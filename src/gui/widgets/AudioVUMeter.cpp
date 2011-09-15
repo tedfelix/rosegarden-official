@@ -35,12 +35,11 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
                            bool stereo,
                            bool hasRecord,
                            int width,
-                           int height,
-                           const char *name) :
-        QWidget(parent, name),
+                           int height) :
+        QWidget(parent),
         m_stereo(stereo)
 {
-    setBackgroundMode(Qt::NoBackground);
+    //setBackgroundMode(Qt::NoBackground);
     setFixedSize(width, height);
 
     // This offset is intended to match that for the height of the
@@ -60,7 +59,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
         ++m_xoff;
 
     m_meter = new AudioVUMeterImpl(this, type, stereo, hasRecord,
-                                   width - m_xoff, height - m_yoff, name);
+                                   width - m_xoff, height - m_yoff);
 
     m_meter->move(m_xoff / 2, m_yoff / 2);
 }
@@ -79,7 +78,8 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
 
     // first, we'll fill the whole background rect with a 40% alpha version of
     // the border color
-    QColor fill = palette().mid();
+//    QColor fill = palette().mid();
+    QColor fill = QColor(0xEE, 0xEE, 0xEE); // QT3: wild guess
     int H = 0;
     int S = 0;
     int V = 0;
@@ -90,7 +90,8 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
     paint.fillRect(0, 0, w, h, fill);
     
     // now we draw the border outline around it
-    paint.setPen(palette().mid());
+//    paint.setPen(palette().mid());
+    paint.setPen(QColor(0xEE, 0xEE, 0xEE)); // QT3: wild guess
     paint.drawRect(0, 0, w, h);
 
 /*    paint.setPen(palette().background());
@@ -109,9 +110,8 @@ AudioVUMeter::AudioVUMeterImpl::AudioVUMeterImpl(QWidget *parent,
         bool stereo,
         bool hasRecord,
         int width,
-        int height,
-        const char *name) :
-        VUMeter(parent, type, stereo, hasRecord, width, height, VUMeter::Vertical, name)
+        int height) :
+        VUMeter(parent, type, stereo, hasRecord, width, height, VUMeter::Vertical)
 {}
 
 }

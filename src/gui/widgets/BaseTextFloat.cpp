@@ -94,9 +94,10 @@ BaseTextFloat::paintEvent(QPaintEvent *e)
     QPainter paint(this);
 
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(e->rect().normalized());
 
-    paint.setPen(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
+//    paint.setPen(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
+    paint.setPen(Qt::black);
 
     paint.setPen(GUIPalette::getColour(GUIPalette::RotaryFloatForeground));
     paint.setBrush(GUIPalette::getColour(GUIPalette::RotaryFloatBackground));

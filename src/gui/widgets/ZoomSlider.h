@@ -78,11 +78,15 @@ template<class T>
 ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
                           T initialSize, Qt::Orientation o,
                           QWidget *parent, const char *name) :
-    QSlider(0, sizes.size()-1, 1,
-            getIndex(sizes, initialSize), o, parent, name),
+    QSlider(o, parent),
     m_sizes(sizes),
     m_defaultValue(initialSize)
 {
+    setObjectName(name);
+    setMinimum(0);
+    setMaximum(sizes.size() - 1);
+    setPageStep(1);
+    setValue(getIndex(sizes, initialSize));
     setTracking(false);
     setFixedWidth(150);
     setFixedHeight(15);

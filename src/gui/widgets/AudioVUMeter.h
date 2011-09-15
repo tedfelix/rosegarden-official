@@ -39,8 +39,7 @@ public:
                  bool stereo = true,
                  bool hasRecord = false,
                  int width = 12,
-                 int height = 140,
-                 const char *name = 0);
+                 int height = 140);
 
     void setLevel(double dB) {
         m_meter->setLevel(dB);
@@ -67,8 +66,7 @@ protected:
                          bool stereo,
                          bool hasRecord,
                          int width,
-                         int height,
-                         const char *name);
+                         int height);
     protected:
         virtual void meterStart() { }
         virtual void meterStop() { }

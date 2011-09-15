@@ -39,8 +39,7 @@ class TristateCheckBox : public QCheckBox
 {
 Q_OBJECT
 public:
-    TristateCheckBox(QWidget *parent=0,
-                               const char *name=0):QCheckBox(parent, name)
+    TristateCheckBox(QWidget *parent=0):QCheckBox(parent)
         { setTristate(true) ;}
 
     virtual ~TristateCheckBox();

@@ -56,8 +56,7 @@ public slots:
     void slotCurrentProgressDialogDestroyed();
 
 protected:
-    CurrentProgressDialog(QObject* parent, const char* name = 0)
-        : QObject(parent, name) {}
+    CurrentProgressDialog(QObject* parent) : QObject(parent) {}
     
     //--------------- Data members ---------------------------------
     static CurrentProgressDialog* m_instance;

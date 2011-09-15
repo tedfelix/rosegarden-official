@@ -39,6 +39,7 @@
 #include <QToolTip>
 #include <QWidget>
 #include <QMouseEvent>
+#include <QColormap>
 
 #include <cmath>
 
@@ -84,7 +85,7 @@ Rotary::Rotary(QWidget *parent,
 {
     setObjectName("RotaryWidget");
 
-    setBackgroundMode(Qt::NoBackground);
+    setAttribute(Qt::WA_NoSystemBackground);
 
     this->setToolTip(tr("<qt><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>"));
     setFixedSize(size, size);
@@ -161,7 +162,12 @@ Rotary::paintEvent(QPaintEvent *)
         break;
     }
 
-    CacheIndex index(m_size, m_knobColour.pixel(), degrees, numTicks, m_centred);
+    //From Qt doc
+
+    QColormap colorMap = QColormap::instance();
+    uint pixel(colorMap.pixel(m_knobColour));
+
+    CacheIndex index(m_size, pixel, degrees, numTicks, m_centred);
 
     if (m_pixmaps.find(index) != m_pixmaps.end()) {
         paint.begin(this);
@@ -173,7 +179,7 @@ Rotary::paintEvent(QPaintEvent *)
     int scale = 4;
     int width = m_size * scale;
     QPixmap map(width, width);
-    map.fill(paletteBackgroundColor());
+    map.fill(palette().color(QPalette::Background));
     paint.begin(&map);
 
     QPen pen;
@@ -270,7 +276,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     // and un-draw the bottom part of the arc
-    pen.setColor(paletteBackgroundColor());
+    map.fill(palette().color(QPalette::Background));
     paint.setPen(pen);
     paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);
@@ -294,7 +300,7 @@ Rotary::paintEvent(QPaintEvent *)
 
     paint.end();
 
-    QImage i = map.convertToImage().smoothScale(m_size, m_size);
+    QImage i = map.toImage().scaled(m_size, m_size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_pixmaps[index] = QPixmap::fromImage(i);
     paint.begin(this);
     paint.drawPixmap(0, 0, m_pixmaps[index]);

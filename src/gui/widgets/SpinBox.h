@@ -40,7 +40,7 @@ class SpinBox : public QSpinBox
 {
     Q_OBJECT
 public:
-    SpinBox(QWidget *parent = 0, const char *name=0);
+    SpinBox(QWidget *parent = 0);
 
     double getDoubleValue() const { return m_doubleValue; }
 

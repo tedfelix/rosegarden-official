@@ -39,9 +39,8 @@ VUMeter::VUMeter(QWidget *parent,
                  bool hasRecord,
                  int width,
                  int height,
-                 VUAlignment alignment,
-                 const char *name):
-    QLabel(parent, name),
+                 VUAlignment alignment):
+    QLabel(parent),
     m_originalHeight(height),
     m_active(true),
     m_type(type),
@@ -352,7 +351,7 @@ VUMeter::paintEvent(QPaintEvent *e)
 
         drawMeterLevel(&paint);
 
-        paint.setPen(palette().background());
+        paint.setPen(palette().background().color());
         paint.drawPoint(0, 0);
         paint.drawPoint(w, 0);
         paint.drawPoint(0, h - 1);

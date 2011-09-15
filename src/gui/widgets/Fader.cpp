@@ -51,13 +51,13 @@ Fader::Fader(AudioLevel::FaderType type,
         m_type(type),
         m_clickMousePos( -1)
 {
-    setBackgroundMode(Qt::NoBackground);
+    //setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
     calculateButtonPixmap();
     //    if (m_vertical) {
-    //	setFixedSize(w, h + m_buttonPixmap->height() + 4);
+    //    setFixedSize(w, h + m_buttonPixmap->height() + 4);
     //    } else {
-    //	setFixedSize(w + m_buttonPixmap->width() + 4, h);
+    //    setFixedSize(w + m_buttonPixmap->width() + 4, h);
     //    }
 
     if (m_vertical) {
@@ -68,7 +68,8 @@ Fader::Fader(AudioLevel::FaderType type,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = palette().mid();
+//    m_outlineColour = palette().mid();
+    m_outlineColour = QColor(0xEE, 0xEE, 0xEE);
 
     calculateGroovePixmap();
     setFader(0.0);
@@ -83,13 +84,13 @@ Fader::Fader(int min, int max, int deflt,
         m_max(max),
         m_clickMousePos( -1)
 {
-    setBackgroundMode(Qt::NoBackground);
+//    setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
     calculateButtonPixmap();
     //    if (m_vertical) {
-    //	setFixedSize(w, h + m_buttonPixmap->height() + 4);
+    //    setFixedSize(w, h + m_buttonPixmap->height() + 4);
     //    } else {
-    //	setFixedSize(w + m_buttonPixmap->width() + 4, h);
+    //    setFixedSize(w + m_buttonPixmap->width() + 4, h);
     //    }
 
     if (m_vertical) {
@@ -100,7 +101,8 @@ Fader::Fader(int min, int max, int deflt,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = palette().mid();
+//    m_outlineColour = palette().mid();
+    m_outlineColour = QColor(0xEE, 0xEE, 0xEE);
 
     calculateGroovePixmap();
     setFader(deflt);
@@ -115,7 +117,7 @@ Fader::Fader(int min, int max, int deflt,
         m_max(max),
         m_clickMousePos( -1)
 {
-    setBackgroundMode(Qt::NoBackground);
+//    setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
 
     if (m_vertical) {
@@ -126,7 +128,8 @@ Fader::Fader(int min, int max, int deflt,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = palette().mid();
+//    m_outlineColour = palette().mid();
+    m_outlineColour = QColor(0xEE, 0xEE, 0xEE);
 
     calculateGroovePixmap();
     setFader(deflt);
@@ -145,13 +148,16 @@ Fader::setOutlineColour(QColor c)
 QPixmap *
 Fader::groovePixmap()
 {
+    // QT3: This needs a total rewrite.
+    /*
     PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
     if (i != m_pixmapCache.end()) {
-        ColourPixmapRec::iterator j = i->second.first.find(m_outlineColour.pixel());
+        ColourPixmapRec::iterator j = i->second.first.find(m_outlineColour.getRgb());
         if (j != i->second.first.end()) {
             return j->second;
         }
     }
+    */
     return 0;
 }
 
@@ -380,7 +386,7 @@ void
 Fader::wheelEvent(QWheelEvent *e)
 {
     int buttonPosition = value_to_position(m_value);
-    if (e->state() & Qt::SHIFT ) {
+    if (e->modifiers() & Qt::SHIFT ) {
         if (e->delta() > 0)
             buttonPosition += 10;
         else
@@ -440,10 +446,15 @@ Fader::showFloatText()
 void
 Fader::calculateGroovePixmap()
 {
-    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].first[m_outlineColour.pixel()];
+    //QT3: MEMORY LEAK!  This garbage needs rewritten some way or other.  In
+    // this state, it's just a guaranteed memory leak and/or crash, but I'm in
+    // too much of a hurry to step back and figure out what all of this crap was
+    // supposed to do.
+//    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].first[m_outlineColour.pixel()];
 
-    delete map;
-    map = new QPixmap(width(), height());
+//    delete map;
+//    map = new QPixmap(width(), height());
+QPixmap *map = new QPixmap(width(), height());
 
     // The area between the groove and the border takes a very translucent tint
     // of border color
@@ -473,10 +484,10 @@ Fader::calculateGroovePixmap()
                 int position = value_to_position(float(dB));
                 if (position >= 0 &&
                         position < m_sliderMax - m_sliderMin) {
-                    if (dB == 0)
-                        paint.setPen(palette().dark());
-                    else
-                        paint.setPen(palette().midlight());
+                    if (dB == 0) paint.setPen(Qt::black);
+//                        paint.setPen(palette().dark());
+                    else paint.setPen(Qt::gray);
+//                        paint.setPen(palette().midlight());
                     paint.drawLine(1, (m_sliderMax - position),
                                    width() - 2, (m_sliderMax - position));
                 }
@@ -536,7 +547,7 @@ Fader::calculateButtonPixmap()
         // This should come out of GUIPalette, I suppose, but I don't feel like
         // rebuilding half the application every time I tweak the following
         // number:
-        QBrush bg(QColor(0xBB, 0xBB, 0xBB));
+        QColor bg(QColor(0xBB, 0xBB, 0xBB));
         map->fill(bg);
 
         int x = 0;
@@ -544,36 +555,42 @@ Fader::calculateButtonPixmap()
 
         QPainter paint(map);
 
-        paint.setPen(palette().light());
+        paint.setPen(palette().light().color());
         paint.drawLine(x + 1, y, x + buttonWidth - 2, y);
         paint.drawLine(x, y + 1, x, y + buttonHeight - 2);
 
-        paint.setPen(palette().midlight());
+//        paint.setPen(palette().midlight());
+        paint.setPen(Qt::gray);
         paint.drawLine(x + 1, y + 1, x + buttonWidth - 2, y + 1);
         paint.drawLine(x + 1, y + 1, x + 1, y + buttonHeight - 2);
 
-        paint.setPen(palette().mid());
+//        paint.setPen(palette().mid());
+        paint.setPen(Qt::gray);
         paint.drawLine(x + 2, y + buttonHeight - 2, x + buttonWidth - 2,
                        y + buttonHeight - 2);
         paint.drawLine(x + buttonWidth - 2, y + 2, x + buttonWidth - 2,
                        y + buttonHeight - 2);
 
-        paint.setPen(palette().dark());
+//        paint.setPen(palette().dark());
+        paint.setPen(Qt::black);
         paint.drawLine(x + 1, y + buttonHeight - 1, x + buttonWidth - 2,
                        y + buttonHeight - 1);
         paint.drawLine(x + buttonWidth - 1, y + 1, x + buttonWidth - 1,
                        y + buttonHeight - 2);
 
-        paint.setPen(palette().shadow());
+//        paint.setPen(palette().shadow());
+        paint.setPen(Qt::black);
         paint.drawLine(x + 1, y + buttonHeight / 2, x + buttonWidth - 2,
                        y + buttonHeight / 2);
 
-        paint.setPen(palette().mid());
+//        paint.setPen(palette().mid());
+        paint.setPen(Qt::gray);
         paint.drawLine(x + 1, y + buttonHeight / 2 - 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 - 1);
         paint.drawPoint(x, y + buttonHeight / 2);
 
-        paint.setPen(palette().light());
+//        paint.setPen(palette().light());
+        paint.setPen(Qt::white);
         paint.drawLine(x + 1, y + buttonHeight / 2 + 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 + 1);
 

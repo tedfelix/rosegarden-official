@@ -107,7 +107,7 @@ Led::paintEvent(QPaintEvent *)
         width *= scale;
 
         tmpMap = new QPixmap(width, width);
-        tmpMap->fill(paletteBackgroundColor());
+//        tmpMap->fill(paletteBackgroundColor());
         paint.begin(tmpMap);
 
     } else
@@ -198,9 +198,9 @@ Led::paintEvent(QPaintEvent *)
     if (smooth)
     {
         QPixmap *&dest = led_state ? d->on_map : d->off_map;
-        QImage i = tmpMap->convertToImage();
+        QImage i = tmpMap->toImage();
         width /= 3;
-        i = i.smoothScale(width, width);
+        i = i.scaled(width, width, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         delete tmpMap;
         dest = new QPixmap(QPixmap::fromImage(i));
         paint.begin(this);

@@ -39,9 +39,10 @@ namespace Rosegarden
 {
 
 ScrollBox::ScrollBox(QWidget* parent, SizeMode sizeMode, const char* name) :
-        QFrame(parent, name),
+        QFrame(parent),
         m_sizeMode(sizeMode)
 {
+    QObject::setObjectName(name);
     setFrameStyle(Panel | Sunken);
 }
 
@@ -56,7 +57,9 @@ void ScrollBox::mousePressEvent(QMouseEvent* e)
 
 void ScrollBox::mouseMoveEvent(QMouseEvent* e)
 {
-    if (e->state() != Qt::LeftButton)
+    //Qt3
+    //if (e->state() != Qt::LeftButton)
+    if (e->buttons() != Qt::LeftButton)
         return ;
 
     int dx = (e->pos().x() - m_mouse.x()) * m_pagesize.width() / width();
@@ -147,7 +150,13 @@ void ScrollBox::setViewY(int y)
 
 void ScrollBox::setThumbnail(QPixmap img)
 {
-    setPaletteBackgroundPixmap(img.fromImage(img.toImage().smoothScale(size())));
+    QPixmap bkPixmap  = img.fromImage(img.toImage().scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    QPalette palette;
+    palette.setBrush(backgroundRole(), bkPixmap);
+    setPalette(palette);
+
+    // Qt3
+    //setPaletteBackgroundPixmap(img.fromImage(img.toImage().scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
 }
 
 }

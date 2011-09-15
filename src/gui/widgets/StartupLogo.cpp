@@ -36,13 +36,11 @@ namespace Rosegarden
 
 // NOTE: use QSplashScreen instead ??
 
-StartupLogo::StartupLogo(QWidget * parent, const char *name) :
-//    QWidget(parent, name, Qt::SplashScreen),
+StartupLogo::StartupLogo(QWidget * parent) :
     QWidget(parent, Qt::SplashScreen),
     m_readyToHide(false),
     m_showTip(true)
 {
-    setObjectName("Splash");
 
 #ifdef STABLE
     m_pixmap = IconLoader().loadPixmap("splash");
@@ -110,7 +108,7 @@ void StartupLogo::slotShowStatusMessage(QString message)
 {
     m_statusMessage = message;
     repaint(); //paintEvent(0);
-    QApplication::flushX();
+    QApplication::flush();
 }
 
 void StartupLogo::close()

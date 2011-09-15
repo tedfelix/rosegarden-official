@@ -43,7 +43,7 @@ public slots:
 
 protected:
 
-    StartupLogo(QWidget *parent=0, const char *name=0);
+    StartupLogo(QWidget *parent=0);
     ~StartupLogo();
     
     virtual void paintEvent(QPaintEvent*);

@@ -25,9 +25,12 @@ namespace Rosegarden {
 class RosegardenPopupMenu : public QMenu
 {
     // just to make itemHeight public
+    //
+    // which is no longer possible or relevant in Qt 4, but I'm leaving this
+    // header because of the stylesheet hack I added to it during the port
 public:
-	RosegardenPopupMenu(QWidget *parent) : QMenu(parent) { setStyleSheet("background-color: #EEEEEE;"); }
-	using QMenu::itemHeight;
+    RosegardenPopupMenu(QWidget *parent) : QMenu(parent) { setStyleSheet("background-color: #EEEEEE;"); }
+//    using QMenu::itemHeight;
 };
 
 

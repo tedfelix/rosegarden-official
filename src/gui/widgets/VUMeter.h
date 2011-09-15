@@ -80,8 +80,7 @@ protected:
             bool hasRecord = false,
             int width = 0,
             int height = 0,
-            VUAlignment alignment = Horizontal,
-            const char *name = 0);
+            VUAlignment alignment = Horizontal);
     ~VUMeter();
 
     virtual void meterStart() = 0;

@@ -35,7 +35,7 @@ class Label : public QLabel
     Q_OBJECT
 public:
     Label(QWidget *parent = 0, const char *name=0):
-        QLabel(parent, name) {;}
+        QLabel(name, parent) {;}
 
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent * /*e*/)

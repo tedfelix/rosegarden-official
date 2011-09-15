@@ -137,7 +137,7 @@ AudioRouteMenu::slotShowMenu()
 
     connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(slotEntrySelected(QAction *)));
 
-    int itemHeight = menu->itemHeight(0) + 2;
+    int itemHeight = menu->actionGeometry(menu->actions().value(0)).height() + 2;
     QPoint pos = QCursor::pos();
 
     pos.rx() -= 10;

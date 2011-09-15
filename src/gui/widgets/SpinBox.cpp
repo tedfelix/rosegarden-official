@@ -27,8 +27,8 @@
 namespace Rosegarden
 {
 
-SpinBox::SpinBox(QWidget *parent, const char *name):
-        QSpinBox(parent, name), m_doubleValue(0)
+SpinBox::SpinBox(QWidget *parent):
+        QSpinBox(parent), m_doubleValue(0)
 {}
 
 QString
