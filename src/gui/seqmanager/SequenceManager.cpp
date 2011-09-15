@@ -206,7 +206,7 @@ SequenceManager::play()
 
     // make sure we toggle the play button
     //
-    m_transport->PlayButton()->setOn(true);
+    m_transport->PlayButton()->setFlat(true);
 
     //!!! disable the record button, because recording while playing is horribly
     // broken, and disabling it is less complicated than fixing it
@@ -319,9 +319,9 @@ SequenceManager::stopping()
     //
     if (m_transportStatus == RECORDING_ARMED) {
         m_transportStatus = STOPPED;
-        m_transport->RecordButton()->setOn(false);
+        m_transport->RecordButton()->setFlat(false);
         m_transport->MetronomeButton()->
-        setOn(m_doc->getComposition().usePlayMetronome());
+        setFlat(m_doc->getComposition().usePlayMetronome());
         return ;
     }
 
@@ -342,9 +342,9 @@ SequenceManager::stop()
     // Toggle off the buttons - first record
     //
     if (m_transportStatus == RECORDING) {
-        m_transport->RecordButton()->setOn(false);
+        m_transport->RecordButton()->setFlat(false);
         m_transport->MetronomeButton()->
-        setOn(m_doc->getComposition().usePlayMetronome());
+        setFlat(m_doc->getComposition().usePlayMetronome());
 
         // Remove the countdown dialog and stop the timer
         //
@@ -353,7 +353,7 @@ SequenceManager::stop()
     }
 
     // Now playback
-    m_transport->PlayButton()->setOn(false);
+    m_transport->PlayButton()->setFlat(false);
 
     // re-enable the record button if it was previously disabled when
     // going into play mode - DMM
@@ -369,7 +369,7 @@ SequenceManager::stop()
 
     // wait cursor
     //
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     RosegardenSequencer::getInstance()->stop();
 
@@ -396,7 +396,7 @@ SequenceManager::stop()
 
     // always untoggle the play button at this stage
     //
-    m_transport->PlayButton()->setOn(false);
+    m_transport->PlayButton()->setFlat(false);
     SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing" << endl;
 
     // We don't reset controllers at this point - what happens with static
@@ -507,7 +507,7 @@ SequenceManager::record(bool toggled)
 
         if (instr && instr->getType() == Instrument::Audio) {
             if (!m_doc || !(m_soundDriverStatus & AUDIO_OK)) {
-                m_transport->RecordButton()->setOn(false);
+                m_transport->RecordButton()->setFlat(false);
                 throw(Exception(QObject::tr("Audio subsystem is not available - can't record audio")));
             }
             // throws BadAudioPathException if path is not valid:
@@ -523,8 +523,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton()->setOn(comp.usePlayMetronome());
-            m_transport->RecordButton()->setOn(false);
+            m_transport->MetronomeButton()->setFlat(comp.usePlayMetronome());
+            m_transport->RecordButton()->setFlat(false);
 
             return ;
         }
@@ -534,8 +534,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
-            m_transport->RecordButton()->setOn(true);
+            m_transport->MetronomeButton()->setFlat(comp.useRecordMetronome());
+            m_transport->RecordButton()->setFlat(true);
 
             return ;
         }
@@ -615,7 +615,7 @@ punchin:
         checkSoundDriverStatus(false);
 
         // toggle the Metronome button if it's in use
-        m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
+        m_transport->MetronomeButton()->setFlat(comp.useRecordMetronome());
 
         // Update record metronome status
         //
@@ -671,8 +671,8 @@ punchin:
         }
 
         // set the buttons
-        m_transport->RecordButton()->setOn(true);
-        m_transport->PlayButton()->setOn(true);
+        m_transport->RecordButton()->setFlat(true);
+        m_transport->PlayButton()->setFlat(true);
 
         if (comp.getCurrentTempo() == 0) {
             SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000" << endl;
@@ -1042,7 +1042,8 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     //
                     if (!m_reportTimer->isActive()) {
                         m_canReport = false;
-                        m_reportTimer->start(5000, true);
+                        m_reportTimer->setSingleShot(true);
+                        m_reportTimer->start(5000);
                     }
                 }
             } else {
@@ -1814,7 +1815,8 @@ void SequenceManager::processRemovedSegment(Segment* s)
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
     SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()" << endl;
-    m_compositionMapperResetTimer->start(500, true); // schedule a composition mapper reset in 0.5s
+    m_compositionMapperResetTimer->setSingleShot(true);
+    m_compositionMapperResetTimer->start(500); // schedule a composition mapper reset in 0.5s
 }
 
 void SequenceManager::timeSignatureChanged(const Composition *)
