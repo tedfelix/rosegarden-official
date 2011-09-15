@@ -78,7 +78,7 @@ fi
 
 AC_PATH_PROG([MAKEDEPEND],[makedepend])
 if test x$MAKEDEPEND = x ; then
-       	AC_MSG_ERROR([Failed to find required makedepend program.])
+       	AC_MSG_ERROR([Failed to find required makedepend program.  (It is sometimes provided by the "imake" package.)])
 fi
 
 AC_PATH_PROG([SHA1SUM],[sha1sum])
