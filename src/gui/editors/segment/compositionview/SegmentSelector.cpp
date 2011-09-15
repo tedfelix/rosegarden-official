@@ -69,7 +69,7 @@ SegmentSelector::~SegmentSelector()
 
 void SegmentSelector::ready()
 {
-    m_canvas->viewport()->setCursor(Qt::arrowCursor);
+    m_canvas->viewport()->setCursor(Qt::ArrowCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
     setContextHelp(tr("Click and drag to select segments"));
@@ -82,7 +82,7 @@ void SegmentSelector::slotCanvasScrolled(int newX, int newY)
 {
     QMouseEvent tmpEvent(QEvent::MouseMove,
                          m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
-                         Qt::NoButton, Qt::NoButton);
+                         Qt::NoButton, Qt::NoButton, 0);
     handleMouseMove(&tmpEvent);
 }
 
@@ -213,7 +213,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     if (m_dispatchTool) {
         m_dispatchTool->handleMouseButtonRelease(e);
         m_dispatchTool = 0;
-        m_canvas->viewport()->setCursor(Qt::arrowCursor);
+        m_canvas->viewport()->setCursor(Qt::ArrowCursor);
         return ;
     }
 
@@ -228,7 +228,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         return ;
     }
 
-    m_canvas->viewport()->setCursor(Qt::arrowCursor);
+    m_canvas->viewport()->setCursor(Qt::ArrowCursor);
 
     Composition &comp = m_doc->getComposition();
 
@@ -308,7 +308,7 @@ int
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (!m_buttonPressed) {
-        setContextHelpFor(e->pos(), (e->state() & Qt::ControlModifier));
+        setContextHelpFor(e->pos(), (e->modifiers() & Qt::ControlModifier));
         return RosegardenScrollView::NoFollow;
     }
 
@@ -347,7 +347,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
     }
 
-    m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
+    m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone) {
         MacroCommand *mcommand = new MacroCommand

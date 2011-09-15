@@ -49,7 +49,7 @@ SegmentTool::~SegmentTool()
 
 void SegmentTool::ready()
 {
-    m_canvas->viewport()->setCursor(Qt::arrowCursor);
+    m_canvas->viewport()->setCursor(Qt::ArrowCursor);
 }
 
 void

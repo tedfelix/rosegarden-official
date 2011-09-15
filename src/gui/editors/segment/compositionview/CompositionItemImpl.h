@@ -42,7 +42,7 @@ public:
     CompositionItemImpl(Segment& s, const CompositionRect&);
     virtual bool isRepeating() const              { return m_rect.isRepeating(); }
     virtual QRect rect() const;
-    virtual void moveBy(int x, int y)             { m_rect.moveBy(x, y); }
+    virtual void translate(int x, int y)          { m_rect.translate(x, y); }
     virtual void moveTo(int x, int y)             { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
     virtual void setX(int x)                      { m_rect.setX(x); }
     virtual void setY(int y)                      { m_rect.setY(y); }

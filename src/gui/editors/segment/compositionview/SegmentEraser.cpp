@@ -43,7 +43,7 @@ SegmentEraser::SegmentEraser(CompositionView *c, RosegardenDocument *d)
 
 void SegmentEraser::ready()
 {
-    m_canvas->viewport()->setCursor(Qt::pointingHandCursor);
+    m_canvas->viewport()->setCursor(Qt::PointingHandCursor);
     setBasicContextHelp();
 }
 

@@ -79,22 +79,22 @@ void AudioPreviewUpdater::update()
     request.width = m_rect.width();
     request.showMinima = m_showMinima;
     request.notify = this;
-    if (m_previewToken >= 0)
-        m_thread.cancelPreview(m_previewToken);
+
+    if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
     m_previewToken = m_thread.requestPreview(request);
-    if (!m_thread.running())
-        m_thread.start();
+
+    if (!m_thread.isRunning()) m_thread.start();
 }
 
 void AudioPreviewUpdater::cancel()
 {
-    if (m_previewToken >= 0)
-        m_thread.cancelPreview(m_previewToken);
+    if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
     m_previewToken = -1;
 }
 
 bool AudioPreviewUpdater::event(QEvent *e)
 {
+    /*
     RG_DEBUG << "AudioPreviewUpdater(" << this << ")::event (" << e << ")" << endl;
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
@@ -136,6 +136,10 @@ bool AudioPreviewUpdater::event(QEvent *e)
     }
 
     return QObject::event(e);
+
+    */
+    //QT3: totally disabled and deferred for later
+    return false;
 }
 
 }

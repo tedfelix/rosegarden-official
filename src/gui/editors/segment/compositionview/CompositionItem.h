@@ -44,7 +44,7 @@ class _CompositionItem : public QObject {
 public:
     virtual bool isRepeating() const = 0;
     virtual QRect rect() const = 0;
-    virtual void moveBy(int x, int y) = 0;
+    virtual void translate(int x, int y) = 0;
     virtual void moveTo(int x, int y) = 0;
     virtual void setX(int x) = 0;
     virtual void setY(int y) = 0;

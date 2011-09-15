@@ -52,7 +52,7 @@ SegmentSplitter::~SegmentSplitter()
 
 void SegmentSplitter::ready()
 {
-    m_canvas->viewport()->setCursor(Qt::splitHCursor);
+    m_canvas->viewport()->setCursor(Qt::SplitHCursor);
     setBasicContextHelp();
 }
 
@@ -64,7 +64,7 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
     CompositionItem item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
-        m_canvas->viewport()->setCursor(Qt::blankCursor);
+        m_canvas->viewport()->setCursor(Qt::BlankCursor);
         m_prevX = item->rect().x();
         m_prevX = item->rect().y();
         drawSplitLine(e);
@@ -103,7 +103,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     // Reinstate the cursor
-    m_canvas->viewport()->setCursor(Qt::splitHCursor);
+    m_canvas->viewport()->setCursor(Qt::SplitHCursor);
     m_canvas->slotHideSplitLine();
 }
 
@@ -120,7 +120,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
         delete item;
         return RosegardenScrollView::FollowHorizontal;
     } else {
-        m_canvas->viewport()->setCursor(Qt::splitHCursor);
+        m_canvas->viewport()->setCursor(Qt::SplitHCursor);
         m_canvas->slotHideSplitLine();
         return RosegardenScrollView::NoFollow;
     }

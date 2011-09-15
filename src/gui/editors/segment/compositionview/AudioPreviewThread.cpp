@@ -54,7 +54,7 @@ AudioPreviewThread::run()
         if (m_queue.empty()) {
             if (m_emptyQueueListener && !emptyQueueSignalled) {
                 QApplication::postEvent(m_emptyQueueListener,
-                                        new QCustomEvent(AudioPreviewQueueEmpty, 0));
+                                        new QEvent(AudioPreviewQueueEmpty));
                 emptyQueueSignalled = true;
             }
 
@@ -156,9 +156,10 @@ AudioPreviewThread::process()
                 unsigned int channels = audioFile->getChannels();
                 m_results[token] = ResultsPair(channels, results);
                 QObject *notify = req.notify;
-                QApplication::postEvent
-                (notify,
-                 new QCustomEvent(AudioPreviewReady, (void *)token));
+// QT3: I just have no earthly idea what this QCustomEvent stuff used to do, and
+// there's nobody to ask.  Audio previews are going to be broken when this code
+// compiles, and we'll have to figure out how to fix this later.
+//                QApplication::postEvent(notify, new QCustomEvent(AudioPreviewReady, (void *)token));
             }
         }
 

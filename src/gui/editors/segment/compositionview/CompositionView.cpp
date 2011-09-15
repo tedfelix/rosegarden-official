@@ -85,8 +85,8 @@ protected:
 
 CompositionView::CompositionView(RosegardenDocument* doc,
                                  CompositionModel* model,
-                                 QWidget * parent, const char * name) :
-    RosegardenScrollView(parent, name),
+                                 QWidget * parent) :
+    RosegardenScrollView(parent),
     m_model(model),
     m_currentIndex(0),
     m_tool(0),
@@ -134,8 +134,9 @@ CompositionView::CompositionView(RosegardenDocument* doc,
 //    viewport()->setAttribute(Qt::WA_PaintOnScreen);
 //    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 
-    viewport()->setPaletteBackgroundColor
-        (GUIPalette::getColour(GUIPalette::SegmentCanvas));
+    QPalette pal;
+    pal.setColor(viewport()->backgroundRole(), GUIPalette::getColour(GUIPalette::SegmentCanvas));
+    viewport()->setPalette(pal);
 
     slotUpdateSize();
 
@@ -208,7 +209,7 @@ void CompositionView::setBackgroundPixmap(const QPixmap &m)
 void CompositionView::initStepSize()
 {
     QScrollBar* hsb = horizontalScrollBar();
-    m_stepSize = hsb->lineStep();
+    m_stepSize = hsb->singleStep();
 }
 
 void CompositionView::slotUpdateSize()
@@ -492,8 +493,8 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());
     int h = std::max(m_segmentsDrawBuffer.height(), visibleHeight());
 
-    m_segmentsDrawBuffer.resize(w, h);
-    m_artifactsDrawBuffer.resize(w, h);
+    m_segmentsDrawBuffer = QPixmap(w, h);
+    m_artifactsDrawBuffer = QPixmap(w, h);
     slotAllDrawBuffersNeedRefresh();
 
     RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsDrawBuffer.size() << endl;
@@ -517,7 +518,7 @@ void CompositionView::viewportPaintRect(QRect r)
     QRect updateRect = r;
 
     r &= viewport()->rect();
-    r.moveBy(contentsX(), contentsY());
+    r.translate(contentsX(), contentsY());
 
 //    std::cerr << "CompositionView::viewportPaintRect updateRect = "
 //              << updateRect.x() << "," << updateRect.y()
@@ -531,7 +532,7 @@ void CompositionView::viewportPaintRect(QRect r)
 
         // r was modified by checkScrollAndRefreshDrawBuffer
         QRect copyRect(r | m_artifactsDrawBufferRefresh);
-        copyRect.moveBy(-contentsX(), -contentsY());
+        copyRect.translate(-contentsX(), -contentsY());
 
 //        std::cerr << "changed = " << changed << ", artrefresh " << m_artifactsDrawBufferRefresh.x() << "," << m_artifactsDrawBufferRefresh.y() << " " << m_artifactsDrawBufferRefresh.width() << "x" << m_artifactsDrawBufferRefresh.height() << ": copying from segment to artifacts buffer: " << copyRect.width() << "x" << copyRect.height() << std::endl;
 
@@ -915,7 +916,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
         rectToFill &= clipRect;
         r = rectToFill;
         drawBasePoint = rectToFill.topLeft();
-        rectToFill.moveBy( -basePoint.x(), -basePoint.y());
+        rectToFill.translate( -basePoint.x(), -basePoint.y());
         int firstPixmapIdx = (r.x() - basePoint.x()) / AudioPreviewPainter::tileWidth();
         if (firstPixmapIdx >= int(api->pixmap.size())) {
             //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : WARNING - miscomputed pixmap array : r.x = "
@@ -935,7 +936,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
             localRect &= r;
             if (idx == firstPixmapIdx && api->resizeOffset != 0) {
                 // this segment is being resized from start, clip beginning of preview
-                localRect.moveBy(api->resizeOffset, 0);
+                localRect.translate(api->resizeOffset, 0);
             }
 
             //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : localRect & clipRect = "
@@ -944,7 +945,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
                 //                 RG_DEBUG << "CompositionView::drawAreaAudioPreviews : localRect & clipRect is empty\n";
                 break;
             }
-            localRect.moveBy( -(basePoint.x() + pixmapRectXOffset), -basePoint.y());
+            localRect.translate( -(basePoint.x() + pixmapRectXOffset), -basePoint.y());
 
             //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
             //                      << idx << " at " << drawBasePoint << " - localRect = " << localRect
@@ -1451,11 +1452,10 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 {
-    Qt::ButtonState bs = e->state();
-    slotSetSelectCopy((bs & Qt::ControlModifier) != 0);
-    slotSetSelectAdd((bs & Qt::ShiftModifier) != 0);
-    slotSetFineGrain((bs & Qt::ShiftModifier) != 0);
-    slotSetPencilOverExisting((bs & (Qt::AltModifier + Qt::ControlModifier)) != 0);
+    slotSetSelectCopy((e->modifiers() & Qt::ControlModifier) != 0);
+    slotSetSelectAdd((e->modifiers() & Qt::ShiftModifier) != 0);
+    slotSetFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
+    slotSetPencilOverExisting((e->modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
 
     switch (e->button()) {
     case Qt::LeftButton:
@@ -1529,9 +1529,8 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool)
         return ;
 
-    Qt::ButtonState bs = e->state();
-    slotSetFineGrain((bs & Qt::ShiftModifier) != 0);
-    slotSetPencilOverExisting((bs & Qt::AltModifier) != 0);
+    slotSetFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
+    slotSetPencilOverExisting((e->modifiers() & Qt::AltModifier) != 0);
 
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);

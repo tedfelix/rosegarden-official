@@ -679,7 +679,7 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
         }
     }
 
-    updateRect = updateRect.normalize();
+    updateRect = updateRect.normalized();
 
     if (!updateRect.isNull() && !m_previousSelectionUpdateRect.isNull()) {
 

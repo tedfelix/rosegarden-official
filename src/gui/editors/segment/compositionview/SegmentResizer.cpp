@@ -62,7 +62,7 @@ SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d,
 
 void SegmentResizer::ready()
 {
-    m_canvas->viewport()->setCursor(Qt::sizeHorCursor);
+    m_canvas->viewport()->setCursor(Qt::SizeHorCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
     setBasicContextHelp(false);
@@ -78,7 +78,7 @@ void SegmentResizer::slotCanvasScrolled(int newX, int newY)
 {
     QMouseEvent tmpEvent(QEvent::MouseMove,
                          m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
-                         Qt::NoButton, Qt::NoButton);
+                         Qt::NoButton, Qt::NoButton, 0);
     handleMouseMove(&tmpEvent);
 }
 
@@ -110,7 +110,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonRelease" << endl;
 
-    bool rescale = (e->state() & Qt::ControlModifier);
+    bool rescale = (e->modifiers() & Qt::ControlModifier);
 
     if (m_currentIndex) {
 
@@ -243,7 +243,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     //     RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
 
-    bool rescale = (e->state() & Qt::ControlModifier);
+    bool rescale = (e->modifiers() & Qt::ControlModifier);
 
     if (!m_currentIndex) {
         setBasicContextHelp(rescale);
