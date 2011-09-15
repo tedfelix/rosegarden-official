@@ -40,11 +40,7 @@
 namespace Rosegarden
 {
 
-PlayList::PlayList
-        (
-        QWidget *parent, const char *name
-        )
-        : QWidget(parent, name),
+PlayList::PlayList(QWidget *parent) : QWidget(parent),
         m_listView(new PlayListView(this)),
         m_buttonBar(new QFrame(this)),
         m_barLayout(new QHBoxLayout(m_buttonBar)),

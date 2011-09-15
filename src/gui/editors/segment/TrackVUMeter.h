@@ -36,8 +36,7 @@ public:
                   VUMeterType type = Plain,
                   int width = 0,
                   int height = 0,
-                  int position = 0,
-                  const char *name = 0);
+                  int position = 0);
 
     int getPosition() const { return m_position; }
 

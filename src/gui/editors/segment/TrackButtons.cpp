@@ -68,9 +68,8 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
                            unsigned int trackLabelWidth,
                            bool showTrackLabels,
                            int overallHeight,
-                           QWidget* parent,
-                           const char* name)
-        : QFrame(parent, name), 
+                           QWidget* parent)
+        : QFrame(parent), 
         m_doc(doc),
         m_layout(new QVBoxLayout(this)),
         m_recordSigMapper(new QSignalMapper(this)),
@@ -196,8 +195,7 @@ TrackButtons::populateButtons()
         if (ins) {
             m_trackLabels[i]->getInstrumentLabel()->setText(ins->getLocalizedPresentationName());
             if (ins->sendsProgramChange()) {
-                m_trackLabels[i]->setAlternativeLabel(QObject::tr(
-                            strtoqstr(ins->getProgramName())));
+                m_trackLabels[i]->setAlternativeLabel(QObject::tr(ins->getProgramName().c_str()));
             }
 
         } else {
@@ -349,7 +347,7 @@ TrackButtons::slotUpdateTracks()
                     trackLabel->setText(tr("<untitled>"));
                 }
             } else {
-                trackLabel->setText(strtoqstr(track->getLabel()));
+                trackLabel->setText(track->getLabel().c_str());
             }
 
             //             RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
@@ -597,7 +595,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
             m_trackLabels[position]->clearAlternativeLabel();
             if (instrument->sendsProgramChange()) {
                 m_trackLabels[position]->setAlternativeLabel
-                    (QObject::tr(QString::fromStdString(instrument->getProgramName())));
+                    (QObject::tr(instrument->getProgramName().c_str()));
             }
         }
     }
@@ -653,8 +651,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         QString iname((*it)->getLocalizedPresentationName());
 
         // translate the program name
+        //
+        // Note we are converting the string from std to Q back to std then to
+        // C.  This is obviously ridiculous, but the fact that we have pname
+        // here at all makes me think it exists as some kind of necessary hack
+        // to coax tr() into behaving nicely.  I decided to change it as little
+        // as possible to get it to compile, and not refactor this down to the
+        // simplest way to call tr() on a C string.
         QString pname(strtoqstr((*it)->getProgramName()));
-        pname = QObject::tr(pname);
+        pname = QObject::tr(pname.toStdString().c_str());
 
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
@@ -735,7 +740,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             currentDevId = int(devId);
 
             QMenu *subMenu = new QMenu(instrumentPopup);
-            QString deviceName = QObject::tr(QString::fromStdString(device->getName()));
+            QString deviceName = QObject::tr(device->getName().c_str());
 
             subMenu->setObjectName(deviceName);
             subMenu->setTitle(deviceName);
@@ -830,7 +835,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             // and if so reset the label
             //
             if (inst->sendsProgramChange())
-                m_trackLabels[m_popupItem]->setAlternativeLabel(QObject::tr(strtoqstr(inst->getProgramName())));
+                m_trackLabels[m_popupItem]->setAlternativeLabel(QObject::tr(inst->getProgramName().c_str()));
 
             m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
 
@@ -1108,7 +1113,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // Set label to program change if it's being sent
     //
     if (ins != 0 && ins->sendsProgramChange()) {
-        trackLabel->setAlternativeLabel(QObject::tr(strtoqstr(ins->getProgramName())));
+        trackLabel->setAlternativeLabel(QObject::tr(ins->getProgramName().c_str()));
     }
 
     trackLabel->showLabel(m_trackInstrumentLabels);

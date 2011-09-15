@@ -33,9 +33,8 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
                            VUMeterType type,
                            int width,
                            int height,
-                           int position,
-                           const char *name):
-        VUMeter(parent, type, false, false, width, height, VUMeter::Horizontal, name),
+                           int position) :
+        VUMeter(parent, type, false, false, width, height, VUMeter::Horizontal),
         m_position(position), m_textHeight(height)
 {
     setAlignment(Qt::AlignCenter);

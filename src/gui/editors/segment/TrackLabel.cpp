@@ -187,7 +187,8 @@ TrackLabel::mousePressEvent(QMouseEvent *e)
     } else if (e->button() == Qt::LeftButton) {
 
         // start a timer on this hold
-        m_pressTimer->start(200, true); // 200ms, single shot
+        m_pressTimer->setSingleShot(true);
+        m_pressTimer->start(200); // 200ms, single shot
     }
 }
 

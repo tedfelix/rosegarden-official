@@ -83,7 +83,7 @@ TrackEditor::TrackEditor(RosegardenDocument* doc,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
                          double initialUnitsPerPixel,
-                         QWidget* parent, const char* name) :
+                         QWidget* parent) :
     QWidget(parent),
     m_doc(doc),
     m_rulerScale(rulerScale),
@@ -98,8 +98,6 @@ TrackEditor::TrackEditor(RosegardenDocument* doc,
     m_playTracking(true),
     m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
-    setObjectName(name);
-
     // accept dnd
     setAcceptDrops(true);
     //setDragEnabled(true);
@@ -156,7 +154,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                      0,
                                      barButtonsHeight,
                                      false,
-                                     this, "topbarbuttons");
+                                     true,
+                                     this);
     m_topStandardRuler->connectRulerToDocPointer(m_doc);
     m_topStandardRuler->setContentsMargins(2,0,0,0);
 
@@ -189,7 +188,12 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
         if (!background.isNull()) {
             m_compositionView->setBackgroundPixmap(background);
-            m_compositionView->viewport()->setBackgroundPixmap(background);
+//            m_compositionView->viewport()->setBackgroundPixmap(background);
+            QPalette palette;
+            palette.setBrush(m_compositionView->backgroundRole(), QBrush(background));
+            palette.setBrush(m_compositionView->viewport()->backgroundRole(), QBrush(background));
+            m_compositionView->setPalette(palette);
+            m_compositionView->viewport()->setPalette(palette);
         }
     }
 
@@ -201,7 +205,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                         0,
                                         barButtonsHeight,
                                         true,
-                                        m_compositionView, "bottombarbuttons");
+                                        true,
+                                        m_compositionView);
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
     m_bottomStandardRuler->setContentsMargins(2,0,0,0);
 
@@ -232,8 +237,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       trackLabelWidth,
                                       m_showTrackLabels,
                                       canvasHeight,
-                                      m_trackButtonScroll,
-                                      "TRACK_BUTTONS"); // permit styling; internal string; no tr()
+                                      m_trackButtonScroll);
+
+    m_trackButtons->setObjectName("TRACK_BUTTONS"); // permit styling; internal string; no tr()
 
     m_trackButtonScroll->setWidget(m_trackButtons);
 
