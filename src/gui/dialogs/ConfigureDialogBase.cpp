@@ -83,7 +83,7 @@ void ConfigureDialogBase::addPage(const QString& name, const QString& title, con
     pageLayout->setMargin(0);
 
     // Create the title label widget for the configration page
-    QLabel * titleLabel = new QLabel(titledPage,title);
+    QLabel * titleLabel = new QLabel(title, titledPage);
     QFont font;
     font.setBold(true);
     font.setPixelSize(12);

@@ -529,7 +529,7 @@ AudioPluginDialog::slotPluginSelected(int i)
             m_insOuts->setText(tr("%1 in, %2 out").arg(ins).arg(outs));
 
         QString shortName(plugin->getName());
-        int parenIdx = shortName.find(" (");
+        int parenIdx = shortName.indexOf(" (");
         if (parenIdx > 0) {
             shortName = shortName.left(parenIdx);
             if (shortName == "Null")
@@ -721,7 +721,7 @@ AudioPluginDialog::slotPluginProgramChanged(const QString &value)
     // store the new value
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
 
-    if (m_programCombo && value == m_programCombo->text(0)) { // "<none set>"
+    if (m_programCombo && value == m_programCombo->itemText(0)) { // "<none set>"
         inst->setProgram("");
     } else {
         inst->setProgram(qstrtostr(value));

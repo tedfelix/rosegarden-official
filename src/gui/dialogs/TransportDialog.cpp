@@ -94,7 +94,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_transport->setupUi(frame);
 	
     setWindowTitle(tr("Rosegarden Transport"));
-    setIcon(IconLoader().loadPixmap("window-transport"));
+    setWindowIcon(IconLoader().loadPixmap("window-transport"));
 
     resetFonts();
 
@@ -102,30 +102,33 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     // set the LCD frame background to black
     //
-    m_transport->LCDBoxFrame->setBackgroundColor(QColor(Qt::black));
+    //@@@ I hope we don't need to set more of the palette's colors.
+    QPalette backgroundPalette;
+    backgroundPalette.setColor(QPalette::Window, QColor(Qt::black));
+    m_transport->LCDBoxFrame->setPalette(backgroundPalette);
 
     // set all the pixmap backgrounds to black to avoid
     // flickering when we update
     //
-    m_transport->TenThousandthsPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->ThousandthsPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->HundredthsPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->TenthsPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->UnitSecondsPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->TenSecondsPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->UnitMinutesPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->TenMinutesPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->UnitHoursPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->TenHoursPixmap->setBackgroundColor(QColor(Qt::black));
-    m_transport->NegativePixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenThousandthsPixmap->setPalette(backgroundPalette);
+    m_transport->ThousandthsPixmap->setPalette(backgroundPalette);
+    m_transport->HundredthsPixmap->setPalette(backgroundPalette);
+    m_transport->TenthsPixmap->setPalette(backgroundPalette);
+    m_transport->UnitSecondsPixmap->setPalette(backgroundPalette);
+    m_transport->TenSecondsPixmap->setPalette(backgroundPalette);
+    m_transport->UnitMinutesPixmap->setPalette(backgroundPalette);
+    m_transport->TenMinutesPixmap->setPalette(backgroundPalette);
+    m_transport->UnitHoursPixmap->setPalette(backgroundPalette);
+    m_transport->TenHoursPixmap->setPalette(backgroundPalette);
+    m_transport->NegativePixmap->setPalette(backgroundPalette);
 
     // unset the negative sign to begin with
     m_transport->NegativePixmap->clear();
 
     // Set our toggle buttons
     //
-    m_transport->PlayButton->setToggleButton(true);
-    m_transport->RecordButton->setToggleButton(true);
+    m_transport->PlayButton->setCheckable(true);
+    m_transport->RecordButton->setCheckable(true);
 
 // Disable the loop button if JACK transport enabled, because this
 // causes a nasty race condition, and it just seems our loops are not JACK compatible
@@ -213,7 +216,8 @@ TransportDialog::TransportDialog(QWidget *parent):
     // will have to as well.
     //
     QPalette pal;
-    pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
+    //@@@ I'm totally guessing that the palette role for this color is window text.
+    pal.setColor(QPalette::Active, QPalette::WindowText, QColor(192, 216, 255));
 
     m_transport->TempoDisplay->setPalette(pal);
     m_transport->TempoDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
@@ -475,7 +479,8 @@ TransportDialog::displayTime()
         break;
 
     case BarMetronomeMode:
-        m_clearMetronomeTimer->start(1700, FALSE);
+        m_clearMetronomeTimer->setSingleShot(false);
+        m_clearMetronomeTimer->start(1700);
         m_transport->TimeDisplayLabel->setText("MET"); // DO NOT i18n
         m_transport->TimeDisplayLabel->show();
         break;
@@ -530,7 +535,7 @@ TransportDialog::slotChangeTimeDisplay()
 void
 TransportDialog::slotChangeToEnd()
 {
-    if (m_transport->ToEndButton->isOn()) {
+    if (m_transport->ToEndButton->isFlat()) {
         m_transport->ToEndLabel->show();
     } else {
         m_transport->ToEndLabel->hide();
@@ -540,7 +545,7 @@ TransportDialog::slotChangeToEnd()
 bool
 TransportDialog::isShowingTimeToEnd()
 {
-    return m_transport->ToEndButton->isOn();
+    return m_transport->ToEndButton->isFlat();
 }
 
 void
@@ -901,7 +906,8 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
 
     // 1.5 second timeout for MIDI event
     //
-    m_midiInTimer->start(1500, true);
+    m_midiInTimer->setSingleShot(true);
+    m_midiInTimer->start(1500);
 }
 
 void
@@ -961,7 +967,8 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 
     // 200 millisecond timeout
     //
-    m_midiOutTimer->start(200, true);
+    m_midiOutTimer->setSingleShot(true);
+    m_midiOutTimer->start(200);
 }
 
 void
@@ -993,7 +1000,7 @@ TransportDialog::slotLoopButtonClicked()
     //    }
     //    settings.endGroup();
 
-    if (m_transport->LoopButton->isOn()) {
+    if (m_transport->LoopButton->isFlat()) {
         emit setLoop();
     } else {
         emit unsetLoop();

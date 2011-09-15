@@ -41,7 +41,7 @@ CountdownBar::paintEvent(QPaintEvent *e)
     QPainter p(this);
 
     p.setClipRegion(e->region());
-    p.setClipRect(e->rect().normalize());
+    p.setClipRect(e->rect().normalized());
 
     p.setPen(GUIPalette::getColour(GUIPalette::AudioCountdownBackground));
     p.setBrush(GUIPalette::getColour(GUIPalette::AudioCountdownBackground));

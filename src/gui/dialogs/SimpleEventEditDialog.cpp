@@ -62,7 +62,9 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         m_modified(false)
 {
     setModal(true);
-    setWindowTitle(tr(inserting ? tr("Insert Event") : tr("Edit Event")));
+    setWindowTitle(tr(inserting ?
+                          tr("Insert Event").toStdString().c_str() :
+                          tr("Edit Event").toStdString().c_str()));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);

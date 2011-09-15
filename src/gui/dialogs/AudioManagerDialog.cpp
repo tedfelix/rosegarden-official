@@ -98,7 +98,7 @@ const char* const AudioManagerDialog::m_listViewLayoutName = "AudioManagerDialog
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        RosegardenDocument *doc):
-        QMainWindow(parent, "audioManagerDialog"),
+        QMainWindow(parent),
         m_doc(doc),
         m_playingAudioFile(0),
         m_audioPlayingDialog(0),
@@ -107,7 +107,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 {
     setWindowTitle(tr("Audio File Manager"));
     this->setAttribute(Qt::WA_DeleteOnClose);
-    setIcon(IconLoader().loadPixmap("window-audio-manager"));
+    setWindowIcon(IconLoader().loadPixmap("window-audio-manager"));
     setMinimumWidth(800);
 
     QWidget *centralWidget = new QWidget;
@@ -700,7 +700,8 @@ AudioManagerDialog::slotPlayPreview()
     //
     int msecs = item->getDuration().sec * 1000 +
                 item->getDuration().nsec / 1000000;
-    m_playTimer->start(msecs, true); // single shot
+    m_playTimer->setSingleShot(true);
+    m_playTimer->start(msecs);
 
     // just execute
     //
@@ -1307,7 +1308,7 @@ AudioManagerDialog::setAudioSubsystemStatus(bool ok)
 bool
 AudioManagerDialog::addAudioFile(const QString &filePath)
 {
-    QString fp = QFileInfo(filePath).absFilePath();
+    QString fp = QFileInfo(filePath).absoluteFilePath();
     RG_DEBUG << "\\_AudioFilePath : " << fp << endl;
     return addFile(fp);
 }

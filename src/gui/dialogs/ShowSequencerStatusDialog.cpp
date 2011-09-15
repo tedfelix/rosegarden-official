@@ -53,12 +53,11 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
     QTextEdit *text = new QTextEdit( vbox );
     vboxLayout->addWidget(text);
     vbox->setLayout(vboxLayout);
-    text->setTextFormat(Qt::PlainText);
     text->setReadOnly(true);
     text->setMinimumWidth(500);
     text->setMinimumHeight(200);
 
-    text->setText(status);
+    text->setPlainText(status);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);

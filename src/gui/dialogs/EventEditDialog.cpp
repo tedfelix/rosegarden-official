@@ -72,7 +72,9 @@ EventEditDialog::EventEditDialog(QWidget *parent,
         m_modified(false)
 {
     setModal(true);
-    setWindowTitle(tr(editable ? tr("Advanced Event Edit") : tr("Advanced Event Viewer")));
+    setWindowTitle(tr(editable ?
+                          tr("Advanced Event Edit").toStdString().c_str() :
+                          tr("Advanced Event Viewer").toStdString().c_str()));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);

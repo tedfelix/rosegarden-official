@@ -106,7 +106,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         bool hasConnection = false;
         if (!isSuitable(dev, &hasConnection)) continue;
 
-        QString label = QObject::tr(strtoqstr(dev->getName()));
+        QString label = QObject::tr(dev->getName().c_str());
         // connections imply some untranslatable external string
         QString connection = RosegardenSequencer::getInstance()->getConnection
             (dev->getId());
@@ -286,9 +286,9 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
         for (iit = list.begin(); iit != list.end(); ++iit) {
 
-            QString iname(QObject::tr(strtoqstr((*iit)->getName())));
+            QString iname(QObject::tr((*iit)->getName().c_str()));
             QString ipname((*iit)->getLocalizedPresentationName());
-            QString pname(QObject::tr(strtoqstr((*iit)->getProgramName())));
+            QString pname(QObject::tr((*iit)->getProgramName().c_str()));
 
             QString text;
 

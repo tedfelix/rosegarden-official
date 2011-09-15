@@ -95,7 +95,6 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
 
     m_textEdit = new QTextEdit(groupBox);
     groupBoxLayout->addWidget(m_textEdit);
-    m_textEdit->setTextFormat(Qt::PlainText);
     if (Thorn) m_textEdit->setStyleSheet("background: white");
 
     m_textEdit->setMinimumWidth(300);
@@ -131,9 +130,9 @@ LyricEditDialog::slotVerseNumberChanged(int verse)
 {
     NOTATION_DEBUG << "LyricEditDialog::slotVerseNumberChanged(" << verse << ")" << endl;
 
-    QString text = m_textEdit->text();
+    QString text = m_textEdit->toPlainText();
     m_texts[m_currentVerse] = text;
-    m_textEdit->setText(m_texts[verse]);
+    m_textEdit->setPlainText(m_texts[verse]);
     m_currentVerse = verse;
 }
 
@@ -292,7 +291,7 @@ LyricEditDialog::unparse()
     }
 
     if (!m_texts.empty()) {
-        m_textEdit->setText(m_texts[0]);
+        m_textEdit->setPlainText(m_texts[0]);
     } else {
         m_texts.push_back(m_skeleton);
     }
@@ -308,7 +307,7 @@ QString
 LyricEditDialog::getLyricData(int verse) const
 {
     if (verse == m_verseNumber->currentIndex()) {
-        return m_textEdit->text();
+        return m_textEdit->toPlainText();
     } else {
         return m_texts[verse];
     }
@@ -336,7 +335,7 @@ LyricEditDialog::verseDialogRepopulate()
     m_verseNumber->setCurrentIndex(m_currentVerse);
 
     std::cerr << "m_currentVerse = " << m_currentVerse << ", text = " << m_texts[m_currentVerse] << std::endl;
-    m_textEdit->setText(m_texts[m_currentVerse]);
+    m_textEdit->setPlainText(m_texts[m_currentVerse]);
 }
 
 

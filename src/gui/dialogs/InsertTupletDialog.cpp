@@ -63,12 +63,14 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
 
 
     timingLayout->addWidget(new QLabel(tr("Play "), timingBox), 0, 0);
-    m_untupledSpin = new QSpinBox(1,99,1,parent);
+    m_untupledSpin = new QSpinBox(parent);
+    m_untupledSpin->setMinimum(1);
     m_untupledSpin->setValue(untupledCount);
     timingLayout->addWidget(m_untupledSpin, 0, 1);
 
     timingLayout->addWidget(new QLabel(tr("in the time of  "), timingBox), 1, 0);
-    m_tupledSpin = new QSpinBox(1,99,1,parent);
+    m_tupledSpin = new QSpinBox(parent);
+    m_tupledSpin->setMinimum(1);
     m_tupledSpin->setValue(tupledCount);
     timingLayout->addWidget(m_tupledSpin, 1, 1);
 

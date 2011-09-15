@@ -71,7 +71,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent, Segment *segme
     m_sequencePreset->addItem(tr("Linear ramp"), LINEAR_RAMP);
     m_sequencePreset->addItem(tr("Fast vibrato arm release"), FAST_VIBRATO_ARM_RELEASE);
     m_sequencePreset->addItem(tr("Vibrato"), VIBRATO);
-    m_sequencePreset->setCurrentItem(settings.value("sequence_preset", int(USER)).toInt());
+    m_sequencePreset->setCurrentIndex(settings.value("sequence_preset", int(USER)).toInt());
 
     QGroupBox *prebendBox = new QGroupBox(tr("Pre Bend"));
     prebendBox->setContentsMargins(5, 5, 5, 5);
