@@ -80,7 +80,7 @@ RosegardenSequencer::RosegardenSequencer() :
     m_studio(new MappedStudio()),
     m_transportToken(1),
     m_isEndOfCompReached(false),
-    m_mutex(true) // recursive
+    m_mutex(QMutex::Recursive) // recursive
 {
     // Initialise the MappedStudio
     //
