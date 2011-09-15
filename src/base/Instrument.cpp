@@ -336,7 +336,7 @@ Instrument::getLocalizedPresentationName() const
 
     // translate the left piece (we'll leave the #1..#n as an untranslatable
     // Rosegarden-specific concept unless people are really bothered by it)
-    return QString("%1 %2").arg(QObject::tr(inameL)).arg(inameR);
+    return QString("%1 %2").arg(QObject::tr(inameL.toLocal8Bit())).arg(inameR);
 }
 
 unsigned int
