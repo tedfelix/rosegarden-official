@@ -54,6 +54,11 @@ Led::Led(const QColor& col, QWidget *parent) :
     d->off_map = 0;
     d->on_map = 0;
     setColor(col);
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 }
 
 Led::~Led()
@@ -109,13 +114,8 @@ Led::paintEvent(QPaintEvent *)
         scale = 3;
         width *= scale;
 
-        QSettings settings;
-        settings.beginGroup(GeneralOptionsConfigGroup);
-        bool Thorn = settings.value("use_thorn_style", true).toBool();
-        settings.endGroup();
-
         tmpMap = new QPixmap(width, width);
-        QColor bg = Thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
+        QColor bg = m_Thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
 
         tmpMap->fill(bg);
         paint.begin(tmpMap);

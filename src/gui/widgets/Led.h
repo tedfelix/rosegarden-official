@@ -61,6 +61,7 @@ public slots:
 protected:
   void paintEvent(QPaintEvent *);
   bool paintCachedPixmap();
+  bool m_Thorn;
 
 private:
   State led_state;
