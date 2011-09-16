@@ -197,13 +197,11 @@ Rotary::paintEvent(QPaintEvent *)
 
     if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
-        paint.setBrush(Qt::red);
     } else {
         paint.setBrush(Base);
     }
 
     QColor c(m_knobColour);
-    c = Qt::red;
     pen.setColor(c);
     paint.setPen(pen);
 
