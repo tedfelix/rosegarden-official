@@ -152,6 +152,7 @@ protected:
 
     typedef std::map<CacheIndex, QPixmap> PixmapCache;
     static PixmapCache m_pixmaps;
+    bool m_Thorn;
 };
 
 

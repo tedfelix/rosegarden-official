@@ -19,6 +19,7 @@
 #include "Rotary.h"
 
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 #include "base/Profiler.h"
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
@@ -40,6 +41,7 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QColormap>
+#include <QSettings>
 
 #include <cmath>
 
@@ -91,6 +93,11 @@ Rotary::Rotary(QWidget *parent,
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
 }
 
 Rotary::~Rotary()
@@ -179,7 +186,8 @@ Rotary::paintEvent(QPaintEvent *)
     int scale = 4;
     int width = m_size * scale;
     QPixmap map(width, width);
-    map.fill(palette().color(QPalette::Background));
+    QColor bg = m_Thorn ? QColor::fromRgb(0x40, 0x40, 0x40) : palette().window().color();
+    map.fill(bg);
     paint.begin(&map);
 
     QPen pen;
@@ -276,7 +284,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     // and un-draw the bottom part of the arc
-    map.fill(palette().color(QPalette::Background));
+    map.fill(bg);
     paint.setPen(pen);
     paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);
