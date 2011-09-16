@@ -26,6 +26,9 @@
 #include <QImage>
 #include <QColor>
 #include <QApplication>
+#include <QSettings>
+
+#include "misc/ConfigGroups.h"
 
 namespace Rosegarden
 {
@@ -106,9 +109,15 @@ Led::paintEvent(QPaintEvent *)
         scale = 3;
         width *= scale;
 
+        QSettings settings;
+        settings.beginGroup(GeneralOptionsConfigGroup);
+        bool Thorn = settings.value("use_thorn_style", true).toBool();
+        settings.endGroup();
+
         tmpMap = new QPixmap(width, width);
-        QPalette pal;
-        tmpMap->fill(pal.window().color());
+        QColor bg = Thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
+
+        tmpMap->fill(bg);
         paint.begin(tmpMap);
 
     } else
