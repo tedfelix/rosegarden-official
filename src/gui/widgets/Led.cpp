@@ -107,7 +107,8 @@ Led::paintEvent(QPaintEvent *)
         width *= scale;
 
         tmpMap = new QPixmap(width, width);
-//        tmpMap->fill(paletteBackgroundColor());
+        QPalette pal;
+        tmpMap->fill(pal.window().color());
         paint.begin(tmpMap);
 
     } else
