@@ -4,7 +4,27 @@ AC_INIT(Rosegarden, 11.11, rosegarden-devel@lists.sourceforge.net)
 dnl  Each release will need the proper version  (e.g. 09.10) in the line above
 dnl  and the proper codename (e.g. Abraham Darby) in the following line
 CODENAME="Edelweiss"
-# next up: "F...?" unless someone has a better suggestion
+#CODENAME="Freedom"
+#CODENAME="Glenfiddich"
+#CODENAME="Handel"
+#CODENAME="Imagination"
+#CODENAME="Joie de Vivre"
+#CODENAME="Kaleidoscope"
+#CODENAME="Lovely Lady"
+#CODENAME="Magic Carpet"
+#CODENAME="Nostalgia"
+#CODENAME="Oranges and Lemons"
+#CODENAME="Peace"
+#CODENAME="Querida"
+#CODENAME="Rhapsody in Blue"
+#CODENAME="Seagull"
+#CODENAME="Twice in a Blue Moon"
+#CODENAME="Ultimate Pleasure"
+#CODENAME="Vesper"
+#CODENAME="Worcestershire"
+#CODENAME="Xerxes"
+#CODENAME="Yesterday"
+#CODENAME="Zepherine Drouhin"
 
 AC_CONFIG_SRCDIR(src/base/Composition.h)
 
