@@ -197,11 +197,13 @@ Rotary::paintEvent(QPaintEvent *)
 
     if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
+        paint.setBrush(Qt::red);
     } else {
         paint.setBrush(Base);
     }
 
     QColor c(m_knobColour);
+    c = Qt::red;
     pen.setColor(c);
     paint.setPen(pen);
 
@@ -284,7 +286,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     // and un-draw the bottom part of the arc
-    map.fill(bg);
+    pen.setColor(bg);
     paint.setPen(pen);
     paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);
