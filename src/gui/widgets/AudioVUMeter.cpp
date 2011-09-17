@@ -78,8 +78,7 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
 
     // first, we'll fill the whole background rect with a 40% alpha version of
     // the border color
-//    QColor fill = palette().mid();
-    QColor fill = QColor(0xEE, 0xEE, 0xEE); // QT3: wild guess
+    QColor fill = palette().mid().color();
     int H = 0;
     int S = 0;
     int V = 0;
@@ -90,16 +89,15 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
     paint.fillRect(0, 0, w, h, fill);
     
     // now we draw the border outline around it
-//    paint.setPen(palette().mid());
-    paint.setPen(QColor(0xEE, 0xEE, 0xEE)); // QT3: wild guess
+    paint.setPen(palette().mid().color());
     paint.drawRect(0, 0, w, h);
 
-/*    paint.setPen(palette().background());
+    paint.setPen(palette().background().color());
     paint.setBrush(palette().background());
     paint.drawRect(1, 1, w - 2, m_yoff / 2 - 1);
     paint.drawRect(1, 1, m_xoff / 2 - 1, h - 2);
     paint.drawRect(w - m_xoff / 2 - 1, 1, m_xoff / 2, h - 2);
-    paint.drawRect(1, h - m_yoff / 2 - 1, w - 2, m_yoff / 2);*/
+    paint.drawRect(1, h - m_yoff / 2 - 1, w - 2, m_yoff / 2);
     paint.end();
 
 //  m_meter->paintEvent(e);
