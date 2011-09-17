@@ -32,6 +32,7 @@
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/Instrument.h"
+#include "base/SegmentLinker.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/MidiTypes.h"
@@ -1323,12 +1324,35 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     // Iterate on segments
     long eventCount = 0;
 
+    // Put a break in the file
+    //
+    outStream << endl << endl;
+
     for (Composition::iterator segitr = m_composition.begin();
          segitr != m_composition.end(); ++segitr) {
 
         Segment *segment = *segitr;
 
-        saveSegment(outStream, segment, progress, totalEvents, eventCount);
+        if (segment->isLinked()) {
+            QString attsString = QString("linkerid=\"%1\" ");
+            attsString += QString("linkertransposechangekey=\"%2\" ");
+            attsString += QString("linkertransposesteps=\"%3\" ");
+            attsString += QString("linkertransposesemitones=\"%4\" ");
+            attsString += QString("linkertransposesegmentback=\"%5\" ");
+            QString linkedSegAtts = QString(attsString)
+              .arg(segment->getLinker()->getSegmentLinkerId())
+              .arg(segment->getLinkTransposeParams().m_changeKey ? "true" : 
+                                                                   "false")
+              .arg(segment->getLinkTransposeParams().m_steps)
+              .arg(segment->getLinkTransposeParams().m_semitones)
+              .arg(segment->getLinkTransposeParams().m_transposeSegmentBack
+                                                         ? "true" : "false");
+
+            saveSegment(outStream, segment, progress, totalEvents, 
+                                            eventCount, linkedSegAtts);
+        } else {
+            saveSegment(outStream, segment, progress, totalEvents, eventCount);
+        }
 
     }
 
@@ -1456,7 +1480,8 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
 {
     QString time;
 
-    outStream << QString("<segment track=\"%1\" start=\"%2\" ")
+    outStream << QString("<%1 track=\"%2\" start=\"%3\" ")
+    .arg(segment->getXmlElementName())
     .arg(segment->getTrack())
     .arg(segment->getStartTime());
 
@@ -1627,7 +1652,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
     }
 
 
-    outStream << "</segment>\n"; //-------------------------
+    outStream << QString("</%1>\n").arg(segment->getXmlElementName()); //-------------------------
 
 }
 
@@ -1808,6 +1833,8 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             }
 
         }
+        
+        getComposition().resetLinkedSegmentRefreshStatuses();
     }
 
     if (handler.channelsWereRemapped()) {

@@ -27,6 +27,7 @@
 #include "base/Selection.h"
 #include "base/Track.h"
 #include "commands/segment/SegmentQuickCopyCommand.h"
+#include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "CompositionItemHelper.h"
 #include "CompositionModel.h"
@@ -56,6 +57,7 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_segmentAddMode(false),
         m_segmentCopyMode(false),
+        m_segmentCopyingAsLink(false),
         m_segmentQuickCopyDone(false),
         m_buttonPressed(false),
         m_selectionMoveStarted(false),
@@ -350,16 +352,28 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone) {
-        MacroCommand *mcommand = new MacroCommand
-                                  (SegmentQuickCopyCommand::getGlobalName());
+        MacroCommand *mcommand = 0;
+        
+        if (m_segmentCopyingAsLink) {
+            mcommand = new MacroCommand
+                           (SegmentQuickLinkCommand::getGlobalName());
+        } else {
+            mcommand = new MacroCommand
+                           (SegmentQuickCopyCommand::getGlobalName());
+        }
 
         SegmentSelection selectedItems = m_canvas->getSelectedSegments();
         SegmentSelection::iterator it;
         for (it = selectedItems.begin();
                 it != selectedItems.end();
                 it++) {
-            SegmentQuickCopyCommand *command =
-                new SegmentQuickCopyCommand(*it);
+            Command *command = 0;
+        
+            if (m_segmentCopyingAsLink) {
+                command = new SegmentQuickLinkCommand(*it);
+            } else {
+                command = new SegmentQuickCopyCommand(*it);
+            }
 
             mcommand->addCommand(command);
         }
@@ -370,7 +384,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         //
 // 		m_canvas->updateContents();
 		m_canvas->update();
-		
+
 		m_segmentQuickCopyDone = true;
     }
 

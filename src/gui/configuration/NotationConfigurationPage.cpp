@@ -532,6 +532,67 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     frame->setLayout(layout);
 
     addTab(frame, tr("Font"));
+
+
+    // Beginning of "Segments" tab
+
+    frame = new QFrame(m_tabWidget);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
+
+    row = 0;
+
+    layout->setRowMinimumHeight(row, 15);
+    ++row;
+
+    layout->addWidget
+        (new QLabel
+         (tr("Show repeated segments"), frame),
+         row, 0, 1, 2);
+    m_showRepeated = new QCheckBox(frame);
+    connect(m_showRepeated, SIGNAL(stateChanged(int)),
+            this, SLOT(slotModified()));
+    bool defaultShowRepeated = qStrToBool(settings.value("showrepeated",
+                                                         "true")) ;
+    m_showRepeated->setChecked(defaultShowRepeated);
+    layout->addWidget(m_showRepeated, row, 2);
+    ++row;
+
+    layout->addWidget
+        (new QLabel
+         (tr("Allow direct edition of repeated segments"), frame),
+         row, 0, 1, 2);
+    m_editRepeated = new QCheckBox(frame);
+    connect(m_editRepeated, SIGNAL(stateChanged(int)),
+            this, SLOT(slotModified()));
+    bool defaultEditRepeated = qStrToBool(settings.value("editrepeated",
+                                                         "false")) ;
+    m_editRepeated->setChecked(defaultEditRepeated);
+    layout->addWidget(m_editRepeated, row, 2);
+    ++row;
+
+    layout->addWidget
+        (new QLabel
+         (tr("Hide redundant clefs and keys"), frame),
+         row, 0, 1, 2);
+    m_hideRedundantClefKey = new QCheckBox(frame);
+    connect(m_hideRedundantClefKey, SIGNAL(stateChanged(int)),
+            this, SLOT(slotModified()));
+    bool defaultHideRedundantClefKey =
+        qStrToBool(settings.value("hideredundantclefkey", "true")) ;
+    m_hideRedundantClefKey->setChecked(defaultHideRedundantClefKey);
+    layout->addWidget(m_hideRedundantClefKey, row, 2);
+    ++row;
+
+
+    layout->setRowStretch(row, 10);
+    frame->setLayout(layout);
+
+    addTab(frame, tr("Segments"));
+
+    // End of "Segments" tab
+
     settings.endGroup();
 }
 
@@ -687,6 +748,11 @@ NotationConfigurationPage::apply()
     settings.setValue("keysigcancelmode", m_keySigCancelMode->currentIndex());
 
     settings.setValue("quantizemakeviable", m_splitAndTie->isChecked());
+
+    settings.setValue("showrepeated", m_showRepeated->isChecked());
+    settings.setValue("editrepeated", m_editRepeated->isChecked());
+    settings.setValue("hideredundantclefkey",
+                       m_hideRedundantClefKey->isChecked());
 
     settings.endGroup();
 }

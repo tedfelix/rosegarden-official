@@ -177,6 +177,7 @@ CommandHistory::addCommand(Command *command, bool execute, bool bundle)
 
     // Emit even if we aren't executing the command, because
     // someone must have executed it for this to make any sense
+    emit updateLinkedSegments(command);
     emit commandExecuted();
     emit commandExecuted(command);
 
@@ -226,6 +227,7 @@ CommandHistory::addToBundle(Command *command, bool execute)
 
     // Emit even if we aren't executing the command, because
     // someone must have executed it for this to make any sense
+    emit updateLinkedSegments(command);
     emit commandExecuted();
     emit commandExecuted(command);
 
@@ -333,6 +335,7 @@ CommandHistory::undo()
 
     Command *command = m_undoStack.top();
     command->unexecute();
+    emit updateLinkedSegments(command);
     emit commandExecuted();
     emit commandUnexecuted(command);
 
@@ -358,6 +361,7 @@ CommandHistory::redo()
 
     Command *command = m_redoStack.top();
     command->execute();
+    emit updateLinkedSegments(command);
     emit commandExecuted();
     emit commandExecuted(command);
 

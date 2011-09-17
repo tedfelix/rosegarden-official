@@ -16,6 +16,7 @@
 #include "Composition.h"
 #include "misc/Debug.h"
 #include "base/Segment.h"
+#include "base/SegmentLinker.h"
 #include "FastVector.h"
 #include "base/BaseProperties.h"
 #include "base/Profiler.h"
@@ -407,6 +408,24 @@ Composition::getSegmentVoiceIndex(const Segment *segment) const
     }
 
     return m_segmentVoiceIndexCache[segment];
+}
+
+void
+Composition::resetLinkedSegmentRefreshStatuses()
+{
+    std::set<const SegmentLinker *> linkers;
+    for (iterator itr = begin(); itr != end(); ++itr) {
+        Segment *segment = *itr;
+        if (segment->isLinked()) {
+            SegmentLinker *linker = segment->getLinker();
+            std::set<const SegmentLinker *>::const_iterator finder = 
+                                                           linkers.find(linker);
+            if (finder == linkers.end()) {
+                linker->clearRefreshStatuses();
+                linkers.insert(linker);
+            }
+        }
+    }
 }
 
 TriggerSegmentRec *
@@ -1958,8 +1977,6 @@ Composition::getNewTrackId() const
 void
 Composition::notifySegmentAdded(Segment *s) const
 {
-    std::cerr << "Composition::notifySegmentAdded" << std::endl;
-
     // If there is an earlier repeating segment on the same track, we
     // need to notify the change of its repeat end time
 
@@ -2067,6 +2084,19 @@ Composition::notifySegmentStartChanged(Segment *s, timeT t)
     // not ideal, but best way to ensure track heights are recomputed:
     clearVoiceCaches();
     updateRefreshStatuses();
+
+    // If there is an earlier repeating segment on the same track, we
+    // need to notify the change of its repeat end time
+    // (Copied from notifySegmentTrackChanged())
+    for (const_iterator i = begin(); i != end(); ++i) {
+        if (((*i)->getTrack() == s->getTrack())
+            && ((*i)->isRepeating())
+            && ((*i)->getStartTime() < s->getStartTime())) {
+
+            notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+        }
+    }
+
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentStartChanged(this, s, t);

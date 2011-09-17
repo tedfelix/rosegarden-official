@@ -38,7 +38,7 @@ ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
         Clef clef,
         bool shouldChangeOctave,
         bool shouldTranspose) :
-        BasicCommand(getGlobalName(&clef), segment, time,
+        BasicCommand(getThisGlobalName(&clef), segment, time,
                      ((shouldChangeOctave || shouldTranspose) ?
                       segment.getEndTime() : time + 1)),
         m_clef(clef),
@@ -60,6 +60,12 @@ ClefInsertionCommand::getSubsequentSelection()
     EventSelection *selection = new EventSelection(getSegment());
     selection->addEvent(getLastInsertedEvent());
     return selection;
+}
+
+QString 
+ClefInsertionCommand::getThisGlobalName(Clef *clef)
+{
+    return getGlobalName(clef);
 }
 
 QString
@@ -135,6 +141,43 @@ ClefInsertionCommand::modifySegment()
                 ++i;
             }
         }
+    }
+}
+
+ClefLinkInsertionCommand::ClefLinkInsertionCommand(Segment &segment,
+                                                   timeT time,
+                                                   Clef clef,
+                                                   bool shouldChangeOctave,
+                                                   bool shouldTranspose) : 
+    ClefInsertionCommand(segment,time,clef,shouldChangeOctave,shouldTranspose)
+{
+    setUpdateLinks(false);
+};
+
+ClefLinkInsertionCommand::~ClefLinkInsertionCommand()
+{
+    // nothing
+}
+
+QString 
+ClefLinkInsertionCommand::getThisGlobalName(Clef *clef)
+{
+    return getGlobalName(clef);
+}
+
+QString
+ClefLinkInsertionCommand::getGlobalName(Clef *clef) 
+{ 
+    return tr("Add Cl&ef Change for linked segment..."); 
+}
+
+void
+ClefLinkInsertionCommand::modifySegment()
+{
+    ClefInsertionCommand::modifySegment();
+    if (m_lastInsertedEvent && m_lastInsertedEvent->isa(Clef::EventType)) {
+        //add a property so this event is ignored when updating linked segs
+        m_lastInsertedEvent->set<Bool>(LINKED_SEGMENT_IGNORE_UPDATE, true);
     }
 }
 

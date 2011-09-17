@@ -68,6 +68,12 @@ HeadersGroup(RosegardenDocument *document) :
     setLayout(m_layout);
 }
 
+HeadersGroup::
+~HeadersGroup()
+{
+    // nothing here
+}
+
 void
 HeadersGroup::removeAllHeaders()
 {

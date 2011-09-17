@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2011 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -32,18 +32,22 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/ViewSegment.h"
 #include "base/ViewElement.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "NotationChord.h"
 #include "NotationElement.h"
+#include "ClefKeyContext.h"
 #include "NotationGroup.h"
 #include "NotationProperties.h"
+#include "NotationScene.h"
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
 #include <QSettings>
 #include <QObject>
 #include <cmath>
+#include <limits>
 
 namespace Rosegarden
 {
@@ -62,11 +66,13 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_spacing(100),
     m_proportion(60),
     m_keySigCancelMode(1),
+    m_hideRedundance(true),
     m_npf(npf),
     m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties),
     m_timePerProgressIncrement(0),
-    m_staffCount(0)
+    m_staffCount(0),
+    m_scene(static_cast<NotationScene *>(parent))
 {
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
@@ -74,6 +80,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     settings.beginGroup(NotationOptionsConfigGroup);
 
     m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
+    m_hideRedundance = settings.value("hideredundantclefkey", "true").toBool();
     settings.endGroup();
 }
 
@@ -169,15 +176,24 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
     Profiler profiler("NotationHLayout::scanViewSegment");
 
     Segment &segment(staff.getSegment());
+    timeT segStartTime = segment.getStartTime();
+    timeT segEndTime = segment.getEndMarkerTime();
+
     int startBarOfViewSegment = getComposition()->getBarNumber(segment.getStartTime());
 
     if (full) {
         clearBarList(staff);
-        startTime = segment.getStartTime();
-        endTime = segment.getEndMarkerTime();
+        startTime = segStartTime;
+        endTime = segEndTime;
     } else {
+        // Time must be limited to values inside segment to avoid the extension
+        // of the staff toward the start of the composition (experienced with
+        // linked segments) with various effects as the display of an
+        // unnecessary time signature at a wrong place.
         startTime = getComposition()->getBarStartForTime(startTime);
         endTime = getComposition()->getBarEndForTime(endTime);
+        if (segStartTime > startTime) startTime = segStartTime;
+        if (segEndTime < endTime) endTime = segEndTime;
     }
 
     NotationElementList *notes = staff.getViewElementList();
@@ -193,9 +209,9 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
     	--endBarNo;
         }
     */
+    TrackId trackId = segment.getTrack();
     std::string name =
-        segment.getComposition()->
-        getTrackById(segment.getTrack())->getLabel();
+        segment.getComposition()->getTrackById(trackId)->getLabel();
     m_staffNameWidths[&staff] =
         npf->getNoteBodyWidth() * 2 +
         npf->getTextWidth(Text(name, Text::StaffName));
@@ -212,11 +228,13 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
     ::Rosegarden::Key key = segment.getKeyAtTime(startTime);
     Clef clef = segment.getClefAtTime(startTime);
     TimeSignature timeSignature =
-        segment.getComposition()->getTimeSignatureAt(startTime);
+        getComposition()->getTimeSignatureAt(startTime);
+    float timeSigWidth = npf->getNoteBodyWidth() +
+                            npf->getTimeSigWidth(timeSignature);
     bool barCorrect = true;
 
     int ottavaShift = 0;
-    timeT ottavaEnd = segment.getEndMarkerTime();
+    timeT ottavaEnd = segEndTime;
 
     if (full) {
 
@@ -311,13 +329,14 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         NOTATION_DEBUG << "bar " << barNo << ", startBarOfViewSegment " << startBarOfViewSegment
                        << ", newTimeSig " << newTimeSig << endl;
 
-        float fixedWidth = 0.0;
-        if (newTimeSig && !timeSignature.isHidden()) {
-            fixedWidth += npf->getNoteBodyWidth() +
-                          npf->getTimeSigWidth(timeSignature);
-        }
+        // When bar is the first one in a segment, the delay computed here
+        // is the difference between event position in bar and event position
+        // in segment.
+        timeT segDelay = (barNo == startBarOfViewSegment) ?
+            segStartTime - getComposition()->getBarStart(barNo) : 0;
 
-        setBarBasicData(staff, barNo, from, barCorrect, timeSignature, newTimeSig);
+        setBarBasicData(staff, barNo, from, barCorrect, timeSignature,
+                        newTimeSig, segDelay, trackId);
         BarDataList::iterator bdli(barList.find(barNo));
         bdli->second.layoutData.needsLayout = true;
 
@@ -348,12 +367,28 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                     ottavaShift = 0;
                 }
             }
+            
+            // Clefs and key signatures must always be memorized here (even
+            // when they are invisible) as the way other elements are displayed
+            // may depend from them.
+            Key oldKey;
+            if (el->event()->isa(Clef::EventType)) {
+                clef = Clef(*el->event());
+                accTable.newClef(clef);
+            } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
+	        oldKey = key;
+                key = ::Rosegarden::Key(*el->event());
+                accTable = AccidentalTable
+                           (key, clef, octaveType, barResetType);
+            }
 
             bool invisible = false;
             if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
                 if (!showInvisibles)
                     continue;
             }
+            if (m_hideRedundance &&
+                m_scene->isEventRedundant(el->event(), segment)) continue;
 
             if (el->event()->has(BEAMED_GROUP_ID)) {
                 NOTATION_DEBUG << "element is beamed" << endl;
@@ -377,19 +412,11 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, npf, key)));
 
-                clef = Clef(*el->event());
-                accTable.newClef(clef);
-
             } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
                 //		NOTATION_DEBUG << "Found key" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
-                                       getLayoutWidth(*el, npf, key)));
-
-                key = ::Rosegarden::Key(*el->event());
-
-                accTable = AccidentalTable
-                           (key, clef, octaveType, barResetType);
+                                       getLayoutWidth(*el, npf, oldKey)));
 
             } else if (el->event()->isa(Text::EventType)) {
 
@@ -458,9 +485,8 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 //        std::cout << "barTimes.first: " << barTimes.first << " .second: " << barTimes.second << " actualBarEnd: " << actualBarEnd << std::endl;
         if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
         barCorrect = (actualBarEnd == barTimes.second);
-
-        setBarSizeData(staff, barNo, fixedWidth,
-                       actualBarEnd - barTimes.first);
+        setBarSizeData(staff, barNo, 0.0,
+                       timeSigWidth, actualBarEnd - barTimes.first);
 
         if ((endTime > startTime) && (barNo % 20 == 0)) {
             emit setValue((barTimes.second - startTime) * 95 /
@@ -492,7 +518,10 @@ NotationHLayout::setBarBasicData(ViewSegment &staff,
                                  NotationElementList::iterator start,
                                  bool correct,
                                  TimeSignature timeSig,
-                                 bool newTimeSig)
+                                 bool newTimeSig,
+                                 timeT segDelay,
+                                 TrackId trackId
+                                )
 {
     //    NOTATION_DEBUG << "setBarBasicData for " << barNo << endl;
 
@@ -510,12 +539,15 @@ NotationHLayout::setBarBasicData(ViewSegment &staff,
     i->second.basicData.correct = correct;
     i->second.basicData.timeSignature = timeSig;
     i->second.basicData.newTimeSig = newTimeSig;
+    i->second.basicData.delayInBar = segDelay;
+    i->second.basicData.trackId = trackId;
 }
 
 void
 NotationHLayout::setBarSizeData(ViewSegment &staff,
                                 int barNo,
                                 float fixedWidth,
+                                float timeSigFixedWidth,
                                 timeT actualDuration)
 {
     //    NOTATION_DEBUG << "setBarSizeData for " << barNo << endl;
@@ -535,6 +567,7 @@ NotationHLayout::setBarSizeData(ViewSegment &staff,
     i->second.sizeData.reconciledWidth = 0.0;
     i->second.sizeData.clefKeyWidth = 0;
     i->second.sizeData.fixedWidth = fixedWidth;
+    i->second.sizeData.timeSigFixedWidth = timeSigFixedWidth;
 }
 
 void
@@ -561,16 +594,16 @@ NotationHLayout::scanChord(NotationElementList *notes,
 //              << " unquantized, "
 //              << (*itr)->getViewAbsoluteTime()
 //              << " quantized" << std::endl;
-    
+
 //    NOTATION_DEBUG << "Contents:" << endl;
-        
+
     /*
         for (NotationElementList::iterator i = chord.getInitialElement();
     	 i != notes->end(); ++i) {
     	(*i)->event()->dump(std::cerr);
     	if (i == chord.getFinalElement()) break;
         }
-    */ 
+    */
     // We don't need to get the chord's notes in pitch order here,
     // but we do need to ensure we see any random non-note events
     // that may crop up in the middle of it.
@@ -727,7 +760,12 @@ NotationHLayout::preSquishBar(int barNo)
     static ColumnMap columns;
     bool haveSomething = false;
 
+    typedef std::vector<BarData *> BarDataVector;
+    typedef std::map<TrackTimeSig, BarDataVector> TimeSigMap;
+    static TimeSigMap timeSigMap;
+
     columns.clear();
+    timeSigMap.clear();
 
     for (BarDataMap::iterator mi = m_barData.begin();
             mi != m_barData.end(); ++mi) {
@@ -739,8 +777,13 @@ NotationHLayout::preSquishBar(int barNo)
 
             haveSomething = true;
             ChunkList &cl(bdli->second.chunks);
-            timeT aggregateTime = 0;
 
+            // Delay between start of bar and start of segment have to be
+            // added to event durations to avoid wrong position of notes
+            // when a segment is not precisely beginning at a start of a bar.
+            // This fixes the "anacrusis problem".
+
+            timeT aggregateTime = bdli->second.basicData.delayInBar;
             for (ChunkList::iterator cli = cl.begin(); cli != cl.end(); ++cli) {
 
                 // Subordering is typically zero for notes, positive
@@ -755,11 +798,66 @@ NotationHLayout::preSquishBar(int barNo)
 
                 aggregateTime += cli->duration;
             }
+
+            // Sometimes, two time signatures may be displayed in the same bar.
+            // Following code should keep only one of them.
+            //    - If the two time signatures are different, don't do anything
+            //    - Else keep the first one
+
+            // Elimination of redundant time signature in the same bar - Step 1:
+            // Remember the time bar, keyed with time signature and track Id in
+            // timeSigMap
+            if (bdli->second.basicData.newTimeSig
+                    && !bdli->second.basicData.timeSignature.isHidden()) {
+                TrackTimeSig tts
+                    = TrackTimeSig(bdli->second.basicData.trackId,
+                                   bdli->second.basicData.timeSignature);
+                timeSigMap[tts].push_back(&(bdli->second));
+            }
         }
     }
 
     if (!haveSomething)
         return ;
+
+    // Elimination of redundant time signature in the same bar - Step 2:
+    // Scan every memorized bar and when several time signatures (i.e. several
+    // bars with the same keys in TimeSigMap) are found keep only one whose
+    // segment exists the soonest after the start of the bar.
+
+    // Walk through the "track and time signature" keys
+    for (TimeSigMap::iterator
+            i = timeSigMap.begin(); i != timeSigMap.end(); ++i) {
+
+        // If only one bar keep its time signature and update fixedWidth
+        if (i->second.size() == 1) {
+          BarData * dataPtr = *(i->second.begin());
+            dataPtr->sizeData.fixedWidth += dataPtr->sizeData.timeSigFixedWidth;
+            continue;
+        }
+
+        // else walk through the bars and find the first segment to exist
+        // (i.e. with the smallest basicData.delayInBar value)
+        timeT delay = std::numeric_limits<timeT>::max();
+        BarData * dataPtr = 0;
+        for (BarDataVector::iterator
+            j = i->second.begin(); j != i->second.end(); j++) {
+
+            // Hide all the time signatures
+            (*j)->basicData.timeSignature.setHidden(true);  
+
+            // Remember the smallest delayInBar and the associated barData
+            if ((*j)->basicData.delayInBar < delay) {
+                delay = (*j)->basicData.delayInBar;
+                dataPtr = *j;
+            }
+        }
+
+        // Set visible again the time sig of the selected bar and update
+        // the bar fixed width
+        dataPtr->basicData.timeSignature.setHidden(false);
+        dataPtr->sizeData.fixedWidth += dataPtr->sizeData.timeSigFixedWidth;
+    }
 
     // now modify chunks in-place
 
@@ -1073,10 +1171,10 @@ NotationHLayout::reconcileBarsPage()
             // narrower than e.g. 90% or something based on the spacing
             /*!!!
             	    if (!tooFar && (nextStretchFactor < 1.0)) {
-             
+
             		for (BarDataMap::iterator i = m_barData.begin();
             		     i != m_barData.end(); ++i) {
-             
+
             		    BarDataList &list = i->second;
             		    BarDataList::iterator bdli = list.find(barNo);
             		    if (bdli != list.end()) {
@@ -1226,7 +1324,11 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime, bool full)
             }
         }
 
-        m_timePerProgressIncrement = timeCovered / (100 / m_barData.size());
+        // Don't crash if more than 100 segments
+        int k = 100 / m_barData.size();
+        if (k < 1) k = 1;
+
+        m_timePerProgressIncrement = timeCovered / k;
 
         layout(i, startTime, endTime, full);
         ++staffNo;
@@ -1257,8 +1359,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
         (full && (notes->begin() != notes->end())) ?
         (*notes->begin())->getViewAbsoluteTime() : startTime;
 
-    ::Rosegarden::Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);
-    Clef clef = notationStaff.getSegment().getClefAtTime(lastIncrement);
+    Segment &segment = notationStaff.getSegment();
+    ::Rosegarden::Key key = segment.getKeyAtTime(lastIncrement);
+    Clef clef = segment.getClefAtTime(lastIncrement);
     TimeSignature timeSignature;
 
     int startBar = getComposition()->getBarNumber(startTime);
@@ -1313,7 +1416,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
 
             bdi->second.layoutData.x += offset;
 
-            if (bdi->second.basicData.newTimeSig)  
+            if (bdi->second.basicData.newTimeSig)
                 bdi->second.layoutData.timeSigX += (int)offset;
 
             for (NotationElementList::iterator it = from;
@@ -1402,6 +1505,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
                 if (!showInvisibles)
                     continue;
             }
+            if (m_hideRedundance &&
+                m_scene->isEventRedundant(el->event(), segment)) continue;
 
 //            float sigx = 0;
 
@@ -1686,7 +1791,7 @@ NotationHLayout::positionChord(ViewSegment &staff,
 
     for (NotationElementList::iterator citr = chord.getInitialElement();
          citr != staff.getViewElementList()->end(); ++citr) {
-        
+
         if (citr == to)
             barEndsInChord = true;
 
@@ -1833,8 +1938,11 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
 
             } else if (m_keySigCancelMode == 1) { // only when reducing acc count
 
-                if (!(key.isSharp() == cancelKey.isSharp() &&
-                        key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+                if (key.getAccidentalCount() &&
+                    !(key.isSharp() == cancelKey.isSharp() &&
+                      key.getAccidentalCount() < cancelKey.getAccidentalCount()
+                     )
+                   ) {
                     cancelKey = ::Rosegarden::Key();
                 }
             }
@@ -1917,7 +2025,6 @@ NotationHLayout::getFirstVisibleBarOnViewSegment(ViewSegment &staff) const
     if (bdl.begin() != bdl.end()) bar = bdl.begin()->first;
 
     //    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBarOnViewSegment: returning " << bar << endl;
-
     return bar;
 }
 
@@ -2001,13 +2108,13 @@ NotationHLayout::isBarCorrectOnViewSegment(ViewSegment &staff, int i) const
 }
 
 bool NotationHLayout::getTimeSignaturePosition(ViewSegment &staff,
-                                               int i,
+                                               int barNo,
                                                TimeSignature &timeSig,
                                                double &timeSigX) const
 {
     const BarDataList &bdl(getBarData(staff));
 
-    BarDataList::const_iterator bdli(bdl.find(i));
+    BarDataList::const_iterator bdli(bdl.find(barNo));
     if (bdli != bdl.end()) {
         timeSig = bdli->second.basicData.timeSignature;
         timeSigX = (double)(bdli->second.layoutData.timeSigX);
@@ -2092,5 +2199,65 @@ NotationHLayout::getXForTimeByEvent(timeT time) const
 
 std::vector<int> NotationHLayout::m_availableSpacings;
 std::vector<int> NotationHLayout::m_availableProportions;
+
+/// YG: Only for debug
+void
+NotationHLayout::BarData::dump(std::string indent)
+{
+    std::cout << indent
+              << "basic(start=<x>"
+              << " correct=" << basicData.correct
+              << " timeSig=" << basicData.timeSignature.getNumerator()
+                      << "/" << basicData.timeSignature.getDenominator()
+              << " newTimeSig=" << basicData.newTimeSig
+              << " delayInBar=" << basicData.delayInBar
+              << " trackId=" << basicData.trackId << ")";
+    std::cout << "\n";
+    std::cout << indent
+              << "size(ideal=" << sizeData.idealWidth
+              << " reconcile=" << sizeData.reconciledWidth
+              << " fixed=" << sizeData.fixedWidth
+              << " timeSigFixed=" << sizeData.timeSigFixedWidth
+              << " clefKey=" << sizeData.clefKeyWidth
+              << " duration=" << sizeData.actualDuration << ")";
+    std::cout << "\n";
+    std::cout << indent;
+    std::cout << "layout(needs=" << layoutData.needsLayout
+              << " x=" << layoutData.x
+              << " timeSigX=" << layoutData.timeSigX << ")";
+    std::cout << "\n";
+
+    ChunkList::iterator i;
+    for (i=chunks.begin(); i!=chunks.end(); ++i) {
+        std::cout << indent
+                  << "   Chunk duration=" << (*i).duration
+                  << " subord=" << (*i).subordering
+                  << " fixed=" << (*i).fixed
+                  << " stretchy=" << (*i).stretchy
+                  << " x=" << (*i).x << "\n";
+    }
+
+    std::cout << "\n";
+    std::cout.flush();
+}
+
+/// YG: Only for debug
+void
+NotationHLayout::dumpBarDataMap()
+{
+    BarDataMap::iterator i;
+    for (i=m_barData.begin(); i!=m_barData.end(); ++i) {
+        ViewSegment *vs = (*i).first;
+        BarDataList bdl = (*i).second;
+
+        std::cout << "------- ViewSegment=" << vs
+                  << " seg=" << &vs->getSegment() << "\n";
+        BarDataList::iterator j;
+        for (j=bdl.begin(); j!=bdl.end(); ++j) {
+            std::cout << "       ------- BarData (" << (*j).first << ")\n";
+            (*j).second.dump("       ");
+        }
+    }
+}
 
 }

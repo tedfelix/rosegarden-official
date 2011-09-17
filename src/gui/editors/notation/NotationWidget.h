@@ -129,8 +129,7 @@ public:
     void updateSegmentChangerBackground();
 
 signals:
-    void segmentDeleted(Segment *);
-    void sceneDeleted();
+    void sceneNeedsRebuilding();
     void toolChanged(QString);
     void hoveredOverNoteChanged(QString);
     void headersVisibilityChanged(bool);

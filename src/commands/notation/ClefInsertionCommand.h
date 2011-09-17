@@ -31,6 +31,7 @@ namespace Rosegarden
 {
 
 class Segment;
+class LinkedSegment;
 class Event;
 
 class ClefInsertionCommand : public BasicCommand
@@ -45,6 +46,7 @@ public:
                          bool shouldTranspose = false);
     virtual ~ClefInsertionCommand();
 
+    virtual QString getThisGlobalName(Clef *clef = 0);
     static QString getGlobalName(Clef *clef = 0);
     virtual timeT getRelayoutEndTime();
 
@@ -61,6 +63,24 @@ protected:
     Event *m_lastInsertedEvent;
 };
 
+class ClefLinkInsertionCommand : public ClefInsertionCommand
+{
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ClefLinkInsertionCommand)
+
+public:
+    ClefLinkInsertionCommand(Segment &segment,
+                            timeT time,
+                            Clef clef,
+                            bool shouldChangeOctave = false,
+                            bool shouldTranspose = false);
+    virtual ~ClefLinkInsertionCommand();
+
+    virtual QString getThisGlobalName(Clef *clef = 0);
+    static QString getGlobalName(Clef *clef = 0);
+
+protected:
+    virtual void modifySegment();
+};
 
 }
 

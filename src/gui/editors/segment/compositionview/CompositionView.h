@@ -174,6 +174,7 @@ public slots:
     //
     void slotSetSelectAdd(bool value);
     void slotSetSelectCopy(bool value);
+    void slotSetSelectCopyingAsLink(bool value);
 
     void slotSetFineGrain(bool value);
     void slotSetPencilOverExisting(bool value);

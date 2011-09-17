@@ -319,10 +319,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     this->restoreState(settings.value("Notation_View_State").toByteArray());
     settings.endGroup();
 
-    connect(m_notationWidget, SIGNAL(segmentDeleted(Segment *)),
-            this, SLOT(slotSegmentDeleted(Segment *)));
-    connect(m_notationWidget, SIGNAL(sceneDeleted()),
-            this, SLOT(slotSceneDeleted()));
+    connect(m_notationWidget, SIGNAL(sceneNeedsRebuilding()),
+            this, SLOT(slotRegenerateScene()));
 
     // do the auto repeat thingie on the <<< << >> >>> buttons
     setRewFFwdToAutoRepeat();
@@ -452,6 +450,8 @@ NotationView::setupActions()
     // Created in EditViewBase::setupActions() via creatAction()
 
     createAction("add_clef", SLOT(slotEditAddClef()));
+    //uncomment this when we implement linked segment transposition
+    //createAction("add_clef_this_link_only", SLOT(slotEditAddClefLinkOnly()));
     createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
     createAction("add_sustain_down", SLOT(slotEditAddSustainDown()));
     createAction("add_sustain_up", SLOT(slotEditAddSustainUp()));
@@ -737,6 +737,10 @@ NotationView::setupActions()
     createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
 
+    /// YG: Only for debug
+     createAction("dump_staves", SLOT(slotDebugDump()));
+     createAction("dump_bardata", SLOT(slotBarDataDump()));
+
     createAction("manual", SLOT(slotHelp()));
     createAction("tutorial", SLOT(slotTutorial()));
     createAction("guidelines", SLOT(slotBugGuidelines()));
@@ -993,6 +997,7 @@ NotationView::slotUpdateMenuStates()
     leaveActionState("have_rests_in_selection");
     leaveActionState("have_clefs_in_selection");
     leaveActionState("have_symbols_in_selection");
+    leaveActionState("have_linked_segment");
 
     if (!m_notationWidget) return;
 
@@ -1039,6 +1044,12 @@ NotationView::slotUpdateMenuStates()
         } else {
             m_selectionCounter->setText(tr("  No selection "));
         }
+    }
+
+    // 3. linked segment specific states
+    Segment *segment = getCurrentSegment();
+    if (segment && segment->isLinked()) {
+        enterActionState("have_linked_segment");
     }
 }
 
@@ -2891,6 +2902,42 @@ NotationView::slotEditAddClef()
 }
 
 void
+NotationView::slotEditAddClefLinkOnly()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment->isLinked()) {
+        return;
+    }
+    timeT insertionTime = getInsertionTime();
+    static Clef lastClef = segment->getClefAtTime(insertionTime);
+
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+
+    NotePixmapFactory npf = *scene->getNotePixmapFactory();
+    npf.setSelected(false);
+
+    ClefDialog dialog(this, &npf, lastClef);
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        ClefDialog::ConversionType conversion = dialog.getConversionType();
+
+        bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+        bool shouldTranspose = (conversion == ClefDialog::Transpose);
+
+        CommandHistory::getInstance()->addCommand(
+                new ClefLinkInsertionCommand(*segment,
+                                            insertionTime,
+                                            dialog.getClef(),
+                                            shouldChangeOctave,
+                                            shouldTranspose));
+
+        lastClef = dialog.getClef();
+    } 
+}
+
+void
 NotationView::slotEditAddKeySignature()
 {
     Segment *segment = getCurrentSegment();
@@ -3205,36 +3252,77 @@ NotationView::slotToggleTracking()
 }
 
 void
-NotationView::slotSegmentDeleted(Segment *s)
+NotationView::slotRegenerateScene()
 {
-    NOTATION_DEBUG << "NotationView::slotSegmentDeleted: " << s << endl;
+    NOTATION_DEBUG << "NotationView::slotRegenerateScene: "
+                   << m_notationWidget->getScene()->getSegmentsDeleted()->size()
+                   << " segments deleted" << endl;
 
-    // remove from vector
-    for (std::vector<Segment *>::iterator i = m_segments.begin();
-         i != m_segments.end(); ++i) {
-        if (*i == s) {
-            m_segments.erase(i);
-            NOTATION_DEBUG << "NotationView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining" << endl;
+    // Look for segments to be removed from vector
+    std::vector<Segment *> * segmentDeleted =
+        m_notationWidget->getScene()->getSegmentsDeleted();
 
-            // Fix bug #2960243:
-            // When a segment is deleted : remove the selection rect 
-            NotationTool * tool =  m_notationWidget->getCurrentTool();
-            if (tool) tool->stow();
-            // and regenerate the whole notation widget .
-            m_notationWidget->setSegments(m_document, m_segments);
-            
+    // If there is no such segment regenerate the notation widget directly
+    if (segmentDeleted->size() != 0) {
+        
+        // else look if there is something to display still
+        if (m_notationWidget->getScene()->isSceneEmpty()) {
+            // All segments have been removed : don't regenerate anything
+            // but close the editor.
+            NOTATION_DEBUG << "NotationView::slotSceneDeleted" << endl;
+
+            close();
             return;
         }
+
+        // then remove the deleted segments
+        for (std::vector<Segment *>::iterator isd = segmentDeleted->begin();
+            isd != segmentDeleted->end(); ++isd) {
+            for (std::vector<Segment *>::iterator i = m_segments.begin();
+                i != m_segments.end(); ++i) {
+                if (*isd == *i) {
+                    m_segments.erase(i);
+                    NOTATION_DEBUG << "NotationView::slotRegenerateScene:"
+                                    " Erased segment from vector, have "
+                                << m_segments.size() << " segment(s) remaining"
+                                << endl;
+                    break;
+                }
+            }
+        }
     }
-}
 
-void
-NotationView::slotSceneDeleted()
-{
-    NOTATION_DEBUG << "NotationView::slotSceneDeleted" << endl;
+    // Fix bug #2960243:
+    // When a segment is deleted : remove the selection rect 
+    NotationTool * tool =  m_notationWidget->getCurrentTool();
+    QString toolName;
+    if (tool) {
+        toolName = tool->getToolName();
+        tool->stow();
+    }
+    
+    // remember zoom factors
+    double hZoomFactor = m_notationWidget->getHorizontalZoomFactor();
+    double vZoomFactor = m_notationWidget->getVerticalZoomFactor();
+    
+    // TODO: remember scene position
+    
+    // regenerate the whole notation widget .
+    m_notationWidget->setSegments(m_document, m_segments);
+    
+    // restore size and spacing of notation police
+    m_notationWidget->slotSetFontName(m_fontName);
+    m_notationWidget->slotSetFontSize(m_fontSize);
+    m_notationWidget->getScene()->setHSpacing(m_spacing);
 
-    m_segments.clear();
-    close();
+    // restore zoom factors
+    m_notationWidget->setVerticalZoomFactor(vZoomFactor);
+    m_notationWidget->setHorizontalZoomFactor(hZoomFactor);
+    
+    // TODO: restore scene position
+    
+    // and restore the current tool if any
+    if (tool) m_notationWidget->slotSetTool(toolName);
 }
 
 void
@@ -3243,6 +3331,13 @@ NotationView::slotUpdateWindowTitle(bool m)
     QString indicator = (m ? "*" : "");
 
     if (m_segments.empty()) return;
+
+    // Scene may be empty and the editor is about to be closed,
+    // but this info doesn't propagate to view still.
+    // (Because signals used to trig slotUpdateWindowTitle() _are not queued_
+    //  but signal used to trig slotRegenerateScene() _is queued_).
+    // In such a case, don't do anything (to avoid a crash).
+    if (m_notationWidget->getScene()->isSceneEmpty()) return;
 
     if (m_segments.size() == 1) {
 
@@ -4635,6 +4730,20 @@ void
 NotationView::slotCheckShowHeadersMenu(bool checked)
 {
     findAction("show_track_headers")->setChecked(checked);
+}
+
+/// YG: Only for debug
+void
+NotationView::slotDebugDump()
+{
+    m_notationWidget->getScene()->dumpVectors();
+}
+
+/// YG: Only for debug
+void
+NotationView::slotBarDataDump()
+{
+    m_notationWidget->getScene()->dumpBarDataMap();
 }
 
 } // end namespace Rosegarden

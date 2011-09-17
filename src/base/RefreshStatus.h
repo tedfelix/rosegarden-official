@@ -23,7 +23,7 @@ namespace Rosegarden
 class RefreshStatus
 {
 public:
-    RefreshStatus() : m_needsRefresh(true) {}
+    RefreshStatus() : m_needsRefresh(false) {}
 
     bool needsRefresh() { return m_needsRefresh; }
     void setNeedsRefresh(bool s) { m_needsRefresh = s; }

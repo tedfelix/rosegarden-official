@@ -610,6 +610,7 @@ StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
         bool isNew = layout.getTimeSignaturePosition
             (*m_viewSegment, barNo, timeSig, timeSigX);
 
+
         if (isNew && barNo < lastBar) {
             currentTimeSignature = timeSig;
             insertTimeSignature(timeSigX, currentTimeSignature);

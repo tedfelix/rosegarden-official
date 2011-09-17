@@ -59,7 +59,7 @@ SegmentRepeatToCopyCommand::execute()
         while (newStartTime + newDuration < repeatEndTime) {
             // Create new segment, transpose and turn off repeat
             //
-            newSegment = new Segment(*m_segment);
+            newSegment = m_segment->clone();
             newSegment->setStartTime(newStartTime);
             newSegment->setRepeating(false);
 

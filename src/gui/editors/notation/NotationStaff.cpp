@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2011 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -88,6 +88,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_showUnknowns(true),
     m_showRanges(true),
     m_showCollisions(true),
+    m_hideRedundance(true),
     m_printPainter(0),
     m_refreshStatusId(segment->getNewRefreshStatusId())
 {
@@ -102,6 +103,8 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_showCollisions = qStrToBool( settings.value("showcollisions", "true" ) ) ;
 
     m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
+
+    m_hideRedundance = settings.value("hideredundantclefkey", "true").toBool();
 
     settings.endGroup();
 
@@ -179,10 +182,24 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
     timeT barStart = getSegment().getComposition()->getBarStart(barNo);
 
     Clef clef = getSegment().getClefAtTime(barStart, t);
-    if (t < barStart) needClef = true;
+    if (t < barStart) {
+        needClef = true;
+    } else {
+        if (m_hideRedundance &&
+            m_notationScene->isEventRedundant(clef, barStart, getSegment())) {
+            needClef = true;
+        }
+    }
 
     ::Rosegarden::Key key = getSegment().getKeyAtTime(barStart, t);
-    if (t < barStart) needKey = true;
+    if (t < barStart) {
+        needKey = true;
+    } else {
+        if (m_hideRedundance &&
+            m_notationScene->isEventRedundant(key, barStart, getSegment())) {
+            needKey = true;
+        }
+    }
 
     double dx = m_notePixmapFactory->getBarMargin() / 2;
 
@@ -430,7 +447,7 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
     // get the note letter name in the key (eg. A)
     std::string s;
     s = p.getNoteName(key);
-    
+
     // get the accidental, and append it immediately after the letter name, to
     // create an English style string (eg. Ab)
     Accidental acc = p.getAccidental(key);
@@ -477,7 +494,14 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     timeT startTime = (from != to ? (*from)->getViewAbsoluteTime() : endTime);
 
     Clef currentClef = getSegment().getClefAtTime(startTime);
-    ::Rosegarden::Key currentKey = getSegment().getKeyAtTime(startTime);
+    // Since the redundant clefs and keys may be hide, the current key may
+    // be defined on some other segment and whe have to find it in the whole
+    // notation scene clef/key context.
+//    ::Rosegarden::Key currentKey = getSegment().getKeyAtTime(startTime);
+    ::Rosegarden::Key currentKey = m_notationScene->getClefKeyContext()->
+                        getKeyFromContext(getSegment().getTrack(), startTime);
+
+// m_notationScene->getClefKeyContext()->dumpKeyContext();
 
     for (NotationElementList::iterator it = from, nextIt = from;
          it != to; it = nextIt) {
@@ -599,7 +623,7 @@ NotationStaff::elementNeedsRegenerating(NotationElementList::iterator i)
     // its stem direction may have changed, or it may need leger
     // lines.  This will happen e.g. if the user inserts a new clef;
     // unfortunately this means inserting clefs is rather slow.
-        
+
     if (!elementNotMovedInY(elt)) {
         NOTATION_DEBUG << "yes (is note, height changed)" << endl;
         return true;
@@ -618,7 +642,7 @@ NotationStaff::elementNeedsRegenerating(NotationElementList::iterator i)
         NOTATION_DEBUG << "no (is simple note, height unchanged)" << endl;
         return false;
     }
-    
+
     if (elementShiftedOnly(i)) {
         NOTATION_DEBUG << "no (is spanning note but only shifted)" << endl;
         return false;
@@ -703,8 +727,14 @@ NotationStaff::positionElements(timeT from, timeT to)
             }
 
             if (!haveCurrentKey) { // stores the key _before_ this one
-                currentKey = getSegment().getKeyAtTime
-                             (el->event()->getAbsoluteTime() - 1);
+                // To correctly render the first key signature of a segment,
+                // the current key has to be found from the whole view context,
+                // not from the segment alone
+//              currentKey = getSegment().getKeyAtTime
+//                               (el->event()->getAbsoluteTime() - 1);
+                currentKey = m_notationScene->getClefKeyContext()->
+                    getKeyFromContext(getSegment().getTrack(),
+                                      el->event()->getAbsoluteTime() - 1);
                 haveCurrentKey = true;
             }
 
@@ -863,6 +893,14 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         if (!showInvisibles) return;
     }
 
+    // Don't display clef or key already in use
+    if (m_hideRedundance &&
+        m_notationScene->isEventRedundant(elt->event(), getSegment())) return;
+
+    // Look if element is part of a symlink segment to show it shaded
+    bool tmp = false;
+    elt->event()->get<Bool>(BaseProperties::TMP, tmp);
+
     try {
         m_notePixmapFactory->setNoteStyle
             (NoteStyleFactory::getStyleForEvent(elt->event()));
@@ -884,7 +922,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         QGraphicsItem *item = 0;
 
         m_notePixmapFactory->setSelected(selected);
-        m_notePixmapFactory->setShaded(invisible);
+        m_notePixmapFactory->setShaded(invisible || tmp);
         int z = selected ? 3 : 0;
 
         // these are actually only used for the printer stuff
@@ -901,11 +939,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         NOTATION_DEBUG << "NotationStaff::renderSingleElement: Setting selected at " << elt->event()->getAbsoluteTime() << " to " << selected << endl;
 
         if (elt->isNote()) {
-
             renderNote(vli);
-
         } else if (elt->isRest()) {
-
             // rests can have marks
             int markCount = 0;
             if (elt->event()->has(BaseProperties::MARK_COUNT))
@@ -977,8 +1012,11 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
             } else if (m_keySigCancelMode == 1) { // only when reducing acc count
 
-                if (!(key.isSharp() == cancelKey.isSharp() &&
-                        key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+                if (key.getAccidentalCount() &&
+                    ! (key.isSharp() == cancelKey.isSharp() &&
+                       key.getAccidentalCount() < cancelKey.getAccidentalCount()
+                      )
+                   ) {
                     cancelKey = ::Rosegarden::Key();
                 }
             }
@@ -1089,7 +1127,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 if (indicationType == Indication::Crescendo ||
                     indicationType == Indication::Decrescendo) {
-                    
+
                     if (m_printPainter) {
                         for (double w = -1, inc = 0; w != 0; inc += w) {
                             w = setPainterClipping(m_printPainter,
@@ -1239,7 +1277,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 /* UNUSED - for printing, just use a large pixmap as below
                 		    if (m_printPainter) {
-                 
+
                 			int length = m_notePixmapFactory->getTextWidth(text);
                 			for (double w = -1, inc = 0; w != 0; inc += w) {
                 			    w = setPainterClipping(m_printPainter,
@@ -1398,7 +1436,7 @@ NotationStaff::setItem(NotationElement *elt, QGraphicsItem *item, int z,
 
                     QGraphicsPixmapItem *right = new QGraphicsPixmapItem(split.second);
                     right->setOffset(QPointF(0, offset.y()));
-                    
+
                     getScene()->addItem(left);
                     left->setZValue(z);
                     left->show();
@@ -1809,7 +1847,7 @@ NotationStaff::wrapEvent(Event *e)
     bool wrap = true;
 
     /*!!! always wrap unknowns, just don't necessarily render them?
-     
+
         if (!m_showUnknowns) {
     	std::string etype = e->getType();
     	if (etype != Note::EventType &&
@@ -1872,7 +1910,7 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
         }
     }
     NOTATION_DEBUG << "NotationStaff::regenerate: explicitly reset items for " << resetCount << " elements" << endl;
-    
+
     Profiler profiler2("NotationStaff::regenerate: repositioning", true);
 
     //!!! would be simpler if positionElements could also be called
@@ -1883,7 +1921,7 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
     //!!! nextBarTime)
 
     if (i != getViewElementList()->end()) {
-        positionElements((*i)->getViewAbsoluteTime(), 
+        positionElements((*i)->getViewAbsoluteTime(),
                          getSegment().getEndMarkerTime());
     } else {
         // Shouldn't happen; if it does, let's re-do everything just in case
@@ -1928,16 +1966,16 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
                     break;
                 }
             }
-    
+
             // If not, add it
             if (!found) {
                 m_clefChanges.push_back(ClefChange(xClef, clef));
             }
-    
+
         } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
 
             ::Rosegarden::Key key = *(*it)->event();
-    
+
             // Is this key already in m_keyChanges list ?
             int xKey = int((*it)->getLayoutX());
             bool found = false;
@@ -1948,7 +1986,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
                     break;
                 }
             }
-    
+
             // If not, add it
             if (!found) {
                 m_keyChanges.push_back(KeyChange(xKey, key));
@@ -1971,9 +2009,10 @@ NotationStaff::getBarStyle(int barNo) const
     if (barNo > firstBar && barNo <= lastNonEmptyBar)
         return PlainBar;
 
-    // First and last bar in a repeating segment get repeat bars.
+    // First and last bar in a repeating segment get repeat bars
+    // unless segment is a temporary clone.
 
-    if (s->isRepeating()) {
+    if (s->isRepeating() && !s->isTmp()) {
         if (barNo == firstBar)
             return RepeatStartBar;
         else if (barNo == lastNonEmptyBar + 1)
@@ -2039,7 +2078,13 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
                 key = ::Rosegarden::Key(**i);
 
                 if (barNo > composition->getBarNumber(s.getStartTime())) {
-                    cancelKey = s.getKeyAtTime(barStart - 1);
+                    // Since the redundant clefs and keys may be hide, the
+                    // current key may be defined on some other segment and
+                    // whe have to find it in the whole notation scene clef/key
+                    // context.
+//                  cancelKey = s.getKeyAtTime(barStart - 1);
+                    cancelKey = m_notationScene->getClefKeyContext()->
+                        getKeyFromContext(getSegment().getTrack(), barStart - 1);
                 }
 
                 if (m_keySigCancelMode == 0) { // only when entering C maj / A min
@@ -2049,8 +2094,11 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
                 } else if (m_keySigCancelMode == 1) { // only when reducing acc count
 
-                    if (!(key.isSharp() == cancelKey.isSharp() &&
-                            key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+                    if (key.getAccidentalCount() &&
+                        ! (key.isSharp() == cancelKey.isSharp() &&
+                           key.getAccidentalCount() < cancelKey.getAccidentalCount()
+                          )
+                       ) {
                         cancelKey = ::Rosegarden::Key();
                     }
                 }

@@ -35,11 +35,18 @@ namespace Rosegarden
 class Command
 {
 public:
+    Command() : m_updateLinks(true) { }
     virtual ~Command() { }
 
     virtual void execute() = 0;
     virtual void unexecute() = 0;
     virtual QString getName() const = 0;
+    
+    bool getUpdateLinks() const { return m_updateLinks; }
+    void setUpdateLinks(bool update) { m_updateLinks = update; }
+
+private:
+    bool m_updateLinks;
 };
 
 class NamedCommand : public Command
@@ -70,6 +77,8 @@ public:
 
     virtual QString getName() const;
     virtual void setName(QString name);
+    
+    virtual const std::vector<Command *>& getCommands() { return m_commands; }
 
 protected:
     QString m_name;

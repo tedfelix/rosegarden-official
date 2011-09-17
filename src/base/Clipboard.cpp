@@ -103,7 +103,7 @@ Clipboard::newSegment()
 Segment *
 Clipboard::newSegment(const Segment *copyFrom)
 {
-    Segment *s = new Segment(*copyFrom);
+    Segment *s = copyFrom->clone();
     m_segments.insert(s);
     // don't change m_partial as we are inserting a complete segment
     return s;
@@ -114,7 +114,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     bool expandRepeats)
 {
     // create with copy ctor so as to inherit track, instrument etc
-    Segment *s = new Segment(*copyFrom);
+    Segment *s = copyFrom->clone();
 
     // If the segment is within the time range
     if (from <= s->getStartTime() && to >= s->getEndMarkerTime()) {
@@ -198,7 +198,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 
             m_segments.insert(s);
             if (repeat < lastRepeat) {
-                s = new Segment(*copyFrom);
+                s = copyFrom->clone();
                 s->setRepeating(false);
             }
         }
@@ -279,8 +279,9 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 Segment *
 Clipboard::newSegment(const EventSelection *copyFrom)
 {
-    // create with copy ctor so as to inherit track, instrument etc
-    Segment *s = new Segment(copyFrom->getSegment());
+    // create with clone function so as to inherit track, instrument etc
+    // but clone as a segment only, even if it's actually a linked segment
+    Segment *s = copyFrom->getSegment().clone(false);
     s->erase(s->begin(), s->end());
 
     const EventSelection::eventcontainer &events(copyFrom->getSegmentEvents());

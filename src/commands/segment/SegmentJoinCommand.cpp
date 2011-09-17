@@ -94,7 +94,7 @@ SegmentJoinCommand::execute()
 
         // Always begin with the leftmost segment to keep in the new segment
         // any clef or key change found at the start of this segment.
-        m_newSegment = new Segment(*m_oldSegments[leftmostIndex]);
+        m_newSegment = m_oldSegments[leftmostIndex]->clone(false);
 
         // drop any events beyond the end marker
         m_newSegment->setEndTime(m_newSegment->getEndMarkerTime());

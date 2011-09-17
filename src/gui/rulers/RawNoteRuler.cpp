@@ -80,7 +80,6 @@ RawNoteRuler::setCurrentSegment(Segment *segment)
 void
 RawNoteRuler::segmentDeleted(const Segment *)
 {
-   if (m_segment) m_segment->removeObserver(this);
    m_segment = 0;
 }
 

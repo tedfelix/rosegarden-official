@@ -37,6 +37,7 @@
 #include "commands/segment/SegmentEraseCommand.h"
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRepeatToCopyCommand.h"
+#include "commands/segment/SegmentLinkToCopyCommand.h"
 #include "compositionview/CompositionModel.h"
 #include "compositionview/CompositionModelImpl.h"
 #include "compositionview/CompositionView.h"
@@ -694,6 +695,37 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
     for (; it != segments.end(); it++) {
         if ((*it)->isRepeating()) {
             macro->addCommand(new SegmentRepeatToCopyCommand(*it));
+        }
+    }
+
+    addCommandToHistory(macro);
+
+}
+
+void
+TrackEditor::slotTurnLinkedSegmentsToRealCopies()
+{
+    RG_DEBUG << "TrackEditor::slotTurnLinkedSegmentsToRealCopies" << endl;
+
+    SegmentSelection segments =
+        m_compositionView->getSelectedSegments();
+
+    if (segments.size() == 0)
+        return ;
+
+    QString text;
+
+    if (segments.size() == 1)
+        text = tr("Turn Linked Segment into Real Copies");
+    else
+        text = tr("Turn Linked Segments into Real Copies");
+
+    MacroCommand *macro = new MacroCommand(text);
+
+    SegmentSelection::iterator it = segments.begin();
+    for (; it != segments.end(); it++) {
+        if ((*it)->isLinked()) {
+            macro->addCommand(new SegmentLinkToCopyCommand(*it));
         }
     }
 

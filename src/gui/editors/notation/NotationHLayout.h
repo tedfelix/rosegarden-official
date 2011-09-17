@@ -45,6 +45,7 @@ class Key;
 class Composition;
 class Clef;
 class AccidentalTable;
+class NotationScene;
 
 
 /**
@@ -227,6 +228,9 @@ public:
         m_staffCount = staffCount;
     }
 
+    /// YG: Only for debug
+    void dumpBarDataMap();
+
 protected:
 
     struct Chunk {
@@ -249,7 +253,7 @@ protected:
     struct BarData
     {
         ChunkList chunks;
-        
+
         struct BasicData
         {   // slots that can be filled at construction time
 
@@ -257,7 +261,8 @@ protected:
             bool correct; // bar preceding barline has correct duration
             TimeSignature timeSignature;
             bool newTimeSig;
-
+            timeT delayInBar;   // Time from start of bar to start of segment
+            TrackId trackId;
         } basicData;
 
         struct SizeData
@@ -266,6 +271,7 @@ protected:
             float idealWidth;    // theoretical width of bar following barline
             float reconciledWidth;
             float fixedWidth;       // width of non-chunk items in bar
+            float timeSigFixedWidth;
             int clefKeyWidth;
             timeT actualDuration; // may exceed nominal duration
 
@@ -285,15 +291,21 @@ protected:
             basicData.correct = correct;
             basicData.timeSignature = timeSig;
             basicData.newTimeSig = newTimeSig;
+            basicData.delayInBar = 0;
+            basicData.trackId = 0;
             sizeData.idealWidth = 0;
             sizeData.reconciledWidth = 0;
             sizeData.fixedWidth = 0;
+            sizeData.timeSigFixedWidth = 0;
             sizeData.clefKeyWidth = 0;
             sizeData.actualDuration = 0;
             layoutData.needsLayout = true;
             layoutData.x = -1;
             layoutData.timeSigX = -1;
         }
+
+        /// YG: Only for debug
+        void dump(std::string indent);
     };
 
     typedef std::map<int, BarData> BarDataList;
@@ -303,6 +315,32 @@ protected:
 
     typedef std::map<ViewSegment *, int> ViewSegmentIntMap;
     typedef std::map<long, NotationGroup *> NotationGroupMap;
+
+
+    /**
+     * Internally used as a key when removing unnecessary time signatures
+     */
+    struct TrackTimeSig
+    {
+        TrackId trackId;
+        TimeSignature timeSignature;
+
+        TrackTimeSig(const TrackId & track,
+                     const TimeSignature & timeSig) {
+          trackId = track;
+          timeSignature = timeSig;
+        }
+
+        bool operator<(const TrackTimeSig &tts) const {
+            // We need this operator to use TrackTimeSig as key of a map.
+            if (trackId == tts.trackId) {
+                return timeSignature < tts.timeSignature;
+            } else {
+                return trackId < tts.trackId;
+            }
+        }
+    };
+
 
     void clearBarList(ViewSegment &);
 
@@ -314,15 +352,16 @@ protected:
      */
     void setBarBasicData(ViewSegment &staff, int barNo,
                          NotationElementList::iterator start, bool correct,
-                         TimeSignature timeSig, bool newTimeSig);
+                         TimeSignature timeSig, bool newTimeSig,
+                         timeT segDelay, TrackId trackId);
 
     /**
      * Set the size data for the given barNo.  If barNo is
      * beyond the end of the existing bar data list, create new
      * records and/or fill with empty ones as appropriate.
      */
-    void setBarSizeData(ViewSegment &staff, int barNo,
-                        float fixedWidth, timeT actualDuration);
+    void setBarSizeData(ViewSegment &staff, int barNo, float fixedWidth,
+                         float timeSigFixedWidth, timeT actualDuration);
 
     /**
      * Returns the bar positions for a given staff, provided that
@@ -350,9 +389,9 @@ protected:
                 timeT startTime,
                 timeT endTime,
                 bool full);
-    
+
     /// Find earliest element with quantized time of t or greater
-    NotationElementList::iterator getStartOfQuantizedSlice 
+    NotationElementList::iterator getStartOfQuantizedSlice
     (NotationElementList *, timeT t) const;
 
     void scanChord
@@ -369,7 +408,7 @@ protected:
     // and may modify the to-iterator if it turns out to point at a
     // note within the chord
     void positionChord
-    (ViewSegment &staff, 
+    (ViewSegment &staff,
      NotationElementList::iterator &, const Clef &clef,
      const ::Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
 
@@ -410,6 +449,7 @@ protected:
     int m_spacing;
     int m_proportion;
     int m_keySigCancelMode;
+    bool m_hideRedundance;         // Don't show unneeded clefs and keys
 
     //!!! This should not be here -- different staffs may have
     //different sizes in principle, so we should always be referring
@@ -425,6 +465,8 @@ protected:
     int m_timePerProgressIncrement;
     std::map<ViewSegment *, bool> m_haveOttavaSomewhere;
     int m_staffCount; // purely for value() reporting
+
+    NotationScene *m_scene;
 };
 
 

@@ -373,6 +373,16 @@ void CompositionView::slotSetSelectCopy(bool value)
     selTool->setSegmentCopy(value);
 }
 
+void CompositionView::slotSetSelectCopyingAsLink(bool value)
+{
+    SegmentSelector* selTool = getSegmentSelectorTool();
+
+    if (!selTool)
+        return ;
+
+    selTool->setSegmentCopyingAsLink(value);
+}
+
 void CompositionView::slotShowSplitLine(int x, int y)
 {
     m_splitLinePos.setX(x);
@@ -1453,6 +1463,8 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 {
     slotSetSelectCopy((e->modifiers() & Qt::ControlModifier) != 0);
+    slotSetSelectCopyingAsLink(((e->modifiers() & Qt::AltModifier) != 0) &&
+                               ((e->modifiers() & Qt::ControlModifier) != 0));
     slotSetSelectAdd((e->modifiers() & Qt::ShiftModifier) != 0);
     slotSetFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
     slotSetPencilOverExisting((e->modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);

@@ -47,7 +47,7 @@ void
 SegmentQuickCopyCommand::execute()
 {
     if (!m_segment) {
-        m_segment = new Segment(*m_segmentToCopy);
+        m_segment = m_segmentToCopy->clone(false);
         std::string label = m_segment->getLabel();
         m_segment->setLabel(appendLabel(label, qstrtostr(tr("(copied)"))));
     }

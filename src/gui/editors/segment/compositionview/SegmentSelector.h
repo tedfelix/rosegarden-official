@@ -62,6 +62,7 @@ public:
     //
     void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
     void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
+    void setSegmentCopyingAsLink(const bool &value) { m_segmentCopyingAsLink = value; }
 
     bool isSegmentAdding() const { return m_segmentAddMode; }
     bool isSegmentCopying() const { return m_segmentCopyMode; }
@@ -86,6 +87,7 @@ protected:
 
     bool m_segmentAddMode;
     bool m_segmentCopyMode;
+    bool m_segmentCopyingAsLink;
     QPoint m_clickPoint;
     bool m_segmentQuickCopyDone;
     bool m_passedInertiaEdge;

@@ -27,6 +27,7 @@
 #include <QString>
 #include "base/Event.h"
 #include <QXmlDefaultHandler>
+#include <QtCore/QSharedPointer>
 
 
 class QXmlParseException;
@@ -40,6 +41,7 @@ class XmlStorableEvent;
 class XmlSubHandler;
 class Studio;
 class Segment;
+class SegmentLinker;
 class RosegardenDocument;
 class Instrument;
 class Device;
@@ -136,6 +138,8 @@ protected:
     RosegardenDocument    *m_doc;
     Segment *m_currentSegment;
     XmlStorableEvent    *m_currentEvent;
+    typedef std::map<int, SegmentLinker *> SegmentLinkerMap;
+    SegmentLinkerMap m_segmentLinkers; 
 
     timeT m_currentTime;
     timeT m_chordDuration;
@@ -158,6 +162,7 @@ protected:
     std::set<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
+    
     Device                           *m_device;
     DeviceId                          m_deviceRunningId;
     InstrumentId                      m_deviceInstrumentBase;

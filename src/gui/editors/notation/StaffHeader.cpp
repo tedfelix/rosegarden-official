@@ -307,7 +307,6 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     for (SortedSegments::iterator i=m_segments.begin();
                                       i!=m_segments.end(); ++i) {
         segVec.push_back(*i);
-    
         (*i)->addObserver(this);
     }
 
@@ -786,6 +785,8 @@ StaffHeader::updateHeader(int width)
         // Fix staff header variant of bug #2997311 (Part 1)
         bool selectedMode = npf->isSelected();
         npf->setSelected(false);
+        bool shadedMode = npf->isShaded();
+        npf->setShaded(false);
 
         delete m_clefItem;
         m_clefItem = npf->makeClef(m_clef, m_foregroundType);
@@ -796,6 +797,7 @@ StaffHeader::updateHeader(int width)
 
         // Fix staff header variant of bug #2997311 (Part 2)
         npf->setSelected(selectedMode);
+        npf->setShaded(shadedMode);
 
         m_lineSpacing = npf->getLineSpacing();
         m_maxDelta = npf->getAccidentalWidth(Accidentals::Sharp);
@@ -822,11 +824,15 @@ StaffHeader::updateHeader(int width)
 bool
 StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) const
 {
-    // Sort segments by start time, then by end time
+    // Sort segments by start time, then by end time, then by address.
+    // The last comparison garantees two segments will never be equals and
+    // allows to remove easily one of them from the m_segments multiset.
+    // (Now, a set may replace the multiset.) 
     if (s1->getStartTime() < s2->getStartTime()) return true;
     if (s1->getStartTime() > s2->getStartTime()) return false;
     if (s1->getEndMarkerTime() < s2->getEndMarkerTime()) return true;
-    return false;
+    if (s1->getEndMarkerTime() > s2->getEndMarkerTime()) return false;
+    return (long) s1 < (long) s2;
 }
 
 
@@ -992,10 +998,23 @@ void
 StaffHeader::segmentDeleted(const Segment *seg)
 {
     Segment *s = const_cast<Segment *>(seg);
-    s->removeObserver(this);
-    m_segments.erase(s);
+
+    // Remove one segment from m_segments, the right segment and only one
+    // segment, even if the comparison operator used in SortedSegments is
+    // not as good as it would be wished.
+    std::pair<SortedSegments::iterator, SortedSegments::iterator> range;
+    range = m_segments.equal_range(s);
+    for (SortedSegments::iterator i=m_segments.begin();
+                                      i!=m_segments.end(); ++i) {
+        if (*i == s) {
+            m_segments.erase(i);
+            break;
+        }
+    }
+
     emit(staffModified());
 }
+
 
 }
 

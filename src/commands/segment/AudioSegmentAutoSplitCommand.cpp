@@ -127,7 +127,7 @@ AudioSegmentAutoSplitCommand::execute()
             //	    absEndTime = m_segment->getStartTime() +
             //		m_composition->getElapsedTimeForRealTime(it->second - audioStart);
 
-            Segment *newSegment = new Segment(*m_segment);
+            Segment *newSegment = m_segment->clone(false);
 
             newSegment->setStartTime(absStartTime);
             newSegment->setAudioFileId(m_segment->getAudioFileId());

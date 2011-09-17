@@ -116,7 +116,7 @@ AudioSegmentRescaleCommand::execute()
 
     if (!m_newSegment) {
 
-        m_newSegment = new Segment(*m_segment);
+        m_newSegment = m_segment->clone(false);
 
         std::string label = m_newSegment->getLabel();
         m_newSegment->setLabel(appendLabel(label, qstrtostr(tr("(rescaled)"))));

@@ -76,7 +76,7 @@ protected:
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
     
-    void setCurrentIndex(CompositionItem item) { if (item != m_currentIndex) { delete m_currentIndex; m_currentIndex = item; } }
+    void setCurrentIndex(CompositionItem item);
 
     SegmentToolBox* getToolBox();
 

@@ -121,14 +121,14 @@ FitToBeatsCommand::initialise(Segment *s)
         // remembering the next beat (the next beat time-wise, which
         // the iterator visited last time)
         vecRealTime::const_reverse_iterator i = beatRealTimes.rbegin();
-        
+
         // Treat the final beat specially
         timeT    finalBeatTime = firstBeatTime + ((numBeats - 1) * beatTime);
         RealTime finalRealTime = beatRealTimes.back();
         scratchComposition.addTempoAtTime(finalBeatTime, defaultTempo, -1);
         // Step past it
         ++i;
-        
+
         // Set up loop variables
         timeT    nextBeatTime = finalBeatTime;
         RealTime nextRealTime = finalRealTime;
@@ -136,7 +136,7 @@ FitToBeatsCommand::initialise(Segment *s)
         // tempi.
         tempoT   nextTempo    = defaultTempo;
 
-        
+
         // Treat all the other beats.
         while (i != beatRealTimes.rend()) {
             timeT        timeNow = nextBeatTime - beatTime;
@@ -159,12 +159,12 @@ FitToBeatsCommand::initialise(Segment *s)
     // We don't try to copy over tempo changes that are outside the
     // range of the groove segment (before or after).  We don't try to
     // correct for accumulated error.
-    
+
     // Done setting Tempi
 
     // Collect tempi
     getCurrentTempi(scratchComposition, m_newTempi);
-    
+
 
     // Copy all the events to scratchComposition.  The copies will be
     // at the same realtime but not the same timeT.  Even events in
@@ -174,12 +174,12 @@ FitToBeatsCommand::initialise(Segment *s)
          i != origSegments.end();
          i++) {
         Segment * const oldSegment = *i;
-        
+
         // We'd prefer to just make a segment with no events that's
         // otherwise the same as the old one but we can't.
-        Segment *newSegment = new Segment(*oldSegment);
+        Segment *newSegment = oldSegment->clone(false);
         newSegment->clear();
-        
+
         // Add the segments into appropriate containers.
         // scratchComposition owns the new segments during initialise,
         // but m_newSegments will own them after initialise returns.

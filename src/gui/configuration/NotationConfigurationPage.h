@@ -95,6 +95,9 @@ protected:
     QuantizeParameters *m_quantizeFrame;
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;
+    QCheckBox *m_showRepeated;
+    QCheckBox *m_editRepeated;
+    QCheckBox *m_hideRedundantClefKey;
 
     void populateSizeCombo(QComboBox *combo, QString font, int dfltSize);
 };

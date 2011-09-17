@@ -54,7 +54,7 @@ AudioSegmentResizeFromStartCommand::execute()
         RealTime oldRT = c->getElapsedRealTime(m_oldStartTime);
         RealTime newRT = c->getElapsedRealTime(m_newStartTime);
 
-        m_newSegment = new Segment(*m_segment);
+        m_newSegment = m_segment->clone(false);
         m_newSegment->setStartTime(m_newStartTime);
 
         // Compute an audio start time that will keep the audio exactly where

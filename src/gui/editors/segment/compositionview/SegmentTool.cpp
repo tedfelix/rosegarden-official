@@ -101,6 +101,15 @@ SegmentTool::addCommandToHistory(Command *command)
     CommandHistory::getInstance()->addCommand(command);
 }
 
+void SegmentTool::setCurrentIndex(CompositionItem item) 
+{
+    if (item != m_currentIndex) 
+    {
+        delete m_currentIndex;
+        m_currentIndex = item; 
+    }
+}
+
 SegmentToolBox* SegmentTool::getToolBox()
 {
     return m_canvas->getToolBox();

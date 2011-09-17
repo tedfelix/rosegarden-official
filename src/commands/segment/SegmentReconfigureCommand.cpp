@@ -29,7 +29,9 @@ namespace Rosegarden
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
         NamedCommand(name)
-{}
+{
+    setUpdateLinks(false);
+}
 
 SegmentReconfigureCommand::~SegmentReconfigureCommand()
 {}

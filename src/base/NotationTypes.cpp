@@ -27,7 +27,7 @@
 //dmm This will make everything excruciatingly slow if defined:
 //#define DEBUG_PITCH
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 using std::string;
@@ -44,13 +44,13 @@ const int MIN_SUBORDERING = SHRT_MIN;
 
 namespace Accidentals
 {
-    /** 
+    /**
      * NoAccidental means the accidental will be inferred
      * based on the performance pitch and current key at the
      * location of the note.
-     */ 
+     */
     const Accidental NoAccidental = "no-accidental";
-    
+
     const Accidental Sharp = "sharp";
     const Accidental Flat = "flat";
     const Accidental Natural = "natural";
@@ -101,7 +101,7 @@ namespace Accidentals
 } // end namespace Accidentals
 
 using namespace Accidentals;
-  
+
 
 namespace Marks
 {
@@ -215,7 +215,7 @@ namespace Marks
     }
 
     bool removeMark(Event &e, const Mark &mark) {
-    
+
 	long markCount = 0;
 	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
 
@@ -279,7 +279,7 @@ using namespace Marks;
 //////////////////////////////////////////////////////////////////////
 // Clef
 //////////////////////////////////////////////////////////////////////
-    
+
 const string Clef::EventType = "clefchange";
 const int Clef::EventSubOrdering = -250;
 const PropertyName Clef::ClefPropertyName = "clef";
@@ -296,6 +296,7 @@ const string Clef::Bass = "bass";
 const string Clef::Subbass = "subbass";
 
 const Clef Clef::DefaultClef = Clef("treble");
+const Clef Clef::UndefinedClef = Clef("undefined");
 
 Clef::Clef(const Event &e) :
     m_clef(DefaultClef.m_clef),
@@ -322,12 +323,15 @@ Clef::Clef(const Event &e) :
 
     m_clef = s;
     m_octaveOffset = octaveOffset;
-}        
+}
 
 Clef::Clef(const std::string &s, int octaveOffset)
     // throw (BadClefName)
 {
-    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass) {
+    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano
+        && s != Alto && s != Tenor && s != Baritone && s != Bass
+        && s != Varbaritone && s != Subbass && s != "undefined") {
+
         throw BadClefName("No such clef as \"" + s + "\"");
     }
     m_clef = s;
@@ -392,8 +396,8 @@ int Clef::getAxisHeight() const
     else if (m_clef == Tenor) return 6;
     else if (m_clef == Baritone) return 8;
     else if (m_clef == Varbaritone) return 4;
-    else if (m_clef == Bass) return 6;		
-    else if (m_clef == Subbass) return 8;		
+    else if (m_clef == Bass) return 6;
+    else if (m_clef == Subbass) return 8;
     else return 6;
 }
 
@@ -433,6 +437,7 @@ const string Key::EventType = "keychange";
 const int Key::EventSubOrdering = -200;
 const PropertyName Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
+const Key Key::UndefinedKey = Key("undefined");
 
 Key::Key() :
     m_name(DefaultKey.m_name),
@@ -465,11 +470,12 @@ Key::Key(const std::string &name) :
     m_name(name),
     m_accidentalHeights(0)
 {
+    if (name == "undefined") return;
     checkMap();
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
         throw BadKeyName("No such key as \"" + m_name + "\"");
     }
-}    
+}
 
 Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
     m_accidentalHeights(0)
@@ -518,7 +524,7 @@ Key::Key(int tonicPitch, bool isMinor) :
 
     throw BadKeySpec(os.str());
 }
-    
+
 
 Key::Key(const Key &kc) :
     m_name(kc.m_name),
@@ -581,26 +587,26 @@ Accidental Key::getAccidentalForStep(int step) const
     if (isMinor()) {
         step = (step + 5) % 7;
     }
-    
+
     int accidentalCount = getAccidentalCount();
-    
+
     if (accidentalCount == 0) {
         return NoAccidental;
     }
 
     bool sharp = isSharp();
-    
+
     int currentAccidentalPosition = sharp ? 6 : 3;
 
     for (int i = 1; i <= accidentalCount; i++) {
         if (step == currentAccidentalPosition) {
             return sharp ? Sharp : Flat;
         }
-        
-        currentAccidentalPosition = 
-            (currentAccidentalPosition + (sharp ? 3 : 4)) % 7;  
+
+        currentAccidentalPosition =
+            (currentAccidentalPosition + (sharp ? 3 : 4)) % 7;
     }
-    
+
     return NoAccidental;
 }
 
@@ -613,7 +619,7 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
 
     for (unsigned int i = 0; i < v.size(); ++i) {
         v[i] += offset;
-        if (offset > 0) 
+        if (offset > 0)
             if (v[i] > 8) v[i] -= 7;
     }
     return v;
@@ -623,11 +629,11 @@ void Key::checkAccidentalHeights() const
 {
     if (m_accidentalHeights) return;
     m_accidentalHeights = new vector<int>;
-  
+
     bool sharp = isSharp();
     int accidentals = getAccidentalCount();
     int height = sharp ? 8 : 4;
-  
+
     for (int i = 0; i < accidentals; ++i) {
         m_accidentalHeights->push_back(height);
         if (sharp) { height -= 3; if (height < 3) height += 7; }
@@ -693,6 +699,7 @@ void Key::checkMap() {
     m_keyDetailMap["E minor" ] = KeyDetails(true,  true,  1, "G major",  "G  maj / E  min", 4);
     m_keyDetailMap["Gb major"] = KeyDetails(false, false, 6, "Eb minor", "Gb maj / Eb min", 6);
     m_keyDetailMap["Eb minor"] = KeyDetails(false, true,  6, "Gb major", "Gb maj / Eb min", 3);
+    m_keyDetailMap["undefined"] = KeyDetails(true,  false, 0, "A minor",  "C  maj / A  min", 0); //=default
 }
 
 
@@ -837,11 +844,11 @@ const std::string Text::Annotation        = "annotation";
 const std::string Text::LilyPondDirective = "lilypond_directive";
 
 // special LilyPond directives
-const std::string Text::FakeSegno   = "Segno"; // DEPRECATED 
+const std::string Text::FakeSegno   = "Segno"; // DEPRECATED
 const std::string Text::FakeCoda    = "Coda";  // DEPRECATED
 const std::string Text::Alternate1  = "Alt1 ->";
 const std::string Text::Alternate2  = "Alt2 ->";
-const std::string Text::BarDouble   = "|| ->";  
+const std::string Text::BarDouble   = "|| ->";
 const std::string Text::BarEnd      = "|. ->";
 const std::string Text::BarDot      = ":  ->";
 const std::string Text::Gliss       = "Gliss.";
@@ -895,7 +902,7 @@ Text::operator=(const Text &t)
 }
 
 Text::~Text()
-{ 
+{
     // nothing
 }
 
@@ -934,17 +941,17 @@ Text::getLilyPondDirectives()
     v.push_back(Alternate2);
     v.push_back(FakeSegno);
     v.push_back(FakeCoda);
-    v.push_back(BarDouble);  
-    v.push_back(BarEnd);     
-    v.push_back(BarDot);     
-    v.push_back(Gliss);      
-    v.push_back(Arpeggio);   
-//    v.push_back(ArpeggioUp); 
-//    v.push_back(ArpeggioDn); 
-    v.push_back(Tiny);       
-    v.push_back(Small);      
-    v.push_back(NormalSize); 
-    
+    v.push_back(BarDouble);
+    v.push_back(BarEnd);
+    v.push_back(BarDot);
+    v.push_back(Gliss);
+    v.push_back(Arpeggio);
+//    v.push_back(ArpeggioUp);
+//    v.push_back(ArpeggioDn);
+    v.push_back(Tiny);
+    v.push_back(Small);
+    v.push_back(NormalSize);
+
     return v;
 }
 
@@ -962,36 +969,36 @@ bool
 pitchInKey(int pitch, const Key& key)
 {
     int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
-    
+
     static int pitchInMajor[] =
         { true, false, true, false, true, true, false, true, false, true, false, true };
     static int pitchInMinor[] =
         { true, false, true, true, false, true, false, true, true, false, true, false };
-    
+
     if (key.isMinor()) {
         return pitchInMinor[pitchOffset];
     }
     else {
         return pitchInMajor[pitchOffset];
-    } 
+    }
 }
 
 /**
  * @param pitch in the range 0..11 (C..B)
- * 
+ *
  * @author Arnout Engelen
  */
 Accidental
 resolveNoAccidental(int pitch,
                   const Key &key,
-                  NoAccidentalStrategy noAccidentalStrategy) 
+                  NoAccidentalStrategy noAccidentalStrategy)
 {
     Accidental outputAccidental = "";
-    
+
     // Find out the accidental to use, based on the strategy specified
     switch (noAccidentalStrategy) {
         case UseKeySharpness:
-            noAccidentalStrategy = 
+            noAccidentalStrategy =
                 key.isSharp() ? UseSharps : UseFlats;
             // fall though
         case UseFlats:
@@ -1002,8 +1009,8 @@ resolveNoAccidental(int pitch,
             }
             else {
                 if (noAccidentalStrategy == UseSharps) {
-                    outputAccidental = Sharp;                    
-                }    
+                    outputAccidental = Sharp;
+                }
                 else {
                     outputAccidental = Flat;
                 }
@@ -1018,38 +1025,38 @@ resolveNoAccidental(int pitch,
             static int pitchToHeight[2][12] =
                 {
                     { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 },
-                    // a ., b, c, ., d, ., e, f, ., g, . 
-                    { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 } 
+                    // a ., b, c, ., d, ., e, f, ., g, .
+                    { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 }
                 };
-            
-            // map pitchOffset to the extra correction, on top of any 
+
+            // map pitchOffset to the extra correction, on top of any
             // accidentals in the key. Example: in F major, with a pitchOffset
             // of 6, the resulting height would be 3 (Bb) and the correction
             // would be +1, so the resulting note would be B-natural
             static int pitchToCorrection[2][12] =
                 {
                     { 0, +1, 0, -1, 0, 0, +1, 0, -1, 0, -1, 0 },
-                    { 0, -1, 0, 0, +1, 0, -1, 0, 0, +1, 0, +1 } 
-                }; 
-            
+                    { 0, -1, 0, 0, +1, 0, -1, 0, 0, +1, 0, +1 }
+                };
+
             int correction = pitchToCorrection[minor][pitchOffset];
 
             // Get the accidental normally associated with this height in this
             //  key.
             Accidental normalAccidental = key.getAccidentalForStep(pitchToHeight[minor][pitchOffset]);
-    
+
             // Apply the pitchCorrection and get the outputAccidental
             outputAccidental = Accidentals::getAccidental(
                 getPitchOffset(normalAccidental) + correction);
-                
+
     }
-    
+
     return outputAccidental;
 }
 
 /**
  * @param pitch in the range 0..11 (C..B)
- * 
+ *
  * @author Michael McIntyre
  */
 void
@@ -1064,14 +1071,14 @@ resolveSpecifiedAccidental(int pitch,
 	// 4.  Get info from the Key
     long accidentalCount = key.getAccidentalCount();
     bool keyIsSharp = key.isSharp(), keyIsFlat = !keyIsSharp;
-    
+
     // Calculate the flags needed for resolving accidentals against the key.
     // First we initialize them false...
     bool keyHasSharpC = false, keyHasSharpD = false, keyHasSharpE = false,
          keyHasSharpF = false, keyHasSharpG = false, keyHasSharpA = false,
          keyHasSharpB = false, keyHasFlatC  = false, keyHasFlatD  = false,
          keyHasFlatE  = false, keyHasFlatF  = false, keyHasFlatG  = false,
-         keyHasFlatA  = false, keyHasFlatB  = false; 
+         keyHasFlatA  = false, keyHasFlatB  = false;
 
     // Then we use "trip points" based on the flat/sharp state of the key and
     // its number of accidentals to set the flags:
@@ -1096,10 +1103,10 @@ resolveSpecifiedAccidental(int pitch,
             case 1: keyHasFlatB = true;
         }
    }
-               
+
 
     // 5. Determine height on staff and accidental note should display with for key...
-    // 
+    //
     // Every position on the staff is one of six accidental states:
     //
     // Natural, Sharp, Flat, DoubleSharp, DoubleFlat, NoAccidental
@@ -1132,12 +1139,12 @@ resolveSpecifiedAccidental(int pitch,
     // possible using only the pitch and key.  Notes that are "in key" pass on
     // with NoAccidental preserved, otherwise we return an appropriate
     // accidental for the key.
-    
+
     // We calculate height on a virtual staff, and then make necessary adjustments to
     // translate them onto a particular Clef later on...
     //
     // ---------F--------- Staff Height   Note(semitone) for each of five states:
-    //          E          
+    //          E
     // ---------D---------               Natural|  Sharp | Flat   |DblSharp| DblFlat
     //          C                               |        |        |        |
     // ---------B--------- height  4      B(11) | B#( 0) | Bb(10) | Bx( 1) | Bbb( 9)
@@ -1147,15 +1154,15 @@ resolveSpecifiedAccidental(int pitch,
     // ---------E--------- height  0      E( 4) | E#( 5) | Eb( 3) | Ex( 6) | Ebb( 2)
     //          D          height -1      D( 2) | D#( 3) | Db( 1) | Dx( 4) | Dbb( 0)
     //       ---C----      height -2      C( 0) | C#( 1) | Cb(11) | Cx( 2) | Cbb(10)
-    
-    
+
+
     // use these constants instead of numeric literals in order to reduce the
     // chance of making incorrect height assignments...
     const int C = -2, D = -1, E = 0, F = 1, G = 2, A = 3, B = 4;
-    
+
     // Here we do the actual work of making all the decisions explained above.
     switch (pitch) {
-        case 0 : 
+        case 0 :
                  if (inputAccidental == Sharp ||                         // B#
                     (inputAccidental == NoAccidental && keyHasSharpB)) {
                      height = B;
@@ -1171,7 +1178,7 @@ resolveSpecifiedAccidental(int pitch,
                                   inputAccidental == Natural)) ? Natural : NoAccidental;
                  }
                  break;
-        case 1 : 
+        case 1 :
                  if (inputAccidental == Sharp ||                       // C#
                     (inputAccidental == NoAccidental &&  keyIsSharp)) {
                      height = C;
@@ -1186,7 +1193,7 @@ resolveSpecifiedAccidental(int pitch,
                     outputAccidental = DoubleSharp;
                  }
                  break;
-        case 2 : 
+        case 2 :
                  if (inputAccidental == DoubleSharp) {                  // Cx
                      height = C;
                      outputAccidental = DoubleSharp;
@@ -1198,7 +1205,7 @@ resolveSpecifiedAccidental(int pitch,
                      outputAccidental = (keyHasSharpD || keyHasFlatD) ? Natural : NoAccidental;
                  }
                  break;
-        case 3 : 
+        case 3 :
                  if (inputAccidental == Sharp ||                        // D#
                     (inputAccidental == NoAccidental &&  keyIsSharp)) {
                      height = D;
@@ -1212,7 +1219,7 @@ resolveSpecifiedAccidental(int pitch,
                      outputAccidental = DoubleFlat;
                  }
                  break;
-        case 4 : 
+        case 4 :
                  if (inputAccidental == Flat ||                         // Fb
                     (inputAccidental == NoAccidental && keyHasFlatF)) {
                      height = F;
@@ -1227,7 +1234,7 @@ resolveSpecifiedAccidental(int pitch,
                                     Natural : NoAccidental;
                  }
                  break;
-        case 5 : 
+        case 5 :
                  if (inputAccidental == Sharp ||                        // E#
                     (inputAccidental == NoAccidental && keyHasSharpE)) {
                      height = E;
@@ -1242,7 +1249,7 @@ resolveSpecifiedAccidental(int pitch,
                                     Natural : NoAccidental;
                  }
                  break;
-        case 6 : 
+        case 6 :
                  if (inputAccidental == Sharp ||
                     (inputAccidental == NoAccidental && keyIsSharp)) {  // F#
                      height = F;
@@ -1256,7 +1263,7 @@ resolveSpecifiedAccidental(int pitch,
                      outputAccidental = DoubleSharp;
                  }
                  break;
-        case 7 : 
+        case 7 :
                  if (inputAccidental == DoubleSharp) {                  // Fx
                      height = F;
                      outputAccidental = DoubleSharp;
@@ -1268,7 +1275,7 @@ resolveSpecifiedAccidental(int pitch,
                      outputAccidental = (keyHasSharpG || keyHasFlatG) ? Natural : NoAccidental;
                  }
                  break;
-        case 8 : 
+        case 8 :
                  if (inputAccidental == Sharp ||
                     (inputAccidental == NoAccidental && keyIsSharp)) {  // G#
                      height = G;
@@ -1287,11 +1294,11 @@ resolveSpecifiedAccidental(int pitch,
                      height = B;
                      outputAccidental = DoubleFlat;
                  } else {                                              // A or A-Natural
-                     height = A;                
+                     height = A;
                      outputAccidental = (keyHasSharpA || keyHasFlatA) ? Natural : NoAccidental;
                  }
                  break;
-        case 10: 
+        case 10:
                  if (inputAccidental == DoubleFlat) {                   // Cbb
                      height = C;
                      octave++;  // tweak B/C divide
@@ -1306,7 +1313,7 @@ resolveSpecifiedAccidental(int pitch,
                      outputAccidental = (keyHasFlatB) ? NoAccidental : Flat;
                  }
                  break;
-        case 11: 
+        case 11:
                  if (inputAccidental == DoubleSharp) {                  // Ax
                      height = A;
                      outputAccidental = DoubleSharp;
@@ -1326,10 +1333,10 @@ resolveSpecifiedAccidental(int pitch,
     if (outputAccidental == NoAccidental && inputAccidental == Natural) {
 	outputAccidental = Natural;
     }
-	
+
 }
 
-bool 
+bool
 Pitch::validAccidental() const
 {
 //	std::cout << "Checking whether accidental is valid " << std::endl;
@@ -1337,7 +1344,7 @@ Pitch::validAccidental() const
 	{
 		return true;
 	}
-	int naturalPitch = (m_pitch - 
+	int naturalPitch = (m_pitch -
 		Accidentals::getPitchOffset(m_accidental) + 12) % 12;
 	switch(naturalPitch)
 	{
@@ -1395,7 +1402,7 @@ Pitch::getAsNoteEvent(timeT absoluteTime, timeT duration) const
  * Entirely rewritten by Hans Kieserman
  * Entirely rewritten by Michael McIntyre
  * This version by Michael McIntyre <dmmcintyr@users.sourceforge.net>
- * Resolving the accidental was refactored out by Arnout Engelen 
+ * Resolving the accidental was refactored out by Arnout Engelen
  */
 void
 Pitch::rawPitchToDisplayPitch(int rawpitch,
@@ -1403,7 +1410,7 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
 			      const Key &key,
 			      int &height,
 			      Accidental &accidental,
-			      NoAccidentalStrategy noAccidentalStrategy) 
+			      NoAccidentalStrategy noAccidentalStrategy)
 {
 
     // 1. Calculate the octave (for later):
@@ -1415,12 +1422,12 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     // 3.  Calculate raw semitone number, yielding a value between 0 (C) and
     // 11 (B)
     int pitch  = rawpitch % 12;
-    
+
     // clear the in-coming accidental so we can trap any failure to re-set
     // it on the way out:
     Accidental userAccidental = accidental;
     accidental = "";
-    
+
     if (userAccidental == NoAccidental || !Pitch(rawpitch, userAccidental).validAccidental())
     {
     	userAccidental = resolveNoAccidental(pitch, key, noAccidentalStrategy);
@@ -1431,9 +1438,9 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     //{
     //	std::cout << "Accidental was specified, as " << userAccidental << std::endl;
     //}
-    
+
     resolveSpecifiedAccidental(pitch, clef, key, height, octave, userAccidental, accidental);
-    
+
     // Failsafe...  If this ever executes, there's trouble to fix...
 // WIP - DMM - munged up to explore #937389, which is temporarily deferred,
 // owing to its non-critical nature, having been hacked around in the LilyPond
@@ -1443,15 +1450,15 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
         std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
 #else
 	std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
-#endif						       
+#endif
                   << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct "
 		  << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
 #ifndef DEBUG_PITCH
     }
 #endif
-    
-    
+
+
     // 6.  "Recenter" height in case it's been changed:
     height = ((height + 2) % 7) - 2;
 
@@ -1469,7 +1476,7 @@ Pitch::displayPitchToRawPitch(int height,
 			      const Clef &clef,
 			      const Key &key,
 			      int &pitch,
-			      bool ignoreOffset) 
+			      bool ignoreOffset)
 {
     int octave = 5;
 
@@ -1615,7 +1622,7 @@ Pitch::getPerformancePitch() const
 Accidental
 Pitch::getAccidental(bool useSharps) const
 {
-    return getDisplayAccidental(Key("C major"), 
+    return getDisplayAccidental(Key("C major"),
 		useSharps ? UseSharps : UseFlats);
 }
 
@@ -1626,7 +1633,7 @@ Pitch::getAccidental(const Key &key) const
     {
         Accidental retval = resolveNoAccidental(m_pitch, key, UseKey);
         //std::cout << "Resolved No/invalid accidental: chose " << retval << std::endl;
-        return retval; 
+        return retval;
     }
     else
     {
@@ -1658,7 +1665,7 @@ Pitch::getNoteInScale(const Key &key) const
     p -= Accidentals::getPitchOffset(getDisplayAccidental(key));
     p += 24; // in case these calculations made it -ve
     p %= 12;
-    
+
     if (key.isMinor()) return steps_Cminor_harmonic[p];
     else return steps_Cmajor[p];
 }
@@ -1684,7 +1691,7 @@ Pitch::getHeightOnStaff(const Clef &clef, bool useSharps) const
 {
     int heightOnStaff;
     Accidental accidental(m_accidental);
-    rawPitchToDisplayPitch(m_pitch, clef, Key("C major"), heightOnStaff, accidental, 
+    rawPitchToDisplayPitch(m_pitch, clef, Key("C major"), heightOnStaff, accidental,
         useSharps ? UseSharps : UseFlats);
     return heightOnStaff;
 }
@@ -1742,7 +1749,7 @@ Pitch::getAsString(bool inclOctave, int octaveBase) const
     s += getNoteName(Key("C major"));
 
     Accidental acc = getAccidental(Key("C major"));
-    
+
     if (acc == Accidentals::Sharp) s += "#";
     else if (acc == Accidentals::Flat) s += "b";
 
@@ -1797,12 +1804,12 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta)
     Accidental oldAccidental = getAccidental(key);
 
     // get old step
-    // TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals    
-    //  properly (e.g. yielding '0' instead of '1' for B#0). For now workaround here.    
+    // TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals
+    //  properly (e.g. yielding '0' instead of '1' for B#0). For now workaround here.
     Pitch oldPitchWithoutAccidental(getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental), Natural);
     Key cmaj = Key();
     int oldStep = oldPitchWithoutAccidental.getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
-    
+
     // calculate new pitch and step
     int newPitch = getPerformancePitch() + pitchDelta;
     int newStep  = oldStep  + heightDelta;
@@ -1815,10 +1822,10 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta)
 
     // should not happen
     if (newStep < 0 || newPitch < 0) {
-        std::cerr << "Internal error in NotationTypes, Pitch::transpose()" 
+        std::cerr << "Internal error in NotationTypes, Pitch::transpose()"
             << std::endl;
     }
-        
+
     // calculate new accidental for step
     int pitchWithoutAccidental = ((newStep / 7) * 12 + scale_Cmajor[newStep % 7]);
     int newAccidentalOffset = newPitch - pitchWithoutAccidental;
@@ -1884,7 +1891,7 @@ Note Note::getNearestNote(timeT duration, int maxDots)
 
     if (tag < Longest) return Note(tag + 1, 0);
     else return Note(tag, std::max(maxDots, tag));
-} 
+}
 
 Event *Note::getAsNoteEvent(timeT absoluteTime, int pitch) const
 {
@@ -2039,7 +2046,7 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
             getDurationListForBar(dlist);
             durationRemaining -= m_barDuration,
                 offset += m_barDuration;
-    
+
         }
 
         // If that fails and we're in 4/4 time, see if we can insert a
@@ -2105,11 +2112,11 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
                       && durationRemaining >= currentDuration) ) {
 
                 if (currentDuration <= Note(Note::Shortest).getDuration()) {
-                    
+
                     // okay, this isn't working.  If our duration takes
                     // us past the next beat boundary, fill with an exact
                     // rest duration to there and then continue  --cc
-                    
+
                     timeT toNextBeat =
                         m_beatDuration - (offset % m_beatDuration);
 
@@ -2136,7 +2143,7 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 void TimeSignature::getDurationListForBar(DurationList &dlist) const
 {
-    
+
     // If the bar's length can be represented with one long symbol, do it.
     // Otherwise, represent it as individual beats.
 
@@ -2156,7 +2163,7 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
         for (int i = 0; i < getBeatsPerBar(); ++i) {
             dlist.push_back(getBeatDuration());
         }
-               
+
     }
 
 }
@@ -2212,7 +2219,7 @@ void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
     return;
 }
 
-          
+
 void TimeSignature::setInternalDurations() const
 {
     int unitLength = m_crotchetTime * 4 / m_denominator;
@@ -2333,7 +2340,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	if (normalAcc == NoAccidental) {
 	    normalAcc = keyAcc;
 	}
-	
+
 	if (acc == normalAcc) {
 	    if (!cautionary) acc = NoAccidental;
 	} else if (acc == NoAccidental) {
@@ -2393,13 +2400,13 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 		}
 	    }
 	}
-    }	
+    }
 
     if (acc != NoAccidental) {
 	m_newAccidentals[height] = AccidentalRec(acc, false);
 	m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
     }
-    
+
     return acc;
 }
 
@@ -2488,7 +2495,7 @@ Symbol::operator=(const Symbol &t)
 }
 
 Symbol::~Symbol()
-{ 
+{
     // nothing
 }
 

@@ -68,6 +68,9 @@ extern const PropertyName DISPLACED_Y;
 
 extern const PropertyName INVISIBLE;
 
+extern const PropertyName TMP;         /// TODO : TMP->REPEATING
+extern const PropertyName LINKED_SEGMENT_IGNORE_UPDATE;
+
 }
 
 }

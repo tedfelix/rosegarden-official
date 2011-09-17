@@ -157,6 +157,12 @@ protected slots:
     
 signals:
     /**
+     * Emitted just before commandExecuted() so that linked segments can
+     * update their siblings.
+     */
+    void updateLinkedSegments(Command *);
+
+    /**
      * Emitted whenever a command has just been executed or
      * unexecuted, whether by addCommand, undo, or redo.  Note in
      * particular that this is emitted by both undo and redo.

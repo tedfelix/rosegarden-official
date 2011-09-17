@@ -53,6 +53,8 @@ public:
      * Create an empty headers group
      */
     HeadersGroup(RosegardenDocument *document);
+    
+    ~HeadersGroup();
 
     void removeAllHeaders();
 

@@ -19,6 +19,8 @@
 #include <set>
 #include <map>
 
+#include <QtCore/QWeakPointer>
+
 #include "FastVector.h"
 
 #include "RealTime.h"
@@ -377,7 +379,11 @@ public:
      */
     void updateTriggerSegmentReferences();
 
-
+    /**
+     * Clear refresh statuses of SegmentLinker after file load.
+     */
+    void resetLinkedSegmentRefreshStatuses();
+    
     //////
     //
     //  BAR
@@ -998,7 +1004,7 @@ protected:
     //
     triggersegmentcontainer           m_triggerSegments;
     TriggerSegmentId                  m_nextTriggerSegmentId;
- 
+    
     ColourMap                         m_segmentColourMap;
     ColourMap                         m_generalColourMap;
 

@@ -108,6 +108,9 @@ public slots:
     void slotHighestPressed();
     void slotLowestPressed();
 
+    void slotChangeLinkTranspose();
+    void slotResetLinkTranspose();
+
     virtual void update();
 
 signals:
@@ -129,6 +132,11 @@ protected:
     QComboBox                  *m_transposeValue;
     QComboBox                  *m_delayValue;
     QComboBox                  *m_colourValue;
+    QPushButton                *m_linkTransposeButton;
+    QPushButton                *m_linkTransposeResetButton;
+
+    // Collapse frame for linked segment functions
+    QFrame                     *m_linkedSegmentGroup;
 
     // Audio autofade
     //

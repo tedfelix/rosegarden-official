@@ -267,6 +267,7 @@ public:
     static const PropertyName ClefPropertyName;
     static const PropertyName OctaveOffsetPropertyName;
     static const Clef DefaultClef;
+    static const Clef UndefinedClef;
     typedef Exception BadClefName;
 
     static const std::string Treble;
@@ -387,6 +388,7 @@ public:
     static const int EventSubOrdering;
     static const PropertyName KeyPropertyName;
     static const Key DefaultKey;
+    static const Key UndefinedKey;
     typedef Exception BadKeyName;
     typedef Exception BadKeySpec;
 
@@ -1160,13 +1162,24 @@ public:
     bool operator!=(const TimeSignature &ts) const {
         return !operator==(ts);
     }
+    bool operator<(const TimeSignature &ts) const {
+        // We don't really need to ordered time signatures, but to be able to
+        // create a map keyed with time signatures. We want to distinguish
+        // 4/4 from 2/4 as well as 4/4 from 2/2.
+        double ratio1 = (double) m_numerator / (double) m_denominator;
+        double ratio2 = (double) ts.m_numerator / (double) ts.m_denominator;
+        if (ratio1 == ratio2) return m_denominator > ts.m_denominator;
+        else return ratio1 < ratio2;
+    }
 
     int getNumerator()     const { return m_numerator; }
     int getDenominator()   const { return m_denominator; }
-    
+
     bool isCommon()        const { return m_common; }
     bool isHidden()        const { return m_hidden; }
     bool hasHiddenBars()   const { return m_hiddenBars; }
+
+    void setHidden(bool hidden) { m_hidden = hidden; }
 
     timeT getBarDuration() const;
 

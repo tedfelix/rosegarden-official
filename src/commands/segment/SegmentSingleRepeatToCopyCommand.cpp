@@ -47,7 +47,7 @@ void
 SegmentSingleRepeatToCopyCommand::execute()
 {
     if (!m_newSegment) {
-        m_newSegment = new Segment(*m_segment);
+        m_newSegment = m_segment->clone();
         m_newSegment->setStartTime(m_time);
         m_newSegment->setRepeating(true);
     }

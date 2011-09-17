@@ -110,6 +110,13 @@
     <Action name="show_track_headers" text="Show &amp;Track Headers" checked="false" />
     <Action name="show_annotations" text="Show &amp;Annotations" checked="true" append="show_merge" />
     <Action name="show_lilypond_directives" text="Show Lily&amp;Pond Directives" checked="true" append="show_merge" />
+
+  <!-- YG - Only for debug
+  <Separator/>
+    <Action name="dump_staves" text="Dump staves (debug)" checked="false" />
+    <Action name="dump_bardata" text="Dump BarDataMap (debug)" checked="false" />
+  -->
+
   </Menu>
 
   <Menu name="document">
@@ -130,6 +137,7 @@
     </Menu>
   <Separator/>
     <Action name="add_clef" text="Add Cle&amp;f Change..." />
+    <Action name="add_clef_this_link_only" text="Add Clef Change in this link only..." />
     <Action name="add_key_signature" text="Add &amp;Key Change..." />
   <Separator/>
     <Action name="add_sustain_down" text="Add Pedal &amp;Press" />
@@ -819,6 +827,12 @@
     <Action name="collapse_rests_aggressively"/>
     <Menu name="Adjust"/>
   </enable>
+</State>
+
+<State name="have_linked_segment">
+  <visible>
+    <Action name="add_clef_this_link_only"/>
+  </visible>
 </State>
 
 <State name="have_notes_in_selection">

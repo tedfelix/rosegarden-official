@@ -85,6 +85,11 @@ public:
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Event *event);
+    
+    /**
+     * Useful to get the tool name from a NotationTool object
+     */ 
+    virtual const QString getToolName() { return ToolName; }
 
     static const QString ToolName;
 

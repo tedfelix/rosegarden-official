@@ -25,6 +25,7 @@
 #include "gui/general/SelectionManager.h"
 #include "StaffLayout.h"
 #include "NotePixmapFactory.h"
+#include "ClefKeyContext.h"
 
 class QGraphicsItem;
 class QGraphicsTextItem;
@@ -40,7 +41,7 @@ class NotationProperties;
 class NotationMouseEvent;
 class EventSelection;
 class Event;
-class NotationScene;
+class ClefKeyContext;
 class NotationElement;
 class NotationWidget;
 class RosegardenDocument;
@@ -62,6 +63,8 @@ public:
 
     void setNotationWidget(NotationWidget *w);
     void setStaffs(RosegardenDocument *document, std::vector<Segment *> segments);
+
+    void createClonesFromRepeatedSegments();
 
     std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
 
@@ -91,7 +94,7 @@ public:
     NotationStaff *getStaffBelow();
     NotationStaff *getPriorStaffOnTrack();
     NotationStaff *getNextStaffOnTrack();
- 
+
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
     NotationStaff *getNextStaffVertically(int direction);
@@ -130,7 +133,7 @@ public:
                                 Event *e,
                                 bool preview);
 
-    StaffLayout::PageMode getPageMode() const { return m_pageMode; } 
+    StaffLayout::PageMode getPageMode() const { return m_pageMode; }
     void setPageMode(StaffLayout::PageMode mode);
 
     QString getFontName() const;
@@ -144,7 +147,7 @@ public:
 
     int getLeftGutter() const;
     void setLeftGutter(int);
-    
+
     const RulerScale *getRulerScale() const;
 
     void suspendLayoutUpdates();
@@ -178,20 +181,53 @@ public:
     TrackIntMap *getTrackHeights() { return &m_trackHeights; }
     TrackIntMap *getTrackCoords() { return &m_trackCoords; }
 
+    ClefKeyContext * getClefKeyContext() { return m_clefKeyContext; }
+    void updateClefKeyContext() { m_clefKeyContext->setSegments(this); }
+
+    /// Return true if element is a clef or a key which already is in use
+    bool isEventRedundant(Event *ev, Segment &seg);
+    bool isEventRedundant(Clef &clef, timeT time, Segment &seg);
+    bool isEventRedundant(Key &key, timeT time, Segment &seg);
+
+    /// Return the segments about to be deleted if any
+    std::vector<Segment *> * getSegmentsDeleted() { return &m_segmentsDeleted; }
+
+    /// Return true if all segments in scene are about to be deleted
+    /// (Editor needs to be closed)
+    bool isSceneEmpty() { return m_sceneIsEmpty; }
+
+    /**
+     * Return true if another staff inside the scene than the given one
+     * exists near the given time.
+     */
+    bool isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t);
+
+   /**
+    * Update the refresh status off all segments on the given track and
+    * for time greater than time.
+    * This method is useful when a clef or key signature has changed as, since
+    * the redundant clefs and keys may be hide, some changes may propagate
+    * across the segments up to the end of the composition.
+    */
+    void updateRefreshStatuses(TrackId track, timeT time);
+
+    /// YG: Only for debug
+    void dumpVectors();
+    void dumpBarDataMap();
+
 signals:
     void mousePressed(const NotationMouseEvent *e);
     void mouseMoved(const NotationMouseEvent *e);
     void mouseReleased(const NotationMouseEvent *e);
     void mouseDoubleClicked(const NotationMouseEvent *e);
 
-    void segmentDeleted(Segment *);
-    void sceneDeleted(); // all segments have been removed
+    void sceneNeedsRebuilding();
 
     void eventRemoved(Event *);
-    
+
     void selectionChanged();
     void selectionChanged(EventSelection *);
-    
+
     void layoutUpdated(timeT,timeT);
     void staffsPositionned();
 
@@ -215,7 +251,7 @@ signals:
      */
 //!!!    void hoveredOverAbsoluteTimeChanged(unsigned int time);
 
-protected slots:    
+protected slots:
     void slotCommandExecuted();
 
 protected:
@@ -224,8 +260,15 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
 
-    void segmentRemoved(const Composition *, Segment *); // CompositionObserver
+    // CompositionObserver methods
+    void segmentRemoved(const Composition *, Segment *);
     void timeSignatureChanged(const Composition *); // CompositionObserver
+    void segmentRepeatChanged(const Composition *, Segment *, bool);
+    void segmentRepeatEndChanged(const Composition *, Segment *, timeT);
+    void segmentStartChanged(const Composition *, Segment *, timeT);
+    void segmentEndMarkerChanged(const Composition *, Segment *, bool);
+
+
 
 private:
     void setNotePixmapFactories(QString fontName = "", int size = -1);
@@ -238,8 +281,13 @@ private:
     NotePixmapFactory *m_notePixmapFactory; // I own this
     NotePixmapFactory *m_notePixmapFactorySmall; // I own this
 
-    std::vector<Segment *> m_segments; // I do not own these
+    std::vector<Segment *> m_externalSegments; // I do not own these
+    std::vector<Segment *> m_clones; // I own these
+    std::vector<Segment *> m_segments; // The concatenation of m_clones 
+                                       // and m_externalSegments
     std::vector<NotationStaff *> m_staffs; // I own these
+
+    ClefKeyContext *m_clefKeyContext; // I own this
 
     EventSelection *m_selection; // I own this
 
@@ -253,7 +301,7 @@ private:
 
     std::vector<QGraphicsItem *> m_pages;
     std::vector<QGraphicsItem *> m_pageNumbers;
-    
+
     StaffLayout::PageMode m_pageMode;
     int m_printSize;
     int m_leftGutter;
@@ -290,6 +338,14 @@ private:
 
     TrackIntMap m_trackHeights;
     TrackIntMap m_trackCoords;
+
+    // Remember segments about to be deleted
+    std::vector<Segment *> m_segmentsDeleted;
+
+    bool m_finished;       // Waiting dtor : don't do too much now
+    bool m_sceneIsEmpty;   // No more segment in scene
+    bool m_showRepeated;   // Repeated segments are visible
+    bool m_editRepeated;   // Direct edition of repeated segments is allowed
 };
 
 }

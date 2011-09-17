@@ -253,7 +253,7 @@ Event::toXmlString(timeT expectedTime)
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
 
-	out << "<property name=\""
+    out << "<property name=\""
 	    << XmlExportable::encode(i->getName()) << "\" ";
 	string type = getPropertyTypeAsString(*i);
 	for (size_t j = 0; j < type.size(); ++j) {
@@ -277,7 +277,7 @@ Event::toXmlString(timeT expectedTime)
 	std::string s(i->getName());
 	if (s.find("::") != std::string::npos) continue;
 
-	out << "<nproperty name=\""
+    out << "<nproperty name=\""
 	    << XmlExportable::encode(s) << "\" ";
 	string type = getPropertyTypeAsString(*i);
 	for (size_t j = 0; j < type.size(); ++j) {

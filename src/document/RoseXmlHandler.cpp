@@ -38,6 +38,7 @@
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
+#include "base/SegmentLinker.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
@@ -805,7 +806,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         // set Segment
-        m_section = InSegment;
+        if(lcName == "segment") {
+            m_section = InSegment;
+        }
 
         int track = -1, startTime = 0;
         unsigned int colourindex = 0;
@@ -913,6 +916,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString triggerVelocityStr = atts.value("triggerbasevelocity");
         QString triggerRetuneStr = atts.value("triggerretune");
         QString triggerAdjustTimeStr = atts.value("triggeradjusttimes");
+        
+        QString linkerIdStr = atts.value("linkerid");
+
+        QString linkerChgKeyStr = atts.value("linkertransposechangekey");
+        QString linkerStepsStr = atts.value("linkertransposesteps");
+        QString linkerSemitonesStr = atts.value("linkertransposesemitones");
+        QString linkerTransBackStr =
+                             atts.value("linkertransposesegmentback");
 
         if (!triggerIdStr.isEmpty()) {
             int pitch = -1;
@@ -933,6 +944,26 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
             m_currentSegment->setStartTimeDataMember(startTime);
         } else {
+            if (!linkerIdStr.isEmpty()) {
+                SegmentLinker *linker = 0;                                  
+                int linkId = linkerIdStr.toInt();
+                SegmentLinkerMap::iterator linkerItr = 
+                                                  m_segmentLinkers.find(linkId);
+                if (linkerItr == m_segmentLinkers.end()) {
+                    //need to create a SegmentLinker with this id
+                    linker = new SegmentLinker(linkId);
+                    m_segmentLinkers[linkId] = linker;
+                } else {
+                    linker = linkerItr->second;
+                }
+                Segment::LinkTransposeParams params(
+                                        linkerChgKeyStr.toLower()=="true",
+                                        linkerStepsStr.toInt(),
+                                        linkerSemitonesStr.toInt(),
+                                        linkerTransBackStr.toLower()=="true");
+                linker->addLinkedSegment(m_currentSegment);
+                m_currentSegment->setLinkTransposeParams(params);
+            }
             getComposition().addSegment(m_currentSegment);
             getComposition().setSegmentStartTime(m_currentSegment, startTime);
         }

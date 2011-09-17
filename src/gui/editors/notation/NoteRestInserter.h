@@ -66,6 +66,11 @@ public:
                     Accidental accidental,
                     int velocity,
                     bool suppressPreview = false);
+    
+    /**
+     * Useful to get the tool name from a NotationTool object
+     */ 
+    virtual const QString getToolName() { return ToolName; }
 
     static const QString ToolName;
 

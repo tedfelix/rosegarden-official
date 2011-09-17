@@ -127,7 +127,7 @@ PasteSegmentsCommand::execute()
 
         TrackId newTrackId = track->getId();
 
-        Segment *segment = new Segment(**i);
+        Segment *segment = (**i).clone();
         segment->setStartTime(segment->getStartTime() + offset);
         segment->setTrack(newTrackId);
         m_composition->addSegment(segment);

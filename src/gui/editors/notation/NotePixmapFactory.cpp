@@ -636,10 +636,10 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
             drawSlashes(m_nd.stemStart, params, slashCount);
         }
 
-        if (m_selected)
-            m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
-        else
-            m_p->painter().setPen(QColor(Qt::black));
+        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(
+                                                GUIPalette::SelectedElement));
+        else if (m_shaded) m_p->painter().setPen(QColor(Qt::gray));
+        else m_p->painter().setPen(QColor(Qt::black));
 
         // If we draw stems after beams, instead of beams after stems,
         // beam anti-aliasing won't damage stems but we have to shorten the
@@ -992,7 +992,9 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     for (std::vector<Mark>::iterator i = aboveMarks.begin();
          i != aboveMarks.end(); ++i) {
 
-        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
+        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(
+                                                GUIPalette::SelectedElement));
+        else if (m_shaded) m_p->painter().setPen(QColor(Qt::gray));
         else m_p->painter().setPen(QColor(Qt::black));
 
         if (!Marks::isFingeringMark(*i)) {
@@ -1098,10 +1100,10 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
         return ;
 
     if (params.m_restOutsideStave) {
-        if (m_selected)
-            m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
-        else
-            m_p->painter().setPen(QColor(Qt::black));
+        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(
+                                                GUIPalette::SelectedElement));
+        else if (m_shaded) m_p->painter().setPen(QColor(Qt::gray));
+        else m_p->painter().setPen(QColor(Qt::black));
     }
     x0 = m_nd.left - m_nd.noteBodyWidth / 5 - 1;
     x1 = m_nd.left + m_nd.noteBodyWidth + m_nd.noteBodyWidth / 5 /* + 1 */;
@@ -1163,6 +1165,10 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     if (getLegerLineThickness() > getStaffLineThickness()) {
         y -= (getLegerLineThickness() - getStaffLineThickness() + 1) / 2;
     }
+
+    // Sometimes needed to render segment link when an accent is under the note.
+    //!!! Why ???
+    if (m_shaded && !m_selected) m_p->painter().setPen(QColor(Qt::gray));
 
     for (int i = legerLines - 1; i >= 0; --i) {
         if (i % 2) {
@@ -1408,6 +1414,8 @@ NotePixmapFactory::drawShallowLine(float x0, float y0, float x1, float y1,
     m_p->painter().setPen(Qt::NoPen);
     if (m_selected) {
         m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::SelectedElement));
+    } else if (m_shaded) {
+        m_p->painter().setBrush(Qt::gray);
     } else {
         m_p->painter().setBrush(Qt::black);
     }

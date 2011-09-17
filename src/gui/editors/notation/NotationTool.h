@@ -91,6 +91,8 @@ public:
     virtual void handleMouseRelease(const NotationMouseEvent *);
     virtual void handleMouseDoubleClick(const NotationMouseEvent *);
     virtual FollowMode handleMouseMove(const NotationMouseEvent *);
+    
+    virtual const QString getToolName() = 0;
 
 
 protected:

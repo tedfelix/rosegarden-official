@@ -19,12 +19,16 @@
 #include "Composition.h"
 #include "BasicQuantizer.h"
 #include "base/Profiler.h"
+#include "base/SegmentLinker.h"
 
 #include <iostream>
 #include <algorithm>
 #include <iterator>
 #include <cstdio>
 #include <typeinfo>
+
+/// YG: Only for debug (dumpObservers)
+#include "gui/editors/notation/StaffHeader.h"
 
 namespace Rosegarden
 {
@@ -60,12 +64,17 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_highestPlayable(127),
     m_lowestPlayable(0),
     m_clefKeyList(0),
+    m_notifyResizeLocked(false),
+    m_memoStart(0),
+    m_memoEndMarkerTime(0),
     m_runtimeSegmentId(_runtimeSegmentId++),
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(false),
     m_fadeInTime(Rosegarden::RealTime::zeroTime),
-    m_fadeOutTime(Rosegarden::RealTime::zeroTime)
+    m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+    m_segmentLinker(0),
+    m_isTmp(0)
 {
 }
 
@@ -96,17 +105,35 @@ Segment::Segment(const Segment &segment):
     m_highestPlayable(127),
     m_lowestPlayable(0),
     m_clefKeyList(0),
+    m_notifyResizeLocked(false),  // To copy a segment while notifications
+    m_memoStart(0),               // are locked doesn't sound as a good
+    m_memoEndMarkerTime(0),       // idea.
     m_runtimeSegmentId(_runtimeSegmentId++),
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(segment.isAutoFading()),
     m_fadeInTime(segment.getFadeInTime()),
-    m_fadeOutTime(segment.getFadeOutTime())
+    m_fadeOutTime(segment.getFadeOutTime()),
+    m_segmentLinker(0), //yes, this is intentional. clone() handles this
+    m_isTmp(segment.isTmp())
 {
     for (const_iterator it = segment.begin();
 	 it != segment.end(); ++it) {
         insert(new Event(**it));
     }
+}
+
+Segment*
+Segment::cloneImpl() const
+{
+    Segment *s = new Segment(*this);
+
+    if (isLinked()) {
+        //if the segment is linked already, link the clone to our SegmentLinker
+       getLinker()->addLinkedSegment(s);
+    }
+
+    return s;
 }
 
 Segment::~Segment()
@@ -122,6 +149,9 @@ Segment::~Segment()
 	}
 	cerr << endl;
     }
+
+    //unlink it
+    SegmentLinker::unlinkSegment(this);
 
     notifySourceDeletion();
 
@@ -144,6 +174,34 @@ Segment::~Segment()
 
     delete m_endMarkerTime;
 }
+
+bool
+Segment::setAsReference() {
+    if (!isLinked()) return false;
+    getLinker()->setReference(this);
+    return true;
+}
+
+Segment *
+Segment::getRealSegment() {
+    if (isLinked()) return getLinker()->getReference();
+    return this;
+}
+
+const Segment *
+Segment::getRealSegment() const {
+    if (isLinked()) return getLinker()->getReference();
+    return this;
+}
+
+void
+Segment::setTmp() {
+    m_isTmp = true;
+    for (iterator it = begin(); it != end(); ++it) {
+        (*it)->set<Bool>(BaseProperties::TMP, true, false);
+    }
+}
+
 
 
 void
@@ -303,18 +361,18 @@ Segment::setEndTime(timeT t)
     if (t < m_startTime) t = m_startTime;
 
     if (m_type == Audio) {
-	setEndMarkerTime(t);
+        setEndMarkerTime(t);
     } else {
-	if (t < endTime) {
-	    erase(findTime(t), end());
-	    endTime = getEndTime();
-	    if (m_endMarkerTime && endTime < *m_endMarkerTime) {
-		*m_endMarkerTime = endTime;
-		notifyEndMarkerChange(true);
-	    }
-	} else if (t > endTime) {
-	    fillWithRests(endTime, t);
-	}
+        if (t < endTime) {
+            erase(findTime(t), end());
+            endTime = getEndTime();
+            if (m_endMarkerTime && endTime < *m_endMarkerTime) {
+                *m_endMarkerTime = endTime;
+                notifyEndMarkerChange(true);
+            }
+        } else if (t > endTime) {
+            fillWithRests(endTime, t);
+        }
     }
 }
 
@@ -322,9 +380,9 @@ Segment::iterator
 Segment::getEndMarker()
 {
     if (m_endMarkerTime) {
-	return findTime(*m_endMarkerTime);
+        return findTime(*m_endMarkerTime);
     } else {
-	return end();
+        return end();
     }
 }
 
@@ -337,7 +395,7 @@ Segment::isBeforeEndMarker(const_iterator i) const
     timeT endTime = getEndMarkerTime();
 
     return ((absTime <  endTime) ||
-	    (absTime == endTime && (*i)->getDuration() == 0));
+            (absTime == endTime && (*i)->getDuration() == 0));
 }
 
 void
@@ -386,6 +444,10 @@ Segment::insert(Event *e)
 	notifyEndMarkerChange(m_endTime < oldTime);
     }
 
+    // A segment having the TMP property should be displayed with a gray colour.
+    // To do so each event in such a segment needs the TMP property.
+    if (isTmp()) e->set<Bool>(BaseProperties::TMP, true, false);
+
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
     updateRefreshStatuses(e->getAbsoluteTime(),
@@ -411,6 +473,7 @@ Segment::erase(iterator pos)
     Event *e = *pos;
 
     assert(e);
+    
 
     timeT t0 = e->getAbsoluteTime();
     timeT t1 = t0 + e->getDuration();
@@ -422,9 +485,13 @@ Segment::erase(iterator pos)
 
     if (t0 == m_startTime && begin() != end()) {
 	timeT startTime = (*begin())->getAbsoluteTime();
-        if (m_composition) m_composition->setSegmentStartTime(this, startTime);
-	else m_startTime = startTime;
-	notifyStartChanged(m_startTime);
+        
+        // Don't send any notification if startTime doesn't change.
+        if (startTime != m_startTime) {
+            if (m_composition) m_composition->setSegmentStartTime(this, startTime);
+            else m_startTime = startTime;
+            notifyStartChanged(m_startTime);
+        }
     }
     if (t1 == m_endTime) {
 	updateEndTime();
@@ -552,6 +619,7 @@ Segment::fillWithRests(timeT endTime)
     fillWithRests(getEndTime(), endTime);
 }
 
+
 void
 Segment::fillWithRests(timeT startTime, timeT endTime)
 {
@@ -589,6 +657,7 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
 	acc += *i;
     }
 }
+
 
 void
 Segment::normalizeRests(timeT startTime, timeT endTime)
@@ -639,7 +708,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     // durations to.)
 
     timeT segmentEndTime = m_endTime;
-    
+
     iterator ia = findNearestTime(startTime);
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
@@ -1167,6 +1236,41 @@ Segment::getFirstClefAndKey(Clef &clef, Key &key)
     }
 }
 
+
+void
+Segment::enforceBeginWithClefAndKey()
+{
+    bool keyFound = false;
+    bool clefFound = false;
+
+    iterator i = begin();
+    while (i!=end()) {
+        // Keep current clef and key as soon as a note or rest event is found
+        if ((*i)->isa(Note::EventRestType) || (*i)->isa(Note::EventType)) break;
+
+        // Remember if a clef event is found
+        if ((*i)->isa(Clef::EventType)) {
+            clefFound = true;
+            // and stop looking for next events if a key has already been found
+            if (keyFound) break;
+        }
+
+        // Remember if a key event is found
+        if ((*i)->isa(Key::EventType)) {
+            keyFound = true;
+            // and stop looking for next events if a clef has already been found
+            if (clefFound) break;
+        }
+
+        ++i;
+    }
+
+    // Insert default clef and key signature if needed
+    if (!keyFound) insert(Key().getAsEvent(m_startTime));
+    if (!clefFound) insert(Clef().getAsEvent(m_startTime));
+}
+
+
 timeT
 Segment::getRepeatEndTime() const
 {
@@ -1237,6 +1341,8 @@ Segment::notifyAppearanceChange() const
 void
 Segment::notifyStartChanged(timeT newTime)
 {
+    if (m_notifyResizeLocked) return;
+
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->startChanged(this, newTime);
@@ -1250,6 +1356,8 @@ Segment::notifyStartChanged(timeT newTime)
 void
 Segment::notifyEndMarkerChange(bool shorten)
 {
+    if (m_notifyResizeLocked) return;
+
     for (ObserverSet::const_iterator i = m_observers.begin();
      i != m_observers.end(); ++i) {
     (*i)->endMarkerTimeChanged(this, shorten);
@@ -1279,6 +1387,33 @@ Segment::notifySourceDeletion() const
     }
 }
 
+void
+Segment::lockResizeNotifications()
+{
+    m_notifyResizeLocked = true;
+    m_memoStart = m_startTime;
+    m_memoEndMarkerTime = m_endMarkerTime ? new timeT(*m_endMarkerTime) : 0;
+}
+
+void
+Segment::unlockResizeNotifications()
+{
+    m_notifyResizeLocked = false;
+    if (m_startTime != m_memoStart) notifyStartChanged(m_startTime);
+    if (!m_memoEndMarkerTime && !m_endMarkerTime) return;  // ???
+    bool shorten = false;
+    if (m_memoEndMarkerTime && m_endMarkerTime) {
+        if (*m_memoEndMarkerTime > *m_endMarkerTime) shorten = true;
+        else if (*m_memoEndMarkerTime == *m_endMarkerTime) return;
+    }
+    
+    // What if m_memoEndMarkerTime=0 and m_endMarkerTime!=0 (or the
+    // opposite) ?   Is such a case possible ?
+    
+    if (m_memoEndMarkerTime) delete m_memoEndMarkerTime;
+    m_memoEndMarkerTime = 0;
+    notifyEndMarkerChange(shorten);
+}
 
 void
 Segment::setColourIndex(const unsigned int input)
@@ -1319,6 +1454,7 @@ Segment::deleteEventRuler(const std::string &type, int controllerValue)
     return false;
 }
 
+
 Segment::EventRuler*
 Segment::getEventRuler(const std::string &type, int controllerValue)
 {
@@ -1329,7 +1465,6 @@ Segment::getEventRuler(const std::string &type, int controllerValue)
 
     return 0;
 }
-
 
 
 SegmentHelper::~SegmentHelper() { }
@@ -1355,7 +1490,26 @@ SegmentRefreshStatus::push(timeT from, timeT to)
     setNeedsRefresh(true);
 }
 
-
+/// YG: Only for debug
+void
+Segment::dumpObservers()
+{
+    std::cerr << "Observers of segment " << this << " are:\n";
+     for (ObserverSet::const_iterator i = m_observers.begin();
+          i != m_observers.end(); ++i) {
+        std::cerr << " " << (*i);
+    }
+    std::cerr << "\n";
+    for (ObserverSet::const_iterator i = m_observers.begin();
+          i != m_observers.end(); ++i) {
+              Segment * seg = dynamic_cast<Segment *>(*i);
+              StaffHeader * sh = dynamic_cast<StaffHeader *>(*i);
+        std::cerr << "        " << (*i);
+        if (seg) std::cerr << " ==> Segment " << seg;
+        if (sh) std::cerr << " ==> StaffHeader " << sh;
+        std::cerr << "\n";
+    }
+}
 
 
 }

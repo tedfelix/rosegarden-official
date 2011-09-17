@@ -35,14 +35,17 @@
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "commands/segment/SegmentCommandRepeat.h"
 #include "commands/segment/SegmentLabelCommand.h"
+#include "commands/segment/SegmentLinkTransposeCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchPickerDialog.h"
+#include "gui/dialogs/IntervalDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
 #include "gui/widgets/TristateCheckBox.h"
+#include "gui/widgets/CollapsingFrame.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include "document/Command.h"
@@ -74,6 +77,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStackedWidget>
+#include <QMessageBox>
 
 
 namespace Rosegarden
@@ -116,6 +120,14 @@ SegmentParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     //int comboHeight = std::max(fontMetrics.height(), 13) + 10;
     int width = fontMetrics.width("12345678901234567890");
+
+    QSettings settings;
+    settings.beginGroup(CollapsingFrameConfigGroup);
+    {
+        bool expanded = qStrToBool(settings.value("segmentparameterslinked", "false")) ;
+        settings.setValue("segmentparameterslinked", expanded);
+    }
+    settings.endGroup();
 
     //    QFrame *frame = new QFrame(this);
     setContentsMargins(4, 4, 4, 4);
@@ -244,6 +256,50 @@ SegmentParameterBox::initBox()
     delayLabel->setFont(font);
     colourLabel->setFont(font);
 
+    //linked segment collapse frame
+    CollapsingFrame *cframe = new CollapsingFrame(tr("Linked segment parameters"),
+            this, "segmentparameterslinked");
+
+    //unhide this cframe if you want to play with the linked segment transpose
+    //parameters
+    
+    //I've hidden it for the time being until we've decided how we're going
+    //to interact with these transpose params
+    
+    cframe->hide();
+    
+    m_linkedSegmentGroup = new QFrame(cframe);
+    cframe->setWidget(m_linkedSegmentGroup);
+    m_linkedSegmentGroup->setContentsMargins(3, 3, 3, 3);
+    QGridLayout *groupLayout = new QGridLayout(m_linkedSegmentGroup);
+    groupLayout->setMargin(0);
+    groupLayout->setSpacing(2);
+    groupLayout->setColumnMinimumWidth(3, 80);
+
+    //linked segment transpose label
+    QLabel *linkTransposeLabel = new QLabel(tr("Transpose"), m_linkedSegmentGroup);
+    linkTransposeLabel->setFont(font);
+    groupLayout->addWidget(linkTransposeLabel, 0, 0, Qt::AlignLeft);
+
+    //transpose change button
+    m_linkTransposeButton = new QPushButton(tr("Change"), m_linkedSegmentGroup);
+    m_linkTransposeButton->setFont(font);
+    m_linkTransposeButton->setToolTip(tr("<qt>Edit the relative transposition on the linked segment</qt>"));
+    //    m_labelButton->setFixedWidth(50);
+    groupLayout->addWidget(m_linkTransposeButton, 0, 1);
+
+    connect(m_linkTransposeButton, SIGNAL(released()),
+            SLOT(slotChangeLinkTranspose()));
+
+    //transpose reset button
+    m_linkTransposeResetButton = new QPushButton(tr("Reset"), m_linkedSegmentGroup);
+    m_linkTransposeResetButton->setFont(font);
+    m_linkTransposeResetButton->setToolTip(tr("<qt>Reset the relative transposition on the linked segment to zero</qt>"));
+    groupLayout->addWidget(m_linkTransposeResetButton, 0, 2);
+
+    connect(m_linkTransposeResetButton, SIGNAL(released()),
+            SLOT(slotResetLinkTranspose()));
+
     int row = 0;
 
 //    gridLayout->addRowSpacing(0, 12); // why??
@@ -271,6 +327,8 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(m_colourValue, row, 1, row- row+1, 5);
     ++row;
 
+    gridLayout->addWidget(cframe, row, 0, 1, 5);
+    ++row;
     // Configure the empty final row to accomodate any extra vertical space.
 
     gridLayout->setRowStretch(gridLayout->rowCount() - 1, 1);
@@ -800,6 +858,85 @@ void
 SegmentParameterBox::slotTransposeSelected(int value)
 {
     slotTransposeTextChanged(m_transposeValue->itemText(value));
+}
+
+void
+SegmentParameterBox::slotChangeLinkTranspose()
+{
+    if (m_segments.size() == 0)
+        return ;
+
+    bool foundTransposedLinks = false;
+    std::vector<Segment *> linkedSegs;
+    std::vector<Segment *>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        Segment *linkedSeg = *it;
+        if (linkedSeg->isLinked()) {
+            if (linkedSeg->getLinkTransposeParams().m_semitones==0) {
+                linkedSegs.push_back(linkedSeg);
+            } else {
+                foundTransposedLinks = true;
+                break;
+            }
+        }
+    }
+    
+    if (foundTransposedLinks) {
+        QMessageBox::critical(this, tr("Rosegarden"), 
+                tr("Existing transpositions on selected linked segments must be removed\nbefore new transposition can be applied."),
+                QMessageBox::Ok);
+        return;
+    }
+        
+    if (linkedSegs.size()==0) {
+        return;
+    }
+    
+    IntervalDialog intervalDialog(this, true, true);
+    int ok = intervalDialog.exec();
+    
+    if (!ok) {
+        return;
+    }
+
+    bool changeKey = intervalDialog.getChangeKey();
+    int steps = intervalDialog.getDiatonicDistance();
+    int semitones = intervalDialog.getChromaticDistance();
+    bool transposeSegmentBack = intervalDialog.getTransposeSegmentBack();
+     
+    CommandHistory::getInstance()->addCommand
+        (new SegmentLinkTransposeCommand(linkedSegs, changeKey, steps, 
+                                         semitones, transposeSegmentBack));
+}
+
+void
+SegmentParameterBox::slotResetLinkTranspose()
+{
+    if (m_segments.size() == 0)
+        return ;
+
+    std::vector<Segment *> linkedSegs;
+    std::vector<Segment *>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        Segment *linkedSeg = *it;
+        if (linkedSeg->isLinked()) {
+            linkedSegs.push_back(linkedSeg);
+        }
+    }
+
+    if (linkedSegs.size() == 0) {
+        return;
+    }
+
+    int reset = QMessageBox::question(this, tr("Rosegarden"), 
+                   tr("Remove transposition on selected linked segments?"));
+
+    if (reset == QMessageBox::No) {
+        return ;
+    }
+
+    CommandHistory::getInstance()->addCommand
+        (new SegmentLinkResetTransposeCommand(linkedSegs));
 }
 
 void
