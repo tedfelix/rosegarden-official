@@ -640,9 +640,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // using Thorn, use a nice dark gray that just contrasts with the black
     // horizontal line here
     QColor kuller(0x40, 0x40, 0x40);
-// QT3: Piss on it.  Let someone who gives a crap about running without the
-// stylesheet figure out how to fix this next bit:
-//    if (!m_Thorn) kuller = palette().background();
+    if (!m_Thorn) kuller = palette().background().color();
     m_buffer.fill(kuller);
 
     QPainter paint(&m_buffer);
