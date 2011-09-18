@@ -535,7 +535,7 @@ TransportDialog::slotChangeTimeDisplay()
 void
 TransportDialog::slotChangeToEnd()
 {
-    if (m_transport->ToEndButton->isFlat()) {
+    if (m_transport->ToEndButton->isChecked()) {
         m_transport->ToEndLabel->show();
     } else {
         m_transport->ToEndLabel->hide();
@@ -545,7 +545,7 @@ TransportDialog::slotChangeToEnd()
 bool
 TransportDialog::isShowingTimeToEnd()
 {
-    return m_transport->ToEndButton->isFlat();
+    return m_transport->ToEndButton->isChecked();
 }
 
 void
@@ -1000,7 +1000,7 @@ TransportDialog::slotLoopButtonClicked()
     //    }
     //    settings.endGroup();
 
-    if (m_transport->LoopButton->isFlat()) {
+    if (m_transport->LoopButton->isChecked()) {
         emit setLoop();
     } else {
         emit unsetLoop();
