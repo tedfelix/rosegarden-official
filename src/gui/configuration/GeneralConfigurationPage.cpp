@@ -548,8 +548,12 @@ void GeneralConfigurationPage::apply()
         QMessageBox::information(this, tr("Rosegarden"), tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
-    if (graphicsSystemChanged || thornChanged) {
+    if (graphicsSystemChanged) {
         QMessageBox::information(this, tr("Rosegarden"), tr("You must restart Rosegarden for the graphics system change to take effect."));
+    }
+
+    if (thornChanged) {
+        QMessageBox::information(this, tr("Rosegarden"), tr("You must restart Rosegarden for the presentation change to take effect."));
     }
 }
 
