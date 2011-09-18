@@ -17,6 +17,7 @@
 
 
 #include "AudioPreviewThread.h"
+#include "AudioPreviewReadyEvent.h"
 
 #include "base/RealTime.h"
 #include "sound/AudioFileManager.h"
@@ -31,6 +32,10 @@
 
 namespace Rosegarden
 {
+
+
+const QEvent::Type AudioPreviewThread::AudioPreviewReady       = QEvent::Type(QEvent::User + 1);
+const QEvent::Type AudioPreviewThread::AudioPreviewQueueEmpty  = QEvent::Type(QEvent::User + 2);
 
 AudioPreviewThread::AudioPreviewThread(AudioFileManager *manager) :
         m_manager(manager),
@@ -156,10 +161,7 @@ AudioPreviewThread::process()
                 unsigned int channels = audioFile->getChannels();
                 m_results[token] = ResultsPair(channels, results);
                 QObject *notify = req.notify;
-// QT3: I just have no earthly idea what this QCustomEvent stuff used to do, and
-// there's nobody to ask.  Audio previews are going to be broken when this code
-// compiles, and we'll have to figure out how to fix this later.
-//                QApplication::postEvent(notify, new QCustomEvent(AudioPreviewReady, (void *)token));
+                QApplication::postEvent(notify, new AudioPreviewReadyEvent(token));
             }
         }
 
@@ -255,7 +257,5 @@ AudioPreviewThread::getPreview(int token, unsigned int &channels,
     return ;
 }
 
-const QEvent::Type AudioPreviewThread::AudioPreviewReady       = QEvent::Type(QEvent::User + 1);
-const QEvent::Type AudioPreviewThread::AudioPreviewQueueEmpty  = QEvent::Type(QEvent::User + 2);
 
 }

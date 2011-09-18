@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,16 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPREVIEWTHREAD_H_
-#define _RG_AUDIOPREVIEWTHREAD_H_
+#ifndef _RG_AUDIOPREVIEWREADYEVENT_H_
+#define _RG_AUDIOPREVIEWREADYEVENT_H_
 
-#include "base/RealTime.h"
-#include <map>
 #include <QEvent>
-#include <QMutex>
-#include <QThread>
-#include <utility>
-#include <vector>
 
 
 class QObject;
@@ -34,59 +27,22 @@ class QObject;
 namespace Rosegarden
 {
 
-class AudioFileManager;
-
-
-class AudioPreviewThread : public QThread
+// This mechanism used to use QCustomEvent.  We need a custom QEvent subclass to
+// pass an int token amongst objects.
+class AudioPreviewReadyEvent : public QEvent
 {
+
 public:
-    AudioPreviewThread(AudioFileManager *manager);
-    
-    virtual void run();
-    virtual void finish();
-    
-    struct Request {
-        int audioFileId;
-        RealTime audioStartTime;
-        RealTime audioEndTime;
-        int width;
-        bool showMinima;
-        QObject *notify;
-    };
+    AudioPreviewReadyEvent(int data);
 
-    virtual int requestPreview(const Request &request);
-    virtual void cancelPreview(int token);
-    virtual void getPreview(int token, unsigned int &channels,
-                            std::vector<float> &values);
-
-    void setEmptyQueueListener(QObject* o) { m_emptyQueueListener = o; }
-
+    int data();
     static const QEvent::Type AudioPreviewReady;
     static const QEvent::Type AudioPreviewQueueEmpty;
-    
 
 protected:
-    virtual bool process();
-
-
-    AudioFileManager *m_manager;
-    int m_nextToken;
-    bool m_exiting;
-
-    QObject* m_emptyQueueListener;
-
-    typedef std::pair<int, Request> RequestRec;
-    typedef std::multimap<int, RequestRec> RequestQueue;
-    RequestQueue m_queue;
-
-    typedef std::pair<unsigned int, std::vector<float> > ResultsPair;
-    typedef std::map<int, ResultsPair> ResultsQueue;
-    ResultsQueue m_results;
-
-    QMutex m_mutex;
+    int m_data;
 };
 
 
 }
-
 #endif

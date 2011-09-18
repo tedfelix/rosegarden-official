@@ -34,6 +34,7 @@ class QObject;
 namespace Rosegarden
 {
 
+
 class AudioFileManager;
 
 
@@ -85,7 +86,6 @@ protected:
 
     QMutex m_mutex;
 };
-
 
 }
 

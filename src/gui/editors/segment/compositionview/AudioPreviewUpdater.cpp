@@ -17,13 +17,15 @@
 
 
 #include "AudioPreviewUpdater.h"
+#include "AudioPreviewThread.h"
+#include "AudioPreviewReadyEvent.h"
+#include "CompositionModelImpl.h"
 
 #include "misc/Debug.h"
-#include "AudioPreviewThread.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
-#include "CompositionModelImpl.h"
+
 #include <QEvent>
 #include <QObject>
 #include <QRect>
@@ -94,13 +96,13 @@ void AudioPreviewUpdater::cancel()
 
 bool AudioPreviewUpdater::event(QEvent *e)
 {
-    /*
+    
     RG_DEBUG << "AudioPreviewUpdater(" << this << ")::event (" << e << ")" << endl;
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
-        QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
+        AudioPreviewReadyEvent *ev = dynamic_cast<AudioPreviewReadyEvent *>(e);
         if (ev) {
-            intptr_t token = (intptr_t)ev->data();
+            int token = (int)ev->data();
             m_channels = 0; // to be filled as getPreview return value
 
             RG_DEBUG << "AudioPreviewUpdater::token " << token << ", my token " << m_previewToken << endl;
@@ -137,9 +139,6 @@ bool AudioPreviewUpdater::event(QEvent *e)
 
     return QObject::event(e);
 
-    */
-    //QT3: totally disabled and deferred for later
-    return false;
 }
 
 }
