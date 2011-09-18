@@ -49,12 +49,9 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
     int pixWidth = std::min(m_rect.getBaseWidth(), tileWidth());
 
     //NB. m_image used to be created as an 8-bit image with 4 bits per pixel.
-    // Qt 4 disallows drawing on 8-bit QImage, and these days it seems there
-    // isn't much point in trying to shave bits off the size of any data
-    // structure.  Let's just try a 32-bit RGB with the alpha channel, which
-    // should take care of the old hasAlphaChannel(true) and allow full use of
-    // any normal drawing operations.
-    m_image = QImage(pixWidth, m_rect.height(), QImage::Format_ARGB32);
+    // QImage::Format_Indexed8 seems to be close enough, since we manipulate the
+    // pixels directly by index, rather than employ drawing tools.
+    m_image = QImage(pixWidth, m_rect.height(), QImage::Format_Indexed8);
     m_image.fill(0);
 
     m_penWidth = (std::max(1U, (unsigned int)m_rect.getPen().width()) * 2);
