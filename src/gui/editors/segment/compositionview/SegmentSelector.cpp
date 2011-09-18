@@ -529,13 +529,13 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
         } else {
             if (m_canvas->getModel()->haveMultipleSelection()) {
                 if (!ctrlPressed) {
-                    setContextHelp(tr("Click and drag to move segments; hold Ctrl as well to copy them"));
+                    setContextHelp(tr("Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies"));
                 } else {
                     setContextHelp(tr("Click and drag to copy segments"));
                 }
             } else {
                 if (!ctrlPressed) {
-                    setContextHelp(tr("Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit"));
+                    setContextHelp(tr("Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit"));
                 } else {
                     setContextHelp(tr("Click and drag to copy segment"));
                 }
