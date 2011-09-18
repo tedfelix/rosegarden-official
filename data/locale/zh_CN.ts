@@ -242,14 +242,14 @@
         <location line="+1174"/>
         <location line="+48"/>
         <location line="+68"/>
-        <location line="+1861"/>
-        <location line="+651"/>
+        <location line="+1864"/>
+        <location line="+661"/>
         <location line="+115"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location line="-4368"/>
+        <location line="-4381"/>
         <source>&amp;Add Audio File...</source>
         <translation>添加音频文件(&amp;A)...</translation>
     </message>
@@ -268,14 +268,14 @@
         <location line="+1174"/>
         <location line="+48"/>
         <location line="+70"/>
-        <location line="+1910"/>
-        <location line="+600"/>
+        <location line="+1913"/>
+        <location line="+610"/>
         <location line="+106"/>
         <source>&amp;Close</source>
         <translation>关闭(&amp;C)</translation>
     </message>
     <message>
-        <location line="-4360"/>
+        <location line="-4373"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
@@ -284,29 +284,29 @@
         <location line="+1174"/>
         <location line="+48"/>
         <location line="+70"/>
-        <location line="+1910"/>
-        <location line="+600"/>
+        <location line="+1913"/>
+        <location line="+610"/>
         <location line="+106"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location line="-4365"/>
+        <location line="-4378"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
         <location line="+1292"/>
-        <location line="+1919"/>
-        <location line="+591"/>
+        <location line="+1922"/>
+        <location line="+601"/>
         <location line="+106"/>
         <source>&amp;Edit</source>
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location line="-4366"/>
+        <location line="-4379"/>
         <source>&amp;Unload Audio File</source>
         <translation>卸载音频文件(&amp;U)</translation>
     </message>
@@ -345,8 +345,8 @@
         <location line="+1"/>
         <location line="+64"/>
         <location line="+1"/>
-        <location line="+1642"/>
-        <location line="+832"/>
+        <location line="+1645"/>
+        <location line="+842"/>
         <location line="+151"/>
         <location line="+1"/>
         <location line="+57"/>
@@ -355,7 +355,7 @@
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location line="-4383"/>
+        <location line="-4396"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+144"/>
@@ -363,8 +363,8 @@
         <location line="+1161"/>
         <location line="+173"/>
         <location line="+65"/>
-        <location line="+1643"/>
-        <location line="+832"/>
+        <location line="+1646"/>
+        <location line="+842"/>
         <location line="+151"/>
         <location line="+58"/>
         <source>F1</source>
@@ -372,20 +372,20 @@
         <translation>F1</translation>
     </message>
     <message>
-        <location line="-2920"/>
-        <location line="+1881"/>
+        <location line="-2933"/>
+        <location line="+1884"/>
         <source>&amp;Rosegarden tutorial</source>
         <translation>&amp;Rosegarden 教程</translation>
     </message>
     <message>
-        <location line="-1880"/>
-        <location line="+1881"/>
-        <location line="+832"/>
+        <location line="-1883"/>
+        <location line="+1884"/>
+        <location line="+842"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>错误报告指导(&amp;B)</translation>
     </message>
     <message>
-        <location line="-4182"/>
+        <location line="-4195"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+144"/>
@@ -393,114 +393,114 @@
         <location line="+1163"/>
         <location line="+171"/>
         <location line="+65"/>
-        <location line="+1645"/>
-        <location line="+832"/>
+        <location line="+1648"/>
+        <location line="+842"/>
         <location line="+149"/>
         <location line="+58"/>
         <source>&amp;About Rosegarden</source>
         <translation>关于 RoseGarden(&amp;A)</translation>
     </message>
     <message>
-        <location line="-4389"/>
+        <location line="-4402"/>
         <location line="+1472"/>
-        <location line="+1881"/>
+        <location line="+1884"/>
         <source>General Toolbar</source>
         <translation>主工具栏</translation>
     </message>
     <message>
-        <location line="-3341"/>
+        <location line="-3344"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+1458"/>
-        <location line="+1919"/>
-        <location line="+535"/>
+        <location line="+1922"/>
+        <location line="+545"/>
         <location line="+56"/>
         <location line="+106"/>
         <source>&amp;Nothing to undo</source>
         <translation>没有可以撤销的操作(&amp;N)</translation>
     </message>
     <message>
-        <location line="-4329"/>
+        <location line="-4342"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
         <location line="+1292"/>
-        <location line="+1919"/>
-        <location line="+591"/>
+        <location line="+1922"/>
+        <location line="+601"/>
         <location line="+106"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-4334"/>
+        <location line="-4347"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+1458"/>
-        <location line="+1919"/>
-        <location line="+527"/>
+        <location line="+1922"/>
+        <location line="+537"/>
         <location line="+64"/>
         <location line="+106"/>
         <source>N&amp;othing to redo</source>
         <translation>没有可以恢复的操作(&amp;O)</translation>
     </message>
     <message>
-        <location line="-4329"/>
+        <location line="-4342"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
         <location line="+1292"/>
-        <location line="+1919"/>
-        <location line="+591"/>
+        <location line="+1922"/>
+        <location line="+601"/>
         <location line="+106"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-4334"/>
+        <location line="-4347"/>
         <location line="+156"/>
         <location line="+281"/>
         <location line="+1292"/>
-        <location line="+1919"/>
+        <location line="+1922"/>
         <source>&amp;Copy</source>
         <translation>拷贝(&amp;C)</translation>
     </message>
     <message>
-        <location line="-3641"/>
+        <location line="-3644"/>
         <location line="+156"/>
         <location line="+281"/>
         <location line="+1292"/>
-        <location line="+1919"/>
+        <location line="+1922"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-3646"/>
+        <location line="-3649"/>
         <location line="+156"/>
         <location line="+281"/>
         <location line="+1292"/>
-        <location line="+1919"/>
+        <location line="+1922"/>
         <source>&amp;Paste</source>
         <translation>粘贴(&amp;P)</translation>
     </message>
     <message>
-        <location line="-3641"/>
+        <location line="-3644"/>
         <location line="+156"/>
         <location line="+281"/>
         <location line="+1292"/>
-        <location line="+1919"/>
+        <location line="+1922"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-3635"/>
+        <location line="-3638"/>
         <location line="+201"/>
         <location line="+52"/>
         <location line="+36"/>
@@ -508,105 +508,105 @@
         <location line="+1093"/>
         <location line="+72"/>
         <location line="+158"/>
-        <location line="+1850"/>
-        <location line="+654"/>
+        <location line="+1853"/>
+        <location line="+664"/>
         <location line="+123"/>
         <source>Switch to Select Tool</source>
         <translation>切换到选择工具</translation>
     </message>
     <message>
-        <location line="-4274"/>
+        <location line="-4287"/>
         <location line="+201"/>
-        <location line="+3951"/>
+        <location line="+3964"/>
         <location line="+123"/>
         <source>Switch to Inserting Notes</source>
         <translation>切换到插入音符</translation>
     </message>
     <message>
-        <location line="-4274"/>
+        <location line="-4287"/>
         <location line="+201"/>
         <location line="+104"/>
         <location line="+36"/>
         <location line="+1102"/>
         <location line="+27"/>
         <location line="+36"/>
-        <location line="+1979"/>
+        <location line="+1982"/>
         <location line="+12"/>
-        <location line="+655"/>
+        <location line="+665"/>
         <location line="+123"/>
         <source>Switch to Erase Tool</source>
         <translation>切换到擦除工具</translation>
     </message>
     <message>
-        <location line="-4273"/>
+        <location line="-4286"/>
         <location line="+49"/>
         <location line="+309"/>
         <location line="+1174"/>
         <location line="+48"/>
         <location line="+68"/>
-        <location line="+1897"/>
-        <location line="+615"/>
+        <location line="+1900"/>
+        <location line="+625"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location line="-4153"/>
+        <location line="-4166"/>
         <location line="+49"/>
         <location line="+309"/>
         <location line="+1174"/>
         <location line="+48"/>
         <location line="+68"/>
-        <location line="+1897"/>
-        <location line="+615"/>
+        <location line="+1900"/>
+        <location line="+625"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location line="-4081"/>
+        <location line="-4094"/>
         <source>&amp;Insert Event</source>
         <translation>插入事件(&amp;I)</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+1108"/>
-        <location line="+1853"/>
-        <location line="+779"/>
-        <location line="+371"/>
+        <location line="+1856"/>
+        <location line="+788"/>
+        <location line="+372"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
         <translation>I</translation>
     </message>
     <message>
-        <location line="-4109"/>
+        <location line="-4122"/>
         <source>&amp;Delete Event</source>
         <translation>删除事件(&amp;D)</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+1637"/>
-        <location line="+1901"/>
+        <location line="+1913"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete</translation>
     </message>
     <message>
-        <location line="-3536"/>
+        <location line="-3548"/>
         <source>&amp;Edit Event</source>
         <translation>编辑事件(&amp;E)</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+1027"/>
-        <location line="+1853"/>
-        <location line="+833"/>
-        <location line="+407"/>
+        <location line="+1856"/>
+        <location line="+842"/>
+        <location line="+408"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location line="-4118"/>
+        <location line="-4131"/>
         <source>&amp;Advanced Event Editor</source>
         <translation>高级事件编辑器(&amp;A)</translation>
     </message>
@@ -614,21 +614,21 @@
         <location line="+1"/>
         <location line="+281"/>
         <location line="+1292"/>
-        <location line="+1919"/>
+        <location line="+1922"/>
         <source>Cu&amp;t</source>
         <translation>剪切(&amp;T)</translation>
     </message>
     <message>
-        <location line="-3485"/>
+        <location line="-3488"/>
         <location line="+281"/>
         <location line="+1292"/>
-        <location line="+1919"/>
+        <location line="+1922"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-3472"/>
+        <location line="-3475"/>
         <source>&amp;Select All</source>
         <translation>全选(&amp;S)</translation>
     </message>
@@ -636,14 +636,14 @@
         <location line="+7"/>
         <location line="+290"/>
         <location line="+1314"/>
-        <location line="+1933"/>
-        <location line="+555"/>
+        <location line="+1945"/>
+        <location line="+556"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location line="-4090"/>
+        <location line="-4103"/>
         <location line="+290"/>
         <source>C&amp;lear Selection</source>
         <translation>清除选择(&amp;l)</translation>
@@ -652,13 +652,13 @@
         <location line="-283"/>
         <location line="+290"/>
         <location line="+1314"/>
-        <location line="+2488"/>
+        <location line="+2501"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation>Escape</translation>
     </message>
     <message>
-        <location line="-4090"/>
+        <location line="-4103"/>
         <location line="+290"/>
         <location line="+1314"/>
         <source>&amp;Filter Selection</source>
@@ -687,76 +687,76 @@
         <location line="+58"/>
         <location line="+231"/>
         <location line="+1314"/>
-        <location line="+1914"/>
-        <location line="+564"/>
+        <location line="+1926"/>
+        <location line="+565"/>
         <location line="+60"/>
         <source>&amp;View</source>
         <translation>查看(&amp;V)</translation>
     </message>
     <message>
-        <location line="-4140"/>
+        <location line="-4153"/>
         <location line="+58"/>
-        <location line="+4023"/>
+        <location line="+4036"/>
         <location line="+60"/>
         <source>&amp;Musical Times</source>
         <translation>音乐时间(&amp;M)</translation>
     </message>
     <message>
-        <location line="-4140"/>
+        <location line="-4153"/>
         <location line="+58"/>
-        <location line="+4023"/>
+        <location line="+4036"/>
         <location line="+60"/>
         <source>&amp;Real Times</source>
         <translation>实际时间(&amp;R)</translation>
     </message>
     <message>
-        <location line="-4140"/>
+        <location line="-4153"/>
         <location line="+58"/>
-        <location line="+4023"/>
+        <location line="+4036"/>
         <location line="+60"/>
         <source>Ra&amp;w Times</source>
         <translation>原始时间(&amp;W)</translation>
     </message>
     <message>
-        <location line="-4138"/>
+        <location line="-4151"/>
         <location line="+379"/>
-        <location line="+1254"/>
-        <location line="+1960"/>
+        <location line="+1256"/>
+        <location line="+1970"/>
         <source>Se&amp;gment</source>
         <translation>片段(&amp;g)</translation>
     </message>
     <message>
-        <location line="-3592"/>
+        <location line="-3604"/>
         <location line="+379"/>
-        <location line="+1254"/>
-        <location line="+1969"/>
+        <location line="+1256"/>
+        <location line="+1979"/>
         <source>Edit &amp;With</source>
         <translation>编辑(&amp;W)</translation>
     </message>
     <message>
-        <location line="-3601"/>
+        <location line="-3613"/>
         <location line="+381"/>
-        <location line="+1253"/>
-        <location line="+1977"/>
+        <location line="+1255"/>
+        <location line="+1987"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>在钢琴卷帘窗中打开(&amp;X)</translation>
     </message>
     <message>
-        <location line="-3610"/>
+        <location line="-3622"/>
         <location line="+379"/>
-        <location line="+3249"/>
+        <location line="+3261"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>在乐谱编辑器中打开(&amp;N)</translation>
     </message>
     <message>
-        <location line="-2401"/>
-        <location line="+1881"/>
-        <location line="+832"/>
+        <location line="-2413"/>
+        <location line="+1884"/>
+        <location line="+842"/>
         <source>About &amp;Qt</source>
         <translation>关于 &amp;Qt</translation>
     </message>
     <message>
-        <location line="-1481"/>
+        <location line="-1491"/>
         <source>Add &amp;Segno</source>
         <translation>添加 &amp;Segno</translation>
     </message>
@@ -810,12 +810,12 @@
         <translation>切换无附点(&amp;g)</translation>
     </message>
     <message>
-        <location line="-1709"/>
+        <location line="-1712"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>显示符号工具栏(&amp;S)</translation>
     </message>
     <message>
-        <location line="+1503"/>
+        <location line="+1506"/>
         <source>Duration Toolbar</source>
         <translation>时值工具栏</translation>
     </message>
@@ -825,7 +825,7 @@
         <translation>符号工具栏</translation>
     </message>
     <message>
-        <location line="+261"/>
+        <location line="+270"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+K</translation>
@@ -855,7 +855,7 @@
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+T</translation>
@@ -930,39 +930,39 @@
         <translation>隐藏状态栏(&amp;a)</translation>
     </message>
     <message>
-        <location line="-4065"/>
+        <location line="-4078"/>
         <location line="+3"/>
         <location line="+1217"/>
-        <location line="+2857"/>
+        <location line="+2870"/>
         <source>Actions Toolbar</source>
         <translation>动作工具栏</translation>
     </message>
     <message>
-        <location line="-4076"/>
+        <location line="-4089"/>
         <location line="+51"/>
-        <location line="+4026"/>
+        <location line="+4039"/>
         <location line="+57"/>
         <source>Time Toolbar</source>
         <translation>时间工具栏</translation>
     </message>
     <message>
-        <location line="-4133"/>
+        <location line="-4146"/>
         <location line="+1217"/>
         <location line="+167"/>
         <location line="+65"/>
-        <location line="+1649"/>
-        <location line="+836"/>
+        <location line="+1652"/>
+        <location line="+846"/>
         <source>Transport Toolbar</source>
         <translation>播放控制工具栏</translation>
     </message>
     <message>
-        <location line="-3932"/>
-        <location line="+3951"/>
+        <location line="-3945"/>
+        <location line="+3964"/>
         <source>Zoom Toolbar</source>
         <translation>缩放工具栏</translation>
     </message>
     <message>
-        <location line="-3902"/>
+        <location line="-3915"/>
         <source>Insert Marker</source>
         <translation>插入标签</translation>
     </message>
@@ -988,14 +988,14 @@
         <location line="+538"/>
         <location line="+555"/>
         <location line="+72"/>
-        <location line="+1112"/>
-        <location line="+1382"/>
+        <location line="+1115"/>
+        <location line="+1392"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation>F2</translation>
     </message>
     <message>
-        <location line="-3729"/>
+        <location line="-3742"/>
         <location line="+72"/>
         <location line="+1093"/>
         <location line="+36"/>
@@ -1010,13 +1010,13 @@
         <location line="+537"/>
         <location line="+36"/>
         <location line="+54"/>
-        <location line="+2494"/>
+        <location line="+2507"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation>F5</translation>
     </message>
     <message>
-        <location line="-3747"/>
+        <location line="-3760"/>
         <location line="+27"/>
         <location line="+1138"/>
         <location line="+18"/>
@@ -1031,14 +1031,14 @@
         <location line="+564"/>
         <location line="+18"/>
         <location line="+45"/>
-        <location line="+1112"/>
-        <location line="+1382"/>
+        <location line="+1115"/>
+        <location line="+1392"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation>F3</translation>
     </message>
     <message>
-        <location line="-3720"/>
+        <location line="-3733"/>
         <location line="+36"/>
         <location line="+36"/>
         <location line="+1129"/>
@@ -1053,26 +1053,26 @@
         <location line="+547"/>
         <location line="+582"/>
         <location line="+45"/>
-        <location line="+2494"/>
+        <location line="+2507"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation>F6</translation>
     </message>
     <message>
-        <location line="-3713"/>
+        <location line="-3726"/>
         <location line="+36"/>
         <location line="+538"/>
         <location line="+564"/>
         <location line="+27"/>
         <location line="+36"/>
-        <location line="+1112"/>
-        <location line="+1382"/>
+        <location line="+1115"/>
+        <location line="+1392"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
     </message>
     <message>
-        <location line="-3628"/>
+        <location line="-3641"/>
         <source>Nothing to &amp;undo</source>
         <translation>没有可以撤销的操作(&amp;u)</translation>
     </message>
@@ -1083,20 +1083,20 @@
     </message>
     <message>
         <location line="+36"/>
-        <location line="+3211"/>
-        <location line="+582"/>
+        <location line="+3223"/>
+        <location line="+583"/>
         <source>&amp;Delete</source>
         <translation>删除(&amp;D)</translation>
     </message>
     <message>
-        <location line="-3786"/>
-        <location line="+3793"/>
+        <location line="-3799"/>
+        <location line="+3806"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete, Ctrl+D</translation>
     </message>
     <message>
-        <location line="-3761"/>
+        <location line="-3774"/>
         <source>&amp;Grid</source>
         <translation>网格(&amp;G)</translation>
     </message>
@@ -1112,13 +1112,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2261"/>
+        <location line="+2264"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation>0</translation>
     </message>
     <message>
-        <location line="-2259"/>
+        <location line="-2262"/>
         <source>Snap to &amp;1/48</source>
         <translation>对齐到 &amp;1/48</translation>
     </message>
@@ -1129,13 +1129,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2242"/>
+        <location line="+2245"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation>3</translation>
     </message>
     <message>
-        <location line="-2240"/>
+        <location line="-2243"/>
         <source>Snap to 1/&amp;24</source>
         <translation>对齐到 1/&amp;24</translation>
     </message>
@@ -1146,13 +1146,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2223"/>
+        <location line="+2226"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation>6</translation>
     </message>
     <message>
-        <location line="-2221"/>
+        <location line="-2224"/>
         <source>Snap t&amp;o 1/12</source>
         <translation>对齐到 1/12(&amp;o)</translation>
     </message>
@@ -1163,13 +1163,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2204"/>
+        <location line="+2207"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation>8</translation>
     </message>
     <message>
-        <location line="-2202"/>
+        <location line="-2205"/>
         <source>Snap to &amp;3/16</source>
         <translation>对齐到 &amp;3/16</translation>
     </message>
@@ -1180,13 +1180,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2185"/>
+        <location line="+2188"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation>4</translation>
     </message>
     <message>
-        <location line="-2183"/>
+        <location line="-2186"/>
         <source>Snap to 3/8</source>
         <translation>对齐到 3/8</translation>
     </message>
@@ -1197,61 +1197,61 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2166"/>
+        <location line="+2169"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation>2</translation>
     </message>
     <message>
-        <location line="-2164"/>
+        <location line="-2167"/>
         <source>Snap to Bea&amp;t</source>
         <translation>对齐到整拍(&amp;t)</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2148"/>
+        <location line="+2151"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation>1</translation>
     </message>
     <message>
-        <location line="-2146"/>
+        <location line="-2149"/>
         <source>Snap to &amp;Bar</source>
         <translation>对齐到小节(&amp;B)</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2130"/>
+        <location line="+2133"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
     </message>
     <message>
-        <location line="-2116"/>
+        <location line="-2119"/>
         <location line="+1251"/>
         <source>Add &amp;Control Ruler</source>
         <translation>添加控制标尺(&amp;C)</translation>
     </message>
     <message>
         <location line="-1250"/>
-        <location line="+1254"/>
-        <location line="+1916"/>
+        <location line="+1256"/>
+        <location line="+1926"/>
         <source>&amp;Composition</source>
         <translation>编曲(&amp;C)</translation>
     </message>
     <message>
-        <location line="-3169"/>
-        <location line="+1254"/>
-        <location line="+1916"/>
-        <location line="+473"/>
+        <location line="-3181"/>
+        <location line="+1256"/>
+        <location line="+1926"/>
+        <location line="+474"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>添加速度(&amp;M)...</translation>
     </message>
     <message>
-        <location line="-3642"/>
-        <location line="+1254"/>
-        <location line="+1916"/>
-        <location line="+481"/>
+        <location line="-3655"/>
+        <location line="+1256"/>
+        <location line="+1926"/>
+        <location line="+482"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>添加拍号(&amp;G)...</translation>
     </message>
@@ -1260,111 +1260,111 @@
         <translation type="obsolete">小节(&amp;M)</translation>
     </message>
     <message>
-        <location line="-3648"/>
-        <location line="+1254"/>
-        <location line="+2005"/>
+        <location line="-3661"/>
+        <location line="+1256"/>
+        <location line="+2015"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>在事件列表编辑器中打开(&amp;E)</translation>
     </message>
     <message>
-        <location line="-3243"/>
-        <location line="+1703"/>
-        <location line="+1566"/>
+        <location line="-3255"/>
+        <location line="+1706"/>
+        <location line="+1575"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation>=</translation>
     </message>
     <message>
-        <location line="-3260"/>
-        <location line="+3269"/>
+        <location line="-3272"/>
+        <location line="+3281"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation>+</translation>
     </message>
     <message>
-        <location line="-3260"/>
+        <location line="-3272"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation>-</translation>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1777"/>
-        <location line="+1487"/>
+        <location line="+1780"/>
+        <location line="+1496"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Left</translation>
     </message>
     <message>
-        <location line="-3255"/>
-        <location line="+1777"/>
-        <location line="+1487"/>
+        <location line="-3267"/>
+        <location line="+1780"/>
+        <location line="+1496"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Right</translation>
     </message>
     <message>
-        <location line="-3255"/>
-        <location line="+1733"/>
-        <location line="+1584"/>
+        <location line="-3267"/>
+        <location line="+1736"/>
+        <location line="+1594"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Up</translation>
     </message>
     <message>
-        <location line="-3308"/>
-        <location line="+1733"/>
-        <location line="+1566"/>
+        <location line="-3321"/>
+        <location line="+1736"/>
+        <location line="+1576"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Down</translation>
     </message>
     <message>
-        <location line="-3287"/>
-        <location line="+1649"/>
+        <location line="-3300"/>
+        <location line="+1652"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
-        <location line="-1638"/>
-        <location line="+1649"/>
-        <location line="+1645"/>
+        <location line="-1641"/>
+        <location line="+1652"/>
+        <location line="+1655"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Up</translation>
     </message>
     <message>
-        <location line="-3285"/>
-        <location line="+1649"/>
-        <location line="+1627"/>
+        <location line="-3298"/>
+        <location line="+1652"/>
+        <location line="+1637"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Down</translation>
     </message>
     <message>
-        <location line="-3267"/>
-        <location line="+1649"/>
+        <location line="-3280"/>
+        <location line="+1652"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Up</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Down</translation>
     </message>
     <message>
-        <location line="-1637"/>
+        <location line="-1640"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Alt+I</translation>
@@ -1377,657 +1377,657 @@
     </message>
     <message>
         <location line="+13"/>
-        <location line="+1679"/>
+        <location line="+1682"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Left</translation>
     </message>
     <message>
-        <location line="-1670"/>
-        <location line="+1679"/>
+        <location line="-1673"/>
+        <location line="+1682"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Right</translation>
     </message>
     <message>
-        <location line="-1677"/>
-        <location line="+1679"/>
+        <location line="-1680"/>
+        <location line="+1682"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>光标后退一小节并选中(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1672"/>
-        <location line="+1679"/>
+        <location line="-1675"/>
+        <location line="+1682"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Left</translation>
     </message>
     <message>
-        <location line="-1677"/>
-        <location line="+1679"/>
+        <location line="-1680"/>
+        <location line="+1682"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>光标前移并选中(&amp;w)</translation>
     </message>
     <message>
-        <location line="-1672"/>
-        <location line="+1679"/>
+        <location line="-1675"/>
+        <location line="+1682"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Right</translation>
     </message>
     <message>
-        <location line="-1670"/>
-        <location line="+1679"/>
+        <location line="-1673"/>
+        <location line="+1682"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+;</translation>
     </message>
     <message>
-        <location line="-1670"/>
-        <location line="+1679"/>
+        <location line="-1673"/>
+        <location line="+1682"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+:</translation>
     </message>
     <message>
-        <location line="-1670"/>
-        <location line="+1697"/>
+        <location line="-1673"/>
+        <location line="+1700"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgUp</translation>
     </message>
     <message>
-        <location line="-1688"/>
-        <location line="+1697"/>
+        <location line="-1691"/>
+        <location line="+1700"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgDown</translation>
     </message>
     <message>
-        <location line="-1686"/>
-        <location line="+1709"/>
+        <location line="-1689"/>
+        <location line="+1712"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Left</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1709"/>
+        <location line="-1697"/>
+        <location line="+1712"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Right</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1709"/>
+        <location line="-1697"/>
+        <location line="+1712"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Left</translation>
     </message>
     <message>
-        <location line="-1700"/>
-        <location line="+1709"/>
+        <location line="-1703"/>
+        <location line="+1712"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Right</translation>
     </message>
     <message>
-        <location line="-1697"/>
-        <location line="+1727"/>
-        <location line="+1522"/>
+        <location line="-1700"/>
+        <location line="+1730"/>
+        <location line="+1532"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation>Pause</translation>
     </message>
     <message>
-        <location line="-3240"/>
+        <location line="-3253"/>
         <location line="+709"/>
         <location line="+48"/>
-        <location line="+976"/>
-        <location line="+1516"/>
+        <location line="+979"/>
+        <location line="+1526"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
-        <location line="-3194"/>
+        <location line="-3207"/>
         <location line="+9"/>
-        <location line="+3112"/>
+        <location line="+3125"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
         <translation>F7</translation>
     </message>
     <message>
-        <location line="-3109"/>
+        <location line="-3122"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do</source>
         <translation>I/do</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do sharp</source>
         <translation>I/do sharp</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+A</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re flat</source>
         <translation>II/re flat</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <location line="+760"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location line="-2611"/>
+        <location line="-2614"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re</source>
         <translation>II/re</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
         <translation>S</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re sharp</source>
         <translation>II/re sharp</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+S</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi flat</source>
         <translation>III/mi flat</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi</source>
         <translation>III/mi</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
-        <location line="+969"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
+        <location line="+978"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location line="-2820"/>
+        <location line="-2832"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa</source>
         <translation>IV/fa</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa sharp</source>
         <translation>IV/fa sharp</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+F</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol flat</source>
         <translation>V/sol flat</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol</source>
         <translation>V/sol</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
         <translation>J</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol sharp</source>
         <translation>V/sol sharp</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+J</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la flat</source>
         <translation>VI/la flat</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la</source>
         <translation>VI/la</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
         <translation>K</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la sharp</source>
         <translation>VI/la sharp</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+K</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti flat</source>
         <translation>VII/ti flat</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
-        <location line="-1851"/>
+        <location line="-1854"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1545"/>
+        <location line="+1548"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti</source>
         <translation>VII/ti</translation>
     </message>
     <message>
-        <location line="-2154"/>
-        <location line="+1853"/>
+        <location line="-2157"/>
+        <location line="+1856"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
         <translation>L</translation>
     </message>
     <message>
-        <location line="-1843"/>
-        <location line="+1853"/>
+        <location line="-1846"/>
+        <location line="+1856"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Q</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Q</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
         <translation>W</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+W</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
-        <location line="-1835"/>
-        <location line="+1853"/>
-        <location line="+973"/>
+        <location line="-1838"/>
+        <location line="+1856"/>
+        <location line="+983"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation>R</translation>
     </message>
     <message>
-        <location line="-2817"/>
-        <location line="+1853"/>
+        <location line="-2830"/>
+        <location line="+1856"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+R</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
-        <location line="+937"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
+        <location line="+947"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation>U</translation>
     </message>
     <message>
-        <location line="-2781"/>
-        <location line="+1853"/>
+        <location line="-2794"/>
+        <location line="+1856"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+U</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location line="-1835"/>
-        <location line="+1853"/>
+        <location line="-1838"/>
+        <location line="+1856"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+I</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
         <translation>O</translation>
     </message>
     <message>
-        <location line="-1843"/>
-        <location line="+1853"/>
+        <location line="-1846"/>
+        <location line="+1856"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Z</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Z</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
-        <location line="+540"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
+        <location line="+549"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
-        <location line="-2384"/>
-        <location line="+1853"/>
+        <location line="-2396"/>
+        <location line="+1856"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
         <translation>X</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+X</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
-        <location line="+522"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
+        <location line="+531"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
-        <location line="-2366"/>
-        <location line="+1853"/>
+        <location line="-2378"/>
+        <location line="+1856"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
         <translation>V</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+V</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+B</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
-        <location line="+607"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
+        <location line="+616"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation>N</translation>
     </message>
     <message>
-        <location line="-2451"/>
-        <location line="+1853"/>
+        <location line="-2463"/>
+        <location line="+1856"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+N</translation>
     </message>
     <message>
-        <location line="-1844"/>
-        <location line="+1853"/>
-        <location line="+521"/>
+        <location line="-1847"/>
+        <location line="+1856"/>
+        <location line="+530"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
-        <location line="-2365"/>
-        <location line="+1853"/>
-        <location line="+562"/>
+        <location line="-2377"/>
+        <location line="+1856"/>
+        <location line="+571"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation>M</translation>
     </message>
     <message>
-        <location line="-2406"/>
-        <location line="+1862"/>
+        <location line="-2418"/>
+        <location line="+1865"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
         <translation>H</translation>
     </message>
     <message>
-        <location line="-1532"/>
+        <location line="-1535"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Shift+X</translation>
@@ -2044,7 +2044,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt++</translation>
@@ -2132,13 +2132,13 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1890"/>
+        <location line="+1900"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location line="-1881"/>
+        <location line="-1891"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+R</translation>
@@ -2174,26 +2174,26 @@
         <translation>&amp;gt;</translation>
     </message>
     <message>
-        <location line="-1510"/>
-        <location line="+1518"/>
+        <location line="-1513"/>
+        <location line="+1521"/>
         <source>Ad&amp;just</source>
         <translation>调整(&amp;j)</translation>
     </message>
     <message>
-        <location line="-1517"/>
-        <location line="+1703"/>
+        <location line="-1520"/>
+        <location line="+1706"/>
         <source>&amp;Quantize</source>
         <translation>量化(&amp;Q)</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+1703"/>
-        <location line="+1566"/>
+        <location line="-1705"/>
+        <location line="+1706"/>
+        <location line="+1575"/>
         <source>&amp;Quantize...</source>
         <translation>量化(&amp;Q)...</translation>
     </message>
     <message>
-        <location line="-3260"/>
+        <location line="-3272"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>重做上一个量化(&amp;R)</translation>
     </message>
@@ -2204,36 +2204,36 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1502"/>
+        <location line="+1505"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>压缩相同音高的音符(&amp;E)</translation>
     </message>
     <message>
-        <location line="-1501"/>
-        <location line="+1777"/>
-        <location line="+1487"/>
+        <location line="-1504"/>
+        <location line="+1780"/>
+        <location line="+1496"/>
         <source>Jog &amp;Left</source>
         <translation>左移一帧(&amp;L)</translation>
     </message>
     <message>
-        <location line="-3255"/>
+        <location line="-3267"/>
         <source>&amp;Jog Right</source>
         <translation>右移一帧(&amp;J)</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1733"/>
+        <location line="+1736"/>
         <source>&amp;Increase Velocity</source>
         <translation>增加力度(&amp;I)</translation>
     </message>
     <message>
-        <location line="-1724"/>
-        <location line="+1733"/>
+        <location line="-1727"/>
+        <location line="+1736"/>
         <source>&amp;Reduce Velocity</source>
         <translation>减少力度(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1724"/>
+        <location line="-1727"/>
         <source>&amp;Set to Current Velocity</source>
         <translation>设置为当前力度(&amp;S)</translation>
     </message>
@@ -2249,142 +2249,142 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1649"/>
+        <location line="+1652"/>
         <source>&amp;Halve Durations</source>
         <translation>时值减半(&amp;H)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>&amp;Double Durations</source>
         <translation>时值加倍(&amp;D)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>拉伸或挤压(&amp;Q)...</translation>
     </message>
     <message>
-        <location line="-1648"/>
-        <location line="+1649"/>
+        <location line="-1651"/>
+        <location line="+1652"/>
         <source>Trans&amp;pose</source>
         <translation>移调(&amp;P)</translation>
     </message>
     <message>
-        <location line="-1648"/>
-        <location line="+1649"/>
+        <location line="-1651"/>
+        <location line="+1652"/>
         <source>&amp;Up a Semitone</source>
         <translation>升高一个半音(&amp;U)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>&amp;Down a Semitone</source>
         <translation>降低一个半音(&amp;D)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>Up an &amp;Octave</source>
         <translation>升高一个八度(&amp;O)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>Down an Octa&amp;ve</source>
         <translation>降低一个八度(&amp;V)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1649"/>
+        <location line="-1643"/>
+        <location line="+1652"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>按半音个数移调(&amp;T)...</translation>
     </message>
     <message>
-        <location line="-1648"/>
-        <location line="+1131"/>
+        <location line="-1651"/>
+        <location line="+1134"/>
         <location line="+518"/>
-        <location line="+1514"/>
+        <location line="+1523"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>按音程移调(&amp;I)...</translation>
     </message>
     <message>
-        <location line="-3162"/>
+        <location line="-3174"/>
         <source>&amp;Convert</source>
         <translation>转换(&amp;C)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1649"/>
+        <location line="+1652"/>
         <source>&amp;Invert</source>
         <translation>翻转(&amp;V)</translation>
     </message>
     <message>
-        <location line="-1640"/>
-        <location line="+1641"/>
+        <location line="-1643"/>
+        <location line="+1644"/>
         <source>&amp;Retrograde</source>
         <translation>反向播放(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1632"/>
-        <location line="+1633"/>
+        <location line="-1635"/>
+        <location line="+1636"/>
         <source>Re&amp;trograde Invert</source>
         <translation>翻转并反向播放(&amp;T)</translation>
     </message>
     <message>
-        <location line="-1632"/>
+        <location line="-1635"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>触发片段(&amp;g)...</translation>
     </message>
     <message>
         <location line="+146"/>
-        <location line="+1739"/>
-        <location line="+1382"/>
+        <location line="+1742"/>
+        <location line="+1392"/>
         <source>&amp;Tools</source>
         <translation>工具(&amp;T)</translation>
     </message>
     <message>
-        <location line="-3120"/>
-        <location line="+1739"/>
-        <location line="+1382"/>
+        <location line="-3133"/>
+        <location line="+1742"/>
+        <location line="+1392"/>
         <source>&amp;Select and Edit</source>
         <translation>选择并编辑(&amp;S)</translation>
     </message>
     <message>
-        <location line="-3112"/>
-        <location line="+3121"/>
+        <location line="-3125"/>
+        <location line="+3134"/>
         <source>&amp;Draw</source>
         <translation>绘制(&amp;D)</translation>
     </message>
     <message>
-        <location line="-3112"/>
-        <location line="+1739"/>
-        <location line="+1382"/>
+        <location line="-3125"/>
+        <location line="+1742"/>
+        <location line="+1392"/>
         <source>&amp;Erase</source>
         <translation>擦除(&amp;E)</translation>
     </message>
     <message>
-        <location line="-3284"/>
+        <location line="-3297"/>
         <location line="+172"/>
-        <location line="+1507"/>
-        <location line="+1614"/>
+        <location line="+1510"/>
+        <location line="+1624"/>
         <source>&amp;Move</source>
         <translation>移动(&amp;M)</translation>
     </message>
     <message>
-        <location line="-3112"/>
+        <location line="-3125"/>
         <source>Resi&amp;ze</source>
         <translation>调整大小(&amp;z)</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+3121"/>
+        <location line="+3134"/>
         <source>S&amp;plit</source>
         <translation>拆分(&amp;P)</translation>
     </message>
     <message>
-        <location line="-3112"/>
+        <location line="-3125"/>
         <source>&amp;Velocity</source>
         <translation>力度(&amp;V)</translation>
     </message>
@@ -2409,106 +2409,106 @@
         <translation type="obsolete">光标移到末尾(&amp;E)</translation>
     </message>
     <message>
-        <location line="+1481"/>
+        <location line="+1484"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>光标后退并选中(&amp;l)</translation>
     </message>
     <message>
-        <location line="-1670"/>
-        <location line="+1679"/>
+        <location line="-1673"/>
+        <location line="+1682"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>光标前移并选中(&amp;S)</translation>
     </message>
     <message>
-        <location line="-1652"/>
-        <location line="+1679"/>
+        <location line="-1655"/>
+        <location line="+1682"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>将选中区域设置为重复段落(&amp;T)</translation>
     </message>
     <message>
-        <location line="-1670"/>
-        <location line="+1679"/>
+        <location line="-1673"/>
+        <location line="+1682"/>
         <source>Clear L&amp;oop</source>
         <translation>清除循环(&amp;o)</translation>
     </message>
     <message>
-        <location line="-889"/>
+        <location line="-892"/>
         <location line="+48"/>
-        <location line="+2436"/>
+        <location line="+2449"/>
         <source>T&amp;ransport</source>
         <translation>播放控制(&amp;R)</translation>
     </message>
     <message>
-        <location line="-3247"/>
+        <location line="-3260"/>
         <location line="+764"/>
         <location line="+48"/>
-        <location line="+885"/>
-        <location line="+1551"/>
+        <location line="+888"/>
+        <location line="+1561"/>
         <source>&amp;Play</source>
         <translation>播放(&amp;P)</translation>
     </message>
     <message>
-        <location line="-3247"/>
+        <location line="-3260"/>
         <location line="+764"/>
         <location line="+48"/>
-        <location line="+891"/>
-        <location line="+1553"/>
+        <location line="+894"/>
+        <location line="+1563"/>
         <source>&amp;Stop</source>
         <translation>停止(&amp;S)</translation>
     </message>
     <message>
-        <location line="-3225"/>
+        <location line="-3238"/>
         <location line="+734"/>
         <location line="+48"/>
-        <location line="+927"/>
-        <location line="+1525"/>
+        <location line="+930"/>
+        <location line="+1535"/>
         <source>Re&amp;wind</source>
         <translation>倒带(&amp;W)</translation>
     </message>
     <message>
-        <location line="-3225"/>
+        <location line="-3238"/>
         <location line="+726"/>
         <location line="+48"/>
-        <location line="+935"/>
-        <location line="+1525"/>
+        <location line="+938"/>
+        <location line="+1535"/>
         <source>&amp;Fast Forward</source>
         <translation>快进(&amp;F)</translation>
     </message>
     <message>
-        <location line="-3225"/>
+        <location line="-3238"/>
         <location line="+718"/>
         <location line="+48"/>
-        <location line="+943"/>
+        <location line="+946"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>跳转到起点(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1708"/>
+        <location line="-1711"/>
         <location line="+718"/>
         <location line="+48"/>
-        <location line="+949"/>
+        <location line="+952"/>
         <source>Fast Forward to &amp;End</source>
         <translation>快进到末尾(&amp;E)</translation>
     </message>
     <message>
-        <location line="-1714"/>
-        <location line="+1721"/>
+        <location line="-1717"/>
+        <location line="+1724"/>
         <source>S&amp;olo</source>
         <translation>独奏(&amp;o)</translation>
     </message>
     <message>
-        <location line="-1720"/>
-        <location line="+1727"/>
-        <location line="+1522"/>
+        <location line="-1723"/>
+        <location line="+1730"/>
+        <location line="+1532"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>播放时滚动视图(&amp;l)</translation>
     </message>
     <message>
-        <location line="-3240"/>
+        <location line="-3253"/>
         <location line="+709"/>
         <location line="+48"/>
-        <location line="+976"/>
-        <location line="+1516"/>
+        <location line="+979"/>
+        <location line="+1526"/>
         <source>P&amp;anic</source>
         <translation>复原(&amp;a)</translation>
     </message>
@@ -2537,39 +2537,39 @@
         <translation type="obsolete">VII</translation>
     </message>
     <message>
-        <location line="-3022"/>
-        <location line="+1853"/>
+        <location line="-3035"/>
+        <location line="+1856"/>
         <source>&amp;Upper Octave</source>
         <translation>高八度(&amp;U)</translation>
     </message>
     <message>
-        <location line="-1545"/>
-        <location line="+1862"/>
+        <location line="-1548"/>
+        <location line="+1865"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>和弦插入模式(&amp;H)</translation>
     </message>
     <message>
-        <location line="-1853"/>
-        <location line="+1881"/>
+        <location line="-1856"/>
+        <location line="+1884"/>
         <source>Ste&amp;p Recording</source>
         <translation>单步录音(&amp;p)</translation>
     </message>
     <message>
-        <location line="-2734"/>
+        <location line="-2737"/>
         <location line="+1243"/>
-        <location line="+1907"/>
+        <location line="+1919"/>
         <source>&amp;Toolbars</source>
         <translation>工具栏(&amp;T)</translation>
     </message>
     <message>
-        <location line="-3143"/>
+        <location line="-3155"/>
         <location line="+1250"/>
-        <location line="+1900"/>
+        <location line="+1912"/>
         <source>&amp;Rulers</source>
         <translation>标尺(&amp;R)</translation>
     </message>
     <message>
-        <location line="-3149"/>
+        <location line="-3161"/>
         <location line="+1250"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>显示和弦名称标尺(&amp;O)</translation>
@@ -2582,20 +2582,20 @@
     </message>
     <message>
         <location line="-390"/>
-        <location line="+1881"/>
-        <location line="+834"/>
+        <location line="+1884"/>
+        <location line="+844"/>
         <source>Tools Toolbar</source>
         <translation>工具工具栏</translation>
     </message>
     <message>
-        <location line="-2568"/>
+        <location line="-2581"/>
         <location line="+48"/>
-        <location line="+2466"/>
+        <location line="+2479"/>
         <source>&amp;Record</source>
         <translation>录音(&amp;R)</translation>
     </message>
     <message>
-        <location line="-2456"/>
+        <location line="-2469"/>
         <source>&amp;Settings</source>
         <translation>设置(&amp;S)</translation>
     </message>
@@ -2691,12 +2691,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location line="+1908"/>
+        <location line="+1911"/>
         <source>&amp;Print...</source>
         <translation>打印(&amp;P)...</translation>
     </message>
     <message>
-        <location line="-1909"/>
+        <location line="-1912"/>
         <source>P&amp;rint Preview...</source>
         <translation>打印预览(&amp;R)...</translation>
     </message>
@@ -2800,30 +2800,30 @@
     </message>
     <message>
         <location line="-1243"/>
-        <location line="+1253"/>
-        <location line="+1985"/>
+        <location line="+1255"/>
+        <location line="+1995"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>在鼓Matrix编辑器中打开(&amp;P)</translation>
     </message>
     <message>
-        <location line="-1983"/>
+        <location line="-1993"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>添加谱号(&amp;F)...</translation>
     </message>
     <message>
-        <location line="-1254"/>
-        <location line="+1255"/>
+        <location line="-1256"/>
+        <location line="+1258"/>
         <source>Add &amp;Key Change...</source>
         <translation>添加调号(&amp;K)...</translation>
     </message>
     <message>
-        <location line="-1359"/>
+        <location line="-1362"/>
         <location line="+1314"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>插入弯音轮序列(&amp;B)...</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+49"/>
         <source>Add Pedal &amp;Press</source>
         <translation>添加踏板按下事件(&amp;P)</translation>
     </message>
@@ -2834,12 +2834,12 @@
     </message>
     <message>
         <location line="+4"/>
-        <location line="+2032"/>
+        <location line="+2041"/>
         <source>&amp;Convert Notation for...</source>
         <translation>转换乐谱(&amp;C)...</translation>
     </message>
     <message>
-        <location line="-2031"/>
+        <location line="-2040"/>
         <source>Add &amp;Layer</source>
         <translation>添加声部(&amp;L)</translation>
     </message>
@@ -3397,12 +3397,12 @@
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1487"/>
+        <location line="+1496"/>
         <source>Jog &amp;Right</source>
         <translation type="unfinished">右移一帧(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1478"/>
+        <location line="-1487"/>
         <source>&amp;Visibility</source>
         <translation>可见性(&amp;V)</translation>
     </message>
@@ -3449,26 +3449,26 @@
         <translation>下一谱表(&amp;D)</translation>
     </message>
     <message>
-        <location line="-1688"/>
-        <location line="+1697"/>
+        <location line="-1691"/>
+        <location line="+1700"/>
         <source>Pre&amp;vious Segment</source>
         <translation>前一个片段(&amp;V)</translation>
     </message>
     <message>
-        <location line="-1688"/>
-        <location line="+1697"/>
+        <location line="-1691"/>
+        <location line="+1700"/>
         <source>Ne&amp;xt Segment</source>
         <translation>下一个片段(&amp;X)</translation>
     </message>
     <message>
-        <location line="-1686"/>
-        <location line="+1709"/>
+        <location line="-1689"/>
+        <location line="+1712"/>
         <source>Step &amp;Back</source>
         <translation>光标后退(&amp;B)</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1709"/>
+        <location line="-1697"/>
+        <location line="+1712"/>
         <source>Step &amp;Forward</source>
         <translation>光标前进(&amp;F)</translation>
     </message>
@@ -3625,14 +3625,14 @@
         <translation type="obsolete">创建小节</translation>
     </message>
     <message>
-        <location line="-1729"/>
-        <location line="+1853"/>
+        <location line="-1732"/>
+        <location line="+1856"/>
         <source>&amp;Insert Note</source>
         <translation>插入音符(&amp;I)</translation>
     </message>
     <message>
-        <location line="-1545"/>
-        <location line="+1853"/>
+        <location line="-1548"/>
+        <location line="+1856"/>
         <source>&amp;Lower Octave</source>
         <translation>低八度(&amp;L)</translation>
     </message>
@@ -3652,13 +3652,13 @@
         <translation>装饰音输入模式(&amp;M)</translation>
     </message>
     <message>
-        <location line="-1488"/>
-        <location line="+1907"/>
+        <location line="-1491"/>
+        <location line="+1919"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>显示工具工具栏(&amp;O)</translation>
     </message>
     <message>
-        <location line="-1906"/>
+        <location line="-1918"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>显示临时升降号工具栏(&amp;A)</translation>
     </message>
@@ -3679,17 +3679,17 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+1904"/>
+        <location line="+1916"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>显示传送控制工具栏(&amp;P)</translation>
     </message>
     <message>
-        <location line="-1903"/>
+        <location line="-1915"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>显示布局工具栏(&amp;L)</translation>
     </message>
     <message>
-        <location line="+1750"/>
+        <location line="+1753"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+O</translation>
@@ -3701,14 +3701,14 @@
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location line="+643"/>
+        <location line="+91"/>
+        <location line="+644"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location line="-634"/>
+        <location line="-635"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Ins</translation>
@@ -3719,7 +3719,7 @@
         <translation>显示和弦名称标尺(&amp;R)</translation>
     </message>
     <message>
-        <location line="-1900"/>
+        <location line="-1912"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation>显示原始音符标尺(&amp;W)</translation>
     </message>
@@ -3734,7 +3734,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1668"/>
+        <location line="+1671"/>
         <source>Clefs Toolbar</source>
         <translation>谱号工具栏</translation>
     </message>
@@ -3754,7 +3754,7 @@
         <translation>标记工具栏</translation>
     </message>
     <message>
-        <location line="-3046"/>
+        <location line="-3049"/>
         <source>Select &amp;All Events</source>
         <translation>选择所有事件(&amp;A)</translation>
     </message>
@@ -3775,8 +3775,8 @@
     </message>
     <message>
         <location line="+852"/>
-        <location line="+1881"/>
-        <location line="+832"/>
+        <location line="+1884"/>
+        <location line="+842"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Rosegarden 用户手册(&amp;M)</translation>
     </message>
@@ -3785,7 +3785,7 @@
         <translation type="obsolete">I</translation>
     </message>
     <message>
-        <location line="-3938"/>
+        <location line="-3951"/>
         <location line="+289"/>
         <source>Preferences...</source>
         <translation>设置...</translation>
@@ -3837,18 +3837,18 @@
     </message>
     <message>
         <location line="+698"/>
-        <location line="+2068"/>
+        <location line="+2071"/>
         <source>Rulers Toolbar</source>
         <translation>标尺工具栏</translation>
     </message>
     <message>
-        <location line="-1708"/>
-        <location line="+1914"/>
+        <location line="-1711"/>
+        <location line="+1926"/>
         <source>&amp;Preferences...</source>
         <translation>选项(&amp;P)...</translation>
     </message>
     <message>
-        <location line="-1893"/>
+        <location line="-1905"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>显示标尺工具栏(&amp;R)</translation>
     </message>
@@ -3858,7 +3858,7 @@
     </message>
     <message>
         <location line="-992"/>
-        <location line="+1709"/>
+        <location line="+1712"/>
         <source>Step Back (Left)</source>
         <translation>光标后退</translation>
     </message>
@@ -3868,13 +3868,13 @@
         <translation>播放</translation>
     </message>
     <message>
-        <location line="-1672"/>
-        <location line="+1709"/>
+        <location line="-1675"/>
+        <location line="+1712"/>
         <source>Step Forward (Right)</source>
         <translation>光标快进</translation>
     </message>
     <message>
-        <location line="-2604"/>
+        <location line="-2607"/>
         <source>&amp;Action</source>
         <translation>动作(&amp;A)</translation>
     </message>
@@ -3909,13 +3909,28 @@
         <translation>显示时值工具栏(&amp;D)</translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location line="+2011"/>
+        <location line="+12"/>
+        <source>Dump staves (debug)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Dump BarDataMap (debug)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+2021"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1719"/>
+        <location line="-2019"/>
+        <source>Add Clef Change in this link only...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+291"/>
         <source>Cycle &amp;Dots</source>
         <translation>循环切换附点(&amp;D)</translation>
     </message>
@@ -4154,20 +4169,20 @@
     </message>
     <message>
         <location line="+471"/>
-        <location line="+473"/>
+        <location line="+482"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
         <translation>P</translation>
     </message>
     <message>
-        <location line="-455"/>
-        <location line="+951"/>
+        <location line="-464"/>
+        <location line="+961"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location line="-949"/>
+        <location line="-959"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4553,7 +4568,18 @@
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+55"/>
+        <source>Paste as &amp;Links</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Ctrl+Alt+V</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Cut &amp;Range</source>
         <translation>剪切范围(&amp;R)</translation>
     </message>
@@ -4707,16 +4733,16 @@
         <translation>拉伸或挤压(&amp;O)...</translation>
     </message>
     <message>
-        <location line="-3293"/>
-        <location line="+1257"/>
-        <location line="+2037"/>
+        <location line="-3305"/>
+        <location line="+1260"/>
+        <location line="+2046"/>
         <source>Set Start &amp;Time...</source>
         <translation>设置起始时间(&amp;T)...</translation>
     </message>
     <message>
-        <location line="-3293"/>
-        <location line="+1257"/>
-        <location line="+2037"/>
+        <location line="-3305"/>
+        <location line="+1260"/>
+        <location line="+2046"/>
         <source>Set &amp;Duration...</source>
         <translation>设置时值(&amp;D)...</translation>
     </message>
@@ -4754,6 +4780,11 @@
         <location line="+1"/>
         <source>Turn Re&amp;peats into Copies</source>
         <translation>将反复转为副本(&amp;P)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Turn Li&amp;nks into Copies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4841,10 +4872,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3905"/>
+        <location line="-3918"/>
         <location line="+366"/>
         <location line="+1243"/>
-        <location line="+1907"/>
+        <location line="+1919"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>显示主工具栏(&amp;T)</translation>
     </message>
@@ -4864,10 +4895,10 @@
         <translation>显示缩放工具栏(&amp;Z)</translation>
     </message>
     <message>
-        <location line="-3520"/>
+        <location line="-3532"/>
         <location line="+370"/>
         <location line="+1250"/>
-        <location line="+1926"/>
+        <location line="+1938"/>
         <source>Show St&amp;atusbar</source>
         <translation>显示状态栏(&amp;A)</translation>
     </message>
@@ -4877,7 +4908,7 @@
         <translation>显示播放位置标尺(&amp;U)</translation>
     </message>
     <message>
-        <location line="-177"/>
+        <location line="-186"/>
         <source>Import &amp;X11 Rosegarden file...</source>
         <translation>导入 &amp;X11 Rosegarden 文件...</translation>
     </message>
@@ -4887,7 +4918,7 @@
         <translation>合并 &amp;X11 Rosegarden 文件...</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+243"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>MIDI 混音器(&amp;x)</translation>
     </message>
@@ -4897,12 +4928,12 @@
         <translation>显示速度标尺(&amp;M)</translation>
     </message>
     <message>
-        <location line="-170"/>
+        <location line="-179"/>
         <source>Export &amp;LilyPond file...</source>
         <translation>导出 &amp;LilyPond 文件...</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+180"/>
         <source>Show Tra&amp;nsport</source>
         <translation>显示播放控制器(&amp;N)</translation>
     </message>
@@ -4933,7 +4964,7 @@
         <translation>显示音轨标签(&amp;L)</translation>
     </message>
     <message>
-        <location line="+401"/>
+        <location line="+402"/>
         <source>Main Toolbar</source>
         <translation>主工具栏</translation>
     </message>
@@ -4948,21 +4979,21 @@
         <translation>编辑器工具栏</translation>
     </message>
     <message>
-        <location line="-1576"/>
-        <location line="+1578"/>
+        <location line="-1586"/>
+        <location line="+1588"/>
         <source>Rewind to Beginning</source>
         <translation>跳转到起点</translation>
     </message>
     <message>
-        <location line="-1571"/>
-        <location line="+1580"/>
+        <location line="-1581"/>
+        <location line="+1590"/>
         <source>Fast Forward to End</source>
         <translation>跳转到终点</translation>
     </message>
     <message>
-        <location line="-2730"/>
-        <location line="+1881"/>
-        <location line="+832"/>
+        <location line="-2743"/>
+        <location line="+1884"/>
+        <location line="+842"/>
         <source>&amp;Support Rosegarden</source>
         <translation>Rosegarden 软件支持(&amp;S)</translation>
     </message>
@@ -5057,7 +5088,7 @@
         <translation>低音</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-2357"/>
+        <location filename="../QMenuStrings.cpp" line="-2367"/>
         <location filename="../InstrumentStrings.cpp" line="-74"/>
         <source>Triangle</source>
         <translation>三角</translation>
@@ -10193,7 +10224,6 @@
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="+91"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+639"/>
         <location line="+7"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+457"/>
@@ -10213,8 +10243,8 @@
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+451"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1000"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+778"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1605"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+782"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1620"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 控制器 %2 %3</translation>
     </message>
@@ -10229,7 +10259,7 @@
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+313"/>
+        <location line="+317"/>
         <source>Welcome!</source>
         <translation>欢迎!</translation>
     </message>
@@ -11198,7 +11228,7 @@
     </message>
     <message>
         <location line="+4"/>
-        <location line="+192"/>
+        <location line="+193"/>
         <location line="+37"/>
         <location line="+75"/>
         <location line="+11"/>
@@ -11348,20 +11378,20 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+13"/>
-        <location line="+137"/>
+        <location line="+145"/>
         <source>Pan</source>
         <translation>声相</translation>
     </message>
     <message>
-        <location line="-129"/>
+        <location line="-137"/>
         <location line="+1"/>
-        <location line="+135"/>
+        <location line="+143"/>
         <location line="+1"/>
         <source>Audio level</source>
         <translation>音频电平</translation>
     </message>
     <message>
-        <location line="-129"/>
+        <location line="-137"/>
         <source>Mono or stereo</source>
         <translation>单声道或立体声</translation>
     </message>
@@ -11380,36 +11410,36 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+11"/>
-        <location line="+121"/>
-        <location line="+141"/>
-        <location line="+55"/>
-        <location line="+178"/>
+        <location line="+129"/>
+        <location line="+143"/>
+        <location line="+57"/>
+        <location line="+183"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;无&gt;</translation>
     </message>
     <message>
-        <location line="-493"/>
-        <location line="+121"/>
+        <location line="-510"/>
+        <location line="+129"/>
         <source>Click to load an audio plugin</source>
         <translation>点击加载一个音频插件</translation>
     </message>
     <message>
-        <location line="-104"/>
+        <location line="-112"/>
         <source>Click to rename this instrument</source>
         <translation>点击重命名此乐器</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+10"/>
         <source>Audio %1</source>
         <translation>音频 %1</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <source>Synth %1</source>
         <translation>合成器 %1</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
         <source>Click the button above to rename this instrument</source>
         <translation>点击上面按钮重命名此乐器</translation>
     </message>
@@ -11419,7 +11449,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>子控制器 %1</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+41"/>
         <location line="+1"/>
         <source>Audio master output level</source>
         <translation>主音频输出电平</translation>
@@ -11431,13 +11461,13 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+90"/>
-        <location line="+55"/>
-        <location line="+178"/>
+        <location line="+57"/>
+        <location line="+183"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;没有插件&gt;</translation>
     </message>
     <message>
-        <location line="+827"/>
+        <location line="+828"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
@@ -12205,7 +12235,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChordNameRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+90"/>
+        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+89"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;和弦名称标尺.  程序分析您乐曲中的和声并尝试猜测乐曲中包含的和弦.  这些和弦不能打印或修改, 仅作为一种参考信息.&lt;/p&gt;&lt;p&gt;点击菜单项 &lt;b&gt;查看 -&gt; 标尺&lt;/b&gt; 打开或关闭该选项.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -12336,9 +12366,17 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ClefInsertionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/ClefInsertionCommand.cpp" line="+75"/>
+        <location filename="../../src/commands/notation/ClefInsertionCommand.cpp" line="+81"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>添加谱号(&amp;F)...</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::ClefLinkInsertionCommand</name>
+    <message>
+        <location line="+90"/>
+        <source>Add Cl&amp;ef Change for linked segment...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12465,7 +12503,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>恢复上一个被撤销的操作</translation>
     </message>
     <message>
-        <location line="+444"/>
+        <location line="+448"/>
         <source>Nothing to undo</source>
         <translation>无可撤消操作</translation>
     </message>
@@ -12513,7 +12551,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+331"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+332"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -12609,7 +12647,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>乐器面板上的位置</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
@@ -13367,7 +13405,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>切换状态栏...</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+68"/>
         <source>Segment Start Time</source>
         <translation>片段开始时间</translation>
     </message>
@@ -13414,12 +13452,12 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::EventEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="+75"/>
+        <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="+76"/>
         <source>Advanced Event Edit</source>
         <translation>高级事件编辑</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+1"/>
         <source>Advanced Event Viewer</source>
         <translation>高级事件查看器</translation>
     </message>
@@ -14159,6 +14197,14 @@ Would you like to try and locate this file or skip it?</source>
     </message>
 </context>
 <context>
+    <name>Rosegarden::FitToBeatsCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/FitToBeatsCommand.h" line="+45"/>
+        <source>Fit existing beats to beat segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::FixNotationQuantizeCommand</name>
     <message>
         <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="+45"/>
@@ -14592,12 +14638,12 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::HeadersConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="-31"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="+60"/>
         <source>Printable headers</source>
         <translation>可打印的题头</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+41"/>
         <source>Dedication</source>
         <translation>贡献</translation>
     </message>
@@ -14983,7 +15029,7 @@ Example text from file:</source>
         <translation type="unfinished">播放</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
         <source>in the time of  </source>
         <translation type="unfinished">实际时长</translation>
     </message>
@@ -15906,7 +15952,7 @@ Would you like to use
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;点击并拖拽以移动播放游标.&lt;/p&gt;&lt;p&gt;按住Shift并单击并拖拽以为循环或编辑设置一个范围.&lt;/p&gt;&lt;p&gt;按住Shift并单击来清除循环或范围.&lt;/p&gt;&lt;p&gt;双击开始播放.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+85"/>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+78"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15934,7 +15980,7 @@ Would you like to use
         <translation>删除歌词段落</translation>
     </message>
     <message>
-        <location line="+235"/>
+        <location line="+234"/>
         <source>Verse %1</source>
         <translation>歌词段 %1</translation>
     </message>
@@ -16519,7 +16565,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MarkerRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+92"/>
+        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+93"/>
         <source>Click on a marker to move the playback pointer.
 Shift-click to set a range between markers.
 Double-click to open the marker editor.</source>
@@ -16553,7 +16599,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixEraser</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixEraser.cpp" line="+63"/>
+        <location filename="../../src/gui/editors/matrix/MatrixEraser.cpp" line="+65"/>
         <source>Click on a note to delete it</source>
         <translation>点击一个音符以删除</translation>
     </message>
@@ -16582,7 +16628,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+185"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+187"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>按住 Shift 键以避免吸附到节拍网格</translation>
     </message>
@@ -16630,7 +16676,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixPainter</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+191"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+193"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>按住Shift键以避免吸附到节拍网格</translation>
     </message>
@@ -16656,7 +16702,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixResizer</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+108"/>
+        <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+110"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>按住 Shift 键以避免吸附到节拍网格</translation>
     </message>
@@ -16819,7 +16865,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">正在删除选择区...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1277"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1286"/>
         <source>Unknown note insert action %1</source>
         <translation>未知的音符插入行为 %1</translation>
     </message>
@@ -16832,7 +16878,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">正在解除量化...</translation>
     </message>
     <message>
-        <location line="-1412"/>
+        <location line="-1421"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;未命名&gt;</translation>
     </message>
@@ -16906,7 +16952,7 @@ Double-click to open the marker editor.</source>
         <translation>关</translation>
     </message>
     <message>
-        <location line="+806"/>
+        <location line="+815"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
@@ -16941,12 +16987,12 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">%1%</translation>
     </message>
     <message>
-        <location line="-843"/>
+        <location line="-852"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+88"/>
         <source>Transpose</source>
         <translation>移调</translation>
     </message>
@@ -16964,7 +17010,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">正在降低力度...</translation>
     </message>
     <message>
-        <location line="-357"/>
+        <location line="-361"/>
         <source>Set Event Velocities</source>
         <translation>设定事件力度</translation>
     </message>
@@ -16996,7 +17042,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">音长</translation>
     </message>
     <message>
-        <location line="+1360"/>
+        <location line="+1369"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation>不能输入音符: 没有选中网格时长</translation>
     </message>
@@ -17163,7 +17209,7 @@ Double-click to open the marker editor.</source>
         <translation>MIDI 混音器</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+40"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
@@ -17347,7 +17393,7 @@ of others.</source>
 益的考虑有必要和库管理员取得联系以便发布您的音色库信息。</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+66"/>
+        <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+67"/>
         <source>Provided by</source>
         <translation>提供者</translation>
     </message>
@@ -17879,7 +17925,27 @@ of others.</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+17"/>
+        <source>Show repeated segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Allow direct edition of repeated segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Hide redundant clefs and keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <location line="+78"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -17898,7 +17964,7 @@ of others.</source>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+448"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+465"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
@@ -17908,7 +17974,7 @@ of others.</source>
         <translation>正在绘制五线谱 %1...</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+58"/>
         <source>Rendering notes on staff %1...</source>
         <translation>正在五线谱 %1 上绘制音符...</translation>
     </message>
@@ -17918,7 +17984,7 @@ of others.</source>
         <translation>正在布置五线谱 %1...</translation>
     </message>
     <message>
-        <location line="+229"/>
+        <location line="+243"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -18187,7 +18253,7 @@ This is a bug (the program would previously have crashed by now)</source>
         </translation>
     </message>
     <message>
-        <location line="+121"/>
+        <location line="+128"/>
         <source>  Font:  </source>
         <translation>  字体: </translation>
     </message>
@@ -18223,7 +18289,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在调和五线谱...</translation>
     </message>
     <message>
-        <location line="-87"/>
+        <location line="-93"/>
         <source>  No selection </source>
         <translation>  未选中 </translation>
     </message>
@@ -18248,7 +18314,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">三连音</translation>
     </message>
     <message>
-        <location line="+2346"/>
+        <location line="+2441"/>
         <source>Chord</source>
         <translation>和弦</translation>
     </message>
@@ -18269,7 +18335,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">隐藏标注</translation>
     </message>
     <message>
-        <location line="-1986"/>
+        <location line="-2070"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">未知的间隔行为 %1</translation>
     </message>
@@ -18353,15 +18419,15 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>无法将多个片段粘贴到一个片段里</translation>
     </message>
     <message numerus="yes">
-        <location line="-451"/>
+        <location line="-462"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>选中了  %n 个事件 </numerusform>
         </translation>
     </message>
     <message>
-        <location line="+58"/>
-        <location line="+161"/>
+        <location line="+64"/>
+        <location line="+166"/>
         <location line="+52"/>
         <location line="+57"/>
         <location line="+26"/>
@@ -18369,14 +18435,14 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+107"/>
         <location line="+69"/>
         <location line="+801"/>
-        <location line="+597"/>
-        <location line="+762"/>
+        <location line="+633"/>
+        <location line="+810"/>
         <location line="+266"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2752"/>
+        <location line="-2836"/>
         <source>Printing with LilyPond...</source>
         <translation>正在使用 LilyPond 打印...</translation>
     </message>
@@ -18408,12 +18474,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>无法粘贴到这点.</translation>
     </message>
     <message>
-        <location line="+2475"/>
+        <location line="+2559"/>
         <source>Move Events to Staff Above</source>
         <translation>移动事件到上一谱表</translation>
     </message>
     <message>
-        <location line="-2359"/>
+        <location line="-2443"/>
         <source>Raising velocities...</source>
         <translation>正在提升力度...</translation>
     </message>
@@ -18433,7 +18499,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>正在设定力度...</translation>
     </message>
     <message>
-        <location line="+2449"/>
+        <location line="+2533"/>
         <source>Edit Text Event</source>
         <translation>编辑文本事件</translation>
     </message>
@@ -18452,7 +18518,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">没有音符音长被选中</translation>
     </message>
     <message>
-        <location line="-1879"/>
+        <location line="-1963"/>
         <source>Unknown note insert action %1</source>
         <translation>未知的音符插入行为 %1</translation>
     </message>
@@ -18478,13 +18544,13 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="obsolete">正在解析选择区...</translation>
     </message>
     <message>
-        <location line="+2053"/>
+        <location line="+2137"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation>正在添加附点...</translation>
     </message>
     <message>
-        <location line="-1678"/>
+        <location line="-1762"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18509,7 +18575,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>移除装饰符号</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+103"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">估计的调号显示为</translation>
     </message>
@@ -18530,7 +18596,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+141"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - 片段 音轨 #%3 - 乐谱</translation>
     </message>
@@ -18610,7 +18676,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1385"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1399"/>
         <source>Zoom</source>
         <translation>缩放</translation>
     </message>
@@ -18635,7 +18701,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>关闭音轨头</translation>
     </message>
     <message>
-        <location line="+1395"/>
+        <location line="+1409"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;转动轮改变当前片段&lt;/qt&gt;</translation>
@@ -18649,7 +18715,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NoteFontFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="+90"/>
+        <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="+91"/>
         <location line="+67"/>
         <location line="+27"/>
         <source>Rosegarden</source>
@@ -18848,7 +18914,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>  A#2   Acoustic Bass Drum  </translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+35"/>
         <source>A#2</source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the pitch name in the percussion ruler text.</extracomment>
         <translation>A#2</translation>
@@ -18972,7 +19038,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchGraphWidget</name>
     <message>
-        <location filename="../../src/gui/editors/pitchtracker/PitchGraphWidget.cpp" line="+107"/>
+        <location filename="../../src/gui/editors/pitchtracker/PitchGraphWidget.cpp" line="+112"/>
         <source>None (Rest)</source>
         <comment>No target frequency because no note is playing</comment>
         <translation type="unfinished"></translation>
@@ -19014,13 +19080,13 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchTrackerConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+58"/>
+        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+59"/>
         <location line="+3"/>
         <source>Pitch Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+64"/>
+        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+65"/>
         <source>Tuning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19065,7 +19131,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>Algorithm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19101,7 +19167,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PlayList</name>
     <message>
-        <location filename="../../src/gui/editors/segment/PlayList.cpp" line="+77"/>
+        <location filename="../../src/gui/editors/segment/PlayList.cpp" line="+73"/>
         <source>Add...</source>
         <translation>添加...</translation>
     </message>
@@ -19280,7 +19346,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProjectPackager</name>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+85"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+77"/>
         <source>Unpack</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19300,28 +19366,28 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>取消</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+35"/>
         <source>&lt;qt&gt;&lt;p&gt;Fatal error.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;严重错误.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+168"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to read %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;无法读取 %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+170"/>
+        <location line="+186"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;无法写入&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location line="+379"/>
+        <location line="+388"/>
         <source>&lt;qt&gt;Could not remove&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;无法移除&lt;br&gt;%1&lt;br&gt;&lt;br&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-374"/>
+        <location line="-383"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;无法拷贝&lt;br&gt;%1&lt;br&gt;  到&lt;br&gt;%2&lt;br&gt;&lt;br&gt;%3&lt;/qt&gt;</translation>
     </message>
@@ -19336,56 +19402,56 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">Checking for flac...</translation>
     </message>
     <message>
-        <location line="+64"/>
-        <location line="+202"/>
+        <location line="+68"/>
+        <location line="+206"/>
         <source>Packing project...</source>
         <translation>打包项目...</translation>
     </message>
     <message>
-        <location line="-167"/>
+        <location line="-170"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not create temporary working directory.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;无法创建临时工作目录.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+183"/>
-        <location line="+199"/>
+        <location line="+186"/>
+        <location line="+210"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to write to temporary backend processing script %1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;无法写入临时后端处理脚本 %1.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-148"/>
+        <location line="-158"/>
         <source>&lt;qt&gt;&lt;p&gt;Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+244"/>
+        <location line="+257"/>
         <source>&lt;qt&gt;&lt;p&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;/p&gt;%3&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-911"/>
+        <location line="-989"/>
         <source>Rosegarden - Fatal Processing Error</source>
         <translation>Rosegarden - 严重的处理错误</translation>
     </message>
     <message>
-        <location line="+472"/>
-        <location line="+45"/>
-        <location line="+67"/>
+        <location line="+534"/>
+        <location line="+46"/>
+        <location line="+68"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;无法拷贝&lt;br&gt;%1&lt;br&gt;  到&lt;br&gt;%2&lt;br&gt;&lt;br&gt;处理终止.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-232"/>
+        <location line="-240"/>
         <source>Checking for wavpack...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-419"/>
+        <location line="-475"/>
         <source>&lt;p&gt;Processing aborted&lt;/p&gt;</source>
         <translation>&lt;p&gt;处理终止&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+403"/>
+        <location line="+459"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19405,19 +19471,19 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+77"/>
         <source>Copying audio files...</source>
         <translation>拷贝音频文件...</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+87"/>
         <location line="+30"/>
-        <location line="+234"/>
+        <location line="+246"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-263"/>
+        <location line="-275"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden can add any number of extra files you may desire to a project package.  For example, you may wish to include an explanatory text file, a soundfont, a bank definition for ZynAddSubFX, or perhaps some cover art.&lt;/p&gt;&lt;p&gt;Would you like to include any additional files?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19437,27 +19503,27 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>拷贝插件数据和额外的文件...</translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+187"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to obtain list of files using tar.&lt;/p&gt;&lt;p&gt;Process exited with status code %1&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-37"/>
+        <location line="-39"/>
         <source>Unpacking project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+46"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to create file list.&lt;/p&gt;%1&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;无法创建文件列表.&lt;/p&gt;%1&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+48"/>
         <source>&lt;qt&gt;&lt;p&gt;It appears that you have already unpacked this project package.&lt;/p&gt;&lt;p&gt;Would you like to load %1 now?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+101"/>
         <source>Decoding audio files...</source>
         <translation>解码音频文件...</translation>
     </message>
@@ -19470,9 +19536,8 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PropertyViewRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/PropertyViewRuler.cpp" line="+66"/>
         <source>%1 controller</source>
-        <translation>%1 控制器</translation>
+        <translation type="obsolete">%1 控制器</translation>
     </message>
 </context>
 <context>
@@ -19657,7 +19722,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+471"/>
+        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+469"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
         <translation>音轨 #%1, 片段 &quot;%2&quot; (runtime id %3)</translation>
     </message>
@@ -19931,7 +19996,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+443"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+444"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation>此文件由 Rosegarden %1 制作, 它使用了一个不能由此版本阅读的文件格式.</translation>
@@ -19949,7 +20014,7 @@ There may be some incompatibilities with the file format.</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1270"/>
+        <location line="+1300"/>
         <source>Loading plugins...</source>
         <translation>正在加载插件...</translation>
     </message>
@@ -19995,20 +20060,20 @@ Do you want to save it?</source>
         <location line="+43"/>
         <location line="+42"/>
         <location line="+392"/>
-        <location line="+619"/>
+        <location line="+645"/>
         <location line="+25"/>
         <location line="+3"/>
         <location line="+37"/>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+13"/>
-        <location line="+922"/>
+        <location line="+15"/>
+        <location line="+939"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2373"/>
+        <location line="-2418"/>
         <source>Could not save document at %1</source>
         <translation>无法保存文档到 %1</translation>
     </message>
@@ -20097,12 +20162,17 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="obsolete">正在保存文件...</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="+192"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>写入 &apos;%1&apos; 时出错</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+54"/>
+        <source>Could not open file &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+245"/>
         <source>File load cancelled</source>
         <translation>文件载入已取消</translation>
     </message>
@@ -20149,12 +20219,12 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+546"/>
+        <location line="+563"/>
         <source>Insert Recorded MIDI</source>
         <translation>插入录制好的 MIDI</translation>
     </message>
@@ -20261,7 +20331,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+311"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+312"/>
         <source>Initializing plugin manager...</source>
         <translation>正在初始化插件管理器...</translation>
     </message>
@@ -20276,7 +20346,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>特殊参数</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+81"/>
         <source>Starting sequence manager...</source>
         <translation>正在启动音序器管理器...</translation>
     </message>
@@ -20286,12 +20356,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>正在清除工作环境数据...</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+20"/>
         <source>Starting...</source>
         <translation>正在启动...</translation>
     </message>
     <message>
-        <location line="+502"/>
+        <location line="+505"/>
         <source>  Zoom:  </source>
         <translation>  缩放:  </translation>
     </message>
@@ -20327,12 +20397,12 @@ Do you want to open it instead ?</source>
     </message>
     <message>
         <location line="+147"/>
-        <location line="+4451"/>
+        <location line="+4485"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location line="-4438"/>
+        <location line="-4472"/>
         <location line="+354"/>
         <location line="+166"/>
         <source>Could not save document at %1
@@ -20372,12 +20442,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-79"/>
-        <location line="+5851"/>
+        <location line="+5891"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
     <message>
-        <location line="-5850"/>
+        <location line="-5890"/>
         <location line="+34"/>
         <location line="+215"/>
         <source>Rosegarden files</source>
@@ -20385,16 +20455,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-248"/>
-        <location line="+1744"/>
+        <location line="+1772"/>
         <location line="+36"/>
         <source>MIDI files</source>
         <translation>MIDI 文件</translation>
     </message>
     <message>
-        <location line="-1779"/>
+        <location line="-1807"/>
         <location line="+33"/>
         <location line="+220"/>
-        <location line="+1439"/>
+        <location line="+1467"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+268"/>
@@ -20407,12 +20477,12 @@ Error was : %2</source>
         <location line="+34"/>
         <location line="+33"/>
         <location line="+112"/>
-        <location line="+2771"/>
+        <location line="+2783"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location line="-5853"/>
+        <location line="-5893"/>
         <location line="+35"/>
         <source>Open File</source>
         <translation>打开文件</translation>
@@ -20430,19 +20500,19 @@ Error was : %2</source>
     <message>
         <location line="+56"/>
         <location line="+110"/>
-        <location line="+1658"/>
+        <location line="+1686"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+268"/>
         <location line="+36"/>
         <location line="+84"/>
         <location line="+35"/>
-        <location line="+3642"/>
+        <location line="+3654"/>
         <source>Cannot open file %1</source>
         <translation>无法打开文件“%1”</translation>
     </message>
     <message>
-        <location line="-5769"/>
+        <location line="-5809"/>
         <source>Saving file...</source>
         <translation>正在保存文件...</translation>
     </message>
@@ -20515,7 +20585,7 @@ Error was : %2</source>
         <translation>正在插入剪贴板内容...</translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+99"/>
         <source>Duration of empty range to insert</source>
         <translation type="unfinished">选中区的音长</translation>
     </message>
@@ -20546,12 +20616,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+31"/>
-        <location line="+2578"/>
+        <location line="+2580"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-2507"/>
+        <location line="-2509"/>
         <source>Jog Selection</source>
         <translation type="unfinished">清除选择</translation>
     </message>
@@ -20595,12 +20665,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+110"/>
-        <location line="+2770"/>
+        <location line="+2772"/>
         <source>Set Global Tempo</source>
         <translation>设置全局速度</translation>
     </message>
     <message>
-        <location line="-2697"/>
+        <location line="-2699"/>
         <source>Toggle the toolbar...</source>
         <translation>切换工具栏...</translation>
     </message>
@@ -20636,7 +20706,7 @@ Error was : %2</source>
         <translation>切换播放控制器</translation>
     </message>
     <message>
-        <location line="+113"/>
+        <location line="+115"/>
         <source>Toggle the statusbar...</source>
         <translation>切换状态栏...</translation>
     </message>
@@ -20670,12 +20740,12 @@ Error was : %2</source>
         <translation>Rosegarden 项目文件</translation>
     </message>
     <message>
-        <location line="+1380"/>
+        <location line="+1386"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+305"/>
         <source>Input</source>
         <translation>输入</translation>
     </message>
@@ -20685,7 +20755,7 @@ Error was : %2</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6415"/>
+        <location line="-6455"/>
         <location line="+313"/>
         <location line="+75"/>
         <location line="+161"/>
@@ -20700,10 +20770,10 @@ Error was : %2</source>
         <location line="+8"/>
         <location line="+57"/>
         <location line="+3"/>
-        <location line="+228"/>
+        <location line="+254"/>
         <location line="+24"/>
         <location line="+368"/>
-        <location line="+771"/>
+        <location line="+773"/>
         <location line="+39"/>
         <location line="+52"/>
         <location line="+36"/>
@@ -20732,11 +20802,11 @@ Error was : %2</source>
         <location line="+74"/>
         <location line="+4"/>
         <location line="+36"/>
-        <location line="+775"/>
+        <location line="+781"/>
         <location line="+96"/>
         <location line="+122"/>
         <location line="+13"/>
-        <location line="+1222"/>
+        <location line="+1228"/>
         <location line="+140"/>
         <location line="+18"/>
         <location line="+3"/>
@@ -20761,7 +20831,7 @@ Error was : %2</source>
         <translation>&lt;p&gt;您正在使用的版本是 %1.  现在有版本 %2 可用.&lt;/p&gt;&lt;p&gt;详情请参见 &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden 网站&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4367"/>
+        <location line="-4379"/>
         <source>Open MIDI File</source>
         <translation>打开 MIDI 文件</translation>
     </message>
@@ -20868,12 +20938,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4433"/>
+        <location line="-4497"/>
         <source>Starting sequencer...</source>
         <translation>启动音序器...</translation>
     </message>
     <message>
-        <location line="+1875"/>
+        <location line="+1911"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>正在将文件%1保存为新的文件名...</translation>
@@ -20884,14 +20954,14 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation> 作为模板 </translation>
     </message>
     <message>
-        <location line="+655"/>
+        <location line="+681"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation>拆分时间不在一个选中的片段内.
 没有片段可拆分.</translation>
     </message>
     <message>
-        <location line="+1905"/>
+        <location line="+1907"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation type="unfinished"></translation>
@@ -21059,7 +21129,7 @@ Would you like to set it now?</source>
         <translation>无描述</translation>
     </message>
     <message>
-        <location line="+484"/>
+        <location line="+490"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation>添加音频文件 %1 到音序器失败</translation>
     </message>
@@ -21069,7 +21139,7 @@ Would you like to set it now?</source>
         <translation>从音序器中移除音频文件 id %1失败</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+61"/>
         <source>Modify Segment label</source>
         <translation>修改片段标签</translation>
     </message>
@@ -21175,7 +21245,7 @@ Error was : %2</source>
         <translation>&lt;qt&gt;&lt;p&gt;音频文件路径 &quot;%1&quot; 可用, 但是不可写.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-5588"/>
+        <location line="-5602"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21187,12 +21257,12 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::Rotary</name>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="+89"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="+92"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;点击并向上下左右拖拽来改动.&lt;/p&gt;&lt;p&gt;双击直接编辑值.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+341"/>
+        <location line="+352"/>
         <source>Select a new value</source>
         <translation>选择一个新的值</translation>
     </message>
@@ -21323,9 +21393,33 @@ Would you like to set it now?</source>
     </message>
 </context>
 <context>
+    <name>Rosegarden::SegmentLinkResetTransposeCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+68"/>
+        <source>Reset Transpose on Linked Segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::SegmentLinkToCopyCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/SegmentLinkToCopyCommand.h" line="+43"/>
+        <source>Turn Links into Copies</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::SegmentLinkTransposeCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="-20"/>
+        <source>Transpose Linked Segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::SegmentMover</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+155"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+158"/>
         <source>Move Segment</source>
         <translation>移动片段</translation>
     </message>
@@ -21348,7 +21442,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+84"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+88"/>
         <source>Segment</source>
         <translation>片段</translation>
     </message>
@@ -21358,7 +21452,7 @@ Would you like to set it now?</source>
         <translation>片段参数</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+49"/>
         <source>Label</source>
         <translation>标签</translation>
     </message>
@@ -21374,11 +21468,12 @@ Would you like to set it now?</source>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+139"/>
         <source>Transpose</source>
         <translation>移调</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-138"/>
         <source>Delay</source>
         <translation>延迟</translation>
     </message>
@@ -21418,7 +21513,32 @@ Would you like to set it now?</source>
         <translation>&lt;qt&gt;&lt;p&gt;改变任意选中片段的颜色&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+21"/>
+        <source>Linked segment parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Reset</source>
+        <translation type="unfinished">复位</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+56"/>
         <source>Off</source>
         <translation>关</translation>
     </message>
@@ -21439,7 +21559,24 @@ Would you like to set it now?</source>
         <translation>添加新颜色</translation>
     </message>
     <message>
-        <location line="+472"/>
+        <location line="+411"/>
+        <location line="+46"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-45"/>
+        <source>Existing transpositions on selected linked segments must be removed
+before new transposition can be applied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Remove transposition on selected linked segments?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>New Color Name</source>
         <translation>新颜色名称</translation>
     </message>
@@ -21487,7 +21624,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentPencil</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="+226"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="+233"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
         <translation>按住Shift以避免吸附到小节线</translation>
     </message>
@@ -21513,6 +21650,19 @@ Would you like to set it now?</source>
         <location filename="../../src/commands/segment/SegmentQuickCopyCommand.cpp" line="+52"/>
         <source>(copied)</source>
         <translation>(已复制)</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::SegmentQuickLinkCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/SegmentQuickLinkCommand.h" line="+43"/>
+        <source>Quick-Link Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commands/segment/SegmentQuickLinkCommand.cpp" line="+54"/>
+        <source>(linked)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21602,7 +21752,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentSelector</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+75"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+77"/>
         <source>Click and drag to select segments</source>
         <translation>点击并拖拽以选中片段</translation>
     </message>
@@ -21614,7 +21764,7 @@ Would you like to set it now?</source>
         </translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+154"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>按住 Shift 以避免吸附到节拍网格</translation>
     </message>
@@ -21707,12 +21857,12 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentSplitCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/segment/SegmentSplitCommand.cpp" line="+40"/>
         <source>Split Segment</source>
         <translation>拆分片段</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+116"/>
         <location line="+1"/>
         <source>(split)</source>
         <translation>(拆分)</translation>
@@ -21792,22 +21942,22 @@ Would you like to set it now?</source>
     <name>Rosegarden::SequenceManager</name>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+134"/>
-        <location line="+149"/>
+        <location line="+150"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-143"/>
-        <location line="+152"/>
+        <location line="-144"/>
+        <location line="+153"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-141"/>
+        <location line="-142"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation>处理器的能力不足以处理实时音频数据.  无法继续.</translation>
     </message>
@@ -21832,7 +21982,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+52"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;系统定时器精度太低!&lt;/h3&gt;</translation>
     </message>
@@ -21872,7 +22022,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-241"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21887,7 +22037,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+214"/>
+        <location line="+215"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21972,12 +22122,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SimpleEventEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="+65"/>
+        <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="+66"/>
         <source>Insert Event</source>
         <translation>插入事件</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+1"/>
         <source>Edit Event</source>
         <translation>编辑事件</translation>
     </message>
@@ -22215,6 +22365,14 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
+    <name>Rosegarden::SingleSegmentLinkResetTransposeCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+34"/>
+        <source>Reset Transpose on Linked Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::SplitByPitchDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="+42"/>
@@ -22347,7 +22505,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+166"/>
         <location line="+50"/>
         <source>...</source>
         <translation>...</translation>
@@ -22425,7 +22583,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>B</translation>
     </message>
     <message>
-        <location line="+340"/>
+        <location line="+347"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22495,7 +22653,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="obsolete">A4</translation>
     </message>
     <message>
-        <location line="-260"/>
+        <location line="-267"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
@@ -23386,27 +23544,27 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+204"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+202"/>
         <location line="+353"/>
-        <location line="+362"/>
+        <location line="+369"/>
         <location line="+186"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;无乐器&gt;</translation>
     </message>
     <message>
-        <location line="-758"/>
-        <location line="+725"/>
+        <location line="-765"/>
+        <location line="+732"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;未命名音频&gt;</translation>
     </message>
     <message>
-        <location line="-723"/>
-        <location line="+725"/>
+        <location line="-730"/>
+        <location line="+732"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;未命名&gt;</translation>
     </message>
     <message>
-        <location line="-665"/>
+        <location line="-672"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -23420,7 +23578,7 @@ Would you like to set it now?</source>
 现在要设置吗?</translation>
     </message>
     <message>
-        <location line="+626"/>
+        <location line="+633"/>
         <source>Mute track</source>
         <translation>音轨静音</translation>
     </message>
@@ -23433,7 +23591,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+681"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+688"/>
         <source>Turn Repeating Segment into Real Copies</source>
         <translation>将重复的片段转换为真实副本</translation>
     </message>
@@ -23441,6 +23599,16 @@ Would you like to set it now?</source>
         <location line="+2"/>
         <source>Turn Repeating Segments into Real Copies</source>
         <translation>将重复的片段转换为真实副本</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Turn Linked Segment into Real Copies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Turn Linked Segments into Real Copies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+230"/>
@@ -23461,7 +23629,7 @@ Would you like to set it now?</source>
         <translation>&lt;qt&gt;&lt;p&gt;点击选中此音轨上的所有片段.&lt;/p&gt;&lt;p&gt;按住Shift并点击以添加或移除此音轨中选择的片段.&lt;/p&gt;&lt;p&gt;点击并按住鼠标键以为该音轨分配一件乐器.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+139"/>
+        <location line="+140"/>
         <source>Change track name</source>
         <translation>改变音轨名称</translation>
     </message>
@@ -23840,7 +24008,7 @@ Would you like to set it now?</source>
         <translation>可播放的最低音</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+63"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>乐器预设数据库损坏. 请检查软件安装.</translation>
     </message>
@@ -23863,38 +24031,38 @@ Would you like to set it now?</source>
         <translation>RoseGarden 播放控制器</translation>
     </message>
     <message>
-        <location line="+777"/>
-        <location line="+60"/>
+        <location line="+782"/>
+        <location line="+61"/>
         <source>PITCH WHEEL</source>
         <translation>弯音轮</translation>
     </message>
     <message>
-        <location line="-56"/>
-        <location line="+60"/>
+        <location line="-57"/>
+        <location line="+61"/>
         <source>CONTROLLER</source>
         <translation>控制器</translation>
     </message>
     <message>
-        <location line="-56"/>
-        <location line="+60"/>
+        <location line="-57"/>
+        <location line="+61"/>
         <source>PROG CHNGE</source>
         <translation>音色变更</translation>
     </message>
     <message>
-        <location line="-55"/>
-        <location line="+60"/>
+        <location line="-56"/>
+        <location line="+61"/>
         <source>PRESSURE</source>
         <translation>触后</translation>
     </message>
     <message>
-        <location line="-56"/>
-        <location line="+60"/>
+        <location line="-57"/>
+        <location line="+61"/>
         <source>SYS MESSAGE</source>
         <translation>系统信息</translation>
     </message>
     <message>
         <location line="-40"/>
-        <location line="+60"/>
+        <location line="+61"/>
         <source>NO EVENTS</source>
         <translation>无事件</translation>
     </message>
