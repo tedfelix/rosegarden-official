@@ -14068,7 +14068,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-96"/>
+        <location line="+194"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-290"/>
         <source>Note name style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14190,11 +14195,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+0"/>
         <location line="+4"/>
+        <location line="+4"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>

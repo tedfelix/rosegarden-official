@@ -14728,6 +14728,7 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="548"/>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="552"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="556"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -14735,6 +14736,11 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="552"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Aby se změna znázorňovacího systému projevila, musíte Rosegarden spustit znovu.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="556"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>KPrinter (KDE3)</source>

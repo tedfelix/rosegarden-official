@@ -14152,16 +14152,22 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+186"/>
         <location line="+4"/>
+        <location line="+4"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Изменения применительно к графической системе не возымеют эффекта до перезапуска Rosegarden.</translation>
     </message>
     <message>
-        <location line="-260"/>
+        <location line="+4"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-264"/>
         <source>Notation</source>
         <translation>Партитура</translation>
     </message>

@@ -14142,22 +14142,28 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Kompletten Pfad im Fenster-Titel anzeigen</translation>
     </message>
     <message>
+        <location line="+250"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>KPrinter (KDE 3)</source>
         <translation type="obsolete">KPrinter (KDE 3)</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="-194"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
         <location line="+186"/>
         <location line="+4"/>
+        <location line="+4"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Rosegarden muss neu gestartet werden, damit die Änderungen bei der Grafik aktiv werden.</translation>
     </message>

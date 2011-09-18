@@ -14396,16 +14396,22 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
     <message>
         <location line="+186"/>
         <location line="+4"/>
+        <location line="+4"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-286"/>
+        <location line="+4"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-290"/>
         <source>Note name style</source>
         <translation type="unfinished">Ardull enw nodyn</translation>
     </message>

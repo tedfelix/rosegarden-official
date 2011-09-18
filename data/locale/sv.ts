@@ -14121,16 +14121,22 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location line="+186"/>
         <location line="+4"/>
+        <location line="+4"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Du måste starta om Rosegarden för att ändringen av grafiksystem ska få effekt.</translation>
     </message>
     <message>
-        <location line="-286"/>
+        <location line="+4"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-290"/>
         <source>Note name style</source>
         <translation>Stil för notnamn</translation>
     </message>

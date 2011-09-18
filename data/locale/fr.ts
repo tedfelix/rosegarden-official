@@ -14093,16 +14093,22 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+186"/>
         <location line="+4"/>
+        <location line="+4"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Vous devez redémarrer Rosegarden pour que la nouvelle configuration du système d&apos;affichage soit prise en compte.</translation>
     </message>
     <message>
-        <location line="-286"/>
+        <location line="+4"/>
+        <source>You must restart Rosegarden for the presentation change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-290"/>
         <source>Note name style</source>
         <translation>Style de nom des notes</translation>
     </message>
