@@ -31,8 +31,6 @@ SegmentLinkToCopyCommand::SegmentLinkToCopyCommand(Segment *segment) :
     m_composition(segment->getComposition()),
     m_Segment(segment),
     m_SegmentCopy(segment->clone())
-    //m_detached(false),
-    //m_originalSegmentLinked(false)
 {
 
 }

@@ -48,6 +48,8 @@ public:
                                   timeT newStartTime);
     virtual ~SegmentResizeFromStartCommand();
 
+    static QString getGlobalName() { return tr("Resize Segment"); }
+
 protected:
     virtual void modifySegment();
 

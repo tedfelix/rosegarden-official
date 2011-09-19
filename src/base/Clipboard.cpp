@@ -114,7 +114,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     bool expandRepeats)
 {
     // create with copy ctor so as to inherit track, instrument etc
-    Segment *s = copyFrom->clone();
+    Segment *s = copyFrom->clone(false);
 
     // If the segment is within the time range
     if (from <= s->getStartTime() && to >= s->getEndMarkerTime()) {
@@ -198,7 +198,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 
             m_segments.insert(s);
             if (repeat < lastRepeat) {
-                s = copyFrom->clone();
+                s = copyFrom->clone(false);
                 s->setRepeating(false);
             }
         }

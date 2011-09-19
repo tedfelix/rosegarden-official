@@ -28,7 +28,7 @@ namespace Rosegarden
 
 SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *s,
         timeT time) :
-        BasicCommand(tr("Resize Segment"), *s,
+        BasicCommand(getGlobalName(), *s,
                      std::min(time, s->getStartTime()),
                      std::max(time, s->getStartTime())),
         m_segment(s),

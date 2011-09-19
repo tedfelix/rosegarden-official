@@ -30,6 +30,7 @@
 #include "commands/segment/SegmentRescaleCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "commands/segment/SegmentResizeFromStartCommand.h"
+#include "commands/segment/SegmentLinkToCopyCommand.h"
 #include "CompositionItemHelper.h"
 #include "CompositionModel.h"
 #include "CompositionView.h"
@@ -205,8 +206,18 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         addCommandToHistory(new AudioSegmentResizeFromStartCommand
                                             (segment, newStartTime));
                     } else {
-                        addCommandToHistory(new SegmentResizeFromStartCommand
-                                            (segment, newStartTime));
+                        SegmentLinkToCopyCommand* unlinkCmd = 
+                                         new SegmentLinkToCopyCommand(segment);
+                        SegmentResizeFromStartCommand* resizeCmd = 
+                        new SegmentResizeFromStartCommand(segment, newStartTime);
+                        
+                        MacroCommand* command = new MacroCommand(
+                            SegmentResizeFromStartCommand::getGlobalName());
+                       
+                        command->addCommand(unlinkCmd);
+                        command->addCommand(resizeCmd);
+                        
+                        addCommandToHistory(command);
                     }
 
                 } else {

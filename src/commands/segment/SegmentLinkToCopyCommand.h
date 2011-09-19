@@ -46,8 +46,6 @@ private:
     Composition *m_composition;
     Segment     *m_Segment;
     Segment     *m_SegmentCopy;
-    //bool        m_detached;
-    //bool        m_originalSegmentLinked;
 };
 
 }
