@@ -814,6 +814,7 @@ RosegardenMainWindow::setupActions()
     createAction("links_to_real_copies", SLOT(slotLinksToCopies()));
     createAction("manage_trigger_segments", SLOT(slotManageTriggerSegments()));
     createAction("groove_quantize", SLOT(slotGrooveQuantize()));
+    createAction("fit_beats", SLOT(slotFitToBeats()));
     createAction("set_tempo_to_segment_length", SLOT(slotTempoToSegmentLength()));
     createAction("audio_manager", SLOT(slotAudioManager()));
     createAction("show_segment_labels", SLOT(slotToggleSegmentLabels()));
@@ -2510,6 +2511,23 @@ RosegardenMainWindow::slotGrooveQuantize()
 
     Segment *s = *selection.begin();
     m_view->slotAddCommandToHistory(new CreateTempoMapFromSegmentCommand(s));
+}
+
+void
+RosegardenMainWindow::slotFitToBeats()
+{
+    if (!m_view->haveSelection())
+        return ;
+
+    SegmentSelection selection = m_view->getSelection();
+
+    if (selection.size() != 1) {
+        QMessageBox::warning(this, tr("Rosegarden"), tr("This function needs no more than one segment to be selected."));
+        return ;
+    }
+
+    Segment *s = *selection.begin();
+    m_view->slotAddCommandToHistory(new FitToBeatsCommand(s));
 }
 
 void

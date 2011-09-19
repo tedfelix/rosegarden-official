@@ -303,9 +303,9 @@ FitToBeatsCommand::getTempoChange(Composition &composition, int i)
     return composition.getTempoChange(i);
 }
 
+// Get the current tempos of the composition
 // @param A composition
 // @param Reference to a TempoMap, to be filled.
-// Get the current tempos of the composition
 // @author Tom Breton (Tehom)
 void
 FitToBeatsCommand::getCurrentTempi(Composition &composition, TempoMap &Tempos)

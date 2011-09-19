@@ -761,6 +761,11 @@ public slots:
     void slotGrooveQuantize();
 
     /**
+     * Fit existing notes to beats based on selected segment
+     */
+    void slotFitToBeats();
+
+    /**
      * Rescale the selected segments by a factor requested from
      * the user
      */

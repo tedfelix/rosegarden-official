@@ -127,6 +127,7 @@
   <Separator/>
     <Action name="set_tempo_to_segment_length" text="Set &amp;Tempo to Audio Segment Duration" />
     <Action name="groove_quantize" text="Set Tempos from &amp;Beat Segment" />
+    <Action name="fit_beats" text="Fit existing beats to beat segment" />
   <Separator/>
     <Action name="change_composition_length" text="Change &amp;Composition Start and End..." />
   <Separator/>
@@ -435,6 +436,7 @@
     <Action name="repeats_to_real_copies"/>
     <Action name="links_to_real_copies"/>
     <Action name="groove_quantize"/>
+    <Action name="fit_beats"/>
   </enable>
 </State>
 
