@@ -1210,7 +1210,8 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             if (!isRecording(s)) {
                 QColor brushColor = GUIPalette::convertColour(m_composition.
                                     getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-                sr.setBrush(brushColor);
+                Qt::BrushStyle brushPattern = (s->isLinked() ? Qt::Dense2Pattern : Qt::SolidPattern);
+                sr.setBrush(QBrush(brushColor, brushPattern));
                 sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
             } else {
                 // border is the same for both audio and MIDI
