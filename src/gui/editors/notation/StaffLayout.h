@@ -621,7 +621,7 @@ protected:
     // The default implementations of the following two are empty.
     virtual void deleteTimeSignatures();
     virtual void insertTimeSignature(double layoutX,
-                                     const TimeSignature &);
+                                     const TimeSignature &, bool grayed);
 
     // The default implementations of the following two are empty.
     virtual void deleteRepeatedClefsAndKeys();

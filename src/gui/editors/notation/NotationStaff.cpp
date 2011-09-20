@@ -142,12 +142,13 @@ NotationStaff::setNotePixmapFactories(NotePixmapFactory *normal,
 
 void
 NotationStaff::insertTimeSignature(double layoutX,
-                                   const TimeSignature &timeSig)
+                                   const TimeSignature &timeSig, bool grayed)
 {
     if (timeSig.isHidden())
         return ;
 
     m_notePixmapFactory->setSelected(false);
+    m_notePixmapFactory->setShaded(grayed);
     QGraphicsItem *item = m_notePixmapFactory->makeTimeSig(timeSig);
 //    QCanvasTimeSigSprite *sprite =
 //        new QCanvasTimeSigSprite(layoutX, pixmap, m_canvas);

@@ -613,7 +613,9 @@ StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
 
         if (isNew && barNo < lastBar) {
             currentTimeSignature = timeSig;
-            insertTimeSignature(timeSigX, currentTimeSignature);
+            // Ask for a gray color if the segment is a repetition
+            bool grayed = m_viewSegment->getSegment().isTmp();
+            insertTimeSignature(timeSigX, currentTimeSignature, grayed);
             RG_DEBUG << "StaffLayout[" << this << "]::sizeStaff: bar no " << barNo << " has time signature at " << timeSigX << endl;
         }
 
@@ -882,7 +884,7 @@ StaffLayout::deleteTimeSignatures()
 }
 
 void
-StaffLayout::insertTimeSignature(double, const TimeSignature &)
+StaffLayout::insertTimeSignature(double, const TimeSignature &, bool)
 {
     // default implementation is empty
 }

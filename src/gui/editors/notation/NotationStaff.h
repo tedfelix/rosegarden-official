@@ -168,9 +168,10 @@ public:
     
     /**
      * Insert time signature at x-coordinate \a x.
+     * Use a gray color if \a grayed is true.
      */
     virtual void insertTimeSignature(double layoutX,
-                                     const TimeSignature &timeSig);
+                                     const TimeSignature &timeSig, bool grayed);
 
     /**
      * Delete all time signatures
