@@ -206,17 +206,18 @@ protected:
     // static JACK transport callbacks
     static int   jackSyncCallback(jack_transport_state_t,
                                   jack_position_t *, void *);
-    static int   jackTimebaseCallback(jack_transport_state_t,
-                                      jack_nframes_t,
-                                      jack_position_t *,
-                                      int,
-                                      void *);
+//    static int   jackTimebaseCallback(jack_transport_state_t,
+//                                      jack_nframes_t,
+//                                      jack_position_t *,
+//                                      int,
+//                                      void *);
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
     int          jackProcessRecord(InstrumentId id,
                                    jack_nframes_t nframes,
                                    sample_t *, sample_t *, bool);
+    // write silence to all ports
     int          jackProcessEmpty(jack_nframes_t nframes);
 
     // other helper methods:
@@ -232,6 +233,7 @@ protected:
 
     // data members:
 
+    // Client handle from jack_client_open()
     jack_client_t               *m_client;
 
     std::vector<jack_port_t *>   m_inputPorts;
@@ -278,6 +280,8 @@ protected:
 
     time_t                       m_kickedOutAt;
     size_t                       m_framesProcessed;
+
+    // initialise() has completed successfully, and there are no other issues
     bool                         m_ok;
 };
 
