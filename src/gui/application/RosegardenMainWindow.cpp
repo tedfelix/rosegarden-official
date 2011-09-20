@@ -60,8 +60,10 @@
 #include "commands/segment/CreateTempoMapFromSegmentCommand.h"
 #include "commands/segment/CutRangeCommand.h"
 #include "commands/segment/DeleteRangeCommand.h"
+#include "commands/segment/EraseTempiInRangeCommand.h"
 #include "commands/segment/FitToBeatsCommand.h"
 #include "commands/segment/InsertRangeCommand.h"
+#include "commands/segment/PasteConductorDataCommand.h"
 #include "commands/segment/ModifyDefaultTempoCommand.h"
 #include "commands/segment/MoveTracksCommand.h"
 #include "commands/segment/PasteRangeCommand.h"
@@ -777,6 +779,8 @@ RosegardenMainWindow::setupActions()
     createAction("paste_range", SLOT(slotPasteRange()));
     createAction("delete_range", SLOT(slotDeleteRange()));
     createAction("insert_range", SLOT(slotInsertRange()));
+    createAction("paste_conductor_data", SLOT(slotPasteConductorData()));
+    createAction("erase_range_tempos", SLOT(slotEraseRangeTempos()));
     createAction("delete", SLOT(slotDeleteSelectedSegments()));
     createAction("select_all", SLOT(slotSelectAll()));
     createAction("add_tempo", SLOT(slotEditTempo()));
@@ -2431,6 +2435,30 @@ RosegardenMainWindow::slotInsertRange()
         CommandHistory::getInstance()->addCommand
             (new InsertRangeCommand(&m_doc->getComposition(), t0, dialog.getTime()));
     }
+}
+
+void
+RosegardenMainWindow::slotPasteConductorData()
+{
+    if (m_clipboard->isEmpty())
+        return ;
+
+    CommandHistory::getInstance()->addCommand
+    (new PasteConductorDataCommand(&m_doc->getComposition(), m_clipboard,
+                                   m_doc->getComposition().getPosition()));
+}
+
+void
+RosegardenMainWindow::slotEraseRangeTempos()
+{
+    timeT t0 = m_doc->getComposition().getLoopStart();
+    timeT t1 = m_doc->getComposition().getLoopEnd();
+
+    if (t0 == t1)
+        { return; }
+
+    CommandHistory::getInstance()->addCommand
+    (new EraseTempiInRangeCommand(&m_doc->getComposition(), t0, t1));
 }
 
 void

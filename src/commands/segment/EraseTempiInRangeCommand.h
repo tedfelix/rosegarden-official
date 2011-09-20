@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,12 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PASTECONDUCTORDATACOMMAND_H_
-#define _RG_PASTECONDUCTORDATACOMMAND_H_
+#ifndef _RG_OPENORCLOSERANGECOMMAND_H_
+#define _RG_OPENORCLOSERANGECOMMAND_H_
 
-#include "document/Command.h"
-#include "base/Event.h"
 #include "base/Selection.h"
+#include "document/Command.h"
+#include <vector>
+#include "base/Event.h"
 
 #include <QCoreApplication>
 
@@ -29,32 +29,28 @@
 namespace Rosegarden
 {
 
+class Segment;
 class Composition;
-class Clipboard;
 
 
 /**
- * Paste time signature and tempo data from the given clipboard into
- * the given composition starting at the given time.
+ * Erase tempos in a given range
  */
-class PasteConductorDataCommand : public NamedCommand
+class EraseTempiInRangeCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteConductorDataCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseTempiInRangeCommand)
 
 public:
-    PasteConductorDataCommand(Composition *composition,
-                              Clipboard *clipboard,
-                              timeT t);
-    virtual ~PasteConductorDataCommand();
+    EraseTempiInRangeCommand(Composition *composition,
+                            timeT rangeBegin,
+                            timeT rangeEnd);
+    virtual ~EraseTempiInRangeCommand();
 
     virtual void execute();
     virtual void unexecute();
 
 private:
     Composition *m_composition;
-    Clipboard *m_clipboard;
-    timeT m_t0;
-    TimeSignatureSelection m_timesigsPre;
     TempoSelection m_temposPre;
 };
 

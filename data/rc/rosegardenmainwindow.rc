@@ -79,6 +79,8 @@
     <Action name="copy_range" text="Cop&amp;y Range" shortcut="Ctrl+Shift+C" />
     <Action name="paste_range" text="Pa&amp;ste Range" shortcut="Ctrl+Shift+V" />
     <Action name="insert_range" text="&amp;Insert Range..." shortcut="Ctrl+Shift+Ins" />
+    <Action name="paste_conductor_data" text="Paste Tempos and Time Signatures" />
+    <Action name="erase_range_tempos" text="Clear Range of Tempos" />
   <Separator/>
     <Action name="select_all" text="Select &amp;All Segments" shortcut="Ctrl+A" />
   <Separator/>
@@ -444,6 +446,7 @@
   <enable>
     <Action name="edit_paste"/>
     <Action name="paste_range"/>
+    <Action name="paste_conductor_data"/>
   </enable>
 </State>
 
@@ -513,7 +516,8 @@
 <State name="have_range">
   <enable>
     <Action name="cut_range"/>
-	<Action name="copy_range"/>
+    <Action name="copy_range"/>
+    <Action name="erase_range_tempos"/>
   </enable>
 </State>
 

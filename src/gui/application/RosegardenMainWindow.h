@@ -736,6 +736,17 @@ public slots:
     void slotInsertRange();
 
     /**
+     * Paste just tempi and time signatures from the clipboard at the
+     * current pointer position.
+     */
+    void slotPasteConductorData();
+
+    /**
+     * Clear a time range of tempos
+     */
+    void slotEraseRangeTempos();
+    
+    /**
      * select all segments on all tracks
      */
     void slotSelectAll();

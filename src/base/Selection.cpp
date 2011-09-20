@@ -491,6 +491,24 @@ TimeSignatureSelection::addTimeSignature(timeT t, TimeSignature timeSig)
 {
     m_timeSignatures.insert(timesigcontainer::value_type(t, timeSig));
 }
+void
+TimeSignatureSelection::RemoveFromComposition(Composition *composition)
+{
+    for (TimeSignatureSelection::timesigcontainer::const_iterator i =
+                begin(); i != end(); ++i) {
+        int n = composition->getTimeSignatureNumberAt(i->first);
+        if (n >= 0)
+            { composition->removeTimeSignature(n); }
+    }
+}
+void
+TimeSignatureSelection::AddToComposition(Composition *composition)
+{
+    for (TimeSignatureSelection::timesigcontainer::const_iterator i =
+                begin(); i != end(); ++i) {
+        composition->addTimeSignature(i->first, i->second);
+    }    
+}
 
 TempoSelection::TempoSelection() { }
 
@@ -532,6 +550,33 @@ TempoSelection::addTempo(timeT t, tempoT tempo, tempoT targetTempo)
 {
     m_tempos.insert(tempocontainer::value_type
 		    (t, tempochange(tempo, targetTempo)));
+}
+
+void
+TempoSelection::RemoveFromComposition(Composition *composition)
+{
+
+    for (TempoSelection::tempocontainer::const_iterator i = begin();
+         i != end();
+         ++i) {
+        int n = composition->getTempoChangeNumberAt(i->first);
+        if (n >= 0)
+            { composition->removeTempoChange(n); }
+    }
+
+}    
+    
+void
+TempoSelection::AddToComposition(Composition *composition)
+{
+
+    for (TempoSelection::tempocontainer::const_iterator i = begin();
+         i != end();
+         ++i) {
+        composition->addTempoAtTime(i->first,
+                                    i->second.first,
+                                    i->second.second);
+    }
 }
 
 }

@@ -118,29 +118,11 @@ OpenOrCloseRangeCommand::execute()
         (*i)->setStartTime((*i)->getStartTime() + offset);
     }
 
-    for (TimeSignatureSelection::timesigcontainer::const_iterator i =
-                m_timesigsPre.begin(); i != m_timesigsPre.end(); ++i) {
-        int n = m_composition->getTimeSignatureNumberAt(i->first);
-        if (n >= 0)
-            m_composition->removeTimeSignature(n);
-    }
 
-    for (TimeSignatureSelection::timesigcontainer::const_iterator i =
-                m_timesigsPost.begin(); i != m_timesigsPost.end(); ++i) {
-        m_composition->addTimeSignature(i->first, i->second);
-    }
-
-    for (TempoSelection::tempocontainer::const_iterator i =
-                m_temposPre.begin(); i != m_temposPre.end(); ++i) {
-        int n = m_composition->getTempoChangeNumberAt(i->first);
-        if (n >= 0)
-            m_composition->removeTempoChange(n);
-    }
-
-    for (TempoSelection::tempocontainer::const_iterator i =
-                m_temposPost.begin(); i != m_temposPost.end(); ++i) {
-        m_composition->addTempoAtTime(i->first, i->second.first, i->second.second);
-    }
+    m_timesigsPre.RemoveFromComposition(m_composition);
+    m_timesigsPost.AddToComposition(m_composition);
+    m_temposPre.RemoveFromComposition(m_composition);
+    m_temposPost.AddToComposition(m_composition);
 
     // Preserve the loop range for undo
     m_loopBegin = m_composition->getLoopStart();
@@ -182,29 +164,10 @@ OpenOrCloseRangeCommand::unexecute()
         (*i)->setStartTime((*i)->getStartTime() + offset);
     }
 
-    for (TimeSignatureSelection::timesigcontainer::const_iterator i =
-                m_timesigsPost.begin(); i != m_timesigsPost.end(); ++i) {
-        int n = m_composition->getTimeSignatureNumberAt(i->first);
-        if (n >= 0)
-            m_composition->removeTimeSignature(n);
-    }
-
-    for (TimeSignatureSelection::timesigcontainer::const_iterator i =
-                m_timesigsPre.begin(); i != m_timesigsPre.end(); ++i) {
-        m_composition->addTimeSignature(i->first, i->second);
-    }
-
-    for (TempoSelection::tempocontainer::const_iterator i =
-                m_temposPost.begin(); i != m_temposPost.end(); ++i) {
-        int n = m_composition->getTempoChangeNumberAt(i->first);
-        if (n >= 0)
-            m_composition->removeTempoChange(n);
-    }
-
-    for (TempoSelection::tempocontainer::const_iterator i =
-                m_temposPre.begin(); i != m_temposPre.end(); ++i) {
-        m_composition->addTempoAtTime(i->first, i->second.first, i->second.second);
-    }
+    m_timesigsPost.RemoveFromComposition(m_composition);
+    m_timesigsPre.AddToComposition(m_composition);
+    m_temposPost.RemoveFromComposition(m_composition);
+    m_temposPre.AddToComposition(m_composition);
     
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
 

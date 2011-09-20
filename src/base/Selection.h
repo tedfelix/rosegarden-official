@@ -258,6 +258,8 @@ public:
     timesigcontainer::const_iterator begin() const { return m_timeSignatures.begin(); }
     timesigcontainer::const_iterator end() const { return m_timeSignatures.end(); }
     bool empty() const { return begin() == end(); }
+    void RemoveFromComposition(Composition *composition);
+    void AddToComposition(Composition *composition);
 
 protected:
     timesigcontainer m_timeSignatures;
@@ -303,6 +305,8 @@ public:
     tempocontainer::const_iterator begin() const { return m_tempos.begin(); }
     tempocontainer::const_iterator end() const { return m_tempos.end(); }
     bool empty() const { return begin() == end(); }
+    void RemoveFromComposition(Composition *composition);
+    void AddToComposition(Composition *composition);
 
 protected:
     tempocontainer m_tempos;

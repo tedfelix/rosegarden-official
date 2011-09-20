@@ -35,7 +35,20 @@ PasteConductorDataCommand::PasteConductorDataCommand(Composition *composition,
         m_composition(composition),
         m_clipboard(new Clipboard(*clipboard)),
         m_t0(t)
-{}
+{
+    if(m_clipboard->hasNominalRange()) {
+        timeT start, end;
+        m_clipboard->getNominalRange(start, end);
+        timeT range = end - start;
+
+        // Get any tempo and timesig data that we're going to erase
+        // in execute. 
+        m_temposPre   = TempoSelection(*m_composition, t,
+                                       t + range, false);
+        m_timesigsPre = TimeSignatureSelection(*m_composition, t,
+                                               t + range, false);
+    }
+}
 
 PasteConductorDataCommand::~PasteConductorDataCommand()
 {
@@ -45,10 +58,11 @@ PasteConductorDataCommand::~PasteConductorDataCommand()
 void
 PasteConductorDataCommand::execute()
 {
-    //!!! current implementation of execute and unexecute require
-    // that the target area of the composition be empty of tempo and
-    // timesig data before the command is executed
-
+    // Clear the target area of the composition of tempo and timesig
+    // data
+    m_temposPre.RemoveFromComposition(m_composition);
+    m_timesigsPre.RemoveFromComposition(m_composition);
+    
     if (m_clipboard->hasTimeSignatureSelection()) {
 
         for (TimeSignatureSelection::timesigcontainer::const_iterator i =
@@ -91,7 +105,9 @@ PasteConductorDataCommand::execute()
 void
 PasteConductorDataCommand::unexecute()
 {
-    //!!! see note above
+    // Replace any tempo and timesig data we removed
+    m_temposPre.AddToComposition(m_composition);
+    m_timesigsPre.AddToComposition(m_composition);
 
     for (TimeSignatureSelection::timesigcontainer::const_iterator i =
                 m_clipboard->getTimeSignatureSelection().begin();
