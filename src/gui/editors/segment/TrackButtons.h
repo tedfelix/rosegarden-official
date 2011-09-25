@@ -42,13 +42,19 @@ class RosegardenDocument;
 class LedButton;
 class Instrument;
 
-
-
-// This class creates a list of mute and record buttons
-// based on the rosegarden document and a specialisation
-// of the Vertical Box widget.
-//
-
+/// The QFrame containing the various widgets for each track.
+/**
+ * The TrackButtons class is a QFrame that runs vertically along the left
+ * side of the tracks.  It contains an "HBox" QFrame for each track.  That
+ * HBox contains the widgets that appear to the left of each track:
+ *
+ *   - The TrackVUMeter (which doubles as the track number)
+ *   - The Mute LedButton
+ *   - The Record LedButton
+ *   - The TrackLabel (usually "<untitled>")
+ *
+ * These widgets are created based on the rosegarden document.
+ */
 class TrackButtons : public QFrame
 {
     Q_OBJECT
@@ -198,12 +204,19 @@ protected:
 
     RosegardenDocument                 *m_doc;
 
+    /// Layout used to stack the trackHBoxes vertically
     QVBoxLayout                      *m_layout;
 
+    // --- The widgets
     std::vector<LedButton *>          m_muteLeds;
     std::vector<LedButton *>          m_recordLeds;
     std::vector<TrackLabel *>         m_trackLabels;
+    /// The TrackVUMeter appears as the track number when there is no MIDI
+    /// activity on a track.  It is to the left of the Mute LED.
     std::vector<TrackVUMeter *>       m_trackMeters;
+
+    /// Each HBox contains the widgets (TrackVUMeter, muteLed, recordLed, and
+    /// Label) for a track.
     std::vector<QFrame *>             m_trackHBoxes;
 
     QSignalMapper                    *m_recordSigMapper;
