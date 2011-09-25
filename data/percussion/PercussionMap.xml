@@ -1,0 +1,85 @@
+<percussion-map>
+   <instrument pitch="35" name="Acoustic Bass Drum">
+       <display pitch="65" stem="down"/>
+   </instrument>
+   <instrument pitch="36" name="Bass Drum 1">
+       <display pitch="65" stem="down"/>
+   </instrument>
+   <instrument pitch="37" name="Side Stick">
+       <display pitch="74" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="38" name="Acoustic Snare">
+       <display pitch="71" stem="up"/>
+   </instrument>
+   <instrument pitch="39" name="Hand Clap"/>
+   <instrument pitch="40" name="Electric Snare">
+       <display pitch="71" stem="up"/>
+   </instrument>
+   <instrument pitch="41" name="Low Floor Tom"/>
+   <instrument pitch="42" name="Closed Hi-Hat">
+       <display pitch="79" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="43" name="High Floor Tom"/>
+   <instrument pitch="44" name="Pedal Hi-Hat">
+       <display pitch="62" notehead="x" stem="down"/>
+   </instrument>
+   <instrument pitch="45" name="Low Tom">
+       <display pitch="69" stem="up"/>
+   </instrument>
+   <instrument pitch="46" name="Hi-Hat">
+       <display pitch="79" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="47" name="Low-Mid Tom">
+       <display pitch="72" stem="up"/>
+   </instrument>
+   <instrument pitch="48" name="Hi-Mid Tom">
+       <display pitch="72" stem="up"/>
+   </instrument>
+   <instrument pitch="49" name="Crash Cymbal 1">
+       <display pitch="83" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="50" name="High Tom">
+       <display pitch="76" stem="up"/>
+   </instrument>
+   <instrument pitch="51" name="Ride Cymbal 1">
+       <display pitch="81" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="52" name="Chinese Cymbal"/>
+   <instrument pitch="53" name="Ride Bell"/>
+   <instrument pitch="54" name="Tambourine"/>
+   <instrument pitch="55" name="Splash Cymbal">
+       <display pitch="" notehead="" stem="up"/>
+   </instrument>
+   <instrument pitch="56" name="Cowbell">
+       <display pitch="77" notehead="diamond" stem="up"/>
+   </instrument>
+   <instrument pitch="57" name="Crash Cymbal 2">
+       <display pitch="83" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="58" name="Vibraslap"/>
+   <instrument pitch="59" name="Ride Cymbal 2">
+       <display pitch="81" notehead="x" stem="up"/>
+   </instrument>
+   <instrument pitch="59" name="Hi Bongo"/>
+   <instrument pitch="61" name="Low Bongo"/>
+   <instrument pitch="62" name="Mute Hi Conga"/>
+   <instrument pitch="63" name="Open Hi Conga"/>
+   <instrument pitch="64" name="Low Conga"/>
+   <instrument pitch="65" name="High Timbale"/>
+   <instrument pitch="66" name="Low Timbale"/>
+   <instrument pitch="67" name="High Agogo"/>
+   <instrument pitch="68" name="Low Agogo"/>
+   <instrument pitch="69" name="Cabasa"/>
+   <instrument pitch="70" name="Maracas"/>
+   <instrument pitch="71" name=""/>
+   <instrument pitch="72" name="Long Whistle"/>
+   <instrument pitch="73" name="Short Guiro"/>
+   <instrument pitch="74" name="Long Guiro"/>
+   <instrument pitch="75" name="Claves"/>
+   <instrument pitch="76" name="Hi Wood Block"/>
+   <instrument pitch="77" name="Low Wood Block"/>
+   <instrument pitch="78" name="Mute Cuica"/>
+   <instrument pitch="79" name="Open Cuica"/>
+   <instrument pitch="80" name="Mute Triangle"/>
+   <instrument pitch="81" name="Open Triangle"/>
+</percussion-map>

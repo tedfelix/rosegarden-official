@@ -1322,7 +1322,7 @@ public:
         BarResetExplicit    // c# | c -> add natural to c
     };
 
-    AccidentalTable(const Key &, const Clef &,
+    AccidentalTable(const Key & = Key(), const Clef & = Clef(),
                     OctaveType = OctavesCautionary,
                     BarResetType = BarResetCautionary);
 

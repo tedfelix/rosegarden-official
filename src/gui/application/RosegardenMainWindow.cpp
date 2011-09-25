@@ -106,6 +106,7 @@
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
+#include "gui/dialogs/MusicXMLOptionsDialog.h"
 #include "gui/dialogs/ManageMetronomeDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
@@ -5135,6 +5136,11 @@ RosegardenMainWindow::slotExportMusicXml()
 void
 RosegardenMainWindow::exportMusicXmlFile(QString file)
 {
+
+    MusicXMLOptionsDialog dialog(this, m_doc, "", "");
+    if (dialog.exec() != QDialog::Accepted) {
+        return;
+    }
     ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting MusicXML file..."),
                                                      (QWidget*)this);
 
@@ -5142,6 +5148,9 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
 
     connect(&e, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
+
+    connect(progressDlg, SIGNAL(canceled()),
+            &e, SLOT(slotCancel()));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();

@@ -46,6 +46,7 @@ namespace Rosegarden
     const char* const PresetDialogConfigGroup = "Parameter_Presets";
     const char* const ExternalApplicationsConfigGroup = "External_Applications";
     const char* const LilyPondExportConfigGroup = "LilyPond_Export";
+    const char* const MusicXMLExportConfigGroup = "MusicXML_Export";
     const char* const LastUsedPathsConfigGroup = "Last_Used_Paths";
     const char* const WindowGeometryConfigGroup = "Window_Geometry";
     const char* const TempDirectoryConfigGroup = "TempDirectory";

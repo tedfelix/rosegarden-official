@@ -4,14 +4,17 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2011 the Rosegarden development team.
- 
+
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
     with heavy lifting from csoundio as it was on 13/5/2002.
 
+    More or less complete rewrite (Aug 2011)
+        Niek van den Berg   <niekjvandenberg@gmail.com>
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -19,34 +22,30 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MusicXmlExporter.h"
 
-#include "base/BaseProperties.h"
-#include "base/Composition.h"
-#include "base/CompositionTimeSliceAdapter.h"
-#include "base/Event.h"
-#include "base/Instrument.h"
-#include "base/NotationTypes.h"
-#include "base/XmlExportable.h"
-#include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenApplication.h"
-#include "gui/general/ProgressReporter.h"
-#include <QObject>
+#include "misc/ConfigGroups.h"
+#include "base/StaffExportTypes.h"
+
+#include <QSettings>
+
+#include <sstream>
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
 
-MusicXmlExporter::MusicXmlExporter(QObject *parent,
+MusicXmlExporter::MusicXmlExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter(parent),
         m_doc(doc),
         m_fileName(fileName)
 {
-    // nothing else
+    m_composition = &m_doc->getComposition();
+    m_view = parent->getView();
+    readConfigVariables();
 }
 
 MusicXmlExporter::~MusicXmlExporter()
@@ -55,492 +54,519 @@ MusicXmlExporter::~MusicXmlExporter()
 }
 
 void
-MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
-                            AccidentalTable &accTable,
-                            const Clef &clef,
-                            const Rosegarden::Key &key,
-                            std::ofstream &str)
+MusicXmlExporter::readConfigVariables(void)
 {
-    str << "\t\t\t<note>" << std::endl;
+    // grab settings info
+    QSettings settings;
 
-    Pitch pitch(64);
-    Accidental acc;
-    Accidental displayAcc;
-    bool cautionary;
-    Accidental processedDisplayAcc;
+    settings.beginGroup(NotationOptionsConfigGroup);
+    int accOctaveMode = settings.value("accidentaloctavemode", 1).toInt() ;
+    m_octaveType =
+        (accOctaveMode == 0 ? AccidentalTable::OctavesIndependent :
+         accOctaveMode == 1 ? AccidentalTable::OctavesCautionary :
+         AccidentalTable::OctavesEquivalent);
 
-    if (e->isa(Note::EventRestType)) {
-        str << "\t\t\t\t<rest/>" << std::endl;
+    int accBarMode = settings.value("accidentalbarmode", 0).toInt() ;
+    m_barResetType =
+        (accBarMode == 0 ? AccidentalTable::BarResetNone :
+         accBarMode == 1 ? AccidentalTable::BarResetCautionary :
+         AccidentalTable::BarResetExplicit);
+    settings.endGroup();
 
-    } else {
+    settings.beginGroup(MusicXMLExportConfigGroup);
+    m_exportSelection = settings.value("mxmlexportselection",
+                                       EXPORT_NONMUTED_TRACKS).toUInt() ;
+    m_mxmlDTDType = settings.value("mxmldtdtype", DTD_PARTWISE).toUInt() ;
+    m_MusicXmlVersion = settings.value("mxmlversion",
+                                       MUSICXML_VERSION_1_1).toUInt() ;
+    m_multiStave = settings.value("mxmlmultistave", MULTI_STAVE_NONE).toUInt();
+    m_exportStaffBracket = settings.value("mxmlexportstaffgroup", 0).toBool();
+    m_exportPercussion = settings.value("mxmlexportpercussion", 0).toUInt();
+    m_mxmlUseOctaveShift = settings.value("mxmluseoctaveshift", 0).toBool();
 
-        // Order of MusicXML elements within a note:
-        // chord
-        // pitch
-        // duration
-        // tie
-        // instrument
-        // voice
-        // type
-        // dot(s)
-        // accidental
-        // time modification
-        // stem
-        // notehead
-        // staff
-        // beam
-        // notations
-        // lyric
+    settings.endGroup();
+}
 
-        if (e->getNotationAbsoluteTime() == lastNoteTime) {
-            str << "\t\t\t\t<chord/>" << std::endl;
-        } else {
-            accTable.update();
+bool
+MusicXmlExporter::isPercussionTrack(Track *track)
+{
+    bool percussion = false;
+    Instrument *instrument =  m_doc->getStudio().getInstrumentFor(track);
+    if (instrument) {
+        percussion = instrument->isPercussion();
+
+        if (percussion && (m_exportPercussion == EXPORT_PERCUSSION_AS_NOTES)) {
+            percussion = false;
         }
+    }
+    return percussion;
+}
 
-        str << "\t\t\t\t<pitch>" << std::endl;
-
-        pitch = Pitch(*e);
-
-        str << "\t\t\t\t\t<step>" << pitch.getNoteName(key) << "</step>" << std::endl;
-
-        acc = pitch.getAccidental(key.isSharp());
-        displayAcc = pitch.getDisplayAccidental(key);
-
-        cautionary = false;
-        processedDisplayAcc =
-            accTable.processDisplayAccidental
-            (displayAcc, pitch.getHeightOnStaff(clef, key), cautionary);
-
-        // don't handle cautionary accidentals here:
-        if (cautionary)
-            processedDisplayAcc = Accidentals::NoAccidental;
-
-        if (acc == Accidentals::DoubleFlat) {
-            str << "\t\t\t\t\t<alter>-2</alter>" << std::endl;
-        } else if (acc == Accidentals::Flat) {
-            str << "\t\t\t\t\t<alter>-1</alter>" << std::endl;
-        } else if (acc == Accidentals::Sharp) {
-            str << "\t\t\t\t\t<alter>1</alter>" << std::endl;
-        } else if (acc == Accidentals::DoubleSharp) {
-            str << "\t\t\t\t\t<alter>2</alter>" << std::endl;
-        }
-
-        int octave = pitch.getOctaveAccidental(-1, acc);
-        str << "\t\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
-
-        str << "\t\t\t\t</pitch>" << std::endl;
+bool
+MusicXmlExporter::exportTrack(Track *track)
+{
+    if (track->getInstrument() < MidiInstrumentBase) {
+        // Not a MIDI track!
+        return false;
     }
 
-    // Since there's no way to provide the performance absolute time
-    // for a note, there's also no point in providing the performance
-    // duration, even though it might in principle be of interest
-    str << "\t\t\t\t<duration>" << e->getNotationDuration() << "</duration>" << std::endl;
-
-    if (!e->isa(Note::EventRestType)) {
-
-        if (e->has(TIED_BACKWARD) &&
-                e->get
-                <Bool>(TIED_BACKWARD)) {
-            str << "\t\t\t\t<tie type=\"stop\"/>" << std::endl;
-        }
-        if (e->has(TIED_FORWARD) &&
-                e->get
-                <Bool>(TIED_FORWARD)) {
-            str << "\t\t\t\t<tie type=\"start\"/>" << std::endl;
-        }
-
-        // Incomplete: will RG ever use this?
-        str << "\t\t\t\t<voice>" << "1" << "</voice>" << std::endl;
+    bool percussion = isPercussionTrack(track);
+    if (percussion && ! m_exportPercussion) {
+        // Percussion track but don't export percussion tracks!
+        return false;
     }
 
-    Note note = Note::getNearestNote(e->getNotationDuration());
-
-    static const char *noteNames[] = {
-        "64th", "32nd", "16th", "eighth", "quarter", "half", "whole", "breve"
-    };
-
-    int noteType = note.getNoteType();
-    if (noteType < 0 || noteType >= int(sizeof(noteNames) / sizeof(noteNames[0]))) {
-        std::cerr << "WARNING: MusicXmlExporter::writeNote: bad note type "
-        << noteType << std::endl;
-        noteType = 4;
-    }
-
-    str << "\t\t\t\t<type>" << noteNames[noteType] << "</type>" << std::endl;
-    for (int i = 0; i < note.getDots(); ++i) {
-        str << "\t\t\t\t<dot/>" << std::endl;
-    }
-
-    if (!e->isa(Note::EventRestType)) {
-
-        if (processedDisplayAcc == Accidentals::DoubleFlat) {
-            str << "\t\t\t\t<accidental>flat-flat</accidental>" << std::endl;
-        } else if (processedDisplayAcc == Accidentals::Flat) {
-            str << "\t\t\t\t<accidental>flat</accidental>" << std::endl;
-        } else if (processedDisplayAcc == Accidentals::Natural) {
-            str << "\t\t\t\t<accidental>natural</accidental>" << std::endl;
-        } else if (processedDisplayAcc == Accidentals::Sharp) {
-            str << "\t\t\t\t<accidental>sharp</accidental>" << std::endl;
-        } else if (processedDisplayAcc == Accidentals::DoubleSharp) {
-            str << "\t\t\t\t<accidental>double-sharp</accidental>" << std::endl;
+    bool hasSegments = false;
+    for (Composition::iterator s = m_composition->begin();
+         s != m_composition->end(); ++s) {
+        if ((*s)->getTrack() == track->getId()) {
+            hasSegments = true;
+            break;
         }
+    }
 
-        bool haveNotations = false;
-        if (e->has(TIED_BACKWARD) &&
-                e->get
-                <Bool>(TIED_BACKWARD)) {
-            if (!haveNotations) {
-                str << "\t\t\t\t<notations>" << std::endl;
-                haveNotations = true;
+    if (m_exportSelection == EXPORT_ALL_TRACKS) {
+        // Obvious.
+        return true;
+    }
+
+    if (m_exportSelection == EXPORT_NONMUTED_TRACKS) {
+        // Is track muted?
+        return !track->isMuted();
+    }
+
+    if (m_exportSelection == EXPORT_SELECTED_TRACK) {
+        return track->getId() == m_composition->getSelectedTrack();
+    }
+
+    if (m_exportSelection == EXPORT_SELECTED_SEGMENTS) {
+        //
+        // Check whather the track contains selected segments. If there are
+        // no selected segments, skip the track.
+        //
+        bool selectedSegments = false;
+        if ((m_view != NULL) && (m_view->haveSelection())) {
+            //
+            // Check whether the current segment is in the list of selected segments.
+            //
+            SegmentSelection selection = m_view->getSelection();
+            for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
+                if ((*it)->getTrack() == track->getId()) {
+                    selectedSegments = true;
+                    break;
+                }
             }
-            str << "\t\t\t\t\t<tied type=\"stop\"/>" << std::endl;
         }
-        if (e->has(TIED_FORWARD) &&
-                e->get
-                <Bool>(TIED_FORWARD)) {
-            if (!haveNotations) {
-                str << "\t\t\t\t<notations>" << std::endl;
-                haveNotations = true;
+        return selectedSegments;
+    }
+
+    return false;
+}
+
+void
+MusicXmlExporter::writeHeader(std::ostream &str)
+{
+    Configuration metadata = m_composition->getMetadata();
+
+    //! NOTE Is the usage of work/movement/credits correct???
+    if (metadata.has("title")) {
+        str << "  <work>" << std::endl;
+        str << "    <work-title>" << XmlExportable::encode(metadata.get<String>("title"))
+            << "</work-title>" << std::endl;
+        str << "  </work>" << std::endl;
+    }
+
+    if (metadata.has("subtitle")) {
+        str << "  <movement-title>"
+            << "    " << XmlExportable::encode(metadata.get<String>("subtitle"))
+            << "  </movement-title>" << std::endl;
+    }
+
+    str << "  <identification>" << std::endl;
+
+    if (metadata.has("composer")) {
+        str << "    <creator type=\"composer\">"
+            << XmlExportable::encode(metadata.get<String>("composer"))
+            << "</creator>" << std::endl;
+    }
+    if (metadata.has("poet")) {
+        str << "    <creator type=\"lyricist\">"
+            << XmlExportable::encode(metadata.get<String>("poet"))
+            << "</creator>" << std::endl;
+    }
+    if (metadata.has("arranger")) {
+        str << "    <creator type=\"arranger\">"
+            << XmlExportable::encode(metadata.get<String>("arranger"))
+            << "</creator>" << std::endl;
+    }
+    if (m_composition->getCopyrightNote() != "") {
+        str << "    <rights>"
+            << XmlExportable::encode(m_composition->getCopyrightNote())
+            << "</rights>" << std::endl;
+    }
+
+    str << "    <encoding>" << std::endl;
+    str << "      <software>Rosegarden v" VERSION "</software>" << std::endl;
+    str << "      <encoding-date>"
+        << QDateTime::currentDateTime().toString("yyyy-MM-dd")
+        << "</encoding-date>" << std::endl;
+    str << "    </encoding>" << std::endl;
+    str << "  </identification>" << std::endl;
+}
+
+MusicXmlExportHelper*
+MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
+                                   bool &exporting, bool &retValue)
+{
+    TrackVector tracks;
+    std::string name;
+    Track *track = 0;
+    Track *curTrack = 0;
+    bool inMultiStaffGroup = false;
+    InstrumentId instrument = 0;
+    bool found = false;
+    retValue = false;
+    exporting = false;
+
+    for (int trackPos = 0;
+         (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+        if (trackPos == curTrackPos) curTrack = track;
+        if (!inMultiStaffGroup) {
+            if (((m_multiStave == MULTI_STAVE_CURLY) &&
+                        (track->getStaffBracket() == Brackets::CurlyOn)) ||
+                ((m_multiStave == MULTI_STAVE_CURLY_SQUARE) &&
+                        ((track->getStaffBracket() == Brackets::CurlyOn) ||
+                         (track->getStaffBracket() == Brackets::CurlySquareOn)))) {
+                inMultiStaffGroup = true;
+                instrument = track->getInstrument();
             }
-            str << "\t\t\t\t\t<tied type=\"start\"/>" << std::endl;
         }
-        if (haveNotations) {
-            str << "\t\t\t\t</notations>" << std::endl;
+        if (inMultiStaffGroup) {
+            if (instrument == track->getInstrument()) {
+                if (exportTrack(track)) {
+                    tracks.push_back(track->getId());
+                    if (trackPos == curTrackPos) {
+                        found = true;
+                        if (tracks.size() == 1) {
+                            std::stringstream id;
+                            id << "P" << curTrack->getId();
+                            name = id.str();
+                            retValue = false;
+                        } else
+                            retValue = true;
+                    }
+                }
+            }
+            if (((m_multiStave == MULTI_STAVE_CURLY) &&
+                        (track->getStaffBracket() == Brackets::CurlyOff)) ||
+                ((m_multiStave == MULTI_STAVE_CURLY_SQUARE) &&
+                        ((track->getStaffBracket() == Brackets::CurlyOff) ||
+                         (track->getStaffBracket() == Brackets::CurlySquareOff)))) {
+                inMultiStaffGroup = false;
+                if (found) {
+                    exporting = exportTrack(curTrack);
+                    return new MusicXmlExportHelper(name, tracks, isPercussionTrack(track),
+                                            m_exportSelection == EXPORT_SELECTED_SEGMENTS,
+                                            compositionEndTime, m_composition, m_view,
+                                            m_octaveType, m_barResetType);
+                }
+                else {
+                    tracks.clear();
+                }
+            }
         }
     }
-
-    // could also do <stem>down</stem> if you wanted
-    str << "\t\t\t</note>" << std::endl;
-}
-
-void
-MusicXmlExporter::writeKey(Rosegarden::Key whichKey, std::ofstream &str)
-{
-    str << "\t\t\t\t<key>" << std::endl;
-    str << "\t\t\t\t<fifths>"
-        << (whichKey.isSharp() ? "" : "-")
-        << (whichKey.getAccidentalCount()) << "</fifths>" << std::endl;
-    str << "\t\t\t\t<mode>";
-    if (whichKey.isMinor()) {
-        str << "minor";
-    } else {
-        str << "major";
+    retValue = true;
+    if ((exporting = exportTrack(curTrack))) {
+        std::stringstream id;
+        id << "P" << curTrack->getId();
+        name = id.str();
+        tracks.push_back(curTrack->getId());
+        retValue = false;
     }
-    str << "</mode>" << std::endl;
-    str << "\t\t\t\t</key>" << std::endl;
+    return new MusicXmlExportHelper(name, tracks, isPercussionTrack(curTrack),
+                            m_exportSelection == EXPORT_SELECTED_SEGMENTS,
+                            compositionEndTime, m_composition, m_view,
+                            m_octaveType, m_barResetType);
 }
 
-void
-MusicXmlExporter::writeTime(TimeSignature timeSignature, std::ofstream &str)
+MusicXmlExporter::PartsVector
+MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
 {
-    str << "\t\t\t\t<time>" << std::endl;
-    str << "\t\t\t\t<beats>" << timeSignature.getNumerator() << "</beats>" << std::endl;
-    str << "\t\t\t\t<beat-type>" << timeSignature.getDenominator() << "</beat-type>" << std::endl;
-    str << "\t\t\t\t</time>" << std::endl;
-}
+    std::string squareOpen  = "    <part-group type=\"start\" number=\"1\">\n"
+                              "      <group-symbol>bracket</group-symbol>\n"
+                              "      <group-barline>yes</group-barline>\n"
+                              "    </part-group>\n";
+    std::string squareClose = "    <part-group type=\"stop\" number=\"1\"/>\n";
+    std::string curlyOpen  = "    <part-group type=\"start\" number=\"2\">\n"
+                             "      <group-symbol>brace</group-symbol>\n"
+                             "      <group-barline>yes</group-barline>\n"
+                             "    </part-group>\n";
+    std::string curlyClose = "    <part-group type=\"stop\" number=\"2\"/>\n";
 
-void
-MusicXmlExporter::writeClef(Clef whichClef, std::ofstream &str)
-{
-    str << "\t\t\t\t<clef>" << std::endl;
-    if (whichClef == Clef::Treble) {
-        str << "\t\t\t\t<sign>G</sign>" << std::endl;
-        str << "\t\t\t\t<line>2</line>" << std::endl;
-    } else if (whichClef == Clef::Alto) {
-        str << "\t\t\t\t<sign>C</sign>" << std::endl;
-        str << "\t\t\t\t<line>3</line>" << std::endl;
-    } else if (whichClef == Clef::Tenor) {
-        str << "\t\t\t\t<sign>C</sign>" << std::endl;
-        str << "\t\t\t\t<line>4</line>" << std::endl;
-    } else if (whichClef == Clef::Bass) {
-        str << "\t\t\t\t<sign>F</sign>" << std::endl;
-        str << "\t\t\t\t<line>4</line>" << std::endl;
-    }
-    str << "\t\t\t\t</clef>" << std::endl;
-}
+    PartsVector parts;
 
-std::string
-MusicXmlExporter::numToId(int num)
-{
-    int base = num % 52;
-    char c;
-    if (base < 26) c = 'A' + char(base);
-    else c = 'a' + char(base - 26);
-    std::string s;
-    s += c;
-    while (num / 52 > 0) {
-        s += c;
-        num /= 52;
-    }
-    return s;
+    str << "  <part-list>" << std::endl;
+
+    int writeSquareOpen = 0;
+    int writeSquareClose = 0;
+    int writeCurlyOpen = 0;
+    int writeCurlyClose = 0;
+    Track *track = 0;
+    for (int trackPos = 0;
+         (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+
+        bool exporting = false;
+        bool inMultiStaffGroup = false;
+        MusicXmlExportHelper* ctx = initalisePart(compositionEndTime, trackPos,
+                                             exporting, inMultiStaffGroup);
+        ctx->setUseOctaveShift(m_mxmlUseOctaveShift);
+        if (m_exportStaffBracket) {
+            switch (track->getStaffBracket()) {
+
+            case Brackets::SquareOn:
+                if(writeSquareOpen == 0) writeSquareOpen = 1;
+                break;
+
+            case Brackets::SquareOff:
+                if(writeSquareOpen > 1) writeSquareClose = 1;
+                else writeSquareOpen = 0;
+                break;
+
+            case Brackets::SquareOnOff:
+                if (exporting) {
+                    if(writeSquareOpen  == 0) writeSquareOpen = 1;
+                    if(writeSquareClose == 0) writeSquareClose = 1;
+                }
+                break;
+
+            case Brackets::CurlyOn:
+                if ((writeCurlyOpen == 0) && !ctx->isMultiStave()) writeCurlyOpen = 1;
+                break;
+
+            case Brackets::CurlyOff:
+                if ((writeCurlyOpen > 1) && !ctx->isMultiStave()) writeCurlyClose = 1;
+                else writeCurlyOpen = 0;
+                break;
+
+            case Brackets::CurlySquareOn:
+                if (writeSquareOpen == 0) writeSquareOpen = 1;
+                if ((writeCurlyOpen == 0) && !ctx->isMultiStave()) writeCurlyOpen = 1;
+                break;
+
+            case Brackets::CurlySquareOff:
+                if (writeSquareOpen > 1) writeSquareClose = 1;
+                else writeSquareOpen = 0;
+                if ((writeCurlyOpen > 1) && !ctx->isMultiStave()) writeCurlyClose = 1;
+                else writeCurlyOpen = 0;
+                break;
+            }
+        }
+
+        if (exporting) {
+            if (writeCurlyOpen == 1) {
+                str << curlyOpen;
+                writeCurlyOpen = 2;
+            }
+            if (writeSquareOpen == 1) {
+                str << squareOpen;
+                writeSquareOpen = 2;
+            }
+        }
+
+        if (!inMultiStaffGroup) {
+            str << "    <score-part id=\"P" << track->getId() << "\">" << std::endl;
+            str << "      <part-name>" << track->getLabel() << "</part-name>" << std::endl;
+
+            Instrument *instrument = m_doc->getStudio().getInstrumentFor(track);
+            if (instrument != NULL) {
+                InstrumentMap instruments;
+                if (isPercussionTrack(track)) {
+                    for (Composition::iterator s = m_composition->begin();
+                         s != m_composition->end(); ++s) {
+                        if ((*s)->getTrack() != track->getId()) continue;
+                        for (Segment::iterator e = (*s)->begin();
+                            e != (*s)->end(); ++e) {
+                            if ((*e)->isa(Rosegarden::Note::EventType)) {
+                                int pitch = (*e)->get<Int>(BaseProperties::PITCH);
+                                std::stringstream id;
+                                id << "P" << track->getId() << "-I" << pitch+1;
+                                InstrumentMap::iterator i = instruments.find(id.str());
+                                if ((i == instruments.end()) && instrument->getKeyMapping()) {
+                                    std::string n = instrument->getKeyMapping()->getMapForKeyName(pitch);
+                                    str << "      <score-instrument id=\"" << id.str() << "\">" << std::endl;
+                                    str << "        <instrument-name>" << n << "</instrument-name>" << std::endl;
+                                    str << "      </score-instrument>" << std::endl;
+
+                                    MidiInstrument mi;
+                                    mi.channel   = int(instrument->getMidiChannel()) + 1;
+                                    mi.program   = int(instrument->getProgramChange()) + 1;
+                                    mi.unpitched = pitch;
+                                    instruments[id.str()] = mi;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    std::stringstream id;
+                    id << "P" << track->getId() << "-I" << int(instrument->getMidiChannel());
+                    str << "      <score-instrument id=\"" << id.str() << "\">" << std::endl;
+                    str << "        <instrument-name>" << ctx->getPartName() << "</instrument-name>" << std::endl;
+                    str << "      </score-instrument>" << std::endl;
+                    MidiInstrument mi;
+                    mi.channel   = int(instrument->getMidiChannel()) + 1;
+                    mi.program   = int(instrument->getProgramChange()) + 1;
+                    mi.unpitched = -1;
+                    instruments[id.str()] = mi;
+                }
+                for (InstrumentMap::iterator i = instruments.begin();
+                     i != instruments.end(); i++) {
+                    str << "      <midi-instrument id=\"" << (*i).first << "\">" << std::endl;
+                    str << "        <midi-channel>" << (*i).second.channel << "</midi-channel>" << std::endl;
+                    str << "        <midi-program>" << (*i).second.program << "</midi-program>" << std::endl;
+                    if ((*i).second.unpitched >= 0) {
+                        str << "        <midi-unpitched>" << (*i).second.unpitched+1 << "</midi-unpitched>" << std::endl;
+                    }
+                    str << "      </midi-instrument>" << std::endl;
+                }
+                ctx->setInstrumentCount(instruments.size());
+            }
+            str << "    </score-part>" << std::endl;
+            parts.push_back(ctx);
+        } else
+            delete ctx;
+
+        if (writeSquareClose == 1) {
+            str << squareClose;
+            writeSquareClose = 0;
+            writeSquareOpen = 0;
+        }
+        if (writeCurlyClose == 1) {
+            str << curlyClose;
+            writeCurlyClose = 0;
+            writeCurlyOpen = 0;
+        }
+
+    } // for (int trackPos = 0....
+    str << "  </part-list>" << std::endl;
+    return parts;
 }
 
 bool
 MusicXmlExporter::write()
 {
-    Composition *composition = &m_doc->getComposition();
-
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
         std::cerr << "MusicXmlExporter::write() - can't write file " << m_fileName << std::endl;
         return false;
     }
+    std::cerr << "writing MusicXML to " << m_fileName << std::endl;
+    std::string version;
+    switch (m_MusicXmlVersion) {
 
-    // XML header information
-    str << "<?xml version=\"1.0\"?>" << std::endl;
-    str << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 1.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">" << std::endl;
-    // MusicXml header information
-    str << "<score-partwise>" << std::endl;
-    str << "\t<work> <work-title>" << XmlExportable::encode(m_fileName)
-        << "</work-title></work> " << std::endl;
-    // Movement, etc. info goes here
-    str << "\t<identification> " << std::endl;
-    if (composition->getCopyrightNote() != "") {
-        str << "\t\t<rights>"
-        << XmlExportable::encode(composition->getCopyrightNote())
-        << "</rights>" << std::endl;
-    }
-    str << "\t\t<encoding>" << std::endl;
-    // Incomplete: Insert date!
-    //    str << "\t\t\t<encoding-date>" << << "</encoding-date>" << std::endl;
-    str << "\t\t\t<software>Rosegarden v" VERSION "</software>" << std::endl;
-    str << "\t\t</encoding>" << std::endl;
-    str << "\t</identification> " << std::endl;
+    case 0:
+        version = "1.1";
+        break;
 
-    // MIDI information
-    str << "\t<part-list>" << std::endl;
-    Composition::trackcontainer& tracks = composition->getTracks();
+    case 1:
+        version = "2.0";
+        break;
 
-    int trackNo = 0;
-    timeT lastNoteTime = -1;
-
-    for (Composition::trackiterator i = tracks.begin();
-            i != tracks.end(); ++i) {
-        // Incomplete: What about all the other Midi stuff?
-        // Incomplete: (Future) GUI to set labels if they're not already
-        Instrument * trackInstrument = (&m_doc->getStudio())->getInstrumentById((*i).second->getInstrument());
-        str << "\t\t<score-part id=\"" << numToId((*i).first) << "\">" << std::endl;
-        str << "\t\t\t<part-name>" << XmlExportable::encode((*i).second->getLabel()) << "</part-name>" << std::endl;
-        if (trackInstrument) {
-/*
-  Removing this stuff for now.  It doesn't work, because the ids are
-  are expected to be non-numeric names that refer to elements
-  elsewhere that define the actual instruments.  I think.
-
-            str << "\t\t\t<score-instrument id=\"" << trackInstrument->getName() << "\">" << std::endl;
-            str << "\t\t\t\t<instrument-name>" << trackInstrument->getType() << "</instrument-name>" << std::endl;
-            str << "\t\t\t</score-instrument>" << std::endl;
-            str << "\t\t\t<midi-instrument id=\"" << trackInstrument->getName() << "\">" << std::endl;
-            str << "\t\t\t\t<midi-channel>" << ((unsigned int)trackInstrument->getMidiChannel() + 1) << "</midi-channel>" << std::endl;
-            if (trackInstrument->sendsProgramChange()) {
-                str << "\t\t\t\t<midi-program>" << ((unsigned int)trackInstrument->getProgramChange() + 1) << "</midi-program>" << std::endl;
-            }
-            str << "\t\t\t</midi-instrument>" << std::endl;
-*/
-        }
-        str << "\t\t</score-part>" << std::endl;
-
-        emit setValue(int(double(trackNo++) / double(tracks.size()) * 20.0));
-        rosegardenApplication->refreshGUI(50);
-
-    } // end track iterator
-    str << "\t</part-list>" << std::endl;
-
-    // Notes!
-    // Write out all segments for each Track
-    trackNo = 0;
-
-    for (Composition::trackiterator j = tracks.begin();
-            j != tracks.end(); ++j) {
-
-        bool startedPart = false;
-
-        // Code courtesy docs/code/iterators.txt
-        CompositionTimeSliceAdapter::TrackSet trackSet;
-
-        // Incomplete: get the track info for each track (i.e. this should
-        // be in an iterator loop) into the track set
-        trackSet.insert((*j).first);
-        CompositionTimeSliceAdapter adapter(composition, trackSet);
-
-        int oldMeasureNumber = -1;
-        bool startedAttributes = false;
-        Rosegarden::Key key;
-        Clef clef;
-        AccidentalTable accTable(key, clef);
-        TimeSignature prevTimeSignature;
-
-        bool timeSigPending = false;
-        bool keyPending = false;
-        bool clefPending = false;
-
-        for (CompositionTimeSliceAdapter::iterator k = adapter.begin();
-                k != adapter.end(); ++k) {
-
-            Event *event = *k;
-            timeT absoluteTime = event->getNotationAbsoluteTime();
-
-            if (!startedPart) {
-                str << "\t<part id=\"" << numToId((*j).first) << "\">" << std::endl;
-                startedPart = true;
-            }
-
-            // Open a new measure if necessary
-            // Incomplete: How does MusicXML handle non-contiguous measures?
-
-            int measureNumber = composition->getBarNumber(absoluteTime);
-
-            TimeSignature timeSignature = composition->getTimeSignatureAt(absoluteTime);
-
-            if (measureNumber != oldMeasureNumber) {
-
-                if (startedAttributes) {
-                    
-                    // rather bizarrely, MusicXML appears to require
-                    // key, time, clef in that order
-
-                    if (keyPending) {
-                        writeKey(key, str);
-                        keyPending = false;
-                    }
-                    if (timeSigPending) {
-                        writeTime(prevTimeSignature, str);
-                        timeSigPending = false;
-                    }
-                    if (clefPending) {
-                        writeClef(clef, str);
-                        clefPending = false;
-                    }
-
-                    str << "\t\t\t</attributes>" << std::endl;
-                    startedAttributes = false;
-                }
-
-                while (measureNumber > oldMeasureNumber) {
-
-                    bool first = (oldMeasureNumber < 0);
-
-                    if (!first) {
-                        if (startedAttributes) {
-                            str << "\t\t\t</attributes>" << std::endl;
-                            startedAttributes = false;
-                        }                            
-                        str << "\t\t</measure>\n" << std::endl;
-                    }
-
-                    ++oldMeasureNumber;
-
-                    str << "\t\t<measure number=\"" << (oldMeasureNumber + 1) << "\">" << std::endl;
-
-                    if (first) {
-                        str << "\t\t\t<attributes>" << std::endl;
-                        // Divisions is divisions of crotchet (quarter-note) on which all
-                        // note-lengths are based
-                        str << "\t\t\t\t<divisions>" << Note(Note::Crotchet).getDuration() << "</divisions>" << std::endl;
-                        startedAttributes = true;
-                        timeSigPending = true;
-                    }
-                }
-
-                accTable = AccidentalTable(key, clef);
-            }
-
-            oldMeasureNumber = measureNumber;
-
-            if (timeSignature != prevTimeSignature) {
-                prevTimeSignature = timeSignature;
-                timeSigPending = true;
-                if (!startedAttributes) {
-                    str << "\t\t\t<attributes>" << std::endl;
-                    startedAttributes = true;
-                }
-            }
-
-            // process event
-            if (event->isa(Rosegarden::Key::EventType)) {
-
-                if (!startedAttributes) {
-                    str << "\t\t\t<attributes>" << std::endl;
-                    startedAttributes = true;
-                }
-                key = Rosegarden::Key(*event);
-                keyPending = true;
-                accTable = AccidentalTable(key, clef);
-
-            } else if (event->isa(Clef::EventType)) {
-
-                if (!startedAttributes) {
-                    str << "\t\t\t<attributes>" << std::endl;
-                    startedAttributes = true;
-                }
-                clef = Clef(*event);
-                clefPending = true;
-                accTable = AccidentalTable(key, clef);
-
-            } else if (event->isa(Note::EventRestType) ||
-                       event->isa(Note::EventType)) {
-                
-                if (startedAttributes) {
-                
-                    if (keyPending) {
-                        writeKey(key, str);
-                        keyPending = false;
-                    }
-                    if (timeSigPending) {
-                        writeTime(prevTimeSignature, str);
-                        timeSigPending = false;
-                    }
-                    if (clefPending) {
-                        writeClef(clef, str);
-                        clefPending = false;
-                    }
-
-                    str << "\t\t\t</attributes>" << std::endl;
-                    startedAttributes = false;
-                }
-
-                writeNote(event, lastNoteTime, accTable, clef, key, str);
-
-                if (event->isa(Note::EventType)) {
-                    lastNoteTime = event->getNotationAbsoluteTime();
-                } else if (event->isa(Note::EventRestType)) {
-                    lastNoteTime = -1;
-                }
-            }
-        }
-
-        if (startedPart) {
-            if (startedAttributes) {
-                
-                if (keyPending) {
-                    writeKey(key, str);
-                    keyPending = false;
-                }
-                if (timeSigPending) {
-                    writeTime(prevTimeSignature, str);
-                    timeSigPending = false;
-                }
-                if (clefPending) {
-                    writeClef(clef, str);
-                    clefPending = false;
-                }
-                
-                str << "\t\t\t</attributes>" << std::endl;
-                startedAttributes = false;
-            }
-
-            str << "\t\t</measure>" << std::endl;
-            str << "\t</part>" << std::endl;
-        }
-
-        emit setValue(20 +
-                         int(double(trackNo++) / double(tracks.size()) * 80.0));
-        rosegardenApplication->refreshGUI(50);
+    default:
+        version = "1.1";
+        break;
     }
 
-    str << "</score-partwise>" << std::endl;
+    // Find out the printed length of the composition
+    timeT compositionStartTime = 0;
+    timeT compositionEndTime = 0;
+    for ( Composition::iterator i = m_composition->begin(); i != m_composition->end(); ++i) {
+
+        // Allow some oportunities for user to cancel
+        if (isOperationCancelled()) {
+            return false;
+        }
+
+        if (compositionStartTime > (*i)->getStartTime()) {
+            compositionStartTime = (*i)->getStartTime();
+        }
+        if (compositionEndTime < (*i)->getEndMarkerTime()) {
+            compositionEndTime = (*i)->getEndMarkerTime();
+        }
+    }
+    bool pickup = compositionStartTime < 0;
+
+    if (m_mxmlDTDType == DTD_PARTWISE) {
+        // XML header information
+        str << "<?xml version=\"1.0\"?>" << std::endl;
+        str << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML " << version
+            << " Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">" << std::endl;
+        str << "<score-partwise version=\"" << version << "\">" << std::endl;
+
+        // Write the MusicXML header
+        writeHeader(str);
+        PartsVector parts = writeScorePart(compositionEndTime, str);
+//         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
+//             (*c)->printSummary();
+
+        for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++) {
+            str << "  <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
+            int bar = pickup ? -1 : 0;
+            while (m_composition->getBarEnd(bar) <= compositionEndTime) {
+                // Allow some oportunities for user to cancel
+                if (isOperationCancelled()) {return false;}
+
+                emit setValue(int(double(bar) /
+                              double(m_composition->getNbTracks()) * 100.0));
+
+                str << "    <measure number=\"" << bar+1 << "\"";
+                if (bar < 0) str << " implicit=\"yes\"";
+                str << ">" << std::endl;
+                (*c)->writeEvents(bar, str);
+                str << "    </measure>" << std::endl;
+                bar++;
+            } // while (m_composition->getBarEnd(bar) < ...
+            str << "  </part>" << std::endl;
+        } // for (int trackPos = 0....
+        str << "</score-partwise>" << std::endl;
+        for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
+            delete *c;
+    } else {
+        // XML header information
+        str << "<?xml version=\"1.0\"?>" << std::endl;
+        str << "<!DOCTYPE score-timewise PUBLIC \"-//Recordare//DTD MusicXML " << version
+            << " Timewise//EN\" \"http://www.musicxml.org/dtds/timewise.dtd\">" << std::endl;
+        str << "<score-timewise version=\"" << version << "\">" << std::endl;
+
+        // Write the MusicXML header
+        writeHeader(str);
+        PartsVector parts = writeScorePart(compositionEndTime, str);
+//         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
+//             (*c)->printSummary();
+
+        int bar = 0;
+        while (m_composition->getBarEnd(bar) <= compositionEndTime) {
+            str << "  <measure number=\"" << bar+1 << "\">" << std::endl;
+            for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++) {
+                // Allow some oportunities for user to cancel
+                if (isOperationCancelled()) {return false;}
+
+                emit setValue(int(double(bar) /
+                              double(m_composition->getNbTracks()) * 100.0));
+
+                str << "    <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
+                (*c)->writeEvents(bar, str);
+                str << "    </part>" << std::endl;
+            } // for (int trackPos = 0....
+            str << "  </measure>" << std::endl;
+            bar++;
+        } // while (m_composition->getBarEnd(bar) < ...
+        str << "</score-timewise>" << std::endl;
+        for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
+            delete *c;
+    }
     str.close();
+    std::cerr << "MusicXML generated.\n";
     return true;
 }
 

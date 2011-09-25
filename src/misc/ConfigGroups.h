@@ -49,6 +49,7 @@ namespace Rosegarden
     extern const char* const PresetDialogConfigGroup;
     extern const char* const ExternalApplicationsConfigGroup;
     extern const char* const LilyPondExportConfigGroup;
+    extern const char* const MusicXMLExportConfigGroup;
     extern const char* const LastUsedPathsConfigGroup;
     extern const char* const WindowGeometryConfigGroup;
     extern const char* const TempDirectoryConfigGroup;
