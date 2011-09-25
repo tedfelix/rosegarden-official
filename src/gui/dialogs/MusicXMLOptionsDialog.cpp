@@ -219,9 +219,8 @@ MusicXMLOptionsDialog::help()
     // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
     // Spanish version. If your language doesn't yet have a translation, feel
     // free to create one.
-    //&&& Sorry, no documentation available (yet?).
-//     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en");
-//     QDesktopServices::openUrl(QUrl(helpURL));
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 
