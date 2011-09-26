@@ -710,15 +710,9 @@ TrackEditor::slotTurnLinkedSegmentsToRealCopies()
     SegmentSelection segments =
         m_compositionView->getSelectedSegments();
 
-    if (segments.size() == 0)
-        return ;
+    if (segments.size() == 0) return ;
 
-    QString text;
-
-    if (segments.size() == 1)
-        text = tr("Turn Linked Segment into Real Copies");
-    else
-        text = tr("Turn Linked Segments into Real Copies");
+    QString text = tr("Turn %n Linked Segment(s) into Real Copies", "", segments.size());
 
     MacroCommand *macro = new MacroCommand(text);
 
