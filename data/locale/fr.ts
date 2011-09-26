@@ -22835,15 +22835,13 @@ Souhaitez vous le faire tout de suite ?</translation>
         <source>Turn Repeating Segments into Real Copies</source>
         <translation>Transformer les répétitions des segments en véritables copies</translation>
     </message>
-    <message>
-        <location line="+29"/>
-        <source>Turn Linked Segment into Real Copies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Turn Linked Segments into Real Copies</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location line="+25"/>
+        <source>Turn %n Linked Segment(s) into Real Copies</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location line="+230"/>
