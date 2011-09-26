@@ -2061,12 +2061,12 @@
     <message>
         <location line="+12"/>
         <source>Dump staves (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dump staves (debug)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dump BarDataMap (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dump BarDataMap (debug)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -2077,7 +2077,7 @@
     <message>
         <location line="-2022"/>
         <source>Add Clef Change in this link only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir cambio de clave unicamente en este vínculo...</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -4465,13 +4465,13 @@
     <message>
         <location line="+55"/>
         <source>Paste as &amp;Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Pegar como &amp;vinculos</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+V</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -4496,12 +4496,12 @@
     <message>
         <location line="+9"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Pegar tempos y compases</translation>
+        <translation>Pegar tempos y compases</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clear Range of Tempos</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar todos los tempos dentro del ámbito</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4690,7 +4690,7 @@
     <message>
         <location line="+1"/>
         <source>Turn Li&amp;nks into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir &amp;vinculos en copías</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12232,7 +12232,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+90"/>
         <source>Add Cl&amp;ef Change for linked segment...</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir cambio de &amp;clave para el segmento vinculado...</translation>
     </message>
 </context>
 <context>
@@ -13159,7 +13159,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/commands/segment/EraseTempiInRangeCommand.cpp" line="+30"/>
         <source>Erase Tempos in Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar tempos dentro del ámbito</translation>
     </message>
 </context>
 <context>
@@ -14107,7 +14107,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+194"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es necesario reiniciar Rosegarden para realizar el cambio de presentación.</translation>
     </message>
     <message>
         <location line="-290"/>
@@ -16929,102 +16929,102 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="+60"/>
         <source>MusicXML Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar MusicXML</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Layout</source>
-        <translation type="unfinished">Formato</translation>
+        <translation>Formato</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Headers</source>
-        <translation type="unfinished">Cabeceras</translation>
+        <translation>Cabeceras</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Basic options</source>
-        <translation type="unfinished">Opciones básicas</translation>
+        <translation>Opciones básicas</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Export content</source>
-        <translation type="unfinished">Contenido para exportar</translation>
+        <translation>Contenido para exportar</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Elegir cuáles pistas o segmentos para exportar&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Elegir cuáles pistas o segmentos para exportar&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>All tracks</source>
-        <translation type="unfinished">Todas las pistas</translation>
+        <translation>Todas las pistas</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Non-muted tracks</source>
-        <translation type="unfinished">Pistas no silenciadas</translation>
+        <translation>Pistas no silenciadas</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>Pista seleccionada</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected segments</source>
-        <translation type="unfinished">Segmentos seleccionados</translation>
+        <translation>Segmentos seleccionados</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished">Exportar paréntesis</translation>
+        <translation>Exportar paréntesis</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Los paréntesis se encuentran en la caja de &lt;b&gt;Parámetros de pista&lt;/b&gt; box, y pueden utilizarse para agrupar pentagramas de modo variado&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Los paréntesis se encuentran en la caja de &lt;b&gt;Parámetros de pista&lt;/b&gt; box, y pueden utilizarse para agrupar pentagramas de modo variado&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Advanced/Experimental options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones avanzadas/experimentales</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Compatibility level</source>
-        <translation type="unfinished">Nivel de compatibilidad</translation>
+        <translation>Nivel de compatibilidad</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Elegir la versión de MusicXML disponible en su sistema.  Si tiene una versión más actualizada, elija la más alta que Rosegarden soporta.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>MusicXML type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de MusicXML</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.Both partwise and timewise file are available.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Elegir el formato del archivo MusicXML.  «Partwise» (utilizando el parte) y «timewise» (utilizando el tiempo) están disponibles.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Export multistave instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar un instrumento que emplea dos o más pentagramas</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>None</source>
-        <translation type="unfinished">Nada</translation>
+        <translation>Nada</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;Choose which bracket will create a multi staff system&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;Elegir &lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -19106,7 +19106,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/segment/RemoveTempoChangeCommand.h" line="+53"/>
         <source>Remove &amp;Tempo Change...</source>
-        <translation>Eliminar cambio de &amp;tempo</translation>
+        <translation>Eliminar cambio de &amp;tempo...</translation>
     </message>
 </context>
 <context>
@@ -19453,7 +19453,7 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location line="+54"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+245"/>
@@ -20644,7 +20644,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+68"/>
         <source>Reset Transpose on Linked Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar trasporte en segmentos vinculados</translation>
     </message>
 </context>
 <context>
@@ -20652,7 +20652,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkToCopyCommand.h" line="+43"/>
         <source>Turn Links into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir vinculos en copías</translation>
     </message>
 </context>
 <context>
@@ -20660,7 +20660,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="-20"/>
         <source>Transpose Linked Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasportar segmentos vinculados</translation>
     </message>
 </context>
 <context>
@@ -20762,27 +20762,27 @@ Error fue : %2</translation>
     <message>
         <location line="+21"/>
         <source>Linked segment parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parámetros de segmento vinculado</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Editar el trasporte relativo en el segmento vinculado&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Reset</source>
-        <translation type="unfinished">Reiniciar</translation>
+        <translation>Reiniciar</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Reiniciar el trasporte relativo en el segmento vinculado&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+56"/>
@@ -20809,18 +20809,19 @@ Error fue : %2</translation>
         <location line="+411"/>
         <location line="+46"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="-45"/>
         <source>Existing transpositions on selected linked segments must be removed
 before new transposition can be applied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es necesario borrar el trasporte existente en segmentos vinculados
+antes de hacer nuevo trasporte.</translation>
     </message>
     <message>
         <location line="+46"/>
         <source>Remove transposition on selected linked segments?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Borrar el trasporte en segmentos vinculados seleccionados?</translation>
     </message>
     <message>
         <location line="+93"/>
@@ -20904,12 +20905,12 @@ before new transposition can be applied.</source>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.h" line="+43"/>
         <source>Quick-Link Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Vínculo rápido de segmento</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.cpp" line="+54"/>
         <source>(linked)</source>
-        <translation type="unfinished"></translation>
+        <translation>(vinculado)</translation>
     </message>
 </context>
 <context>
@@ -21034,7 +21035,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; doble clic para editar</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -21629,7 +21630,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+34"/>
         <source>Reset Transpose on Linked Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar trasporte en segmento vinculado</translation>
     </message>
 </context>
 <context>
@@ -22836,7 +22837,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location line="+29"/>
         <source>Turn Linked Segment into Real Copies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Convertir segmento vinculado en copias reales</translation>
     </message>
     <message>
         <location line="+2"/>
