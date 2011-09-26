@@ -22835,13 +22835,14 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <translation>Convertir repeticiones de segmentos en copias reales</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Turn %n Linked Segment(s) into Real Copies</source>
-        <translation type="unfinished"></translation>
+        <location line="+29"/>
+        <source>Turn Linked Segment into Real Copies</source>
+        <translation type="unfinished">Convertir segmento vinculado en copias reales</translation>
     </message>
     <message>
-        <source>Turn Linked Segment into Real Copies</source>
-        <translation type="obsolete">Convertir segmento vinculado en copias reales</translation>
+        <location line="+2"/>
+        <source>Turn Linked Segments into Real Copies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+230"/>
