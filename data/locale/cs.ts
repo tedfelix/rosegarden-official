@@ -24407,23 +24407,22 @@ Chcete cestu nastavit nyní?</translation>
         <source>Turn Repeating Segments into Real Copies</source>
         <translation>Převést opakující se části na skutečné kopie</translation>
     </message>
-    <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="719"/>
-        <source>Turn Linked Segment into Real Copies</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="715"/>
+        <source>Turn %n Linked Segment(s) into Real Copies</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="721"/>
-        <source>Turn Linked Segments into Real Copies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="951"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="945"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="952"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="946"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden nemůže přijmout upuštěné soubory tohoto typu.</translation>
     </message>
