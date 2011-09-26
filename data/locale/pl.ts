@@ -23935,8 +23935,13 @@ Czy chciałbyś ją teraz ustawić?</translation>
         <translation type="unfinished">Zamień Repetycje Segmentów w Rzeczywiste Kopie</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Turn %n Linked Segment(s) into Real Copies</source>
+        <location line="+29"/>
+        <source>Turn Linked Segment into Real Copies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Turn Linked Segments into Real Copies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
