@@ -128,7 +128,7 @@ MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
     // Music XML version/
     layoutAdvanced->addWidget(new QLabel(tr("Compatibility level"), frameBasic), 0, 0);
     m_mxmlVersion = new QComboBox(frameAdvanced);
-    m_mxmlVersion->setToolTip(tr("<qt>Set the MusicXML version you want export.</qt>"));
+    m_mxmlVersion->setToolTip(tr("<qt>Set the MusicXML version you want export</qt>"));
     m_mxmlVersion->addItem("MusicXML 1.1");
     m_mxmlVersion->addItem("MusicXML 2.0");
     m_mxmlVersion->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -137,8 +137,7 @@ MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
     // part-wise or score-wise score.
     layoutAdvanced->addWidget(new QLabel(tr("MusicXML type"), frameBasic), 1, 0);
     m_mxmlDTDType = new QComboBox(frameBasic);
-    m_mxmlDTDType->setToolTip(tr("<qt><p>Choose the format of the MusicXML file."
-                                  "Both partwise and timewise file are available.</p></qt>"));
+    m_mxmlDTDType->setToolTip(tr("<qt><p>Choose the format of the MusicXML file.</p><p>The &quot;partwise&quot; format contains &quot;part&quot; elements that contain &quot;measure&quot; elements.  The &quot;timewise&quot; format reverses this ordering.</p></qt>"));
     m_mxmlDTDType->addItem("partwise");
     m_mxmlDTDType->addItem("timewise");
     m_mxmlDTDType->setMinimumWidth(150);
@@ -154,31 +153,18 @@ MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
 
     m_mxmlExportPercussion = new QComboBox(frameAdvanced);
     m_mxmlExportPercussion->addItem(tr("Don't export percussion tracks"));
-    m_mxmlExportPercussion->addItem("Export percussion tracks as notes");
-    m_mxmlExportPercussion->addItem("Export percussion tracks as percussion (experimental)");
+    m_mxmlExportPercussion->addItem("Export percussion as notes");
+    m_mxmlExportPercussion->addItem("Export percussion as percussion (experimental)");
 
     layoutAdvanced->addWidget(m_mxmlExportPercussion, 3, 0, 1, 2);
     m_mxmlExportPercussion->setToolTip(
-        tr("<qt>Exporting percussion is still experimental.<br>"
-           "Percussion can be exported &quot;as notes&quot; or &quot;as percussion&quot;. "
-           "When exporting &quot;as notes&quot; a percussion track is handled as a normal "
-           "track.<br>If a track is exported &quot;as percussion&quot; it will be exported as "
-           "a MusicXML percussion part. Since Rosegarden hasn't a real percussion "
-           "notation MusicXML Export tries to convert the percussion track to a percussion "
-           "notation. This option is still experimental.</qt>"));
+        tr("<qt><p>Exporting percussion is still experimental.</p>Percussion can be exported &quot;as notes&quot; or &quot;as percussion.&quot;  When exporting &quot;as notes&quot; a percussion track is handled as a normal track.</p><p>If a track is exported &quot;as percussion&quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn't have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still <b>experimental</b>.</p></qt>"));
 
     m_mxmlUseOctaveShift = new QCheckBox(tr("Use \"<octave-shift>\" for transposing instruments"),
                                          frameAdvanced);
     layoutAdvanced->addWidget(m_mxmlUseOctaveShift, 4, 0, 1, 2);
     m_mxmlUseOctaveShift->setToolTip(
-        tr("<qt>Some transposing instruments (like a tenor or bariton sax) transposes "
-           "over more than 1 octave. For such large transpositions some tools require "
-           "a \"&lt;octave-shif&gt;\" element while other tools will not support this element! "
-           "Therefor the use of the \"&lt;octave-shift&gt;\" element can be controlled by "
-           "this option.<br>"
-           "When importing the MusicXML file into another tool, check transposing instrument "
-           "carefully in both concert and notated pitch. When this is not correct toggling "
-           "this option might help.</qt>"));
+        tr("<qt><p>Some transposing instruments (like a tenor or baritone sax) transpose over more than one octave.  For such large transpositions some tools require an &quot;&lt;octave-shift&gt;&quot; element while other tools do not support this element at all.</p><p>When importing the MusicXML file into another tool, check transposing instruments carefully in both concert and notated pitch. When this is not correct toggling this option might help.</p></qt>"));
 
     layoutGrid->setRowStretch(4, 10);
 
@@ -264,6 +250,10 @@ MusicXMLOptionsDialog::slotApply()
 
     //! NOTE Does this sets the "document changed" flag???
     //! apparantly! Why??????
+    //
+    // If you edit the headers, those are stored in the document, so the
+    // document might have changed when you have something to apply.  This could
+    // probably be handled in a more fine-grained and robust manner. -dmm
     m_headersPage->apply();
 }
 
