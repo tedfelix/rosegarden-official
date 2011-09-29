@@ -69,6 +69,7 @@
 
 #include <sstream>
 #include <algorithm>
+#include <limits>
 
 namespace Rosegarden
 {
@@ -140,6 +141,50 @@ LilyPondExporter::~LilyPondExporter()
 {
     delete(m_language);
 }
+
+bool
+LilyPondExporter::isSegmentToPrint(Segment *seg)
+{
+    bool currentSegmentSelected = false;
+    if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 
+        (m_view != NULL) && (m_view->haveSelection())) {
+        //
+        // Check whether the current segment is in the list of selected segments.
+        //
+        SegmentSelection selection = m_view->getSelection();
+        for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
+            if ((*it) == seg) currentSegmentSelected = true;
+        }
+#ifdef NOT_JUST_NOW //!!!
+    } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
+        currentSegmentSelected = m_notationView->hasSegment(seg);
+#endif
+    }
+
+    // Check whether the track is a non-midi track.
+    Track *track = m_composition->getTrackById(seg->getTrack());
+    InstrumentId instrumentId = track->getInstrument();
+    bool isMidiTrack = instrumentId >= MidiInstrumentBase;
+
+    // Look for various printing selection modes
+    bool ok1 = m_exportSelection == EXPORT_ALL_TRACKS;
+    bool ok2 = (m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted());
+    bool ok3 = (m_exportSelection == EXPORT_SELECTED_TRACK)
+               && (m_view != NULL)
+               && (track->getId() == m_composition->getSelectedTrack());
+#ifdef NOT_JUST_NOW //!!!
+    bool ok4 = (m_exportSelection == EXPORT_SELECTED_TRACK)
+               && (m_notationView != NULL)
+               && (track->getId() == m_notationView->getCurrentSegment()->getTrack());
+#else
+    bool ok4 = false;
+#endif
+    bool ok5 = (m_exportSelection == EXPORT_SELECTED_SEGMENTS) && currentSegmentSelected;
+
+    // Skip non-midi tracks and return true if segment is selected
+    return isMidiTrack && (ok1 || ok2 || ok3 || ok4 || ok5);
+}
+
 
 void
 LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
@@ -754,20 +799,51 @@ LilyPondExporter::write()
         }
     }
 
+
+
+    // If some segment is not starting at a bar boundary, adapted
+    // \partial or \skip keywords must be added to the output file.
+    // We have to know what segment is the first to start when
+    // we need to compute the data going with such \partial and \skip.
+    // We can't rely on compositionStartTime to compute such data
+    // because the first segment of the composition may be being not printed.
+    // Following code is finding out the start time of the first segment
+    // being printed.
+
+    timeT firstSegmentStartTime = std::numeric_limits<timeT>::max();
+    for (Composition::iterator i = m_composition->begin();
+            i != m_composition->end(); ++i) {
+        if (isSegmentToPrint(*i)) {
+            if ((*i)->getStartTime() < firstSegmentStartTime) {
+                firstSegmentStartTime = (*i)->getStartTime();
+            }
+        }
+    }
+
+
+
+
+
     // define global context which is common for all staffs
     str << indent(col++) << "global = { " << std::endl;
     TimeSignature timeSignature = m_composition->
         getTimeSignatureAt(m_composition->getStartMarker());
-    if (m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime)) < compositionStartTime) {
-        str << indent(col) << "\\partial ";
-        // Arbitrary partial durations are handled by the following way:
-        // split the partial duration to 64th notes: instead of "4" write "64*16". (hjj)
-        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
-        int partialDuration = m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime) + 1) - compositionStartTime;
-        writeDuration(1, str);
-        str << "*" << ((int)(partialDuration / partialNote.getDuration()))
-            << std::endl;
-    }
+
+///YG: Should not the anacrusis fix be done segment by segment rather than globally ?
+///     ==> \partial temporarily remove from the global context 
+    // The \partial should be relative to firstSegmentStartTime rather than to
+    // compositionStartTime because we may not be printing the whole composition...
+//     if (m_composition->getBarStart(m_composition->getBarNumber(firstSegmentStartTime)) < firstSegmentStartTime) {
+//         str << indent(col) << "\\partial ";
+//         // Arbitrary partial durations are handled by the following way:
+//         // split the partial duration to 64th notes: instead of "4" write "64*16". (hjj)
+//         Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+//         int partialDuration = m_composition->getBarStart(m_composition->getBarNumber(firstSegmentStartTime) + 1) - firstSegmentStartTime;
+//         writeDuration(1, str);
+//         str << "*" << ((int)(partialDuration / partialNote.getDuration()))
+//             << std::endl;
+//     }
+
     int leftBar = 0;
     int rightBar = leftBar;
     do {
@@ -929,6 +1005,7 @@ LilyPondExporter::write()
         str << indent(--col) << "}" << std::endl;
     }
 
+
     // open \score section
     str << "\\score {" << std::endl;
 
@@ -954,7 +1031,7 @@ LilyPondExporter::write()
         if (isOperationCancelled()) {
             return false;
         }
-        
+
         for (Composition::iterator i = m_composition->begin();
              i != m_composition->end(); ++i) {
 
@@ -1004,37 +1081,8 @@ LilyPondExporter::write()
                               
             qApp->processEvents(QEventLoop::AllEvents, 100);
             //            rosegardenApplication->refreshGUI(50);
-        
-            bool currentSegmentSelected = false;
-            if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 
-                (m_view != NULL) && (m_view->haveSelection())) {
-                //
-                // Check whether the current segment is in the list of selected segments.
-                //
-                SegmentSelection selection = m_view->getSelection();
-                for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
-                    if ((*it) == (*i)) currentSegmentSelected = true;
-                }
-#ifdef NOT_JUST_NOW //!!!
-            } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
-                currentSegmentSelected = m_notationView->hasSegment(*i);
-#endif
-            }
 
-            // Check whether the track is a non-midi track.
-            InstrumentId instrumentId = track->getInstrument();
-            bool isMidiTrack = instrumentId >= MidiInstrumentBase;
-
-            if (isMidiTrack && (// Skip non-midi tracks.
-                                (m_exportSelection == EXPORT_ALL_TRACKS) || 
-                                ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
-                                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) &&
-                                 (track->getId() == m_composition->getSelectedTrack())) ||
-#ifdef NOT_JUST_NOW //!!!
-                                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) &&
-                                 (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
-#endif
-                                ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (currentSegmentSelected)))) {
+            if (isSegmentToPrint(*i)) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)
@@ -1296,6 +1344,39 @@ LilyPondExporter::write()
                               false, str);
                 }
 
+///YG: Since \partial has been removed from the global context :
+// If segment is not starting on a bar, but is starting at barTime + offset,
+// we have to do :
+//     if segment is the first one : add partial (barDuration - offset)
+//     else  add skip (offset)
+                if ((*i)->getStartTime() - m_composition->getBarStart(firstBar) > 0) {
+                    if ((*i)->getStartTime() == firstSegmentStartTime) {
+                        timeT partialDuration = m_composition->getBarStart(firstBar + 1)
+                                                - (*i)->getStartTime();
+                        str << indent(col) << "\\partial ";
+                        // Arbitrary partial durations are handled by the following
+                        // way: split the partial duration to 64th notes: instead
+                        // of "4" write "64*16". (hjj)
+                        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+                        writeDuration(1, str);
+                        str << "*" << ((int)(partialDuration / partialNote.getDuration()))
+                            << std::endl;
+
+                    } else {
+                        timeT partialOffset = (*i)->getStartTime()
+                                              - m_composition->getBarStart(firstBar);
+                        str << indent(col) << "\\skip ";
+                        // Arbitrary partial durations are handled by the following
+                        // way: split the partial duration to 64th notes: instead
+                        // of "4" write "64*16". (hjj)
+                        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+                        writeDuration(1, str);
+                        str << "*" << ((int)(partialOffset / partialNote.getDuration()))
+                            << std::endl;
+                    }
+                }
+
+
                 std::string lilyText = "";      // text events
                 std::string prevStyle = "";     // track note styles
 
@@ -1518,7 +1599,7 @@ LilyPondExporter::write()
                         } // if (rx.search(text....
                     } // for (long currentVerse = 0....
                 } // if (m_exportLyrics....
-            } // if (isMidiTrack.... 
+            } // if (isSegmentToPrint.... 
             firstTrack = false;
         } // for (Composition::iterator i = m_composition->begin()....
     } // for (int trackPos = 0....

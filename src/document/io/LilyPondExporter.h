@@ -99,6 +99,11 @@ protected:
     LilyPondLanguage *m_language;
 
     void readConfigVariables(void);
+
+    // Return true if the given segment has to be print
+    // (readConfigVAriables() should have been called before)
+    bool isSegmentToPrint(Segment *seg);
+
     void writeBar(Segment *, int barNo, timeT barStart, timeT barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText,
                   std::string &prevStyle,
