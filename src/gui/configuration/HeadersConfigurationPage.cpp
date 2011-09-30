@@ -84,7 +84,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         if (property == key) {
 
             // get the std::string from metadata
-            header = metadata.get<String>(property);
+            header = strtoqstr(metadata.get<String>(property)).toStdString();
 
             //@@@ dtb: tr() only works with char* now, so I'm going to try
             // using header directly instead of a QString version of header.
