@@ -661,6 +661,8 @@ MusicXmlExportHelper::addClef(const Event &event)
 {
     Clef clef(event);
 
+    if (clef == m_staves[m_staff].clef) return;
+
     std::stringstream tmp;
     tmp << "        <clef";
     if (isMultiStave()) tmp << " number=\"" << m_staff+1 << "\"";
