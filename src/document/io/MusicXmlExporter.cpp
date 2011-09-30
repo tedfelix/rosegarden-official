@@ -512,7 +512,7 @@ MusicXmlExporter::write()
         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++) {
             str << "  <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
             int bar = pickup ? -1 : 0;
-            while (m_composition->getBarEnd(bar) <= compositionEndTime) {
+            while (m_composition->getBarStart(bar) < compositionEndTime) {
                 // Allow some oportunities for user to cancel
                 if (isOperationCancelled()) {return false;}
 
@@ -545,7 +545,7 @@ MusicXmlExporter::write()
 //             (*c)->printSummary();
 
         int bar = 0;
-        while (m_composition->getBarEnd(bar) <= compositionEndTime) {
+        while (m_composition->getBarStart(bar) < compositionEndTime) {
             str << "  <measure number=\"" << bar+1 << "\">" << std::endl;
             for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++) {
                 // Allow some oportunities for user to cancel
