@@ -4503,12 +4503,12 @@
     <message>
         <location line="+9"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Coller les tempos et chiffrages de la mesure</translation>
+        <translation>Coller les tempos et chiffrages de la mesure</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clear Range of Tempos</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer la plage de tempos</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -16940,77 +16940,77 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="+60"/>
         <source>MusicXML Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter vers MusicXML</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Layout</source>
-        <translation type="unfinished">Mise en page</translation>
+        <translation>Mise en page</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Headers</source>
-        <translation type="unfinished">En-têtes</translation>
+        <translation>En-têtes</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Basic options</source>
-        <translation type="unfinished">Options de base</translation>
+        <translation>Options de base</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Export content</source>
-        <translation type="unfinished">Exporter le contenu</translation>
+        <translation>Exporter le contenu</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Choix des pistes ou segments à exporter&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Choix des pistes ou segments à exporter&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>All tracks</source>
-        <translation type="unfinished">de toutes les pistes</translation>
+        <translation>de toutes les pistes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Non-muted tracks</source>
-        <translation type="unfinished">des pistes non assourdies</translation>
+        <translation>des pistes non assourdies</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>de la piste sélectionnée</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected segments</source>
-        <translation type="unfinished">des segments sélectionnés</translation>
+        <translation>des segments sélectionnés</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished">Exporter les accolades</translation>
+        <translation>Exporter les accolades</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Les accolades de portées se définissent dans la boîte des &lt;b&gt;Paramètres de la Piste&lt;/b&gt;, et peuvent être utilisées pour regrouper les portées de différentes façons&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Les accolades de portées se définissent dans la boîte des &lt;b&gt;Paramètres de la Piste&lt;/b&gt;, et peuvent être utilisées pour regrouper les portées de différentes façons&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Advanced/Experimental options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options avancées ou expérimentales</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Compatibility level</source>
-        <translation type="unfinished">Niveau de compatibilité</translation>
+        <translation>Niveau de compatibilité</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Définir la version de MusicXML à utiliser.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -17020,32 +17020,32 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.Both partwise and timewise file are available.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Choix du format du fichier MusicXML file.Les deux types de fichiers &quot;partwise&quot; et &quot;timewise&quot; sont disponibles.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Export multistave instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter les instruments utilisant plusieurs portées</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>None</source>
-        <translation type="unfinished">Aucun</translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;Choose which bracket will create a multi staff system&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Sélectionner les accolades à utiliser&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Don&apos;t export percussion tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne pas exporter les percussions</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;Exporting percussion is still experimental.&lt;br&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion&amp;quot;. When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;br&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden hasn&apos;t a real percussion notation MusicXML Export tries to convert the percussion track to a percussion notation. This option is still experimental.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;L&apos;exportation des percussions est encore experimentale.&lt;br&gt;Les percussions peuvent être exportées &amp;quot;comme des notes&amp;quot; ou &amp;quot;comme des percussions&amp;quot;. Si l&apos;exportation est faite &amp;quot;comme des notes&amp;quot; une piste de percussion est traitée comme une piste normale.&lt;br&gt;Si une piste est exportée &amp;quot;comme des percussions&amp;quot; une partition de percussion MusicXML sera produite. Comme Rosegarden ne gère pas actuellement les partitions de percussion, l&apos;exporteur MusicXML fait lui-même la conversion. Cette option est encore experimentale.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -17055,12 +17055,12 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;Some transposing instruments (like a tenor or bariton sax) transposes over more than 1 octave. For such large transpositions some tools require a &quot;&amp;lt;octave-shif&amp;gt;&quot; element while other tools will not support this element! Therefor the use of the &quot;&amp;lt;octave-shift&amp;gt;&quot; element can be controlled by this option.&lt;br&gt;When importing the MusicXML file into another tool, check transposing instrument carefully in both concert and notated pitch. When this is not correct toggling this option might help.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Certains instruments transpositeurs (comme un saxophone tenor ou bariton) transposent sur plus d&apos;une octave. Pour de telles transpositions, certains outils ont besoin d&apos;une indication &quot;&amp;lt;octave-shif&amp;gt;&quot; que d&apos;autres outils ne supporteront pas! C&apos;est pourquoi cette option permet de contrôler l&apos;utilisation de l&apos;indication &quot;&amp;lt;octave-shift&amp;gt;.&lt;br&gt;Pour utiliser un fichier MusicXML depuis un autre outil, vérifier soigneusement l&apos;instrument transpositeur, en mode concert comme en mode notation. Quand le basculement entre ces deux modes est incorrect, il peut être utile de modifier cette option.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -18359,7 +18359,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+9"/>
         <source>Tuning System:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempérament:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18369,12 +18369,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1"/>
         <source>Error (cents):</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur (octave/100)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>None available (check preferences)</source>
-        <translation type="unfinished">Rien n&apos;est disponible (vérifier la configuration)</translation>
+        <translation>Rien n&apos;est disponible (vérifier la configuration)</translation>
     </message>
 </context>
 <context>
@@ -18470,7 +18470,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+121"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexion à Jack impossible! Vérifiez que le serveur Jack fonctionne et qu&apos;aucun autre testeur de justesse n&apos;est ouvert.</translation>
     </message>
 </context>
 <context>
@@ -19569,7 +19569,7 @@ Nous vous recommandons de sauver à nouveau ce fichier en utilisant la version c
     <message>
         <location line="-356"/>
         <source>Pitch Tracker can only contain 1 segment.</source>
-        <translation>Le Suiveur de Hauteur ne peut contenir qu&apos;un seul segment.</translation>
+        <translation>Le Testeur de Justesse ne peut contenir qu&apos;un seul segment.</translation>
     </message>
     <message>
         <location line="+434"/>
@@ -20774,7 +20774,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Entrer la transposition relative du segment lié&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -20817,7 +20817,8 @@ Erreur obtenue : %2</translation>
         <location line="-45"/>
         <source>Existing transpositions on selected linked segments must be removed
 before new transposition can be applied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avant d&apos;appliquer une nouvelle transposition au segments liés selectionnés,
+il est nécessaire de supprimer les anciennes transpositions.</translation>
     </message>
     <message>
         <location line="+46"/>
@@ -21036,12 +21037,12 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer et glisser pour déplacer des segments; avec Ctrl copier les segment; avec Ctrl + Alt créer des segments liés</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer et glisser pour déplacer le segment; avec Ctrl copier le segment; avec Ctrl + Alt créer un segment lié; double-cliquer pour l&apos;éditer</translation>
     </message>
     <message>
         <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
@@ -22838,9 +22839,9 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message numerus="yes">
         <location line="+25"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Transformer un segment lié en une copie indépendante</numerusform>
+            <numerusform>Transformer les segments liés en copies indépendantes</numerusform>
         </translation>
     </message>
     <message>
