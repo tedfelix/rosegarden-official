@@ -1473,6 +1473,14 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
         m_recentFiles.add(tmp);
         
         settings.endGroup();
+
+        // As an empty composition can be saved, we need to look if
+        // segments exist before enabling print options in menu
+        if(doc->getComposition().getSegments().size()) {
+            enterActionState("have_segments"); 
+        } else {
+            leaveActionState("have_segments"); 
+        }
     }
 }
 
@@ -1846,8 +1854,8 @@ RosegardenMainWindow::slotFileNew()
     }
 
     if (makeNew) {
-
         setDocument(new RosegardenDocument(this, m_pluginManager));
+        leaveActionState("have_segments"); 
     }
 }
 
