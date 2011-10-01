@@ -201,6 +201,8 @@
     <Action name="repeats_to_real_copies" text="Turn Re&amp;peats into Copies" />
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />
   <Separator/>
+    <Action name="expand_figuration" text="E&amp;xpand block chord segments by figuration" />
+  <Separator/>
     <Action name="manage_trigger_segments" text="Manage Tri&amp;ggered Segments" />
   </Menu>
 
@@ -429,6 +431,7 @@
     <Action name="split_by_recording"/>
     <Action name="split_at_time"/>
     <Action name="join_segments"/>
+    <Action name="expand_figuration"/>
     <Action name="relabel_segment"/>
     <Action name="transpose"/>
     <Action name="set_segment_start"/>

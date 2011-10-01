@@ -306,6 +306,15 @@ public:
      */
     int getSegmentVoiceIndex(const Segment *) const;
 
+    /**
+     * Add every segment in segmentcontainer
+     */
+    void addAllSegments(segmentcontainer segments);
+
+    /**
+     * Detach every segment in segmentcontainer
+     */
+    void detachAllSegments(segmentcontainer segments);
 
     //////
     //

@@ -1180,6 +1180,12 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                              indicationType == Indication::PhrasingSlur);
                     }
 
+                } else if (indicationType == Indication::ParameterChord) {
+                    Text text = Text("Chord");
+                    item = m_notePixmapFactory->makeText(text);
+                } else if (indicationType == Indication::Figuration) {
+                    Text text = Text("Figuration");
+                    item = m_notePixmapFactory->makeText(text);
                 } else {
 
                     int octaves = indication.getOttavaShift();

@@ -296,6 +296,12 @@
       <Action name="octave_down" text="Add Octave &amp;Down" />
       <Action name="octave_2down" text="Add Double &amp;Octave Down" />
     </Menu>
+  <Separator/>
+    <Menu name="figuration">
+      <text>&amp;Figuration</text>
+      <Action name="parameter_chord" text="Make &amp;Parameter Chord" />
+      <Action name="figuration" text="Mark selection as &amp;figuration" />
+    </Menu>
   </Menu>
 
   <Menu name="Adjust">
@@ -890,6 +896,8 @@
     <Action name="add_text_rf"/>
     <Action name="add_trill"/>
     <Action name="trill_line"/> <!-- the new indication version -->
+    <Action name="parameter_chord"/>
+    <Action name="figuration"/>
     <Action name="add_turn"/>
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>

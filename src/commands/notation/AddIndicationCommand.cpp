@@ -47,6 +47,8 @@ static std::vector<std::string> getStandardIndications()
     v.push_back(Indication::OttavaDown);
     v.push_back(Indication::QuindicesimaDown);
     v.push_back(Indication::TrillLine);
+    v.push_back(Indication::ParameterChord);
+    v.push_back(Indication::Figuration);
     return v;
 }
 
@@ -56,6 +58,8 @@ static const char *shortcuts[] = {
     "",
     "<",
     ">",
+    "",
+    "",
     "",
     "",
     "",
@@ -72,7 +76,9 @@ static const char *icons[] = {
     "group-ottava",
     "",
     "",
-    "trill_line"
+    "trill_line",
+    "",
+    ""
 };
 static const char *actionNames[] = {
     "slur",
@@ -84,7 +90,9 @@ static const char *actionNames[] = {
     "octave_up",
     "octave_down",
     "octave_2down",
-    "trill_line"
+    "trill_line",
+    "parameter_chord",
+    "figuration"
 };
 
 void
@@ -260,6 +268,10 @@ AddIndicationCommand::getGlobalName(std::string indicationType)
         return tr("Add &Glissando");
     } else if (indicationType == Indication::TrillLine) {
         return tr("Add Tri&ll With Line");
+    } else if (indicationType == Indication::ParameterChord) {
+        return tr("Add Parameter Chord");
+    } else if (indicationType == Indication::Figuration) {
+        return tr("Add Figuration");
     }
 
     QString n = tr("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));

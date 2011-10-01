@@ -530,7 +530,8 @@ NotationView::setupActions()
     createAction("simple_tuplet", SLOT(slotGroupSimpleTuplet()));
     createAction("tuplet", SLOT(slotGroupGeneralTuplet()));
 
-    //Where are "break_tuplet", "slur", & "phrasing_slur" created?
+    //Where is "break_tuplet" created?
+    //"slur" & "phrasing_slur" are created in AddIndicationCommand
     
     //"Slurs" subMenu
     //where are "restore_slurs", "slurs_above", "slurs_below" created?
@@ -540,11 +541,10 @@ NotationView::setupActions()
     //"Ties" subMenu
     //"restore_ties", "ties_above", & "ties_below" created?
     
-    //Where are "crescendo" & "decrescendo" created?
+    //"crescendo" & "decrescendo" are created in AddIndicationCommand
 
     //"octaves" subMenu
-    //Where are "octave_2up", "octave_up", "octave_down",
-    //"octave_down", & "octave_2down" created?
+    //All are created in AddIndicationCommand
 
     //Actions first appear in "Adjust" Menubar menu
 

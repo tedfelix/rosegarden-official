@@ -829,6 +829,11 @@ public slots:
     void slotJoinSegments();
 
     /**
+     * Expand block-chord segments by figuration
+     */
+    void slotExpandFiguration();
+
+    /**
      * Tempo to Segment length
      */
     void slotTempoToSegmentLength();

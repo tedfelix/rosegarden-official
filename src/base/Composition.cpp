@@ -294,6 +294,28 @@ Composition::weakDetachSegment(Segment *segment)
     return true;
 }
 
+// Add every segment in segmentcontainer
+// @author Tom Breton (Tehom)
+void
+Composition::addAllSegments(segmentcontainer segments)
+{
+    for (segmentcontainer::iterator i = segments.begin();
+         i != segments.end();
+         ++i)
+        { addSegment(*i); }
+}
+
+// Detach every segment in segmentcontainer
+// @author Tom Breton (Tehom)
+void
+Composition::detachAllSegments(segmentcontainer segments)
+{
+    for (segmentcontainer::iterator i = segments.begin();
+         i != segments.end();
+         ++i)
+        { detachSegment(*i); }    
+}
+
 bool
 Composition::contains(const Segment *s)
 {

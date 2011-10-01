@@ -61,6 +61,7 @@
 #include "commands/segment/CutRangeCommand.h"
 #include "commands/segment/DeleteRangeCommand.h"
 #include "commands/segment/EraseTempiInRangeCommand.h"
+#include "commands/segment/ExpandFigurationCommand.h"
 #include "commands/segment/FitToBeatsCommand.h"
 #include "commands/segment/InsertRangeCommand.h"
 #include "commands/segment/PasteConductorDataCommand.h"
@@ -815,6 +816,7 @@ RosegardenMainWindow::setupActions()
     createAction("set_segment_start", SLOT(slotSetSegmentStartTimes()));
     createAction("set_segment_duration", SLOT(slotSetSegmentDurations()));
     createAction("join_segments", SLOT(slotJoinSegments()));
+    createAction("expand_figuration", SLOT(slotExpandFiguration()));
     createAction("repeats_to_real_copies", SLOT(slotRepeatingSegments()));
     createAction("links_to_real_copies", SLOT(slotLinksToCopies()));
     createAction("manage_trigger_segments", SLOT(slotManageTriggerSegments()));
@@ -2581,6 +2583,32 @@ RosegardenMainWindow::slotJoinSegments()
     }
 
     m_view->slotAddCommandToHistory(new SegmentJoinCommand(selection));
+    m_view->updateSelectionContents();
+}
+
+void
+RosegardenMainWindow::slotExpandFiguration()
+{
+    if (!m_view->haveSelection())
+        { return; }
+
+    //!!! this should all be in rosegardenguiview
+    //!!! should it?
+
+    SegmentSelection selection = m_view->getSelection();
+    if (selection.size() < 2)
+        { return; }
+
+    for (SegmentSelection::iterator i = selection.begin();
+            i != selection.end(); ++i) {
+        if ((*i)->getType() != Segment::Internal) {
+            QMessageBox::warning(this, tr("Rosegarden"),
+                                 tr("Can't expand Audio segments with figuration"));
+            return ;
+        }
+    }
+
+    m_view->slotAddCommandToHistory(new ExpandFigurationCommand(selection));
     m_view->updateSelectionContents();
 }
 

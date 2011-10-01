@@ -628,6 +628,8 @@ public:
     static const std::string QuindicesimaDown;
 
     static const std::string TrillLine;
+    static const std::string ParameterChord;
+    static const std::string Figuration;
 
     Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
