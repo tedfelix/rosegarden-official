@@ -22,7 +22,6 @@
 #include "base/AudioLevel.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/VelocityColour.h"
-#include <QBrush>
 #include <QColor>
 #include <QLabel>
 #include <QPainter>
@@ -249,6 +248,9 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
             (rightLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
         break;
 
+    case Plain:
+    case PeakHold:
+    case FixedHeightVisiblePeakHold:
     default:
         ll = (int)(double(m_maxLevel) * leftLevel);
         lr = (int)(double(m_maxLevel) * rightLevel);
@@ -330,6 +332,11 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 // rounded blank zero state meter being cut off so it's only rounded on one
 // side.
 
+// The above problem may have been because drawRect() draws a rectangle that
+// is the specified width and height plus the width of the pen.  After
+// changing all of this over to the faster fillRect(), adjusting
+// the width and height by one appears to no longer be necessary.
+
 void
 VUMeter::paintEvent(QPaintEvent *e)
 {
@@ -338,16 +345,16 @@ VUMeter::paintEvent(QPaintEvent *e)
 
     paint.setRenderHint(QPainter::Antialiasing, false);
 
-    int w = width() - 1;
-    int h = height() - 1;
+    int w = width();
+    int h = height();
 
     if (m_type == VUMeter::AudioPeakHoldShort ||
         m_type == VUMeter::AudioPeakHoldLong ||
         m_type == VUMeter::AudioPeakHoldIEC ||
         m_type == VUMeter::AudioPeakHoldIECLong) {
-        paint.setPen(m_background);
-        paint.setBrush(m_background);
-        paint.drawRect(0, 0, w, h);
+        // Clearing the background is not necessary as drawMeterLevel()
+        // fills the part without the bar with the background color.
+//        paint.fillRect(0, 0, w, h, m_background);
 
         drawMeterLevel(&paint);
 
@@ -357,9 +364,9 @@ VUMeter::paintEvent(QPaintEvent *e)
         paint.drawPoint(0, h - 1);
         paint.drawPoint(w, h - 1);
     } else if (m_type == VUMeter::FixedHeightVisiblePeakHold) {
-        paint.setPen(m_background);
-        paint.setBrush(m_background);
-        paint.drawRect(0, 0, w, h);
+        // Clearing the background is not necessary as drawMeterLevel()
+        // fills the part without the bar with the background color.
+//        paint.fillRect(0, 0, w, h, m_background);
 
         if (m_fallTimerLeft->isActive())
             drawMeterLevel(&paint);
@@ -371,17 +378,18 @@ VUMeter::paintEvent(QPaintEvent *e)
         }
     } else {
         if (m_fallTimerLeft->isActive()) {
-            paint.setPen(m_background);
-            paint.setBrush(m_background);
-            paint.drawRect(0, 0, w, h);
+            // Clearing the background is not necessary as drawMeterLevel()
+            // fills the part without the bar with the background color.
+//            paint.fillRect(0, 0, w, h, m_background);
             drawMeterLevel(&paint);
         } else {
             meterStop();
             QColor background = palette().color(backgroundRole());
-            paint.setPen(background);
-            paint.setBrush(background);
-            paint.drawRect(0, 0, w, h);
+            // Fill with background grey so the black text (QLabel track
+            // number) will be visible.
+            paint.fillRect(0, 0, w, h, background);
             paint.end();
+            // Let QLabel draw the track number text.
             QLabel::paintEvent(e);			
 	}
     }
@@ -396,86 +404,65 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
         m_type == AudioPeakHoldIEC ||
         m_type == AudioPeakHoldIECLong) {
 
-        Qt::BrushStyle style = Qt::SolidPattern;
-
         int medium = m_velocityColour->getMediumKnee(),
             loud = m_velocityColour->getLoudKnee();
 
         if (m_alignment == Vertical) {
             if (h > loud) {
-                paint->setPen(m_velocityColour->getLoudColour());
-                paint->setBrush(QBrush(m_velocityColour->getLoudColour(),
-                                       style));
-                paint->drawRect(x, y, w, h - loud);
+                paint->fillRect(x, y, w, h - loud,
+                                m_velocityColour->getLoudColour());
             }
-        } else {
+        } else {  // horizontal
             if (w > loud) {
-                paint->setPen(m_velocityColour->getLoudColour());
-                paint->setBrush(QBrush(m_velocityColour->getLoudColour(),
-                                       style));
-                paint->drawRect(x + loud, y, w - loud, h);
+                paint->fillRect(x + loud, y, w - loud, h,
+                                m_velocityColour->getLoudColour());
             }
         }
 
         if (m_alignment == Vertical) {
             if (h > medium) {
-                paint->setPen(m_velocityColour->getMediumColour());
-                paint->setBrush(QBrush(m_velocityColour->getMediumColour(),
-                                       style));
-                paint->drawRect(x, y + (h > loud ? (h - loud) : 0),
-                                w, std::min(h - medium, loud - medium));
+                paint->fillRect(x, y + (h > loud ? (h - loud) : 0),
+                                w, std::min(h - medium, loud - medium),
+                                m_velocityColour->getMediumColour());
             }
-        } else {
+        } else {  // horizontal
             if (w > medium) {
-                paint->setPen(m_velocityColour->getMediumColour());
-                paint->setBrush(QBrush(m_velocityColour->getMediumColour(),
-                                       style));
-                paint->drawRect(x + medium, y,
-                                std::min(w - medium, loud - medium), h);
+                paint->fillRect(x + medium, y,
+                                std::min(w - medium, loud - medium), h,
+                                m_velocityColour->getMediumColour());
             }
         }
 
         if (m_alignment == Vertical) {
-            paint->setPen(m_velocityColour->getQuietColour());
-            paint->setBrush(QBrush(m_velocityColour->getQuietColour(),
-                                   style));
-            paint->drawRect(x, y + (h > medium ? (h - medium) : 0),
-                            w, std::min(h, medium));
-        } else {
-            paint->setPen(m_velocityColour->getQuietColour());
-            paint->setBrush(QBrush(m_velocityColour->getQuietColour(),
-                                   style));
-            paint->drawRect(x, y, std::min(w, medium), h);
+            paint->fillRect(x, y + (h > medium ? (h - medium) : 0),
+                            w, std::min(h, medium),
+                            m_velocityColour->getQuietColour());
+        } else {  // horizontal
+            paint->fillRect(x, y, std::min(w, medium), h,
+                            m_velocityColour->getQuietColour());
         }
 
     } else {
 
+        QColor mixedColour;
+
         if (channel == 0) {
-
-            QColor mixedColour = m_velocityColour->getColour(m_levelLeft);
-
-            paint->setPen(mixedColour);
-            paint->setBrush(mixedColour);
-
+            mixedColour = m_velocityColour->getColour(m_levelLeft);
         } else {
-
-            QColor mixedColour = m_velocityColour->getColour(m_levelRight);
-
-            paint->setPen(mixedColour);
-            paint->setBrush(mixedColour);
+            mixedColour = m_velocityColour->getColour(m_levelRight);
         }
 
         //        RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
 
-        paint->drawRect(x, y, w, h);
+        paint->fillRect(x, y, w, h, mixedColour);
     }
 }
 
 void
 VUMeter::drawMeterLevel(QPainter* paint)
 {
-    int medium = m_velocityColour->getMediumKnee(),
-        loud = m_velocityColour->getLoudKnee();
+//    int medium = m_velocityColour->getMediumKnee();
+    int loud = m_velocityColour->getLoudKnee();
 
     if (m_stereo) {
         if (m_alignment == VUMeter::Vertical) {
@@ -499,12 +486,10 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 drawColouredBar(paint, 0, hW - midWidth, ry, midWidth + 1, height() - ry);
             }
 
-            paint->setPen(m_background);
-            paint->setBrush(m_background);
-            paint->drawRect(0, 0, hW - midWidth, y);
+            paint->fillRect(0, 0, hW - midWidth, y, m_background);
 
             if (m_hasRecord) {
-                paint->drawRect(hW - midWidth, 0, midWidth + 1, ry);
+                paint->fillRect(hW - midWidth, 0, midWidth + 1, ry, m_background);
             }
 
             if (m_showPeakLevel) {
@@ -512,12 +497,12 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 y = height() - h;
 
                 if (h > loud) {
-                    paint->setPen(QColor(Qt::red)); // brighter than the red meter bar
+                    paint->setPen(Qt::red); // brighter than the red meter bar
                     paint->drawLine(0, y - 1, hW - midWidth - 1, y - 1);
                     paint->drawLine(0, y + 1, hW - midWidth - 1, y + 1);
                 }
 
-                paint->setPen(QColor(Qt::white));
+                paint->setPen(Qt::white);
                 paint->drawLine(0, y, hW - midWidth - 1, y);
             }
 
@@ -531,12 +516,10 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 drawColouredBar(paint, 1, hW, ry, midWidth + 1, height() - ry);
             }
 
-            paint->setPen(m_background);
-            paint->setBrush(m_background);
-            paint->drawRect(hW + midWidth, 0, hW - midWidth + 1, y);
+            paint->fillRect(hW + midWidth, 0, hW - midWidth + 1, y, m_background);
 
             if (m_hasRecord) {
-                paint->drawRect(hW, 0, midWidth, ry);
+                paint->fillRect(hW, 0, midWidth, ry, m_background);
             }
 
             if (m_showPeakLevel) {
@@ -544,30 +527,23 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 y = height() - h;
 
                 if (h > loud) {
-                    paint->setPen(QColor(Qt::red)); // brighter than the red meter bar
+                    paint->setPen(Qt::red); // brighter than the red meter bar
                     paint->drawLine(hW + midWidth, y - 1, width(), y - 1);
                     paint->drawLine(hW + midWidth, y + 1, width(), y + 1);
                 }
 
-                paint->setPen(QColor(Qt::white));
-                paint->setBrush(QColor(Qt::white));
-
+                paint->setPen(Qt::white);
                 paint->drawLine(hW + midWidth, y, width(), y);
             }
         } else // horizontal
         {
-            paint->setPen(m_background);
-            paint->setBrush(m_background);
-            paint->drawRect(0, 0, width(), height());
+            paint->fillRect(0, 0, width(), height(), m_background);
 
             int x = (m_levelLeft * width()) / m_maxLevel;
             if (x > 0)
-                paint->drawRect(0, 0, x, height());
+                paint->fillRect(0, 0, x, height(), m_background);
 
             if (m_showPeakLevel) {
-                paint->setPen(QColor(Qt::white));
-                paint->setBrush(QColor(Qt::white));
-
                 // show peak level
                 x = m_peakLevelLeft * width() / m_maxLevel;
                 if (x < (width() - 1))
@@ -575,19 +551,18 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 else
                     x = width() - 1;
 
+                paint->setPen(Qt::white);
                 paint->drawLine(x, 0, x, height());
             }
         }
-    } else {
+    } else {  // monaural
         // Paint a vertical meter according to type
         //
         if (m_alignment == VUMeter::Vertical) {
             int y = height() - (m_levelLeft * height()) / m_maxLevel;
             drawColouredBar(paint, 0, 0, y, width(), height());
 
-            paint->setPen(m_background);
-            paint->setBrush(m_background);
-            paint->drawRect(0, 0, width(), y);
+            paint->fillRect(0, 0, width(), y, m_background);
 
             /*
               RG_DEBUG << "VUMeter::drawMeterLevel - height = " << height() 
@@ -595,26 +570,19 @@ VUMeter::drawMeterLevel(QPainter* paint)
             */
 
             if (m_showPeakLevel) {
-                paint->setPen(QColor(Qt::white));
-                paint->setBrush(QColor(Qt::white));
-
                 y = height() - (m_peakLevelLeft * height()) / m_maxLevel;
 
+                paint->setPen(Qt::white);
                 paint->drawLine(0, y, width(), y);
             }
-        } else {
+        } else {  // Horizontal
             int x = (m_levelLeft * width()) / m_maxLevel;
             if (x > 0)
                 drawColouredBar(paint, 0, 0, 0, x, height());
 
-            paint->setPen(m_background);
-            paint->setBrush(m_background);
-            paint->drawRect(x, 0, width() - x, height());
+            paint->fillRect(x, 0, width() - x, height(), m_background);
 
             if (m_showPeakLevel) {
-                paint->setPen(QColor(Qt::white));
-                paint->setBrush(QColor(Qt::white));
-
                 // show peak level
                 x = (m_peakLevelLeft * width()) / m_maxLevel;
                 if (x < (width() - 1))
@@ -622,6 +590,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 else
                     x = width() - 1;
 
+                paint->setPen(Qt::white);
                 paint->drawLine(x, 0, x, height());
             }
         }
