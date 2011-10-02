@@ -699,7 +699,23 @@ public:
     //
     // LINKED SEGMENTS
 
+   /**
+    * Return true if the segment is connected to a SegmentLinker.
+    * This doesn't always mean that the segment is really linked : 
+    *    - The segment may be the only one referenced by the SegmentLinker.
+    *      (Probaly this should not be, but nevertheless is not impossible.)
+    *    - The segment is a repeating one opened in the notation editor.
+    *      It is a linked segment, but linked with temporary segments which
+    *      composition doesn't know.
+    */
     bool isLinked() const { return m_segmentLinker; }
+
+    /**
+     * Return true if the segment is link to at least one other segment
+     * which is not a temporary one nor being outside ofthe composition
+     * (i.e. deleted).
+     */ 
+    bool isTrulyLinked() const;
 
     SegmentLinker * getLinker() const { return m_segmentLinker; }
     void setLinker(SegmentLinker *linker) { m_segmentLinker = linker; }
@@ -721,7 +737,6 @@ public:
     void setLinkTransposeParams(LinkTransposeParams params) {
                                               m_linkTransposeParams = params; }
 
-/// YGYGYG Replace "tmp" with something more understandable as "repeating"...
     /**
      * Set the segment as a temporary one.
      * A temporary segment is always linked to some "real segment" and is not

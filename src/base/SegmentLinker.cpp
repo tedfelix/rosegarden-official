@@ -364,12 +364,40 @@ SegmentLinker::refreshSegment(Segment *seg)
     }
 }
 
+int
+SegmentLinker::getNumberOfTmpSegments() const
+{
+    int count = 0;
+
+    LinkedSegmentParamsList::const_iterator it;
+    for (it = m_linkedSegmentParamsList.begin();
+             it != m_linkedSegmentParamsList.end(); ++it) {
+        if ((*it).m_linkedSegment->isTmp()) ++count;
+    }
+
+    return count;
+}
+
+int
+SegmentLinker::getNumberOfOutOfCompSegments() const
+{
+    int count = 0;
+
+    LinkedSegmentParamsList::const_iterator it;
+    for (it = m_linkedSegmentParamsList.begin();
+             it != m_linkedSegmentParamsList.end(); ++it) {
+        if ((*it).m_linkedSegment->isTmp()) continue;  // Ignore tmp segs
+        if (!(*it).m_linkedSegment->getComposition()) count++;
+    }
+
+    return count;
+}
 
 SegmentLinker::LinkedSegmentParams::LinkedSegmentParams(Segment *s) : 
     m_linkedSegment(s),
     m_refreshStatusId(s->getNewRefreshStatusId())
-{    
-
+{
+    
 }
 
 }

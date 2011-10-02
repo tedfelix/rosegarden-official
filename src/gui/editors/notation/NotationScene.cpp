@@ -1042,6 +1042,7 @@ NotationScene::dumpVectors()
         std::cerr << "extern " << i << " : " << m_externalSegments[i];
         if (m_externalSegments[i]->isTmp()) std::cerr << " TMP";
         if (m_externalSegments[i]->isLinked()) std::cerr << " LINKED";
+        if (m_externalSegments[i]->isTrulyLinked()) std::cerr << " TRULYLINKED";
         std::cerr << " start=" << m_externalSegments[i]->getStartTime()
                   << " endMrkr=" << m_externalSegments[i]->getEndMarkerTime();
         std::cerr << "\n";

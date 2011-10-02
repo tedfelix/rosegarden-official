@@ -41,6 +41,8 @@ public:
     void removeLinkedSegment(Segment *s);
     int getNumberOfLinkedSegments() const {
                                     return m_linkedSegmentParamsList.size(); }
+    int getNumberOfTmpSegments() const;
+    int getNumberOfOutOfCompSegments() const;
 
     void clearRefreshStatuses();
     SegmentLinkerId getSegmentLinkerId() const { return m_id; }

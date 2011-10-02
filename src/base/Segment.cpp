@@ -202,7 +202,30 @@ Segment::setTmp() {
     }
 }
 
+bool
+Segment::isTrulyLinked() const {
+    // If there is no SegmentLinker the segment is not linked
+    if (!m_segmentLinker) return false;
+    
+    // If segment is a temporary one or is out of composition return false
+    // That's arbitrary, but this method is designed to be used from
+    // segments which are inside the composition.
+    if (isTmp()) return false;
+    if (!getComposition()) return false;
 
+    // If the SegmentLinker is referencing only one segment the
+    // segment is only linked to itself and is not truly linked.
+    int numOfSegments = m_segmentLinker->getNumberOfLinkedSegments();
+    if (numOfSegments < 2) return false;
+
+    // The segment is truly linked if at least another segment which
+    // is inside the composition and which is not a temporary one is
+    // referenced by its linker.
+    int numOfTmpSegments = m_segmentLinker->getNumberOfTmpSegments();
+    int numOfOutsideSegments = m_segmentLinker->getNumberOfOutOfCompSegments();
+    if ((numOfSegments - numOfTmpSegments - numOfOutsideSegments) > 1) return true;
+    else return false;
+}
 
 void
 Segment::setTrack(TrackId id)
