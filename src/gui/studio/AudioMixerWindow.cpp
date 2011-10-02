@@ -337,37 +337,41 @@ AudioMixerWindow::populate()
         rec.m_pluginBox->setLayout(pluginBoxLayout);
         rec.m_pluginBox->show();
 
-        QLabel *idLabel;
-        QString idString;
-
-        // use the instrument alias if one is set, else a standard label
-        std::string alias = (*i)->getAlias();
-
         InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, (*i));
         aliasButton->setFixedSize(10, 6); // golden rectangle
         aliasButton->setToolTip(tr("Click to rename this instrument"));
         connect (aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
         mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignLeft);
 
+        // use the instrument alias if one is set, else a standard label
+        std::string alias = (*i)->getAlias();
+        QString idString;
+        QLabel *idLabel = NULL;
+
         //NB. The objectName property is used to address widgets in a nice piece
         // of old school Qt2 style faffery, so we DO need to set these.
         if ((*i)->getType() == Instrument::Audio) {
+            // use the instrument alias if one is set, else a standard label
             if (alias.size()) {
                 idString = strtoqstr(alias);
             } else {
                 idString = tr("Audio %1").arg((*i)->getId() - AudioInstrumentBase + 1);
-                idLabel = new QLabel(idString, m_mainBox);
-                idLabel->setObjectName("audioIdLabel");
             }
+            idLabel = new QLabel(idString, m_mainBox);
+            idLabel->setObjectName("audioIdLabel");
         } else {
+            // use the instrument alias if one is set, else a standard label
             if (alias.size()) {
                 idString = strtoqstr(alias);
             } else {
                 idString = tr("Synth %1").arg((*i)->getId() - SoftSynthInstrumentBase + 1);
-                idLabel = new QLabel(idString, m_mainBox);
-                idLabel->setObjectName("synthIdLabel");
             }
+            idLabel = new QLabel(idString, m_mainBox);
+            idLabel->setObjectName("synthIdLabel");
         }
+
+        Q_ASSERT(idLabel);
+
         idLabel->setFont(boldFont);
         idLabel->setToolTip(tr("Click the button above to rename this instrument"));
 
