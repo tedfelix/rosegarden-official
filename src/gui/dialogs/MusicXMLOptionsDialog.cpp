@@ -143,13 +143,13 @@ MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
     m_mxmlDTDType->setMinimumWidth(150);
     layoutAdvanced->addWidget(m_mxmlDTDType, 1, 1);
 
-    layoutAdvanced->addWidget(new QLabel(tr("Export multistave instrument"), frameAdvanced), 2, 0);
+    layoutAdvanced->addWidget(new QLabel(tr("Export grand staff instrument"), frameAdvanced), 2, 0);
     m_mxmlMultiStave = new QComboBox(frameAdvanced);
     m_mxmlMultiStave->addItem(tr("None"));
     m_mxmlMultiStave->addItem("{[--  --]}");
     m_mxmlMultiStave->addItem("{--  --}");
     layoutAdvanced->addWidget(m_mxmlMultiStave, 2, 1);
-    m_mxmlMultiStave->setToolTip(tr("<qt>Choose which bracket will create a multi staff system</qt>"));
+    m_mxmlMultiStave->setToolTip(tr("<qt>Choose which bracket will create a grand staff system</qt>"));
 
     m_mxmlExportPercussion = new QComboBox(frameAdvanced);
     m_mxmlExportPercussion->addItem(tr("Don't export percussion tracks"));
