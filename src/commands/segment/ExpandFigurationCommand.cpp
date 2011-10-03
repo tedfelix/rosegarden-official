@@ -120,6 +120,19 @@ private:
 /// @author Tom Breton (Tehom)
 typedef std::vector<RelativeEvent *> RelativeEventVec;
 
+/// @class A chord together with its start and end times.
+/// @author Tom Breton (Tehom)
+class TimedEventVector
+{
+public:
+    eventVector chord;
+    timeT       start;
+    timeT       end;
+};
+/// @typedef Several TimedEventVectors in the same bar (or other group)
+/// @author Tom Breton (Tehom)
+typedef std::vector<TimedEventVector> TimeSegmentedEventVector;
+
 /***** End of internal types *****/
 
 /***** Helper functions *****/
@@ -141,6 +154,12 @@ int higherPitch(Event *a, Event* b)
 
 /***** Methods for DiatonicRelativeNote *****/    
 
+/// Make a DiatonicRelativeNote for Event e
+/// @param i indexes some tone in the parameter chord.
+/// @param basePitch is the pitch of that tone
+/// @param startTime is the time the figuration started
+/// @param key is the current key
+/// @author Tom Breton (Tehom)
 DiatonicRelativeNote::DiatonicRelativeNote(int i,
                                            Event *e,
                                            timeT startTime,
@@ -259,24 +278,28 @@ ChromaticRelativeNote::getResultPitch(const Key, const Pitch & basePitch)
 Event *
 RelativeNote::getAsEvent(timeT baseTime, const Key key, eventVector notes)
 {
+    // Figure out time
     timeT newStartTime =
         m_relativeTime + baseTime;
+
+    // Figure out pitch
     Event *baseNote = notes[m_index];
     const Pitch basePitch(*baseNote);
     pitchT pitch =
         getResultPitch(key, basePitch);
+
+    // Figure out velocity
     velocityT velocity = 
         baseNote->get<Int>(BaseProperties::VELOCITY) +
         (m_bareEvent)->get<Int>(BaseProperties::VELOCITY) -
         100;
-                
     // Clamp to legal MIDI velocities
     if (velocity < 0)
         { velocity = 0; }
     if (velocity > 127)
         { velocity = 127; }
     
-    // Add a corresponding note in the new segment.
+    // Create a corresponding note
     Event *newNote = new Event(*(m_bareEvent), newStartTime);
     newNote->set<Int>(BaseProperties::PITCH, pitch, true);
     newNote->set<Int>(BaseProperties::VELOCITY, velocity, true);
@@ -312,46 +335,43 @@ ExpandFigurationCommand::getBlockChord(Segment *s, timeT time)
     eventVector blockChord;
     blockChord.clear();
 
+    // Look at each event that starts at time
     Segment::const_iterator start, end;
     s->getTimeSlice(time, start, end);
     for (Segment::const_iterator i = start; i != end; ++i) {
-        // Get chord notes
+        // Capture note events to make a chord
         if ((*i)->isa(Note::EventType)) {
             blockChord.push_back(*i);
         }
     }
-    // Sort pitches from low to high
+
+    // Sort pitches from high to low (Any ordering would work as long
+    // as it's consistent)
     sort(blockChord.begin(), blockChord.end(), higherPitch);
     return blockChord;
 }
 
-/// Return the first legal time to expand figuration in segment s.
+/// Return a legal time no earlier than lookAtTime to expand the
+/// figuration.
+/// @param s is the segment holding the block chords.
 /// @author Tom Breton (Tehom)
 timeT
-ExpandFigurationCommand::getFirstFigTime(Segment *s)
+Figuration::getOKFigTime(Composition *composition, timeT lookAtTime)
 {
-    const timeT earliestTime = 0;
-    
     // !!! If bar is partial, we should move to the next full bar.
-    // !!! This will optionally use beats or multiple bars.
 
-    return s->getBarStartForTime(earliestTime);
+    return composition->getBarStartForTime(lookAtTime);
 }
 
-/// Return the next time legal time to expand figuration in segment s.
-/// @param time is the time at which we last expanded figuration
+/// Return a legal time strictly later than lookAtTime to expand the
+/// figuration.
+/// @param s is the segment holding the block chords.
+/// @param lookAtTime is the time at which we last expanded figuration
 /// @author Tom Breton (Tehom)
 timeT
-ExpandFigurationCommand::getNextFigTime(Segment *s, timeT time)
+Figuration::getNextFigTime(Composition *composition, timeT lookAtTime)
 {
-    // !!! We'd like to figure out "next start" by figuration
-    // length, but also checking that bars or beats match it.
-
-    // !!! Check that we can match time signature.  If bar isn't
-    // applicable, keep going to next one.  Stepping seems the right
-    // place to check time signatures.
-
-    return s->getBarEndForTime(time);
+    return composition->getBarEndForTime(lookAtTime); 
 }
 
 
@@ -426,17 +446,15 @@ ExpandFigurationCommand::getPossibleRelations(Event *e,
 
 /// Return a figuration object if segment s has one.
 /// @author Tom Breton (Tehom)
-figurationT
+Figuration
 ExpandFigurationCommand::getFiguration(Segment *s)
 {
     RG_DEBUG << "Looking for figuration in segment " << s->getLabel()
              << endl;
 
-    UnsolvedFiguration        notesToAccountFor;
-    eventVector parameterChord;
-
-    // This will only be made when we're done this.
-    RelativeEventVec events;
+    UnsolvedFiguration  notesToAccountFor;
+    eventVector         parameterChord;
+    RelativeEventVec    events;
     events.clear();
     for (Segment::iterator i = s->begin();
          i != s->end();
@@ -497,8 +515,8 @@ ExpandFigurationCommand::getFiguration(Segment *s)
                      j != end;
                      ++j) {
                     Event *e = (*j);
-                    // For now, just skip non-notes.  Later they'll have
-                    // their own relativeEvent type.
+                    // !!! For now, just skip non-notes.  Later
+                    // they'll have their own relativeEvent type
                     if (!e->isa(Note::EventType))
                         { continue; }
                     RG_DEBUG << "Figuration note"
@@ -549,38 +567,22 @@ ExpandFigurationCommand::getFiguration(Segment *s)
                         events.push_back(bestRelation);
                     }
                 }
-                figurationT figurationAll = { events, duration, };
+                Figuration figurationAll = { events, duration, };
                 return figurationAll;
             }
         }
-        // When done (end), let each original event choose its best
-        // hypothesis.  If we find ties, stop and return empty.
-        
     }
 
-    figurationT figurationAll = { events, 0, };
+    Figuration figurationAll = { events, 0, };
     return figurationAll;
 }
-
-/// @class A chord together with its start and end times.
-/// @author Tom Breton (Tehom)
-class TimedEventVector
-{
-public:
-    eventVector chord;
-    timeT       start;
-    timeT       end;
-};
-/// @typedef Several TimedEventVectors in the same bar (or other group)
-/// @author Tom Breton (Tehom)
-typedef std::vector<TimedEventVector> TimeSegmentedEventVector;
 
 /// Initialize ExpandFigurationCommand
 /// @author Tom Breton (Tehom)
 void
 ExpandFigurationCommand::initialise(SegmentSelection selection)
 {
-    figurationT figuration;
+    Figuration figuration;
     // figurationSegment will be the first segment in which we find
     // figuration.
     Segment *figurationSegment = 0;
@@ -608,9 +610,9 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
         // Don't try to expand the figuration segment.
         if (s == figurationSegment) { continue; }
         if ((s)->getType() != Segment::Internal) {
-            // This shouldn't be possible because
+            // Audio segments shouldn't get here because
             // RosegardenMainWindow::slotExpandFiguration checks for
-            // audio segments.
+            // them
             throw Exception("Shouldn't get an audio segment in ExpandFigurationCommand.");
         }
         
@@ -623,12 +625,35 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
 
         /** Add notes to target segment **/
 
-        // We step figurationStartTime along the segment (For now, by
-        // exact bars.  Later, we may figure it out robustly).  For
-        // each valid bar, we add the entire figuration.
-        for ( timeT figurationStartTime = getFirstFigTime(s);
-              figurationStartTime < s->getEndTime();
-              figurationStartTime = getNextFigTime(s, figurationStartTime)) {
+        // We step figurationStartTime along the composition, finding
+        // valid places to expand it.  We have two loop variables,
+        // figurationStartTime and timePastFiguration.
+
+        // didExpansion is true just if we expanded last iteration.
+        // It helps us find valid times to expand.
+        bool didExpansion = false;
+        for (timeT
+                 figurationStartTime =
+                 figuration.getOKFigTime(m_composition, s->getStartTime()),
+                 timePastFiguration =
+                         figuration.getEndTime(figurationStartTime);
+             // Test to continue
+             figurationStartTime < s->getEndTime();
+             // Step both loop variables.
+             // If we did expansion, we can't expand again till after
+             // timePastFiguration, otherwise we can try again at the
+             // next legal time.
+              figurationStartTime =
+                 (didExpansion ?
+                  figuration.getOKFigTime(m_composition, timePastFiguration) :
+                  figuration.getNextFigTime(m_composition, figurationStartTime)),
+              timePastFiguration =
+                      figuration.getEndTime(figurationStartTime)) {
+
+            didExpansion = false;
+
+            // !!! Check that we can match time signature, otherwise
+            // continue to next.
 
             /* Get one or more block chords */
 
@@ -641,18 +666,20 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
             // If we have no match for the number of tones, continue
             // to the next possible time.
             // !!! For now, assume the right number of tones is 3.
-            if (blockChord.size() != 3) { continue; }
             const unsigned int nbChordNotes = 3;
+            if (blockChord.size() != nbChordNotes) { continue; }
 
-            timeT timePastFiguration =
-                figurationStartTime + figuration.m_duration;
-            Segment::iterator EventsPastFiguration = 
-                s->findTime(timePastFiguration);
+            // Variables for the chord search loop and slightly past
+            // it.  We keep track of when we looked for a chord, to
+            // control search timing, and when we last found one, to
+            // give us chord duration.
             timeT timeLookedChord = figurationStartTime;
             timeT timeGotChord    = figurationStartTime;
 
             // Iterate over events within the figuration duration, to
             // find more block chords in case they changed.
+            Segment::iterator EventsPastFiguration = 
+                s->findTime(timePastFiguration);
             for (Segment::iterator e = s->findTime(figurationStartTime);
                  e != EventsPastFiguration;
                  ++e) {
@@ -668,7 +695,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
                 eventVector newBlockChord =
                     getBlockChord(s, timeNow);
                 // If new chord is compatible with the old one, store
-                // the *old* one, which is now knows its complete
+                // the *old* one, which now knows its complete
                 // duration, and consider the new one the incomplete
                 // one.
                 if (newBlockChord.size() == nbChordNotes) {
@@ -695,12 +722,13 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
                             endl;
                     }
                 // Whether we got a usable chord or not, we looked at
-                // this time so skip any further events at timeNow
+                // this time.
                 timeLookedChord = timeNow;
             }
 
             // Store the final chord and its timing.  Since we started
-            // with a chord there's guaranteed to be a last chord.
+            // with a chord and we always keep one incomplete one,
+            // there's guaranteed to be a last chord.
             TimedEventVector timedChord = {
                 blockChord,
                 timeGotChord,
@@ -708,8 +736,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
             };
             multiBlockChords.push_back(timedChord);
             
-            // Get the key, which will always be the current key at
-            // this time.
+            // Get the key, for diatonic relations.
             const Key key =
                 s->getKeyAtTime(figurationStartTime);
             
@@ -718,21 +745,22 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
             for (RelativeEventVec::iterator k = events.begin();
                  k != events.end();
                  ++k) {
+                const timeT eventTime = figurationStartTime +
+                    (*k)->getRelativeTime(); 
                 const eventVector *pBlockChord;
                 // Get the relevant blockChord.
                 for (TimeSegmentedEventVector::iterator j =
                          multiBlockChords.begin();
                      j != multiBlockChords.end();
                      ++j) {
-                        const timeT time = figurationStartTime +
-                            (*k)->getRelativeTime(); 
-                        if ((time >= j->start) &&
-                            (time < j->end))
+                        if ((eventTime >= j->start) &&
+                            (eventTime < j->end))
                             {
                                 pBlockChord = &j->chord;
                                 break;
                             }
                     }
+                if (!pBlockChord) { continue; }
                 
                 Event *newNote =
                     (*k)->getAsEvent(figurationStartTime,
@@ -740,7 +768,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
                                      *pBlockChord);
                 target->insert(newNote);
             }
-            
+            didExpansion = true;
         }
         m_composition->weakAddSegment(target);
         target->normalizeRests(s->getStartTime(),s->getEndTime());

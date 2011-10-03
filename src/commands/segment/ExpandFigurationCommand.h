@@ -36,9 +36,13 @@ namespace Rosegarden
     typedef std::vector<RelativeEvent *> RelativeEventVec;
 
 
-class figurationT
+class Figuration
 {
  public:
+    static timeT getOKFigTime(Composition *composition, timeT lookAtTime = 0);
+    static timeT getNextFigTime(Composition *composition, timeT lookAtTime);
+    timeT       getEndTime(timeT startTime)
+    { return startTime + m_duration; }
     RelativeEventVec m_events;
     timeT            m_duration;
     // Punt: Keysignature it applies to.
@@ -78,10 +82,8 @@ private:
                                               const Key key,
                                               timeT startTime);
     static RelationSeenMap getFreshSeenMap(UnsolvedFiguration &figuration);
-    static timeT       getFirstFigTime(Segment *s);
-    static timeT       getNextFigTime(Segment *s, timeT time);
     static eventVector getBlockChord(Segment *s, timeT time);
-    static figurationT getFiguration(Segment *s);
+    static Figuration getFiguration(Segment *s);
 
     Composition                   *m_composition;
     // The new segments we make.
