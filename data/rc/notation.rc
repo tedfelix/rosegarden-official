@@ -300,7 +300,7 @@
     <Menu name="figuration">
       <text>&amp;Figuration</text>
       <Action name="parameter_chord" text="Make &amp;Parameter Chord" />
-      <Action name="figuration" text="Mark selection as &amp;figuration" />
+      <Action name="figuration" text="Mark Selection as &amp;Figuration" />
     </Menu>
   </Menu>
 

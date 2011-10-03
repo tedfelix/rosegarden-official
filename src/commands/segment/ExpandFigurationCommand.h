@@ -69,7 +69,7 @@ public:
     virtual ~ExpandFigurationCommand();
 
     static QString getGlobalName() 
-        { return tr("Expand block chords to figurations"); }
+        { return tr("Expand Block Chords to Figurations"); }
 
     virtual void execute();
     virtual void unexecute();

@@ -201,7 +201,7 @@
     <Action name="repeats_to_real_copies" text="Turn Re&amp;peats into Copies" />
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />
   <Separator/>
-    <Action name="expand_figuration" text="E&amp;xpand block chord segments by figuration" />
+    <Action name="expand_figuration" text="E&amp;xpand Block Chord Segments by Figuration" />
   <Separator/>
     <Action name="manage_trigger_segments" text="Manage Tri&amp;ggered Segments" />
   </Menu>

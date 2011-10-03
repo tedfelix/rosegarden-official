@@ -30,7 +30,7 @@ namespace Rosegarden
 {
 
 // @class FitToBeatsCommand
-// @remarks Implements the command "Fit existing beats to beat segment".  
+// @remarks Implements the command "Fit Existing Beats to Beat Segment".  
 // @author Tom Breton (Tehom)
 class FitToBeatsCommand : public NamedCommand
 {
@@ -42,7 +42,7 @@ public:
     virtual ~FitToBeatsCommand();
 
     static QString getGlobalName() 
-        { return tr("Fit existing beats to beat segment"); }
+        { return tr("Fit Existing Beats to Beat Segment"); }
 
     virtual void execute();
     virtual void unexecute();
