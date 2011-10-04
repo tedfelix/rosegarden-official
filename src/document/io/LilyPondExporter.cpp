@@ -134,6 +134,7 @@ LilyPondExporter::readConfigVariables(void)
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt() ;
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
+    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt() ;
     settings.endGroup();
 }
 
@@ -1032,6 +1033,8 @@ LilyPondExporter::write()
             return false;
         }
 
+        timeT repeatOffset = 0;
+
         for (Composition::iterator i = m_composition->begin();
              i != m_composition->end(); ++i) {
 
@@ -1340,7 +1343,7 @@ LilyPondExporter::write()
                     // bars
                     str << std::endl << indent(col);
                     writeSkip(timeSignature, compositionStartTime,
-                              m_composition->getBarStart(firstBar) - compositionStartTime,
+                              m_composition->getBarStart(firstBar) - compositionStartTime - repeatOffset,
                               false, str);
                 }
 
@@ -1427,12 +1430,43 @@ LilyPondExporter::write()
                     if ((*i)->isRepeating() && !haveRepeating) {
 
                         haveRepeating = true;
+                        int numRepeats = 2; 
 
-                        //!!! calculate the number of times this segment
-                        //repeats and make the following variable meaningful
-                        int numRepeats = 2;
+                        switch (m_repeatMode) {
+                        case REPEAT_BASIC :
+                            // The old unfinished way
+                            str << std::endl << indent(col++) << "\\repeat volta " << numRepeats << " {";
+                            break;
+                            
+                        case REPEAT_VOLTA :
+                        case REPEAT_UNFOLD :
+                            // Calculate the number of times this segment
+                            // repeats and make the following variable meaningful
+                            timeT startOfSeg = (*i)->getStartTime();
+                            timeT endOfSeg = (*i)->getEndMarkerTime();
+                            timeT nextSegmentStartTime = m_composition->getEndMarker();
+                            for (Composition::iterator j = m_composition->begin();
+                                    j != m_composition->end(); ++j) {
+                                if ((*j)->getTrack() != track->getId()) continue;
+                                if ((*j)->getStartTime() <= startOfSeg) continue;
+                                if ((*j)->getStartTime() < nextSegmentStartTime); {
+                                    nextSegmentStartTime = (*j)->getStartTime();
+                                }
+                            }
+                            numRepeats = (nextSegmentStartTime - startOfSeg + 1) /
+                                              (endOfSeg - startOfSeg);
 
-                        str << std::endl << indent(col++) << "\\repeat volta " << numRepeats << " {";
+                            if (m_repeatMode == REPEAT_VOLTA) {
+                                repeatOffset += (numRepeats - 1) * (endOfSeg - startOfSeg);
+                                str << std::endl << indent(col++) 
+                                    << "\\repeat volta " << numRepeats << " {";
+                            } else {
+                                // m_repeatMode == REPEAT_UNFOLD
+                                str << std::endl << indent(col++) 
+                                    << "\\repeat unfold " << numRepeats << " {";
+                            }
+                            break;
+                        }
                     }
 
                     // open the \alternative section if this bar is alternative ending 1

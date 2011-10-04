@@ -260,6 +260,16 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyNoteLanguage, 7, 1);
     m_lilyNoteLanguage->setToolTip(tr("<qt>Outputs note names and accidentals in any of LilyPond's supported languages</qt>"));
 
+    m_lilyRepeatMode = new QComboBox(frameNotation);
+    m_lilyRepeatMode->addItem(tr("Basic twice repeat"));
+    m_lilyRepeatMode->addItem(tr("Repeat when possible"));
+    m_lilyRepeatMode->addItem(tr("Unfold when possible"));
+
+    layoutNotation->addWidget(new QLabel(
+                                   tr("Repeat mode"), frameNotation),8, 0);
+    layoutNotation->addWidget(m_lilyRepeatMode, 8, 1);
+    m_lilyRepeatMode->setToolTip(tr("<qt>How to export repeating segments.</qt>"));
+
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);
 
@@ -323,6 +333,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyExportStaffGroup->setChecked(settings.value("lilyexportstaffbrackets", "true").toBool());
     m_lilyMarkerMode->setCurrentIndex(settings.value("lilyexportmarkermode", 0).toUInt());
     m_lilyNoteLanguage->setCurrentIndex(settings.value("lilyexportnotelanguage", 6).toUInt());
+    m_lilyRepeatMode->setCurrentIndex(settings.value("lilyrepeatmode", 0).toUInt());
 
     std::cerr << "QSettings for LilyPond (populateDefaultValues):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
@@ -352,6 +363,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
     settings.setValue("lilyexportnotelanguage", m_lilyNoteLanguage->currentIndex());
+    settings.setValue("lilyrepeatmode", m_lilyRepeatMode->currentIndex());
 
     std::cerr << "QSettings for LilyPond (slotApply):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
