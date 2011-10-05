@@ -1144,10 +1144,10 @@ RosegardenMainWindow::initView()
     getTransport()->raise();
 
     // set the play metronome button
-    getTransport()->MetronomeButton()->setFlat(comp.usePlayMetronome());
+    getTransport()->MetronomeButton()->setChecked(comp.usePlayMetronome());
 
     // Set the solo button
-    getTransport()->SoloButton()->setFlat(comp.isSolo());
+    getTransport()->SoloButton()->setChecked(comp.isSolo());
 
     // set the transport mode found in the configuration
     getTransport()->setNewMode(transportMode);
@@ -5230,14 +5230,14 @@ RosegardenMainWindow::slotToggleMetronome()
         else
             comp.setRecordMetronome(true);
 
-        getTransport()->MetronomeButton()->setFlat(comp.useRecordMetronome());
+        getTransport()->MetronomeButton()->setChecked(comp.useRecordMetronome());
     } else {
         if (comp.usePlayMetronome())
             comp.setPlayMetronome(false);
         else
             comp.setPlayMetronome(true);
 
-        getTransport()->MetronomeButton()->setFlat(comp.usePlayMetronome());
+        getTransport()->MetronomeButton()->setChecked(comp.usePlayMetronome());
     }
 }
 
@@ -5309,9 +5309,9 @@ RosegardenMainWindow::slotRecord()
         //
         QMessageBox::critical(0, tr("Rosegarden"), s);
 
-        getTransport()->MetronomeButton()->setFlat(false);
-        getTransport()->RecordButton()->setFlat(false);
-        getTransport()->PlayButton()->setFlat(false);
+        getTransport()->MetronomeButton()->setChecked(false);
+        getTransport()->RecordButton()->setChecked(false);
+        getTransport()->PlayButton()->setChecked(false);
         return ;
     } catch (AudioFileManager::BadAudioPathException e) {
             if (QMessageBox::warning
@@ -5324,16 +5324,16 @@ RosegardenMainWindow::slotRecord()
                 slotOpenAudioPathSettings();
             }//end if
         
-        getTransport()->MetronomeButton()->setFlat(false);
-        getTransport()->RecordButton()->setFlat(false);
-        getTransport()->PlayButton()->setFlat(false);
+        getTransport()->MetronomeButton()->setChecked(false);
+        getTransport()->RecordButton()->setChecked(false);
+        getTransport()->PlayButton()->setChecked(false);
         return ;
     } catch (Exception e) {
         QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
 
-        getTransport()->MetronomeButton()->setFlat(false);
-        getTransport()->RecordButton()->setFlat(false);
-        getTransport()->PlayButton()->setFlat(false);
+        getTransport()->MetronomeButton()->setChecked(false);
+        getTransport()->RecordButton()->setChecked(false);
+        getTransport()->PlayButton()->setChecked(false);
         return ;
     }
 
@@ -5390,10 +5390,10 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
 
         // toggle the loop button
         if (lhs != rhs) {
-            getTransport()->LoopButton()->setFlat(true);
+            getTransport()->LoopButton()->setChecked(true);
             enterActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
         } else {
-            getTransport()->LoopButton()->setFlat(false);
+            getTransport()->LoopButton()->setChecked(false);
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
     } catch (QString s) {
@@ -5593,7 +5593,7 @@ RosegardenMainWindow::slotToggleSolo(bool value)
     RG_DEBUG << "RosegardenMainWindow::slotToggleSolo value = " << value << endl;
 
     m_doc->getComposition().setSolo(value);
-    getTransport()->SoloButton()->setFlat(value);
+    getTransport()->SoloButton()->setChecked(value);
 
     m_doc->slotDocumentModified();
 

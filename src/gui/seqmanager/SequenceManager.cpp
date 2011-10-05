@@ -206,7 +206,7 @@ SequenceManager::play()
 
     // make sure we toggle the play button
     //
-    m_transport->PlayButton()->setFlat(true);
+    m_transport->PlayButton()->setChecked(true);
 
     //!!! disable the record button, because recording while playing is horribly
     // broken, and disabling it is less complicated than fixing it
@@ -319,9 +319,9 @@ SequenceManager::stopping()
     //
     if (m_transportStatus == RECORDING_ARMED) {
         m_transportStatus = STOPPED;
-        m_transport->RecordButton()->setFlat(false);
+        m_transport->RecordButton()->setChecked(false);
         m_transport->MetronomeButton()->
-        setFlat(m_doc->getComposition().usePlayMetronome());
+          setChecked(m_doc->getComposition().usePlayMetronome());
         return ;
     }
 
@@ -342,9 +342,9 @@ SequenceManager::stop()
     // Toggle off the buttons - first record
     //
     if (m_transportStatus == RECORDING) {
-        m_transport->RecordButton()->setFlat(false);
+        m_transport->RecordButton()->setChecked(false);
         m_transport->MetronomeButton()->
-        setFlat(m_doc->getComposition().usePlayMetronome());
+          setChecked(m_doc->getComposition().usePlayMetronome());
 
         // Remove the countdown dialog and stop the timer
         //
@@ -353,7 +353,7 @@ SequenceManager::stop()
     }
 
     // Now playback
-    m_transport->PlayButton()->setFlat(false);
+    m_transport->PlayButton()->setChecked(false);
 
     // re-enable the record button if it was previously disabled when
     // going into play mode - DMM
@@ -396,7 +396,7 @@ SequenceManager::stop()
 
     // always untoggle the play button at this stage
     //
-    m_transport->PlayButton()->setFlat(false);
+    m_transport->PlayButton()->setChecked(false);
     SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing" << endl;
 
     // We don't reset controllers at this point - what happens with static
@@ -507,7 +507,7 @@ SequenceManager::record(bool toggled)
 
         if (instr && instr->getType() == Instrument::Audio) {
             if (!m_doc || !(m_soundDriverStatus & AUDIO_OK)) {
-                m_transport->RecordButton()->setFlat(false);
+                m_transport->RecordButton()->setChecked(false);
                 throw(Exception(QObject::tr("Audio subsystem is not available - can't record audio")));
             }
             // throws BadAudioPathException if path is not valid:
@@ -523,8 +523,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton()->setFlat(comp.usePlayMetronome());
-            m_transport->RecordButton()->setFlat(false);
+            m_transport->MetronomeButton()->setChecked(comp.usePlayMetronome());
+            m_transport->RecordButton()->setChecked(false);
 
             return ;
         }
@@ -534,8 +534,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton()->setFlat(comp.useRecordMetronome());
-            m_transport->RecordButton()->setFlat(true);
+            m_transport->MetronomeButton()->setChecked(comp.useRecordMetronome());
+            m_transport->RecordButton()->setChecked(true);
 
             return ;
         }
@@ -615,7 +615,7 @@ punchin:
         checkSoundDriverStatus(false);
 
         // toggle the Metronome button if it's in use
-        m_transport->MetronomeButton()->setFlat(comp.useRecordMetronome());
+        m_transport->MetronomeButton()->setChecked(comp.useRecordMetronome());
 
         // Update record metronome status
         //
@@ -671,8 +671,8 @@ punchin:
         }
 
         // set the buttons
-        m_transport->RecordButton()->setFlat(true);
-        m_transport->PlayButton()->setFlat(true);
+        m_transport->RecordButton()->setChecked(true);
+        m_transport->PlayButton()->setChecked(true);
 
         if (comp.getCurrentTempo() == 0) {
             SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000" << endl;
