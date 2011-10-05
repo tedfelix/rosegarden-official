@@ -35,7 +35,11 @@ namespace Rosegarden
   
   class RosegardenMainWindow;
   class RosegardenDocument;
-  
+
+  /// Support for the TranzPort wireless remote control
+  /**
+   * For the Rosegarden transport dialog, see TransportDialog.
+   */
   class TranzportClient : public QObject, public CompositionObserver
   {
       Q_OBJECT
