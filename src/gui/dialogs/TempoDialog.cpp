@@ -91,11 +91,11 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
     //    m_tempoTargetCheckBox = new QCheckBox(tr("Ramping to:"), frame);
     m_tempoTargetSpinBox = new QDoubleSpinBox(frame);
-    m_tempoValueSpinBox->setDecimals(3);
-    m_tempoValueSpinBox->setMaximum(1000);
-    m_tempoValueSpinBox->setMinimum(1);
-    m_tempoValueSpinBox->setSingleStep(1);
-    m_tempoValueSpinBox->setValue(120);
+    m_tempoTargetSpinBox->setDecimals(3);
+    m_tempoTargetSpinBox->setMaximum(1000);
+    m_tempoTargetSpinBox->setMinimum(1);
+    m_tempoTargetSpinBox->setSingleStep(1);
+    m_tempoTargetSpinBox->setValue(120);
 
     //    layout->addWidget(m_tempoTargetCheckBox, 1, 0, 0+1, 1- 1, AlignRight);
     //    layout->addWidget(m_tempoTargetSpinBox, 1, 2);
