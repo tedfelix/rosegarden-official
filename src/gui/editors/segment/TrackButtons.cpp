@@ -1041,8 +1041,10 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     mute->setToolTip(tr("Mute track"));
     hblayout->addWidget(mute);
 
-    record = new LedButton(Rosegarden::GUIPalette::getColour
-                (Rosegarden::GUIPalette::RecordMIDITrackLED), trackHBox);
+    Rosegarden::Instrument *ins =
+        m_doc->getStudio().getInstrumentById(track->getInstrument());
+
+    record = new LedButton(getRecordLedColour(ins), trackHBox);
     record->setToolTip(tr("Record on this track"));
     hblayout->addWidget(record);
 
@@ -1069,10 +1071,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     hblayout->addSpacing(vuSpacing);
 
     if (track->getLabel() == std::string("")) {
-
-        Rosegarden::Instrument *ins =
-            m_doc->getStudio().getInstrumentById(track->getInstrument());
-
         if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
             trackLabel->getTrackLabel()->setText(tr("<untitled audio>"));
         } else {
@@ -1104,9 +1102,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     // instrument label
     //
-    Rosegarden::Instrument *ins =
-        m_doc->getStudio().getInstrumentById(track->getInstrument());
-
     QString instrumentName(tr("<no instrument>"));
     if (ins) instrumentName = ins->getLocalizedPresentationName();
 
