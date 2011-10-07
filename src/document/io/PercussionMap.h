@@ -1,17 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2011 the Rosegarden development team.
-
-    This file is Copyright 2002
-        Hans Kieserman      <hkieserman@mail.com>
-    with heavy lifting from csoundio as it was on 13/5/2002.
-
-    More or less complete rewrite (Aug 2011)
-        Niek van den Berg   <niekjvandenberg@gmail.com>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
