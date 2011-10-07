@@ -56,8 +56,8 @@ namespace Accidentals
     const Accidental Natural = "natural";
     const Accidental DoubleSharp = "double-sharp";
     const Accidental DoubleFlat = "double-flat";
- 
-    // Additional Accidentals for demi- and sesqui- sharps and flats 
+
+    // Additional Accidentals for demi- and sesqui- sharps and flats
     const Accidental QuarterFlat = "demiflat";
     const Accidental ThreeQuarterFlat =  "sesqiflat";
     const Accidental QuarterSharp = "demisharp";
@@ -1706,7 +1706,7 @@ Pitch::getOctave(int octaveBase) const
     return m_pitch / 12 + octaveBase;
 }
 
-int 
+int
 Pitch::getOctaveAccidental(int octaveBase, Accidental acc) const
 {
     int t_pitch = m_pitch;
@@ -2063,7 +2063,7 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
             dlist.push_back(m_barDuration/2);
             durationRemaining -= m_barDuration/2;
-            offset += m_barDuration;
+            offset += m_barDuration/2;
 
         }
 
