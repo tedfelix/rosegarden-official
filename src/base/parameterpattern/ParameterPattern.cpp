@@ -128,6 +128,7 @@ void
 ParameterPattern::
 setProperties(QMainWindow *parent,
               EventSelection *selection,
+              const std::string eventType,
               PropertyName property,
               const ParameterPatternVec *patterns,
               int normValue)
@@ -141,7 +142,7 @@ setProperties(QMainWindow *parent,
     // situation will ultimately be owned by SelectionPropertyCommand via
     // dialog result
     Situation * situation =
-        new Situation(property, selection, normValue);
+        new Situation(eventType, property, selection, normValue);
 
     EventParameterDialog
         dialog(parent,
@@ -164,7 +165,8 @@ setVelocities(QMainWindow *parent,
               EventSelection *selection,
               int normVelocity)
 {
-    setProperties(parent, selection, BaseProperties::VELOCITY,
+    setProperties(parent, selection, Note::EventType,
+                  BaseProperties::VELOCITY,
                   &ParameterPattern::VelocityPatterns, normVelocity);
 }
 
@@ -172,13 +174,14 @@ setVelocities(QMainWindow *parent,
 void
 ParameterPattern::
 setPropertyFlat(EventSelection *selection,
+                const std::string eventType,
                 PropertyName property,
                 int targetValue)
 {
     if (!selection) { return; }
 
     Result
-        result(new Situation(property, selection),
+        result(new Situation(eventType, property, selection),
                ParameterPattern::FlatPattern,
                targetValue);
 
@@ -191,7 +194,8 @@ void
 ParameterPattern::
 setVelocitiesFlat(EventSelection *selection, int targetVelocity)
 {
-    setPropertyFlat(selection, BaseProperties::VELOCITY,
+    setPropertyFlat(selection, Note::EventType,
+                    BaseProperties::VELOCITY,
                     targetVelocity);
 }
 

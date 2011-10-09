@@ -49,7 +49,8 @@ FlatParameterPattern::setEventProperties(iterator begin, iterator end,
     const PropertyName property = result->m_situation->m_property;
     const int          value    = result->m_parameters[0];
     for (iterator i = begin; i != end; ++i) {
-        (*i)->set<Int>(property, value);
+        if ((*i)->isa(result->m_situation->m_eventType))
+            { (*i)->set<Int>(property, value); }
     }
 }
 

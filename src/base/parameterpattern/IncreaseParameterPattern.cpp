@@ -58,13 +58,14 @@ IncreaseParameterPattern::setEventProperties(iterator begin, iterator end,
     const int          delta    = result->m_parameters[0];
     const int          increase = m_isIncrease ? delta : -delta;
     for (iterator i = begin; i != end; ++i) {
-      int oldValue = (*i)->get<Int>(property);
-      int newValue = oldValue + increase;
-      // This assumes a 0-127 value, as for velocity.
-      if (newValue > 127) { newValue = 127; }
-      else if (newValue < 0) { newValue = 0; }
-      (*i)->set<Int>(property, newValue);
-    }
+        if ((*i)->isa(result->m_situation->m_eventType)) {
+            int oldValue = (*i)->get<Int>(property);
+            int newValue = oldValue + increase;
+            // This assumes a 0-127 value, as for velocity.
+            if (newValue > 127) { newValue = 127; }
+            else if (newValue < 0) { newValue = 0; }
+            (*i)->set<Int>(property, newValue);
+        }}
 }
 
 } // End namespace Rosegarden 

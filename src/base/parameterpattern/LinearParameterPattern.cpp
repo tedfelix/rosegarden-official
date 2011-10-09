@@ -79,9 +79,11 @@ setEventProperties(iterator begin, iterator end,
     double step = double(value1 - value2) / double(duration);
 
     for (iterator i = begin; i != end; ++i) {
-        timeT relativeTime = (*i)->getAbsoluteTime() - startTime;
-        int value = value1 - int(step * relativeTime);
-        (*i)->set<Int>(property, value);
+        if ((*i)->isa(result->m_situation->m_eventType)) {
+            timeT relativeTime = (*i)->getAbsoluteTime() - startTime;
+            int value = value1 - int(step * relativeTime);
+            (*i)->set<Int>(property, value);
+        }
     }
 }
 

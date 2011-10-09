@@ -55,11 +55,14 @@ setEventProperties(iterator begin, iterator end,
     const int          value1   = result->m_parameters[0];
     const int          value2   = result->m_parameters[1];
     int count = 0;
-    for (iterator i = begin; i != end; ++i, ++count) {
-        if (count % 2 == 0)
-            { (*i)->set<Int>(property, value1); }
-        else
-            { (*i)->set<Int>(property, value2); }
+    for (iterator i = begin; i != end; ++i) {
+        if ((*i)->isa(result->m_situation->m_eventType)) {
+            if (count % 2 == 0)
+                { (*i)->set<Int>(property, value1); }
+            else
+                { (*i)->set<Int>(property, value2); }
+            ++count;
+        }
     }
 }
 

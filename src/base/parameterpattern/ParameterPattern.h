@@ -92,28 +92,29 @@ protected:
     {
 
     public:
-    Situation(const PropertyName &property,
+    Situation(std::string eventType,
+              const PropertyName &property,
               EventSelection *selection,
-              int currentFlatValue)
-        : m_property(property),
+              int currentFlatValue = 0)
+        : m_eventType(eventType),
+            m_property(property),
             m_selection(selection),
             m_currentFlatValue(currentFlatValue)
             {};
 
-    Situation(const PropertyName &property,
-              EventSelection *selection)
-        : m_property(property),
-            m_selection(selection),
-            m_currentFlatValue(selection->getAverageProperty(property))
-                {};
-
         QString getPropertyNameQString(void) const;
 
     public:
+        // We are treating this event type...
+        const std::string          m_eventType;
+        // ...and this property
         const PropertyName         m_property;
-        // m_selection can't be const pointer because SelectionPropertyCommand
-        // passes it as non-const to BasicSelectionCommand.
+        // ...in this selection.  m_selection can't be const pointer
+        // because SelectionPropertyCommand passes it as non-const to
+        // BasicSelectionCommand.
         EventSelection            *m_selection;
+        // A reference value from outside.  Some patterns use it as
+        // default. 
         const int                  m_currentFlatValue;
     };
 
@@ -127,17 +128,17 @@ protected:
     // @author Tom Breton (Tehom)
     struct Result
     {
-    Result(const Situation  *situation,
-           const ParameterPattern         *pattern,
-           const BareParams           parameters)
+    Result(const Situation        *situation,
+           const ParameterPattern *pattern,
+           const BareParams        parameters)
     : m_situation(situation),
             m_pattern(pattern),
             m_parameters(parameters)
         {}
 
-    Result(const Situation  *situation,
-           const ParameterPattern         *pattern,
-           int                             soleParameter)
+    Result(const Situation        *situation,
+           const ParameterPattern *pattern,
+           int                     soleParameter)
     : m_situation(situation),
             m_pattern(pattern),
             m_parameters(1, soleParameter)
@@ -146,9 +147,9 @@ protected:
         EventSelection *getSelection(void);
         void            modifySegment(void);
         
-        const Situation  *m_situation;
-        const ParameterPattern         *m_pattern;
-        const BareParams           m_parameters;
+        const Situation        *m_situation;
+        const ParameterPattern *m_pattern;
+        const BareParams        m_parameters;
     };
 
     /*** End-to-end methods that do the complete operation  ***/
@@ -160,6 +161,7 @@ public:
     
     // Set some property flat, no dialog. 
     static void setPropertyFlat(EventSelection *selection,
+                                const std::string eventType,
                                 PropertyName property,
                                 int targetValue);
     
@@ -171,6 +173,7 @@ public:
     // Set some property, with a dialog
     static void setProperties(QMainWindow *parent,
                               EventSelection *selection,
+                              const std::string eventType,
                               PropertyName property,
                               const ParameterPatternVec *patterns,
                               int normValue = -1);
