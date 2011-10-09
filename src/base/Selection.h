@@ -134,6 +134,18 @@ public:
      */
     timeT getTotalNotationDuration() const;
 
+    /**
+     * Return the average value of an integer-valued property for
+     * events in the selection.
+     */
+    int   getAverageProperty(PropertyName property) const;
+
+    /**
+     * Return the maximum and minimum values of an integer-valued
+     * property for events in the selection.
+     */
+    std::pair<int,int> getMinMaxProperty(PropertyName property) const;
+
     typedef std::vector<std::pair<Segment::iterator,
                                   Segment::iterator> > RangeList;
     /**

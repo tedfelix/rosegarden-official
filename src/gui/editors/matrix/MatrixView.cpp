@@ -85,6 +85,7 @@
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
 #include "base/MidiTypes.h"
+#include "base/parameterpattern/ParameterPattern.h"
 
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"
@@ -996,36 +997,15 @@ MatrixView::slotVelocityDown()
 void
 MatrixView::slotSetVelocities()
 {
-    if (!getSelection()) return;
-
-    EventParameterDialog dialog(this,
-                                tr("Set Event Velocities"),
-                                BaseProperties::VELOCITY,
-                                getCurrentVelocity());
-
-    if (dialog.exec() == QDialog::Accepted) {
-        CommandHistory::getInstance()->addCommand
-            (new SelectionPropertyCommand
-             (getSelection(),
-              BaseProperties::VELOCITY,
-              dialog.getPattern(),
-              dialog.getValue1(),
-              dialog.getValue2()));
-    }
+    ParameterPattern::
+        setVelocities(this, getSelection(), getCurrentVelocity());
 }
 
 void
 MatrixView::slotSetVelocitiesToCurrent()
 {
-    if (!getSelection()) return;
-
-    CommandHistory::getInstance()->addCommand
-        (new SelectionPropertyCommand
-         (getSelection(),
-          BaseProperties::VELOCITY,
-          FlatPattern,
-          getCurrentVelocity(),
-          getCurrentVelocity()));
+    ParameterPattern::
+        setVelocitiesFlat(getSelection(), getCurrentVelocity());
 }
 
 void

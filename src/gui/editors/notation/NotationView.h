@@ -364,12 +364,6 @@ private:
      */
     QString getLilyPondTmpFilename();
 
-    /**
-     * Get the average velocity of the selected notes
-     */
-    int getVelocityFromSelection();
-
-
     int getPitchFromNoteInsertAction(QString name,
                                      Accidental &accidental,
                                      const Clef &clef,

@@ -1,0 +1,212 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2011 the Rosegarden development team.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef _RG_PARAMETERPATTERN_H_
+#define _RG_PARAMETERPATTERN_H_
+
+#include "base/PropertyName.h"
+#include "base/Selection.h"
+#include <QMainWindow>
+#include <QString>
+#include <map>
+#include <vector>
+
+namespace Rosegarden
+{
+
+class EventParameterDialog;
+class SelectionPropertyCommand;
+
+// @typedef ParameterPatternBareParameters The bare parameters.
+// modifySegment uses this type as well as other data to determine
+// what to do.  Declared here because the compiler doesn't like it
+// when declared inside ParameterPattern, so we just typedef it into
+// there.
+typedef std::vector<int> ParameterPatternBareParameters;
+
+// @class ParameterPattern Base class of parameter patterns.  This
+// class has no data members.  It is used for its static functions,
+// its nested types, and its descendants' vtables.  Only a static
+// instance of each subclass exists.
+// @author Tom Breton (Tehom)
+struct ParameterPattern
+{
+    // Many of the nested classes had to be all public so that derived
+    // classes could see them, so in order to have degree of
+    // encapsulation, they are protected and the classes that would
+    // use them are friended.  Not perfect, but until C++ lets us
+    // friend derived classes, it'll have to do.
+    friend class EventParameterDialog;
+    friend class SelectionPropertyCommand;
+
+    typedef EventSelection::eventcontainer::iterator iterator;
+    typedef std::pair<timeT,timeT> StartAndDuration;
+    typedef ParameterPatternBareParameters BareParams;
+    typedef std::vector<ParameterPattern *> ParameterPatternVec;
+    
+    /*** Nested class SliderSpec  ***/
+
+protected:
+    // @class SliderSpec The arguments to make a slider that are of
+    // interest here, grouped in one class.
+    // @author Tom Breton (Tehom)
+    struct SliderSpec
+    {
+    SliderSpec(QString label, int defaultValue)
+    : m_label(label),
+            m_defaultValue(defaultValue),
+            m_minValue(0),
+            m_maxValue(127)
+        {}
+        QString m_label;
+        int m_defaultValue;
+        int m_minValue;
+        int m_maxValue;
+    };
+
+    typedef std::vector<SliderSpec>  SliderSpecVector;
+
+    /*** Nested class Situation  ***/
+
+protected:
+    // @class Situation Non-gui-related situation data for
+    // EventParameterDialog and SelectionPropertyCommand.  It's all
+    // public because there's no way to friend all derived classes of
+    // ParameterPattern.
+    // @author Tom Breton (Tehom)
+    class Situation
+    {
+
+    public:
+    Situation(const PropertyName &property,
+              EventSelection *selection,
+              int currentFlatValue)
+        : m_property(property),
+            m_selection(selection),
+            m_currentFlatValue(currentFlatValue)
+            {};
+
+    Situation(const PropertyName &property,
+              EventSelection *selection)
+        : m_property(property),
+            m_selection(selection),
+            m_currentFlatValue(selection->getAverageProperty(property))
+                {};
+
+        QString getPropertyNameQString(void) const;
+
+    public:
+        const PropertyName         m_property;
+        // m_selection can't be const pointer because SelectionPropertyCommand
+        // passes it as non-const to BasicSelectionCommand.
+        EventSelection            *m_selection;
+        const int                  m_currentFlatValue;
+    };
+
+    /*** Nested class Result  ***/
+    
+protected:
+    // @class EventParameter::Result The result of an EventParameterDialog
+    // or similar, to inform for SelectionPropertyCommand.  It's open
+    // because there's no way to friend all derived classes of
+    // ParameterPattern.
+    // @author Tom Breton (Tehom)
+    struct Result
+    {
+    Result(const Situation  *situation,
+           const ParameterPattern         *pattern,
+           const BareParams           parameters)
+    : m_situation(situation),
+            m_pattern(pattern),
+            m_parameters(parameters)
+        {}
+
+    Result(const Situation  *situation,
+           const ParameterPattern         *pattern,
+           int                             soleParameter)
+    : m_situation(situation),
+            m_pattern(pattern),
+            m_parameters(1, soleParameter)
+        {}
+
+        EventSelection *getSelection(void);
+        void            modifySegment(void);
+        
+        const Situation  *m_situation;
+        const ParameterPattern         *m_pattern;
+        const BareParams           m_parameters;
+    };
+
+    /*** End-to-end methods that do the complete operation  ***/
+
+public:
+    // Set velocities flat, no dialog. 
+    static void setVelocitiesFlat(EventSelection *selection,
+                                  int targetVelocity);
+    
+    // Set some property flat, no dialog. 
+    static void setPropertyFlat(EventSelection *selection,
+                                PropertyName property,
+                                int targetValue);
+    
+    // Set velocities, with a dialog
+    static void setVelocities(QMainWindow *parent,
+                              EventSelection *selection,
+                              int normVelocity = -1);
+
+    // Set some property, with a dialog
+    static void setProperties(QMainWindow *parent,
+                              EventSelection *selection,
+                              PropertyName property,
+                              const ParameterPatternVec *patterns,
+                              int normValue = -1);
+
+    /*** The abstract virtual methods ***/
+
+protected:
+    virtual QString getText(QString propertyName) const =0;
+
+    // Get the arguments that inform gui sliders or spinboxes.  This
+    // makes whatever number the parameter pattern think is
+    // appropriate, it's up to EventParameterDialog to handle it.
+    virtual SliderSpecVector
+    getSliderSpec(const Situation *situation) const =0;
+
+    // Set the properties of events from begin to end
+    // @param result is the result of an EventParameterDialog.
+    virtual void
+    setEventProperties(iterator begin, iterator end,
+                       Result *result) const =0;
+
+    /*** Static helper functions  ***/
+
+    static StartAndDuration getTimes (iterator begin, iterator end);
+
+    /*** Static objects of interest  ***/
+    
+public:
+    // All the ParameterPatterns that are useful with velocity.
+    static ParameterPatternVec VelocityPatterns;
+    // The flat pattern, for setPropertyFlat
+    static ParameterPattern *FlatPattern;
+};
+
+
+
+}
+
+#endif

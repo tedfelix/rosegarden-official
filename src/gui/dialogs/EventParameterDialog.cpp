@@ -25,6 +25,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>
+#include <QSpinBox>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -35,13 +36,62 @@
 namespace Rosegarden
 {
 
+    /******** Nested class EventParameterDialog::ParamWidget ********/
+
+// Construct a ParamWidget
+EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
+{
+    QWidget *box = new QWidget;
+    parent->addWidget(box);
+    QHBoxLayout *boxLayout = new QHBoxLayout;
+    m_label = new QLabel(tr("Value"));
+    boxLayout->addWidget(m_label);
+    m_spinBox = new QSpinBox;
+    boxLayout->addWidget(m_spinBox);
+    box->setLayout(boxLayout);
+}
+
+// Get the result value when done
+int
+EventParameterDialog::ParamWidget::getValue(void)
+{
+    return m_spinBox->value();
+}
+
+// Show the widget in accordance with args 
+void
+EventParameterDialog::ParamWidget::showByArgs(const SliderSpec* args)
+{
+    m_label->setText(args->m_label);
+    m_spinBox->setMinimum(args->m_minValue);
+    m_spinBox->setMaximum(args->m_maxValue);
+    m_spinBox->setValue(args->m_defaultValue);
+
+    m_label->show();
+    m_spinBox->show();
+}
+
+// Hide the widget
+void
+EventParameterDialog::ParamWidget::hide(void)
+{
+    m_label->hide();
+    m_spinBox->hide();
+}
+
+    /******** Main class EventParameterDialog ********/
+
+// @author Tom Breton (Tehom) (some)
+// @author Chris Cannam (most)
 EventParameterDialog::EventParameterDialog(
     QWidget *parent,
     const QString &name,
-    const PropertyName &property,
-    int startValue):
+    ParameterPattern::Situation *situation,
+    const ParameterPatternVec *patterns):
         QDialog(parent),
-        m_property(property)
+        m_situation(situation),
+        m_patterns(patterns),
+        m_NbParameters(0)
 {
     setModal(true);
     setWindowTitle(tr("Rosegarden"));
@@ -51,20 +101,21 @@ EventParameterDialog::EventParameterDialog(
     setLayout(mainLayout);
 
     QGroupBox *controls = new QGroupBox(name);
-    QVBoxLayout *controlsLayout = new QVBoxLayout;
-    controlsLayout->setSpacing(0);    
-    controls->setLayout(controlsLayout);
+    m_controlsLayout = new QVBoxLayout;
+    m_controlsLayout->setSpacing(0);    
+    controls->setLayout(m_controlsLayout);
     mainLayout->addWidget(controls);
     
     QWidget *topBox = new QWidget;
     QVBoxLayout *topBoxLayout = new QVBoxLayout;
     topBox->setLayout(topBoxLayout);
-    controlsLayout->addWidget(topBox);
+    m_controlsLayout->addWidget(topBox);
     
 
     QLabel *explainLabel = new QLabel;
+    QString propertyName = m_situation->getPropertyNameQString();
     QString text = tr("Set the %1 property of the event selection:")
-                   .arg(strtoqstr(property));
+                   .arg(propertyName);
     explainLabel->setText(text);
     topBoxLayout->addWidget(explainLabel);
 
@@ -72,66 +123,23 @@ EventParameterDialog::EventParameterDialog(
     QWidget *patternBox = new QWidget;
     QHBoxLayout *patternBoxLayout = new QHBoxLayout;
     patternBox->setLayout(patternBoxLayout);
-    controlsLayout->addWidget(patternBox);
+    m_controlsLayout->addWidget(patternBox);
     
     QLabel *child_10 = new QLabel(tr("Pattern"));
     m_patternCombo = new QComboBox;
     patternBoxLayout->addWidget(child_10);
     patternBoxLayout->addWidget(m_patternCombo);
 
-    // create options
-    // 0 flat
-    text = tr("Flat - set %1 to value").arg(strtoqstr(property));
-    m_patternCombo->addItem(text);
-
-    // 1 alternating
-    text = tr("Alternating - set %1 to max and min on alternate events").arg(strtoqstr(property));
-    m_patternCombo->addItem(text);
-
-    // 2 crescendo
-    text = tr("Crescendo - set %1 rising from min to max").arg(strtoqstr(property));
-    m_patternCombo->addItem(text);
-
-    // 3 diminuendo
-    text = tr("Diminuendo - set %1 falling from max to min").arg(strtoqstr(property));
-    m_patternCombo->addItem(text);
-
-    // 4 ringing
-    text = tr("Ringing - set %1 alternating from max to min with both dying to zero").arg(strtoqstr(property));
-    m_patternCombo->addItem(text);
+    initializePatternBox();
 
     connect(m_patternCombo, SIGNAL(activated(int)),
             this, SLOT(slotPatternSelected(int)));
 
-    QWidget *value1Box = new QWidget;
-    controlsLayout->addWidget(value1Box);
-    QHBoxLayout *value1BoxLayout = new QHBoxLayout;
-    m_value1Label = new QLabel(tr("Value"));
-    value1BoxLayout->addWidget(m_value1Label);
-    m_value1Combo = new QComboBox;
-    value1BoxLayout->addWidget(m_value1Combo);
-    value1Box->setLayout(value1BoxLayout);
-
-    QWidget *value2Box = new QWidget;
-    controlsLayout->addWidget(value2Box);
-    QHBoxLayout *value2BoxLayout = new QHBoxLayout;
-    m_value2Label = new QLabel(tr("Value"));
-    value2BoxLayout->addWidget(m_value2Label);
-    m_value2Combo = new QComboBox;
-    value2BoxLayout->addWidget(m_value2Combo);
-    value2Box->setLayout(value2BoxLayout);
-
-    for (unsigned int i = 0; i < 128; i++) {
-        m_value1Combo->addItem(QString("%1").arg(i));
-        m_value2Combo->addItem(QString("%1").arg(i));
-    }
-    m_value1Combo->setCurrentIndex(127);
+    // Instead of looping for 2 we just call twice.
+    m_paramVec.push_back(ParamWidget(m_controlsLayout));
+    m_paramVec.push_back(ParamWidget(m_controlsLayout));
 
     slotPatternSelected(0);
-
-    // start value
-    m_value1Combo->setCurrentIndex(startValue);
-    m_value2Combo->setCurrentIndex(startValue);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
@@ -140,79 +148,71 @@ EventParameterDialog::EventParameterDialog(
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
+// Initialize the widget that selects a pattern
+void
+EventParameterDialog::initializePatternBox(void)
+{
+    typedef ParameterPattern::ParameterPatternVec::const_iterator iterator;
+    QString propertyName = m_situation->getPropertyNameQString();
+
+    for (iterator i = m_patterns->begin();
+         i != m_patterns->end();
+         ++i) {
+        QString text = (*i)->getText(propertyName);
+        m_patternCombo->addItem(text);
+    }
+}
+
+// React to selecting a pattern: Set up the parameter widgets in
+// accordance with what the pattern tells us it needs.
 void
 EventParameterDialog::slotPatternSelected(int value)
 {
-    switch (value) {
-    case 0:  // flat
-        m_value1Label->setText(tr("Value"));
-        m_value1Label->show();
-        m_value1Combo->show();
-        m_value2Label->hide();
-        m_value2Combo->hide();
-        break;
+    ParameterPattern::SliderSpecVector sliderArgs =
+        getPattern(value)->getSliderSpec(m_situation);
+    typedef ParameterPattern::SliderSpecVector::const_iterator
+        ArgIterator;
 
-    case 1:  // alternating
-        m_value1Label->setText(tr("First Value"));
-        m_value2Label->setText(tr("Second Value"));
-        m_value1Label->show();
-        m_value1Combo->show();
-        m_value2Label->show();
-        m_value2Combo->show();
-        break;
-
-    case 2:  // crescendo
-        m_value1Label->setText(tr("Low Value"));
-        m_value2Label->setText(tr("High Value"));
-        m_value1Label->show();
-        m_value1Combo->show();
-        m_value2Label->show();
-        m_value2Combo->show();
-        break;
-
-    case 3:  // decrescendo
-        m_value1Label->setText(tr("High Value"));
-        m_value2Label->setText(tr("Low Value"));
-        m_value1Label->show();
-        m_value1Combo->show();
-        m_value2Label->show();
-        m_value2Combo->show();
-        break;
-
-    case 4:  // ringing
-        m_value1Label->setText(tr("First Value"));
-        m_value2Label->setText(tr("Second Value"));
-        m_value1Label->show();
-        m_value1Combo->show();
-        m_value2Label->show();
-        m_value2Combo->show();
-        break;
-
-    default:
-        RG_DEBUG << "EventParameterDialog::slotPatternSelected - "
-        << "unrecognised pattern number" << endl;
-        break;
+    // We don't try to handle more than 2 parameters.  But now that
+    // m_controlsLayout is a member, we could add widgets just-in-time.
+    if (sliderArgs.size() > 2) { return; }
+    m_NbParameters = sliderArgs.size();
+    WidIterator widgetBox = m_paramVec.begin();
+    for (ArgIterator i = sliderArgs.begin();
+         i != sliderArgs.end();
+         ++i, ++widgetBox) {
+        widgetBox->showByArgs(&*i);
     }
+
+    // If not all widgets are being used, hide the rest.
+    for (;widgetBox != m_paramVec.end(); ++widgetBox)
+    { widgetBox->hide(); }
 
     adjustSize();
 }
 
-PropertyPattern
-EventParameterDialog::getPattern()
+// Get a vector of the current parameters.  This makes part of our
+// final result object.
+ParameterPattern::BareParams
+EventParameterDialog::getBareParams(void)
 {
-    return PropertyPattern(m_patternCombo->currentIndex());
+    BareParams result;
+    for (int i = 0; i < m_NbParameters; ++i) {
+        ParamWidget &widgetBox = m_paramVec[i];
+        result.push_back(widgetBox.getValue());
+    }
+    return result;
 }
 
-int
-EventParameterDialog::getValue1()
+// Get the final result object.
+ParameterPattern::Result
+EventParameterDialog::getResult(void)
 {
-    return m_value1Combo->currentIndex();
-}
-
-int
-EventParameterDialog::getValue2()
-{
-    return m_value2Combo->currentIndex();
+    const int patternIndex = m_patternCombo->currentIndex();
+    return 
+        ParameterPattern::Result(m_situation,
+                                 getPattern(patternIndex),
+                                 getBareParams());
 }
 
 }

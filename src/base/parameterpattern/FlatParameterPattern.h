@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,38 +15,32 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SELECTIONPROPERTYCOMMAND_H_
-#define _RG_SELECTIONPROPERTYCOMMAND_H_
+#ifndef _RG_FLATPARAMETERPATTERN_H_
+#define _RG_FLATPARAMETERPATTERN_H_
 
-#include "base/PropertyName.h"
-#include "base/parameterpattern/ParameterPattern.h"
-#include "document/BasicSelectionCommand.h"
-#include <QString>
-#include <QCoreApplication>
-
-
-class Set;
-
+#include "ParameterPattern.h"
 
 namespace Rosegarden
 {
 
-class SelectionPropertyCommand : public BasicSelectionCommand
+// @class FlatParameterPattern Implement the Flat parameter pattern
+// @author Tom Breton (Tehom)
+class FlatParameterPattern : public ParameterPattern
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SelectionPropertyCommand)
+    virtual QString getText(QString propertyName) const;
 
+    // Make as many sliders as we need.  EventParameterDialog will
+    // truncate or pad as needed.
+    virtual SliderSpecVector
+        getSliderSpec(const Situation *situation) const;
+
+    // Set the properties of events from begin to end.
+    virtual void
+        setEventProperties(iterator begin, iterator end,
+                           Result *result) const;
 public:
-
-    SelectionPropertyCommand(ParameterPattern::Result result);
-
-    static QString getGlobalName() { return tr("Set &Property"); }
-
-    virtual void modifySegment();
-
-private:
-    ParameterPattern::Result m_result;
+    static FlatParameterPattern single;
 };
-
 
 }
 

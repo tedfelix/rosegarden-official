@@ -51,6 +51,7 @@
 #include "base/Instrument.h"
 #include "base/Device.h"
 #include "base/SoftSynthDevice.h"
+#include "base/parameterpattern/ParameterPattern.h"
 
 #include "commands/edit/CopyCommand.h"
 #include "commands/edit/CutCommand.h"
@@ -1740,51 +1741,11 @@ NotationView::slotVelocityDown()
             -10, *getSelection()));
 }
 
-int
-NotationView::getVelocityFromSelection()
-{
-    if (!getSelection()) return 0;
-
-    float totalVelocity = 0;
-    int count = 0;
-
-    for (EventSelection::eventcontainer::iterator i =
-             getSelection()->getSegmentEvents().begin();
-         i != getSelection()->getSegmentEvents().end(); ++i) {
-
-        if ((*i)->has(BaseProperties::VELOCITY)) {
-            totalVelocity += (*i)->get<Int>(BaseProperties::VELOCITY);
-            ++count;
-        }
-    }
-
-    if (count > 0) {
-        return (totalVelocity / count) + 0.5;
-    }
-    return 0;
-}
-
 void
 NotationView::slotSetVelocities()
 {
-    if (!getSelection())
-        return ;
-
-    EventParameterDialog dialog(this,
-                                tr("Set Event Velocities"),
-                                BaseProperties::VELOCITY,
-                                getVelocityFromSelection());
-
-    if (dialog.exec() == QDialog::Accepted) {
-        TmpStatusMsg msg(tr("Setting Velocities..."), this);
-        CommandHistory::getInstance()->addCommand(
-                new SelectionPropertyCommand(
-                        getSelection(),
-                        BaseProperties::VELOCITY,
-                        dialog.getPattern(),
-                        dialog.getValue1(),
-                        dialog.getValue2()));
-    }
+    ParameterPattern::
+        setVelocities(this, getSelection());
 }
 
 void

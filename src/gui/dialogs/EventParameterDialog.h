@@ -20,53 +20,101 @@
 #define _RG_EVENTPARAMETERDIALOG_H_
 
 #include "base/PropertyName.h"
-#include <QDialog>
 #include "commands/edit/SelectionPropertyCommand.h"
+#include <QDialog>
+#include <vector>
 
 class QWidget;
+class QSpinBox;
 class QString;
 class QLabel;
 class QComboBox;
-
+class QHBoxLayout;
+class QLayout;
 
 namespace Rosegarden
 {
 
+class ParameterPattern;
 
-
+// @class EventParameterDialog Dialog about setting a property for a group of
+// events.  Ultimately makes a ParameterPattern::Result to be passed
+// to SelectionPropertyCommand.
+// @author Tom Breton (Tehom) (adapted)
+// @author Chris Cannam (originally)
 class EventParameterDialog : public QDialog
 {
     Q_OBJECT
 
+     // Typedefs so we can refer to types defined in ParameterPattern
+     // concisely.  We don't try to abbreviate everything, just the
+     // names that are used often.
+    typedef ParameterPattern::BareParams          BareParams;
+    typedef ParameterPattern::SliderSpec          SliderSpec;
+    typedef ParameterPattern::ParameterPatternVec ParameterPatternVec;
+
+protected:
+    // @class ParamWidget A group of widgets corresponding to one
+    // parameter.  This class is internal to EventParameterDialog.
+    // @author Tom Breton (Tehom)
+    class ParamWidget
+    {
+    public:
+      ParamWidget(QLayout *parent);
+      void showByArgs(const SliderSpec* args);
+      void hide(void);
+      int getValue(void);
+      
+    private:
+      // We only include the widgets that we may want to interact with
+      // in other code.
+      QSpinBox          *m_spinBox;
+      QLabel            *m_label;
+    };
+
+    // Typedefs about ParamWidget
+    typedef std::vector<ParamWidget> ParamWidgetVec;
+    typedef ParamWidgetVec::iterator WidIterator;
+
 public:
     EventParameterDialog(QWidget *parent,
-                         const QString &name,                      // name
-                         const PropertyName &property, // property
-                         int startValue);                          // start
+                         const QString &name,
+			 ParameterPattern::Situation *situation,
+			 const ParameterPatternVec *patterns);
+private:
+    // Initialize just the pattern-choosing widgets.
+    void    initializePatternBox(void);
 
-    int getValue1();
-    int getValue2();
-    PropertyPattern getPattern();
-
+public:
+    // Get the entire result
+    ParameterPattern::Result getResult(void);
+private:
+    // Get just the BareParams part of the result.
+    BareParams getBareParams(void);
+    // Get the current pattern index.
+    const ParameterPattern * getPattern(int index) const
+    { return m_patterns->at(index); }
+    
 public slots:
     void slotPatternSelected(int value);
 
 protected:
-    //--------------- Data members ---------------------------------
-    PropertyName    m_property;
-    PropertyPattern m_pattern;
-
-    QComboBox         *m_value1Combo;
-    QComboBox         *m_value2Combo;
-    QComboBox         *m_patternCombo;
-
-    QLabel                     *m_value1Label;
-    QLabel                     *m_value2Label;
-
+    // The widget that chooses the current pattern.
+    QComboBox           *m_patternCombo;
+    // The control layout which holds the individual parameter widgets.
+    QLayout             *m_controlsLayout;
+    // All the parameter widgets.  Not all are used with
+    // all patterns.
+    ParamWidgetVec       m_paramVec;
+    // Helper containing non-gui data, which will outlive
+    // EventParameterDialog.
+    const ParameterPattern::Situation  *m_situation;
+    // The available patterns.
+    const ParameterPatternVec *m_patterns;
+    // Number of parameters currently in use.  Not always the same as
+    // m_paramVec.size().
+    int                  m_NbParameters;
 };
-
-
-// ---------------- CompositionLengthDialog -----------
 
 }
 
