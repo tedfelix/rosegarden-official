@@ -54,6 +54,9 @@ void PropertyControlItem::update()
     long val = 0;    
     MatrixElement *matrixelement = dynamic_cast<MatrixElement*>(m_element);
     if (matrixelement) {
+        // Guarantee that matrixelement is up to date, otherwise data
+        // can be out of date, velocity especially.
+        matrixelement->reconfigure();
         x0 = matrixelement->getLayoutX();
         x1 = matrixelement->getWidth() + x0;
         val = matrixelement->getElementVelocity();

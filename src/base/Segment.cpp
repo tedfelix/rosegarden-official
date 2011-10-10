@@ -79,6 +79,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
 }
 
 Segment::Segment(const Segment &segment):
+    QObject(),
     std::multiset<Event*, Event::EventCmp>(),
     m_composition(0), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
@@ -1536,3 +1537,5 @@ Segment::dumpObservers()
 
 
 }
+
+#include "Segment.moc"

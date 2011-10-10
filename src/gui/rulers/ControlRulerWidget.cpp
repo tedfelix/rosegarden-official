@@ -125,6 +125,10 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
 void
 ControlRulerWidget::setSegment(Segment *segment)
 {
+    if (m_segment) {
+        disconnect(m_segment, SIGNAL(contentsChanged(timeT, timeT)),
+                this, SLOT(slotUpdateRulers(timeT, timeT)));
+    }
     m_segment = segment;
 
     RG_DEBUG << "ControlRulerWidget::setSegments Widget contains " << m_controlRulerList.size() << " rulers.";
@@ -134,7 +138,11 @@ ControlRulerWidget::setSegment(Segment *segment)
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->setSegment(m_segment);
         }
-    }    
+    }
+    if (m_segment) {
+        connect(m_segment, SIGNAL(contentsChanged(timeT, timeT)),
+                   this, SLOT(slotUpdateRulers(timeT, timeT)));
+    }
 }
 
 void

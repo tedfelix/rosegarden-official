@@ -111,6 +111,7 @@ BasicCommand::execute()
 
     RG_DEBUG << "BasicCommand(" << getName() << "): updated refresh statuses "
          << getStartTime() << " -> " << getRelayoutEndTime() << endl;
+    m_segment.signalChanged(getStartTime(), getRelayoutEndTime());
 }
 
 void
@@ -124,6 +125,7 @@ BasicCommand::unexecute()
     copyFrom(&m_savedEvents);
 
     m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+    m_segment.signalChanged(getStartTime(), getRelayoutEndTime());
 }
     
 void

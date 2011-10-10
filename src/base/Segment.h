@@ -71,10 +71,14 @@ class Quantizer;
 class BasicQuantizer;
 class Composition;
 class SegmentLinker;
+class BasicCommand;
 
-class Segment : public std::multiset<Event*, Event::EventCmp>
+class Segment : public QObject, public std::multiset<Event*, Event::EventCmp>
 {
+  Q_OBJECT
+
 public:
+
     /// A Segment contains either Internal representation or Audio
     typedef enum {
         Internal,
@@ -837,6 +841,12 @@ private: // stuff to support SegmentObservers
     timeT m_memoStart;
     timeT *m_memoEndMarkerTime;
 
+signals:
+    void contentsChanged(timeT start, timeT end);
+ public:
+    void signalChanged(timeT start, timeT end)
+    { emit contentsChanged(start,end); }
+    
 private:
 
     // assignment operator not provided
