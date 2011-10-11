@@ -270,6 +270,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyRepeatMode, 8, 1);
     m_lilyRepeatMode->setToolTip(tr("<qt>How to export repeating segments.</qt>"));
 
+    m_cancelAccidentals = new QCheckBox;
+    layoutNotation->addWidget(new QLabel(tr("Cancel accidentals")), 9, 0);
+    layoutNotation->addWidget(m_cancelAccidentals, 9, 1);
+    m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor."));
+
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);
 
@@ -334,6 +339,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyMarkerMode->setCurrentIndex(settings.value("lilyexportmarkermode", 0).toUInt());
     m_lilyNoteLanguage->setCurrentIndex(settings.value("lilyexportnotelanguage", 6).toUInt());
     m_lilyRepeatMode->setCurrentIndex(settings.value("lilyrepeatmode", 0).toUInt());
+    m_cancelAccidentals->setChecked(settings.value("lilycancelaccidentals", "false").toBool());
 
     std::cerr << "QSettings for LilyPond (populateDefaultValues):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
@@ -364,6 +370,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
     settings.setValue("lilyexportnotelanguage", m_lilyNoteLanguage->currentIndex());
     settings.setValue("lilyrepeatmode", m_lilyRepeatMode->currentIndex());
+    settings.setValue("lilycancelaccidentals", m_cancelAccidentals->isChecked());
 
     std::cerr << "QSettings for LilyPond (slotApply):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl

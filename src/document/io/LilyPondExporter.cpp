@@ -135,6 +135,7 @@ LilyPondExporter::readConfigVariables(void)
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
     m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt() ;
+    m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
     settings.endGroup();
 }
 
@@ -1288,7 +1289,16 @@ LilyPondExporter::write()
                     // year old son pointed out to me that it "Looks really
                     // stupid.  Why is it cancelling out four flats and then
                     // adding five flats back?  That's brain damaged."
-                    str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
+                    //
+                    // New option to turn it back on, per user request.  There
+                    // doesn't seem to be any way to get LilyPond's behavior to
+                    // quite mimic our own, so we just offer it to them as an
+                    // either/or choice.
+                    if (m_cancelAccidentals) {
+                        str << indent(col) << "\\set Staff.printKeyCancellation = ##t" << std::endl;
+                    } else {
+                        str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
+                    }
                     str << indent(col) << "\\new Voice \\global" << std::endl;
                     if (tempoCount > 0) {
                         str << indent(col) << "\\new Voice \\globalTempo" << std::endl;

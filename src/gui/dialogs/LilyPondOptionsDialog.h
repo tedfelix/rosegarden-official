@@ -66,6 +66,7 @@ protected:
     QCheckBox *m_lilyExportStaffGroup;
     QComboBox *m_lilyMarkerMode;
     QComboBox *m_lilyRepeatMode;
+    QCheckBox *m_cancelAccidentals;
     HeadersConfigurationPage *m_headersPage;
 
     void populateDefaultValues();

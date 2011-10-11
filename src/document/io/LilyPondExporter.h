@@ -232,6 +232,8 @@ private:
     static const int REPEAT_VOLTA  = 1;
     static const int REPEAT_UNFOLD = 2;
 
+    bool m_cancelAccidentals;
+
     std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {
 	std::pair<int,int> z(
 	    x.first * y.second + x.second * y.first,
