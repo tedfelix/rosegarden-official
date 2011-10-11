@@ -1459,7 +1459,7 @@ LilyPondExporter::write()
                                     j != m_composition->end(); ++j) {
                                 if ((*j)->getTrack() != track->getId()) continue;
                                 if ((*j)->getStartTime() <= startOfSeg) continue;
-                                if ((*j)->getStartTime() < nextSegmentStartTime); {
+                                if ((*j)->getStartTime() < nextSegmentStartTime) {
                                     nextSegmentStartTime = (*j)->getStartTime();
                                 }
                             }
