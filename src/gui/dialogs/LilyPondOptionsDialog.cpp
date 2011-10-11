@@ -270,9 +270,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyRepeatMode, 8, 1);
     m_lilyRepeatMode->setToolTip(tr("<qt>How to export repeating segments.</qt>"));
 
-    m_cancelAccidentals = new QCheckBox;
-    layoutNotation->addWidget(new QLabel(tr("Cancel accidentals")), 9, 0);
-    layoutNotation->addWidget(m_cancelAccidentals, 9, 1);
+    m_cancelAccidentals = new QCheckBox("Cancel accidentals");
+    layoutNotation->addWidget(m_cancelAccidentals, 9, 0);
     m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor."));
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
