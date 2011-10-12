@@ -26,11 +26,18 @@
 #include <QLabel>
 #include <QPainter>
 #include <QTimer>
+#include <QTime>
 #include <QWidget>
 
 
 namespace Rosegarden
 {
+
+// VU Meter decay refresh interval in msecs.
+// 100 is a little jerky, but uses less CPU.
+// 50 is smooth, but uses more CPU.
+const int refreshInterval = 100;
+
 
 VUMeter::VUMeter(QWidget *parent,
                  VUMeterType type,
@@ -44,22 +51,21 @@ VUMeter::VUMeter(QWidget *parent,
     m_active(true),
     m_type(type),
     m_alignment(alignment),
+    m_decayRate(1/.05),  // 1 pixel per 50msecs
     m_levelLeft(0),
     m_recordLevelLeft(0),
     m_peakLevelLeft(0),
-    m_levelStepLeft(m_baseLevelStep),
-    m_recordLevelStepLeft(m_baseLevelStep),
-    m_fallTimerLeft(0),
+    m_decayTimerLeft(0),
+    m_timeDecayLeft(0),
     m_peakTimerLeft(0),
     m_levelRight(0),
     m_recordLevelRight(0),
     m_peakLevelRight(0),
-    m_levelStepRight(0),
-    m_recordLevelStepRight(0),
-    m_fallTimerRight(0),
+    m_decayTimerRight(0),
+    m_timeDecayRight(0),
     m_peakTimerRight(0),
     m_showPeakLevel(true),
-    m_baseLevelStep(3),
+    m_baseLevelStep(3),  // Exponential decay constant.  3 is too small.
     m_stereo(stereo),
     m_hasRecord(hasRecord)
 {
@@ -84,12 +90,12 @@ VUMeter::VUMeter(QWidget *parent,
         break;
     }
 
-    // Always init the left fall timer
+    // Always init the left decay timer
     //
-    m_fallTimerLeft = new QTimer();
+    m_decayTimerLeft = new QTimer();
 
-    connect(m_fallTimerLeft, SIGNAL(timeout()),
-            this, SLOT(slotReduceLevelLeft()));
+    connect(m_decayTimerLeft, SIGNAL(timeout()),
+            this, SLOT(slotDecayLeft()));
 
     if (m_showPeakLevel) {
         m_peakTimerLeft = new QTimer();
@@ -98,17 +104,21 @@ VUMeter::VUMeter(QWidget *parent,
                 this, SLOT(slotStopShowingPeakLeft()));
     }
 
-    if (stereo) {
-        m_fallTimerRight = new QTimer();
+    m_timeDecayLeft = new QTime();
 
-        connect(m_fallTimerRight, SIGNAL(timeout()),
-                this, SLOT(slotReduceLevelRight()));
+    if (stereo) {
+        m_decayTimerRight = new QTimer();
+
+        connect(m_decayTimerRight, SIGNAL(timeout()),
+                this, SLOT(slotDecayRight()));
 
         if (m_showPeakLevel) {
             m_peakTimerRight = new QTimer();
             connect(m_peakTimerRight, SIGNAL(timeout()),
                     this, SLOT(slotStopShowingPeakRight()));
         }
+
+        m_timeDecayRight = new QTime();
 
     }
 
@@ -173,8 +183,10 @@ VUMeter::~VUMeter()
     delete m_velocityColour;
     delete m_peakTimerRight;
     delete m_peakTimerLeft;
-    delete m_fallTimerRight;
-    delete m_fallTimerLeft;
+    delete m_timeDecayRight;
+    delete m_decayTimerRight;
+    delete m_timeDecayLeft;
+    delete m_decayTimerLeft;
 }
 
 void
@@ -212,9 +224,10 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     if (record && !m_hasRecord)
         return ;
 
-    short &ll = (record ? m_recordLevelLeft : m_levelLeft);
-    short &lr = (record ? m_recordLevelRight : m_levelRight);
+    double &ll = (record ? m_recordLevelLeft : m_levelLeft);
+    double &lr = (record ? m_recordLevelRight : m_levelRight);
 
+    // Previous levels.  Used to detect a change.
     short pll = ll;
     short plr = lr;
 
@@ -265,25 +278,23 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     if (lr > m_maxLevel)
         lr = m_maxLevel;
 
-    if (record) {
-        m_recordLevelStepLeft = m_baseLevelStep;
-        m_recordLevelStepRight = m_baseLevelStep;
-    } else {
-        m_levelStepLeft = m_baseLevelStep;
-        m_levelStepRight = m_baseLevelStep;
-    }
-
     // Only start the timer when we need it
     if (ll > 0) {
-        if (m_fallTimerLeft->isActive() == false) {
-            m_fallTimerLeft->start(40); // 40 ms per level fall iteration
+        if (m_decayTimerLeft && m_decayTimerLeft->isActive() == false) {
+            m_decayTimerLeft->start(refreshInterval);
+            if (m_timeDecayLeft) {
+                m_timeDecayLeft->start();
+            }
             meterStart();
         }
     }
 
     if (lr > 0) {
-        if (m_fallTimerRight && m_fallTimerRight->isActive() == false) {
-            m_fallTimerRight->start(40); // 40 ms per level fall iteration
+        if (m_decayTimerRight && m_decayTimerRight->isActive() == false) {
+            m_decayTimerRight->start(refreshInterval);
+            if (m_timeDecayRight) {
+                m_timeDecayRight->start();
+            }
             meterStart();
         }
     }
@@ -296,10 +307,12 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
         if (ll >= m_peakLevelLeft && m_showPeakLevel) {
             m_peakLevelLeft = ll;
 
-            if (m_peakTimerLeft->isActive())
-                m_peakTimerLeft->stop();
+            if (m_peakTimerLeft) {
+                if (m_peakTimerLeft->isActive())
+                    m_peakTimerLeft->stop();
 
-            m_peakTimerLeft->start(1000); // milliseconds of peak hold
+                m_peakTimerLeft->start(1000); // milliseconds of peak hold
+            }
         }
 
         if (lr >= m_peakLevelRight && m_showPeakLevel) {
@@ -314,6 +327,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
         }
     }
 
+    // If we're active and there has been a change, redraw the meter
     if (m_active && (ll != pll || lr != plr)) {
         update();
     }
@@ -368,7 +382,7 @@ VUMeter::paintEvent(QPaintEvent *e)
         // fills the part without the bar with the background color.
 //        paint.fillRect(0, 0, w, h, m_background);
 
-        if (m_fallTimerLeft->isActive())
+        if (m_decayTimerLeft->isActive())
             drawMeterLevel(&paint);
         else {
             meterStop();
@@ -377,7 +391,7 @@ VUMeter::paintEvent(QPaintEvent *e)
             QLabel::paintEvent(e);
         }
     } else {
-        if (m_fallTimerLeft->isActive()) {
+        if (m_decayTimerLeft->isActive()) {
             // Clearing the background is not necessary as drawMeterLevel()
             // fills the part without the bar with the background color.
 //            paint.fillRect(0, 0, w, h, m_background);
@@ -597,21 +611,42 @@ VUMeter::drawMeterLevel(QPainter* paint)
     }
 }
 
-void
-VUMeter::slotReduceLevelRight()
-{
-    m_levelStepRight = int(m_levelRight) * m_baseLevelStep / 100 + 1;
-    if (m_levelStepRight < 1)
-        m_levelStepRight = 1;
+// The exponential decay algorithm that is in here is only effective when
+// m_baseLevelStep is around 10.  With the original setting of 3, the effect
+// was not visible on the track meters and the MIDI mixer meters.
+//#define EXPONENTIAL_DECAY
 
-    m_recordLevelStepRight = int(m_recordLevelRight) * m_baseLevelStep / 100 + 1;
-    if (m_recordLevelStepRight < 1)
-        m_recordLevelStepRight = 1;
+void
+VUMeter::slotDecayRight()
+{
+#ifdef EXPONENTIAL_DECAY
+    // Exponential decay
+    double decay = int(m_levelRight) * m_baseLevelStep / 100 + 1;
+    if (decay < 1)
+        decay = 1;
+#else
+    // Linear decay
+    double timeElapsed = refreshInterval / 1000.0;
+    if (m_timeDecayRight) {
+        timeElapsed = m_timeDecayRight->restart() / 1000.0;
+    }
+    double decay = timeElapsed * m_decayRate;
+#endif
+
+#ifdef EXPONENTIAL_DECAY
+    // Exponential decay
+    double recordDecay = int(m_recordLevelRight) * m_baseLevelStep / 100 + 1;
+    if (recordDecay < 1)
+        recordDecay = 1;
+#else
+    // Linear decay
+    double recordDecay = decay;
+#endif
 
     if (m_levelRight > 0)
-        m_levelRight -= m_levelStepRight;
+        m_levelRight -= decay;
     if (m_recordLevelRight > 0)
-        m_recordLevelRight -= m_recordLevelStepRight;
+        m_recordLevelRight -= recordDecay;
 
     if (m_levelRight <= 0) {
         m_levelRight = 0;
@@ -623,29 +658,46 @@ VUMeter::slotReduceLevelRight()
 
     if (m_levelRight == 0 && m_recordLevelRight == 0) {
         // Always stop the timer when we don't need it
-        if (m_fallTimerRight)
-            m_fallTimerRight->stop();
+        if (m_decayTimerRight)
+            m_decayTimerRight->stop();
         meterStop();
     }
 
+    // Redraw the meter at the new level
     update();
 }
 
 void
-VUMeter::slotReduceLevelLeft()
+VUMeter::slotDecayLeft()
 {
-    m_levelStepLeft = int(m_levelLeft) * m_baseLevelStep / 100 + 1;
-    if (m_levelStepLeft < 1)
-        m_levelStepLeft = 1;
+#ifdef EXPONENTIAL_DECAY
+    // Exponential decay
+    double decay = int(m_levelLeft) * m_baseLevelStep / 100 + 1;
+    if (decay < 1)
+        decay = 1;
+#else
+    // Linear decay
+    double timeElapsed = refreshInterval / 1000.0;
+    if (m_timeDecayLeft) {
+        timeElapsed = m_timeDecayLeft->restart() / 1000.0;
+    }
+    double decay = timeElapsed * m_decayRate;
+#endif
 
-    m_recordLevelStepLeft = int(m_recordLevelLeft) * m_baseLevelStep / 100 + 1;
-    if (m_recordLevelStepLeft < 1)
-        m_recordLevelStepLeft = 1;
+#ifdef EXPONENTIAL_DECAY
+    // Exponential decay
+    double recordDecay = int(m_recordLevelLeft) * m_baseLevelStep / 100 + 1;
+    if (recordDecay < 1)
+        recordDecay = 1;
+#else
+    // Linear decay
+    double recordDecay = decay;
+#endif
 
     if (m_levelLeft > 0)
-        m_levelLeft -= m_levelStepLeft;
+        m_levelLeft -= decay;
     if (m_recordLevelLeft > 0)
-        m_recordLevelLeft -= m_recordLevelStepLeft;
+        m_recordLevelLeft -= recordDecay;
 
     if (m_levelLeft <= 0) {
         m_levelLeft = 0;
@@ -657,11 +709,12 @@ VUMeter::slotReduceLevelLeft()
 
     if (m_levelLeft == 0 && m_recordLevelLeft == 0) {
         // Always stop the timer when we don't need it
-        if (m_fallTimerLeft)
-            m_fallTimerLeft->stop();
+        if (m_decayTimerLeft)
+            m_decayTimerLeft->stop();
         meterStop();
     }
 
+    // Redraw the meter at the new level
     update();
 }
 

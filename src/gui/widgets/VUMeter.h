@@ -24,6 +24,7 @@
 
 class QWidget;
 class QTimer;
+class QTime;
 class QPaintEvent;
 class QPainter;
 
@@ -92,13 +93,16 @@ protected:
     void setLevel(double leftLevel, double rightLevel, bool record);
 
 private slots:
-    void slotReduceLevelLeft();
+    void slotDecayLeft();
     void slotStopShowingPeakLeft();
 
-    void slotReduceLevelRight();
+    void slotDecayRight();
     void slotStopShowingPeakRight();
 
 private:
+    // Hide copy ctor and op= due to non-trivial dtor.
+    VUMeter(const VUMeter &);
+    VUMeter &operator=(const VUMeter &);
 
     void drawMeterLevel(QPainter *paint);
     void drawColouredBar(QPainter *paint, int channel,
@@ -108,22 +112,24 @@ private:
     VUAlignment m_alignment;
     QColor      m_background;
 
+    // The size of the meter in pixels.
     short       m_maxLevel;
+    double      m_decayRate;  // pixels per second
 
-    short       m_levelLeft;
-    short       m_recordLevelLeft;
+    // The current playback level in pixels.
+    double      m_levelLeft;
+    double      m_recordLevelLeft;
     short       m_peakLevelLeft;
-    short       m_levelStepLeft;
-    short       m_recordLevelStepLeft;
-    QTimer     *m_fallTimerLeft;
+    QTimer     *m_decayTimerLeft;
+    QTime      *m_timeDecayLeft;
     QTimer     *m_peakTimerLeft;
 
-    short       m_levelRight;
-    short       m_recordLevelRight;
+    // The current playback level in pixels.
+    double      m_levelRight;
+    double      m_recordLevelRight;
     short       m_peakLevelRight;
-    short       m_levelStepRight;
-    short       m_recordLevelStepRight;
-    QTimer     *m_fallTimerRight;
+    QTimer     *m_decayTimerRight;
+    QTime      *m_timeDecayRight;
     QTimer     *m_peakTimerRight;
 
     bool        m_showPeakLevel;
