@@ -110,7 +110,8 @@ protected:
                   eventendlist &preEventsInProgress, eventendlist &postEventsInProgress,
                   std::ofstream &str, int &MultiMeasureRestCount,
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
-                  bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
+                  bool &nextBarIsDouble, bool &nextBarIsEnd,
+                  bool &nextBarIsDot, bool noTimeSignature);
     
     timeT calculateDuration(Segment *s,
                                         const Segment::iterator &i,
@@ -144,7 +145,10 @@ protected:
 
     // return a string full of column tabs
     std::string indent(const int &column);
-                  
+
+    // write a time signature
+    void writeTimeSignature(TimeSignature timeSignature, int col, std::ofstream &str);
+
     std::pair<int,int> writeSkip(const TimeSignature &timeSig,
 				 timeT offset,
 				 timeT duration,
@@ -270,7 +274,6 @@ private:
 	}
     }
 };
-
 
 
 }

@@ -261,9 +261,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyNoteLanguage->setToolTip(tr("<qt>Outputs note names and accidentals in any of LilyPond's supported languages</qt>"));
 
     m_lilyRepeatMode = new QComboBox(frameNotation);
-    m_lilyRepeatMode->addItem(tr("Basic twice repeat"));
+    m_lilyRepeatMode->addItem(tr("Old mode"));
     m_lilyRepeatMode->addItem(tr("Repeat when possible"));
-    m_lilyRepeatMode->addItem(tr("Unfold when possible"));
+    m_lilyRepeatMode->addItem(tr("Always unfold"));
 
     layoutNotation->addWidget(new QLabel(
                                    tr("Repeat mode"), frameNotation),8, 0);

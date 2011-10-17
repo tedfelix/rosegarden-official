@@ -29,6 +29,7 @@
 
 
 #include "LilyPondExporter.h"
+#include "LilyPondSegmentsContext.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -801,12 +802,29 @@ LilyPondExporter::write()
         }
     }
 
+    // Gather all segments in a place where it will be possible
+    // to see the repetitions in a global context and to compute
+    // the place of the different voices in the Lilypond score.
+    LilyPondSegmentsContext lsc(this, m_composition);
+    for (Composition::iterator i = m_composition->begin();
+            i != m_composition->end(); ++i) {
+        if (isSegmentToPrint(*i)) {
+            lsc.addSegment(*i);
+        }
+    }
+
+    // Look for repeating segments
+    lsc.precompute();
+
+    // If needed, compute offsets of segments following a repeating one
+    // in LilyPond score
+    if (m_repeatMode == REPEAT_VOLTA) lsc.fixStartTimes();
 
 
-    // If some segment is not starting at a bar boundary, adapted
+    // If any segment is not starting at a bar boundary, adapted
     // \partial or \skip keywords must be added to the output file.
-    // We have to know what segment is the first to start when
-    // we need to compute the data going with such \partial and \skip.
+    // We have to know what segment is starting first to compute
+    // such \partial and \skip parameters.
     // We can't rely on compositionStartTime to compute such data
     // because the first segment of the composition may be being not printed.
     // Following code is finding out the start time of the first segment
@@ -823,28 +841,10 @@ LilyPondExporter::write()
     }
 
 
-
-
-
     // define global context which is common for all staffs
     str << indent(col++) << "global = { " << std::endl;
     TimeSignature timeSignature = m_composition->
         getTimeSignatureAt(m_composition->getStartMarker());
-
-///YG: Should not the anacrusis fix be done segment by segment rather than globally ?
-///     ==> \partial temporarily remove from the global context 
-    // The \partial should be relative to firstSegmentStartTime rather than to
-    // compositionStartTime because we may not be printing the whole composition...
-//     if (m_composition->getBarStart(m_composition->getBarNumber(firstSegmentStartTime)) < firstSegmentStartTime) {
-//         str << indent(col) << "\\partial ";
-//         // Arbitrary partial durations are handled by the following way:
-//         // split the partial duration to 64th notes: instead of "4" write "64*16". (hjj)
-//         Note partialNote = Note::getNearestNote(1, MAX_DOTS);
-//         int partialDuration = m_composition->getBarStart(m_composition->getBarNumber(firstSegmentStartTime) + 1) - firstSegmentStartTime;
-//         writeDuration(1, str);
-//         str << "*" << ((int)(partialDuration / partialNote.getDuration()))
-//             << std::endl;
-//     }
 
     int leftBar = 0;
     int rightBar = leftBar;
@@ -1025,9 +1025,10 @@ LilyPondExporter::write()
     // be relatively small in the greater scheme.
 
     Track *track = 0;
+    int trackPos = 0;
 
-    for (int trackPos = 0;
-         (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+    for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
+        trackPos = lsc.getTrackPos();
 
         // Allow some oportunities for user to cancel
         if (isOperationCancelled()) {
@@ -1036,11 +1037,8 @@ LilyPondExporter::write()
 
         timeT repeatOffset = 0;
 
-        for (Composition::iterator i = m_composition->begin();
-             i != m_composition->end(); ++i) {
-
-            if ((*i)->getTrack() != track->getId())
-                continue;
+        Segment *seg;
+        for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
 
             // handle the bracket(s) for the first track, and if no brackets
             // present, open with a <<
@@ -1086,297 +1084,295 @@ LilyPondExporter::write()
             qApp->processEvents(QEventLoop::AllEvents, 100);
             //            rosegardenApplication->refreshGUI(50);
 
-            if (isSegmentToPrint(*i)) {
-                if ((int) (*i)->getTrack() != lastTrackIndex) {
-                    if (lastTrackIndex != -1) {
-                        // close the old track (Staff context)
-                        str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
-                    }
-
-                    // handle any necessary bracket closures with a rude
-                    // hack, because bracket closures need to be handled
-                    // right under staff closures, but at this point in the
-                    // loop we are one track too early for closing, so we use
-                    // the bracket setting for the previous track for closing
-                    // purposes (I'm not quite sure why this works, but it does)            
-                    if (m_exportStaffGroup) {
-                        if (prevBracket == Brackets::SquareOff ||
-                            prevBracket == Brackets::SquareOnOff) {
-                            str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-                                << std::endl; //indent-
-                        } else if (prevBracket == Brackets::CurlyOff) {
-                            str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
-                                << std::endl; //indent-
-                        } else if (prevBracket == Brackets::CurlySquareOff) {
-                            str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
-                                << std::endl; //indent-
-                            str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-                                << std::endl; //indent-
-                        }
-                    }
+            if ((int) seg->getTrack() != lastTrackIndex) {
+                if (lastTrackIndex != -1) {
+                    // close the old track (Staff context)
+                    str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
                 }
 
+                // handle any necessary bracket closures with a rude
+                // hack, because bracket closures need to be handled
+                // right under staff closures, but at this point in the
+                // loop we are one track too early for closing, so we use
+                // the bracket setting for the previous track for closing
+                // purposes (I'm not quite sure why this works, but it does)            
+                if (m_exportStaffGroup) {
+                    if (prevBracket == Brackets::SquareOff ||
+                        prevBracket == Brackets::SquareOnOff) {
+                        str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+                            << std::endl; //indent-
+                    } else if (prevBracket == Brackets::CurlyOff) {
+                        str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
+                            << std::endl; //indent-
+                    } else if (prevBracket == Brackets::CurlySquareOff) {
+                        str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
+                            << std::endl; //indent-
+                        str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+                            << std::endl; //indent-
+                    }
+                }
+            }
+
+            //
+            // Write the chord text events into a lead sheet format.
+            // The chords are placed into ChordName context above the staff,
+            // which is between the previous ending staff and next starting
+            // staff.
+            //
+            if (m_chordNamesMode) {
+                int numberOfChords = -1;
+
+                timeT lastTime = compositionStartTime;
+                for (Segment::iterator j = seg->begin();
+                      seg->isBeforeEndMarker(j); ++j) {
+
+                    bool isNote = (*j)->isa(Note::EventType);
+                    bool isChord = false;
+
+                    if (!isNote) {
+                        if ((*j)->isa(Text::EventType)) {
+                            std::string textType;
+                            if ((*j)->get
+                                <String>(Text::TextTypePropertyName, textType) &&
+                                textType == Text::Chord) {
+                                isChord = true;
+                            }
+                        }
+                    }
+
+                    if (!isNote && !isChord) continue;
+
+                    timeT myTime = (*j)->getNotationAbsoluteTime();
+
+                    if (isChord) {
+                        std::string schord;
+                        (*j)->get<String>(Text::TextPropertyName, schord);
+                        QString chord(strtoqstr(schord));
+                        chord.replace(QRegExp("\\s+"), "");
+                        chord.replace(QRegExp("h"), "b");
+
+                        // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
+                        QRegExp rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
+                        if (rx.indexIn(chord) != -1) {
+                            // The chord duration is zero, but the chord
+                            // intervals is given with skips (see below).
+                            QRegExp rxStart("^([a-g]([ei]s)?)");
+                            chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
+                        } else {
+                            // Skip improper chords.
+                            str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
+                            continue;
+                        }
+
+                        if (numberOfChords == -1) {
+                            str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
+                                (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
+                            str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
+                            str << indent(col);
+                            numberOfChords++;
+                        }
+                        if (numberOfChords >= 0) {
+                            // The chord intervals are specified with skips.
+                            writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                            str << qStrToStrUtf8(chord) << " ";
+                            numberOfChords++;
+                        }
+                        lastTime = myTime;
+                    }
+                } // for
+                if (numberOfChords >= 0) {
+                    writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
+                    if (numberOfChords == 1) str << "s8 ";
+                    str << std::endl;
+                    str << indent(--col) << "} % ChordNames " << std::endl;
+                }
+            } // if (m_exportChords....
+
+            if ((int) seg->getTrack() != lastTrackIndex) {
+                lastTrackIndex = seg->getTrack();
+
+                // handle any bracket start events (unless track staff
+                // brackets are being ignored, as when printing single parts
+                // out of a bigger score one by one)
+                if (!firstTrack && m_exportStaffGroup) {
+                    if (bracket == Brackets::SquareOn ||
+                        bracket == Brackets::SquareOnOff) {
+                        str << indent(col++) << "\\context StaffGroup = \""
+                            << ++staffGroupCounter << "\" <<" << std::endl;
+                    } else if (bracket == Brackets::CurlyOn) {
+                        str << indent(col++) << "\\context GrandStaff = \""
+                            << ++pianoStaffCounter << "\" <<" << std::endl;
+                    } else if (bracket == Brackets::CurlySquareOn) {
+                        str << indent(col++) << "\\context StaffGroup = \""
+                            << ++staffGroupCounter << "\" <<" << std::endl;
+                        str << indent(col++) << "\\context GrandStaff = \""
+                            << ++pianoStaffCounter << "\" <<" << std::endl;
+                    }
+                } 
+
+                // avoid problem with <untitled> tracks yielding a
+                // .ly file that jumbles all notes together on a
+                // single staff...  every Staff context has to
+                // have a unique name, even if the
+                // Staff.instrument property is the same for
+                // multiple staffs...
+                // Added an option to merge staffs with the same, non-empty
+                // name. This option makes it possible to produce staffs
+                // with polyphonic, and polyrhytmic, music. Polyrhytmic
+                // music in a single staff is typical in piano, or
+                // guitar music. (hjj)
+                // In the case of colliding note heads, user may define
+                //  - DISPLACED_X -- for a note/chord
+                //  - INVISIBLE -- for a rest
+                std::ostringstream staffName;
+                staffName << protectIllegalChars(m_composition->
+                                                  getTrackById(lastTrackIndex)->getLabel());
+
+                /*
+                  * The context name is unique to a single track.
+                  */
+                str << std::endl << indent(col)
+                    << "\\context Staff = \"track "
+                    << (trackPos + 1) << (staffName.str() == "" ? "" : ", ")
+                    << staffName.str() << "\" ";
+
+                str << "<< " << std::endl;
+
+                // The octavation is omitted in the instrument name.
+                // HJJ: Should it be automatically added to the clef: G^8 ?
+                // What if two segments have different transpose in a track?
+                std::ostringstream staffNameWithTranspose;
+                staffNameWithTranspose << "\\markup { \\column { \"" << staffName.str() << " \"";
+                if ((seg->getTranspose() % 12) != 0) {
+                    staffNameWithTranspose << " \\line { ";
+                    switch (seg->getTranspose() % 12) {
+                    case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
+                    case 2 : staffNameWithTranspose << "\"in D\""; break;
+                    case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
+                    case 4 : staffNameWithTranspose << "\"in E\""; break;
+                    case 5 : staffNameWithTranspose << "\"in F\""; break;
+                    case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
+                    case 7 : staffNameWithTranspose << "\"in G\""; break;
+                    case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
+                    case 9 : staffNameWithTranspose << "\"in A\""; break;
+                    case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
+                    case 11 : staffNameWithTranspose << "\"in B\""; break;
+                    }
+                    staffNameWithTranspose << " }";
+                }
+                staffNameWithTranspose << " } }";
+                if (m_languageLevel < LILYPOND_VERSION_2_10) {
+                    str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
+                        << std::endl;
+                } else {
+                    str << indent(++col) << "\\set Staff.instrumentName = "
+                        << staffNameWithTranspose.str() << std::endl;
+                }
+
+                // Set always midi instrument for the Staff
+                std::ostringstream staffMidiName;
+                Instrument *instr = m_studio->getInstrumentById(
+                                                                m_composition->getTrackById(lastTrackIndex)->getInstrument());
+                staffMidiName << instr->getProgramName();
+
+                str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
+                    << "\"" << std::endl;
+
+                // multi measure rests are used by default
+                str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
+
+                // turn off the stupid accidental cancelling business,
+                // because we don't do that ourselves, and because my 11
+                // year old son pointed out to me that it "Looks really
+                // stupid.  Why is it cancelling out four flats and then
+                // adding five flats back?  That's brain damaged."
                 //
-                // Write the chord text events into a lead sheet format.
-                // The chords are placed into ChordName context above the staff,
-                // which is between the previous ending staff and next starting
-                // staff.
-                //
-                if (m_chordNamesMode) {
-                    int numberOfChords = -1;
-
-                    timeT lastTime = compositionStartTime;
-                    for (Segment::iterator j = (*i)->begin();
-                         (*i)->isBeforeEndMarker(j); ++j) {
-    
-                        bool isNote = (*j)->isa(Note::EventType);
-                        bool isChord = false;
-    
-                        if (!isNote) {
-                            if ((*j)->isa(Text::EventType)) {
-                                std::string textType;
-                                if ((*j)->get
-                                    <String>(Text::TextTypePropertyName, textType) &&
-                                    textType == Text::Chord) {
-                                    isChord = true;
-                                }
-                            }
-                        }
-    
-                        if (!isNote && !isChord) continue;
-    
-                        timeT myTime = (*j)->getNotationAbsoluteTime();
-    
-                        if (isChord) {
-                            std::string schord;
-                            (*j)->get<String>(Text::TextPropertyName, schord);
-                            QString chord(strtoqstr(schord));
-                            chord.replace(QRegExp("\\s+"), "");
-                            chord.replace(QRegExp("h"), "b");
-
-                            // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
-                            QRegExp rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
-                            if (rx.indexIn(chord) != -1) {
-                                // The chord duration is zero, but the chord
-                                // intervals is given with skips (see below).
-                                QRegExp rxStart("^([a-g]([ei]s)?)");
-                                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
-                            } else {
-                                // Skip improper chords.
-                                str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
-                                continue;
-                            }
-
-                            if (numberOfChords == -1) {
-                                str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
-                                    (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
-                                str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
-                                str << indent(col);
-                                numberOfChords++;
-                            }
-                            if (numberOfChords >= 0) {
-                                // The chord intervals are specified with skips.
-                                writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
-                                str << qStrToStrUtf8(chord) << " ";
-                                numberOfChords++;
-                            }
-                            lastTime = myTime;
-                        }
-                    } // for
-                    if (numberOfChords >= 0) {
-                        writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
-                        if (numberOfChords == 1) str << "s8 ";
-                        str << std::endl;
-                        str << indent(--col) << "} % ChordNames " << std::endl;
-                    }
-                } // if (m_exportChords....
-
-                if ((int) (*i)->getTrack() != lastTrackIndex) {
-                    lastTrackIndex = (*i)->getTrack();
-
-                    // handle any bracket start events (unless track staff
-                    // brackets are being ignored, as when printing single parts
-                    // out of a bigger score one by one)
-                    if (!firstTrack && m_exportStaffGroup) {
-                        if (bracket == Brackets::SquareOn ||
-                            bracket == Brackets::SquareOnOff) {
-                            str << indent(col++) << "\\context StaffGroup = \""
-                                << ++staffGroupCounter << "\" <<" << std::endl;
-                        } else if (bracket == Brackets::CurlyOn) {
-                            str << indent(col++) << "\\context GrandStaff = \""
-                                << ++pianoStaffCounter << "\" <<" << std::endl;
-                        } else if (bracket == Brackets::CurlySquareOn) {
-                            str << indent(col++) << "\\context StaffGroup = \""
-                                << ++staffGroupCounter << "\" <<" << std::endl;
-                            str << indent(col++) << "\\context GrandStaff = \""
-                                << ++pianoStaffCounter << "\" <<" << std::endl;
-                        }
-                    } 
-
-                    // avoid problem with <untitled> tracks yielding a
-                    // .ly file that jumbles all notes together on a
-                    // single staff...  every Staff context has to
-                    // have a unique name, even if the
-                    // Staff.instrument property is the same for
-                    // multiple staffs...
-                    // Added an option to merge staffs with the same, non-empty
-                    // name. This option makes it possible to produce staffs
-                    // with polyphonic, and polyrhytmic, music. Polyrhytmic
-                    // music in a single staff is typical in piano, or
-                    // guitar music. (hjj)
-                    // In the case of colliding note heads, user may define
-                    //  - DISPLACED_X -- for a note/chord
-                    //  - INVISIBLE -- for a rest
-                    std::ostringstream staffName;
-                    staffName << protectIllegalChars(m_composition->
-                                                     getTrackById(lastTrackIndex)->getLabel());
-
-                    /*
-                     * The context name is unique to a single track.
-                     */
-                    str << std::endl << indent(col)
-                        << "\\context Staff = \"track "
-                        << (trackPos + 1) << (staffName.str() == "" ? "" : ", ")
-                        << staffName.str() << "\" ";
-
-                    str << "<< " << std::endl;
-
-                    // The octavation is omitted in the instrument name.
-                    // HJJ: Should it be automatically added to the clef: G^8 ?
-                    // What if two segments have different transpose in a track?
-                    std::ostringstream staffNameWithTranspose;
-                    staffNameWithTranspose << "\\markup { \\column { \"" << staffName.str() << " \"";
-                    if (((*i)->getTranspose() % 12) != 0) {
-                        staffNameWithTranspose << " \\line { ";
-                        switch ((*i)->getTranspose() % 12) {
-                        case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
-                        case 2 : staffNameWithTranspose << "\"in D\""; break;
-                        case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
-                        case 4 : staffNameWithTranspose << "\"in E\""; break;
-                        case 5 : staffNameWithTranspose << "\"in F\""; break;
-                        case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
-                        case 7 : staffNameWithTranspose << "\"in G\""; break;
-                        case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
-                        case 9 : staffNameWithTranspose << "\"in A\""; break;
-                        case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
-                        case 11 : staffNameWithTranspose << "\"in B\""; break;
-                        }
-                        staffNameWithTranspose << " }";
-                    }
-                    staffNameWithTranspose << " } }";
-                    if (m_languageLevel < LILYPOND_VERSION_2_10) {
-                        str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
-                            << std::endl;
-                    } else {
-                        str << indent(++col) << "\\set Staff.instrumentName = "
-                            << staffNameWithTranspose.str() << std::endl;
-                    }
-
-                    // Set always midi instrument for the Staff
-                    std::ostringstream staffMidiName;
-                    Instrument *instr = m_studio->getInstrumentById(
-                                                                    m_composition->getTrackById(lastTrackIndex)->getInstrument());
-                    staffMidiName << instr->getProgramName();
-
-                    str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
-                        << "\"" << std::endl;
-
-                    // multi measure rests are used by default
-                    str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
-
-                    // turn off the stupid accidental cancelling business,
-                    // because we don't do that ourselves, and because my 11
-                    // year old son pointed out to me that it "Looks really
-                    // stupid.  Why is it cancelling out four flats and then
-                    // adding five flats back?  That's brain damaged."
-                    //
-                    // New option to turn it back on, per user request.  There
-                    // doesn't seem to be any way to get LilyPond's behavior to
-                    // quite mimic our own, so we just offer it to them as an
-                    // either/or choice.
-                    if (m_cancelAccidentals) {
-                        str << indent(col) << "\\set Staff.printKeyCancellation = ##t" << std::endl;
-                    } else {
-                        str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
-                    }
-                    str << indent(col) << "\\new Voice \\global" << std::endl;
-                    if (tempoCount > 0) {
-                        str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
-                    }
-                    if (m_exportMarkerMode != EXPORT_NO_MARKERS) {
-                        str << indent(col) << "\\new Voice \\markers" << std::endl;
-                    }
-
+                // New option to turn it back on, per user request.  There
+                // doesn't seem to be any way to get LilyPond's behavior to
+                // quite mimic our own, so we just offer it to them as an
+                // either/or choice.
+                if (m_cancelAccidentals) {
+                    str << indent(col) << "\\set Staff.printKeyCancellation = ##t" << std::endl;
+                } else {
+                    str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
+                }
+                str << indent(col) << "\\new Voice \\global" << std::endl;
+                if (tempoCount > 0) {
+                    str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
+                }
+                if (m_exportMarkerMode != EXPORT_NO_MARKERS) {
+                    str << indent(col) << "\\new Voice \\markers" << std::endl;
                 }
 
-                // Temporary storage for non-atomic events (!BOOM)
-                // ex. LilyPond expects signals when a decrescendo starts
-                // as well as when it ends
-                eventendlist preEventsInProgress;
-                eventstartlist preEventsToStart;
-                eventendlist postEventsInProgress;
-                eventstartlist postEventsToStart;
+            }
 
-                // If the segment doesn't start at 0, add a "skip" to the start
-                // No worries about overlapping segments, because Voices can overlap
-                // voiceCounter is a hack because LilyPond does not by default make
-                // them unique
-                std::ostringstream voiceNumber;
-                voiceNumber << "voice " << ++voiceCounter;
+            // Temporary storage for non-atomic events (!BOOM)
+            // ex. LilyPond expects signals when a decrescendo starts
+            // as well as when it ends
+            eventendlist preEventsInProgress;
+            eventstartlist preEventsToStart;
+            eventendlist postEventsInProgress;
+            eventstartlist postEventsToStart;
 
-                str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
-                    << "\" {"; // indent+
+            // If the segment doesn't start at 0, add a "skip" to the start
+            // No worries about overlapping segments, because Voices can overlap
+            // voiceCounter is a hack because LilyPond does not by default make
+            // them unique
+            std::ostringstream voiceNumber;
+            voiceNumber << "voice " << ++voiceCounter;
 
-                str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
-                str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
+            str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
+                << "\" {"; // indent+
 
-                // staff notation size
-                int staffSize = track->getStaffSize();
-                if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
-                else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
+            str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
+            str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
-                SegmentNotationHelper helper(**i);
-                helper.setNotationProperties();
+            // staff notation size
+            int staffSize = track->getStaffSize();
+            if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
+            else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
 
-                int firstBar = m_composition->getBarNumber((*i)->getStartTime());
+            SegmentNotationHelper helper(*seg);
+            helper.setNotationProperties();
 
-                if (firstBar > 0) {
-                    // Add a skip for the duration until the start of the first
-                    // bar in the segment.  If the segment doesn't start on a
-                    // bar line, an additional skip will be written at the start
-                    // of writeBar, below.
-                    //!!! This doesn't cope correctly yet with time signature changes
-                    // during this skipped section.
-                    // dmm - changed this to call writeSkip with false, to avoid
-                    // writing actual rests, and write a skip instead, so
-                    // visible rests do not appear before the start of short
-                    // bars
-                    str << std::endl << indent(col);
-                    writeSkip(timeSignature, compositionStartTime,
-                              m_composition->getBarStart(firstBar) - compositionStartTime - repeatOffset,
-                              false, str);
-                }
+            int firstBar = m_composition->getBarNumber(seg->getStartTime());
 
-///YG: Since \partial has been removed from the global context :
-// If segment is not starting on a bar, but is starting at barTime + offset,
-// we have to do :
-//     if segment is the first one : add partial (barDuration - offset)
-//     else  add skip (offset)
-                if ((*i)->getStartTime() - m_composition->getBarStart(firstBar) > 0) {
-                    if ((*i)->getStartTime() == firstSegmentStartTime) {
-                        timeT partialDuration = m_composition->getBarStart(firstBar + 1)
-                                                - (*i)->getStartTime();
-                        str << indent(col) << "\\partial ";
-                        // Arbitrary partial durations are handled by the following
-                        // way: split the partial duration to 64th notes: instead
-                        // of "4" write "64*16". (hjj)
-                        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
-                        writeDuration(1, str);
-                        str << "*" << ((int)(partialDuration / partialNote.getDuration()))
-                            << std::endl;
+            if (firstBar > 0) {
+                // Add a skip for the duration until the start of the first
+                // bar in the segment.  If the segment doesn't start on a
+                // bar line, an additional skip will be written at the start
+                // of writeBar, below.
+                //!!! This doesn't cope correctly yet with time signature changes
+                // during this skipped section.
+                // dmm - changed this to call writeSkip with false, to avoid
+                // writing actual rests, and write a skip instead, so
+                // visible rests do not appear before the start of short
+                // bars
+                str << std::endl << indent(col);
+                writeSkip(timeSignature, compositionStartTime,
+                          lsc.getSegmentStartTime(), false, str);
+            }
 
-                    } else {
-                        timeT partialOffset = (*i)->getStartTime()
+            // If segment is not starting on a bar, but is starting at barTime + offset,
+            // we have to do :
+            //     if segment is the first one : add partial (barDuration - offset)
+            //     else  add skip (offset)
+            if (seg->getStartTime() - m_composition->getBarStart(firstBar) > 0) {
+                if (seg->getStartTime() == firstSegmentStartTime) {
+                    timeT partialDuration = m_composition->getBarStart(firstBar + 1)
+                                            - seg->getStartTime();
+                    str << indent(col) << "\\partial ";
+                    // Arbitrary partial durations are handled by the following
+                    // way: split the partial duration to 64th notes: instead
+                    // of "4" write "64*16". (hjj)
+                    Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+                    writeDuration(1, str);
+                    str << "*" << ((int)(partialDuration / partialNote.getDuration()))
+                        << std::endl;
+
+                } else {
+                    if (m_repeatMode == REPEAT_BASIC) {
+                        timeT partialOffset = seg->getStartTime()
                                               - m_composition->getBarStart(firstBar);
                         str << indent(col) << "\\skip ";
                         // Arbitrary partial durations are handled by the following
@@ -1388,262 +1384,262 @@ LilyPondExporter::write()
                             << std::endl;
                     }
                 }
+            }
 
 
-                std::string lilyText = "";      // text events
-                std::string prevStyle = "";     // track note styles
+            std::string lilyText = "";      // text events
+            std::string prevStyle = "";     // track note styles
 
-                Rosegarden::Key key;
+            Rosegarden::Key key;
 
-                bool haveRepeating = false;
-                bool haveAlternates = false;
+            bool haveRepeating = false;
+            bool haveAlternates = false;
 
-                bool nextBarIsAlt1 = false;
-                bool nextBarIsAlt2 = false;
-                bool prevBarWasAlt2 = false;
+            bool nextBarIsAlt1 = false;
+            bool nextBarIsAlt2 = false;
+            bool prevBarWasAlt2 = false;
 
-                int MultiMeasureRestCount = 0;
+            int MultiMeasureRestCount = 0;
 
-                bool nextBarIsDouble = false;
-                bool nextBarIsEnd = false;
-                bool nextBarIsDot = false;
+            bool nextBarIsDouble = false;
+            bool nextBarIsEnd = false;
+            bool nextBarIsDot = false;
 
-                for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
-                     barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
-                     ++barNo) {
+            for (int barNo = m_composition->getBarNumber(seg->getStartTime());
+                  barNo <= m_composition->getBarNumber(seg->getEndMarkerTime());
+                  ++barNo) {
 
-                    timeT barStart = m_composition->getBarStart(barNo);
-                    timeT barEnd = m_composition->getBarEnd(barNo);
-                    timeT currentSegmentStartTime = (*i)->getStartTime();
-                    timeT currentSegmentEndTime = (*i)->getEndMarkerTime();
-                    // Check for a partial measure in the beginning of the composition
-                    if (barStart < compositionStartTime) {
-                        barStart = compositionStartTime;
-                    }
-                    // Check for a partial measure in the end of the composition
-                    if (barEnd > compositionEndTime) {
-                        barEnd = compositionEndTime;
-                    }
-                    // Check for a partial measure beginning in the middle of a
-                    // theoretical bar
-                    if (barStart < currentSegmentStartTime) {
-                        barStart = currentSegmentStartTime;
-                    }
-                    // Check for a partial measure ending in the middle of a
-                    // theoretical bar
-                    if (barEnd > currentSegmentEndTime) {
-                        barEnd = currentSegmentEndTime;
-                    }
+                timeT barStart = m_composition->getBarStart(barNo);
+                timeT barEnd = m_composition->getBarEnd(barNo);
+                timeT currentSegmentStartTime = seg->getStartTime();
+                timeT currentSegmentEndTime = seg->getEndMarkerTime();
+                // Check for a partial measure in the beginning of the composition
+                if (barStart < compositionStartTime) {
+                    barStart = compositionStartTime;
+                }
+                // Check for a partial measure in the end of the composition
+                if (barEnd > compositionEndTime) {
+                    barEnd = compositionEndTime;
+                }
+                // Check for a partial measure beginning in the middle of a
+                // theoretical bar
+                if (barStart < currentSegmentStartTime) {
+                    barStart = currentSegmentStartTime;
+                }
+                // Check for a partial measure ending in the middle of a
+                // theoretical bar
+                if (barEnd > currentSegmentEndTime) {
+                    barEnd = currentSegmentEndTime;
+                }
 
-                    // open \repeat section if this is the first bar in the
-                    // repeat
-                    if ((*i)->isRepeating() && !haveRepeating) {
+                // Check for a time signature in the first bar of the segment
+                bool timeSigInFirstBar = false;
+                TimeSignature firstTimeSig =
+                    m_composition->getTimeSignatureInBar(firstBar, timeSigInFirstBar);
+                // and write it here (to avoid multiple time signatures when
+                // a repeating segment is unfolded)
+                if (timeSigInFirstBar && (barNo == firstBar)) {
+                    writeTimeSignature(firstTimeSig, col, str);
+                }
 
-                        haveRepeating = true;
-                        int numRepeats = 2; 
+                // open \repeat section if this is the first bar in the
+                // repeat
+                if (seg->isRepeating() && !haveRepeating) {
 
-                        switch (m_repeatMode) {
-                        case REPEAT_BASIC :
-                            // The old unfinished way
-                            str << std::endl << indent(col++) << "\\repeat volta " << numRepeats << " {";
-                            break;
-                            
-                        case REPEAT_VOLTA :
-                        case REPEAT_UNFOLD :
-                            // Calculate the number of times this segment
-                            // repeats and make the following variable meaningful
-                            timeT startOfSeg = (*i)->getStartTime();
-                            timeT endOfSeg = (*i)->getEndMarkerTime();
-                            timeT nextSegmentStartTime = m_composition->getEndMarker();
-                            for (Composition::iterator j = m_composition->begin();
-                                    j != m_composition->end(); ++j) {
-                                if ((*j)->getTrack() != track->getId()) continue;
-                                if ((*j)->getStartTime() <= startOfSeg) continue;
-                                if ((*j)->getStartTime() < nextSegmentStartTime) {
-                                    nextSegmentStartTime = (*j)->getStartTime();
-                                }
-                            }
-                            numRepeats = (nextSegmentStartTime - startOfSeg + 1) /
-                                              (endOfSeg - startOfSeg);
+                    haveRepeating = true;
+                    int numRepeats = 2; 
 
-                            if (m_repeatMode == REPEAT_VOLTA) {
-                                repeatOffset += (numRepeats - 1) * (endOfSeg - startOfSeg);
-                                str << std::endl << indent(col++) 
-                                    << "\\repeat volta " << numRepeats << " {";
-                            } else {
-                                // m_repeatMode == REPEAT_UNFOLD
-                                str << std::endl << indent(col++) 
-                                    << "\\repeat unfold " << numRepeats << " {";
-                            }
-                            break;
+                    if (m_repeatMode == REPEAT_BASIC) {
+                         // The old unfinished way
+                        str << std::endl << indent(col++) << "\\repeat volta " << numRepeats << " {";
+                    } else {
+                        numRepeats = lsc.getNumberOfRepeats();
+
+                        if ((m_repeatMode == REPEAT_VOLTA) && !lsc.isUnfolded()) {
+                            str << std::endl << indent(col++) 
+                                << "\\repeat volta " << numRepeats << " {";
+                        } else {
+                            // m_repeatMode == REPEAT_UNFOLD
+                            str << std::endl << indent(col++) 
+                                << "\\repeat unfold " << numRepeats << " {";
                         }
                     }
+                }
 
-                    // open the \alternative section if this bar is alternative ending 1
-                    // ending (because there was an "Alt1" flag in the
-                    // previous bar to the left of where we are right now)
-                    //
-                    // Alt1 remains in effect until we run into Alt2, which
-                    // runs to the end of the segment
-                    if (nextBarIsAlt1 && haveRepeating) {
-                        str << std::endl << indent(--col) << "} \% repeat close (before alternatives) ";
-                        str << std::endl << indent(col++) << "\\alternative {";
-                        str << std::endl << indent(col++) << "{  \% open alternative 1 ";
-                        nextBarIsAlt1 = false;
-                        haveAlternates = true;
-                    } else if (nextBarIsAlt2 && haveRepeating) {
-                        if (!prevBarWasAlt2) {
-                            col--;
-                            // add an extra str to the following to shut up
-                            // compiler warning from --ing and ++ing it in the
-                            // same statement
-                            str << std::endl << indent(--col) << "} \% close alternative 1 ";
-                            str << std::endl << indent(col++) << "{  \% open alternative 2";
-                            col++;
-                        }
-                        prevBarWasAlt2 = true;
+                // open the \alternative section if this bar is alternative ending 1
+                // ending (because there was an "Alt1" flag in the
+                // previous bar to the left of where we are right now)
+                //
+                // Alt1 remains in effect until we run into Alt2, which
+                // runs to the end of the segment
+                if (nextBarIsAlt1 && haveRepeating) {
+                    str << std::endl << indent(--col) << "} \% repeat close (before alternatives) ";
+                    str << std::endl << indent(col++) << "\\alternative {";
+                    str << std::endl << indent(col++) << "{  \% open alternative 1 ";
+                    nextBarIsAlt1 = false;
+                    haveAlternates = true;
+                } else if (nextBarIsAlt2 && haveRepeating) {
+                    if (!prevBarWasAlt2) {
+                        col--;
+                        // add an extra str to the following to shut up
+                        // compiler warning from --ing and ++ing it in the
+                        // same statement
+                        str << std::endl << indent(--col) << "} \% close alternative 1 ";
+                        str << std::endl << indent(col++) << "{  \% open alternative 2";
+                        col++;
                     }
-
-                    // write out a bar's worth of events
-                    writeBar(*i, barNo, barStart, barEnd, col, key,
-                             lilyText,
-                             prevStyle, preEventsInProgress, postEventsInProgress, str,
-                             MultiMeasureRestCount, 
-                             nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble, nextBarIsEnd, nextBarIsDot);
-
+                    prevBarWasAlt2 = true;
                 }
 
-                // close \repeat
-                if (haveRepeating) {
-
-                    // close \alternative section if present
-                    if (haveAlternates) {
-                        str << std::endl << indent(--col) << " } \% close alternative 2 ";
-                    }
-
-                    // close \repeat section in either case
-                    str << std::endl << indent(--col) << " } \% close "
-                        << (haveAlternates ? "alternatives" : "repeat");
+                // should a time signature be writed in the current bar ?
+                bool noTimeSig;
+                if (timeSigInFirstBar) {
+                    noTimeSig = barNo == firstBar;
+                } else {
+                    noTimeSig = barNo != firstBar;
                 }
 
-                // closing bar
-                if (((*i)->getEndMarkerTime() == compositionEndTime) && !haveRepeating) {
-                    str << std::endl << indent(col) << "\\bar \"|.\"";
+                // write out a bar's worth of events
+                writeBar(seg, barNo, barStart, barEnd, col, key,
+                          lilyText,
+                          prevStyle, preEventsInProgress, postEventsInProgress, str,
+                          MultiMeasureRestCount, 
+                          nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble,
+                          nextBarIsEnd, nextBarIsDot,
+                          noTimeSig);
+
+            }
+
+            // close \repeat
+            if (haveRepeating) {
+
+                // close \alternative section if present
+                if (haveAlternates) {
+                    str << std::endl << indent(--col) << " } \% close alternative 2 ";
                 }
 
-                // close Voice context
-                str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-
+                // close \repeat section in either case
+                str << std::endl << indent(--col) << " } \% close "
+                    << (haveAlternates ? "alternatives" : "repeat");
+            }
 
-                //
-                // Write accumulated lyric events to the Lyric context, if desired.
-                //
-                // Sync the code below with LyricEditDialog::unparse() !!
-                //
-                if (m_exportLyrics != EXPORT_NO_LYRICS) {
-                    // To force correct ordering of verses must track when first verse is printed.
-                    bool isFirstPrintedVerse = true;
-                    for (long currentVerse = 0, lastVerse = 0; 
-                         currentVerse <= lastVerse; 
-                         currentVerse++) {
-                        bool haveLyric = false;
-                        bool firstNote = true;
-                        QString text = "";
+            // closing bar
+            if ((seg->getEndMarkerTime() == compositionEndTime) && !haveRepeating) {
+                str << std::endl << indent(col) << "\\bar \"|.\"";
+            }
 
-                        timeT lastTime = (*i)->getStartTime();
-                        for (Segment::iterator j = (*i)->begin();
-                             (*i)->isBeforeEndMarker(j); ++j) {
-    
-                            bool isNote = (*j)->isa(Note::EventType);
-                            bool isLyric = false;
-    
-                            if (!isNote) {
-                                if ((*j)->isa(Text::EventType)) {
-                                    std::string textType;
-                                    if ((*j)->get
-                                        <String>(Text::TextTypePropertyName, textType) &&
-                                        textType == Text::Lyric) {
-                                        isLyric = true;
-                                    }
-                                }
-                            }
-    
-                            if (!isNote && !isLyric) continue;
-    
-                            timeT myTime = (*j)->getNotationAbsoluteTime();
-    
-                            if (isNote) {
-                                if ((myTime > lastTime) || firstNote) {
-                                    if (!haveLyric)
-                                        text += " _";
-                                    lastTime = myTime;
-                                    haveLyric = false;
-                                    firstNote = false;
-                                }
-                            }
-    
-                            if (isLyric) {
-                                long verse;
-                                (*j)->get<Int>(Text::LyricVersePropertyName, verse);
+            // close Voice context
+            str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-
 
-                                if (verse == currentVerse) {
-                                    std::string ssyllable;
-                                    (*j)->get<String>(Text::TextPropertyName, ssyllable);
-                                    text += " ";
-            
-                                    QString syllable(strtoqstr(ssyllable));
-                                    syllable.replace(QRegExp("^\\s+"), "");
-                                    syllable.replace(QRegExp("\\s+$"), "");
-                                    syllable.replace(QRegExp("\""), "\\\"");
-                                    text += "\"" + syllable + "\"";
-                                    haveLyric = true;
-                                } else if (verse > lastVerse) {
-                                    lastVerse = verse;
+            //
+            // Write accumulated lyric events to the Lyric context, if desired.
+            //
+            // Sync the code below with LyricEditDialog::unparse() !!
+            //
+            if (m_exportLyrics != EXPORT_NO_LYRICS) {
+                // To force correct ordering of verses must track when first verse is printed.
+                bool isFirstPrintedVerse = true;
+                for (long currentVerse = 0, lastVerse = 0; 
+                      currentVerse <= lastVerse; 
+                      currentVerse++) {
+                    bool haveLyric = false;
+                    bool firstNote = true;
+                    QString text = "";
+
+                    timeT lastTime = seg->getStartTime();
+                    for (Segment::iterator j = seg->begin();
+                          seg->isBeforeEndMarker(j); ++j) {
+
+                        bool isNote = (*j)->isa(Note::EventType);
+                        bool isLyric = false;
+
+                        if (!isNote) {
+                            if ((*j)->isa(Text::EventType)) {
+                                std::string textType;
+                                if ((*j)->get
+                                    <String>(Text::TextTypePropertyName, textType) &&
+                                    textType == Text::Lyric) {
+                                    isLyric = true;
                                 }
                             }
                         }
 
-                        text.replace(QRegExp(" _+([^ ])") , " \\1");
-                        text.replace("\"_\"" , " ");
-    
-                        // Do not create empty context for lyrics.
-                        // Does this save some vertical space, as was written
-                        // in earlier comment?
-                        QRegExp rx("\"");
-                        if (rx.indexIn(text) != -1) {
+                        if (!isNote && !isLyric) continue;
+
+                        timeT myTime = (*j)->getNotationAbsoluteTime();
+
+                        if (isNote) {
+                            if ((myTime > lastTime) || firstNote) {
+                                if (!haveLyric)
+                                    text += " _";
+                                lastTime = myTime;
+                                haveLyric = false;
+                                firstNote = false;
+                            }
+                        }
+
+                        if (isLyric) {
+                            long verse;
+                            (*j)->get<Int>(Text::LyricVersePropertyName, verse);
+
+                            if (verse == currentVerse) {
+                                std::string ssyllable;
+                                (*j)->get<String>(Text::TextPropertyName, ssyllable);
+                                text += " ";
         
-                            if (m_languageLevel <= LILYPOND_VERSION_2_10) {
-                                str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-                                    << " \\new Lyrics \\lyricmode {" << std::endl;
-                            } else {
-                                str << indent(col)
-                                    << "\\new Lyrics ";
-                                // Put special alignment info for first printed verse only.
-                                // Otherwise, verses print in reverse order.
-                                if (isFirstPrintedVerse) {
-                                    str << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} ";
-                                    isFirstPrintedVerse = false;
-                                }
-                                str << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
+                                QString syllable(strtoqstr(ssyllable));
+                                syllable.replace(QRegExp("^\\s+"), "");
+                                syllable.replace(QRegExp("\\s+$"), "");
+                                syllable.replace(QRegExp("\""), "\\\"");
+                                text += "\"" + syllable + "\"";
+                                haveLyric = true;
+                            } else if (verse > lastVerse) {
+                                lastVerse = verse;
                             }
-                            if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
-                                str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
-                                    << std::endl;
-                            } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
-                                str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
-                                    << std::endl;
-                            } else {
-                                str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
-                                    << std::endl;
+                        }
+                    }
+
+                    text.replace(QRegExp(" _+([^ ])") , " \\1");
+                    text.replace("\"_\"" , " ");
+
+                    // Do not create empty context for lyrics.
+                    // Does this save some vertical space, as was written
+                    // in earlier comment?
+                    QRegExp rx("\"");
+                    if (rx.indexIn(text) != -1) {
+    
+                        if (m_languageLevel <= LILYPOND_VERSION_2_10) {
+                            str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
+                                << " \\new Lyrics \\lyricmode {" << std::endl;
+                        } else {
+                            str << indent(col)
+                                << "\\new Lyrics ";
+                            // Put special alignment info for first printed verse only.
+                            // Otherwise, verses print in reverse order.
+                            if (isFirstPrintedVerse) {
+                                str << "\\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} ";
+                                isFirstPrintedVerse = false;
                             }
-                            str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
-                            str << indent(col) << qStrToStrUtf8(text) << " " << std::endl;
-                            str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
-                            str << indent(--col) << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
-                            // close the Lyrics context
-                        } // if (rx.search(text....
-                    } // for (long currentVerse = 0....
-                } // if (m_exportLyrics....
-            } // if (isSegmentToPrint.... 
+                            str << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
+                        }
+                        if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
+                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
+                                << std::endl;
+                        } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
+                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
+                                << std::endl;
+                        } else {
+                            str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
+                                << std::endl;
+                        }
+                        str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
+                        str << indent(col) << qStrToStrUtf8(text) << " " << std::endl;
+                        str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
+                        str << indent(--col) << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
+                        // close the Lyrics context
+                    } // if (rx.search(text....
+                } // for (long currentVerse = 0....
+            } // if (m_exportLyrics....
             firstTrack = false;
         } // for (Composition::iterator i = m_composition->begin()....
     } // for (int trackPos = 0....
@@ -1822,7 +1818,8 @@ LilyPondExporter::writeBar(Segment *s,
                            std::ofstream &str,
                            int &MultiMeasureRestCount,
                            bool &nextBarIsAlt1, bool &nextBarIsAlt2,
-                           bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
+                           bool &nextBarIsDouble, bool &nextBarIsEnd,
+                           bool &nextBarIsDot,  bool noTimeSignature)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
     int isGrace = 0;
@@ -1844,25 +1841,8 @@ LilyPondExporter::writeBar(Segment *s,
 
     bool isNew = false;
     TimeSignature timeSignature = m_composition->getTimeSignatureInBar(barNo, isNew);
-    if (isNew) {
-        if (timeSignature.isHidden()) {
-            str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
-        }
-        //
-        // It is not possible to jump between common time signature "C"
-        // and fractioned time signature "4/4", because new time signature
-        // is entered only if the time signature fraction changes.
-        // Maybe some tweak is needed in order to allow the jumping between
-        // "C" and "4/4" ? (HJJ)
-        //
-        if (timeSignature.isCommon() == false) {
-            // use numberedtime signature: 4/4
-            str << "\\once \\override Staff.TimeSignature #'style = #'() ";
-        }
-        str << "\\time "
-            << timeSignature.getNumerator() << "/"
-            << timeSignature.getDenominator()
-            << std::endl << indent(col);
+    if (isNew && !noTimeSignature) {
+        writeTimeSignature(timeSignature, col, str);
     }
 
     timeT absTime = (*i)->getNotationAbsoluteTime();
@@ -2570,6 +2550,30 @@ LilyPondExporter::writeBar(Segment *s,
     } else if (MultiMeasureRestCount == 0) {
         str << " |";
     }
+}
+
+void
+LilyPondExporter::writeTimeSignature(TimeSignature timeSignature,
+                                     int col, std::ofstream &str)
+{
+    if (timeSignature.isHidden()) {
+        str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
+    }
+    //
+    // It is not possible to jump between common time signature "C"
+    // and fractioned time signature "4/4", because new time signature
+    // is entered only if the time signature fraction changes.
+    // Maybe some tweak is needed in order to allow the jumping between
+    // "C" and "4/4" ? (HJJ)
+    //
+    if (timeSignature.isCommon() == false) {
+        // use numberedtime signature: 4/4
+        str << "\\once \\override Staff.TimeSignature #'style = #'() ";
+    }
+    str << "\\time "
+        << timeSignature.getNumerator() << "/"
+        << timeSignature.getDenominator()
+        << std::endl << indent(col);
 }
 
 std::pair<int,int>
