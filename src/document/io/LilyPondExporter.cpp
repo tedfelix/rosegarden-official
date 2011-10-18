@@ -582,6 +582,7 @@ LilyPondExporter::protectIllegalChars(std::string inStr)
     tmpStr.replace(QRegExp("\\]"), "");
     tmpStr.replace(QRegExp("\\{"), "");
     tmpStr.replace(QRegExp("\\}"), "");
+    tmpStr.replace(QRegExp("\""), "\\\"");
 
     //
     // LilyPond uses utf8 encoding.
