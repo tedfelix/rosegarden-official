@@ -135,7 +135,8 @@ LilyPondExporter::readConfigVariables(void)
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt() ;
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
-    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt() ;
+//    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt() ;
+    m_repeatMode = settings.value("lilyexportrepeat", "true").toBool() ? REPEAT_VOLTA : REPEAT_UNFOLD;
     m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
     settings.endGroup();
 }
