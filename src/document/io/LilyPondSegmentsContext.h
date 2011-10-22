@@ -77,6 +77,12 @@ public:
     void fixStartTimes();
 
     /**
+     * Return the smaller start time of the segments being exported.
+     * Only valid after precompute() has been executed.
+     */
+    timeT getFirstSegmentStartTime() { return m_firstSegmentStartTime; }
+
+    /**
      * Prepare to get the segments on the first track.
      * Return null if there is no track.
      */

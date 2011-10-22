@@ -831,16 +831,7 @@ LilyPondExporter::write()
     // because the first segment of the composition may be being not printed.
     // Following code is finding out the start time of the first segment
     // being printed.
-
-    timeT firstSegmentStartTime = std::numeric_limits<timeT>::max();
-    for (Composition::iterator i = m_composition->begin();
-            i != m_composition->end(); ++i) {
-        if (isSegmentToPrint(*i)) {
-            if ((*i)->getStartTime() < firstSegmentStartTime) {
-                firstSegmentStartTime = (*i)->getStartTime();
-            }
-        }
-    }
+    timeT firstSegmentStartTime = lsc.getFirstSegmentStartTime();
 
 
     // define global context which is common for all staffs
