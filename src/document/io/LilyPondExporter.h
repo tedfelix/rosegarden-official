@@ -218,23 +218,30 @@ private:
     unsigned int m_exportMarkerMode;
 
     bool m_chordNamesMode;
-    
-    static const unsigned int EXPORT_NO_MARKERS = 0;
-    static const unsigned int EXPORT_DEFAULT_MARKERS = 1;
-    static const unsigned int EXPORT_TEXT_MARKERS = 2;
+
+    enum {
+        EXPORT_NO_MARKERS,
+        EXPORT_DEFAULT_MARKERS,
+        EXPORT_TEXT_MARKERS,
+    };
+        
 
     unsigned int m_exportNoteLanguage;
 
     int m_languageLevel;
-    static const int LILYPOND_VERSION_2_6  = 0;
-    static const int LILYPOND_VERSION_2_8  = 1;
-    static const int LILYPOND_VERSION_2_10 = 2;
-    static const int LILYPOND_VERSION_2_12 = 3;
+    enum {
+        LILYPOND_VERSION_2_6,
+        LILYPOND_VERSION_2_8,
+        LILYPOND_VERSION_2_10,
+        LILYPOND_VERSION_2_12,
+    };
 
     int m_repeatMode;
-    static const int REPEAT_BASIC  = 0;
-    static const int REPEAT_VOLTA  = 1;
-    static const int REPEAT_UNFOLD = 2;
+    enum {
+        REPEAT_BASIC,
+        REPEAT_VOLTA,
+        REPEAT_UNFOLD,
+    };
 
     bool m_cancelAccidentals;
 
