@@ -31,22 +31,27 @@ namespace Rosegarden
 
 
     class SegmentSelection;
-    struct RelativeEvent;
-    typedef std::vector<Event *> eventVector;
+    class NotationQuantizer;
+    class ChordFromCounterpoint;
+    class RelativeEvent;
     typedef std::vector<RelativeEvent *> RelativeEventVec;
 
 
+// @class Figuration
+// @remarks A figuration ready for expansion
+// @author Tom Breton (Tehom)
 class Figuration
 {
  public:
     static timeT getOKFigTime(Composition *composition, timeT lookAtTime = 0);
     static timeT getNextFigTime(Composition *composition, timeT lookAtTime);
-    timeT       getEndTime(timeT startTime)
+    timeT        getEndTime(timeT startTime)
     { return startTime + m_duration; }
     RelativeEventVec m_events;
     timeT            m_duration;
+    // Parameter count
+    unsigned int     m_NbParameters;
     // Punt: Keysignature it applies to.
-    // Punt: Parameter count
 };
 
 // @class ExpandFigurationCommand
@@ -78,17 +83,19 @@ private:
     
     void initialise(SegmentSelection selection);
     static UnsolvedNote getPossibleRelations(Event *e,
-                                              const eventVector parameterChord,
-                                              const Key key,
-                                              timeT startTime);
+                                             const ChordFromCounterpoint *parameterChord,
+                                             const Key key,
+                                             timeT startTime);
     static RelationSeenMap getFreshSeenMap(UnsolvedFiguration &figuration);
-    static eventVector getBlockChord(Segment *s, timeT time);
     static Figuration getFiguration(Segment *s);
 
     Composition                   *m_composition;
     // The new segments we make.
     segmentcontainer               m_newSegments;
     bool                           m_executed;
+
+    static const timeT m_preDuration;
+    static NotationQuantizer * m_nq;
 };
 
 }

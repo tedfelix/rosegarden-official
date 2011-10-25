@@ -43,13 +43,15 @@ class Quantizer;
  * Events somehow.
  *
  * To construct a set requires (at least) a container reference plus
- * an iterator into that container.  The constructor (or more
- * precisely the initialise() method called by the constructor) then
- * scans the surrounding area of the list for the maximal set of
- * contiguous or within-the-same-bar elements before and after the
- * passed-in iterator such that all elements are in the same set
- * (i.e. Chord, BeamedGroup etc) as the one that the passed-in
- * iterator pointed to.
+ * an iterator into that container.  Derived classes must call
+ * initialise().  It has to be done this way otherwise the expected
+ * virtual functions wouldn't get called.
+ * 
+ * The initialise() method scans the surrounding area of the list for
+ * the maximal set of contiguous or within-the-same-bar elements
+ * before and after the passed-in iterator such that all elements are
+ * in the same set (i.e. Chord, BeamedGroup etc) as the one that the
+ * passed-in iterator pointed to.
  *
  * The extents of the set within the list can then be discovered via
  * getInitialElement() and getFinalElement().  If the iterator passed
@@ -105,6 +107,9 @@ public:
 protected:
     AbstractSet(Container &c, Iterator elementInSet, const Quantizer *);
     void initialise();
+
+    // Finish initialization specifically for a derived class
+    virtual void initialiseFinish(void) = 0;
 
     /// Return true if this element is not definitely beyond bounds of set
     virtual bool test(const Iterator &i) = 0;
@@ -171,6 +176,8 @@ public:
     virtual std::vector<int> getPitches() const;
     virtual bool contains(const Iterator &) const;
 
+    virtual void initialiseFinish(void);
+    
     /**
      * Return an iterator pointing to the previous note before this
      * chord, or container's end() if there is no previous note.
@@ -216,7 +223,68 @@ protected:
     Iterator m_firstReject;
 };
 
+// These class definitions exist just to call `initialise' in
+// derived ctors.
+class Chord : public GenericChord<Event, Segment, true>
+{
+    typedef Event    Element;
+    typedef Segment  Container;
+    static const bool singleStaff = true;
 
+ public:
+    Chord(Container &c,
+          Iterator elementInChord,
+          const Quantizer *quantizer,
+          PropertyName stemUpProperty =
+          PropertyName::EmptyPropertyName)
+        : GenericChord<Element, Container, singleStaff>
+              (c, elementInChord, quantizer, stemUpProperty)
+        { initialise(); }
+};
+
+class GlobalChord : public GenericChord<Event, CompositionTimeSliceAdapter, false>
+{
+    typedef Event                        Element;
+    typedef CompositionTimeSliceAdapter  Container;
+    static const bool singleStaff = false;
+
+ public:
+    GlobalChord(Container &c,
+          Iterator elementInChord,
+          const Quantizer *quantizer,
+          PropertyName stemUpProperty =
+          PropertyName::EmptyPropertyName)
+        : GenericChord<Element, Container, singleStaff>
+              (c, elementInChord, quantizer, stemUpProperty)
+        { initialise(); }
+};
+
+/// Class to describe a chord whose notes might not start at the same
+/// time
+/// @class ChordFromCounterpoint
+/// @author Tom Breton (Tehom)
+class ChordFromCounterpoint : public GenericChord<Event, Segment, false>
+{
+    typedef Event    Element;
+    typedef Segment  Container;
+    static const bool singleStaff = false;
+
+public:
+    ChordFromCounterpoint(Container &c,
+                      Iterator elementInChord,
+                      const Quantizer *quantizer,
+                      timeT preDuration)
+        : GenericChord<Element, Container, singleStaff>
+              (c, elementInChord, quantizer),
+          m_preDuration(preDuration)
+          { initialise(); }
+
+protected:
+    virtual bool     test(const Iterator &i);
+    virtual bool     sample(const Iterator &i, bool goingForwards);
+    // The longest duration we expect a preceding note to have.
+    timeT    m_preDuration;
+};
 
 ///
 /// Implementation only from here on.
@@ -319,6 +387,9 @@ AbstractSet<Element, Container>::initialise()
 	    }
         }
     }
+
+    // And do specific things for the derived class
+    initialiseFinish();
 }
 
 template <class Element, class Container>
@@ -374,37 +445,27 @@ GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
     m_subordering(getAsEvent(i)->getSubOrdering()),
     m_firstReject(c.end())
 {
-    AbstractSet<Element, Container>::initialise();
-
-    if (std::vector<typename Container::iterator>::size() > 1) {
-        std::stable_sort(std::vector<typename Container::iterator>::begin(),
-			 std::vector<typename Container::iterator>::end(),
-			 PitchGreater());
-    }
-
-/*!!! this should all be removed ultimately
-//    std::cerr << "GenericChord::GenericChord: pitches are:" << std::endl;
-    int prevPitch = -999;
-    for (unsigned int i = 0; i < size(); ++i) {
-        try {
-            int pitch = getAsEvent((*this)[i])->get<Int>(BaseProperties::PITCH);
-//            std::cerr << i << ": " << pitch << std::endl;
-            if (pitch < prevPitch) {
-                cerr << "ERROR: Pitch less than previous pitch (" << pitch
-                     << " < " << prevPitch << ")" << std::endl;
-                throw(1);
-            }
-        } catch (Event::NoData) {
-            std::cerr << i << ": no pitch property" << std::endl;
-        }
-    }
-*/
+    // initialise must be called in individual derived classes.  If we
+    // called it here, it wouldn't use the right
+    // virtual functions.
 }
 
 template <class Element, class Container, bool singleStaff>
 GenericChord<Element, Container, singleStaff>::~GenericChord()
 {
 }
+
+template <class Element, class Container, bool singleStaff>
+void
+GenericChord<Element, Container, singleStaff>::
+initialiseFinish(void)
+{
+    if (std::vector<typename Container::iterator>::size() > 1) {
+        std::stable_sort(std::vector<typename Container::iterator>::begin(),
+			 std::vector<typename Container::iterator>::end(),
+			 PitchGreater());
+    }
+ }
 
 template <class Element, class Container, bool singleStaff>
 bool
@@ -679,10 +740,6 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
         return false;
     }
 }
-
-
-typedef GenericChord<Event, Segment, true> Chord;
-typedef GenericChord<Event, CompositionTimeSliceAdapter, false> GlobalChord;
 
 
 }

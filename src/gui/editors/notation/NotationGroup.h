@@ -91,6 +91,7 @@ public:
 
 protected:
     virtual bool test(const NELIterator &i);
+    virtual void initialiseFinish(void);
 
 private:
     struct Beam

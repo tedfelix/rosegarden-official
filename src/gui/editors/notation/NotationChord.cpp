@@ -49,7 +49,7 @@ NotationChord::NotationChord(NotationElementList &c,
         m_clef(clef),
         m_key(key)
 {
-    // nothing else
+    initialise();
 }
 
 int
