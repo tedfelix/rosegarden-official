@@ -721,6 +721,25 @@ public:
      */ 
     bool isTrulyLinked() const;
 
+    /**
+     * Return true if the segment is "truly link" and doesn't embbed any
+     * local change (as transpositon...).
+     * This method is intended to help exporting linked segments as repeat with
+     * volta in LilyPond.
+     */ 
+    bool isPlainlyLinked() const;
+
+    /**
+     * Return true if the given segment is linked to this.
+     */ 
+    bool isLinkedTo(Segment *) const;
+
+    /**
+     * Return true if the given segment is a plain link linked to the current
+     * object which is equally a plain link
+     */ 
+    bool isPlainlyLinkedTo(Segment *) const;
+
     SegmentLinker * getLinker() const { return m_segmentLinker; }
     void setLinker(SegmentLinker *linker) { m_segmentLinker = linker; }
 

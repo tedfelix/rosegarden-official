@@ -228,6 +228,36 @@ Segment::isTrulyLinked() const {
     else return false;
 }
 
+bool
+Segment::isPlainlyLinked() const {
+    // A segment which is not a "true link" can't be a "plain link"
+    if (!isTrulyLinked()) return false;
+
+    // TODO: the real work...
+    // Currently the features which make the difference between a link and a
+    // plain link are at the embryonic stage and are not implemented
+    // through the GUI still.
+    // That's why I leave this method unfinished.
+    return true;
+}
+
+bool
+Segment::isLinkedTo(Segment * seg) const {
+    if (!m_segmentLinker) return false;
+
+    SegmentLinker * otherSegmentLinker = seg->getLinker();
+    if (!otherSegmentLinker) return false;
+
+    return m_segmentLinker == otherSegmentLinker;
+}
+
+bool
+Segment::isPlainlyLinkedTo(Segment * seg) const {
+    if (!isPlainlyLinked()) return false;
+    if (!seg->isPlainlyLinked()) return false;
+    return isLinkedTo(seg);
+}
+
 void
 Segment::setTrack(TrackId id)
 {

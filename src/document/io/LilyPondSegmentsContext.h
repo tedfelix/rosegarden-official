@@ -26,10 +26,11 @@
  * which have to be exported to LilyPond.
  *
  * This context is used to 
- *      - See when a repeating segment may be cam ne print inside
+ *      - See when a repeating segment may be printed inside
  *        repeat bars. (i.e. when no other unrepeating segment
  *        coexists at the same time on an other track).
- *      - Compute the time offset which have to be set il LilyPond for
+ *      - Find out which linked segments may be printed as repeat with volta.
+ *      - Compute the time offset which have to be set in LilyPond for
  *        each segment (with keyword \skip).
  */
 
@@ -38,6 +39,8 @@
 
 #include <set>
 #include <map>
+#include <list>
+#include <string>
 
 
 namespace Rosegarden
@@ -66,15 +69,21 @@ public:
 
     /**
      * Walk through all segments, find the repeating ones and compute
-     * their start times in the LilyPond score assuming they are unfolded.
+     * their start times in the LilyPond score assuming they are synchronous.
      */
     void precompute();
 
     /**
-     * Walk through all segments and fix their start times when some of them
-     * are printed with repeat bars in the LilyPond score.
+     * Walk through all segments and fix their start times when some repeating
+     * segments are printed with repeat bars in the LilyPond score.
      */
-    void fixStartTimes();
+    void fixRepeatStartTimes();
+
+    /**
+     * Walk through all segments and fix their start times when some linked
+     * segments are printed in the LilyPond score as repeat with volta.
+     */
+    void fixVoltaStartTimes();
 
     /**
      * Return the smaller start time of the segments being exported.
@@ -127,29 +136,84 @@ public:
     bool isRepeated();
 
     /**
-     * Return true if the segment is unfolded
+     * Return true if the segment is inside a "repeat with volta" chain
      */
-    bool isUnfolded();
+    bool isRepeatWithVolta();
+
+    /**
+     * Return true if the segment is synchronous
+     */
+    bool isSynchronous();
+
+    /**
+     * Return true if the segment is a volta
+     */
+    bool isVolta();
+
+    /**
+     * Return true if the segment is the last volta of a chain
+     */
+    bool isLastVolta();
+
+    /**
+     * Return the text of the current volta.
+     */
+    std::string getVoltaText();
 
     /// Only for debug
     void dump();
 
+protected :
+
+    /**
+     * Look in the specified track for linked segments which may be
+     * exported as repeat with volta and mark them accordingly.
+     */
+    void lookForRepeatedLinks(int trackId);
+
 
 private :
+
+    typedef std::list<Segment *> SegmentList;   /// CURRENTLY NOT USED
+  
+    struct Volta {
+        Segment * segment;
+        timeT duration;
+        std::set<int> voltaNumber;
+
+        Volta(Segment * seg, timeT voltaDuration, int number)
+        {
+            segment = seg;
+            duration = voltaDuration;
+            voltaNumber.insert(number);
+        }
+    };
+    
+    typedef std::vector<Volta *> VoltaChain;
 
     struct SegmentData
     {
         Segment * segment;
-        
+
         mutable timeT duration;               // Duration without repeat
         mutable timeT wholeDuration;          // Duration with repeat
         mutable int numberOfRepeats;          // 0 if not repeating
         mutable timeT remainderDuration;
-        
-        mutable bool unfolded;                // repeat not allowed
 
-        mutable timeT startTime;       // In LilyPond output
-        mutable timeT endTime;         // In LilyPond output
+        mutable bool synchronous;             // Multitrack repeat is possible
+        mutable bool noRepeat;                // Repeat is forbidden
+        mutable int repeatId;                 // Identify a repeat chain
+        mutable int numberOfRepeatLinks;      // How many repeat in a chain
+
+        mutable bool startOfRepeatChain;
+        mutable bool volta;                   // Mark a volta
+        mutable bool ignored;                 // Mark a segment inserted
+                                              // in a repeat chain.
+        mutable VoltaChain * rawVoltaChain;
+        mutable VoltaChain * sortedVoltaChain;
+
+        mutable timeT startTime;              // In LilyPond output
+        mutable timeT endTime;                // In LilyPond output
 
         SegmentData(Segment * seg)
         {
@@ -158,7 +222,15 @@ private :
             wholeDuration = 0;
             numberOfRepeats = 0;
             remainderDuration = 0;
-            unfolded = false;
+            synchronous = true;
+            noRepeat = false;
+            repeatId = 0;
+            numberOfRepeatLinks = 0;
+            startOfRepeatChain = false;
+            volta = false;
+            ignored = false;
+            rawVoltaChain = 0;
+            sortedVoltaChain = 0;
             startTime = 0;
             endTime = 0;
         }
@@ -170,6 +242,30 @@ private :
     typedef std::multiset<SegmentData, LilyPondSegmentsContext::SegmentDataCmp> SegmentSet;
     typedef std::map<int, SegmentSet> TrackMap;
 
+    typedef std::list<const SegmentData *> SegmentDataList;
+
+
+   /**
+    * Begin to look on all tracks for all segments synchronous of the given one.
+    * Return null if no segment found.
+    */
+    const SegmentData * getFirstSynchronousSegment(Segment * seg);
+
+   /**
+    * Get the next segment synchronous of the one passed as argument of
+    * the last call of getFirstSynchronousSegment().
+    * Return null if no more segment found.
+    */
+    const SegmentData * getNextSynchronousSegment();
+
+   /**
+    * Look for similar segments in the raw volta chain (on all tracks
+    * simultaneously) and fill the sorted volta chain accordingly.
+    * The argument is the list of the associated synchronous main repeat
+    * segment data from all the tracks.
+    */
+    void sortAndGatherVolta(SegmentDataList &);
+
     TrackMap m_segments;
 
     LilyPondExporter * m_exporter;
@@ -180,6 +276,19 @@ private :
 
     TrackMap::iterator m_trackIterator;
     SegmentSet::iterator m_segIterator;
+    VoltaChain::iterator m_voltaIterator;
+
+    int m_nextRepeatId;
+
+    // Used by "Get Synchronous Segment" methods getFirstSynchronousSegment()
+    // and getNextSynchronousSegment()
+    Segment * m_GSSSegment;
+    TrackMap::iterator m_GSSTrackIterator;
+    SegmentSet::iterator m_GSSSegIterator;
+
+    bool m_repeatWithVolta;
+    VoltaChain * m_currentVoltaChain;
+    bool m_lastVolta;
 
 };
 
