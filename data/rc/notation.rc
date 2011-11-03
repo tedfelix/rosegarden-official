@@ -143,6 +143,7 @@
     <Action name="add_sustain_down" text="Add Pedal &amp;Press" />
     <Action name="add_sustain_up" text="Add Pedal &amp;Release" />
   <Separator/>
+    <Action name="create_anacrusis" text="Create &amp;Anacrusis..." />
     <Action name="set_segment_start" text="Set Start &amp;Time..." />
     <Action name="set_segment_duration" text="Set &amp;Duration..." />
   <Separator/>
@@ -800,6 +801,7 @@
     <Action name="normalize_rests"/>
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>
+    <Action name="create_anacrusis"/>
     <Action name="jog_left"/>
     <Action name="jog_right"/>
     <Action name="slurs_above"/>

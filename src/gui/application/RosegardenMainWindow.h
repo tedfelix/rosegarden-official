@@ -814,6 +814,12 @@ public slots:
     void slotHarmonizeSelection();
 
     /**
+     * Expand the composition to the left by one bar, and move the selected
+     * segment(s) into this space by the amount chosen with a dialog
+     */
+    void slotCreateAnacrusis();
+
+    /**
      * Set the start times of the selected segments
      */
     void slotSetSegmentStartTimes();

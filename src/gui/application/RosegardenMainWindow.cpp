@@ -80,6 +80,7 @@
 #include "commands/segment/SegmentSplitCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/SegmentSyncCommand.h"
+#include "commands/segment/CreateAnacrusisCommand.h"
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
@@ -813,6 +814,7 @@ RosegardenMainWindow::setupActions()
     createAction("split_at_time", SLOT(slotSplitSelectionAtTime()));
     createAction("jog_left", SLOT(slotJogLeft()));
     createAction("jog_right", SLOT(slotJogRight()));
+    createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
     createAction("set_segment_start", SLOT(slotSetSegmentStartTimes()));
     createAction("set_segment_duration", SLOT(slotSetSegmentDurations()));
     createAction("join_segments", SLOT(slotJoinSegments()));
@@ -2984,6 +2986,12 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
                    "No segment will be split."));
         }
     }
+}
+
+void
+RosegardenMainWindow::slotCreateAnacrusis()
+{
+    // CreateAnacrusisCommand
 }
 
 void

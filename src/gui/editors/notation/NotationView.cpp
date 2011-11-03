@@ -79,6 +79,7 @@
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/AddLayerCommand.h"
+#include "commands/segment/CreateAnacrusisCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -465,6 +466,7 @@ NotationView::setupActions()
 
     createAction("transpose_segment", SLOT(slotEditTranspose()));
     createAction("switch_preset", SLOT(slotEditSwitchPreset()));
+    createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
 
     //"Notes" Menubar menu
 
@@ -4705,6 +4707,12 @@ void
 NotationView::slotBarDataDump()
 {
     m_notationWidget->getScene()->dumpBarDataMap();
+}
+
+void
+NotationView::slotCreateAnacrusis()
+{
+    //CreateAnacrusisCommand
 }
 
 } // end namespace Rosegarden

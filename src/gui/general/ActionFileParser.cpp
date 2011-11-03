@@ -320,10 +320,11 @@ bool
 ActionFileParser::error(const QXmlParseException &exception)
 {
     QString errorString =
-	QString("ERROR: ActionFileParser: %1 at line %2, column %3")
+	QString("ERROR: ActionFileParser: %1 at line %2, column %3 in file %4")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
-	.arg(exception.columnNumber());
+	.arg(exception.columnNumber())
+        .arg(m_currentFile);
     std::cerr << errorString.toLocal8Bit().data() << std::endl;
     return QXmlDefaultHandler::error(exception);
 }
@@ -332,10 +333,11 @@ bool
 ActionFileParser::fatalError(const QXmlParseException &exception)
 {
     QString errorString =
-	QString("FATAL ERROR: ActionFileParser: %1 at line %2, column %3")
+	QString("FATAL ERROR: ActionFileParser: %1 at line %2, column %3 in file %4")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
-	.arg(exception.columnNumber());
+	.arg(exception.columnNumber())
+        .arg(m_currentFile);
     std::cerr << errorString.toLocal8Bit().data() << std::endl;
     return QXmlDefaultHandler::fatalError(exception);
 }
