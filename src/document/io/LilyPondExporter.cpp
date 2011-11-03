@@ -850,41 +850,71 @@ LilyPondExporter::write()
 
     int leftBar = 0;
     int rightBar = leftBar;
-    do {
-        // Allow some oportunities for user to cancel
-        if (isOperationCancelled()) {
-            return false;
-        }
-        
-        bool isNew = false;
-        m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
-
-        if (isNew || (m_composition->getBarStart(rightBar + 1) >= compositionEndTime)) {
-            //  - set initial time signature; further time signature changes
-            //    are defined within the segments, because they may be hidden
-            str << indent(col) << (leftBar == 0 ? "" : "% ") << "\\time "
-                << timeSignature.getNumerator() << "/"
-                << timeSignature.getDenominator() << std::endl;
-            //  - place skips upto the end of the composition;
-            //    this justifies the printed staffs
-            str << indent(col);
-            timeT leftTime = m_composition->getBarStart(leftBar);
-            timeT rightTime = m_composition->getBarStart(rightBar + 1);
-            // Check for a partial measure in the beginning of the composition
-            if (leftTime < compositionStartTime) {
-                leftTime = compositionStartTime;
+    if (m_repeatMode != REPEAT_VOLTA) {   ///!!! Quick hack to remove the last blank measure
+        /// The old way : look all bars successively to find time signature and
+        /// write it in a LilyPond comment except for the very first one.
+        /// The time is computed from the composition start time. This is wrong as 
+        /// the composition start time may be outside the exported time range.
+        /// Nevertheless I have no time to fix it now. So sometimes it may work and
+        /// sometimes not work...
+        /// When using this code with repeats, the writeskip() to the end of the
+        /// composition is writing a blank measure at the end of the score.
+        do {
+            // Allow some oportunities for user to cancel
+            if (isOperationCancelled()) {
+                return false;
             }
-            // Check for a partial measure in the end of the composition
-            if (rightTime > compositionEndTime) {
-                rightTime = compositionEndTime;
-            };
-            writeSkip(timeSignature, leftTime, rightTime - leftTime, false, str);
-            str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
+            
+            bool isNew = false;
+            m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
 
-            timeSignature = m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
-            leftBar = rightBar + 1;
-        }
-    } while (m_composition->getBarStart(++rightBar) < compositionEndTime);
+            if (isNew || (m_composition->getBarStart(rightBar + 1) >= compositionEndTime)) {
+                //  - set initial time signature; further time signature changes
+                //    are defined within the segments, because they may be hidden
+                str << indent(col) << (leftBar == 0 ? "" : "% ") << "\\time "
+                    << timeSignature.getNumerator() << "/"
+                    << timeSignature.getDenominator() << std::endl;
+                //  - place skips upto the end of the composition;
+                //    this justifies the printed staffs
+                str << indent(col);
+                timeT leftTime = m_composition->getBarStart(leftBar);
+                timeT rightTime = m_composition->getBarStart(rightBar + 1);
+                // Check for a partial measure in the beginning of the composition
+                if (leftTime < compositionStartTime) {
+                    leftTime = compositionStartTime;
+                }
+                // Check for a partial measure in the end of the composition
+                if (rightTime > compositionEndTime) {
+                    rightTime = compositionEndTime;
+                };
+                writeSkip(timeSignature, leftTime, rightTime - leftTime, false, str);
+                str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
+
+                timeSignature = m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
+                leftBar = rightBar + 1;
+            }
+        } while (m_composition->getBarStart(++rightBar) < compositionEndTime);
+    } else {    /// Quick hack to remove the last blank measure
+        /// The preliminary new way: The timesignature are all ignored except
+        /// the first one and the writeSkip() is computed to the end of the
+        /// score taking into acount the repeats rather than to the end of
+        /// the composition.
+        timeSignature = m_composition->
+            getTimeSignatureAt(lsc.getFirstSegmentStartTime());
+        //  - set initial time signature; further time signature changes
+        //    are defined within the segments, because they may be hidden
+        str << indent(col) << "\\time "
+            << timeSignature.getNumerator() << "/"
+            << timeSignature.getDenominator() << std::endl;
+        //  - place skips upto the end of the composition;
+        //    this justifies the printed staffs
+        str << indent(col);
+        writeSkip(timeSignature, lsc.getFirstSegmentStartTime(),
+                  lsc.getLastSegmentEndTime() - lsc.getFirstSegmentStartTime(),
+                  false, str);
+        str << std::endl;
+    }   /// Quick hack to remove the last blank measure
+
     str << indent(--col) << "}" << std::endl;
 
     // time signatures changes are in segments, reset initial value
@@ -960,8 +990,11 @@ LilyPondExporter::write()
         if (prevTempoChangeTime < compositionStartTime) {
             prevTempoChangeTime = compositionStartTime;
         }
-        writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime),
-                  prevTempoChangeTime, compositionEndTime - prevTempoChangeTime, false, str);
+        if (m_repeatMode != REPEAT_VOLTA) {   ///!!! Quick hack bis to remove the last blank measure
+            /// The writeSkip() is just not called when exporting repeats
+            writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime),
+                      prevTempoChangeTime, compositionEndTime - prevTempoChangeTime, false, str);
+        }   /// Quick hack bis to remove the last blank measure
         str << std::endl;
         str << indent(--col) << "}" << std::endl;
     }

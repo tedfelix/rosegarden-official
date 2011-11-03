@@ -92,6 +92,12 @@ public:
     timeT getFirstSegmentStartTime() { return m_firstSegmentStartTime; }
 
     /**
+     * Return the smaller start time of the segments being exported.
+     * Only valid after precompute() has been executed.
+     */
+    timeT getLastSegmentEndTime() { return m_lastSegmentEndTime; }
+
+    /**
      * Prepare to get the segments on the first track.
      * Return null if there is no track.
      */
@@ -273,6 +279,7 @@ private :
     
     timeT m_epsilon;
     timeT m_firstSegmentStartTime;
+    timeT m_lastSegmentEndTime;
 
     TrackMap::iterator m_trackIterator;
     SegmentSet::iterator m_segIterator;

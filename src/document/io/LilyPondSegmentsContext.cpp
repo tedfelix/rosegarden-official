@@ -35,6 +35,7 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(LilyPondExporter *exporter,
     m_exporter(exporter),
     m_composition(composition),
     m_firstSegmentStartTime(0),
+    m_lastSegmentEndTime(0),
     m_nextRepeatId(1),
     m_repeatWithVolta(false),
     m_currentVoltaChain(0),
@@ -49,7 +50,7 @@ LilyPondSegmentsContext::~LilyPondSegmentsContext()
 {
     TrackMap::iterator tit;
     SegmentSet::iterator sit;
-    
+
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
             if (sit->rawVoltaChain) {
@@ -77,13 +78,17 @@ LilyPondSegmentsContext::precompute()
     TrackMap::iterator tit;
     SegmentSet::iterator sit;
 
-    // Find the start time of the first segment
+    // Find the start time of the first segment and the end time of the
+    // last segment.
     m_firstSegmentStartTime = m_composition->getEndMarker();
+    m_lastSegmentEndTime = m_composition->getStartMarker();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         sit = tit->second.begin();
         if (sit != tit->second.end()) {
             timeT start = sit->segment->getStartTime();
             if (start < m_firstSegmentStartTime) m_firstSegmentStartTime = start;
+            timeT end = sit->segment->getEndMarkerTime();
+            if (end > m_lastSegmentEndTime) m_lastSegmentEndTime = end;
         }
     }
 
@@ -307,6 +312,8 @@ LilyPondSegmentsContext::fixRepeatStartTimes()
                 }
             }
         }
+        // Fix the end of composition time
+        m_lastSegmentEndTime -= deltaT;
     }
 }
 
@@ -341,6 +348,7 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
     for (it=repeatedSegments.rbegin(); it!=repeatedSegments.rend(); ++it) {
         const SegmentData *segData = it->second;
 
+        // Compute the duration error
         timeT duration = segData->duration;
         timeT wholeDuration = duration * segData->numberOfRepeatLinks;
         VoltaChain::iterator vci;
@@ -349,8 +357,9 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
             wholeDuration += (*vci)->duration * (*vci)->voltaNumber.size();
             duration += (*vci)->duration;
         }
-
         timeT deltaT = wholeDuration - duration;
+
+        // Fix the segment start time when needed
         for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
             SegmentSet &segSet = tit->second;
             for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
@@ -359,6 +368,8 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
                 }
             }
         }
+        // Fix the end of composition time
+        m_lastSegmentEndTime -= deltaT;
     }
 }
 
