@@ -213,84 +213,84 @@
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
+        <translation>Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
     </message>
     <message>
         <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+40"/>
         <source>First Value</source>
-        <translation type="unfinished">Velocidad primera</translation>
+        <translation>Velocidad primera</translation>
     </message>
     <message>
         <location line="+2"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
-        <translation type="unfinished">Velocidad segunda</translation>
+        <translation>Velocidad segunda</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Bemol - establecer %1 al valor</translation>
+        <translation>Llano - establecer %1 al valor</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished">Valor</translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+27"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Aumentar - crescer cada %1 por valor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Increase by</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescer por</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuir - bajar cada %1 por valor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Decrease by</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuir por</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+28"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
+        <translation>Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
+        <translation>Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Low Value</source>
-        <translation type="unfinished">Velocidad baja</translation>
+        <translation>Velocidad baja</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">Velocidad alta</translation>
+        <translation>Velocidad alta</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+149"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished"></translation>
+        <translation>Establecer velocidades de los eventos</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Estableciendo velocidades...</translation>
+        <translation>Estableciendo velocidades...</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-12"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
+        <translation>Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
     </message>
 </context>
 <context>
@@ -2178,17 +2178,17 @@
     <message>
         <location line="+252"/>
         <source>&amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Figuración</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Make &amp;Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer acorde de &amp;parámetro</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mark Selection as &amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar &amp;selección como figuración</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -10668,12 +10668,12 @@
     <message>
         <location line="+2"/>
         <source>Add Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir acorde de parámetro</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir figuración</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -22990,7 +22990,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location line="-25"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
