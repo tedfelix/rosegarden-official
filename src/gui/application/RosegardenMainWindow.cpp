@@ -2991,18 +2991,43 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
 void
 RosegardenMainWindow::slotCreateAnacrusis()
 {
-    // CreateAnacrusisCommand
+    if (!m_view->haveSelection()) return ;
+
+    SegmentSelection selection = m_view->getSelection();
+    if (selection.empty()) return ;
+
+    bool haveBeginningSegment = false;
+    timeT compositionStart = m_doc->getComposition().getStartMarker();
+
+    for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
+        if ((*i)->getStartTime() == compositionStart) haveBeginningSegment = true;
+    }
+
+    if (!haveBeginningSegment) {
+        QMessageBox::information(this,
+                                 tr("Rosegarden"),
+                                 tr("<qt><p>In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.</p></qt>")
+                                );
+        return;
+    }
+
+    std::cout << "Yay, we get to do some stuff!" << std::endl;
+
+    // I guess we need a little dialog...  Call up some standard duration
+    // chooser thing or something...  Not sure yet.
+    //
+    // Figure out the duration of the anacrusis, then run CreateAnacrusisCommand
+    //
+    // CreateAnacrusisCommand will want to run ChangeCompositionLengthCommand and SegmentReconfigureCommand
 }
 
 void
 RosegardenMainWindow::slotSetSegmentStartTimes()
 {
-    if (!m_view->haveSelection())
-        return ;
+    if (!m_view->haveSelection()) return ;
 
     SegmentSelection selection = m_view->getSelection();
-    if (selection.empty())
-        return ;
+    if (selection.empty()) return ;
 
     timeT someTime = (*selection.begin())->getStartTime();
 
