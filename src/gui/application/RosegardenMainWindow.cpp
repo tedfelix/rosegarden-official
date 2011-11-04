@@ -3033,7 +3033,6 @@ RosegardenMainWindow::slotCreateAnacrusis()
     // decided to quit while I'm ahead, and leave it here.
     if (dialog.exec() == QDialog::Accepted) {
         timeT anacrusisAmount = dialog.getTime();
-        timeT newStartTime = compOrigStart - anacrusisAmount;
         timeT newCompStart = compOrigStart - (comp.getBarEnd(1) - comp.getBarStart(1));
         MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
 
@@ -3049,9 +3048,11 @@ RosegardenMainWindow::slotCreateAnacrusis()
 
         for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
 
+            //timeT newStartTime = compOrigStart - anacrusisAmount;
+            timeT newStartTime = (*i)->getStartTime() - anacrusisAmount;
             reconfigureCommand->addSegment(*i,
                                           newStartTime,
-                                          (*i)->getEndMarkerTime(FALSE) - (*i)->getStartTime() - anacrusisAmount,
+                                          (*i)->getEndMarkerTime(FALSE) - (*i)->getStartTime() + newStartTime,
                                           (*i)->getTrack()
                                           );
         }
