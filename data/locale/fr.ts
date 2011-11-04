@@ -213,84 +213,84 @@
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Alternance - alterner %1 entre max et min à chacun des événements successifs</translation>
+        <translation>Alternance - Alterner %1 entre max et min à chacun des événements successifs</translation>
     </message>
     <message>
         <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+40"/>
         <source>First Value</source>
-        <translation type="unfinished">1ère valeur</translation>
+        <translation>1ère valeur</translation>
     </message>
     <message>
         <location line="+2"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
-        <translation type="unfinished">2ème valeur</translation>
+        <translation>2ème valeur</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Constant - %1 reste à valeur</translation>
+        <translation>Constant - Mettre %1 à valeur</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished">Valeur</translation>
+        <translation>Valeur</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+27"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Augmentation - Ajouter la valeur à chaque %1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Increase by</source>
-        <translation type="unfinished"></translation>
+        <translation>Augmenter par</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminution - Retirer la valeur à chaque %1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Decrease by</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuer par</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+28"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo - %1 du min au max</translation>
+        <translation>Crescendo - Faire varier %1 du min au max</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo - %1 du min au max</translation>
+        <translation>Diminuendo - Faire varier %1 du max au min</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Low Value</source>
-        <translation type="unfinished">Valeur faible</translation>
+        <translation>Valeur faible</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">Valeur élevée</translation>
+        <translation>Valeur élevée</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+149"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Définir une variation de vélocité</translation>
+        <translation>Définir les événements &quot;Vélocité&quot;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Réglages Vélocités...</translation>
+        <translation>Réglages Vélocités...</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-12"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Oscillations amorties - Varier %1 alternativement du max au min, avec max et min tendant tous deux vers 0</translation>
+        <translation>Oscillations amorties - Varier %1 alternativement du max au min, avec max et min tendant tous deux vers 0</translation>
     </message>
 </context>
 <context>
@@ -4638,7 +4638,7 @@
     <message>
         <location line="+1"/>
         <source>Fit existing beats to beat segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuster la pulsation existante à celle du segment de pulsation</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13280,7 +13280,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/commands/segment/EraseTempiInRangeCommand.cpp" line="+30"/>
         <source>Erase Tempos in Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer les tempos dans une plage</translation>
     </message>
 </context>
 <context>
@@ -14032,7 +14032,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/commands/segment/FitToBeatsCommand.h" line="+45"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuster la pulsation existante à celle du segment de pulsation</translation>
     </message>
 </context>
 <context>
@@ -15431,17 +15431,17 @@ Voulez-vous utiliser
     <message>
         <location line="+11"/>
         <source>Use repeat when possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Si possible, utiliser des répétitions</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Mode d&apos;exportation des segments répétés : Si décoché, les segments répétés sont tous imprimés comme des segments successifs.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si coché, des bécarres sont imprimés automatiquement pour annuler les accidents de l&apos;armature précédente. Cette annulation diffère de la façon dont Rosegarden annule les accidents dans l&apos;éditeur de partition.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -17132,7 +17132,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Définir la version de MusicXML avec laquelle exporter&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -17166,7 +17166,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="-29"/>
         <source>MusicXML type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de fichier MusicXML</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.Both partwise and timewise file are available.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -17197,7 +17197,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+8"/>
         <source>Use &quot;&lt;octave-shift&gt;&quot; for transposing instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser &quot;&lt;octave-shift&gt;&quot; pour les instruments transpositeurs</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Some transposing instruments (like a tenor or bariton sax) transposes over more than 1 octave. For such large transpositions some tools require a &quot;&amp;lt;octave-shif&amp;gt;&quot; element while other tools will not support this element! Therefor the use of the &quot;&amp;lt;octave-shift&amp;gt;&quot; element can be controlled by this option.&lt;br&gt;When importing the MusicXML file into another tool, check transposing instrument carefully in both concert and notated pitch. When this is not correct toggling this option might help.&lt;/qt&gt;</source>
@@ -21057,7 +21057,7 @@ il est nécessaire de supprimer les anciennes transpositions.</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.h" line="+43"/>
         <source>Quick-Link Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer un segment lié</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.cpp" line="+54"/>
@@ -22987,9 +22987,9 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+685"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Transformer un segment répété en segments indépendants</numerusform>
+            <numerusform>Transformer %n segments répétés en segments indépendants</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -22997,7 +22997,7 @@ Souhaitez vous le faire tout de suite ?</translation>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
         <translation>
             <numerusform>Transformer un segment lié en une copie indépendante</numerusform>
-            <numerusform>Transformer les segments liés en copies indépendantes</numerusform>
+            <numerusform>Transformer %n segments liés en copies indépendantes</numerusform>
         </translation>
     </message>
     <message>
