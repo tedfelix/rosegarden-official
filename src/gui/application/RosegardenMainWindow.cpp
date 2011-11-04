@@ -3034,7 +3034,7 @@ RosegardenMainWindow::slotCreateAnacrusis()
     if (dialog.exec() == QDialog::Accepted) {
         timeT anacrusisAmount = dialog.getTime();
         timeT newStartTime = compOrigStart - anacrusisAmount;
-        timeT newCompStart = compOrigStart - Note(Note::WholeNote).getDuration();
+        timeT newCompStart = compOrigStart - (comp.getBarEnd(1) - comp.getBarStart(1));
         MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
 
         ChangeCompositionLengthCommand *changeLengthCommand =
@@ -3066,7 +3066,7 @@ RosegardenMainWindow::slotCreateAnacrusis()
                     comp.getStartMarker(),
                     comp.getTempoAtTime(compOrigStart)));
 
-        macro->addCommand(new AddTimeSignatureCommand(&comp,
+        macro->addCommand(new AddTimeSignatureAndNormalizeCommand(&comp,
                     comp.getStartMarker(),
                     comp.getTimeSignatureAt(compOrigStart)));
 
@@ -3080,6 +3080,7 @@ RosegardenMainWindow::slotCreateAnacrusis()
                     comp.getTempoChangeNumberAt(compOrigStart)));
 
         CommandHistory::getInstance()->addCommand(macro);
+
     }
 }
 
