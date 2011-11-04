@@ -69,6 +69,7 @@
 #include "commands/segment/MoveTracksCommand.h"
 #include "commands/segment/PasteRangeCommand.h"
 #include "commands/segment/RemoveTempoChangeCommand.h"
+#include "commands/segment/RemoveTimeSignatureCommand.h"
 #include "commands/segment/SegmentAutoSplitCommand.h"
 #include "commands/segment/SegmentChangeTransposeCommand.h"
 #include "commands/segment/SegmentJoinCommand.h"
@@ -2999,11 +3000,11 @@ RosegardenMainWindow::slotCreateAnacrusis()
     Composition &comp = m_doc->getComposition();
 
     bool haveBeginningSegment = false;
-    timeT compositionStart = comp.getStartMarker();
+    timeT compOrigStart = comp.getStartMarker();
     timeT compositionEnd = comp.getEndMarker();
 
     for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
-        if ((*i)->getStartTime() == compositionStart) haveBeginningSegment = true;
+        if ((*i)->getStartTime() == compOrigStart) haveBeginningSegment = true;
     }
 
     if (!haveBeginningSegment) {
@@ -3020,19 +3021,25 @@ RosegardenMainWindow::slotCreateAnacrusis()
     TimeDialog dialog(m_view,
                       tr("Anacrusis Amount"),
                       &comp,
-                      compositionStart - defaultDuration,
+                      compOrigStart - defaultDuration,
                       defaultDuration,
                       minimumDuration,
                       constrainToCompositionDuration);
 
+    // NB. To get this to work correctly and preserve the ability to undo the
+    // entire operation, I finally resorted to splitting it up into three
+    // separate commands.  This means it takes three undo operations to revert
+    // what can be done in one swipe.  I find this rather irritating, but I've
+    // decided to quit while I'm ahead, and leave it here.
     if (dialog.exec() == QDialog::Accepted) {
         timeT anacrusisAmount = dialog.getTime();
-        timeT newStartTime = compositionStart - anacrusisAmount;
+        timeT newStartTime = compOrigStart - anacrusisAmount;
+        timeT newCompStart = compOrigStart - Note(Note::WholeNote).getDuration();
         MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
 
         ChangeCompositionLengthCommand *changeLengthCommand =
             new ChangeCompositionLengthCommand(&comp,
-                                              newStartTime, compositionEnd);
+                                              newCompStart, compositionEnd);
         
         bool plural = (selection.size() > 1);
         SegmentReconfigureCommand *reconfigureCommand =
@@ -3051,6 +3058,27 @@ RosegardenMainWindow::slotCreateAnacrusis()
 
         macro->addCommand(changeLengthCommand);
         macro->addCommand(reconfigureCommand);
+
+        CommandHistory::getInstance()->addCommand(macro);
+
+        macro = new MacroCommand(tr("Insert Corrected Tempo and Time Signature"));
+        macro->addCommand(new AddTempoChangeCommand(&comp,
+                    comp.getStartMarker(),
+                    comp.getTempoAtTime(compOrigStart)));
+
+        macro->addCommand(new AddTimeSignatureCommand(&comp,
+                    comp.getStartMarker(),
+                    comp.getTimeSignatureAt(compOrigStart)));
+
+        CommandHistory::getInstance()->addCommand(macro);
+
+        macro = new MacroCommand(tr("Remove Original Tempo and Time Signature"));
+        macro->addCommand(new RemoveTimeSignatureCommand(&comp,
+                    comp.getTimeSignatureNumberAt(compOrigStart)));
+
+        macro->addCommand(new RemoveTempoChangeCommand(&comp,
+                    comp.getTempoChangeNumberAt(compOrigStart)));
+
         CommandHistory::getInstance()->addCommand(macro);
     }
 }
