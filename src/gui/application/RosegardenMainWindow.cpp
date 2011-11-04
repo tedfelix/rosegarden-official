@@ -80,7 +80,6 @@
 #include "commands/segment/SegmentSplitCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/SegmentSyncCommand.h"
-#include "commands/segment/CreateAnacrusisCommand.h"
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
@@ -1551,6 +1550,8 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
     case ImportHydrogen:
         doc = createDocumentFromHydrogenFile(filePath);
         break;
+    case ImportRG4:
+    case ImportCheckType:
     default:
         doc = createDocumentFromRGFile(filePath);
     }
@@ -2991,13 +2992,15 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
 void
 RosegardenMainWindow::slotCreateAnacrusis()
 {
-    if (!m_view->haveSelection()) return ;
+    if (!m_view->haveSelection()) return;
 
     SegmentSelection selection = m_view->getSelection();
-    if (selection.empty()) return ;
+    if (selection.empty()) return;
+    Composition &comp = m_doc->getComposition();
 
     bool haveBeginningSegment = false;
-    timeT compositionStart = m_doc->getComposition().getStartMarker();
+    timeT compositionStart = comp.getStartMarker();
+    timeT compositionEnd = comp.getEndMarker();
 
     for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
         if ((*i)->getStartTime() == compositionStart) haveBeginningSegment = true;
@@ -3011,14 +3014,45 @@ RosegardenMainWindow::slotCreateAnacrusis()
         return;
     }
 
-    std::cout << "Yay, we get to do some stuff!" << std::endl;
+    timeT defaultDuration = Note(Note::QuarterNote).getDuration();
+    timeT minimumDuration = Note(Note::SixtyFourthNote).getDuration();
+    bool constrainToCompositionDuration = false;
+    TimeDialog dialog(m_view,
+                      tr("Anacrusis Amount"),
+                      &comp,
+                      compositionStart - defaultDuration,
+                      defaultDuration,
+                      minimumDuration,
+                      constrainToCompositionDuration);
 
-    // I guess we need a little dialog...  Call up some standard duration
-    // chooser thing or something...  Not sure yet.
-    //
-    // Figure out the duration of the anacrusis, then run CreateAnacrusisCommand
-    //
-    // CreateAnacrusisCommand will want to run ChangeCompositionLengthCommand and SegmentReconfigureCommand
+    if (dialog.exec() == QDialog::Accepted) {
+        timeT anacrusisAmount = dialog.getTime();
+        timeT newStartTime = compositionStart - anacrusisAmount;
+        MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
+
+        ChangeCompositionLengthCommand *changeLengthCommand =
+            new ChangeCompositionLengthCommand(&comp,
+                                              newStartTime, compositionEnd);
+        
+        bool plural = (selection.size() > 1);
+        SegmentReconfigureCommand *reconfigureCommand =
+            new SegmentReconfigureCommand(plural ?
+                                          tr("Set Segment Start Times") :
+                                          tr("Set Segment Start Time"));
+
+        for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
+
+            reconfigureCommand->addSegment(*i,
+                                          newStartTime,
+                                          (*i)->getEndMarkerTime(FALSE) - (*i)->getStartTime() - anacrusisAmount,
+                                          (*i)->getTrack()
+                                          );
+        }
+
+        macro->addCommand(changeLengthCommand);
+        macro->addCommand(reconfigureCommand);
+        CommandHistory::getInstance()->addCommand(macro);
+    }
 }
 
 void

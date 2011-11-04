@@ -79,7 +79,6 @@
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/AddLayerCommand.h"
-#include "commands/segment/CreateAnacrusisCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -4709,11 +4708,6 @@ NotationView::slotBarDataDump()
     m_notationWidget->getScene()->dumpBarDataMap();
 }
 
-void
-NotationView::slotCreateAnacrusis()
-{
-    //CreateAnacrusisCommand
-}
 
 } // end namespace Rosegarden
 

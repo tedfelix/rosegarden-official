@@ -343,7 +343,6 @@ protected slots:
     void slotCycleSlashes();
 
     void slotAddLayer();
-    void slotCreateAnacrusis();
 
     virtual void slotConfigure();
 
