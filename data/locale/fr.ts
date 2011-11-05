@@ -3697,7 +3697,7 @@
     <message>
         <location line="+229"/>
         <source>Create &amp;Anacrusis...</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer &amp;Anacrouse...</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -3910,17 +3910,17 @@
     <message>
         <location line="+8"/>
         <source>&amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Trait</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Make &amp;Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir l&apos;accord &amp;paramètre</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mark Selection as &amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir la sélection comme &amp;Trait</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -4797,7 +4797,7 @@
     <message>
         <location line="+2"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Transformer en traits les blocs-accords des segments</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10523,7 +10523,8 @@
         <location filename="../../src/sound/PitchDetector.cpp" line="+34"/>
         <source>Partial</source>
         <comment>Frequency Component (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Cf. &quot;Partiel (acoustique)&quot; dans fr.Wikipedia.org</translatorcomment>
+        <translation>Partiels</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10535,7 +10536,8 @@
         <location line="+2"/>
         <source>Harmonic Product Spectrum</source>
         <comment>Pitch determination (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Cf. Tae Hong Park &quot;Introduction to Digital Signal Processing&quot; (World scientific Publishing Co.)</translatorcomment>
+        <translation>Produit des spectres harmoniques</translation>
     </message>
 </context>
 <context>
@@ -10675,12 +10677,12 @@
     <message>
         <location line="+2"/>
         <source>Add Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un accord paramètre</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un trait</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -13860,7 +13862,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+77"/>
         <source>Expand Block Chords to Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Transformer les blocs-accords en traits</translation>
     </message>
 </context>
 <context>
@@ -17142,27 +17144,28 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.&lt;/p&gt;&lt;p&gt;The &amp;quot;partwise&amp;quot; format contains &amp;quot;part&amp;quot; elements that contain &amp;quot;measure&amp;quot; elements.  The &amp;quot;timewise&amp;quot; format reverses this ordering.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>&quot;partwise&quot; et &quot;timewise&quot; sont des termes MusicXML et ne doivent donc pas être traduits. Mais en est-il de même pour &quot;part&quot; et &quot;measure&quot; ?</translatorcomment>
+        <translation>&lt;qt&gt;&lt;p&gt;Choisir le format du fichier MusicXML.&lt;/p&gt;&lt;p&gt;Le format &amp;quot;partwise&amp;quot; contient des éléments &amp;quot;part&amp;quot; qui contiennent des éléments &amp;quot;measure&amp;quot;.  Le format &amp;quot;timewise&amp;quot; utilise la disposition inverse.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export grand staff instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter un instrument utilisant une double portée</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;Choose which bracket will create a grand staff system&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Choisir quelle accolade créera un sytème à deux portées&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Exporting percussion is still experimental.&lt;/p&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion.&amp;quot;  When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;/p&gt;&lt;p&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn&apos;t have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;L&apos;exportation des percussions est encore expérimentale.&lt;/p&gt;Les percussions peuvent être exportées &amp;quot;as notes&amp;quot; ou &amp;quot;as percussion.&amp;quot;  En exportant &amp;quot;as notes&amp;quot; une piste de percussions est traitée comme une piste normale.&lt;/p&gt;&lt;p&gt;Si une piste est exportée &amp;quot;as percussion&amp;quot; elle deviendra une partie de percussion MusicXML. Comme Rosegarden ne dispose pas d&apos;une représentation spécifique pour les percussions, le système d&apos;exportation MusicXML essaye de faire la conversion lui-même. Cette option est encore &lt;b&gt;expérimentale&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;&lt;p&gt;Some transposing instruments (like a tenor or baritone sax) transpose over more than one octave.  For such large transpositions some tools require an &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; element while other tools do not support this element at all.&lt;/p&gt;&lt;p&gt;When importing the MusicXML file into another tool, check transposing instruments carefully in both concert and notated pitch. When this is not correct toggling this option might help.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Certains instruments transpositeurs (comme les saxophones ténors et barytons) transposent sur plus d&apos;une octave.  Pour des transpositions aussi étendues, certains logiciels ont besoin d&apos;un élément &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; alors que d&apos;autres ne connaissentent pas cet élément.&lt;/p&gt;&lt;p&gt;En important le fichier MusicXML produit dans un logiciel externe, vérifiez soigneusement le comportement des instruments transpositeurs dans les deux modes jeu audio et partition. Un rendu incorrect pourrait être amélioré en modifiant cette option.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Set the MusicXML version you want export.&lt;/qt&gt;</source>
@@ -18518,7 +18521,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1"/>
         <source>Error (cents):</source>
-        <translation>Erreur (octave/100)</translation>
+        <translation>Erreur (cents):</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18545,17 +18548,17 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+65"/>
         <source>Tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>Accord</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Root Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauteur de base</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauteur de référence</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18611,7 +18614,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+26"/>
         <source>The tunings file could not be found! The file named &quot;tunings.xml&quot; containing tuning definitions has not been found in any of the standard directories. On Linux platforms, these include /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches and $HOME/.local/share/rosegarden/pitches. This file should be part of the standard installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier d&apos;accordage non trouvé! Le fichier nommé &quot;tunings.xml&quot;, qui contient la féfinition du tempérament, n&apos;a pu être trouvé dans aucun des répertoires standards. Sur un système Linux, ces répertoires sont /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches et $HOME/.local/share/rosegarden/pitches. Ce fichier devrait être inclus dans une installation normale de Rosegarden.</translation>
     </message>
 </context>
 <context>
@@ -20371,7 +20374,7 @@ Veuillez quitter puis relancer Rosegarden pour rétablir ces fonctionnalités.</
     <message>
         <location line="+379"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Il n&apos;est pas possible de transformer un fichier audio avec des traits.</translation>
     </message>
     <message>
         <location line="+369"/>
@@ -20382,27 +20385,27 @@ No segment will be split.</source>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Pour créer une anacrouse, au moins un segment de la sélection doit commencer au début de la composition.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Anacrusis Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur de l&apos;anacrouse</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Create Anacrusis</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer une anacrouse</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Insérer les tempo et chiffrage de la mesure corrigés</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Remove Original Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Retirer les tempo et chiffrage de la mesure initiaux</translation>
     </message>
     <message>
         <location line="+1911"/>
@@ -20952,7 +20955,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+25"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier</translation>
     </message>
     <message>
         <location line="+2"/>
