@@ -6,7 +6,8 @@
     <message>
         <source></source>
         <comment>&quot;long&quot; is a C++ data type</comment>
-        <translation></translation>
+        <translatorcomment>WTF?</translatorcomment>
+        <translation>find me</translation>
     </message>
 </context>
 <context>
@@ -2157,7 +2158,7 @@
         <location line="+9"/>
         <location line="+2027"/>
         <source>Open in &amp;Pitch Tracker</source>
-        <translation></translation>
+        <translation>Abrir en &amp;tracker de altura</translation>
     </message>
     <message>
         <location line="-2025"/>
@@ -4185,7 +4186,7 @@
         <location line="+7"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
-        <translation></translation>
+        <translation>;</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -4616,22 +4617,22 @@
     <message>
         <location line="+37"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
-        <translation>Abrir editor de Temp&amp;o y Medida</translation>
+        <translation>Abrir editor de temp&amp;o y medida</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Set &amp;Tempo to Audio Segment Duration</source>
-        <translation>Establecer &amp;Tempo a la duración del Segmento de Audio</translation>
+        <translation>Establecer &amp;Tempo a la duración del segmento de audio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Set Tempos from &amp;Beat Segment</source>
-        <translation>Esta&amp;blecer Tempos desde segmento de pulsos</translation>
+        <translation>Esta&amp;blecer tempos desde segmento de pulsos</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fit existing beats to beat segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer caber pulsos existentes con un segmento de pulsos</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4755,7 +4756,7 @@
     <message>
         <location line="-2"/>
         <source>Create &amp;Anacrusis...</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer &amp;anacrusa...</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -4800,7 +4801,7 @@
     <message>
         <location line="+1"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>E&amp;xpansionar segmentos de acordes bloques por figuración</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10492,7 +10493,8 @@
     </message>
     <message>
         <source></source>
-        <translation></translation>
+        <translatorcomment>weird...  WTF is this?</translatorcomment>
+        <translation>find me</translation>
     </message>
     <message>
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
@@ -10552,10 +10554,6 @@
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
         <translation>&lt;p&gt;Copyright 2000-2011 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2&lt;/p&gt; {2000-2011 ?} {1 ?} {2&lt;?} {3&lt;?} {2&lt;?}</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2010 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -13559,45 +13557,9 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
         <translation>Patrón</translation>
     </message>
     <message>
-        <source>Flat - set %1 to value</source>
-        <translation type="obsolete">Bemol - establecer %1 al valor</translation>
-    </message>
-    <message>
-        <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="obsolete">Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
-    </message>
-    <message>
-        <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="obsolete">Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
-    </message>
-    <message>
-        <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="obsolete">Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
-    </message>
-    <message>
-        <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="obsolete">Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
-    </message>
-    <message>
         <location line="-81"/>
         <source>Value</source>
         <translation>Valor</translation>
-    </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Velocidad primera</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Velocidad segunda</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Velocidad baja</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Velocidad alta</translation>
     </message>
 </context>
 <context>
@@ -13854,7 +13816,7 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+77"/>
         <source>Expand Block Chords to Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Expansionar acordes bloques hasta figuraciones</translation>
     </message>
 </context>
 <context>
@@ -14031,7 +13993,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/segment/FitToBeatsCommand.h" line="+45"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer caber pulsos existentes con un segmento de pulsos</translation>
     </message>
 </context>
 <context>
@@ -14303,10 +14265,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Adobe Acrobat Reader (no libre)</translation>
     </message>
     <message>
-        <source>KPDF (KDE 3.x)</source>
-        <translation type="obsolete">KPDF (KDE 3.x)</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Se utiliza para previsualización con LilyPond</translation>
@@ -14315,10 +14273,6 @@ Would you like to try and locate this file or skip it?</source>
         <location line="+5"/>
         <source>Command-line file printing utility</source>
         <translation>Utilidad para imprimir desde la línea de órdenes</translation>
-    </message>
-    <message>
-        <source>KPrinter (KDE 3)</source>
-        <translation type="obsolete">KPrinter (KDE 3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -14361,13 +14315,6 @@ Would you like to try and locate this file or skip it?</source>
         <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Es necesario reiniciar Rosegarden para realizar el cambio de sistema de gráficos.</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Guitar::Fingering</name>
-    <message>
-        <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="obsolete">no se ha podido interpretar la digitación de &apos;%1&apos; en &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -15430,17 +15377,17 @@ en su lugar? </translation>
     <message>
         <location line="+11"/>
         <source>Use repeat when possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizar ritornello cuando sea posible</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Como exportar repeticiones de segmentos:  Si no marcado, repeticiones de segmentos siempre se despliegan.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Al marcar, becuadros siempre se imprimen para cancelar las alteraciones de armaduras anteriores.  Este comportamiento de cancelación no tiene nada que ver con cómo Rosegarden se comporta dentro del editor de partitura, porque las reglas de LilyPond y de Rosegarden no están de acuerdo, y es imposible duplicar el mismo comportamiento entre ellos.</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -15759,10 +15706,6 @@ en su lugar? </translation>
 </context>
 <context>
     <name>Rosegarden::LoopRuler</name>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Haga clic y arrastre  para establecer puntero de reproducción.&lt;/p&gt;&lt;p&gt;Mayúsculas+clic y arrastre para establecer bucle o ámbito.&lt;/p&gt;&lt;p&gt;Mayúsculas+clic para deshacer bucle o ámbito &lt;/p&gt;&lt;p&gt;Doble click para iniciar reproducción &lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+78"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -16694,10 +16637,6 @@ Doble clic para abrir el editor de marcadores.</translation>
         <translation>Se muestra la armadura estimada</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Establecer Velocidades de los Eventos</translation>
-    </message>
-    <message>
         <location line="-1080"/>
         <source>Trigger Segment</source>
         <translation>Activar Segmento</translation>
@@ -17126,36 +17065,32 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Elegir la versión de MusicXML disponible en su sistema.  Si tiene una versión más actualizada, elija la más alta que Rosegarden soporta.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.&lt;/p&gt;&lt;p&gt;The &amp;quot;partwise&amp;quot; format contains &amp;quot;part&amp;quot; elements that contain &amp;quot;measure&amp;quot; elements.  The &amp;quot;timewise&amp;quot; format reverses this ordering.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Elegir el formato del archivo MusicXML.  «Partwise» (utilizando el parte) y «timewise» (utilizando el tiempo) están disponibles.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export grand staff instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar un instrumento de doble pentagrama</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;Choose which bracket will create a grand staff system&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Elegir el tipo de paréntesis que creará un sistema de pentagrama doble&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Exporting percussion is still experimental.&lt;/p&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion.&amp;quot;  When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;/p&gt;&lt;p&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn&apos;t have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;El exporte de percusión es experimental.&lt;/p&gt;Es posible exportar percusión «como notas» or «como percusión».  Al exportar «como notas», una pista de percusión se trata como una pista normal.&lt;/p&gt;&lt;p&gt;Al exportar «como percusión», se exportará como un pentagrama de percusión en MusicXML. Como no hay partitura de percusión dentro de Rosegarden, el exporte de MusicXML pretende convertir la pista de percusión en partitura de percusión.  Todo esto es muy &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;&lt;p&gt;Some transposing instruments (like a tenor or baritone sax) transpose over more than one octave.  For such large transpositions some tools require an &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; element while other tools do not support this element at all.&lt;/p&gt;&lt;p&gt;When importing the MusicXML file into another tool, check transposing instruments carefully in both concert and notated pitch. When this is not correct toggling this option might help.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;Set the MusicXML version you want export.&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Elegir la versión de MusicXML disponible en su sistema.  Si tiene una versión más actualizada, elija la más alta que Rosegarden soporta.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Unos instrumentos transpositores (como el saxifón barítono) trasportan por un intervalo de dos o más octavos.  Unas herramientas MusicXML exigen un elemento &lt;i&gt;&amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot;&lt;/i&gt;  y otras no comprenden este elemento.&lt;/p&gt;&lt;p&gt;Al exportar el archivo MusicXML para utilizar con otra herramienta, mire estos instrumentos con cuidado.  Si hay un problema con los octavos, puede que sea útil cambiar esta opción y exportar de nuevo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-29"/>
@@ -17163,36 +17098,24 @@ Doble clic para abrir el editor de marcadores.</translation>
         <translation>Tipo de MusicXML</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.Both partwise and timewise file are available.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Elegir el formato del archivo MusicXML.  «Partwise» (utilizando el parte) y «timewise» (utilizando el tiempo) están disponibles.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Export multistave instrument</source>
-        <translation type="obsolete">Exportar un instrumento que emplea dos o más pentagramas</translation>
-    </message>
-    <message>
         <location line="+10"/>
         <source>None</source>
         <translation>Nada</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;Choose which bracket will create a multi staff system&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Elegir &lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location line="+7"/>
         <source>Don&apos;t export percussion tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>No exportar pistas de percusión</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Use &quot;&lt;octave-shift&gt;&quot; for transposing instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizar &lt;i&gt;&quot;&lt;octave-shift&gt;&quot;&lt;/i&gt; para instrumentos transpositores</translation>
     </message>
     <message>
         <location line="+45"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-es</translation>
     </message>
 </context>
 <context>
@@ -17479,22 +17402,22 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+17"/>
         <source>Show repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar repeticiones de segmento</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Allow direct edition of repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir edición directo de repeticiones de segmento</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Hide redundant clefs and keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Esconder claves y armaduras redundantes</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmentos</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -17823,10 +17746,6 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <translation>  Sin selección </translation>
     </message>
     <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Tresillo</translation>
-    </message>
-    <message>
         <location line="+2401"/>
         <source>Chord</source>
         <translation> Acorde</translation>
@@ -17933,14 +17852,6 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <location line="+11"/>
         <source>Lowering velocities...</source>
         <translation>Bajando velocidades...</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Establecer velocidades de los eventos</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Estableciendo velocidades...</translation>
     </message>
     <message>
         <location line="+632"/>
@@ -18968,13 +18879,6 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     </message>
 </context>
 <context>
-    <name>Rosegarden::PropertyViewRuler</name>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">controlador %1</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::QuantizeDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="+36"/>
@@ -19433,10 +19337,6 @@ Pueden haber incompatibilidades con el formato del archivo.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <source>Open Directory</source>
-        <translation type="obsolete">Abrir directorio</translation>
-    </message>
-    <message>
         <location line="+1300"/>
         <source>Loading plugins...</source>
         <translation>Enumerando plugins... </translation>
@@ -19583,10 +19483,6 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
         <translation>Fallo al renombrar &apos;%1 a &apos;%2&apos;</translation>
     </message>
     <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Guardando archivo...</translation>
-    </message>
-    <message>
         <location line="+192"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fallo al escribir en &apos;%1&apos;</translation>
@@ -19594,7 +19490,7 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location line="+54"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
-        <translation></translation>
+        <translation>No se ha podido abrir archivo &apos;%1&apos; para escribir</translation>
     </message>
     <message>
         <location line="+245"/>
@@ -20015,7 +19911,7 @@ Error fue: %2</translation>
     <message>
         <location line="+26"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>No es posible expansionar segmentos de audio con figuración</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -20254,7 +20150,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location line="-233"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
-        <translation></translation>
+        <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
         <location line="+479"/>
@@ -20368,27 +20264,27 @@ No se divide ningún segmento.</translation>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Para hacer anacrusa, por lo menos un segmento en su selección debe comenzar al comienzo de la composición.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Anacrusis Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de anacrusa</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Create Anacrusis</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer anacrusa</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertar tempo y armadura correctos</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Remove Original Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar tempo y armadura originales</translation>
     </message>
     <message>
         <location line="+1911"/>
@@ -20593,10 +20489,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location line="+1086"/>
         <source>Play List</source>
         <translation>Lista de Ejecución</translation>
-    </message>
-    <message>
-        <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="obsolete">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -21210,25 +21102,17 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation type="unfinished">Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; doble clic para editar</translation>
+        <translation>Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; Ctrl + Alt para copias vinculadas</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
-        <translation type="obsolete">Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiarlos</translation>
+        <translation>Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; Ctrl + Alt para copias vinculadas; doble clic para editar</translation>
     </message>
     <message>
         <location line="-4"/>
         <source>Click and drag to copy segments</source>
         <translation>Haga clic y arrastre para copiar segmentos</translation>
-    </message>
-    <message>
-        <source>Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit</source>
-        <translation type="obsolete">Haga clic y arrastre para mover segmentos; pulse Ctrl a la vez para copiar; doble clic para editar</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22999,14 +22883,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
 </context>
 <context>
     <name>Rosegarden::TrackEditor</name>
-    <message>
-        <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="obsolete">Convertir repeticiones de segmento en copias reales</translation>
-    </message>
-    <message>
-        <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="obsolete">Convertir repeticiones de segmentos en copias reales</translation>
-    </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+710"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
@@ -23015,16 +22891,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
             <numerusform>Convertir %n segmentos vinculados en copias reales</numerusform>
         </translation>
     </message>
-    <message>
-        <source>Turn Linked Segment into Real Copies</source>
-        <translation type="obsolete">Convertir segmento vinculado en copias reales</translation>
-    </message>
     <message numerus="yes">
         <location line="-25"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Convertir repeticiones de %n segmento en copias reales</numerusform>
+            <numerusform>Convertir repeticiones de %n segmentos en copias reales</numerusform>
         </translation>
     </message>
     <message>
@@ -23763,13 +23635,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     </message>
 </context>
 <context>
-    <name>Rosegarden::Ui</name>
-    <message>
-        <source>[ No port ]</source>
-        <translation type="obsolete">[ningún]</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="+43"/>
@@ -24003,13 +23868,6 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden está utilizando el sistema de gráficos seguro.  Este proporciona la mejor estabilidad, pero el rendimiento gráfico es muy lento.&lt;/p&gt;&lt;p&gt;Véase &lt;b&gt;Editar -&gt; Preferencias -&gt; Comportamiento -&gt; Calidad de rendimiento gráfico&lt;/b&gt; y pruebe «normal» or «rápido» para mejorar la velocidad de rendimiento.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(grabado)</translation>
     </message>
 </context>
 <context>
@@ -24256,7 +24114,8 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <source></source>
         <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
+        <translatorcomment>WTF?</translatorcomment>
+        <translation>find me</translation>
     </message>
 </context>
 </TS>
