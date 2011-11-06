@@ -209,7 +209,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+27"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhöhen - vergrößere jedes %1 um den Wert</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -219,7 +219,7 @@
     <message>
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermindern - verkleinere jedes %1 um den Wert</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3709,12 +3709,12 @@
     <message>
         <location line="+12"/>
         <source>Dump staves (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenzeilen ausgeben (debug)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dump BarDataMap (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt Informationen ausgeben (debug)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3725,7 +3725,7 @@
     <message>
         <location line="-2025"/>
         <source>Add Clef Change in this link only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur in diesem Link die Änderung des Notenschlüssels hinzufügen...</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -3856,17 +3856,17 @@
     <message>
         <location line="+8"/>
         <source>&amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Figuration</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Make &amp;Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord aus &amp;Parameter erzeugen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mark Selection as &amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl als &amp;Figuration markieren</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -4534,7 +4534,7 @@
     <message>
         <location line="+55"/>
         <source>Paste as &amp;Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Als &amp;Link einfügen</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4570,7 +4570,7 @@
     <message>
         <location line="+1"/>
         <source>Clear Range of Tempos</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereich der Tempi löschen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4759,7 +4759,7 @@
     <message>
         <location line="+1"/>
         <source>Turn Li&amp;nks into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Li&amp;nks in Kopie verwandeln</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10642,12 +10642,12 @@
     <message>
         <location line="+2"/>
         <source>Add Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord hinzufügen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Figuration hinzufügen</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -12337,7 +12337,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location line="+90"/>
         <source>Add Cl&amp;ef Change for linked segment...</source>
-        <translation type="unfinished"></translation>
+        <translation>Änderung des Not&amp;enschlüssels für das verlinkte Segment hinzufügen...</translation>
     </message>
 </context>
 <context>
@@ -13264,7 +13264,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/segment/EraseTempiInRangeCommand.cpp" line="+30"/>
         <source>Erase Tempos in Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempi im Bereich löschen</translation>
     </message>
 </context>
 <context>
@@ -15415,7 +15415,7 @@ Wollen Sie stattdessen
     <message>
         <location line="+11"/>
         <source>Use repeat when possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Sofern möglich benutze Wiederholung</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -17162,7 +17162,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location line="+7"/>
         <source>Don&apos;t export percussion tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Perkussions-Spuren exportieren</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -17469,7 +17469,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location line="+13"/>
         <source>Hide redundant clefs and keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Redundante Notenschlüssel verbergen</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -18459,7 +18459,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/editors/pitchtracker/PitchGraphWidget.cpp" line="+112"/>
         <source>None (Rest)</source>
         <comment>No target frequency because no note is playing</comment>
-        <translation type="unfinished"></translation>
+        <translation>Keine (Pause)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -18484,7 +18484,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+4"/>
         <source>None available (check preferences)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht verfügbar (Einstellungen überprüfen)</translation>
     </message>
 </context>
 <context>
@@ -20004,7 +20004,7 @@ Fehler war: %2</translation>
     <message>
         <location line="+26"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Segment kann nicht mit Figuration erweitert werden</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -20818,7 +20818,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkToCopyCommand.h" line="+43"/>
         <source>Turn Links into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Links in Kopie verwandeln</translation>
     </message>
 </context>
 <context>
@@ -20826,7 +20826,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="-20"/>
         <source>Transpose Linked Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Verlinkte Segmente transponieren</translation>
     </message>
 </context>
 <context>
@@ -20933,7 +20933,7 @@ Fehler: %2</translation>
     <message>
         <location line="+25"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändern</translation>
     </message>
     <message>
         <location line="+2"/>
