@@ -15447,7 +15447,7 @@ Voulez-vous utiliser
     </message>
     <message>
         <location line="+6"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Si coché, des bécarres sont imprimés automatiquement pour annuler les accidents de l&apos;armature précédente. Cette annulation diffère de la façon dont Rosegarden annule les accidents dans l&apos;éditeur de partition.&lt;/qt&gt;</translation>
     </message>
     <message>

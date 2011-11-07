@@ -15386,8 +15386,8 @@ en su lugar? </translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</source>
-        <translation>Al marcar, becuadros siempre se imprimen para cancelar las alteraciones de armaduras anteriores.  Este comportamiento de cancelación no tiene nada que ver con cómo Rosegarden se comporta dentro del editor de partitura, porque las reglas de LilyPond y de Rosegarden no están de acuerdo, y es imposible duplicar el mismo comportamiento entre ellos.</translation>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <translation>Al marcar, becuadros siempre se imprimen para cancelar las alteraciones de armaduras anteriores.  Este comportamiento de cancelación no tiene nada que ver con cómo Rosegarden se comporta dentro del editor de partitura, porque las reglas de LilyPond y de Rosegarden no están de acuerdo, y es imposible duplicar el mismo comportamiento entre ellos.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>

@@ -276,7 +276,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     m_cancelAccidentals = new QCheckBox("Cancel accidentals");
     layoutNotation->addWidget(m_cancelAccidentals, 9, 0);
-    m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor."));
+    m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</qt>"));
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);

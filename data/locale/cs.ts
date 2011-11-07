@@ -16265,8 +16265,8 @@ Chcete použít
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="279"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</source>
-        <translation>&lt;qt&gt;Když je zaškrtnuto, jsou automaticky tištěny značky bez předznamenání pro zrušení jakýchkoli posuvek z předchozích předznamenání. Toto rušící chování je odděleno a nevztahuje se k tomu, jak Rosegarden zobrazuje zrušení posuvky v editoru notového zápisu.</translation>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;Když je zaškrtnuto, jsou automaticky tištěny značky bez předznamenání pro zrušení jakýchkoli posuvek z předchozích předznamenání. Toto rušící chování je odděleno a nevztahuje se k tomu, jak Rosegarden zobrazuje zrušení posuvky v editoru notového zápisu.&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Choose how often to show Tempo Marks in your score.&lt;/qt&gt;</source>

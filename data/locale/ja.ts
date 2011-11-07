@@ -15440,7 +15440,7 @@ Would you like to use
     </message>
     <message>
         <location line="+6"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
