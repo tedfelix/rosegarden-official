@@ -4600,7 +4600,7 @@
     <message>
         <location line="+1"/>
         <source>Fit existing beats to beat segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Existierende Takte an Takt-Segment anpassen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13839,7 +13839,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+77"/>
         <source>Expand Block Chords to Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkorde zur Figuration erweitern</translation>
     </message>
 </context>
 <context>
@@ -14016,7 +14016,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/segment/FitToBeatsCommand.h" line="+45"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Existierende Takte an Takt-Segment anpassen</translation>
     </message>
 </context>
 <context>
@@ -15405,12 +15405,12 @@ Wollen Sie stattdessen
     <message>
         <location line="+116"/>
         <source>Notation language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache der Notenschrift</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ausgabe von Noten-Bezeichnungen und Vorzeichen in einer von LilyPond unterstützten Sprache&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -15420,12 +15420,12 @@ Wollen Sie stattdessen
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Export von sich wiederholenden Segmenten: Falls nicht markiert werden sich wiederholende Segmente immer aneinander gereiht.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Falls markiert werden automatisch Auflösungszeichen ausgegeben um Versetzungszeichen von vorhergehenden Vorzeichen aufzuheben. Dieses Verhalten ist unabhängig von der Art und Weise wie Rosegarden Versetzungszeichen im Notations-Editor aufhebt.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
