@@ -133,7 +133,6 @@ private:
     QTimer     *m_peakTimerRight;
 
     bool        m_showPeakLevel;
-    short       m_baseLevelStep;
 
     bool        m_stereo;
     bool        m_hasRecord;

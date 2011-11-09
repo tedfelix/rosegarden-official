@@ -65,7 +65,6 @@ VUMeter::VUMeter(QWidget *parent,
     m_timeDecayRight(0),
     m_peakTimerRight(0),
     m_showPeakLevel(true),
-    m_baseLevelStep(3),  // Exponential decay constant.  3 is too small.
     m_stereo(stereo),
     m_hasRecord(hasRecord)
 {
@@ -366,9 +365,6 @@ VUMeter::paintEvent(QPaintEvent *e)
         m_type == VUMeter::AudioPeakHoldLong ||
         m_type == VUMeter::AudioPeakHoldIEC ||
         m_type == VUMeter::AudioPeakHoldIECLong) {
-        // Clearing the background is not necessary as drawMeterLevel()
-        // fills the part without the bar with the background color.
-//        paint.fillRect(0, 0, w, h, m_background);
 
         drawMeterLevel(&paint);
 
@@ -378,10 +374,6 @@ VUMeter::paintEvent(QPaintEvent *e)
         paint.drawPoint(0, h - 1);
         paint.drawPoint(w, h - 1);
     } else if (m_type == VUMeter::FixedHeightVisiblePeakHold) {
-        // Clearing the background is not necessary as drawMeterLevel()
-        // fills the part without the bar with the background color.
-//        paint.fillRect(0, 0, w, h, m_background);
-
         if (m_decayTimerLeft->isActive())
             drawMeterLevel(&paint);
         else {
@@ -392,9 +384,6 @@ VUMeter::paintEvent(QPaintEvent *e)
         }
     } else {
         if (m_decayTimerLeft->isActive()) {
-            // Clearing the background is not necessary as drawMeterLevel()
-            // fills the part without the bar with the background color.
-//            paint.fillRect(0, 0, w, h, m_background);
             drawMeterLevel(&paint);
         } else {
             meterStop();
@@ -611,42 +600,19 @@ VUMeter::drawMeterLevel(QPainter* paint)
     }
 }
 
-// The exponential decay algorithm that is in here is only effective when
-// m_baseLevelStep is around 10.  With the original setting of 3, the effect
-// was not visible on the track meters and the MIDI mixer meters.
-//#define EXPONENTIAL_DECAY
-
 void
 VUMeter::slotDecayRight()
 {
-#ifdef EXPONENTIAL_DECAY
-    // Exponential decay
-    double decay = int(m_levelRight) * m_baseLevelStep / 100 + 1;
-    if (decay < 1)
-        decay = 1;
-#else
-    // Linear decay
     double timeElapsed = refreshInterval / 1000.0;
     if (m_timeDecayRight) {
         timeElapsed = m_timeDecayRight->restart() / 1000.0;
     }
     double decay = timeElapsed * m_decayRate;
-#endif
-
-#ifdef EXPONENTIAL_DECAY
-    // Exponential decay
-    double recordDecay = int(m_recordLevelRight) * m_baseLevelStep / 100 + 1;
-    if (recordDecay < 1)
-        recordDecay = 1;
-#else
-    // Linear decay
-    double recordDecay = decay;
-#endif
 
     if (m_levelRight > 0)
         m_levelRight -= decay;
     if (m_recordLevelRight > 0)
-        m_recordLevelRight -= recordDecay;
+        m_recordLevelRight -= decay;
 
     if (m_levelRight <= 0) {
         m_levelRight = 0;
@@ -670,34 +636,16 @@ VUMeter::slotDecayRight()
 void
 VUMeter::slotDecayLeft()
 {
-#ifdef EXPONENTIAL_DECAY
-    // Exponential decay
-    double decay = int(m_levelLeft) * m_baseLevelStep / 100 + 1;
-    if (decay < 1)
-        decay = 1;
-#else
-    // Linear decay
     double timeElapsed = refreshInterval / 1000.0;
     if (m_timeDecayLeft) {
         timeElapsed = m_timeDecayLeft->restart() / 1000.0;
     }
     double decay = timeElapsed * m_decayRate;
-#endif
-
-#ifdef EXPONENTIAL_DECAY
-    // Exponential decay
-    double recordDecay = int(m_recordLevelLeft) * m_baseLevelStep / 100 + 1;
-    if (recordDecay < 1)
-        recordDecay = 1;
-#else
-    // Linear decay
-    double recordDecay = decay;
-#endif
 
     if (m_levelLeft > 0)
         m_levelLeft -= decay;
     if (m_recordLevelLeft > 0)
-        m_recordLevelLeft -= recordDecay;
+        m_recordLevelLeft -= decay;
 
     if (m_levelLeft <= 0) {
         m_levelLeft = 0;
