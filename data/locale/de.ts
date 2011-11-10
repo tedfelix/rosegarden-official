@@ -3720,7 +3720,7 @@
         <location line="+9"/>
         <location line="+2027"/>
         <source>Open in &amp;Pitch Tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>Im Tonlagen T&amp;racker öffnen</translation>
     </message>
     <message>
         <location line="-2025"/>
@@ -4764,7 +4764,7 @@
     <message>
         <location line="+1"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>E&amp;xpandiere Blockakkord Segmente durch Figuration</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10502,7 +10502,7 @@
         <location line="+2"/>
         <source>Harmonic Product Spectrum</source>
         <comment>Pitch determination (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translation>Harmonic Product Spectrum</translation>
     </message>
 </context>
 <context>
@@ -11922,7 +11922,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location line="+2"/>
         <source>Add a Percussion Key Mapping to the current device</source>
-        <translation>Füge Percussions-Tasten-Übersetzungstabelle zum aktuellen Gerät hinzu</translation>
+        <translation>Füge Schlagzeug-Tasten-Übersetzungstabelle zum aktuellen Gerät hinzu</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -14941,7 +14941,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/gui/dialogs/IntervalDialog.cpp" line="+47"/>
         <source>Specify Interval</source>
-        <translation>Intervaleingabe für die Transposition</translation>
+        <translation>Intervaleingabe für die Transponierung</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -14977,7 +14977,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location line="+9"/>
         <source>Adjust segment transposition in opposite direction (maintain audible pitch)</source>
-        <translation>Passe die Transposition des Segmentes in entegengesetzter Richtung an (erhalte die hörbare Tonhöhe) </translation>
+        <translation>Passe die Transponierung des Segmentes in entegengesetzter Richtung an (erhalte die hörbare Tonhöhe) </translation>
     </message>
     <message>
         <location line="+104"/>
@@ -15214,7 +15214,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location line="-269"/>
         <source>Transpose key according to segment transposition</source>
-        <translation>Transponiere die Tonart gemäß der Segment Transposition</translation>
+        <translation>Transponiere die Tonart gemäß der Segment Transponierung</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -15234,7 +15234,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location line="+5"/>
         <source>Exclude percussion segments</source>
-        <translation>Perkussion Segmente ausschließen</translation>
+        <translation>Schlagzeug Segmente ausschließen</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -17122,32 +17122,32 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Definiere die MusicXML-Version, die exportiert werden soll&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.&lt;/p&gt;&lt;p&gt;The &amp;quot;partwise&amp;quot; format contains &amp;quot;part&amp;quot; elements that contain &amp;quot;measure&amp;quot; elements.  The &amp;quot;timewise&amp;quot; format reverses this ordering.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Format der MusicXML-Datei festlegen&lt;/p&gt;&lt;p&gt;Das &amp;quot;partwise&amp;quot;-Format enthält &amp;quot;part&amp;quot;-Elemente, die &amp;quot;measure&amp;quot;-Elemente enthalten. Das &amp;quot;timewise&amp;quot;-Format kehrt diese Sortierung um.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export grand staff instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Export Akkolade-Instrument</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;Choose which bracket will create a grand staff system&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Auswählen, welche Klammer ein Akkolade-System erzeugt&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Exporting percussion is still experimental.&lt;/p&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion.&amp;quot;  When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;/p&gt;&lt;p&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn&apos;t have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Der Export von Schlagzeug Instrumenten ist noch experimentell.&lt;/p&gt;Schlagzeug kann &amp;quot;as notes&amp;quot; oder &amp;quot;as percussion.&amp;quot; exportiert werden. Im Fall von &amp;quot;as notes&amp;quot;  wird eine Schlagzeug-Spur wie eine normale Spur behandelt.&lt;/p&gt;&lt;p&gt;Falls eine Spur als &amp;quot;as percussion&amp;quot; exportiert wird, wird sie als ein MusicXML Schlagzeug Stimme exportiert. Da Rosegarden keine eigene Schlagzeug-Notation besitzt, versucht der MusciXML-Export eine entsprechende Umwandlung. Diese Option ist noch &lt;b&gt;experimentell&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;&lt;p&gt;Some transposing instruments (like a tenor or baritone sax) transpose over more than one octave.  For such large transpositions some tools require an &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; element while other tools do not support this element at all.&lt;/p&gt;&lt;p&gt;When importing the MusicXML file into another tool, check transposing instruments carefully in both concert and notated pitch. When this is not correct toggling this option might help.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Einige transponierende Instrumente (z.B. Tenor- oder Bariton-Saxophon) transponieren über mehr als eine Oktave. Für solch große Transponierungen benötigen einige Programme ein &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; -Element, während andere so ein Element nicht unterstützen.&lt;/p&gt;&lt;p&gt;Falls eine MusicXML-Datei von einem anderen Programm importiert wird, müssen transponierende Instrumente sowohl bei der Kammertonhöhe als auch in der notierten Tonhöhe sorgfältig überprüft wernde. Bei Unstimmigkeiten könnte das ändern dieser Option helfen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-29"/>
@@ -17167,7 +17167,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location line="+8"/>
         <source>Use &quot;&lt;octave-shift&gt;&quot; for transposing instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponieren von Instrumenten mit  &quot;&lt;octave-shift&gt;&quot;</translation>
     </message>
     <message>
         <location line="+45"/>
@@ -17464,7 +17464,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location line="+13"/>
         <source>Allow direct edition of repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Direkte Veränderung von wiederholenden Segmenten erlauben</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -18469,7 +18469,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+9"/>
         <source>Tuning System:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stimmsystem:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18479,7 +18479,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+1"/>
         <source>Error (cents):</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler (Prozent):</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18501,27 +18501,27 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+59"/>
         <location line="+3"/>
         <source>Pitch Tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>Tonlagen Tracker</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+65"/>
         <source>Tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>Stimmung</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Root Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Basis Tonlage</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Referenz Tonlage</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Referenz Frequenz</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -18536,17 +18536,17 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+20"/>
         <source>Frame Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Rahmen Größe</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Step Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrittweite</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Ignore Octave Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler bei Oktaven ignorieren</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -18556,12 +18556,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+7"/>
         <source>Graph Width (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Breite der Grafik (ms)</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Graph Height (cents)</source>
-        <translation type="unfinished"></translation>
+        <translation>Höhe der Graphik (Prozent)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -18571,7 +18571,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+26"/>
         <source>The tunings file could not be found! The file named &quot;tunings.xml&quot; containing tuning definitions has not been found in any of the standard directories. On Linux platforms, these include /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches and $HOME/.local/share/rosegarden/pitches. This file should be part of the standard installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei mit Stimmungen konnte nicht gefunden wernde. Die Datei &quot;tunigs.xml&quot;, die Definitionen zur Stimmung enthält, konnte nicht in den Standard-Verzeichnissen gefunden werden. Unter Linux wäre die unter anderem /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches und $HOME/.local/share/rosegarden/pitches. Diese Datei sollte Teil der normalen Installation sein.</translation>
     </message>
 </context>
 <context>
@@ -19687,7 +19687,7 @@ um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
     <message>
         <location line="-356"/>
         <source>Pitch Tracker can only contain 1 segment.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Tonlagen Tracker kann nur ein Segment enthalten.</translation>
     </message>
     <message>
         <location line="+434"/>
@@ -19699,12 +19699,12 @@ Siehe: Editieren -&gt; Einstellungen -&gt; Audio.</translation>
     <message>
         <location line="+761"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann abgelgte Date nicht hinzufügen. JACK Audio Server ist nicht verfügbar.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann abgelgte Date nicht hinzufügen. Diese Version von Rosegarden wurde nicht mit Audio-Unterstützung gebaut.</translation>
     </message>
     <message>
         <source>importing a remote audio file</source>
@@ -20357,12 +20357,12 @@ Kein Segment wird geteilt.</translation>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Um Anakrusis zu erzeugen muss mindestens ein Segment in der Auswahl am Anfang der Komposition beginnen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Anacrusis Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Umfang des Anakrusis</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -20372,12 +20372,12 @@ Kein Segment wird geteilt.</translation>
     <message>
         <location line="+28"/>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Korrigierte Tempi und Taktangaben einfügen</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Remove Original Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Originale Tempi und Taktangaben löschen</translation>
     </message>
     <message>
         <location line="+1911"/>
@@ -20716,12 +20716,12 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentChangeTransposeCommand.h" line="+47"/>
         <source>Undo change transposition</source>
-        <translation>Änderung der Transposition rückgängig machen</translation>
+        <translation>Änderung der Transponierung rückgängig machen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Change transposition to %1</source>
-        <translation>Transposition ändern in %1</translation>
+        <translation>Transponierung ändern in %1</translation>
     </message>
 </context>
 <context>
@@ -20810,7 +20810,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+68"/>
         <source>Reset Transpose on Linked Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponieren von verlinkten Segmenten zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -20928,7 +20928,7 @@ Fehler: %2</translation>
     <message>
         <location line="+21"/>
         <source>Linked segment parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter der verlinkten Segmente</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -20938,7 +20938,7 @@ Fehler: %2</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ändert die relative Transponierung des verlinkten Segmentes&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -20948,7 +20948,7 @@ Fehler: %2</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rücksetzen der relativen Transponierung des verlinkten Segments auf 0&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+56"/>
@@ -20981,12 +20981,13 @@ Fehler: %2</translation>
         <location line="-45"/>
         <source>Existing transpositions on selected linked segments must be removed
 before new transposition can be applied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Existierende Transponierungen von ausgewählten verlinkten Segmenten müssen
+gelöscht werden, bevor eine neue Transponierung gesetzt werden kann.</translation>
     </message>
     <message>
         <location line="+46"/>
         <source>Remove transposition on selected linked segments?</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösche Transponierung von ausgewählten verlinkten Segmenten?</translation>
     </message>
     <message>
         <location line="+93"/>
@@ -21070,12 +21071,12 @@ before new transposition can be applied.</source>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.h" line="+43"/>
         <source>Quick-Link Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnelle Segment Verlinkung</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.cpp" line="+54"/>
         <source>(linked)</source>
-        <translation type="unfinished"></translation>
+        <translation>(verlinkt)</translation>
     </message>
 </context>
 <context>
@@ -21200,12 +21201,12 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken und ziehen bewegt ein Segment; Bei halten der Strg-Taste wird eine Kopie erstellt; Strg + Alt erstellt eine verlinkte Kopie</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken und ziehen bewegt ein Segment; Bei halten der Strg-Taste wird eine Kopie erstellt; Strg + Alt erzeugt eine verlinkte Kopie, Doppelklick zum editieren</translation>
     </message>
     <message>
         <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
@@ -21349,7 +21350,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="+29"/>
         <location line="+6"/>
         <source>Change segment transposition</source>
-        <translation>Transposition des Segments ändern</translation>
+        <translation>Transponierung des Segments ändern</translation>
     </message>
 </context>
 <context>
@@ -21795,7 +21796,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+34"/>
         <source>Reset Transpose on Linked Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponierung von verlinkten Segmenten zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -22047,7 +22048,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location line="+5"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation>Überlappende Segmente mit inkonsistenten Transpositionen:</translation>
+        <translation>Überlappende Segmente mit inkonsistenten Transponierungen:</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -23002,15 +23003,17 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+685"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Wiederholungssegment in echte Kopien umwandeln</numerusform>
+            <numerusform>%n Wiederholungssegmente in echte Kopien umwandeln</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+25"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n verlinktes Segment in echte Kopien umwandeln</numerusform>
+            <numerusform>%n verlinkte Segmente in echte Kopien umwandeln</numerusform>
         </translation>
     </message>
     <message>
@@ -23323,7 +23326,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Neue Segmente werden mit dieser Transpositions Eigenschaft erzeugt&lt;p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Neue Segmente werden mit dieser Transponierungs Eigenschaft erzeugt&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
