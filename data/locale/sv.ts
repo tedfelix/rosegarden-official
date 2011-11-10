@@ -217,84 +217,84 @@
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Växlande: Ställ in %1 till maximum och minimum för varannan händelse</translation>
+        <translation>Växlande: Ställ in %1 till maximum och minimum för varannan händelse</translation>
     </message>
     <message>
         <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+40"/>
         <source>First Value</source>
-        <translation type="unfinished">Första värdet</translation>
+        <translation>Första värdet</translation>
     </message>
     <message>
         <location line="+2"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
-        <translation type="unfinished">Andra värdet</translation>
+        <translation>Andra värdet</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Jämn: Ställ in %1 till ett värde</translation>
+        <translation>Jämn: Ställ in %1 till ett värde</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished">Värde</translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+27"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Öka: Höj var %1 enlig värde</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Increase by</source>
-        <translation type="unfinished"></translation>
+        <translation>Öka med</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Minska: Sänk var %1 enlig värde</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Decrease by</source>
-        <translation type="unfinished"></translation>
+        <translation>Minska med</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+28"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo: Ställ in %1 stigande från minimum till maximum</translation>
+        <translation>Crescendo: Ställ in %1 stigande från minimum till maximum</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo: Ställ in %1 fallande från maximum till minimum</translation>
+        <translation>Diminuendo: Ställ in %1 fallande från maximum till minimum</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Low Value</source>
-        <translation type="unfinished">Lägsta värdet</translation>
+        <translation>Lägsta värdet</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">Högsta värdet</translation>
+        <translation>Högsta värdet</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+149"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Ställ in händelseljudstyrkor</translation>
+        <translation>Ställ in händelseljudstyrkor</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Ställer in ljudstyrkor...</translation>
+        <translation>Ställer in ljudstyrkor...</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-12"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Ringning: Ställ in %1 växlande från maximum till minimum med båda bortdöende till tystnad</translation>
+        <translation>Ringning: Ställ in %1 växlande från maximum till minimum med båda bortdöende till tystnad</translation>
     </message>
 </context>
 <context>
@@ -2149,23 +2149,23 @@
     <message>
         <location line="+12"/>
         <source>Dump staves (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dumpa notrader (felsökning)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dump BarDataMap (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dumpa taktdataavbildning (felsökning)</translation>
     </message>
     <message>
         <location line="+9"/>
         <location line="+2027"/>
         <source>Open in &amp;Pitch Tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna i ton&amp;höjdsföljare</translation>
     </message>
     <message>
         <location line="-2025"/>
         <source>Add Clef Change in this link only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till klavändring enbart för den här länken...</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2181,17 +2181,17 @@
     <message>
         <location line="+252"/>
         <source>&amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Figuration</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Make &amp;Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa &amp;parameterackord</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mark Selection as &amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange att markering är en &amp;figuration</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -4567,13 +4567,13 @@
     <message>
         <location line="+55"/>
         <source>Paste as &amp;Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Klista in som &amp;länkar</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Alt+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+V</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -4598,12 +4598,12 @@
     <message>
         <location line="+9"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">Klistra in tempo- och taktartsbeteckningar</translation>
+        <translation>Klistra in tempo- och taktartsbeteckningar</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clear Range of Tempos</source>
-        <translation type="unfinished"></translation>
+        <translation>Radera tempointervall</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4633,7 +4633,7 @@
     <message>
         <location line="+1"/>
         <source>Fit existing beats to beat segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Passa in befintliga takter i taktsegment</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4757,7 +4757,7 @@
     <message>
         <location line="-2"/>
         <source>Create &amp;Anacrusis...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa uppt&amp;akt...</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -4797,12 +4797,12 @@
     <message>
         <location line="+1"/>
         <source>Turn Li&amp;nks into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Omvandla lä&amp;nkar till kopior</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>E&amp;xpandera segment med blockackord enligt figuration</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10537,19 +10537,19 @@
         <location filename="../../src/sound/PitchDetector.cpp" line="+34"/>
         <source>Partial</source>
         <comment>Frequency Component (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translation>Partiell</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Autocorrelation</source>
         <comment>DSP operation</comment>
-        <translation type="unfinished"></translation>
+        <translation>Autokorrelation</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Harmonic Product Spectrum</source>
         <comment>Pitch determination (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translation>Harmoniskt produktspektrum</translation>
     </message>
 </context>
 <context>
@@ -10567,7 +10567,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2010 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt; {2000-2011 ?} {1 ?} {2&lt;?} {3&lt;?} {2&lt;?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2011 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -10689,12 +10689,12 @@
     <message>
         <location line="+2"/>
         <source>Add Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till parameterackord</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till figuration</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -12384,7 +12384,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location line="+90"/>
         <source>Add Cl&amp;ef Change for linked segment...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till &amp;klavändring för länkade segment...</translation>
     </message>
 </context>
 <context>
@@ -13311,7 +13311,7 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location filename="../../src/commands/segment/EraseTempiInRangeCommand.cpp" line="+30"/>
         <source>Erase Tempos in Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Radera tempon i intervall</translation>
     </message>
 </context>
 <context>
@@ -13886,7 +13886,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
     <message>
         <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+77"/>
         <source>Expand Block Chords to Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Expandera segment med blockackord enligt figuration</translation>
     </message>
 </context>
 <context>
@@ -14063,7 +14063,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location filename="../../src/commands/segment/FitToBeatsCommand.h" line="+45"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Passa in befintliga takter i taktsegment</translation>
     </message>
 </context>
 <context>
@@ -14269,7 +14269,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
     <message>
         <location line="+4"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du måste starta om Rosegarden för att ändringen av utseendet ska få effekt.</translation>
     </message>
     <message>
         <location line="-290"/>
@@ -15462,27 +15462,27 @@ Vill du använda
     <message>
         <location line="+40"/>
         <source>Notation language</source>
-        <translation type="unfinished"></translation>
+        <translation>Notationsspråk</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Skriver ut notnamn och förtecken på vilket som helst av språken som LilyPond stöder&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use repeat when possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd upprepning om möjligt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Hur upprepade segment ska exporteras: Om ej markerat, expanderas alltid upprepade segment.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Om markerat, skrivs återställningstecken automatiskt ut för att återställa eventuella förtecken från föregående tonartssignaturer. Återställningsbeteende är separat från, och inte relaterat till, hur Rosegarden visar återställning av förtecken i noteditorn.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -17097,127 +17097,127 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     <message>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="+60"/>
         <source>MusicXML Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Export till MusicXML</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Layout</source>
-        <translation type="unfinished">Utläggning</translation>
+        <translation>Utläggning</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Headers</source>
-        <translation type="unfinished">Rubriker</translation>
+        <translation>Rubriker</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Basic options</source>
-        <translation type="unfinished">Grundalternativ</translation>
+        <translation>Grundalternativ</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Export content</source>
-        <translation type="unfinished">Exportera innehåll</translation>
+        <translation>Exportera innehåll</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Välj vilka spår eller segment att exportera&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Välj vilka spår eller segment att exportera&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>All tracks</source>
-        <translation type="unfinished">Alla spår</translation>
+        <translation>Alla spår</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Non-muted tracks</source>
-        <translation type="unfinished">Ljudande spår</translation>
+        <translation>Ljudande spår</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>Markerat spår</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected segments</source>
-        <translation type="unfinished">Markerade segment</translation>
+        <translation>Markerade segment</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished">Exportera spårsystemklamrar</translation>
+        <translation>Exportera spårsystemklamrar</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;Spårsystemklamrar finns i rutan &lt;b&gt;Spårparametrar&lt;/b&gt;, och kan användas för att gruppera system på olika sätt&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Spårsystemklamrar finns i rutan &lt;b&gt;Spårparametrar&lt;/b&gt;, och kan användas för att gruppera system på olika sätt&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Advanced/Experimental options</source>
-        <translation type="unfinished"></translation>
+        <translation>Avancerade och experimentella alternativ</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Compatibility level</source>
-        <translation type="unfinished">Kompatibilitetsnivå</translation>
+        <translation>Kompatibilitetsnivå</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ange version av MusicXML du vill exportera&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.&lt;/p&gt;&lt;p&gt;The &amp;quot;partwise&amp;quot; format contains &amp;quot;part&amp;quot; elements that contain &amp;quot;measure&amp;quot; elements.  The &amp;quot;timewise&amp;quot; format reverses this ordering.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Välj MusicXML-filens format.&lt;/p&gt;&lt;p&gt;Formatet &amp;quot;partwise&amp;quot; innehåller &amp;quot;part&amp;quot;-element som innehåller &amp;quot;measure&amp;quot;-element. Formatet &amp;quot;timewise&amp;quot; vänder på denna ordning.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export grand staff instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera instrument med notsystem</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;Choose which bracket will create a grand staff system&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Välj vilken klammer som ska skapa ett notsystem&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Exporting percussion is still experimental.&lt;/p&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion.&amp;quot;  When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;/p&gt;&lt;p&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn&apos;t have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Export av slagverk är ännu experimentell.&lt;/p&gt;Slagverk kan exporteras &amp;quot;som noter&amp;quot; eller &amp;quot;som slagverk.&amp;quot;  Vid export &amp;quot;som noter&amp;quot; hanteras ett slagverksspår som ett normalt spår.&lt;/p&gt;&lt;p&gt;Om ett spår exporteras &amp;quot;som slagverk&amp;quot; exporteras det som ett slagverkspartitur i MusicXML. Eftersom Rosegarden inte har slagverksnotation, försöker export till MusicXML konvertera slagverksspåret till slagverksnotation. Alternativet är ännu &lt;b&gt;experimentellt&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;&lt;p&gt;Some transposing instruments (like a tenor or baritone sax) transpose over more than one octave.  For such large transpositions some tools require an &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; element while other tools do not support this element at all.&lt;/p&gt;&lt;p&gt;When importing the MusicXML file into another tool, check transposing instruments carefully in both concert and notated pitch. When this is not correct toggling this option might help.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Vissa transponerande instrument (som en tenor- eller altsax) transponerar över mer än en oktav. För sådana stora transponeringar kräver vissa verktyg elementet &amp;quot;&amp;lt;octave-shift&amp;gt;&amp;quot; medan andra verktyg inte stöder elementet alls.&lt;/p&gt;&lt;p&gt;Vid import av MusicXML-filen i ett annat verktyg, kontrollera transponerande instrument noggrannt i både konsert- och noterad tonhöjd. Om det inte är korrekt, kan det hjälpa att ändra det här alternativet.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-29"/>
         <source>MusicXML type</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXML-typ</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Don&apos;t export percussion tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera inte slagverksspår</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Use &quot;&lt;octave-shift&gt;&quot; for transposing instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd &quot;&lt;octave-shift&gt;&quot; för transponerande instrument</translation>
     </message>
     <message>
         <location line="+45"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en</translation>
     </message>
 </context>
 <context>
@@ -17504,22 +17504,22 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     <message>
         <location line="+17"/>
         <source>Show repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa upprepade segment</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Allow direct edition of repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt direkt redigering av upprepade segment</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Hide redundant clefs and keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Dölj redundanta klaver och tonarter</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -18504,32 +18504,32 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/editors/pitchtracker/PitchGraphWidget.cpp" line="+112"/>
         <source>None (Rest)</source>
         <comment>No target frequency because no note is playing</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ingen (paus)</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Odefinierad</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Tuning System:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stämningssystem:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Actual freq:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verklig frek:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Error (cents):</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel (hundradelar):</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>None available (check preferences)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen tillgänglig (kontrollera inställningarna)</translation>
     </message>
 </context>
 <context>
@@ -18546,77 +18546,77 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+59"/>
         <location line="+3"/>
         <source>Pitch Tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>Tonhöjdsföljare</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+65"/>
         <source>Tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>Stämning</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Root Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundtonhöjd</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Referenstonhöjd</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Referensfrekvens</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>General</source>
-        <translation type="unfinished">Allmänt</translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metod</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Frame Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Ramstorlek</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Step Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Stegstorlek</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Ignore Octave Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorera oktavfel</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Algoritm</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Graph Width (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafbredd (ms)</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Graph Height (cents)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafhöjd (hundradelar)</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Utseende</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>The tunings file could not be found! The file named &quot;tunings.xml&quot; containing tuning definitions has not been found in any of the standard directories. On Linux platforms, these include /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches and $HOME/.local/share/rosegarden/pitches. This file should be part of the standard installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stämningsfilen kunde inte hittas. Filen som heter &quot;tunings.xml&quot; och innehåller stämningsdefinitioner hittades inte i någon av standardkatalogerna. På Linux-plattformar omfattar de /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches och $HOME/.local/share/rosegarden/pitches. Filen ska ingå i standardinstallationen.</translation>
     </message>
 </context>
 <context>
@@ -18624,7 +18624,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <message>
         <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+121"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte ansluta till JACK. Försäkra dig om att JACK-servern kör och inga andra följningsklienter är öppna.</translation>
     </message>
 </context>
 <context>
@@ -19623,7 +19623,7 @@ Välj alla du vill ta bort permanent från hårddisken.
     <message>
         <location line="+54"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte öppna filen &apos;%1&apos; för skrivning</translation>
     </message>
     <message>
         <location line="+245"/>
@@ -19731,7 +19731,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
     <message>
         <location line="-356"/>
         <source>Pitch Tracker can only contain 1 segment.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tonhöjdsföljaren kan bara innehålla ett segment.</translation>
     </message>
     <message>
         <location line="+434"/>
@@ -19743,12 +19743,12 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
     <message>
         <location line="+761"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte lägga till släppt fil. Ljudservern JACK är inte tillgänglig.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte lägga till släppt fil. Den här versionen av Rosegarden byggdes inte med ljudstöd.</translation>
     </message>
     <message>
         <source>importing a remote audio file</source>
@@ -20048,7 +20048,7 @@ Felet är: %2</translation>
     <message>
         <location line="+26"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte expandera ljudsegment med figuration</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -20395,27 +20395,27 @@ Inget segment kommer att delas.</translation>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;För att skapa en upptakt måste åtminstone ett av segmenten i markeringen starta i kompositionens början.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Anacrusis Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Upptaktens storlek</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Create Anacrusis</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa upptakt</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Infoga korrigerat tempo och taktart</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Remove Original Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort ursprungligt tempo och taktart</translation>
     </message>
     <message>
         <location line="+1911"/>
@@ -20851,7 +20851,7 @@ Felet är: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+68"/>
         <source>Reset Transpose on Linked Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ transponering av länkade segment</translation>
     </message>
 </context>
 <context>
@@ -20859,7 +20859,7 @@ Felet är: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkToCopyCommand.h" line="+43"/>
         <source>Turn Links into Copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Omvandla länkar till kopior</translation>
     </message>
 </context>
 <context>
@@ -20867,7 +20867,7 @@ Felet är: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="-20"/>
         <source>Transpose Linked Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera länkade segment</translation>
     </message>
 </context>
 <context>
@@ -20969,27 +20969,27 @@ Felet är: %2</translation>
     <message>
         <location line="+21"/>
         <source>Linked segment parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Länkade segmentparametrar</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Redigera relativ transponering för det länkade segmentet&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Reset</source>
-        <translation type="unfinished">Återställ</translation>
+        <translation>Återställ</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Återställ relativ transponering för det länkade segmentet till noll&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+56"/>
@@ -21016,18 +21016,19 @@ Felet är: %2</translation>
         <location line="+411"/>
         <location line="+46"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="-45"/>
         <source>Existing transpositions on selected linked segments must be removed
 before new transposition can be applied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Befintlig transponering för markerade länkade segment måste tas bort
+innan en ny transponering kan utföras.</translation>
     </message>
     <message>
         <location line="+46"/>
         <source>Remove transposition on selected linked segments?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort transponering för markerade länkade segment?</translation>
     </message>
     <message>
         <location line="+93"/>
@@ -21111,12 +21112,12 @@ before new transposition can be applied.</source>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.h" line="+43"/>
         <source>Quick-Link Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Snabblänka segment</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentQuickLinkCommand.cpp" line="+54"/>
         <source>(linked)</source>
-        <translation type="unfinished"></translation>
+        <translation>(länkat)</translation>
     </message>
 </context>
 <context>
@@ -21241,12 +21242,12 @@ Vill du ange den nu?</translation>
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicka och dra för att flytta segment; håll ner Ctrl för att kopiera dem; Ctrl+Alt för länkade kopior</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicka och dra för att flytta segment; håll ner Ctrl för att kopiera det; Cltr+Alt för en länkad kopia; dubbelklicka för att redigera</translation>
     </message>
     <message>
         <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
@@ -21836,7 +21837,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
     <message>
         <location filename="../../src/commands/segment/SegmentLinkTransposeCommand.h" line="+34"/>
         <source>Reset Transpose on Linked Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ transponering av länkat segment</translation>
     </message>
 </context>
 <context>
@@ -23041,17 +23042,17 @@ Vill du ställa in den nu?</translation>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+685"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Omvandla ett upprepat segment till en riktig kopia</numerusform>
+            <numerusform>Omvandla %n upprepade segment till riktiga kopior</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+25"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Omvandla ett länkat segment till en riktig kopia</numerusform>
+            <numerusform>Omvandla %n länkade segment till riktiga kopior</numerusform>
         </translation>
     </message>
     <message>
