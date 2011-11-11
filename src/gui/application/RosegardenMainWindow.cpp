@@ -243,6 +243,14 @@
 namespace Rosegarden
 {
 
+// Interval (in msecs) for m_playTimer.
+// To keep the transport's time display from looking like it is stuck, avoid
+// multiples of 10.
+// ??? Original value was 23.  53 results in a significant reduction in CPU
+//   usage.  But are there any serious drawbacks to this?  Is this timer
+//   used to drive anything other than the UI?  I tried 253 and I was able to
+//   play a MIDI-only sequence without incident.
+#define PLAYTIMER_INTERVAL 23
 
 RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                                            QObject *startupStatusMessageReceiver) :
@@ -5444,10 +5452,7 @@ RosegardenMainWindow::slotRecord()
     // Start the playback timer - this fetches the current sequencer position &c
     //
     m_stopTimer->stop();
-    m_playTimer->start(23); // avoid multiples of 10 just so as
-    // to avoid always having the same digit
-    // in one place on the transport.  How
-    // shallow.)
+    m_playTimer->start(PLAYTIMER_INTERVAL);
 }
 
 void
@@ -5562,7 +5567,7 @@ RosegardenMainWindow::slotPlay()
             // Start the playback timer - this fetches the current sequencer position &c
             //
             m_stopTimer->stop();
-            m_playTimer->start(23);
+            m_playTimer->start(PLAYTIMER_INTERVAL);
         } else {
             m_playTimer->stop();
             m_stopTimer->start(100);
