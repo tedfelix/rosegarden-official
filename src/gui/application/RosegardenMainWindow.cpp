@@ -4541,7 +4541,7 @@ RosegardenMainWindow::slotCheckTransportStatus()
 
     TransportStatus status = RosegardenSequencer::getInstance()->
         getStatus();
-    
+
     if (status == PLAYING || status == RECORDING) { //@@@ JAS orig ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse
         leaveActionState("not_playing");
     } else {
@@ -4578,19 +4578,27 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
     //
     if (!m_seqManager) return;
 
+
+    // Update display of the current MIDI out event on the transport
+
     MappedEvent ev;
     bool haveEvent = SequencerDataBlock::getInstance()->getVisual(ev);
     if (haveEvent) getTransport()->setMidiOutLabel(&ev);
 
+
+    // Update the playback position pointer (part 1)
+
     RealTime position = SequencerDataBlock::getInstance()->getPositionPointer();
-
-    //    std::cerr << "RosegardenMainWindow::slotUpdatePlaybackPosition: mapper pos = " << position << std::endl;
-
     Composition &comp = m_doc->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
 
-    //    std::cerr << "RosegardenMainWindow::slotUpdatePlaybackPosition: mapper timeT = " << elapsedTime << std::endl;
 
+    // Handle recorded MIDI events
+
+    // If we're recording, gather the recorded events and put them where they
+    // belong in the document.
+    // ??? Why is this prior to the update of the playback position pointer,
+    //   but after the computation of elapsedTime?
     if (m_seqManager->getTransportStatus() == RECORDING) {
 
         MappedEventList mC;
@@ -4603,27 +4611,44 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
         m_doc->updateRecordingAudioSegments();
     }
 
+
+    // Update the playback position pointer (part 2)
+
+    // We don't want slotSetPointerPosition() to affect the sequencer.
+    // Setting m_originatingJump to true causes slotSetPointerPosition()
+    // to not tell the sequencer to jump to this new position.  This
+    // might be renamed m_seqJump and reverse its value.
+    // ??? This should just be an argument to slotSetPointerPosition().
+    //   slotSetPointerPosition(elapsedTime, bool jumpSequencer = true);
+    //   (Can we have default args in a slot?  Seems unlikely.)
     m_originatingJump = true;
+    // Move the pointer to the current position.
     m_doc->slotSetPointerPosition(elapsedTime);
+    // Future moves (jumps) won't be coming from here.
     m_originatingJump = false;
 
+
+    // Update the VU meters
     if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters();
     if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
     m_view->updateMeters();
 
+
+    // Update the CPU meter
+    // ??? Use a QTime object to measure 1 second elapsed.  Or use a separate
+    //   one second timer for this and detect playback mode within the update
+    //   routine.
     if (++callbackCount == 60) {
         slotUpdateCPUMeter(true);
         callbackCount = 0;
     }
-
-    //     if (elapsedTime >= comp.getEndMarker())
-    //         slotStop();
 }
 
 void
 RosegardenMainWindow::slotUpdateCPUMeter(bool playing)
 {
     static std::ifstream *statstream = 0;
+    // Set to true when CPU % has been displayed.
     static bool modified = false;
     static unsigned long lastBusy = 0, lastIdle = 0;
 
@@ -4672,12 +4697,13 @@ RosegardenMainWindow::slotUpdateCPUMeter(bool playing)
 
         modified = true;
 
-    } else if (modified) {
+    } else if (modified) {  // If CPU has been displayed, clear it.
         if (m_cpuBar) {
             m_cpuBar->setTextVisible(false);
             m_cpuBar->setFormat("%p%");
             m_cpuBar->setValue(0);
         }
+        // Indicate CPU % display is now clear.
         modified = false;
     }
 }
@@ -4693,6 +4719,7 @@ RosegardenMainWindow::slotUpdateMonitoring()
 
     m_view->updateMonitorMeters();
 
+    // Clear the CPU meter
     slotUpdateCPUMeter(false);
 }
 
