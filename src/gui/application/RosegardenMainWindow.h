@@ -1498,22 +1498,10 @@ public slots:
     void slotAudioManagerClosed();
 
     /**
-     * Update the pointer position from the sequencer mmapped file when playing
-     */
-    void slotUpdatePlaybackPosition();
-
-    /**
-     * Update the CPU level meter
-     */
-    void slotUpdateCPUMeter(bool playing);
-
-    /**
      * Update the monitor levels from the sequencer mmapped file when not playing
      * (slotUpdatePlaybackPosition does this among other things when playing)
      */
     void slotUpdateMonitoring();
-
-    void slotCheckTransportStatus();
 
     /**
      * Create a plugin dialog for a given instrument and slot, or
@@ -1715,9 +1703,14 @@ private:
 
     static std::map<QProcess *, QTemporaryFile *> m_lilyTempFileMap;
 
-    // Used to fetch the current sequencer position from the mmapped sequencer information file
-    //
+    // Used to fetch the current sequencer position from the mmapped sequencer
+    // information file.
+    // Runs when playing or recording.  Drives slotUpdatePlaybackPosition()
+    // and slotCheckTransportStatus().
     QTimer *m_playTimer;
+
+    // Runs when the sequence is stopped.  Drives slotUpdateMonitoring() and
+    // slotCheckTransportStatus().
     QTimer *m_stopTimer;
 
     StartupTester *m_startupTester;
@@ -1742,8 +1735,23 @@ private:
     static void handleSignal(int);
     bool installSignalHandlers();
 
+    // See slotUpdateCPUMeter()
+    QTimer *m_cpuMeterTimer;
+
 private slots:
     void signalAction(int);
+
+    /**
+     * Update the pointer position from the sequencer mmapped file when playing
+     */
+    void slotUpdatePlaybackPosition();
+
+    void slotCheckTransportStatus();
+
+    /**
+     * Update the CPU level meter
+     */
+    void slotUpdateCPUMeter();
 };
 
 

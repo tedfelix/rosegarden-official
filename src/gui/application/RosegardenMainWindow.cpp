@@ -302,7 +302,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 #endif
     m_tranzport(0),
     m_deviceManager(0),
-    m_warningWidget(0)
+    m_warningWidget(0),
+    m_cpuMeterTimer(new QTimer(static_cast<QObject *>(this)))
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -529,6 +530,15 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     if (!installSignalHandlers())
         qWarning("%s", "Signal handlers not installed!");
+
+    // Connect the various timers to their handlers.
+    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
+    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
+    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
+    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
+    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    connect(m_cpuMeterTimer, SIGNAL(timeout()), this, SLOT(slotUpdateCPUMeter()));
+    m_cpuMeterTimer->start(1000);
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()
@@ -561,6 +571,11 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_tranzport;    
     delete m_doc;
     Profiles::getInstance()->dump();
+
+    delete m_playTimer;
+    delete m_stopTimer;
+    delete m_autoSaveTimer;
+    delete m_cpuMeterTimer;
 }
 
 int RosegardenMainWindow::sigpipe[2];
@@ -1373,17 +1388,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             SLOT(slotTestClipboard()));
 
-    // connect and start the autosave timer
-    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    // start the autosave timer
     m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
-
-    // Connect the playback timer
-    //
-    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
-    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
-
-    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
-    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
 
     // finally recreate the main view
     //
@@ -3221,10 +3227,10 @@ RosegardenMainWindow::slotTempoToSegmentLength(QWidget* parent)
         TimeSignature timeSig =
             comp.getTimeSignatureAt(seg->getStartTime());
 
-        timeT endTime = seg->getEndTime();
-
-        if (seg->getRawEndMarkerTime())
-            endTime = seg->getEndMarkerTime();
+        // unused warning fix
+//        timeT endTime = seg->getEndTime();
+//        if (seg->getRawEndMarkerTime())
+//            endTime = seg->getEndMarkerTime();
 
         RealTime segDuration =
             seg->getAudioEndTime() - seg->getAudioStartTime();
@@ -4571,8 +4577,6 @@ RosegardenMainWindow::slotCheckTransportStatus()
 void
 RosegardenMainWindow::slotUpdatePlaybackPosition()
 {
-    static int callbackCount = 0;
-
     // Either sequencer mappper or the sequence manager could be missing at
     // this point.
     //
@@ -4632,27 +4636,20 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
     if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters();
     if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
     m_view->updateMeters();
-
-
-    // Update the CPU meter
-    // ??? Use a QTime object to measure 1 second elapsed.  Or use a separate
-    //   one second timer for this and detect playback mode within the update
-    //   routine.
-    if (++callbackCount == 60) {
-        slotUpdateCPUMeter(true);
-        callbackCount = 0;
-    }
 }
 
 void
-RosegardenMainWindow::slotUpdateCPUMeter(bool playing)
+RosegardenMainWindow::slotUpdateCPUMeter()
 {
     static std::ifstream *statstream = 0;
     // Set to true when CPU % has been displayed.
     static bool modified = false;
     static unsigned long lastBusy = 0, lastIdle = 0;
 
-    if (playing) {
+    TransportStatus status = RosegardenSequencer::getInstance()->getStatus();
+
+    // If we're playing, display the CPU %
+    if (status == PLAYING  ||  status == RECORDING) {
 
         if (!statstream) {
             statstream = new std::ifstream("/proc/stat", std::ios::in);
@@ -4718,9 +4715,6 @@ RosegardenMainWindow::slotUpdateMonitoring()
         m_midiMixer->updateMonitorMeter();
 
     m_view->updateMonitorMeters();
-
-    // Clear the CPU meter
-    slotUpdateCPUMeter(false);
 }
 
 void
@@ -6219,7 +6213,7 @@ RosegardenMainWindow::slotTestClipboard()
 }
 
 void
-RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut *acc)
+RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
 {
     //
     // Shortcuts are now defined in *.rc files.
