@@ -57,7 +57,7 @@ RosegardenSequencer::m_instance = 0;
 QMutex
 RosegardenSequencer::m_instanceMutex;
 
-//#define LOCKED QMutexLocker _locker(&m_mutex); std::cerr << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__ << std::endl
+//#define LOCKED QMutexLocker _locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
 
 #define LOCKED QMutexLocker _locker(&m_mutex)
 
@@ -145,7 +145,7 @@ RosegardenSequencer::quit()
 {
     LOCKED;
 
-    std::cerr << "RosegardenSequencer::quit()" << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::quit()";
 
     // and break out of the loop next time around
     m_transportStatus = QUIT;
@@ -276,7 +276,7 @@ RosegardenSequencer::record(const RealTime &time,
                 (audioInstruments);
 
             if (audioFileNames.size() != audioInstruments.size()) {
-                std::cerr << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")" << std::endl;
+                SEQUENCER_DEBUG << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")";
                 stop();
                 return false;
             }
@@ -438,10 +438,10 @@ RosegardenSequencer::getSoundDriverStatus(const QString &guiVersion)
     if (guiVersion == VERSION)
         driverStatus |= VERSION_OK;
     else {
-        std::cerr << "WARNING: RosegardenSequencer::getSoundDriverStatus: "
+        SEQUENCER_DEBUG << "WARNING: RosegardenSequencer::getSoundDriverStatus: "
         << "GUI version \"" << guiVersion
         << "\" does not match sequencer version \"" << VERSION
-        << "\"" << std::endl;
+        << "\"";
     }
     return driverStatus;
 }
@@ -494,8 +494,8 @@ RosegardenSequencer::processMappedEvent(MappedEvent mE)
 {
     QMutexLocker locker(&m_asyncQueueMutex);
     m_asyncOutQueue.push_back(new MappedEvent(mE));
-    SEQUENCER_DEBUG << "processMappedEvent: Have " << m_asyncOutQueue.size()
-                    << " events in async out queue" << endl;
+//    SEQUENCER_DEBUG << "processMappedEvent: Have " << m_asyncOutQueue.size()
+//                    << " events in async out queue" << endl;
 }
 
 int
@@ -1075,8 +1075,7 @@ RosegardenSequencer::remapTracks()
 {
     LOCKED;
 
-//    SEQUENCER_DEBUG << "RosegardenSequencer::remapTracks" << endl;
-    std::cout << "RosegardenSequencer::remapTracks" << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::remapTracks";
 
     rationalisePlayingAudio();
 }
@@ -1166,7 +1165,7 @@ RosegardenSequencer::applyLatencyCompensation(MappedEventList &composition)
         RealTime instrumentLatency =
             m_driver->getInstrumentPlayLatency((*i)->getInstrument());
 
-        //	std::cerr << "RosegardenSequencer::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency << std::endl;
+        //	SEQUENCER_DEBUG << "RosegardenSequencer::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency;
 
         (*i)->setEventTime((*i)->getEventTime() +
                            maxLatency - instrumentLatency);
@@ -1291,7 +1290,7 @@ RosegardenSequencer::updateClocks()
 
     RealTime maxLatency = m_driver->getMaximumPlayLatency();
     if (maxLatency != RealTime::zeroTime) {
-        //	std::cerr << "RosegardenSequencer::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency << std::endl;
+        //	SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency;
         newPosition = newPosition - maxLatency;
     }
 
@@ -1312,14 +1311,14 @@ RosegardenSequencer::sleep(const RealTime &rt)
 void
 RosegardenSequencer::processRecordedMidi()
 {
-    std::cerr << "RosegardenSequencer::processRecordedMidi" << std::endl;
+//    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi";
 
     MappedEventList mC;
     m_driver->getMappedEventList(mC);
 
     if (mC.empty()) return;
 
-    std::cerr << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events" << std::endl;
+//    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
 
     applyFiltering(&mC, ControlBlock::getInstance()->getRecordFilter(), false);
     SequencerDataBlock::getInstance()->addRecordedEvents(&mC);
@@ -1470,7 +1469,7 @@ RosegardenSequencer::transportChange(TransportRequest request)
     TransportPair pair(request, RealTime::zeroTime);
     m_transportRequests.push_back(pair);
 
-    std::cout << "RosegardenSequencer::transportChange: " << request << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::transportChange: " << request;
 
     if (request == TransportNoChange)
         return m_transportToken;
@@ -1487,7 +1486,7 @@ RosegardenSequencer::transportJump(TransportRequest request,
     TransportPair pair(request, rt);
     m_transportRequests.push_back(pair);
 
-    std::cout << "RosegardenSequencer::transportJump: " << request << ", " << rt << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::transportJump: " << request << ", " << rt;
 
     if (request == TransportNoChange)
         return m_transportToken + 1;
@@ -1500,7 +1499,7 @@ RosegardenSequencer::isTransportSyncComplete(TransportToken token)
 {
     QMutexLocker locker(&m_transportRequestMutex);
 
-    std::cout << "RosegardenSequencer::isTransportSyncComplete: token " << token << ", current token " << m_transportToken << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::isTransportSyncComplete: token " << token << ", current token " << m_transportToken;
     return m_transportToken >= token;
 }
 
