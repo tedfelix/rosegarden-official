@@ -17,6 +17,7 @@
 #include "base/Segment.h"
 #include "SegmentNotationHelper.h"
 #include "base/BaseProperties.h"
+#include "misc/Debug.h"
 #include <limits>
 
 namespace Rosegarden {
@@ -165,8 +166,8 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
     
     // Sanity Check
     if (baseSegmentItr == m_originalSegment.end()) {
-        std::cerr << "EventSelection::addRemoveEvent Sent event that can not be found "
-                  << "in segment.  Exiting method" << std::endl;
+        RG_DEBUG << "EventSelection::addRemoveEvent Sent event that can not be found "
+                  << "in segment.  Exiting method";
     
     }
 
@@ -482,8 +483,8 @@ void
 EventSelection::segmentDeleted(const Segment *)
 {
     /*
-    std::cerr << "WARNING: EventSelection notified of segment deletion: this is probably a bug "
-	      << "(selection should have been deleted before segment)" << std::endl;
+    RG_DEBUG << "WARNING: EventSelection notified of segment deletion: this is probably a bug "
+	      << "(selection should have been deleted before segment)";
               */
 }
 

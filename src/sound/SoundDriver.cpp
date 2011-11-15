@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 
+#include "misc/Debug.h"
 #include "SoundDriver.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
@@ -63,7 +64,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
 
 SoundDriver::~SoundDriver()
 {
-    std::cout << "SoundDriver::~SoundDriver (exiting)" << std::endl;
+    RG_DEBUG << "SoundDriver::~SoundDriver (exiting)";
     delete m_audioQueue;
 }
 
@@ -102,7 +103,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                 (getMappedStudio()->getAudioFader(i->getInstrument()));
 
             if (!fader) {
-                std::cerr << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument() << std::endl;
+                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument();
                 continue;
             }
 
@@ -112,7 +113,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
             //#define DEBUG_PLAYING_AUDIO
 #ifdef DEBUG_PLAYING_AUDIO
 
-            std::cout << "Creating playable audio file: id " << audioFile->getId() << ", event time " << i->getEventTime() << ", time now " << getSequencerTime() << ", start marker " << i->getAudioStartMarker() << ", duration " << i->getDuration() << ", instrument " << i->getInstrument() << " channels " << channels << std::endl;
+            RG_DEBUG << "Creating playable audio file: id " << audioFile->getId() << ", event time " << i->getEventTime() << ", time now " << getSequencerTime() << ", start marker " << i->getAudioStartMarker() << ", duration " << i->getDuration() << ", instrument " << i->getInstrument() << " channels " << channels;
 #endif
 
             RealTime bufferLength = getAudioReadBufferLength();
@@ -145,36 +146,31 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                 //#define DEBUG_AUTOFADING
 #ifdef DEBUG_AUTOFADING
 
-                std::cout << "SoundDriver::initialiseAudioQueue - "
+                RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
                 << "PlayableAudioFile is AUTOFADING - "
                 << "in = " << i->getFadeInTime()
-                << ", out = " << i->getFadeOutTime()
-                << std::endl;
+                << ", out = " << i->getFadeOutTime();
 #endif
 
             }
 #ifdef DEBUG_AUTOFADING
             else {
-                std::cout << "PlayableAudioFile has no AUTOFADE"
-                << std::endl;
+                RG_DEBUG << "PlayableAudioFile has no AUTOFADE";
             }
 #endif
 
             newQueue->addScheduled(paf);
         } else {
-            std::cerr << "SoundDriver::initialiseAudioQueue - "
-            << "can't find audio file reference for id " << i->getAudioID()
-            << std::endl;
+            RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
+            << "can't find audio file reference for id " << i->getAudioID();
 
-            std::cerr << "SoundDriver::initialiseAudioQueue - "
-            << "try reloading the current Rosegarden file"
-            << std::endl;
+            RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
+            << "try reloading the current Rosegarden file";
         }
     }
 
-    std::cout << "SoundDriver::initialiseAudioQueue -- new queue has "
-    << newQueue->size() << " files"
-    << std::endl;
+    RG_DEBUG << "SoundDriver::initialiseAudioQueue -- new queue has "
+    << newQueue->size() << " files";
 
     if (newQueue->empty()) {
         if (m_audioQueue->empty()) {
@@ -192,7 +188,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 void
 SoundDriver::clearAudioQueue()
 {
-    std::cout << "SoundDriver::clearAudioQueue" << std::endl;
+    RG_DEBUG << "SoundDriver::clearAudioQueue";
 
     if (m_audioQueue->empty())
         return ;
@@ -206,7 +202,7 @@ SoundDriver::clearAudioQueue()
 void
 SoundDriver::cancelAudioFile(MappedEvent *mE)
 {
-    std::cout << "SoundDriver::cancelAudioFile" << std::endl;
+    RG_DEBUG << "SoundDriver::cancelAudioFile";
 
     if (!m_audioQueue)
         return ;
@@ -259,10 +255,10 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     // else create a new one
     m_instruments.push_back(mI);
 
-    std::cout << "SoundDriver: setMappedInstrument() : "
+    RG_DEBUG << "SoundDriver: setMappedInstrument() : "
     << "type = " << mI->getType() << " : "
     << "channel = " << (int)(mI->getChannel()) << " : "
-    << "id = " << mI->getId() << std::endl;
+    << "id = " << mI->getId();
 
 }
 /*!DEVPUSH
@@ -291,13 +287,12 @@ SoundDriver::getMappedDevice(DeviceId id)
     }
 
 #ifdef DEBUG_SOUND_DRIVER
-    std::cout << "SoundDriver::getMappedDevice(" << id << ") - "
+    RG_DEBUG << "SoundDriver::getMappedDevice(" << id << ") - "
     << "name = \"" << retDevice.getName()
     << "\" type = " << retDevice.getType()
     << " direction = " << retDevice.getDirection()
     << " connection = \"" << retDevice.getConnection() << "\""
-    << " recording = " << retDevice.isRecording()
-    << std::endl;
+    << " recording = " << retDevice.isRecording();
 #endif
 
     return retDevice;
@@ -316,12 +311,12 @@ SoundDriver::addAudioFile(const QString &fileName, unsigned int id)
         ins->open();
         m_audioFiles.push_back(ins);
 
-        //    std::cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << std::endl;
+        //RG_DEBUG << "Sequencer::addAudioFile() = \"" << fileName << "\"";
 
         return true;
 
     } catch (SoundFile::BadSoundFileException e) {
-        std::cerr << "SoundDriver::addAudioFile: Failed to add audio file " << fileName << ": " << e.getMessage() << std::endl;
+        RG_DEBUG << "SoundDriver::addAudioFile: Failed to add audio file " << fileName << ": " << e.getMessage();
         delete ins;
         return false;
     }
@@ -333,8 +328,8 @@ SoundDriver::removeAudioFile(unsigned int id)
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++) {
         if ((*it)->getId() == id) {
-            std::cout << "Sequencer::removeAudioFile() = \"" <<
-            (*it)->getFilename() << "\"" << std::endl;
+            RG_DEBUG << "Sequencer::removeAudioFile() = \"" <<
+                (*it)->getFilename() << "\"";
 
             delete (*it);
             m_audioFiles.erase(it);
@@ -360,8 +355,7 @@ SoundDriver::getAudioFile(unsigned int id)
 void
 SoundDriver::clearAudioFiles()
 {
-    //    std::cout << "SoundDriver::clearAudioFiles() - clearing down audio files"
-    //              << std::endl;
+    //RG_DEBUG << "SoundDriver::clearAudioFiles() - clearing down audio files";
 
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
