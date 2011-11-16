@@ -137,6 +137,7 @@ LilyPondExporter::readConfigVariables(void)
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
 //    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt() ;
     m_repeatMode = settings.value("lilyexportrepeat", "true").toBool() ? REPEAT_VOLTA : REPEAT_UNFOLD;
+    m_voltaBar = settings.value("lilydrawbaratvolta", "true").toBool();
     m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
     settings.endGroup();
 }
@@ -1515,7 +1516,11 @@ LilyPondExporter::write()
                         haveRepeatingWithVolta = true;
                     } else {
                         str << std::endl << indent(col++) 
-                            << " {";
+                            << " {     % Alternative start here";
+                        if (m_voltaBar) {
+                            str << std::endl << indent(col) 
+                                << " \\bar \"|\" ";
+                        }
                         haveVolta = true;
                     }
                 }

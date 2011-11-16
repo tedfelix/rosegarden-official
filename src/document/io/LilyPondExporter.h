@@ -243,6 +243,8 @@ private:
         REPEAT_UNFOLD,
     };
 
+    bool m_voltaBar;
+
     bool m_cancelAccidentals;
 
     std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {

@@ -274,8 +274,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                                     "repeating segments are always unfolded.</qt>"));
     layoutNotation->addWidget(m_lilyRepeatMode, 8, 0);
 
+    m_lilyDrawBarAtVolta = new QCheckBox(
+                           tr("Draw bar line at volta"), frameNotation);
+    m_lilyDrawBarAtVolta->setToolTip(tr("<qt>If checked a bar line is always "
+                                    "drawn when a volta begins even if it "
+                                    "begins in the middle of a bar.</qt>"));
+    layoutNotation->addWidget(m_lilyDrawBarAtVolta, 9, 0);
+
     m_cancelAccidentals = new QCheckBox("Cancel accidentals");
-    layoutNotation->addWidget(m_cancelAccidentals, 9, 0);
+    layoutNotation->addWidget(m_cancelAccidentals, 10, 0);
     m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</qt>"));
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
@@ -343,6 +350,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyNoteLanguage->setCurrentIndex(settings.value("lilyexportnotelanguage", 6).toUInt());
 //    m_lilyRepeatMode->setCurrentIndex(settings.value("lilyrepeatmode", 0).toUInt());
     m_lilyRepeatMode->setChecked(settings.value("lilyexportrepeat", "true").toBool());
+    m_lilyDrawBarAtVolta->setChecked(settings.value("lilydrawbaratvolta", "true").toBool());
     m_cancelAccidentals->setChecked(settings.value("lilycancelaccidentals", "false").toBool());
 
     std::cerr << "QSettings for LilyPond (populateDefaultValues):" << std::endl
@@ -375,6 +383,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportnotelanguage", m_lilyNoteLanguage->currentIndex());
 //    settings.setValue("lilyrepeatmode", m_lilyRepeatMode->currentIndex());
     settings.setValue("lilyexportrepeat", m_lilyRepeatMode->isChecked());
+    settings.setValue("lilydrawbaratvolta", m_lilyDrawBarAtVolta->isChecked());
     settings.setValue("lilycancelaccidentals", m_cancelAccidentals->isChecked());
 
     std::cerr << "QSettings for LilyPond (slotApply):" << std::endl

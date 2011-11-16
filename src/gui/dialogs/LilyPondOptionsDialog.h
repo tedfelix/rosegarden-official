@@ -67,6 +67,7 @@ protected:
     QComboBox *m_lilyMarkerMode;
 //    QComboBox *m_lilyRepeatMode;
     QCheckBox *m_lilyRepeatMode;
+    QCheckBox *m_lilyDrawBarAtVolta;
     QCheckBox *m_cancelAccidentals;
     HeadersConfigurationPage *m_headersPage;
 
