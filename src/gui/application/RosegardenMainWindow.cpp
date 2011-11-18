@@ -250,7 +250,7 @@ namespace Rosegarden
 //   usage.  But are there any serious drawbacks to this?  Is this timer
 //   used to drive anything other than the UI?  I tried 253 and I was able to
 //   play a MIDI-only sequence without incident.
-#define PLAYTIMER_INTERVAL 23
+//#define PLAYTIMER_INTERVAL 23
 
 RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                                            QObject *startupStatusMessageReceiver) :
@@ -290,8 +290,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_tempoView(0),
     m_triggerSegmentManager(0),
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
-    m_playTimer(new QTimer(static_cast<QObject *>(this))),
-    m_stopTimer(new QTimer(static_cast<QObject *>(this))),
+//    m_playTimer(new QTimer(static_cast<QObject *>(this))),
+//    m_stopTimer(new QTimer(static_cast<QObject *>(this))),
+    m_updateUITimer(new QTimer(static_cast<QObject *>(this))),
+    m_inputTimer(new QTimer(static_cast<QObject *>(this))),
     m_startupTester(0),
     m_firstRun(false),
     m_haveAudioImporter(false),
@@ -532,10 +534,14 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
         qWarning("%s", "Signal handlers not installed!");
 
     // Connect the various timers to their handlers.
-    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
-    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
-    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
-    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
+//    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
+//    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
+//    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
+//    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
+    connect(m_updateUITimer, SIGNAL(timeout()), this, SLOT(slotUpdateUI()));
+    m_updateUITimer->start(50);
+    connect(m_inputTimer, SIGNAL(timeout()), this, SLOT(slotHandleInputs()));
+    m_inputTimer->start(20);
     connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     connect(m_cpuMeterTimer, SIGNAL(timeout()), this, SLOT(slotUpdateCPUMeter()));
     m_cpuMeterTimer->start(1000);
@@ -572,10 +578,14 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_doc;
     Profiles::getInstance()->dump();
 
-    delete m_playTimer;
-    delete m_stopTimer;
+//    delete m_playTimer;
+//    delete m_stopTimer;
+    delete m_inputTimer;
+    delete m_updateUITimer;
     delete m_autoSaveTimer;
     delete m_cpuMeterTimer;
+
+    delete m_clipboard;
 }
 
 int RosegardenMainWindow::sigpipe[2];
@@ -1445,7 +1455,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     //
     m_view->getTrackEditor()->slotReadjustCanvasSize();
 
-    m_stopTimer->start(100);
+//    m_stopTimer->start(100);
 }
 
 void
@@ -4524,6 +4534,7 @@ RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
     }
 }
 
+#if 0
 void
 RosegardenMainWindow::slotCheckTransportStatus()
 {
@@ -4573,7 +4584,32 @@ RosegardenMainWindow::slotCheckTransportStatus()
     
     return;
 }
+#endif
 
+void RosegardenMainWindow::processRecordedEvents()
+{
+    if (!m_seqManager)
+        return;
+    // Only if we're recording
+    if (m_seqManager->getTransportStatus() != RECORDING)
+        return;
+    if (!m_doc)
+        return;
+
+    // Gather the recorded events and put them where they belong in the
+    // document.
+
+    MappedEventList mC;
+    if (SequencerDataBlock::getInstance()->getRecordedEvents(mC) > 0) {
+        m_seqManager->processAsynchronousMidi(mC, 0);
+        m_doc->insertRecordedMidi(mC);
+    }
+
+    m_doc->updateRecordingMIDISegment();
+    m_doc->updateRecordingAudioSegments();
+}
+
+#if 0
 void
 RosegardenMainWindow::slotUpdatePlaybackPosition()
 {
@@ -4637,6 +4673,113 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
     if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
     m_view->updateMeters();
 }
+#endif
+
+#if 1
+// New handlers to replace slotUpdatePlaybackPosition() and
+// slotCheckTransportStatus().
+void
+RosegardenMainWindow::slotHandleInputs()
+{
+    processRecordedEvents();
+
+    ExternalTransport::TransportRequest req;
+    RealTime rt;
+    bool have = RosegardenSequencer::getInstance()->
+        getNextTransportRequest(req, rt);
+
+    if (have) {
+        switch (req) {
+        case ExternalTransport::TransportNoChange:    break;
+        case ExternalTransport::TransportStop:        stop(); break;
+        case ExternalTransport::TransportStart:       play(); break;
+        case ExternalTransport::TransportPlay:        play(); break;
+        case ExternalTransport::TransportRecord:      record(); break;
+        case ExternalTransport::TransportJumpToTime:  jumpToTime(rt); break;
+        case ExternalTransport::TransportStartAtTime: startAtTime(rt); break;
+        case ExternalTransport::TransportStopAtTime:  stop(); jumpToTime(rt); break;
+        }
+    }
+
+    TransportStatus status = RosegardenSequencer::getInstance()->
+        getStatus();
+
+    if (status == PLAYING || status == RECORDING) { //@@@ JAS orig ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse
+        leaveActionState("not_playing");
+    } else {
+        enterActionState("not_playing");
+    }
+
+    if (m_seqManager) {
+
+        m_seqManager->setTransportStatus(status);
+
+        MappedEventList asynchronousQueue =
+            RosegardenSequencer::getInstance()->pullAsynchronousMidiQueue();
+
+        if (!asynchronousQueue.empty()) {
+
+            m_seqManager->processAsynchronousMidi(asynchronousQueue, 0);
+
+            // ??? These already have their own timer.  See slotUpdateUI().
+//            if (m_view) {
+//                m_view->updateMeters();
+//            }
+        }
+    }
+}
+
+void
+RosegardenMainWindow::slotUpdateUI()
+{
+    TransportStatus status = RosegardenSequencer::getInstance()->getStatus();
+
+    // If we're stopped
+    if (status != PLAYING  &&  status != RECORDING) {
+        // Keep the meters going for monitoring
+        slotUpdateMonitoring();
+        return;
+    }
+
+    // Either sequencer mapper or the sequence manager could be missing at
+    // this point.
+    //
+    if (!m_seqManager) return;
+    if (!m_doc) return;
+
+    // Update display of the current MIDI out event on the transport
+
+    MappedEvent ev;
+    bool haveEvent = SequencerDataBlock::getInstance()->getVisual(ev);
+    if (haveEvent) getTransport()->setMidiOutLabel(&ev);
+
+
+    // Update the playback position pointer
+
+    RealTime position = SequencerDataBlock::getInstance()->getPositionPointer();
+    Composition &comp = m_doc->getComposition();
+    timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
+
+    // We don't want slotSetPointerPosition() to affect the sequencer.
+    // Setting m_originatingJump to true causes slotSetPointerPosition()
+    // to not tell the sequencer to jump to this new position.  This
+    // might be renamed m_seqJump and reverse its value.
+    // ??? This should just be an argument to slotSetPointerPosition().
+    //   slotSetPointerPosition(elapsedTime, bool jumpSequencer = true);
+    //   (Can we have default args in a slot?  Seems unlikely.)
+    m_originatingJump = true;
+    // Move the pointer to the current position.
+    m_doc->slotSetPointerPosition(elapsedTime);
+    // Future moves (jumps) won't be coming from here.
+    m_originatingJump = false;
+
+
+    // Update the VU meters
+    if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters();
+    if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
+    if (m_view) m_view->updateMeters();
+}
+#endif
 
 void
 RosegardenMainWindow::slotUpdateCPUMeter()
@@ -5472,8 +5615,8 @@ RosegardenMainWindow::slotRecord()
 
     // Start the playback timer - this fetches the current sequencer position &c
     //
-    m_stopTimer->stop();
-    m_playTimer->start(PLAYTIMER_INTERVAL);
+//    m_stopTimer->stop();
+//    m_playTimer->start(PLAYTIMER_INTERVAL);
 }
 
 void
@@ -5587,20 +5730,20 @@ RosegardenMainWindow::slotPlay()
 
             // Start the playback timer - this fetches the current sequencer position &c
             //
-            m_stopTimer->stop();
-            m_playTimer->start(PLAYTIMER_INTERVAL);
+//            m_stopTimer->stop();
+//            m_playTimer->start(PLAYTIMER_INTERVAL);
         } else {
-            m_playTimer->stop();
-            m_stopTimer->start(100);
+//            m_playTimer->stop();
+//            m_stopTimer->start(100);
         }
     } catch (QString s) {
         QMessageBox::critical(0, tr("Rosegarden"), s);
-        m_playTimer->stop();
-        m_stopTimer->start(100);
+//        m_playTimer->stop();
+//        m_stopTimer->start(100);
     } catch (Exception e) {
         QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
-        m_playTimer->stop();
-        m_stopTimer->start(100);
+//        m_playTimer->stop();
+//        m_stopTimer->start(100);
     }  
 }
 
@@ -5638,8 +5781,8 @@ RosegardenMainWindow::slotStop()
     }
 
     // stop the playback timer
-    m_playTimer->stop();
-    m_stopTimer->start(100);
+//    m_playTimer->stop();
+//    m_stopTimer->start(100);
 }
 
 void

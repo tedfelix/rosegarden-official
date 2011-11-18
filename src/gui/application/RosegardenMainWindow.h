@@ -1707,11 +1707,14 @@ private:
     // information file.
     // Runs when playing or recording.  Drives slotUpdatePlaybackPosition()
     // and slotCheckTransportStatus().
-    QTimer *m_playTimer;
+//    QTimer *m_playTimer;
 
     // Runs when the sequence is stopped.  Drives slotUpdateMonitoring() and
     // slotCheckTransportStatus().
-    QTimer *m_stopTimer;
+//    QTimer *m_stopTimer;
+
+    QTimer *m_updateUITimer;
+    QTimer *m_inputTimer;
 
     StartupTester *m_startupTester;
 
@@ -1738,15 +1741,21 @@ private:
     // See slotUpdateCPUMeter()
     QTimer *m_cpuMeterTimer;
 
+    void processRecordedEvents();
+
 private slots:
     void signalAction(int);
 
     /**
      * Update the pointer position from the sequencer mmapped file when playing
      */
-    void slotUpdatePlaybackPosition();
+//    void slotUpdatePlaybackPosition();
 
-    void slotCheckTransportStatus();
+//    void slotCheckTransportStatus();
+
+    // New routines to handle inputs and UI updates
+    void slotHandleInputs();
+    void slotUpdateUI();
 
     /**
      * Update the CPU level meter
