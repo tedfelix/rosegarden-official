@@ -2141,7 +2141,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 void
 RosegardenDocument::updateRecordingMIDISegment()
 {
-    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
+//    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
 
     if (m_recordMIDISegments.size() == 0) {
         // make this call once to create one
@@ -2150,7 +2150,7 @@ RosegardenDocument::updateRecordingMIDISegment()
             return ; // not recording any MIDI
     }
 
-    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment" << endl;
+//    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment" << endl;
 
     NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
