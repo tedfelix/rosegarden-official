@@ -54,6 +54,12 @@ class RosegardenDocument;
 class CompositionRect;
 
 /// Draws the Composition on the display.
+/**
+ * The key output routine is viewportPaintRect() which draws the segments
+ * and the artifacts (playback position pointer, guides, "rubber band"
+ * selection, ...) on the viewport (the portion of the composition that
+ * is currently visible).
+ */
 class CompositionView : public RosegardenScrollView 
 {
     Q_OBJECT
@@ -334,85 +340,153 @@ protected:
 
     /// Called when the mouse enters the view.
     /// Override of QWidget::enterEvent().
-    /// Shows context help for the current tool.
-    /// See leaveEvent().
+    /// Shows context help (in the status bar at the bottom) for the current
+    /// tool.
+    /// See leaveEvent() and slotToolHelpChanged().
     virtual void enterEvent(QEvent *);
     /// Called when the mouse leaves the view.
     /// Override of QWidget::leaveEvent().
-    /// Hides context help for the current tool.
-    /// See enterEvent().
+    /// Hides context help (in the status bar at the bottom) for the current
+    /// tool.
+    /// See enterEvent() and slotToolHelpChanged().
     virtual void leaveEvent(QEvent *);
 
+    /// Draws the segments and artifacts on the viewport (screen).
+    /**
+     * First, the segments draw buffer is copied to the artifacts
+     * draw buffer.  Then the artifacts are drawn over top of the
+     * segments in the artifacts (overlay) draw buffer by
+     * refreshArtifactsDrawBuffer().
+     * Finally, the artifacts draw buffer is copied to the viewport.
+     */
     virtual void viewportPaintRect(QRect);
     
+    /// Scrolls and refreshes the segment draw buffer if needed.
     /**
-     * if something changed, returns true and sets rect accordingly
-     * sets 'scroll' if some scrolling occurred
+     * Returns enough information to determine how much additional work
+     * needs to be done to update the viewport.
+     * Used by viewportPaintRect().
      */
-    bool checkScrollAndRefreshDrawBuffer(QRect &, bool& scroll);
+    bool scrollSegmentsDrawBuffer(QRect &rect, bool& scroll);
+
+    /// Draws the background then calls drawArea() to draw the segments on the
+    /// segments draw buffer.
+    /// Used by scrollSegmentsDrawBuffer().
     void refreshSegmentsDrawBuffer(const QRect&);
+    /// Calls drawAreaArtifacts() to draw the artifacts on the artifacts draw
+    /// buffer.
+    /// Used by viewportPaintRect().
     void refreshArtifactsDrawBuffer(const QRect&);
+
+    /// Draws the segments on the specified painter (usually the segments
+    /// draw buffer).
+    /// Used by refreshSegmentsDrawBuffer().
     void drawArea(QPainter * p, const QRect& rect);
+    /// Draws the audio previews for any audio segments on the specified
+    /// painter (usually the segments draw buffer).
+    /// Used by drawArea().
     void drawAreaAudioPreviews(QPainter * p, const QRect& rect);
+    /// Draws the overlay artifacts (e.g. playback position pointer,
+    /// guides, and the "rubber band" selection) on the specified painter
+    /// (usually the artifacts draw buffer).
+    /// Used by refreshArtifactsDrawBuffer().
     void drawAreaArtifacts(QPainter * p, const QRect& rect);
+    /// Draws a rectangle on the given painter with proper clipping.
+    /// This is an improved QPainter::drawRect().
+    /// See drawCompRect().
     void drawRect(const QRect& rect, QPainter * p, const QRect& clipRect,
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
+    /// A version of drawRect() that handles segment repeats.
     void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
                       int intersectLvl = 0, bool fill = true);
+    /// Used by drawArea() to draw the segment labels.
     /// See setShowSegmentLabels().
     void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
+    /// Used by drawArea() to draw any intersections between rectangles.
     void drawIntersections(const CompositionModel::rectcontainer&, QPainter * p, const QRect& clipRect);
 
+    /// Used by drawAreaArtifacts() to draw the playback position pointer on
+    /// the given painter (usually the artifacts draw buffer).
     /// See setPointerPos() and setPointerPosition().
     void drawPointer(QPainter * p, const QRect& clipRect);
+    /// Used by drawAreaArtifacts() to draw the guides on the given painter
+    /// (usually the artifacts draw buffer).
+    /// See setGuidesPos() and setDrawGuides().
     void drawGuides(QPainter * p, const QRect& clipRect);
+    /// Used by drawAreaArtifacts() to draw the floating text on the view.
+    /// See setTextFloat() for details.
     void drawTextFloat(QPainter * p, const QRect& clipRect);
 
-    void initStepSize();
-    void releaseCurrentItem();
+    // Dead Code.
+//    void initStepSize();
+//    void releaseCurrentItem();
 
+    /// Used by drawIntersections() to mix the brushes of intersecting
+    /// rectangles.
     static QColor mixBrushes(QBrush a, QBrush b);
 
+    /// Helper function to make it easier to get the segment selector tool.
     SegmentSelector* getSegmentSelectorTool();
 
-protected slots:
+    /// Adds the entire viewport to the segments draw buffer refresh rect.
+    /// This will cause scrollSegmentsDrawBuffer() to refresh the entire
+    /// segment draw buffer the next time it is called.  This in turn will
+    /// cause viewportPaintRect() to redraw the entire viewport the next
+    /// time it is called.
     void slotSegmentsDrawBufferNeedsRefresh() {
         m_segmentsDrawBufferRefresh =
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
     }
 
+    /// Adds the specified rect to the segments draw buffer refresh rect.
+    /// This will cause the given portion of the viewport to be refreshed
+    /// the next time viewportPaintRect() is called.
     void slotSegmentsDrawBufferNeedsRefresh(QRect r) {
         m_segmentsDrawBufferRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
     }
 
+protected slots:
+
+    /// Updates the artifacts in the entire viewport.
+    /// In addition to being used locally several times, this is also
+    /// connected to CompositionModelImpl::needArtifactsUpdate().
     void slotArtifactsDrawBufferNeedsRefresh() {
         m_artifactsDrawBufferRefresh = 
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
-	updateContents();
+        updateContents();
     }
 
+protected:
+    /// Updates the artifacts in the given rect.
     void slotArtifactsDrawBufferNeedsRefresh(QRect r) {
         m_artifactsDrawBufferRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
-	updateContents(r);
+        updateContents(r);
     }
 
+    /// Updates the entire viewport.
     void slotAllDrawBuffersNeedRefresh() {
         slotSegmentsDrawBufferNeedsRefresh();
         slotArtifactsDrawBufferNeedsRefresh();
     }
 
+    /// Updates the given rect on the view.
     void slotAllDrawBuffersNeedRefresh(QRect r) {
         slotSegmentsDrawBufferNeedsRefresh(r);
         slotArtifactsDrawBufferNeedsRefresh(r);
     }
 
+protected slots:
+    /// Updates the tool context help (in the status bar at the bottom) and
+    /// shows it if the mouse is in the view.
+    /// Connected to SegmentToolBox::showContextHelp().
+    /// See showContextHelp().
     void slotToolHelpChanged(const QString &);
 
-protected:         
+protected:
 
     //--------------- Data members ---------------------------------
 
@@ -456,8 +530,21 @@ protected:
     QString      m_textFloatText;
     QPoint       m_textFloatPos;
 
+    /// The segments draw buffer is drawn on by drawArea().  It contains
+    /// the segment rectangles.
+    /// refreshSegmentsDrawBuffer() draws on the segment buffer with
+    /// drawArea().
+    /// See viewportPaintRect().
     QPixmap      m_segmentsDrawBuffer;
+
+    /// The artifacts draw buffer is drawn on by drawAreaArtifacts().
+    /// This includes everything other than the segment rectangles.
+    /// E.g. the playback position pointer, guides, and the "rubber
+    /// band" selection rect.  These artifacts are drawn as an overlay
+    /// on top of the segments.
+    /// See viewportPaintRect().
     QPixmap      m_artifactsDrawBuffer;
+
     QRect        m_segmentsDrawBufferRefresh;
     QRect        m_artifactsDrawBufferRefresh;
     int          m_lastBufferRefreshX;

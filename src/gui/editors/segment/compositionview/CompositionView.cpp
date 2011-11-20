@@ -206,11 +206,14 @@ void CompositionView::setBackgroundPixmap(const QPixmap &m)
     //     viewport()->setErasePixmap(m_backgroundPixmap);
 }
 
+#if 0
+// Dead Code.
 void CompositionView::initStepSize()
 {
     QScrollBar* hsb = horizontalScrollBar();
     m_stepSize = hsb->singleStep();
 }
+#endif
 
 void CompositionView::slotUpdateSize()
 {
@@ -530,7 +533,9 @@ void CompositionView::viewportPaintRect(QRect r)
 
     QRect updateRect = r;
 
+    // Limit the requested rect to the viewport.
     r &= viewport()->rect();
+    // Convert from viewport coords to contents coords.
     r.translate(contentsX(), contentsY());
 
 //    std::cerr << "CompositionView::viewportPaintRect updateRect = "
@@ -539,16 +544,21 @@ void CompositionView::viewportPaintRect(QRect r)
 //              << std::endl;
 
     bool scroll = false;
-    bool changed = checkScrollAndRefreshDrawBuffer(r, scroll);
+
+    // Scroll and refresh the segment draw buffer.
+    bool changed = scrollSegmentsDrawBuffer(r, scroll);
+
+    // r is now the combination of the requested refresh rect and the refresh
+    // needed by any scrolling.
 
     if (changed || m_artifactsDrawBufferRefresh.isValid()) {
 
-        // r was modified by checkScrollAndRefreshDrawBuffer
         QRect copyRect(r | m_artifactsDrawBufferRefresh);
         copyRect.translate(-contentsX(), -contentsY());
 
 //        std::cerr << "changed = " << changed << ", artrefresh " << m_artifactsDrawBufferRefresh.x() << "," << m_artifactsDrawBufferRefresh.y() << " " << m_artifactsDrawBufferRefresh.width() << "x" << m_artifactsDrawBufferRefresh.height() << ": copying from segment to artifacts buffer: " << copyRect.width() << "x" << copyRect.height() << std::endl;
 
+        // Copy the segments to the artifacts draw buffer.
         QPainter ap;
         ap.begin(&m_artifactsDrawBuffer);
         ap.drawPixmap(copyRect.x(), copyRect.y(),
@@ -561,6 +571,8 @@ void CompositionView::viewportPaintRect(QRect r)
     }
 
     if (m_artifactsDrawBufferRefresh.isValid()) {
+        // Draw the artifacts over top of the segments on the artifacts
+        // draw buffer.
         refreshArtifactsDrawBuffer(m_artifactsDrawBufferRefresh);
         m_artifactsDrawBufferRefresh = QRect();
     }
@@ -593,9 +605,9 @@ void CompositionView::viewportPaintRect(QRect r)
 
 }
 
-bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
+bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
 {
-    Profiler profiler("CompositionView::checkScrollAndRefreshDrawBuffer");
+    Profiler profiler("CompositionView::scrollSegmentsDrawBuffer");
 
     bool all = false;
     QRect refreshRect = m_segmentsDrawBufferRefresh;
@@ -607,7 +619,7 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 
     if (scroll) {
 
-        //    RG_DEBUG << "checkScrollAndRefreshDrawBuffer: scrolling by ("
+        //    RG_DEBUG << "scrollSegmentsDrawBuffer: scrolling by ("
         //         << cx - m_lastBufferRefreshX << "," << cy - m_lastBufferRefreshY << ")" << endl;
 
         if (refreshRect.isValid()) {
@@ -632,12 +644,16 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
                 map = QPixmap(m_segmentsDrawBuffer.size());
             }
 
+            // If we're scrolling sideways
             if (cx != m_lastBufferRefreshX) {
 
+                // compute the delta
                 int dx = m_lastBufferRefreshX - cx;
 
+                // If we're scrolling less than the entire viewport
                 if (dx > -w && dx < w) {
 
+                    // Scroll the segments draw buffer sideways
                     QPainter cp;
                     cp.begin(&map);
                     cp.drawPixmap(0, 0, m_segmentsDrawBuffer);
@@ -645,26 +661,33 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
                     cp.begin(&m_segmentsDrawBuffer);
                     cp.drawPixmap(dx, 0, map);
                     cp.end();
-                    
+
+                    // Add the part that was exposed to the refreshRect
                     if (dx < 0) {
                         refreshRect |= QRect(cx + w + dx, cy, -dx, h);
                     } else {
                         refreshRect |= QRect(cx, cy, dx, h);
                     }
 
-                } else {
+                } else {  // We've scrolled more than the entire viewport
 
+                    // Refresh everything
                     refreshRect.setRect(cx, cy, w, h);
                     all = true;
                 }
             }
 
+            // If we're scrolling vertically and the sideways scroll didn't
+            // result in a need to refresh everything,
             if (cy != m_lastBufferRefreshY && !all) {
 
+                // compute the delta
                 int dy = m_lastBufferRefreshY - cy;
 
+                // If we're scrolling less than the entire viewport
                 if (dy > -h && dy < h) {
 
+                    // Scroll the segments draw buffer vertically
                     QPainter cp;
                     cp.begin(&map);
                     cp.drawPixmap(0, 0, m_segmentsDrawBuffer);
@@ -673,20 +696,24 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
                     cp.drawPixmap(0, dy, map);
                     cp.end();
 
+                    // Add the part that was exposed to the refreshRect
                     if (dy < 0) {
                         refreshRect |= QRect(cx, cy + h + dy, w, -dy);
                     } else {
                         refreshRect |= QRect(cx, cy, w, dy);
                     }
 
-                } else {
+                } else {  // We've scrolled more than the entire viewport
 
+                    // Refresh everything
                     refreshRect.setRect(cx, cy, w, h);
                     all = true;
                 }
             }
         }
     }
+
+    // Refresh the segments draw buffer for the exposed portion.
 
     bool needRefresh = false;
 
@@ -697,13 +724,18 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
     if (needRefresh)
         refreshSegmentsDrawBuffer(refreshRect);
 
+    // ??? Move these lines to the end of refreshSegmentsDrawBuffer()?
+    //     Or do they still need to run even when needRefresh is false?
     m_segmentsDrawBufferRefresh = QRect();
     m_lastBufferRefreshX = cx;
     m_lastBufferRefreshY = cy;
 
+    // Compute the final rect for the caller.
+
     rect |= refreshRect;
     if (scroll)
-        rect.setRect(cx, cy, w, h);
+        rect.setRect(cx, cy, w, h);  // everything
+
     return needRefresh;
 }
 
@@ -1583,10 +1615,13 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     }
 }
 
+#if 0
+// Dead Code.
 void CompositionView::releaseCurrentItem()
 {
     m_currentIndex = CompositionItem();
 }
+#endif
 
 void CompositionView::setPointerPos(int pos)
 {
