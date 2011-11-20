@@ -261,6 +261,7 @@
     <message>
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
+        <translatorcomment>Decrease - lower each %1 by value</translatorcomment>
         <translation>Diminuire - </translation>
     </message>
     <message>
@@ -1303,7 +1304,7 @@
     <message>
         <location line="-2170"/>
         <source>Snap to Bea&amp;t</source>
-        <translation>Spezza sul ba&amp;ttito</translation>
+        <translation>Separa sul ba&amp;ttito</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2472,7 +2473,7 @@
         <location line="+9"/>
         <location line="+3142"/>
         <source>S&amp;plit</source>
-        <translation>Spe&amp;zza</translation>
+        <translation>Se&amp;para</translation>
     </message>
     <message>
         <location line="-3133"/>
@@ -3020,7 +3021,7 @@
     <message>
         <location line="+1"/>
         <source>Dump BarDataMap (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Scarica BarDataMap (debug)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -5169,12 +5170,12 @@
     <message>
         <location line="+9"/>
         <source>&amp;Split</source>
-        <translation>Spe&amp;zza</translation>
+        <translation>Se&amp;para</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Split on Silence</source>
-        <translation>&amp;Spezza sul silenzio</translation>
+        <translation>&amp;Separa sul silenzio</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5897,7 +5898,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Double reeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Ance doppie</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5933,7 +5934,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Heckelphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Heckelfono</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5968,27 +5969,27 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Soprano crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cromorno Soprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cromorno Alto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cromorno Tenore</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cromorno Basso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Greatbass crumhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cromorno Contrabbasso</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6013,12 +6014,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Sopranino rauschpfeife</source>
-        <translation type="unfinished"></translation>
+        <translation>Rauschpfeife Sopranino</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Soprano rauschpfeife</source>
-        <translation type="unfinished"></translation>
+        <translation>Rauschpfeife Soprano</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6084,7 +6085,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Single reeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Ance singole</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6124,7 +6125,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Bassett horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Corno di bassetto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -16189,27 +16190,27 @@ Vuoi usare
     <message>
         <location line="+40"/>
         <source>Notation language</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingua di notazione</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Uscita nomi delle note e accidenti in una qualsiasi delle lingue supportate da LilyPond&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use repeat when possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizzare ripetere quando possibile</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Come esportare i segmenti di ripetitione: se deselezionati, i segmenti di ripetizione sono sempre dispiegati.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Se selezionati, i segni naturali vengono automaticamente stampati per annullare le alterazioni da precedenti segni di chiave. Questo comportamento è separato dalla cancellazione, e non correlate al modo in cui Rosegarden mostra la cancellazione delle alterazioni nell&apos;editor di notazione.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -21435,7 +21436,7 @@ Vuoi impostarla adesso?</translation>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
-            <numerusform>Spezza %n Segmenti al tempo
+            <numerusform>Separa %n Segmenti al tempo
         </numerusform>
             <numerusform>Spezza %n Segmenti al tempo
         </numerusform>
@@ -21801,7 +21802,7 @@ Prova a chiudere e riavviare Rosegarden per ripristinare il suono.</translation>
     <message>
         <location line="+379"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è possibile espandere i segmenti audio con figurazione</translation>
     </message>
     <message>
         <location line="+369"/>
@@ -21813,27 +21814,27 @@ Nessun segmento sarà spezzato.</translation>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Al fine di creare un&apos;anacrusi, almeno uno dei segmenti nella selezione deve iniziare all&apos;inizio della composizione&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Anacrusis Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Importo Anacrusis</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Create Anacrusis</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea Anacrusi</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire Tempo Corretto e Segno di Metro</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Remove Original Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovere Tempo Iniziale e Segno di Metro</translation>
     </message>
     <message>
         <location line="+1911"/>
@@ -25149,9 +25150,10 @@ Vuoi impostarlo adesso?</translation>
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
         <translation>
+            <numerusform>%1 in %n traccia
+        </numerusform>
             <numerusform>%1 in %n tracce
         </numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -25187,7 +25189,8 @@ Vuoi impostarlo adesso?</translation>
         <translation>
             <numerusform>Questo segmento attivato è utilizzato %n volte nella composizione corrente. Sei sicuro di volerlo rimuovere?
         </numerusform>
-            <numerusform></numerusform>
+            <numerusform>Questo segmento attivato è utilizzato %n volte nella composizione corrente. Sei sicuro di volerlo rimuovere?
+        </numerusform>
         </translation>
     </message>
     <message>
