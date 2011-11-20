@@ -61,37 +61,68 @@ public:
     CompositionView(RosegardenDocument*, CompositionModel*,
                     QWidget * parent=0);
 
+    /// Moves the playback position pointer to a new X coordinate.
+    /// See getPointerPos().
+    /// Also see setPointerPosition() and drawPointer().
     void setPointerPos(int pos);
+    /// Gets the X coordinate of the playback position pointer.
+    /// See setPointerPos().
+    /// Also see setPointerPosition() and drawPointer().
     int getPointerPos() { return m_pointerPos; }
 
+    /// Sets the position of the guides.  See setDrawGuides().
     void setGuidesPos(int x, int y);
+    /// Sets the position of the guides.  See setDrawGuides().
     void setGuidesPos(const QPoint& p);
+    /// Enables/disables drawing of the guides.  The guides are blue
+    /// crosshairs that stretch across the entire view.  They
+    /// appear when selecting or moving a segment.  See setGuidesPos()
+    /// and drawGuides().
     void setDrawGuides(bool d);
 
+    /// Gets the rect for the "rubber band" selection.
+    /// See setDrawSelectionRect().
     QRect getSelectionRect() const { return m_selectionRect; }
+    /// Sets the position of the "rubber band" selection.
+    /// See setDrawSelectionRect().
     void setSelectionRectPos(const QPoint& pos);
+    /// Sets the size of the "rubber band" selection.
+    /// See setDrawSelectionRect().
     void setSelectionRectSize(int w, int h);
+    /// Enables/disables drawing of the selection "rubber band" rectangle.
+    /// Clicking and dragging the arrow tool across the view enables this.
+    /// See getSelectionRect(), setSelectionRectPos(), and
+    /// setSelectionRectSize().
     void setDrawSelectionRect(bool d);
 
+    /// Gets the snap grid from the CompositionModel.
     SnapGrid& grid() { return m_model->grid(); }
 
+    /// Gets the topmost item (segment) at the given position on the view.
     CompositionItem getFirstItemAt(QPoint pos);
 
+    /// Returns the segment tool box.  See slotSetTool() and m_toolBox.
     SegmentToolBox* getToolBox() { return m_toolBox; }
 
+    /// Returns the composition model.  See m_model.
     CompositionModel* getModel() { return m_model; }
 
+    /// See getTmpRect().
     void setTmpRect(const QRect& r);
+    /// See getTmpRect().
     void setTmpRect(const QRect& r, const QColor &c);
+    /// The "temp rect" is used by the pencil tool when first drawing
+    /// out the segment while the mouse button is being held down.
+    /// See setTmpRect().
     const QRect& getTmpRect() const { return m_tmpRect; }
 
     /**
      * Set the snap resolution of the grid to something suitable.
      * 
-     * fineTool indicates whether the current tool is a fine-grain sort
+     * fine indicates whether the current tool is a fine-grain sort
      * (such as the resize or move tools) or a coarse one (such as the
      * segment creation pencil).  If the user is requesting extra-fine
-     * resolution (through the setFineGrain method) that will also be
+     * resolution (through slotSetFineGrain()) that will also be
      * taken into account.
      */
     void setSnapGrain(bool fine);
@@ -102,6 +133,7 @@ public:
      * client code will only need to query the snap grid that is
      * adjusted appropriately by the view when interactions take
      * place.
+     * See slotSetFineGrain().
      */
     bool isFineGrain() const { return m_fineGrain; }
 
@@ -111,122 +143,204 @@ public:
      * pencil to decide whether to abort or not if a user attempts to draw over
      * an existing segment, and this is all necessary in order to avoid breaking
      * the double-click-to-open behavior.
+     * See slotSetPencilOverExisting().
      */
     bool pencilOverExisting() const { return m_pencilOverExisting; }
 
     /**
-     * Set whether the segment items contain previews or not
+     * Set whether the segment items contain previews or not.
+     * See isShowingPreviews().
      */
     void setShowPreviews(bool previews) { m_showPreviews = previews; }
 
     /**
-     * Return whether the segment items contain previews or not
+     * Return whether the segment items contain previews or not.
+     * See setShowPreviews()
      */
     bool isShowingPreviews() { return m_showPreviews; }
 
     /**
-     * clear all seg rect cache
+     * Delegates to CompositionModelImpl::clearSegmentRectsCache().
      */
     void clearSegmentRectsCache(bool clearPreviews = false);
 
     /// Return the selected Segments if we're currently using a "Selector"
+    /// Delegates to CompositionModelImpl::getSelectedSegments().
+    /// See haveSelection().
     SegmentSelection getSelectedSegments();
 
+    /// Delegates to CompositionModelImpl::haveSelection().
+    /// See getSelectedSegments().
     bool haveSelection() const { return m_model->haveSelection(); }
 
+    /// Updates the portion of the view where the selected items are.
+    /// See RosegardenScrollView::updateContents().
     void updateSelectionContents();
 
     /**
-     * Set and hide a text float on this canvas - it can contain
+     * Set a text float on this canvas.  It can contain
      * anything and can be left to timeout or you can hide it
-     * explicitly.
-     *
+     * explicitly with hideTextFloat().
+     * Used by SegmentMover::handleMouseMove() to display time,
+     * bar, and beat on the view while the user is moving a segment.
+     * Also used by SegmentSelector::handleMouseMove().
+     * See slotTextFloatTimeout().
      */
     void setTextFloat(int x, int y, const QString &text);
+    /// See setTextFloat().
     void hideTextFloat() { m_drawTextFloat = false; }
 
+    /// Enables/disables display of the text labels on each segment.
+    /// From the menu: View > Show Segment Labels.
+    /// See drawCompRectLabel().
     void setShowSegmentLabels(bool b) { m_showSegmentLabels = b; }
 
+    /// Sets the image (pixmap) that will appear behind the segments
+    /// on the view.
     void setBackgroundPixmap(const QPixmap &m);
 
+    /// Delegates to CompositionModelImpl::setAudioPreviewThread().
     void endAudioPreviewGeneration();
 	
 	
 
 public slots:
-    void scrollRight();
-    void scrollLeft();
+    /// Dead Code.
+//    void scrollRight();
+    /// Dead Code.
+//    void scrollLeft();
     void slotContentsMoving(int x, int y);
 
-    /// Set the current segment editing tool
+    /// Set the current segment editing tool.
+    /// See getToolBox().
     void slotSetTool(const QString& toolName);
 
-    // This method only operates if we're of the "Selector"
-    // tool type - it's called from the View to enable it
-    // to automatically set the selection of Segments (say
-    // by Track).
-    //
+    /// Selects the segments via CompositionModelImpl::setSelected().
+    /// Used by RosegardenMainViewWidget.
     void slotSelectSegments(const SegmentSelection &segment);
 
     // These are sent from the top level app when it gets key
     // depresses relating to selection add (usually Qt::SHIFT) and
     // selection copy (usually CONTROL)
-    //
+
+    /// Delegates to SegmentSelector::setSegmentAdd().
+    /// Used by contentsMousePressEvent() with "value" indicating whether
+    /// the user is holding down the SHIFT key.
     void slotSetSelectAdd(bool value);
+    /// Delegates to SegmentSelector::setSegmentCopy().
+    /// Used by contentsMousePressEvent() with "value" indicating whether
+    /// the user is holding down the CONTROL key.
     void slotSetSelectCopy(bool value);
+    /// Delegates to SegmentSelector::setSegmentCopyingAsLink().
+    /// Used by contentsMousePressEvent() with "value" indicating whether
+    /// the user is holding down the ALT and CONTROL keys.
     void slotSetSelectCopyingAsLink(bool value);
 
+    /// See isFineGrain().
     void slotSetFineGrain(bool value);
+    /// See pencilOverExisting().
     void slotSetPencilOverExisting(bool value);
 
-    // Show and hige the splitting line on a Segment
-    //
+    /// Show the splitting line on a Segment.  Used by SegmentSplitter.
+    /// See slotHideSplitLine().
     void slotShowSplitLine(int x, int y);
+    /// See slotShowSplitLine().
     void slotHideSplitLine();
 
+    /// Handles scroll wheel events from TrackEditor::m_trackButtonScroll.
     void slotExternalWheelEvent(QWheelEvent*);
 
-    // TextFloat timer
-    void slotTextFloatTimeout();
+    /// TextFloat timer handler.
+    /// Dead Code.
+//    void slotTextFloatTimeout();
 
+    /// Redraws everything.  Segments and artifacts.
     void slotUpdateSegmentsDrawBuffer();
+    /// Redraws everything (segments and artifacts) within the specified rect.
     void slotUpdateSegmentsDrawBuffer(const QRect&);
 
+    /// Redraws everything with the new color scheme.
+    /// Connected to RosegardenDocument::docColoursChanged().
     void slotRefreshColourCache();
 
+    /// Delegates to CompositionModelImpl::addRecordingItem().
+    /// Connected to RosegardenDocument::newMIDIRecordingSegment().
+    ///
+    /// Suggestion: Try eliminating this middleman.
     void slotNewMIDIRecordingSegment(Segment*);
+    /// Delegates to CompositionModelImpl::addRecordingItem().
+    /// Connected to RosegardenDocument::newAudioRecordingSegment().
+    ///
+    /// Suggestion: Try eliminating this middleman.
     void slotNewAudioRecordingSegment(Segment*);
-    // no longer used, see RosegardenDocument::insertRecordedMidi
+
+    // no longer used, see RosegardenDocument::insertRecordedMidi()
 //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
+
+    /// Delegates to CompositionModelImpl::clearRecordingItems().
+    /// Connected to RosegardenDocument::stoppedAudioRecording() and
+    /// RosegardenDocument::stoppedMIDIRecording().
     void slotStoppedRecording();
 
+    /// Handles a view size change.
+    /// See RosegardenScrollView::resizeContents().
     void slotUpdateSize();
 
 signals:
-    void editSegment(Segment*); // use default editor
-    void editSegmentNotation(Segment*);
-    void editSegmentMatrix(Segment*);
-    void editSegmentAudio(Segment*);
-    void editSegmentEventList(Segment*);
-    void audioSegmentAutoSplit(Segment*);
+    /// Emitted when a segment is double-clicked.  Launches the default
+    /// segment editor.  Connected to
+    /// RosegardenMainViewWidget::slotEditSegment().
+    void editSegment(Segment*);
+//    void editSegmentNotation(Segment*);
+//    void editSegmentMatrix(Segment*);
+//    void editSegmentAudio(Segment*);
+//    void editSegmentEventList(Segment*);
+//    void audioSegmentAutoSplit(Segment*);
+    /// Emitted when a segment repeat is double-clicked.  Converts the repeat
+    /// to a segment, then launches the default segment editor on the new
+    /// segment.  Connected to RosegardenMainViewWidget::slotEditRepeat().
     void editRepeat(Segment*, timeT);
 
+    /// Emitted when a double-click occurs on the ruler.
+    /// Connected to RosegardenDocument::slotSetPointerPosition().
+    /// Connection is made by the RosegardenMainViewWidget ctor.
+    /// See setPointerPos() and drawPointer().
     void setPointerPosition(timeT);
 
+    /// Connected to RosegardenMainWindow::slotShowToolHelp().
     void showContextHelp(const QString &);
 
 protected:
+    /// Qt event handler.  Only handles
+    /// AudioPreviewThread::AudioPreviewQueueEmpty() which triggers a
+    /// redraw.
     virtual bool event(QEvent *);
 
+    /// Passes the event on to the current tool.
     virtual void contentsMousePressEvent(QMouseEvent*);
+    /// Passes the event on to the current tool.
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    /// Handles a double-click by either moving the playback position
+    /// pointer, or launching a segment editor.
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+    /// Passes the event on to the current tool.  Also handles scrolling
+    /// as needed.
     virtual void contentsMouseMoveEvent(QMouseEvent*);
 
+    /// Delegates to viewportPaintRect() for each rect that needs painting.
     virtual void viewportPaintEvent(QPaintEvent*);
+    /// Handles resize.  Uses slotUpdateSize().
     virtual void resizeEvent(QResizeEvent*);
 
+    /// Called when the mouse enters the view.
+    /// Override of QWidget::enterEvent().
+    /// Shows context help for the current tool.
+    /// See leaveEvent().
     virtual void enterEvent(QEvent *);
+    /// Called when the mouse leaves the view.
+    /// Override of QWidget::leaveEvent().
+    /// Hides context help for the current tool.
+    /// See enterEvent().
     virtual void leaveEvent(QEvent *);
 
     virtual void viewportPaintRect(QRect);
@@ -245,9 +359,11 @@ protected:
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
     void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
                       int intersectLvl = 0, bool fill = true);
+    /// See setShowSegmentLabels().
     void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
     void drawIntersections(const CompositionModel::rectcontainer&, QPainter * p, const QRect& clipRect);
 
+    /// See setPointerPos() and setPointerPosition().
     void drawPointer(QPainter * p, const QRect& clipRect);
     void drawGuides(QPainter * p, const QRect& clipRect);
     void drawTextFloat(QPainter * p, const QRect& clipRect);

@@ -234,6 +234,8 @@ void CompositionView::slotUpdateSize()
     }
 }
 
+#if 0
+// Dead Code.
 void CompositionView::scrollRight()
 {
     RG_DEBUG << "CompositionView::scrollRight()\n";
@@ -263,17 +265,18 @@ void CompositionView::scrollLeft()
     }
 
 }
+#endif
 
 void CompositionView::setSelectionRectPos(const QPoint& pos)
 {
-    RG_DEBUG << "setSelectionRectPos(" << pos << ")" << endl;
+    //RG_DEBUG << "setSelectionRectPos(" << pos << ")";
     m_selectionRect.setRect(pos.x(), pos.y(), 0, 0);
     getModel()->setSelectionRect(m_selectionRect);
 }
 
 void CompositionView::setSelectionRectSize(int w, int h)
 {
-    RG_DEBUG << "setSelectionRectSize(" << w << "," << h << ")" << endl;
+    //RG_DEBUG << "setSelectionRectSize(" << w << "," << h << ")";
     m_selectionRect.setSize(QSize(w, h));
     getModel()->setSelectionRect(m_selectionRect);
 }
@@ -562,9 +565,12 @@ void CompositionView::viewportPaintRect(QRect r)
         m_artifactsDrawBufferRefresh = QRect();
     }
 
+    // Display the artifacts draw buffer on the viewport.
+
     QPainter p;
     p.begin(viewport());
     if (scroll) {
+        // Redraw the entire artifacts draw buffer.
         p.drawPixmap(0, 0, 
                      m_artifactsDrawBuffer,
                      0, 0,
@@ -1694,6 +1700,8 @@ void CompositionView::slotSetPencilOverExisting(bool value)
     m_pencilOverExisting = value;
 }
 
+#if 0
+// Dead Code.
 void
 CompositionView::slotTextFloatTimeout()
 {
@@ -1701,6 +1709,7 @@ CompositionView::slotTextFloatTimeout()
     slotArtifactsDrawBufferNeedsRefresh();
     //    mainWindow->slotSetStatusMessage(QString::null);
 }
+#endif
 
 }
 #include "CompositionView.moc"
