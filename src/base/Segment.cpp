@@ -84,7 +84,7 @@ Segment::Segment(const Segment &segment):
     m_composition(0), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
     m_endMarkerTime(segment.m_endMarkerTime ?
-		    new timeT(*segment.m_endMarkerTime) : 0),
+                    new timeT(*segment.m_endMarkerTime) : 0),
     m_endTime(segment.getEndTime()),
     m_track(segment.getTrack()),
     m_type(segment.getType()),
@@ -98,7 +98,7 @@ Segment::Segment(const Segment &segment):
     m_audioEndTime(segment.getAudioEndTime()),
     m_repeating(segment.isRepeating()),
     m_quantizer(new BasicQuantizer(segment.m_quantizer->getUnit(),
-				   segment.m_quantizer->getDoDurations())),
+                                   segment.m_quantizer->getDoDurations())),
     m_quantize(segment.hasQuantization()),
     m_transpose(segment.getTranspose()),
     m_delay(segment.getDelay()),
@@ -119,7 +119,7 @@ Segment::Segment(const Segment &segment):
     m_isTmp(segment.isTmp())
 {
     for (const_iterator it = segment.begin();
-	 it != segment.end(); ++it) {
+         it != segment.end(); ++it) {
         insert(new Event(**it));
     }
 }
@@ -140,15 +140,15 @@ Segment::cloneImpl() const
 Segment::~Segment()
 {
     if (!m_observers.empty()) {
-	cerr << "Warning: Segment::~Segment() with " << m_observers.size()
-	     << " observers still extant" << endl;
-	cerr << "Observers are:";
-	for (ObserverSet::const_iterator i = m_observers.begin();
-	     i != m_observers.end(); ++i) {
-	    cerr << " " << (void *)(*i);
-	    cerr << " [" << typeid(**i).name() << "]";
-	}
-	cerr << endl;
+        cerr << "Warning: Segment::~Segment() with " << m_observers.size()
+             << " observers still extant" << endl;
+        cerr << "Observers are:";
+        for (ObserverSet::const_iterator i = m_observers.begin();
+             i != m_observers.end(); ++i) {
+            cerr << " " << (void *)(*i);
+            cerr << " [" << typeid(**i).name() << "]";
+        }
+        cerr << endl;
     }
 
     //unlink it
@@ -159,9 +159,9 @@ Segment::~Segment()
     if (m_composition) m_composition->detachSegment(this);
 
     if (m_clefKeyList) {
-	// don't delete contents of m_clefKeyList: the pointers
-	// are just aliases for events in the main segment
-	delete m_clefKeyList;
+        // don't delete contents of m_clefKeyList: the pointers
+        // are just aliases for events in the main segment
+        delete m_clefKeyList;
     }
 
     // Clear EventRulers
@@ -268,7 +268,7 @@ Segment::setTrack(TrackId id)
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
-	c->notifySegmentTrackChanged(this, oldTrack, id);
+        c->notifySegmentTrackChanged(this, oldTrack, id);
     }
 }
 
@@ -298,21 +298,21 @@ Segment::getEndMarkerTime(bool comp) const
 
     if (m_type == Audio && m_composition) {
 
-	RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
-	RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
-	endTime = m_composition->getElapsedTimeForRealTime(endRT);
+        RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+        RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
+        endTime = m_composition->getElapsedTimeForRealTime(endRT);
 
     } else {
 
-	if (m_endMarkerTime) {
-	    endTime = *m_endMarkerTime;
-	} else {
-	    endTime = getEndTime();
-	}
+        if (m_endMarkerTime) {
+            endTime = *m_endMarkerTime;
+        } else {
+            endTime = getEndTime();
+        }
 
-	if (m_composition && comp) {
-	    endTime = std::min(endTime, m_composition->getEndMarker());
-	}
+        if (m_composition && comp) {
+            endTime = std::min(endTime, m_composition->getEndMarker());
+        }
     }
 
     return endTime;
@@ -322,11 +322,11 @@ timeT
 Segment::getEndTime() const
 {
     if (m_type == Audio && m_composition) {
-	RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
-	RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
-	return m_composition->getElapsedTimeForRealTime(endRT);
+        RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+        RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
+        return m_composition->getElapsedTimeForRealTime(endRT);
     } else {
-	return m_endTime;
+        return m_endTime;
     }
 }
 
@@ -345,7 +345,7 @@ Segment::setStartTime(timeT t)
     FastVector<Event *> events;
 
     for (iterator i = begin(); i != end(); ++i) {
-	events.push_back((*i)->copyMoving(dt));
+        events.push_back((*i)->copyMoving(dt));
     }
 
     timeT previousEndTime = m_endTime;
@@ -359,7 +359,7 @@ Segment::setStartTime(timeT t)
     else m_startTime = t;
 
     for (int i = 0; i < int(events.size()); ++i) {
-	insert(events[i]);
+        insert(events[i]);
     }
 
     notifyStartChanged(m_startTime);
@@ -372,39 +372,39 @@ Segment::setEndMarkerTime(timeT t)
     if (t < m_startTime) t = m_startTime;
 
     if (m_type == Audio) {
-	if (m_endMarkerTime) *m_endMarkerTime = t;
-	else m_endMarkerTime = new timeT(t);
-	RealTime oldAudioEndTime = m_audioEndTime;
-	if (m_composition) {
-	    m_audioEndTime = m_audioStartTime +
-		m_composition->getRealTimeDifference(m_startTime, t);
-	    if (oldAudioEndTime != m_audioEndTime) {
-		notifyEndMarkerChange(m_audioEndTime < oldAudioEndTime);
-	    }
-	}
+        if (m_endMarkerTime) *m_endMarkerTime = t;
+        else m_endMarkerTime = new timeT(t);
+        RealTime oldAudioEndTime = m_audioEndTime;
+        if (m_composition) {
+            m_audioEndTime = m_audioStartTime +
+                m_composition->getRealTimeDifference(m_startTime, t);
+            if (oldAudioEndTime != m_audioEndTime) {
+                notifyEndMarkerChange(m_audioEndTime < oldAudioEndTime);
+            }
+        }
     } else {
 
-	timeT endTime = getEndTime();
-	timeT oldEndMarker = getEndMarkerTime();
-	bool shorten = (t < oldEndMarker);
+        timeT endTime = getEndTime();
+        timeT oldEndMarker = getEndMarkerTime();
+        bool shorten = (t < oldEndMarker);
 
-	if (t > endTime) {
-	    fillWithRests(endTime, t);
-	    if (oldEndMarker < endTime) {
-	        updateRefreshStatuses(oldEndMarker, t);
-	    }
-	} else {
-	    // only need to do this if we aren't inserting or
-	    // deleting any actual events
-	    if (oldEndMarker < t) {
-	        updateRefreshStatuses(oldEndMarker, t);
-	    }
-	    updateRefreshStatuses(t, endTime);
-	}
+        if (t > endTime) {
+            fillWithRests(endTime, t);
+            if (oldEndMarker < endTime) {
+                updateRefreshStatuses(oldEndMarker, t);
+            }
+        } else {
+            // only need to do this if we aren't inserting or
+            // deleting any actual events
+            if (oldEndMarker < t) {
+                updateRefreshStatuses(oldEndMarker, t);
+            }
+            updateRefreshStatuses(t, endTime);
+        }
 
-	if (m_endMarkerTime) *m_endMarkerTime = t;
-	else m_endMarkerTime = new timeT(t);
-	notifyEndMarkerChange(shorten);
+        if (m_endMarkerTime) *m_endMarkerTime = t;
+        else m_endMarkerTime = new timeT(t);
+        notifyEndMarkerChange(shorten);
     }
 }
 
@@ -484,18 +484,18 @@ Segment::insert(Event *e)
     timeT t1 = t0 + e->getDuration();
 
     if (t0 < m_startTime ||
-	(begin() == end() && t0 > m_startTime)) {
+        (begin() == end() && t0 > m_startTime)) {
 
         if (m_composition) m_composition->setSegmentStartTime(this, t0);
-	else m_startTime = t0;
-	notifyStartChanged(m_startTime);
+        else m_startTime = t0;
+        notifyStartChanged(m_startTime);
     }
 
     if (t1 > m_endTime ||
-	begin() == end()) {
-	timeT oldTime = m_endTime;
-	m_endTime = t1;
-	notifyEndMarkerChange(m_endTime < oldTime);
+        begin() == end()) {
+        timeT oldTime = m_endTime;
+        m_endTime = t1;
+        notifyEndMarkerChange(m_endTime < oldTime);
     }
 
     // A segment having the TMP property should be displayed with a gray colour.
@@ -505,7 +505,7 @@ Segment::insert(Event *e)
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
     updateRefreshStatuses(e->getAbsoluteTime(),
-			  e->getAbsoluteTime() + e->getDuration());
+                          e->getAbsoluteTime() + e->getDuration());
     return i;
 }
 
@@ -515,8 +515,8 @@ Segment::updateEndTime()
 {
     m_endTime = m_startTime;
     for (iterator i = begin(); i != end(); ++i) {
-	timeT t = (*i)->getAbsoluteTime() + (*i)->getDuration();
-	if (t > m_endTime) m_endTime = t;
+        timeT t = (*i)->getAbsoluteTime() + (*i)->getDuration();
+        if (t > m_endTime) m_endTime = t;
     }
 }
 
@@ -538,7 +538,7 @@ Segment::erase(iterator pos)
     updateRefreshStatuses(t0, t1);
 
     if (t0 == m_startTime && begin() != end()) {
-	timeT startTime = (*begin())->getAbsoluteTime();
+        timeT startTime = (*begin())->getAbsoluteTime();
         
         // Don't send any notification if startTime doesn't change.
         if (startTime != m_startTime) {
@@ -548,7 +548,7 @@ Segment::erase(iterator pos)
         }
     }
     if (t1 == m_endTime) {
-	updateEndTime();
+        updateEndTime();
     }
 }
 
@@ -565,28 +565,28 @@ Segment::erase(iterator from, iterator to)
 
     for (Segment::iterator i = from; i != to; ) {
 
-	Segment::iterator j(i);
+        Segment::iterator j(i);
         ++j;
 
-	Event *e = *i;
-	assert(e);
+        Event *e = *i;
+        assert(e);
 
-	std::multiset<Event*, Event::EventCmp>::erase(i);
-	notifyRemove(e);
-	delete e;
+        std::multiset<Event*, Event::EventCmp>::erase(i);
+        notifyRemove(e);
+        delete e;
 
-	i = j;
+        i = j;
     }
 
     if (startTime == m_startTime && begin() != end()) {
-	timeT startTime = (*begin())->getAbsoluteTime();
+        timeT startTime = (*begin())->getAbsoluteTime();
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
-	else m_startTime = startTime;
-	notifyStartChanged(m_startTime);
+        else m_startTime = startTime;
+        notifyStartChanged(m_startTime);
     }
 
     if (endTime == m_endTime) {
-	updateEndTime();
+        updateEndTime();
     }
 
     updateRefreshStatuses(startTime, endTime);
@@ -638,8 +638,8 @@ Segment::findNearestTime(timeT t)
 {
     iterator i = findTime(t);
     if (i == end() || (*i)->getAbsoluteTime() > t) {
-	if (i == begin()) return end();
-	else --i;
+        if (i == begin()) return end();
+        else --i;
     }
     return i;
 }
@@ -679,15 +679,15 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
 {
     if (startTime < m_startTime) {
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
-	else m_startTime = startTime;
-	notifyStartChanged(m_startTime);
+        else m_startTime = startTime;
+        notifyStartChanged(m_startTime);
     }
 
     TimeSignature ts;
     timeT sigTime = 0;
 
     if (getComposition()) {
-	sigTime = getComposition()->getTimeSignatureAt(startTime, ts);
+        sigTime = getComposition()->getTimeSignatureAt(startTime, ts);
     }
 
     timeT restDuration = endTime - startTime;
@@ -695,8 +695,8 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
 
 #ifdef DEBUG_NORMALIZE_RESTS
     cerr << "fillWithRests (" << startTime << "->" << endTime << "), composition "
-	 << (getComposition() ? "exists" : "does not exist") << ", sigTime "
-	 << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration << endl;
+         << (getComposition() ? "exists" : "does not exist") << ", sigTime "
+         << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration << endl;
 #endif
 
     DurationList dl;
@@ -705,10 +705,10 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     timeT acc = startTime;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	Event *e = new Event(Note::EventRestType, acc, *i,
-			     Note::EventRestSubOrdering);
-	insert(e);
-	acc += *i;
+        Event *e = new Event(Note::EventRestType, acc, *i,
+                             Note::EventRestSubOrdering);
+        insert(e);
+        acc += *i;
     }
 }
 
@@ -724,12 +724,12 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     if (startTime < m_startTime) {
 #ifdef DEBUG_NORMALIZE_RESTS
-	cerr << "normalizeRests: pulling start time back from "
-	     << m_startTime << " to " << startTime << endl;
+        cerr << "normalizeRests: pulling start time back from "
+             << m_startTime << " to " << startTime << endl;
 #endif
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
-	else m_startTime = startTime;
-	notifyStartChanged(m_startTime);
+        else m_startTime = startTime;
+        notifyStartChanged(m_startTime);
     }
 
     // Preliminary: If there are any time signature changes between
@@ -738,19 +738,19 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     Composition *composition = getComposition();
     if (composition) {
-	int timeSigNo = composition->getTimeSignatureNumberAt(startTime);
-	if (timeSigNo < composition->getTimeSignatureCount() - 1) {
-	    timeT nextSigTime =
-		composition->getTimeSignatureChange(timeSigNo + 1).first;
-	    if (nextSigTime < endTime) {
+        int timeSigNo = composition->getTimeSignatureNumberAt(startTime);
+        if (timeSigNo < composition->getTimeSignatureCount() - 1) {
+            timeT nextSigTime =
+                composition->getTimeSignatureChange(timeSigNo + 1).first;
+            if (nextSigTime < endTime) {
 #ifdef DEBUG_NORMALIZE_RESTS
-		cerr << "normalizeRests: divide-and-conquer on timesig at " << nextSigTime << endl;
+                cerr << "normalizeRests: divide-and-conquer on timesig at " << nextSigTime << endl;
 #endif
-		normalizeRests(startTime, nextSigTime);
-		normalizeRests(nextSigTime, endTime);
-		return;
-	    }
-	}
+                normalizeRests(startTime, nextSigTime);
+                normalizeRests(nextSigTime, endTime);
+                return;
+            }
+        }
     }
 
     // First stage: erase all existing non-tupleted rests in this
@@ -767,43 +767,43 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
 #ifdef DEBUG_NORMALIZE_RESTS
-	cerr << "normalizeRests: empty segment" << endl;
+        cerr << "normalizeRests: empty segment" << endl;
 #endif
-	fillWithRests(startTime, endTime);
-	return;
+        fillWithRests(startTime, endTime);
+        return;
     } else {
-	while (!((*ia)->isa(Note::EventType) ||
-		 (*ia)->isa(Text::EventType) ||
-		 (*ia)->isa(Note::EventRestType))) {
-	    if (ia == begin()) break;
-	    --ia;
-	}
-	if (startTime > (*ia)->getNotationAbsoluteTime()) {
-	    startTime = (*ia)->getNotationAbsoluteTime();
-	}
+        while (!((*ia)->isa(Note::EventType) ||
+                 (*ia)->isa(Text::EventType) ||
+                 (*ia)->isa(Note::EventRestType))) {
+            if (ia == begin()) break;
+            --ia;
+        }
+        if (startTime > (*ia)->getNotationAbsoluteTime()) {
+            startTime = (*ia)->getNotationAbsoluteTime();
+        }
     }
 
     iterator ib = findTime(endTime);
     while (ib != end()) {
-	if ((*ib)->isa(Note::EventType) ||
-	    (*ib)->isa(Text::EventType) ||
-	    (*ib)->isa(Note::EventRestType)) break;
-	++ib;
+        if ((*ib)->isa(Note::EventType) ||
+            (*ib)->isa(Text::EventType) ||
+            (*ib)->isa(Note::EventRestType)) break;
+        ++ib;
     }
     if (ib == end()) {
-	if (ib != begin()) {
-	    --ib;
-	    // if we're pointing at the real-end-time of the last event,
-	    // use its notation-end-time instead
-	    if (endTime == (*ib)->getAbsoluteTime() + (*ib)->getDuration()) {
-		endTime =
-		    (*ib)->getNotationAbsoluteTime() +
-		    (*ib)->getNotationDuration();
-	    }
-	    ++ib;
-	}
+        if (ib != begin()) {
+            --ib;
+            // if we're pointing at the real-end-time of the last event,
+            // use its notation-end-time instead
+            if (endTime == (*ib)->getAbsoluteTime() + (*ib)->getDuration()) {
+                endTime =
+                    (*ib)->getNotationAbsoluteTime() +
+                    (*ib)->getNotationDuration();
+            }
+            ++ib;
+        }
     } else {
-	endTime = (*ib)->getNotationAbsoluteTime();
+        endTime = (*ib)->getNotationAbsoluteTime();
     }
 
     // If there's a rest preceding the start time, with no notes
@@ -814,29 +814,29 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     iterator scooter = ia;
     while (scooter-- != begin()) {
-	if ((*scooter)->getDuration() > 0) {
-	    if ((*scooter)->getNotationAbsoluteTime() +
-		(*scooter)->getNotationDuration() !=
-		startTime) {
-		startTime = (*scooter)->getNotationAbsoluteTime();
+        if ((*scooter)->getDuration() > 0) {
+            if ((*scooter)->getNotationAbsoluteTime() +
+                (*scooter)->getNotationDuration() !=
+                startTime) {
+                startTime = (*scooter)->getNotationAbsoluteTime();
 #ifdef DEBUG_NORMALIZE_RESTS
-		cerr << "normalizeRests: scooting back to " << startTime << endl;
+                cerr << "normalizeRests: scooting back to " << startTime << endl;
 #endif
-		ia = scooter;
-	    }
-	    break;
-	}
+                ia = scooter;
+            }
+            break;
+        }
     }
 
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
-	++j;
-	if ((*i)->isa(Note::EventRestType) &&
-	    !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+        ++j;
+        if ((*i)->isa(Note::EventRestType) &&
+            !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
 #ifdef DEBUG_NORMALIZE_RESTS
-	    cerr << "normalizeRests: erasing rest at " << (*i)->getAbsoluteTime() << endl;
+            cerr << "normalizeRests: erasing rest at " << (*i)->getAbsoluteTime() << endl;
 #endif
-	    erase(i);
-	}
+            erase(i);
+        }
     }
 
     // It's possible we've just removed all the events between here
@@ -844,9 +844,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     if (endTime < segmentEndTime && m_endTime < segmentEndTime) {
 #ifdef DEBUG_NORMALIZE_RESTS
-	cerr << "normalizeRests: new end time " << m_endTime << " is earlier than previous segment end time " << segmentEndTime << ", extending our working end time again" << endl;
+        cerr << "normalizeRests: new end time " << m_endTime << " is earlier than previous segment end time " << segmentEndTime << ", extending our working end time again" << endl;
 #endif
-	endTime = segmentEndTime;
+        endTime = segmentEndTime;
     }
 
     // Second stage: find the gaps that need to be filled with
@@ -864,77 +864,77 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     ia = findNearestTime(startTime);
 
     if (ia == end()) {
-	// already have good lastNoteStarts, lastNoteEnds
-	ia = begin();
+        // already have good lastNoteStarts, lastNoteEnds
+        ia = begin();
     } else {
-	while (!((*ia)->isa(Note::EventType) ||
-		 (*ia)->isa(Text::EventType) ||
-		 (*ia)->isa(Note::EventRestType))) {
-	    if (ia == begin()) break;
-	    --ia;
-	}
-	lastNoteStarts = (*ia)->getNotationAbsoluteTime();
-	lastNoteEnds = lastNoteStarts;
+        while (!((*ia)->isa(Note::EventType) ||
+                 (*ia)->isa(Text::EventType) ||
+                 (*ia)->isa(Note::EventRestType))) {
+            if (ia == begin()) break;
+            --ia;
+        }
+        lastNoteStarts = (*ia)->getNotationAbsoluteTime();
+        lastNoteEnds = lastNoteStarts;
     }
 
     iterator i = ia;
 
     for (; i != ib && i != end(); ++i) {
 
-	// Boundary events for sets of rests may be notes (obviously),
-	// text events (because they need to be "attached" to
-	// something that has the correct timing), or rests (any
-	// remaining rests in this area have tuplet data so should be
-	// treated as "hard" rests);
-	if (!((*i)->isa(Note::EventType) ||
-	      (*i)->isa(Text::EventType) ||
-	      (*i)->isa(Note::EventRestType))) {
-	    continue;
-	}
+        // Boundary events for sets of rests may be notes (obviously),
+        // text events (because they need to be "attached" to
+        // something that has the correct timing), or rests (any
+        // remaining rests in this area have tuplet data so should be
+        // treated as "hard" rests);
+        if (!((*i)->isa(Note::EventType) ||
+              (*i)->isa(Text::EventType) ||
+              (*i)->isa(Note::EventRestType))) {
+            continue;
+        }
 
-	timeT thisNoteStarts = (*i)->getNotationAbsoluteTime();
+        timeT thisNoteStarts = (*i)->getNotationAbsoluteTime();
 
 #ifdef DEBUG_NORMALIZE_RESTS
-	cerr << "normalizeRests: scanning: thisNoteStarts " << thisNoteStarts
-	     << ", lastNoteStarts " << lastNoteStarts
-	     << ", lastNoteEnds " << lastNoteEnds << endl;
+        cerr << "normalizeRests: scanning: thisNoteStarts " << thisNoteStarts
+             << ", lastNoteStarts " << lastNoteStarts
+             << ", lastNoteEnds " << lastNoteEnds << endl;
 #endif
 
-	/* BR #988185: "Notation: Rest can be simultaneous with note but follow it"
+        /* BR #988185: "Notation: Rest can be simultaneous with note but follow it"
 
-	   This conditional tested whether a note started before the
-	   preceding note ended, and if so inserted rests simultaneous
-	   with the preceding note to make up the gap.  Without the
-	   ability to lay out those rests partwise, this is never any
-	   better than plain confusing.  Revert the change.
+           This conditional tested whether a note started before the
+           preceding note ended, and if so inserted rests simultaneous
+           with the preceding note to make up the gap.  Without the
+           ability to lay out those rests partwise, this is never any
+           better than plain confusing.  Revert the change.
 
-	if (thisNoteStarts < lastNoteEnds &&
-	    thisNoteStarts > lastNoteStarts) {
-	    gaps.push_back(std::pair<timeT, timeT>
-			   (lastNoteStarts,
-			    thisNoteStarts - lastNoteStarts));
-	}
-	*/
+        if (thisNoteStarts < lastNoteEnds &&
+            thisNoteStarts > lastNoteStarts) {
+            gaps.push_back(std::pair<timeT, timeT>
+                           (lastNoteStarts,
+                            thisNoteStarts - lastNoteStarts));
+        }
+        */
 
-	if (thisNoteStarts > lastNoteEnds) {
+        if (thisNoteStarts > lastNoteEnds) {
 #ifdef DEBUG_NORMALIZE_RESTS
-	    cerr << "normalizeRests: found gap between note/text/rest events from " << lastNoteEnds << " to " << thisNoteStarts << endl;
+            cerr << "normalizeRests: found gap between note/text/rest events from " << lastNoteEnds << " to " << thisNoteStarts << endl;
 #endif
-	    gaps.push_back(std::pair<timeT, timeT>
-			   (lastNoteEnds,
-			    thisNoteStarts - lastNoteEnds));
-	}
+            gaps.push_back(std::pair<timeT, timeT>
+                           (lastNoteEnds,
+                            thisNoteStarts - lastNoteEnds));
+        }
 
-	lastNoteStarts = thisNoteStarts;
-	lastNoteEnds = thisNoteStarts + (*i)->getNotationDuration();
+        lastNoteStarts = thisNoteStarts;
+        lastNoteEnds = thisNoteStarts + (*i)->getNotationDuration();
     }
 
     if (endTime > lastNoteEnds) {
 #ifdef DEBUG_NORMALIZE_RESTS
-	cerr << "normalizeRests: need to fill up gap from last note/text/rest event end at " << lastNoteEnds << " to normalize end time at " << endTime << endl;
+        cerr << "normalizeRests: need to fill up gap from last note/text/rest event end at " << lastNoteEnds << " to normalize end time at " << endTime << endl;
 #endif
-	gaps.push_back(std::pair<timeT, timeT>
-		       (lastNoteEnds, endTime - lastNoteEnds));
+        gaps.push_back(std::pair<timeT, timeT>
+                       (lastNoteEnds, endTime - lastNoteEnds));
     }
 
     timeT duration;
@@ -942,15 +942,15 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     for (size_t gi = 0; gi < gaps.size(); ++gi) {
 
 #ifdef DEBUG_NORMALIZE_RESTS
-	cerr << "normalizeRests: gap " << gi << ": " << gaps[gi].first << " -> " << (gaps[gi].first + gaps[gi].second) << endl;
+        cerr << "normalizeRests: gap " << gi << ": " << gaps[gi].first << " -> " << (gaps[gi].first + gaps[gi].second) << endl;
 #endif
 
         startTime = gaps[gi].first;
-	duration = gaps[gi].second;
+        duration = gaps[gi].second;
 
-	if (duration >= Note(Note::Shortest).getDuration()) {
-	    fillWithRests(startTime, startTime + duration);
-	}
+        if (duration >= Note(Note::Shortest).getDuration()) {
+            fillWithRests(startTime, startTime + duration);
+        }
     }
 }
 
@@ -974,8 +974,8 @@ void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     start = end = lower_bound(&dummy);
 
     while (end != this->end() &&
-	   (*end)->getAbsoluteTime() == (*start)->getAbsoluteTime())
-	++end;
+           (*end)->getAbsoluteTime() == (*start)->getAbsoluteTime())
+        ++end;
 }
 
 void Segment::getTimeSlice(timeT absoluteTime, const_iterator &start, const_iterator &end)
@@ -986,20 +986,20 @@ void Segment::getTimeSlice(timeT absoluteTime, const_iterator &start, const_iter
     start = end = lower_bound(&dummy);
 
     while (end != this->end() &&
-	   (*end)->getAbsoluteTime() == (*start)->getAbsoluteTime())
-	++end;
+           (*end)->getAbsoluteTime() == (*start)->getAbsoluteTime())
+        ++end;
 }
 
 void
 Segment::setQuantization(bool quantize)
 {
     if (m_quantize != quantize) {
-	m_quantize = quantize;
-	if (m_quantize) {
-	    m_quantizer->quantize(this, begin(), end());
-	} else {
-	    m_quantizer->unquantize(this, begin(), end());
-	}
+        m_quantize = quantize;
+        if (m_quantize) {
+            m_quantizer->quantize(this, begin(), end());
+        } else {
+            m_quantizer->unquantize(this, begin(), end());
+        }
     }
 }
 
@@ -1153,25 +1153,25 @@ Segment::getClefAtTime(timeT time, timeT &ctime) const
     ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ec);
 
     while (i == m_clefKeyList->end() ||
-	   (*i)->getAbsoluteTime() > time ||
-	   (*i)->getType() != Clef::EventType) {
+           (*i)->getAbsoluteTime() > time ||
+           (*i)->getType() != Clef::EventType) {
 
-	if (i == m_clefKeyList->begin()) {
-	    ctime = getStartTime();
-	    return Clef();
-	}
-	--i;
+        if (i == m_clefKeyList->begin()) {
+            ctime = getStartTime();
+            return Clef();
+        }
+        --i;
     }
 
     try {
-	ctime = (*i)->getAbsoluteTime();
-	return Clef(**i);
+        ctime = (*i)->getAbsoluteTime();
+        return Clef(**i);
     } catch (const Exception &e) {
-	std::cerr << "Segment::getClefAtTime(" << time
-		  << "): bogus clef in ClefKeyList: event dump follows:"
-		  << std::endl;
-	(*i)->dump(std::cerr);
-	return Clef();
+        std::cerr << "Segment::getClefAtTime(" << time
+                  << "): bogus clef in ClefKeyList: event dump follows:"
+                  << std::endl;
+        (*i)->dump(std::cerr);
+        return Clef();
     }
 }
 
@@ -1184,9 +1184,9 @@ Segment::getNextClefTime(timeT time, timeT &nextTime) const
     ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ec);
 
     while (i != m_clefKeyList->end() &&
-	   ((*i)->getAbsoluteTime() <= time ||
-	    (*i)->getType() != Clef::EventType)) {
-	++i;
+           ((*i)->getAbsoluteTime() <= time ||
+            (*i)->getType() != Clef::EventType)) {
+        ++i;
     }
 
     if (i == m_clefKeyList->end()) return false;
@@ -1212,27 +1212,27 @@ Segment::getKeyAtTime(timeT time, timeT &ktime) const
     ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ek);
 
     while (i == m_clefKeyList->end() ||
-	   (*i)->getAbsoluteTime() > time ||
-	   (*i)->getType() != Key::EventType) {
+           (*i)->getAbsoluteTime() > time ||
+           (*i)->getType() != Key::EventType) {
 
-	if (i == m_clefKeyList->begin()) {
-	    ktime = getStartTime();
-	    return Key();
-	}
-	--i;
+        if (i == m_clefKeyList->begin()) {
+            ktime = getStartTime();
+            return Key();
+        }
+        --i;
     }
 
     try {
-	ktime = (*i)->getAbsoluteTime();
+        ktime = (*i)->getAbsoluteTime();
         Key k(**i);
 //        std::cerr << "Segment::getKeyAtTime: Requested time " << time << ", found key " << k.getName() << " at time " << ktime << std::endl;
         return k;
     } catch (const Exception &e) {
-	std::cerr << "Segment::getClefAtTime(" << time
-		  << "): bogus key in ClefKeyList: event dump follows:"
-		  << std::endl;
-	(*i)->dump(std::cerr);
-	return Key();
+        std::cerr << "Segment::getClefAtTime(" << time
+                  << "): bogus key in ClefKeyList: event dump follows:"
+                  << std::endl;
+        (*i)->dump(std::cerr);
+        return Key();
     }
 }
 
@@ -1245,9 +1245,9 @@ Segment::getNextKeyTime(timeT time, timeT &nextTime) const
     ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ec);
 
     while (i != m_clefKeyList->end() &&
-	   ((*i)->getAbsoluteTime() <= time ||
-	    (*i)->getType() != Key::EventType)) {
-	++i;
+           ((*i)->getAbsoluteTime() <= time ||
+            (*i)->getType() != Key::EventType)) {
+        ++i;
     }
 
     if (i == m_clefKeyList->end()) return false;
@@ -1331,16 +1331,16 @@ Segment::getRepeatEndTime() const
     timeT endMarker = getEndMarkerTime();
 
     if (m_repeating && m_composition) {
-	Composition::iterator i(m_composition->findSegment(this));
-	assert(i != m_composition->end());
-	++i;
-	if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
-	    timeT t = (*i)->getStartTime();
-	    if (t < endMarker) return endMarker;
-	    else return t;
-	} else {
+        Composition::iterator i(m_composition->findSegment(this));
+        assert(i != m_composition->end());
+        ++i;
+        if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
+            timeT t = (*i)->getStartTime();
+            if (t < endMarker) return endMarker;
+            else return t;
+        } else {
             return m_composition->getEndMarker();
-	}
+        }
     }
 
     return endMarker;
@@ -1351,13 +1351,13 @@ void
 Segment::notifyAdd(Event *e) const
 {
     if (e->isa(Clef::EventType) || e->isa(Key::EventType)) {
-	if (!m_clefKeyList) m_clefKeyList = new ClefKeyList;
-	m_clefKeyList->insert(e);
+        if (!m_clefKeyList) m_clefKeyList = new ClefKeyList;
+        m_clefKeyList->insert(e);
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->eventAdded(this, e);
+         i != m_observers.end(); ++i) {
+        (*i)->eventAdded(this, e);
     }
 }
 
@@ -1366,19 +1366,19 @@ void
 Segment::notifyRemove(Event *e) const
 {
     if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
-	ClefKeyList::iterator i;
-	for (i = m_clefKeyList->find(e); i != m_clefKeyList->end(); ++i) {
+        ClefKeyList::iterator i;
+        for (i = m_clefKeyList->find(e); i != m_clefKeyList->end(); ++i) {
             // fix for bug#1485643 (crash erasing a duplicated key signature)
             if ((*i) == e) {
-	        m_clefKeyList->erase(i);
+                m_clefKeyList->erase(i);
                 break;
             }
-	}
+        }
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->eventRemoved(this, e);
+         i != m_observers.end(); ++i) {
+        (*i)->eventRemoved(this, e);
     }
 }
 
@@ -1387,8 +1387,8 @@ void
 Segment::notifyAppearanceChange() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->appearanceChanged(this);
+         i != m_observers.end(); ++i) {
+        (*i)->appearanceChanged(this);
     }
 }
 
@@ -1398,11 +1398,11 @@ Segment::notifyStartChanged(timeT newTime)
     if (m_notifyResizeLocked) return;
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->startChanged(this, newTime);
+         i != m_observers.end(); ++i) {
+        (*i)->startChanged(this, newTime);
     }
     if (m_composition) {
-	m_composition->notifySegmentStartChanged(this, newTime);
+        m_composition->notifySegmentStartChanged(this, newTime);
     }
 }
 
@@ -1413,11 +1413,11 @@ Segment::notifyEndMarkerChange(bool shorten)
     if (m_notifyResizeLocked) return;
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-     i != m_observers.end(); ++i) {
-    (*i)->endMarkerTimeChanged(this, shorten);
+         i != m_observers.end(); ++i) {
+        (*i)->endMarkerTimeChanged(this, shorten);
     }
     if (m_composition) {
-    m_composition->notifySegmentEndMarkerChange(this, shorten);
+        m_composition->notifySegmentEndMarkerChange(this, shorten);
     }
 }
 
@@ -1436,8 +1436,8 @@ void
 Segment::notifySourceDeletion() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentDeleted(this);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentDeleted(this);
     }
 }
 
