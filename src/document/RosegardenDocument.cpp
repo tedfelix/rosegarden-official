@@ -1863,7 +1863,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 void
 RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 {
-    RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events" << endl;
+    //RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events";
 
     // Just create a new record Segment if we don't have one already.
     // Make sure we don't recreate the record segment if it's already
@@ -1994,7 +1994,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
                         // at this point we could quantize the bar if we were
                         // tracking in a notation view
                     } else {
-                        std::cerr << " WARNING: NOTE OFF received without corresponding NOTE ON" << std::endl;
+                        RG_DEBUG << " WARNING: NOTE OFF received without corresponding NOTE ON";
                     }
                 }
 
@@ -2044,8 +2044,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
             case MappedEvent::MidiNoteOneShot:
                 RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
-                         << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
-                         << endl;
+                         << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot";
                 break;
 
                 // Audio control signals - ignore these
@@ -2076,8 +2075,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             case MappedEvent::SystemAudioFileFormat:
             default:
                 RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
-                << "GOT UNSUPPORTED MAPPED EVENT"
-                << endl;
+                         << "GOT UNSUPPORTED MAPPED EVENT";
                 break;
             }
 
@@ -2107,6 +2105,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             delete rEvent;
         }
 
+        // If we have note events, quantize the notation for the recording
+        // segments.
         if (haveNotes) {
 
             QSettings settings;
@@ -2266,16 +2266,23 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
             //    m_studio.getInstrumentById(track->getInstrument());
             int chan_filter = track->getMidiInputChannel();
             int dev_filter = track->getMidiInputDevice();
+
             if (((chan_filter < 0) || (chan_filter == channel)) &&
                 ((dev_filter == int(Device::ALL_DEVICES)) || (dev_filter == device))) {
 
+                // Insert the event into the segment.
                 it = recordMIDISegment->insert(new Event(*ev));
+
                 if (isNoteOn) {
+                    // Add the event to m_noteOnEvents.
+                    // To match up with a note-off later.
                     storeNoteOnEvent(recordMIDISegment, it, device, channel);
                 }
-                RG_DEBUG << "RosegardenDocument::insertRecordedEvent() - matches filter" << endl;
+
+                //RG_DEBUG << "RosegardenDocument::insertRecordedEvent() - matches filter";
+
             } else {
-                RG_DEBUG << "RosegardenDocument::insertRecordedEvent() - unmatched event discarded" << endl;
+                //RG_DEBUG << "RosegardenDocument::insertRecordedEvent() - unmatched event discarded";
             }
         }
     }
