@@ -1416,6 +1416,7 @@ Segment::notifyEndMarkerChange(bool shorten)
          i != m_observers.end(); ++i) {
         (*i)->endMarkerTimeChanged(this, shorten);
     }
+
     if (m_composition) {
         m_composition->notifySegmentEndMarkerChange(this, shorten);
     }

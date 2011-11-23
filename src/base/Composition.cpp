@@ -33,8 +33,6 @@
 
 #include <sstream>
 
-using std::cerr;
-using std::endl;
 
 //#define DEBUG_BAR_STUFF 1
 //#define DEBUG_TEMPO_STUFF 1
@@ -200,15 +198,13 @@ Composition::Composition() :
 Composition::~Composition()
 {
     if (!m_observers.empty()) {
-	cerr << "Warning: Composition::~Composition() with " << m_observers.size()
-	     << " observers still extant" << endl;
-	cerr << "Observers are:";
+	RG_DEBUG << "Warning: Composition::~Composition() with " << m_observers.size()
+	     << " observers still extant";
+	RG_DEBUG << "Observers are:";
 	for (ObserverSet::const_iterator i = m_observers.begin();
 	     i != m_observers.end(); ++i) {
-	    cerr << " " << (void *)(*i);
-	    cerr << " [" << typeid(**i).name() << "]";
+	    RG_DEBUG << " " << (void *)(*i) << " [" << typeid(**i).name() << "]";
 	}
-	cerr << endl;
     }
 
     notifySourceDeletion();
@@ -356,7 +352,7 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 void
 Composition::clearVoiceCaches()
 {
-//    std::cerr << "Composition::clearVoiceCaches" << std::endl;
+//    RG_DEBUG << "Composition::clearVoiceCaches";
     m_trackVoiceCountCache.clear();
     m_segmentVoiceIndexCache.clear();
 }
@@ -364,7 +360,7 @@ Composition::clearVoiceCaches()
 void
 Composition::rebuildVoiceCaches() const
 {
-//    std::cerr << "Composition::rebuildVoiceCaches" << std::endl;
+//    RG_DEBUG << "Composition::rebuildVoiceCaches";
     Profiler profiler("Composition::rebuildVoiceCaches");
 
     // slow
@@ -383,8 +379,8 @@ Composition::rebuildVoiceCaches() const
             if ((*i)->getTrack() != tid) continue;
             timeT t0 = (*i)->getStartTime();
             timeT t1 = (*i)->getRepeatEndTime();
-//            std::cerr << "track " << tid << " segment " << *i
-//                      << " " << t0 << " to " << t1 << std::endl;
+//            RG_DEBUG << "track " << tid << " segment " << *i
+//                     << " " << t0 << " to " << t1;
             int index = 0;
             std::multimap<timeT, Segment *>::iterator ei = ends.end();
             std::set<int> used;
@@ -400,7 +396,7 @@ Composition::rebuildVoiceCaches() const
             }
             m_segmentVoiceIndexCache[*i] = index;
             if (index >= m_trackVoiceCountCache[tid]) {
-//                std::cerr << "count to " << index + 1 << std::endl;
+//                RG_DEBUG << "count to " << index + 1;
                 m_trackVoiceCountCache[tid] = index + 1;
             }
             ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
@@ -418,7 +414,7 @@ Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
     }
 
     int count = m_trackVoiceCountCache[track];
-//    std::cerr << "max contemporaneous on track " << track << " = " << count << std::endl;
+//    RG_DEBUG << "max contemporaneous on track " << track << " = " << count;
     return count;
 }
 
@@ -633,7 +629,7 @@ Composition::calculateBarPositions() const
     if (!m_barPositionsNeedCalculating) return;
 
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::calculateBarPositions" << endl;
+    RG_DEBUG << "Composition::calculateBarPositions";
 #endif
 
     ReferenceSegment &t = m_timeSigSegment;
@@ -650,7 +646,7 @@ Composition::calculateBarPositions() const
 	lastBarNo = getStartMarker() / barDuration;
 	lastSigTime = getStartMarker();
 #ifdef DEBUG_BAR_STUFF
-	cerr << "Composition::calculateBarPositions: start marker = " << getStartMarker() << ", so initial bar number = " << lastBarNo << endl;
+	RG_DEBUG << "Composition::calculateBarPositions: start marker = " << getStartMarker() << ", so initial bar number = " << lastBarNo;
 #endif
     }
 
@@ -670,8 +666,8 @@ Composition::calculateBarPositions() const
 	}
 
 #ifdef DEBUG_BAR_STUFF
-	cerr << "Composition::calculateBarPositions: bar " << n
-		  << " at " << myTime << endl;
+	RG_DEBUG << "Composition::calculateBarPositions: bar " << n
+		  << " at " << myTime;
 #endif
 
 	(*i)->set<Int>(BarNumberProperty, n);
@@ -694,7 +690,7 @@ Composition::getNbBars() const
     int bars = getBarNumber(getDuration() - 1) + 1;
 
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::getNbBars: returning " << bars << endl;
+    RG_DEBUG << "Composition::getNbBars: returning " << bars;
 #endif
     return bars;
 }
@@ -733,7 +729,7 @@ Composition::getBarNumber(timeT t) const
     }
 
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::getBarNumber(" << t << "): returning " << n << endl;
+    RG_DEBUG << "Composition::getBarNumber(" << t << "): returning " << n;
 #endif
     return n;
 }
@@ -780,8 +776,8 @@ Composition::getBarRange(int n) const
 	finish = start + barDuration;
 
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::getBarRange[1]: bar " << n << ": (" << start
-	      << " -> " << finish << ")" << endl;
+    RG_DEBUG << "Composition::getBarRange[1]: bar " << n << ": (" << start
+	      << " -> " << finish << ")";
 #endif
 
     } else {
@@ -792,8 +788,8 @@ Composition::getBarRange(int n) const
 	finish = start + barDuration;
 
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::getBarRange[2]: bar " << n << ": (" << start
-	      << " -> " << finish << ")" << endl;
+    RG_DEBUG << "Composition::getBarRange[2]: bar " << n << ": (" << start
+	      << " -> " << finish << ")";
 #endif
     } 
 
@@ -801,8 +797,8 @@ Composition::getBarRange(int n) const
     if (j != m_timeSigSegment.end() && finish > (*j)->getAbsoluteTime()) {
 	finish = (*j)->getAbsoluteTime();
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::getBarRange[3]: bar " << n << ": (" << start
-	      << " -> " << finish << ")" << endl;
+    RG_DEBUG << "Composition::getBarRange[3]: bar " << n << ": (" << start
+	      << " -> " << finish << ")";
 #endif
     }
 
@@ -826,7 +822,7 @@ int
 Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 {
 #ifdef DEBUG_BAR_STUFF
-    cerr << "Composition::addTimeSignature(" << t << ", " << timeSig.getNumerator() << "/" << timeSig.getDenominator() << ")" << endl;
+    RG_DEBUG << "Composition::addTimeSignature(" << t << ", " << timeSig.getNumerator() << "/" << timeSig.getDenominator() << ")";
 #endif
 
     ReferenceSegment::iterator i =
@@ -944,7 +940,7 @@ Composition::getTempoAtTime(timeT t) const
     if (i == m_tempoSegment.end()) {
 	if (t < 0) {
 #ifdef DEBUG_TEMPO_STUFF
-	    cerr << "Composition: Negative time " << t << " for tempo, using 0" << endl;
+	    RG_DEBUG << "Composition: Negative time " << t << " for tempo, using 0";
 #endif
 	    return getTempoAtTime(0);
 	}
@@ -979,7 +975,7 @@ Composition::getTempoAtTime(timeT t) const
 	    tempoT result = tempoT((1.0 / s) + 0.01);
 
 #ifdef DEBUG_TEMPO_STUFF
-	    cerr << "Composition: Calculated tempo " << result << " at " << t << endl;
+	    RG_DEBUG << "Composition: Calculated tempo " << result << " at " << t;
 #endif
 
 	    return result;
@@ -987,7 +983,7 @@ Composition::getTempoAtTime(timeT t) const
     }
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition: Found tempo " << tempo << " at " << t << endl;
+    RG_DEBUG << "Composition: Found tempo " << tempo << " at " << t;
 #endif
     return tempo;
 }
@@ -1043,7 +1039,7 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
     updateRefreshStatuses();
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
+    RG_DEBUG << "Composition: Added tempo " << tempo << " at " << time;
 #endif
     notifyTempoChanged();
 
@@ -1174,8 +1170,8 @@ Composition::getElapsedRealTime(timeT t) const
     }
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition::getElapsedRealTime: " << t << " -> "
-	 << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")" << endl;
+    RG_DEBUG << "Composition::getElapsedRealTime: " << t << " -> "
+         << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")";
 #endif
 
     return elapsed;
@@ -1220,11 +1216,11 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	RealTime cfReal = getElapsedRealTime(elapsed);
 	timeT cfTimeT = getElapsedTimeForRealTime(cfReal);
 	doError = true;
-	cerr << "getElapsedTimeForRealTime: " << t << " -> "
+	RG_DEBUG << "getElapsedTimeForRealTime: " << t << " -> "
 	     << elapsed << " (error " << (cfReal - t)
 	     << " or " << (cfTimeT - elapsed) << ", tempo "
 	     << (*i)->getAbsoluteTime() << ":"
-	     << (tempoT)((*i)->get<Int>(TempoProperty)) << ")" << endl;
+	     << (tempoT)((*i)->get<Int>(TempoProperty)) << ")";
     }
 #endif
     return elapsed;
@@ -1242,7 +1238,7 @@ Composition::calculateTempoTimestamps() const
     tempoT target = -1;
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << endl;
+    RG_DEBUG << "Composition::calculateTempoTimestamps: Tempo events are:";
 #endif
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
@@ -1262,7 +1258,7 @@ Composition::calculateTempoTimestamps() const
 	setTempoTimestamp(*i, myTime);
 
 #ifdef DEBUG_TEMPO_STUFF
-	(*i)->dump(cerr);
+	(*i)->dump(std::cerr);
 #endif
 
 	lastRealTime = myTime;
@@ -1295,14 +1291,14 @@ Composition::time2RealTime(timeT t, tempoT tempo) const
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {
-	cerr << "Composition::time2RealTime: t " << t << ", sec " << sec << ", nsec "
+	RG_DEBUG << "Composition::time2RealTime: t " << t << ", sec " << sec << ", nsec "
 	     << nsec << ", tempo " << tempo
-	     << ", cdur " << cdur << ", dt " << dt << ", rt " << rt << endl;
+	     << ", cdur " << cdur << ", dt " << dt << ", rt " << rt;
 	DEBUG_silence_recursive_tempo_printout = 1;
 	timeT ct = realTime2Time(rt, tempo);
 	timeT et = t - ct;
 	RealTime ert = time2RealTime(et, tempo);
-	cerr << "cf. realTime2Time(" << rt << ") -> " << ct << " [err " << et << " (" << ert << "?)]" << endl;
+	RG_DEBUG << "cf. realTime2Time(" << rt << ") -> " << ct << " [err " << et << " (" << ert << "?)]";
 	DEBUG_silence_recursive_tempo_printout=0;
     }
 #endif
@@ -1347,13 +1343,13 @@ Composition::time2RealTime(timeT time, tempoT tempo,
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {
-	cerr << "Composition::time2RealTime[2]: time " << time << ", tempo "
+	RG_DEBUG << "Composition::time2RealTime[2]: time " << time << ", tempo "
 	     << tempo << ", targetTime " << targetTime << ", targetTempo "
-	     << targetTempo << ": rt " << rt << endl;
+	     << targetTempo << ": rt " << rt;
 	DEBUG_silence_recursive_tempo_printout = 1;
 //	RealTime nextRt = time2RealTime(targetTime, tempo, targetTime, targetTempo);
 	timeT ct = realTime2Time(rt, tempo, targetTime, targetTempo);
-	cerr << "cf. realTime2Time: rt " << rt << " -> " << ct << endl;
+	RG_DEBUG << "cf. realTime2Time: rt " << rt << " -> " << ct;
 	DEBUG_silence_recursive_tempo_printout=0;
     }
 #endif
@@ -1374,14 +1370,14 @@ Composition::realTime2Time(RealTime rt, tempoT tempo) const
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {
-	cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
+	RG_DEBUG << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
 	     << rt.nsec << ", tempo " << tempo
-	     << ", cdur " << cdur << ", tsec " << tsec << ", tnsec " << tnsec << ", dt " << dt << ", t " << t << endl;
+	     << ", cdur " << cdur << ", tsec " << tsec << ", tnsec " << tnsec << ", dt " << dt << ", t " << t;
 	DEBUG_silence_recursive_tempo_printout = 1;
 	RealTime crt = time2RealTime(t, tempo);
 	RealTime ert = rt - crt;
 	timeT et = realTime2Time(ert, tempo);
-	cerr << "cf. time2RealTime(" << t << ") -> " << crt << " [err " << ert << " (" << et << "?)]" << endl;
+	RG_DEBUG << "cf. time2RealTime(" << t << ") -> " << crt << " [err " << ert << " (" << et << "?)]";
 	DEBUG_silence_recursive_tempo_printout = 0;
     }
 #endif
@@ -1422,15 +1418,15 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
 
     if (term2 < 0) { 
 	// We're screwed, but at least let's not crash
-	std::cerr << "ERROR: Composition::realTime2Time: term2 < 0 (it's " << term2 << ")" << std::endl;
+	RG_DEBUG << "ERROR: Composition::realTime2Time: term2 < 0 (it's " << term2 << ")";
 #ifdef DEBUG_TEMPO_STUFF
-	std::cerr << "rt = " << rt << ", tempo = " << tempo << ", targetTime = " << targetTime << ", targetTempo = " << targetTempo << std::endl;
-	std::cerr << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t <<std::endl;
-	std::cerr << "that's sqrt( (" << ((2.0*n*a*2.0*n*a)) << ") + "
-		  << (8*(b-a)*t*n) << " )" << endl;
+	RG_DEBUG << "rt = " << rt << ", tempo = " << tempo << ", targetTime = " << targetTime << ", targetTempo = " << targetTempo;
+	RG_DEBUG << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t;
+	RG_DEBUG << "that's sqrt( (" << ((2.0*n*a*2.0*n*a)) << ") + "
+		  << (8*(b-a)*t*n) << " )";
 
-	std::cerr << "so our original expression was " << rt << " = "
-		  << a << "t + (t^2 * (" << b << " - " << a << ")) / " << 2*n << std::endl;
+	RG_DEBUG << "so our original expression was " << rt << " = "
+		  << a << "t + (t^2 * (" << b << " - " << a << ")) / " << 2*n;
 #endif
 
 	return realTime2Time(rt, tempo);
@@ -1444,10 +1440,10 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
     double result = - (term1 + term3) / (2 * (b - a));
 
 #ifdef DEBUG_TEMPO_STUFF
-    std::cerr << "Composition::realTime2Time:" <<endl;
-    std::cerr << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t <<std::endl;
-    std::cerr << "+/-sqrt(term2) = " << term3 << std::endl;
-    std::cerr << "result = " << result << endl;
+    RG_DEBUG << "Composition::realTime2Time:";
+    RG_DEBUG << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t;
+    RG_DEBUG << "+/-sqrt(term2) = " << term3;
+    RG_DEBUG << "result = " << result;
 #endif
 
     return long(result + 0.1);
@@ -1583,8 +1579,8 @@ static void dumpTracks(Composition::trackcontainer& tracks)
 {
     Composition::trackiterator it = tracks.begin();
     for (; it != tracks.end(); ++it) {
-        std::cerr << "tracks[" << (*it).first << "] = "
-                  << (*it).second << std::endl;
+        RG_DEBUG << "tracks[" << (*it).first << "] = "
+                 << (*it).second;
     }
 }
 #endif
@@ -1596,12 +1592,12 @@ Track* Composition::getTrackById(TrackId track) const
     if (i != m_tracks.end())
         return (*i).second;
 
-    std::cerr << "Composition::getTrackById("
+    RG_DEBUG << "Composition::getTrackById("
 	      << track << ") - WARNING - track id not found, this is probably a BUG "
-	      << __FILE__ << ":" << __LINE__ << std::endl;
-    std::cerr << "Available track ids are: " << std::endl;
+	      << __FILE__ << ":" << __LINE__;
+    RG_DEBUG << "Available track ids are: ";
     for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-	std::cerr << (int)(*i).second->getId() << std::endl;
+        RG_DEBUG << (int)(*i).second->getId();
     }
 
     return 0;
@@ -1647,9 +1643,8 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 	notifyTrackChanged(getTrackById(newId));
     }
     else
-        std::cerr << "Composition::resetTrackIdAndPosition - "
-                  << "can't move track " << oldId << " to " << newId 
-                  << std::endl;
+        RG_DEBUG << "Composition::resetTrackIdAndPosition - "
+                 << "can't move track " << oldId << " to " << newId;
 }
 
 void Composition::setSelectedTrack(TrackId track)
@@ -1678,10 +1673,10 @@ void Composition::addTrack(Track *track)
 	notifyTrackChanged(track);
 
     } else {
-        std::cerr << "Composition::addTrack("
-                  << track << "), id = " << track->getId()
-                  << " - WARNING - track id already present "
-                  << __FILE__ << ":" << __LINE__ << std::endl;
+        RG_DEBUG << "Composition::addTrack("
+                 << track << "), id = " << track->getId()
+                 << " - WARNING - track id already present "
+                 << __FILE__ << ":" << __LINE__;
         // throw Exception("track id already present");
     }
 }
@@ -1693,7 +1688,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
 
     if (titerator == m_tracks.end()) {
 
-        std::cerr << "Composition::deleteTrack : no track of id " << track << std::endl;
+        RG_DEBUG << "Composition::deleteTrack : no track of id " << track;
         throw Exception("track id not found");
 
     } else {
@@ -1718,7 +1713,7 @@ bool Composition::detachTrack(Rosegarden::Track *track)
     }
 
     if (it == m_tracks.end()) {
-        std::cerr << "Composition::detachTrack() : no such track " << track << std::endl;
+        RG_DEBUG << "Composition::detachTrack() : no such track " << track;
         throw Exception("track id not found");
         return false;
     }
@@ -1859,19 +1854,19 @@ std::string Composition::toXmlString()
     composition << "\" playmetronome=\"" << m_playMetronome;
     composition << "\" recordmetronome=\"" << m_recordMetronome;
     composition << "\" nexttriggerid=\"" << m_nextTriggerSegmentId;
-    composition << "\">" << endl << endl;
+    composition << "\">" << std::endl << std::endl;
 
-    composition << endl;
+    composition << std::endl;
 
     for (trackiterator tit = getTracks().begin();
          tit != getTracks().end();
          ++tit)
         {
             if ((*tit).second)
-                composition << "  " << (*tit).second->toXmlString() << endl;
+                composition << "  " << (*tit).second->toXmlString() << std::endl;
         }
 
-    composition << endl;
+    composition << std::endl;
 
     for (ReferenceSegment::iterator i = m_timeSigSegment.begin();
 	 i != m_timeSigSegment.end(); ++i) {
@@ -1899,10 +1894,10 @@ std::string Composition::toXmlString()
 	(*i)->get<Bool>(TimeSignature::HasHiddenBarsPropertyName, hiddenBars);
 	if (hiddenBars) composition << " hiddenbars=\"true\"";
 
-	composition << "/>" << endl;
+	composition << "/>" << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
@@ -1918,22 +1913,22 @@ std::string Composition::toXmlString()
 	if (target >= 0) {
 	    composition << "\" target=\"" << target;
 	}
-	composition << "\"/>" << endl;
+	composition << "\"/>" << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
-    composition << "<metadata>" << endl
-		<< m_metadata.toXmlString() << endl
-		<< "</metadata>" << endl << endl;
+    composition << "<metadata>" << std::endl
+		<< m_metadata.toXmlString() << std::endl
+		<< "</metadata>" << std::endl << std::endl;
 
-    composition << "<markers>" << endl;
+    composition << "<markers>" << std::endl;
     for (markerconstiterator mIt = m_markers.begin();
          mIt != m_markers.end(); ++mIt)
     {
         composition << (*mIt)->toXmlString();
     }
-    composition << "</markers>" << endl;
+    composition << "</markers>" << std::endl;
     composition << "</composition>";
 
     return composition.str();
@@ -2213,7 +2208,7 @@ Composition::notifySourceDeletion() const
 
 void breakpoint()
 {
-    //std::cerr << "breakpoint()\n";
+    //RG_DEBUG << "breakpoint()";
 }
 
 // Just empty out the markers
@@ -2285,7 +2280,7 @@ Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
 void
 Composition::dump(std::ostream& out, bool) const
 {
-    out << "Composition segments : " << endl;
+    out << "Composition segments : " << std::endl;
 
     for (const_iterator i = begin(); i != end(); ++i) {
 
@@ -2295,7 +2290,7 @@ Composition::dump(std::ostream& out, bool) const
             << " - repeating : " << s->isRepeating()
             << " - track id : " << s->getTrack()
             << " - label : " << s->getLabel()
-            << endl;
+            << std::endl;
         
     }
     
