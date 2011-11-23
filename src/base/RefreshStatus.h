@@ -17,9 +17,23 @@
 #ifndef _REFRESH_STATUS_H_
 #define _REFRESH_STATUS_H_
 
+#include <QtGlobal>
+#include <vector>
+
 namespace Rosegarden 
 {
 
+/// Flag indicating that a refresh is needed.
+/**
+ * This is a flag indicating that a refresh may be required for
+ * some part of the user interface.  The implementation is
+ * a simple wrapper around a bool.
+ *
+ * See SegmentRefreshStatus which derives from this and adds a
+ * time range.
+ *
+ * See RefreshStatusArray which supports multiple observers.
+ */
 class RefreshStatus
 {
 public:
@@ -32,13 +46,44 @@ protected:
     bool m_needsRefresh;
 };
 
+/// Polled notification mechanism.
+/**
+ * This supports providing refresh notification flags (e.g. RefreshStatus)
+ * for a number of observers.  An observer can check the flag
+ * periodically and perform a refresh when the flag is set.  Then they
+ * can clear the flag.
+ *
+ * Polling mechanisms such as this are useful when changes to an underlying
+ * data object are fast and frequent but the observers would like to update
+ * at a slower pace (usually to save CPU time).
+ *
+ * See Composition which instantiates this with RefreshStatus and
+ * Segment which instantiates this with SegmentRefreshStatus.
+ */
 template<class RS>
 class RefreshStatusArray
 {
 public:
+    /// Creates a new flag for an observer.  Use the returned ID when calling
+    /// getRefreshStatus() to check whether a refresh is needed.
     unsigned int getNewRefreshStatusId();
+
+    /// Returns the number of observers.
     size_t size() { return m_refreshStatuses.size(); }
-    RS& getRefreshStatus(unsigned int id) { return m_refreshStatuses[id]; }
+
+    /// Returns the refresh status object for a particular observer.
+    RS& getRefreshStatus(unsigned int id)
+    {
+        Q_ASSERT_X(id < m_refreshStatuses.size(),
+                   "RefreshStatusArray::getRefreshStatus()",
+                   "ID out of bounds");
+
+        return m_refreshStatuses[id];
+    }
+
+    /// Sets all the refresh flags to true.
+    ///
+    /// Rename: needsRefresh()
     void updateRefreshStatuses();
 
 protected:
@@ -53,13 +98,17 @@ unsigned int RefreshStatusArray<RS>::getNewRefreshStatusId()
     return res;
 }
 
+// Defined in Composition.cpp.
 void breakpoint();
 
 template<class RS>
 void RefreshStatusArray<RS>::updateRefreshStatuses()
 {
     // breakpoint(); // for debug purposes, so one can set a breakpoint
-    // in this template code (set it in breakpoint() itself).
+    // in this template code (set it in breakpoint() itself which is in
+    // Composition.cpp).
+
+    // Set all the refresh flags to true.
     for(unsigned int i = 0; i < m_refreshStatuses.size(); ++i)
         m_refreshStatuses[i].setNeedsRefresh(true);
 }
