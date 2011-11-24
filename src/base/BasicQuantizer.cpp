@@ -26,6 +26,10 @@
 #include <cstdio> // for sprintf
 #include <ctime>
 
+using std::cout;
+using std::cerr;
+using std::endl;
+
 namespace Rosegarden
 {
 
