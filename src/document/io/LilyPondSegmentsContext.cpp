@@ -68,8 +68,8 @@ LilyPondSegmentsContext::~LilyPondSegmentsContext()
 void
 LilyPondSegmentsContext::addSegment(Segment *segment)
 {
-    int trackId = segment->getTrack();
-    m_segments[trackId].insert(SegmentData(segment));
+    int trackPos = m_composition->getTrackPositionById(segment->getTrack());
+    m_segments[trackPos].insert(SegmentData(segment));
 }
 
 void
