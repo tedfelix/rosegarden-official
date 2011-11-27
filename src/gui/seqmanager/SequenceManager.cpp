@@ -1310,8 +1310,8 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             // send program change
             //
             if ((*it)->sendsProgramChange() || forceProgramChanges) {
-                RG_DEBUG << "SequenceManager::preparePlayback() : sending prg change for "
-                << (*it)->getPresentationName().c_str() << endl;
+                SEQMAN_DEBUG << "SequenceManager::preparePlayback() : sending prg change for "
+                             << (*it)->getPresentationName().c_str() << endl;
 
                 mE = new MappedEvent((*it)->getId(),
                                      MappedEvent::MidiProgramChange,
@@ -1322,8 +1322,8 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
         } else if ((*it)->getType() == Instrument::Audio ||
                    (*it)->getType() == Instrument::SoftSynth) {
         } else {
-            RG_DEBUG << "SequenceManager::preparePlayback - "
-            << "unrecognised instrument type" << endl;
+            SEQMAN_DEBUG << "SequenceManager::preparePlayback - "
+                         << "unrecognised instrument type" << endl;
         }
     }
 
@@ -1715,12 +1715,12 @@ void SequenceManager::checkRefreshStatus()
 void
 SequenceManager::segmentModified(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")" << endl;
+    //SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")";
 
     bool sizeChanged = m_compositionMapper->segmentModified(s);
 
-    SEQMAN_DEBUG << "SequenceManager::segmentModified() : size changed = "
-                 << sizeChanged << endl;
+    //SEQMAN_DEBUG << "SequenceManager::segmentModified() : size changed = "
+    //             << sizeChanged;
 
     RosegardenSequencer::getInstance()->segmentModified
         (m_compositionMapper->getMappedSegment(s));
@@ -1781,7 +1781,7 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
 
 void SequenceManager::segmentEndMarkerChanged(const Composition*, Segment *s, bool)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentEndMarkerChanged(" << s << ")" << endl;
+    //SEQMAN_DEBUG << "SequenceManager::segmentEndMarkerChanged(" << s << ")" << endl;
     segmentModified(s);
 }
 
