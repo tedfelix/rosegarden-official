@@ -277,7 +277,7 @@ TrackButtons::slotUpdateTracks()
     unsigned int newNbTracks = comp.getNbTracks();
     Track *track = 0;
 
-    RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks << endl;
+    //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks << endl;
 
     if (newNbTracks < m_tracks) {
         for (unsigned int i = m_tracks; i > newNbTracks; --i)
