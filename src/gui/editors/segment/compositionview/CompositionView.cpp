@@ -453,7 +453,7 @@ void CompositionView::setSnapGrain(bool fine)
 
 void CompositionView::slotUpdateSegmentsDrawBuffer()
 {
-    //     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()\n";
+    //RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()";
     slotAllDrawBuffersNeedRefresh();
     updateContents();
 //    update();
@@ -461,8 +461,8 @@ void CompositionView::slotUpdateSegmentsDrawBuffer()
 
 void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
 {
-    //     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer() rect "
-    //              << rect << " - valid : " << rect.isValid() << endl;
+    //RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer() rect "
+    //         << rect << " - valid : " << rect.isValid();
 
     slotAllDrawBuffersNeedRefresh(rect);
 

@@ -310,7 +310,7 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 
 void CompositionModelImpl::clearPreviewCache()
 {
-    RG_DEBUG << "CompositionModelImpl::clearPreviewCache";
+    //RG_DEBUG << "CompositionModelImpl::clearPreviewCache";
 
     for (NotationPreviewDataCache::iterator i = m_notationPreviewDataCache.begin();
          i != m_notationPreviewDataCache.end(); ++i) {
@@ -1130,7 +1130,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     }
 
 
-    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << ", w " << w << ", h " << h;
+    //RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << ", w " << w << ", h " << h;
 
     CompositionRect cr(origin, QSize(w, h));
     QString label = strtoqstr(s.getLabel());
