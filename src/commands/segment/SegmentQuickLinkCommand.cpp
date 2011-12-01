@@ -53,7 +53,7 @@ SegmentQuickLinkCommand::execute()
         std::string label = m_originalSegment->getLabel();
         m_newLinkedSegment->setLabel(appendLabel(label, qstrtostr(tr("(linked)"))));
     } else {
-        if (m_originalSegmentLinked) {
+        if (!m_originalSegmentLinked) {
             m_newLinkedSegment->getLinker()->addLinkedSegment(m_originalSegment);
         }
     }
