@@ -213,19 +213,19 @@
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">交互 - %1 をふたつの値で交互に設定</translation>
+        <translation>交互 - %1 をふたつの値で交互に設定</translation>
     </message>
     <message>
         <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+40"/>
         <source>First Value</source>
-        <translation type="unfinished">最初の価</translation>
+        <translation>最初の価</translation>
     </message>
     <message>
         <location line="+2"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
-        <translation type="unfinished">次の値</translation>
+        <translation>次の値</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
@@ -235,7 +235,7 @@
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished">数値</translation>
+        <translation>値</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+27"/>
@@ -260,37 +260,37 @@
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+28"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">クレッシェンド - %1 を最小値から最大値へ右上がりで設定</translation>
+        <translation>クレッシェンド - %1 を最小値から最大値へ右上がりで設定</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">ディミニエンド - %1 を最大値から最小値ヘ右下りで設定</translation>
+        <translation>ディミニエンド - %1 を最大値から最小値ヘ右下りで設定</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Low Value</source>
-        <translation type="unfinished">下限</translation>
+        <translation>下限</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">上限</translation>
+        <translation>上限</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+149"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">イベントベロシティの設定</translation>
+        <translation>イベントベロシティの設定</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">ベロシティの設定...</translation>
+        <translation>ベロシティの設定...</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-12"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">リンギング効果 - %1 を最大から最小値へ、最小値からゼロへの両方を交互に設定</translation>
+        <translation>リンギング効果 - %1 を最大から最小値へ、最小値からゼロへの両方を交互に設定</translation>
     </message>
 </context>
 <context>
@@ -2088,13 +2088,13 @@
     <message>
         <location line="+1"/>
         <source>Dump BarDataMap (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>小節データマップのダンプ(デバッグ)</translation>
     </message>
     <message>
         <location line="+9"/>
         <location line="+2027"/>
         <source>Open in &amp;Pitch Tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>ピッチトラッカーで開く(&amp;P)</translation>
     </message>
     <message>
         <location line="-2025"/>
@@ -2423,7 +2423,7 @@
     <message>
         <location line="-3133"/>
         <source>&amp;Velocity</source>
-        <translation>ベロシティ(&amp;V):</translation>
+        <translation>ベロシティ(&amp;V)</translation>
     </message>
     <message>
         <location line="+1487"/>
@@ -4571,7 +4571,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+V</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+V</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -10551,7 +10551,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;バージョン: %1 &amp;nbsp; Qt バージョン: %2&lt;br&gt;ビルドキー: %3&lt;/p&gt;&lt;p&gt;Rosegardenは世界中から参加したボランティアのチームによって開発されました。貢献者の一覧は&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;を参照してください。&lt;br&gt;Rosegardenについてのより詳細な情報は、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;を参照してください。&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt; {2000-2011 ?} {1 ?} {2&lt;?} {3&lt;?} {2&lt;?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;バージョン: %1 &amp;nbsp; Qt バージョン: %2&lt;br&gt;ビルドキー: %3&lt;/p&gt;&lt;p&gt;Rosegardenは世界中から参加したボランティアのチームによって開発されました。貢献者の一覧は&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;を参照してください。&lt;br&gt;Rosegardenについてのより詳細な情報は、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;を参照してください。&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -14234,7 +14234,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+4"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>表示形式の変更を反映させるためにはRosegardenを再起動する必要がある。</translation>
     </message>
     <message>
         <location line="-290"/>
@@ -17048,52 +17048,52 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="+60"/>
         <source>MusicXML Export</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXMLのエクスポート</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Layout</source>
-        <translation type="unfinished">レイアウト</translation>
+        <translation>レイアウト</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Headers</source>
-        <translation type="unfinished">ヘッダ</translation>
+        <translation>ヘッダ</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Basic options</source>
-        <translation type="unfinished">基本オプション</translation>
+        <translation>基本オプション</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Export content</source>
-        <translation type="unfinished">コンテンツのエクスポート</translation>
+        <translation>コンテンツのエクスポート</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;エクスポートするトラックかセグメントを選択&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;エクスポートするトラックかセグメントを選択&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>All tracks</source>
-        <translation type="unfinished">すべてのトラック</translation>
+        <translation>すべてのトラック</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Non-muted tracks</source>
-        <translation type="unfinished">ミュートされていないトラック</translation>
+        <translation>ミュートされていないトラック</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>選択されたトラック</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Selected segments</source>
-        <translation type="unfinished">セグメントを選択</translation>
+        <translation>選択されたセグメント</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -17108,22 +17108,22 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+6"/>
         <source>Advanced/Experimental options</source>
-        <translation type="unfinished"></translation>
+        <translation>高度/実験的なオプション</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Compatibility level</source>
-        <translation type="unfinished">互換レベル</translation>
+        <translation>互換レベル</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;エクスポート死体MusicXMLバージョンを設定&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the format of the MusicXML file.&lt;/p&gt;&lt;p&gt;The &amp;quot;partwise&amp;quot; format contains &amp;quot;part&amp;quot; elements that contain &amp;quot;measure&amp;quot; elements.  The &amp;quot;timewise&amp;quot; format reverses this ordering.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;MusicXMLファイルの形式を選択。&lt;/p&gt;&lt;p&gt;&amp;quot;partwise&amp;quot;形式には &amp;quot;measure&amp;quot;要素を含む&amp;quot;part&amp;quot;要素が含まれている。  &amp;quot;timewise&amp;quot; 形式にはこの順序を反転している。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -17148,17 +17148,17 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="-29"/>
         <source>MusicXML type</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXML タイプ</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>None</source>
-        <translation type="unfinished">なし</translation>
+        <translation>なし</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Don&apos;t export percussion tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>パーカッショントラックをエクスポートしない</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -17168,7 +17168,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+45"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:manual-musicxmlexportoptions-en</translation>
     </message>
 </context>
 <context>
@@ -17470,7 +17470,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+15"/>
         <source>Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>セグメント</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -18456,7 +18456,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+16"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>未定義</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -18476,7 +18476,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+4"/>
         <source>None available (check preferences)</source>
-        <translation type="unfinished"></translation>
+        <translation>全て無効(設定を確認)</translation>
     </message>
 </context>
 <context>
@@ -18493,7 +18493,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+59"/>
         <location line="+3"/>
         <source>Pitch Tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>ピッチトラッカー</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+65"/>
@@ -18518,22 +18518,22 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+7"/>
         <source>General</source>
-        <translation type="unfinished">一般</translation>
+        <translation>一般</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>メソッド</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Frame Size</source>
-        <translation type="unfinished"></translation>
+        <translation>フレームサイズ</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Step Size</source>
-        <translation type="unfinished"></translation>
+        <translation>ステップサイズ</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -18543,7 +18543,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+14"/>
         <source>Algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>アルゴリズム</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -18571,7 +18571,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+121"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
-        <translation type="unfinished"></translation>
+        <translation>jackに接続できない！jackサーバをきちんと動かし、他のトラッカークライアントがオープンしないようにする。</translation>
     </message>
 </context>
 <context>
@@ -19559,7 +19559,7 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location line="+54"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込む%1ファイルがオープンできない</translation>
     </message>
     <message>
         <location line="+245"/>
@@ -19666,7 +19666,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
     <message>
         <location line="-356"/>
         <source>Pitch Tracker can only contain 1 segment.</source>
-        <translation type="unfinished"></translation>
+        <translation>ピッチトラッカーは1セグメントのみ含むことが出来る。</translation>
     </message>
     <message>
         <location line="+434"/>
@@ -19678,12 +19678,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
     <message>
         <location line="+761"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>ドロップしたファイルをついか出来ない。  JACKオーディオサーバは無効。</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
-        <translation type="unfinished"></translation>
+        <translation>ドロップしたファイルが追加出来ない。   このバージョンのrosegardenはオーディオをサポートできるように構築されていない。</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -20344,7 +20344,7 @@ No segment will be split.</source>
     <message>
         <location line="+11"/>
         <source>Remove Original Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>オリジナルのテンポとタイムシグネチャを削除</translation>
     </message>
     <message>
         <location line="+1911"/>
@@ -20610,7 +20610,7 @@ Error was : %2</source>
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;ビュー-&gt;ドキュメントのプロパティ-&gt;オーディオで修正するまで、&lt;/b&gt;Rosegarden上にオーディオファイルをドラッグアンドドロップするか、オーディオを録音できない。&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -20899,7 +20899,7 @@ Error was : %2</source>
     <message>
         <location line="+25"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>変更</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -20909,7 +20909,7 @@ Error was : %2</source>
     <message>
         <location line="+8"/>
         <source>Reset</source>
-        <translation type="unfinished">リセット</translation>
+        <translation>リセット</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -20941,7 +20941,7 @@ Error was : %2</source>
         <location line="+411"/>
         <location line="+46"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="-45"/>
@@ -21165,12 +21165,12 @@ Would you like to set it now?</source>
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation type="unfinished"></translation>
+        <translation>クリックしてドラッグでセグメントを移動;Ctrlキーを押しながらではコピー;Ctrl+Altではリンクされたコピー</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>クリックしてドラッグでセグメントを移動;Ctrlキーを押しながらではコピー;Ctrl+Altではリンクされたコピー；ダブルクリックで編集</translation>
     </message>
     <message>
         <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
@@ -21878,7 +21878,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+29"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;br&gt;サイズ: %1,  Bracket: %2 </translation>
     </message>
     <message>
         <location line="+28"/>
