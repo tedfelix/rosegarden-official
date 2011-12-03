@@ -279,17 +279,22 @@ TrackButtons::slotUpdateTracks()
 
     //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks << endl;
 
+    // If a track or tracks were deleted
     if (newNbTracks < m_tracks) {
+        // For each deleted track, remove a button from the end.
         for (unsigned int i = m_tracks; i > newNbTracks; --i)
             removeButtons(i - 1);
-    } else if (newNbTracks > m_tracks) {
+    } else if (newNbTracks > m_tracks) {  // if added
+        // For each added track
         for (unsigned int i = m_tracks; i < newNbTracks; ++i) {
             track = m_doc->getComposition().getTrackByPosition(i);
             if (track) {
+                // Make a new button
                 QFrame *trackHBox = makeButton(track->getId());
 
                 if (trackHBox) {
                     trackHBox->show();
+                    // Add the new button to the layout.
                     m_layout->insertWidget(i, trackHBox);
                     m_trackHBoxes.push_back(trackHBox);
                 }
@@ -440,8 +445,8 @@ TrackButtons::slotToggleRecordTrack(int position)
                 // found another record track of the same type (and
                 // with the same instrument, if audio): unselect that
 
-                //!!! should we tell the user, particularly for the
-                //audio case? might seem odd otherwise
+                // !!! should we tell the user, particularly for the
+                // audio case? might seem odd otherwise
 
                 int otherPos = otherTrack->getPosition();
                 setRecordTrack(otherPos, false);
@@ -458,8 +463,8 @@ void
 TrackButtons::setRecordTrack(int position, bool state)
 {
     setRecordButton(position, state);
-    m_doc->getComposition().setTrackRecording
-    (m_trackLabels[position]->getId(), state);
+    m_doc->getComposition().setTrackRecording(
+            m_trackLabels[position]->getId(), state);
 }
 
 void
@@ -517,6 +522,10 @@ TrackButtons::slotSetTrackMeter(float value, int position)
     //Studio &studio = m_doc->getStudio();
     //Track *track;
 
+    // ??? Couldn't we just do this:
+    //   m_trackMeters[position]->setLevel(value);
+    //     This loop may have been leftover from a version of this using
+    //     track ID.
     for (unsigned int i = 0; i < (unsigned int)m_trackMeters.size(); ++i) {
         if (i == ((unsigned int)position)) {
             m_trackMeters[i]->setLevel(value);

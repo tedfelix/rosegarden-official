@@ -45,15 +45,16 @@ class Instrument;
 /// The QFrame containing the various widgets for each track.
 /**
  * The TrackButtons class is a QFrame that runs vertically along the left
- * side of the tracks.  It contains an "HBox" QFrame for each track.  That
- * HBox contains the widgets that appear to the left of each track:
+ * side of the tracks (CompositionView).  It contains an "HBox" QFrame for
+ * each track.  That HBox contains the widgets that appear to the left of
+ * each track:
  *
  *   - The TrackVUMeter (which doubles as the track number)
  *   - The Mute LedButton
  *   - The Record LedButton
- *   - The TrackLabel (usually "<untitled>")
+ *   - The TrackLabel (defaults to "<untitled>")
  *
- * These widgets are created based on the rosegarden document.
+ * These widgets are created based on the RosegardenDocument.
  */
 class TrackButtons : public QFrame
 {
@@ -69,121 +70,154 @@ public:
 
     ~TrackButtons();
 
-    /// Return a vector of muted tracks
+    /// Return a vector of muted track positions
     std::vector<int> mutedTracks();
 
-    /// Return a vector of highlighted tracks
+    /// Return a vector of highlighted track positions
+    /// @see selectLabel()
     std::vector<int> getHighlightedTracks();
 
+    /// Change the track labels between track, instrument, or both.
     void changeTrackInstrumentLabels(TrackLabel::InstrumentTrackLabels label);
 
     /**
      * Change the instrument label to something else like
      * an actual program name rather than a meaningless
-     * device number and midi channel
+     * device number and MIDI channel.
      */
     void changeInstrumentLabel(InstrumentId id, QString label);
 
+    /// Set the label (track name) that is normally displayed.
+    /// @see slotRenameTrack()
     void changeTrackLabel(TrackId id, QString label);
 
-    // Select a label from outside this class by position
-    //
-    void selectLabel(int trackId);
+    /// Select the given track.  This displays it with a highlight.
+    /// @see getHighlightedTracks()
+    void selectLabel(int position);
 
-    /*
-     * Set the mute button down or up
-     */
+    /// Set the mute button down or up.
     void setMuteButton(TrackId track, bool value);
 
-    /*
-     * Make this available so that others can set record buttons down
-     */
+    /// Set the record button down or up.
     void setRecordTrack(int position, bool value);
 
     /**
      * Precalculate the Instrument popup so we don't have to every
-     * time it appears
-     * not protected because also used by the RosegardenMainWindow
+     * time it appears.
      *
-     * @see RosegardenMainWindow#slotPopulateTrackInstrumentPopup()
+     * @see RosegardenMainWindow::slotPopulateTrackInstrumentPopup()
      */
     void populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup);
 
 signals:
-    // to emit what Track has been selected
-    //
-    void trackSelected(int);
-    void instrumentSelected(int);
+    /// Emitted when a track has been selected.
+    /// @see slotLabelSelected()
+    void trackSelected(int trackId);
+    /// Emitted when an instrument is selected from the popup.
+    /// @see slotInstrumentPopupActivated()
+    void instrumentSelected(int instrumentId);
 
+    /// Emitted when the track label changes.
+    /// @see changeTrackLabel()
     void widthChanged();
 
-    // to tell the notation canvas &c when a name changes
-    //
+    /// Emitted when a track label changes.
+    /// Tell the notation canvas &c when a name changes.
+    /// @see changeTrackLabel()
     void nameChanged();
 
     // document modified (mute button)
-    //
-    void modified();
+    // Dead Code.
+//    void modified();
 
-    // A record button has been pressed - if we're setting to an audio
-    // track we need to tell the sequencer for live monitoring
-    // purposes.
-    //
-    void recordButton(TrackId track, bool state);
+    /// Emitted when a record button's state has changed.
+    /// If we're setting to an audio
+    /// track we need to tell the sequencer for live monitoring
+    /// purposes.
+    /// @see slotToggleRecordTrack()
+    void recordButton(TrackId trackId, bool state);
 
-    // A mute button has been pressed
-    //
-    void muteButton(TrackId track, bool state);
+    /// Emitted when a mute button's state has changed.
+    /// @see slotToggleMutedTrack()
+    void muteButton(TrackId trackId, bool state);
 
 public slots:
 
+    /// Toggles the record state for the track at the given position.
     void slotToggleRecordTrack(int position);
-    void slotToggleMutedTrack(int mutedTrack);
+    /// Toggles the mute state for the track at the given position.
+    void slotToggleMutedTrack(int position);
+
+    /// Full sync of the track buttons with the composition.
+    /// Adds or deletes track buttons as needed and updates the labels and
+    /// LEDs on all tracks.
+    /// @see slotSynchroniseWithComposition()
+    /// @see populateButtons()
     void slotUpdateTracks();
+
+    /// Connected to TrackLabel::renameTrack() to respond to the user changing
+    /// the name of the track.
+    /// @see changeTrackLabel()
     void slotRenameTrack(QString newName, TrackId trackId);
+    /// Sets the level of the VU meter on a track.
+    /// @see slotSetMetersByInstrument()
+    /// @see RosegardenMainViewWidget::updateMeters()
     void slotSetTrackMeter(float value, int position);
+    /// Sets the level of the VU meter on all tracks that use a specific
+    /// instrument.
+    /// @see slotSetTrackMeter()
     void slotSetMetersByInstrument(float value, InstrumentId id);
 
-    void slotInstrumentSelection(int);
-    void slotInstrumentPopupActivated(int);		// old kde3
+    /// Brings up the popup menu so that the user can select an instrument
+    /// for the given track.
+    void slotInstrumentSelection(int trackId);
+    /// Sets the instrument for the track once the user has made a selection
+    /// in the instrument popup.
+    /// @see slotTrackInstrumentSelection()
+    void slotInstrumentPopupActivated(int item);		// old kde3
+    /// Delegates to the overloaded version that takes an int.
     void slotInstrumentPopupActivated(QAction*);		// old kde3
+
+    /// Selects the instrument for a track given the track ID and the popup
+    /// menu item for the instrument.
+    void slotTrackInstrumentSelection(TrackId trackId, int item);
     
-    void slotTrackInstrumentSelection(TrackId, int);
-    
-    // ensure track buttons match the Composition
-    //
+    /// Ensure track buttons match the Composition.
+    /// This routine only makes sure the mute and record buttons are synced.
+    /// slotUpdateTracks() does a more thorough sync.
     void slotSynchroniseWithComposition();
 
-    // Convert a positional selection into a track selection and re-emit
-    //
+    /// Convert a positional selection into a track ID selection and emit
+    /// trackSelected().
     void slotLabelSelected(int position);
 
 protected:
 
-    /**
-     * Populate the track buttons themselves with Instrument information
-     */
+    /// Updates the buttons from the composition.
+    /// @see slotUpdateTracks()
     void populateButtons();
 
-    /**
-     * Remove buttons and clear iterators for a position
-     */
+    /// Remove buttons for a position.
     void removeButtons(unsigned int position);
 
-    /**
-     * Set record button - graphically only
-     */
+    /// Set record button - graphically only.
+    /// @see slotSynchroniseWithComposition()
+    /// @see setRecordTrack()
     void setRecordButton(int position, bool down);
 
-    /**
-     *  buttons, starting at the specified index
-     */
+    /// Creates the buttons for all the tracks, then calls populateButtons()
+    /// to sync them up with the composition.
     void makeButtons();
 
+    /// Creates all the widgets for a single track.
     QFrame* makeButton(TrackId trackId);
-    QString getPresentationName(Instrument *);
 
-    void setButtonMapping(QObject*, TrackId);
+    // Dead Code.
+//    QString getPresentationName(Instrument *);
+
+    /// Used to associate TrackLabel signals with their track ID.
+    /// @see QSignalMapper::setMapping()
+    void setButtonMapping(QObject* obj, TrackId trackId);
 
     /**
      * Return a suitable colour for a record LED for the supplied instrument,
@@ -198,7 +232,7 @@ protected:
      * when adding and deleting things with the device manager, and this may
      * help show that up.  Or not.)
      */
-     QColor getRecordLedColour(Rosegarden::Instrument *ins);
+    QColor getRecordLedColour(Rosegarden::Instrument *ins);
 
     //--------------- Data members ---------------------------------
 
@@ -208,6 +242,7 @@ protected:
     QVBoxLayout                      *m_layout;
 
     // --- The widgets
+    // These vectors are indexed by track position.
     std::vector<LedButton *>          m_muteLeds;
     std::vector<LedButton *>          m_recordLeds;
     std::vector<TrackLabel *>         m_trackLabels;
@@ -244,7 +279,13 @@ protected:
     int                               m_popupItem;
 
     TrackLabel::InstrumentTrackLabels             m_trackInstrumentLabels;
+    // Position of the last selected track.
     int m_lastSelected;
+
+private:
+    // Hide copy ctor and op=
+    TrackButtons(const TrackButtons &);
+    TrackButtons &operator=(const TrackButtons &);
 };
 
 
