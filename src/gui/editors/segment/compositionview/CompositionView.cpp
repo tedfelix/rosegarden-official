@@ -1230,7 +1230,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     QRect rect = r;
     rect.setSize(rect.size() - QSize(1, 1));                                    
 
-    RG_DEBUG << "drawRect: rect is " << rect << endl;
+    //RG_DEBUG << "drawRect: rect is " << rect << endl;
 
     if (fill) {
         if (isSelected) {
@@ -1258,7 +1258,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     QRect intersection = rect.intersect(clipRect);
 
     if (clipRect.contains(rect)) {
-        RG_DEBUG << "note: drawing whole rect" << endl;
+        //RG_DEBUG << "note: drawing whole rect" << endl;
         p->drawRect(rect);
     } else {
         // draw only what's necessary
