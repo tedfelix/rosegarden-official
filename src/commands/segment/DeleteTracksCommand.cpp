@@ -51,57 +51,64 @@ DeleteTracksCommand::~DeleteTracksCommand()
 
 void DeleteTracksCommand::execute()
 {
-    Track *track = 0;
-    const Composition::segmentcontainer &segments =
-        m_composition->getSegments();
+    //RG_DEBUG << "DeleteTracksCommand::execute()";
 
-    //cout << "DeleteTracksCommand::execute()" << endl;
-
+    // Clear out the undo info.
     m_oldSegments.clear();
     m_oldTracks.clear();
 
-    // Remap positions and track numbers
-    //
+    // Aliases for readability
+    const Composition::segmentcontainer &segments =
+        m_composition->getSegments();
+    Composition::trackcontainer &tracks = m_composition->getTracks();
 
-    Composition::trackiterator tit;
-    Composition::trackcontainer
-    &tracks = m_composition->getTracks();
+    // Remove the tracks and their segments.
 
+    // For each track we are deleting.
     for (size_t i = 0; i < m_tracks.size(); ++i) {
-        // detach segments and store tracks somewhere
-        track = m_composition->getTrackById(m_tracks[i]);
+
+        Track *track = m_composition->getTrackById(m_tracks[i]);
 
         if (track) {
-            // detach all segments for that track
-            //
-            for (Composition::segmentcontainer::const_iterator
-                    it = segments.begin();
-                    it != segments.end(); ++it) {
+            // For each segment in the composition.
+            for (Composition::segmentcontainer::const_iterator it =
+                     segments.begin();
+                 it != segments.end(); ++it) {
+                // If this segment is on the track we are deleting
                 if ((*it)->getTrack() == m_tracks[i]) {
+                    // Save the segment for undo.
                     m_oldSegments.push_back(*it);
+                    // Remove the segment from the composition.
                     m_composition->detachSegment(*it);
                 }
             }
 
-            // store old tracks
+            // Save the track for undo.
             m_oldTracks.push_back(track);
+            // Remove the track from the composition.
             if (m_composition->detachTrack(track) == false) {
-                RG_DEBUG << "DeleteTracksCommand::execute - can't detach track" << endl;
+                RG_DEBUG << "DeleteTracksCommand::execute - can't detach track";
             }
         }
     }
 
-    std::vector<Track*>::iterator otIt;
-    for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt) {
-        for (tit = tracks.begin(); tit != tracks.end(); ++tit) {
-            if ((*tit).second->getPosition() > (*otIt)->getPosition()) {
-                // If the track we've removed was after the current
-                // track then decrement the track position.
-                //
-                int newPosition = (*tit).second->getPosition() - 1;
+    // Adjust the track position numbers to remove any gaps.
 
-                (*tit).second->setPosition(newPosition);
-
+    // For each deleted track
+    for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin();
+         oldTrackIter != m_oldTracks.end();
+         ++oldTrackIter) {
+        // For each track left in the composition
+        for (Composition::trackiterator compTrackIter = tracks.begin();
+             compTrackIter != tracks.end();
+             ++compTrackIter) {
+            // If the composition track was after the deleted track
+            if ((*compTrackIter).second->getPosition() > 
+                    (*oldTrackIter)->getPosition()) {
+                // Decrement the composition track's position to close up
+                // the gap in the position numbers.
+                int newPosition = (*compTrackIter).second->getPosition() - 1;
+                (*compTrackIter).second->setPosition(newPosition);
             }
         }
     }
@@ -111,40 +118,45 @@ void DeleteTracksCommand::execute()
 
 void DeleteTracksCommand::unexecute()
 {
-    // Add the tracks and the segments back in
-    //
+    // Add the tracks and the segments back in.
 
-    // Remap positions and track numbers
-    //
-    Composition::trackcontainer
-    &tracks = m_composition->getTracks();
-    Composition::trackiterator tit;
+    // Alias for readability.
+    Composition::trackcontainer &tracks = m_composition->getTracks();
 
-    std::vector<Track*>::iterator otIt;
-    for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt) {
-        // From the back we shuffle out the tracks to allow the new
-        // (old) track some space to come back in.
-        //
-        tit = tracks.end();
+    // For each track we need to add back in 
+    for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin(); 
+         oldTrackIter != m_oldTracks.end(); 
+         ++oldTrackIter) {
+
+        // From the back we shift the track positions in the composition
+        // to allow the new (old) track some space to come back in.
+
+        // ??? There's no need to do this in reverse.  Doing this forward will
+        //     work just as well.  We are visiting every single track in the
+        //     Composition either way.
+
+        Composition::trackiterator compTrackIter = tracks.end();
         while (true) {
-            --tit;
+            --compTrackIter;
 
-            if ((*tit).second->getPosition() >= (*otIt)->getPosition()) {
-                // If the track we're adding has position after the
-                // current track then increment position.
-                //
-                int newPosition = (*tit).second->getPosition() + 1;
-
-                (*tit).second->setPosition(newPosition);
+            // If the composition track's position is after or the same as
+            // the position of the track we are adding
+            if ((*compTrackIter).second->getPosition() >= 
+                    (*oldTrackIter)->getPosition()) {
+                // Increment the composition track's position to make room
+                int newPosition = (*compTrackIter).second->getPosition() + 1;
+                (*compTrackIter).second->setPosition(newPosition);
             }
 
-            if (tit == tracks.begin())
+            if (compTrackIter == tracks.begin())
                 break;
         }
 
-        m_composition->addTrack(*otIt);
+        // Add the new (old) track back in.
+        m_composition->addTrack(*oldTrackIter);
     }
 
+    // Add the old segments back in.
     for (size_t i = 0; i < m_oldSegments.size(); ++i)
         m_composition->addSegment(m_oldSegments[i]);
 
@@ -152,3 +164,4 @@ void DeleteTracksCommand::unexecute()
 }
 
 }
+
