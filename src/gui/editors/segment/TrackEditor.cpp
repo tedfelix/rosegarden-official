@@ -317,8 +317,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(this, SIGNAL(needUpdate()),
-            m_compositionView, SLOT(slotUpdateSegmentsDrawBuffer()));
+    // Was only emitted from dead code.
+    //connect(this, SIGNAL(needUpdate()),
+    //        m_compositionView, SLOT(slotUpdateSegmentsDrawBuffer()));
 
     connect(m_compositionView->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),
@@ -416,20 +417,56 @@ void TrackEditor::updateRulers()
 
 void TrackEditor::paintEvent(QPaintEvent* e)
 {
-//    RG_DEBUG << "TrackEditor::paintEvent" << endl;
+#if 0
+    RG_DEBUG << "TrackEditor::paintEvent()";
+    static QTime t;
+    RG_DEBUG << "  elapsed: " << t.restart();
+    QRect wr = rect();
+    RG_DEBUG << "  widget rect: (" << wr.x() << "," << wr.y() << ") - (" << wr.right() << "," << wr.bottom() << ")";
+    QRect r = e->rect();
+    RG_DEBUG << "  pe rect: (" << r.x() << "," << r.y() << ") - (" << r.right() << "," << r.bottom() << ")";
+    QVector<QRect> rects = e->region().rects();
+    for (unsigned i = 0; i < (unsigned)rects.size(); ++i) {
+        QRect &s = rects[i];
+        RG_DEBUG << "  pe region rect #" << i+1 << " (" << s.x() << "," << s.y() << ") - (" << s.right() << "," << s.bottom() << ")";
+    }
+#endif
 
+    // ??? If we are asked to paint, we should paint.  It shouldn't matter
+    //   whether anything has changed.  This may be here as a way to stop the
+    //   endless loop that would otherwise be created by the
+    //   m_compositionView->updateContents() call inside this "if".
     if (isCompositionModified()) {
 
-        RG_DEBUG << "TrackEditor::paintEvent: Composition modified" << endl;
+        //RG_DEBUG << "TrackEditor::paintEvent: Composition modified";
 
-        //!!! These calls from within a paintEvent look ugly
+        // !!! These calls from within a paintEvent look ugly
+        // ??? Need to investigate each of these calls and see if we can
+        //     implement them in a more appropriate way.  Some are causing
+        //     serious CPU issues.  None belong here.
+
         slotReadjustCanvasSize();
-        m_trackButtons->slotUpdateTracks(); 
+
+        // ??? This is the biggest source of CPU usage when recording.
+        //     Essentially, the track buttons are being asked to update
+        //     themselves every 20ms when MIDI is coming in.  Even if
+        //     there is no change to the Composition that is relevant to the
+        //     track buttons.
+        m_trackButtons->slotUpdateTracks();
+
         m_compositionView->clearSegmentRectsCache(true);
-        
+
+        // ??? This is directly contrary to the advice in the Qt docs.  This
+        //   is asking a child QWidget to paint itself.  From the Qt docs for
+        //   QWidget::paintEvent():
+        //     "Generally, you should refrain from calling update() or
+        //      repaint() inside a paintEvent(). For example, calling
+        //      update() or repaint() on children inside a paintevent()
+        //      results in undefined behavior; the child may or may not get
+        //      a paint event."
         m_compositionView->updateContents();
-         
-//        m_compositionView->update();
+
+        //m_compositionView->update();
 
         Composition &composition = m_doc->getComposition();
 
@@ -481,6 +518,8 @@ void TrackEditor::addSegment(int track, int time, unsigned int duration)
     addCommandToHistory(command);
 }
 
+#if 0
+// Dead Code.
 void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 {
     RG_DEBUG << QString("TrackEditor::segmentOrderChanged(section : %1, from %2, to %3)")
@@ -489,9 +528,10 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
     //!!! how do we get here? need to involve a command
     emit needUpdate();
 }
+#endif
 
 void
-TrackEditor::slotCanvasScrolled(int x, int y)
+TrackEditor::slotCanvasScrolled(int x, int /*y*/)
 {
     // update the pointer position if the user is dragging it from the loop ruler
     if ((m_topStandardRuler && m_topStandardRuler->getLoopRuler() &&

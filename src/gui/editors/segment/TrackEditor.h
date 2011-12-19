@@ -54,9 +54,12 @@ class StandardRuler;
  * Global widget for segment edition.
  *
  * Shows a global overview of the composition, and lets the user
- * manipulate the segments
+ * manipulate the segments.
+ *
+ * An object of this class is created and owned by RosegardenMainViewWidget.
  *
  * @see CompositionView
+ * @see RosegardenMainViewWidget::getTrackEditor()
  */
 class TrackEditor : public QWidget
 {
@@ -154,7 +157,8 @@ public slots:
     void slotToggleTracking();
 
 protected slots:
-    void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
+    // Dead Code.
+//    void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
 
     void slotTrackButtonsWidthChanged();
 
@@ -168,7 +172,8 @@ signals:
      *
      * @see CompositionView::update()
      */
-    void needUpdate();
+    // Dead Code.
+//    void needUpdate();
 
     /**
      * sent back to RosegardenGUI
@@ -196,10 +201,10 @@ signals:
 
 protected:
 
+    // QWidget overrides.
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent*);
     virtual void dragMoveEvent(QDragMoveEvent *);
-    
     virtual void paintEvent(QPaintEvent* e);
     
     void init(QWidget *);
