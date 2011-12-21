@@ -1686,7 +1686,8 @@ void Composition::addTrack(Track *track)
     }
 }
 
-
+#if 0
+// unused
 void Composition::deleteTrack(Rosegarden::TrackId track)
 {
     trackiterator titerator = m_tracks.find(track);
@@ -1706,6 +1707,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
     }
     
 }
+#endif
 
 bool Composition::detachTrack(Rosegarden::Track *track)
 {
@@ -1728,7 +1730,6 @@ bool Composition::detachTrack(Rosegarden::Track *track)
     m_tracks.erase(it);
     updateRefreshStatuses();
     checkSelectedAndRecordTracks();
-    notifyTrackDeleted(track->getId());
 
     return true;
 }
@@ -2156,11 +2157,13 @@ Composition::notifyTrackChanged(Track *t) const
 }
 
 void
-Composition::notifyTrackDeleted(TrackId t) const
+Composition::notifyTracksDeleted(std::vector<TrackId> trackIds) const
 {
+    //RG_DEBUG << "Composition::notifyTracksDeleted() notifying" << m_observers.size() << "observers";
+
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->trackDeleted(this, t);
+         i != m_observers.end(); ++i) {
+        (*i)->tracksDeleted(this, trackIds);
     }
 }
 

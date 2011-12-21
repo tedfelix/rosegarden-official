@@ -380,7 +380,7 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
                                   (eventStart,
                                    eventEnd - eventStart)));
 
-        RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment: x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")";
+        //RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment: x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")";
 
         if (x <= segStartX) {
             ++x;

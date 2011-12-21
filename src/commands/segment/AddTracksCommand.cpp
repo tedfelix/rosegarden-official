@@ -124,6 +124,12 @@ void AddTracksCommand::unexecute()
         if (track) track->setPosition(i->second);
     }
 
+    // Notify composition observers of the delete
+    std::vector<TrackId> trackIds;
+    for (size_t i = 0; i < m_newTracks.size(); ++i)
+        trackIds.push_back(m_newTracks[i]->getId());
+    m_composition->notifyTracksDeleted(trackIds);
+
     m_detached = true;
 }
 

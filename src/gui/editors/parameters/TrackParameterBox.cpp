@@ -90,11 +90,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
         : RosegardenParameterBox(tr("Track"),
                                  tr("Track Parameters"),
                                  parent),
-                                 m_doc(doc),
-                                 m_highestPlayable(127),
-                                 m_lowestPlayable(0),
-                                 m_lastInstrumentType(-1),
-                                 m_selectedTrackId((int)NO_TRACK)
+          m_doc(doc),
+          m_highestPlayable(127),
+          m_lowestPlayable(0),
+          m_selectedTrackId((int)NO_TRACK),
+          m_lastInstrumentType(-1)
 {
     setObjectName("Track Parameter Box");
 
@@ -479,6 +479,7 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
     if (m_doc != doc) {
         RG_DEBUG << "TrackParameterBox::setDocument\n";
         m_doc = doc;
+        m_doc->getComposition().addObserver(this);
         slotPopulateDeviceLists();
     }
 }
@@ -722,10 +723,18 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
 }
 
 void
-TrackParameterBox::trackDeleted(const Composition *comp, TrackId id)
+TrackParameterBox::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
 {
-    std::cerr << "TrackParameterBox::trackDeleted(" << id << "), selected is " << m_selectedTrackId << std::endl;
-    if ((int)id == m_selectedTrackId) slotSelectedTrackChanged();
+    //RG_DEBUG << "TrackParameterBox::tracksDeleted(), selected is " << m_selectedTrackId;
+
+    // For each deleted track
+    for (unsigned i = 0; i < trackIds.size(); ++i) {
+        // If this is the selected track
+        if ((int)trackIds[i] == m_selectedTrackId) {
+            slotSelectedTrackChanged();
+            return;
+        }
+    }
 }
 
 void

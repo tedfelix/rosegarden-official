@@ -113,6 +113,8 @@ void DeleteTracksCommand::execute()
         }
     }
 
+    m_composition->notifyTracksDeleted(m_tracks);
+
     m_detached = true;
 }
 

@@ -18,6 +18,7 @@
 #ifndef _RG_TRACKBUTTONS_H_
 #define _RG_TRACKBUTTONS_H_
 
+#include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include "gui/application/RosegardenMainWindow.h"
@@ -56,7 +57,7 @@ class Instrument;
  *
  * These widgets are created based on the RosegardenDocument.
  */
-class TrackButtons : public QFrame
+class TrackButtons : public QFrame, CompositionObserver
 {
     Q_OBJECT
 public:
@@ -233,6 +234,11 @@ protected:
      * help show that up.  Or not.)
      */
     QColor getRecordLedColour(Rosegarden::Instrument *ins);
+
+    // CompositionObserver overrides
+//    virtual void trackChanged(const Composition *, Track*);
+    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
+
 
     //--------------- Data members ---------------------------------
 

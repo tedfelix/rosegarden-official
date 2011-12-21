@@ -167,7 +167,8 @@ public:
     /**
      * Delete a Track by index
      */
-    void deleteTrack(TrackId track);
+    // unused
+//    void deleteTrack(TrackId track);
 
     /**
      * Detach a Track (revert ownership of the Track object to the
@@ -823,6 +824,8 @@ public:
     void    addObserver(CompositionObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
 
+    void notifyTracksDeleted(std::vector<TrackId> trackIds) const;
+
     //////
     // DEBUG FACILITIES
     void dump(std::ostream&, bool full=false) const;
@@ -963,7 +966,6 @@ protected:
     void notifySegmentEndMarkerChange(Segment *s, bool shorten);
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
-    void notifyTrackDeleted(TrackId) const;
     void notifyMetronomeChanged() const;
     void notifyTimeSignatureChanged() const;
     void notifySoloChanged() const;
@@ -1108,9 +1110,9 @@ public:
     virtual void trackChanged(const Composition *, Track*) { }
 
     /**
-     * Called when a track has been deleted
+     * Called when tracks have been deleted
      */
-    virtual void trackDeleted(const Composition *, TrackId) { }
+    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/) { }
 
     /**
      * Called when some time signature has changed

@@ -179,7 +179,7 @@ public:
     virtual void segmentEndMarkerChanged   (const Composition*, Segment *, bool);
     virtual void endMarkerTimeChanged      (const Composition*, bool shorten);
     virtual void trackChanged              (const Composition*, Track*);
-    virtual void trackDeleted              (const Composition*, TrackId);
+    virtual void tracksDeleted             (const Composition *, std::vector<TrackId> &/*trackIds*/);
     virtual void timeSignatureChanged      (const Composition*);
     virtual void metronomeChanged          (const Composition*);
     virtual void soloChanged               (const Composition*, bool solo, TrackId selectedTrack);

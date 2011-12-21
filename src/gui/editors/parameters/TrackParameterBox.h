@@ -66,7 +66,7 @@ public:
 
     // CompositionObserver interface
     //
-    virtual void trackDeleted(const Composition *, TrackId);
+    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
 
 public slots:
     void slotSelectedTrackChanged();

@@ -1834,9 +1834,13 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
     }
 }
 
-void SequenceManager::trackDeleted(const Composition *, TrackId t)
+void SequenceManager::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
 {
-    ControlBlock::getInstance()->setTrackDeleted(t, true);
+    //SEQMAN_DEBUG << "SequenceManager::tracksDeleted()";
+
+    for (unsigned i = 0; i < trackIds.size(); ++i) {
+        ControlBlock::getInstance()->setTrackDeleted(trackIds[i], true);
+    }
 }
 
 void SequenceManager::metronomeChanged(InstrumentId id,

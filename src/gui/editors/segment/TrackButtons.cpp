@@ -121,10 +121,15 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
     //
     setMinimumHeight(overallHeight);
 
+    m_doc->getComposition().addObserver(this);
 }
 
-TrackButtons::~TrackButtons()
-{}
+TrackButtons::~TrackButtons() {
+    // CRASH!  Probably m_doc is gone...
+    // Probably don't need to disconnect as we only go away when the
+    // doc and composition do.  shared_ptr would help here.
+//    m_doc->getComposition().removeObserver(this);
+}
 
 void
 TrackButtons::makeButtons()
@@ -273,6 +278,12 @@ TrackButtons::removeButtons(unsigned int position)
 void
 TrackButtons::slotUpdateTracks()
 {
+#if 0
+    RG_DEBUG << "TrackButtons::slotUpdateTracks()";
+    static QTime t;
+    RG_DEBUG << "  elapsed: " << t.restart();
+#endif
+
     Composition &comp = m_doc->getComposition();
     unsigned int newNbTracks = comp.getNbTracks();
     Track *track = 0;
@@ -1157,6 +1168,21 @@ TrackButtons::getRecordLedColour(Instrument *ins)
 
 }
 
+#if 0
+// Definitely not ready for primetime.
+void
+TrackButtons::trackChanged(const Composition *, Track*) {
+    RG_DEBUG << "TrackButtons::trackChanged()";
+//    slotUpdateTracks();
+}
+#endif
+
+void
+TrackButtons::tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/) {
+    //RG_DEBUG << "TrackButtons::tracksDeleted()";
+
+    slotUpdateTracks();
+}
 
 }
 #include "TrackButtons.moc"
