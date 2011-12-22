@@ -1996,6 +1996,26 @@ Composition::getNewTrackId() const
     return highWater;
 }
 
+// Get all the segments that the same instrument plays that plays
+// segment s.
+// @return a segmentcontainer that includes s itself.
+Composition::segmentcontainer
+Composition::getInstrumentSegments(Segment *s, timeT t) const
+{
+    Composition::segmentcontainer segments;
+    InstrumentId Instrument = getInstrumentId(s);
+
+    const Composition::segmentcontainer& allSegments = getSegments();
+    for (Composition::iterator i = allSegments.begin();
+         i != allSegments.end();
+         ++i)
+        {
+            if (((*i)->getStartTime() < t) &&
+                (getInstrumentId(*i) == Instrument))
+                { segments.insert(*i); }
+        }
+    return segments;
+}
 
 void
 Composition::notifySegmentAdded(Segment *s) const

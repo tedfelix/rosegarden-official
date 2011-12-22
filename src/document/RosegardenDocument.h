@@ -404,6 +404,12 @@ public:
      */
     AudioPluginManager* getPluginManager()
         { return m_pluginManager; }
+    
+    /**
+     * Return the instrument that plays segment
+     */
+    Instrument *
+    getInstrument(Segment *segment);
 
     /**
      * Clear all plugins from sequencer and from gui

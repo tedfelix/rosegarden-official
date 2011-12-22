@@ -22,8 +22,10 @@
 #include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
+#include "base/ControllerContext.h"
 #include "base/Event.h"
 #include "base/Exception.h"
+#include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
@@ -34,7 +36,9 @@
 #include "sound/MappedSegment.h"
 #include <QFile>
 #include <QString>
+#include <vector>
 
+#include "base/SoftSynthDevice.h"
 
 namespace Rosegarden
 {
@@ -259,6 +263,9 @@ SegmentMapper::mergeTriggerSegment(Segment **target,
     if (!*target) *target = new Segment;
 
     timeT evTime = trigger->getAbsoluteTime();
+
+    ControllerContextMap controllerContextMap;
+
     timeT trStart = rec->getSegment()->getStartTime();
     timeT trEnd = rec->getSegment()->getEndMarkerTime();
     timeT trDuration = trEnd - trStart;
@@ -338,6 +345,21 @@ SegmentMapper::mergeTriggerSegment(Segment **target,
             newEvent->set<Int>(BaseProperties::VELOCITY, velocity);
         }
 
+        if (newEvent->isa(Controller::EventType) ||
+            newEvent->isa(PitchBend::EventType)) {
+            const int controllerId =
+                newEvent->has(Controller::NUMBER) ?
+                newEvent->get <Int>(Controller::NUMBER) : 0;
+            const ControllerContext * ctlContext =
+                controllerContextMap.
+                    findControllerContext(m_doc,
+                                          m_segment,
+                                          evTime,
+                                          newEvent->getType(),
+                                          controllerId);
+            ctlContext->adjustControllerValue(newEvent);
+        }
+            
         (*target)->insert(newEvent);
     }
 }

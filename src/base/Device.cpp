@@ -14,6 +14,9 @@
 */
 
 #include "Device.h"
+#include "base/Controllable.h"
+#include "base/MidiDevice.h"
+#include "base/SoftSynthDevice.h"
 
 namespace Rosegarden
 {
@@ -26,6 +29,19 @@ Device::~Device()
 {
     InstrumentList::iterator it = m_instruments.begin();
     for (; it != m_instruments.end(); it++) delete (*it);
+}
+
+// Return a Controllable if we are a subtype that also inherits from
+// Controllable, otherwise return NULL
+Controllable *
+Device::getControllable(void)
+{
+    Controllable *c = dynamic_cast<MidiDevice *>(this);
+    if (!c) {
+        c = dynamic_cast<SoftSynthDevice *>(this);
+    }
+    // Even if it's zero, return it now.
+    return c;
 }
 
 }

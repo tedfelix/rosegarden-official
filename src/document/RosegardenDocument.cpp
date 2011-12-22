@@ -2997,5 +2997,22 @@ RosegardenDocument::notifyAudioFileRemoval(AudioFileId id)
     }
 }
 
+// Get the instrument that plays the segment.
+// @returns a pointer to the instrument object
+Instrument *
+RosegardenDocument::
+getInstrument(Segment *segment)
+{
+    if (!segment)
+        { return 0; }
+
+    Studio &studio = getStudio();
+    Instrument *instrument =
+        studio.getInstrumentById
+        (segment->getComposition()->getTrackById(segment->getTrack())->
+         getInstrument());
+    return instrument;
+}
+
 }
 #include "RosegardenDocument.moc"

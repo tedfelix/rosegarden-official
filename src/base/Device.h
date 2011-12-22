@@ -32,7 +32,8 @@ typedef unsigned int DeviceId;
 
 class Instrument;
 typedef std::vector<Instrument *> InstrumentList;
-
+class Controllable;
+ 
 class Device : public XmlExportable
 {
 public:
@@ -53,6 +54,12 @@ public:
 
     virtual ~Device();
 
+    /**
+     * Return a Controllable if we are a subtype that also inherits
+     * from Controllable, otherwise return NULL
+     **/
+    Controllable * getControllable(void);
+    
     void setType(DeviceType type) { m_type = type; }
     DeviceType getType() const { return m_type; }
 

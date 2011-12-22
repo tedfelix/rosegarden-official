@@ -182,6 +182,19 @@ public:
      */
     TrackId getNewTrackId() const;
 
+    /**
+     * Get the Instrument Id of a given segment.
+     **/
+    InstrumentId getInstrumentId(Segment *s) const {
+        Track* track = getTrackById(s->getTrack());
+        return track->getInstrument();
+    };
+
+    /**
+     * Get all segments that play on the same instrument segment s
+     * plays on and start before t.
+     */
+    segmentcontainer getInstrumentSegments(Segment *s, timeT t) const;
 
     //////
     //
