@@ -16,6 +16,7 @@
 #ifndef _TRIGGER_SEGMENT_H_
 #define _TRIGGER_SEGMENT_H_
 
+#include <base/Segment.h>
 #include <set>
 #include <string>
 
@@ -88,6 +89,33 @@ struct TriggerSegmentCmp
     }
 };
 
+// @class TriggerSegmentTimeAdjust represents a linear transform of
+// time to and from the internal times of a triggered segment.
+// "Squishing" converts a triggered segment's intrinsic times to
+// outside times, "unsquishing" does the reverse.
+// @author Tom Breton (Tehom)
+// Adapted from SegmentMapper.cpp
+class TriggerSegmentTimeAdjust
+{
+ public:
+    TriggerSegmentTimeAdjust(TriggerSegmentRec *rec,
+                             Segment::iterator  trigger,
+                             Segment           *oversegment);
+    timeT  toSquished(timeT t)
+    { return timeT((t + m_offset) * m_ratio); }
+    timeT  toUnsquished(timeT t)
+    { return timeT((t/m_ratio) - m_offset); }
+    timeT  toSquishedDuration(timeT t)
+    { return timeT(t * m_ratio); }
+    timeT  toUnsquishedDuration(timeT t)
+    { return timeT(t/m_ratio); }
+
+ private:
+    double m_ratio;
+    timeT  m_offset;
+    timeT  m_start;
+    timeT  m_end;
+};
 
 }
   

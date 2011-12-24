@@ -23,10 +23,68 @@
 
 namespace Rosegarden
 {
+  class Composition;
+  class ControllerContextMap;
+  class ControllerSearch;
+  class ControlParameter;
+  class Instrument;
   class RosegardenDocument;
   class Segment;
-  class ControllerContextMap;
-  
+
+// @class ControllerSearchValue A (possibly intermediate) value in a
+// parameter search, including what time it was found at.
+// @author Tom Breton (Tehom)
+class ControllerSearchValue
+{
+    friend class ControllerSearch;
+ public:
+ ControllerSearchValue(long value, timeT when) :
+    m_value(value),
+        m_when(when)
+        {};
+ ControllerSearchValue(void) :
+    m_value(0),
+        m_when(0)
+            {};    
+    int value(void) { return m_value; }
+ private:
+    // Type is long so that ControllerEventAdapter can work.
+    long              m_value; 
+    timeT             m_when;
+};
+
+// @class ControllerSearch The unvarying parameters governing a
+// search for a controller for a given instrument.
+// @author Tom Breton (Tehom)
+class ControllerSearch
+{
+ public:
+    typedef std::pair<bool,ControllerSearchValue> Maybe;
+ ControllerSearch(const std::string eventType,
+                  int controllerId,
+                  Composition &comp,
+                  const Instrument  *instrument,
+                  const ControlParameter *controlParameter) :
+    m_eventType(eventType),
+        m_controllerId(controllerId),
+        m_comp(comp),
+        m_instrument(instrument),
+        m_controlParameter(controlParameter)
+        {};
+    Maybe
+        search(Segment *s, timeT noEarlierThan,
+               timeT noLaterThan, bool forceAbsolute) const;
+    bool matches(Event *e) const;
+    int getStaticValue(void) const;
+ private:
+    const std::string  m_eventType;
+    const int          m_controllerId;
+    Composition       &m_comp;
+    const Instrument  *m_instrument;
+    const ControlParameter *m_controlParameter;
+};
+
+
 // @class ControllerContext  Context information for one controller of
 // one Controllable instrument at one time.
 // @author Tom Breton (Tehom)
@@ -63,14 +121,14 @@ struct ControllerContextMap : public std::map<int,ControllerContext>
         m_pitchBendContext(0,0,0) // Really uninitted
             {};
 
-  const ControllerContext * 
-    findControllerContext(RosegardenDocument *doc, Segment *s, timeT at,
-                          const std::string eventType, int controllerId);
+    const ControllerContext * 
+        findControllerContext(RosegardenDocument *doc, Segment *s, timeT at,
+                              const std::string eventType, int controllerId);
 
  private:
-  bool              m_havePitchBendContext;
-  ControllerContext m_pitchBendContext;
-};
+    bool              m_havePitchBendContext;
+    ControllerContext m_pitchBendContext;
+ };
 
 }
 

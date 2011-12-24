@@ -16,8 +16,10 @@
 #include "TriggerSegment.h"
 
 #include "base/Segment.h"
+#include "base/SegmentPerformanceHelper.h"
 #include "Composition.h"
 #include "base/BaseProperties.h"
+#include <limits>
 
 namespace Rosegarden
 {
@@ -118,6 +120,52 @@ TriggerSegmentRec::calculateBases()
 
     if (m_basePitch < 0) m_basePitch = 60;
     if (m_baseVelocity < 0) m_baseVelocity = 100;
+}
+
+// Constructor for TriggerSegmentTimeAdjust.  Computes the right linear
+// transform for the given trigger segment and event.
+// @param trigger is an iterator corresponding to the triggering
+// event.
+// @param oversegment is the segment that the trigger segment is
+// triggered in.
+// @author Tom Breton (Tehom)
+// Adapted from SegmentMapper.cpp
+TriggerSegmentTimeAdjust::TriggerSegmentTimeAdjust
+(TriggerSegmentRec *rec, Segment::iterator trigger, Segment *oversegment)
+{
+    Event * ev = *trigger;
+    timeT performanceStart = ev->getAbsoluteTime();
+    timeT performanceDuration =
+        SegmentPerformanceHelper(*oversegment).getSoundingDuration(trigger);
+
+    timeT trStart = rec->getSegment()->getStartTime();
+    timeT trEnd = rec->getSegment()->getEndMarkerTime();
+    timeT trDuration = trEnd - trStart;
+
+    std::string timeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+    ev->get<String>(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
+    
+    if ((timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) &&
+        (trDuration != 0)) {
+        // If duration is zero, we use the default case instead.
+        m_ratio = (double(performanceDuration) / double(trDuration));
+        m_offset = timeT(double(-trStart) / m_ratio) + performanceStart;
+    } else if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+        m_ratio = 1.0;
+        m_offset = performanceStart - trStart +
+            performanceDuration - trDuration;
+    } else {
+        // Used for TRIGGER_SEGMENT_ADJUST_NONE or
+        // TRIGGER_SEGMENT_ADJUST_SYNC_START
+        m_ratio = 1.0;
+        m_offset = performanceStart - trStart;
+    }
+    m_start = performanceStart;
+    // Only TRIGGER_SEGMENT_ADJUST_SYNC_START needs clipping at the end.
+    m_end =
+        (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) ? 
+        performanceStart + performanceDuration :
+        std::numeric_limits<int>::max();
 }
 
 }
