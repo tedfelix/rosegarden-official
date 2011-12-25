@@ -3,8 +3,7 @@ AC_INIT(Rosegarden, 11.11.42, rosegarden-devel@lists.sourceforge.net)
 
 dnl  Each release will need the proper version  (e.g. 09.10) in the line above
 dnl  and the proper codename (e.g. Abraham Darby) in the following line
-CODENAME="Edelweiss"
-#CODENAME="Freedom"
+CODENAME="Freedom"
 #CODENAME="Glenfiddich"
 #CODENAME="Handel"
 #CODENAME="Imagination"
