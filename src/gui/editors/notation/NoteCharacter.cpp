@@ -100,7 +100,7 @@ NoteCharacter::draw(QPainter *painter, int x, int y) const
 {
     if (!m_rep) {
 
-std::cout << "Pay attention Michael:  !m_rep tested true.  Executing painter->drawPixmap(x, y, m_pixmap)..." << std::endl;
+//std::cout << "Pay attention Michael:  !m_rep tested true.  Executing painter->drawPixmap(x, y, m_pixmap)..." << std::endl;
 
         painter->drawPixmap(x, y, m_pixmap);
 
