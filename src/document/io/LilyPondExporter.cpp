@@ -1088,21 +1088,21 @@ LilyPondExporter::write()
                 // something.  TBA.
                 if (firstTrack) {
                     // seems to be common to every case now
-                    str << indent(col++) << "<< % common" << std::endl;
+                    str << indent(++col) << "<< % common" << std::endl;
                 }
 
                 if (firstTrack && m_exportStaffGroup) {
 
                     if (bracket == Brackets::SquareOn) {
-                        str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
+                        str << indent(++col) << "\\context StaffGroup = \"" << staffGroupCounter++
                             << "\" << " << std::endl; //indent+
                     } else if (bracket == Brackets::CurlyOn) {
-                        str << indent(col++) << "\\context GrandStaff = \"" << pianoStaffCounter++
+                        str << indent(++col) << "\\context GrandStaff = \"" << pianoStaffCounter++
                             << "\" << " << std::endl; //indent+
                     } else if (bracket == Brackets::CurlySquareOn) {
-                        str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
+                        str << indent(++col) << "\\context StaffGroup = \"" << staffGroupCounter++
                             << "\" << " << std::endl; //indent+
-                        str << indent(col++) << "\\context GrandStaff = \"" << pianoStaffCounter++
+                        str << indent(++col) << "\\context GrandStaff = \"" << pianoStaffCounter++
                             << "\" << " << std::endl; //indent+
                     }
 
@@ -1516,10 +1516,10 @@ LilyPondExporter::write()
                         haveRepeatingWithVolta = true;
                     } else {
                         str << std::endl << indent(col++) 
-                            << " {     % Alternative start here";
+                            << "{     % Alternative start here";
                         if (m_voltaBar) {
                             str << std::endl << indent(col) 
-                                << " \\bar \"|\" ";
+                                << "\\bar \"|\" ";
                         }
                         haveVolta = true;
                     }
@@ -1574,22 +1574,22 @@ LilyPondExporter::write()
 
                 // close \alternative section if present
                 if (haveAlternates) {
-                    str << std::endl << indent(--col) << " } \% close alternative 2 ";
+                    str << std::endl << indent(--col) << "} \% close alternative 2 ";
                 }
 
                 // close \repeat section in either case
-                str << std::endl << indent(--col) << " } \% close "
+                str << std::endl << indent(--col) << "} \% close "
                     << (haveAlternates ? "alternatives" : "repeat");
             }
 
             // Open alternate parts if repeat with volta from linked segments
             if (haveRepeatingWithVolta) {
                 if (!lsc.isVolta()) {
-                    str << std::endl << indent(--col) << " } \% close main repeat ";
-                    str << std::endl << "\\alternative {" <<  std::endl;
+                    str << std::endl << indent(--col) << "} \% close main repeat ";
+                    str << std::endl << indent (col++) << "\\alternative {" <<  std::endl;
                 } else {
                     // Close alternative segment
-                    str << std::endl << indent(--col) << " }";
+                    str << std::endl << indent(--col) << "}";
                 }
             }
 
@@ -2642,7 +2642,9 @@ LilyPondExporter::writeTimeSignature(TimeSignature timeSignature,
                                      int col, std::ofstream &str)
 {
     if (timeSignature.isHidden()) {
-        str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
+        str << indent (col)
+            << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) "
+            << std::endl;
     }
     //
     // It is not possible to jump between common time signature "C"
@@ -2653,9 +2655,12 @@ LilyPondExporter::writeTimeSignature(TimeSignature timeSignature,
     //
     if (timeSignature.isCommon() == false) {
         // use numberedtime signature: 4/4
-        str << "\\once \\override Staff.TimeSignature #'style = #'() ";
+        str << indent (col)
+            << "\\once \\override Staff.TimeSignature #'style = #'() "
+            << std::endl;
     }
-    str << "\\time "
+    str << indent (col)
+        << "\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator()
         << std::endl << indent(col);
