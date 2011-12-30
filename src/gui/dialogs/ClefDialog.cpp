@@ -278,7 +278,11 @@ ClefDialog::slotOctaveDown()
 void
 ClefDialog::redrawClefPixmap()
 {
-    NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight : NotePixmapFactory::PlainColour);
+    NotePixmapFactory::ColourType ct =
+        m_Thorn ? NotePixmapFactory::PlainColourLight
+                : NotePixmapFactory::PlainColour;
+    m_notePixmapFactory->setSelected(false);
+    m_notePixmapFactory->setShaded(false);
     QPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef, ct);
     m_clefPixmap->setPixmap(pmap);
 

@@ -383,7 +383,11 @@ void
 KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
-        NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight : NotePixmapFactory::PlainColour);
+        NotePixmapFactory::ColourType ct =
+            m_Thorn ? NotePixmapFactory::PlainColourLight
+                    : NotePixmapFactory::PlainColour;
+        m_notePixmapFactory->setSelected(false);
+        m_notePixmapFactory->setShaded(false);
         QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef, ct);
         m_keyPixmap->setPixmap(pmap);
     } else {
