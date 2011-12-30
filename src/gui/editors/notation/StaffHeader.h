@@ -290,13 +290,13 @@ private :
     QString m_toolTipText;
     QString m_warningToolTipText;
     QPoint m_cursorPos;
+    QTimer *m_toolTipTimer;
+    int m_toolTipCount;
 
     unsigned int m_colourIndex;
     unsigned int m_lastColourIndex;
 
     QToolButton *m_clefOrKeyInconsistency;
-
-    QTimer *m_toolTipTimer;
 
     Inconsistencies<int> *m_transposeOverlaps;
     Inconsistencies<Clef> *m_clefOverlaps;

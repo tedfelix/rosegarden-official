@@ -112,10 +112,11 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_toolTipText(QString("")),
         m_warningToolTipText(QString("")),
         m_cursorPos(QPoint()),
+        m_toolTipTimer(0),
+        m_toolTipCount(0),
         m_colourIndex(0),
         m_lastColourIndex(0),
         m_clefOrKeyInconsistency(0),
-        m_toolTipTimer(0),
         m_transposeOverlaps(0),
         m_clefOverlaps(0),
         m_keyOverlaps(0),
@@ -290,8 +291,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // mouseMoveEvent()).
     m_toolTipTimer = new QTimer(this);
     connect(m_toolTipTimer, SIGNAL(timeout()), this, SLOT(slotToolTip()));
-    m_toolTipTimer->setSingleShot(true);
-    m_toolTipTimer->setInterval(500);  // 0.5 s
+    m_toolTipTimer->setSingleShot(false);
+    m_toolTipTimer->setInterval(200);  // 0.2 s
     setMouseTracking(true);
 
     connect(m_headersGroup, SIGNAL(currentSegmentChanged()),
@@ -854,12 +855,18 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 // occured, but I was unable to determine what this action is).
 // The 4 following methods and m_toolTipTimer are used to replace that
 // ToolTip event.
+// Moreover, QToolTip::showText() called from NotationWidget when the
+// showToolTip() signal is emitted displays the tooltip for a short duration
+// only. That's why m_toolTipCount is used with a multipleshot m_toolTipTimer
+// to get a reasonable tooltip display duration (10 s).
+
 
 void
 StaffHeader::enterEvent(QEvent *event)
 {
     // Start timer when mouse enters
     m_toolTipTimer->start();
+    m_toolTipCount = 50;   // Set a 10 s tooltip duration if timer is 0.2 s
 }
 
 void
@@ -867,6 +874,7 @@ StaffHeader::leaveEvent(QEvent *event)
 {
     // Stop timer when mouse leaves
     m_toolTipTimer->stop();
+    m_toolTipCount = 0;
 }
 
 void
@@ -882,7 +890,9 @@ StaffHeader::mouseMoveEvent(QMouseEvent *event)
 void
 StaffHeader::slotToolTip()
 {
-    // Timeout occured : show the tool tip
+    // Timeout occured : show the tool tip while countdown unfinished
+
+    if (m_toolTipCount-- <= 0)  return;
 
     // First select what tool tip to display then show it
     QRect inconIconRect = m_clefOrKeyInconsistency->frameGeometry();
