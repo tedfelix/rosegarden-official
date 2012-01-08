@@ -648,89 +648,97 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
     std::vector<Event *> toInsert;
 
     Segment::iterator i = noteItr;
-    
-	if (!(*i)->isa(Note::EventType) && !(*i)->isa(Note::EventRestType)) {
-            return *noteItr;
-	}
 
-	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-            return *noteItr;
-	}
+    if (!(*i)->isa(Note::EventType) && !(*i)->isa(Note::EventRestType)) {
+        return *noteItr;
+    }
 
-	DurationList dl;
+    if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+        return *noteItr;
+    }
 
-	// Behaviour differs from TimeSignature::getDurationListForInterval
+    DurationList dl;
 
-	timeT acc = 0;
-	timeT required = (*i)->getNotationDuration();
-	
-	while (acc < required) {
-	    timeT remaining = required - acc;
-	    if (splitAtBars) {
-		timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
-		timeT toNextBar =
-		    segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
-		if (toNextBar > 0 && remaining > toNextBar) remaining = toNextBar;
-	    }
-	    timeT component = Note::getNearestNote(remaining).getDuration();
-	    if (component > (required - acc)) dl.push_back(required - acc);
-	    else dl.push_back(component);
-	    acc += component;
-	}
+    // Behaviour differs from TimeSignature::getDurationListForInterval
 
-	if (dl.size() < 2) {
-	    // event is already of the correct duration
-            return *noteItr;
-	}
-    
-	acc = (*i)->getNotationAbsoluteTime();
-	Event *e = new Event(*(*i));
+    timeT acc = 0;
+    timeT required = (*i)->getNotationDuration();
 
-	bool lastTiedForward = false;
-	e->get<Bool>(TIED_FORWARD, lastTiedForward);
-	
-	e->set<Bool>(TIED_FORWARD, true);
-	erase(i);
+    while (acc < required) {
+        timeT remaining = required - acc;
+        if (splitAtBars) {
+            timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
+            timeT toNextBar = segment().getBarEndForTime(thisNoteStart)
+                    - thisNoteStart;
+            if (toNextBar > 0 && remaining > toNextBar)
+                remaining = toNextBar;
+        }
+        timeT component = Note::getNearestNote(remaining).getDuration();
+        if (component > (required - acc))
+            dl.push_back(required - acc);
+        else
+            dl.push_back(component);
+        acc += component;
+    }
 
-	for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
+    if (dl.size() < 2) {
+        // event is already of the correct duration
+        return *noteItr;
+    }
 
-	    DurationList::iterator dlj(dli);
-	    if (++dlj == dl.end()) {
-		// end of duration list
-		if (!lastTiedForward) e->unset(TIED_FORWARD);
-		toInsert.push_back(e);
-		e = 0;
-		break;
-	    }
-	    
-	    std::pair<Event *, Event *> splits =
-		splitPreservingPerformanceTimes(e, *dli);
-	    
-	    if (!splits.first || !splits.second) {
-		cerr << "WARNING: SegmentNotationHelper::makeNoteViable(): No valid split for event of duration " << e->getDuration() << " at " << e->getAbsoluteTime() << " (split duration " << *dli << "), ignoring remainder\n";
-		cerr << "WARNING: This is probably a bug; fix required" << std::endl;
-		toInsert.push_back(e);
-		e = 0;
-		break;
-	    }
-	    
-	    toInsert.push_back(splits.first);
-	    delete e;
-	    e = splits.second;
-	    
-	    acc += *dli;
-	    
-	    e->set<Bool>(TIED_BACKWARD, true);
-	}
-	
-	delete e;
+    acc = (*i)->getNotationAbsoluteTime();
+    Event *e = new Event(*(*i));
+
+    bool lastTiedForward = false;
+    e->get<Bool>(TIED_FORWARD, lastTiedForward);
+
+    e->set<Bool>(TIED_FORWARD, true);
+    erase(i);
+
+    for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
+
+        DurationList::iterator dlj(dli);
+        if (++dlj == dl.end()) {
+            // end of duration list
+            if (!lastTiedForward)
+                e->unset(TIED_FORWARD);
+            toInsert.push_back(e);
+            e = 0;
+            break;
+        }
+
+        std::pair<Event *, Event *> splits = splitPreservingPerformanceTimes(e,
+                *dli);
+
+        if (!splits.first || !splits.second) {
+            cerr
+                    << "WARNING: SegmentNotationHelper::makeNoteViable(): No valid split for event of duration "
+                    << e->getDuration() << " at " << e->getAbsoluteTime()
+                    << " (split duration " << *dli << "), ignoring remainder\n";
+            cerr << "WARNING: This is probably a bug; fix required"
+                    << std::endl;
+            toInsert.push_back(e);
+            e = 0;
+            break;
+        }
+
+        toInsert.push_back(splits.first);
+        delete e;
+        e = splits.second;
+
+        acc += *dli;
+
+        e->set<Bool>(TIED_BACKWARD, true);
+    }
+
+    delete e;
 
     // Insert new events into segement
     for (std::vector<Event *>::iterator ei = toInsert.begin();
-	 ei != toInsert.end(); ++ei) {
-	insert(*ei);
+            ei != toInsert.end(); ++ei) {
+        insert(*ei);
     }
-    
+
     // Make assumption that toInsert.begin() != toInsert.end()
     return *(toInsert.begin());
 
