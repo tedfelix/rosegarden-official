@@ -717,6 +717,26 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
                     << " (split duration " << *dli << "), ignoring remainder\n";
             cerr << "WARNING: This is probably a bug; fix required"
                     << std::endl;
+
+            // Bug #3466912
+            // There's a situation where an event might be unsplittable, and
+            // it could cause an endless loop because its notation duration
+            // is longer than the event duration.  The following check will
+            // make sure the notation duration is truncated to the event
+            // duration thus preventing the endless loop.
+
+            // If the event and notation times are the same.
+            if (e->getAbsoluteTime() == e->getNotationAbsoluteTime()) {
+                // Create a new event with the notation abs time and duration
+                // set to the event abs time and duration.
+                Event *e1 = new Event(*e,
+                        e->getAbsoluteTime(), e->getDuration(),   // event
+                        e->getSubOrdering(),
+                        e->getAbsoluteTime(), e->getDuration());  // notation
+                toInsert.push_back(e1);
+                break;
+            }
+
             toInsert.push_back(e);
             e = 0;
             break;
