@@ -28,8 +28,9 @@ class ChannelIdAccessor
 {
     friend class FreeChannels;
     static void setChannelId(Segment *s, ChannelIdRaw id)
-    { s->m_channel = id; }
-    static ChannelIdRaw &getChannelId(Segment *s) { return s->m_channel; }
+    { s->m_channel.m_channel = id; }
+    static ChannelIdRaw &getChannelId(Segment *s)
+    { return s->m_channel.m_channel; }
 };
 
 // Constructor for FreeChannels, taking a composition and the maximum

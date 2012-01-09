@@ -63,10 +63,10 @@ class FreeChannels :
                                             RealTime /* rtDelay */) { }
 
   virtual void segmentStartChanged(const Composition *, Segment *,
-				     timeT /* newStartTime */) { }
+                                   timeT /* newStartTime */);
 
   virtual void segmentEndMarkerChanged(const Composition *, Segment *,
-                                         bool /* shorten */) { }
+                                       bool /* shorten */);
 
   virtual void segmentTrackChanged(const Composition *, Segment *,
                                      TrackId /* id */) { }
