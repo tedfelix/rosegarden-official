@@ -2010,7 +2010,7 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     timeT u1 = (qt + q1) - ut;
     timeT u2 = (ut + ud) - (qt + q1);
 
-//    std::cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << std::endl;
+    std::cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << std::endl;
 
     if (u1 <= 0 || u2 <= 0) { // can't do a meaningful split
 	return std::pair<Event *, Event *>(0, 0);
