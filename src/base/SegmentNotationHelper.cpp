@@ -645,6 +645,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
     // is quantized), we want any playback to produce exactly the same
     // duration of note as was originally recorded
 
+    // Holds the events we will add once an event is split.
     std::vector<Event *> toInsert;
 
     Segment::iterator i = noteItr;
@@ -657,6 +658,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
         return *noteItr;
     }
 
+    // A list of durations that will satisfactorily break up this event.
     DurationList dl;
 
     // Behaviour differs from TimeSignature::getDurationListForInterval
@@ -664,12 +666,14 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
     timeT acc = 0;
     timeT required = (*i)->getNotationDuration();
 
+    // While we've not yet accumulated the required amount of time, build
+    // the duration list (dl).
     while (acc < required) {
         timeT remaining = required - acc;
         if (splitAtBars) {
             timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
-            timeT toNextBar = segment().getBarEndForTime(thisNoteStart)
-                    - thisNoteStart;
+            timeT toNextBar =
+                    segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
             if (toNextBar > 0 && remaining > toNextBar)
                 remaining = toNextBar;
         }
@@ -695,6 +699,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
     e->set<Bool>(TIED_FORWARD, true);
     erase(i);
 
+    // For each duration
     for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
 
         DurationList::iterator dlj(dli);
@@ -707,8 +712,8 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
             break;
         }
 
-        std::pair<Event *, Event *> splits = splitPreservingPerformanceTimes(e,
-                *dli);
+        std::pair<Event *, Event *> splits =
+                splitPreservingPerformanceTimes(e, *dli);
 
         if (!splits.first || !splits.second) {
             cerr
@@ -737,6 +742,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
                 break;
             }
 
+            // Add in the remaining time.
             toInsert.push_back(e);
             e = 0;
             break;
@@ -753,7 +759,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
 
     delete e;
 
-    // Insert new events into segement
+    // Insert new events into segment
     for (std::vector<Event *>::iterator ei = toInsert.begin();
             ei != toInsert.end(); ++ei) {
         insert(*ei);
@@ -763,18 +769,23 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
     return *(toInsert.begin());
 
 }
+
 void
 SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
 				       bool splitAtBars)
 {
-    std::vector<Event *> toInsert;
+//  std::vector<Event *> toInsert;
 
+    // For each Event in the range
     for (Segment::iterator i = from, j = i;
-	 segment().isBeforeEndMarker(i) && i != to; i = j) {
+         segment().isBeforeEndMarker(i) && i != to;
+         i = j) {
 
-	++j;
-	
-	makeThisNoteViable(i, splitAtBars);
+        // We keep a second iterator to make sure we aren't modifying the
+        // event that our iterator points to.
+        ++j;
+
+        makeThisNoteViable(i, splitAtBars);
     }
 
 }
@@ -2010,10 +2021,10 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     timeT u1 = (qt + q1) - ut;
     timeT u2 = (ut + ud) - (qt + q1);
 
-    std::cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << std::endl;
+    //cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << endl;
 
     if (u1 <= 0 || u2 <= 0) { // can't do a meaningful split
-	return std::pair<Event *, Event *>(0, 0);
+        return std::pair<Event *, Event *>(0, 0);
     }
 
     Event *e1 = new Event(*e, ut, u1, e->getSubOrdering(), qt, q1);
