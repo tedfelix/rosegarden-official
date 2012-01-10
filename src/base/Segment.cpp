@@ -74,8 +74,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_fadeInTime(Rosegarden::RealTime::zeroTime),
     m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_segmentLinker(0),
-    m_isTmp(0),
-    m_channel() // No channel, it will be allocated later.
+    m_isTmp(0)
 {
 }
 
@@ -117,9 +116,7 @@ Segment::Segment(const Segment &segment):
     m_fadeInTime(segment.getFadeInTime()),
     m_fadeOutTime(segment.getFadeOutTime()),
     m_segmentLinker(0), //yes, this is intentional. clone() handles this
-    m_isTmp(segment.isTmp()),
-    m_channel() // Cloned segments do not have the same channel, so
-    // use default. 
+    m_isTmp(segment.isTmp())
 {
     for (const_iterator it = segment.begin();
          it != segment.end(); ++it) {

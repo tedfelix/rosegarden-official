@@ -23,7 +23,6 @@
 
 #include "Track.h"
 #include "Event.h"
-#include "base/ChannelSegment.h"
 #include "base/NotationTypes.h"
 #include "RefreshStatus.h"
 #include "RealTime.h"
@@ -73,12 +72,11 @@ class BasicQuantizer;
 class Composition;
 class SegmentLinker;
 class BasicCommand;
-class ChannelIdAccessor;
 
 class Segment : public QObject, public std::multiset<Event*, Event::EventCmp>
 {
   Q_OBJECT
-      friend class ChannelIdAccessor;
+
 public:
 
     /// A Segment contains either Internal representation or Audio
@@ -796,6 +794,8 @@ public:
      */
     const Segment * getRealSegment() const;
     
+
+
 private:
     Composition *m_composition; // owns me, if it exists
 
@@ -893,10 +893,6 @@ private:
     SegmentLinker *m_segmentLinker;
     LinkTransposeParams m_linkTransposeParams;
     bool m_isTmp;   // Mark a segment (usually a link) as temporary
-
-    // The channel interval that is allocated for this segment.  Relevant
-    // for MIDI segments.
-    ChannelSegment m_channel;
 };
 
 
