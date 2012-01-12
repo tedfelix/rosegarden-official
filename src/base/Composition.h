@@ -47,17 +47,16 @@ class Quantizer;
 class BasicQuantizer;
 class NotationQuantizer;
 
-/**
- * Composition contains a complete representation of a piece of music.
- * It is a container for multiple Segments, as well as any associated
- * non-Event data.
- * 
- * The Composition owns the Segments it holds, and deletes them on
- * destruction.  When Segments are removed, it will also delete them.
- */
-
 class CompositionObserver;
 
+/// Composition contains a complete representation of a piece of music.
+/**
+ * It is a container for multiple Segment objects (m_segments), as well as
+ * any associated non-Event data.
+ * 
+ * The Composition owns the Segment objects it holds, and deletes them on
+ * destruction.  See deleteSegment() and detachSegment().
+ */
 class Composition : public XmlExportable
 {
     friend class Track; // to call notifyTrackChanged()
@@ -93,7 +92,7 @@ private:
 public:
 
     /**
-     * Remove all Segments from the Composition and destroy them
+     * Remove everything from the Composition.
      */
     void clear();
 
@@ -131,7 +130,8 @@ public:
     const trackcontainer& getTracks() const { return m_tracks; }
 
     // Reset id and position
-    void resetTrackIdAndPosition(TrackId oldId, TrackId newId, int position);
+    // unused
+//    void resetTrackIdAndPosition(TrackId oldId, TrackId newId, int position);
 
     TrackId getMinTrackId() const;
     TrackId getMaxTrackId() const;
@@ -140,17 +140,24 @@ public:
     void setTrackRecording(TrackId track, bool recording);
     bool isTrackRecording(TrackId track) const;
 
-    // Get and set Solo Track
-    //
+    /// Get the selected (solo) track.
+    /// @see setSelectedTrack()
+    /// @see setSolo()
     TrackId getSelectedTrack() const { return m_selectedTrack; }
-
+    /// Set the selected (solo) track.
+    /// @see getSelectedTrack()
     void setSelectedTrack(TrackId track);
 
-    // Are we soloing a Track?
-    //
+    /// Are we soloing the selected track?
+    /// @see setSolo()
+    /// @see getSelectedTrack()
     bool isSolo() const { return m_solo; }
+    /// Enable or disable solo of the selected track.
+    /// @see isSolo()
+    /// @see getSelectedTrack()
     void setSolo(bool value);
 
+    /// Total number of tracks in the composition.
     unsigned int getNbTracks() const { return m_tracks.size(); }
 
     /**
@@ -215,7 +222,8 @@ public:
      */
     bool detachMarker(Marker *marker);
 
-    bool isMarkerAtPosition(timeT time) const;
+    // unused
+//    bool isMarkerAtPosition(timeT time) const;
 
     void clearMarkers();
 
@@ -744,9 +752,13 @@ public:
 
 
     // Some set<> API delegation
+    /// Segment begin iterator.
     iterator       begin()       { return m_segments.begin(); }
+    /// Segment begin iterator.
     const_iterator begin() const { return m_segments.begin(); }
+    /// Segment end iterator.
     iterator       end()         { return m_segments.end(); }
+    /// Segment end iterator.
     const_iterator end() const   { return m_segments.end(); }
 
 

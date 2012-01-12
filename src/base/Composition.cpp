@@ -1614,6 +1614,8 @@ Composition::haveTrack(TrackId track) const
     return (i != m_tracks.end());
 }
 
+#if 0
+// unused
 // Move a track object to a new id and position in the container -
 // used when deleting and undoing deletion of tracks.
 //
@@ -1651,6 +1653,7 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
                   << "can't move track " << oldId << " to " << newId 
                   << std::endl;
 }
+#endif
 
 void Composition::setSelectedTrack(TrackId track)
 {
@@ -2278,6 +2281,8 @@ Composition::detachMarker(Rosegarden::Marker *marker)
     return false;
 }
 
+#if 0
+// unused
 bool
 Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 {
@@ -2288,6 +2293,7 @@ Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 
     return false;
 }
+#endif
 
 void
 Composition::setSegmentColourMap(Rosegarden::ColourMap &newmap)
