@@ -33,173 +33,156 @@ class QSocketNotifier;
 namespace Rosegarden
 {
   
-  class RosegardenMainWindow;
-  class RosegardenDocument;
+class RosegardenMainWindow;
+class RosegardenDocument;
 
-  /// Support for the TranzPort wireless remote control
-  /**
-   * For the Rosegarden transport dialog, see TransportDialog.
-   */
-  class TranzportClient : public QObject, public CompositionObserver
-  {
-      Q_OBJECT
-      public:
-      TranzportClient(RosegardenMainWindow* rgGUIApp);
+/// Support for the TranzPort wireless remote control
+/**
+ * For the Rosegarden transport dialog, see TransportDialog.
+ */
+class TranzportClient : public QObject, public CompositionObserver
+{
+    Q_OBJECT
+public:
+    TranzportClient(RosegardenMainWindow* rgGUIApp);
       
-      virtual ~TranzportClient();
+    virtual ~TranzportClient();
 
-    public slots:
-      void readData();
+public slots:
+    void readData();
       
-      void 
-      documentChanged(RosegardenDocument*);
+    void documentChanged(RosegardenDocument*);
       
-      void writeCommandQueue();
+    void writeCommandQueue();
 
-      void
-      pointerPositionChanged(timeT time);
+    void pointerPositionChanged(timeT time);
       
-      void
-      loopChanged(timeT t1,
-                  timeT t2);
-    signals:
+    void loopChanged(timeT t1, timeT t2);
+
+signals:
     
-      void play();
-      void stop();
-      void record();
-      void rewind();
-      void rewindToBeginning();
-      void fastForward();
-      void fastForwardToEnd();
-      void toggleRecord();
-      void trackDown();
-      void trackUp();
-      void trackMute();
-      void trackRecord();
-      void solo(bool);
-      void undo();
-      void redo();
+    void play();
+    void stop();
+    void record();
+    void rewind();
+    void rewindToBeginning();
+    void fastForward();
+    void fastForwardToEnd();
+    void toggleRecord();
+    void trackDown();
+    void trackUp();
+    void trackMute();
+    void trackRecord();
+    void solo(bool);
+    void undo();
+    void redo();
       
-      void setPosition(timeT);
+    void setPosition(timeT);
       
-    public:
+public:
       
-      virtual void 
-      soloChanged(const Composition *, 
-                  bool  solo,
-                  TrackId  selectedTrack );
+    virtual void soloChanged(const Composition *,
+                             bool solo,
+                             TrackId selectedTrack );
             
-      virtual void 
-      trackChanged(const Composition *c,
-                   Track* t);
+    virtual void trackChanged(const Composition *c, Track* t);
           
-      void
-      stateUpdate();
+    void stateUpdate();
       
-    public:
-      enum ButtonMasks 
-      {        
+public:
+    enum ButtonMasks
+    {
 #if BIG_ENDIAN
-#define SWAP(x) ((((uint32_t)(x) & 0xff000000) >> 24) |     \
+    #define SWAP(x) ((((uint32_t)(x) & 0xff000000) >> 24) |     \
                      (((uint32_t)(x) & 0x00ff0000) >> 8)  |     \
                      (((uint32_t)(x) & 0x0000ff00) << 8)  |     \
                      (((uint32_t)(x) & 0x000000ff) << 24))
 #elif LITTLE_ENDIAN
-#define SWAP(x) x
+    #define SWAP(x) x
 #else
-#error No endianness defined
+    #error No endianness defined
 #endif
 
-      Battery     = SWAP(0x00004000),
-      Backlight   = SWAP(0x00008000),
-      TrackLeft   = SWAP(0x04000000),
-      TrackRight  = SWAP(0x40000000),
-      TrackRec    = SWAP(0x00040000),
-      TrackMute   = SWAP(0x00400000),
-      TrackSolo   = SWAP(0x00000400),
-      Undo        = SWAP(0x80000000),
-      In          = SWAP(0x02000000),
-      Out         = SWAP(0x20000000),
-      Punch       = SWAP(0x00800000),
-      Loop        = SWAP(0x00080000),
-      Prev        = SWAP(0x00020000),
-      Add         = SWAP(0x00200000),
-      Next        = SWAP(0x00000200),
-      Rewind      = SWAP(0x01000000),
-      FastForward = SWAP(0x10000000),
-      FootSwitch  = SWAP(0x00001000),
-      Stop        = SWAP(0x00010000),
-      Play        = SWAP(0x00100000),
-      Record      = SWAP(0x00000100),
-      Shift       = SWAP(0x08000000)
-#undef SWAP
-      };
-
-      enum Light
-    {
-      LightRecord = 0,
-      LightTrackrec,
-      LightTrackmute,
-      LightTracksolo,
-      LightAnysolo,
-      LightLoop,
-      LightPunch
+        Battery     = SWAP(0x00004000),
+        Backlight   = SWAP(0x00008000),
+        TrackLeft   = SWAP(0x04000000),
+        TrackRight  = SWAP(0x40000000),
+        TrackRec    = SWAP(0x00040000),
+        TrackMute   = SWAP(0x00400000),
+        TrackSolo   = SWAP(0x00000400),
+        Undo        = SWAP(0x80000000),
+        In          = SWAP(0x02000000),
+        Out         = SWAP(0x20000000),
+        Punch       = SWAP(0x00800000),
+        Loop        = SWAP(0x00080000),
+        Prev        = SWAP(0x00020000),
+        Add         = SWAP(0x00200000),
+        Next        = SWAP(0x00000200),
+        Rewind      = SWAP(0x01000000),
+        FastForward = SWAP(0x10000000),
+        FootSwitch  = SWAP(0x00001000),
+        Stop        = SWAP(0x00010000),
+        Play        = SWAP(0x00100000),
+        Record      = SWAP(0x00000100),
+        Shift       = SWAP(0x08000000)
+    #undef SWAP
     };
 
-      void
-      LightOn(Light l);
+    enum Light
+    {
+        LightRecord = 0,
+        LightTrackrec,
+        LightTrackmute,
+        LightTracksolo,
+        LightAnysolo,
+        LightLoop,
+        LightPunch
+    };
+
+    void LightOn(Light l);
       
-      void
-      LightOff(Light l);
+    void LightOff(Light l);
       
-      enum Row 
-      {
+    enum Row
+    {
         Top,
         Bottom,
-      };
+    };
     
-      void
-      LCDWrite(const std::string& text,
-               Row row = Top,
-               uint8_t offset = 0);
+    void LCDWrite(const std::string& text,
+                  Row row = Top,
+                  uint8_t offset = 0);
       
-      void 
-      write(uint64_t buf);
+    void write(uint64_t buf);
       
         
-    private:
-      int m_descriptor;
+private:
+    int m_descriptor;
       
-      QSocketNotifier * m_socketReadNotifier;
-      QSocketNotifier* m_socketWriteNotifier;
+    QSocketNotifier * m_socketReadNotifier;
+    QSocketNotifier* m_socketWriteNotifier;
 
-      bool device_online;
+    bool device_online;
 
+    uint8_t previousbuf[8];
+    uint8_t currentbuf[8];
+    volatile uint32_t& previous_buttons;
+    volatile uint32_t& current_buttons;
+    volatile uint8_t& datawheel;
+    volatile uint8_t& status;
+
+    RosegardenMainWindow* m_rgGUIApp;
+    RosegardenDocument* m_rgDocument;
+    Composition* m_composition;
+
+    static const uint8_t LCDLength = 20;
+    TranzportClient(const TranzportClient&);
       
+    typedef uint64_t CommandType;
+    std::queue<CommandType> commands;
       
-      uint8_t previousbuf[8];    
-      uint8_t currentbuf[8];
-      volatile uint32_t& previous_buttons;
-      volatile uint32_t& current_buttons;
-      volatile uint8_t& datawheel;
-      volatile uint8_t& status;      
-      RosegardenMainWindow    *m_rgGUIApp;
-      RosegardenDocument* m_rgDocument;
-      Composition* m_composition;
-      static const uint8_t LCDLength = 20;
-      TranzportClient(const TranzportClient&);
-      
-      typedef uint64_t CommandType;
-      std::queue<CommandType> commands;
-      
-  };
+};
   
-    
 }
 
-
 #endif // _RG_TRANZPORTCLIENT_H_
-
-// Local Variables: **
-// compile-command:"cd ../../../;make -j 6" **
-// End: **
