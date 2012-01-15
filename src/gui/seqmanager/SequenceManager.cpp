@@ -784,7 +784,6 @@ void
 SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                                          AudioManagerDialog *audioManagerDialog)
 {
-    static bool boolShowingWarning = false;
     static bool boolShowingALSAWarning = false;
     static long warningShownAt = 0;
 
@@ -970,6 +969,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                         //#define REPORT_XRUNS 1
 #ifdef REPORT_XRUNS
+                        static bool boolShowingWarning = false;
 
                         struct timeval tv;
                         (void)gettimeofday(&tv, 0);
@@ -1717,7 +1717,8 @@ SequenceManager::segmentModified(Segment* s)
 {
     //SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")";
 
-    bool sizeChanged = m_compositionMapper->segmentModified(s);
+    //bool sizeChanged =
+    m_compositionMapper->segmentModified(s);
 
     //SEQMAN_DEBUG << "SequenceManager::segmentModified() : size changed = "
     //             << sizeChanged;
@@ -1824,9 +1825,29 @@ void SequenceManager::timeSignatureChanged(const Composition *)
     resetMetronomeMapper();
 }
 
+void SequenceManager::tracksAdded(const Composition* c, std::vector<TrackId> &trackIds)
+{
+    SEQMAN_DEBUG << "SequenceManager::tracksAdded()  tracks: " << trackIds.size();
+
+    // For each track added, call ControlBlock::updateTrackData()
+    for (unsigned i = 0; i < trackIds.size(); ++i) {
+        SEQMAN_DEBUG << "  ID: " << trackIds[i];
+
+        Track *t = c->getTrackById(trackIds[i]);
+        ControlBlock::getInstance()->updateTrackData(t);
+
+        // ??? Can we move this out of this for loop and call it once after
+        //     we are done calling updateTrackData() for each track?
+        if (m_transportStatus == PLAYING) {
+            RosegardenSequencer::getInstance()->remapTracks();
+        }
+    }
+}
+
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
-    SEQMAN_DEBUG << "SequenceManager::trackChanged(" << t << ", " << (t ? t->getPosition() : -1) << ")" << endl;
+    SEQMAN_DEBUG << "SequenceManager::trackChanged()  ID: " << t->getId();
+
     ControlBlock::getInstance()->updateTrackData(t);
 
     if (m_transportStatus == PLAYING) {
@@ -1836,9 +1857,10 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
 
 void SequenceManager::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
 {
-    //SEQMAN_DEBUG << "SequenceManager::tracksDeleted()";
+    SEQMAN_DEBUG << "SequenceManager::tracksDeleted()  tracks:" << trackIds.size();
 
     for (unsigned i = 0; i < trackIds.size(); ++i) {
+        SEQMAN_DEBUG << "  ID: " << trackIds[i];
         ControlBlock::getInstance()->setTrackDeleted(trackIds[i], true);
     }
 }
@@ -2032,7 +2054,7 @@ SequenceManager::slotCountdownTimerTimeout()
 
 void
 SequenceManager::slotFoundMountPoint(const QString&,
-                                     unsigned long kBSize,
+                                     unsigned long /*kBSize*/,
                                      unsigned long /*kBUsed*/,
                                      unsigned long kBAvail)
 {

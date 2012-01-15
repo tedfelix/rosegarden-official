@@ -1678,7 +1678,7 @@ void Composition::addTrack(Track *track)
         m_tracks[track->getId()] = track;
         track->setOwningComposition(this);
         updateRefreshStatuses();
-	notifyTrackChanged(track);
+        notifyTrackChanged(track);
 
     } else {
         std::cerr << "Composition::addTrack("
@@ -2187,6 +2187,17 @@ Composition::notifyTracksDeleted(std::vector<TrackId> trackIds) const
     for (ObserverSet::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->tracksDeleted(this, trackIds);
+    }
+}
+
+void
+Composition::notifyTracksAdded(std::vector<TrackId> trackIds) const
+{
+    //RG_DEBUG << "Composition::notifyTracksAdded() notifying" << m_observers.size() << "observers";
+
+    for (ObserverSet::const_iterator i = m_observers.begin();
+         i != m_observers.end(); ++i) {
+        (*i)->tracksAdded(this, trackIds);
     }
 }
 

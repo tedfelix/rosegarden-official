@@ -52,14 +52,18 @@ AddTracksCommand::~AddTracksCommand()
 
 void AddTracksCommand::execute()
 {
-    // Re-attach tracks
+    // Re-attach tracks (redo)
     //
     if (m_detached) {
 
+        std::vector<TrackId> trackIds;
+
         for (size_t i = 0; i < m_newTracks.size(); i++) {
             m_composition->addTrack(m_newTracks[i]);
+            trackIds.push_back(m_newTracks[i]->getId());
         }
 
+        // Adjust the track positions.
         for (TrackPositionMap::iterator i = m_oldPositions.begin();
              i != m_oldPositions.end(); ++i) {
 
@@ -68,8 +72,12 @@ void AddTracksCommand::execute()
             if (track) track->setPosition(newPosition);
         }
 
+        m_composition->notifyTracksAdded(trackIds);
+
         return;
     }
+
+    // Adjust the track positions
 
     int highPosition = 0;
 
@@ -98,6 +106,10 @@ void AddTracksCommand::execute()
         }
     }
 
+    // Add the tracks
+
+    std::vector<TrackId> trackIds;
+
     for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
 
         TrackId trackId = m_composition->getNewTrackId();
@@ -107,16 +119,24 @@ void AddTracksCommand::execute()
         track->setInstrument(m_instrumentId);
 
         m_composition->addTrack(track);
+        trackIds.push_back(trackId);
         m_newTracks.push_back(track);
     }
+
+    m_composition->notifyTracksAdded(trackIds);
 }
 
 void AddTracksCommand::unexecute()
 {
+    std::vector<TrackId> trackIds;
+
+    // Detach the tracks
     for (size_t i = 0; i < m_newTracks.size(); i++) {
         m_composition->detachTrack(m_newTracks[i]);
+        trackIds.push_back(m_newTracks[i]->getId());
     }
 
+    // Adjust the positions
     for (TrackPositionMap::iterator i = m_oldPositions.begin();
          i != m_oldPositions.end(); ++i) {
 
@@ -124,10 +144,6 @@ void AddTracksCommand::unexecute()
         if (track) track->setPosition(i->second);
     }
 
-    // Notify composition observers of the delete
-    std::vector<TrackId> trackIds;
-    for (size_t i = 0; i < m_newTracks.size(); ++i)
-        trackIds.push_back(m_newTracks[i]->getId());
     m_composition->notifyTracksDeleted(trackIds);
 
     m_detached = true;

@@ -850,6 +850,7 @@ public:
     void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
 
     void notifyTracksDeleted(std::vector<TrackId> trackIds) const;
+    void notifyTracksAdded(std::vector<TrackId> trackIds) const;
 
     //////
     // DEBUG FACILITIES
@@ -1138,6 +1139,11 @@ public:
      * Called when tracks have been deleted
      */
     virtual void tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/) { }
+
+    /**
+     * Called when tracks have been added
+     */
+    virtual void tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*/) { }
 
     /**
      * Called when some time signature has changed
