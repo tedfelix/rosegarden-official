@@ -36,8 +36,11 @@ namespace Rosegarden
 class RosegardenMainWindow;
 class RosegardenDocument;
 
-/// Support for the TranzPort wireless remote control
+/// Support for the TranzPort(TM) wireless remote control.
 /**
+ * Frontier Design Group's TranzPort(TM) DAW Control:
+ * http://www.frontierdesign.com/Products/TranzPort
+ *
  * For the Rosegarden transport dialog, see TransportDialog.
  */
 class TranzportClient : public QObject, public CompositionObserver
@@ -80,13 +83,7 @@ signals:
     void setPosition(timeT);
       
 public:
-      
-    virtual void soloChanged(const Composition *,
-                             bool solo,
-                             TrackId selectedTrack );
-            
-    virtual void trackChanged(const Composition *c, Track* t);
-          
+
     void stateUpdate();
       
 public:
@@ -181,6 +178,16 @@ private:
     typedef uint64_t CommandType;
     std::queue<CommandType> commands;
       
+    // CompositionObserver overrides
+    virtual void soloChanged(const Composition *,
+                             bool solo,
+                             TrackId selectedTrack);
+    virtual void trackChanged(const Composition *c, Track* t);
+    // tracksAdded() need not be overridden as adding a track will not change
+    // anything the TranzPort would display.
+    // tracksDeleted() should probably be overridden to clear the display on
+    // the TranzPort when the selected track is deleted.
+
 };
   
 }

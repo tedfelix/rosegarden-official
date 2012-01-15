@@ -205,8 +205,6 @@ TranzportClient::soloChanged(const Composition * c,
 /**
  * Called when a track is changed (instrument id, muted status...)
  */
-
-
 void
 TranzportClient::trackChanged(const Composition *c,
                               Track* track)
@@ -216,6 +214,7 @@ TranzportClient::trackChanged(const Composition *c,
     if (device_online) {
         const Track* track2 = c->getTrackById(c->getSelectedTrack());
 
+        // If the changed track is the selected track
         if (track == track2) {
             RG_DEBUG << "TranzportClient, CompostionObserver::trackChanged updateing";
             
