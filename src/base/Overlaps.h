@@ -65,15 +65,15 @@ public :
         timeT segEnd = (*i)->getEndMarkerTime();
 
         // Start and ends of segments always are range limits
-        insert(std::pair<timeT, OverlapRange<T> >(segStart, range));
-        insert(std::pair<timeT, OverlapRange<T> >(segEnd, range));
+        this->insert(std::pair<timeT, OverlapRange<T> >(segStart, range));
+        this->insert(std::pair<timeT, OverlapRange<T> >(segEnd, range));
 
         timeT currentTime, propertyTime;
         currentTime = segStart;
         for (;;) {
             bool fnd = getNextPropertyTime((*i), currentTime, propertyTime);
             if (!fnd) break;
-            insert(std::pair<timeT, OverlapRange<T> >(propertyTime, range));
+            this->insert(std::pair<timeT, OverlapRange<T> >(propertyTime, range));
             currentTime = propertyTime;
         }
     }

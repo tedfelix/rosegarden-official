@@ -18,6 +18,7 @@
 
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <string.h>
 
 #include "Scavenger.h"
 

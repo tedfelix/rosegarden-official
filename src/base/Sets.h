@@ -349,7 +349,7 @@ AbstractSet<Element, Container>::initialise()
     m_final = m_baseIterator;
     sample(m_baseIterator, true);
 
-    if (getAsEvent(m_baseIterator)->isa(Note::EventType)) {
+    if (AbstractSet::getAsEvent(m_baseIterator)->isa(Note::EventType)) {
         m_initialNote = m_baseIterator;
         m_finalNote = m_baseIterator;
     }
@@ -362,7 +362,7 @@ AbstractSet<Element, Container>::initialise()
     for (i = j = m_baseIterator; i != getContainer().begin() && test(--j); i = j){
         if (sample(j, false)) {
             m_initial = j;
-            if (getAsEvent(j)->isa(Note::EventType)) {
+            if (AbstractSet::getAsEvent(j)->isa(Note::EventType)) {
 		m_initialNote = j;
 		if (m_finalNote == getContainer().end()) {
 		    m_finalNote = j;
@@ -379,7 +379,7 @@ AbstractSet<Element, Container>::initialise()
     for (i = j = m_baseIterator; ++j != getContainer().end() && test(j); i = j) {
         if (sample(j, true)) {
             m_final = j;
-            if (getAsEvent(j)->isa(Note::EventType)) {
+            if (AbstractSet::getAsEvent(j)->isa(Note::EventType)) {
 		m_finalNote = j;
 		if (m_initialNote == getContainer().end()) {
 		    m_initialNote = j;
@@ -397,17 +397,17 @@ bool
 AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 {
     const Quantizer &q(getQuantizer());
-    Event *e = getAsEvent(i);
+    Event *e = AbstractSet::getAsEvent(i);
     timeT d(q.getQuantizedDuration(e));
     
     if (e->isa(Note::EventType) || d > 0) {
         if (m_longest == getContainer().end() ||
-            d > q.getQuantizedDuration(getAsEvent(m_longest))) {
+            d > q.getQuantizedDuration(AbstractSet::getAsEvent(m_longest))) {
 //          std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_longest = i;
         }
         if (m_shortest == getContainer().end() ||
-            d < q.getQuantizedDuration(getAsEvent(m_shortest))) {
+            d < q.getQuantizedDuration(AbstractSet::getAsEvent(m_shortest))) {
 //          std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_shortest = i;
         }
@@ -417,12 +417,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
         long p = get__Int(e, BaseProperties::PITCH);
 
         if (m_highest == getContainer().end() ||
-            p > get__Int(getAsEvent(m_highest), BaseProperties::PITCH)) {
+            p > get__Int(AbstractSet::getAsEvent(m_highest), BaseProperties::PITCH)) {
 //          std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_highest = i;
         }
         if (m_lowest == getContainer().end() ||
-            p < get__Int(getAsEvent(m_lowest), BaseProperties::PITCH)) {
+            p < get__Int(AbstractSet::getAsEvent(m_lowest), BaseProperties::PITCH)) {
 //          std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_lowest = i;
         }
@@ -441,8 +441,8 @@ GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
                                                             PropertyName stemUpProperty) :
     AbstractSet<Element, Container>(c, i, q),
     m_stemUpProperty(stemUpProperty),
-    m_time(q->getQuantizedAbsoluteTime(getAsEvent(i))),
-    m_subordering(getAsEvent(i)->getSubOrdering()),
+    m_time(q->getQuantizedAbsoluteTime(GenericChord::getAsEvent(i))),
+    m_subordering(GenericChord::getAsEvent(i)->getSubOrdering()),
     m_firstReject(c.end())
 {
     // initialise must be called in individual derived classes.  If we
@@ -471,7 +471,7 @@ template <class Element, class Container, bool singleStaff>
 bool
 GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
-    Event *e = getAsEvent(i);
+    Event *e = GenericChord::getAsEvent(i);
     if (AbstractSet<Element, Container>::
 	getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
 	return false;
@@ -507,7 +507,7 @@ bool
 GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
                                                       bool goingForwards)
 {
-    Event *e1 = getAsEvent(i);
+    Event *e1 = GenericChord::getAsEvent(i);
     if (!e1->isa(Note::EventType)) {
         if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end()) m_firstReject = i;
         return false;
@@ -527,7 +527,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 
         if (AbstractSet<Element, Container>::m_baseIterator != AbstractSet<Element, Container>::getContainer().end()) {
 
-            Event *e0 = getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
+            Event *e0 = GenericChord::getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
 
             if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
 
@@ -573,7 +573,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
     }
 
     AbstractSet<Element, Container>::sample(i, goingForwards);
-    push_back(i);
+    this->push_back(i);
     return true;
 }
 
@@ -615,7 +615,7 @@ GenericChord<Element, Container, singleStaff>::getMarkCountForChord() const
 
     for (unsigned int i = 0; i < std::vector<typename Container::iterator>::size(); ++i) {
 
-        Event *e = getAsEvent((*this)[i]);
+        Event *e = GenericChord::getAsEvent((*this)[i]);
         std::vector<Mark> marks(Marks::getMarks(*e));
 
         for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
@@ -635,7 +635,7 @@ GenericChord<Element, Container, singleStaff>::getMarksForChord() const
 
     for (unsigned int i = 0; i < std::vector<typename Container::iterator>::size(); ++i) {
 
-        Event *e = getAsEvent((*this)[i]);
+        Event *e = GenericChord::getAsEvent((*this)[i]);
         std::vector<Mark> marks(Marks::getMarks(*e));
 
 
@@ -662,9 +662,9 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
 
     for (typename std::vector<typename Container::iterator>::const_iterator
              i = std::vector<typename Container::iterator>::begin(); i != std::vector<typename Container::iterator>::end(); ++i) {
-        if (getAsEvent(*i)->has(BaseProperties::PITCH)) {
+        if (GenericChord::getAsEvent(*i)->has(BaseProperties::PITCH)) {
             int pitch = get__Int
-                (getAsEvent(*i), BaseProperties::PITCH);
+                (GenericChord::getAsEvent(*i), BaseProperties::PITCH);
             if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
                 continue;
             pitches.push_back(pitch);
@@ -696,7 +696,7 @@ GenericChord<Element, Container, singleStaff>::getPreviousNote()
     while (1) {
         if (i == AbstractSet<Element, Container>::getContainer().begin()) return AbstractSet<Element, Container>::getContainer().end();
         --i;
-        if (getAsEvent(i)->isa(Note::EventType)) {
+        if (GenericChord::getAsEvent(i)->isa(Note::EventType)) {
             return i;
         }
     }
@@ -710,7 +710,7 @@ GenericChord<Element, Container, singleStaff>::getNextNote()
     Iterator i(AbstractSet<Element, Container>::getFinalElement());
     while (  i != AbstractSet<Element, Container>::getContainer().end() &&
            ++i != AbstractSet<Element, Container>::getContainer().end()) {
-        if (getAsEvent(i)->isa(Note::EventType)) {
+        if (GenericChord::getAsEvent(i)->isa(Note::EventType)) {
             return i;
         }
     }
@@ -732,8 +732,8 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
                                                            const Iterator &b)
 {
     try {
-        long ap = get__Int(getAsEvent(a), BaseProperties::PITCH);
-        long bp = get__Int(getAsEvent(b), BaseProperties::PITCH);
+        long ap = get__Int(GenericChord::getAsEvent(a), BaseProperties::PITCH);
+        long bp = get__Int(GenericChord::getAsEvent(b), BaseProperties::PITCH);
         return (ap < bp);
     } catch (Event::NoData) {
         std::cerr << "Bad karma: PitchGreater failed to find one or both pitches" << std::endl;

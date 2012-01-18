@@ -31,7 +31,7 @@
 #include "document/CommandHistory.h"
 
 #include <QObject>
-
+#include <unistd.h>
 
 namespace Rosegarden
 {

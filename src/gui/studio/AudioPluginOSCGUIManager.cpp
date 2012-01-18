@@ -37,7 +37,7 @@
 #include <QString>
 
 #include <lo/lo.h>
-
+#include <unistd.h>
 
 namespace Rosegarden
 {

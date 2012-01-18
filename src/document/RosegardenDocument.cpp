@@ -2359,13 +2359,13 @@ RosegardenDocument::stopRecordingMidi()
          ++i) {
 
         Segment *s = i->second;
-        Segment::iterator i = s->begin();
+        Segment::iterator j = s->begin();
 
-        if (i == s->end() || !(*i)->isa(Clef::EventType)) continue;
+        if (j == s->end() || !(*j)->isa(Clef::EventType)) continue;
 
-        if ((*i)->getAbsoluteTime() < meaningfulBarStart) {
-            Event *e = new Event(**i, meaningfulBarStart);
-            s->erase(i);
+        if ((*j)->getAbsoluteTime() < meaningfulBarStart) {
+            Event *e = new Event(**j, meaningfulBarStart);
+            s->erase(j);
             s->insert(e);
         }
     }

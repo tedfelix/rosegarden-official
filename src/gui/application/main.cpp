@@ -49,6 +49,7 @@
 #include <QStringList>
 
 #include <sys/time.h>
+#include <unistd.h>
 
 using namespace Rosegarden;
 

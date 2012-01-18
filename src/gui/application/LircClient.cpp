@@ -29,6 +29,7 @@
 #include <QSocketNotifier>
 #include <fcntl.h>
 #include <cstdlib>
+#include <unistd.h>
 
 namespace Rosegarden
 {
