@@ -96,13 +96,32 @@ CompositionMapper::segmentAdded(Segment *segment)
 void
 CompositionMapper::segmentDeleted(Segment *segment)
 {
-    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted(" << segment << ")\n";
+    // Converting segment to a number to avoid dereferencing a pointer to
+    // deleted memory.
+    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted(" << (int)segment << ")\n";
+
+    // !!! WARNING !!!
+    // The segment pointer that is coming in to this routine has already
+    // been deleted.  This is a POINTER TO DELETED MEMORY.  It cannot be
+    // dereferenced in any way.  Each of the following lines of code will be
+    // explained to make it clear that the pointer is not being dereferenced.
+
+    // "segment" is used here as an index into m_segmentMappers.  It is not
+    // dereferenced.
     if (m_segmentMappers.find(segment) == m_segmentMappers.end()) return;
 
+    // "segment" is used here as an index into m_segmentMappers.  It is not
+    // dereferenced.
     SegmentMapper *mapper = m_segmentMappers[segment];
+    // "segment" is used here as an index into m_segmentMappers.  It is not
+    // dereferenced.
     m_segmentMappers.erase(segment);
 
-    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : deleting SegmentMapper " << mapper << endl;
+    // Given that mapper has a pointer to the deleted segment, this line is
+    // suspect.  However, I believe there is no operator<< for SegmentMapper.
+    // In that case, this should do nothing more than write out the pointer
+    // value.  Uncomment this line of code at your own risk.
+//    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : deleting SegmentMapper " << mapper << endl;
 
     delete mapper;
 }
@@ -123,6 +142,11 @@ CompositionMapper::mapSegment(Segment *segment)
 MappedSegment *
 CompositionMapper::getMappedSegment(Segment *s)
 {
+    // !!! WARNING !!!
+    // The "s" segment pointer that is coming in to this routine may have
+    // already been deleted.  This may be a POINTER TO DELETED MEMORY.
+    // DO NOT DEREFERENCE IN ANY WAY!
+
     if (m_segmentMappers.find(s) != m_segmentMappers.end()) {
         return m_segmentMappers[s]->getMappedSegment();
     } else {

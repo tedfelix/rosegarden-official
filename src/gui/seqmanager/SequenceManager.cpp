@@ -1736,7 +1736,13 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
 void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s << ")" << endl;
+
+    // !!! WARNING !!!
+    // The segment pointer "s" is about to be deleted by
+    // Composition::deleteSegment(Composition::iterator).  After this routine
+    // ends, this pointer cannot be dereferenced.
     m_removedSegments.push_back(s);
+
     std::vector<Segment*>::iterator i =
         find(m_addedSegments.begin(), m_addedSegments.end(), s);
     if (i != m_addedSegments.end()) {
@@ -1802,14 +1808,25 @@ void SequenceManager::processAddedSegment(Segment* s)
 
 void SequenceManager::processRemovedSegment(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << s << ")" << endl;
+    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << (int)s << ")";
 
+    // !!! WARNING !!!
+    // The "s" segment pointer that is coming in to this routine has already
+    // been deleted.  This is a POINTER TO DELETED MEMORY.  It cannot be
+    // dereferenced in any way.  Each of the following lines of code will be
+    // explained to make it clear that the pointer is not being dereferenced.
+
+    // getMappedSegment() uses the segment pointer value as an index into a
+    // map.  So this is not a dereference.
     RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
         (m_compositionMapper->getMappedSegment(s));
 
+    // segmentDeleted() has been reviewed and should only be using the pointer
+    // as an index into a container.
     m_compositionMapper->segmentDeleted(s);
 
     // Remove from segments map
+    // This uses "s" as an index.  It is not dereferenced.
     m_segments.erase(s);
 }
 
