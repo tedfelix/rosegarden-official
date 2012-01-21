@@ -260,6 +260,10 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
             m_currentTrackNb++;
             m_composition->addTrack(track);
 
+            std::vector<TrackId> trackIds;
+            trackIds.push_back(track->getId());
+            m_composition->notifyTracksAdded(trackIds);
+
             m_segmentAdded = false;
 
             // Each pattern has it's own bar so that the imported
@@ -293,6 +297,11 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
             m_segment->setLabel(qstrtostr(label));
 
             m_composition->addTrack(track);
+
+            std::vector<TrackId> trackIds;
+            trackIds.push_back(track->getId());
+            m_composition->notifyTracksAdded(trackIds);
+
             m_composition->addSegment(m_segment);
             m_segment = 0;
 

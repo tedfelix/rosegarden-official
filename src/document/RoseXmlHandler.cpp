@@ -755,10 +755,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // to default values in the ctor, so they don't need to be initialized
         // here
         
-    QString presetLabelStr = atts.value("defaultLabel");
-    if (!labelStr.isEmpty()) {
-        track->setPresetLabel( qstrtostr(presetLabelStr) );
-    }    
+        QString presetLabelStr = atts.value("defaultLabel");
+        if (!labelStr.isEmpty()) {
+            track->setPresetLabel( qstrtostr(presetLabelStr) );
+        }
     
         QString clefStr = atts.value("defaultClef");
         if (!clefStr.isEmpty()) {
@@ -785,17 +785,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             track->setLowestPlayable(lowplayStr.toInt());
         }
 
-    QString staffSizeStr = atts.value("staffSize");
-    if (!staffSizeStr.isEmpty()) {
-        track->setStaffSize(staffSizeStr.toInt());
-    }
+        QString staffSizeStr = atts.value("staffSize");
+        if (!staffSizeStr.isEmpty()) {
+            track->setStaffSize(staffSizeStr.toInt());
+        }
 
-    QString staffBracketStr = atts.value("staffBracket");
-    if (!staffBracketStr.isEmpty()) {
-        track->setStaffBracket(staffBracketStr.toInt());
-    }
+        QString staffBracketStr = atts.value("staffBracket");
+        if (!staffBracketStr.isEmpty()) {
+            track->setStaffBracket(staffBracketStr.toInt());
+        }
 
         getComposition().addTrack(track);
+
+        std::vector<TrackId> trackIds;
+        trackIds.push_back(track->getId());
+        getComposition().notifyTracksAdded(trackIds);
 
 
     } else if (lcName == "segment") {

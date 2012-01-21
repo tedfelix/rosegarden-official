@@ -792,7 +792,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     if ((long)multiplier > (long)divisor)
         maxRawTime = (maxRawTime / multiplier) * divisor;
 
-    bool haveTimeSignatures = false;
+    //bool haveTimeSignatures = false;
     InstrumentId compInstrument = MidiInstrumentBase;
 
     // Clear down the assigned Instruments we already have
@@ -1059,7 +1059,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     composition.addTimeSignature
                         (rosegardenTime,
                          TimeSignature(numerator, denominator));
-                    haveTimeSignatures = true;
+                    //haveTimeSignatures = true;
                     break;
 
                 case MIDI_KEY_SIGNATURE:
@@ -1369,8 +1369,13 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
             // Rosegarden segment number
             //
             composition.addTrack(track);
+
+            std::vector<TrackId> trackIds;
+            trackIds.push_back(track->getId());
+            composition.notifyTracksAdded(trackIds);
+
             composition.addSegment(rosegardenSegment);
-	    addedSegments.push_back(rosegardenSegment);
+            addedSegments.push_back(rosegardenSegment);
             compTrack++;
 
         } else {

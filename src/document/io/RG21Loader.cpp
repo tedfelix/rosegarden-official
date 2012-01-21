@@ -612,9 +612,14 @@ void RG21Loader::closeSegment()
         Track *track = new Track
                        (trackId, m_currentInstrumentId, trackId,
                         qstrtostr(m_currentStaffName), false);
-        m_currentInstrumentId = (++m_currentInstrumentId) % 16;
+        m_currentInstrumentId = (m_currentInstrumentId + 1) % 16;
 
         m_composition->addTrack(track);
+
+        std::vector<TrackId> trackIds;
+        trackIds.push_back(track->getId());
+        m_composition->notifyTracksAdded(trackIds);
+
         m_composition->addSegment(m_currentSegment);
         m_currentSegment = 0;
         m_currentSegmentTime = 0;

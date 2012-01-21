@@ -122,6 +122,8 @@ void DeleteTracksCommand::unexecute()
 {
     // Add the tracks and the segments back in.
 
+    std::vector<TrackId> trackIds;
+
     // Alias for readability.
     Composition::trackcontainer &tracks = m_composition->getTracks();
 
@@ -156,11 +158,14 @@ void DeleteTracksCommand::unexecute()
 
         // Add the new (old) track back in.
         m_composition->addTrack(*oldTrackIter);
+        trackIds.push_back((*oldTrackIter)->getId());
     }
 
     // Add the old segments back in.
     for (size_t i = 0; i < m_oldSegments.size(); ++i)
         m_composition->addSegment(m_oldSegments[i]);
+
+    m_composition->notifyTracksAdded(trackIds);
 
     m_detached = false;
 }
