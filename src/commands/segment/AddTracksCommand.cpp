@@ -74,6 +74,8 @@ void AddTracksCommand::execute()
 
         m_composition->notifyTracksAdded(trackIds);
 
+        m_detached = false;
+
         return;
     }
 
