@@ -1678,7 +1678,6 @@ void Composition::addTrack(Track *track)
         m_tracks[track->getId()] = track;
         track->setOwningComposition(this);
         updateRefreshStatuses();
-        notifyTrackChanged(track);
 
     } else {
         std::cerr << "Composition::addTrack("

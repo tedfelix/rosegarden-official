@@ -236,6 +236,7 @@ protected:
     QColor getRecordLedColour(Rosegarden::Instrument *ins);
 
     // CompositionObserver overrides
+    virtual void tracksAdded(const Composition *, std::vector<TrackId> &trackIds);
 //    virtual void trackChanged(const Composition *, Track*);
     virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
 

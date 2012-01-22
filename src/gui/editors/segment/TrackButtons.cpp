@@ -1168,17 +1168,27 @@ TrackButtons::getRecordLedColour(Instrument *ins)
 
 }
 
+void
+TrackButtons::tracksAdded(const Composition *, std::vector<TrackId> &trackIds)
+{
+    //RG_DEBUG << "TrackButtons::tracksAdded()";
+
+    slotUpdateTracks();
+}
+
 #if 0
 // Definitely not ready for primetime.
 void
-TrackButtons::trackChanged(const Composition *, Track*) {
+TrackButtons::trackChanged(const Composition *, Track*)
+{
     RG_DEBUG << "TrackButtons::trackChanged()";
 //    slotUpdateTracks();
 }
 #endif
 
 void
-TrackButtons::tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/) {
+TrackButtons::tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/)
+{
     //RG_DEBUG << "TrackButtons::tracksDeleted()";
 
     slotUpdateTracks();

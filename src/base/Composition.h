@@ -846,11 +846,35 @@ public:
     }
 
 
+    /// Change notification mechanism.
+    /// @see removeObserver()
+    /// @see notifyTracksAdded()
     void    addObserver(CompositionObserver *obs) { m_observers.push_back(obs); }
+    /// Change notification mechanism.
+    /// @see addObserver()
     void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
 
-    void notifyTracksDeleted(std::vector<TrackId> trackIds) const;
+    /// Change notification mechanism.
+    /**
+     * See the various other "notify*" functions.
+     *
+     * These functions have been made public in the interests of improving
+     * performance.  There are at lease two main approaches to sending change
+     * notifications to observers.  The first is to have each modifier
+     * function (e.g. deleteTrack()) send the change notification.  The second
+     * is to make the change notification functions public and let the code
+     * that modifies the object also call the change notification function.
+     * The first approach is convenient and less likely to be forgotten.  The
+     * second approach has the advantage of performance in situations where
+     * there are many changes being made at once.  All of the changes can be
+     * made, then a single notification can be sent out once the changes are
+     * complete.  With the first approach, many change notifications might get
+     * sent out, each of which might lead to a potentially costly UI update.
+     */
     void notifyTracksAdded(std::vector<TrackId> trackIds) const;
+    /// Change notification mechanism.
+    /// @see notifyTracksAdded()
+    void notifyTracksDeleted(std::vector<TrackId> trackIds) const;
 
     //////
     // DEBUG FACILITIES
