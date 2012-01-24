@@ -1808,7 +1808,7 @@ void SequenceManager::processAddedSegment(Segment* s)
 
 void SequenceManager::processRemovedSegment(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << (int)s << ")";
+    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << s << ")";
 
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already
