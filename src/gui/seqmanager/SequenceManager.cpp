@@ -1735,7 +1735,7 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
 
 void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s << ")" << endl;
+    SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s << ")";
 
     // !!! WARNING !!!
     // The segment pointer "s" is about to be deleted by
@@ -1808,7 +1808,7 @@ void SequenceManager::processAddedSegment(Segment* s)
 
 void SequenceManager::processRemovedSegment(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << s << ")";
+    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment()";
 
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already

@@ -96,9 +96,7 @@ CompositionMapper::segmentAdded(Segment *segment)
 void
 CompositionMapper::segmentDeleted(Segment *segment)
 {
-    // Converting segment to a number to avoid dereferencing a pointer to
-    // deleted memory.
-    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted(" << segment << ")\n";
+    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted()";
 
     // !!! WARNING !!!
     // The segment pointer that is coming in to this routine has already
