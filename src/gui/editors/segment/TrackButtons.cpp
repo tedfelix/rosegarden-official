@@ -288,7 +288,7 @@ TrackButtons::slotUpdateTracks()
     const unsigned int newNbTracks = comp.getNbTracks();
     Track *track = 0;
 
-    //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks << endl;
+    //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks;
 
     // If a track or tracks were deleted
     if (newNbTracks < m_tracks) {
@@ -321,87 +321,92 @@ TrackButtons::slotUpdateTracks()
     if (m_tracks != m_trackLabels.size())
     	RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
 
-    // Set size
-    //
+    // For each track
     for (unsigned int i = 0; i < m_tracks; ++i) {
 
         track = comp.getTrackByPosition(i);
 
-        if (track) {
-            
-            int multiple = m_doc->
-                    getComposition().getMaxContemporaneousSegmentsOnTrack(
-                            track->getId());
+        if (!track)
+            continue;
 
-            if (multiple == 0) multiple = 1;
+// BEGIN updateTrack() ----------------
 
-            const int trackHeight = m_cellSize * multiple - m_borderGap;
+        // *** Set Track Size ***
 
-            // nasty dupe from makeButton
+        // Track height can change when the user moves segments around and
+        // they overlap.
 
-            const int buttonGap = 8;
-            const int vuWidth = 20;
-            const int vuSpacing = 2;
+        int multiple = m_doc->
+                getComposition().getMaxContemporaneousSegmentsOnTrack(
+                        track->getId());
 
-            const int labelWidth = m_trackLabelWidth -
-                ((m_cellSize - buttonGap) * 2 +
-                 vuSpacing * 2 + vuWidth);
+        if (multiple == 0) multiple = 1;
 
-            m_trackHBoxes[i]->setMinimumSize(labelWidth, trackHeight);
+        const int trackHeight = m_cellSize * multiple - m_borderGap;
 
-            m_trackHBoxes[i]->setFixedHeight(trackHeight);
-        }
-    }
+        // ??? Dupe from makeButton().  Factor out if possible.  Maybe just
+        //     factor out labelWidth and trackHeight into functions to start.
 
-    // Renumber all the labels
-    //
-    for (unsigned int i = 0; i < m_tracks; ++i) {
-        track = comp.getTrackByPosition(i);
+        const int buttonGap = 8;
+        const int vuWidth = 20;
+        const int vuSpacing = 2;
 
-        if (track) {
-            m_trackLabels[i]->setId(track->getId());
+        const int labelWidth = m_trackLabelWidth -
+            ((m_cellSize - buttonGap) * 2 +
+             vuSpacing * 2 + vuWidth);
 
-            QLabel *trackLabel = m_trackLabels[i]->getTrackLabel();
+        m_trackHBoxes[i]->setMinimumSize(labelWidth, trackHeight);
 
-            if (track->getLabel() == std::string("")) {
-                Instrument *ins =
-                    m_doc->getStudio().getInstrumentById(track->getInstrument());
-                if (ins && ins->getType() == Instrument::Audio) {
-                    trackLabel->setText(tr("<untitled audio>"));
-                } else {
-                    trackLabel->setText(tr("<untitled>"));
-                }
-            } else {
-                trackLabel->setText(track->getLabel().c_str());
-            }
+        m_trackHBoxes[i]->setFixedHeight(trackHeight);
 
-            //             RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
-            //                      << i << " to track id " << track->getId() << endl;
-            setButtonMapping(m_trackLabels[i], track->getId());
-        }
-    }
 
-    // Set record status and colour
-    // 
-    for (unsigned int i = 0; i < m_tracks; ++i) {
+        // *** Set the Label's Track ID ***
 
-        track = comp.getTrackByPosition(i);
+        m_trackLabels[i]->setId(track->getId());
 
-        if (track) {
 
-            setRecordTrack(i, comp.isTrackRecording(track->getId()));
+        // *** Set the Label's Text ***
 
+        QLabel *trackLabel = m_trackLabels[i]->getTrackLabel();
+
+        if (track->getLabel() == std::string("")) {
             Instrument *ins =
                 m_doc->getStudio().getInstrumentById(track->getInstrument());
-
-            m_recordLeds[i]->setColor(getRecordLedColour(ins));
+            if (ins && ins->getType() == Instrument::Audio) {
+                trackLabel->setText(tr("<untitled audio>"));
+            } else {
+                trackLabel->setText(tr("<untitled>"));
+            }
+        } else {
+            trackLabel->setText(track->getLabel().c_str());
         }
 
+        //             RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
+        //                      << i << " to track id " << track->getId() << endl;
+        setButtonMapping(m_trackLabels[i], track->getId());
+
+
+        // *** Set Record Status ***
+
+        setRecordTrack(i, comp.isTrackRecording(track->getId()));
+
+
+        // *** Set Colour ***
+
+        Instrument *ins =
+            m_doc->getStudio().getInstrumentById(track->getInstrument());
+
+        m_recordLeds[i]->setColor(getRecordLedColour(ins));
+
+// END updateTrack() -------------------------
     }
 
     // repopulate the buttons
+    // ??? This re-does some of the work we've already done.
+    // ??? We need to split this into a populateButton() that we can use for
+    //     each track in the for loop above.
     populateButtons();
-    
+
     // This is necessary to update the widgets's sizeHint to reflect any change in child widget sizes
     adjustSize();
 }
