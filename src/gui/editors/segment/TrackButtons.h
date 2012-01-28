@@ -56,6 +56,11 @@ class Instrument;
  *   - The TrackLabel (defaults to "<untitled>")
  *
  * These widgets are created based on the RosegardenDocument.
+ *
+ * Suggestion: This class appears to be the focus for track related changes.
+ * It would probably be better to have the system make direct changes to
+ * Composition, then call a notification routine which would trigger an
+ * update to this UI.  This should result in simpler code.
  */
 class TrackButtons : public QFrame, CompositionObserver
 {

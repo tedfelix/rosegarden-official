@@ -285,7 +285,7 @@ TrackButtons::slotUpdateTracks()
 #endif
 
     Composition &comp = m_doc->getComposition();
-    unsigned int newNbTracks = comp.getNbTracks();
+    const unsigned int newNbTracks = comp.getNbTracks();
     Track *track = 0;
 
     //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks << endl;
@@ -314,39 +314,48 @@ TrackButtons::slotUpdateTracks()
         }
     }
 
-    // Set height
+    m_tracks = newNbTracks;
+
+    if (m_tracks != m_trackHBoxes.size())
+    	RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackHBoxes.size() != m_tracks";
+    if (m_tracks != m_trackLabels.size())
+    	RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
+
+    // Set size
     //
-    for (unsigned int i = 0; i < (unsigned int)m_trackHBoxes.size(); ++i) {
+    for (unsigned int i = 0; i < m_tracks; ++i) {
 
         track = comp.getTrackByPosition(i);
 
         if (track) {
             
-            int multiple = m_doc->getComposition()
-                .getMaxContemporaneousSegmentsOnTrack(track->getId());
+            int multiple = m_doc->
+                    getComposition().getMaxContemporaneousSegmentsOnTrack(
+                            track->getId());
+
             if (multiple == 0) multiple = 1;
+
+            const int trackHeight = m_cellSize * multiple - m_borderGap;
 
             // nasty dupe from makeButton
 
-            int buttonGap = 8;
-            int vuWidth = 20;
-            int vuSpacing = 2;
+            const int buttonGap = 8;
+            const int vuWidth = 20;
+            const int vuSpacing = 2;
 
-            int labelWidth = m_trackLabelWidth -
+            const int labelWidth = m_trackLabelWidth -
                 ((m_cellSize - buttonGap) * 2 +
                  vuSpacing * 2 + vuWidth);
 
-            m_trackHBoxes[i]->setMinimumSize
-                (labelWidth, m_cellSize * multiple - m_borderGap);
+            m_trackHBoxes[i]->setMinimumSize(labelWidth, trackHeight);
 
-            m_trackHBoxes[i]->setFixedHeight
-                (m_cellSize * multiple - m_borderGap);
+            m_trackHBoxes[i]->setFixedHeight(trackHeight);
         }
     }
 
     // Renumber all the labels
     //
-    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
+    for (unsigned int i = 0; i < m_tracks; ++i) {
         track = comp.getTrackByPosition(i);
 
         if (track) {
@@ -371,11 +380,10 @@ TrackButtons::slotUpdateTracks()
             setButtonMapping(m_trackLabels[i], track->getId());
         }
     }
-    m_tracks = newNbTracks;
 
     // Set record status and colour
     // 
-    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
+    for (unsigned int i = 0; i < m_tracks; ++i) {
 
         track = comp.getTrackByPosition(i);
 
@@ -909,6 +917,7 @@ TrackButtons::changeTrackLabel(TrackId id, QString label)
     Composition &comp = m_doc->getComposition();
     Track *track;
 
+    // ??? Wouldn't it be better to use Composition::getTrackById()?
     for (int i = 0; i < (int)m_tracks; i++) {
         track = comp.getTrackByPosition(i);
         if (track && track->getId() == id) {
@@ -1169,7 +1178,7 @@ TrackButtons::getRecordLedColour(Instrument *ins)
 }
 
 void
-TrackButtons::tracksAdded(const Composition *, std::vector<TrackId> &trackIds)
+TrackButtons::tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*/)
 {
     //RG_DEBUG << "TrackButtons::tracksAdded()";
 
@@ -1182,7 +1191,8 @@ void
 TrackButtons::trackChanged(const Composition *, Track*)
 {
     RG_DEBUG << "TrackButtons::trackChanged()";
-//    slotUpdateTracks();
+
+//    updateTrack(track);
 }
 #endif
 
