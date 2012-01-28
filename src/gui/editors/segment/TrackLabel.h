@@ -45,6 +45,7 @@ namespace Rosegarden
 Q_OBJECT
 public:
 
+    // rename: DisplayMode or just Mode.
     enum InstrumentTrackLabels
     {
         ShowTrack,

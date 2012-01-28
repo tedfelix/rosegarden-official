@@ -63,6 +63,12 @@ namespace Rosegarden
 {
 
 
+// Constants
+const int TrackButtons::buttonGap = 8;
+const int TrackButtons::vuWidth = 20;
+const int TrackButtons::vuSpacing = 2;
+
+
 TrackButtons::TrackButtons(RosegardenDocument* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
@@ -135,21 +141,18 @@ void
 TrackButtons::makeButtons()
 {
     if (!m_doc)
-        return ;
+        return;
 
     // Create a horizontal box for each track
-    // plus the two buttons
-    //
-    unsigned int nbTracks = m_doc->getComposition().getNbTracks();
 
-    for (unsigned int i = 0; i < nbTracks; ++i) {
+    for (unsigned int i = 0; i < m_tracks; ++i) {
         Track *track = m_doc->getComposition().getTrackByPosition(i);
 
         if (track) {
-            QFrame *trackHBox = makeButton(track->getId());
-            trackHBox->setObjectName("TrackButtonFrame");
+            QFrame *trackHBox = makeButton(track);
 
             if (trackHBox) {
+                trackHBox->setObjectName("TrackButtonFrame");
                 m_layout->addWidget(trackHBox);
                 m_trackHBoxes.push_back(trackHBox);
             }
@@ -301,7 +304,7 @@ TrackButtons::slotUpdateTracks()
             track = m_doc->getComposition().getTrackByPosition(i);
             if (track) {
                 // Make a new button
-                QFrame *trackHBox = makeButton(track->getId());
+                QFrame *trackHBox = makeButton(track);
 
                 if (trackHBox) {
                     trackHBox->show();
@@ -317,9 +320,9 @@ TrackButtons::slotUpdateTracks()
     m_tracks = newNbTracks;
 
     if (m_tracks != m_trackHBoxes.size())
-    	RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackHBoxes.size() != m_tracks";
+        RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackHBoxes.size() != m_tracks";
     if (m_tracks != m_trackLabels.size())
-    	RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
+        RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
 
     // For each track
     for (unsigned int i = 0; i < m_tracks; ++i) {
@@ -336,28 +339,8 @@ TrackButtons::slotUpdateTracks()
         // Track height can change when the user moves segments around and
         // they overlap.
 
-        int multiple = m_doc->
-                getComposition().getMaxContemporaneousSegmentsOnTrack(
-                        track->getId());
-
-        if (multiple == 0) multiple = 1;
-
-        const int trackHeight = m_cellSize * multiple - m_borderGap;
-
-        // ??? Dupe from makeButton().  Factor out if possible.  Maybe just
-        //     factor out labelWidth and trackHeight into functions to start.
-
-        const int buttonGap = 8;
-        const int vuWidth = 20;
-        const int vuSpacing = 2;
-
-        const int labelWidth = m_trackLabelWidth -
-            ((m_cellSize - buttonGap) * 2 +
-             vuSpacing * 2 + vuWidth);
-
-        m_trackHBoxes[i]->setMinimumSize(labelWidth, trackHeight);
-
-        m_trackHBoxes[i]->setFixedHeight(trackHeight);
+        m_trackHBoxes[i]->setMinimumSize(labelWidth(), trackHeight(track->getId()));
+        m_trackHBoxes[i]->setFixedHeight(trackHeight(track->getId()));
 
 
         // *** Set the Label's Track ID ***
@@ -1005,47 +988,43 @@ TrackButtons::slotTrackInstrumentSelection(TrackId trackId, int item)
     slotInstrumentPopupActivated(item);
 }
 
-QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
+int
+TrackButtons::labelWidth()
 {
-    // The buttonGap sets up the sizes of the buttons
-    //
-    static const int buttonGap = 8;
+    return m_trackLabelWidth -
+           ((m_cellSize - buttonGap) * 2 + vuSpacing * 2 + vuWidth);
+}
 
-    QFrame *trackHBox = 0;
-
-    LedButton *mute = 0;
-    LedButton *record = 0;
-
-    TrackVUMeter *vuMeter = 0;
-    TrackLabel *trackLabel = 0;
-
-    int vuWidth = 20;
-    int vuSpacing = 2;
-    int multiple = m_doc->getComposition()
-        .getMaxContemporaneousSegmentsOnTrack(trackId);
+int
+TrackButtons::trackHeight(TrackId trackId)
+{
+    int multiple = m_doc->
+            getComposition().getMaxContemporaneousSegmentsOnTrack(trackId);
     if (multiple == 0) multiple = 1;
-    int labelWidth = m_trackLabelWidth - ((m_cellSize - buttonGap) * 2 +
-                                           vuSpacing * 2 + vuWidth);
 
-    // Set the label from the Track object on the Composition
-    //
-    Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackId);
+    return m_cellSize * multiple - m_borderGap;
+}
 
+QFrame*
+TrackButtons::makeButton(Track *track)
+{
     if (track == 0) return 0;
 
-    // Create a horizontal box for each track
-    //
-    trackHBox = new QFrame(this);
+    TrackId trackId = track->getId();
+
+
+    // *** Horizontal Box ***
+
+    QFrame *trackHBox = new QFrame(this);
     QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
     trackHBox->setLayout(hblayout);
     hblayout->setMargin(0);
     hblayout->setSpacing(0);
 
-    trackHBox->setMinimumSize(labelWidth, m_cellSize * multiple - m_borderGap);
-    trackHBox->setFixedHeight(m_cellSize * multiple - m_borderGap);
+    trackHBox->setMinimumSize(labelWidth(), trackHeight(trackId));
+    trackHBox->setFixedHeight(trackHeight(trackId));
 
     // Try a style for the box
-    //
     trackHBox->setFrameStyle(StyledPanel);
     trackHBox->setFrameShape(StyledPanel);
     trackHBox->setFrameShadow(Raised);
@@ -1053,57 +1032,70 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // Insert a little gap
     hblayout->addSpacing(vuSpacing);
 
-    // Create a VU meter
-    vuMeter = new TrackVUMeter(trackHBox,
-                               VUMeter::PeakHold,
-                               vuWidth,
-                               buttonGap,
-                               track->getPosition());
+
+    // *** VU Meter ***
+
+    TrackVUMeter *vuMeter = new TrackVUMeter(trackHBox,
+                                             VUMeter::PeakHold,
+                                             vuWidth,
+                                             buttonGap,
+                                             track->getPosition());
 
     m_trackMeters.push_back(vuMeter);
 
     hblayout->addWidget(vuMeter);
 
-    // Create another little gap
+    // Insert a little gap
     hblayout->addSpacing(vuSpacing);
 
-    //
-    // 'mute' and 'record' leds
-    //
-    mute = new LedButton(Rosegarden::GUIPalette::getColour
-              (Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
+
+    // *** Mute LED ***
+
+    LedButton *mute = new LedButton(
+            GUIPalette::getColour(GUIPalette::MuteTrackLED), trackHBox);
     mute->setToolTip(tr("Mute track"));
     hblayout->addWidget(mute);
+
+    if (track->isMuted()) mute->off();
+
+    connect(mute, SIGNAL(stateChanged(bool)),
+            m_muteSigMapper, SLOT(map()));
+    m_muteSigMapper->setMapping(mute, track->getPosition());
+
+    m_muteLeds.push_back(mute);
+
+    mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+
+
+    // *** Record LED ***
 
     Rosegarden::Instrument *ins =
         m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-    record = new LedButton(getRecordLedColour(ins), trackHBox);
+    LedButton *record = new LedButton(getRecordLedColour(ins), trackHBox);
     record->setToolTip(tr("Record on this track"));
     hblayout->addWidget(record);
 
     record->off();
 
-    // Connect them to their sigmappers
     connect(record, SIGNAL(stateChanged(bool)),
             m_recordSigMapper, SLOT(map()));
-    connect(mute, SIGNAL(stateChanged(bool)),
-            m_muteSigMapper, SLOT(map()));
     m_recordSigMapper->setMapping(record, track->getPosition());
-    m_muteSigMapper->setMapping(mute, track->getPosition());
 
-    // Store the LedButton
-    //
-    m_muteLeds.push_back(mute);
     m_recordLeds.push_back(record);
 
-    //
-    // Track label
-    //
-    trackLabel = new TrackLabel(trackId, track->getPosition(), trackHBox);
+    record->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+
+
+    // *** Track Label ***
+
+    TrackLabel *trackLabel =
+            new TrackLabel(trackId, track->getPosition(), trackHBox);
     hblayout->addWidget(trackLabel);
+
     hblayout->addSpacing(vuSpacing);
 
+    // Set the label from the Track object on the Composition
     if (track->getLabel() == std::string("")) {
         if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
             trackLabel->getTrackLabel()->setText(tr("<untitled audio>"));
@@ -1114,15 +1106,24 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
         trackLabel->getTrackLabel()->setText(strtoqstr(track->getLabel()));
     }
 
-    trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
+    // Instrument (alternative) label
+    QString instrumentName(tr("<no instrument>"));
+    if (ins) instrumentName = ins->getLocalizedPresentationName();
+
+    // Set label to program change if it's being sent
+    if (ins != 0 && ins->sendsProgramChange()) {
+        trackLabel->setAlternativeLabel(QObject::tr(ins->getProgramName().c_str()));
+    }
+
+    trackLabel->showLabel(m_trackInstrumentLabels);
+
+    trackLabel->setFixedSize(labelWidth(), m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
 
     connect(trackLabel, SIGNAL(renameTrack(QString, TrackId)),
             SLOT(slotRenameTrack(QString, TrackId)));
 
-    // Store the TrackLabel pointer
-    //
     m_trackLabels.push_back(trackLabel);
 
     // Connect it
@@ -1133,26 +1134,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     connect(trackLabel, SIGNAL(clicked()),
             m_clickedSigMapper, SLOT(map()));
 
-    //
-    // instrument label
-    //
-    QString instrumentName(tr("<no instrument>"));
-    if (ins) instrumentName = ins->getLocalizedPresentationName();
-
-    // Set label to program change if it's being sent
-    //
-    if (ins != 0 && ins->sendsProgramChange()) {
-        trackLabel->setAlternativeLabel(QObject::tr(ins->getProgramName().c_str()));
-    }
-
-    trackLabel->showLabel(m_trackInstrumentLabels);
-
-    mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
-    record->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
-
-    // set the mute button
-    //
-    if (track->isMuted()) mute->off();
 
     return trackHBox;
 }

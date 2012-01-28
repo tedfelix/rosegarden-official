@@ -67,6 +67,16 @@ class TrackButtons : public QFrame, CompositionObserver
     Q_OBJECT
 public:
 
+    /**
+     * @param[in] trackCellHeight Height of each track including the gap
+     *                            between tracks.  See m_cellSize.
+     * @param[in] trackLabelWidth Width of the TrackLabel portion.  See
+     *                            m_trackLabelWidth.
+     * @param[in] showTrackLabels true => track names are displayed.
+     *     false => instrument names are displayed.  See
+     *     m_trackInstrumentLabels and changeTrackInstrumentLabels().
+     * @param[in] overallHeight   Height of the entire TrackButtons frame.
+     */
     TrackButtons(RosegardenDocument* doc,
                  unsigned int trackCellHeight,
                  unsigned int trackLabelWidth,
@@ -84,6 +94,7 @@ public:
     std::vector<int> getHighlightedTracks();
 
     /// Change the track labels between track, instrument, or both.
+    /// rename: changeLabelDisplayMode()
     void changeTrackInstrumentLabels(TrackLabel::InstrumentTrackLabels label);
 
     /**
@@ -216,7 +227,7 @@ protected:
     void makeButtons();
 
     /// Creates all the widgets for a single track.
-    QFrame* makeButton(TrackId trackId);
+    QFrame* makeButton(Track *track);
 
     // Dead Code.
 //    QString getPresentationName(Instrument *);
@@ -245,10 +256,13 @@ protected:
 //    virtual void trackChanged(const Composition *, Track*);
     virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
 
+    int labelWidth();
+    int trackHeight(TrackId trackId);
+
 
     //--------------- Data members ---------------------------------
 
-    RosegardenDocument                 *m_doc;
+    RosegardenDocument               *m_doc;
 
     /// Layout used to stack the trackHBoxes vertically
     QVBoxLayout                      *m_layout;
@@ -283,16 +297,22 @@ protected:
     //
     int                               m_cellSize;
 
-    // gaps between elements
+    // gaps between elements vertically
     //
     int                               m_borderGap;
 
     int                               m_trackLabelWidth;
     int                               m_popupItem;
 
+    // rename: m_labelDisplayMode
     TrackLabel::InstrumentTrackLabels             m_trackInstrumentLabels;
     // Position of the last selected track.
     int m_lastSelected;
+
+    // Constants
+    static const int buttonGap;
+    static const int vuWidth;
+    static const int vuSpacing;
 
 private:
     // Hide copy ctor and op=
