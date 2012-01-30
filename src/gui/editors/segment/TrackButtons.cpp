@@ -171,48 +171,48 @@ void TrackButtons::setButtonMapping(QObject* obj, TrackId trackId)
 void
 TrackButtons::populateButtons()
 {
-    Instrument *ins = 0;
-    Track *track;
+    // For each track
+    for (unsigned int i = 0; i < m_tracks; ++i) {
+        Track *track = m_doc->getComposition().getTrackByPosition(i);
 
-    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
-        track = m_doc->getComposition().getTrackByPosition(i);
+        if (!track)
+            continue;
 
-        if (track) {
-            ins = m_doc->getStudio().getInstrumentById(track->getInstrument());
-
-            // Set mute button from track
-            //
-            if (track->isMuted()) {
-                m_muteLeds[i]->off();
-            } else {
-                m_muteLeds[i]->on();
-            }
-
-            // Set record button from track
-            //
-            bool recording =
-                m_doc->getComposition().isTrackRecording(track->getId());
-            setRecordTrack(track->getPosition(), recording);
-
-            // reset track tokens
-            m_trackLabels[i]->setId(track->getId());
-            setButtonMapping(m_trackLabels[i], track->getId());
-            m_trackLabels[i]->setPosition(i);
+        // Set mute button from track
+        if (track->isMuted()) {
+            m_muteLeds[i]->off();
+        } else {
+            m_muteLeds[i]->on();
         }
 
+        // Set record button from track
+        bool recording =
+            m_doc->getComposition().isTrackRecording(track->getId());
+        setRecordTrack(track->getPosition(), recording);
+
+        // Set label from track
+        m_trackLabels[i]->setId(track->getId());
+        setButtonMapping(m_trackLabels[i], track->getId());
+        m_trackLabels[i]->setPosition(i);
+
+        Instrument *ins =
+                m_doc->getStudio().getInstrumentById(track->getInstrument());
+
         if (ins) {
-            m_trackLabels[i]->getInstrumentLabel()->setText(ins->getLocalizedPresentationName());
+            m_trackLabels[i]->getInstrumentLabel()->setText(
+                    ins->getLocalizedPresentationName());
             if (ins->sendsProgramChange()) {
-                m_trackLabels[i]->setAlternativeLabel(QObject::tr(ins->getProgramName().c_str()));
+                m_trackLabels[i]->setAlternativeLabel(
+                        QObject::tr(ins->getProgramName().c_str()));
             }
 
         } else {
-            m_trackLabels[i]->getInstrumentLabel()->setText(tr("<no instrument>"));
+            m_trackLabels[i]->getInstrumentLabel()->setText(
+                    tr("<no instrument>"));
         }
 
         m_trackLabels[i]->update();
     }
-
 }
 
 std::vector<int>

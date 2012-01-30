@@ -21,6 +21,7 @@
 #include "base/Track.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
+#include "misc/Debug.h"
 
 #include <QFont>
 #include <QFrame>
@@ -106,11 +107,15 @@ void TrackLabel::setIndent(int i)
 
 void TrackLabel::setAlternativeLabel(const QString &label)
 {
+    //RG_DEBUG << "TrackLabel::setAlternativeLabel(" << label << ")";
+
     // recover saved original
     if (label.isEmpty()) {
 
-        if (!m_alternativeLabel.isEmpty())
+        if (!m_alternativeLabel.isEmpty()) {
+            //RG_DEBUG << "  Recalling stored alternative label.";
             m_instrumentLabel->setText(m_alternativeLabel);
+        }
 
         // do nothing if we've got nothing to swap
         return ;
@@ -118,8 +123,10 @@ void TrackLabel::setAlternativeLabel(const QString &label)
 
     // Store the current (first) label
     //
-    if (m_alternativeLabel.isEmpty())
+    if (m_alternativeLabel.isEmpty()) {
+        //RG_DEBUG << "  Setting alternative label to " << m_instrumentLabel->text();
         m_alternativeLabel = m_instrumentLabel->text();
+    }
 
     // set new label
     m_instrumentLabel->setText(label);

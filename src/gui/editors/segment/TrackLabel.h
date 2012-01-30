@@ -63,10 +63,39 @@ public:
     // QLabel API delegation - applies on both labels
     void setIndent(int);
 
+    // I believe these two may only ever be used to set the text for these
+    // member variables.  If so, consider just providing a
+    // setInstrumentLabel(text) and a setTrackLabel(text).
     QLabel* getInstrumentLabel() { return m_instrumentLabel; }
     QLabel* getTrackLabel()      { return m_trackLabel; }
+
+    /// Set the instrument label, storing the first as an alternative.
+    /**
+     * The first instrument label that comes into this routine is the
+     * instrument's "presentation name".  This is something like "General
+     * MIDI Device #1".  It is stored as the "alternative" instrument name
+     * in case the program change name is blank ("").
+     *
+     * Every other name that comes in after the "presentation name" is
+     * a "program change name" like "Acoustic Grand Piano".  If the user
+     * turns off the "Program" checkbox in the Instrument Parameters box,
+     * an empty string is sent, and the "presentation name" is displayed
+     * on the track label.
+     *
+     * Suggestion: Can we simplify this by offering two routines:
+     *
+     *   - setPresentationName() sets an m_presentationName
+     *   - setProgramChangeName() sets an m_programChangeName
+     *
+     * Then if m_programChangeName is ever "", we would fall back on
+     * displaying m_presentationName.
+     *
+     * @see clearAlternativeLabel()
+     */
     void setAlternativeLabel(const QString &label);
+    /// @see setAlternativeLabel()
     void clearAlternativeLabel();
+
     void showLabel(InstrumentTrackLabels);
 
     // Encapsulates setting the label to highlighted or not
