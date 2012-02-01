@@ -22,36 +22,35 @@
 #include "base/Track.h"
 #include <QString>
 #include <QStackedWidget>
+#include <QLabel>
 
 
 class QWidget;
 class QTimer;
 class QMouseEvent;
-class QLabel;
 
 
 namespace Rosegarden
 {
 
 
-
 /**
  * Specialises QLabel to create in effect a toggleable and hence
  * selectable label/label list.  In conjunction with TrackButtons
- * provides a framework for Track selection on the TrackCanvas.
+ * provides a framework for Track selection in the TrackEditor.
+ *
+ * Actually, this specializes QStackedWidget and creates two QLabels which
+ * can be switched to display either track name or instrument name.
+ *
+ * Suggestion: Rewrite this to be QLabel-derived to reduce the number of
+ * widgets.  Keep the track name and instrument name as separate strings
+ * and send the proper one to the label based on the current mode.  IOw,
+ * where we call setCurrentWidget(), call setText() instead.
  */
-	class TrackLabel : public QStackedWidget
+class TrackLabel : public QStackedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-
-    // rename: DisplayMode or just Mode.
-    enum InstrumentTrackLabels
-    {
-        ShowTrack,
-        ShowInstrument,
-        ShowBoth
-    };
 
     TrackLabel(TrackId id,
                int position,
@@ -60,14 +59,16 @@ public:
 
     ~TrackLabel();
 
-    // QLabel API delegation - applies on both labels
-    void setIndent(int);
+    /// Label indent in pixels.  See QLabel::setIndent().
+    void setIndent(int pixels);
 
-    // I believe these two may only ever be used to set the text for these
-    // member variables.  If so, consider just providing a
-    // setInstrumentLabel(text) and a setTrackLabel(text).
-    QLabel* getInstrumentLabel() { return m_instrumentLabel; }
-    QLabel* getTrackLabel()      { return m_trackLabel; }
+    /// Sets the instrument name (e.g. Acoustic Grand Piano).
+    void setInstrumentLabel(const QString &text)
+        { m_instrumentLabel->setText(text); }
+    /// Sets the track name (e.g. Melody).  See getTrackLabel().
+    void setTrackLabel(const QString &text)  { m_trackLabel->setText(text); }
+    /// Gets the track name (e.g. Melody).  See setTrackLabel().
+    QString getTrackLabel() const  { return m_trackLabel->text(); }
 
     /// Set the instrument label, storing the first as an alternative.
     /**
@@ -96,10 +97,17 @@ public:
     /// @see setAlternativeLabel()
     void clearAlternativeLabel();
 
-    void showLabel(InstrumentTrackLabels);
+    enum DisplayMode
+    {
+        ShowTrack,
+        ShowInstrument,
+        ShowBoth
+    };
+
+    // rename: setDisplayMode()
+    void showLabel(DisplayMode mode);
 
     // Encapsulates setting the label to highlighted or not
-    //
     void setSelected(bool on);
     bool isSelected() const { return m_selected; }
 
@@ -113,7 +121,6 @@ signals:
     void clicked();
 
     // We emit this once we've renamed a track
-    //
     void renameTrack(QString, TrackId);
 
     void changeToInstrumentList();

@@ -199,7 +199,7 @@ TrackButtons::populateButtons()
                 m_doc->getStudio().getInstrumentById(track->getInstrument());
 
         if (ins) {
-            m_trackLabels[i]->getInstrumentLabel()->setText(
+            m_trackLabels[i]->setInstrumentLabel(
                     ins->getLocalizedPresentationName());
             if (ins->sendsProgramChange()) {
                 m_trackLabels[i]->setAlternativeLabel(
@@ -207,8 +207,7 @@ TrackButtons::populateButtons()
             }
 
         } else {
-            m_trackLabels[i]->getInstrumentLabel()->setText(
-                    tr("<no instrument>"));
+            m_trackLabels[i]->setInstrumentLabel(tr("<no instrument>"));
         }
 
         m_trackLabels[i]->update();
@@ -350,18 +349,16 @@ TrackButtons::slotUpdateTracks()
 
         // *** Set the Label's Text ***
 
-        QLabel *trackLabel = m_trackLabels[i]->getTrackLabel();
-
         if (track->getLabel() == std::string("")) {
             Instrument *ins =
                 m_doc->getStudio().getInstrumentById(track->getInstrument());
             if (ins && ins->getType() == Instrument::Audio) {
-                trackLabel->setText(tr("<untitled audio>"));
+                m_trackLabels[i]->setTrackLabel(tr("<untitled audio>"));
             } else {
-                trackLabel->setText(tr("<untitled>"));
+                m_trackLabels[i]->setTrackLabel(tr("<untitled>"));
             }
         } else {
-            trackLabel->setText(track->getLabel().c_str());
+            m_trackLabels[i]->setTrackLabel(track->getLabel().c_str());
         }
 
         //             RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
@@ -580,7 +577,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     //
     // populate this instrument widget
-    m_trackLabels[position]->getInstrumentLabel()->setText(instrumentName);
+    m_trackLabels[position]->setInstrumentLabel(instrumentName);
 
     // Ensure the instrument name is shown
     m_trackLabels[position]->showLabel(TrackLabel::ShowInstrument);
@@ -606,8 +603,8 @@ TrackButtons::slotInstrumentSelection(int trackId)
     if (track != 0) {
         instrument = studio.getInstrumentById(track->getInstrument());
         if (instrument) {
-            m_trackLabels[position]->getInstrumentLabel()->
-                setText(instrument->getLocalizedPresentationName());
+            m_trackLabels[position]->setInstrumentLabel(
+                    instrument->getLocalizedPresentationName());
             m_trackLabels[position]->clearAlternativeLabel();
             if (instrument->sendsProgramChange()) {
                 m_trackLabels[position]->setAlternativeLabel
@@ -841,8 +838,8 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             // select instrument
             emit instrumentSelected((int)inst->getId());
 
-            m_trackLabels[m_popupItem]->getInstrumentLabel()->
-                setText(inst->getLocalizedPresentationName());
+            m_trackLabels[m_popupItem]->setInstrumentLabel(
+                    inst->getLocalizedPresentationName());
 
             // reset the alternative label
             m_trackLabels[m_popupItem]->clearAlternativeLabel();
@@ -866,14 +863,14 @@ TrackButtons::slotInstrumentPopupActivated(int item)
 }
 
 void
-TrackButtons::changeTrackInstrumentLabels(TrackLabel::InstrumentTrackLabels label)
+TrackButtons::changeTrackInstrumentLabels(TrackLabel::DisplayMode mode)
 {
     // Set new label
-    m_trackInstrumentLabels = label;
+    m_trackInstrumentLabels = mode;
 
     // update and reconnect with new value
     for (int i = 0; i < (int)m_tracks; i++) {
-        m_trackLabels[i]->showLabel(label);
+        m_trackLabels[i]->showLabel(mode);
     }
 }
 
@@ -909,8 +906,8 @@ TrackButtons::changeTrackLabel(TrackId id, QString label)
     for (int i = 0; i < (int)m_tracks; i++) {
         track = comp.getTrackByPosition(i);
         if (track && track->getId() == id) {
-            if (m_trackLabels[i]->getTrackLabel()->text() != label) {
-                m_trackLabels[i]->getTrackLabel()->setText(label);
+            if (m_trackLabels[i]->getTrackLabel() != label) {
+                m_trackLabels[i]->setTrackLabel(label);
                 emit widthChanged();
                 emit nameChanged();
             }
@@ -942,7 +939,7 @@ TrackButtons::slotSynchroniseWithComposition()
             if (ins)
                 instrumentName = ins->getLocalizedPresentationName();
 
-            m_trackLabels[i]->getInstrumentLabel()->setText(instrumentName);
+            m_trackLabels[i]->setInstrumentLabel(instrumentName);
 
             setRecordButton(i, comp.isTrackRecording(track->getId()));
 
@@ -1098,12 +1095,12 @@ TrackButtons::makeButton(Track *track)
     // Set the label from the Track object on the Composition
     if (track->getLabel() == std::string("")) {
         if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
-            trackLabel->getTrackLabel()->setText(tr("<untitled audio>"));
+            trackLabel->setTrackLabel(tr("<untitled audio>"));
         } else {
-            trackLabel->getTrackLabel()->setText(tr("<untitled>"));
+            trackLabel->setTrackLabel(tr("<untitled>"));
         }
     } else {
-        trackLabel->getTrackLabel()->setText(strtoqstr(track->getLabel()));
+        trackLabel->setTrackLabel(strtoqstr(track->getLabel()));
     }
 
     // Instrument (alternative) label

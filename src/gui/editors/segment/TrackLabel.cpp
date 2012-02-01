@@ -25,7 +25,6 @@
 
 #include <QFont>
 #include <QFrame>
-#include <QLabel>
 #include <QRegExp>
 #include <QString>
 #include <QTimer>
@@ -99,10 +98,10 @@ TrackLabel::TrackLabel(TrackId id,
 TrackLabel::~TrackLabel()
 {}
 
-void TrackLabel::setIndent(int i)
+void TrackLabel::setIndent(int pixels)
 {
-    m_instrumentLabel->setIndent(i);
-    m_trackLabel->setIndent(i);
+    m_instrumentLabel->setIndent(pixels);
+    m_trackLabel->setIndent(pixels);
 }
 
 void TrackLabel::setAlternativeLabel(const QString &label)
@@ -137,13 +136,13 @@ void TrackLabel::clearAlternativeLabel()
     m_alternativeLabel = "";
 }
 
-void TrackLabel::showLabel(InstrumentTrackLabels l)
+void TrackLabel::showLabel(DisplayMode mode)
 {
-//     raiseWidget(l);
-    if( l == ShowTrack ){
+//     raiseWidget(mode);
+    if( mode == ShowTrack ){
         setCurrentWidget( m_trackLabel );
         
-    } else if( l == ShowInstrument ){
+    } else if( mode == ShowInstrument ){
         setCurrentWidget( m_instrumentLabel );
         
     }

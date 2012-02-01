@@ -95,7 +95,7 @@ public:
 
     /// Change the track labels between track, instrument, or both.
     /// rename: changeLabelDisplayMode()
-    void changeTrackInstrumentLabels(TrackLabel::InstrumentTrackLabels label);
+    void changeTrackInstrumentLabels(TrackLabel::DisplayMode mode);
 
     /**
      * Change the instrument label to something else like
@@ -305,7 +305,7 @@ protected:
     int                               m_popupItem;
 
     // rename: m_labelDisplayMode
-    TrackLabel::InstrumentTrackLabels             m_trackInstrumentLabels;
+    TrackLabel::DisplayMode           m_trackInstrumentLabels;
     // Position of the last selected track.
     int m_lastSelected;
 
