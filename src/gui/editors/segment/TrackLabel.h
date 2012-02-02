@@ -63,25 +63,33 @@ public:
     void setIndent(int pixels);
 
     /// Sets the instrument name (e.g. Acoustic Grand Piano).
+    // ??? Check all use of the term "label".  Should it be "name"?
+    //     A name is displayed on a label.
     void setInstrumentLabel(const QString &text)
         { m_instrumentLabel->setText(text); }
+
     /// Sets the track name (e.g. Melody).  See getTrackLabel().
     void setTrackLabel(const QString &text)  { m_trackLabel->setText(text); }
     /// Gets the track name (e.g. Melody).  See setTrackLabel().
     QString getTrackLabel() const  { return m_trackLabel->text(); }
 
-    /// Set the instrument label, storing the first as an alternative.
+    /// Set the instrument label, storing the current as an alternative.
     /**
-     * The first instrument label that comes into this routine is the
-     * instrument's "presentation name".  This is something like "General
-     * MIDI Device #1".  It is stored as the "alternative" instrument name
-     * in case the program change name is blank ("").
+     * Typically, this is used as follows:
      *
-     * Every other name that comes in after the "presentation name" is
-     * a "program change name" like "Acoustic Grand Piano".  If the user
-     * turns off the "Program" checkbox in the Instrument Parameters box,
-     * an empty string is sent, and the "presentation name" is displayed
-     * on the track label.
+     *   1. setInstrumentLabel() is called with the "presentation name"
+     *      which looks like "General MIDI Device  #1".  This is set as
+     *      the text on the instrument label.
+     *   2. setAlternativeLabel() is called with the "program name" which
+     *      looks like "Acoustic Grand Piano".
+     *   3. setAlternativeLabel() notices the presentation name is in the
+     *      instrument label already, so it stores it as the alternative.
+     *
+     * On future calls, a "program change name" like "Acoustic Grand Piano"
+     * is usually sent into this routine and that is what is displayed.
+     * If the user turns off the "Program" checkbox in the Instrument
+     * Parameters box, an empty string is sent, and the "presentation name"
+     * is displayed on the track label.
      *
      * Suggestion: Can we simplify this by offering two routines:
      *
@@ -94,7 +102,12 @@ public:
      * @see clearAlternativeLabel()
      */
     void setAlternativeLabel(const QString &label);
-    /// @see setAlternativeLabel()
+
+    /// Clears any stored alternative name.
+    /**
+     * The next call to setAlternativeLabel() will store the current
+     * instrument label text as the alternative name.
+     */
     void clearAlternativeLabel();
 
     enum DisplayMode
@@ -135,11 +148,18 @@ protected:
 
     //--------------- Data members ---------------------------------
 
+    // Typically this displays the program change name (e.g. "Acoustic Grand
+    // Piano").  However, if the instrument doesn't send a program change,
+    // this displays m_alternativeLabel.
     QLabel              *m_instrumentLabel;
+
+    // Track name selected by the user.
     QLabel              *m_trackLabel;
+
+    // Presentation Name (e.g. "General MIDI Device  #1")
     QString              m_alternativeLabel;
 
-    TrackId  m_id;
+    TrackId              m_id;
     int                  m_position;
     bool                 m_selected;
 

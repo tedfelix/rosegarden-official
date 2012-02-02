@@ -107,6 +107,7 @@ void TrackLabel::setIndent(int pixels)
 void TrackLabel::setAlternativeLabel(const QString &label)
 {
     //RG_DEBUG << "TrackLabel::setAlternativeLabel(" << label << ")";
+    //RG_DEBUG << "  Alternative label is: " << m_alternativeLabel;
 
     // recover saved original
     if (label.isEmpty()) {
@@ -127,6 +128,7 @@ void TrackLabel::setAlternativeLabel(const QString &label)
         m_alternativeLabel = m_instrumentLabel->text();
     }
 
+    //RG_DEBUG << "  Setting label text to " << label;
     // set new label
     m_instrumentLabel->setText(label);
 }
