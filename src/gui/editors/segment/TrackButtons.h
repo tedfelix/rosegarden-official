@@ -210,6 +210,10 @@ public slots:
 
 protected:
 
+    /// Initializes both the instrument label and the alternative label.
+    /// @see TrackLabel
+    void initInstrumentLabel(Instrument *ins, TrackLabel *label);
+
     /// Updates the buttons from the composition.
     /// @see slotUpdateTracks()
     void populateButtons();

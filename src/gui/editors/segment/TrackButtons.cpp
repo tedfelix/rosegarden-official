@@ -162,10 +162,45 @@ TrackButtons::makeButtons()
     populateButtons();
 }
 
-void TrackButtons::setButtonMapping(QObject* obj, TrackId trackId)
+void
+TrackButtons::setButtonMapping(QObject* obj, TrackId trackId)
 {
     m_clickedSigMapper->setMapping(obj, trackId);
     m_instListSigMapper->setMapping(obj, trackId);
+}
+
+void
+TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
+{
+    // Initializes a label's instrument name(s) from a track
+
+    if (ins) {
+        // Get the presentation name on the label first.  This is something
+        // like "General MIDI Device  #1".  It will become the alternative
+        // name if the instrument sends program changes.
+        label->setInstrumentLabel(ins->getLocalizedPresentationName());
+
+        // Clear out the old alternative presentation name.  We don't want
+        // it to be out of sync.
+        label->clearAlternativeLabel();
+
+        if (ins->sendsProgramChange()) {
+            // This causes TrackLabel to store the current text in the label
+            // (the presentation name set above) as the alternative name.
+            // Then the program name is put on the instrument label.
+            label->setAlternativeLabel(
+                    QObject::tr(ins->getProgramName().c_str()));
+        }
+
+    } else {
+        // Just go with <no instrument> and no alternative name.
+        label->setInstrumentLabel(tr("<no instrument>"));
+        label->clearAlternativeLabel();
+    }
+
+    // ??? Does this make sense for all?  Maybe it should be done after all
+    //     updates?
+    //label->update();
 }
 
 void
@@ -198,17 +233,7 @@ TrackButtons::populateButtons()
         Instrument *ins =
                 m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-        if (ins) {
-            m_trackLabels[i]->setInstrumentLabel(
-                    ins->getLocalizedPresentationName());
-            if (ins->sendsProgramChange()) {
-                m_trackLabels[i]->setAlternativeLabel(
-                        QObject::tr(ins->getProgramName().c_str()));
-            }
-
-        } else {
-            m_trackLabels[i]->setInstrumentLabel(tr("<no instrument>"));
-        }
+        initInstrumentLabel(ins, m_trackLabels[i]);
 
         m_trackLabels[i]->update();
     }
@@ -558,7 +583,10 @@ TrackButtons::slotSetMetersByInstrument(float value,
 void
 TrackButtons::slotInstrumentSelection(int trackId)
 {
-    RG_DEBUG << "TrackButtons::slotInstrumentSelection(" << trackId << ")\n";
+    //RG_DEBUG << "TrackButtons::slotInstrumentSelection(" << trackId << ")\n";
+
+
+    // *** Force The Track Label To Show The Presentation Name ***
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
@@ -575,12 +603,15 @@ TrackButtons::slotInstrumentSelection(int trackId)
             instrumentName = instrument->getLocalizedPresentationName();
     }
 
-    //
-    // populate this instrument widget
+    // Force the instrument label to show the "presentation name".
+    // E.g. "General MIDI Device  #1"
     m_trackLabels[position]->setInstrumentLabel(instrumentName);
 
     // Ensure the instrument name is shown
     m_trackLabels[position]->showLabel(TrackLabel::ShowInstrument);
+
+
+    // *** Launch The Popup ***
 
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
@@ -594,6 +625,9 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     instrumentPopup.exec(QCursor::pos());
 
+
+    // *** Restore The Track Label ***
+
     // Restore the label back to what it was showing
     m_trackLabels[position]->showLabel(m_trackInstrumentLabels);
 
@@ -602,15 +636,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
     // program was selected from the menu
     if (track != 0) {
         instrument = studio.getInstrumentById(track->getInstrument());
-        if (instrument) {
-            m_trackLabels[position]->setInstrumentLabel(
-                    instrument->getLocalizedPresentationName());
-            m_trackLabels[position]->clearAlternativeLabel();
-            if (instrument->sendsProgramChange()) {
-                m_trackLabels[position]->setAlternativeLabel
-                    (QObject::tr(instrument->getProgramName().c_str()));
-            }
-        }
+        initInstrumentLabel(instrument, m_trackLabels[position]);
     }
 }
 
@@ -813,6 +839,8 @@ TrackButtons::slotInstrumentPopupActivated(QAction* act)
 void
 TrackButtons::slotInstrumentPopupActivated(int item)
 {
+    // This is called when the user selects a new instrument via the popup.
+
     RG_DEBUG << "TrackButtons::slotInstrumentPopupActivated " << item << endl;
 
     Composition &comp = m_doc->getComposition();
@@ -833,22 +861,12 @@ TrackButtons::slotInstrumentPopupActivated(int item)
         Track *track = comp.getTrackByPosition(m_popupItem);
 
         if (track != 0) {
-            track->setInstrument(inst->getId());
-
             // select instrument
+            track->setInstrument(inst->getId());
             emit instrumentSelected((int)inst->getId());
 
-            m_trackLabels[m_popupItem]->setInstrumentLabel(
-                    inst->getLocalizedPresentationName());
-
-            // reset the alternative label
-            m_trackLabels[m_popupItem]->clearAlternativeLabel();
-
-            // Now see if the program is being shown for this instrument
-            // and if so reset the label
-            //
-            if (inst->sendsProgramChange())
-                m_trackLabels[m_popupItem]->setAlternativeLabel(QObject::tr(inst->getProgramName().c_str()));
+            // Set the labels
+            initInstrumentLabel(inst, m_trackLabels[m_popupItem]);
 
             m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
 
@@ -935,11 +953,7 @@ TrackButtons::slotSynchroniseWithComposition()
             Instrument *ins = studio.
                               getInstrumentById(track->getInstrument());
 
-            QString instrumentName(tr("<no instrument>"));
-            if (ins)
-                instrumentName = ins->getLocalizedPresentationName();
-
-            m_trackLabels[i]->setInstrumentLabel(instrumentName);
+            initInstrumentLabel(ins, m_trackLabels[i]);
 
             setRecordButton(i, comp.isTrackRecording(track->getId()));
 
@@ -1104,8 +1118,10 @@ TrackButtons::makeButton(Track *track)
     }
 
     // Instrument (alternative) label
-    QString instrumentName(tr("<no instrument>"));
-    if (ins) instrumentName = ins->getLocalizedPresentationName();
+
+    // unused
+//    QString instrumentName(tr("<no instrument>"));
+//    if (ins) instrumentName = ins->getLocalizedPresentationName();
 
     // Set label to program change if it's being sent
     if (ins != 0 && ins->sendsProgramChange()) {
