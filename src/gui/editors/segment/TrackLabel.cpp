@@ -104,33 +104,36 @@ void TrackLabel::setIndent(int pixels)
     m_trackLabel->setIndent(pixels);
 }
 
-void TrackLabel::setProgramChangeName(const QString &label)
+void TrackLabel::setProgramChangeName(const QString &programChangeName)
 {
-    //RG_DEBUG << "TrackLabel::setProgramChangeName(" << label << ")";
+    //RG_DEBUG << "TrackLabel::setProgramChangeName(" << programChangeName << ")";
     //RG_DEBUG << "  Presentation Name is: " << m_presentationName;
 
-    // recover saved original
-    if (label.isEmpty()) {
+    // If the incoming program change name is blank
+    if (programChangeName.isEmpty()) {
 
+        // Go with the presentation name if available
         if (!m_presentationName.isEmpty()) {
             //RG_DEBUG << "  Recalling stored Presentation Name.";
             m_instrumentLabel->setText(m_presentationName);
         }
 
-        // do nothing if we've got nothing to swap
+        // No program change name and no presentation name?  Just leave
+        // whatever's up there, up there.
         return ;
     }
 
-    // Store the current (first) label
-    //
+    // If we have no presentation name stored away yet, take the name
+    // that is currently on the instrument label and store that.
     if (m_presentationName.isEmpty()) {
         //RG_DEBUG << "  Setting Presentation Name to " << m_instrumentLabel->text();
         m_presentationName = m_instrumentLabel->text();
     }
 
-    //RG_DEBUG << "  Setting label text to " << label;
-    // set new label
-    m_instrumentLabel->setText(label);
+    //RG_DEBUG << "  Setting label text to " << programChangeName;
+
+    // Put the program change name on the instrument label
+    m_instrumentLabel->setText(programChangeName);
 }
 
 void TrackLabel::clearPresentationName()

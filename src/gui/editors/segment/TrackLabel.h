@@ -108,7 +108,7 @@ public:
      *
      * @see clearPresentationName()
      */
-    void setProgramChangeName(const QString &label);
+    void setProgramChangeName(const QString &programChangeName);
 
     /// Clears any stored presentation name.
     /**
