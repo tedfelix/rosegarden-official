@@ -97,12 +97,11 @@ public:
     /// rename: changeLabelDisplayMode()
     void changeTrackInstrumentLabels(TrackLabel::DisplayMode mode);
 
+    /// Handles a change to the Program in the Instrument Parameters box.
     /**
-     * Change the instrument label to something else like
-     * an actual program name rather than a meaningless
-     * device number and MIDI channel.
+     * @param[in] label Program change name.
      */
-    void changeInstrumentLabel(InstrumentId id, QString label);
+    void changeInstrumentLabel(InstrumentId id, QString programChangeName);
 
     /// Set the label (track name) that is normally displayed.
     /// @see slotRenameTrack()

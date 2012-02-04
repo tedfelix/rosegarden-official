@@ -62,28 +62,35 @@ public:
     /// Label indent in pixels.  See QLabel::setIndent().
     void setIndent(int pixels);
 
-    /// Sets the instrument name (e.g. Acoustic Grand Piano).
     // ??? Check all use of the term "label".  Should it be "name"?
     //     A name is displayed on a label.
-    void setInstrumentLabel(const QString &text)
+
+    /// Sets the instrument's presentation name (e.g. "General MIDI Device  #1").
+    /**
+     * "Presentation Name"?  What does that even mean?  I think
+     * it is a combination of a device name and a channel #.  Need to
+     * dig and find the proper terms.
+     */
+    void setPresentationName(const QString &text)
         { m_instrumentLabel->setText(text); }
 
-    /// Sets the track name (e.g. Melody).  See getTrackLabel().
-    void setTrackLabel(const QString &text)  { m_trackLabel->setText(text); }
-    /// Gets the track name (e.g. Melody).  See setTrackLabel().
-    QString getTrackLabel() const  { return m_trackLabel->text(); }
+    /// Sets the track name (e.g. Melody).  See getTrackName().
+    void setTrackName(const QString &text)  { m_trackLabel->setText(text); }
+    /// Gets the track name (e.g. Melody).  See setTrackName().
+    QString getTrackName() const  { return m_trackLabel->text(); }
 
-    /// Set the instrument label, storing the current as an alternative.
+    /// Set the instrument's program change name.
     /**
      * Typically, this is used as follows:
      *
-     *   1. setInstrumentLabel() is called with the "presentation name"
+     *   1. setPresentationName() is called with the "presentation name"
      *      which looks like "General MIDI Device  #1".  This is set as
      *      the text on the instrument label.
-     *   2. setAlternativeLabel() is called with the "program name" which
+     *   2. setProgramChangeName() is called with the "program name" which
      *      looks like "Acoustic Grand Piano".
-     *   3. setAlternativeLabel() notices the presentation name is in the
-     *      instrument label already, so it stores it as the alternative.
+     *   3. setProgramChangeName() notices the presentation name is in the
+     *      instrument label already, so it stores it as the presentation
+     *      name.
      *
      * On future calls, a "program change name" like "Acoustic Grand Piano"
      * is usually sent into this routine and that is what is displayed.
@@ -99,26 +106,24 @@ public:
      * Then if m_programChangeName is ever "", we would fall back on
      * displaying m_presentationName.
      *
-     * @see clearAlternativeLabel()
+     * @see clearPresentationName()
      */
-    void setAlternativeLabel(const QString &label);
+    void setProgramChangeName(const QString &label);
 
-    /// Clears any stored alternative name.
+    /// Clears any stored presentation name.
     /**
-     * The next call to setAlternativeLabel() will store the current
-     * instrument label text as the alternative name.
+     * The next call to setProgramChangeName() will store the current
+     * instrument label text as the presentation name.
      */
-    void clearAlternativeLabel();
+    void clearPresentationName();
 
     enum DisplayMode
     {
         ShowTrack,
-        ShowInstrument,
-        ShowBoth
+        ShowInstrument
     };
 
-    // rename: setDisplayMode()
-    void showLabel(DisplayMode mode);
+    void setDisplayMode(DisplayMode mode);
 
     // Encapsulates setting the label to highlighted or not
     void setSelected(bool on);
@@ -150,14 +155,14 @@ protected:
 
     // Typically this displays the program change name (e.g. "Acoustic Grand
     // Piano").  However, if the instrument doesn't send a program change,
-    // this displays m_alternativeLabel.
+    // this displays m_presentationName.
     QLabel              *m_instrumentLabel;
 
-    // Track name selected by the user.
+    // Displays the track name selected by the user.
     QLabel              *m_trackLabel;
 
     // Presentation Name (e.g. "General MIDI Device  #1")
-    QString              m_alternativeLabel;
+    QString              m_presentationName;
 
     TrackId              m_id;
     int                  m_position;

@@ -104,17 +104,17 @@ void TrackLabel::setIndent(int pixels)
     m_trackLabel->setIndent(pixels);
 }
 
-void TrackLabel::setAlternativeLabel(const QString &label)
+void TrackLabel::setProgramChangeName(const QString &label)
 {
-    //RG_DEBUG << "TrackLabel::setAlternativeLabel(" << label << ")";
-    //RG_DEBUG << "  Alternative label is: " << m_alternativeLabel;
+    //RG_DEBUG << "TrackLabel::setProgramChangeName(" << label << ")";
+    //RG_DEBUG << "  Presentation Name is: " << m_presentationName;
 
     // recover saved original
     if (label.isEmpty()) {
 
-        if (!m_alternativeLabel.isEmpty()) {
-            //RG_DEBUG << "  Recalling stored alternative label.";
-            m_instrumentLabel->setText(m_alternativeLabel);
+        if (!m_presentationName.isEmpty()) {
+            //RG_DEBUG << "  Recalling stored Presentation Name.";
+            m_instrumentLabel->setText(m_presentationName);
         }
 
         // do nothing if we've got nothing to swap
@@ -123,9 +123,9 @@ void TrackLabel::setAlternativeLabel(const QString &label)
 
     // Store the current (first) label
     //
-    if (m_alternativeLabel.isEmpty()) {
-        //RG_DEBUG << "  Setting alternative label to " << m_instrumentLabel->text();
-        m_alternativeLabel = m_instrumentLabel->text();
+    if (m_presentationName.isEmpty()) {
+        //RG_DEBUG << "  Setting Presentation Name to " << m_instrumentLabel->text();
+        m_presentationName = m_instrumentLabel->text();
     }
 
     //RG_DEBUG << "  Setting label text to " << label;
@@ -133,12 +133,12 @@ void TrackLabel::setAlternativeLabel(const QString &label)
     m_instrumentLabel->setText(label);
 }
 
-void TrackLabel::clearAlternativeLabel()
+void TrackLabel::clearPresentationName()
 {
-    m_alternativeLabel = "";
+    m_presentationName = "";
 }
 
-void TrackLabel::showLabel(DisplayMode mode)
+void TrackLabel::setDisplayMode(DisplayMode mode)
 {
 //     raiseWidget(mode);
     if( mode == ShowTrack ){
