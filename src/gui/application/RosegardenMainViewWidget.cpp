@@ -217,7 +217,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     connect(m_trackParameterBox,
             SIGNAL(instrumentSelected(TrackId, int)),
             m_trackEditor->getTrackButtons(),
-            SLOT(slotTrackInstrumentSelection(TrackId, int)));
+            SLOT(slotTPBInstrumentSelected(TrackId, int)));
 
     connect(this, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
             this, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));

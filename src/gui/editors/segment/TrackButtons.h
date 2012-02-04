@@ -131,7 +131,7 @@ signals:
     /// @see slotLabelSelected()
     void trackSelected(int trackId);
     /// Emitted when an instrument is selected from the popup.
-    /// @see slotInstrumentPopupActivated()
+    /// @see slotInstrumentSelected()
     void instrumentSelected(int instrumentId);
 
     /// Emitted when the track label changes.
@@ -185,22 +185,37 @@ public slots:
     /// @see slotSetTrackMeter()
     void slotSetMetersByInstrument(float value, InstrumentId id);
 
-    /// Brings up the popup menu so that the user can select an instrument
-    /// for the given track.
-    void slotInstrumentSelection(int trackId);
-    /// Sets the instrument for the track once the user has made a selection
-    /// in the instrument popup.
-    /// @see slotTrackInstrumentSelection()
-    void slotInstrumentPopupActivated(int item);		// old kde3
-    /// Delegates to the overloaded version that takes an int.
-    void slotInstrumentPopupActivated(QAction*);		// old kde3
+    /// Brings up the instrument selection popup menu.
+    /**
+     * Called in response to a right-click on a track label.  Brings up
+     * the popup menu so that the user can select an instrument for the
+     * given track.
+     *
+     * @see slotInstrumentSelected()
+     */
+    void slotInstrumentMenu(int trackId);
 
-    /// Selects the instrument for a track given the track ID and the popup
-    /// menu item for the instrument.
-    void slotTrackInstrumentSelection(TrackId trackId, int item);
+    /// Does the actual work for the other slotInstrumentSelected().
+    void slotInstrumentSelected(int item);		// old kde3
+
+    /// Handles the user clicking on a selection in the instrument menu.
+    /**
+     * Delegates to the overloaded version that takes an int.
+     *
+     * @see slotInstrumentMenu()
+     */
+    void slotInstrumentSelected(QAction*);		// old kde3
+
+    /// Handles instrument changes from the TrackParameterBox.
+    /**
+     * Connected to TrackParameterBox::instrumentSelected().  This is called
+     * when the user changes the instrument via the Track Parameters box.
+     */
+    void slotTPBInstrumentSelected(TrackId trackId, int item);
     
     /// Ensure track buttons match the Composition.
-    /// This routine only makes sure the mute and record buttons are synced.
+    /// This routine only makes sure the instrument labels, mute, and record
+    /// buttons are synced.
     /// slotUpdateTracks() does a more thorough sync.
     void slotSynchroniseWithComposition();
 
