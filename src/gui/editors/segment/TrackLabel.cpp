@@ -42,15 +42,14 @@ namespace Rosegarden
 
 TrackLabel::TrackLabel(TrackId id,
                        int position,
-                       QWidget *parent,
-                       const char *name) :
+                       QWidget *parent) :
         QLabel(parent),
         m_mode(ShowTrack),
         m_forcePresentationName(false),
         m_id(id),
         m_position(position)
 {
-    this->setObjectName(name);
+    setObjectName("TrackLabel");
     
     QFont font;
     font.setPointSize(font.pointSize() * 95 / 100);
@@ -61,8 +60,6 @@ TrackLabel::TrackLabel(TrackId id,
 
     setAutoFillBackground(true);
     
-    setObjectName("TrackLabel");
-    
     setFrameShape(QFrame::NoFrame);
 
     m_pressTimer = new QTimer(this);
@@ -70,24 +67,14 @@ TrackLabel::TrackLabel(TrackId id,
     connect(m_pressTimer, SIGNAL(timeout()),
             this, SIGNAL(changeToInstrumentList()));
 
-    this->setToolTip(tr("<qt>"
-                        "<p>Click to select all the segments on this track.</p>"
-                        "<p>Shift+click to add to or to remove from the"
-                        " selection all the segments on this track.</p>"
-                        "<p>Click and hold with either mouse button to assign"
-                        " this track to an instrument.</p>"
-                        "</qt>"));
+    setToolTip(tr("<qt>"
+                  "<p>Click to select all the segments on this track.</p>"
+                  "<p>Shift+click to add to or to remove from the"
+                  " selection all the segments on this track.</p>"
+                  "<p>Click and hold with either mouse button to assign"
+                  " this track to an instrument.</p>"
+                  "</qt>"));
 
-}
-
-TrackLabel::~TrackLabel()
-{}
-
-void
-TrackLabel::setDisplayMode(DisplayMode mode)
-{
-    m_mode = mode;
-    updateLabel();  // ??? Or should we let the client do this?
 }
 
 void
@@ -110,7 +97,7 @@ TrackLabel::updateLabel()
 }
 
 void
-TrackLabel::setSelected(bool on)
+TrackLabel::setSelected(bool selected)
 {
 //###
 // NOTES: Using QPalette works fine if there is no stylesheet.  If there is a
@@ -125,19 +112,16 @@ TrackLabel::setSelected(bool on)
 // and have less overhead, though it comes with some side effects that may have
 // to be revisited.
 //
-    QString localStyle = "";
 
-    if (on) {
-        m_selected = true;
-        localStyle="QLabel { background-color: #AAAAAA; color: #FFFFFF; }";
+    m_selected = selected;
+
+    if (m_selected) {
+        setStyleSheet("QLabel { background-color: #AAAAAA; color: #FFFFFF; }");
     } else {
-        m_selected = false;
-        localStyle="QLabel { background-color: transparent; color: #000000; }";
+        setStyleSheet("QLabel { background-color: transparent; color: #000000; }");
     }
 
-    setStyleSheet(localStyle);
-
-    update();
+    //update();  // Seems to work fine without.
 }
 
 void
@@ -186,8 +170,6 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     bool ok = false;
 
-    QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
-    
     QString newText = InputDialog::getText(this,
                                            tr("Change track name"),
                                            tr("Enter new track name"),
@@ -195,11 +177,6 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
                                            m_trackName,
                                            &ok
                                            );
-//                                             &validator);
-//
-//&&& what to do with these validators that aren't part of Q/InputDialog?  We
-//could do something with them in InputDialog I suppose, but I'm not quite sure
-//how that would work.
 
     if ( ok )
         emit renameTrack(newText, m_id);

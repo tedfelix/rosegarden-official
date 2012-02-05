@@ -38,14 +38,6 @@ namespace Rosegarden
  * Specialises QLabel to create in effect a toggleable and hence
  * selectable label/label list.  In conjunction with TrackButtons
  * provides a framework for Track selection in the TrackEditor.
- *
- * Actually, this specializes QStackedWidget and creates two QLabels which
- * can be switched to display either track name or instrument name.
- *
- * Suggestion: Rewrite this to be QLabel-derived to reduce the number of
- * widgets.  Keep the track name and instrument name as separate strings
- * and send the proper one to the label based on the current mode.  IOw,
- * where we call setCurrentWidget(), call setText() instead.
  */
 class TrackLabel : public QLabel
 {
@@ -54,13 +46,7 @@ public:
 
     TrackLabel(TrackId id,
                int position,
-               QWidget *parent,
-               const char *name=0);
-
-    ~TrackLabel();
-
-    // ??? Check all use of the term "label".  Should it be "name"?
-    //     A name is displayed on a label.
+               QWidget *parent);
 
     /// Sets the track name (e.g. "Wicked Solo").
     /**
@@ -76,7 +62,7 @@ public:
     /**
      * Be sure to call updateLabel() for the change to appear on the UI.
      *
-     * "Presentation Name"?  What does that even mean?  I think
+     * "Presentation Name"?  Can we come up with something better?  I think
      * it is a combination of a device name and a channel #.  Need to
      * dig and find the proper terms.
      */
@@ -102,8 +88,8 @@ public:
 
     /// Updates the label on the display.
     /**
-     * Call this after calling any of the set name routines to get the
-     * changes to appear on the UI.
+     * Call this after calling any of the routines that modify the appearance
+     * or content of the label to get the changes to appear on the UI.
      *
      * @see setTrackName()
      * @see setPresentationName()
@@ -113,37 +99,64 @@ public:
      */
     void updateLabel();
 
+    /// See setDisplayMode()
     enum DisplayMode
     {
         ShowTrack,
         ShowInstrument
     };
 
-    /// Selects between showing track labels and instrument labels.
+    /// Selects between showing track names and instrument names.
     /**
      * Be sure to call updateLabel() for the change to appear on the UI.
      */
-    void setDisplayMode(DisplayMode mode);
+    void setDisplayMode(DisplayMode mode)  { m_mode = mode; }
 
-    // Encapsulates setting the label to highlighted or not
-    void setSelected(bool on);
+    /// Highlights this label as being selected.
+    /**
+     * @see isSelected()
+     */
+    void setSelected(bool selected);
+    /// Whether this track is selected.
+    /**
+     * @see setSelected()
+     */
     bool isSelected() const { return m_selected; }
 
+    /// The Track ID from Track::getId().  See getId(), setPosition()
     void setId(TrackId id) { m_id = id; }
+    /// See setId(), getPosition()
     TrackId getId() const { return m_id; }
 
+    /// The position of this track on the UI.
+    /**
+     * @see setPosition()
+     * @see getId()
+     */
     int getPosition() const { return m_position; }
+    /// See getPosition()
     void setPosition(int position) { m_position = position; }
 
 signals:
+    /// Sent on right-click, left-release, and left-double-click events.
+    /**
+     * This is connected to TrackButtons's clicked signal mapper.
+     */
     void clicked();
 
-    // We emit this once we've renamed a track
-    void renameTrack(QString, TrackId);
+    /// Sent when a track's name is changed.
+    /**
+     * Connected to TrackButtons::slotRenameTrack().
+     */
+    void renameTrack(QString name, TrackId trackId);
 
+    /// Sent on right-click to launch the instrument popup menu.
+    /**
+     * Connected to TrackButtons's instrument list signal mapper.
+     */
     void changeToInstrumentList();
 
-protected:
+private:
 
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
@@ -151,21 +164,30 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    // The track name selected by the user (e.g. "Wicked Solo")
+    /// The track name selected by the user (e.g. "Wicked Solo")
     QString              m_trackName;
-    // Presentation Name (e.g. "General MIDI Device  #1")
+    /// Instrument Presentation Name (e.g. "General MIDI Device  #1")
     QString              m_presentationName;
-    // Program Change Name (e.g. "Acoustic Grand Piano")
+    /// Instrument Program Change Name (e.g. "Acoustic Grand Piano")
     QString              m_programChangeName;
 
+    /// Show track names or instrument names.
     DisplayMode          m_mode;
 
     bool                 m_forcePresentationName;
 
+    /// The associated Track object's ID.  See Track::getId().
     TrackId              m_id;
+    /// Position on the UI.
     int                  m_position;
+
     bool                 m_selected;
 
+    /// Timer to support the "left-click and hold" behavior.
+    /**
+     * Connected to changeToInstrumentList() which brings up the
+     * instrument popup menu.
+     */
     QTimer              *m_pressTimer;
 };
 

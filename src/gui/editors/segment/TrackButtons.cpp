@@ -881,6 +881,7 @@ TrackButtons::changeTrackInstrumentLabels(TrackLabel::DisplayMode mode)
     // update and reconnect with new value
     for (int i = 0; i < (int)m_tracks; i++) {
         m_trackLabels[i]->setDisplayMode(mode);
+        m_trackLabels[i]->updateLabel();
     }
 }
 
