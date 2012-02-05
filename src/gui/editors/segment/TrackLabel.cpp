@@ -43,10 +43,10 @@ namespace Rosegarden
 TrackLabel::TrackLabel(TrackId id,
                        int position,
                        QWidget *parent,
-                       const char *name):
-        QStackedWidget(parent),
-        m_instrumentLabel(new QLabel(this)),
-        m_trackLabel(new QLabel(this)),
+                       const char *name) :
+        QLabel(parent),
+        m_mode(ShowTrack),
+        m_forcePresentationName(false),
         m_id(id),
         m_position(position)
 {
@@ -57,28 +57,13 @@ TrackLabel::TrackLabel(TrackId id,
     if (font.pixelSize() > 14)
         font.setPixelSize(14);
     font.setBold(false);
-    m_instrumentLabel->setFont(font);
-    m_trackLabel->setFont(font);
+    setFont(font);
 
-    m_instrumentLabel->setAutoFillBackground(true);
-    m_trackLabel->setAutoFillBackground(true);
+    setAutoFillBackground(true);
     
-//    this->setLayout( new QHBoxLayout() );
-//        layout()->setMargin(0);
+    setObjectName("TrackLabel");
     
-    m_instrumentLabel->setObjectName("InstrumentLabel");
-    m_trackLabel->setObjectName("TrackLabel");
-    
-//    layout()->addWidget(m_instrumentLabel);        //, ShowInstrument);
-    addWidget(m_instrumentLabel);        //, ShowInstrument);
-//    layout()->addWidget(m_trackLabel);            //, ShowTrack);
-    addWidget(m_trackLabel);        //, ShowInstrument);
-    
-//     raiseWidget(ShowTrack);
-    setCurrentWidget( m_trackLabel );
-    
-    m_instrumentLabel->setFrameShape(QFrame::NoFrame);
-    m_trackLabel->setFrameShape(QFrame::NoFrame);
+    setFrameShape(QFrame::NoFrame);
 
     m_pressTimer = new QTimer(this);
 
@@ -98,58 +83,29 @@ TrackLabel::TrackLabel(TrackId id,
 TrackLabel::~TrackLabel()
 {}
 
-void TrackLabel::setIndent(int pixels)
+void
+TrackLabel::setDisplayMode(DisplayMode mode)
 {
-    m_instrumentLabel->setIndent(pixels);
-    m_trackLabel->setIndent(pixels);
+    m_mode = mode;
+    updateLabel();  // ??? Or should we let the client do this?
 }
 
-void TrackLabel::setProgramChangeName(const QString &programChangeName)
+void
+TrackLabel::updateLabel()
 {
-    //RG_DEBUG << "TrackLabel::setProgramChangeName(" << programChangeName << ")";
-    //RG_DEBUG << "  Presentation Name is: " << m_presentationName;
+    if (m_forcePresentationName) {
+        setText(m_presentationName);
+        return;
+    }
 
-    // If the incoming program change name is blank
-    if (programChangeName.isEmpty()) {
-
-        // Go with the presentation name if available
-        if (!m_presentationName.isEmpty()) {
-            //RG_DEBUG << "  Recalling stored Presentation Name.";
-            m_instrumentLabel->setText(m_presentationName);
+    if (m_mode == ShowTrack) {
+        setText(m_trackName);
+    } else if (m_mode == ShowInstrument) {
+        if (m_programChangeName != "") {
+            setText(m_programChangeName);
+        } else {
+            setText(m_presentationName);
         }
-
-        // No program change name and no presentation name?  Just leave
-        // whatever's up there, up there.
-        return ;
-    }
-
-    // If we have no presentation name stored away yet, take the name
-    // that is currently on the instrument label and store that.
-    if (m_presentationName.isEmpty()) {
-        //RG_DEBUG << "  Setting Presentation Name to " << m_instrumentLabel->text();
-        m_presentationName = m_instrumentLabel->text();
-    }
-
-    //RG_DEBUG << "  Setting label text to " << programChangeName;
-
-    // Put the program change name on the instrument label
-    m_instrumentLabel->setText(programChangeName);
-}
-
-void TrackLabel::clearPresentationName()
-{
-    m_presentationName = "";
-}
-
-void TrackLabel::setDisplayMode(DisplayMode mode)
-{
-//     raiseWidget(mode);
-    if( mode == ShowTrack ){
-        setCurrentWidget( m_trackLabel );
-        
-    } else if( mode == ShowInstrument ){
-        setCurrentWidget( m_instrumentLabel );
-        
     }
 }
 
@@ -179,12 +135,9 @@ TrackLabel::setSelected(bool on)
         localStyle="QLabel { background-color: transparent; color: #000000; }";
     }
 
-    m_instrumentLabel->setStyleSheet(localStyle);
-    m_trackLabel->setStyleSheet(localStyle);
+    setStyleSheet(localStyle);
 
-    if (currentWidget()){
-        currentWidget()->update();
-    }
+    update();
 }
 
 void
@@ -239,7 +192,7 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
                                            tr("Change track name"),
                                            tr("Enter new track name"),
                                            LineEdit::Normal,
-                                           m_trackLabel->text(),
+                                           m_trackName,
                                            &ok
                                            );
 //                                             &validator);

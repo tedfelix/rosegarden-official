@@ -47,7 +47,7 @@ namespace Rosegarden
  * and send the proper one to the label based on the current mode.  IOw,
  * where we call setCurrentWidget(), call setText() instead.
  */
-class TrackLabel : public QStackedWidget
+class TrackLabel : public QLabel
 {
     Q_OBJECT
 public:
@@ -59,63 +59,59 @@ public:
 
     ~TrackLabel();
 
-    /// Label indent in pixels.  See QLabel::setIndent().
-    void setIndent(int pixels);
-
     // ??? Check all use of the term "label".  Should it be "name"?
     //     A name is displayed on a label.
 
+    /// Sets the track name (e.g. "Wicked Solo").
+    /**
+     * Be sure to call updateLabel() for the change to appear on the UI.
+     *
+     * @see getTrackName()
+     */
+    void setTrackName(const QString &text)  { m_trackName = text; }
+    /// Gets the track name (e.g. "Wicked Solo").  See setTrackName().
+    QString getTrackName() const  { return m_trackName; }
+
     /// Sets the instrument's presentation name (e.g. "General MIDI Device  #1").
     /**
+     * Be sure to call updateLabel() for the change to appear on the UI.
+     *
      * "Presentation Name"?  What does that even mean?  I think
      * it is a combination of a device name and a channel #.  Need to
      * dig and find the proper terms.
      */
     void setPresentationName(const QString &text)
-        { m_instrumentLabel->setText(text); }
+        { m_presentationName = text; }
 
-    /// Sets the track name (e.g. Melody).  See getTrackName().
-    void setTrackName(const QString &text)  { m_trackLabel->setText(text); }
-    /// Gets the track name (e.g. Melody).  See setTrackName().
-    QString getTrackName() const  { return m_trackLabel->text(); }
-
-    /// Set the instrument's program change name.
+    /// Set the instrument's program change name (e.g. "Acoustic Grand Piano").
     /**
-     * Typically, this is used as follows:
-     *
-     *   1. setPresentationName() is called with the "presentation name"
-     *      which looks like "General MIDI Device  #1".  This is set as
-     *      the text on the instrument label.
-     *   2. setProgramChangeName() is called with the "program name" which
-     *      looks like "Acoustic Grand Piano".
-     *   3. setProgramChangeName() notices the presentation name is in the
-     *      instrument label already, so it stores it as the presentation
-     *      name.
-     *
-     * On future calls, a "program change name" like "Acoustic Grand Piano"
-     * is usually sent into this routine and that is what is displayed.
-     * If the user turns off the "Program" checkbox in the Instrument
-     * Parameters box, an empty string is sent, and the "presentation name"
-     * is displayed on the track label.
-     *
-     * Suggestion: Can we simplify this by offering two routines:
-     *
-     *   - setPresentationName() sets an m_presentationName
-     *   - setProgramChangeName() sets an m_programChangeName
-     *
-     * Then if m_programChangeName is ever "", we would fall back on
-     * displaying m_presentationName.
-     *
-     * @see clearPresentationName()
+     * Be sure to call updateLabel() for the change to appear on the UI.
      */
-    void setProgramChangeName(const QString &programChangeName);
+    void setProgramChangeName(const QString &text)
+        { m_programChangeName = text; }
 
-    /// Clears any stored presentation name.
+    /// Forces the presentation name to be displayed on the label.
     /**
-     * The next call to setProgramChangeName() will store the current
-     * instrument label text as the presentation name.
+     * This is used when the instrument popup menu is launched.
+     *
+     * Be sure to call updateLabel() for the change to appear on the UI.
+     *
+     * @see TrackButtons::slotInstrumentMenu()
      */
-    void clearPresentationName();
+    void forcePresentationName(bool force)  { m_forcePresentationName = force; }
+
+    /// Updates the label on the display.
+    /**
+     * Call this after calling any of the set name routines to get the
+     * changes to appear on the UI.
+     *
+     * @see setTrackName()
+     * @see setPresentationName()
+     * @see setProgramChangeName()
+     * @see setDisplayMode()
+     * @see forcePresentationName()
+     */
+    void updateLabel();
 
     enum DisplayMode
     {
@@ -123,6 +119,10 @@ public:
         ShowInstrument
     };
 
+    /// Selects between showing track labels and instrument labels.
+    /**
+     * Be sure to call updateLabel() for the change to appear on the UI.
+     */
     void setDisplayMode(DisplayMode mode);
 
     // Encapsulates setting the label to highlighted or not
@@ -149,20 +149,18 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
-    QLabel* getVisibleLabel();
-
     //--------------- Data members ---------------------------------
 
-    // Typically this displays the program change name (e.g. "Acoustic Grand
-    // Piano").  However, if the instrument doesn't send a program change,
-    // this displays m_presentationName.
-    QLabel              *m_instrumentLabel;
-
-    // Displays the track name selected by the user.
-    QLabel              *m_trackLabel;
-
+    // The track name selected by the user (e.g. "Wicked Solo")
+    QString              m_trackName;
     // Presentation Name (e.g. "General MIDI Device  #1")
     QString              m_presentationName;
+    // Program Change Name (e.g. "Acoustic Grand Piano")
+    QString              m_programChangeName;
+
+    DisplayMode          m_mode;
+
+    bool                 m_forcePresentationName;
 
     TrackId              m_id;
     int                  m_position;

@@ -175,32 +175,21 @@ TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
     // Initializes a label's instrument name(s) from a track
 
     if (ins) {
-        // Get the presentation name on the label first.  This is something
-        // like "General MIDI Device  #1".  It will become the alternative
-        // name if the instrument sends program changes.
         label->setPresentationName(ins->getLocalizedPresentationName());
 
-        // Clear out the old alternative presentation name.  We don't want
-        // it to be out of sync.
-        label->clearPresentationName();
-
         if (ins->sendsProgramChange()) {
-            // This causes TrackLabel to store the current text in the label
-            // (the presentation name set above) as the alternative name.
-            // Then the program name is put on the instrument label.
             label->setProgramChangeName(
                     QObject::tr(ins->getProgramName().c_str()));
+        } else {
+            label->setProgramChangeName("");
         }
-
     } else {
-        // Just go with <no instrument> and no alternative name.
         label->setPresentationName(tr("<no instrument>"));
-        label->clearPresentationName();
     }
 
     // ??? Does this make sense for all?  Maybe it should be done after all
     //     updates?
-    //label->update();
+    //label->updateLabel();
 }
 
 void
@@ -383,6 +372,8 @@ TrackButtons::slotUpdateTracks()
         } else {
             m_trackLabels[i]->setTrackName(track->getLabel().c_str());
         }
+
+        m_trackLabels[i]->updateLabel();
 
         //RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos " << i << " to track id " << track->getId();
         setButtonMapping(m_trackLabels[i], track->getId());
@@ -602,10 +593,8 @@ TrackButtons::slotInstrumentMenu(int trackId)
 
     // Force the instrument label to show the "presentation name".
     // E.g. "General MIDI Device  #1"
-    m_trackLabels[position]->setPresentationName(instrumentName);
-
-    // Ensure the instrument name is shown
-    m_trackLabels[position]->setDisplayMode(TrackLabel::ShowInstrument);
+    m_trackLabels[position]->forcePresentationName(true);
+    m_trackLabels[position]->updateLabel();
 
 
     // *** Launch The Popup ***
@@ -625,16 +614,20 @@ TrackButtons::slotInstrumentMenu(int trackId)
 
     // *** Restore The Track Label ***
 
-    // Restore the label back to what it was showing
-    m_trackLabels[position]->setDisplayMode(m_trackInstrumentLabels);
+    // Turn off the presentation name
+    m_trackLabels[position]->forcePresentationName(false);
 
     // Do this here as well as in slotInstrumentSelected, so as
     // to restore the correct alternative label even if no other
-    // program was selected from the menu
+    // program was selected from the menu.
+    // ??? Do we really need to do this both places?  Or would this
+    //     one cover both situations?  It should be hit in both cases.
     if (track != 0) {
         instrument = studio.getInstrumentById(track->getInstrument());
         initInstrumentLabel(instrument, m_trackLabels[position]);
     }
+
+    m_trackLabels[position]->updateLabel();
 }
 
 void
@@ -865,6 +858,7 @@ TrackButtons::slotInstrumentSelected(int item)
 
             // Set the labels
             initInstrumentLabel(inst, m_trackLabels[m_popupItem]);
+            m_trackLabels[m_popupItem]->updateLabel();
 
             m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
 
@@ -907,6 +901,7 @@ TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
 
             // Set the program change name.
             m_trackLabels[i]->setProgramChangeName(programChangeName);
+            m_trackLabels[i]->updateLabel();
 
             Instrument *ins = m_doc->getStudio().
                               getInstrumentById(track->getInstrument());
@@ -929,6 +924,7 @@ TrackButtons::changeTrackLabel(TrackId id, QString label)
         if (track && track->getId() == id) {
             if (m_trackLabels[i]->getTrackName() != label) {
                 m_trackLabels[i]->setTrackName(label);
+                m_trackLabels[i]->updateLabel();
                 emit widthChanged();
                 emit nameChanged();
             }
@@ -957,6 +953,7 @@ TrackButtons::slotSynchroniseWithComposition()
                               getInstrumentById(track->getInstrument());
 
             initInstrumentLabel(ins, m_trackLabels[i]);
+            m_trackLabels[i]->updateLabel();
 
             setRecordButton(i, comp.isTrackRecording(track->getId()));
 
@@ -1132,9 +1129,13 @@ TrackButtons::makeButton(Track *track)
 
     trackLabel->setDisplayMode(m_trackInstrumentLabels);
 
+    // ??? What about the presentation name?
+
     trackLabel->setFixedSize(labelWidth(), m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
+
+    trackLabel->updateLabel();
 
     connect(trackLabel, SIGNAL(renameTrack(QString, TrackId)),
             SLOT(slotRenameTrack(QString, TrackId)));
