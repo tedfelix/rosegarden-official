@@ -18,24 +18,16 @@
 
 #include "TrackLabel.h"
 
-#include "base/Track.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
 #include "misc/Debug.h"
 
 #include <QFont>
 #include <QFrame>
-#include <QRegExp>
 #include <QString>
 #include <QTimer>
-#include <QToolTip>
 #include <QWidget>
-#include <QStackedWidget>
-#include <QValidator>
-#include <QLayout>
-#include <QHBoxLayout>
 #include <QMouseEvent>
-#include <QHeaderView>
 
 namespace Rosegarden
 {

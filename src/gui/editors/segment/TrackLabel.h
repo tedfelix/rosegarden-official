@@ -21,7 +21,6 @@
 
 #include "base/Track.h"
 #include <QString>
-#include <QStackedWidget>
 #include <QLabel>
 
 

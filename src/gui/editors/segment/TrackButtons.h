@@ -228,6 +228,9 @@ protected:
     /// @see TrackLabel
     void initInstrumentLabel(Instrument *ins, TrackLabel *label);
 
+    /// Updates a track button from its associated Track.
+    void updateUI(Track *track);
+
     /// Updates the buttons from the composition.
     /// @see slotUpdateTracks()
     void populateButtons();

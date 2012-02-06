@@ -137,6 +137,72 @@ TrackButtons::~TrackButtons() {
 //    m_doc->getComposition().removeObserver(this);
 }
 
+// New routine intended to standardize updating the UI from the Track.
+void
+TrackButtons::updateUI(Track *track)
+{
+    if (!track)
+        return;
+
+    unsigned pos = track->getPosition();
+
+    if (pos > m_tracks)
+        return;
+
+
+    // *** Mute LED
+
+    if (track->isMuted()) {
+        m_muteLeds[pos]->off();
+    } else {
+        m_muteLeds[pos]->on();
+    }
+
+
+    // *** Record LED
+
+    Instrument *ins =
+        m_doc->getStudio().getInstrumentById(track->getInstrument());
+    m_recordLeds[pos]->setColor(getRecordLedColour(ins));
+
+    // ??? Record status is tricky.  Typically, the routines in here use
+    //     setRecordTrack() which sets the UI and the Track.
+    bool recording =
+        m_doc->getComposition().isTrackRecording(track->getId());
+    setRecordButton(pos, recording);
+
+
+    // *** Track Label
+
+    TrackLabel *label = m_trackLabels[pos];
+
+    if (!label)
+        return;
+
+    // ??? Should we set the position and ID?  I'm guessing not.  That should
+    //     be setup by the creator of the TrackLabel object.  But is there
+    //     a possibility that these will change?  Yeah, when tracks are
+    //     shuffled due to add/delete.  That's probably a special case that
+    //     shouldn't be handled here.
+    //label->setId(track->getId());
+    //setButtonMapping(label, track->getId());
+    //label->setPosition(pos);
+
+    if (track->getLabel() == std::string("")) {
+        if (ins && ins->getType() == Instrument::Audio) {
+            label->setTrackName(tr("<untitled audio>"));
+        } else {
+            label->setTrackName(tr("<untitled>"));
+        }
+    } else {
+        label->setTrackName(track->getLabel().c_str());
+    }
+
+    initInstrumentLabel(ins, label);
+
+    label->updateLabel();
+}
+
 void
 TrackButtons::makeButtons()
 {
@@ -174,6 +240,9 @@ TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
 {
     // Initializes a label's instrument name(s) from a track
 
+    if (!label)
+        return;
+
     if (ins) {
         label->setPresentationName(ins->getLocalizedPresentationName());
 
@@ -195,26 +264,32 @@ TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
 void
 TrackButtons::populateButtons()
 {
-    // For each track
+    // For each track, copy info from Track object to the widgets
     for (unsigned int i = 0; i < m_tracks; ++i) {
         Track *track = m_doc->getComposition().getTrackByPosition(i);
 
         if (!track)
             continue;
 
-        // Set mute button from track
+
+        // *** Mute Button
+
         if (track->isMuted()) {
             m_muteLeds[i]->off();
         } else {
             m_muteLeds[i]->on();
         }
 
-        // Set record button from track
+
+        // *** Record Button
+
         bool recording =
             m_doc->getComposition().isTrackRecording(track->getId());
         setRecordTrack(track->getPosition(), recording);
 
-        // Set label from track
+
+        // *** Track Label
+
         m_trackLabels[i]->setId(track->getId());
         setButtonMapping(m_trackLabels[i], track->getId());
         m_trackLabels[i]->setPosition(i);
@@ -224,6 +299,10 @@ TrackButtons::populateButtons()
 
         initInstrumentLabel(ins, m_trackLabels[i]);
 
+        // ??? And why don't we set up the track name as well?
+
+        // ??? Is this actually needed?  Test, but be sure to remove the call
+        //     to slotUpdateTracks() in TrackEditor::paintEvent().
         m_trackLabels[i]->update();
     }
 }
@@ -479,7 +558,9 @@ TrackButtons::slotToggleRecordTrack(int position)
 void
 TrackButtons::setRecordTrack(int position, bool state)
 {
+    // Copy this potentially new state to the UI.
     setRecordButton(position, state);
+    // Copy this potentially new state to the Track.
     m_doc->getComposition().setTrackRecording(
             m_trackLabels[position]->getId(), state);
 }
@@ -630,6 +711,8 @@ TrackButtons::slotInstrumentMenu(int trackId)
     m_trackLabels[position]->updateLabel();
 }
 
+// ??? Break this stuff off into an InstrumentPopup class.  This class is too
+//     big.
 void
 TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup)
 {
@@ -945,16 +1028,25 @@ TrackButtons::slotSynchroniseWithComposition()
         track = comp.getTrackByPosition(i);
 
         if (track) {
+
+            // *** Mute LED
+
             if (track->isMuted())
                 m_muteLeds[i]->off();
             else
                 m_muteLeds[i]->on();
+
+
+            // *** Instrument Label
 
             Instrument *ins = studio.
                               getInstrumentById(track->getInstrument());
 
             initInstrumentLabel(ins, m_trackLabels[i]);
             m_trackLabels[i]->updateLabel();
+
+
+            // *** Record Button/LED
 
             setRecordButton(i, comp.isTrackRecording(track->getId()));
 
