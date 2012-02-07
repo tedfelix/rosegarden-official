@@ -156,7 +156,7 @@ public:
 
     TransportDialog* getTransport();
 
-    enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportHydrogen, ImportCheckType };
+    enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportHydrogen, ImportMusicXML, ImportCheckType };
 
     /**
      * open a Rosegarden file
@@ -386,6 +386,11 @@ protected:
      * Create document from Hydrogen drum machine file
      */
     RosegardenDocument* createDocumentFromHydrogenFile(QString filePath);
+
+    /**
+     * Create document from MusicXML file
+     */
+    RosegardenDocument* createDocumentFromMusicXMLFile(QString filePath);
 
     /**/
     /**/
@@ -624,6 +629,11 @@ public slots:
     void slotImportHydrogen();
 
     /**
+     * Let the user select a MusicXML file for import
+     */
+    void slotImportMusicXML();
+
+    /**
      * Let the user select a MIDI file for merge
      */
     void slotMerge();
@@ -642,6 +652,11 @@ public slots:
      * Select a Hydrogen drum machine file for merge
      */
     void slotMergeHydrogen();
+
+    /**
+     * Let the user select a MusicXML file for merge
+     */
+    void slotMergeMusicXML();
 
     /**
      * Let the user export a Rosegarden Project file

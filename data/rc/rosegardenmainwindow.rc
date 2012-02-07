@@ -15,6 +15,7 @@
       <Action name="file_import_midi" text="Import &amp;MIDI file..." />
       <Action name="file_import_rg21" text="Import &amp;X11 Rosegarden file..." />
       <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." />
+      <Action name="file_import_musicxml" text="Import MusicXM&amp;L file..." />
     </Menu>
     <Menu name="merge" append="new_merge">
       <text>&amp;Merge</text>
@@ -22,6 +23,7 @@
       <Action name="file_merge_midi" text="Merge &amp;MIDI file..." />
       <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden file..." />
       <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file..." />
+      <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L file..." />
     </Menu>
     <!-- this one would like to be save_merge, but that sticks it at
 	 the very bottom in older KDE3 versions: -->
@@ -163,7 +165,7 @@
   <!-- JAS some of matrix.rc "Transpose" shortcuts might interfere with rosegardenui arrow keys.  -->
   <Menu name="Segments">
     <text>Se&amp;gment</text>
-   
+
     <Action name="repeat_segment_onoff" text="Toggle Repeat" shortcut="Ctrl+Shift+R" shortcut-context="application" />
 
     <Menu name="edit_with">
@@ -198,7 +200,7 @@
       <Action name="split_by_pitch" text="Split by &amp;Pitch..." icon="split-by-pitch" />
       <Action name="split_by_recording" text="Split by &amp;Recording Source..." />
       <Action name="split_at_time" text=" Split &amp;at Time..." />
-    </Menu>  
+    </Menu>
     <Action name="repeats_to_real_copies" text="Turn Re&amp;peats into Copies" />
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />
   <Separator/>
@@ -243,11 +245,11 @@
     <Menu name="Transport">
       <text>T&amp;ransport</text>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" shortcut="Enter, Media Play, Ctrl+Return" shortcut-context="application" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Insert, Media Stop" shortcut-context="application" /> 
+      <Action name="play" text="&amp;Play" icon="transport-play" shortcut="Enter, Media Play, Ctrl+Return" shortcut-context="application" />
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Insert, Media Stop" shortcut-context="application" />
       <!-- JAS swapped rewind / ffwd to match matrix.rc -->
-      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" shortcut-context="application" /> 
-      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" shortcut-context="application" /> 
+      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" shortcut-context="application" />
+      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" shortcut-context="application" />
       <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Media Record" shortcut-context="application" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" shortcut-context="application" />
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />

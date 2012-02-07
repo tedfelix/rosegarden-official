@@ -85,6 +85,7 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
 #include "document/io/HydrogenLoader.h"
+#include "document/io/MusicXMLLoader.h"
 #include "document/io/LilyPondExporter.h"
 #include "document/CommandHistory.h"
 #include "document/io/RG21Loader.h"
@@ -764,10 +765,12 @@ RosegardenMainWindow::setupActions()
     createAction("file_import_midi", SLOT(slotImportMIDI()));
     createAction("file_import_rg21", SLOT(slotImportRG21()));
     createAction("file_import_hydrogen", SLOT(slotImportHydrogen()));
+    createAction("file_import_musicxml", SLOT(slotImportMusicXML()));
     createAction("file_merge", SLOT(slotMerge()));
     createAction("file_merge_midi", SLOT(slotMergeMIDI()));
     createAction("file_merge_rg21", SLOT(slotMergeRG21()));
     createAction("file_merge_hydrogen", SLOT(slotMergeHydrogen()));
+    createAction("file_merge_musicxml", SLOT(slotMergeMusicXML()));
     createAction("file_export_project", SLOT(slotExportProject()));
     createAction("file_export_midi", SLOT(slotExportMIDI()));
     createAction("file_export_lilypond", SLOT(slotExportLilyPond()));
@@ -1562,6 +1565,8 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
             importType = ImportRG21;
         else if (testFileType.endsWith(".h2song"))
             importType = ImportHydrogen;
+        else if (testFileType.endsWith(".xml"))
+            importType = ImportMusicXML;
     }
 
 
@@ -1574,6 +1579,9 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
         break;
     case ImportHydrogen:
         doc = createDocumentFromHydrogenFile(filePath);
+        break;
+    case ImportMusicXML:
+        doc = createDocumentFromMusicXMLFile(filePath);
         break;
     case ImportRG4:
     case ImportCheckType:
@@ -4460,6 +4468,128 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
         CurrentProgressDialog::freeze();
         QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load Hydrogen file.  It appears to be corrupted."));
+        delete newDoc;
+        progressDlg->close();
+        return 0;
+    }
+
+    // Set modification flag
+    //
+    newDoc->slotDocumentModified();
+
+    // Set the caption and add recent
+    //
+    newDoc->setTitle(QFileInfo(file).fileName());
+    newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
+
+    progressDlg->close();
+    return newDoc;
+
+}
+
+void
+RosegardenMainWindow::slotImportMusicXML()
+{
+    if (m_doc && !m_doc->saveIfModified())
+        return ;
+
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("import_musicxml", QDir::homePath()).toString();
+
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
+               tr("XML files") + " (*.xml *.XML)" + ";;" +
+               tr("All files") + " (*)", 0, 0);
+
+    if (url.isEmpty()) {
+        return ;
+    }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_musicxml", directory);
+    settings.endGroup();
+
+    //&&& KIO used to show a progress dialog of its own; we need to
+    //replicate that
+
+    QString tmpfile;
+    FileSource source(url);
+    if (!source.isAvailable()) {
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
+        return ;
+    }
+
+    tmpfile = source.getLocalFilename();
+    source.waitForData();
+
+    openFile(tmpfile, ImportMusicXML);
+}
+
+void
+RosegardenMainWindow::slotMergeMusicXML()
+{
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("merge_musicxml", QDir::homePath()).toString();
+
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
+               tr("XML files") + " (*.xml *.XML)" + ";;" +
+               tr("All files") + " (*)", 0, 0);
+
+    if (url.isEmpty()) {
+        return ;
+    }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("merge_musicxml", directory);
+    settings.endGroup();
+
+    //&&& KIO used to show a progress dialog of its own; we need to
+    //replicate that
+
+    QString tmpfile;
+    FileSource source(url);
+    if (!source.isAvailable()) {
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
+        return ;
+    }
+
+    tmpfile = source.getLocalFilename();
+    source.waitForData();
+
+    mergeFile(tmpfile, ImportMusicXML);
+}
+
+RosegardenDocument*
+RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
+{
+    StartupLogo::hideIfStillThere();
+    ProgressDialog *progressDlg = new ProgressDialog(
+        tr("Importing MusicXML file..."), (QWidget*) this);
+
+    CurrentProgressDialog::set(progressDlg);
+
+    // Inherent autoload
+    //
+    RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
+
+    MusicXMLLoader musicxmlLoader(&newDoc->getStudio());
+
+    // TODO: make RG21Loader to actually emit these signals
+    //
+    connect(&musicxmlLoader, SIGNAL(setValue(int)),
+             progressDlg, SLOT(setValue(int)));
+
+    // "your starter for 40%" - helps the "freeze" work
+    progressDlg->setValue(40);
+
+    if (!musicxmlLoader.load(file, newDoc->getComposition(), newDoc->getStudio())) {
+        CurrentProgressDialog::freeze();
+        QMessageBox::critical(this, tr("Rosegarden"),
+                           tr("Can't load MusicXML file:\n")+
+                              musicxmlLoader.errorMessage());
         delete newDoc;
         progressDlg->close();
         return 0;
