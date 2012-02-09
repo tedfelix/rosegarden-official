@@ -146,7 +146,7 @@ TrackButtons::updateUI(Track *track)
 
     unsigned pos = track->getPosition();
 
-    if (pos > m_tracks)
+    if (pos >= m_tracks)
         return;
 
 
@@ -165,8 +165,9 @@ TrackButtons::updateUI(Track *track)
         m_doc->getStudio().getInstrumentById(track->getInstrument());
     m_recordLeds[pos]->setColor(getRecordLedColour(ins));
 
-    // ??? Record status is tricky.  Typically, the routines in here use
-    //     setRecordTrack() which sets the UI and the Track.
+    // Note: setRecordTrack() used to be used to do this.  But that would
+    //       set the track in the composition to record as well as setting
+    //       the button on the UI.  This seems better and works fine.
     bool recording =
         m_doc->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
@@ -179,11 +180,11 @@ TrackButtons::updateUI(Track *track)
     if (!label)
         return;
 
-    // ??? Should we set the position and ID?  I'm guessing not.  That should
-    //     be setup by the creator of the TrackLabel object.  But is there
-    //     a possibility that these will change?  Yeah, when tracks are
-    //     shuffled due to add/delete.  That's probably a special case that
-    //     shouldn't be handled here.
+    // My guess is that we shouldn't set the position and ID in this routine.
+    // They should be set up by the creator of the TrackLabel object.  But is
+    // there a possibility that these will change?  Yes.  When tracks are
+    // shuffled due to add/delete.  That's probably a special case that
+    // shouldn't be handled here.
     //label->setId(track->getId());
     //setButtonMapping(label, track->getId());
     //label->setPosition(pos);
@@ -256,14 +257,15 @@ TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
         label->setPresentationName(tr("<no instrument>"));
     }
 
-    // ??? Does this make sense for all?  Maybe it should be done after all
-    //     updates?
+    // All callers take care of this on their own.  Not needed.
     //label->updateLabel();
 }
 
 void
 TrackButtons::populateButtons()
 {
+    //RG_DEBUG << "TrackButtons::populateButtons()";
+
     // For each track, copy info from Track object to the widgets
     for (unsigned int i = 0; i < m_tracks; ++i) {
         Track *track = m_doc->getComposition().getTrackByPosition(i);
@@ -271,39 +273,13 @@ TrackButtons::populateButtons()
         if (!track)
             continue;
 
-
-        // *** Mute Button
-
-        if (track->isMuted()) {
-            m_muteLeds[i]->off();
-        } else {
-            m_muteLeds[i]->on();
-        }
-
-
-        // *** Record Button
-
-        bool recording =
-            m_doc->getComposition().isTrackRecording(track->getId());
-        setRecordTrack(track->getPosition(), recording);
-
-
-        // *** Track Label
-
+        // Configure the track label's ID and position.
         m_trackLabels[i]->setId(track->getId());
         setButtonMapping(m_trackLabels[i], track->getId());
         m_trackLabels[i]->setPosition(i);
 
-        Instrument *ins =
-                m_doc->getStudio().getInstrumentById(track->getInstrument());
+        updateUI(track);
 
-        initInstrumentLabel(ins, m_trackLabels[i]);
-
-        // ??? And why don't we set up the track name as well?
-
-        // ??? Is this actually needed?  Test, but be sure to remove the call
-        //     to slotUpdateTracks() in TrackEditor::paintEvent().
-        m_trackLabels[i]->update();
     }
 }
 
@@ -325,7 +301,7 @@ TrackButtons::slotToggleMutedTrack(int mutedTrackPos)
 {
     //RG_DEBUG << "TrackButtons::slotToggleMutedTrack( position =" << mutedTrackPos << ")";
 
-    if (mutedTrackPos < 0 || mutedTrackPos > (int)m_tracks)
+    if (mutedTrackPos < 0 || mutedTrackPos >= (int)m_tracks)
         return ;
 
     Track *track =
@@ -422,7 +398,6 @@ TrackButtons::slotUpdateTracks()
         if (!track)
             continue;
 
-// BEGIN updateTrack() ----------------
 
         // *** Set Track Size ***
 
@@ -432,51 +407,8 @@ TrackButtons::slotUpdateTracks()
         m_trackHBoxes[i]->setMinimumSize(labelWidth(), trackHeight(track->getId()));
         m_trackHBoxes[i]->setFixedHeight(trackHeight(track->getId()));
 
-
-        // *** Set the Label's Track ID ***
-
-        m_trackLabels[i]->setId(track->getId());
-
-
-        // *** Set the Label's Text ***
-
-        if (track->getLabel() == std::string("")) {
-            Instrument *ins =
-                m_doc->getStudio().getInstrumentById(track->getInstrument());
-            if (ins && ins->getType() == Instrument::Audio) {
-                m_trackLabels[i]->setTrackName(tr("<untitled audio>"));
-            } else {
-                m_trackLabels[i]->setTrackName(tr("<untitled>"));
-            }
-        } else {
-            m_trackLabels[i]->setTrackName(track->getLabel().c_str());
-        }
-
-        m_trackLabels[i]->updateLabel();
-
-        //RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos " << i << " to track id " << track->getId();
-        setButtonMapping(m_trackLabels[i], track->getId());
-
-
-        // *** Set Record Status ***
-
-        setRecordTrack(i, comp.isTrackRecording(track->getId()));
-
-
-        // *** Set Colour ***
-
-        Instrument *ins =
-            m_doc->getStudio().getInstrumentById(track->getInstrument());
-
-        m_recordLeds[i]->setColor(getRecordLedColour(ins));
-
-// END updateTrack() -------------------------
     }
 
-    // repopulate the buttons
-    // ??? This re-does some of the work we've already done.
-    // ??? We need to split this into a populateButton() that we can use for
-    //     each track in the for loop above.
     populateButtons();
 
     // This is necessary to update the widgets's sizeHint to reflect any change in child widget sizes
@@ -614,22 +546,12 @@ TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
 }
 
 void
-TrackButtons::slotSetTrackMeter(float value, int position)
+TrackButtons::slotSetTrackMeter(float value, unsigned position)
 {
-    //Composition &comp = m_doc->getComposition();
-    //Studio &studio = m_doc->getStudio();
-    //Track *track;
+    if (position >= m_tracks)
+        return;
 
-    // ??? Couldn't we just do this:
-    //   m_trackMeters[position]->setLevel(value);
-    //     This loop may have been leftover from a version of this using
-    //     track ID.
-    for (unsigned int i = 0; i < (unsigned int)m_trackMeters.size(); ++i) {
-        if (i == ((unsigned int)position)) {
-            m_trackMeters[i]->setLevel(value);
-            return ;
-        }
-    }
+    m_trackMeters[position]->setLevel(value);
 }
 
 void
@@ -672,7 +594,7 @@ TrackButtons::slotInstrumentMenu(int trackId)
             instrumentName = instrument->getLocalizedPresentationName();
     }
 
-    // Force the instrument label to show the "presentation name".
+    // Force the track label to show the "presentation name".
     // E.g. "General MIDI Device  #1"
     m_trackLabels[position]->forcePresentationName(true);
     m_trackLabels[position]->updateLabel();
@@ -697,17 +619,6 @@ TrackButtons::slotInstrumentMenu(int trackId)
 
     // Turn off the presentation name
     m_trackLabels[position]->forcePresentationName(false);
-
-    // Do this here as well as in slotInstrumentSelected, so as
-    // to restore the correct alternative label even if no other
-    // program was selected from the menu.
-    // ??? Do we really need to do this both places?  Or would this
-    //     one cover both situations?  It should be hit in both cases.
-    if (track != 0) {
-        instrument = studio.getInstrumentById(track->getInstrument());
-        initInstrumentLabel(instrument, m_trackLabels[position]);
-    }
-
     m_trackLabels[position]->updateLabel();
 }
 
@@ -925,7 +836,7 @@ TrackButtons::slotInstrumentSelected(int item)
     // debug dump
 //    for (int n = 0; n < 100; n++) {
 //        inst = studio.getInstrumentFromList(n);
-//        std::cout << "Studio returned instrument \"" << inst->getPresentationName() << "\" for index " << n << std::endl;
+//        RG_DEBUG << "Studio returned instrument \"" << inst->getPresentationName() << "\" for index " << n;
 //    }
 //    inst = studio.getInstrumentFromList(item);
 
@@ -946,7 +857,7 @@ TrackButtons::slotInstrumentSelected(int item)
             m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
 
         } else {
-            RG_DEBUG << "slotInstrumentSelected() - can't find item!\n";
+            RG_DEBUG << "slotInstrumentSelected() - can't find track!\n";
         }
 
     } else {
@@ -971,13 +882,13 @@ TrackButtons::changeTrackInstrumentLabels(TrackLabel::DisplayMode mode)
 void
 TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
 {
-    RG_DEBUG << "TrackButtons::changeInstrumentLabel( id =" << id << ", programChangeName = " << programChangeName << ")";
+    //RG_DEBUG << "TrackButtons::changeInstrumentLabel( id =" << id << ", programChangeName = " << programChangeName << ")";
 
     Composition &comp = m_doc->getComposition();
     Track *track;
 
     // for each track, search for the one with this instrument id
-    // ??? Is there a Composition::getTrackByInstrumentId()?
+    // This is essentially a Composition::getTrackByInstrumentId().
     for (int i = 0; i < (int)m_tracks; i++) {
         track = comp.getTrackByPosition(i);
 
@@ -997,22 +908,20 @@ TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
 }
 
 void
-TrackButtons::changeTrackLabel(TrackId id, QString label)
+TrackButtons::changeTrackLabel(TrackId id, QString name)
 {
-    Composition &comp = m_doc->getComposition();
-    Track *track;
+    Track *track = m_doc->getComposition().getTrackById(id);
 
-    // ??? Wouldn't it be better to use Composition::getTrackById()?
-    for (int i = 0; i < (int)m_tracks; i++) {
-        track = comp.getTrackByPosition(i);
-        if (track && track->getId() == id) {
-            if (m_trackLabels[i]->getTrackName() != label) {
-                m_trackLabels[i]->setTrackName(label);
-                m_trackLabels[i]->updateLabel();
-                emit widthChanged();
-                emit nameChanged();
-            }
-            return ;
+    if (track) {
+        unsigned pos = track->getPosition();
+        TrackLabel *label = m_trackLabels[pos];
+
+        // If the name is actually changing
+        if (label->getTrackName() != name) {
+            label->setTrackName(name);
+            label->updateLabel();
+            emit widthChanged();
+            emit nameChanged();
         }
     }
 }
@@ -1020,38 +929,12 @@ TrackButtons::changeTrackLabel(TrackId id, QString label)
 void
 TrackButtons::slotSynchroniseWithComposition()
 {
+    //RG_DEBUG << "TrackButtons::slotSynchroniseWithComposition()";
+
     Composition &comp = m_doc->getComposition();
-    Studio &studio = m_doc->getStudio();
-    Track *track;
 
     for (int i = 0; i < (int)m_tracks; i++) {
-        track = comp.getTrackByPosition(i);
-
-        if (track) {
-
-            // *** Mute LED
-
-            if (track->isMuted())
-                m_muteLeds[i]->off();
-            else
-                m_muteLeds[i]->on();
-
-
-            // *** Instrument Label
-
-            Instrument *ins = studio.
-                              getInstrumentById(track->getInstrument());
-
-            initInstrumentLabel(ins, m_trackLabels[i]);
-            m_trackLabels[i]->updateLabel();
-
-
-            // *** Record Button/LED
-
-            setRecordButton(i, comp.isTrackRecording(track->getId()));
-
-            m_recordLeds[i]->setColor(getRecordLedColour(ins));
-        }
+        updateUI(comp.getTrackByPosition(i));
     }
 }
 
@@ -1198,37 +1081,11 @@ TrackButtons::makeButton(Track *track)
 
     hblayout->addSpacing(vuSpacing);
 
-    // Set the label from the Track object on the Composition
-    if (track->getLabel() == std::string("")) {
-        if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
-            trackLabel->setTrackName(tr("<untitled audio>"));
-        } else {
-            trackLabel->setTrackName(tr("<untitled>"));
-        }
-    } else {
-        trackLabel->setTrackName(strtoqstr(track->getLabel()));
-    }
-
-    // Instrument (alternative) label
-
-    // unused
-//    QString instrumentName(tr("<no instrument>"));
-//    if (ins) instrumentName = ins->getLocalizedPresentationName();
-
-    // Set label to program change if it's being sent
-    if (ins != 0 && ins->sendsProgramChange()) {
-        trackLabel->setProgramChangeName(QObject::tr(ins->getProgramName().c_str()));
-    }
-
     trackLabel->setDisplayMode(m_trackInstrumentLabels);
-
-    // ??? What about the presentation name?
 
     trackLabel->setFixedSize(labelWidth(), m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
-
-    trackLabel->updateLabel();
 
     connect(trackLabel, SIGNAL(renameTrack(QString, TrackId)),
             SLOT(slotRenameTrack(QString, TrackId)));
@@ -1264,8 +1121,7 @@ TrackButtons::getRecordLedColour(Instrument *ins)
         return GUIPalette::getColour(GUIPalette::RecordMIDITrackLED);
             
     default:
-        std::cerr << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!" 
-                  << std::endl;
+        RG_DEBUG << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!";
         return Qt::green;
 
     }

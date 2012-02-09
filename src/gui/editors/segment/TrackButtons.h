@@ -178,7 +178,7 @@ public slots:
     /// Sets the level of the VU meter on a track.
     /// @see slotSetMetersByInstrument()
     /// @see RosegardenMainViewWidget::updateMeters()
-    void slotSetTrackMeter(float value, int position);
+    void slotSetTrackMeter(float value, unsigned position);
     /// Sets the level of the VU meter on all tracks that use a specific
     /// instrument.
     /// @see slotSetTrackMeter()
