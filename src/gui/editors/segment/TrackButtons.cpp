@@ -898,11 +898,6 @@ TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
             m_trackLabels[i]->setProgramChangeName(programChangeName);
             m_trackLabels[i]->updateLabel();
 
-            Instrument *ins = m_doc->getStudio().
-                              getInstrumentById(track->getInstrument());
-
-            m_recordLeds[i]->setColor(getRecordLedColour(ins));
-
         }
     }
 }
