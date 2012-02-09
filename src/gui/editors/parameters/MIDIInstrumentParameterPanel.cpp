@@ -1054,6 +1054,9 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         emit updateAllBoxes();
     }
 
+    emit changeInstrumentLabel(m_selectedInstrument->getId(),
+            m_selectedInstrument->getProgramName().c_str());
+
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
