@@ -111,10 +111,10 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
     m_layout->addStretch(20);
 
     connect(m_recordSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleRecordTrack(int)));
+            this, SLOT(slotToggleRecord(int)));
 
     connect(m_muteSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleMutedTrack(int)));
+            this, SLOT(slotToggleMute(int)));
 
     // connect signal mappers
     connect(m_instListSigMapper, SIGNAL(mapped(int)),
@@ -137,7 +137,6 @@ TrackButtons::~TrackButtons() {
 //    m_doc->getComposition().removeObserver(this);
 }
 
-// New routine intended to standardize updating the UI from the Track.
 void
 TrackButtons::updateUI(Track *track)
 {
@@ -165,7 +164,7 @@ TrackButtons::updateUI(Track *track)
         m_doc->getStudio().getInstrumentById(track->getInstrument());
     m_recordLeds[pos]->setColor(getRecordLedColour(ins));
 
-    // Note: setRecordTrack() used to be used to do this.  But that would
+    // Note: setRecord() used to be used to do this.  But that would
     //       set the track in the composition to record as well as setting
     //       the button on the UI.  This seems better and works fine.
     bool recording =
@@ -189,7 +188,7 @@ TrackButtons::updateUI(Track *track)
     //setButtonMapping(label, track->getId());
     //label->setPosition(pos);
 
-    if (track->getLabel() == std::string("")) {
+    if (track->getLabel() == "") {
         if (ins && ins->getType() == Instrument::Audio) {
             label->setTrackName(tr("<untitled audio>"));
         } else {
@@ -210,19 +209,20 @@ TrackButtons::makeButtons()
     if (!m_doc)
         return;
 
-    // Create a horizontal box for each track
+    // Create a horizontal box filled with widgets for each track
 
     for (unsigned int i = 0; i < m_tracks; ++i) {
         Track *track = m_doc->getComposition().getTrackByPosition(i);
 
-        if (track) {
-            QFrame *trackHBox = makeButton(track);
+        if (!track)
+            continue;
 
-            if (trackHBox) {
-                trackHBox->setObjectName("TrackButtonFrame");
-                m_layout->addWidget(trackHBox);
-                m_trackHBoxes.push_back(trackHBox);
-            }
+        QFrame *trackHBox = makeButton(track);
+
+        if (trackHBox) {
+            trackHBox->setObjectName("TrackButtonFrame");
+            m_layout->addWidget(trackHBox);
+            m_trackHBoxes.push_back(trackHBox);
         }
     }
 
@@ -239,8 +239,6 @@ TrackButtons::setButtonMapping(QObject* obj, TrackId trackId)
 void
 TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
 {
-    // Initializes a label's instrument name(s) from a track
-
     if (!label)
         return;
 
@@ -256,9 +254,6 @@ TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
     } else {
         label->setPresentationName(tr("<no instrument>"));
     }
-
-    // All callers take care of this on their own.  Not needed.
-    //label->updateLabel();
 }
 
 void
@@ -283,31 +278,39 @@ TrackButtons::populateButtons()
     }
 }
 
+#if 0
+// unused
 std::vector<int>
 TrackButtons::mutedTracks()
 {
     std::vector<int> mutedTracks;
 
-    for (TrackId i = 0; i < m_tracks; i++) {
-        if (m_muteLeds[i]->state() == Led::Off)
-            mutedTracks.push_back(i);
+    for (unsigned pos = 0; pos < m_tracks; pos++) {
+        if (m_muteLeds[pos]->state() == Led::Off)
+            mutedTracks.push_back(pos);
     }
 
     return mutedTracks;
 }
+#endif
 
 void
-TrackButtons::slotToggleMutedTrack(int mutedTrackPos)
+TrackButtons::slotToggleMute(int pos)
 {
-    //RG_DEBUG << "TrackButtons::slotToggleMutedTrack( position =" << mutedTrackPos << ")";
+    //RG_DEBUG << "TrackButtons::slotToggleMute( position =" << pos << ")";
 
-    if (mutedTrackPos < 0 || mutedTrackPos >= (int)m_tracks)
-        return ;
+    if (!m_doc)
+        return;
 
-    Track *track =
-        m_doc->getComposition().getTrackByPosition(mutedTrackPos);
+    if (pos < 0)
+        return;
+    if ((unsigned)pos >= m_tracks)
+        return;
 
-    emit muteButton(track->getId(), !track->isMuted()); // will set the value
+    Track *track = m_doc->getComposition().getTrackByPosition(pos);
+
+    // Set the mute to the opposite state
+    emit muteButton(track->getId(), !track->isMuted());
 }
 
 void
@@ -315,9 +318,9 @@ TrackButtons::removeButtons(unsigned int position)
 {
     //RG_DEBUG << "TrackButtons::removeButtons - deleting track button at position " << position;
 
-    if (position >= (unsigned int)m_trackHBoxes.size()) {
+    if (position >= m_tracks) {
         RG_DEBUG << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
-        return ;
+        return;
     }
 
     std::vector<TrackLabel*>::iterator tit = m_trackLabels.begin();
@@ -336,7 +339,8 @@ TrackButtons::removeButtons(unsigned int position)
     mit += position;
     m_recordLeds.erase(mit);
 
-    delete m_trackHBoxes[position]; // deletes all child widgets (button, led, label...)
+    // Delete all child widgets (button, led, label...)
+    delete m_trackHBoxes[position];
 
     std::vector<QFrame*>::iterator it = m_trackHBoxes.begin();
     it += position;
@@ -353,9 +357,11 @@ TrackButtons::slotUpdateTracks()
     RG_DEBUG << "  elapsed: " << t.restart();
 #endif
 
+    if (!m_doc)
+        return;
+
     Composition &comp = m_doc->getComposition();
     const unsigned int newNbTracks = comp.getNbTracks();
-    Track *track = 0;
 
     //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks;
 
@@ -367,7 +373,7 @@ TrackButtons::slotUpdateTracks()
     } else if (newNbTracks > m_tracks) {  // if added
         // For each added track
         for (unsigned int i = m_tracks; i < newNbTracks; ++i) {
-            track = m_doc->getComposition().getTrackByPosition(i);
+            Track *track = m_doc->getComposition().getTrackByPosition(i);
             if (track) {
                 // Make a new button
                 QFrame *trackHBox = makeButton(track);
@@ -393,7 +399,7 @@ TrackButtons::slotUpdateTracks()
     // For each track
     for (unsigned int i = 0; i < m_tracks; ++i) {
 
-        track = comp.getTrackByPosition(i);
+        Track *track = comp.getTrackByPosition(i);
 
         if (!track)
             continue;
@@ -412,14 +418,27 @@ TrackButtons::slotUpdateTracks()
     populateButtons();
 
     // This is necessary to update the widgets's sizeHint to reflect any change in child widget sizes
+    // Make the TrackButtons QFrame big enough to hold all the track buttons.
+    // Some may have grown taller due to segments that overlap.
+    // Note: This appears to no longer be needed.  But it doesn't hurt.
     adjustSize();
 }
 
 void
-TrackButtons::slotToggleRecordTrack(int position)
+TrackButtons::slotToggleRecord(int position)
 {
+    RG_DEBUG << "TrackButtons::slotToggleRecord(" << position << ")";
+
+    if (position < 0)
+        return;
+    if ((unsigned)position >= m_tracks)
+        return;
+
     Composition &comp = m_doc->getComposition();
     Track *track = comp.getTrackByPosition(position);
+
+    if (!track)
+        return;
 
     bool state = !comp.isTrackRecording(track->getId());
 
@@ -477,35 +496,40 @@ TrackButtons::slotToggleRecordTrack(int position)
                 // audio case? might seem odd otherwise
 
                 int otherPos = otherTrack->getPosition();
-                setRecordTrack(otherPos, false);
+                setRecord(otherPos, false);
             }
         }
     }
 
-    setRecordTrack(position, state);
+    // Update the UI and the Track
+    setRecord(position, state);
 
+    // ??? This appears to be handled by no one.
     emit recordButton(track->getId(), state);
 }
 
 void
-TrackButtons::setRecordTrack(int position, bool state)
+TrackButtons::setRecord(unsigned position, bool record)
 {
+    if (position >= m_tracks)
+        return;
+    if (!m_doc)
+        return;
+
     // Copy this potentially new state to the UI.
-    setRecordButton(position, state);
+    setRecordButton(position, record);
     // Copy this potentially new state to the Track.
     m_doc->getComposition().setTrackRecording(
-            m_trackLabels[position]->getId(), state);
+            m_trackLabels[position]->getId(), record);
 }
 
 void
-TrackButtons::setRecordButton(int position, bool state)
+TrackButtons::setRecordButton(unsigned position, bool record)
 {
-    if (position < 0 || position >= (int)m_tracks)
-        return ;
+    if (position >= m_tracks)
+        return;
 
-    LedButton* led = m_recordLeds[position];
-
-    led->setState(state ? Led::On : Led::Off);
+    m_recordLeds[position]->setState(record ? Led::On : Led::Off);
 }
 
 void
@@ -521,6 +545,8 @@ TrackButtons::selectLabel(int position)
     }
 }
 
+#if 0
+// unused
 std::vector<int>
 TrackButtons::getHighlightedTracks()
 {
@@ -533,6 +559,7 @@ TrackButtons::getHighlightedTracks()
 
     return retList;
 }
+#endif
 
 void
 TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
@@ -1128,6 +1155,9 @@ TrackButtons::tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*
 {
     //RG_DEBUG << "TrackButtons::tracksAdded()";
 
+    // ??? This is a bit heavy-handed as it just adds a track button, then
+    //     recreates all the track buttons.  We might be able to just add the
+    //     one that is needed.
     slotUpdateTracks();
 }
 
@@ -1147,6 +1177,9 @@ TrackButtons::tracksDeleted(const Composition *, std::vector<TrackId> &/*trackId
 {
     //RG_DEBUG << "TrackButtons::tracksDeleted()";
 
+    // ??? This is a bit heavy-handed as it just deletes a track button,
+    //     then recreates all the track buttons.  We might be able to just
+    //     delete the one that is going away.
     slotUpdateTracks();
 }
 

@@ -87,11 +87,13 @@ public:
     ~TrackButtons();
 
     /// Return a vector of muted track positions
-    std::vector<int> mutedTracks();
+    // unused.
+//    std::vector<int> mutedTracks();
 
     /// Return a vector of highlighted track positions
     /// @see selectLabel()
-    std::vector<int> getHighlightedTracks();
+    // unused.
+//    std::vector<int> getHighlightedTracks();
 
     /// Change the track labels between track, instrument, or both.
     /// rename: changeLabelDisplayMode()
@@ -113,9 +115,6 @@ public:
 
     /// Set the mute button down or up.
     void setMuteButton(TrackId track, bool value);
-
-    /// Set the record button down or up.
-    void setRecordTrack(int position, bool value);
 
     /**
      * Precalculate the Instrument popup so we don't have to every
@@ -147,22 +146,27 @@ signals:
 //    void modified();
 
     /// Emitted when a record button's state has changed.
-    /// If we're setting to an audio
-    /// track we need to tell the sequencer for live monitoring
-    /// purposes.
-    /// @see slotToggleRecordTrack()
+    /**
+     * If we're setting to an audio track we need to tell the sequencer for
+     * live monitoring purposes.  [Doesn't appear to be true anymore.]
+     *
+     * This appears to not be handled by anyone.
+     *
+     * @see slotToggleRecord()
+     */
     void recordButton(TrackId trackId, bool state);
 
     /// Emitted when a mute button's state has changed.
-    /// @see slotToggleMutedTrack()
+    /// @see slotToggleMute()
     void muteButton(TrackId trackId, bool state);
 
 public slots:
 
     /// Toggles the record state for the track at the given position.
-    void slotToggleRecordTrack(int position);
+    void slotToggleRecord(int position);
     /// Toggles the mute state for the track at the given position.
-    void slotToggleMutedTrack(int position);
+    /// Appears to only be used internally.  Make protected or private.
+    void slotToggleMute(int position);
 
     /// Full sync of the track buttons with the composition.
     /// Adds or deletes track buttons as needed and updates the labels and
@@ -238,10 +242,13 @@ protected:
     /// Remove buttons for a position.
     void removeButtons(unsigned int position);
 
-    /// Set record button - graphically only.
+    /// Set the record state on both the UI and the Composition's Track.
+    void setRecord(unsigned position, bool record);
+
+    /// Set record button - UI only.
     /// @see slotSynchroniseWithComposition()
-    /// @see setRecordTrack()
-    void setRecordButton(int position, bool down);
+    /// @see setRecord()
+    void setRecordButton(unsigned position, bool record);
 
     /// Creates the buttons for all the tracks, then calls populateButtons()
     /// to sync them up with the composition.

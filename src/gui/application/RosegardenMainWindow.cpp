@@ -6081,7 +6081,7 @@ RosegardenMainWindow::slotToggleRecordCurrentTrack()
     Composition &comp = m_doc->getComposition();
     TrackId tid = comp.getSelectedTrack();
     int pos = comp.getTrackPositionById(tid);
-    m_view->getTrackEditor()->getTrackButtons()->slotToggleRecordTrack(pos);
+    m_view->getTrackEditor()->getTrackButtons()->slotToggleRecord(pos);
 }
 
 
