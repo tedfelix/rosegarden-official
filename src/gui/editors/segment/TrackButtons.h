@@ -110,8 +110,7 @@ public:
     void changeTrackLabel(TrackId id, QString label);
 
     /// Select the given track.  This displays it with a highlight.
-    /// @see getHighlightedTracks()
-    void selectLabel(int position);
+    void selectLabel(unsigned position);
 
     /// Set the mute button down or up.
     void setMuteButton(TrackId track, bool value);
@@ -175,17 +174,29 @@ public slots:
     /// @see populateButtons()
     void slotUpdateTracks();
 
-    /// Connected to TrackLabel::renameTrack() to respond to the user changing
-    /// the name of the track.
-    /// @see changeTrackLabel()
+    /// Rename the Track in the Composition.
+    /**
+     * Connected to TrackLabel::renameTrack() to respond to the user changing
+     * the name of the track (by double-clicking on the label).
+     *
+     * @see changeTrackLabel()
+     */
     void slotRenameTrack(QString newName, TrackId trackId);
+
     /// Sets the level of the VU meter on a track.
-    /// @see slotSetMetersByInstrument()
-    /// @see RosegardenMainViewWidget::updateMeters()
+    /**
+     * Suggestion: Reverse the argument order.
+     *
+     * @see slotSetMetersByInstrument()
+     * @see RosegardenMainViewWidget::updateMeters()
+     */
     void slotSetTrackMeter(float value, unsigned position);
-    /// Sets the level of the VU meter on all tracks that use a specific
-    /// instrument.
-    /// @see slotSetTrackMeter()
+    /// Sets the VU meter level on all tracks that use a specific instrument.
+    /**
+     * Suggestion: Reverse the argument order.
+     *
+     * @see slotSetTrackMeter()
+     */
     void slotSetMetersByInstrument(float value, InstrumentId id);
 
     /// Brings up the instrument selection popup menu.
@@ -335,7 +346,7 @@ protected:
     // rename: m_labelDisplayMode
     TrackLabel::DisplayMode           m_trackInstrumentLabels;
     // Position of the last selected track.
-    int m_lastSelected;
+    unsigned m_lastSelected;
 
     // Constants
     static const int buttonGap;

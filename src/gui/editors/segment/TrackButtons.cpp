@@ -88,7 +88,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_borderGap(1),
         m_trackLabelWidth(trackLabelWidth),
         m_popupItem(0),
-        m_lastSelected(-1)
+        m_lastSelected(UINT_MAX)  // An unlikely number of tracks.
 {
     m_layout->setMargin(0);
     setFrameStyle(Plain);
@@ -135,6 +135,16 @@ TrackButtons::~TrackButtons() {
     // Probably don't need to disconnect as we only go away when the
     // doc and composition do.  shared_ptr would help here.
 //    m_doc->getComposition().removeObserver(this);
+
+#if 0
+// ??? Memory leaks anyone?
+    delete m_layout;
+    delete m_recordSigMapper;
+    delete m_muteSigMapper;
+    delete m_clickedSigMapper;
+    delete m_instListSigMapper;
+    // ??? There are plenty more "new"s throughout that look suspicious.
+#endif
 }
 
 void
@@ -341,6 +351,7 @@ TrackButtons::removeButtons(unsigned int position)
 
     // Delete all child widgets (button, led, label...)
     delete m_trackHBoxes[position];
+    m_trackHBoxes[position] = NULL;
 
     std::vector<QFrame*>::iterator it = m_trackHBoxes.begin();
     it += position;
@@ -533,16 +544,23 @@ TrackButtons::setRecordButton(unsigned position, bool record)
 }
 
 void
-TrackButtons::selectLabel(int position)
+TrackButtons::selectLabel(unsigned position)
 {
-    if (m_lastSelected >= 0 && m_lastSelected < (int)m_trackLabels.size()) {
+    if (position >= m_tracks)
+        return;
+
+    // No sense doing anything if the selection isn't changing
+    if (position == m_lastSelected)
+        return;
+
+    // Unselect the previously selected
+    if (m_lastSelected < m_tracks) {
         m_trackLabels[m_lastSelected]->setSelected(false);
     }
 
-    if (position >= 0 && position < (int)m_trackLabels.size()) {
-        m_trackLabels[position]->setSelected(true);
-        m_lastSelected = position;
-    }
+    // Select the newly selected
+    m_trackLabels[position]->setSelected(true);
+    m_lastSelected = position;
 }
 
 #if 0
@@ -564,11 +582,16 @@ TrackButtons::getHighlightedTracks()
 void
 TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
 {
-    CommandHistory::getInstance()->addCommand
-        (new RenameTrackCommand(&m_doc->getComposition(),
-                                trackId,
-                                qstrtostr(newName)));
+    // Rename the track
+    CommandHistory::getInstance()->addCommand(
+            new RenameTrackCommand(&m_doc->getComposition(),
+                                   trackId,
+                                   qstrtostr(newName)));
 
+    // Make sure the track label matches.
+    // ??? This shouldn't be needed.  RenameTrackCommand() should modify
+    //     the Track which should cause a trackChanged() to come in and
+    //     cause the label to get updated.
     changeTrackLabel(trackId, newName);
 }
 
@@ -586,13 +609,11 @@ TrackButtons::slotSetMetersByInstrument(float value,
                                         InstrumentId id)
 {
     Composition &comp = m_doc->getComposition();
-    //Studio &studio = m_doc->getStudio();
-    Track *track;
 
-    for (unsigned int i = 0; i < (unsigned int)m_trackMeters.size(); ++i) {
-        track = comp.getTrackByPosition(i);
+    for (unsigned i = 0; i < m_tracks; ++i) {
+        Track *track = comp.getTrackByPosition(i);
 
-        if (track != 0 && track->getInstrument() == id) {
+        if (track  &&  track->getInstrument() == id) {
             m_trackMeters[i]->setLevel(value);
         }
     }
