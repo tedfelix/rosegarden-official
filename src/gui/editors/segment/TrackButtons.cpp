@@ -70,8 +70,8 @@ const int TrackButtons::vuSpacing = 2;
 
 
 TrackButtons::TrackButtons(RosegardenDocument* doc,
-                           unsigned int trackCellHeight,
-                           unsigned int trackLabelWidth,
+                           int trackCellHeight,
+                           int trackLabelWidth,
                            bool showTrackLabels,
                            int overallHeight,
                            QWidget* parent)
@@ -88,7 +88,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_borderGap(1),
         m_trackLabelWidth(trackLabelWidth),
         m_popupItem(0),
-        m_lastSelected(UINT_MAX)  // An unlikely number of tracks.
+        m_lastSelected(-1)
 {
     m_layout->setMargin(0);
     setFrameStyle(Plain);
@@ -153,9 +153,9 @@ TrackButtons::updateUI(Track *track)
     if (!track)
         return;
 
-    unsigned pos = track->getPosition();
+    int pos = track->getPosition();
 
-    if (pos >= m_tracks)
+    if (pos < 0  ||  pos >= m_tracks)
         return;
 
 
@@ -221,7 +221,7 @@ TrackButtons::makeButtons()
 
     // Create a horizontal box filled with widgets for each track
 
-    for (unsigned int i = 0; i < m_tracks; ++i) {
+    for (int i = 0; i < m_tracks; ++i) {
         Track *track = m_doc->getComposition().getTrackByPosition(i);
 
         if (!track)
@@ -272,7 +272,7 @@ TrackButtons::populateButtons()
     //RG_DEBUG << "TrackButtons::populateButtons()";
 
     // For each track, copy info from Track object to the widgets
-    for (unsigned int i = 0; i < m_tracks; ++i) {
+    for (int i = 0; i < m_tracks; ++i) {
         Track *track = m_doc->getComposition().getTrackByPosition(i);
 
         if (!track)
@@ -295,7 +295,7 @@ TrackButtons::mutedTracks()
 {
     std::vector<int> mutedTracks;
 
-    for (unsigned pos = 0; pos < m_tracks; pos++) {
+    for (int pos = 0; pos < m_tracks; pos++) {
         if (m_muteLeds[pos]->state() == Led::Off)
             mutedTracks.push_back(pos);
     }
@@ -312,9 +312,7 @@ TrackButtons::slotToggleMute(int pos)
     if (!m_doc)
         return;
 
-    if (pos < 0)
-        return;
-    if ((unsigned)pos >= m_tracks)
+    if (pos < 0  ||  pos >= m_tracks)
         return;
 
     Track *track = m_doc->getComposition().getTrackByPosition(pos);
@@ -324,11 +322,11 @@ TrackButtons::slotToggleMute(int pos)
 }
 
 void
-TrackButtons::removeButtons(unsigned int position)
+TrackButtons::removeButtons(int position)
 {
     //RG_DEBUG << "TrackButtons::removeButtons - deleting track button at position " << position;
 
-    if (position >= m_tracks) {
+    if (position < 0  ||  position >= m_tracks) {
         RG_DEBUG << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
         return;
     }
@@ -372,18 +370,18 @@ TrackButtons::slotUpdateTracks()
         return;
 
     Composition &comp = m_doc->getComposition();
-    const unsigned int newNbTracks = comp.getNbTracks();
+    const int newNbTracks = comp.getNbTracks();
 
     //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks;
 
     // If a track or tracks were deleted
     if (newNbTracks < m_tracks) {
         // For each deleted track, remove a button from the end.
-        for (unsigned int i = m_tracks; i > newNbTracks; --i)
+        for (int i = m_tracks; i > newNbTracks; --i)
             removeButtons(i - 1);
     } else if (newNbTracks > m_tracks) {  // if added
         // For each added track
-        for (unsigned int i = m_tracks; i < newNbTracks; ++i) {
+        for (int i = m_tracks; i < newNbTracks; ++i) {
             Track *track = m_doc->getComposition().getTrackByPosition(i);
             if (track) {
                 // Make a new button
@@ -402,13 +400,13 @@ TrackButtons::slotUpdateTracks()
 
     m_tracks = newNbTracks;
 
-    if (m_tracks != m_trackHBoxes.size())
+    if (m_tracks != (int)m_trackHBoxes.size())
         RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackHBoxes.size() != m_tracks";
-    if (m_tracks != m_trackLabels.size())
+    if (m_tracks != (int)m_trackLabels.size())
         RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
 
     // For each track
-    for (unsigned int i = 0; i < m_tracks; ++i) {
+    for (int i = 0; i < m_tracks; ++i) {
 
         Track *track = comp.getTrackByPosition(i);
 
@@ -438,11 +436,9 @@ TrackButtons::slotUpdateTracks()
 void
 TrackButtons::slotToggleRecord(int position)
 {
-    RG_DEBUG << "TrackButtons::slotToggleRecord(" << position << ")";
+    //RG_DEBUG << "TrackButtons::slotToggleRecord(" << position << ")";
 
-    if (position < 0)
-        return;
-    if ((unsigned)position >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     Composition &comp = m_doc->getComposition();
@@ -520,9 +516,9 @@ TrackButtons::slotToggleRecord(int position)
 }
 
 void
-TrackButtons::setRecord(unsigned position, bool record)
+TrackButtons::setRecord(int position, bool record)
 {
-    if (position >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
     if (!m_doc)
         return;
@@ -535,18 +531,18 @@ TrackButtons::setRecord(unsigned position, bool record)
 }
 
 void
-TrackButtons::setRecordButton(unsigned position, bool record)
+TrackButtons::setRecordButton(int position, bool record)
 {
-    if (position >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     m_recordLeds[position]->setState(record ? Led::On : Led::Off);
 }
 
 void
-TrackButtons::selectLabel(unsigned position)
+TrackButtons::selectLabel(int position)
 {
-    if (position >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     // No sense doing anything if the selection isn't changing
@@ -554,7 +550,7 @@ TrackButtons::selectLabel(unsigned position)
         return;
 
     // Unselect the previously selected
-    if (m_lastSelected < m_tracks) {
+    if (m_lastSelected >= 0  &&  m_lastSelected < m_tracks) {
         m_trackLabels[m_lastSelected]->setSelected(false);
     }
 
@@ -570,7 +566,7 @@ TrackButtons::getHighlightedTracks()
 {
     std::vector<int> retList;
 
-    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
+    for (int i = 0; i < m_trackLabels.size(); ++i) {
         if (m_trackLabels[i]->isSelected())
             retList.push_back(i);
     }
@@ -596,9 +592,9 @@ TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
 }
 
 void
-TrackButtons::slotSetTrackMeter(float value, unsigned position)
+TrackButtons::slotSetTrackMeter(float value, int position)
 {
-    if (position >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     m_trackMeters[position]->setLevel(value);
@@ -610,7 +606,7 @@ TrackButtons::slotSetMetersByInstrument(float value,
 {
     Composition &comp = m_doc->getComposition();
 
-    for (unsigned i = 0; i < m_tracks; ++i) {
+    for (int i = 0; i < m_tracks; ++i) {
         Track *track = comp.getTrackByPosition(i);
 
         if (track  &&  track->getInstrument() == id) {
@@ -956,7 +952,7 @@ TrackButtons::changeTrackLabel(TrackId id, QString name)
     Track *track = m_doc->getComposition().getTrackById(id);
 
     if (track) {
-        unsigned pos = track->getPosition();
+        int pos = track->getPosition();
         TrackLabel *label = m_trackLabels[pos];
 
         // If the name is actually changing

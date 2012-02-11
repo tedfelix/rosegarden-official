@@ -78,8 +78,8 @@ public:
      * @param[in] overallHeight   Height of the entire TrackButtons frame.
      */
     TrackButtons(RosegardenDocument* doc,
-                 unsigned int trackCellHeight,
-                 unsigned int trackLabelWidth,
+                 int trackCellHeight,
+                 int trackLabelWidth,
                  bool showTrackLabels,
                  int overallHeight,
                  QWidget* parent = 0);
@@ -110,7 +110,7 @@ public:
     void changeTrackLabel(TrackId id, QString label);
 
     /// Select the given track.  This displays it with a highlight.
-    void selectLabel(unsigned position);
+    void selectLabel(int position);
 
     /// Set the mute button down or up.
     void setMuteButton(TrackId track, bool value);
@@ -185,12 +185,13 @@ public slots:
 
     /// Sets the level of the VU meter on a track.
     /**
-     * Suggestion: Reverse the argument order.
+     * Suggestion: Reverse the argument order.  Also, this is never used as
+     * a slot.  Move it to public.
      *
      * @see slotSetMetersByInstrument()
      * @see RosegardenMainViewWidget::updateMeters()
      */
-    void slotSetTrackMeter(float value, unsigned position);
+    void slotSetTrackMeter(float value, int position);
     /// Sets the VU meter level on all tracks that use a specific instrument.
     /**
      * Suggestion: Reverse the argument order.
@@ -251,15 +252,15 @@ protected:
     void populateButtons();
 
     /// Remove buttons for a position.
-    void removeButtons(unsigned int position);
+    void removeButtons(int position);
 
     /// Set the record state on both the UI and the Composition's Track.
-    void setRecord(unsigned position, bool record);
+    void setRecord(int position, bool record);
 
     /// Set record button - UI only.
     /// @see slotSynchroniseWithComposition()
     /// @see setRecord()
-    void setRecordButton(unsigned position, bool record);
+    void setRecordButton(int position, bool record);
 
     /// Creates the buttons for all the tracks, then calls populateButtons()
     /// to sync them up with the composition.
@@ -326,7 +327,7 @@ protected:
 
     // Number of tracks on our view
     //
-    unsigned int                      m_tracks;
+    int                               m_tracks;
 
     // The pixel offset from the top - just to overcome
     // the borders
@@ -346,7 +347,7 @@ protected:
     // rename: m_labelDisplayMode
     TrackLabel::DisplayMode           m_trackInstrumentLabels;
     // Position of the last selected track.
-    unsigned m_lastSelected;
+    int m_lastSelected;
 
     // Constants
     static const int buttonGap;
