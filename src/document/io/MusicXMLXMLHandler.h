@@ -101,6 +101,12 @@ public:
     virtual bool characters(const QString& ch);
 
     virtual bool endDocument ();
+private:
+    /**
+     * startElement() and endElement() call the functions below for
+     * processing based on m_currentState
+     */
+    
     bool startHeader(const QString& qName, const QXmlAttributes& atts);
     bool endHeader(const QString& qName);
     bool startPartList(const QString& qName, const QXmlAttributes& atts);
@@ -119,6 +125,7 @@ public:
     bool endBarlineData(const QString& qName);
 
 
+public:
     bool error(const QXmlParseException & exception);
     bool fatalError(const QXmlParseException & exception);
     bool warning(const QXmlParseException & exception);

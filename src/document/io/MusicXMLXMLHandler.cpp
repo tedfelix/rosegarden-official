@@ -33,6 +33,7 @@
 #include "base/Track.h"
 
 #include <QString>
+#include <assert.h>
 
 namespace Rosegarden
 
@@ -362,21 +363,22 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
             m_parts[m_partId]->setBracketType(Brackets::SquareOn);
             m_bracket = -m_bracket;
         }
-    } else if (m_currentElement == "score-instrument") {
-        // ignored
-    } else if (m_currentElement == "instrument-name") {
-        // ignored
-    } else if (m_currentElement == "part-name") {
-        // no action required here
+    } else if ((m_currentElement == "score-instrument") ||
+            (m_currentElement == "instrument-name")) {
+        // These elements get ignored
     } else if (m_currentElement == "midi-instrument") {
         ret = getAttributeString(atts, "id", m_midiInstrument);
-    } else if (m_currentElement == "midi-channel") {
-        // no action required here
-    } else if (m_currentElement == "midi-program") {
-        // no action required here
-    } else if (m_currentElement == "midi-unpitched") {
-        // no action required here
+    } else if ((m_currentElement == "part-name") ||
+            (m_currentElement == "midi-channel") ||
+            (m_currentElement == "midi-program") ||
+            (m_currentElement == "midi-unpitched")) {
+        // No action is required here; the character contents of these are
+        // processed via endElement().
+    } else {
+        // For debugging
+        assert(0);
     }
+    
     return ret;
 }
 
