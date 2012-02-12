@@ -3488,14 +3488,14 @@ RosegardenMainWindow::slotToggleTrackLabels()
 #endif
 
         m_view->getTrackEditor()->getTrackButtons()->
-        changeTrackInstrumentLabels(TrackLabel::ShowTrack);
+                changeLabelDisplayMode(TrackLabel::ShowTrack);
     } else {
 #ifdef SETTING_LOG_DEBUG
         _settingLog("toggle track labels off");
 #endif
 
         m_view->getTrackEditor()->getTrackButtons()->
-        changeTrackInstrumentLabels(TrackLabel::ShowInstrument);
+                changeLabelDisplayMode(TrackLabel::ShowInstrument);
     }
 }
 

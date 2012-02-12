@@ -74,7 +74,7 @@ public:
      *                            m_trackLabelWidth.
      * @param[in] showTrackLabels true => track names are displayed.
      *     false => instrument names are displayed.  See
-     *     m_trackInstrumentLabels and changeTrackInstrumentLabels().
+     *     m_labelDisplayMode and changeLabelDisplayMode().
      * @param[in] overallHeight   Height of the entire TrackButtons frame.
      */
     TrackButtons(RosegardenDocument* doc,
@@ -96,13 +96,9 @@ public:
 //    std::vector<int> getHighlightedTracks();
 
     /// Change the track labels between track, instrument, or both.
-    /// rename: changeLabelDisplayMode()
-    void changeTrackInstrumentLabels(TrackLabel::DisplayMode mode);
+    void changeLabelDisplayMode(TrackLabel::DisplayMode mode);
 
     /// Handles a change to the Program in the Instrument Parameters box.
-    /**
-     * @param[in] label Program change name.
-     */
     void changeInstrumentLabel(InstrumentId id, QString programChangeName);
 
     /// Set the label (track name) that is normally displayed.
@@ -205,6 +201,10 @@ public slots:
      * Called in response to a right-click on a track label.  Brings up
      * the popup menu so that the user can select an instrument for the
      * given track.
+     *
+     * Warning: This uses an "int" rather than TrackId because TrackId is
+     * unsigned, and this will be connected to a signal that passes an int.
+     * trackId must be an "int".
      *
      * @see slotInstrumentSelected()
      */
@@ -326,33 +326,33 @@ protected:
     QSignalMapper                    *m_instListSigMapper;
 
     // Number of tracks on our view
-    //
     int                               m_tracks;
 
     // The pixel offset from the top - just to overcome
     // the borders
-    int                               m_offset;
+    // unused
+//    int                               m_offset;
 
     // The height of the cells
-    //
     int                               m_cellSize;
 
-    // gaps between elements vertically
-    //
-    int                               m_borderGap;
-
     int                               m_trackLabelWidth;
+
+    // Track position of the track that is currently showing the
+    // instrument popup menu.
+    // rename: m_popupPosition
     int                               m_popupItem;
 
-    // rename: m_labelDisplayMode
-    TrackLabel::DisplayMode           m_trackInstrumentLabels;
+    TrackLabel::DisplayMode           m_labelDisplayMode;
     // Position of the last selected track.
     int m_lastSelected;
 
     // Constants
-    static const int buttonGap;
-    static const int vuWidth;
-    static const int vuSpacing;
+    // gaps between elements vertically
+    static const int m_borderGap;
+    static const int m_buttonGap;
+    static const int m_vuWidth;
+    static const int m_vuSpacing;
 
 private:
     // Hide copy ctor and op=

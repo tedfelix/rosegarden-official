@@ -460,6 +460,9 @@ int main(int argc, char *argv[])
     theApp.setOrganizationName("rosegardenmusic");
     theApp.setOrganizationDomain("rosegardenmusic.com");
     theApp.setApplicationName(QObject::tr("Rosegarden"));
+    // This allows icons to appear in the instrument popup menu in
+    // TrackButtons.
+    theApp.setAttribute(Qt::AA_DontShowIconsInMenus, false);
     QStringList args = theApp.arguments();
     QSettings settings;
 

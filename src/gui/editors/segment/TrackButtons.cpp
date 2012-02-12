@@ -64,9 +64,10 @@ namespace Rosegarden
 
 
 // Constants
-const int TrackButtons::buttonGap = 8;
-const int TrackButtons::vuWidth = 20;
-const int TrackButtons::vuSpacing = 2;
+const int TrackButtons::m_borderGap = 1;
+const int TrackButtons::m_buttonGap = 8;
+const int TrackButtons::m_vuWidth = 20;
+const int TrackButtons::m_vuSpacing = 2;
 
 
 TrackButtons::TrackButtons(RosegardenDocument* doc,
@@ -74,8 +75,8 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
                            int trackLabelWidth,
                            bool showTrackLabels,
                            int overallHeight,
-                           QWidget* parent)
-        : QFrame(parent), 
+                           QWidget* parent) :
+        QFrame(parent),
         m_doc(doc),
         m_layout(new QVBoxLayout(this)),
         m_recordSigMapper(new QSignalMapper(this)),
@@ -83,9 +84,8 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_clickedSigMapper(new QSignalMapper(this)),
         m_instListSigMapper(new QSignalMapper(this)),
         m_tracks(doc->getComposition().getNbTracks()),
-        m_offset(4),
+//        m_offset(4),
         m_cellSize(trackCellHeight),
-        m_borderGap(1),
         m_trackLabelWidth(trackLabelWidth),
         m_popupItem(0),
         m_lastSelected(-1)
@@ -95,9 +95,9 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
     // when we create the widget, what are we looking at?
     if (showTrackLabels) {
-        m_trackInstrumentLabels = TrackLabel::ShowTrack;
+        m_labelDisplayMode = TrackLabel::ShowTrack;
     } else {
-        m_trackInstrumentLabels = TrackLabel::ShowInstrument;
+        m_labelDisplayMode = TrackLabel::ShowInstrument;
     }
 
     // Set the spacing between vertical elements
@@ -620,25 +620,20 @@ TrackButtons::slotInstrumentMenu(int trackId)
 {
     //RG_DEBUG << "TrackButtons::slotInstrumentMenu( trackId =" << trackId << ")";
 
-
-    // *** Force The Track Label To Show The Presentation Name ***
-
     Composition &comp = m_doc->getComposition();
-    Studio &studio = m_doc->getStudio();
-
-    int position = comp.getTrackById(trackId)->getPosition();
-
-    QString instrumentName = tr("<no instrument>");
+    const int position = comp.getTrackById(trackId)->getPosition();
     Track *track = comp.getTrackByPosition(position);
 
     Instrument *instrument = 0;
+
     if (track != 0) {
-        instrument = studio.getInstrumentById(track->getInstrument());
-        if (instrument)
-            instrumentName = instrument->getLocalizedPresentationName();
+        instrument = m_doc->getStudio().getInstrumentById(
+                track->getInstrument());
     }
 
-    // Force the track label to show the "presentation name".
+
+    // *** Force The Track Label To Show The Presentation Name ***
+
     // E.g. "General MIDI Device  #1"
     m_trackLabels[position]->forcePresentationName(true);
     m_trackLabels[position]->updateLabel();
@@ -649,11 +644,9 @@ TrackButtons::slotInstrumentMenu(int trackId)
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
     QMenu instrumentPopup(this);
-
     populateInstrumentPopup(instrument, &instrumentPopup);
 
-    // Store the popup item position
-    //
+    // Store the popup item position for slotInstrumentSelected().
     m_popupItem = position;
 
     instrumentPopup.exec(QCursor::pos());
@@ -671,12 +664,15 @@ TrackButtons::slotInstrumentMenu(int trackId)
 void
 TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup)
 {
+    // pixmaps for icons to show connection states as variously colored boxes
+    // ??? Factor out the icon-related stuff to make this routine clearer.
+    //     getIcon(Instrument *) would be ideal, but might not be easy.
     static QPixmap connectedPixmap, unconnectedPixmap,
-    connectedUsedPixmap, unconnectedUsedPixmap,
-    connectedSelectedPixmap, unconnectedSelectedPixmap;
+                   connectedUsedPixmap, unconnectedUsedPixmap,
+                   connectedSelectedPixmap, unconnectedSelectedPixmap;
+
     static bool havePixmaps = false;
         
-    // pixmaps to show connection states as variously colored boxes
     if (!havePixmaps) {
 
         IconLoader il;
@@ -692,25 +688,23 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     }
 
     Composition &comp = m_doc->getComposition();
-    Studio &studio = m_doc->getStudio();
 
     // clear the popup
     instrumentPopup->clear();
 
-    std::vector<QMenu*> instrumentSubMenus;
+    QMenu *currentSubMenu = 0;
 
     // position index
     int count = 0;
 
-    // Get the list
-    InstrumentList list = studio.getPresentationInstruments();
-    InstrumentList::iterator it;
     int currentDevId = -1;
-    bool deviceUsedByAnyone = false;
-    QAction* tempMenu = 0;
+
+    // Get the list
+    Studio &studio = m_doc->getStudio();
+    InstrumentList list = studio.getPresentationInstruments();
 
     // For each instrument
-    for (it = list.begin(); it != list.end(); it++) {
+    for (InstrumentList::iterator it = list.begin(); it != list.end(); it++) {
 
         if (!(*it)) continue; // sanity check
 
@@ -731,7 +725,10 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
+        // For selecting the proper icon.
         bool connected = false;
+
+        // Determine the proper program name and whether it is connected
 
         if ((*it)->getType() == Instrument::SoftSynth) {
             pname = "";
@@ -773,9 +770,12 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             instrUsedByAnyone = true;
         }
 
+        // If we have switched to a new device, we'll create a new submenu
         if (devId != (DeviceId)(currentDevId)) {
 
-            deviceUsedByAnyone = false;
+            currentDevId = int(devId);
+
+            bool deviceUsedByAnyone = false;
 
             if (instrUsedByMe)
                 deviceUsedByAnyone = true;
@@ -798,30 +798,39 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                 }
             }
 
-            QIcon iconSet
+            QIcon icon
                 (connected ?
                  (deviceUsedByAnyone ?
                   connectedUsedPixmap : connectedPixmap) :
                  (deviceUsedByAnyone ?
                   unconnectedUsedPixmap : unconnectedPixmap));
 
-            currentDevId = int(devId);
-
+            // Create a submenu for this device
             QMenu *subMenu = new QMenu(instrumentPopup);
+            subMenu->setIcon(icon);
+            // Not needed so long as AA_DontShowIconsInMenus is false.
+            //subMenu->menuAction()->setIconVisibleInMenu(true);
+
+            // Menu title
             QString deviceName = QObject::tr(device->getName().c_str());
-
-            subMenu->setObjectName(deviceName);
             subMenu->setTitle(deviceName);
-            subMenu->setIcon(iconSet);
-                        
-            instrumentPopup->addMenu(subMenu);
-            instrumentSubMenus.push_back(subMenu);
 
-            // Connect up the submenu
-            connect(subMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotInstrumentSelected(QAction*)));
+            // QObject name
+            subMenu->setObjectName(deviceName);
+
+            // Add the submenu to the popup menu
+            instrumentPopup->addMenu(subMenu);
+
+            // Connect the submenu to slotInstrumentSelected()
+            connect(subMenu, SIGNAL(triggered(QAction*)),
+                    this, SLOT(slotInstrumentSelected(QAction*)));
+
+            currentSubMenu = subMenu;
 
         } else if (!instrUsedByMe) {
 
+            // Search the tracks to see if anyone else is using this
+            // instrument
             for (Composition::trackcontainer::iterator tit =
                      comp.getTracks().begin();
                  tit != comp.getTracks().end(); ++tit) {
@@ -833,7 +842,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             }
         }
 
-        QIcon iconSet
+        QIcon icon
             (connected ?
              (instrUsedByAnyone ?
               instrUsedByMe ?
@@ -844,19 +853,31 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
               unconnectedSelectedPixmap :
               unconnectedUsedPixmap : unconnectedPixmap));
 
-        if (pname != "") iname += " (" + pname + ")";
-            
-        tempMenu = new QAction(instrumentPopup);
-        tempMenu->setIcon(iconSet);
-        tempMenu->setText(iname);    // for QAction
-        tempMenu->setData(QVariant(count));
-        tempMenu->setObjectName(iname + QString(count));
-        
-        count++;
-        
-        instrumentSubMenus[instrumentSubMenus.size() - 1]->addAction(tempMenu);
-    }
 
+        // Create an action for this instrument
+        QAction* action = new QAction(instrumentPopup);
+        action->setIcon(icon);
+        // Not needed so long as AA_DontShowIconsInMenus is false.
+        //action->setIconVisibleInMenu(true);
+
+        // Action text
+        if (pname != "") iname += " (" + pname + ")";
+        action->setText(iname);
+
+        // Item index used to find the proper instrument once the user makes
+        // a selection from the menu.
+        action->setData(QVariant(count));
+
+        // QObject object name.
+        action->setObjectName(iname + QString(count));
+
+        // Add the action to the current submenu
+        if (currentSubMenu)
+            currentSubMenu->addAction(action);
+
+        // Next item index
+        count++;
+    }
 }
 
 void
@@ -911,10 +932,10 @@ TrackButtons::slotInstrumentSelected(int item)
 }
 
 void
-TrackButtons::changeTrackInstrumentLabels(TrackLabel::DisplayMode mode)
+TrackButtons::changeLabelDisplayMode(TrackLabel::DisplayMode mode)
 {
     // Set new label
-    m_trackInstrumentLabels = mode;
+    m_labelDisplayMode = mode;
 
     // update and reconnect with new value
     for (int i = 0; i < (int)m_tracks; i++) {
@@ -1009,6 +1030,7 @@ TrackButtons::slotTPBInstrumentSelected(TrackId trackId, int item)
 
     Composition &comp = m_doc->getComposition();
     int position = comp.getTrackById(trackId)->getPosition();
+    // Set the position for slotInstrumentSelected()
     m_popupItem = position;
     slotInstrumentSelected(item);
 }
@@ -1017,7 +1039,7 @@ int
 TrackButtons::labelWidth()
 {
     return m_trackLabelWidth -
-           ((m_cellSize - buttonGap) * 2 + vuSpacing * 2 + vuWidth);
+           ((m_cellSize - m_buttonGap) * 2 + m_vuSpacing * 2 + m_vuWidth);
 }
 
 int
@@ -1055,15 +1077,15 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setFrameShadow(Raised);
 
     // Insert a little gap
-    hblayout->addSpacing(vuSpacing);
+    hblayout->addSpacing(m_vuSpacing);
 
 
     // *** VU Meter ***
 
     TrackVUMeter *vuMeter = new TrackVUMeter(trackHBox,
                                              VUMeter::PeakHold,
-                                             vuWidth,
-                                             buttonGap,
+                                             m_vuWidth,
+                                             m_buttonGap,
                                              track->getPosition());
 
     m_trackMeters.push_back(vuMeter);
@@ -1071,7 +1093,7 @@ TrackButtons::makeButton(Track *track)
     hblayout->addWidget(vuMeter);
 
     // Insert a little gap
-    hblayout->addSpacing(vuSpacing);
+    hblayout->addSpacing(m_vuSpacing);
 
 
     // *** Mute LED ***
@@ -1089,7 +1111,7 @@ TrackButtons::makeButton(Track *track)
 
     m_muteLeds.push_back(mute);
 
-    mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+    mute->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
 
 
     // *** Record LED ***
@@ -1109,7 +1131,7 @@ TrackButtons::makeButton(Track *track)
 
     m_recordLeds.push_back(record);
 
-    record->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+    record->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
 
 
     // *** Track Label ***
@@ -1118,12 +1140,12 @@ TrackButtons::makeButton(Track *track)
             new TrackLabel(trackId, track->getPosition(), trackHBox);
     hblayout->addWidget(trackLabel);
 
-    hblayout->addSpacing(vuSpacing);
+    hblayout->addSpacing(m_vuSpacing);
 
-    trackLabel->setDisplayMode(m_trackInstrumentLabels);
+    trackLabel->setDisplayMode(m_labelDisplayMode);
 
-    trackLabel->setFixedSize(labelWidth(), m_cellSize - buttonGap);
-    trackLabel->setFixedHeight(m_cellSize - buttonGap);
+    trackLabel->setFixedSize(labelWidth(), m_cellSize - m_buttonGap);
+    trackLabel->setFixedHeight(m_cellSize - m_buttonGap);
     trackLabel->setIndent(7);
 
     connect(trackLabel, SIGNAL(renameTrack(QString, TrackId)),
