@@ -770,18 +770,69 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
     } else if (m_currentElement == "step") {
         m_step = m_characters.toUpper().at(0).toAscii();
     } else if (m_currentElement == "alter") {
-        int alter;
-        if (!checkInteger(m_currentElement, alter))
+        // Although a floating point value is acceptable, the only
+        // valid non-integer values are -1.5, -0.5, 0.5, 1.5.  So some
+        // Extra sanity checking is required.
+        //
+        // Note: Rosegarden does not currently do anything with the
+        //       .5 values other than storing them so the handling logic
+        //       here just stops the import failing.
+        
+        float alter;
+        if (!checkFloat(m_currentElement, alter))
             return false;
-        if      (alter == -2) m_accidental = Accidentals::DoubleFlat;
-        else if (alter == -1) m_accidental = Accidentals::Flat;
-        else if (alter ==  0) m_accidental = Accidentals::Natural; //NoAccidental;
-        else if (alter ==  1) m_accidental = Accidentals::Sharp;
-        else if (alter ==  2) m_accidental = Accidentals::DoubleSharp;
-        else {
+
+        int alter_as_int = int(alter * 2.0);
+
+        if (float(alter_as_int) / 2.0 != alter) {
             m_errormessage = QString("Bad value \"%1\" for <alter>")
                                 .arg(m_characters);
             return false;
+        }
+
+        // Convert to int to allow switch statement
+        switch(alter_as_int) {
+        case -4: // Original -2
+            m_accidental = Accidentals::DoubleFlat;
+            break;
+
+        case -3: // Original -1.5
+            m_accidental = Accidentals::ThreeQuarterFlat;
+            break;
+
+        case -2: // Original -1
+            m_accidental = Accidentals::Flat;
+            break;
+
+        case -1: // Original -0.5
+            m_accidental = Accidentals::QuarterFlat;
+            break;
+
+        case 0: // Original 0
+            m_accidental = Accidentals::Natural; //NoAccidental;
+            break;
+
+        case 1: // Original 0.5
+            m_accidental = Accidentals::QuarterSharp;
+            break;
+
+        case 2: // Original 1
+            m_accidental = Accidentals::Sharp;
+            break;
+
+        case 3: // Original 1.5
+            m_accidental = Accidentals::ThreeQuarterSharp;
+            break;
+
+        case 4: // Original 2
+            m_accidental = Accidentals::DoubleSharp;
+            break;
+
+        default:
+            m_errormessage = QString("Bad value \"%1\" for <alter>")
+                                .arg(m_characters);
+            return false;
+            
         }
     } else if (m_currentElement == "octave") {
         if (!checkInteger(m_currentElement, m_octave))
@@ -1445,6 +1496,18 @@ MusicXMLXMLHandler::checkInteger(const QString &element, int &value)
     value = m_characters.toInt(&ok);
     if (!ok) {
         m_errormessage = element + " is not an integer.";
+        return false;
+    }
+    return true;
+}
+
+bool
+MusicXMLXMLHandler::checkFloat(const QString &element, float &value)
+{
+    bool ok = false;
+    value = m_characters.toFloat(&ok);
+    if (!ok) {
+        m_errormessage = element + " is not a number.";
         return false;
     }
     return true;

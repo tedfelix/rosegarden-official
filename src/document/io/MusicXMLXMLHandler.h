@@ -134,6 +134,7 @@ public:
 private:
     void ignoreElement();
     bool checkInteger(const QString &element, int &value);
+    bool checkFloat(const QString &element, float &value);
     void cerrInfo(const QString &message);
     void cerrWarning(const QString &message);
     void cerrError(const QString &message);
