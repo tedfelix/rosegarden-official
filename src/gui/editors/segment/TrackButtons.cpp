@@ -87,7 +87,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 //        m_offset(4),
         m_cellSize(trackCellHeight),
         m_trackLabelWidth(trackLabelWidth),
-        m_popupItem(0),
+        m_popupTrackPos(0),
         m_lastSelected(-1)
 {
     m_layout->setMargin(0);
@@ -647,7 +647,7 @@ TrackButtons::slotInstrumentMenu(int trackId)
     populateInstrumentPopup(instrument, &instrumentPopup);
 
     // Store the popup item position for slotInstrumentSelected().
-    m_popupItem = position;
+    m_popupTrackPos = position;
 
     instrumentPopup.exec(QCursor::pos());
 
@@ -667,6 +667,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     // pixmaps for icons to show connection states as variously colored boxes
     // ??? Factor out the icon-related stuff to make this routine clearer.
     //     getIcon(Instrument *) would be ideal, but might not be easy.
+    //     getIcon(Device *) would also be needed.
     static QPixmap connectedPixmap, unconnectedPixmap,
                    connectedUsedPixmap, unconnectedUsedPixmap,
                    connectedSelectedPixmap, unconnectedSelectedPixmap;
@@ -725,26 +726,26 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
-        // For selecting the proper icon.
-        bool connected = false;
+        bool connectedIcon = false;
 
         // Determine the proper program name and whether it is connected
 
         if ((*it)->getType() == Instrument::SoftSynth) {
             pname = "";
-            AudioPluginInstance *plugin = (*it)->getPlugin
-                (Instrument::SYNTH_PLUGIN_POSITION);
+            AudioPluginInstance *plugin =
+                    (*it)->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
                 // we don't translate any plugin program names or other texts
                 pname = strtoqstr(plugin->getProgram());
                 QString identifier = strtoqstr(plugin->getIdentifier());
                 if (identifier != "") {
-                    connected = true;
+                    connectedIcon = true;
                     QString type, soName, label;
-                    PluginIdentifier::parseIdentifier
-                        (identifier, type, soName, label);
+                    PluginIdentifier::parseIdentifier(
+                            identifier, type, soName, label);
                     if (pname == "") {
-                        pname = strtoqstr(plugin->getDistinctiveConfigurationText());
+                        pname = strtoqstr(
+                                plugin->getDistinctiveConfigurationText());
                     }
                     if (pname != "") {
                         pname = QString("%1: %2").arg(label).arg(pname);
@@ -752,16 +753,18 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                         pname = label;
                     }
                 } else {
-                    connected = false;
+                    connectedIcon = false;
                 }
             }
         } else if ((*it)->getType() == Instrument::Audio) {
-            connected = true;
+            connectedIcon = true;
         } else {
-            QString conn = RosegardenSequencer::getInstance()->getConnection(devId);
-            connected = (conn != "");
+            QString conn = RosegardenSequencer::getInstance()->
+                    getConnection(devId);
+            connectedIcon = (conn != "");
         }
 
+        // These two are for selecting the correct icon to display.
         bool instrUsedByMe = false;
         bool instrUsedByAnyone = false;
 
@@ -775,6 +778,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             currentDevId = int(devId);
 
+            // For selecting the correct icon to display.
             bool deviceUsedByAnyone = false;
 
             if (instrUsedByMe)
@@ -799,7 +803,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             }
 
             QIcon icon
-                (connected ?
+                (connectedIcon ?
                  (deviceUsedByAnyone ?
                   connectedUsedPixmap : connectedPixmap) :
                  (deviceUsedByAnyone ?
@@ -843,7 +847,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         }
 
         QIcon icon
-            (connected ?
+            (connectedIcon ?
              (instrUsedByAnyone ?
               instrUsedByMe ?
               connectedSelectedPixmap :
@@ -881,45 +885,42 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 }
 
 void
-TrackButtons::slotInstrumentSelected(QAction* act)
+TrackButtons::slotInstrumentSelected(QAction* action)
 {
-    slotInstrumentSelected(act->data().toInt());
+    // The action data field has the instrument index.
+    slotInstrumentSelected(action->data().toInt());
 }
 
 void
-TrackButtons::slotInstrumentSelected(int item)
+TrackButtons::slotInstrumentSelected(int instrumentIndex)
 {
-    // This is called when the user selects a new instrument via the popup.
+    //RG_DEBUG << "TrackButtons::slotInstrumentSelected()  instrumentIndex =" << instrumentIndex;
 
-    //RG_DEBUG << "TrackButtons::slotInstrumentSelected item =" << item;
-
-    Composition &comp = m_doc->getComposition();
-    Studio &studio = m_doc->getStudio();
-
-    Instrument *inst = studio.getInstrumentFromList(item);
+    Instrument *inst = m_doc->getStudio().getInstrumentFromList(instrumentIndex);
 
     // debug dump
 //    for (int n = 0; n < 100; n++) {
 //        inst = studio.getInstrumentFromList(n);
 //        RG_DEBUG << "Studio returned instrument \"" << inst->getPresentationName() << "\" for index " << n;
 //    }
-//    inst = studio.getInstrumentFromList(item);
 
     //RG_DEBUG << "TrackButtons::slotInstrumentSelected: instrument " << inst;
 
     if (inst != 0) {
-        Track *track = comp.getTrackByPosition(m_popupItem);
+        Track *track =
+                m_doc->getComposition().getTrackByPosition(m_popupTrackPos);
 
         if (track != 0) {
-            // select instrument
+            // Select the new instrument for the track
             track->setInstrument(inst->getId());
             emit instrumentSelected((int)inst->getId());
 
-            // Set the labels
-            initInstrumentLabel(inst, m_trackLabels[m_popupItem]);
-            m_trackLabels[m_popupItem]->updateLabel();
+            // Update the instrument names
+            initInstrumentLabel(inst, m_trackLabels[m_popupTrackPos]);
+            m_trackLabels[m_popupTrackPos]->updateLabel();
 
-            m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
+            // Udpate the LED color
+            m_recordLeds[m_popupTrackPos]->setColor(getRecordLedColour(inst));
 
         } else {
             RG_DEBUG << "slotInstrumentSelected() - can't find track!\n";
@@ -934,11 +935,11 @@ TrackButtons::slotInstrumentSelected(int item)
 void
 TrackButtons::changeLabelDisplayMode(TrackLabel::DisplayMode mode)
 {
-    // Set new label
+    // Set new mode
     m_labelDisplayMode = mode;
 
-    // update and reconnect with new value
-    for (int i = 0; i < (int)m_tracks; i++) {
+    // For each track, set the display mode and update.
+    for (int i = 0; i < m_tracks; i++) {
         m_trackLabels[i]->setDisplayMode(mode);
         m_trackLabels[i]->updateLabel();
     }
@@ -950,16 +951,15 @@ TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
     //RG_DEBUG << "TrackButtons::changeInstrumentLabel( id =" << id << ", programChangeName = " << programChangeName << ")";
 
     Composition &comp = m_doc->getComposition();
-    Track *track;
 
-    // for each track, search for the one with this instrument id
+    // For each track, search for the one with this instrument ID.
     // This is essentially a Composition::getTrackByInstrumentId().
-    for (int i = 0; i < (int)m_tracks; i++) {
-        track = comp.getTrackByPosition(i);
+    for (int i = 0; i < m_tracks; i++) {
+        Track *track = comp.getTrackByPosition(i);
 
-        if (track && track->getInstrument() == id) {
+        if (track  &&  track->getInstrument() == id) {
 
-            // Set the program change name.
+            // Set the program change name and update the UI.
             m_trackLabels[i]->setProgramChangeName(programChangeName);
             m_trackLabels[i]->updateLabel();
 
@@ -978,10 +978,13 @@ TrackButtons::changeTrackLabel(TrackId id, QString name)
 
         // If the name is actually changing
         if (label->getTrackName() != name) {
+
             label->setTrackName(name);
             label->updateLabel();
+
             emit widthChanged();
             emit nameChanged();
+
         }
     }
 }
@@ -993,11 +996,12 @@ TrackButtons::slotSynchroniseWithComposition()
 
     Composition &comp = m_doc->getComposition();
 
-    for (int i = 0; i < (int)m_tracks; i++) {
+    for (int i = 0; i < m_tracks; i++) {
         updateUI(comp.getTrackByPosition(i));
     }
 }
 
+#if 0
 void
 TrackButtons::slotLabelSelected(int position)
 {
@@ -1008,31 +1012,35 @@ TrackButtons::slotLabelSelected(int position)
         emit trackSelected(track->getId());
     }
 }
+#endif
 
 void
-TrackButtons::setMuteButton(TrackId track, bool value)
+TrackButtons::setMuteButton(TrackId trackId, bool mute)
 {
-    Track *trackObj = m_doc->getComposition().getTrackById(track);
-    if (trackObj == 0)
-        return ;
+    Track *track = m_doc->getComposition().getTrackById(trackId);
 
-    int pos = trackObj->getPosition();
+    if (!track)
+        return;
 
-    //RG_DEBUG << "TrackButtons::setMuteButton() trackId = " << track << ", pos = " << pos;
+    int pos = track->getPosition();
 
-    m_muteLeds[pos]->setState(value ? Led::Off : Led::On);
+    //RG_DEBUG << "TrackButtons::setMuteButton() trackId = " << trackId << ", pos = " << pos;
+
+    m_muteLeds[pos]->setState(mute ? Led::Off : Led::On);
 }
 
 void
-TrackButtons::slotTPBInstrumentSelected(TrackId trackId, int item)
+TrackButtons::slotTPBInstrumentSelected(TrackId trackId, int instrumentIndex)
 {
-    //RG_DEBUG << "TrackButtons::slotTPBInstrumentSelected( trackId =" << trackId << ", item =" << item << ")";
+    //RG_DEBUG << "TrackButtons::slotTPBInstrumentSelected( trackId =" << trackId << ", instrumentIndex =" << instrumentIndex << ")";
 
-    Composition &comp = m_doc->getComposition();
-    int position = comp.getTrackById(trackId)->getPosition();
-    // Set the position for slotInstrumentSelected()
-    m_popupItem = position;
-    slotInstrumentSelected(item);
+    // Set the position for slotInstrumentSelected().
+    // ??? This isn't good.  Should have a selectTrack() that takes the
+    //     track position and the instrument index.  slotInstrumentSelected()
+    //     could call it.
+    m_popupTrackPos =
+            m_doc->getComposition().getTrackById(trackId)->getPosition();
+    slotInstrumentSelected(instrumentIndex);
 }
 
 int
@@ -1047,7 +1055,8 @@ TrackButtons::trackHeight(TrackId trackId)
 {
     int multiple = m_doc->
             getComposition().getMaxContemporaneousSegmentsOnTrack(trackId);
-    if (multiple == 0) multiple = 1;
+    if (multiple == 0)
+        multiple = 1;
 
     return m_cellSize * multiple - m_borderGap;
 }
@@ -1103,8 +1112,6 @@ TrackButtons::makeButton(Track *track)
     mute->setToolTip(tr("Mute track"));
     hblayout->addWidget(mute);
 
-    if (track->isMuted()) mute->off();
-
     connect(mute, SIGNAL(stateChanged(bool)),
             m_muteSigMapper, SLOT(map()));
     m_muteSigMapper->setMapping(mute, track->getPosition());
@@ -1122,8 +1129,6 @@ TrackButtons::makeButton(Track *track)
     LedButton *record = new LedButton(getRecordLedColour(ins), trackHBox);
     record->setToolTip(tr("Record on this track"));
     hblayout->addWidget(record);
-
-    record->off();
 
     connect(record, SIGNAL(stateChanged(bool)),
             m_recordSigMapper, SLOT(map()));
@@ -1207,7 +1212,7 @@ TrackButtons::trackChanged(const Composition *, Track*)
 {
     RG_DEBUG << "TrackButtons::trackChanged()";
 
-//    updateTrack(track);
+//    updateUI(track);
 }
 #endif
 
