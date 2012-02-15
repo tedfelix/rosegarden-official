@@ -92,7 +92,7 @@ public:
 //    std::vector<int> mutedTracks();
 
     /// Return a vector of highlighted track positions
-    /// @see selectLabel()
+    /// @see selectTrack()
     // unused.
 //    std::vector<int> getHighlightedTracks();
 
@@ -100,19 +100,16 @@ public:
     void changeLabelDisplayMode(TrackLabel::DisplayMode mode);
 
     /// Handles a change to the Program in the Instrument Parameters box.
-    // rename: changeInstrumentName()
-    void changeInstrumentLabel(InstrumentId id, QString programChangeName);
+    void changeInstrumentName(InstrumentId id, QString programChangeName);
 
     /// Change the track's name.
     /**
      * @see slotRenameTrack()
      */
-    // rename: changeTrackName()
-    void changeTrackLabel(TrackId id, QString label);
+    void changeTrackName(TrackId id, QString label);
 
     /// Select the given track.  This displays it with a highlight.
-    // rename: selectTrack()
-    void selectLabel(int position);
+    void selectTrack(int position);
 
     /// Set the mute button (LED) state for a specific track.
     /**
@@ -143,14 +140,14 @@ signals:
 
     /// Emitted when a track's name changes.
     /**
-     * @see changeTrackLabel()
+     * @see changeTrackName()
      * @see TrackEditor::slotTrackButtonsWidthChanged()
      */
     void widthChanged();
 
     /// Emitted when a track's name changes.
     /**
-     * @see changeTrackLabel()
+     * @see changeTrackName()
      * @see TrackParameterBox::slotSelectedTrackNameChanged()
      */
     void nameChanged();
@@ -202,7 +199,7 @@ public slots:
      * Connected to TrackLabel::renameTrack() to respond to the user changing
      * the name of the track (by double-clicking on the label).
      *
-     * @see changeTrackLabel()
+     * @see changeTrackName()
      */
     void slotRenameTrack(QString newName, TrackId trackId);
 
@@ -272,8 +269,7 @@ protected:
     /**
      * @see TrackLabel
      */
-    // rename: initInstrumentNames()
-    void initInstrumentLabel(Instrument *ins, TrackLabel *label);
+    void initInstrumentNames(Instrument *ins, TrackLabel *label);
 
     /// Updates a track button from its associated Track.
     void updateUI(Track *track);

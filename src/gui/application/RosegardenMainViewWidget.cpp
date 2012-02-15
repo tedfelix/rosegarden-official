@@ -1175,7 +1175,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
 
     // Show the selection on the track buttons.  Find the position.
     //
-    m_trackEditor->getTrackButtons()->selectLabel(track->getPosition());
+    m_trackEditor->getTrackButtons()->selectTrack(track->getPosition());
     m_trackEditor->slotScrollToTrack(track->getPosition());
 
     // Store the selected Track in the Composition
@@ -1607,14 +1607,14 @@ void
 RosegardenMainViewWidget::slotChangeInstrumentLabel(InstrumentId id,
         QString label)
 {
-    m_trackEditor->getTrackButtons()->changeInstrumentLabel(id, label);
+    m_trackEditor->getTrackButtons()->changeInstrumentName(id, label);
 }
 
 void
 RosegardenMainViewWidget::slotChangeTrackLabel(TrackId id,
                                         QString label)
 {
-    m_trackEditor->getTrackButtons()->changeTrackLabel(id, label);
+    m_trackEditor->getTrackButtons()->changeTrackName(id, label);
 }
 
 void

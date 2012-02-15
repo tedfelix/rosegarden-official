@@ -208,7 +208,7 @@ TrackButtons::updateUI(Track *track)
         label->setTrackName(track->getLabel().c_str());
     }
 
-    initInstrumentLabel(ins, label);
+    initInstrumentNames(ins, label);
 
     label->updateLabel();
 }
@@ -247,7 +247,7 @@ TrackButtons::setButtonMapping(QObject* obj, TrackId trackId)
 }
 
 void
-TrackButtons::initInstrumentLabel(Instrument *ins, TrackLabel *label)
+TrackButtons::initInstrumentNames(Instrument *ins, TrackLabel *label)
 {
     if (!label)
         return;
@@ -540,7 +540,7 @@ TrackButtons::setRecordButton(int position, bool record)
 }
 
 void
-TrackButtons::selectLabel(int position)
+TrackButtons::selectTrack(int position)
 {
     if (position < 0  ||  position >= m_tracks)
         return;
@@ -588,7 +588,7 @@ TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
     // ??? This shouldn't be needed.  RenameTrackCommand() should modify
     //     the Track which should cause a trackChanged() to come in and
     //     cause the label to get updated.
-    changeTrackLabel(trackId, newName);
+    changeTrackName(trackId, newName);
 }
 
 void
@@ -916,7 +916,7 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
             emit instrumentSelected((int)inst->getId());
 
             // Update the instrument names
-            initInstrumentLabel(inst, m_trackLabels[m_popupTrackPos]);
+            initInstrumentNames(inst, m_trackLabels[m_popupTrackPos]);
             m_trackLabels[m_popupTrackPos]->updateLabel();
 
             // Udpate the LED color
@@ -946,9 +946,9 @@ TrackButtons::changeLabelDisplayMode(TrackLabel::DisplayMode mode)
 }
 
 void
-TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
+TrackButtons::changeInstrumentName(InstrumentId id, QString programChangeName)
 {
-    //RG_DEBUG << "TrackButtons::changeInstrumentLabel( id =" << id << ", programChangeName = " << programChangeName << ")";
+    //RG_DEBUG << "TrackButtons::changeInstrumentName( id =" << id << ", programChangeName = " << programChangeName << ")";
 
     Composition &comp = m_doc->getComposition();
 
@@ -968,7 +968,7 @@ TrackButtons::changeInstrumentLabel(InstrumentId id, QString programChangeName)
 }
 
 void
-TrackButtons::changeTrackLabel(TrackId id, QString name)
+TrackButtons::changeTrackName(TrackId id, QString name)
 {
     Track *track = m_doc->getComposition().getTrackById(id);
 
