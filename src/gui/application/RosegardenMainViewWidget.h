@@ -221,20 +221,13 @@ public slots:
     void slotChangeTrackLabel(TrackId id, QString label);
 
     /// Set the mute state for a track.
-    /**
-     * @see slotSetMute()
-     *
-     * rename: slotMuteTrack()
-     */
-    void slotSetMuteButton(TrackId trackId, bool muted);
+    void slotMute(TrackId trackId, bool muted);
 
     /// Set the mute state for an instrument.
     /**
-     * @see slotSetMuteButton()
-     *
-     * rename: slotMuteInstrument()
+     * @see slotMute()
      */
-//    void slotSetMute(InstrumentId, bool muted);
+//    void slotMuteInstrument(InstrumentId, bool muted);
 
     /// Set the record state for an instrument.
     void slotSetRecord(InstrumentId, bool);

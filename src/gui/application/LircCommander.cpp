@@ -65,7 +65,7 @@ LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
     connect(this, SIGNAL(trackUp()),
             m_rgGUIApp, SLOT(slotTrackUp()) );
     connect(this, SIGNAL(trackMute()),
-            m_rgGUIApp, SLOT(slotToggleMutedCurrentTrack()) );
+            m_rgGUIApp, SLOT(slotToggleMute()) );
     connect(this, SIGNAL(trackRecord()),
             m_rgGUIApp, SLOT(slotToggleRecordCurrentTrack()) );
     connect(this, SIGNAL(undo()),

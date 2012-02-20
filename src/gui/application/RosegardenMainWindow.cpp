@@ -870,7 +870,7 @@ RosegardenMainWindow::setupActions()
     createAction("move_track_up", SLOT(slotMoveTrackUp()));
     createAction("select_next_track", SLOT(slotTrackDown()));
     createAction("select_previous_track", SLOT(slotTrackUp()));
-    createAction("toggle_mute_track", SLOT(slotToggleMutedCurrentTrack()));
+    createAction("toggle_mute_track", SLOT(slotToggleMute()));
     createAction("toggle_arm_track", SLOT(slotToggleRecordCurrentTrack()));
     createAction("mute_all_tracks", SLOT(slotMuteAllTracks()));
     createAction("unmute_all_tracks", SLOT(slotUnmuteAllTracks()));
@@ -6046,7 +6046,7 @@ RosegardenMainWindow::slotMuteAllTracks()
 
     for (Composition::trackiterator trackIt = tracks.begin();
             trackIt != tracks.end(); ++trackIt)
-        m_view->slotSetMuteButton(trackIt->second->getId(), true);
+        m_view->slotMute(trackIt->second->getId(), true);
 }
 
 void
@@ -6059,11 +6059,11 @@ RosegardenMainWindow::slotUnmuteAllTracks()
 
     for (Composition::trackiterator trackIt = tracks.begin();
             trackIt != tracks.end(); ++trackIt)
-        m_view->slotSetMuteButton(trackIt->second->getId(), false);
+        m_view->slotMute(trackIt->second->getId(), false);
 }
 
 void
-RosegardenMainWindow::slotToggleMutedCurrentTrack()
+RosegardenMainWindow::slotToggleMute()
 {
     Composition &comp = m_doc->getComposition();
     TrackId tid = comp.getSelectedTrack();
@@ -6071,7 +6071,7 @@ RosegardenMainWindow::slotToggleMutedCurrentTrack()
     // If the track exists
     if (track) {
         bool isMuted = track->isMuted();
-        m_view->slotSetMuteButton(tid, !isMuted);
+        m_view->slotMute(tid, !isMuted);
     }
 }
 

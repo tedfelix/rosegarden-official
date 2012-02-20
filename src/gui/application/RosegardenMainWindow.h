@@ -255,7 +255,7 @@ public:
     
     virtual void trackUp()            { slotTrackUp(); }
     virtual void trackDown()          { slotTrackDown(); }
-//    virtual void toggleMutedCurrentTrack() { slotToggleMutedCurrentTrack(); }
+//    virtual void toggleMutedCurrentTrack() { slotToggleMute(); }
     virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
        
     /**
@@ -1292,8 +1292,7 @@ public slots:
      */
     void slotMuteAllTracks();
     void slotUnmuteAllTracks();
-    void slotToggleMutedCurrentTrack();
-    
+
     /**
      * Toggle arm (record) current track
      */
@@ -1605,6 +1604,9 @@ public slots:
                             QString informativeText);
 
 protected slots:
+    /// Toggles mute state of the currently selected track.
+    void slotToggleMute();
+
     void setupRecentFilesMenu();
 
 private:

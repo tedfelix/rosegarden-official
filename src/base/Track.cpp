@@ -77,9 +77,6 @@ void Track::setMuted(bool muted)
     if (m_muted == muted) return;
 
     m_muted = muted;
-
-    if (m_owningComposition)
-        m_owningComposition->notifyTrackChanged(this);
 }
 
 void Track::setLabel(const std::string &label)

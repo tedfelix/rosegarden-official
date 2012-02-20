@@ -113,7 +113,7 @@ public:
 
     /// Set the mute button (LED) state for a specific track.
     /**
-     * @see RosegardenMainViewWidget::slotSetMuteButton()
+     * @see RosegardenMainViewWidget::slotMute()
      */
     void setMuteButton(TrackId id, bool mute);
 
@@ -170,7 +170,7 @@ signals:
     /// Emitted when a mute button's state has changed.
     /**
      * @see slotToggleMute()
-     * @see RosegardenMainViewWidget::slotSetMuteButton()
+     * @see RosegardenMainViewWidget::slotMute()
      */
     void muteButton(TrackId trackId, bool state);
 
@@ -326,7 +326,7 @@ protected:
 
     // CompositionObserver overrides
     virtual void tracksAdded(const Composition *, std::vector<TrackId> &trackIds);
-//    virtual void trackChanged(const Composition *, Track*);
+    virtual void trackChanged(const Composition *, Track*);
     virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
 
     int labelWidth();

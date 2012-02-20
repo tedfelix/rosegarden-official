@@ -1205,16 +1205,13 @@ TrackButtons::tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*
     slotUpdateTracks();
 }
 
-#if 0
-// Definitely not ready for primetime.
 void
-TrackButtons::trackChanged(const Composition *, Track*)
+TrackButtons::trackChanged(const Composition *, Track* track)
 {
-    RG_DEBUG << "TrackButtons::trackChanged()";
+    //RG_DEBUG << "TrackButtons::trackChanged()";
 
-//    updateUI(track);
+    updateUI(track);
 }
-#endif
 
 void
 TrackButtons::tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/)

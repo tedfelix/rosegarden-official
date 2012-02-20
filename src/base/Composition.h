@@ -873,7 +873,14 @@ public:
      */
     void notifyTracksAdded(std::vector<TrackId> trackIds) const;
     /// Change notification mechanism.
-    /// @see notifyTracksAdded()
+    /**
+     * @see notifyTracksAdded()
+     */
+    void notifyTrackChanged(Track*) const;
+    /// Change notification mechanism.
+    /**
+     * @see notifyTracksAdded()
+     */
     void notifyTracksDeleted(std::vector<TrackId> trackIds) const;
 
     //////
@@ -1015,7 +1022,6 @@ protected:
     void notifySegmentStartChanged(Segment *, timeT);
     void notifySegmentEndMarkerChange(Segment *s, bool shorten);
     void notifyEndMarkerChange(bool shorten) const;
-    void notifyTrackChanged(Track*) const;
     void notifyMetronomeChanged() const;
     void notifyTimeSignatureChanged() const;
     void notifySoloChanged() const;
