@@ -220,17 +220,26 @@ public slots:
      */
     void slotChangeTrackLabel(TrackId id, QString label);
 
+    /// Set the mute state for a track.
     /**
-     * Set the mute button on the track buttons and on the instrument
-     * parameter box
+     * @see slotSetMute()
+     *
+     * rename: slotMuteTrack()
      */
-    void slotSetMuteButton(TrackId track, bool value);
+    void slotSetMuteButton(TrackId trackId, bool muted);
 
+    /// Set the mute state for an instrument.
     /**
-     * Set mute, record and solo by instrument id
+     * @see slotSetMuteButton()
+     *
+     * rename: slotMuteInstrument()
      */
-    void slotSetMute(InstrumentId, bool);
+//    void slotSetMute(InstrumentId, bool muted);
+
+    /// Set the record state for an instrument.
     void slotSetRecord(InstrumentId, bool);
+
+    /// Set the solo state for an instrument.
     void slotSetSolo(InstrumentId, bool);
 
     /**

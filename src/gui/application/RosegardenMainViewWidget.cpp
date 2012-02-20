@@ -1898,47 +1898,42 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
 }
 
 void
-RosegardenMainViewWidget::slotSetMuteButton(TrackId track, bool value)
+RosegardenMainViewWidget::slotSetMuteButton(TrackId trackId, bool muted)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotSetMuteButton - track id = " << track
-    << ", value = " << value << endl;
+    //RG_DEBUG << "RosegardenMainViewWidget::slotSetMuteButton() - track id =" << trackId << ", muted =" << muted;
 
-    m_trackEditor->getTrackButtons()->setMuteButton(track, value);
-    Track *trackObj = getDocument()->
-                      getComposition().getTrackById(track);
-    /*
-        // to fix 739544
-        if (m_instrumentParameterBox->getSelectedInstrument() &&
-            m_instrumentParameterBox->getSelectedInstrument()->getId() ==
-            trackObj->getInstrument())
-        {
-            m_instrumentParameterBox->setMute(value);
-        }
-    */ 
-    // set the value in the composition
-    trackObj->setMuted(value);
+    Track *track = getDocument()->getComposition().getTrackById(trackId);
 
-    getDocument()->slotDocumentModified(); // set the modification flag
+    // Update the document
+    track->setMuted(muted);
 
+    // Notify observers
+//    getDocument()->getComposition().notifyTrackChanged(track);  // ??? not public yet
+    getDocument()->slotDocumentModified();
+
+    // Update the UI
+    // ??? Should be handled via observer notification.
+    m_trackEditor->getTrackButtons()->setMuteButton(trackId, muted);
 }
 
+#if 0
 void
-RosegardenMainViewWidget::slotSetMute(InstrumentId id, bool value)
+RosegardenMainViewWidget::slotSetMute(InstrumentId id, bool muted)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotSetMute - "
-    << "id = " << id
-    << ",value = " << value << endl;
+    //RG_DEBUG << "RosegardenMainViewWidget::slotSetMute - id =" << id << ", muted =" << muted;
 
     Composition &comp = getDocument()->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
-    Composition::trackiterator it;
 
-    for (it = tracks.begin(); it != tracks.end(); ++it) {
-        if ((*it).second->getInstrument() == id)
-            slotSetMuteButton((*it).second->getId(), value);
+    // For each track in the composition
+    for (Composition::trackiterator it = tracks.begin();
+            it != tracks.end(); ++it) {
+        // If this is the instrument we want, update the mute button.
+        if (it->second->getInstrument() == id)
+            slotSetMuteButton(it->second->getId(), muted);
     }
-
 }
+#endif
 
 void
 RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)

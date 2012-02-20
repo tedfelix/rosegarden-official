@@ -6039,27 +6039,27 @@ RosegardenMainWindow::slotTrackDown()
 void
 RosegardenMainWindow::slotMuteAllTracks()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotMuteAllTracks" << endl;
+    //RG_DEBUG << "RosegardenMainWindow::slotMuteAllTracks()";
 
     Composition &comp = m_doc->getComposition();
-
     Composition::trackcontainer tracks = comp.getTracks();
-    Composition::trackiterator tit;
-    for (tit = tracks.begin(); tit != tracks.end(); ++tit)
-        m_view->slotSetMute((*tit).second->getInstrument(), true);
+
+    for (Composition::trackiterator trackIt = tracks.begin();
+            trackIt != tracks.end(); ++trackIt)
+        m_view->slotSetMuteButton(trackIt->second->getId(), true);
 }
 
 void
 RosegardenMainWindow::slotUnmuteAllTracks()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotUnmuteAllTracks" << endl;
+    //RG_DEBUG << "RosegardenMainWindow::slotUnmuteAllTracks()";
 
     Composition &comp = m_doc->getComposition();
-
     Composition::trackcontainer tracks = comp.getTracks();
-    Composition::trackiterator tit;
-    for (tit = tracks.begin(); tit != tracks.end(); ++tit)
-        m_view->slotSetMute((*tit).second->getInstrument(), false);
+
+    for (Composition::trackiterator trackIt = tracks.begin();
+            trackIt != tracks.end(); ++trackIt)
+        m_view->slotSetMuteButton(trackIt->second->getId(), false);
 }
 
 void

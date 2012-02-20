@@ -255,7 +255,7 @@ public:
     
     virtual void trackUp()            { slotTrackUp(); }
     virtual void trackDown()          { slotTrackDown(); }
-    virtual void toggleMutedCurrentTrack() { slotToggleMutedCurrentTrack(); }
+//    virtual void toggleMutedCurrentTrack() { slotToggleMutedCurrentTrack(); }
     virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
        
     /**
