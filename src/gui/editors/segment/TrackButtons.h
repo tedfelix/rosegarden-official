@@ -167,22 +167,10 @@ signals:
      */
     void recordButton(TrackId trackId, bool state);
 
-    /// Emitted when a mute button's state has changed.
-    /**
-     * @see slotToggleMute()
-     * @see RosegardenMainViewWidget::slotMute()
-     */
-    void muteButton(TrackId trackId, bool state);
-
 public slots:
 
     /// Toggles the record state for the track at the given position.
     void slotToggleRecord(int position);
-    /// Toggles the mute state for the track at the given position.
-    /**
-     * Appears to only be used internally.  Make protected or private.
-     */
-    void slotToggleMute(int position);
 
     /// Full sync of the track buttons with the composition.
     /**
@@ -262,6 +250,14 @@ public slots:
     /// trackSelected().
     // unused
 //    void slotLabelSelected(int position);
+
+protected slots:
+    /// Toggles the mute state for the track at the given position.
+    /**
+     * Called when the user clicks on a mute button.
+     * @see m_muteSigMapper
+     */
+    void slotToggleMute(int position);
 
 protected:
 

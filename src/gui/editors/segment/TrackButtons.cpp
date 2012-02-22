@@ -317,8 +317,12 @@ TrackButtons::slotToggleMute(int pos)
 
     Track *track = m_doc->getComposition().getTrackByPosition(pos);
 
-    // Set the mute to the opposite state
-    emit muteButton(track->getId(), !track->isMuted());
+    // Toggle the mute state
+    track->setMuted(!track->isMuted());
+
+    // Notify observers
+    m_doc->getComposition().notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
 }
 
 void

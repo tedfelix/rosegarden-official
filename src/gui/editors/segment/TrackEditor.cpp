@@ -259,9 +259,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_trackButtons, SIGNAL(modified()),
             m_doc, SLOT(slotDocumentModified()));
 
-    connect(m_trackButtons, SIGNAL(muteButton(TrackId, bool)),
-            rosegardenguiview, SLOT(slotMute(TrackId, bool)));
-
     // connect loop rulers' follow-scroll signals
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_compositionView, SLOT(startAutoScroll(int)));
