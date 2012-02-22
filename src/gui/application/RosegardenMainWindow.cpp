@@ -6065,14 +6065,21 @@ RosegardenMainWindow::slotUnmuteAllTracks()
 void
 RosegardenMainWindow::slotToggleMute()
 {
+    if (!m_doc)
+        return;
+
     Composition &comp = m_doc->getComposition();
-    TrackId tid = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(tid);
-    // If the track exists
-    if (track) {
-        bool isMuted = track->isMuted();
-        m_view->slotMute(tid, !isMuted);
-    }
+    Track *track = comp.getTrackById(comp.getSelectedTrack());
+
+    if (!track)
+        return;
+
+    // Toggle the mute state
+    track->setMuted(!track->isMuted());
+
+    // Notify observers
+    comp.notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
 }
 
 void

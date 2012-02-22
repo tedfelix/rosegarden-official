@@ -315,13 +315,17 @@ TrackButtons::slotToggleMute(int pos)
     if (pos < 0  ||  pos >= m_tracks)
         return;
 
-    Track *track = m_doc->getComposition().getTrackByPosition(pos);
+    Composition &comp = m_doc->getComposition();
+    Track *track = comp.getTrackByPosition(pos);
+
+    if (!track)
+        return;
 
     // Toggle the mute state
     track->setMuted(!track->isMuted());
 
     // Notify observers
-    m_doc->getComposition().notifyTrackChanged(track);
+    comp.notifyTrackChanged(track);
     m_doc->slotDocumentModified();
 }
 
