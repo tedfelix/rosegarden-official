@@ -112,9 +112,6 @@ public:
     void selectTrack(int position);
 
     /// Set the mute button (LED) state for a specific track.
-    /**
-     * @see RosegardenMainViewWidget::slotMute()
-     */
     void setMuteButton(TrackId id, bool mute);
 
     /// Fill the instrument popup menu with the available instruments.

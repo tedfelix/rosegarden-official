@@ -6037,29 +6037,43 @@ RosegardenMainWindow::slotTrackDown()
 }
 
 void
-RosegardenMainWindow::slotMuteAllTracks()
+RosegardenMainWindow::muteAllTracks(bool mute)
 {
-    //RG_DEBUG << "RosegardenMainWindow::slotMuteAllTracks()";
+    //RG_DEBUG << "RosegardenMainWindow::muteAllTracks()";
+
+    if (!m_doc)
+        return;
 
     Composition &comp = m_doc->getComposition();
     Composition::trackcontainer tracks = comp.getTracks();
 
     for (Composition::trackiterator trackIt = tracks.begin();
-            trackIt != tracks.end(); ++trackIt)
-        m_view->slotMute(trackIt->second->getId(), true);
+            trackIt != tracks.end(); ++trackIt) {
+        Track *track = trackIt->second;
+
+        if (!track)
+            continue;
+
+        // Mute or unmute the track
+        track->setMuted(mute);
+
+        // Notify observers
+        comp.notifyTrackChanged(track);
+    }
+
+    m_doc->slotDocumentModified();
+}
+
+void
+RosegardenMainWindow::slotMuteAllTracks()
+{
+    muteAllTracks();
 }
 
 void
 RosegardenMainWindow::slotUnmuteAllTracks()
 {
-    //RG_DEBUG << "RosegardenMainWindow::slotUnmuteAllTracks()";
-
-    Composition &comp = m_doc->getComposition();
-    Composition::trackcontainer tracks = comp.getTracks();
-
-    for (Composition::trackiterator trackIt = tracks.begin();
-            trackIt != tracks.end(); ++trackIt)
-        m_view->slotMute(trackIt->second->getId(), false);
+    muteAllTracks(false);
 }
 
 void

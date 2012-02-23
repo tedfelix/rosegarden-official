@@ -1897,6 +1897,7 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
 
+#if 0
 void
 RosegardenMainViewWidget::slotMute(TrackId trackId, bool muted)
 {
@@ -1911,6 +1912,7 @@ RosegardenMainViewWidget::slotMute(TrackId trackId, bool muted)
     getDocument()->getComposition().notifyTrackChanged(track);
     getDocument()->slotDocumentModified();
 }
+#endif
 
 #if 0
 void

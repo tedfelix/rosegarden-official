@@ -1760,6 +1760,8 @@ private:
 
     void processRecordedEvents();
 
+    void muteAllTracks(bool mute = true);
+
 private slots:
     void signalAction(int);
 
