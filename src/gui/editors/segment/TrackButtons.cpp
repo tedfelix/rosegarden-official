@@ -135,16 +135,6 @@ TrackButtons::~TrackButtons() {
     // Probably don't need to disconnect as we only go away when the
     // doc and composition do.  shared_ptr would help here.
 //    m_doc->getComposition().removeObserver(this);
-
-#if 0
-// ??? Memory leaks anyone?
-    delete m_layout;
-    delete m_recordSigMapper;
-    delete m_muteSigMapper;
-    delete m_clickedSigMapper;
-    delete m_instListSigMapper;
-    // ??? There are plenty more "new"s throughout that look suspicious.
-#endif
 }
 
 void
@@ -1021,21 +1011,6 @@ TrackButtons::slotLabelSelected(int position)
     }
 }
 #endif
-
-void
-TrackButtons::setMuteButton(TrackId trackId, bool mute)
-{
-    Track *track = m_doc->getComposition().getTrackById(trackId);
-
-    if (!track)
-        return;
-
-    int pos = track->getPosition();
-
-    //RG_DEBUG << "TrackButtons::setMuteButton() trackId = " << trackId << ", pos = " << pos;
-
-    m_muteLeds[pos]->setState(mute ? Led::Off : Led::On);
-}
 
 void
 TrackButtons::slotTPBInstrumentSelected(TrackId trackId, int instrumentIndex)

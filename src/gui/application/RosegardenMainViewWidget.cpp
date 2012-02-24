@@ -1897,42 +1897,6 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
 
-#if 0
-void
-RosegardenMainViewWidget::slotMute(TrackId trackId, bool muted)
-{
-    //RG_DEBUG << "RosegardenMainViewWidget::slotMute() - track id =" << trackId << ", muted =" << muted;
-
-    Track *track = getDocument()->getComposition().getTrackById(trackId);
-
-    // Update the document
-    track->setMuted(muted);
-
-    // Notify observers
-    getDocument()->getComposition().notifyTrackChanged(track);
-    getDocument()->slotDocumentModified();
-}
-#endif
-
-#if 0
-void
-RosegardenMainViewWidget::slotMuteInstrument(InstrumentId id, bool muted)
-{
-    //RG_DEBUG << "RosegardenMainViewWidget::slotMuteInstrument - id =" << id << ", muted =" << muted;
-
-    Composition &comp = getDocument()->getComposition();
-    Composition::trackcontainer &tracks = comp.getTracks();
-
-    // For each track in the composition
-    for (Composition::trackiterator it = tracks.begin();
-            it != tracks.end(); ++it) {
-        // If this is the instrument we want, update the mute button.
-        if (it->second->getInstrument() == id)
-            slotMute(it->second->getId(), muted);
-    }
-}
-#endif
-
 void
 RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
 {

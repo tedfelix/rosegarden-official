@@ -220,15 +220,6 @@ public slots:
      */
     void slotChangeTrackLabel(TrackId id, QString label);
 
-    /// Set the mute state for a track.
-//    void slotMute(TrackId trackId, bool muted);
-
-    /// Set the mute state for an instrument.
-    /**
-     * @see slotMute()
-     */
-//    void slotMuteInstrument(InstrumentId, bool muted);
-
     /// Set the record state for an instrument.
     void slotSetRecord(InstrumentId, bool);
 

@@ -111,9 +111,6 @@ public:
     /// Select the given track.  This displays it with a highlight.
     void selectTrack(int position);
 
-    /// Set the mute button (LED) state for a specific track.
-    void setMuteButton(TrackId id, bool mute);
-
     /// Fill the instrument popup menu with the available instruments.
     /**
      * @see RosegardenMainWindow::slotPopulateTrackInstrumentPopup()
