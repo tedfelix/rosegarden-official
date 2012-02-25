@@ -155,11 +155,11 @@ signals:
      * If we're setting to an audio track we need to tell the sequencer for
      * live monitoring purposes.  [Doesn't appear to be true anymore.]
      *
-     * ??? This appears to not be handled by anyone.
+     * This appears to be handled by no one.
      *
      * @see slotToggleRecord()
      */
-    void recordButton(TrackId trackId, bool state);
+//    void recordButton(TrackId trackId, bool state);
 
 public slots:
 

@@ -120,6 +120,11 @@ public:
     void setStaffBracket(int index) { m_staffBracket = index; }
     
     bool isArmed() const { return m_armed; }
+    /// This routine should only be called by Composition::setTrackRecording().
+    /**
+     * Composition maintains a list of tracks that are recording.  Calling
+     * this routine directly will bypass that.
+     */
     void setArmed(bool armed);
 
 protected: // For Composition use only

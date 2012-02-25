@@ -255,7 +255,7 @@ public:
     
     virtual void trackUp()            { slotTrackUp(); }
     virtual void trackDown()          { slotTrackDown(); }
-    virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
+//    virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
        
     /**
      * Create some new audio files for the sequencer and return the

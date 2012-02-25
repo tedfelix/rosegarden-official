@@ -438,6 +438,8 @@ TrackButtons::slotToggleRecord(int position)
 
     if (position < 0  ||  position >= m_tracks)
         return;
+    if (!m_doc)
+        return;
 
     Composition &comp = m_doc->getComposition();
     Track *track = comp.getTrackByPosition(position);
@@ -447,13 +449,13 @@ TrackButtons::slotToggleRecord(int position)
 
     bool state = !comp.isTrackRecording(track->getId());
 
-    Instrument *instrument = m_doc->getStudio().getInstrumentById
-                             (track->getInstrument());
+    Instrument *instrument =
+            m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-    bool audio = (instrument &&
+    bool audio = (instrument  &&
                   instrument->getType() == Instrument::Audio);
 
-    if (audio && state) {
+    if (audio  &&  state) {
         try {
             m_doc->getAudioFileManager().testAudioPath();
         } catch (AudioFileManager::BadAudioPathException e) {
@@ -470,38 +472,33 @@ TrackButtons::slotToggleRecord(int position)
         }
     }
 
-    // can have any number of audio instruments armed, but only one
-    // track armed per instrument.
+    // If we are arming this track
+    if (state) {
+        // Enforce "one track armed per instrument" rule.
 
-    // Need to copy this container, as we're implicitly modifying it
-    // through calls to comp.setTrackRecording
+        Composition::recordtrackcontainer oldRecordTracks =
+                comp.getRecordTracks();
 
-    Composition::recordtrackcontainer oldRecordTracks =
-        comp.getRecordTracks();
+        // For each track that was armed for record
+        for (Composition::recordtrackcontainer::const_iterator i =
+                oldRecordTracks.begin();
+                i != oldRecordTracks.end(); ++i) {
 
-    for (Composition::recordtrackcontainer::const_iterator i =
-            oldRecordTracks.begin();
-            i != oldRecordTracks.end(); ++i) {
+            // Skip if this track is not armed.
+            // ??? Seems impossible.  Remove?
+            if (!comp.isTrackRecording(*i))
+                continue;
 
-        if (!comp.isTrackRecording(*i)) {
-            // We've already reset this one
-            continue;
-        }
+            Track *otherTrack = comp.getTrackById(*i);
 
-        Track *otherTrack = comp.getTrackById(*i);
+            if (!otherTrack)
+                continue;
+            if (otherTrack == track)
+                continue;
 
-        if (otherTrack &&
-                otherTrack != track) {
-
+            // If this track is using the same instrument, unarm it.
             if (otherTrack->getInstrument() == track->getInstrument()) {
-                // found another record track of the same type (and
-                // with the same instrument, if audio): unselect that
-
-                // !!! should we tell the user, particularly for the
-                // audio case? might seem odd otherwise
-
-                int otherPos = otherTrack->getPosition();
-                setRecord(otherPos, false);
+                setRecord(otherTrack->getPosition(), false);
             }
         }
     }
@@ -509,8 +506,8 @@ TrackButtons::slotToggleRecord(int position)
     // Update the UI and the Track
     setRecord(position, state);
 
-    // ??? This appears to be handled by no one.
-    emit recordButton(track->getId(), state);
+    // This appears to be handled by no one.
+//    emit recordButton(track->getId(), state);
 }
 
 void

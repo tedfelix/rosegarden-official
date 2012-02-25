@@ -1800,16 +1800,16 @@ Composition::getMaxTrackId() const
 }
 
 void
-Composition::setTrackRecording(TrackId track, bool recording)
+Composition::setTrackRecording(TrackId trackId, bool recording)
 {
     if (recording) {
-	m_recordTracks.insert(track);
+        m_recordTracks.insert(trackId);
     } else {
-	m_recordTracks.erase(track);
+        m_recordTracks.erase(trackId);
     }
-    Track *t = getTrackById(track);
-    if (t) {
-        t->setArmed(recording);
+    Track *track = getTrackById(trackId);
+    if (track) {
+        track->setArmed(recording);
     }
 }
 
