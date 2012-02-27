@@ -795,6 +795,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             track->setStaffBracket(staffBracketStr.toInt());
         }
 
+        // If the composition tag had this track set to record, make sure
+        // it is armed.
+        if (getComposition().isTrackRecording(id)) {
+            track->setArmed(true);
+        }
+
         getComposition().addTrack(track);
 
         std::vector<TrackId> trackIds;
