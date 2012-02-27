@@ -472,37 +472,6 @@ TrackButtons::slotToggleRecord(int position)
         }
     }
 
-    // If we are arming this track
-    if (state) {
-        // Enforce "one track armed per instrument" rule.
-
-        Composition::recordtrackcontainer oldRecordTracks =
-                comp.getRecordTracks();
-
-        // For each track that was armed for record
-        for (Composition::recordtrackcontainer::const_iterator i =
-                oldRecordTracks.begin();
-                i != oldRecordTracks.end(); ++i) {
-
-            // Skip if this track is not armed.
-            // ??? Seems impossible.  Remove?
-            if (!comp.isTrackRecording(*i))
-                continue;
-
-            Track *otherTrack = comp.getTrackById(*i);
-
-            if (!otherTrack)
-                continue;
-            if (otherTrack == track)
-                continue;
-
-            // If this track is using the same instrument, unarm it.
-            if (otherTrack->getInstrument() == track->getInstrument()) {
-                setRecord(otherTrack->getPosition(), false);
-            }
-        }
-    }
-
     // Update the UI and the Track
     setRecord(position, state);
 
@@ -1189,6 +1158,8 @@ void
 TrackButtons::trackChanged(const Composition *, Track* track)
 {
     //RG_DEBUG << "TrackButtons::trackChanged()";
+    //RG_DEBUG << "  Position:" << track->getPosition();
+    //RG_DEBUG << "  Armed:" << track->isArmed();
 
     updateUI(track);
 }

@@ -876,7 +876,7 @@ public:
     /**
      * @see notifyTracksAdded()
      */
-    void notifyTrackChanged(Track*) const;
+    void notifyTrackChanged(Track*);
     /// Change notification mechanism.
     /**
      * @see notifyTracksAdded()
@@ -1008,6 +1008,9 @@ protected:
 
     static RealTime getTempoTimestamp(const Event *e);
     static void setTempoTimestamp(Event *e, RealTime r);
+
+    /// No more than one armed track per instrument.
+    void enforceArmRule(const Track *track);
 
     typedef std::list<CompositionObserver *> ObserverSet;
     ObserverSet m_observers;

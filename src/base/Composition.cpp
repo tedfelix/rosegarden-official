@@ -2020,6 +2020,36 @@ Composition::getInstrumentSegments(Segment *s, timeT t) const
 }
 
 void
+Composition::enforceArmRule(const Track *track)
+{
+    // No more than one armed track per instrument.
+
+    if (!track->isArmed())
+        return;
+
+    recordtrackcontainer recordTracks = getRecordTracks();
+
+    // For each track that is armed for record
+    for (recordtrackcontainer::const_iterator i =
+            recordTracks.begin();
+            i != recordTracks.end(); ++i) {
+
+        const TrackId otherTrackId = *i;
+        const Track *otherTrack = getTrackById(otherTrackId);
+
+        if (!otherTrack)
+            continue;
+        if (otherTrack == track)
+            continue;
+
+        // If this track is using the same instrument, unarm it.
+        if (otherTrack->getInstrument() == track->getInstrument()) {
+            setTrackRecording(otherTrackId, false);
+        }
+    }
+}
+
+void
 Composition::notifySegmentAdded(Segment *s) const
 {
     // If there is an earlier repeating segment on the same track, we
@@ -2170,11 +2200,13 @@ Composition::notifyEndMarkerChange(bool shorten) const
 }
 
 void
-Composition::notifyTrackChanged(Track *t) const
+Composition::notifyTrackChanged(Track *t)
 {
+    enforceArmRule(t);
+
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->trackChanged(this, t);
+            i != m_observers.end(); ++i) {
+        (*i)->trackChanged(this, t);
     }
 }
 
