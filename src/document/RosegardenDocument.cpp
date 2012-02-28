@@ -3014,5 +3014,40 @@ getInstrument(Segment *segment)
     return instrument;
 }
 
+void
+RosegardenDocument::checkAudioPath(Track *track)
+{
+    // Might consider calling this from a trackChanged() handler.  Although
+    // it might not be a good idea to do a dialog from there, and the dialog
+    // could keep popping up over and over without some sort of static flag.
+
+    if (!track->isArmed())
+        return;
+
+    Instrument *instrument =
+            getStudio().getInstrumentById(track->getInstrument());
+
+    bool audio = (instrument  &&
+                  instrument->getType() == Instrument::Audio);
+
+    if (!audio)
+        return;
+
+    try {
+        getAudioFileManager().testAudioPath();
+    } catch (AudioFileManager::BadAudioPathException & /*e*/) {
+        // ho ho, here was the real culprit: this dialog inherited style
+        // from the track button, hence the weird background and black
+        // foreground!
+        if (QMessageBox::warning(0,
+                                 tr("Warning"),
+                                 tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
+                                 QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+                                ) == QMessageBox::Yes) {
+            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
+        }
+    }
+}
+
 }
 #include "RosegardenDocument.moc"

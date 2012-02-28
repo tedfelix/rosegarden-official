@@ -449,6 +449,9 @@ public:
 
     static const unsigned int MinNbOfTracks; // 64
 
+    /// Verify that the audio path exists and can be written to.
+    void checkAudioPath(Track *track);
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object

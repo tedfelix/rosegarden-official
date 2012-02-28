@@ -279,8 +279,6 @@ protected:
      */
     void setRecordButton(int position, bool record);
 
-    void checkAudioPath(Track *track);
-
     /// Creates and syncs the buttons for all the tracks.
     void makeButtons();
 

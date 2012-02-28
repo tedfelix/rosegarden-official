@@ -432,43 +432,6 @@ TrackButtons::slotUpdateTracks()
 }
 
 void
-TrackButtons::checkAudioPath(Track *track)
-{
-    // This routine appears to be at the "doc" level.  Consider moving
-    // it there.  Then it can be called easily by anyone.
-    // Might consider calling it from a trackChanged() handler.  Although
-    // it might not be a good idea to do a dialog from there, and the dialog
-    // could keep popping up over and over without some sort of static flag.
-
-    if (!track->isArmed())
-        return;
-
-    Instrument *instrument =
-            m_doc->getStudio().getInstrumentById(track->getInstrument());
-
-    bool audio = (instrument  &&
-                  instrument->getType() == Instrument::Audio);
-
-    if (!audio)
-        return;
-
-    try {
-        m_doc->getAudioFileManager().testAudioPath();
-    } catch (AudioFileManager::BadAudioPathException e) {
-        // ho ho, here was the real culprit: this dialog inherited style
-        // from the track button, hence the weird background and black
-        // foreground!
-        if (QMessageBox::warning(0,
-                                 tr("Warning"),
-                                 tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
-                                 QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-                                ) == QMessageBox::Yes) {
-            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
-        }
-    }
-}
-
-void
 TrackButtons::slotToggleRecord(int position)
 {
     //RG_DEBUG << "TrackButtons::slotToggleRecord(" << position << ")";
@@ -489,7 +452,7 @@ TrackButtons::slotToggleRecord(int position)
     // Update the Track
     m_doc->getComposition().setTrackRecording(track->getId(), state);
 
-    checkAudioPath(track);
+    m_doc->checkAudioPath(track);
 
     // This appears to be handled by no one.
 //    emit recordButton(track->getId(), state);
