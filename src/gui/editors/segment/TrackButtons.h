@@ -273,15 +273,13 @@ protected:
     /// Remove buttons for a position.
     void removeButtons(int position);
 
-    /// Set the record state on both the UI and the Composition's Track.
-    void setRecord(int position, bool record);
-
     /// Set record button - UI only.
     /**
      * @see slotSynchroniseWithComposition()
-     * @see setRecord()
      */
     void setRecordButton(int position, bool record);
+
+    void checkAudioPath(Track *track);
 
     /// Creates and syncs the buttons for all the tracks.
     void makeButtons();
