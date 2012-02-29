@@ -6099,12 +6099,25 @@ RosegardenMainWindow::slotToggleMute()
 void
 RosegardenMainWindow::slotToggleRecordCurrentTrack()
 {
+    if (!m_doc)
+        return;
+
     Composition &comp = m_doc->getComposition();
     TrackId tid = comp.getSelectedTrack();
-    int pos = comp.getTrackPositionById(tid);
-    m_view->getTrackEditor()->getTrackButtons()->slotToggleRecord(pos);
-}
 
+    Track *track = comp.getTrackById(tid);
+
+    if (!track)
+        return;
+
+    // Toggle
+    bool state = !comp.isTrackRecording(tid);
+
+    // Update the Track
+    comp.setTrackRecording(tid, state);
+
+    m_doc->checkAudioPath(track);
+}
 
 void
 RosegardenMainWindow::slotConfigure()

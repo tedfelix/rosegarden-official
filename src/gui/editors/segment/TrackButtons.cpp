@@ -447,10 +447,11 @@ TrackButtons::slotToggleRecord(int position)
     if (!track)
         return;
 
+    // Toggle
     bool state = !comp.isTrackRecording(track->getId());
 
     // Update the Track
-    m_doc->getComposition().setTrackRecording(track->getId(), state);
+    comp.setTrackRecording(track->getId(), state);
 
     m_doc->checkAudioPath(track);
 
