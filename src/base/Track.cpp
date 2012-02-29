@@ -112,12 +112,7 @@ void Track::setInstrument(InstrumentId instrument)
 
 void Track::setArmed(bool armed) 
 { 
-    if (m_armed == armed) return;
-
     m_armed = armed; 
-    
-    if (m_owningComposition)
-        m_owningComposition->notifyTrackChanged(this);
 } 
 
 void Track::setMidiInputDevice(DeviceId id) 

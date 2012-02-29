@@ -1807,10 +1807,13 @@ Composition::setTrackRecording(TrackId trackId, bool recording)
     } else {
         m_recordTracks.erase(trackId);
     }
+
     Track *track = getTrackById(trackId);
-    if (track) {
-        track->setArmed(recording);
-    }
+
+    if (!track)
+        return;
+
+    track->setArmed(recording);
 }
 
 bool
@@ -2035,7 +2038,7 @@ Composition::enforceArmRule(const Track *track)
             i != recordTracks.end(); ++i) {
 
         const TrackId otherTrackId = *i;
-        const Track *otherTrack = getTrackById(otherTrackId);
+        Track *otherTrack = getTrackById(otherTrackId);
 
         if (!otherTrack)
             continue;
@@ -2045,6 +2048,7 @@ Composition::enforceArmRule(const Track *track)
         // If this track is using the same instrument, unarm it.
         if (otherTrack->getInstrument() == track->getInstrument()) {
             setTrackRecording(otherTrackId, false);
+            notifyTrackChanged(otherTrack);
         }
     }
 }

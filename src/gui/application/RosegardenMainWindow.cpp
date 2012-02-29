@@ -6115,6 +6115,7 @@ RosegardenMainWindow::slotToggleRecordCurrentTrack()
 
     // Update the Track
     comp.setTrackRecording(tid, state);
+    comp.notifyTrackChanged(track);
 
     m_doc->checkAudioPath(track);
 }
