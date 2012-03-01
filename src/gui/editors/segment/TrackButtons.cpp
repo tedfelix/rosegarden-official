@@ -278,22 +278,6 @@ TrackButtons::populateButtons()
     }
 }
 
-#if 0
-// unused
-std::vector<int>
-TrackButtons::mutedTracks()
-{
-    std::vector<int> mutedTracks;
-
-    for (int pos = 0; pos < m_tracks; pos++) {
-        if (m_muteLeds[pos]->state() == Led::Off)
-            mutedTracks.push_back(pos);
-    }
-
-    return mutedTracks;
-}
-#endif
-
 void
 TrackButtons::slotToggleMute(int pos)
 {
@@ -455,9 +439,6 @@ TrackButtons::slotToggleRecord(int position)
     comp.notifyTrackChanged(track);
 
     m_doc->checkAudioPath(track);
-
-    // This appears to be handled by no one.
-//    emit recordButton(track->getId(), state);
 }
 
 void
@@ -912,6 +893,7 @@ TrackButtons::changeTrackName(TrackId id, QString name)
             label->setTrackName(name);
             label->updateLabel();
 
+            // ??? Width cannot change.  Remove this.
             emit widthChanged();
             emit nameChanged();
 

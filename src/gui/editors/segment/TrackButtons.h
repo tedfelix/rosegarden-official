@@ -87,16 +87,15 @@ public:
 
     ~TrackButtons();
 
-    /// Return a vector of muted track positions
-    // unused.
-//    std::vector<int> mutedTracks();
-
     /// Return a vector of highlighted track positions
     /// @see selectTrack()
     // unused.
 //    std::vector<int> getHighlightedTracks();
 
-    /// Change the track labels between track, instrument, or both.
+    /// Change the track labels between track or instrument.
+    /**
+     * Menu: View > Show Track Labels (show_tracklabels action)
+     */
     void changeLabelDisplayMode(TrackLabel::DisplayMode mode);
 
     /// Handles a change to the Program in the Instrument Parameters box.
@@ -134,6 +133,8 @@ signals:
 
     /// Emitted when a track's name changes.
     /**
+     * Appears unneeded as the width of the track button never changes.
+     *
      * @see changeTrackName()
      * @see TrackEditor::slotTrackButtonsWidthChanged()
      */
@@ -145,21 +146,6 @@ signals:
      * @see TrackParameterBox::slotSelectedTrackNameChanged()
      */
     void nameChanged();
-
-    // document modified (mute button)
-    // Dead Code.
-//    void modified();
-
-    /// Emitted when a record button's state has changed.
-    /**
-     * If we're setting to an audio track we need to tell the sequencer for
-     * live monitoring purposes.  [Doesn't appear to be true anymore.]
-     *
-     * This appears to be handled by no one.
-     *
-     * @see slotToggleRecord()
-     */
-//    void recordButton(TrackId trackId, bool state);
 
 public slots:
 
