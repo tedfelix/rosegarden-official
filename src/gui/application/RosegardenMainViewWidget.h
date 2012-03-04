@@ -218,7 +218,7 @@ public slots:
     /**
      * Change the Track Label
      */
-    void slotChangeTrackLabel(TrackId id, QString label);
+//    void slotChangeTrackLabel(TrackId id, QString label);
 
     /// Set the record state for an instrument.
     void slotSetRecord(InstrumentId, bool);

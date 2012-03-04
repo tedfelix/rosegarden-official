@@ -469,8 +469,9 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
             this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
     connect(notationView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
-    connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
-            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
+    // No such signal comes from NotationView
+//    connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
+//            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
     connect(notationView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
     connect(notationView, SIGNAL(editTimeSignature(timeT)),
@@ -641,8 +642,9 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
 */
     connect(pitchTrackerView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
-    connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
-            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
+    // No such signal comes from PitchTrackerView
+//    connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
+//            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
     connect(pitchTrackerView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
     connect(pitchTrackerView, SIGNAL(editTimeSignature(timeT)),
@@ -1610,12 +1612,14 @@ RosegardenMainViewWidget::slotChangeInstrumentLabel(InstrumentId id,
     m_trackEditor->getTrackButtons()->changeInstrumentName(id, label);
 }
 
+#if 0
 void
 RosegardenMainViewWidget::slotChangeTrackLabel(TrackId id,
                                         QString label)
 {
     m_trackEditor->getTrackButtons()->changeTrackName(id, label);
 }
+#endif
 
 void
 RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,
