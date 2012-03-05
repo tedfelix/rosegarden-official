@@ -64,3 +64,19 @@ With data/data.o existing, `make' should now succeed without problems.
 
 NB, these parameter values are not tuned, they just worked for me.
 
+========
+
+Developing with emacs
+
+Developers who use emacs may want to use the auto-insert templates.
+
+ * Arrange for the two elisp files in
+   /home/tehom/projects/rosegarden/rosegarden/templates to be loaded.
+   auto-insert-choose.el is the general package while
+   auto-insert-rosegarden-templates.el holds templates specific to
+   Rosegarden.
+
+ * Customize auto-insert-alist according to the instructions in
+   auto-insert-rosegarden-templates.el.  The instructions in
+   auto-insert-choose.el will work too.
+

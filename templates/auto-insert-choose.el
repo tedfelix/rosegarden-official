@@ -1,0 +1,1 @@
+/home/tehom/.emacs.d/personal/auto-insert-choose.el
