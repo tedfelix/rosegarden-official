@@ -195,10 +195,25 @@ DiatonicRelativeNote::DiatonicRelativeNote(int i,
         (thisPitch.getDisplayAccidental(key) ==
          Accidentals::NoAccidental) ? 0 : 1000;
 
+    // Diatonic intervals aren't right for handling perfect intervals
+    // because addDiatonicInterval removes accidentals.
+    int perfectPenalty;
+    switch (relativeNoteInScale) {
+    case 0: perfectPenalty = 500;
+        break;
+    case 4: // Fallthru
+    case 5:
+        perfectPenalty = 250;
+        break;
+    default:
+        perfectPenalty = 0;
+    }
+
     const int penalty =
         abs(relativeNoteInScale) +
         abs(relativeOctave) +
-        accidentalPenalty;
+        accidentalPenalty +
+        perfectPenalty;
     m_score =  -penalty;
 };
 
