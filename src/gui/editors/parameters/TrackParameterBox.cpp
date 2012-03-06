@@ -754,9 +754,12 @@ TrackParameterBox::slotSelectedTrackChanged()
 void
 TrackParameterBox::slotSelectedTrackNameChanged()
 {
-    RG_DEBUG << "TrackParameterBox::sotSelectedTrackNameChanged()\n";
+    RG_DEBUG << "TrackParameterBox::slotSelectedTrackNameChanged()";
+
     if (m_selectedTrackId == (int)NO_TRACK) return;
+
     Composition &comp = m_doc->getComposition();
+
     if (!comp.haveTrack(m_selectedTrackId)) {
         m_selectedTrackId = (int)NO_TRACK;
         return;

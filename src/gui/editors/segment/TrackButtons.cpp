@@ -489,17 +489,31 @@ TrackButtons::getHighlightedTracks()
 void
 TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
 {
+    if (!m_doc)
+        return;
+
+    Track *track = m_doc->getComposition().getTrackById(trackId);
+
+    if (!track)
+        return;
+
+    TrackLabel *label = m_trackLabels[track->getPosition()];
+
+    // If the name isn't really changing
+    if (label->getTrackName() == newName)
+        return;
+
     // Rename the track
     CommandHistory::getInstance()->addCommand(
             new RenameTrackCommand(&m_doc->getComposition(),
                                    trackId,
                                    qstrtostr(newName)));
 
-    // Make sure the track label matches.
-    // ??? This shouldn't be needed.  RenameTrackCommand() should modify
-    //     the Track which should cause a trackChanged() to come in and
-    //     cause the label to get updated.
-    changeTrackName(trackId, newName);
+    // ??? Width cannot change.  Remove this.
+    emit widthChanged();
+    // Need to get rid of this as well.  All who depend on it should
+    // depend on trackChanged() instead.
+    emit nameChanged();
 }
 
 void
@@ -873,29 +887,6 @@ TrackButtons::changeInstrumentName(InstrumentId id, QString programChangeName)
             // Set the program change name and update the UI.
             m_trackLabels[i]->setProgramChangeName(programChangeName);
             m_trackLabels[i]->updateLabel();
-
-        }
-    }
-}
-
-void
-TrackButtons::changeTrackName(TrackId id, QString name)
-{
-    Track *track = m_doc->getComposition().getTrackById(id);
-
-    if (track) {
-        int pos = track->getPosition();
-        TrackLabel *label = m_trackLabels[pos];
-
-        // If the name is actually changing
-        if (label->getTrackName() != name) {
-
-            label->setTrackName(name);
-            label->updateLabel();
-
-            // ??? Width cannot change.  Remove this.
-            emit widthChanged();
-            emit nameChanged();
 
         }
     }

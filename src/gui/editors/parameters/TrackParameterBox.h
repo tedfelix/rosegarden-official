@@ -64,10 +64,6 @@ public:
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 
-    // CompositionObserver interface
-    //
-    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
-
 public slots:
     void slotSelectedTrackChanged();
     void slotSelectedTrackNameChanged();
@@ -152,6 +148,11 @@ private:
     QLabel              *m_colorLbl;
     QLabel              *m_rangeLbl;
     QLabel              *m_psetLbl;
+
+    // CompositionObserver interface
+    //virtual void trackChanged(const Composition *comp, Track *track);
+    virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
+
 };
 
 

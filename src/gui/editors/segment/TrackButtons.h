@@ -101,12 +101,6 @@ public:
     /// Handles a change to the Program in the Instrument Parameters box.
     void changeInstrumentName(InstrumentId id, QString programChangeName);
 
-    /// Change the track's name.
-    /**
-     * @see slotRenameTrack()
-     */
-    void changeTrackName(TrackId id, QString label);
-
     /// Select the given track.  This displays it with a highlight.
     void selectTrack(int position);
 
