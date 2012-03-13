@@ -513,7 +513,7 @@ TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
     emit widthChanged();
     // Need to get rid of this as well.  All who depend on it should
     // depend on trackChanged() instead.
-    emit nameChanged();
+    //emit nameChanged();
 }
 
 void

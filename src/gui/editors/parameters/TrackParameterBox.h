@@ -150,7 +150,7 @@ private:
     QLabel              *m_psetLbl;
 
     // CompositionObserver interface
-    //virtual void trackChanged(const Composition *comp, Track *track);
+    virtual void trackChanged(const Composition *comp, Track *track);
     virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
 
 };

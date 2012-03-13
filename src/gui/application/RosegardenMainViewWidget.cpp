@@ -204,10 +204,10 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             m_trackParameterBox,
             SLOT(slotInstrumentLabelChanged(InstrumentId, QString)));
 
-    connect(m_trackEditor->getTrackButtons(),
-            SIGNAL(nameChanged()),
-            m_trackParameterBox,
-            SLOT(slotSelectedTrackNameChanged()));
+    //connect(m_trackEditor->getTrackButtons(),
+    //        SIGNAL(nameChanged()),
+    //        m_trackParameterBox,
+    //        SLOT(slotSelectedTrackNameChanged()));
 
     connect(m_trackEditor->getTrackButtons(),
             SIGNAL(instrumentSelected(int)),

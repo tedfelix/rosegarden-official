@@ -139,7 +139,7 @@ signals:
      * @see changeTrackName()
      * @see TrackParameterBox::slotSelectedTrackNameChanged()
      */
-    void nameChanged();
+    //void nameChanged();
 
 public slots:
 

@@ -723,6 +723,19 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
 }
 
 void
+TrackParameterBox::trackChanged(const Composition *, Track *track)
+{
+    if (!track)
+        return;
+
+    if (track->getId() != (unsigned)m_selectedTrackId)
+        return;
+
+    // Update the track name in case it has changed.
+    slotSelectedTrackNameChanged();
+}
+
+void
 TrackParameterBox::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
 {
     //RG_DEBUG << "TrackParameterBox::tracksDeleted(), selected is " << m_selectedTrackId;
