@@ -90,8 +90,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
-    m_channelUsed  = new QComboBox(this);
+    m_channelUsed = new QComboBox(this);
 
+    // Everything else sets up elsewhere, but these don't vary per instrument:
+    m_channelUsed->addItem(tr("auto"));
+    m_channelUsed->addItem(tr("fixed"));
 
     m_connectionLabel->setFont(f);
     m_bankValue->setFont(f);
@@ -101,13 +104,13 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox->setFont(f);
     m_variationCheckBox->setFont(f);
     m_percussionCheckBox->setFont(f);
-    m_channelUsed ->setFont(f);
+    m_channelUsed->setFont(f);
 
     m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_variationValue->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    m_channelUsed->setToolTip(tr("<qt><p>Whether this instrument is to always on the same channel</p></qt>"));
+    m_channelUsed->setToolTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
 
     m_bankValue->setMaxVisibleItems(20);
     m_programValue->setMaxVisibleItems(20);
@@ -118,13 +121,13 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_variationLabel = new QLabel(tr("Variation"), this);
     m_programLabel = new QLabel(tr("Program"), this);
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
-    QLabel *channelLabel    = new QLabel(tr("Channel:"), this);
+    QLabel *channelLabel = new QLabel(tr("Channel"), this);
     
     m_bankLabel->setFont(f);
     m_variationLabel->setFont(f);
     m_programLabel->setFont(f);
     percussionLabel->setFont(f);
-    channelLabel   ->setFont(f);
+    channelLabel->setFont(f);
     
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
@@ -138,6 +141,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_bankValue->setMinimumContentsLength(width22);
     m_programValue->setMinimumContentsLength(width22);
     m_variationValue->setMinimumContentsLength(width22);
+    m_channelUsed->setMinimumContentsLength(width22);
 
     // we still have to use the QFontMetrics here, or a SqueezedLabel will
     // squeeze itself down to 0.
@@ -180,28 +184,13 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
     m_mainGrid->addWidget(m_variationValue, 6, 2, 1, 2, Qt::AlignRight);
       
-    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, 1, 3, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 3, Qt::AlignLeft);
+    m_mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_channelUsed, 7, 2, 1, 2, Qt::AlignRight);
 
-    {
-        m_channelUsed->addItem(tr("auto"));
-        m_channelUsed->addItem(tr("fixed"));
-        QHBoxLayout *hbox      = new QHBoxLayout;
-        hbox->addWidget(channelLabel);
-        hbox->addWidget(m_channelUsed);
-        hbox->insertSpacing(1, 5);
-        // Add space to the end to move the combobox closer to the
-        // label, because there's no direct way to subtract space
-        // between them.
-        hbox->insertSpacing(-1, 30);
-        m_mainGrid->addLayout(hbox, 8, 0, 1, -1, 0);
-    }
+    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 8, 0, 1, 3, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 8, 3, Qt::AlignLeft);
 
-    // Configure the empty final row to accomodate any extra vertical space.
-    
-    
-    // Disable these by default - they are activate by their
-    // checkboxes
+    // Disable these by default - they are activated by their checkboxes
     //
     m_programValue->setDisabled(true);
     m_bankValue->setDisabled(true);
@@ -247,7 +236,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programValue->setCurrentIndex( -1);
     m_bankValue->setCurrentIndex( -1);
     m_variationValue->setCurrentIndex( -1);
-    m_channelUsed   ->setCurrentIndex(-1);
+    m_channelUsed->setCurrentIndex(-1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
