@@ -65,7 +65,7 @@ ModifyDeviceMappingCommand::execute()
                     Device::Midi) {
                 // Try to match channels on the target device
                 //
-                MidiByte channel = instr->getMidiChannel();
+                MidiByte channel = instr->getNaturalChannel();
 
                 InstrumentList destList = m_studio->
                                           getDevice(m_toDevice)->getPresentationInstruments();
@@ -73,7 +73,7 @@ ModifyDeviceMappingCommand::execute()
                 InstrumentList::iterator dIt = destList.begin();
 
                 for (; dIt != destList.end(); dIt++) {
-                    if ((*dIt)->getMidiChannel() == channel) {
+                    if ((*dIt)->getNaturalChannel() == channel) {
                         break;
                     }
                 }

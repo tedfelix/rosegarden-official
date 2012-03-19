@@ -37,7 +37,7 @@
 #include "base/Event.h"
 #include "sound/MappedStudio.h"
 #include "sound/ExternalTransport.h"
-#include "sound/MappedSegment.h"
+#include "sound/MappedBufMetaIterator.h"
 
 #include <deque>
 
@@ -117,8 +117,7 @@ public:
 
     // Set a MappedInstrument at the Sequencer
     //
-    virtual void setMappedInstrument(int type, unsigned char channel,
-                                     unsigned int id);
+    virtual void setMappedInstrument(int type, unsigned int id);
 
     virtual void processMappedEvent(MappedEvent mE);
 /*!DEVPUSH
@@ -233,12 +232,12 @@ public:
     //
     virtual void clearStudio();
 
-    // Debug stuff, to check MappedSegment::iterator
+    // Debug stuff, to check MappedEventBuffer::iterator
     virtual void dumpFirstSegment();
 
-    virtual void segmentModified(MappedSegment *);
-    virtual void segmentAdded(MappedSegment *);
-    virtual void segmentAboutToBeDeleted(MappedSegment *);
+    virtual void segmentModified(MappedEventBuffer *);
+    virtual void segmentAdded(MappedEventBuffer *);
+    virtual void segmentAboutToBeDeleted(MappedEventBuffer *);
     virtual void compositionAboutToBeDeleted();
     virtual void remapTracks();
 
@@ -389,7 +388,7 @@ protected:
 
     // mmap segments
     // 
-    MappedSegmentsMetaIterator m_metaIterator;
+    MappedBufMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
     // m_asyncOutQueue is not a MappedEventList: order of receipt

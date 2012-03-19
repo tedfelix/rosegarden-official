@@ -23,13 +23,13 @@
 
 namespace Rosegarden
 {
-  class Composition;
+  class ControllerContext;
   class ControllerContextMap;
   class ControllerSearch;
   class ControlParameter;
   class Instrument;
-  class RosegardenDocument;
   class Segment;
+  class InternalSegmentMapper;
 
 // @class ControllerSearchValue A (possibly intermediate) value in a
 // parameter search, including what time it was found at.
@@ -38,6 +38,7 @@ class ControllerSearchValue
 {
     friend class ControllerSearch;
  public:
+    typedef std::pair<bool,ControllerSearchValue> Maybe;
  ControllerSearchValue(long value, timeT when) :
     m_value(value),
         m_when(when)
@@ -47,6 +48,7 @@ class ControllerSearchValue
         m_when(0)
             {};    
     int value(void) { return m_value; }
+    int time(void)  { return m_when; }
  private:
     // Type is long so that ControllerEventAdapter can work.
     long              m_value; 
@@ -59,75 +61,62 @@ class ControllerSearchValue
 class ControllerSearch
 {
  public:
-    typedef std::pair<bool,ControllerSearchValue> Maybe;
- ControllerSearch(const std::string eventType,
-                  int controllerId,
-                  Composition &comp,
-                  const Instrument  *instrument,
-                  const ControlParameter *controlParameter) :
-    m_eventType(eventType),
-        m_controllerId(controllerId),
-        m_comp(comp),
-        m_instrument(instrument),
-        m_controlParameter(controlParameter)
-        {};
+    typedef ControllerSearchValue::Maybe Maybe;
+
+    ControllerSearch(const std::string eventType,
+                     int controllerId,
+                     InternalSegmentMapper *mapper);
+    
     Maybe
-        search(Segment *s, timeT noEarlierThan,
-               timeT noLaterThan, bool forceAbsolute) const;
-    bool matches(Event *e) const;
-    int getStaticValue(void) const;
+        search(InternalSegmentMapper *mapper, timeT noLaterThan) const;
+
  private:
+    Maybe
+        searchSegment(const Segment *s, timeT noEarlierThan,
+                      timeT noLaterThan) const;
+    bool matches(Event *e) const;
+
     const std::string  m_eventType;
     const int          m_controllerId;
-    Composition       &m_comp;
     const Instrument  *m_instrument;
-    const ControlParameter *m_controlParameter;
 };
 
-
-// @class ControllerContext  Context information for one controller of
-// one Controllable instrument at one time.
-// @author Tom Breton (Tehom)
-class ControllerContext
-{
-    friend class ControllerContextMap;
- public:
- ControllerContext(int diffValue, int min, int max)
-     : m_diffValue(diffValue),
-        m_min(min),
-        m_max(max)
-        {};
-    unsigned int getAbsoluteValue(unsigned int relativeValue) const;
-    void adjustControllerValue(Event *e) const;
-    static const ControllerContext
-        getControllerContext(RosegardenDocument *doc, Segment *s, timeT at,
-                             const std::string eventType, int controllerId);
- private:
-    int m_diffValue;
-    int m_min;
-    int m_max;
-
-    static const ControllerContext dummyContext127;
-};
-
-// @class ControllerContextMap A cache of ControllerContexts, one per
+// @class ControllerContextMap A cache of controller values, one per
 // controller and one for pitchbend.
 // @author Tom Breton (Tehom)
-struct ControllerContextMap : public std::map<int,ControllerContext>
+struct ControllerContextMap 
 {
+    typedef ControllerSearchValue::Maybe Maybe;
+    typedef std::map< int, ControllerSearchValue>  Cache;
+    typedef std::pair<int, ControllerSearchValue>  CacheEntry;
  public:
  ControllerContextMap(void) :
-    m_havePitchBendContext(false),
-        m_pitchBendContext(0,0,0) // Really uninitted
-            {};
+    m_PitchBendLatestValue(Maybe(false,ControllerSearchValue()))
+    {};
 
-    const ControllerContext * 
-        findControllerContext(RosegardenDocument *doc, Segment *s, timeT at,
-                              const std::string eventType, int controllerId);
+    void makeControlValueAbsolute(InternalSegmentMapper *mapper,
+                                  Event *e, timeT at);
+
+    int getControllerValue(InternalSegmentMapper *mapper, 
+                           timeT noLaterThan, const std::string eventType,
+                           int controllerId);
+
+    void storeLatestValue(Event *e);
+    void clear(void);
 
  private:
-    bool              m_havePitchBendContext;
-    ControllerContext m_pitchBendContext;
+    int makeAbsolute(const ControlParameter * controlParameter,
+                     int value) const;
+    const ControlParameter
+        *getControlParameter(InternalSegmentMapper *mapper,
+                             const std::string eventType,
+                             const int controllerId);
+    static int
+    getStaticValue(InternalSegmentMapper *mapper,
+                   const std::string eventType, int controllerId);
+
+    Cache             m_latestValues;
+    Maybe             m_PitchBendLatestValue;
  };
 
 }

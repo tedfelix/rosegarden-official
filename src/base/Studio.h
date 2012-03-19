@@ -71,6 +71,8 @@ public:
 
     void removeDevice(DeviceId id);
 
+    void resyncDeviceConnections(void);
+
     DeviceId getSpareDeviceId(InstrumentId &baseInstrumentId);
 
     // Return the combined instrument list from all devices

@@ -21,7 +21,6 @@ namespace Rosegarden
 
 MappedInstrument::MappedInstrument():
         m_type(Instrument::Midi),
-        m_channel(0),
         m_id(0),
         m_name(std::string("")),
         m_audioChannels(0)
@@ -31,7 +30,6 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    MidiByte channel,
                                    InstrumentId id):
         m_type(type),
-        m_channel(channel),
         m_id(id),
         m_name(std::string("")),
         m_audioChannels(0)
@@ -43,7 +41,6 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    const std::string &name,
                                    DeviceId device):
         m_type(type),
-        m_channel(channel),
         m_id(id),
         m_name(name),
         m_device(device),
@@ -52,7 +49,6 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
 
 MappedInstrument::MappedInstrument(const Instrument &instr):
         m_type(instr.getType()),
-        m_channel(instr.getMidiChannel()),
         m_id(instr.getId()),
         m_name(instr.getName()),
         m_device((instr.getDevice())->getId()),
@@ -61,7 +57,6 @@ MappedInstrument::MappedInstrument(const Instrument &instr):
 
 MappedInstrument::MappedInstrument(Instrument *instr):
         m_type(instr->getType()),
-        m_channel(instr->getMidiChannel()),
         m_id(instr->getId()),
         m_name(instr->getName()),
         m_device(instr->getDevice()->getId()),
@@ -82,7 +77,6 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
     dS >> audioChannels;
 
     mI->setType(Instrument::InstrumentType(type));
-    mI->setChannel(MidiByte(channel));
     mI->setId(InstrumentId(id));
 	mI->setName( qStrToStrLocal8(name) );
     mI->setDevice(DeviceId(device));
@@ -105,7 +99,6 @@ operator>>(QDataStream &dS, MappedInstrument &mI)
     dS >> audioChannels;
 
     mI.setType(Instrument::InstrumentType(type));
-    mI.setChannel(MidiByte(channel));
     mI.setId(InstrumentId(id));
 	mI.setName( qStrToStrLocal8(name) );
     mI.setDevice(DeviceId(device));
@@ -118,7 +111,7 @@ QDataStream&
 operator<<(QDataStream &dS, MappedInstrument *mI)
 {
     dS << (unsigned int)mI->getType();
-    dS << (unsigned int)mI->getChannel();
+    dS << (unsigned int)-1;
     dS << (unsigned int)mI->getId();
     ;
     dS << QString(mI->getName().c_str());
@@ -133,7 +126,7 @@ QDataStream&
 operator<<(QDataStream &dS, const MappedInstrument &mI)
 {
     dS << (unsigned int)mI.getType();
-    dS << (unsigned int)mI.getChannel();
+    dS << (unsigned int)-1;
     dS << (unsigned int)mI.getId();
     ;
     dS << QString(mI.getName().c_str());

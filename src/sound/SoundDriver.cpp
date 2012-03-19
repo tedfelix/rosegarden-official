@@ -245,7 +245,6 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     // If we match then change existing entry
     for (it = m_instruments.begin(); it != m_instruments.end(); it++) {
         if ((*it)->getId() == mI->getId()) {
-            (*it)->setChannel(mI->getChannel());
             (*it)->setType(mI->getType());
             delete mI;
             return ;
@@ -257,7 +256,6 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
 
     RG_DEBUG << "SoundDriver: setMappedInstrument() : "
     << "type = " << mI->getType() << " : "
-    << "channel = " << (int)(mI->getChannel()) << " : "
     << "id = " << mI->getId();
 
 }

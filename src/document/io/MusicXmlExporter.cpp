@@ -36,6 +36,15 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
+MusicXmlExporter::MidiInstrument::
+MidiInstrument(Instrument * instrument, int pitch) :
+    channel(instrument->hasFixedChannel() ?
+            (int(instrument->getNaturalChannel()) + 1) :
+            -1),
+    program(int(instrument->getProgramChange()) + 1),
+    unpitched(pitch)
+{ }
+
 MusicXmlExporter::MusicXmlExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
@@ -398,10 +407,7 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
                                     str << "        <instrument-name>" << n << "</instrument-name>" << std::endl;
                                     str << "      </score-instrument>" << std::endl;
 
-                                    MidiInstrument mi;
-                                    mi.channel   = int(instrument->getMidiChannel()) + 1;
-                                    mi.program   = int(instrument->getProgramChange()) + 1;
-                                    mi.unpitched = pitch;
+                                    MidiInstrument mi(instrument, pitch);
                                     instruments[id.str()] = mi;
                                 }
                             }
@@ -409,20 +415,23 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
                     }
                 } else {
                     std::stringstream id;
-                    id << "P" << track->getId() << "-I" << int(instrument->getMidiChannel());
+                    id << "P" << track->getId() << "-I" << int(instrument->getId());
                     str << "      <score-instrument id=\"" << id.str() << "\">" << std::endl;
                     str << "        <instrument-name>" << ctx->getPartName() << "</instrument-name>" << std::endl;
                     str << "      </score-instrument>" << std::endl;
-                    MidiInstrument mi;
-                    mi.channel   = int(instrument->getMidiChannel()) + 1;
-                    mi.program   = int(instrument->getProgramChange()) + 1;
-                    mi.unpitched = -1;
+                    MidiInstrument mi(instrument, -1);
                     instruments[id.str()] = mi;
                 }
                 for (InstrumentMap::iterator i = instruments.begin();
                      i != instruments.end(); i++) {
                     str << "      <midi-instrument id=\"" << (*i).first << "\">" << std::endl;
-                    str << "        <midi-channel>" << (*i).second.channel << "</midi-channel>" << std::endl;
+                    int channelMaybe = (*i).second.channel;
+                    if (channelMaybe >= 0) {
+                        str << "        <midi-channel>"
+                            << channelMaybe
+                            << "</midi-channel>"
+                            << std::endl;
+                    }
                     str << "        <midi-program>" << (*i).second.program << "</midi-program>" << std::endl;
                     if ((*i).second.unpitched >= 0) {
                         str << "        <midi-unpitched>" << (*i).second.unpitched+1 << "</midi-unpitched>" << std::endl;

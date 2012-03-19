@@ -49,6 +49,10 @@ AudioRouteMenu::AudioRouteMenu(QWidget *par,
         m_direction(direction),
         m_format(format)
 {
+    // Make instrument tell us if it gets destroyed.
+    connect(instrument, SIGNAL(destroyed()),
+            this, SLOT(slotInstrumentGone()));
+    
     switch (format) {
 
     case Compact: {
@@ -106,6 +110,9 @@ AudioRouteMenu::slotSetInstrument(Studio *studio,
     m_studio = studio;
     m_instrument = instrument;
     slotRepopulate();
+    // Make instrument tell us if it gets destroyed.
+    connect(instrument, SIGNAL(destroyed()),
+            this, SLOT(slotInstrumentGone()));
 }
 
 void
@@ -218,6 +225,9 @@ AudioRouteMenu::getCurrentEntry()
 QString
 AudioRouteMenu::getEntryText(int entry)
 {
+    if (!m_instrument)
+        { return tr("none");}
+
     switch (m_direction) {
 
     case In: {
@@ -268,6 +278,9 @@ AudioRouteMenu::slotEntrySelected(QAction *a)
 void
 AudioRouteMenu::slotEntrySelected(int i)
 {
+    if (!m_instrument)
+        { return; }
+    
     switch (m_direction) {
 
     case In: {
@@ -378,6 +391,12 @@ AudioRouteMenu::slotEntrySelected(int i)
     emit changed();
 }
 
+void
+AudioRouteMenu::
+slotInstrumentGone(void)
+{
+    m_instrument = 0;
+}
 
 }
 #include "AudioRouteMenu.moc"

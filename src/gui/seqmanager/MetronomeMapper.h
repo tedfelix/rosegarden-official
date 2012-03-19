@@ -18,13 +18,14 @@
 #ifndef _RG_METRONOMEMAPPER_H_
 #define _RG_METRONOMEMAPPER_H_
 
+#include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
-#include "SegmentMapper.h"
+#include "gui/seqmanager/ChannelManager.h"
+#include "gui/seqmanager/MappedEventBuffer.h"
 #include <QString>
 #include <utility>
 #include <vector>
-#include "base/Event.h"
 
 namespace Rosegarden
 {
@@ -32,11 +33,11 @@ namespace Rosegarden
 class RosegardenDocument;
 class MidiMetronome;
 
-class MetronomeMapper : public SegmentMapper
+class MetronomeMapper : public MappedEventBuffer
 {
     friend class SegmentMapperFactory;
 
-public:
+ public:
     virtual ~MetronomeMapper();
 
     InstrumentId getMetronomeInstrument();
@@ -44,8 +45,12 @@ public:
     // overrides from SegmentMapper
     virtual int getSegmentRepeatCount();
 
-protected:
-    MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped);
+    // Do channel-setup
+    virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                         RealTime start, bool firstOutput);
+
+ protected:
+    MetronomeMapper(RosegardenDocument *doc);
 
     virtual int calculateSize();
 
@@ -54,6 +59,7 @@ protected:
     // override from SegmentMapper
     virtual void dump();
 
+    
     //--------------- Data members ---------------------------------
     typedef std::pair<timeT, int> Tick;
     typedef std::vector<Tick> TickContainer;
@@ -63,6 +69,7 @@ protected:
     bool m_deleteMetronome;
     const MidiMetronome* m_metronome;
     RealTime m_tickDuration;
+    EternalChannelManager m_channelManager;
 };
 
 }

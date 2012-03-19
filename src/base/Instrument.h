@@ -97,9 +97,10 @@ protected:
     std::vector<AudioPluginInstance*> m_audioPlugins;
 };
 
-class Instrument : public XmlExportable, public PluginContainer
+class Instrument : public QObject, public XmlExportable, public PluginContainer
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::Instrument)
+    Q_OBJECT
+
 public:
     static const unsigned int SYNTH_PLUGIN_POSITION;
 
@@ -149,13 +150,25 @@ public:
     InstrumentType getInstrumentType() { return m_type; }
 
 
-    // ---------------- MIDI Controllers -----------------
-    //
-    void setMidiChannel(MidiByte mC) { m_channel = mC; }
-    MidiByte getMidiChannel() const { return m_channel; }
+    // ---------------- Fixed channels -----------------
+
+    void setFixedChannel(void);
+    // Release this instrument's fixed channel, if any.
+    void releaseFixedChannel(void);
+    bool hasFixedChannel(void) const { return m_fixed; }
 
     //void setMidiInputChannel(char ic) { m_input_channel = ic; }
     //char getMidiInputChannel() const { return m_input_channel; }
+
+    // ---------------- MIDI Controllers -----------------
+    //
+
+    void setNaturalChannel(MidiByte channelId)
+    { m_channel = channelId; }
+    
+    // Get the "natural" channel with regard to its device.  May not
+    // be the same channel instrument is playing on.
+    MidiByte getNaturalChannel() const { return m_channel; }
 
     void setMidiTranspose(MidiByte mT) { m_transpose = mT; }
     MidiByte getMidiTranspose() const { return m_transpose; }
@@ -172,19 +185,34 @@ public:
     void setVolume(MidiByte volume) { m_volume = volume; }
     MidiByte getVolume() const { return m_volume; }
 
-    void setProgram(const MidiProgram &program) { m_program = program; }
+    void setProgram(const MidiProgram &program) {
+        m_program = program;
+        emit changedChannelSetup();
+    }
     const MidiProgram &getProgram() const { return m_program; }
 
-    void setSendBankSelect(bool value) { m_sendBankSelect = value; }
+    void setSendBankSelect(bool value) {
+        m_sendBankSelect = value;
+        if (value) { emit changedChannelSetup(); }
+    }
     bool sendsBankSelect() const { return m_sendBankSelect; }
 
-    void setSendProgramChange(bool value) { m_sendProgramChange = value; }
+    void setSendProgramChange(bool value) {
+        m_sendProgramChange = value;
+        if (value) { emit changedChannelSetup(); }
+    }
     bool sendsProgramChange() const { return m_sendProgramChange; }
 
-    void setSendPan(bool value) { m_sendPan = value; }
+    void setSendPan(bool value) {
+        m_sendPan = value;
+        if (value) { emit changedChannelSetup(); }
+    }
     bool sendsPan() const { return m_sendPan; }
 
-    void setSendVolume(bool value) { m_sendVolume = value; }
+    void setSendVolume(bool value) {
+        m_sendVolume = value;
+        if (value) { emit changedChannelSetup(); }
+    }
     bool sendsVolume() const { return m_sendVolume; } 
 
     void setControllerValue(MidiByte controller, MidiByte value);
@@ -257,6 +285,25 @@ public:
     //
     void removeStaticController(MidiByte controller);
 
+    void sendWholeDeviceDestroyed(void)
+    { emit wholeDeviceDestroyed(); }
+
+ signals:
+    // Like QObject::destroyed, but implies that the whole device is
+    // being destroyed so we needn't bother freeing channels on it.
+    void wholeDeviceDestroyed(void);
+
+    // Emitted when we change how we set up the MIDI channel.
+    // Notifies ChannelManagers that use the instrument to refresh
+    // channel
+    void changedChannelSetup(void);
+
+    // Emitted when we lose/gain a fixed MIDI channel.  Notifies
+    // ChannelManagers that use the instrument to modify their channel
+    // allocation accordingly.
+    void channelBecomesFixed(void);
+    void channelBecomesUnfixed(void);
+
 private:
     InstrumentId    m_id;
     std::string     m_name;
@@ -271,6 +318,9 @@ private:
     MidiByte        m_transpose;
     MidiByte        m_pan;  // required by audio
     MidiByte        m_volume;
+
+    // Whether this instrument uses a fixed channel.
+    bool            m_fixed;
 
     // Used for Audio volume (dB value)
     //

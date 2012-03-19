@@ -17,6 +17,7 @@
 #include "base/Controllable.h"
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
@@ -27,8 +28,15 @@ const DeviceId Device::CONTROL_DEVICE = 10002;
 
 Device::~Device()
 {
+    SEQUENCER_DEBUG
+        << "~Device"
+        << endl;
     InstrumentList::iterator it = m_instruments.begin();
-    for (; it != m_instruments.end(); it++) delete (*it);
+    for (; it != m_instruments.end(); it++) {
+        (*it)->sendWholeDeviceDestroyed();
+        delete (*it);
+    }
+        
 }
 
 // Return a Controllable if we are a subtype that also inherits from
@@ -43,5 +51,11 @@ Device::getControllable(void)
     // Even if it's zero, return it now.
     return c;
 }
+
+// Base case: Device itself doesn't know AllocateChannels so gives NULL.
+// @author Tom Breton (Tehom)
+AllocateChannels *
+Device::getAllocator(void)
+{ return 0; }
 
 }

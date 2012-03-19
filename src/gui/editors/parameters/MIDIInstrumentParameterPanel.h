@@ -18,6 +18,7 @@
 #ifndef _RG_MIDIINSTRUMENTPARAMETERPANEL_H_
 #define _RG_MIDIINSTRUMENTPARAMETERPANEL_H_
 
+#include "base/ChannelInterval.h"
 #include "base/MidiProgram.h"
 #include "base/MidiDevice.h"
 #include "InstrumentParameterPanel.h"
@@ -31,7 +32,8 @@ class QGridLayout;
 class QFrame;
 class QCheckBox;
 class QComboBox;
-
+class QGroupBox;
+class QSpinBox;
 
 namespace Rosegarden
 {
@@ -67,13 +69,14 @@ public slots:
     void slotSelectVariation(int index);
 
     void slotControllerChanged(int index);
+    void slotSetUseChannel(int index);
 
     void slotTogglePercussion(bool value);
     void slotToggleProgramChange(bool value);
     void slotToggleBank(bool value);
     void slotToggleVariation(bool value);
     void slotToggleChangeListOnProgChange(bool val);
-
+    
 protected:
 
     // fill (or hide) bank combo based on whether the instrument is percussion
@@ -85,8 +88,8 @@ protected:
     // fill (or hide) variation combo based on current bank and program
     void populateVariationList();
 
-    // send the bank and program events relevant to this instrument
-    void sendBankAndProgram();
+    // Fill the fixed channel list controls
+    void populateChannelList();
 
     // get value of a specific rotary (keyed by controller value)
     int getValueFromRotary(int rotary);
@@ -107,6 +110,8 @@ protected:
     QCheckBox          *m_variationCheckBox;
     QCheckBox          *m_programCheckBox;
     QCheckBox          *m_evalMidiPrgChgCheckBox;
+
+    QComboBox          *m_channelUsed;
 
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;

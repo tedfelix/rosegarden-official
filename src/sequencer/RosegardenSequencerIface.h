@@ -24,7 +24,7 @@
 #include "sound/MappedDevice.h"
 #include "sound/MappedStudio.h"
 #include "sound/MappedCommon.h"
-#include "sound/MappedSegment.h"
+#include "sound/MappedBufMetaIterator.h"
 
 namespace Rosegarden {
 
@@ -85,7 +85,6 @@ public:
     // Any mods on the GUI are sent only through this method.
     //
     virtual void setMappedInstrument(int type,
-                                     unsigned char channel,
                                      unsigned int id) = 0;
 
     // The proper implementation
@@ -309,13 +308,13 @@ public:
     virtual void dumpFirstSegment() = 0;
 
     /// A segment has been modified
-    virtual void segmentModified(MappedSegment *) = 0;
+    virtual void segmentModified(MappedEventBuffer *) = 0;
 
     /// Add a segment
-    virtual void segmentAdded(MappedSegment *) = 0;
+    virtual void segmentAdded(MappedEventBuffer *) = 0;
 
     /// Delete a segment
-    virtual void segmentAboutToBeDeleted(MappedSegment *) = 0;
+    virtual void segmentAboutToBeDeleted(MappedEventBuffer *) = 0;
 
     /// Close all mapped segments
     virtual void compositionAboutToBeDeleted() = 0;

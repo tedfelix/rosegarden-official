@@ -23,9 +23,9 @@
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMapper.h"
+#include "gui/seqmanager/MappedEventBuffer.h"
+#include "gui/seqmanager/SegmentMapper.h"
 #include "sound/MappedEvent.h"
-#include "sound/MappedSegment.h"
 #include <QString>
 
 
@@ -33,9 +33,8 @@ namespace Rosegarden
 {
 
 AudioSegmentMapper::AudioSegmentMapper(RosegardenDocument *doc,
-                                       Segment *s,
-                                       MappedSegment *mapped) :
-    SegmentMapper(doc, s, mapped)
+                                       Segment *s) :
+    SegmentMapper(doc, s)
 {
 }
 
@@ -108,11 +107,14 @@ AudioSegmentMapper::dump()
             //                      << "NO AUTOFADE SET ON SEGMENT" << std::endl;
         }
 
-        m_mapped->getBuffer()[index] = e;
+        getBuffer()[index] = e;
         ++index;
     }
 
-    m_mapped->setBufferFill(index);
+    setBufferFill(index);
+    // Instead of calling setStartEnd, we let m_start and m_end remain
+    // at their defaults because metaiterator does nothing special for
+    // audio segments.
 }
 
 int

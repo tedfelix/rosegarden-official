@@ -346,11 +346,11 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     RG_DEBUG << "AudioInstrumentParameterPanel[" << this << "]::setupForInstrument(" << instrument << ")" << endl;
 
-    m_selectedInstrument = instrument;
-
     QString l = QString::fromStdString(instrument->getAlias());
     if (l.isEmpty()) l = instrument->getLocalizedPresentationName();
-    m_instrumentLabel->setText(l);
+
+    setSelectedInstrument(instrument, l);
+
     m_aliasButton->setInstrument(instrument);
 
     m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());

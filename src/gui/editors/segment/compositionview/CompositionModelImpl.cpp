@@ -72,10 +72,10 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
 
     setTrackHeights();
 
-    Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    segmentcontainer& segments = m_composition.getSegments();
+    segmentcontainer::iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
+    for (segmentcontainer::iterator i = segments.begin();
             i != segEnd; ++i) {
 
         (*i)->addObserver(this);
@@ -90,10 +90,10 @@ CompositionModelImpl::~CompositionModelImpl()
 
         m_composition.removeObserver(this);
 
-        Composition::segmentcontainer& segments = m_composition.getSegments();
-        Composition::segmentcontainer::iterator segEnd = segments.end();
+        segmentcontainer& segments = m_composition.getSegments();
+        segmentcontainer::iterator segEnd = segments.end();
 
-        for (Composition::segmentcontainer::iterator i = segments.begin();
+        for (segmentcontainer::iterator i = segments.begin();
                 i != segEnd; ++i) {
 
             (*i)->removeObserver(this);
@@ -331,10 +331,10 @@ void CompositionModelImpl::clearPreviewCache()
         i->second->cancel();
     }
 
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::const_iterator segEnd = segments.end();
+    const segmentcontainer& segments = m_composition.getSegments();
+    segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+    for (segmentcontainer::const_iterator i = segments.begin();
             i != segEnd; ++i) {
 
         if ((*i)->getType() == Segment::Audio) {
@@ -498,10 +498,10 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
 void CompositionModelImpl::slotInstrumentParametersChanged(InstrumentId id)
 {
     RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()";
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::const_iterator segEnd = segments.end();
+    const segmentcontainer& segments = m_composition.getSegments();
+    segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+    for (segmentcontainer::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
         const Segment* s = *i;
@@ -663,12 +663,12 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     m_previousTmpSelectedSegments = m_tmpSelectedSegments;
     m_tmpSelectedSegments.clear();
 
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::const_iterator segEnd = segments.end();
+    const segmentcontainer& segments = m_composition.getSegments();
+    segmentcontainer::const_iterator segEnd = segments.end();
 
     QRect updateRect = m_selectionRect;
 
-    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+    for (segmentcontainer::const_iterator i = segments.begin();
          i != segEnd; ++i) {
         
         const Segment* s = *i;
@@ -696,10 +696,10 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
 
 void CompositionModelImpl::finalizeSelectionRect()
 {
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::const_iterator segEnd = segments.end();
+    const segmentcontainer& segments = m_composition.getSegments();
+    segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+    for (segmentcontainer::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
         const Segment* s = *i;
@@ -788,9 +788,9 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
 
     itemcontainer res;
 
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    const segmentcontainer& segments = m_composition.getSegments();
 
-    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+    for (segmentcontainer::const_iterator i = segments.begin();
          i != segments.end(); ++i) {
 
         const Segment* s = *i;
@@ -1012,7 +1012,7 @@ bool CompositionModelImpl::setTrackHeights(Segment *s)
 
     if (heightsChanged) {
 //        RG_DEBUG << "CompositionModelImpl::setTrackHeights: heights have changed";
-        for (Composition::segmentcontainer::iterator i = m_composition.begin();
+        for (segmentcontainer::iterator i = m_composition.begin();
              i != m_composition.end(); ++i) {
             computeSegmentRect(**i);
         }
@@ -1179,10 +1179,10 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
     //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
 
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::const_iterator segEnd = segments.end();
+    const segmentcontainer& segments = m_composition.getSegments();
+    segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+    for (segmentcontainer::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
         //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";

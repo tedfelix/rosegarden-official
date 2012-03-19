@@ -237,8 +237,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_haveControls(false),
     m_cancelled(false),
     m_skipAllAudio(false),
-    m_hasActiveAudio(false),
-    m_remappedChannels(false)
+    m_hasActiveAudio(false)
 
 {}
 
@@ -426,7 +425,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "rosegarden-data") {
 
         // FILE FORMAT VERSIONING -- see comments in
-        // rosegardenguidoc.cpp.  We only care about major and minor
+        // RosegardenDocument.cpp.  We only care about major and minor
         // here, not point.
 
         QString version = atts.value("version");
@@ -1985,22 +1984,27 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // Preserve this.
             MidiByte channel = (MidiByte)atts.value("channel").toInt();
 
-            // If it's a MIDI instrument, ignore the channel specified in the
-            // file.  Instead, use getPresentationNumber to return the
-            // instrument's user-visible number (eg. 8 from "General MIDI Device #8")
-            // and set the channel to that ( -1 ) instead, thus enforcing a 1:1
-            // correspondence between MIDI channel and MIDI instrument number,
-            // and obviating the need for a channel display or a channel change
-            // control in the IPB.
-            MidiByte lastChannel = channel;
-            if (type == Instrument::Midi) channel = m_instrument->getPresentationNumber() - 1;
+            m_instrument->setNaturalChannel(channel);
 
-            if (lastChannel != channel) {
-                std::cout << "lastChannel: " << (unsigned int)lastChannel << " != channel: " << (unsigned int)channel << std::endl;
-                m_remappedChannels = true;
+            if (type == Instrument::Midi)
+                {
+                    QString valueText = atts.value("fixed");
+                    // Despite appearances this is not comparing
+                    // addresses, it tests for empty QString.
+                    if ("" == valueText) {
+                        // Old file with no "fixed" attribute, so use
+                        // sensible defaults.
+                        if (MidiDevice::isPercussionNumber(channel)) {
+                            m_instrument->setFixedChannel();
+                        }
+                    } else if (valueText.toLower() == "true") {
+                        // Fixed attribute is set.
+                        m_instrument->setFixedChannel();
+                    } 
+                    // Otherwise there's a "fixed" attribute that's
+                    // "false" (or at least non-true) so we let it
+                    // default to auto.
             }
-
-            m_instrument->setMidiChannel(channel);
         }
 
     } else if (lcName == "buss") {
@@ -2078,10 +2082,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_errorString = "Found alias outside Instrument";
             return false;
         }
-
-        QString alias = atts.value("value");
-        m_instrument->setAlias(alias.toStdString());
-
+        if (m_instrument) {
+            QString alias = atts.value("value");
+            m_instrument->setAlias(alias.toStdString());
+        }
+            
     } else if (lcName == "audioinput") {
 
         if (m_section != InInstrument) {
@@ -2578,7 +2583,9 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 
     RosegardenSequencer::getInstance()->setPlausibleConnection
         (md->getId(), connection);
-    // connection should be sync'd later in the natural course of things
+    // We sync connection now, otherwise we'll confuse
+    // MidiDevice::setConnection.
+    md->setConnection(qstrtostr(connection));
 }
 
 void

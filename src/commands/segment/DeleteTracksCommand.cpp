@@ -58,7 +58,7 @@ void DeleteTracksCommand::execute()
     m_oldTracks.clear();
 
     // Aliases for readability
-    const Composition::segmentcontainer &segments =
+    const segmentcontainer &segments =
         m_composition->getSegments();
     Composition::trackcontainer &tracks = m_composition->getTracks();
 
@@ -71,7 +71,7 @@ void DeleteTracksCommand::execute()
 
         if (track) {
             // For each segment in the composition.
-            for (Composition::segmentcontainer::const_iterator it =
+            for (segmentcontainer::const_iterator it =
                      segments.begin();
                  it != segments.end(); ++it) {
                 // If this segment is on the track we are deleting

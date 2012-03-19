@@ -33,10 +33,8 @@ class TimeSigSegmentMapper : public SpecialSegmentMapper
 public:
 
 protected:
-    TimeSigSegmentMapper(RosegardenDocument *doc,
-                         MappedSegment *mapped) :
-	SpecialSegmentMapper(doc, mapped) {
-    }
+    TimeSigSegmentMapper(RosegardenDocument *doc) :
+	SpecialSegmentMapper(doc) {}
 
     // overrides from SegmentMapper
     virtual int calculateSize();

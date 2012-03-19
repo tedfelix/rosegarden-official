@@ -145,8 +145,8 @@ FitToBeatsCommand::initialise(Segment *s)
             // Calculate what tempoT will get us to the right real
             // time.  For now, we use unramped tempi.
             tempoT rampTo = -1;
-            tempoT tempo = beatTimeRatioToTempo(realTimeDelta,
-                                               beatTime, rampTo);
+            tempoT tempo = Composition::timeRatioToTempo(realTimeDelta,
+                                                         beatTime, rampTo);
             scratchComposition.addTempoAtTime(timeNow, tempo, rampTo);
 
             // Step
@@ -239,39 +239,6 @@ FitToBeatsCommand::initialise(Segment *s)
     }
 
     // We do the actual swapping of old <-> new in (un)execute.
-}
-
-// @param A RealTime corresponding to one beat,
-// @returns corresponding beats per minute.
-// @author Tom Breton
-// @remarks Might fit better in RealTime.h
-double
-FitToBeatsCommand::beatRealTimeToBpm(RealTime &realTime)
-{
-    // Same as ONE_BILLION in RealTime.cpp
-    const double nsecsPerSec = 1000000000;
-    const double secondsPerBeat =
-        double(realTime.sec) + double(realTime.nsec) / nsecsPerSec;
-    const double beatsPerSecond = 1.0 / secondsPerBeat;
-    const double beatsPerMinute = beatsPerSecond * 60;
-    return beatsPerMinute;
-}
-
-// @param A RealTime corresponding to one beat.    
-// @param The same beat time in TimeT
-// @param A target tempo to ramp to.  For now, this parameter is
-// ignored and ramping is not supported.
-// @returns A tempo that effects this relationship.  
-// @author Tom Breton (Tehom)
-tempoT
-FitToBeatsCommand::beatTimeRatioToTempo(RealTime &realTime,
-                                       timeT beatTime, tempoT)
-{
-    static const timeT cdur = Note(Note::Crotchet).getDuration();
-    const double beatsPerMinute = beatRealTimeToBpm(realTime);
-    const double qpm = beatsPerMinute * double(beatTime) / double(cdur);
-    tempoT averageTempo = Composition::getTempoForQpm(qpm);
-    return averageTempo;
 }
 
 // @param A beat segment

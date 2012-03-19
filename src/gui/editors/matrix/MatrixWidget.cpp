@@ -478,6 +478,11 @@ MatrixWidget::generatePitchRuler()
     m_instrument = m_document->getStudio().
                             getInstrumentById(track->getInstrument());
     if (m_instrument) {
+
+        // Make instrument tell us if it gets destroyed.
+        connect(m_instrument, SIGNAL(destroyed()),
+                this, SLOT(slotInstrumentGone()));
+
         mapping = m_instrument->getKeyMapping();
         if (mapping) {
             RG_DEBUG << "MatrixView: Instrument has key mapping: "
@@ -1362,18 +1367,12 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 
     Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
-    // check for null instrument
-    //
-    if (ins == 0) return;
-
-    MappedEvent mE(ins->getId(),
-                   MappedEvent::MidiNote,
-                   evPitch + current->getSegment().getTranspose(),
-                   MidiMaxValue,
-                   RealTime::zeroTime,
-                   RealTime::zeroTime,
-                   RealTime::zeroTime);
-    StudioControl::sendMappedEvent(mE);
+    StudioControl::
+        playPreviewNote(ins,
+                        evPitch + current->getSegment().getTranspose(),
+                        MidiMaxValue,
+                        0,
+                        false);
 }
 
 void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
@@ -1429,18 +1428,12 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 
     Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
-    // check for null instrument
-    //
-    if (ins == 0) return;
-
-    MappedEvent mE(ins->getId(),
-                   MappedEvent::MidiNote,
-                   evPitch + current->getSegment().getTranspose(),
-                   MidiMaxValue,
-                   RealTime::zeroTime,
-                   RealTime::zeroTime,
-                   RealTime::zeroTime);
-    StudioControl::sendMappedEvent(mE);
+    StudioControl::
+        playPreviewNote(ins,
+                        evPitch + current->getSegment().getTranspose(),
+                        MidiMaxValue,
+                        0,
+                        false);
 }
 
 void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
@@ -1460,21 +1453,12 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
 
     Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
-    // check for null instrument
-    //
-    if (ins == 0) return;
-
-    evPitch = evPitch + current->getSegment().getTranspose();
-    if (evPitch < 0 || evPitch > 127) return;
-
-    Rosegarden::MappedEvent mE(ins->getId(),
-                               Rosegarden::MappedEvent::MidiNote,
-                               evPitch,
-                               0,
-                               Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime::zeroTime);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
+    StudioControl::
+        playPreviewNote(ins,
+                        evPitch + current->getSegment().getTranspose(),
+                        0,
+                        0,
+                        false);
 }
 
 void
@@ -1499,7 +1483,11 @@ MatrixWidget::showInitialPointer()
         m_hpanner->slotShowPositionPointer(sceneX);
     }
 }
-
+/// Instrument is destroyed
+void
+MatrixWidget::
+slotInstrumentGone(void)
+{ m_instrument = 0; }
 
 }
 

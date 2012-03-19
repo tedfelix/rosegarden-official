@@ -62,8 +62,6 @@ class ExpandFigurationCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ExpandFigurationCommand)
 
 public:
-    typedef Composition::segmentcontainer segmentcontainer;
-    
     typedef std::pair<RelativeEvent *, bool> RelationSeen;
     typedef std::map <RelativeEvent *, bool> RelationSeenMap;
     typedef std::set <RelativeEvent *>       UnsolvedNote;

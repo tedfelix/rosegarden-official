@@ -21,12 +21,14 @@
 #include "base/Segment.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Debug.h"
-#include "MetronomeMapper.h"
-#include "SegmentMapper.h"
-#include "AudioSegmentMapper.h"
-#include "TempoSegmentMapper.h"
-#include "TimeSigSegmentMapper.h"
-#include "sound/MappedSegment.h"
+#include "gui/seqmanager/AudioSegmentMapper.h"
+#include "gui/seqmanager/InternalSegmentMapper.h"
+#include "gui/seqmanager/MarkerMapper.h"
+#include "gui/seqmanager/MappedEventBuffer.h"
+#include "gui/seqmanager/MetronomeMapper.h"
+#include "gui/seqmanager/SegmentMapper.h"
+#include "gui/seqmanager/TempoSegmentMapper.h"
+#include "gui/seqmanager/TimeSigSegmentMapper.h"
 #include <QString>
 
 
@@ -44,14 +46,12 @@ SegmentMapperFactory::makeMapperForSegment(RosegardenDocument *doc,
         return 0;
     }
     
-    MappedSegment *mapped = new MappedSegment;
-
     switch (segment->getType()) {
     case Segment::Internal :
-        mapper = new SegmentMapper(doc, segment, mapped);
+        mapper = new InternalSegmentMapper(doc, segment);
         break;
     case Segment::Audio :
-        mapper = new AudioSegmentMapper(doc, segment, mapped);
+        mapper = new AudioSegmentMapper(doc, segment);
         break;
     default:
         SEQMAN_DEBUG << "SegmentMapperFactory::makeMapperForSegment("
@@ -60,9 +60,8 @@ SegmentMapperFactory::makeMapperForSegment(RosegardenDocument *doc,
                      << segment->getType() << endl;
         mapper = 0;
     }
-    
-    if (mapper) mapper->init();
-    else delete mapped;
+
+    if (mapper) { mapper->init(); }
 
     return mapper;
 }
@@ -70,8 +69,7 @@ SegmentMapperFactory::makeMapperForSegment(RosegardenDocument *doc,
 MetronomeMapper *
 SegmentMapperFactory::makeMetronome(RosegardenDocument *doc)
 {
-    MappedSegment *mapped = new MappedSegment;
-    MetronomeMapper *mapper = new MetronomeMapper(doc, mapped);
+    MetronomeMapper *mapper = new MetronomeMapper(doc);
     mapper->init();
     return mapper;
 }
@@ -79,8 +77,7 @@ SegmentMapperFactory::makeMetronome(RosegardenDocument *doc)
 TimeSigSegmentMapper *
 SegmentMapperFactory::makeTimeSig(RosegardenDocument *doc)
 {
-    MappedSegment *mapped = new MappedSegment;
-    TimeSigSegmentMapper *mapper = new TimeSigSegmentMapper(doc, mapped);
+    TimeSigSegmentMapper *mapper = new TimeSigSegmentMapper(doc);
     mapper->init();
     return mapper;
 }
@@ -88,10 +85,17 @@ SegmentMapperFactory::makeTimeSig(RosegardenDocument *doc)
 TempoSegmentMapper *
 SegmentMapperFactory::makeTempo(RosegardenDocument *doc)
 {
-    MappedSegment *mapped = new MappedSegment;
-    TempoSegmentMapper* mapper = new TempoSegmentMapper(doc, mapped);
+    TempoSegmentMapper* mapper = new TempoSegmentMapper(doc);
     mapper->init();
     return mapper;
 }
-    
+
+MarkerMapper *
+SegmentMapperFactory::makeMarker(RosegardenDocument *doc)
+{
+    MarkerMapper* mapper = new MarkerMapper(doc);
+    mapper->init();
+    return mapper;
+}
+
 }

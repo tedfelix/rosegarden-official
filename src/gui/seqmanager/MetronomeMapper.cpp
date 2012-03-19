@@ -23,6 +23,7 @@
 #include "sound/Midi.h"
 #include <QDir>
 #include "misc/ConfigGroups.h"
+#include "base/AllocateChannels.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
@@ -31,9 +32,9 @@
 #include "base/Studio.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMapper.h"
+#include "gui/seqmanager/MappedEventBuffer.h"
+#include "gui/seqmanager/SegmentMapper.h"
 #include "sound/MappedEvent.h"
-#include "sound/MappedSegment.h"
 #include <QSettings>
 #include <QString>
 #include <algorithm>
@@ -42,10 +43,11 @@
 namespace Rosegarden
 {
 
-MetronomeMapper::MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped) :
-    SegmentMapper(doc, 0, mapped),
+MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
+    MappedEventBuffer(doc),
     m_metronome(0),  // no metronome to begin with
-    m_tickDuration(0, 100000000)
+    m_tickDuration(0, 100000000),
+    m_channelManager(0) // We will set this below after we find instrument.
 {
     SEQMAN_DEBUG << "MetronomeMapper ctor : " << this << endl;
 
@@ -63,7 +65,13 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped)
         m_metronome = new MidiMetronome(SystemInstrumentBase);
         SEQMAN_DEBUG << "MetronomeMapper: no metronome for device " << device << endl;
     }
-
+    {
+        // As we promised, set instrument
+        InstrumentId id = m_metronome->getInstrument();
+        m_channelManager.m_instrument =
+            doc->getStudio().getInstrumentById(id);
+    }
+        
     Composition& c = m_doc->getComposition();
     timeT t = c.getBarStart( -20); // somewhat arbitrary
     int depth = m_metronome->getDepth();
@@ -119,7 +127,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped)
         SEQMAN_DEBUG << "MetronomeMapper : WARNING no ticks generated\n";
     }
 
-    mapped->setMetronome(true);
+    setMetronome(true);
 
     // Done by init()
 
@@ -195,11 +203,13 @@ void MetronomeMapper::dump()
                             RealTime::zeroTime);
         }
 
-        m_mapped->getBuffer()[index] = e;
+        getBuffer()[index] = e;
         ++index;
     }
 
-    m_mapped->setBufferFill(index);
+    setBufferFill(index);
+    m_channelManager.reallocate();
+    m_channelManager.setDirty();
 
     SEQMAN_DEBUG << "MetronomeMapper::dump: - "
                  << "Total events written = " << index
@@ -249,6 +259,15 @@ int
 MetronomeMapper::getSegmentRepeatCount()
 {
     return 1;
+}
+
+void
+MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                         RealTime start, bool firstOutput)
+{
+    ChannelManager::MapperFunctionalitySimple callback;
+    m_channelManager.doInsert(inserter, evt, start, &callback,
+                              firstOutput, NO_TRACK);
 }
 
 }

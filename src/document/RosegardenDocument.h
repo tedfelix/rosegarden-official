@@ -417,11 +417,6 @@ public:
     void clearAllPlugins();
 
     /**
-     * Initialise the MIDI controllers after we've loaded a file
-     */
-    void initialiseControllers();
-
-    /**
      * Clear the studio at the sequencer
      */
     void clearStudio();

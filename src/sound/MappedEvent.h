@@ -57,8 +57,9 @@ public:
     typedef unsigned long blockid;
 
     static DataBlockRepository* getInstance();
-    static std::string getDataBlockForEvent(MappedEvent*);
-    static void setDataBlockForEvent(MappedEvent*, const std::string&);
+    static std::string getDataBlockForEvent(const MappedEvent*);
+    static void setDataBlockForEvent(MappedEvent*, const std::string&,
+                                     bool extend = false);
     /**
      * Clear all block files
      */
@@ -71,7 +72,6 @@ protected:
     std::string getDataBlock(blockid);
 
     void addDataByteForEvent(MidiByte byte, MappedEvent*);
-    void addDataStringForEvent(const std::string&, MappedEvent*);
 
 
     blockid registerDataBlock(const std::string&);
@@ -149,11 +149,15 @@ public:
         // Auto-connect sync outputs
         SystemMIDISyncAuto       = 1 << 26,
         // File format used for audio recording (data1 is 0=PCM,1=float)
-        SystemAudioFileFormat    = 1 << 27
+        SystemAudioFileFormat    = 1 << 27,
 
         // An alsa sequencer port-connection was established or removed
         //AlsaSeqPortConnectionChanged = 1 << 28   // not required, handled with SystemUpdateInstruments event
-        
+
+        // Marker (for MIDI export, not sound)
+        Marker                   = 1 << 28,
+        // Text (for MIDI export, not sound)
+        Text                     = 1 << 29
         
     } MappedEventType;
 
@@ -196,7 +200,7 @@ public:
 
     MappedEvent(): m_trackId((int)NO_TRACK),
                    m_instrument(0),
-                   m_type(MidiNote),
+                   m_type(InvalidMappedEvent),
                    m_data1(0),
                    m_data2(0),
                    m_eventTime(0, 0),
@@ -375,6 +379,7 @@ public:
         if (initialise) *this = MappedEvent();
     }
 
+    bool isValid(void) const { return m_type != InvalidMappedEvent; }
     // Event time
     //
     void setEventTime(const RealTime &a) { m_eventTime = a; }
@@ -508,9 +513,9 @@ private:
     RealTime  m_fadeInTime;
     RealTime  m_fadeOutTime;
 
-    // input event original data,
-    // stored as it was recorded
-    //
+    // For input events, original data, stored as it was recorded.
+    // For output events, channel to play on.  m_recordedDevice is not
+    // used for output.
     unsigned int          m_recordedChannel;
     unsigned int          m_recordedDevice;
 };

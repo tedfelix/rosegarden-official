@@ -19,6 +19,7 @@
 
 #include "RealTime.h"
 #include "sys/time.h"
+#include <limits>
 
 namespace Rosegarden {
 
@@ -203,6 +204,24 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
     return rt;
 }
 
+// @param A RealTime corresponding to one beat,
+// @returns corresponding beats per minute.
+// @author Tom Breton
+double
+RealTime::toPerMinute(void)
+{
+    const double nsecsPerSec = ONE_BILLION;
+    const double secondsPerBeat = double(sec) + double(nsec) / nsecsPerSec;
+    const double beatsPerSecond = 1.0 / secondsPerBeat;
+    const double beatsPerMinute = beatsPerSecond * 60;
+    return beatsPerMinute;
+}
+
+const RealTime RealTime::beforeZeroTime(-1,0);
 const RealTime RealTime::zeroTime(0,0);
+const RealTime
+RealTime::beforeMaxTime(std::numeric_limits<int>::max(),0);
+const RealTime
+RealTime::maxTime(std::numeric_limits<int>::max(),ONE_BILLION-1);
 
 }

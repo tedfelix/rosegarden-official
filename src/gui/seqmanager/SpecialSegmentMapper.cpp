@@ -18,20 +18,11 @@
 
 #include "SpecialSegmentMapper.h"
 
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/TriggerSegment.h"
-#include "document/RosegardenDocument.h"
-#include "SegmentMapper.h"
-#include <QString>
-
-
 namespace Rosegarden
 {
 
-SpecialSegmentMapper::SpecialSegmentMapper(RosegardenDocument *doc,
-                                           MappedSegment *mapped) :
-    SegmentMapper(doc, 0, mapped)
+SpecialSegmentMapper::SpecialSegmentMapper(RosegardenDocument *doc) :
+    MappedEventBuffer(doc)
 {
 }
 

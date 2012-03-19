@@ -33,7 +33,8 @@ typedef unsigned int DeviceId;
 class Instrument;
 typedef std::vector<Instrument *> InstrumentList;
 class Controllable;
- 
+class AllocateChannels;
+    
 class Device : public XmlExportable
 {
 public:
@@ -58,8 +59,14 @@ public:
      * Return a Controllable if we are a subtype that also inherits
      * from Controllable, otherwise return NULL
      **/
-    Controllable * getControllable(void);
-    
+    Controllable *getControllable(void);
+
+    /**
+     * Return our AllocateChannels if we are a subtype that tracks
+     * free channels, otherwise return NULL
+     **/
+    virtual AllocateChannels *getAllocator(void);
+
     void setType(DeviceType type) { m_type = type; }
     DeviceType getType() const { return m_type; }
 
@@ -79,16 +86,21 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
-    // It is not possible to query the connection from the Device.
-    // This is because the Device doesn't really know what it's
-    // connected to -- it does not get updated when the connection
-    // changes in the sequencer.  This function only exists so that we
-    // can let the Device know its proper connection prior to
-    // e.g. writing itself out as XML (because we want to include the
-    // connection in the XML).
-    //
-    void setConnection(std::string connection) { m_connection = connection; }
+    // Historically Device didn't always know what it was connected to.
+    // Now it gets updated when the connection changes in the
+    // sequencer.
+    void setConnection(std::string connection) {
+        // compare returns 0 if strings match.
+        if (connection.compare(m_connection)) {
+            m_connection = connection;
+            refreshForConnection();
+        }
+    }
 
+    // Refresh this device for a possibly new connection.  
+    // Non-trivial only in MidiDevice.
+    virtual void refreshForConnection(void) = 0;
+    
 protected:
     virtual void addInstrument(Instrument *) = 0;
     virtual void renameInstruments() = 0;

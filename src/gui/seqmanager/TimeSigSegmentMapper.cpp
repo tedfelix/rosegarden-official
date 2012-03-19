@@ -18,16 +18,10 @@
 
 #include "TimeSigSegmentMapper.h"
 
-#include "base/Event.h"
 #include "base/RealTime.h"
-#include "base/Segment.h"
-#include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMapper.h"
+#include "gui/seqmanager/SpecialSegmentMapper.h"
 #include "sound/MappedEvent.h"
-#include "sound/MappedSegment.h"
-#include "SpecialSegmentMapper.h"
-#include <QString>
 
 
 namespace Rosegarden
@@ -54,11 +48,11 @@ TimeSigSegmentMapper::dump()
         e.setData1(timeSigChange.second.getNumerator());
         e.setData2(timeSigChange.second.getDenominator());
 
-        m_mapped->getBuffer()[index] = e;
+        getBuffer()[index] = e;
         ++index;
     }
 
-    m_mapped->setBufferFill(index);
+    setBufferFill(index);
 }
 
 int

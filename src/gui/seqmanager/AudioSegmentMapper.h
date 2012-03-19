@@ -31,7 +31,7 @@ class AudioSegmentMapper : public SegmentMapper
     friend class SegmentMapperFactory;
 
 protected:
-    AudioSegmentMapper(RosegardenDocument *, Segment *, MappedSegment *mapped);
+    AudioSegmentMapper(RosegardenDocument *, Segment *);
 
     virtual int calculateSize();
 

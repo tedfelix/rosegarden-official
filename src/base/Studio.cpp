@@ -25,8 +25,13 @@
 #include "misc/Strings.h"
 #include "Track.h"
 #include "Composition.h"
+#include "sequencer/RosegardenSequencer.h"
 
 #include <sstream>
+#include <string>
+
+#include <QString>
+
 
 using std::cerr;
 using std::endl;
@@ -119,6 +124,20 @@ Studio::removeDevice(DeviceId id)
 	}
     }
 }
+
+void
+Studio::
+resyncDeviceConnections(void)
+{
+    // Sync all the device connections
+    DeviceList *devices = getDevices();
+    for (uint i = 0; i < devices->size(); ++i) {
+        DeviceId id = (*devices)[i]->getId();
+        QString connection = RosegardenSequencer::getInstance()->getConnection(id);
+        (*devices)[i]->setConnection(qstrtostr(connection));
+    }
+}
+
 
 DeviceId
 Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
@@ -553,8 +572,9 @@ Studio::unassignAllInstruments()
                 {
                     (*iit)->setSendBankSelect(false);
                     (*iit)->setSendProgramChange(false);
-                    (*iit)->setMidiChannel(channel);
+                    (*iit)->setNaturalChannel(channel);
                     channel = ( channel + 1 ) % 16;
+                    (*iit)->releaseFixedChannel();
 
                     (*iit)->setSendPan(false);
                     (*iit)->setSendVolume(false);

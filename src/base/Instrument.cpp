@@ -16,6 +16,7 @@
 #include "Instrument.h"
 #include "sound/Midi.h"
 #include "MidiDevice.h"
+#include "base/AllocateChannels.h"
 #include "base/AudioPluginInstance.h"
 #include "base/AudioLevel.h"
 
@@ -128,6 +129,7 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
+    m_fixed(false),
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
@@ -175,6 +177,7 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
+    m_fixed(false), // However, this ctor isn't used for MIDI.
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
@@ -229,18 +232,20 @@ Instrument::Instrument(InstrumentId id,
 }
 
 Instrument::Instrument(const Instrument &ins):
+    QObject(),
     XmlExportable(),
     PluginContainer(ins.getType() == Audio || ins.getType() == SoftSynth),
     m_id(ins.getId()),
     m_name(ins.getName()),
     m_alias(ins.getAlias()),
     m_type(ins.getType()),
-    m_channel(ins.getMidiChannel()),
+    m_channel(ins.getNaturalChannel()),
     //m_input_channel(ins.getMidiInputChannel()),
     m_program(ins.getProgram()),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
     m_volume(ins.getVolume()),
+    m_fixed(ins.m_fixed),
     m_level(ins.getLevel()),
     m_recordLevel(ins.getRecordLevel()),
     m_device(ins.getDevice()),
@@ -281,12 +286,13 @@ Instrument::operator=(const Instrument &ins)
     m_name = ins.getName();
     m_alias = ins.getAlias();
     m_type = ins.getType();
-    m_channel = ins.getMidiChannel();
+    m_channel = ins.getNaturalChannel();
     //m_input_channel = ins.getMidiInputChannel();
     m_program = ins.getProgram();
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
     m_volume = ins.getVolume();
+    m_fixed  = false;
     m_level = ins.getLevel();
     m_recordLevel = ins.getRecordLevel();
     m_device = ins.getDevice();
@@ -365,7 +371,7 @@ Instrument::getAlias() const
 void
 Instrument::setProgramChange(MidiByte program)
 {
-    m_program = MidiProgram(m_program.getBank(), program);
+    setProgram(MidiProgram(m_program.getBank(), program));
 }
 
 MidiByte
@@ -377,10 +383,10 @@ Instrument::getProgramChange() const
 void
 Instrument::setMSB(MidiByte msb)
 {
-    m_program = MidiProgram(MidiBank(m_program.getBank().isPercussion(),
-				     msb,
-				     m_program.getBank().getLSB()),
-			    m_program.getProgram());
+    setProgram(MidiProgram(MidiBank(m_program.getBank().isPercussion(),
+                                    msb,
+                                    m_program.getBank().getLSB()),
+                           m_program.getProgram()));
 }
 
 MidiByte
@@ -392,10 +398,10 @@ Instrument::getMSB() const
 void
 Instrument::setLSB(MidiByte lsb)
 {
-    m_program = MidiProgram(MidiBank(m_program.getBank().isPercussion(),
-				     m_program.getBank().getMSB(),
-				     lsb),
-			    m_program.getProgram());
+    setProgram(MidiProgram(MidiBank(m_program.getBank().isPercussion(),
+                                    m_program.getBank().getMSB(),
+                                    lsb),
+                           m_program.getProgram()));
 }
 
 MidiByte
@@ -407,10 +413,10 @@ Instrument::getLSB() const
 void
 Instrument::setPercussion(bool percussion)
 {
-    m_program = MidiProgram(MidiBank(percussion,
-				     m_program.getBank().getMSB(),
-				     m_program.getBank().getLSB()),
-			    m_program.getProgram());
+    setProgram(MidiProgram(MidiBank(percussion,
+                                    m_program.getBank().getMSB(),
+                                    m_program.getBank().getLSB()),
+                           m_program.getProgram()));
 }
 
 bool
@@ -469,6 +475,7 @@ Instrument::toXmlString()
 
     instrument << "        <instrument id=\"" << m_id;
     instrument << "\" channel=\"" << (int)m_channel;
+    instrument << "\" fixed=\""   << (m_fixed ? "true" : "false");
     instrument << "\" type=\"";
 
     if (m_type == Midi)
@@ -582,11 +589,14 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
         if (it->first == controller)
         {
             it->second = value;
+            emit changedChannelSetup();
             return;
         }
     }
 
     m_staticControllers.push_back(std::pair<MidiByte, MidiByte>(controller, value));
+
+    emit changedChannelSetup();
 }
 
 MidiByte
@@ -635,6 +645,41 @@ Instrument::getKeyMapping() const
     return 0;
 }    
 
+// Set a fixed channel.  For MIDI instruments, conform allocator
+// accordingly. 
+void
+Instrument::
+setFixedChannel(void)
+{
+    if (m_fixed) { return; }
+
+    AllocateChannels *allocator = getDevice()->getAllocator();
+    if (allocator) {
+        allocator->reserveFixedChannel(m_channel);
+        m_fixed = true;
+        emit channelBecomesFixed();
+    }
+}
+
+// Release this instrument's fixed channel, if any.
+// @author Tom Breton (Tehom) 
+void
+Instrument::
+releaseFixedChannel(void)
+{
+    if (!m_fixed) { return; }
+    
+    AllocateChannels *allocator = getDevice()->getAllocator();
+    if (allocator) {
+        allocator->releaseFixedChannel(m_channel);
+    }
+
+    m_fixed = false;
+    emit channelBecomesUnfixed();
+}
+
+
+/***** Buss *****/
 
 Buss::Buss(BussId id) :
     PluginContainer(true),
@@ -688,6 +733,8 @@ Buss::getAlias() const
     return getName();
 }
 
+/***** RecordIn *****/
+
 RecordIn::RecordIn() :
     m_mappedId(0)
 {
@@ -708,3 +755,4 @@ RecordIn::toXmlString()
 
 }
 
+#include "Instrument.moc"

@@ -20,57 +20,31 @@
 
 #include <QString>
 #include "base/Event.h"
+#include "gui/seqmanager/MappedEventBuffer.h"
 
 namespace Rosegarden
 {
 
-class TriggerSegmentRec;
 class Segment;
 class RosegardenDocument;
-class MappedEvent;
-class Event;
-class MappedSegment;
 
-class SegmentMapper
+class SegmentMapper : public MappedEventBuffer
 {
-    friend class SegmentMapperFactory;
 
 public:
     virtual ~SegmentMapper();
 
-    /**
-     * refresh the object after the segment has been modified
-     * returns true if size changed (and thus the sequencer
-     * needs to be told about it)
-     */
-    bool refresh();
-
     virtual int getSegmentRepeatCount();
 
-    MappedSegment *getMappedSegment() { return m_mapped; }
+    virtual void initSpecial(void);
 
 protected:
-    SegmentMapper(RosegardenDocument *, Segment *, MappedSegment *);
-
-    virtual int calculateSize(); // in MappedEvents
-    virtual int addSize(int size, Segment *);
-
-    /// actual setup, must be called after ctor, calls virtual methods
-    virtual void init();
-
-    /// dump all segment data in the file
-    virtual void dump();
-
-    void mergeTriggerSegment(Segment **target,
-                             Event *trigger,
-                             timeT performanceDuration,
-                             TriggerSegmentRec *rec);
+    SegmentMapper(RosegardenDocument *, Segment *);
 
     //--------------- Data members ---------------------------------
-    RosegardenDocument *m_doc;
     Segment *m_segment;
-    MappedSegment *m_mapped; // I take ownership of this
 };
+
 
 
 }

@@ -24,9 +24,9 @@
 #include "base/Segment.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "SegmentMapperFactory.h"
-#include "SegmentMapper.h"
-#include "sound/MappedSegment.h"
+#include "gui/seqmanager/MappedEventBuffer.h"
+#include "gui/seqmanager/SegmentMapperFactory.h"
+#include "gui/seqmanager/SegmentMapper.h"
 #include <QDir>
 #include <QFile>
 #include <QString>
@@ -62,7 +62,7 @@ CompositionMapper::~CompositionMapper()
 
     for (segmentmappers::iterator i = m_segmentMappers.begin();
          i != m_segmentMappers.end(); ++i) {
-        delete i->second;
+        i->second->removeOwner();
     }
 }
 
@@ -119,26 +119,36 @@ CompositionMapper::segmentDeleted(Segment *segment)
     // suspect.  However, I believe there is no operator<< for SegmentMapper.
     // In that case, this should do nothing more than write out the pointer
     // value.  Uncomment this line of code at your own risk.
-//    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : deleting SegmentMapper " << mapper << endl;
+//    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : releasing SegmentMapper " << mapper << endl;
 
-    delete mapper;
+    mapper->removeOwner();
 }
 
 void
 CompositionMapper::mapSegment(Segment *segment)
 {
     SEQMAN_DEBUG << "CompositionMapper::mapSegment(" << segment << ")\n";
+    SEQMAN_DEBUG << "We have" << m_segmentMappers.size()
+                 << "segments"
+                 << endl;
+    segmentmappers::iterator itMapper = m_segmentMappers.find(segment);
 
+    // If it already exists, don't add it but do refresh it.
+    if (itMapper != m_segmentMappers.end()) {
+        itMapper->second->refresh();
+        return;
+    }
     SegmentMapper *mapper =
         SegmentMapperFactory::makeMapperForSegment(m_doc, segment);
 
     if (mapper) {
         m_segmentMappers[segment] = mapper;
+        mapper->addOwner();
     }
 }
 
-MappedSegment *
-CompositionMapper::getMappedSegment(Segment *s)
+MappedEventBuffer *
+CompositionMapper::getMappedEventBuffer(Segment *s)
 {
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine may have
@@ -146,7 +156,7 @@ CompositionMapper::getMappedSegment(Segment *s)
     // DO NOT DEREFERENCE IN ANY WAY!
 
     if (m_segmentMappers.find(s) != m_segmentMappers.end()) {
-        return m_segmentMappers[s]->getMappedSegment();
+        return m_segmentMappers[s];
     } else {
         return 0;
     }

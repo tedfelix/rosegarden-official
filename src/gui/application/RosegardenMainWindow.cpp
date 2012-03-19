@@ -1417,6 +1417,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
             this, SLOT(slotDocumentDevicesResyncd()));
 
     RosegardenSequencer::getInstance()->connectSomething();
+    newDocument->getStudio().resyncDeviceConnections();
 
     m_doc->checkSequencerTimer();
     m_doc->clearModifiedStatus();

@@ -31,7 +31,7 @@ namespace Rosegarden
  *
  * Note that MappedEventList is a list of MappedEvents, not a mapped
  * list of events.  Although a MappedEvent is a fixed-size object for
- * use in contexts like MappedSegment which contain fixed-size sets of
+ * use in contexts like MappedEventBuffer which contain fixed-size sets of
  * fixed-size objects to be read and written with minimal locking,
  * MappedEventList is a normal container with nothing fixed about it;
  * it's just the container that happens to be used in sequencer

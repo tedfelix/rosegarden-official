@@ -27,7 +27,7 @@
 #include <cassert>
 #include <cstdlib>
 
-#define DEBUG_MAPPEDEVENT 1
+// #define DEBUG_MAPPEDEVENT 1
 
 namespace Rosegarden
 {
@@ -182,10 +182,9 @@ MappedEvent::addDataByte(MidiByte byte)
 void
 MappedEvent::addDataString(const std::string& data)
 {
-    DataBlockRepository::getInstance()->addDataStringForEvent(data, this);
+    DataBlockRepository::getInstance()->
+        setDataBlockForEvent(this, data, true);
 }
-
-
 
 //--------------------------------------------------
 
@@ -325,7 +324,7 @@ std::string DataBlockRepository::getDataBlock(DataBlockRepository::blockid id)
 }
 
 
-std::string DataBlockRepository::getDataBlockForEvent(MappedEvent* e)
+std::string DataBlockRepository::getDataBlockForEvent(const MappedEvent* e)
 {
     blockid id = e->getDataBlockId();
     if (id == 0) {
@@ -335,16 +334,28 @@ std::string DataBlockRepository::getDataBlockForEvent(MappedEvent* e)
     return getInstance()->getDataBlock(id);
 }
 
-void DataBlockRepository::setDataBlockForEvent(MappedEvent* e, const std::string& s)
+void DataBlockRepository::setDataBlockForEvent(MappedEvent* e,
+                                               const std::string& s,
+                                               bool extend)
 {
     blockid id = e->getDataBlockId();
     if (id == 0) {
-  //      std::cerr << "Creating new datablock for event" << std::endl;
+#ifdef DEBUG_MAPPEDEVENT
+        std::cerr << "Creating new datablock for event"
+                  << std::endl;
+#endif
         getInstance()->registerDataBlockForEvent(s, e);
     } else {
-   //     std::cerr << "Writing " << s.length() << " chars to file for datablock " << id << std::endl;
+#ifdef DEBUG_MAPPEDEVENT
+        std::cerr << "Writing " << s.length()
+                  << " chars to file for datablock " << id
+                  << std::endl;
+#endif
         DataBlockFile dataBlockFile(id);
-        dataBlockFile.setData(s);
+        if (extend)
+            { dataBlockFile.addDataString(s);}
+        else
+            { dataBlockFile.setData(s); }
     }
 }
 
@@ -406,7 +417,7 @@ void DataBlockRepository::clear()
     }
 }
 
-
+// !!! We assume there is already a datablock
 void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
 {
     DataBlockFile dataBlockFile(e->getDataBlockId());
@@ -414,11 +425,8 @@ void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
 
 }
 
-void DataBlockRepository::addDataStringForEvent(const std::string& s, MappedEvent* e)
-{
-    DataBlockFile dataBlockFile(e->getDataBlockId());
-    dataBlockFile.addDataString(s);
-}
+// setDataBlockForEvent does what addDataStringForEvent used to do.
+
 
 DataBlockRepository* DataBlockRepository::m_instance = 0;
 

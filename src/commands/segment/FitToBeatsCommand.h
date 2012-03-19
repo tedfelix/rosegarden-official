@@ -66,12 +66,6 @@ private:
     static void
         getCurrentTempi(Composition &composition, TempoMap &Tempos);
 
-    static double
-        beatRealTimeToBpm(RealTime &realTime);
-    static tempoT
-        beatTimeRatioToTempo(RealTime &realTime,
-                             timeT beatTime, tempoT rampTo);
-
     Composition *m_composition;
 
     segmentcontainer m_oldSegments;

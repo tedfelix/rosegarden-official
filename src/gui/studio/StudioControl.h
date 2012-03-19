@@ -21,6 +21,7 @@
 #include "base/MidiProgram.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
+#include <QMutex>
 #include <QString>
 
 
@@ -35,6 +36,8 @@ class RealTime;
 class MappedInstrument;
 class MappedEvent;
 class MappedEventList;
+class Instrument;
+class ImmediateNote;
 
 typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
 
@@ -122,22 +125,15 @@ public:
     //
     static void sendQuarterNoteLength(const RealTime &length);
 
-    // Convenience wrappers for RPNs and NRPNs
-    //
-    static void sendRPN(InstrumentId instrumentId,
-                        MidiByte paramMSB,
-                        MidiByte paramLSB,
-                        MidiByte controller,
-                        MidiByte value);
+    static void playPreviewNote(Instrument *instrument, int pitch,
+                                int velocity, int nsecs,
+                                bool oneshot = true);
+ private:
+    static ImmediateNote *getFiller(void);
 
-    static void sendNRPN(InstrumentId instrumentId,
-                         MidiByte paramMSB,
-                         MidiByte paramLSB,
-                         MidiByte controller,
-                         MidiByte value);
+    static QMutex         m_instanceMutex;
+    static ImmediateNote *m_immediateNoteFiller;
 };
-
-
 
 }
 

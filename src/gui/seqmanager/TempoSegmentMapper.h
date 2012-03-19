@@ -19,22 +19,21 @@
 #define _RG_TEMPOSEGMENTMAPPER_H_
 
 #include "SpecialSegmentMapper.h"
-#include <QString>
-
+#include "base/Composition.h"
 
 namespace Rosegarden
 {
 
 class RosegardenDocument;
-
+class RealTime;
 
 class TempoSegmentMapper : public SpecialSegmentMapper
 {
     friend class SegmentMapperFactory;
 
 protected:
-    TempoSegmentMapper(RosegardenDocument *doc, MappedSegment *mapped) :
-        SpecialSegmentMapper(doc, mapped) {
+    TempoSegmentMapper(RosegardenDocument *doc) :
+        SpecialSegmentMapper(doc) {
     }
 
     // overrides from SegmentMapper
@@ -42,6 +41,11 @@ protected:
 
     // override from SegmentMapper
     virtual void dump();
+
+    // Map one tempo event
+    void mapATempo(RealTime eventTime, tempoT tempo, bool ramping);
+    // Map the tempo event at time 0.
+    void mapTempoAtZero(Composition& comp);
 };
 
 }

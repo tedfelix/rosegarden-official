@@ -58,9 +58,6 @@ public:
     void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
 
-    void setChannel(MidiByte channel) { m_channel = channel; }
-    MidiByte getChannel() const { return m_channel; }
-
     void setType(Instrument::InstrumentType type) { m_type = type; }
     Instrument::InstrumentType getType() const { return m_type; }
 
@@ -83,7 +80,6 @@ public:
 private:
 
     Instrument::InstrumentType  m_type;
-    MidiByte                    m_channel;
     InstrumentId                m_id;
     std::string                 m_name;
     DeviceId                    m_device;

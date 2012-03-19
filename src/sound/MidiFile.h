@@ -55,12 +55,12 @@ typedef std::vector<MidiEvent *> MidiTrack;
 typedef std::map<unsigned int, MidiTrack> MidiComposition;
 
 class Studio;
-
+ 
 class MidiFile : public QObject, public SoundFile
 {
     Q_OBJECT
 public:
-
+    friend class MidiInserter;
     enum FileFormatType {
         MIDI_SINGLE_TRACK_FILE          = 0x00,
         MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,

@@ -55,8 +55,15 @@ public:
 
     void showAdditionalControls(bool showThem);
 
+ protected:
+    void setSelectedInstrument(Instrument *instrument, QString label);
+ public:
 signals:
     void updateAllBoxes();
+
+private slots:
+    /// Instrument is being destroyed
+    void slotInstrumentGone(void);
         
 protected:
     //--------------- Data members ---------------------------------

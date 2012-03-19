@@ -294,35 +294,40 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
                 instr->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
 
-                MappedEvent mE((*it)->m_id,
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_VOLUME,
-                               MidiByte(value));
-                StudioControl::sendMappedEvent(mE);
+                if (instr->hasFixedChannel())
+                {
+                    // send out to external controllers as well if the
+                    // affected instrument is on a fixed channel.
+                    
+                    //!!! really want some notification of whether we have any!
+                    int tabIndex = m_tabWidget->currentIndex();
+                    if (tabIndex < 0)
+                        tabIndex = 0;
+                    int i = 0;
+                    for (DeviceList::const_iterator dit = m_studio->begin();
+                         dit != m_studio->end(); ++dit) {
+                        RG_DEBUG << "slotFaderLevelChanged: i = " << i << ", tabIndex " << tabIndex << endl;
+                        if (!dynamic_cast<MidiDevice*>(*dit))
+                            continue;
+                        if (i != tabIndex) {
+                            ++i;
+                            continue;
+                        }
+                        RG_DEBUG << "slotFaderLevelChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+                        if (instr->getDevice()->getId() == (*dit)->getId()) {
+                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instr->getNaturalChannel() << endl;
 
-                // send out to external controllers as well.
-                //!!! really want some notification of whether we have any!
-                int tabIndex = m_tabWidget->currentIndex();
-                if (tabIndex < 0)
-                    tabIndex = 0;
-                int i = 0;
-                for (DeviceList::const_iterator dit = m_studio->begin();
-                        dit != m_studio->end(); ++dit) {
-                    RG_DEBUG << "slotFaderLevelChanged: i = " << i << ", tabIndex " << tabIndex << endl;
-                    if (!dynamic_cast<MidiDevice*>(*dit))
-                        continue;
-                    if (i != tabIndex) {
-                        ++i;
-                        continue;
+                            MappedEvent mE((*it)->m_id,
+                                           MappedEvent::MidiController,
+                                           MIDI_CONTROLLER_VOLUME,
+                                           MidiByte(value));
+
+                            mE.setRecordedChannel(instr->getNaturalChannel());
+                            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+                            StudioControl::sendMappedEvent(mE);
+                        }
+                        break;
                     }
-                    RG_DEBUG << "slotFaderLevelChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
-                    if (instr->getDevice()->getId() == (*dit)->getId()) {
-                        RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instr->getMidiChannel() << endl;
-                        mE.setRecordedChannel(instr->getMidiChannel());
-                        mE.setRecordedDevice(Device::CONTROL_DEVICE);
-                        StudioControl::sendMappedEvent(mE);
-                    }
-                    break;
                 }
             }
 
@@ -370,36 +375,35 @@ MidiMixerWindow::slotControllerChanged(float value)
                                   m_controllerRotaries[j].first,
                                   MidiByte(value));
 
-        MappedEvent mE(m_faders[i]->m_id,
-                       MappedEvent::MidiController,
-                       m_faders[i]->m_controllerRotaries[j].first,
-                       MidiByte(value));
-        StudioControl::sendMappedEvent(mE);
-
-        int tabIndex = m_tabWidget->currentIndex();
-        if (tabIndex < 0)
-            tabIndex = 0;
-        int k = 0;
-        for (DeviceList::const_iterator dit = m_studio->begin();
-                dit != m_studio->end(); ++dit) {
-            RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex << endl;
-            if (!dynamic_cast<MidiDevice*>(*dit))
-                continue;
-            if (k != tabIndex) {
-                ++k;
-                continue;
-            }
-            RG_DEBUG << "slotControllerChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
-            if (instr->getDevice()->getId() == (*dit)->getId()) {
-                RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instr->getMidiChannel() << endl;
-                // send out to external controllers as well.
-                //!!! really want some notification of whether we have any!
-                mE.setRecordedChannel(instr->getMidiChannel());
-                mE.setRecordedDevice(Device::CONTROL_DEVICE);
-                StudioControl::sendMappedEvent(mE);
+        if (instr->hasFixedChannel()) {
+            int tabIndex = m_tabWidget->currentIndex();
+            if (tabIndex < 0)
+                tabIndex = 0;
+            int k = 0;
+            for (DeviceList::const_iterator dit = m_studio->begin();
+                 dit != m_studio->end(); ++dit) {
+                RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex << endl;
+                if (!dynamic_cast<MidiDevice*>(*dit))
+                    continue;
+                if (k != tabIndex) {
+                    ++k;
+                    continue;
+                }
+                RG_DEBUG << "slotControllerChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+                if (instr->getDevice()->getId() == (*dit)->getId()) {
+                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instr->getNaturalChannel() << endl;
+                    // send out to external controllers as well.
+                    //!!! really want some notification of whether we have any!
+                    MappedEvent mE(m_faders[i]->m_id,
+                                   MappedEvent::MidiController,
+                                   m_faders[i]->m_controllerRotaries[j].first,
+                                   MidiByte(value));
+                    mE.setRecordedChannel(instr->getNaturalChannel());
+                    mE.setRecordedDevice(Device::CONTROL_DEVICE);
+                    StudioControl::sendMappedEvent(mE);
+                }
             }
         }
-
         emit instrumentParametersChanged(m_faders[i]->m_id);
     }
 }
@@ -566,7 +570,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
 
             Instrument *instrument = *iIt;
 
-            if (instrument->getMidiChannel() != channel)
+            if (instrument->getNaturalChannel() != channel)
                 continue;
 
             ControlList cl = dev->getIPBControlParameters();
@@ -578,12 +582,6 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
                     break;
                 }
             }
-
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MidiByte(controller),
-                           MidiByte(value));
-            StudioControl::sendMappedEvent(mE);
 
             slotUpdateInstrument(instrument->getId());
             emit instrumentParametersChanged(instrument->getId());
@@ -635,7 +633,8 @@ MidiMixerWindow::sendControllerRefresh()
                     instruments.begin(); iIt != instruments.end(); ++iIt) {
 
             Instrument *instrument = *iIt;
-            int channel = instrument->getMidiChannel();
+            if (!instrument->hasFixedChannel()) { continue; }
+            int channel = instrument->getNaturalChannel();
 
             RG_DEBUG << "instrument is " << instrument->getId() << endl;
 

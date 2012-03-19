@@ -22,6 +22,7 @@
 #include "sound/Midi.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "base/AllocateChannels.h"
 #include "base/Colour.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
@@ -32,8 +33,6 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Rotary.h"
 #include "InstrumentParameterPanel.h"
-#include "sound/MappedEvent.h"
-#include "sound/MappedInstrument.h"
 #include "sequencer/RosegardenSequencer.h"
 
 #include <algorithm>
@@ -43,10 +42,13 @@
 #include <QColor>
 #include <QFontMetrics>
 #include <QFrame>
+#include <QGroupBox>
 #include <QLabel>
 #include <QRegExp>
 #include <QSignalMapper>
+#include <QSpinBox>
 #include <QString>
+#include <QVariant>
 #include <QWidget>
 #include <QLayout>
 #include <QHBoxLayout>
@@ -88,6 +90,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
+    m_channelUsed  = new QComboBox(this);
+
 
     m_connectionLabel->setFont(f);
     m_bankValue->setFont(f);
@@ -97,25 +101,30 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox->setFont(f);
     m_variationCheckBox->setFont(f);
     m_percussionCheckBox->setFont(f);
+    m_channelUsed ->setFont(f);
 
     m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_variationValue->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
+    m_channelUsed->setToolTip(tr("<qt><p>Whether this instrument is to always on the same channel</p></qt>"));
 
     m_bankValue->setMaxVisibleItems(20);
     m_programValue->setMaxVisibleItems(20);
     m_variationValue->setMaxVisibleItems(20);
+    m_channelUsed->setMaxVisibleItems(2);
     
     m_bankLabel = new QLabel(tr("Bank"), this);
     m_variationLabel = new QLabel(tr("Variation"), this);
     m_programLabel = new QLabel(tr("Program"), this);
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
+    QLabel *channelLabel    = new QLabel(tr("Channel:"), this);
     
     m_bankLabel->setFont(f);
     m_variationLabel->setFont(f);
     m_programLabel->setFont(f);
     percussionLabel->setFont(f);
+    channelLabel   ->setFont(f);
     
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
@@ -148,7 +157,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_evalMidiPrgChgCheckBox->setChecked(false);
     m_evalMidiPrgChgCheckBox->setToolTip(programTip);
     m_evalMidiPrgChgCheckBox->setShortcut((QKeySequence)"Shift+P");
-    
+
+
 
     m_mainGrid->setColumnStretch(2, 1);
 
@@ -156,7 +166,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
 
     m_mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignRight);
+    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
 
     m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
@@ -171,8 +181,22 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_mainGrid->addWidget(m_variationValue, 6, 2, 1, 2, Qt::AlignRight);
       
     m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, 1, 3, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 3, Qt::AlignRight);    
-    
+    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 3, Qt::AlignLeft);
+
+    {
+        m_channelUsed->addItem(tr("auto"));
+        m_channelUsed->addItem(tr("fixed"));
+        QHBoxLayout *hbox      = new QHBoxLayout;
+        hbox->addWidget(channelLabel);
+        hbox->addWidget(m_channelUsed);
+        hbox->insertSpacing(1, 5);
+        // Add space to the end to move the combobox closer to the
+        // label, because there's no direct way to subtract space
+        // between them.
+        hbox->insertSpacing(-1, 30);
+        m_mainGrid->addLayout(hbox, 8, 0, 1, -1, 0);
+    }
+
     // Configure the empty final row to accomodate any extra vertical space.
     
     
@@ -223,9 +247,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programValue->setCurrentIndex( -1);
     m_bankValue->setCurrentIndex( -1);
     m_variationValue->setCurrentIndex( -1);
+    m_channelUsed   ->setCurrentIndex(-1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
+    connect(m_channelUsed, SIGNAL(activated(int)),
+            this, SLOT(slotSetUseChannel(int)));
 }
 
 
@@ -258,11 +285,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         return ;
     }
 
-    m_selectedInstrument = instrument;
-
-    // Set instrument name
-    //
-    m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
+    setSelectedInstrument(instrument,
+                          instrument->getLocalizedPresentationName());
 
     // Set Studio Device name
     //
@@ -303,10 +327,10 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //
     
     // Block signals
-    m_percussionCheckBox->blockSignals(true);
-    m_programCheckBox->blockSignals(true);
-    m_bankCheckBox->blockSignals(true);
-    m_variationCheckBox->blockSignals(true);
+    m_percussionCheckBox-> blockSignals(true);
+    m_programCheckBox->    blockSignals(true);
+    m_bankCheckBox->       blockSignals(true);
+    m_variationCheckBox->  blockSignals(true);
     
     // Change state
     m_percussionCheckBox->setChecked(instrument->isPercussion());
@@ -314,11 +338,11 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
 
-    // Block signals
-    m_percussionCheckBox->blockSignals(false);
-    m_programCheckBox->blockSignals(false);
-    m_bankCheckBox->blockSignals(false);
-    m_variationCheckBox->blockSignals(false);
+    // Unblock signals
+    m_percussionCheckBox-> blockSignals(false);
+    m_programCheckBox->    blockSignals(false);
+    m_bankCheckBox->       blockSignals(false);
+    m_variationCheckBox->  blockSignals(false);
 
     // Basic parameters
     //
@@ -328,6 +352,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateBankList();
     populateProgramList();
     populateVariationList();
+    populateChannelList();
     
     // Setup the ControlParameters
     //
@@ -349,6 +374,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         }
         setRotaryToValue(it->first, int(value));
     }
+
 }
 
 void
@@ -358,7 +384,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
-        m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 1, 3, Qt::AlignHCenter);
+        m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 3, Qt::AlignHCenter);
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
         m_rotaryGrid->setSpacing(1);
@@ -893,6 +919,24 @@ MIDIInstrumentParameterPanel::populateVariationList()
     }    
 }
 
+// Fill the fixed channel list controls
+// @author Tom Breton (Tehom)
+void
+MIDIInstrumentParameterPanel::
+populateChannelList(void)
+{
+    // Block signals
+    m_channelUsed-> blockSignals(true);
+
+    const Instrument * instrument = m_selectedInstrument;
+    bool hasFixedChannel = instrument->hasFixedChannel();
+    int index = hasFixedChannel ? 1 : 0;
+    m_channelUsed->setCurrentIndex(index);
+
+    // Unblock signals
+    m_channelUsed-> blockSignals(false);
+}
+
 void
 MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
 {
@@ -907,8 +951,6 @@ MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
     populateBankList();
     populateProgramList();
     populateVariationList();
-
-    sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
@@ -941,9 +983,6 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
     populateProgramList();
     populateVariationList();
 
-    if (value)
-        sendBankAndProgram();
-
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
                                          getProgramName().c_str());
@@ -973,9 +1012,6 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
     populateProgramList();
     populateVariationList();
 
-    if (value)
-        sendBankAndProgram();
-
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
                                          getProgramName().c_str());
@@ -1004,9 +1040,6 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
     }
 
     populateVariationList();
-
-//    if (value)
-//        sendBankAndProgram();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
@@ -1050,7 +1083,6 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     populateProgramList();
 
     if (change) {
-        sendBankAndProgram();
         emit updateAllBoxes();
     }
 
@@ -1123,7 +1155,6 @@ void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bank_ls
     //populateVariationList();
     
     if (change or changed_bank) {
-        //sendBankAndProgram();
         //emit changeInstrumentLabel( m_selectedInstrument->getId(),
         //            strtoqstr(m_selectedInstrument->getProgramName()) );
         emit updateAllBoxes();
@@ -1161,7 +1192,6 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     populateVariationList();
 
     if (change) {
-        sendBankAndProgram();
         emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                    m_selectedInstrument->
                                              getProgramName().c_str());
@@ -1189,87 +1219,21 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 
     MidiByte v = m_variations[index];
 
-    bool change = false;
-
     if (md->getVariationType() == MidiDevice::VariationFromLSB) {
         if (m_selectedInstrument->getLSB() != v) {
             m_selectedInstrument->setLSB(v);
-            change = true;
         }
     } else if (md->getVariationType() == MidiDevice::VariationFromMSB) {
         if (m_selectedInstrument->getMSB() != v) {
             m_selectedInstrument->setMSB(v);
-            change = true;
         }
-    }
-
-    if (change) {
-        sendBankAndProgram();
     }
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
-void
-MIDIInstrumentParameterPanel::sendBankAndProgram()
-{
-    if (m_selectedInstrument == 0)
-        return ;
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
-    if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::sendBankAndProgram: No MidiDevice for Instrument "
-        << m_selectedInstrument->getId() << endl;
-        return ;
-    }
-
-    if (m_selectedInstrument->sendsBankSelect()) {
-
-        // Send the bank select message before any PC message
-        //
-        MappedEvent mEMSB(m_selectedInstrument->getId(),
-                          MappedEvent::MidiController,
-                          MIDI_CONTROLLER_BANK_MSB,
-                          m_selectedInstrument->getMSB());
-
-        RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
-        << "sending MSB = "
-        << int(m_selectedInstrument->getMSB())
-        << endl;
-
-        StudioControl::sendMappedEvent(mEMSB);
-
-        MappedEvent mELSB(m_selectedInstrument->getId(),
-                          MappedEvent::MidiController,
-                          MIDI_CONTROLLER_BANK_LSB,
-                          m_selectedInstrument->getLSB());
-
-        RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
-        << "sending LSB = "
-        << int(m_selectedInstrument->getLSB())
-        << endl;
-
-        StudioControl::sendMappedEvent(mELSB);
-    }
-
-    if (m_selectedInstrument->sendsProgramChange()) {
-        MappedEvent mE(m_selectedInstrument->getId(),
-                       MappedEvent::MidiProgramChange,
-                       m_selectedInstrument->getProgramChange(),
-                       (MidiByte)0);
-
-        RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
-        << "sending program change = "
-        << int(m_selectedInstrument->getProgramChange())
-        << endl;
-
-
-        // Send the controller change
-        //
-        StudioControl::sendMappedEvent(mE);
-    }
-}
+// In place of the old sendBankAndProgram, instruments themselves now
+// signal the affected channel managers when changed.
 
 void
 MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
@@ -1304,12 +1268,6 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     m_selectedInstrument->setControllerValue(MidiByte(controllerNumber),
             MidiByte(value));
 
-    MappedEvent mE(m_selectedInstrument->getId(),
-                   MappedEvent::MidiController,
-                   (MidiByte)controllerNumber,
-                   (MidiByte)value);
-    StudioControl::sendMappedEvent(mE);
-
     emit updateAllBoxes();
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 
@@ -1342,6 +1300,19 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
         //it->second.first->setShown(showThem || (index < 8));
         //it->second.second->setShown(showThem || (index < 8));
         index++;
+    }
+}
+
+void
+MIDIInstrumentParameterPanel::
+slotSetUseChannel(int index)
+{
+    if (m_selectedInstrument == 0)
+        { return; }
+    if (index == 1) {
+        m_selectedInstrument->setFixedChannel();
+    } else {
+        m_selectedInstrument->releaseFixedChannel();
     }
 }
 

@@ -20,181 +20,82 @@
 #include "base/BaseProperties.h"
 #include "base/Controllable.h"
 #include "base/MidiTypes.h"
+#include "base/Profiler.h"
 #include "base/Segment.h"
-#include "base/TriggerSegment.h"
-#include "document/RosegardenDocument.h"
 #include "gui/rulers/ControllerEventAdapter.h"
+#include "gui/seqmanager/InternalSegmentMapper.h"
+#include "misc/Debug.h"
+#include <assert.h>
 #include <limits>
-#include <stack>
+
+// #define DEBUG_CONTROLLER_CONTEXT 1
 
 namespace Rosegarden
 {
 
-// Dummy controller context.  Returned when no controller is found.
-// @author Tom Breton (Tehom)
-const ControllerContext
-ControllerContext::dummyContext127 = ControllerContext(0,0,127);
+    /*** ControllerSearch ***/
+ControllerSearch::
+ControllerSearch(const std::string eventType,
+                 int controllerId,
+                 InternalSegmentMapper *mapper) :
+    m_eventType(eventType),
+    m_controllerId(controllerId),
+    m_instrument(mapper->getInstrument())
+{}
 
-// Given the relative value of a controller, return its absolute value
-// @author Tom Breton (Tehom)
-unsigned int
-ControllerContext::
-getAbsoluteValue(unsigned int relativeValue) const
-{
-    int value =
-        relativeValue + m_diffValue;
-    if (value > m_max) { value = m_max; }
-    if (value < m_min) { value = m_min; }
-    return value;
-}
-
-// Adjust a controller event.  Before the call, its value is relative to its
-// context.  After the call, the value is absolute.
-// Don't call this twice on the same event.
-// @author Tom Breton (Tehom)
-void
-ControllerContext::
-adjustControllerValue(Event *e) const
-{
-    long oldValue;
-    ControllerEventAdapter eAsController(e);
-    eAsController.getValue(oldValue);
-    eAsController.setValue(getAbsoluteValue(oldValue));
-}
-
-// Look for a value in segment s and update this ControllerSearchValue
-// accordingly.  It may be a relative value; caller has the
-// responsibility to handle that.
+// Return the last value of controller before noLaterThan in segment s.
 // @author Tom Breton (Tehom)
 ControllerSearch::Maybe
 ControllerSearch::
-search(Segment *s, timeT noEarlierThan, timeT noLaterThan,
-       bool forceAbsolute) const
+searchSegment(const Segment *s, timeT noEarlierThan, timeT noLaterThan) const
 {
-    // Stack will hold a possible cascade of relative events from
-    // triggered segments, each getting its baseline from the next.
-    std::stack<ControllerSearchValue>  stack;
-    // A baseline, when we have one.
-    ControllerSearchValue baseline;
-    bool gotBaseline     = false;
-    bool getControllers = true;
+    Profiler profiler("ControllerSearch::searchSegment", false);
+    if (!s)
+        { return Maybe(false, ControllerSearchValue(0,0)); }
 
-    // The latest a relevant event could be.
-    Segment::iterator latest  = s->findNearestTime(noLaterThan);
-    // The terminator at the beginning of the segment, one step before
-    // the first event.
-    Segment::iterator rEnd    = --s->begin();
+    // Get the latest relevant event before or at noEarlierThan.
+    Segment::reverse_iterator latest(s->findTime(noLaterThan));
 
-    for (Segment::iterator j  = latest; j != rEnd; --j) {
+    // Search backwards for a match.
+    for (Segment::reverse_iterator j = latest; j != s->rend(); ++j) {
         timeT t = (*j)->getAbsoluteTime();
 
-        // If we have no relative controls that need to be baselined
-        // and this event is before the time range we're looking at,
-        // no controller we can find will satisfy the search
-        // (triggered segments still may).
-        if ((t <= noEarlierThan) && stack.size() == 0)
-            { getControllers = false; }
+        // Event is too early.  No controller we can find will satisfy
+        // the search.
+        if ((t <= noEarlierThan))
+            { break; }
 
         // Treat a controller event
-        if (getControllers && matches(*j)) {
-            getControllers  = false;
-            gotBaseline     = true;
-            // Presumptively assign it to the state.
-            ControllerEventAdapter(*j).getValue(baseline.m_value);
-            baseline.m_when = t;
-        }
-
-        // Keep looking for trigger segments even if we've found a
-        // baseline controller event.  No matter how early one is
-        // triggered, it might still be playing at the time we're
-        // looking for controllers at.
-
-        // We block nested explorations of triggered segments because
-        // they might cause endless loops.
-        else if (forceAbsolute) {
-            long triggerId = -1;
-            (*j)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID, triggerId);
-            if (triggerId >= 0) {
-                TriggerSegmentRec *rec =
-                    m_comp.getTriggerSegmentRec(triggerId);
-
-                if (rec && rec->getSegment()) {
-                    TriggerSegmentTimeAdjust timeAdjust(rec, j, s);
-
-                    // If we have found a baseline already, controller
-                    // events before it don't matter, so then we're
-                    // only looking for controller events that linger
-                    // into the current time.
-                    timeT noEarlier =
-                        gotBaseline ? baseline.m_when : -1;
-
-                    Maybe result =
-                        search(rec->getSegment(),
-                               timeAdjust.toUnsquished(noEarlier),
-                               timeAdjust.toUnsquished(noLaterThan),
-                               false);
-                    
-                    if(result.first) {
-                        // If we found something, it's relative so we
-                        // still need to find its baseline.
-                        ControllerSearchValue &found = result.second;
-
-                        // Convert its time to our time.
-                        found.m_when =
-                            timeAdjust.toSquished(found.m_when);
-                        
-                        // The new relative value can serve in turn as
-                        // baseline for relative values that come
-                        // after it timewise.  But those that play
-                        // earlier than it are obscured by it, so
-                        // remove them.  Since the stack is in time
-                        // order, any such elements will be at the
-                        // top.
-                        while (!stack.empty() &&
-                               // We break ties this way just because
-                               // we prefer the stack smaller.
-                               (stack.top().m_when <= found.m_when))
-                            { (void)stack.pop(); }
-
-                        // Record this relative value.
-                        stack.push(found);
-                        // We will look for a baseline for it.
-                        gotBaseline = false;
-                        getControllers = true;
-                    }
-                }
-            }
+        if (matches(*j)) {
+            long value = 0;
+            ControllerEventAdapter(*j).getValue(value);
+            return Maybe(true, ControllerSearchValue(value,t));
         }
     }
 
-    // If we still don't have a baseline, get something suitable.
-    if (!gotBaseline) {
-        if (forceAbsolute) {
-            baseline.m_value = getStaticValue();
-        } else {
-            // Relative values just use 0 as baseline.
-            baseline.m_value = 0;
-        }
-        baseline.m_when = std::numeric_limits<int>::min();
+    return Maybe(false, ControllerSearchValue(0,0));
+}
+
+ControllerSearch::Maybe
+ControllerSearch::
+search(InternalSegmentMapper *mapper, timeT noLaterThan) const
+{
+    Profiler profiler("ControllerSearch::search", false);
+    ControllerSearch::Maybe runningResult =
+        searchSegment(mapper->m_segment, std::numeric_limits<int>::min(),
+               noLaterThan);
+    {
+        timeT noEarlierThan = runningResult.first ?
+            runningResult.second.m_when :
+            std::numeric_limits<int>::min();
+        ControllerSearch::Maybe result2 =
+            searchSegment(mapper->m_triggeredEvents, noEarlierThan,
+                          noLaterThan);
+        if (result2.first)
+            { runningResult = result2; }
     }
 
-    // Add the relative values in the stack to what we found.  The
-    // earliest one has the relevant time, which we find by
-    // successively overwriting the time field.
-    while (!stack.empty()) {
-        ControllerSearchValue &top = stack.top();
-        baseline.m_value += top.m_value;
-        baseline.m_when  = top.m_when;
-        stack.pop();
-    }
-
-    // The value we return is relative to the default.
-    int defaultValue = m_controlParameter->getDefault();
-    baseline.m_value -= defaultValue;
-
-    // True if we found a relevant controller of any kind
-    bool found = gotBaseline || forceAbsolute || !stack.empty();
-    return Maybe(found, baseline);
+    return runningResult;
 }
 
 // Return true just if event e is what we're processing in the current search.
@@ -210,102 +111,212 @@ matches(Event *e) const
           e->get <Int>(Controller::NUMBER) == m_controllerId));
 }
 
-// Get the static value for the controller and instrument we are
+// Get the static value for the controller and mapper we are
 // searching about.
 // @author Tom Breton (Tehom)
 int
-ControllerSearch::getStaticValue(void) const
-{
-    if (m_eventType == Controller::EventType) {
-        return m_instrument->getControllerValue(m_controllerId);
-    }
-    else { return 0; }
-}
-
-// Get a controller context for controllerId at time t for the
-// instrument playing segment s.
-// Always returns a usable ControllerContext even if no controller is found.
-// @author Tom Breton (Tehom)
-const ControllerContext
-ControllerContext::
-getControllerContext(RosegardenDocument *doc, Segment *s, timeT noLaterThan,
-                     const std::string eventType, int controllerId)
-{
-    Composition &comp = doc->getComposition();
-    Composition::segmentcontainer segments =
-        comp.getInstrumentSegments(s, noLaterThan);
-
-    Instrument *instrument = doc->getInstrument(s);
-    if (!instrument) { return ControllerContext::dummyContext127; }
-
-    Device * device = instrument->getDevice();
-            
-    const Controllable *c = device->getControllable();
-    if (!c) { return ControllerContext::dummyContext127; }
-
-    const ControlParameter *controlParameter =
-        c->getControlParameter(eventType, controllerId);
-    if (!controlParameter) { return ControllerContext::dummyContext127; }
-    
-    const ControllerSearch params(eventType, controllerId, comp,
-                                        instrument, controlParameter);
-    ControllerSearchValue state;
-
-    // Since we take all segments playing segment s's instrument
-    // including s, there must be at least one segment.
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-        i != segments.end();
-        ++i) {
-        ControllerSearch::Maybe result =
-            params.search(*i, comp.getStartMarker() - 1,
-                          noLaterThan, true);
-        // Since we are forcing absolute values, this is guaranteed to
-        // be true for the first segment.
-        if (result.first)
-            { state = result.second; }
-    }
-
-    return ControllerContext(state.value(),
-                             controlParameter->getMin(),
-                             controlParameter->getMax());
-}
-
-
-// Return a pointer to a controller context for controllerId at time t
-// for the instrument playing segment s.  Uses a cache.
-// @author Tom Breton (Tehom)
-const ControllerContext * 
 ControllerContextMap::
-findControllerContext(RosegardenDocument *doc, Segment *s, timeT t,
-                      const std::string eventType, int controllerId)
+getStaticValue(InternalSegmentMapper *mapper,
+               const std::string eventType,
+               int controllerId) 
 {
-    if (eventType == Controller::EventType) {
-        ControllerContextMap::iterator c = find(controllerId);
-        if (c == end()) {
-            insert(value_type(controllerId,
-                              ControllerContext::getControllerContext
-                                  (doc, s, t, eventType, controllerId)));
-            // Find it again.  Now we can't fail.
-            c = find(controllerId);
-        }
-        return &c->second;
-    } else if (eventType == PitchBend::EventType) {
-        // Since there's only one type of pitchbend controller, we
-        // just store one ControllerContext for that and a flag
-        // whether it's been initialized.
-        if (!m_havePitchBendContext)
-            {
-                m_pitchBendContext =
-                    ControllerContext::getControllerContext
-                        (doc, s, t, eventType, controllerId);
-                m_havePitchBendContext = true;
-            }
-        return &m_pitchBendContext;
-    }
-    // We should never get here, but let's be safe if we do.
+    if (eventType == Controller::EventType)
+        { return mapper->getInstrument()->getControllerValue(controllerId); }
     else
-        { return &ControllerContext::dummyContext127; }
+        // Neutral pitch-bend value
+        { return 8192; }
 }
-  
+
+// Get the value for controller controllerId at time t for mapper.
+// @author Tom Breton (Tehom)
+int
+ControllerContextMap::
+getControllerValue(InternalSegmentMapper *mapper,
+                   timeT searchTime, const std::string eventType,
+                   int controllerId)
+{
+    Profiler profiler("ControllerContextMap::getControllerValue", false);
+
+    // Should only get these two types.
+    assert((eventType == Controller::EventType) ||
+           (eventType == PitchBend::EventType));
+    
+    // We have cached the latest value of all controllers we've
+    // inserted.  Find the relevant cache.
+
+    ControllerSearchValue * lastValue;
+    bool valueExists;
+    if (eventType == Controller::EventType) {
+        Cache::iterator found = m_latestValues.find(controllerId);
+        valueExists = (found != m_latestValues.end());
+        lastValue = &(found->second);
+    } else {
+        valueExists = m_PitchBendLatestValue.first;
+        lastValue   = &m_PitchBendLatestValue.second;
+    }
+
+    // If cache don'es have that controller, then no such controller
+    // is in this segment, so use the static value.
+    if (!valueExists) {
+        return getStaticValue(mapper, eventType, controllerId);
+    }
+
+    // If we are servicing a repeating segment, the segment may repeat
+    // many times but we only have to search it once.  Figure out what
+    // time we really should look at; mutate searchTime accordingly.
+    bool firstRepeat;
+    if (mapper->getSegmentRepeatCount() > 0) {
+        Segment *s = mapper->m_segment;
+        timeT segmentStartTime = s->getStartTime();
+        timeT segmentEndTime   = s->getEndMarkerTime();
+        timeT segmentDuration = segmentEndTime - segmentStartTime;
+
+        if (searchTime >= segmentEndTime) {
+            timeT timeRelativeToStart = (searchTime - segmentStartTime);
+            firstRepeat = false;
+            searchTime =
+                (timeRelativeToStart % segmentDuration) + segmentStartTime;
+        } else {
+            firstRepeat = true;
+        }
+    } else {
+        firstRepeat = true;
+    }
+
+    // If search time is later than the last time we inserted a
+    // controller, it's the last value inserted, which we know from
+    // the cache.  This lets us essentially skip segments that have no
+    // controller of that type and gives us relative controllers for
+    // triggers immediately too.
+    if (lastValue->time() < searchTime)
+        { return lastValue->value(); }
+
+    // Some non-static values exist for this controller but the last
+    // value isn't it, so search.
+    const ControllerSearch params(eventType, controllerId, mapper);
+    Maybe foundInEvents = params.search(mapper, searchTime);
+
+    // Found it, done.
+    if (foundInEvents.first)
+        { return foundInEvents.second.value(); } 
+
+    // If this is a repeat, we've wrapped around, so the value is the
+    // last value from a previous repeat, which is the same as cached
+    // value.
+    if (!firstRepeat)
+        { return lastValue->value(); }
+
+    // Search time is before all controller events, so the static
+    // value is it.
+    return getStaticValue(mapper, eventType, controllerId);
+}
+
+// Get the respective control parameter.
+// @author Tom Breton (Tehom)
+const ControlParameter *
+ControllerContextMap::
+getControlParameter(InternalSegmentMapper *mapper,
+                    const std::string eventType,
+                    const int controllerId)
+{
+    Device * device = mapper->getInstrument()->getDevice();
+    const Controllable *c = device->getControllable();
+    assert(c);
+    return c->getControlParameter(eventType, controllerId);
+}
+
+// Clip a controller value to appropriate limits
+// @author Tom Breton (Tehom)
+int
+ControllerContextMap::
+makeAbsolute(const ControlParameter * controlParameter, int value) const
+{
+    int max = controlParameter->getMax();
+    int min = controlParameter->getMin();
+    value -= controlParameter->getDefault(); 
+
+    if (value > max) { value = max; }
+    if (value < min) { value = min; }
+    return value;
+}
+
+// Transform e's controller value from relative to absolute.
+// @param at the time at which to look.  This is typically not e's time.
+// @author Tom Breton (Tehom)
+void
+ControllerContextMap::
+makeControlValueAbsolute(InternalSegmentMapper *mapper, Event *e, timeT at)
+{
+    Profiler profiler("ControllerContextMap::makeControlValueAbsolute", false);
+    const std::string eventType = e->getType();
+    const int controllerId =
+        e->has(Controller::NUMBER) ?
+        e->get <Int>(Controller::NUMBER) : 0;
+    const ControllerSearch params(eventType, controllerId, mapper);
+    ControllerSearch::Maybe result = params.search(mapper, at);
+    int baseline;
+    if (result.first)
+        { baseline = result.second.value(); }
+    else
+        { baseline = getStaticValue(mapper, eventType, controllerId); }
+    ControllerEventAdapter adapter(e);
+    long oldValue;
+    adapter.getValue(oldValue);
+    const ControlParameter * m_controlParameter =
+        getControlParameter(mapper, eventType, controllerId);
+    long newValue =
+        makeAbsolute(m_controlParameter, oldValue + baseline);
+    adapter.setValue(newValue);
+#ifdef DEBUG_CONTROLLER_CONTEXT
+    SEQMAN_DEBUG << "ControllerContextMap::makeControlValueAbsolute"
+                 << "oldValue - " << oldValue
+                 << "newValue - " << newValue
+                 << "baseline - " << result.second.value()
+                 << endl
+        ;
+#endif
+}
+
+// Store e as the latest controller event.  e must really be a
+// controller event.
+// @author Tom Breton (Tehom)
+void
+ControllerContextMap::
+storeLatestValue(Event *e)
+{
+    Profiler profiler("ControllerContextMap::storeLatestValue", false);
+    timeT at = e->getAbsoluteTime();
+    const std::string eventType = e->getType();
+    const int controllerId =
+        e->has(Controller::NUMBER) ?
+        e->get <Int>(Controller::NUMBER) : 0;
+    long value;
+    ControllerEventAdapter eAsController(e);
+    eAsController.getValue(value);
+
+    // Both branches store a search-value as if from a search.
+    ControllerSearchValue toCache(value, at);
+    if (eventType == Controller::EventType) {
+        // Create or replace it.
+        m_latestValues[controllerId] = toCache;
+    } else {
+        // We are only expecting these two types.
+        assert(eventType == PitchBend::EventType);
+        // Set it.
+        m_PitchBendLatestValue = Maybe(true, toCache);
+    } 
+}
+
+// Clear the cache.
+// @author Tom Breton (Tehom)
+void
+ControllerContextMap::
+clear(void)
+{
+    m_latestValues.clear();
+    m_PitchBendLatestValue = Maybe(false,ControllerSearchValue());
+}
+
+
 } // End namespace Rosegarden
 

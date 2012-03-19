@@ -107,8 +107,13 @@ struct RealTime
     //
     static long realTime2Frame(const RealTime &r, unsigned int sampleRate);
     static RealTime frame2RealTime(long frame, unsigned int sampleRate);
+    // Convert to frequency per minute.
+    double toPerMinute(void);
 
+    static const RealTime beforeZeroTime;
     static const RealTime zeroTime;
+    static const RealTime beforeMaxTime;
+    static const RealTime maxTime;
 };
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);

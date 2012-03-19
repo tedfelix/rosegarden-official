@@ -1453,6 +1453,23 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
     return long(result + 0.1);
 }
 
+// @param A RealTime
+// @param The same time in TimeT
+// @param A target tempo to ramp to.  For now, this parameter is
+// ignored and ramping is not supported.
+// @returns A tempo that effects this relationship.  
+// @author Tom Breton (Tehom)
+tempoT
+Composition::timeRatioToTempo(RealTime &realTime,
+                                  timeT beatTime, tempoT)
+{
+    static const timeT cdur = Note(Note::Crotchet).getDuration();
+    const double beatsPerMinute = realTime.toPerMinute();
+    const double qpm = beatsPerMinute * double(beatTime) / double(cdur);
+    tempoT averageTempo = Composition::getTempoForQpm(qpm);
+    return averageTempo;
+}
+
 bool
 Composition::getTempoTarget(ReferenceSegment::const_iterator i,
 			    tempoT &target,
@@ -2004,13 +2021,13 @@ Composition::getNewTrackId() const
 // Get all the segments that the same instrument plays that plays
 // segment s.
 // @return a segmentcontainer that includes s itself.
-Composition::segmentcontainer
+segmentcontainer
 Composition::getInstrumentSegments(Segment *s, timeT t) const
 {
-    Composition::segmentcontainer segments;
+    segmentcontainer segments;
     InstrumentId Instrument = getInstrumentId(s);
 
-    const Composition::segmentcontainer& allSegments = getSegments();
+    const segmentcontainer& allSegments = getSegments();
     for (Composition::iterator i = allSegments.begin();
          i != allSegments.end();
          ++i)

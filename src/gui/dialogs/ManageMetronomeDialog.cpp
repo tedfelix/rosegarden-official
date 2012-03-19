@@ -508,20 +508,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
 
     Instrument *inst =
         list[m_metronomeInstrument->currentIndex()];
-
-    if (inst) {
-        RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch"
-        << " - previewing" << endl;
-        MappedEvent mE(inst->getId(),
-                       MappedEvent::MidiNoteOneShot,
-                       pitch,
-                       MidiMaxValue,
-                       RealTime::zeroTime,
-                       RealTime(0, 10000000),
-                       RealTime::zeroTime);
-
-        StudioControl::sendMappedEvent(mE);
-    }
+    StudioControl::playPreviewNote(inst, pitch, MidiMaxValue, 10000000);
 }
 
 void

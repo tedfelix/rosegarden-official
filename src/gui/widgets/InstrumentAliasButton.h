@@ -45,6 +45,10 @@ public:
 protected slots:
     void slotPressed();
 
+private slots:
+    /// Instrument is being destroyed
+    void slotInstrumentGone(void);
+
 signals:
     // The button writes changes directly to the instrument, but it
     // also emits this to let you know something has changed

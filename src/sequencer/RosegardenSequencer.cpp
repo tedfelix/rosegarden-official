@@ -40,13 +40,14 @@
 #include "sound/SoundDriver.h"
 #include "sound/SoundDriverFactory.h"
 #include "sound/MappedInstrument.h"
+#include "sound/MappedEventInserter.h"
 #include "base/Profiler.h"
 #include "sound/PluginFactory.h"
 
 #include "gui/application/RosegardenApplication.h" 
 #include "gui/application/RosegardenMainWindow.h" 
 
-
+// #define DEBUG_ROSEGARDEN_SEQUENCER
 
 namespace Rosegarden
 {
@@ -119,7 +120,9 @@ RosegardenSequencer::getInstance()
 {
     m_instanceMutex.lock();
     if (!m_instance) {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "RosegardenSequencer::getInstance: Creating" << endl;
+#endif
         m_instance = new RosegardenSequencer();
     }
     m_instanceMutex.unlock();
@@ -145,8 +148,9 @@ RosegardenSequencer::quit()
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::quit()";
-
+#endif
     // and break out of the loop next time around
     m_transportStatus = QUIT;
 }
@@ -209,8 +213,9 @@ RosegardenSequencer::play(const RealTime &time,
 
     // report
     //
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::play() - starting to play\n";
-    
+#endif    
 //!!!
 //    dumpFirstSegment();
 
@@ -231,12 +236,15 @@ RosegardenSequencer::record(const RealTime &time,
 
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus << endl;
-
+#endif
     // punch in recording
     if (m_transportStatus == PLAYING) {
         if (localRecordMode == STARTING_TO_RECORD) {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
             SEQUENCER_DEBUG << "RosegardenSequencer::record: punching in" << endl;
+#endif
             localRecordMode = RECORDING; // no need to start playback
         }
     }
@@ -247,9 +255,10 @@ RosegardenSequencer::record(const RealTime &time,
     if (localRecordMode == STARTING_TO_RECORD ||
         localRecordMode == RECORDING) {
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "RosegardenSequencer::record()"
                         << " - starting to record" << endl;
-
+#endif
         // This function is (now) called synchronously from the GUI
         // thread, which is why we needed to obtain the sequencer lock
         // above.  This means we can safely call back into GUI
@@ -276,7 +285,9 @@ RosegardenSequencer::record(const RealTime &time,
                 (audioInstruments);
 
             if (audioFileNames.size() != audioInstruments.size()) {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
                 SEQUENCER_DEBUG << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")";
+#endif
                 stop();
                 return false;
             }
@@ -333,8 +344,9 @@ RosegardenSequencer::stop()
 
     // report
     //
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::stop() - stopping" << endl;
-
+#endif
     // process pending NOTE OFFs and stop the Sequencer
     m_driver->stopPlayback();
 
@@ -376,8 +388,9 @@ RosegardenSequencer::jumpTo(const RealTime &pos)
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::jumpTo(" << pos << ")\n";
-
+#endif
     if (pos < RealTime::zeroTime) return;
 
     m_driver->stopClocks();
@@ -474,18 +487,16 @@ RosegardenSequencer::clearAllAudioFiles()
 }
 
 void
-RosegardenSequencer::setMappedInstrument(int type, unsigned char channel,
-                                         unsigned int id)
+RosegardenSequencer::setMappedInstrument(int type, unsigned int id)
 {
     LOCKED;
 
     InstrumentId mID = (InstrumentId)id;
     Instrument::InstrumentType mType =
         (Instrument::InstrumentType)type;
-    MidiByte mChannel = (MidiByte)channel;
 
     m_driver->setMappedInstrument(
-        new MappedInstrument (mType, mChannel, mID));
+        new MappedInstrument (mType, 0, mID));
 
 }
 
@@ -703,10 +714,11 @@ RosegardenSequencer::setMappedProperty(int id,
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "setProperty: id = " << id
                     << " : property = \"" << property << "\""
                     << ", value = " << value << endl;
-
+#endif
     MappedObject *object = m_studio->getObjectById(id);
 
     if (object) object->setStringProperty(property, value);
@@ -718,10 +730,11 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "setPropertyList: id = " << id
                     << " : property list size = \"" << values.size()
                     << "\"" << endl;
-
+#endif
     MappedObject *object = m_studio->getObjectById(id);
 
     if (object) {
@@ -778,9 +791,10 @@ RosegardenSequencer::getPropertyList(int id,
         list = object->getPropertyList(property);
     }
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "getPropertyList - return " << list.size()
                     << " items" << endl;
-
+#endif
     return list;
 }
 
@@ -848,7 +862,9 @@ RosegardenSequencer::setMappedPort(int pluginId,
     if (slot) {
         slot->setPort(portId, value);
     } else {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "no such slot" << endl;
+#endif
     }
 }
 
@@ -867,7 +883,9 @@ RosegardenSequencer::getMappedPort(int pluginId,
     if (slot) {
         return slot->getPort(portId);
     } else {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "no such slot" << endl;
+#endif
     }
 
     return 0;
@@ -884,9 +902,11 @@ RosegardenSequencer::createMappedObject(int type)
         m_studio->createObject(MappedObject::MappedObjectType(type));
 
     if (object) {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "createMappedObject - type = "
                         << type << ", object id = "
                         << object->getId() << endl;
+#endif
         return object->getId();
     }
 
@@ -958,7 +978,9 @@ RosegardenSequencer::clearStudio()
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "clearStudio()" << endl;
+#endif
     m_studio->clear();
     SequencerDataBlock::getInstance()->clearTemporaries();
 
@@ -971,9 +993,10 @@ RosegardenSequencer::setQuarterNoteLength(RealTime rt)
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::setQuarterNoteLength"
                     << rt << endl;
-
+#endif
     m_driver->setMIDIClockInterval(rt / 24);
 }
 
@@ -994,15 +1017,15 @@ void RosegardenSequencer::dumpFirstSegment()
 
     unsigned int i = 0;
     
-    std::set<MappedSegment *> segs = m_metaIterator.getSegments();
+    std::set<MappedEventBuffer *> segs = m_metaIterator.getSegments();
     if (segs.empty()) {
         SEQUENCER_DEBUG << "(no segments)" << endl;
         return;
     }
 
-    MappedSegment *firstMappedSegment = *segs.begin();
+    MappedEventBuffer *firstMappedEventBuffer = *segs.begin();
 
-    MappedSegment::iterator it(firstMappedSegment);
+    MappedEventBuffer::iterator it(firstMappedEventBuffer);
 
     for (; !it.atEnd(); ++it) {
 
@@ -1024,40 +1047,46 @@ void RosegardenSequencer::dumpFirstSegment()
 }
 
 void
-RosegardenSequencer::segmentModified(MappedSegment *segment)
+RosegardenSequencer::segmentModified(MappedEventBuffer *mapper)
 {
-    if (!segment) return;
+    if (!mapper) return;
 
-    SEQUENCER_DEBUG << "RosegardenSequencer::segmentModified(" << segment << ")\n";
-
-    if (m_transportStatus == PLAYING) {
-        LOCKED;
-        m_metaIterator.resetIteratorForSegment(segment);
-    }
+ #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
+   SEQUENCER_DEBUG << "RosegardenSequencer::segmentModified(" << mapper << ")\n";
+#endif
+   LOCKED;
+   bool immediate = (m_transportStatus == PLAYING);
+   m_metaIterator.resetIteratorForSegment(mapper, immediate);
 }
 
 void
-RosegardenSequencer::segmentAdded(MappedSegment *segment)
+RosegardenSequencer::segmentAdded(MappedEventBuffer *mapper)
 {
-    if (!segment) return;
+    if (!mapper) return;
 
     LOCKED;
 
-    SEQUENCER_DEBUG << "MmappedSegment::segmentAdded(" << segment << ")\n";
-
-    m_metaIterator.addSegment(segment);
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
+    SEQUENCER_DEBUG << "RosegardenSequencer::segmentAdded(" << mapper << ")\n";
+#endif
+    // m_metaIterator takes ownership of the mapper, shared with other
+    // MappedBufMetaIterators
+    m_metaIterator.addSegment(mapper);
 }
 
 void
-RosegardenSequencer::segmentAboutToBeDeleted(MappedSegment *segment)
+RosegardenSequencer::segmentAboutToBeDeleted(MappedEventBuffer *mapper)
 {
-    if (!segment) return;
+    if (!mapper) return;
 
     LOCKED;
 
-    SEQUENCER_DEBUG << "MmappedSegment::segmentAboutToBeDeleted(" << segment << ")\n";
-
-    m_metaIterator.removeSegment(segment);
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
+    SEQUENCER_DEBUG << "RosegardenSequencer::segmentAboutToBeDeleted(" << mapper << ")\n";
+#endif
+    
+    // This deletes mapper just if no other metaiterator owns it.
+    m_metaIterator.removeSegment(mapper);
 }
 
 void
@@ -1065,8 +1094,9 @@ RosegardenSequencer::compositionAboutToBeDeleted()
 {
     LOCKED;
 
-    SEQUENCER_DEBUG << "MmappedSegment::compositionAboutToBeDeleted()\n";
-
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
+    SEQUENCER_DEBUG << "RosegardenSequencer::compositionAboutToBeDeleted()\n";
+#endif
     m_metaIterator.clear();
 }
 
@@ -1075,8 +1105,9 @@ RosegardenSequencer::remapTracks()
 {
     LOCKED;
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::remapTracks";
-
+#endif
     rationalisePlayingAudio();
 }
 
@@ -1138,12 +1169,16 @@ RosegardenSequencer::getSlice(MappedEventList &composition,
     //    SEQUENCER_DEBUG << "RosegardenSequencer::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
 
     if (firstFetch || (start < m_lastStartTime)) {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "[calling jumpToTime on start]" << endl;
+#endif
         m_metaIterator.jumpToTime(start);
     }
 
+    MappedEventInserter inserter(composition);
+
     (void)m_metaIterator.fillCompositionWithEventsUntil
-        (firstFetch, &composition, start, end);
+        (firstFetch, inserter, start, end);
 
     //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
     // playing stops right after it starts.
@@ -1311,20 +1346,24 @@ RosegardenSequencer::sleep(const RealTime &rt)
 void
 RosegardenSequencer::processRecordedMidi()
 {
-//    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi";
-
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER
+    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi";
+#endif
     MappedEventList mC;
     m_driver->getMappedEventList(mC);
 
     if (mC.empty()) return;
 
-//    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
-
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER
+    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
+#endif
     applyFiltering(&mC, ControlBlock::getInstance()->getRecordFilter(), false);
+
     SequencerDataBlock::getInstance()->addRecordedEvents(&mC);
 
     if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
         applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
+
         routeEvents(&mC, false);
     }
 }
@@ -1375,8 +1414,10 @@ RosegardenSequencer::processAsynchronousEvents()
     if (!m_asyncOutQueue.empty()) {
         q = m_asyncOutQueue;
         m_asyncOutQueue.clear();
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "processAsynchronousEvents: Have " << q.size()
                         << " events in async out queue" << endl;
+#endif
     }
     m_asyncQueueMutex.unlock();
     MappedEventList mC;
@@ -1447,7 +1488,9 @@ RosegardenSequencer::checkForNewClients()
         return ;
 
     if (m_driver->checkForNewClients()) {
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
         SEQUENCER_DEBUG << "client list changed" << endl;
+#endif
     }
 }
 
@@ -1469,8 +1512,9 @@ RosegardenSequencer::transportChange(TransportRequest request)
     TransportPair pair(request, RealTime::zeroTime);
     m_transportRequests.push_back(pair);
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::transportChange: " << request;
-
+#endif
     if (request == TransportNoChange)
         return m_transportToken;
     else
@@ -1486,8 +1530,9 @@ RosegardenSequencer::transportJump(TransportRequest request,
     TransportPair pair(request, rt);
     m_transportRequests.push_back(pair);
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::transportJump: " << request << ", " << rt;
-
+#endif
     if (request == TransportNoChange)
         return m_transportToken + 1;
     else
@@ -1499,7 +1544,9 @@ RosegardenSequencer::isTransportSyncComplete(TransportToken token)
 {
     QMutexLocker locker(&m_transportRequestMutex);
 
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::isTransportSyncComplete: token " << token << ", current token " << m_transportToken;
+#endif
     return m_transportToken >= token;
 }
 
@@ -1507,7 +1554,9 @@ void
 RosegardenSequencer::incrementTransportToken()
 {
     ++m_transportToken;
+#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
     SEQUENCER_DEBUG << "RosegardenSequencer::incrementTransportToken: incrementing to " << m_transportToken << endl;
+#endif
 }
 
 }

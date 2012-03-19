@@ -25,7 +25,7 @@ namespace Rosegarden
 {
 
 class SegmentMapper;
-class MappedSegment;
+class MappedEventBuffer;
 class Segment;
 class RosegardenDocument;
 
@@ -38,7 +38,7 @@ public:
     CompositionMapper(RosegardenDocument *doc);
     ~CompositionMapper();
 
-    MappedSegment *getMappedSegment(Segment *);
+    MappedEventBuffer *getMappedEventBuffer(Segment *);
 
 protected:
     bool segmentModified(Segment *);
@@ -49,6 +49,8 @@ protected:
 
     RosegardenDocument *m_doc;
 
+    // I share ownership of the mappers with instances of
+    // MappedBufMetaIterator
     typedef std::map<Segment*, SegmentMapper *> segmentmappers;
     segmentmappers m_segmentMappers;
 };

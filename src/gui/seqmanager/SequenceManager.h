@@ -51,7 +51,7 @@ class CountdownDialog;
 class CompositionMapper;
 class Composition;
 class AudioManagerDialog;
-
+class MappedBufMetaIterator;
 
 class SequenceManager : public QObject, public CompositionObserver
 {
@@ -165,7 +165,9 @@ public:
 
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
 
-
+    // Return a new metaiterator on the current composition (suitable
+    // for MidiFile)
+    MappedBufMetaIterator *makeTempMetaiterator(void);
     //
     // CompositionObserver interface
     //

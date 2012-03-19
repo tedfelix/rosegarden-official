@@ -15,9 +15,11 @@
 
 #include "MidiDevice.h"
 #include "sound/Midi.h"
+#include "base/AllocateChannels.h"
+#include "base/ControlParameter.h"
+#include "base/Instrument.h"
 #include "base/MidiTypes.h"
-#include "Instrument.h"
-#include "ControlParameter.h"
+#include "misc/Debug.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -36,7 +38,8 @@ MidiDevice::MidiDevice():
     m_metronome(0),
     m_direction(Play),
     m_variationType(NoVariations),
-    m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
+    m_librarian(std::pair<std::string, std::string>("<none>", "<none>")),
+    m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
     createInstruments(MidiInstrumentBase);
     generatePresentationList();
@@ -55,7 +58,8 @@ MidiDevice::MidiDevice(DeviceId id,
     m_metronome(0),
     m_direction(dir),
     m_variationType(NoVariations),
-    m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
+    m_librarian(std::pair<std::string, std::string>("<none>", "<none>")),
+    m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
     createInstruments(ibase);
     generatePresentationList();
@@ -77,7 +81,8 @@ MidiDevice::MidiDevice(DeviceId id,
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
-    m_librarian(dev.getLibrarian())
+    m_librarian(dev.getLibrarian()),
+    m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
     createInstruments(ibase);
 
@@ -107,7 +112,8 @@ MidiDevice::MidiDevice(const MidiDevice &dev) :
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
-    m_librarian(dev.getLibrarian())
+    m_librarian(dev.getLibrarian()),
+    m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
     // Create and assign a metronome if required
     //
@@ -166,6 +172,9 @@ MidiDevice::operator=(const MidiDevice &dev)
 	m_metronome = 0;
     }
 
+    if (m_allocator) { delete m_allocator; }
+    m_allocator = new AllocateChannels(ChannelSetup::MIDI);
+
     // Copy the instruments
     //
     InstrumentList insList = dev.getAllInstruments();
@@ -186,8 +195,14 @@ MidiDevice::operator=(const MidiDevice &dev)
 MidiDevice::~MidiDevice()
 {
     delete m_metronome;
+    delete m_allocator;
+
     //!!! delete key mappings
 }
+
+AllocateChannels *
+MidiDevice::getAllocator(void)
+{ return m_allocator; }
 
 void
 MidiDevice::createInstruments(InstrumentId base)
@@ -195,6 +210,9 @@ MidiDevice::createInstruments(InstrumentId base)
     for (int i = 0; i < 16; ++i) {
 	Instrument *instrument = new Instrument
 	    (base + i, Instrument::Midi, "", i, this);
+        if (isPercussionNumber(i)) {
+            instrument->setFixedChannel();
+        }
 	addInstrument(instrument);
     }
     renameInstruments();
@@ -208,7 +226,7 @@ MidiDevice::renameInstruments()
             (QString("%1 #%2%3")
              .arg(getName().c_str())
              .arg(i+1)
-             .arg((i==9) ? "[D]" : "")
+             .arg(isPercussionNumber(i) ? "[D]" : "")
              .toUtf8().data());
     }
 }
@@ -608,6 +626,18 @@ MidiDevice::toXmlString()
     return midiDevice.str();
 }
 
+void
+MidiDevice::
+refreshForConnection(void)
+{
+    // !!! We cheat here: instead of checking beforehand which
+    // Instrument controllers have default values and changing them to
+    // the new defaults, we assume afterwards that zero values are
+    // probably leftover old defaults.
+    generateDefaultControllers();
+    conformInstrumentControllers();
+}
+
 // Only copy across non System instruments
 //
 InstrumentList
@@ -846,6 +876,44 @@ MidiDevice::replaceControlParameters(const ControlList &con)
     }
 }
 
+// Conform instrument controllers to a new setup.
+void
+MidiDevice::
+conformInstrumentControllers(void)
+{
+    InstrumentList insList = getAllInstruments();
+
+    // Treat each instrument
+    for(InstrumentList::iterator iIt = insList.begin();
+        iIt != insList.end();
+        ++iIt) {
+        // Get this instrument's static controllers.  As a seperate
+        // copy, so it's not munged when we erase controllers.
+        StaticControllers staticControllers = 
+            (*iIt)->getStaticControllers();
+
+        for (StaticControllerIterator it = staticControllers.begin();
+             it != staticControllers.end();
+             ++it) {
+            MidiByte conNumber = it->first;
+
+            const ControlParameter * con =
+                findControlParameter(Rosegarden::Controller::EventType,
+                                     conNumber);
+            if (!con) {
+                // It doesn't exist in device, so remove it from
+                // instrument.
+                (*iIt)->removeStaticController(conNumber);
+            }
+            else if ((*iIt)->getControllerValue(conNumber) == 0) {
+                // Controller value probably has an old default value,
+                // so set it to the new default.
+                MidiByte value = con->getDefault();
+                (*iIt)->setControllerValue(conNumber, value);
+            } 
+        }
+    }
+}
 
 // Check to see if passed ControlParameter is unique.  Either the
 // type must be unique or in the case of Controller::EventType the
@@ -857,21 +925,27 @@ MidiDevice::replaceControlParameters(const ControlList &con)
 bool 
 MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
 {
+    return
+        findControlParameter(con.getType(), con.getControllerValue()) == 0;
+}
+
+const ControlParameter *
+MidiDevice::
+findControlParameter(std::string type, MidiByte conNumber) const
+{
     ControlList::const_iterator it = m_controlList.begin();
 
     for (; it != m_controlList.end(); ++it)
     {
-        if (it->getType() == con.getType())
+        if (it->getType() == type)
         {
             if (it->getType() == Rosegarden::Controller::EventType &&
-                it->getControllerValue() != con.getControllerValue())
-                continue;
-            return false;
+                it->getControllerValue() != conNumber)
+                { continue; }
+            return &*it;
         }
-
     }
-
-    return true;
+    return 0;
 }
 
 bool 

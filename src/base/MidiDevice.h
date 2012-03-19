@@ -32,6 +32,8 @@ namespace Rosegarden
 typedef std::vector<std::string> StringList;
 typedef std::vector<MidiByte> MidiByteList;
 
+class AllocateChannels;
+
 class MidiDevice : public Device, public Controllable
 {
 public:
@@ -64,6 +66,8 @@ public:
 
     // Assignment
     MidiDevice &operator=(const MidiDevice &);
+
+    virtual AllocateChannels *getAllocator(void);
 
     // Instrument must be on heap; I take ownership of it
     virtual void addInstrument(Instrument*);
@@ -160,11 +164,15 @@ public:
     bool modifyControlParameter(const ControlParameter &con, int index);
 
     void replaceControlParameters(const ControlList &);
+    void refreshControlParameters(void);
 
     // Check to see if the passed ControlParameter is unique in
     // our ControlParameter list.
     //
     bool isUniqueControlParameter(const ControlParameter &con) const;
+    
+    const ControlParameter *
+        findControlParameter(std::string type, MidiByte conNumber) const;
     
     // Check if controller is visible.
     //
@@ -175,13 +183,19 @@ public:
     void generateDefaultControllers();
 
     virtual std::string toXmlString();
-    
+
+    virtual void refreshForConnection(void);
+
     // Accessors for recording property
     bool isRecording() {return m_recording; }
+
+    static bool isPercussionNumber(int channel)
+    { return channel == 9; }
 
 protected:
     void createInstruments(InstrumentId);
     void renameInstruments();
+    void conformInstrumentControllers(void);
 
     void generatePresentationList();
 
@@ -196,7 +210,6 @@ protected:
     // Remove a control from all of the device's Instruments.
     //
     void removeControlFromInstrument(const ControlParameter &con);
-    
 
     ProgramList    m_programList;
     BankList       m_bankList;
@@ -222,6 +235,9 @@ protected:
     // Librarian contact details
     //
     std::pair<std::string, std::string> m_librarian; // name. email
+
+    // The channel allocator.
+    AllocateChannels  *m_allocator;
 };
 
 }

@@ -1814,50 +1814,17 @@ NotationScene::clearPreviewNote(NotationStaff *staff)
     }
 }
 
-static bool
-canPreviewAnotherNote()
-{
-    static time_t lastCutOff = 0;
-    static int sinceLastCutOff = 0;
-
-    time_t now = time(0);
-    ++sinceLastCutOff;
-
-    if ((now - lastCutOff) > 0) {
-        sinceLastCutOff = 0;
-        lastCutOff = now;
-    } else {
-        if (sinceLastCutOff >= 20) {
-            // don't permit more than 20 notes per second or so, to
-            // avoid gungeing up the sound drivers
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void
 NotationScene::playNote(Segment &segment, int pitch, int velocity)
 {
     if (!m_document) return;
 
     Instrument *instrument = m_document->getStudio().getInstrumentFor(&segment);
-    if (!instrument) return;
 
-    if (!canPreviewAnotherNote()) return;
-
-    if (velocity < 0) velocity = 100;
-
-    MappedEvent mE(instrument->getId(),
-                   MappedEvent::MidiNoteOneShot,
-                   pitch + segment.getTranspose(),
-                   velocity,
-                   RealTime::zeroTime,
-                   RealTime(0, 250000000),
-                   RealTime::zeroTime);
-
-    StudioControl::sendMappedEvent(mE);
+    StudioControl::playPreviewNote(instrument,
+                                   pitch + segment.getTranspose(),
+                                   velocity,
+                                   250000000);
 }
 
 bool

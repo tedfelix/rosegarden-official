@@ -895,6 +895,7 @@ private:
     bool m_isTmp;   // Mark a segment (usually a link) as temporary
 };
 
+typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
 
 class SegmentObserver
 {

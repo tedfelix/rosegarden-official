@@ -25,13 +25,13 @@ class QString;
 namespace Rosegarden
 {
 
-class TimeSigSegmentMapper;
-class TempoSegmentMapper;
-class SegmentMapper;
-class MappedSegment;
 class Segment;
 class RosegardenDocument;
+class MarkerMapper;
 class MetronomeMapper;
+class SegmentMapper;
+class TempoSegmentMapper;
+class TimeSigSegmentMapper;
 
 class SegmentMapperFactory
 {
@@ -40,6 +40,7 @@ public:
     static MetronomeMapper *makeMetronome(RosegardenDocument *);
     static TimeSigSegmentMapper *makeTimeSig(RosegardenDocument *);
     static TempoSegmentMapper *makeTempo(RosegardenDocument *);
+    static MarkerMapper       *makeMarker(RosegardenDocument *doc);
 };
 
 }

@@ -41,12 +41,13 @@
 #include "ExternalTransport.h"
 
 #include <QRegExp>
+#include <QMutex>
 
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
-//#define DEBUG_PROCESS_MIDI_OUT 1
+// #define DEBUG_ALSA 1
+// #define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
 
@@ -59,7 +60,7 @@ using std::endl;
 static size_t _debug_jack_frame_count = 0;
 
 #define AUTO_TIMER_NAME "(auto)"
-
+#define LOCKED QMutexLocker _locker(&m_mutex)
 
 namespace Rosegarden
 {
@@ -78,6 +79,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
                 std::string(", kernel version ") +
                 getKernelVersionString() +
                 "]"),
+    m_midiHandle(0),
     m_client( -1),
     m_inputPort( -1),
     m_syncOutputPort( -1),
@@ -1818,6 +1820,10 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         m_needJackStart = NeedJackStart;
     }
 #endif
+
+    // Erase recent noteoffs.  There shouldn't be any, but let's be
+    // extra careful.
+    m_recentNoteOffs.clear();
 }
 
 
@@ -2116,6 +2122,7 @@ AlsaDriver::pushRecentNoteOffs()
     m_recentNoteOffs.clear();
 }
 
+// Remove recent noteoffs that are before time t
 void
 AlsaDriver::cropRecentNoteOffs(const RealTime &t)
 {
@@ -2444,6 +2451,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 continue;
             if (event->data.note.velocity > 0) {
                 MappedEvent *mE = new MappedEvent();
+                mE->setType(MappedEvent::MidiNote);
                 mE->setPitch(event->data.note.note);
                 mE->setVelocity(event->data.note.velocity);
                 mE->setEventTime(eventTime);
@@ -3442,12 +3450,12 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                            const RealTime &sliceStart,
                            const RealTime &sliceEnd)
 {
+    LOCKED;
     RealTime outputTime;
     RealTime outputStopTime;
     MappedInstrument *instrument;
     ClientPortPair outputDevice;
     MidiByte channel;
-    snd_seq_event_t event;
 
     // special case for unqueued events
     bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
@@ -3462,8 +3470,6 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
     // These won't change in this slice
     //
-    snd_seq_ev_clear(&event);
-
     if ((mC.begin() != mC.end())) {
         SequencerDataBlock::getInstance()->setVisual(*mC.begin());
     }
@@ -3479,6 +3485,9 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
+        snd_seq_event_t event;
+        snd_seq_ev_clear(&event);
+    
         bool isControllerOut = ((*i)->getRecordedDevice() ==
                                 Device::CONTROL_DEVICE);
 
@@ -3600,7 +3609,11 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             std::cerr << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel << std::endl;
 #endif
         } else if (instrument != 0) {
-            channel = instrument->getChannel();
+            channel = (*i)->getRecordedChannel();
+#ifdef DEBUG_ALSA
+            std::cerr << "processMidiOut() - Non-controller Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for channel " 
+                      << (int)(*i)->getRecordedChannel() << std::endl;
+#endif
         } else {
 #ifdef DEBUG_ALSA
             std::cerr << "processMidiOut() - No instrument for event of type "
@@ -3748,6 +3761,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                                       (*i)->getData2());
             break;
 
+            // These types do nothing here, so go on to the
+            // next iteration.
         case MappedEvent::Audio:
         case MappedEvent::AudioCancel:
         case MappedEvent::AudioLevel:
@@ -3757,7 +3772,19 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         case MappedEvent::SystemMMCTransport:
         case MappedEvent::SystemMIDIClock:
         case MappedEvent::SystemMIDISyncAuto:
-            break;
+        case MappedEvent::AudioGeneratePreview:
+        case MappedEvent::Marker:
+        case MappedEvent::Panic:
+        case MappedEvent::SystemAudioFileFormat:
+        case MappedEvent::SystemAudioPortCounts:
+        case MappedEvent::SystemAudioPorts:
+        case MappedEvent::SystemFailure:
+        case MappedEvent::SystemMetronomeDevice:
+        case MappedEvent::SystemMTCTransport:
+        case MappedEvent::TimeSignature:
+        case MappedEvent::Tempo:
+        case MappedEvent::Text:
+             continue;
 
         default:
         case MappedEvent::InvalidMappedEvent:
@@ -3970,6 +3997,7 @@ AlsaDriver::startClocks()
 void
 AlsaDriver::startClocksApproved()
 {
+    LOCKED;
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::startClocks: startClocksApproved" << std::endl;
 #endif

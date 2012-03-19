@@ -26,15 +26,15 @@ namespace Rosegarden
 
 class RosegardenDocument;
 
-class SpecialSegmentMapper : public SegmentMapper
+class SpecialSegmentMapper : public MappedEventBuffer
 {
 public:
-    // overrides from SegmentMapper
+    // overrides from MappedEventBuffer.  Exists only for historical
+    // reasons.
     virtual int getSegmentRepeatCount();
 
 protected:
-    SpecialSegmentMapper(RosegardenDocument *doc,
-                         MappedSegment *mapped);
+    SpecialSegmentMapper(RosegardenDocument *doc);
 };
 
 }

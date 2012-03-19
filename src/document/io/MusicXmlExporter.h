@@ -38,6 +38,7 @@ class RosegardenDocument;
 class Key;
 class Clef;
 class AccidentalTable;
+class Instrument;
 
 /**
  *   The global structure of this exporter (MusicXmlExporter::write()) is
@@ -118,11 +119,14 @@ public:
      * A simple structure to store some MIDI information required to include
      * the MIDI support in MusicXML file.
      */
-    typedef struct midi_instrument {
-        int         channel;
-        int         program;
-        int         unpitched;
-    } MidiInstrument;
+    struct MidiInstrument
+    {
+      MidiInstrument(void) {};
+      MidiInstrument(Instrument * instrument, int pitch);
+      int         channel;
+      int         program;
+      int         unpitched;
+    };
     typedef std::map<std::string, MidiInstrument> InstrumentMap;
 
     /**

@@ -3,9 +3,10 @@
 # rebuild-qrc
 #
 # Copyright (c) 2009  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# git code by Tom Breton (Tehom)
 # Released under the GPL
 #
-# REQUIRES: a working copy under Subversion version control
+# REQUIRES: a working copy under Subversion or git version control
 #
 #
 # PURPOSE: Having to edit data.qrc by hand every time I add a file is annoying,
@@ -28,7 +29,7 @@ cd data||exit 1
 writeEntries() {
     echo "  assembling files of type $1..."
     if (svn info > /dev/null 2>&1); then
-        for f in $(find . -name \*.$1 | sort); do
+        for f in $(find . -name \*.$1 | sort --ignore-case --dictionary-order); do
             if (svn info $f > /dev/null 2>&1); then
                 # skip rosegarden.ts
                 [ "$(basename $f)" == "rosegarden.ts" ] && continue
@@ -42,6 +43,24 @@ EOF
                 not_added="$f $not_added"
             fi
         done
+	## No svn found, so try git.  Code is otherwise identical.
+    elif (git ls-files --ignored --exclude='' > /dev/null 2>&1); then
+        for f in $(find . -name \*.$1 | sort --ignore-case --dictionary-order); do
+            if (git ls-files --error-unmatch $f > /dev/null 2>&1); then
+                # skip rosegarden.ts
+                [ "$(basename $f)" == "rosegarden.ts" ] && continue
+                # change .ts extension to .qm, which are the files we actually
+                # need to bundle for every .ts we eventually have
+                f=$(echo $f|sed "s/\.ts/\.qm/g")
+                cat >> $ofile << EOF
+<file>$f</file>
+EOF
+            else
+                not_added="$f $not_added"
+            fi
+        done
+    else
+	echo "  No version control found" && exit 1
     fi
 }
 

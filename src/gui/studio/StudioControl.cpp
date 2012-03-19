@@ -29,6 +29,7 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedStudio.h"
+#include "sound/ImmediateNote.h"
 #include <QByteArray>
 #include <QDataStream>
 #include <QString>
@@ -37,6 +38,24 @@
 namespace Rosegarden
 {
 
+ImmediateNote *
+StudioControl::
+getFiller(void)
+{
+    m_instanceMutex.lock();
+    if (!m_immediateNoteFiller)
+        { m_immediateNoteFiller = new ImmediateNote(); }
+    m_instanceMutex.unlock();
+    return m_immediateNoteFiller;
+}
+
+ImmediateNote *
+StudioControl::
+m_immediateNoteFiller = 0;
+
+QMutex
+StudioControl::m_instanceMutex;
+    
 MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
@@ -175,7 +194,6 @@ void
 StudioControl::sendMappedInstrument(const MappedInstrument &mI)
 {
     RosegardenSequencer::getInstance()->setMappedInstrument(mI.getType(),
-                                                            mI.getChannel(),
                                                             mI.getId());
 }
 
@@ -186,95 +204,13 @@ StudioControl::sendQuarterNoteLength(const RealTime &length)
 }
 
 void
-StudioControl::sendRPN(InstrumentId instrumentId,
-                       MidiByte paramMSB,
-                       MidiByte paramLSB,
-                       MidiByte /* controller */,
-                       MidiByte value)
+StudioControl::
+playPreviewNote(Instrument *instrument, int pitch,
+                int velocity, int nsecs, bool oneshot)
 {
-    Profiler profiler("StudioControl::sendRPN", true);
-
     MappedEventList mC;
-    MappedEvent *mE =
-        new MappedEvent(instrumentId,
-                        MappedEvent::MidiController,
-                        MIDI_CONTROLLER_RPN_2,
-                        paramMSB);
-    mC.insert(mE);
-
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_RPN_1,
-                         paramLSB);
-    mC.insert(mE);
-
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         6,  // data value changed
-                         value);
-    mC.insert(mE);
-
-
-    // Null the controller using - this is "best practice"
-    //
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_RPN_2,
-                         MidiMaxValue); // null
-    mC.insert(mE);
-
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_RPN_1,
-                         MidiMaxValue); // null
-    mC.insert(mE);
-
-    sendMappedEventList(mC);
-}
-
-void
-StudioControl::sendNRPN(InstrumentId instrumentId,
-                        MidiByte paramMSB,
-                        MidiByte paramLSB,
-                        MidiByte /* controller */,
-                        MidiByte value)
-{
-    Profiler profiler("StudioControl::sendNRPN", true);
-
-    MappedEventList mC;
-    MappedEvent *mE =
-        new MappedEvent(instrumentId,
-                        MappedEvent::MidiController,
-                        MIDI_CONTROLLER_NRPN_2,
-                        paramMSB);
-    mC.insert(mE);
-
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_NRPN_1,
-                         paramLSB);
-    mC.insert(mE);
-
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         6,  // data value changed
-                         value);
-    mC.insert(mE);
-
-    // Null the controller using - this is "best practice"
-    //
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_RPN_2,
-                         MidiMaxValue); // null
-    mC.insert(mE);
-
-    mE = new MappedEvent(instrumentId,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_RPN_1,
-                         MidiMaxValue); // null
-    mC.insert(mE);
-
+    ImmediateNote * filler = getFiller();
+    filler->fillWithNote(mC, instrument, pitch, velocity, nsecs, oneshot);
     sendMappedEventList(mC);
 }
 

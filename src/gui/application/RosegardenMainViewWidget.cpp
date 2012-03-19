@@ -1722,7 +1722,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
                 bestSoFar = ti->first;
             bool haveSegment = false;
 
-            for (Composition::segmentcontainer::const_iterator si =
+            for (segmentcontainer::const_iterator si =
                         comp.getSegments().begin();
                     si != comp.getSegments().end(); ++si) {
                 if ((*si)->getTrack() == ti->first) {

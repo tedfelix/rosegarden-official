@@ -63,7 +63,6 @@ class Composition : public XmlExportable
     friend class Segment; // to call notifySegmentRepeatChanged()
     
 public:
-    typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
 
@@ -677,6 +676,9 @@ public:
         else         return getElapsedRealTime(t0) - getElapsedRealTime(t1);
     }
 
+    static tempoT
+        timeRatioToTempo(RealTime &realTime,
+                         timeT beatTime, tempoT rampTo);
 
     //////
     //
@@ -1001,7 +1003,6 @@ protected:
     timeT realTime2Time(RealTime rtime, tempoT tempo) const;
     timeT realTime2Time(RealTime rtime, tempoT tempo,
                         timeT targetTempoTime, tempoT targetTempo) const;
-
     bool getTempoTarget(ReferenceSegment::const_iterator i,
                         tempoT &target,
                         timeT &targetTime) const;

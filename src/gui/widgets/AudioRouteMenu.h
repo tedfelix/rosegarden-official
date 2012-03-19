@@ -70,6 +70,9 @@ signals:
     // The menu writes changes directly to the instrument, but it
     // also emits this to let you know something has changed
     void changed();
+private slots:
+    /// Instrument is being destroyed
+    void slotInstrumentGone(void);
 
 private:
     Studio *m_studio;

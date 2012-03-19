@@ -895,6 +895,29 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
         m_transport->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
+        // Pacify compiler warnings about missed cases.
+    case MappedEvent::InvalidMappedEvent:
+    case MappedEvent::Audio:
+    case MappedEvent::AudioCancel:
+    case MappedEvent::AudioLevel:
+    case MappedEvent::AudioStopped:
+    case MappedEvent::AudioGeneratePreview:
+    case MappedEvent::Marker:
+    case MappedEvent::SystemUpdateInstruments:
+    case MappedEvent::SystemJackTransport:
+    case MappedEvent::SystemMMCTransport:
+    case MappedEvent::SystemMIDIClock:
+    case MappedEvent::SystemMetronomeDevice:
+    case MappedEvent::SystemAudioPortCounts:
+    case MappedEvent::SystemAudioPorts:
+    case MappedEvent::SystemFailure:
+    case MappedEvent::Panic:
+    case MappedEvent::SystemMTCTransport:
+    case MappedEvent::SystemMIDISyncAuto:
+    case MappedEvent::SystemAudioFileFormat:
+    case MappedEvent::TimeSignature:
+    case MappedEvent::Tempo:
+    case MappedEvent::Text:
     default:   // do nothing
         return ;
     }
@@ -956,6 +979,29 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
         m_transport->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
+        // Pacify compiler warnings about missed cases.
+    case MappedEvent::InvalidMappedEvent:
+    case MappedEvent::Audio:
+    case MappedEvent::AudioCancel:
+    case MappedEvent::AudioLevel:
+    case MappedEvent::AudioStopped:
+    case MappedEvent::AudioGeneratePreview:
+    case MappedEvent::Marker:
+    case MappedEvent::SystemUpdateInstruments:
+    case MappedEvent::SystemJackTransport:
+    case MappedEvent::SystemMMCTransport:
+    case MappedEvent::SystemMIDIClock:
+    case MappedEvent::SystemMetronomeDevice:
+    case MappedEvent::SystemAudioPortCounts:
+    case MappedEvent::SystemAudioPorts:
+    case MappedEvent::SystemFailure:
+    case MappedEvent::Panic:
+    case MappedEvent::SystemMTCTransport:
+    case MappedEvent::SystemMIDISyncAuto:
+    case MappedEvent::SystemAudioFileFormat:
+    case MappedEvent::TimeSignature:
+    case MappedEvent::Tempo:
+    case MappedEvent::Text:
     default:   // do nothing
         return ;
     }

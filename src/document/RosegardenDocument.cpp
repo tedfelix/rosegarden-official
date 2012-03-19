@@ -686,11 +686,6 @@ bool RosegardenDocument::openDocument(const QString& filename,
         //
         initialiseStudio();
 
-        // Initialise the MIDI controllers (reaches through to MIDI devices
-        // to set them up)
-        //
-        initialiseControllers();
-        
     } else {
         RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is not running" << endl;
     }
@@ -1173,7 +1168,7 @@ RosegardenDocument::getSequenceManager()
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 0;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 1;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
@@ -1264,12 +1259,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     // First make sure all MIDI devices know their current connections
     //
-    DeviceList *devices = m_studio.getDevices();
-    for (uint i = 0; i < devices->size(); ++i) {
-        DeviceId id = (*devices)[i]->getId();
-        QString connection = RosegardenSequencer::getInstance()->getConnection(id);
-        (*devices)[i]->setConnection(qstrtostr(connection));
-    }
+    m_studio.resyncDeviceConnections();
 
     if (progress) {
         progress->setValue(10);
@@ -1837,18 +1827,6 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         getComposition().resetLinkedSegmentRefreshStatuses();
     }
 
-    if (handler.channelsWereRemapped()) {
-        StartupLogo::hideIfStillThere();
-        CurrentProgressDialog::freeze();
-
-        QMessageBox::information(
-                dynamic_cast<QWidget *>(parent()),
-                tr("Rosegarden"),
-                tr("<qt><h2>Channels were remapped</h2><p>Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, \"MIDI Input System Device #12\" always uses channel 12.</p><p>The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.</p><p>We apologize for any inconvenience.</p></qt>"));
-
-        CurrentProgressDialog::thaw();
-    }
-
     // Set to maximum just incase reading did not do this.
     if (progress) {
         progress->setValue(progress->maximum());
@@ -2060,6 +2038,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             // list everything in the enum to avoid the annoying compiler
             // warning
             case MappedEvent::InvalidMappedEvent:
+            case MappedEvent::Marker:
             case MappedEvent::SystemJackTransport:
             case MappedEvent::SystemMMCTransport:
             case MappedEvent::SystemMIDIClock:
@@ -2067,6 +2046,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             case MappedEvent::SystemAudioPortCounts:
             case MappedEvent::SystemAudioPorts:
             case MappedEvent::SystemFailure:
+            case MappedEvent::Text:
             case MappedEvent::TimeSignature:
             case MappedEvent::Tempo:
             case MappedEvent::Panic:
@@ -2859,62 +2839,6 @@ void
 RosegardenDocument::setCurrentTimer(QString name)
 {
     RosegardenSequencer::getInstance()->setCurrentTimer(name);
-}
-
-void
-RosegardenDocument::initialiseControllers()
-{
-    InstrumentList list = m_studio.getAllInstruments();
-    MappedEventList mC;
-    MappedEvent *mE;
-
-    // This is updated code for Thorn that only sends visible IPB controllers for
-    // Instruments assigned to tracks.
-
-    // Deterime the active instruments
-    std::set<InstrumentId> activeInstruments;
-
-    for (Composition::trackcontainer::const_iterator i =
-             m_composition.getTracks().begin();
-         i != m_composition.getTracks().end(); ++i) {
-
-        Track *track = i->second;
-        if (track) activeInstruments.insert(track->getInstrument());
-    }
-
-    // Send controllers for active MIDI instruments
-    InstrumentList::iterator it = list.begin();
-
-    for (; it != list.end(); it++) {
-        if ((*it)->getType() == Instrument::Midi) {
-
-            if (activeInstruments.find((*it)->getId()) !=
-                activeInstruments.end()) {
-                std::vector<MidiControlPair> advancedControls;
-            
-                StaticControllers &list = (*it)->getStaticControllers();
-                for (StaticControllerConstIterator cIt = list.begin();
-                     cIt != list.end(); ++cIt) {
-                    advancedControls.push_back(MidiControlPair(cIt->first,
-                                                               cIt->second));
-                }
-                std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
-                for (; iit != advancedControls.end(); iit++) {
-                    try {
-                        mE = new MappedEvent((*it)->getId(),
-                                             MappedEvent::MidiController,
-                                             iit->first,
-                                             iit->second);
-                    } catch (...) {
-                        continue;
-                    }
-
-                    mC.insert(mE);
-                }
-            }
-        }
-    }
-    StudioControl::sendMappedEventList(mC);
 }
 
 void
