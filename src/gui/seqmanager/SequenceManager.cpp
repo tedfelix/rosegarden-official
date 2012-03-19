@@ -1686,11 +1686,15 @@ SequenceManager::segmentModified(Segment* s)
 {
 #ifdef DEBUG_SEQUENCE_MANAGER
     SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")";
+#endif
+
     bool sizeChanged = m_compositionMapper->segmentModified(s);
+
+#ifdef DEBUG_SEQUENCE_MANAGER
     SEQMAN_DEBUG << "SequenceManager::segmentModified() : size changed = "
                  << sizeChanged;
 #else
-    (void)m_compositionMapper->segmentModified(s);
+    (void)sizeChanged;
 #endif
 
     RosegardenSequencer::getInstance()->segmentModified
@@ -1811,8 +1815,7 @@ void SequenceManager::processAddedSegment(Segment* s)
 void SequenceManager::processRemovedSegment(Segment* s)
 {
 #ifdef DEBUG_SEQUENCE_MANAGER
-    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << s 
-                 << ")" << endl;
+    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment()" << endl;
 #endif
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already
