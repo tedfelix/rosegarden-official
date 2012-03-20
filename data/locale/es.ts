@@ -4436,7 +4436,7 @@
     <message>
         <location line="+1"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar archivo de MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4461,7 +4461,7 @@
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezclar archivo de MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10522,7 +10522,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2012 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -11692,7 +11692,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+229"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>ninguno</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -11703,7 +11703,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <location line="+2"/>
         <location line="+23"/>
         <source>Master</source>
-        <translation>Master</translation>
+        <translation>Maestro</translation>
     </message>
     <message>
         <location line="-21"/>
@@ -14830,7 +14830,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+67"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>nada</translation>
     </message>
 </context>
 <context>
@@ -15373,12 +15373,12 @@ en su lugar? </translation>
     <message>
         <location line="+5"/>
         <source>Draw bar line at volta</source>
-        <translation type="unfinished"></translation>
+        <translation>Dibujar barra de compás que coincide con la volta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si marcado siempre se dibuja una barra de compás al comienzo de una volta, aunque comienza la volta en medio de una barra.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -15909,17 +15909,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="-13"/>
         <source>auto</source>
-        <translation type="unfinished"></translation>
+        <translation>automático</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>fijo</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Establecer el programa o «parche» de MIDI&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Establecer el programa o &amp;quot;parche&amp;quot; de MIDI&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -15929,7 +15929,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Automático&lt;/i&gt;, proporcionar un canal automáticamente; &lt;i&gt;Fijo&lt;/i&gt;, el número del canal es el número de este instrumento&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -15954,7 +15954,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>Channel</source>
-        <translation type="unfinished">Canal</translation>
+        <translation>Canal</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -19560,14 +19560,14 @@ Rosegarden para garantizar que podrá ser reconocida por futuras versiones.</tra
     <message>
         <location line="+1151"/>
         <source>Warning</source>
-        <translation type="unfinished">Advertencia</translation>
+        <translation>Advertencia</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation type="unfinished">El directorio de archivos de audio no existe o no es escribible.
+        <translation>El directorio de archivos de audio no existe o no es escribible.
 Por favor, configura el directorio de archivos de audio hacia un directorio válido desde Propiedades del Documento antes de grabar audio.
 ¿Quiere configurarlo ahora?</translation>
     </message>
@@ -20438,18 +20438,19 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
         <location line="-1061"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir archivo de MusicXML</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Importing MusicXML file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importando archivo MusicXML...</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Can&apos;t load MusicXML file:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al cargar archivo de MusicXML:
+</translation>
     </message>
     <message>
         <location line="+1127"/>
