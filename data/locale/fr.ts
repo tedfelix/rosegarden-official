@@ -4458,7 +4458,7 @@
     <message>
         <location line="+1"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer un fichier MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4483,7 +4483,7 @@
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner un fichier MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10524,7 +10524,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2012 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -11702,7 +11702,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+229"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>aucun</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -14891,7 +14891,7 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+67"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>aucun</translation>
     </message>
 </context>
 <context>
@@ -15434,12 +15434,12 @@ Voulez-vous utiliser
     <message>
         <location line="+5"/>
         <source>Draw bar line at volta</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracer une barre au début d&apos;une alternative de répétition</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si coché, une barre est toujours tracée au début d&apos;une alternative de répétition, même si cette dernière commence au milieu d&apos;une mesure.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -15977,12 +15977,12 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="-13"/>
         <source>auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fixé</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -15997,7 +15997,7 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt; : Le numéro du canal est choisi automatiquement&lt;/p&gt;&lt;p&gt;&lt;i&gt;Fixé&lt;/i&gt; : Le numéro du canal est identique au numéro de l&apos;instrument&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -16022,7 +16022,7 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="+1"/>
         <source>Channel</source>
-        <translation type="unfinished">Canal</translation>
+        <translation>Canal</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -19620,15 +19620,15 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+1749"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avertissement</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation type="unfinished">Le chemin du fichier audio n&apos;existe pas ou ne peut pas être écrit.
-Veuillez déclarer un répertoire valide comme chemin du fichier audio dans les Paramètres du Document avant d&apos;enregistrer en audio.
+        <translation>Le chemin du fichier audio n&apos;existe pas ou ne peut pas être écrit.
+Veuillez déclarer un répertoire valide comme chemin du fichier audio dans les Propriétés du Document avant d&apos;enregistrer en audio.
 Souhaitez vous le faire tout de suite ?</translation>
     </message>
     <message>
@@ -20559,18 +20559,19 @@ Afin de recevoir de l&apos;assistance pour configurer correctement votre audio e
         <location line="-1061"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un fichier MusicXML</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Importing MusicXML file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importation d&apos;un fichier MusicXML...</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Can&apos;t load MusicXML file:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Echec du chargement du fichier MusicXML :
+</translation>
     </message>
     <message>
         <location line="+1127"/>
