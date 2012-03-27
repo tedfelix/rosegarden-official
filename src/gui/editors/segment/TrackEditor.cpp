@@ -244,8 +244,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_trackButtonScroll->setWidget(m_trackButtons);
 
-    connect(m_trackButtons, SIGNAL(widthChanged()),
-            this, SLOT(slotTrackButtonsWidthChanged()));
+    //connect(m_trackButtons, SIGNAL(widthChanged()),
+    //        this, SLOT(slotTrackButtonsWidthChanged()));
 
     connect(m_trackButtons, SIGNAL(trackSelected(int)),
             rosegardenguiview, SLOT(slotSelectTrackSegments(int)));
@@ -359,6 +359,7 @@ void TrackEditor::slotReadjustCanvasSize()
     m_compositionView->slotUpdateSize();
 }
 
+#if 0
 void TrackEditor::slotTrackButtonsWidthChanged()
 {
     // We need to make sure the trackButtons geometry is fully updated
@@ -368,6 +369,7 @@ void TrackEditor::slotTrackButtonsWidthChanged()
     m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
     m_doc->slotDocumentModified();
 }
+#endif
 
 int TrackEditor::getTrackCellHeight() const
 {

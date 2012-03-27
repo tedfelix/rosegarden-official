@@ -132,14 +132,7 @@ signals:
      * @see changeTrackName()
      * @see TrackEditor::slotTrackButtonsWidthChanged()
      */
-    void widthChanged();
-
-    /// Emitted when a track's name changes.
-    /**
-     * @see changeTrackName()
-     * @see TrackParameterBox::slotSelectedTrackNameChanged()
-     */
-    //void nameChanged();
+    //void widthChanged();
 
 public slots:
 

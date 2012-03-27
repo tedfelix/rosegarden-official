@@ -732,7 +732,7 @@ TrackParameterBox::trackChanged(const Composition *, Track *track)
         return;
 
     // Update the track name in case it has changed.
-    slotSelectedTrackNameChanged();
+    selectedTrackNameChanged();
 }
 
 void
@@ -759,15 +759,15 @@ TrackParameterBox::slotSelectedTrackChanged()
     if ((int)newTrack != m_selectedTrackId) {
         m_presetLbl->setEnabled(true);
         m_selectedTrackId = newTrack;
-        slotSelectedTrackNameChanged();
+        selectedTrackNameChanged();
         slotUpdateControls(-1);
     }
 }
 
 void
-TrackParameterBox::slotSelectedTrackNameChanged()
+TrackParameterBox::selectedTrackNameChanged()
 {
-    RG_DEBUG << "TrackParameterBox::slotSelectedTrackNameChanged()";
+    RG_DEBUG << "TrackParameterBox::selectedTrackNameChanged()";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
 

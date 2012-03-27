@@ -66,7 +66,6 @@ public:
 
 public slots:
     void slotSelectedTrackChanged();
-    void slotSelectedTrackNameChanged();
     void slotPlaybackDeviceChanged(int index);
     void slotInstrumentChanged(int index);
     void slotRecordingDeviceChanged(int index);
@@ -152,6 +151,8 @@ private:
     // CompositionObserver interface
     virtual void trackChanged(const Composition *comp, Track *track);
     virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
+
+    void selectedTrackNameChanged();
 
 };
 

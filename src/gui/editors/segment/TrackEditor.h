@@ -160,7 +160,7 @@ protected slots:
     // Dead Code.
 //    void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
 
-    void slotTrackButtonsWidthChanged();
+    //void slotTrackButtonsWidthChanged();
 
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);

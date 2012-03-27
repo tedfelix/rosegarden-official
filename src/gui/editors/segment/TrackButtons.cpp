@@ -509,11 +509,8 @@ TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
                                    trackId,
                                    qstrtostr(newName)));
 
-    // ??? Width cannot change.  Remove this.
-    emit widthChanged();
-    // Need to get rid of this as well.  All who depend on it should
-    // depend on trackChanged() instead.
-    //emit nameChanged();
+    // Width cannot change.  Remove this.
+    //emit widthChanged();
 }
 
 void
