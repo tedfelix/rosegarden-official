@@ -27,16 +27,24 @@
 namespace Rosegarden
 {
 
-// Allocate a channel interval that encompasses start and end.
-// @param start is the first instant sound is to be played on the channel.
-// @param end is the last such instant.
+// Allocate a channel interval that encompasses startTime and endTime.
+// @param startTime is the first instant sound is to be played on the channel.
+// @param endTime is the last such instant.
 // @author Tom Breton (Tehom)
 ChannelInterval
 FreeChannels::
-allocateChannelInterval(RealTime start, RealTime end)
+allocateChannelInterval(RealTime startTime, RealTime endTime,
+                        Instrument *instrument,
+                        RealTime marginBefore,
+                        RealTime marginAfter)
 {
+    iterator bestMatch = end();
+    // Scoring just tracks wasted space.  Init it to worse than any
+    // stored interval can be.
+    RealTime leastWastedSpace = ChannelInterval::m_afterLatestTime;
+    
     // Scan segments backwards from the last one beginning at time
-    // `start'
+    // `startTime'
     if (!empty()) {
 #ifdef DEBUG_CHANNEL_ALLOCATOR
                     SEQUENCER_DEBUG
@@ -44,26 +52,69 @@ allocateChannelInterval(RealTime start, RealTime end)
                         << endl;
 #endif
 
-        ChannelInterval dummy(0, start, RealTime::maxTime);
+        ChannelInterval dummy(startTime);
         for (reverse_iterator i(upper_bound(dummy));
              i != rend();
              ++i) {
 #ifdef DEBUG_CHANNEL_ALLOCATOR
                     SEQUENCER_DEBUG
-                        << "Scanning"
-                        << endl;
+                        << "Scanning";
 #endif
-            const ChannelInterval cs = (*i);
-            if ((cs.m_start <= start) && (cs.m_end >= end)) {
-                // We found one that this fits into, so use it.
+            const ChannelInterval &cs = (*i);
+            // Consider each end of the proposed interval.  An end
+            // fits if either:
+            //
+            // * It is big enough to accomodate the respective margin.
+            //
+            // * It is big enough without the margin and the adjacent
+            //   (allocated) channel interval sounds on the same
+            //   instrument.
+
+            // Reject complete non-fits early.
+            if (cs.m_start > startTime) { continue; }
+            if (cs.m_end < endTime)     { continue; }
+
+            // Reject if instrument changed and margin is
+            // insufficient.  This considers both the given margins
+            // and the adjacent instruments' margins recorded in
+            // ChannelInterval.  Its fields m_marginBefore and
+            // m_marginAfter refer to our own before/after
+            // orientation, not to the reversed orientation that the
+            // instruments playing before and after would have.
+            if (cs.m_instrumentBefore &&
+                (cs.m_instrumentBefore != instrument) &&
+                (((cs.m_start +      marginBefore) > startTime) ||
+                 ((cs.m_start + cs.m_marginBefore) > startTime)))
+                { continue; }
+
+            if (cs.m_instrumentAfter &&
+                (cs.m_instrumentAfter != instrument) &&
+                (((cs.m_end -      marginAfter) < endTime) ||
+                 ((cs.m_end - cs.m_marginAfter) < endTime)))
+                { continue; }
+
+            // We found an candidate, but is it the best so far?  Only
+            // if it wastes less space than all others we've seen.
+            RealTime wastedSpace =
+                (cs.m_end - cs.m_start) - (endTime - startTime);
+            if (wastedSpace < leastWastedSpace) {
                 // Decrement so forward iterator refers to the same
                 // element we examined.
-                return allocateChannelIntervalFrom(--(i.base()), start, end);
+                bestMatch = --(i.base());
+                leastWastedSpace = wastedSpace;
             }
         }
     }
-    // If that failed, return an unplayable dummy channel
-    return ChannelInterval(); 
+    if (bestMatch != end()) {
+        return allocateChannelIntervalFrom(bestMatch,
+                                           startTime, endTime,
+                                           instrument,
+                                           marginBefore, marginAfter);
+    } else {
+        // If we found nothing usable, return an unplayable dummy
+        // channel
+        return ChannelInterval(); 
+    }
 }
 
 // Free the given channel interval, setting old's channel to unused.
@@ -85,7 +136,7 @@ freeChannelInterval(ChannelInterval &old)
     // Find the free ChannelInterval before it.
     {
         iterator rEnd = --begin();
-        ChannelInterval dummy(0, old.m_start, RealTime::maxTime);
+        ChannelInterval dummy(old.m_start);
         for (iterator i = upper_bound(dummy); i != rEnd; --i) {
             const ChannelInterval cs = (*i);
             if (cs.getChannelId() == old.getChannelId()) {
@@ -97,13 +148,11 @@ freeChannelInterval(ChannelInterval &old)
 
     // Figure out whether we will merge with "before"
     bool mergeBefore = (before != end() && (before->m_end   == old.m_start));
-    RealTime startContiguous = mergeBefore ? before->m_start : old.m_start;
-    // Remove "before" if we incorporated it.
-    if (mergeBefore) { erase(before); }
+    const ChannelInterval &ciBefore = mergeBefore ? *before : old;
 
     // Find the free ChannelInterval after it.
     {
-        ChannelInterval dummy(0, old.m_end, RealTime::maxTime);
+        ChannelInterval dummy(old.m_end);
         for (iterator i = lower_bound(dummy); i != end(); ++i) {
             const ChannelInterval cs = (*i);
             if (cs.getChannelId() == old.getChannelId()) {
@@ -115,12 +164,19 @@ freeChannelInterval(ChannelInterval &old)
 
     // Figure out whether we will merge with "after"
     bool mergeAfter  = (after  != end() && (after ->m_start == old.m_end));
-    RealTime endContiguous   = mergeAfter  ? after ->m_end   : old.m_end;
-    // Remove "after" if we incorporated it.
-    if (mergeAfter)  { erase(after); }
+    const ChannelInterval &ciAfter = mergeAfter ? *after : old;
+    
 
     // Add a channelsegment incorporating the whole contiguous time.
-    insert(ChannelInterval(old.getChannelId(), startContiguous, endContiguous));
+    insert(ChannelInterval(old.getChannelId(),
+                           ciBefore.m_start,             ciAfter.m_end,
+                           ciBefore.m_instrumentBefore,  ciAfter.m_instrumentAfter,
+                           ciBefore.m_marginBefore,      ciAfter.m_marginAfter));
+
+    // Remove "before" if we incorporated it.
+    if (mergeBefore) { erase(before); }
+    // Remove "after" if we incorporated it.
+    if (mergeAfter)  { erase(after); }
     old.clearChannelId();
 }
 
@@ -135,7 +191,10 @@ freeChannelInterval(ChannelInterval &old)
 // @author Tom Breton (Tehom)
 ChannelInterval
 FreeChannels::
-allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end)
+allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end,
+                            Instrument *instrument,
+                            RealTime marginBefore,
+                            RealTime marginAfter)
 {
   const ChannelInterval cs = (*i);
 
@@ -144,15 +203,24 @@ allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end)
     // There's some length before `start'.  Insert a new piece.  (We
     // can't alter it in place because the base class owns it and
     // makes it const)
-    (void)insert(ChannelInterval(cs.getChannelId(), cs.m_start, start));
+      (void)insert(ChannelInterval(cs.getChannelId(),
+                                   cs.m_start,            start,
+                                   cs.m_instrumentBefore, instrument,
+                                   cs.m_marginBefore,     marginBefore));
   } else { }
 
   if (cs.m_end > end) {
     // There's some length after `end'.  Insert a new piece.
-    (void)insert(ChannelInterval(cs.getChannelId(), end, cs.m_end));
+    (void)insert(ChannelInterval(cs.getChannelId(),
+                                 end,         cs.m_end,
+                                 instrument,  cs.m_instrumentAfter,
+                                 marginAfter, cs.m_marginAfter));
   } else {}
  
-  return ChannelInterval(cs.getChannelId(), start, end);
+  return ChannelInterval(cs.getChannelId(),
+                         start, end,
+                         NULL, NULL,
+                         RealTime::zeroTime, RealTime::zeroTime);
 }
 
 // Add a channel that may be allocated from.  It is caller's
@@ -165,7 +233,9 @@ addChannel(ChannelId channelNb)
     insert(begin(),
            ChannelInterval(channelNb,
                            ChannelInterval::m_beforeEarliestTime,
-                           ChannelInterval::m_afterLatestTime));
+                           ChannelInterval::m_afterLatestTime,
+                           NULL, NULL,
+                           RealTime::zeroTime, RealTime::zeroTime));
 }
 
 // Remove channel from being allocated.  It is caller's
@@ -191,7 +261,10 @@ removeChannel(ChannelId channelNb)
 // @author Tom Breton (Tehom)
 void
 FreeChannels::
-reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end)
+reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end,
+                Instrument *instrument,
+                RealTime marginBefore,
+                RealTime marginAfter)
 {
     // If it still fits, re-use it.
     if ((ci.validChannel()) &&
@@ -202,7 +275,8 @@ reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end)
     // Otherwise just replace it.
     if (ci.validChannel())
         { freeChannelInterval(ci); }
-    ci = allocateChannelInterval(start, end);
+    ci = allocateChannelInterval(start, end, instrument,
+                                 marginBefore, marginAfter);
 }
 
     /*** ChannelSetup definitions ***/
@@ -261,7 +335,9 @@ AllocateChannels::
 void
 AllocateChannels::
 reallocateToFit(Instrument& instrument, ChannelInterval &ci,
-                RealTime start, RealTime end)
+                RealTime start, RealTime end,
+                RealTime marginBefore, RealTime marginAfter,
+                bool changedInstrument)
 {
 #ifdef DEBUG_CHANNEL_ALLOCATOR
     SEQUENCER_DEBUG
@@ -274,17 +350,22 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         << ci.getChannelId()
         << endl;
 #endif
-    // If we already have a channel but it's the wrong type, always
-    // free it.
+    // If we already have a channel but it's the wrong type or it
+    // changed instrument, always free it.
     if (ci.validChannel() &&
-        (instrument.isPercussion() != (isPercussion(ci))))
+        ((changedInstrument && (end != ChannelInterval::m_latestTime)) || 
+         (instrument.isPercussion() != (isPercussion(ci)))))
         { freeChannelInterval(ci); }
 
     if (instrument.isPercussion()) {
         // For single channel, this implicitly frees+reallocates
-        ci = ChannelInterval(9, start, end);
+        ci = ChannelInterval(9, start, end,
+                             NULL, NULL,
+                             RealTime::zeroTime, RealTime::zeroTime);
     } else {
-        m_freeChannels.reallocateToFit(ci, start, end);
+        m_freeChannels.reallocateToFit(ci, start, end,
+                                       &instrument,
+                                       marginBefore, marginAfter);
     }
     
 #ifdef DEBUG_CHANNEL_ALLOCATOR

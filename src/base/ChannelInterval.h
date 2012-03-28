@@ -26,6 +26,7 @@ namespace Rosegarden
 
 class FreeChannels;
 class ChannelManager;
+class Instrument;
 
 // @type ChannelId The index of a channel on some
 // device.  A negative value indicates no channel.
@@ -43,17 +44,41 @@ class ChannelInterval
     // functions. 
     friend class ChannelManager;
  public:
-    
+
+    // Construct an invalid channelinterval
  ChannelInterval(void) :
     m_channel(-1),
         m_start(RealTime::zeroTime),
-        m_end(RealTime::zeroTime)
+        m_end(RealTime::zeroTime),
+        m_instrumentBefore(NULL),
+        m_instrumentAfter(NULL),
+        m_marginBefore(RealTime::zeroTime),
+        m_marginAfter(RealTime::zeroTime)
             {}
     
- ChannelInterval(ChannelId channel, RealTime start, RealTime end) :
+    // Construct a dummy channelinterval used in searching.
+ ChannelInterval(RealTime t) :
+    m_channel(-1),
+        m_start(t),
+        m_end(RealTime::maxTime),
+        m_instrumentBefore(NULL),
+        m_instrumentAfter(NULL),
+        m_marginBefore(RealTime::zeroTime),
+        m_marginAfter(RealTime::zeroTime)
+            {}
+    
+ ChannelInterval(ChannelId channel, RealTime start, RealTime end, 
+                 Instrument *instrumentBefore,
+                 Instrument *instrumentAfter,
+                 RealTime marginBefore,
+                 RealTime marginAfter) :
     m_channel(channel),
         m_start(start),
-        m_end(end)
+        m_end(end),
+        m_instrumentBefore(instrumentBefore),
+        m_instrumentAfter(instrumentAfter),
+        m_marginBefore(marginBefore),
+        m_marginAfter(marginAfter)
         {}
 
     // Comparison operation for sorting in FreeChannels
@@ -78,9 +103,18 @@ class ChannelInterval
     void setChannelId(ChannelId channel)
     { m_channel = channel; };
     
-    ChannelId m_channel;
-    RealTime  m_start;
-    RealTime  m_end;
+    ChannelId   m_channel;
+    RealTime    m_start;
+    RealTime    m_end;
+
+    // The instrument that plays on the channel immediately before
+    // this channel interval starts, or NULL if none.
+    Instrument *m_instrumentBefore;
+    // The instrument immediately after (see above)
+    Instrument *m_instrumentAfter;
+    // The margin of time required before/after this channel interval.
+    RealTime    m_marginBefore;
+    RealTime    m_marginAfter;
 
  public:
   /* Reference times */

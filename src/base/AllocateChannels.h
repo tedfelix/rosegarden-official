@@ -46,7 +46,10 @@ class FreeChannels :
 
   // Reallocate a channel interval to fit start and end.
   void
-      reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end);
+      reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end,
+                      Instrument *instrument,
+                      RealTime marginBefore,
+                      RealTime marginAfter);
   
   // Free a channel interval
   void freeChannelInterval(ChannelInterval &old);
@@ -63,12 +66,18 @@ class FreeChannels :
  private:
 
   // Allocate a channel interval
-  ChannelInterval allocateChannelInterval(RealTime start, RealTime end);
+  ChannelInterval allocateChannelInterval(RealTime start, RealTime end,
+                                          Instrument *instrument,
+                                          RealTime marginBefore,
+                                          RealTime marginAfter);
 
   // Allocate a time interval from a known free ChannelInterval
   ChannelInterval
-      allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end);
-
+      allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end,
+                                  Instrument *instrument,
+                                  RealTime marginBefore,
+                                  RealTime marginAfter);
+  
  };
 
 // @class ChannelSetup.  Dummy class.  It tells us how to initialize
@@ -96,7 +105,10 @@ struct ChannelSetup
 
   void
       reallocateToFit(Instrument& instrument, ChannelInterval &ci,
-                      RealTime start, RealTime end);
+                      RealTime start, RealTime end,
+                      RealTime marginBefore,
+                      RealTime marginAfter,
+                      bool changedInstrument);
 
   void freeChannelInterval(ChannelInterval &old);
 

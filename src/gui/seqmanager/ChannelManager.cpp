@@ -37,7 +37,8 @@ ChannelManager::
 ChannelManager(Instrument *instrument) :
     m_usingAllocator(false),
     m_instrument(0),
-    m_inittedForOutput(false)
+    m_inittedForOutput(false),
+    m_triedToGetChannel(false)
 {
     // Safe even for NULL.
     connectInstrument(instrument);
@@ -239,7 +240,14 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
             : "doesn't need init")
         << endl;
 #endif
-    if (!m_channel.validChannel()) { return; }
+    if (!m_channel.validChannel()) {
+        // We already tried to init it and failed; don't keep trying.
+        if (m_triedToGetChannel) { return; }
+        // Try to get a channel.  This sets m_triedToGetChannel.
+        reallocate(false);
+        // If we still don't have one, give up.
+        if (!m_channel.validChannel()) { return; }
+        }
     RealTime insertTime = evt.getEventTime();
         // !!! Should probably just abort if there's no instrument.
     if (m_instrument) {
@@ -342,7 +350,7 @@ disconnectAllocator(void)
 // Allocate a sufficient channel interval in the current allocation mode.
 // @author Tom Breton (Tehom) 
 void
-ChannelManager::reallocate(void)
+ChannelManager::reallocate(bool changedInstrument)
 {
 #ifdef DEBUG_CHANNEL_MANAGER
     SEQUENCER_DEBUG << "IntervalChannelManager::reallocate " 
@@ -357,12 +365,16 @@ ChannelManager::reallocate(void)
         m_instrument->getType() == Instrument::Midi) {
         if (m_usingAllocator) {
             getAllocator()->
-                reallocateToFit(*m_instrument, m_channel, m_start, m_end);
+                reallocateToFit(*m_instrument, m_channel,
+                                m_start, m_end,
+                                m_startMargin, m_endMargin,
+                                changedInstrument);
             connectAllocator();
         } else {
             setChannelIdDirectly();
         }
     }
+    m_triedToGetChannel = true;
 }
 
 // Free the channel interval it owned.  Safe even when
@@ -376,6 +388,7 @@ void ChannelManager::freeChannelInterval(void)
             allocater->freeChannelInterval(m_channel);
             disconnectAllocator();
         }
+        m_triedToGetChannel = false;
     }
 }
 
@@ -403,6 +416,7 @@ setInstrument(Instrument *instrument)
                 freeChannelInterval();
             }
         }
+        reallocate(true);
         connectInstrument(instrument);
         setDirty();
     }
@@ -508,7 +522,7 @@ slotChannelBecomesUnfixed(void)
     // We no longer have a channel interval.
     m_channel.clearChannelId();
     // Get a new one.
-    reallocate();
+    reallocate(false);
     setDirty();
 }
 

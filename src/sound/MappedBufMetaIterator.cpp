@@ -261,7 +261,7 @@ fillNoncompeting(MappedInserterBase &inserter,
         RealTime start, end;
         (*i)->getSegment()->getStartEnd(start, end);
         bool active = ((start < endTime) && (end >= startTime));
-        (*i)->setActive(active);
+        (*i)->setActive(active, startTime);
         // If some are yet to even start, we have events remaining.
         // Record that now because the loop won't discover it.
         if (start >= endTime) { eventsRemaining = true; }
@@ -363,15 +363,7 @@ fillNoncompeting(MappedInserterBase &inserter,
                         << cur->getType() << ")" << std::endl;
 #endif
 
-                    // Use loopTime as a reference time, eg for
-                    // calculating the correct controllers.  It can't
-                    // simply be event time, because if we jumped into
-                    // the middle of a long note, we'd wrongly find
-                    // the controller values as they are at the time
-                    // the note starts.
-                    if (cur->getEventTime() > loopTime)
-                        { loopTime = cur->getEventTime(); }
-                    iter->doInsert(inserter, *cur, loopTime);
+                    iter->doInsert(inserter, *cur);
                 } else {
 
 #ifdef DEBUG_META_ITERATOR
@@ -388,7 +380,7 @@ fillNoncompeting(MappedInserterBase &inserter,
                 ++(*iter);
 
             } else if (cur->isValid()) {
-                iter->setActive(false); // no more events to get from this segment
+                iter->setInactive(); // no more events to get from this segment
 
 #ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"

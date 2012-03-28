@@ -208,7 +208,7 @@ void MetronomeMapper::dump()
     }
 
     setBufferFill(index);
-    m_channelManager.reallocate();
+    m_channelManager.reallocateEternalChannel();
     m_channelManager.setDirty();
 
     SEQMAN_DEBUG << "MetronomeMapper::dump: - "

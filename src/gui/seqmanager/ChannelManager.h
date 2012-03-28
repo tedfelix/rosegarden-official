@@ -123,15 +123,19 @@ protected slots:
 
   // Set an interval that this ChannelManager must cover.  This does
   // not do allocation.
-  void setRequiredInterval(RealTime start, RealTime end) {
-      m_start = start;
-      m_end   = end;
+  void setRequiredInterval(RealTime start, RealTime end,
+                           RealTime startMargin, RealTime endMargin)
+  {
+      m_start       = start;
+      m_end         = end;
+      m_startMargin = startMargin;
+      m_endMargin   = endMargin;
   }
 
   // Allocate a sufficient channel interval if possible.  It is safe
   // to call this more than once, ie even if we already have a channel
   // interval.
-  void reallocate(void);
+  void reallocate(bool changedInstrument);
 
   void debugPrintStatus(void);
 
@@ -184,6 +188,9 @@ protected slots:
   // but never smaller.
   RealTime        m_start, m_end;
 
+  // Margins required if instrument has changed.
+  RealTime        m_startMargin, m_endMargin;
+
   // The instrument this plays on.  I don't own this.
   Instrument *m_instrument;
 
@@ -192,7 +199,10 @@ protected slots:
   // argument tells us if we need setup for some other reason such as jumping
   // in time.
   bool m_inittedForOutput;
-
+  // Whether we have tried to allocate a channel interval, not
+  // neccessarily successfully.  This allows some flexibility without
+  // making us search again every time we insert a note.
+  bool m_triedToGetChannel;
 };
 
 // @class EternalChannelManager Channel manager of an channel
@@ -205,11 +215,13 @@ class EternalChannelManager : public ChannelManager
     ChannelManager(instrument)
     {
         setRequiredInterval(ChannelInterval::m_earliestTime,
-                            ChannelInterval::m_latestTime);
+                            ChannelInterval::m_latestTime,
+                            RealTime::zeroTime,
+                            RealTime::zeroTime);
     }
 
     // Reallocate its channel
-    void reallocateEternalChannel(void) { reallocate(); }
+    void reallocateEternalChannel(void) { reallocate(false); }
 };
 
 // @class IntervalChannelManager Channel manager of an channel
@@ -223,8 +235,8 @@ class IntervalChannelManager : public ChannelManager
 
     // Reallocate its channel interval.
     void reallocateChannel(RealTime start, RealTime end) {
-        setRequiredInterval(start, end);
-        reallocate();
+        setRequiredInterval(start, end, RealTime::zeroTime, RealTime(1,0));
+        reallocate(false);
     }
 };
 

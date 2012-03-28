@@ -148,18 +148,18 @@ public:
         MappedEventBuffer *getSegment() { return m_s; }
         const MappedEventBuffer *getSegment() const { return m_s; }
 
-        void setActive(bool value) { m_active = value; }
+        void setActive(bool value, RealTime currentTime) {
+            m_active = value;
+            m_currentTime = currentTime;
+        }
+        void setInactive(void) { m_active = false; }
         bool getActive(void) { return m_active; }
         void setReady (bool value) { m_ready  = value; };
         bool getReady(void)  { return m_ready; }
 
         // Do appropriate preparation for inserting event, including
         // possibly setting up the channel.
-        void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                     RealTime start) {
-            getSegment()->doInsert(inserter, evt, start, !getReady());
-            setReady(true);
-        }
+        void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
     private:
          iterator();
@@ -175,6 +175,11 @@ public:
         // Whether this iterator has more events to give within the
         // current time slice.
         bool m_active;
+
+        // RealTime when the current event starts sounding.  Either
+        // the current event's time or the time the loop starts,
+        // whichever is greater.  Used for calculating the correct controllers
+        RealTime  m_currentTime;
     };
 
 protected:

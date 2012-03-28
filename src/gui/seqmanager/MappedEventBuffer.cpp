@@ -268,4 +268,20 @@ MappedEventBuffer::iterator::atEnd() const
     return (m_index >= fill);
 }
 
+void
+MappedEventBuffer::iterator::
+doInsert(MappedInserterBase &inserter, MappedEvent &evt)
+{
+    // Get time when note starts sounding, eg for finding the correct
+    // controllers.  It can't simply be event time, because if we
+    // jumped into the middle of a long note, we'd wrongly find the
+    // controller values as they are at the time the note starts.
+    if (evt.getEventTime() > m_currentTime)
+        { m_currentTime = evt.getEventTime(); }
+
+    // Mapper does the actual insertion.
+    getSegment()->doInsert(inserter, evt, m_currentTime, !getReady());
+    setReady(true);
+}
+
 }

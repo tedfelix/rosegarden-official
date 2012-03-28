@@ -89,7 +89,7 @@ fillWithNote(MappedEventList &mC, Instrument *instrument,
 
   // Set up channel manager.
   m_channelManager.setInstrument(instrument);
-  m_channelManager.reallocate();
+  m_channelManager.reallocateEternalChannel();
 
   // Set up channel.
   ChannelManager::MapperFunctionalitySimple callback;

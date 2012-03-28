@@ -30,6 +30,7 @@
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Debug.h"
+#include "sound/ControlBlock.h"
 #include "sound/MappedEvent.h"
 
 #include "assert.h"
@@ -280,19 +281,30 @@ void InternalSegmentMapper::dump()
     RealTime maxRealTime;
     if (anything) {
         minRealTime = getBuffer()[0].getEventTime();
-        maxRealTime = getBuffer()[getBufferFill() - 1].getEventTime()
-            + RealTime(1, 0);
+        maxRealTime = getBuffer()[getBufferFill() - 1].getEventTime();
     } else {
         minRealTime = maxRealTime = RealTime::zeroTime;
     }
 
-    // Make sure we have a sufficient channel interval to play on.
-    // This also releases the old channel interval if unused.
-    m_channelManager.reallocateChannel(minRealTime, maxRealTime);
+    m_channelManager.setRequiredInterval(minRealTime, maxRealTime,
+                                         RealTime::zeroTime, RealTime(1,0));
+
+    if (!ControlBlock::getInstance()->isTrackMuted(track->getId())) {
+        // Track is unmuted, so get a channel interval to play on.
+        // This also releases the old channel interval (possibly
+        // getting it again)
+        m_channelManager.reallocate(false);
+    } else {
+        // But if track is muted, don't waste a channel interval on
+        // it.  If that changes later, the first played note will
+        // trigger a search for one.
+        m_channelManager.freeChannelInterval();
+    }
+
 
     // We have changed the contents, so force a reinit.  Even if the
-    // length is the same, "previously played" controllers may have
-    // changed.
+    // length is the same, the current controllers for a given time
+    // may have changed.
     m_channelManager.setDirty();
     setStartEnd(minRealTime, maxRealTime);
 }
