@@ -93,6 +93,20 @@ setControllers(ChannelId channel, Instrument *instrument,
         !sendControllers) { return; }
 #endif
 
+    // In case some controllers are on that we don't know about, turn
+    // all controllers off.
+    try {
+        const int controllerAllControllersOff = 121;
+        MappedEvent mE(instrument->getId(),
+                       MappedEvent::MidiController,
+                       controllerAllControllersOff,
+                       0);
+        mE.setRecordedChannel(channel);
+        mE.setEventTime(insertTime);
+        mE.setTrackId(trackId);
+        inserter.insertCopy(mE);
+    } catch (...) { }
+        
     // Get the appropriate controllers from the callback our mapper
     // gave us.
     ControllerAndPBList CAndPBlist =
@@ -126,6 +140,7 @@ setControllers(ChannelId channel, Instrument *instrument,
         } catch (...) { continue; }
     }
 
+    // We only do one type of pitchbend, though GM2 allows others.
     if (CAndPBlist.m_havePitchbend) {
         int raised = CAndPBlist.m_pitchbend + 8192;
         int d1 = (raised >> 7) & 0x7f;
