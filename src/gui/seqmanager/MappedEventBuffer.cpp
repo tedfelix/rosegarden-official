@@ -135,7 +135,15 @@ void
 MappedEventBuffer::
 mapAnEvent(MappedEvent *e)
 {
-    assert(getBufferFill() < getBufferSize());
+    if (getBufferFill() >= getBufferSize()) {
+        // We need a bigger buffer.  We scale by 1.5, a compromise
+        // between allocating too often and wasting too much space.
+        // We also add 1 in case the space didn't increase due to
+        // rounding.
+        int newSize = 1 + float(getBufferSize()) * 1.5;
+        resizeBuffer(newSize);
+    }
+        
     getBuffer()[getBufferFill()] = e;
     // Some mappers need this to be done now because they may resize
     // the buffer later, which will only copy the filled part.
