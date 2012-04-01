@@ -4563,7 +4563,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3654"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést soubor MusicXM&amp;L...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3655"/>
@@ -4588,7 +4588,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3660"/>
         <source>Merge MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojit soubor MusicXM&amp;L...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3661"/>
@@ -10895,7 +10895,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2012 Vývojářský tým programu Rosgarden&lt;/p&gt;&lt;p&gt;Verze: %1 &amp;nbsp; Verze Qt: %2&lt;br&gt;Klíč: %3&lt;/p&gt;&lt;p&gt;Rosegarden byl vyvíjen skupinou dobrovolníků z celého světa. Seznam přispěvatelů je k prohlédnutí na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;. &lt;br&gt;Další informace o Rosegardenu jsou dostupné na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Povolení: GNU General Public License Version 2 nebo pozdější&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -12110,7 +12110,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="229"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádný</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="239"/>
@@ -15537,7 +15537,7 @@ Vzor textu ze souboru:</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="67"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádný</translation>
     </message>
 </context>
 <context>
@@ -16252,12 +16252,12 @@ Chcete použít
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="278"/>
         <source>Draw bar line at volta</source>
-        <translation type="unfinished"></translation>
+        <translation>Nakreslit taktovou čáru na voltě</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="279"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Je-li vybrána tato volba, bude taktová čára vždy nakreslena, když volta začíná, i když začíná vprostřed taktu.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="286"/>
@@ -16732,12 +16732,12 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="96"/>
         <source>auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automaticky</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="97"/>
         <source>fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Pevný</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="109"/>
@@ -16757,7 +16757,7 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Automaticky&lt;/i&gt;, přidělit kanál automaticky; &lt;i&gt;Pevný&lt;/i&gt;, připevnit kanál k číslu nástroje&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="120"/>
@@ -16786,7 +16786,7 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="124"/>
         <source>Channel</source>
-        <translation type="unfinished">Kanál</translation>
+        <translation>Kanál</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="153"/>
@@ -20997,15 +20997,15 @@ Vyberte kterékoli z těch, které chcete z pevného disku trvale odstranit.
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2967"/>
         <source>Warning</source>
-        <translation type="unfinished">Upozornění</translation>
+        <translation>Upozornění</translation>
     </message>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2968"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation type="unfinished">Cesta ke zvukovému souboru neexistuje nebo se do ní nedá zapisovat.
-Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech dokumentu před pořizováním zvukového záznamu.
+        <translation>Cesta ke zvukovému souboru neexistuje nebo se do ní nedá zapisovat.
+Nastavte, prosím, platný adresář jako cestu ke zvukovému souboru ve Vlastnostech dokumentu před nahráváním zvukového záznamu.
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
@@ -21915,18 +21915,19 @@ Nebude rozdělena žádná část.</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4501"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4537"/>
         <source>Open MusicXML File</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevřít soubor MusicXML</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4571"/>
         <source>Importing MusicXML file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavádí se soubor MusicXML...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4592"/>
         <source>Can&apos;t load MusicXML file:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze zavést soubor MusicXML:
+</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5290"/>
@@ -21938,7 +21939,7 @@ Informace o správném nastavení zvuku a MIDI naleznete na adrese http://rosega
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5302"/>
         <source>Exporting Rosegarden Project file...</source>
-        <translation>Probíhá vyvedení souboru s projektem programu Rosegarden...</translation>
+        <translation>Vyvádí se soubor s projektem programu Rosegarden...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5307"/>
