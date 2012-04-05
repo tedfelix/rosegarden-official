@@ -33,6 +33,7 @@ class Segment;
 class Event;
 class CompositionTimeSliceAdapter;
 class Quantizer;
+class Composition;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -137,10 +138,25 @@ public:
     TimeSignature guessTimeSignature(CompositionTimeSliceAdapter &c);
 
     /**
-     * Returns a guess at the starting key of the given timeslice.
+     * Returns a guess at the starting key of the given timeslice,
+     * based only on notes, not existing key signatures.
      */
     Key guessKey(CompositionTimeSliceAdapter &c);
 
+    /**
+     * Returns a guess at the appropriate key at time t, based on 
+     * existing key signatures.  May fall back to guessKey.
+     */
+    static Key
+        guessKeyAtTime(Composition &comp, timeT t,
+                       const Segment *segmentToSkip);
+
+    /**
+     * Returns a guess at the appropriate key for segment s at time t.
+     */
+    static Key
+        guessKeyForSegment(timeT t, const Segment *s);
+    
     /**
      * Like labelChords, but the algorithm is more complicated. This tries
      * to guess the chords that should go under a beat even when all of the

@@ -439,6 +439,11 @@ public:
         return !(k == *this);
     }
 
+    // We only use this for map, which doesn't need an intelligent
+    // ordering.
+    bool operator<(const Key &b) const
+    { return this->getName() < b.getName(); }
+
     /**
      * Test whether the given event is a valid Key event.
      */

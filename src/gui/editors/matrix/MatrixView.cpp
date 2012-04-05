@@ -2083,14 +2083,7 @@ MatrixView::slotEditAddKeySignature()
     Segment *segment = getCurrentSegment();
     timeT insertionTime = getInsertionTime();
     Clef clef = segment->getClefAtTime(insertionTime);
-    Key key = segment->getKeyAtTime(insertionTime);
-
-    //!!! experimental:
-    CompositionTimeSliceAdapter adapter
-        (&getDocument()->getComposition(), insertionTime,
-         getDocument()->getComposition().getDuration());
-    AnalysisHelper helper;
-    key = helper.guessKey(adapter);
+    Key key = AnalysisHelper::guessKeyForSegment(insertionTime, segment);
 
     MatrixScene *scene = m_matrixWidget->getScene();
     if (!scene) return;

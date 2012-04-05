@@ -1110,4 +1110,80 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
 
 }
 
+// Guess the appropriate key signature at this time.  First tries to
+// find the most common key signature, then falls back to guessKey.
+// @returns Key in concert pitch
+// @param comp is the composition
+// @param t is the target time
+// @param segmentToSkip is the segment to skip, presumably because it
+// is getting a new key signature so its old one isn't relevant.  It
+// may be NULL.
+// @author Tom Breton (Tehom)
+Key
+AnalysisHelper::guessKeyAtTime(Composition &comp, timeT t,
+                               const Segment *segmentToSkip)
+{
+    typedef std::map<Key,unsigned int> MapKeys;
+    MapKeys keyCounts;
+    segmentcontainer& segs = comp.getSegments();
+    for (segmentcontainer::iterator i = segs.begin();
+         i != segs.end();
+         ++i) {
+        Segment *s = *i;
+        // If this segment is relevant...
+        if ((s != segmentToSkip) &&
+            (s->getStartTime() <= t) &&
+            (s->getEndMarkerTime() > t)) {
+            // ...get its current key.
+            Key segKey = s->getKeyAtTime(t);
+            // Adjust it in case s is transposing.
+            int transposition = s->getTranspose();
+            if (transposition != 0) {
+                // This works reasonably well without finding the
+                // right height, which is often ambiguous anyways.
+                segKey = segKey.transpose(transposition, 0);
+            }
+            // Increment our count of that key, creating it in map if
+            // needed.
+            MapKeys::iterator found = keyCounts.find(segKey);
+            if (found != keyCounts.end()) {
+                ++found->second;
+            } else {
+                keyCounts.insert(MapKeys::value_type(segKey, 1));
+            }
+        }
+    }
+    
+    // Return the most common one, if any.
+    if (!keyCounts.empty()) { 
+        unsigned int mostFound = 0;
+        Key bestKey = Key();
+        for (MapKeys::iterator i = keyCounts.begin();
+             i != keyCounts.end();
+             ++i) {
+            if (i->second > mostFound) {
+                bestKey   = i->first;
+                mostFound = i->second;
+            }
+        }
+        return bestKey;
+    }
+
+    // Otherwise fall back to GuessKey.
+    CompositionTimeSliceAdapter adapter(&comp, t, comp.getDuration());
+    AnalysisHelper helper;
+    return helper.guessKey(adapter);
+}
+
+// Guess the appropriate key signature for segment at this time.  
+// @returns Key in concert pitch
+// @param t is the target time
+// @param segment is the target segment
+// @author Tom Breton (Tehom)
+Key
+AnalysisHelper::guessKeyForSegment(timeT t, const Segment *segment)
+{
+    return guessKeyAtTime(*segment->getComposition(), t, segment);
+}
+
 }
