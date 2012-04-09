@@ -9,6 +9,7 @@ Icon=rosegarden
 Comment=MIDI and Audio Sequencer and Notation Editor
 Comment[de]=MIDI- und Audio-Sequencer und Notensatzprogramm
 Comment[es]=Secuenciador de MIDI y de audio y editor de partitura
+Comment[fr]=Séquenceur MIDI/audio et éditeur de partitions
 Comment[ru]=MIDI-секвенсер и нотный редактор
 Terminal=false
 Name=Rosegarden
