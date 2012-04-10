@@ -154,6 +154,8 @@ protected slots:
   void connectAllocator(void);
   void disconnectAllocator(void);
 
+  void setAllocationMode(Instrument *instrument);
+
   /* Functions about setting up the channel */
   
   void setInitted(bool initted)

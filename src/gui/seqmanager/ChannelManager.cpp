@@ -69,7 +69,7 @@ connectInstrument(Instrument *instrument)
     connect(instrument, SIGNAL(channelBecomesUnfixed()),
             this, SLOT(slotChannelBecomesUnfixed()));
 
-    m_usingAllocator = !instrument->hasFixedChannel();
+    setAllocationMode(instrument);
     m_instrument = instrument;
 }
 
@@ -304,9 +304,11 @@ setChannelIdDirectly(void)
 {
     assert(!m_usingAllocator);
     ChannelId channel = m_instrument->getNaturalChannel();
-    // !!! Stopgap measure.  If we ever share allocators between MIDI
-    // devices, this will have to become smarter.
-    if (m_instrument->isPercussion()) { channel = 9; }
+    if (m_instrument->getType() == Instrument::Midi) {
+        // !!! Stopgap measure.  If we ever share allocators between
+        // MIDI devices, this will have to become smarter.
+        if (m_instrument->isPercussion()) { channel = 9; }
+    }
     m_channel.setChannelId(channel);
 }
 
@@ -347,6 +349,36 @@ disconnectAllocator(void)
     }
 }
 
+// Set m_usingAllocator appropriately for instrument.  It is safe to
+// pass NULL here.
+// @author Tom Breton (Tehom) 
+void
+ChannelManager::
+setAllocationMode(Instrument *instrument)
+{
+    if (!instrument)
+        { m_usingAllocator = false; }
+    else
+        {
+            switch (instrument->getType()) {
+            case Instrument::Midi :
+                m_usingAllocator = !instrument->hasFixedChannel();
+                break;
+            case Instrument::SoftSynth:
+                m_usingAllocator = false;
+                break;
+            case Instrument::Audio:
+            default:
+#ifdef DEBUG_CHANNEL_MANAGER
+                SEQMAN_DEBUG << "ChannelManager::connectInstrument() : Got an "
+                    "audio or unrecognizable instrument type."
+                             << endl;
+#endif
+                break;
+            }
+        }
+}    
+
 // Allocate a sufficient channel interval in the current allocation mode.
 // @author Tom Breton (Tehom) 
 void
@@ -360,10 +392,10 @@ ChannelManager::reallocate(bool changedInstrument)
                     << (void *)m_instrument
                     << endl;
 #endif
-    
-    if (m_instrument &&
-        m_instrument->getType() == Instrument::Midi) {
+    if (m_instrument) {
         if (m_usingAllocator) {
+            // Only Midi instruments should have m_usingAllocator set.
+            assert(m_instrument->getType() == Instrument::Midi);
             getAllocator()->
                 reallocateToFit(*m_instrument, m_channel,
                                 m_start, m_end,
@@ -374,6 +406,7 @@ ChannelManager::reallocate(bool changedInstrument)
             setChannelIdDirectly();
         }
     }
+
     m_triedToGetChannel = true;
 }
 
