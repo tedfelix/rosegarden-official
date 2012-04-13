@@ -71,8 +71,18 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
             //   instrument.
 
             // Reject complete non-fits early.
-            if (cs.m_start > startTime) { continue; }
-            if (cs.m_end < endTime)     { continue; }
+            if (cs.m_start > startTime) {
+#ifdef DEBUG_CHANNEL_ALLOCATOR
+                SEQUENCER_DEBUG << "  Rejecting due to free channel's available start time (" << cs.m_start << ") after needed start (" << startTime << ")";
+#endif
+                continue;
+            }
+            if (cs.m_end < endTime) {
+#ifdef DEBUG_CHANNEL_ALLOCATOR
+                SEQUENCER_DEBUG << "  Rejecting due to free channel's available end time (" << cs.m_end << ") before needed end (" << endTime << ")";
+#endif
+                continue;
+            }
 
             // Reject if instrument changed and margin is
             // insufficient.  This considers both the given margins
@@ -106,11 +116,17 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
         }
     }
     if (bestMatch != end()) {
+#ifdef DEBUG_CHANNEL_ALLOCATOR
+        SEQUENCER_DEBUG << "  FreeChannels::allocateChannelInterval() SUCCESS!!!!";
+#endif
         return allocateChannelIntervalFrom(bestMatch,
                                            startTime, endTime,
                                            instrument,
                                            marginBefore, marginAfter);
     } else {
+#ifdef DEBUG_CHANNEL_ALLOCATOR
+        SEQUENCER_DEBUG << "  FreeChannels::allocateChannelInterval() giving up.  FAIL";
+#endif
         // If we found nothing usable, return an unplayable dummy
         // channel
         return ChannelInterval(); 
@@ -278,6 +294,18 @@ reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end,
     ci = allocateChannelInterval(start, end, instrument,
                                  marginBefore, marginAfter);
 }
+
+void
+FreeChannels::dump()
+{
+    SEQUENCER_DEBUG << "FreeChannels::Dump()";
+    for (iterator I = begin(); I != end(); ++I) {
+        SEQUENCER_DEBUG << "  Channel:" << I->getChannelId();
+        SEQUENCER_DEBUG << "    Start:" << I->m_start;
+        SEQUENCER_DEBUG << "    End:" << I->m_end;
+    }
+}
+
 
     /*** ChannelSetup definitions ***/
 

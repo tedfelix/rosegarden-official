@@ -385,7 +385,7 @@ void
 ChannelManager::reallocate(bool changedInstrument)
 {
 #ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG << "IntervalChannelManager::reallocate " 
+    SEQUENCER_DEBUG << "ChannelManager::reallocate "
                     << (m_usingAllocator ? "using allocator" :
                         "not using allocator")
                     << "for"
@@ -406,6 +406,14 @@ ChannelManager::reallocate(bool changedInstrument)
             setChannelIdDirectly();
         }
     }
+
+#ifdef DEBUG_CHANNEL_MANAGER
+    if (m_channel.validChannel()) {
+        SEQUENCER_DEBUG << "  Channel is valid";
+    } else {
+        SEQUENCER_DEBUG << "  ??? Channel is invalid!  (end of reallocate())";
+    }
+#endif
 
     m_triedToGetChannel = true;
 }

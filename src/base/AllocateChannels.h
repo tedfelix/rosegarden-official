@@ -77,7 +77,8 @@ class FreeChannels :
                                   Instrument *instrument,
                                   RealTime marginBefore,
                                   RealTime marginAfter);
-  
+
+  void dump();
  };
 
 // @class ChannelSetup.  Dummy class.  It tells us how to initialize
