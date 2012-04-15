@@ -122,6 +122,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_hSliderHacked(false),
     m_lastNote(0)
 {
+    MATRIX_DEBUG << "MatrixWidget ctor";
+
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
@@ -316,11 +318,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 MatrixWidget::~MatrixWidget()
 {
-    RG_DEBUG << "MatrixWidget::~MatrixWidget() - start";
+    MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - start";
     delete m_scene;
     delete m_pianoScene;
     delete m_localMapping;
-    RG_DEBUG << "MatrixWidget::~MatrixWidget() - end";
+    MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - end";
 }
 
 void
@@ -485,13 +487,13 @@ MatrixWidget::generatePitchRuler()
 
         mapping = m_instrument->getKeyMapping();
         if (mapping) {
-            RG_DEBUG << "MatrixView: Instrument has key mapping: "
+            MATRIX_DEBUG << "MatrixView: Instrument has key mapping: "
                     << mapping->getName() << endl;
             m_localMapping = new MidiKeyMapping(*mapping);
             m_localMapping->extend();
             isPercussion = true;
         } else {
-            RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
+            MATRIX_DEBUG << "MatrixView: Instrument has no key mapping\n";
             isPercussion = false;
         }
     }
@@ -968,7 +970,8 @@ MatrixWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();
 
-    std::cout << "my name is " << name.toStdString() << std::endl;
+    MATRIX_DEBUG << "MatrixWidget::slotAddControlRuler";
+    MATRIX_DEBUG << "  my name is " << name.toStdString();
 
     // we just cheaply paste the code from MatrixView that created the menu to
     // figure out what its indices must point to (and thinking about this whole
@@ -1009,7 +1012,7 @@ MatrixWidget::slotAddControlRuler(QAction *action)
         
         if (name != itemStr) continue;
 
-        std::cout << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString() << std::endl;
+        MATRIX_DEBUG << "  name: " << name << " should match  itemStr: " << itemStr;
 
         m_controlsWidget->slotAddControlRuler(*it);
 
@@ -1120,7 +1123,7 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
         m_Vzoom->setBright(true);
     }
 
-    //std::cout << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+    //MATRIX_DEBUG << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setHorizontalZoomFactor(newZoom);
     m_lastH = v;
@@ -1155,7 +1158,7 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
         m_Vzoom->setBright(true);
     }
 
-    //std::cout << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+    //MATRIX_DEBUG << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setVerticalZoomFactor(newZoom);
     m_lastV = v;
@@ -1206,7 +1209,7 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 void
 MatrixWidget::slotResetZoomClicked()
 {
-    std::cerr << "MatrixWidget::slotResetZoomClicked()" << std::endl;
+    MATRIX_DEBUG << "MatrixWidget::slotResetZoomClicked()";
 
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
@@ -1257,9 +1260,10 @@ MatrixWidget::slotInitialHSliderHack(int)
 
     m_hSliderHacked = true;
 
-    std::cout << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+    MATRIX_DEBUG << "MatrixWidget::slotInitialHSliderHack()";
+    MATRIX_DEBUG << "  h slider position was: " << m_view->horizontalScrollBar()->sliderPosition();
     m_view->horizontalScrollBar()->setSliderPosition(0);
-    std::cout << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+    MATRIX_DEBUG << "  h slider position now: " << m_view->horizontalScrollBar()->sliderPosition();
 }
 
 void
@@ -1328,6 +1332,7 @@ MatrixWidget::updateSegmentChangerBackground()
 void
 MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
 {
+    MATRIX_DEBUG << "MatrixWidget::slotHoveredOverKeyChanged(" << y << ")";
     int evPitch = m_scene->calculatePitchFromY(y);
     m_pitchRuler->drawHoverNote(evPitch);
     m_pianoView->update();   // Needed to remove black trailers left by
