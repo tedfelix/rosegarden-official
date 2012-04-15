@@ -32,15 +32,19 @@ RenameTrackCommand::RenameTrackCommand(Composition *composition,
                                        std::string name) :
         NamedCommand(getGlobalName()),
         m_composition(composition),
-        m_track(trackId),
+        m_trackId(trackId),
         m_newName(name)
 {
-    Track *track = composition->getTrackById(m_track);
+    if (!m_composition)
+        return;
+
+    Track *track = composition->getTrackById(m_trackId);
     if (!track) {
-        RG_DEBUG << "Hey! No Track in RenameTrackCommand (track id " << track
-        << ")!" << endl;
-        return ;
+        RG_DEBUG << "RenameTrackCommand: Cannot find track with ID " << m_trackId;
+        return;
     }
+
+    // Save the old name for unexecute (undo)
     m_oldName = track->getLabel();
 }
 
@@ -50,19 +54,31 @@ RenameTrackCommand::~RenameTrackCommand()
 void
 RenameTrackCommand::execute()
 {
-    Track *track = m_composition->getTrackById(m_track);
+    if (!m_composition)
+        return;
+
+    Track *track = m_composition->getTrackById(m_trackId);
+
     if (!track)
-        return ;
+        return;
+
     track->setLabel(m_newName);
+    m_composition->notifyTrackChanged(track);
 }
 
 void
 RenameTrackCommand::unexecute()
 {
-    Track *track = m_composition->getTrackById(m_track);
+    if (!m_composition)
+        return;
+
+    Track *track = m_composition->getTrackById(m_trackId);
+
     if (!track)
-        return ;
+        return;
+
     track->setLabel(m_oldName);
+    m_composition->notifyTrackChanged(track);
 }
 
 }

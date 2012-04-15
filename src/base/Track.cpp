@@ -84,9 +84,6 @@ void Track::setLabel(const std::string &label)
     if (m_label == label) return;
 
     m_label = label;
-
-    if (m_owningComposition)
-        m_owningComposition->notifyTrackChanged(this);
 }
 
 void Track::setPresetLabel(const std::string &label)

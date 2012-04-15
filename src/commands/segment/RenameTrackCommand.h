@@ -51,7 +51,7 @@ public:
 
 protected:
     Composition *m_composition;
-    TrackId      m_track;
+    TrackId      m_trackId;
     std::string              m_oldName;
     std::string              m_newName;
 };
