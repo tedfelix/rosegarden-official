@@ -1376,16 +1376,24 @@ RosegardenSequencer::routeEvents(MappedEventList *mC, bool useSelectedTrack)
     if (useSelectedTrack) {
         instrumentId = ControlBlock::getInstance()->getInstrumentForTrack
             (ControlBlock::getInstance()->getSelectedTrack());
+        unsigned int channel =
+                ControlBlock::getInstance()->
+                getNaturalChannelForInstrument(instrumentId);
         for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
             (*i)->setInstrument(instrumentId);
+            (*i)->setRecordedChannel(channel);
         }
     } else {
         for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
             instrumentId = ControlBlock::getInstance()->getInstrumentForEvent
                 ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
+            unsigned int channel =
+                ControlBlock::getInstance()->
+                getNaturalChannelForInstrument(instrumentId);
             (*i)->setInstrument(instrumentId);
+            (*i)->setRecordedChannel(channel);
         }
     }
     m_driver->processEventsOut(*mC);

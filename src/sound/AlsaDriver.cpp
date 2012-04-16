@@ -46,7 +46,7 @@
 #include <pthread.h>
 
 
-// #define DEBUG_ALSA 1
+#define DEBUG_ALSA 1
 // #define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
@@ -2405,6 +2405,11 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
         unsigned int channel = (unsigned int)event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) +
             (unsigned int) event->data.note.note;
+#ifdef DEBUG_ALSA
+        std::cerr << "Got note " << chanNoteKey
+                  << " on channel" << channel
+                  << std::endl;
+#endif
 
         bool fromController = false;
 

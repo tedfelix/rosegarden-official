@@ -59,6 +59,7 @@ public:
 
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
     InstrumentId getInstrumentForTrack(TrackId trackId) const;
+    int getNaturalChannelForInstrument(InstrumentId trackId) const;
 
     void setTrackArmed(TrackId trackId, bool);
     bool isTrackArmed(TrackId trackId) const;

@@ -128,6 +128,8 @@ public:
     static void playPreviewNote(Instrument *instrument, int pitch,
                                 int velocity, int nsecs,
                                 bool oneshot = true);
+
+    static void sendChannelSetup(Instrument *instrument, int channel);
  private:
     static ImmediateNote *getFiller(void);
 

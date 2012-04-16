@@ -19,6 +19,7 @@
 #include "base/AllocateChannels.h"
 #include "base/AudioPluginInstance.h"
 #include "base/AudioLevel.h"
+#include "gui/studio/StudioControl.h"
 
 #include <cassert>
 
@@ -369,6 +370,16 @@ Instrument::getAlias() const
 }
 
 void
+Instrument::
+setProgram(const MidiProgram &program)
+{
+    m_program = program;
+    emit changedChannelSetup();
+    if (hasFixedChannel())
+        { StudioControl::sendChannelSetup(this, m_channel); }
+}
+
+void
 Instrument::setProgramChange(MidiByte program)
 {
     setProgram(MidiProgram(m_program.getBank(), program));
@@ -658,6 +669,7 @@ setFixedChannel(void)
         allocator->reserveFixedChannel(m_channel);
         m_fixed = true;
         emit channelBecomesFixed();
+        StudioControl::sendChannelSetup(this, m_channel);
     }
 }
 

@@ -89,6 +89,17 @@ class MapperFunctionalitySimple : public MapperFunctionality
 
   void connectInstrument(Instrument *instrument);
 
+  static void
+      sendProgramForInstrument(ChannelId channel, Instrument *instrument,
+                               MappedInserterBase &inserter,
+                               RealTime insertTime,
+                               int trackId);
+  static void
+      setControllers(ChannelId channel, Instrument *instrument,
+                     MappedInserterBase &inserter,
+                     RealTime reftime, RealTime insertTime,
+                     MapperFunctionality *functionality, int trackId);
+
 protected slots:
   // Something is kicking everything off channel in our device.
   void slotVacateChannel(ChannelId channel);
@@ -165,17 +176,6 @@ protected slots:
   void insertChannelSetup(MappedInserterBase &inserter,
                           RealTime reftime, RealTime insertTime,
                           MapperFunctionality *functionality, int trackId);
-  static void
-      sendProgramForInstrument(ChannelId channel, Instrument *instrument,
-                               MappedInserterBase &inserter,
-                               RealTime insertTime,
-                               int trackId);
-  static void
-      setControllers(ChannelId channel, Instrument *instrument,
-                     MappedInserterBase &inserter,
-                     RealTime reftime, RealTime insertTime,
-                     MapperFunctionality *functionality, int trackId);
-
   /* Data members */
 
   // The channel interval that is allocated for this segment.

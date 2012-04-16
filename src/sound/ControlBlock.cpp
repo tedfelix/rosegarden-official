@@ -17,6 +17,7 @@
 
 #include "ControlBlock.h"
 
+#include "base/Instrument.h"
 #include "document/RosegardenDocument.h"
 
 namespace Rosegarden
@@ -98,6 +99,23 @@ ControlBlock::getInstrumentForTrack(TrackId trackId) const
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
         return m_trackInfo[trackId].instrumentId;
     return 0;
+}
+
+// Return the natural channel of instrument, meaningful only for
+// fixed-channel MIDI instruments.
+int
+ControlBlock::
+getNaturalChannelForInstrument(InstrumentId id) const
+{
+    if (!m_doc) { return -1; }
+    Instrument *instrument =
+        m_doc->getStudio().getInstrumentById(id);
+    if (!instrument) { return -1; }
+    if (instrument->getType() != Instrument::Midi)
+        { return -1; }
+    if (!instrument->hasFixedChannel()) { return -1; }
+
+    return instrument->getNaturalChannel();
 }
 
 void

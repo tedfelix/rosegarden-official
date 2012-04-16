@@ -23,13 +23,16 @@
 #include "base/MidiProgram.h"
 #include "base/Profiler.h"
 #include "base/RealTime.h"
+#include "gui/seqmanager/ChannelManager.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/MappedCommon.h"
+#include "sound/MappedEventInserter.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedStudio.h"
 #include "sound/ImmediateNote.h"
+
 #include <QByteArray>
 #include <QDataStream>
 #include <QString>
@@ -211,6 +214,28 @@ playPreviewNote(Instrument *instrument, int pitch,
     MappedEventList mC;
     ImmediateNote * filler = getFiller();
     filler->fillWithNote(mC, instrument, pitch, velocity, nsecs, oneshot);
+    sendMappedEventList(mC);
+}
+
+void
+StudioControl::
+sendChannelSetup(Instrument *instrument, int channel)
+{
+    assert(instrument->hasFixedChannel());
+    MappedEventList mC;
+    MappedEventInserter inserter(mC);
+    // MapperFunctionalitySimple functionality;
+            
+    // Acquire it from ChannelManager.  Passing -1 for trackId which
+    // is unused here.
+    ChannelManager::sendProgramForInstrument(channel, instrument,
+                                             inserter,
+                                             RealTime::zeroTime, -1);
+    // ChannelManager::setControllers(channel, instrument,
+    //                                inserter, RealTime::zeroTime,
+    //                                RealTime::zeroTime, 
+    //                                &functionality, -1);
+
     sendMappedEventList(mC);
 }
 

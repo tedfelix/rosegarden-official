@@ -185,10 +185,7 @@ public:
     void setVolume(MidiByte volume) { m_volume = volume; }
     MidiByte getVolume() const { return m_volume; }
 
-    void setProgram(const MidiProgram &program) {
-        m_program = program;
-        emit changedChannelSetup();
-    }
+    void setProgram(const MidiProgram &program);
     const MidiProgram &getProgram() const { return m_program; }
 
     void setSendBankSelect(bool value) {
