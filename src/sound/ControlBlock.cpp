@@ -107,13 +107,16 @@ int
 ControlBlock::
 getNaturalChannelForInstrument(InstrumentId id) const
 {
-    if (!m_doc) { return -1; }
-    Instrument *instrument =
-        m_doc->getStudio().getInstrumentById(id);
-    if (!instrument) { return -1; }
+    if (!m_doc)
+        { return -1; }
+
+    Instrument *instrument = m_doc->getStudio().getInstrumentById(id);
+    if (!instrument)
+        { return -1; }
     if (instrument->getType() != Instrument::Midi)
         { return -1; }
-    if (!instrument->hasFixedChannel()) { return -1; }
+    if (!instrument->hasFixedChannel())
+        { return -1; }
 
     return instrument->getNaturalChannel();
 }

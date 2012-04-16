@@ -217,6 +217,8 @@ playPreviewNote(Instrument *instrument, int pitch,
     sendMappedEventList(mC);
 }
 
+// Set up a channel for output.  Intended only for fixed-channel MIDI
+// instruments.
 void
 StudioControl::
 sendChannelSetup(Instrument *instrument, int channel)
