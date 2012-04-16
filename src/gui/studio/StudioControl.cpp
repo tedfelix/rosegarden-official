@@ -226,17 +226,17 @@ sendChannelSetup(Instrument *instrument, int channel)
     assert(instrument->hasFixedChannel());
     MappedEventList mC;
     MappedEventInserter inserter(mC);
-    // MapperFunctionalitySimple functionality;
+    ChannelManager::MapperFunctionalitySimple functionality;
             
     // Acquire it from ChannelManager.  Passing -1 for trackId which
     // is unused here.
     ChannelManager::sendProgramForInstrument(channel, instrument,
                                              inserter,
                                              RealTime::zeroTime, -1);
-    // ChannelManager::setControllers(channel, instrument,
-    //                                inserter, RealTime::zeroTime,
-    //                                RealTime::zeroTime, 
-    //                                &functionality, -1);
+    ChannelManager::setControllers(channel, instrument,
+                                   inserter, RealTime::zeroTime,
+                                   RealTime::zeroTime, 
+                                   &functionality, -1);
 
     sendMappedEventList(mC);
 }

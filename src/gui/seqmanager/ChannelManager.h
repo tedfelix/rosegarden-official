@@ -56,6 +56,7 @@ class ChannelManager : public QObject
   friend class MetronomeMapper;
   friend class ImmediateNote;
 
+ public:
 // @class MapperFunctionality Base class to provide covariance with
 // MIDI-type mappers.  InternalSegmentMapper and MetronomeMapper
 // subclass this, add a pointer member to themselves, and pass that as
