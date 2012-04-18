@@ -122,7 +122,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_hSliderHacked(false),
     m_lastNote(0)
 {
-    MATRIX_DEBUG << "MatrixWidget ctor";
+    //MATRIX_DEBUG << "MatrixWidget ctor";
 
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -318,11 +318,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 MatrixWidget::~MatrixWidget()
 {
-    MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - start";
+    //MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - start";
     delete m_scene;
     delete m_pianoScene;
     delete m_localMapping;
-    MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - end";
+    //MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - end";
 }
 
 void
@@ -487,13 +487,12 @@ MatrixWidget::generatePitchRuler()
 
         mapping = m_instrument->getKeyMapping();
         if (mapping) {
-            MATRIX_DEBUG << "MatrixView: Instrument has key mapping: "
-                    << mapping->getName() << endl;
+            //MATRIX_DEBUG << "MatrixView: Instrument has key mapping: " << mapping->getName();
             m_localMapping = new MidiKeyMapping(*mapping);
             m_localMapping->extend();
             isPercussion = true;
         } else {
-            MATRIX_DEBUG << "MatrixView: Instrument has no key mapping\n";
+            //MATRIX_DEBUG << "MatrixView: Instrument has no key mapping";
             isPercussion = false;
         }
     }
@@ -900,7 +899,7 @@ MatrixWidget::slotSetTool(QString name)
 void
 MatrixWidget::slotSetPaintTool()
 {
-    MATRIX_DEBUG << "slotSetPaintTool" << endl;
+    //MATRIX_DEBUG << "slotSetPaintTool";
     
     slotSetTool(MatrixPainter::ToolName);
 }
@@ -914,12 +913,12 @@ MatrixWidget::slotSetEraseTool()
 void
 MatrixWidget::slotSetSelectTool()
 {
-    MATRIX_DEBUG << "slotSetSelectTool" << endl;
+    //MATRIX_DEBUG << "slotSetSelectTool";
     
     slotSetTool(MatrixSelector::ToolName);
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
     if (selector) {
-        MATRIX_DEBUG << "slotSetSelectTool: selector successfully set" << endl;
+        //MATRIX_DEBUG << "slotSetSelectTool: selector successfully set";
     
         connect(selector, SIGNAL(editTriggerSegment(int)),
                 this, SIGNAL(editTriggerSegment(int)));
@@ -970,8 +969,8 @@ MatrixWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();
 
-    MATRIX_DEBUG << "MatrixWidget::slotAddControlRuler";
-    MATRIX_DEBUG << "  my name is " << name.toStdString();
+    //MATRIX_DEBUG << "MatrixWidget::slotAddControlRuler()";
+    //MATRIX_DEBUG << "  my name is " << name;
 
     // we just cheaply paste the code from MatrixView that created the menu to
     // figure out what its indices must point to (and thinking about this whole
@@ -1012,7 +1011,7 @@ MatrixWidget::slotAddControlRuler(QAction *action)
         
         if (name != itemStr) continue;
 
-        MATRIX_DEBUG << "  name: " << name << " should match  itemStr: " << itemStr;
+        //MATRIX_DEBUG << "  name: " << name << " should match  itemStr: " << itemStr;
 
         m_controlsWidget->slotAddControlRuler(*it);
 
@@ -1209,7 +1208,7 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 void
 MatrixWidget::slotResetZoomClicked()
 {
-    MATRIX_DEBUG << "MatrixWidget::slotResetZoomClicked()";
+    //MATRIX_DEBUG << "MatrixWidget::slotResetZoomClicked()";
 
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
@@ -1260,10 +1259,10 @@ MatrixWidget::slotInitialHSliderHack(int)
 
     m_hSliderHacked = true;
 
-    MATRIX_DEBUG << "MatrixWidget::slotInitialHSliderHack()";
-    MATRIX_DEBUG << "  h slider position was: " << m_view->horizontalScrollBar()->sliderPosition();
+    //MATRIX_DEBUG << "MatrixWidget::slotInitialHSliderHack()";
+    //MATRIX_DEBUG << "  h slider position was: " << m_view->horizontalScrollBar()->sliderPosition();
     m_view->horizontalScrollBar()->setSliderPosition(0);
-    MATRIX_DEBUG << "  h slider position now: " << m_view->horizontalScrollBar()->sliderPosition();
+    //MATRIX_DEBUG << "  h slider position now: " << m_view->horizontalScrollBar()->sliderPosition();
 }
 
 void
@@ -1332,7 +1331,8 @@ MatrixWidget::updateSegmentChangerBackground()
 void
 MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
 {
-    MATRIX_DEBUG << "MatrixWidget::slotHoveredOverKeyChanged(" << y << ")";
+    //MATRIX_DEBUG << "MatrixWidget::slotHoveredOverKeyChanged(" << y << ")";
+
     int evPitch = m_scene->calculatePitchFromY(y);
     m_pitchRuler->drawHoverNote(evPitch);
     m_pianoView->update();   // Needed to remove black trailers left by
@@ -1352,6 +1352,8 @@ MatrixWidget::slotMouseLeavesView()
 
 void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 {
+    //MATRIX_DEBUG << "MatrixWidget::slotKeyPressed(" << y << ")";
+
     slotHoveredOverKeyChanged(y);
     int evPitch = m_scene->calculatePitchFromY(y);
 
@@ -1382,6 +1384,8 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 
 void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 {
+    //MATRIX_DEBUG << "MatrixWidget::slotKeySelected(" << y << ")";
+
     slotHoveredOverKeyChanged(y);
 
 //    getCanvasView()->slotScrollVertSmallSteps(y);
