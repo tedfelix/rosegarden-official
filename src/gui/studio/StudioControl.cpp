@@ -217,13 +217,12 @@ playPreviewNote(Instrument *instrument, int pitch,
     sendMappedEventList(mC);
 }
 
-// Set up a channel for output.  Intended only for fixed-channel MIDI
-// instruments.
+// Set up a channel for output.  This is used for fix channel
+// instruments and also to set up MIDI thru channels.
 void
 StudioControl::
 sendChannelSetup(Instrument *instrument, int channel)
 {
-    assert(instrument->hasFixedChannel());
     MappedEventList mC;
     MappedEventInserter inserter(mC);
     ChannelManager::MapperFunctionalitySimple functionality;

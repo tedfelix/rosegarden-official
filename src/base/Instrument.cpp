@@ -20,6 +20,7 @@
 #include "base/AudioPluginInstance.h"
 #include "base/AudioLevel.h"
 #include "gui/studio/StudioControl.h"
+#include "sound/ControlBlock.h"
 
 #include <cassert>
 
@@ -375,6 +376,7 @@ setProgram(const MidiProgram &program)
 {
     m_program = program;
     emit changedChannelSetup();
+    ControlBlock::getInstance()->instrumentChangedProgram(getId());
     if (hasFixedChannel())
         { StudioControl::sendChannelSetup(this, m_channel); }
 }

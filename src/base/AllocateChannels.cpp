@@ -19,6 +19,7 @@
 #include "Instrument.h"
 #include "MidiDevice.h"
 #include "misc/Debug.h"
+#include "sound/ControlBlock.h"
 
 #include <algorithm>
 
@@ -425,39 +426,66 @@ void
 AllocateChannels::
 reserveFixedChannel(ChannelId channel)
 {
-    // Remove channel from FreeChannels (if not percussion) so we
-    // don't give anything an interval on this channel.
-    if (!isPercussion(channel)) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-    SEQUENCER_DEBUG
-        << "AllocateChannels: reserveFixedChannel reserving"
-        << (int) channel
-        << endl;
-#endif
-        m_freeChannels.removeChannel(channel);
+    reserveChannel(channel, m_fixedChannels);
+
+    // If m_thruChannels has it, release it from there too.  Fixed
+    // channels have priority over thru channels because their channel
+    // numbers are chosen by the user.  We do this last to be very
+    // sure we're in a nice clean state when ControlBlock looks for
+    // another thru channel.
+    FixedChannelSet::iterator i = m_thruChannels.find(channel);
+    if (i != m_thruChannels.end())
+    {
+        // This statement is effectively releaseThruChannel, since we
+        // already found it there and we know it's not going into
+        // m_freeChannels.
+        m_thruChannels.erase(i);
+        
+        // Kick ControlBlock off this channel.  It will allocate
+        // another.
+        ControlBlock::getInstance()->vacateThruChannel(channel);
     }
-
-    // Kick everything else off the channel.  They'll get a new
-    // channel; that's not a concern here.
-    emit sigVacateChannel(channel);
-
-    // Record that this channel is reserved
-    m_fixedChannels.insert(channel);
-
-    // Tell any visiting dialogs what's reserved now.
-    emit sigChangedReservedChannels(this);
 }
 
 
-// Release a channel that a fixed-channel instrument had.
+// Allocate a channel for MIDI playthru
+// The signal connections this uses are made by ChannelManager.
+// @author Tom Breton (Tehom)
+ChannelId
+AllocateChannels::
+allocateThruChannel(void)
+{
+    // Quick and dirty: assume ChannelSetup::MIDI.  We inspect
+    // channels highest-first because they tend to be used
+    // lowest-first and we'd prefer not to collide.
+    for (int channel = 15; channel >= 0; --channel) {
+        // Avoid channels we've already reserved.
+        if (m_thruChannels.find(channel) != m_thruChannels.end())
+            { continue; }
+
+        // Avoid any channel in m_fixedChannels.
+        if (m_fixedChannels.find(channel) != m_fixedChannels.end())
+            { continue; }
+
+        // We don't try to find a good channel, we just accept the
+        // first candidate.
+        reserveChannel(channel, m_thruChannels);
+        return channel;
+    }
+
+    // Fixed channels has all the channels, so return invalid channel.
+    return -1;
+}
+
+// Release a reserved channel from channelSet
 // @author Tom Breton (Tehom)
 void
 AllocateChannels::
-releaseFixedChannel(ChannelId channel)
+releaseReservedChannel(ChannelId channel, FixedChannelSet& channelSet)
 {
-    FixedChannelSet::iterator i = m_fixedChannels.find(channel);
+    FixedChannelSet::iterator i = channelSet.find(channel);
 
-    if (i == m_fixedChannels.end()) { return; }
+    if (i == channelSet.end()) { return; }
 #ifdef DEBUG_CHANNEL_ALLOCATOR
     SEQUENCER_DEBUG
         << "AllocateChannels: releaseFixedChannel releasing"
@@ -466,15 +494,37 @@ releaseFixedChannel(ChannelId channel)
 #endif
     
     // Remove from reserved channels.
-    m_fixedChannels.erase(i);
-
-    // Tell any visiting dialogs what's reserved now.
-    emit sigChangedReservedChannels(this);
+    channelSet.erase(i);
 
     // Add channel to FreeChannels (if not percussion)
     if (!isPercussion(channel)) {
         m_freeChannels.addChannel(channel);
     }
+}
+
+// Reserve a channel with regard to channelSet.
+// @author Tom Breton (Tehom)
+void
+AllocateChannels::
+reserveChannel(ChannelId channel, FixedChannelSet& channelSet)
+{
+    // Remove channel from FreeChannels (if not percussion) so we
+    // don't give anything an interval on this channel.
+    if (!isPercussion(channel)) {
+#ifdef DEBUG_CHANNEL_ALLOCATOR
+        SEQUENCER_DEBUG
+            << "AllocateChannels: reserveFixedChannel reserving"
+            << (int) channel
+            << endl;
+#endif
+        m_freeChannels.removeChannel(channel);
+    }
+    // Record that this channel is reserved.  
+    channelSet.insert(channel);
+
+    // Kick ChannelManagers off the channel.  They'll get a new
+    // channel; that's not a concern here.
+    emit sigVacateChannel(channel);
 }
 
 }

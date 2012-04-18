@@ -23,18 +23,55 @@ namespace Rosegarden
 {
 
 class RosegardenDocument;
+ class Studio;
+ 
+class InstrumentAndChannel
+{
+ public:
+ InstrumentAndChannel(InstrumentId id, int channel) :
+    m_id(id),
+        m_channel(channel)
+        {};
+
+    // Default to an invalid value.
+ InstrumentAndChannel(void) :
+    m_id(0),
+        m_channel(-1)
+        {};
+    
+    InstrumentId m_id;
+    int          m_channel;
+};
 
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  */
 struct TrackInfo 
 {
+    InstrumentAndChannel getChannelAsReady(Studio &studio);
+    void conform(Studio &studio);
+    void releaseThruChannel(Studio &studio);
+private:
+    void allocateThruChannel(Studio &studio);
+
+public:
     bool deleted;
     bool muted;
     bool armed;
     char channelFilter;
     DeviceId deviceFilter;
     InstrumentId instrumentId;
+    // The channel to play thru MIDI events on, if any.  For unarmed
+    // tracks, this will be an invalid channel.
+    int thruChannel;
+    // Whether the thru channel is ready - the right program has been
+    // sent, etc.
+    bool isThruChannelReady;
+    // Whether we have allocated a thru channel.
+    bool hasThruChannel;
+    // This duplicates information in ControlBlock.  It exists so that
+    // we can check if we need a thru channel using just this class.
+    bool selected;
 };
 
 #define CONTROLBLOCK_MAX_NB_TRACKS 1024 // can't be a symbol
@@ -59,7 +96,6 @@ public:
 
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
     InstrumentId getInstrumentForTrack(TrackId trackId) const;
-    int getNaturalChannelForInstrument(InstrumentId trackId) const;
 
     void setTrackArmed(TrackId trackId, bool);
     bool isTrackArmed(TrackId trackId) const;
@@ -88,7 +124,7 @@ public:
     bool isSolo() const      { return m_solo; }
     void setSolo(bool value) { m_solo = value; }
     TrackId getSelectedTrack() const     { return m_selectedTrack; }
-    void setSelectedTrack(TrackId track) { m_selectedTrack = track; }
+    void setSelectedTrack(TrackId track);
 
     void setThruFilter(MidiFilter filter) { m_thruFilter = filter; }
     MidiFilter getThruFilter() const { return m_thruFilter; }
@@ -100,16 +136,23 @@ public:
     bool isMidiRoutingEnabled() const { return m_routing; } 
     
     /**
-     * Gets an InstrumentId for the given DeviceId and Channel. If there
-     * is an armed track having a matching device and channel filters, 
-     * this method returns the instrument assigned to the track, even if 
-     * there are more tracks matching the same filters. If there is not a
-     * single match, it returns the instrument assigned to the selected
-     * track.
+     * Gets an instrument id and output channel for the given DeviceId
+     * and input Channel. If there is an armed track having a matching
+     * device and channel filters, this method returns the instrument
+     * assigned to the track, even if there are more tracks matching
+     * the same filters. If there is not a single match, it returns
+     * the value corresponding to the selected track.
      */
-    InstrumentId getInstrumentForEvent(unsigned int dev, 
-                                       unsigned int chan);
+    InstrumentAndChannel
+        getInsAndChanForEvent(unsigned int dev, 
+                              unsigned int chan);
 
+    InstrumentAndChannel
+        getInsAndChanForSelectedTrack(void);
+
+    void vacateThruChannel(int channel);
+    void instrumentChangedProgram(InstrumentId instrumentId);
+    
 protected:
     ControlBlock();
 
@@ -117,6 +160,7 @@ protected:
     unsigned int m_maxTrackId;
     bool m_solo;
     bool m_routing;
+    bool m_isSelectedChannelReady;
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;
     TrackId m_selectedTrack;

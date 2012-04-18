@@ -114,14 +114,25 @@ struct ChannelSetup
   void freeChannelInterval(ChannelInterval &old);
 
   void reserveFixedChannel(ChannelId channel);
-  void releaseFixedChannel(ChannelId channel);
+  void releaseFixedChannel(ChannelId channel)
+  { releaseReservedChannel(channel, m_fixedChannels); }
+
+  ChannelId allocateThruChannel(void);
+  void releaseThruChannel(ChannelId channel)
+  { releaseReservedChannel(channel, m_thruChannels); }
+
   static bool isPercussion(ChannelId channel);
   static bool isPercussion(ChannelInterval &ci);
  signals:
   void sigVacateChannel(ChannelId channel);
-  void sigChangedReservedChannels(const AllocateChannels *allocator);
   
  private:
+  // Release channel from channelSet, making it available for normal use.
+  void releaseReservedChannel(ChannelId channel, FixedChannelSet& channelSet);
+  // Reserve a channel, with respect only to channelSet and
+  // m_freeChannels.
+  void reserveChannel(ChannelId channel, FixedChannelSet& channelSet);
+      
   // Channel intervals for "normal" instruments: Not percussion, not
   // fixed.  ChannelManagers holding pieces of this are connected to
   // sigVacateChannel.
@@ -130,6 +141,10 @@ struct ChannelSetup
   // instruments share a fixed channel.  This doesn't record
   // instrument identity.
   FixedChannelSet m_fixedChannels;
+
+  // Channels for "MIDI thru" to play on.  They are arranged to not
+  // conflict with fixed channels.
+  FixedChannelSet m_thruChannels;
 };
 }
 

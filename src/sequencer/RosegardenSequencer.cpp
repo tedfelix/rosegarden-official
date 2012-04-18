@@ -1371,29 +1371,25 @@ RosegardenSequencer::processRecordedMidi()
 void
 RosegardenSequencer::routeEvents(MappedEventList *mC, bool useSelectedTrack)
 {
-    InstrumentId instrumentId;
-
+    ControlBlock *control = ControlBlock::getInstance();
     if (useSelectedTrack) {
-        instrumentId = ControlBlock::getInstance()->getInstrumentForTrack
-            (ControlBlock::getInstance()->getSelectedTrack());
-        unsigned int channel =
-                ControlBlock::getInstance()->
-                getNaturalChannelForInstrument(instrumentId);
+        InstrumentAndChannel 
+            info = control->getInsAndChanForSelectedTrack();
+        
         for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
-            (*i)->setInstrument(instrumentId);
-            (*i)->setRecordedChannel(channel);
+            (*i)->setInstrument(info.m_id);
+            (*i)->setRecordedChannel(info.m_channel);
         }
     } else {
         for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
-            instrumentId = ControlBlock::getInstance()->getInstrumentForEvent
+            InstrumentAndChannel 
+                info = control->getInsAndChanForEvent
                 ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
-            unsigned int channel =
-                ControlBlock::getInstance()->
-                getNaturalChannelForInstrument(instrumentId);
-            (*i)->setInstrument(instrumentId);
-            (*i)->setRecordedChannel(channel);
+            
+            (*i)->setInstrument(info.m_id);
+            (*i)->setRecordedChannel(info.m_channel);
         }
     }
     m_driver->processEventsOut(*mC);
