@@ -178,7 +178,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation>交互 - %1 をふたつの値で交互に設定</translation>
+        <translation>オルタネーティング - オルタネートイベント上で%1 を最大最小に</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -195,7 +195,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">均一 - %1 を均一に設定</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -583,7 +583,7 @@
         <location line="+4046"/>
         <location line="+60"/>
         <source>&amp;Musical Times</source>
-        <translation type="unfinished"></translation>
+        <translation>ミュージカルタイム(&amp;M)</translation>
     </message>
     <message>
         <location line="-4163"/>
@@ -2048,7 +2048,7 @@
     <message>
         <location line="+77"/>
         <source>Dump staves (debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>連符をダンプ（デバッグ）</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2064,7 +2064,7 @@
     <message>
         <location line="-2027"/>
         <source>Add Clef Change in this link only...</source>
-        <translation type="unfinished"></translation>
+        <translation>このリンクのみ中で音符記号を追加...</translation>
     </message>
     <message>
         <location line="+53"/>
@@ -2645,7 +2645,7 @@
     <message>
         <location line="+1"/>
         <source>Collapse Rests After Erase</source>
-        <translation type="unfinished"></translation>
+        <translation>消去の後で休符を分割</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -4435,7 +4435,7 @@
     <message>
         <location line="+1"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MusicXMLファイルのインポート（&amp;L)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4540,7 +4540,7 @@
     <message>
         <location line="+55"/>
         <source>Paste as &amp;Links</source>
-        <translation type="unfinished"></translation>
+        <translation>リンクとして貼り付け(&amp;L)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4571,12 +4571,12 @@
     <message>
         <location line="+9"/>
         <source>Paste Tempos and Time Signatures</source>
-        <translation type="unfinished">テンポ/拍子をペースト</translation>
+        <translation>テンポ/タイムシグネチャ（拍子）をペースト</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clear Range of Tempos</source>
-        <translation type="unfinished"></translation>
+        <translation>テンポのレンジをクリヤ</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4730,7 +4730,7 @@
     <message>
         <location line="-2"/>
         <source>Create &amp;Anacrusis...</source>
-        <translation type="unfinished"></translation>
+        <translation>弱拍（上拍）を作成(&amp;A)...</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -10496,13 +10496,13 @@
         <location line="+2"/>
         <source>Autocorrelation</source>
         <comment>DSP operation</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Harmonic Product Spectrum</source>
         <comment>Pitch determination (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -10520,7 +10520,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -11697,7 +11697,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+229"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>なし</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -14878,7 +14878,7 @@ Example text from file:</source>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+67"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>なし</translation>
     </message>
 </context>
 <context>
@@ -15959,12 +15959,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="-13"/>
         <source>auto</source>
-        <translation type="unfinished"></translation>
+        <translation>自動</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>固定</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -15979,7 +15979,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;自動&lt;/i&gt;, 自動的にチャンネルを割り当て; &lt;i&gt;固定&lt;/i&gt;, インストゥルメント番号にチャンネルを固定&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -16004,7 +16004,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>Channel</source>
-        <translation type="unfinished">チャンネル</translation>
+        <translation>チャンネル</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -18387,7 +18387,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+3"/>
         <source>Pre Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>プリベンド</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -18482,12 +18482,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+1"/>
         <source>Actual freq:</source>
-        <translation type="unfinished"></translation>
+        <translation>実際の周波数:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Error (cents):</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー（セント):</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18519,17 +18519,17 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+20"/>
         <source>Root Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>ルートピッチ</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>リファレンスピッチ</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reference Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>リファレンス周波数</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -18579,7 +18579,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+26"/>
         <source>The tunings file could not be found! The file named &quot;tunings.xml&quot; containing tuning definitions has not been found in any of the standard directories. On Linux platforms, these include /usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitches and $HOME/.local/share/rosegarden/pitches. This file should be part of the standard installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>チューニングファイルが見つからない！ チューニング情報が含まれている、ファイル名&quot;tunings.xml&quot;が、標準ディレクトリのどこにも見つからない。Linuxプラットフォームでは、それらは/usr/share/rosegarden/pitches, /usr/local/share/rosegarden/pitchesと$HOME/.local/share/rosegarden/pitchesです。このファイルは標準的にインストールされるものの一部です。</translation>
     </message>
 </context>
 <context>
@@ -19243,7 +19243,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/commands/segment/RemoveTimeSignatureCommand.h" line="+53"/>
         <source>Remove &amp;Time Signature Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムシグネチャチェンジを削除(&amp;T)...</translation>
     </message>
 </context>
 <context>
@@ -19565,14 +19565,14 @@ Please select any you wish to delete permanently from the hard disk.
     <message>
         <location line="+1749"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation type="unfinished">オーディオファイルのパスが存在しないか、書き込みできません。
+        <translation>オーディオファイルのパスが存在しないか、書き込みできません。
 オーディオを録音する前にドキュメントプロパティ中で、オーディオ パスのための有効なディレクトリを指定します。
 今それを設定しますか?</translation>
     </message>
@@ -20355,7 +20355,7 @@ No segment will be split.</source>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;弱拍（上拍）を作成するためには、少なくとも、選択されたセグメントのどれか1つがコンポジションの最初から始まる必要があります。composition.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -20365,7 +20365,7 @@ No segment will be split.</source>
     <message>
         <location line="+15"/>
         <source>Create Anacrusis</source>
-        <translation type="unfinished"></translation>
+        <translation>弱拍（上拍）の作成</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -20494,18 +20494,19 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
         <location line="-1061"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXMLファイルのオープン</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Importing MusicXML file...</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXMLファイルのインポート中...</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Can&apos;t load MusicXML file:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXMLファイルをロードできない:
+</translation>
     </message>
     <message>
         <location line="+1127"/>
@@ -20568,7 +20569,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+276"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;オーディオを録音する前にこのコンポジション用のファイル名を選択しなければなりません。&lt;/p&gt;&lt;p&gt;オーディオファイルはAudio files will be saved to &lt;b&gt;%1&lt;/b&gt; に &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;という形式でセーブされます。録音する前に、オーディオインストゥルメントを改名してもよいでしょう。さらなる情報は&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;を参照してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+214"/>
@@ -21444,7 +21445,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;MIDIとオーディオサブシステム両方の初期化に失敗しました。&lt;/p&gt;&lt;p&gt;もしもシーケンサなしで動作させたいのであれば、このエラーを表示させないように、&quot;rosegarden --nosequencer&quot;として起動します。   それ以外は、システムの設定を修復してRosegardenを再起動することを推奨します。&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -21927,7 +21928,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+29"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished">&lt;br&gt;サイズ: %1,  Bracket: %2 </translation>
+        <translation>&lt;br&gt;サイズ: %1,  Bracket: %2 </translation>
     </message>
     <message>
         <location line="+28"/>
