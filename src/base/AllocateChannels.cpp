@@ -342,7 +342,7 @@ AllocateChannels(ChannelSetup /*unused*/) :
 {
     // Quick and dirty: assume ChannelSetup::MIDI.
     for (int i = 0; i < 16; ++i) {
-        if (i != 9) {
+        if (!isPercussion(i)) {
             (void)m_freeChannels.addChannel(i);
         }
     }
@@ -388,7 +388,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
 
     if (instrument.isPercussion()) {
         // For single channel, this implicitly frees+reallocates
-        ci = ChannelInterval(9, start, end,
+        ci = ChannelInterval(getPercussionChannel(), start, end,
                              NULL, NULL,
                              RealTime::zeroTime, RealTime::zeroTime);
     } else {
@@ -453,8 +453,10 @@ reserveFixedChannel(ChannelId channel)
 // @author Tom Breton (Tehom)
 ChannelId
 AllocateChannels::
-allocateThruChannel(void)
+allocateThruChannel(Instrument& instrument)
 {
+    if (instrument.isPercussion()) { return getPercussionChannel(); }
+    
     // Quick and dirty: assume ChannelSetup::MIDI.  We inspect
     // channels highest-first because they tend to be used
     // lowest-first and we'd prefer not to collide.

@@ -51,6 +51,7 @@ struct TrackInfo
     InstrumentAndChannel getChannelAsReady(Studio &studio);
     void conform(Studio &studio);
     void releaseThruChannel(Studio &studio);
+    void makeChannelReady(Studio &studio);
 private:
     void allocateThruChannel(Studio &studio);
 

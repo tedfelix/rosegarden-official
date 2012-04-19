@@ -308,7 +308,7 @@ instrumentChangedProgram(InstrumentId instrumentId)
     for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
         TrackInfo &track = m_trackInfo[i];
         if(track.hasThruChannel && (track.instrumentId == instrumentId)) {
-            track.isThruChannelReady = false;
+            track.makeChannelReady(m_doc->getStudio()); 
         }
     }
 }
@@ -324,8 +324,10 @@ conform(Studio &studio)
 {
     bool shouldHaveThru = (armed || selected) && !deleted;
     
-    if (!hasThruChannel && shouldHaveThru)
-        { allocateThruChannel(studio); }
+    if (!hasThruChannel && shouldHaveThru) {
+        allocateThruChannel(studio);
+        makeChannelReady(studio); 
+    }
     else if (hasThruChannel && !shouldHaveThru)
         { releaseThruChannel(studio); }
 }
@@ -341,25 +343,29 @@ TrackInfo::getChannelAsReady(Studio &studio)
         { return InstrumentAndChannel(); }
 
     // If our channel might not have the right program, send it now.
-    if (!isThruChannelReady) {
-        Instrument *instrument =
-            studio.getInstrumentById(instrumentId);
-        assert(instrument);
-
-        // Unreadiness should only occur with a Midi device.
-        assert(instrument->getType() == Instrument::Midi);
-
-        Device* device = instrument->getDevice();
-        assert(device);
-
-        // This is how MidiInstrument readies a fixed
-        // channel.
-        StudioControl::sendChannelSetup(instrument, thruChannel);
-        isThruChannelReady = true;
-    }
-
+    if (!isThruChannelReady) 
+        { makeChannelReady(studio); }
     return InstrumentAndChannel(instrumentId, thruChannel);    
 }
+
+void
+TrackInfo::makeChannelReady(Studio &studio)
+{
+    Instrument *instrument =
+        studio.getInstrumentById(instrumentId);
+    assert(instrument);
+
+    // We expect a Midi instrument.
+    assert(instrument->getType() == Instrument::Midi);
+
+    Device* device = instrument->getDevice();
+    assert(device);
+
+    // This is how Midi instrument readies a fixed channel.
+    StudioControl::sendChannelSetup(instrument, thruChannel);
+    isThruChannelReady = true;
+}
+
 
 // Allocate a channel for thru MIDI events to play on.
 // @author Tom Breton (Tehom)
@@ -393,7 +399,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
         }
 
     // Get a suitable channel.
-    thruChannel = allocator->allocateThruChannel();
+    thruChannel = allocator->allocateThruChannel(*instrument);
 
     // Right now the channel is probably playing the wrong program.
     isThruChannelReady = false;

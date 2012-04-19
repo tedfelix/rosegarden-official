@@ -117,12 +117,13 @@ struct ChannelSetup
   void releaseFixedChannel(ChannelId channel)
   { releaseReservedChannel(channel, m_fixedChannels); }
 
-  ChannelId allocateThruChannel(void);
+  ChannelId allocateThruChannel(Instrument& instrument);
   void releaseThruChannel(ChannelId channel)
   { releaseReservedChannel(channel, m_thruChannels); }
 
   static bool isPercussion(ChannelId channel);
   static bool isPercussion(ChannelInterval &ci);
+  static ChannelId getPercussionChannel(void) { return 9; }
  signals:
   void sigVacateChannel(ChannelId channel);
   
