@@ -95,7 +95,7 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
 
         MidiPitchLabel label(minPitch + i);
         std::string key = m_mapping->getMapForKeyName(minPitch + i);
-        RG_DEBUG << i << ": " << label.getQString() << ": " << key << endl;
+        //RG_DEBUG << "PercussionPitchRuler::paintEvent()" << i << ": " << label.getQString() << ": " << key;
 
         int yi = (extent - i - 1) * (m_lineSpacing + 1) + offset;
         paint.drawText(2, yi, label.getQString());
