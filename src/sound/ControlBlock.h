@@ -63,7 +63,7 @@ public:
     DeviceId deviceFilter;
     InstrumentId instrumentId;
     // The channel to play thru MIDI events on, if any.  For unarmed
-    // tracks, this will be an invalid channel.
+    // unselected tracks, this will be an invalid channel.
     int thruChannel;
     // Whether the thru channel is ready - the right program has been
     // sent, etc.
@@ -156,6 +156,7 @@ public:
     
 protected:
     ControlBlock();
+    void clearTracks(void);
 
     RosegardenDocument *m_doc;
     unsigned int m_maxTrackId;

@@ -21,6 +21,10 @@
 #include "base/Instrument.h"
 #include "document/RosegardenDocument.h"
 #include "gui/studio/StudioControl.h"
+#include "misc/Debug.h"
+
+#define DEBUG_CONTROL_BLOCK 1
+
 
 namespace Rosegarden
 {
@@ -44,22 +48,34 @@ ControlBlock::ControlBlock() :
 {
     m_metronomeInfo.muted = true;
     m_metronomeInfo.instrumentId = 0;
+    clearTracks();
+    setSelectedTrack(0);
+}
+
+void
+ControlBlock::
+clearTracks(void)
+{
     for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i) {
         m_trackInfo[i].muted = true;
         m_trackInfo[i].deleted = true;
-        m_trackInfo[i].armed = true;
+        m_trackInfo[i].armed = false;
         m_trackInfo[i].selected = false;
         m_trackInfo[i].hasThruChannel = false;
         m_trackInfo[i].instrumentId = 0;
         // We don't set thruChannel or isThruChannelReady because they
         // mean nothing when hasThruChannel is false.
     }
-    setSelectedTrack(0);
 }
 
 void
 ControlBlock::setDocument(RosegardenDocument *doc)
 {
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setDocument()"
+             << endl;
+#endif
+    clearTracks();
     m_doc = doc;
     m_maxTrackId = m_doc->getComposition().getMaxTrackId();
     
@@ -82,6 +98,11 @@ void
 ControlBlock::updateTrackData(Track* t)
 {
     if (t) {
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "Updating track"
+             << t->getId()
+             << endl;
+#endif
         setInstrumentForTrack(t->getId(), t->getInstrument());
         setTrackArmed(t->getId(), t->isArmed());
         setTrackMuted(t->getId(), t->isMuted());
@@ -217,9 +238,18 @@ void
 ControlBlock::
 setSelectedTrack(TrackId track)
 {
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setSelectedTrack()" << endl;
+#endif
+     
     // Undo the old selected track.  Safe even if it referred to the
     // same track or to no track.
     if (m_selectedTrack < CONTROLBLOCK_MAX_NB_TRACKS) {
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setSelectedTrack() deselecting"
+             << m_selectedTrack
+             << endl;
+#endif
         TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
         oldTrack.selected = false;
         oldTrack.conform(m_doc->getStudio());
@@ -227,7 +257,12 @@ setSelectedTrack(TrackId track)
 
     // Set up the new selected track
     if (track < CONTROLBLOCK_MAX_NB_TRACKS) {
-        TrackInfo &newTrack = m_trackInfo[m_selectedTrack];
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setSelectedTrack() selecting"
+             << track
+             << endl;
+#endif
+        TrackInfo &newTrack = m_trackInfo[track];
         newTrack.selected = true;
         newTrack.conform(m_doc->getStudio());
     }
@@ -323,6 +358,15 @@ TrackInfo::
 conform(Studio &studio)
 {
     bool shouldHaveThru = (armed || selected) && !deleted;
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "TrackInfo::conform()"
+             << (shouldHaveThru ?
+                 "should have a thru channel" :
+                 "shouldn't have a thru channel")
+             << "and"
+             << (hasThruChannel ? "does" : "doesn't")
+             << endl;
+#endif
     
     if (!hasThruChannel && shouldHaveThru) {
         allocateThruChannel(studio);
@@ -348,6 +392,8 @@ TrackInfo::getChannelAsReady(Studio &studio)
     return InstrumentAndChannel(instrumentId, thruChannel);    
 }
 
+// Make the channel ready to play on.  Send the program, etc.
+// @author Tom Breton (Tehom)
 void
 TrackInfo::makeChannelReady(Studio &studio)
 {
@@ -389,18 +435,33 @@ TrackInfo::allocateThruChannel(Studio &studio)
     assert(device);
     AllocateChannels *allocator = device->getAllocator();
 
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "TrackInfo::allocateThruChannel() "
+             << (allocator ?
+                 "got an allocator" :
+                 "didn't get an allocator")
+             << endl;
+#endif
+
     // Device is not a channel-managing device, so instrument's
     // natural channel is correct and requires no further setup.
     if (!allocator)
         {
             thruChannel = instrument->getNaturalChannel();
             isThruChannelReady = true;
+            hasThruChannel = true;
             return;
         }
 
     // Get a suitable channel.
     thruChannel = allocator->allocateThruChannel(*instrument);
 
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "TrackInfo::allocateThruChannel() got channel"
+             << (int)thruChannel
+             << endl;
+#endif
+    
     // Right now the channel is probably playing the wrong program.
     isThruChannelReady = false;
     hasThruChannel = true;
