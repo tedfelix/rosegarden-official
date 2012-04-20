@@ -399,7 +399,10 @@ TrackInfo::makeChannelReady(Studio &studio)
 {
     Instrument *instrument =
         studio.getInstrumentById(instrumentId);
-    assert(instrument);
+
+    // If we have deleted a device, we may get a NULL instrument.  In
+    // that case, we can't do much.
+    if (!instrument) { return; }
 
     // We expect a Midi instrument.
     assert(instrument->getType() == Instrument::Midi);
@@ -420,7 +423,10 @@ TrackInfo::allocateThruChannel(Studio &studio)
 {
     Instrument *instrument =
         studio.getInstrumentById(instrumentId);
-    assert(instrument);
+
+    // If we have deleted a device, we may get a NULL instrument.  In
+    // that case, we can't do much.
+    if (!instrument) { return; }
 
     // We can't use a fixed channel for this because we're not
     // notified if it becomes auto.
@@ -476,19 +482,24 @@ TrackInfo::releaseThruChannel(Studio &studio)
 
     Instrument *instrument =
         studio.getInstrumentById(instrumentId);
-    assert(instrument);
 
-    // We don't use fixed channels, so we don't need to be careful
-    // about releasing one.
+    if (instrument) {
+        // We don't use fixed channels, so we don't need to be careful
+        // about releasing one.
 
-    Device* device = instrument->getDevice();
-    assert(device);
-    AllocateChannels *allocator = device->getAllocator();
+        Device* device = instrument->getDevice();
+        assert(device);
+        AllocateChannels *allocator = device->getAllocator();
 
-    // Device is a channel-managing device (Midi), so release the
-    // channel.
-    if (allocator)
-        { allocator->releaseThruChannel(thruChannel); }
+        // Device is a channel-managing device (Midi), so release the
+        // channel.
+        if (allocator)
+            { allocator->releaseThruChannel(thruChannel); }
+    }
+    // If we recently deleted a device, we may get a NULL instrument.
+    // In that case, we can't actively release it but we don't need
+    // to, we can just mark it released.
+    else /* if (!instrument) */ {}
     
     thruChannel = -1;
     // Channel wants no setup if we somehow encounter it in this
