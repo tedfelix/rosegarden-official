@@ -140,8 +140,8 @@
     <Action name="add_clef_this_link_only" text="Add Clef Change in this link only..." />
     <Action name="add_key_signature" text="Add &amp;Key Change..." />
   <Separator/>
-    <Action name="add_sustain_down" text="Add Pedal &amp;Press" />
-    <Action name="add_sustain_up" text="Add Pedal &amp;Release" />
+    <Action name="add_sustain_down" text="Add Pedal &amp;Press" icon="notation-pedal-down" />
+    <Action name="add_sustain_up" text="Add Pedal &amp;Release" icon="notation-pedal-up" />
   <Separator/>
     <Action name="set_segment_start" text="Set Start &amp;Time..." />
     <Action name="set_segment_duration" text="Set &amp;Duration..." />
@@ -761,6 +761,9 @@
 <Separator/>
   <Action name="add_dot" />
   <Action name="cycle_slashes" />
+<Separator/>
+  <Action name="add_sustain_down" />
+  <Action name="add_sustain_up" />
 </ToolBar>
 
 <ToolBar name="Layout Toolbar" hidden="false">
