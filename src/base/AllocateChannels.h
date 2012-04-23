@@ -117,6 +117,8 @@ struct ChannelSetup
   void releaseFixedChannel(ChannelId channel)
   { releaseReservedChannel(channel, m_fixedChannels); }
 
+  ChannelId
+      reallocateThruChannel(Instrument& instrument, ChannelId channel);
   ChannelId allocateThruChannel(Instrument& instrument);
   void releaseThruChannel(ChannelId channel)
   { releaseReservedChannel(channel, m_thruChannels); }

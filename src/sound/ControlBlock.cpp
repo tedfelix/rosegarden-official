@@ -92,6 +92,7 @@ ControlBlock::setDocument(RosegardenDocument *doc)
 
     setThruFilter(m_doc->getStudio().getMIDIThruFilter());
     setRecordFilter(m_doc->getStudio().getMIDIRecordFilter());
+    setSelectedTrack(comp.getSelectedTrack());
 }
 
 void
@@ -397,6 +398,10 @@ TrackInfo::getChannelAsReady(Studio &studio)
 void
 TrackInfo::makeChannelReady(Studio &studio)
 {
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "TrackInfo::makeChannelReady()"
+             << endl;
+#endif
     Instrument *instrument =
         studio.getInstrumentById(instrumentId);
 
@@ -407,7 +412,23 @@ TrackInfo::makeChannelReady(Studio &studio)
     // We can get non-Midi instruments here.  There's nothing to do
     // for them.
     if (instrument->getType() == Instrument::Midi) {
-
+        // Re-acquire channel.  It may change if instrument's program
+        // became percussion or became non-percussion.
+        Device* device = instrument->getDevice();
+        assert(device);
+        AllocateChannels *allocator = device->getAllocator();
+        if (allocator) {
+            thruChannel =
+                allocator->reallocateThruChannel(*instrument, thruChannel);
+            // If somehow we got here without having a channel, we
+            // have one now.
+            hasThruChannel = true;
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "TrackInfo::makeChannelReady() now has channel"
+             << hasThruChannel
+             << endl;
+#endif
+        }
         // This is how Midi instrument readies a fixed channel.
         StudioControl::sendChannelSetup(instrument, thruChannel);
     }

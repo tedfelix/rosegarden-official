@@ -23,7 +23,7 @@
 
 #include <algorithm>
 
-// #define DEBUG_CHANNEL_ALLOCATOR 1
+#define DEBUG_CHANNEL_ALLOCATOR 1
 
 namespace Rosegarden
 {
@@ -437,14 +437,31 @@ reserveFixedChannel(ChannelId channel)
     if (i != m_thruChannels.end())
     {
         // This statement is effectively releaseThruChannel, since we
-        // already found it there and we know it's not going into
-        // m_freeChannels.
+        // already found the channel in m_thruChannels and we know
+        // it's not going into m_freeChannels.
         m_thruChannels.erase(i);
         
         // Kick ControlBlock off this channel.  It will allocate
         // another.
         ControlBlock::getInstance()->vacateThruChannel(channel);
     }
+}
+
+ChannelId
+AllocateChannels::
+reallocateThruChannel(Instrument& instrument, ChannelId channel)
+{
+    // If we already have a valid channel and it has the right
+    // percussion-ness, we're done.
+    if (channel >= 0) {
+        bool isInstrumentPercussion = instrument.isPercussion();
+        bool isChannelPercussion    = isPercussion(channel);
+        if (isInstrumentPercussion == isChannelPercussion) { return channel; }
+    }
+
+    // Otherwise, out with the old, in with the new.
+    releaseThruChannel(channel);
+    return allocateThruChannel(instrument);
 }
 
 
@@ -485,6 +502,11 @@ void
 AllocateChannels::
 releaseReservedChannel(ChannelId channel, FixedChannelSet& channelSet)
 {
+    // Releasing an invalid channel does nothing.
+    if (channel < 0) { return; }
+    // Releasing the percussion channel does nothing.
+    if (isPercussion(channel)) { return; }
+    
     FixedChannelSet::iterator i = channelSet.find(channel);
 
     if (i == channelSet.end()) { return; }
