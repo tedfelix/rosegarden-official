@@ -59,6 +59,7 @@ ImmediateNote::
 fillWithNote(MappedEventList &mC, Instrument *instrument,
              int pitch, int velocity, int nsecs, bool oneshot)
 {
+  if (!instrument) { return; }
 #ifdef DEBUG_PREVIEW_NOTES
     SEQUENCER_DEBUG
         << "ImmediateNote::fillWithNote on"
@@ -66,7 +67,6 @@ fillWithNote(MappedEventList &mC, Instrument *instrument,
         << instrument->getName() << instrument->getId()
         << endl;
 #endif
-  if (!instrument) { return; }
   if (!canPreviewAnotherNote()) { return; }
   if ((pitch < 0) || (pitch > 127)) { return; }
   if (velocity < 0) { velocity = 100; }

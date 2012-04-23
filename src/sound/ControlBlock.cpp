@@ -404,14 +404,13 @@ TrackInfo::makeChannelReady(Studio &studio)
     // that case, we can't do much.
     if (!instrument) { return; }
 
-    // We expect a Midi instrument.
-    assert(instrument->getType() == Instrument::Midi);
+    // We can get non-Midi instruments here.  There's nothing to do
+    // for them.
+    if (instrument->getType() == Instrument::Midi) {
 
-    Device* device = instrument->getDevice();
-    assert(device);
-
-    // This is how Midi instrument readies a fixed channel.
-    StudioControl::sendChannelSetup(instrument, thruChannel);
+        // This is how Midi instrument readies a fixed channel.
+        StudioControl::sendChannelSetup(instrument, thruChannel);
+    }
     isThruChannelReady = true;
 }
 
