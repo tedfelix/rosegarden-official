@@ -3627,7 +3627,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 #endif
             channel = 0;
         }
-
+        if (channel < 0) { continue; }
         switch ((*i)->getType()) {
 
         case MappedEvent::MidiNoteOneShot:
