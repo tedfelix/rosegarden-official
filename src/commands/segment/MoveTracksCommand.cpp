@@ -50,6 +50,8 @@ MoveTracksCommand::execute()
     destTrack->setPosition(srcPosition);
 
     m_composition->updateRefreshStatuses();
+    m_composition->notifyTrackChanged(srcTrack);
+    m_composition->notifyTrackChanged(destTrack);
 }
 
 void
@@ -64,6 +66,8 @@ MoveTracksCommand::unexecute()
     destTrack->setPosition(srcPosition);
 
     m_composition->updateRefreshStatuses();
+    m_composition->notifyTrackChanged(srcTrack);
+    m_composition->notifyTrackChanged(destTrack);
 }
 
 }

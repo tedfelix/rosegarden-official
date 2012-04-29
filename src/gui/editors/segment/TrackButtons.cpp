@@ -179,14 +179,10 @@ TrackButtons::updateUI(Track *track)
     if (!label)
         return;
 
-    // My guess is that we shouldn't set the position and ID in this routine.
-    // They should be set up by the creator of the TrackLabel object.  But is
-    // there a possibility that these will change?  Yes.  When tracks are
-    // shuffled due to add/delete.  That's probably a special case that
-    // shouldn't be handled here.
-    //label->setId(track->getId());
-    //setButtonMapping(label, track->getId());
-    //label->setPosition(pos);
+    // In case the tracks have been moved around, update the mapping.
+    label->setId(track->getId());
+    setButtonMapping(label, track->getId());
+    label->setPosition(pos);
 
     if (track->getLabel() == "") {
         if (ins && ins->getType() == Instrument::Audio) {
@@ -230,10 +226,10 @@ TrackButtons::makeButtons()
 }
 
 void
-TrackButtons::setButtonMapping(QObject* obj, TrackId trackId)
+TrackButtons::setButtonMapping(TrackLabel* trackLabel, TrackId trackId)
 {
-    m_clickedSigMapper->setMapping(obj, trackId);
-    m_instListSigMapper->setMapping(obj, trackId);
+    m_clickedSigMapper->setMapping(trackLabel, trackId);
+    m_instListSigMapper->setMapping(trackLabel, trackId);
 }
 
 void
@@ -267,11 +263,6 @@ TrackButtons::populateButtons()
 
         if (!track)
             continue;
-
-        // Configure the track label's ID and position.
-        m_trackLabels[i]->setId(track->getId());
-        setButtonMapping(m_trackLabels[i], track->getId());
-        m_trackLabels[i]->setPosition(i);
 
         updateUI(track);
 

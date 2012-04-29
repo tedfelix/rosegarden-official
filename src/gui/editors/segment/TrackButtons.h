@@ -113,6 +113,7 @@ public:
 signals:
     /// Emitted when a track button has been clicked.
     /**
+     * Emitted by m_clickedSigMapper.
      * Handled by TrackEditor.
      *
      * @see slotLabelSelected()
@@ -265,7 +266,7 @@ protected:
     /**
      * @see QSignalMapper::setMapping()
      */
-    void setButtonMapping(QObject* obj, TrackId trackId);
+    void setButtonMapping(TrackLabel* obj, TrackId trackId);
 
     /// Gets the proper color for an instrument based on its type.
     /**
