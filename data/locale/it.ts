@@ -189,7 +189,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation>Alternato - imposta %1 al max e al min sugli eventi alternati</translation>
+        <translation>Alternato - imposta %1 su max e min a eventi alternati</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -227,7 +227,7 @@
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
         <translatorcomment>Decrease - lower each %1 by value</translatorcomment>
-        <translation>Diminuire - </translation>
+        <translation>Diminuisci - ongni %1 del valore</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4836,7 +4836,7 @@
     <message>
         <location line="+1"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa file MusicXM&amp;L</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4861,7 +4861,7 @@
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci file MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5857,7 +5857,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Slide whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>flauto a stantuffo</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5939,7 +5939,8 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Alto pommer</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>(wikipedia)</translatorcomment>
+        <translation>Contrabombarda</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6010,12 +6011,14 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Dulcian</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>(Wikipedia)</translatorcomment>
+        <translation>Dulciana</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rackett</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Wikipedia ma dice che è più usato l&apos;inglese racket o il tedesco</translatorcomment>
+        <translation>cervellato</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6125,17 +6128,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Soprano chalumeau</source>
-        <translation type="unfinished"></translation>
+        <translation>salmoè</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto chalumeau</source>
-        <translation type="unfinished"></translation>
+        <translation>Salmoè contralto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor chalumeau</source>
-        <translation type="unfinished"></translation>
+        <translation>Salmoè tenore</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6175,27 +6178,27 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Wind electrophones</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiati elettrofoni</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wind synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Sintetizzatore a fiato</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Brass</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottoni</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Piccolo trumpet in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombino in Si bemolle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Piccolo trumpet in A</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombino in la</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6265,7 +6268,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Flugelhorn</source>
-        <translation type="unfinished"></translation>
+        <translation>Flicorno</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6285,32 +6288,33 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Serpent</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Non si trova traduzione, neanche su Virginia Tech</translatorcomment>
+        <translation>Serpent</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto ophicleide in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Oficleide contralto in Fa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto ophicleide in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Oficleide contralto in Mi bemolle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass ophicleide in C</source>
-        <translation type="unfinished"></translation>
+        <translation>Oficleide basso in do</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass ophicleide in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Oficleide basso in Si bemolle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Contrabass ophicleide in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Oficleide contrabasso</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6385,32 +6389,32 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Mellophone in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellofono in Fa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mellophone in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellofono in Mi bemolle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mellophonium in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellofono in Fa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mellophonium in Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellofono in Mi bemolle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wagner tuba in Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba di Wagner in Si bemolle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wagner tuba in F</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba di Wagner in Fa</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6440,7 +6444,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Euphonium</source>
-        <translation type="unfinished"></translation>
+        <translation>Eufonio</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6460,7 +6464,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Pitched Percussion</source>
-        <translation type="unfinished"></translation>
+        <translation>Percussioni con intonazione</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6471,12 +6475,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Roto-toms (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rototom (soprano)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Roto-toms (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rototom (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6487,32 +6491,33 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Orff soprano glockenspiel</source>
-        <translation type="unfinished"></translation>
+        <translation>Glockenspiel soprano diOrff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orff alto glockenspiel</source>
-        <translation type="unfinished"></translation>
+        <translation>Glockenspiel contralto di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Crotales</source>
-        <translation type="unfinished"></translation>
+        <translation>Crotali</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tubaphone</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Guido Facchin: Le percussioni</translatorcomment>
+        <translation>Tubafono</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Almglocken (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanaccio (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Almglocken (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanaccio (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6523,87 +6528,87 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Orff soprano metallophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Metallofono soprano di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orff alto metallophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Metallofono contralto di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orff bass metallophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Metallofono basso di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tubular chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Campane tubolari</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo d&apos;acciaio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cello steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambuto d&apos;acciaio violoncello</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo d&apos;acciao tenore</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo d&apos;acciao chitarra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo d&apos;acciaio contralto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Soprano steel drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo d&apos;acciaio soprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hand bells (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle (acute)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hand bells (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle (basse)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tuned gongs</source>
-        <translation type="unfinished"></translation>
+        <translation>Gong intonato</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Flexatone</source>
-        <translation type="unfinished"></translation>
+        <translation>Flexaton</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Musical saw</source>
-        <translation type="unfinished"></translation>
+        <translation>Sega musicale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Musical glasses</source>
-        <translation type="unfinished"></translation>
+        <translation>Bicchieri musicali</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Glass harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Armonica a cristalli rotanti</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6614,17 +6619,17 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Orff soprano xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Xilofono soprano di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orff alto xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Xilofono contralto di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orff bass xylophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Xilofono basso di Orff</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6639,310 +6644,311 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Dulcimer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dulcimer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mallet synthesizer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mallet sintetizzato (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mallet synthesizer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mallet sintetizzato (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Unpitched Percussion</source>
-        <translation type="unfinished"></translation>
+        <translation>Percussione non intonate</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Snare drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Rullante</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Piccolo snare drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Rullante piccolo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Military drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo militare</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tom-toms</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Chinese tom-toms</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom tom cinese</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bongos</source>
-        <translation type="unfinished"></translation>
+        <translation>Bonghi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Congas</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Timbales</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbales</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Cassa</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="+213"/>
         <source>Tambourine</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburello</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Frame drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo a cornice</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tablas</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabla</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cuíca</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Finger cymbals</source>
-        <translation type="unfinished"></translation>
+        <translation>Cimbalini a dita</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cymbals</source>
-        <translation type="unfinished"></translation>
+        <translation>Cimbali</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi-hat cymbals</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>The English version is well know now-a-days</translatorcomment>
+        <translation>Charleston (hi-hat)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Suspended cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Piatti sospesi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride (piatto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sizzle cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Piatto chiodato</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Crash cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash (Piatti a mano)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Splash cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Splash (piatto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Chinese cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Piatti sospesi cinesi</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Cowbells</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanacci</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tam-tam</source>
-        <translation type="unfinished"></translation>
+        <translation>Tam tam</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bells</source>
-        <translation type="unfinished"></translation>
+        <translation>Campane</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sleighbells</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonagli</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bell plate</source>
-        <translation type="unfinished"></translation>
+        <translation>Campana piatta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bowl gongs</source>
-        <translation type="unfinished"></translation>
+        <translation>Campane giapponesi (bowl)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tubo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tubo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Metal castanets</source>
-        <translation type="unfinished"></translation>
+        <translation>Nacchere in metallo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Automobile brake drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Freni di automobileù</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Iron pipes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tubi in ferro</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Chaines</source>
-        <translation type="unfinished"></translation>
+        <translation>Catene</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Anvil</source>
-        <translation type="unfinished"></translation>
+        <translation>Incudine</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Woodblocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocchi di legno</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Temple blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Temple blocks</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="+21"/>
         <source>Claves</source>
-        <translation type="unfinished"></translation>
+        <translation>Claves</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="-94"/>
         <source>Castanets</source>
-        <translation type="unfinished"></translation>
+        <translation>Nacchere</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Guiro</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Vibra slap</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slit drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo a fessura</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Whip</source>
-        <translation type="unfinished"></translation>
+        <translation>Frusta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ratchet</source>
-        <translation type="unfinished"></translation>
+        <translation>Raganella</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Thundersheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Lastra del tuono</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sandpaper blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Sandpaper blocks</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wooden wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle a vento in legno</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bamboo wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle a vento in bamboo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Metal wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle a vento in metallo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Glass wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle a vento in vetro</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shell wind chimes</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanelle a vento in conchiglia</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Stones</source>
-        <translation type="unfinished"></translation>
+        <translation>Litofono</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Finger snap</source>
-        <translation type="unfinished"></translation>
+        <translation>Colpo con dito</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hand clap</source>
-        <translation type="unfinished"></translation>
+        <translation>Colpo con mano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slap</source>
-        <translation type="unfinished"></translation>
+        <translation>Slap</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Stamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Battito di piede</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Drum set</source>
-        <translation type="unfinished"></translation>
+        <translation>Batteria</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7007,12 +7013,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Cabasa</source>
-        <translation type="unfinished"></translation>
+        <translation>Cabasa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Quijada</source>
-        <translation type="unfinished"></translation>
+        <translation>Quijada</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -7022,143 +7028,143 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Piano (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte (auto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Piano (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte (baso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clavichord (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicordo (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clavichord (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicordo (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Harpsichord (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicembalo (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Harpsichord (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicembalo (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Celesta (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Celesta (acuta)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Celesta (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Celesta (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric piano (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano elettrico (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric piano (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano elettrico (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Toy piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte giocattolo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Keyboard synthesizer (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastiera sintetizzatore (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Keyboard synthesizer (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastiera sintetizzatore (basso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Organ (manual) (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo (manuale) (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo (manuale) (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo (pedale)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation>Organo elettronico (manuale) (tremolo)</translation>
+        <translation>Organo elettrico (manuale) (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electronic organ (manual) (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo elettrico (manuale) (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electronic organ (pedal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo elettrico  (pedale)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Harmonium (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonium (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Harmonium (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonium (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Free reeds</source>
-        <translation type="unfinished"></translation>
+        <translation>Ance libere</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Accordion (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fisarmonica (acuta)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Accordion (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fisarmonica (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bandoneon (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandoneon (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bandoneon (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandoneon (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="-219"/>
         <source>Harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Armonica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Melodica</source>
-        <translation type="unfinished"></translation>
+        <translation>Melodica</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7183,12 +7189,12 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+2"/>
         <source>Baritone</source>
-        <translation type="unfinished"></translation>
+        <translation>Baritono</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Boy soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Voce bianca soprano</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7198,62 +7204,62 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Kazoo (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kazoo (acuto)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Kazoo (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kazoo (basso)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Police whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Fischietto della polizia</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bird whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinguettio di uccellino</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Duck call</source>
-        <translation type="unfinished"></translation>
+        <translation>Richiamo di anatra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mouth siren</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirena a bocca</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Siren</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirena</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Auto horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Clacson</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Klaxon horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Corno clacson</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lion&apos;s roar</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruggito del leone</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wind machine</source>
-        <translation type="unfinished"></translation>
+        <translation>Macchina del vento</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pistol shot</source>
-        <translation type="unfinished"></translation>
+        <translation>Colpo di pistola</translation>
     </message>
     <message>
         <source>C</source>
@@ -7316,827 +7322,828 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Acoustic Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte a coda</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bright Acoustic Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte a coda brillante</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte elettrico a coda</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Honky-tonk Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianoforte honky-tonk</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Piano 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano elettrico 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Piano 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano elettrico 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Harpsichord</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicembalo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clavi</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Celesta</source>
-        <translation type="unfinished"></translation>
+        <translation>Celesta</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Music Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Carillon</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Marimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Tubular Bells</source>
-        <translation type="unfinished"></translation>
+        <translation>Campane tubolari</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Drawbar Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo Hammond</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Percussive Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo percussibo
+</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rock Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo Rock</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Church Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Reed Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Armonium</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Fisarmonica</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Tango Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandoneón</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra classica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra acustica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Guitar (jazz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra elettrica jazz</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Guitar (clean)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra elettrica (pulita)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Guitar (muted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra elettrica (muted)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Overdriven Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra elettrica overdrive</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Distortion Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra elettrica distorta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar harmonics</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra armonici</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso acustico</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fingered Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso pizzicato</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Picked Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso con plettro</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fretless Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso fretless (senza tasti)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slap Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso slap 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slap Bass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso slap 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso synth 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Bass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso synth 2</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Violoncello</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Tremolo Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi tremolo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pizzicato Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi pizzicati</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orchestral Harp</source>
-        <translation type="unfinished"></translation>
+        <translation>Arpa</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>String Ensemble 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi ensemble 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>String Ensemble 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi ensemble 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SynthStrings 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi synth 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SynthStrings 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi synth 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Choir Aahs</source>
-        <translation type="unfinished"></translation>
+        <translation>Coro aah</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Voice Oohs</source>
-        <translation type="unfinished"></translation>
+        <translation>Voce ooh</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Voci synth</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orchestra Hit</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchestra colpo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Tromba</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombone</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Muted Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Tromba sordina</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>French Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Corno francese</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Brass Section</source>
-        <translation type="unfinished"></translation>
+        <translation>Sezione di ottoni</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SynthBrass 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottoni synth 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SynthBrass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottoni synth 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Soprano Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Sax soprano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Alto Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Sax contralto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tenor Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Sax tenore</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Baritone Sax</source>
-        <translation type="unfinished"></translation>
+        <translation>Sax baritono</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>English Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Corno inglese</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Clarinetto</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto dolce</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pan Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto di pan</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Blown Bottle</source>
-        <translation type="unfinished"></translation>
+        <translation>Flauto bottighia</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Fischio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ocarina</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocarina</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 1 (square)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 1 (onda quadra)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 2 (sawtooth)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 2 (dente di sega)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 3 (calliope)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 3 (Calliope)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 4 (chiff)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 4 (chiff)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 5 (charang)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 5 (charango)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 6 (voice)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 6 (voce)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 7 (fifths)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 7 (quinte)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lead 8 (bass + lead)</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo 8 (basso + solo)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 1 (new age)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 1 (new age)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 2 (warm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappero 2 (caldo)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 3 (polysynth)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 3 (polysynth)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 4 (choir)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 4 (coro)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 5 (bowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 5 (archi)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 6 (metallic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 6 (metallico)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 7 (halo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 7 (halo)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pad 8 (sweep)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto 8 (sweep)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 1 (rain)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX1 (pioggia)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 2 (soundtrack)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX2 (colonna sonora)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 3 (crystal)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX3 (cristallo)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 4 (atmosphere)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX4 (atmosfera)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 5 (brightness)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 5 (brillante)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 6 (goblins)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 6 (goblins)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 7 (echoes)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 7 (echi)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>FX 8 (sci-fi)</source>
-        <translation type="unfinished"></translation>
+        <translation>FX 8 (fantascienza)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitar</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shamisen</source>
-        <translation type="unfinished"></translation>
+        <translation>Shamisen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Kalimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalimba</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bag pipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Cornamusa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fiddle</source>
-        <translation type="unfinished"></translation>
+        <translation>Violino folk</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Shanai</source>
-        <translation type="unfinished"></translation>
+        <translation>shanai</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tinkle Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanella</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Steel Drums</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburi d&apos;acciaio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Woodblock</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocchi di legno</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Taiko Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo taico</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Melodic Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo melodico</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamburo synth</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Reverse Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cembalo al contrario</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar Fret Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Tasto chitarra (rumore)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Breath Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Respiro (rumore)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Seashore</source>
-        <translation type="unfinished"></translation>
+        <translation>Mare</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bird Tweet</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinguettio di uccellini</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Telephone Ring</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefono</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Helicopter</source>
-        <translation type="unfinished"></translation>
+        <translation>Elicottero</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Applause</source>
-        <translation type="unfinished"></translation>
+        <translation>Applauso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Gunshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bank 0:8</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 0:8</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Detuned EP 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano elettrico scordato 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Detuned EP 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano elettrico scordato 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Coupled Harpsichord</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavicembalo doppio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Church Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Campana da chiesa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Detuned Organ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo scordato 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Detuned Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo scordato 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Church Organ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Organo 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Italian Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Fisarmonica italiana</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>12 String Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra a 12 corde</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hawaiian Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra hawaiana</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Funk Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Chitarra funk</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Feedback Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback di chitarra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback chitarra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Bass 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso synth 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Bass 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Basso synth 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slow Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Violino lento</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orchestral Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappeto orchestrale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Strings 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Archi synth 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Brass 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottoni 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Brass 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottoni synth 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Brass 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottoni synth 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sine Wave</source>
-        <translation type="unfinished"></translation>
+        <translation>Onda seno</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Taisho Koto</source>
-        <translation type="unfinished"></translation>
+        <translation>Koto</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Concert Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Gran cassa da concerto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Melo Tom 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tome melodico 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>808 Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom 808</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bank 0:9</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 0:9</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Burst Noise</source>
-        <translation type="unfinished"></translation>
+        <translation>Esplosione (rumore)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bank 0:16</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 0:16</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bank 1:0</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco 1:0</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 5</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 6</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Standard 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 7</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 3</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 4</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 5</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 6</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Room 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Camera 7</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Power 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Power 2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Power 3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8146,52 +8153,52 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>TR-808</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jazz 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jazz 2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jazz 3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Jazz 4</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Brush</source>
-        <translation type="unfinished"></translation>
+        <translation>Spazzole </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Brush 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Spazzole 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Brush 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Spazzole 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Orchestra Kit</source>
-        <translation type="unfinished"></translation>
+        <translation>Colpo d&apos;orchestra</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8252,7 +8259,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="-498"/>
         <source>General MIDI Percussion</source>
-        <translation type="unfinished"></translation>
+        <translation>Percussioni General MIDI</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8266,197 +8273,197 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+1"/>
         <source>Acoustic Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Gran cassa acustica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gran cassa 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Side Stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Bacchetta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Rullante acustico</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"></translation>
+        <translation>Battito di mano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Rullante eletrico </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom grave a terra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi-hat chiuso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom acuto a terra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi-hat pedale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom grave</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi-hat aperto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom medio-basso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom medio-alto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom acuto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>China</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride campana</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Splash</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanaccio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Crash 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo acuto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo grave</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga acuta stoppata</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Cunga acuta aperta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Conga grave</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbales acuto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Timbales grave</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogo acuto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Agogo grave</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Short Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Fischieto corto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Fischietto lungo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Guiro corto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Guiro lungo</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocchetto legno acuto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocchetto legno grave</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10981,7 +10988,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Versione: %1 &amp;nbsp; Versione Qt: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosgarden è fornito alla comunità da un team di volontari in tutto il mondo. Per una lista dei collaboratori visita: &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Per maggiori informazioni su Rosegarden, visita &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licenza: GNU General Public License Versione 2 o successiva&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -12183,7 +12190,7 @@ Scegli quelli che vuoi eliminare definitivamente dal disco fisso.
     <message>
         <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+229"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>nessuno</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -15597,7 +15604,7 @@ Testo di esempio dal file:</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+67"/>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>nessuno</translation>
     </message>
 </context>
 <context>
@@ -16196,12 +16203,12 @@ Vuoi usare
     <message>
         <location line="+5"/>
         <source>Draw bar line at volta</source>
-        <translation type="unfinished"></translation>
+        <translation>Disegna stanghetta di battuta sulla volta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Se selezionato una stanghetta di battuta viene disegnata sempre a inizio di una volta anche se inizia in mezzo alla battuta&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -16730,12 +16737,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="-13"/>
         <source>auto</source>
-        <translation type="unfinished"></translation>
+        <translation>auto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>fisso</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -16750,7 +16757,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, alloca il canale automaticamente; &lt;i&gt;Fisso&lt;/i&gt;, setta il canale al numero dello strumento&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -16779,7 +16786,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>Channel</source>
-        <translation type="unfinished">Canale</translation>
+        <translation>Canale</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -20957,16 +20964,15 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
     <message>
         <location line="+1749"/>
         <source>Warning</source>
-        <translation type="unfinished">Allarme</translation>
+        <translation>Attenzione</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation type="unfinished">Il percorso del file audio non esiste o non è scrivibile.
-Prova a impostare il percorso del file audio su una directory valida nelle
-Proprietà del documento prima di cominciare a registrare l&apos;audio.
+        <translation>Il percorso del file audio non esiste o non è scrivibile.
+Prova a impostare il percorso del file audio su una directory valida nelle Proprietà del documento prima di cominciare a registrare l&apos;audio.
 Vuoi impostarlo adesso?</translation>
     </message>
     <message>
@@ -21876,18 +21882,18 @@ Nessun segmento sarà spezzato.</translation>
         <location line="+1392"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri file MusicXML</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Importing MusicXML file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa file MusicXML...</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Can&apos;t load MusicXML file:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare file MuxicXML:</translation>
     </message>
     <message>
         <location line="+698"/>
