@@ -1092,7 +1092,6 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
 void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
 {
-    // update the instrument parameter box
     Composition &comp = getDocument()->getComposition();
     Track *track = comp.getTrackById(trackId);
 
@@ -1181,6 +1180,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
 
     m_trackParameterBox->slotSelectedTrackChanged();
 
+    // update the instrument parameter box
     slotUpdateInstrumentParameterBox(comp.getTrackById(trackId)->
                                      getInstrument());
 

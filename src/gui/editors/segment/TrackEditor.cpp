@@ -446,11 +446,8 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
         slotReadjustCanvasSize();
 
-        // ??? This is the biggest source of CPU usage when recording.
-        //     Essentially, the track buttons are being asked to update
-        //     themselves every 20ms when MIDI is coming in.  Even if
-        //     there is no change to the Composition that is relevant to the
-        //     track buttons.
+        // ??? At one time, this was linked to excessive CPU usage while
+        //     recording MIDI.  Now, it doesn't seem to make much difference.
         m_trackButtons->slotUpdateTracks();
 
         m_compositionView->clearSegmentRectsCache(true);

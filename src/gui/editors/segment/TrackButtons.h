@@ -114,7 +114,7 @@ signals:
     /// Emitted when a track button has been clicked.
     /**
      * Emitted by m_clickedSigMapper.
-     * Handled by TrackEditor.
+     * Handled by RosegardenMainViewWidget::slotSelectTrackSegments().
      *
      * @see slotLabelSelected()
      */

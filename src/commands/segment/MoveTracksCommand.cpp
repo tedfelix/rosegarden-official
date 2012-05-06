@@ -44,8 +44,8 @@ MoveTracksCommand::execute()
     Track *srcTrack = m_composition->getTrackById(m_srcTrack);
     Track *destTrack = m_composition->getTrackById(m_destTrack);
 
-    int srcPosition = srcTrack->getPosition();
-
+    // Swap positions
+    const int srcPosition = srcTrack->getPosition();
     srcTrack->setPosition(destTrack->getPosition());
     destTrack->setPosition(srcPosition);
 
@@ -57,11 +57,14 @@ MoveTracksCommand::execute()
 void
 MoveTracksCommand::unexecute()
 {
+    // ??? Given that this is the same as execute(), why not just call
+    //     execute()?
+
     Track *srcTrack = m_composition->getTrackById(m_srcTrack);
     Track *destTrack = m_composition->getTrackById(m_destTrack);
 
-    int srcPosition = srcTrack->getPosition();
-
+    // Swap positions
+    const int srcPosition = srcTrack->getPosition();
     srcTrack->setPosition(destTrack->getPosition());
     destTrack->setPosition(srcPosition);
 
