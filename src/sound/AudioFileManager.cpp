@@ -661,31 +661,35 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 AudioFileId
 AudioFileManager::importFile(const QString &fileName, int sampleRate)
 {
-    MutexLock lock (&_audioFileManagerLock);
-
     std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
 
     emit setOperationName(tr("Importing audio file..."));
 
-    AudioFileId newId = getUniqueAudioFileID();
     QString targetName = "";
+    AudioFileId newId = 0;
 
-    QString sourceBase = QFileInfo(fileName).baseName();
-    if (sourceBase.length() > 3 && sourceBase.startsWith("rg-")) {
-	sourceBase = sourceBase.right(sourceBase.length() - 3);
-    }
-    if (sourceBase.length() > 15) sourceBase = sourceBase.left(15);
+    {
+        MutexLock lock (&_audioFileManagerLock);
 
-    while (targetName == "") {
+        newId = getUniqueAudioFileID();
 
-        targetName = QString("conv-%2-%3-%4.wav")
-	    .arg(sourceBase)
-	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
-	    .arg(newId + 1);
+        QString sourceBase = QFileInfo(fileName).baseName();
+        if (sourceBase.length() > 3 && sourceBase.startsWith("rg-")) {
+            sourceBase = sourceBase.right(sourceBase.length() - 3);
+        }
+        if (sourceBase.length() > 15) sourceBase = sourceBase.left(15);
 
-        if (QFile(m_audioPath + targetName).exists()) {
-            targetName = "";
-            ++newId;
+        while (targetName == "") {
+
+            targetName = QString("conv-%2-%3-%4.wav")
+                .arg(sourceBase)
+                .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
+                .arg(newId + 1);
+
+            if (QFile(m_audioPath + targetName).exists()) {
+                targetName = "";
+                ++newId;
+            }
         }
     }
 
@@ -699,19 +703,23 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
             (fileName, qstrtostr(tr("Failed to convert or resample audio file on import")) );
     }
 
-    // insert file into vector
-    WAVAudioFile *aF = 0;
+    {
+        MutexLock lock (&_audioFileManagerLock);
 
-    aF = new WAVAudioFile(newId,
-			  qstrtostr(targetName),
-			  m_audioPath + targetName);
-    m_audioFiles.push_back(aF);
-    m_derivedAudioFiles.insert(aF);
-    // Don't catch SoundFile::BadSoundFileException
+        // insert file into vector
+        WAVAudioFile *aF = 0;
 
-    m_expectedSampleRate = sampleRate;
+        aF = new WAVAudioFile(newId,
+                              qstrtostr(targetName),
+                              m_audioPath + targetName);
+        m_audioFiles.push_back(aF);
+        m_derivedAudioFiles.insert(aF);
+        // Don't catch SoundFile::BadSoundFileException
 
-    return aF->getId();
+        m_expectedSampleRate = sampleRate;
+
+        return aF->getId();
+    }
 }
 
 int AudioFileManager::convertAudioFile(QString inFile, QString outFile)
