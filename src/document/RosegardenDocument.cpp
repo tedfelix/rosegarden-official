@@ -103,6 +103,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QWidget>
+#include <QPointer>
 
 
 namespace Rosegarden
@@ -593,7 +594,9 @@ bool RosegardenDocument::openDocument(const QString& filename,
         return false;
     }
 
-    ProgressDialog *progressDlg = 0;
+    //cc 20120508: avoid dereferencing self-deleted progress dialog
+    //after user has closed it, by using a QPointer
+    QPointer<ProgressDialog> progressDlg = 0;
    
     if (!squelch) {
         progressDlg = new ProgressDialog(tr("Reading file..."),
@@ -613,7 +616,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     bool okay = GzipFile::readFromFile(filename, fileContents);
     
-    if (!squelch)
+    if (progressDlg)
         progressDlg->show();
     
     if (!okay) errMsg = tr("Could not open Rosegarden file");
@@ -631,16 +634,16 @@ bool RosegardenDocument::openDocument(const QString& filename,
                      .arg(filename)
                      .arg(errMsg));
 
-        if (!squelch) CurrentProgressDialog::freeze();
+        if (progressDlg) CurrentProgressDialog::freeze();
         QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-        if (!squelch) {
+        if (progressDlg) {
             CurrentProgressDialog::thaw();
             progressDlg->close();
         }
         return false;
 
     } else if (cancelled) {
-        if (!squelch) {
+        if (progressDlg) {
             progressDlg->close();
         }
         newDocument();
@@ -659,7 +662,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
         RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime() << endl;
     }
 
-    if (!squelch) {
+    if (progressDlg) {
         
         progressDlg->setLabelText(tr("Generating audio previews..."));
         progressDlg->setValue(0);
@@ -673,9 +676,9 @@ bool RosegardenDocument::openDocument(const QString& filename,
         m_audioFileManager.generatePreviews();
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
-        if (!squelch) CurrentProgressDialog::freeze();
+        if (progressDlg) CurrentProgressDialog::freeze();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
-        if (!squelch) CurrentProgressDialog::thaw();
+        if (progressDlg) CurrentProgressDialog::thaw();
     }
 
     if (isSequencerRunning()) {
@@ -692,7 +695,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
 
-    if (!squelch) {
+    if (progressDlg) {
         progressDlg->close();
     }
 

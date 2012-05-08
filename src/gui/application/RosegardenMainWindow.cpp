@@ -2715,7 +2715,9 @@ RosegardenMainWindow::slotRescaleSelection()
     }
     
     
-    ProgressDialog *progressDlg = 0;
+    //cc 20120508: avoid dereferencing self-deleted progress dialog
+    //after user has closed it, by using a QPointer
+    QPointer<ProgressDialog> progressDlg = 0;
 
     if (!asrcs.empty()) {
         progressDlg = new ProgressDialog (tr("Rescaling audio file..."),
@@ -2730,15 +2732,19 @@ RosegardenMainWindow::slotRescaleSelection()
     if (!asrcs.empty()) {
 
         for (size_t i = 0; i < asrcs.size(); ++i) {
-            asrcs[i]->disconnectProgressDialog(progressDlg);    //&&& obsolete (?)
+            if (progressDlg) {
+                asrcs[i]->disconnectProgressDialog(progressDlg);    //&&& obsolete (?)
+            }
         }
 
-        progressDlg->setLabelText(tr("Generating audio preview..."));
+        if (progressDlg) {
+            progressDlg->setLabelText(tr("Generating audio preview..."));
 
-        connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                 progressDlg, SLOT(setValue(int)));
-        connect(progressDlg, SIGNAL(cancelClicked()),
-                &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+            connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
+                    progressDlg, SLOT(setValue(int)));
+            connect(progressDlg, SIGNAL(cancelClicked()),
+                    &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+        }
 
         for (size_t i = 0; i < asrcs.size(); ++i) {
             int fid = asrcs[i]->getNewAudioFileId();
@@ -2747,7 +2753,7 @@ RosegardenMainWindow::slotRescaleSelection()
                 m_doc->getAudioFileManager().generatePreview(fid);
             }
             int complete = i + 1 / asrcs.size();
-            progressDlg->setValue(complete);
+            if (progressDlg) progressDlg->setValue(complete);
         }
     }
 

@@ -164,15 +164,19 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         new AudioSegmentRescaleCommand(m_doc, segment, ratio,
                                                        newStartTime, newEndTime);
 
-                    ProgressDialog *progressDlg = new ProgressDialog(
+                    //cc 20120508: avoid dereferencing self-deleted
+                    //progress dialog after user has closed it, by
+                    //using a QPointer
+                    QPointer<ProgressDialog> progressDlg = new ProgressDialog(
                             tr("Rescaling audio file..."), (QWidget*)parent());
                     command->connectProgressDialog(progressDlg);
                     
                     addCommandToHistory(command);
 
-//                     progressDlg.setLabel( new QLabel(tr("Generating audio preview..."), this, Qt::Tool) );
-                    command->disconnectProgressDialog(progressDlg);
-                    progressDlg->close();
+                    if (progressDlg) {
+                        command->disconnectProgressDialog(progressDlg);
+                        progressDlg->close();
+                    }
                     
                     progressDlg = new ProgressDialog(tr("Generating audio preview..."),
                                                      (QWidget*)parent());
@@ -187,7 +191,8 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         RosegardenMainWindow::self()->slotAddAudioFile(fid);
                         m_doc->getAudioFileManager().generatePreview(fid);
                     }
-                    progressDlg->close();
+
+                    if (progressDlg) progressDlg->close();
                 
                 } else {
                     

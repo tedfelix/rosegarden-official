@@ -85,6 +85,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <QDesktopServices>
+#include <QPointer>
 
 
 
@@ -521,8 +522,10 @@ AudioManagerDialog::slotExportAudio()
     if (saveFile.contains(".") == 0)
         saveFile += ".wav";
 
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting audio file..."),
-                               (QWidget*)this);
+    //cc 20120508: avoid dereferencing self-deleted progress dialog
+    //after user has closed it, by using a QPointer
+    QPointer<ProgressDialog> progressDlg = new ProgressDialog(tr("Exporting audio file..."),
+                                                              (QWidget*)this);
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -544,7 +547,7 @@ AudioManagerDialog::slotExportAudio()
     progressDlg->setValue(40);
     if (sourceFile->open() == false) {
         delete destFile;
-        progressDlg->close();
+        if (progressDlg) progressDlg->close();
         return ;
     }
     qApp->processEvents(QEventLoop::AllEvents, 100);
@@ -552,7 +555,7 @@ AudioManagerDialog::slotExportAudio()
     destFile->write();
 
     qApp->processEvents(QEventLoop::AllEvents, 100);
-    progressDlg->setValue(80);
+    if (progressDlg) progressDlg->setValue(80);
     
     sourceFile->scanTo(clipStartTime);
     destFile->appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
@@ -561,8 +564,10 @@ AudioManagerDialog::slotExportAudio()
     sourceFile->close();
     delete destFile;
 
-    progressDlg->setValue(100);
-    progressDlg->close();
+    if (progressDlg) {
+        progressDlg->setValue(100);
+        progressDlg->close();
+    }
 }
 
 void
@@ -1173,8 +1178,11 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     // If mulitple audio files are added concurrently, this implementation
     // looks funny to the user, but it is functional for now.  NO time for
     // a more robust solution.
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Adding audio file..."),
-                               (QWidget*)this);
+
+    //cc 20120508: avoid dereferencing self-deleted progress dialog
+    //after user has closed it, by using a QPointer
+    QPointer<ProgressDialog> progressDlg = new ProgressDialog(tr("Adding audio file..."),
+                                                              (QWidget*)this);
 
     CurrentProgressDialog::set(progressDlg);
     progressDlg->setIndeterminate(true);
@@ -1194,26 +1202,28 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        progressDlg->close();
+        if (progressDlg) progressDlg->close();
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        progressDlg->close();
+        if (progressDlg) progressDlg->close();
         return false;
     }
-    
-    disconnect(progressDlg, SIGNAL(canceled()),
-               &aFM, SLOT(slotStopImport()));
 
-    progressDlg->setIndeterminate(false);
-    progressDlg->setValue(0);
-    
-    progressDlg->setLabelText(tr("Generating audio preview..."));
+    if (progressDlg) {
+        disconnect(progressDlg, SIGNAL(canceled()),
+                   &aFM, SLOT(slotStopImport()));
 
-    connect(progressDlg, SIGNAL(canceled()),
-            &aFM, SLOT(slotStopPreview()));
+        progressDlg->setIndeterminate(false);
+        progressDlg->setValue(0);
+    
+        progressDlg->setLabelText(tr("Generating audio preview..."));
+
+        connect(progressDlg, SIGNAL(canceled()),
+                &aFM, SLOT(slotStopPreview()));
+    }
 
     try {
         aFM.generatePreview(id);
@@ -1226,11 +1236,15 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     }
 
     //Disconnect all signals from &aFM from the Progress Bar
-    disconnect(progressDlg, 0, &aFM, 0);
+    if (progressDlg) {
+        disconnect(progressDlg, 0, &aFM, 0);
+    }
 
     slotPopulateFileList();
-    
-    progressDlg->close();
+
+    if (progressDlg) {
+        progressDlg->close();
+    }
 
     // tell the sequencer
     emit addAudioFile(id);
