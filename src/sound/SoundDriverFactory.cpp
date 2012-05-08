@@ -39,6 +39,9 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
     initialised = driver->initialise();
 
     if ( ! initialised ) {
+
+        QString log = driver->getStatusLog();
+
         driver->shutdown();
         delete driver;
 
@@ -46,7 +49,7 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
         // fall to the DummyDriver as a last chance,
         // so GUI can still be used for notation.
         //
-        driver = new DummyDriver(studio);
+        driver = new DummyDriver(studio, log);
         driver->initialise();
     }
     return driver;

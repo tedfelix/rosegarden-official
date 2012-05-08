@@ -30,12 +30,9 @@ class Audit : public std::stringstream
 public:
     Audit() { }
 
-    virtual ~Audit() {
-        std::cerr << str();
-        m_audit += str();
-    }
+    virtual ~Audit();
 
-    static std::string getAudit() { return m_audit; }
+    static std::string getAudit();
 
 protected:
     static std::string m_audit;

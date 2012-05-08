@@ -5117,7 +5117,6 @@ AlsaDriver::getStatusLog()
     return strtoqstr(Audit::getAudit());
 }
 
-
 void
 AlsaDriver::sleep(const RealTime &rt)
 {

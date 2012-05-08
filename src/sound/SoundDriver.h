@@ -255,7 +255,7 @@ public:
 
     virtual void sleep(const RealTime &rt);
 
-    virtual QString getStatusLog() { return ""; }
+    virtual QString getStatusLog() = 0;
 
     // Mapped Instruments
     //

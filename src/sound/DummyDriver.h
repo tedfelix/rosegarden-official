@@ -27,10 +27,8 @@ namespace Rosegarden
 class DummyDriver : public SoundDriver
 {
 public:
-    DummyDriver(MappedStudio *studio):
-        SoundDriver(studio, std::string("DummyDriver - no sound")) { }
-    DummyDriver(MappedStudio *studio, const std::string & name):
-        SoundDriver(studio, std::string("DummyDriver: " + name)) { }
+    DummyDriver(MappedStudio *studio);
+    DummyDriver(MappedStudio *studio, QString pastLog);
     virtual ~DummyDriver() { }
 
     virtual bool initialise()  { return true; }
@@ -131,6 +129,8 @@ public:
     virtual void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) { }
 
+    virtual QString getStatusLog();
+
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
         { return std::vector<PlayableAudioFile*>(); }
 
@@ -151,6 +151,7 @@ protected:
                                 const RealTime &, const RealTime &) { }
     virtual void generateFixedInstruments()  { }
 
+    QString m_pastLog;
 };
 
 }
