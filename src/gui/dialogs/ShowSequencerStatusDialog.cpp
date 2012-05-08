@@ -39,28 +39,27 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
     setModal(true);
     setWindowTitle(tr("Sequencer status"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    QGridLayout *layout = new QGridLayout;
+    setLayout(layout);
 
+    int row = 0;
 
-    new QLabel(tr("Sequencer status:"), vbox);
+    layout->addWidget(new QLabel(tr("Sequencer status:")), row, 0);
 
     QString status = RosegardenSequencer::getInstance()->getStatusLog();
 
-    QTextEdit *text = new QTextEdit( vbox );
-    vboxLayout->addWidget(text);
-    vbox->setLayout(vboxLayout);
+    QTextEdit *text = new QTextEdit;
     text->setReadOnly(true);
     text->setMinimumWidth(500);
     text->setMinimumHeight(200);
-
     text->setPlainText(status);
+
+    layout->addWidget(text, ++row, 0);
+    layout->setRowStretch(row, 20);
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    layout->addWidget(buttonBox, ++row, 0);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }

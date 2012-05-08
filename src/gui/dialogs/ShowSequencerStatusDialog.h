@@ -38,9 +38,6 @@ public:
 };
 
 
-// Timer dialog for counting down
-//
-
 
 }
 
