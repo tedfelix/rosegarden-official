@@ -42,7 +42,6 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
       m_composition(composition),
       m_segment(segment),
       m_rect(model.computeSegmentRect(*(segment))),
-      m_image(1, 1, QImage::Format_ARGB32),
       m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
       m_height(model.grid().getYSnap()/2)
 {
@@ -52,8 +51,6 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
     // QImage::Format_Indexed8 seems to be close enough, since we manipulate the
     // pixels directly by index, rather than employ drawing tools.
     m_image = QImage(pixWidth, m_rect.height(), QImage::Format_Indexed8);
-    m_image.fill(0);
-
     m_penWidth = (std::max(1U, (unsigned int)m_rect.getPen().width()) * 2);
     m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
 }
@@ -100,7 +97,7 @@ void AudioPreviewPainter::paintPreviewImage()
     double sampleScaleFactor = samplePoints / double(m_rect.getBaseWidth());
     m_sliceNb = 0;
 
-    m_image.fill(0);
+    initializeNewSlice();
 
     int centre = m_image.height() / 2;
 
@@ -255,6 +252,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
         if (((i+1) % tileWidth()) == 0 || i == (m_rect.getBaseWidth() - 1)) {
             finalizeCurrentSlice();
+            initializeNewSlice();
         }
     }
 
@@ -282,10 +280,8 @@ void AudioPreviewPainter::paintPreviewImage()
     settings.endGroup();
 }
 
-void AudioPreviewPainter::finalizeCurrentSlice()
+void AudioPreviewPainter::initializeNewSlice()
 {
-//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth() << endl;
-
     // transparent background
     m_image.setColor(0, qRgba(255, 255, 255, 0));
 
@@ -297,10 +293,14 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     // red for clipping
     m_image.setColor(2, qRgba(255, 0, 0, 255));
 
-    m_previewPixmaps.push_back(m_image.copy());
-
     m_image.fill(0);
+}
 
+void AudioPreviewPainter::finalizeCurrentSlice()
+{
+//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth() << endl;
+
+    m_previewPixmaps.push_back(m_image.copy());
     ++m_sliceNb;
 }
 

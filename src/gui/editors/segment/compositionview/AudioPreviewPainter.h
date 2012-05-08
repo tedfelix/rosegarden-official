@@ -44,6 +44,7 @@ public:
     static int tileWidth();
 
 protected:
+    void initializeNewSlice();
     void finalizeCurrentSlice();
 
     //--------------- Data members ---------------------------------
