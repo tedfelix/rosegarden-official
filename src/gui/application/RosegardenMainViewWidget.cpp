@@ -1806,15 +1806,15 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         audioFileId = aFM.importURL(qurl, sampleRate);
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
+        progressDlg->close(); 
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        progressDlg->close(); 
         return ;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
+        progressDlg->close(); 
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        progressDlg->close(); 
         return;
     }
 
