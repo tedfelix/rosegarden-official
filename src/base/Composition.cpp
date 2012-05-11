@@ -2254,6 +2254,15 @@ Composition::notifyTracksAdded(std::vector<TrackId> trackIds) const
 }
 
 void
+Composition::notifyTrackSelectionChanged(TrackId t) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+         i != m_observers.end(); ++i) {
+        (*i)->trackSelectionChanged(this, t);
+    }
+}
+
+void
 Composition::notifyMetronomeChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();

@@ -861,7 +861,7 @@ public:
      * See the various other "notify*" functions.
      *
      * These functions have been made public in the interests of improving
-     * performance.  There are at lease two main approaches to sending change
+     * performance.  There are at least two main approaches to sending change
      * notifications to observers.  The first is to have each modifier
      * function (e.g. deleteTrack()) send the change notification.  The second
      * is to make the change notification functions public and let the code
@@ -884,6 +884,12 @@ public:
      * @see notifyTracksAdded()
      */
     void notifyTracksDeleted(std::vector<TrackId> trackIds) const;
+    /// Call when the selected track is changed.
+    /**
+     * @see setSelectedTrack()
+     * @see notifyTracksAdded()
+     */
+    void notifyTrackSelectionChanged(TrackId) const;
 
     //////
     // DEBUG FACILITIES
@@ -1163,6 +1169,13 @@ public:
      * changed
      */
     virtual void endMarkerTimeChanged(const Composition *, bool /* shorten */) { }
+
+    /**
+     * Called when a different track is selected.  This can happen when
+     * the user clicks on a track label, or presses the up/down arrow keys
+     * to change which track is currently selected.
+     */
+    virtual void trackSelectionChanged(const Composition *, TrackId) { }
 
     /**
      * Called when a track is changed (instrument id, muted status...)
