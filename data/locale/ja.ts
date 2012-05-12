@@ -23027,7 +23027,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+62"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;クリックしてこのトラック上のすべてのセグメントを選択。&lt;/p&gt;&lt;p&gt;Shiftしながらクリックしてこのトラック上のすべての選択されたセグメントをセンタ熊田は削除。&lt;/p&gt;&lt;p&gt;クリックしてそのままどちらかのマウスボタンを押したままにすることで、このトラックに対してインストゥルメントを割り当て。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;クリックしてこのトラック上のすべてのセグメントを選択。&lt;/p&gt;&lt;p&gt;Shiftしながらクリックしてこのトラック上のすべての選択されたセグメントを選択又は削除。&lt;/p&gt;&lt;p&gt;クリックしてそのままどちらかのマウスボタンを押したままにすることで、このトラックに対してインストゥルメントを割り当て。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+104"/>
