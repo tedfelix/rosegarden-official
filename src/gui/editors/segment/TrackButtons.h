@@ -113,7 +113,7 @@ public:
 signals:
     /// Emitted when a track button has been clicked.
     /**
-     * Emitted by m_clickedSigMapper.
+     * Emitted by slotTrackSelected().
      * Handled by RosegardenMainViewWidget::slotSelectTrackSegments().
      *
      * @see slotLabelSelected()
@@ -288,6 +288,7 @@ protected:
     virtual void tracksAdded(const Composition *, std::vector<TrackId> &trackIds);
     virtual void trackChanged(const Composition *, Track*);
     virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
+    virtual void trackSelectionChanged(const Composition *, TrackId trackId);
 
     int labelWidth();
     int trackHeight(TrackId trackId);
@@ -349,6 +350,10 @@ protected:
     static const int m_buttonGap;
     static const int m_vuWidth;
     static const int m_vuSpacing;
+
+private slots:
+    /// Handles clicks from m_clickedSigMapper.
+    void slotTrackSelected(int trackId);
 
 private:
     // Hide copy ctor and op=

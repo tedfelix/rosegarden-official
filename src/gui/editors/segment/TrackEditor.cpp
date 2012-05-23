@@ -256,8 +256,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(this, SIGNAL(stateChange(QString, bool)),
             rosegardenguiview, SIGNAL(stateChange(QString, bool)));
 
-    connect(m_trackButtons, SIGNAL(modified()),
-            m_doc, SLOT(slotDocumentModified()));
+    // No such signal.  Was there ever?
+//    connect(m_trackButtons, SIGNAL(modified()),
+//            m_doc, SLOT(slotDocumentModified()));
 
     // connect loop rulers' follow-scroll signals
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),

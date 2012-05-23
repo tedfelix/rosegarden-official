@@ -121,7 +121,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
             this, SLOT(slotInstrumentMenu(int)));
 
     connect(m_clickedSigMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(trackSelected(int)));
+            this, SLOT(slotTrackSelected(int)));
 
     // We have to force the height for the moment
     //
@@ -1101,6 +1101,27 @@ TrackButtons::tracksDeleted(const Composition *, std::vector<TrackId> &/*trackId
     //     delete the one that is going away.
     slotUpdateTracks();
 }
+
+void
+TrackButtons::trackSelectionChanged(const Composition *, TrackId trackId)
+{
+    //RG_DEBUG << "TrackButtons::trackSelectionChanged()" << trackId;
+    Track *track = m_doc->getComposition().getTrackById(trackId);
+    selectTrack(track->getPosition());
+}
+
+void
+TrackButtons::slotTrackSelected(int trackId)
+{
+    // New notification mechanism
+    // ??? Wouldn't a track pointer be more convenient for all involved?
+    m_doc->getComposition().notifyTrackSelectionChanged(trackId);
+
+    // Old mechanism.  Keeping this until we can completely replace it
+    // with the new mechanism above.
+    emit trackSelected(trackId);
+}
+
 
 }
 #include "TrackButtons.moc"
