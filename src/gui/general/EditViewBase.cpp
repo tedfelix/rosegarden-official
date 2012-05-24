@@ -266,14 +266,18 @@ EditViewBase::slotToggleSolo()
 
     bool newSoloState = toggleSoloAction->isChecked();
 
-    RG_DEBUG << "EditViewBase::slotToggleSolo() : solo action is "
-             << (toggleSoloAction->isCheckable() ? "" : "NOT")
-             << " checkable." << endl;
+    //RG_DEBUG << "EditViewBase::slotToggleSolo() : solo action is " << (toggleSoloAction->isCheckable() ? "" : "NOT") << " checkable.";
+    //RG_DEBUG << "EditViewBase::slotToggleSolo() : solo  = " << newSoloState;
 
-    RG_DEBUG << "EditViewBase::slotToggleSolo() : solo  = " << newSoloState << endl;
     emit toggleSolo(newSoloState);
 
     if (newSoloState) {
+        getDocument()->getComposition().setSelectedTrack(
+                getCurrentSegment()->getTrack());
+        getDocument()->getComposition().notifyTrackSelectionChanged(
+                getCurrentSegment()->getTrack());
+
+        // Old notification mechanism.
         emit selectTrack(getCurrentSegment()->getTrack());
     }
 }
