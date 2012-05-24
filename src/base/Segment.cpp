@@ -46,7 +46,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_startTime(startTime),
     m_endMarkerTime(0),
     m_endTime(startTime),
-    m_track(0),
+    m_trackId(0),
     m_type(segmentType),
     m_colourIndex(0),
     m_id(0),
@@ -86,7 +86,7 @@ Segment::Segment(const Segment &segment):
     m_endMarkerTime(segment.m_endMarkerTime ?
                     new timeT(*segment.m_endMarkerTime) : 0),
     m_endTime(segment.getEndTime()),
-    m_track(segment.getTrack()),
+    m_trackId(segment.getTrack()),
     m_type(segment.getType()),
     m_label(segment.getLabel()),
     m_colourIndex(segment.getColourIndex()),
@@ -263,12 +263,12 @@ Segment::setTrack(TrackId id)
 {
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
-    TrackId oldTrack = m_track;
-    m_track = id;
+    TrackId oldTrackId = m_trackId;
+    m_trackId = id;
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
-        c->notifySegmentTrackChanged(this, oldTrack, id);
+        c->notifySegmentTrackChanged(this, oldTrackId, id);
     }
 }
 

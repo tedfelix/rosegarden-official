@@ -145,15 +145,17 @@ public:
         }
     }
 
+    // Get the track ID this Segment is associated with.
     /**
-     * Get the track number this Segment is associated with.
+     * rename: getTrackId()
      */
-    TrackId getTrack() const { return m_track; }
+    TrackId getTrack() const { return m_trackId; }
 
+    /// Set the track ID this Segment is associated with.
     /**
-     * Set the track number this Segment is associated with.
+     * rename: setTrackId()
      */
-    void setTrack(TrackId i);
+    void setTrack(TrackId trackId);
 
     // label
     //
@@ -805,7 +807,7 @@ private:
 
     void updateEndTime();       // called after erase of item at end
 
-    TrackId m_track;
+    TrackId m_trackId;
     SegmentType m_type;         // identifies Segment type
     std::string m_label;        // segment label
 
