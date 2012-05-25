@@ -305,7 +305,7 @@ AudioSplitDialog::drawSplits(int threshold)
     qreal x1, x2;
     qreal overlapHeight = 10;
 
-    for (it = splitPoints.begin(); it != splitPoints.end(); it++) {
+    for (it = splitPoints.begin(); it != splitPoints.end(); ++it) {
         RealTime splitStart = it->first - startTime;
         RealTime splitEnd = it->second - startTime;
 
@@ -329,7 +329,7 @@ AudioSplitDialog::drawSplits(int threshold)
     if (m_previewBoxes.size()) {
         // clear any previous preview boxes
         //
-        for (pIt = m_previewBoxes.begin(); pIt != m_previewBoxes.end(); pIt++) {
+        for (pIt = m_previewBoxes.begin(); pIt != m_previewBoxes.end(); ++pIt) {
             //(*pIt)->setVisible(false);
             delete (*pIt);
         }
@@ -340,7 +340,7 @@ AudioSplitDialog::drawSplits(int threshold)
 
     // Now store the new ones
     //
-    for (pIt = tempRects.begin(); pIt != tempRects.end(); pIt++)
+    for (pIt = tempRects.begin(); pIt != tempRects.end(); ++pIt)
         m_previewBoxes.push_back(*pIt);
 
 }

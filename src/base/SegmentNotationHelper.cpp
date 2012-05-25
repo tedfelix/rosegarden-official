@@ -2244,7 +2244,7 @@ int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterat
     bool newTuplet = true;
 
     if ((*beginB)->getType()=="clefchange"){
-        beginB++;
+        ++beginB;
     }
 
     for ( ;beginB!=endB; ++beginB){

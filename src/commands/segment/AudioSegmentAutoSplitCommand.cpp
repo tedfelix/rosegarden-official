@@ -107,7 +107,7 @@ AudioSegmentAutoSplitCommand::execute()
         RealTime audioStart = m_segment->getAudioStartTime();
         RealTime origStartRT = m_composition->getElapsedRealTime(origStartTime);
 
-        for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); it++) {
+        for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); ++it) {
             // The start time for the segment is the original
             // segment's start time, plus whatever it->first translates
             // into as an offset from the original segment's start

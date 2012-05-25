@@ -511,7 +511,7 @@ TrackParameterBox::populatePlaybackDeviceList()
     InstrumentList::iterator it;
     int currentDevId = -1;
 
-    for (it = list.begin(); it != list.end(); it++) {
+    for (it = list.begin(); it != list.end(); ++it) {
 
         if (! (*it))
             continue; // sanity check

@@ -203,7 +203,7 @@ Studio::getPresentationInstruments()
 
     // Append lists
     //
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
@@ -232,11 +232,11 @@ Studio::getInstrumentById(InstrumentId id)
     InstrumentList list;
     InstrumentList::iterator iit;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         list = (*it)->getAllInstruments();
 
-        for (iit = list.begin(); iit != list.end(); iit++)
+        for (iit = list.begin(); iit != list.end(); ++iit)
             if ((*iit)->getId() == id)
                 return (*iit);
     }
@@ -256,7 +256,7 @@ Studio::getInstrumentFromList(int index)
     InstrumentList::iterator iit;
     int count = 0;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
 
@@ -269,7 +269,7 @@ Studio::getInstrumentFromList(int index)
 
         list = (*it)->getPresentationInstruments();
 
-        for (iit = list.begin(); iit != list.end(); iit++)
+        for (iit = list.begin(); iit != list.end(); ++iit)
         {
             if (count == index)
                 return (*iit);
@@ -346,7 +346,7 @@ Studio::clear()
     InstrumentList list;
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
         delete *it;
 
     m_devices.erase(m_devices.begin(), m_devices.end());
@@ -416,7 +416,7 @@ Studio::getMetronomeFromDevice(DeviceId id)
 {
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
 
 	std::cerr << "Studio::getMetronomeFromDevice: Having a look at device " << (*it)->getId() << std::endl;
 
@@ -468,7 +468,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     // a match that we can re-use.  i.e. if we have a matching 
     // Program Change then we can use this Instrument.
     //
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
@@ -476,7 +476,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
         {
             instList = (*it)->getPresentationInstruments();
 
-            for (iit = instList.begin(); iit != instList.end(); iit++)
+            for (iit = instList.begin(); iit != instList.end(); ++iit)
             {
                 if (firstInstrument == 0)
                     firstInstrument = *iit;
@@ -556,7 +556,7 @@ Studio::unassignAllInstruments()
     Rosegarden::InstrumentList instList;
     int channel = 0;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
@@ -564,7 +564,7 @@ Studio::unassignAllInstruments()
         {
             instList = (*it)->getPresentationInstruments();
 
-            for (iit = instList.begin(); iit != instList.end(); iit++)
+            for (iit = instList.begin(); iit != instList.end(); ++iit)
             {
                 // Only for true MIDI Instruments - not System ones
                 //
@@ -592,7 +592,7 @@ Studio::unassignAllInstruments()
             {
                 instList = (*it)->getPresentationInstruments();
 
-                for (iit = instList.begin(); iit != instList.end(); iit++)
+                for (iit = instList.begin(); iit != instList.end(); ++iit)
                     (*iit)->emptyPlugins();
             }
         }
@@ -605,7 +605,7 @@ Studio::clearMidiBanksAndPrograms()
     MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
@@ -644,7 +644,7 @@ Studio::getDevice(DeviceId id)
     
     std::vector<Device*>::iterator it;
     
-    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
         
         // possibly fix a following seg.fault :
         if( ! (*it) ){ 
@@ -670,7 +670,7 @@ Studio::getAudioDevice()
 {
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
 	if ((*it)->getType() == Device::Audio) return *it;
     }
 
@@ -682,7 +682,7 @@ Studio::getSoftSynthDevice()
 {
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
 	if ((*it)->getType() == Device::SoftSynth) return *it;
     }
 
@@ -697,7 +697,7 @@ Studio::getSegmentName(InstrumentId id)
     Rosegarden::InstrumentList::iterator iit;
     Rosegarden::InstrumentList instList;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
@@ -705,7 +705,7 @@ Studio::getSegmentName(InstrumentId id)
         {
             instList = (*it)->getAllInstruments();
 
-            for (iit = instList.begin(); iit != instList.end(); iit++)
+            for (iit = instList.begin(); iit != instList.end(); ++iit)
             {
                 if ((*iit)->getId() == id)
                 {
@@ -731,7 +731,7 @@ Studio::getAudioPreviewInstrument()
     AudioDevice *audioDevice;
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         audioDevice = dynamic_cast<AudioDevice*>(*it);
 

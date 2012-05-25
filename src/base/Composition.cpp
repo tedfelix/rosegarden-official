@@ -1967,7 +1967,7 @@ Composition::clearTracks()
 {
     trackiterator it = m_tracks.begin();
 
-    for (; it != m_tracks.end(); it++)
+    for (; it != m_tracks.end(); ++it)
         delete ((*it).second);
 
     m_tracks.erase(m_tracks.begin(), m_tracks.end());
@@ -1978,7 +1978,7 @@ Composition::getTrackByPosition(int position) const
 {
     trackconstiterator it = m_tracks.begin();
 
-    for (; it != m_tracks.end(); it++)
+    for (; it != m_tracks.end(); ++it)
     {
         if ((*it).second->getPosition() == position)
             return (*it).second;
@@ -2009,7 +2009,7 @@ Composition::getNewTrackId() const
 
     trackconstiterator it = m_tracks.begin();
 
-    for (; it != m_tracks.end(); it++)
+    for (; it != m_tracks.end(); ++it)
     {
         if ((*it).second->getId() >= highWater)
             highWater = (*it).second->getId() + 1;

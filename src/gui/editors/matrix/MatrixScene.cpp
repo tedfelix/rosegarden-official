@@ -739,7 +739,7 @@ MatrixScene::selectAll()
     Segment::iterator it = segment->begin();
     EventSelection *selection = new EventSelection(*segment);
 
-    for (; segment->isBeforeEndMarker(it); it++) {
+    for (; segment->isBeforeEndMarker(it); ++it) {
         if ((*it)->isa(Note::EventType)) {
             selection->addEvent(*it);
         }

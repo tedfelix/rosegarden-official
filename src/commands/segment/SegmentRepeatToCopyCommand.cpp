@@ -41,7 +41,7 @@ SegmentRepeatToCopyCommand::~SegmentRepeatToCopyCommand()
         std::vector<Segment*>::iterator it =
             m_newSegments.begin();
 
-        for (; it != m_newSegments.end(); it++)
+        for (; it != m_newSegments.end(); ++it)
             delete (*it);
     }
 }
@@ -76,7 +76,7 @@ SegmentRepeatToCopyCommand::execute()
         std::vector<Segment*>::iterator it =
             m_newSegments.begin();
 
-        for (; it != m_newSegments.end(); it++)
+        for (; it != m_newSegments.end(); ++it)
             m_composition->addSegment(*it);
     }
     m_segment->setRepeating(false);
@@ -89,7 +89,7 @@ SegmentRepeatToCopyCommand::unexecute()
     std::vector<Segment*>::iterator it =
         m_newSegments.begin();
 
-    for (; it != m_newSegments.end(); it++)
+    for (; it != m_newSegments.end(); ++it)
         m_composition->detachSegment(*it);
 
     m_detached = true;

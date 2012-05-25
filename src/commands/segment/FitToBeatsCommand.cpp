@@ -172,7 +172,7 @@ FitToBeatsCommand::initialise(Segment *s)
     segmentcontainer &origSegments = m_composition->getSegments();
     for (Composition::iterator i = origSegments.begin();
          i != origSegments.end();
-         i++) {
+         ++i) {
         Segment * const oldSegment = *i;
 
         // We'd prefer to just make a segment with no events that's

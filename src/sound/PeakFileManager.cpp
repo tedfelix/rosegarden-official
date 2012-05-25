@@ -51,7 +51,7 @@ PeakFileManager::insertAudioFile(AudioFile *audioFile)
 {
     std::vector<PeakFile*>::iterator it;
 
-    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++) {
+    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); ++it) {
         if ((*it)->getAudioFile()->getId() == audioFile->getId())
             return false;
     }
@@ -76,7 +76,7 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
 {
     std::vector<PeakFile*>::iterator it;
 
-    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++) {
+    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); ++it) {
         if ((*it)->getAudioFile()->getId() == audioFile->getId()) {
             if (m_currentPeakFile == *it)
                 m_currentPeakFile = 0;
@@ -98,7 +98,7 @@ PeakFileManager::getPeakFile(AudioFile *audioFile)
     PeakFile *ptr = 0;
 
     while (ptr == 0) {
-        for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+        for (it = m_peakFiles.begin(); it != m_peakFiles.end(); ++it)
             if ((*it)->getAudioFile()->getId() == audioFile->getId())
                 ptr = *it;
 
@@ -259,7 +259,7 @@ PeakFileManager::clear()
 {
     std::vector<PeakFile*>::iterator it;
 
-    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); ++it)
         delete (*it);
 
     m_peakFiles.erase(m_peakFiles.begin(), m_peakFiles.end());

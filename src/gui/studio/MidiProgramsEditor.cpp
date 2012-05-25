@@ -125,7 +125,7 @@ MidiProgramsEditor::getBankSubset(const MidiBank &bank)
     ProgramList program;
     ProgramList::iterator it;
 
-    for (it = m_programList.begin(); it != m_programList.end(); it++) {
+    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
         if (it->getBank() == bank)
             program.push_back(*it);
     }
@@ -145,7 +145,7 @@ MidiProgramsEditor::modifyCurrentPrograms(const MidiBank &oldBank,
 {
     ProgramList::iterator it;
 
-    for (it = m_programList.begin(); it != m_programList.end(); it++) {
+    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
         if (it->getBank() == oldBank) {
             *it = MidiProgram(newBank, it->getProgram(), it->getName());
         }
@@ -233,7 +233,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         getKeyMapButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
         getKeyMapButton(i)->setMaximumHeight( 12 );
 
-        for (it = programSubset.begin(); it != programSubset.end(); it++) {
+        for (it = programSubset.begin(); it != programSubset.end(); ++it) {
             if (it->getProgram() == i) {
 
                 // zero in on "Harpsichord" vs. "Coupled Harpsichord to cut down
@@ -444,7 +444,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
             ProgramList::iterator it = m_programList.begin();
             ProgramList tmpProg;
 
-            for (; it != m_programList.end(); it++) {
+            for (; it != m_programList.end(); ++it) {
                 if (((unsigned int)it->getProgram()) == id) {
                     m_programList.erase(it);
                     m_bankEditor->slotApply();
@@ -628,7 +628,7 @@ MidiProgramsEditor::banklistContains(const MidiBank &bank)
     MidiBank bankNotPercussion = MidiBank(!bank.isPercussion(),
                                           bank.getMSB(), bank.getLSB());
     
-    for (it = m_bankList.begin(); it != m_bankList.end(); it++)
+    for (it = m_bankList.begin(); it != m_bankList.end(); ++it)
         if (*it == bank || *it == bankNotPercussion)
             return true;
 
@@ -640,7 +640,7 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
     ProgramList::iterator it = m_programList.begin();
 
-    for (; it != m_programList.end(); it++) {
+    for (; it != m_programList.end(); ++it) {
         if (it->getBank() == bank && it->getProgram() == programNo) {
             //Only show hits to avoid overflow of console.
             RG_DEBUG << "it->getBank() " << "== bank" << endl;

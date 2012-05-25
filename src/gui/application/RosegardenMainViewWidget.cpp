@@ -1108,7 +1108,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
         // (all the other segments will be deselected)
         for (Composition::iterator i =
                     getDocument()->getComposition().begin();
-                i != getDocument()->getComposition().end(); i++) {
+                i != getDocument()->getComposition().end(); ++i) {
             if (((int)(*i)->getTrack()) == trackId)
                 segments.insert(*i);
         }
@@ -1128,7 +1128,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
         bool noSegSelected = true;
         for (Composition::iterator i =
                   getDocument()->getComposition().begin();
-              i != getDocument()->getComposition().end(); i++) {
+              i != getDocument()->getComposition().end(); ++i) {
             if (((int)(*i)->getTrack()) == trackId) {
                 if (segments.count(*i)) {
                     // Segment *i is selected
@@ -1143,7 +1143,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
             // Deselect all selected segments on this track
             for (Composition::iterator i =
                      getDocument()->getComposition().begin();
-                 i != getDocument()->getComposition().end(); i++) {
+                 i != getDocument()->getComposition().end(); ++i) {
                 if (((int)(*i)->getTrack()) == trackId) {
                     if (segments.count(*i)) {
                         // Segment *i is selected
@@ -1159,7 +1159,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
             // Select all segments on this track
             for (Composition::iterator i =
                      getDocument()->getComposition().begin();
-                 i != getDocument()->getComposition().end(); i++) {
+                 i != getDocument()->getComposition().end(); ++i) {
                 if (((int)(*i)->getTrack()) == trackId) {
                     segments.insert(*i);
                 }

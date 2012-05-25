@@ -103,7 +103,7 @@ SegmentRescaleCommand::execute()
         // Now entire contents (even hidden contents are resized
         // in segment.
         for (Segment::iterator i = m_segment->begin();
-                  i != m_segment->end(); i++) {
+                  i != m_segment->end(); ++i) {
         // Changed condition from m_segment->isBeforeEndMarker(i).
 
               //&& Need to place rests in new segment otherwise rests at

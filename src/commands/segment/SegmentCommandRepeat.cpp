@@ -36,7 +36,7 @@ void SegmentCommandRepeat::execute()
 {
     segmentlist::iterator it;
 
-    for (it = m_segments.begin(); it != m_segments.end(); it++)
+    for (it = m_segments.begin(); it != m_segments.end(); ++it)
         (*it)->setRepeating(m_repeatState);
 }
 
@@ -44,7 +44,7 @@ void SegmentCommandRepeat::unexecute()
 {
     segmentlist::iterator it;
 
-    for (it = m_segments.begin(); it != m_segments.end(); it++)
+    for (it = m_segments.begin(); it != m_segments.end(); ++it)
         (*it)->setRepeating(!m_repeatState);
 }
 

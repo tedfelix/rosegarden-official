@@ -195,7 +195,7 @@ ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
 {
     PropertyControlRuler *propruler;
     std::list<ControlRuler*>::iterator it;
-    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); it++) {
+    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
         propruler = dynamic_cast <PropertyControlRuler*> (*it);
         if (propruler) {
             if (propruler->getPropertyName() == propertyName)
@@ -218,7 +218,7 @@ ControlRulerWidget::slotToggleControlRuler(std::string controlName)
     ControlList::const_iterator it;
     // Check that the device supports a control parameter of this name
     for (it = m_controlList->begin();
-        it != m_controlList->end(); it++) {
+        it != m_controlList->end(); ++it) {
         if ((*it).getName() == controlName) {
             break;
         }
@@ -229,7 +229,7 @@ ControlRulerWidget::slotToggleControlRuler(std::string controlName)
         // Check whether we already have a control ruler for a control parameter of this name
         ControllerEventsRuler *eventruler;
         std::list<ControlRuler*>::iterator jt;
-        for (jt = m_controlRulerList.begin(); jt != m_controlRulerList.end(); jt++) {
+        for (jt = m_controlRulerList.begin(); jt != m_controlRulerList.end(); ++jt) {
             eventruler = dynamic_cast <ControllerEventsRuler*> (*jt);
             if (eventruler) {
                 if (eventruler->getControlParameter()->getName() == controlName)

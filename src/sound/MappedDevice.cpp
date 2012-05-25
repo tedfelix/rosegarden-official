@@ -51,7 +51,7 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
 {
     clear();
 
-    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); ++it)
         this->push_back(new MappedInstrument(**it));
 
     m_id = mD.getId();
@@ -66,7 +66,7 @@ MappedDevice::clear()
 {
     MappedDeviceIterator it;
 
-    for (it = this->begin(); it != this->end(); it++)
+    for (it = this->begin(); it != this->end(); ++it)
         delete (*it);
 
     this->erase(this->begin(), this->end());
@@ -75,7 +75,7 @@ MappedDevice::clear()
 MappedDevice&
 MappedDevice::operator+(const MappedDevice &mD)
 {
-    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); ++it)
         this->push_back(new MappedInstrument(**it));
 
     return *this;
@@ -89,7 +89,7 @@ MappedDevice::operator=(const MappedDevice &mD)
 
     clear();
 
-    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); ++it)
         this->push_back(new MappedInstrument(**it));
 
     m_id = mD.getId();
@@ -193,7 +193,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
 {
     dS << (int)mD->size();
 
-    for (MappedDeviceIterator it = mD->begin(); it != mD->end(); it++)
+    for (MappedDeviceIterator it = mD->begin(); it != mD->end(); ++it)
         dS << (*it);
 
     dS << (unsigned int)(mD->getId());
@@ -217,7 +217,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
 {
     dS << (int)mD.size();
 
-    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); ++it)
         dS << (*it);
 
     dS << (unsigned int)(mD.getId());

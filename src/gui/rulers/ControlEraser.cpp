@@ -58,7 +58,7 @@ ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
     ControllerEventsRuler *ruler = static_cast <ControllerEventsRuler*> (m_ruler);
     std::vector <ControlItem*>::const_iterator it;
     // If any of the covered items is selected, delete entire selection
-    for (it = e->itemList.begin(); it != e->itemList.end(); it++) {
+    for (it = e->itemList.begin(); it != e->itemList.end(); ++it) {
         if ((*it)->isSelected()) {
             ruler->eraseControllerEvent();
             break;

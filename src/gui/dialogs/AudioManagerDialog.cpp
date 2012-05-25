@@ -393,7 +393,7 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Add children
         //
-        for (iit = segments.begin(); iit != segments.end(); iit++) {
+        for (iit = segments.begin(); iit != segments.end(); ++iit) {
             if ((*iit)->getAudioFileId() == (*it)->getId()) {
                 AudioListItem *childItem =
                     new AudioListItem(item,

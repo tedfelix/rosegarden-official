@@ -47,7 +47,7 @@ ModifyInstrumentMappingCommand::execute()
         m_composition->getTracks();
     Composition::trackcontainer::iterator it = tracks.begin();
 
-    for (; it != tracks.end(); it++) {
+    for (; it != tracks.end(); ++it) {
         if (it->second->getInstrument() == m_fromInstrument) {
             m_mapping.push_back(it->first);
             it->second->setInstrument(m_toInstrument);
@@ -62,7 +62,7 @@ ModifyInstrumentMappingCommand::unexecute()
     std::vector<TrackId>::iterator it = m_mapping.begin();
     Track *track = 0;
 
-    for (; it != m_mapping.end(); it++) {
+    for (; it != m_mapping.end(); ++it) {
         track = m_composition->getTrackById(*it);
         track->setInstrument(m_fromInstrument);
     }

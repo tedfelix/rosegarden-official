@@ -182,7 +182,7 @@ void
 MappedObject::addChild(MappedObject *object)
 {
     std::vector<MappedObject*>::iterator it = m_children.begin();
-    for (; it != m_children.end(); it++)
+    for (; it != m_children.end(); ++it)
         if ((*it) == object)
             return ;
 
@@ -193,7 +193,7 @@ void
 MappedObject::removeChild(MappedObject *object)
 {
     std::vector<MappedObject*>::iterator it = m_children.begin();
-    for (; it != m_children.end(); it++) {
+    for (; it != m_children.end(); ++it) {
         if ((*it) == object) {
             m_children.erase(it);
             return ;
@@ -208,7 +208,7 @@ MappedObject::getChildren()
 {
     MappedObjectPropertyList list;
     std::vector<MappedObject*>::iterator it = m_children.begin();
-    for (; it != m_children.end(); it++)
+    for (; it != m_children.end(); ++it)
         list.push_back(QString("%1").arg((*it)->getId()));
 
     return list;
@@ -222,7 +222,7 @@ MappedObject::getChildren(MappedObjectType type)
 {
     MappedObjectPropertyList list;
     std::vector<MappedObject*>::iterator it = m_children.begin();
-    for (; it != m_children.end(); it++) {
+    for (; it != m_children.end(); ++it) {
         if ((*it)->getType() == type)
             list.push_back(QString("%1").arg((*it)->getId()));
     }
@@ -244,7 +244,7 @@ MappedObject::destroyChildren()
     m_children.clear();
 
     std::vector<MappedObject *>::iterator it = children.begin();
-    for (; it != children.end(); it++)
+    for (; it != children.end(); ++it)
         (*it)->destroy(); // remove from studio and destroy
 }
 
@@ -271,7 +271,7 @@ MappedObject::destroy()
     m_children.clear();
 
     std::vector<MappedObject *>::iterator it = children.begin();
-    for (; it != children.end(); it++) {
+    for (; it != children.end(); ++it) {
         (*it)->destroy();
     }
 
@@ -1519,7 +1519,7 @@ MappedPluginSlot::setPort(unsigned long portNumber, float value)
     std::vector<MappedObject*>::iterator it = ports.begin();
     MappedPluginPort *port = 0;
 
-    for (; it != ports.end(); it++) {
+    for (; it != ports.end(); ++it) {
         port = dynamic_cast<MappedPluginPort *>(*it);
         if (port && (unsigned long)port->getPortNumber() == portNumber) {
             port->setValue(value);
@@ -1534,7 +1534,7 @@ MappedPluginSlot::getPort(unsigned long portNumber)
     std::vector<MappedObject*>::iterator it = ports.begin();
     MappedPluginPort *port = 0;
 
-    for (; it != ports.end(); it++) {
+    for (; it != ports.end(); ++it) {
         port = dynamic_cast<MappedPluginPort *>(*it);
         if (port && (unsigned long)port->getPortNumber() == portNumber) {
             return port->getValue();

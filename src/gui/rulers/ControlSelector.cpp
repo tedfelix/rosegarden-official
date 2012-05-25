@@ -77,7 +77,7 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
     if (pRectF) {
         // Selection drag is in progress
         // Clear the list of items that this tool has added
-        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); it++) {
+        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it) {
             (*it)->setSelected(false);
         }
         m_addedItems.clear();
@@ -94,7 +94,7 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
                 pRectF->right()));
 
         // Add them if they're within the rectangle
-        for (ControlItemMap::iterator it = itmin; it != itmax; it++) {
+        for (ControlItemMap::iterator it = itmin; it != itmax; ++it) {
             if (pRectF->contains(it->second->boundingRect().center())) {
                 m_addedItems.push_back(it->second);
                 it->second->setSelected(true);
@@ -116,7 +116,7 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
         m_ruler->setSelectionRect(0);
 
         // Add the selected items to the current selection
-        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); it++) {
+        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it) {
             m_ruler->addToSelection(*it);
         }
     }

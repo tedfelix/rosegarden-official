@@ -119,7 +119,7 @@ SegmentReconfigureCommand::swap()
              segment_iterator != composition->end() &&
              composition->getNbSegments() > 1 ) {
             // move to previous segment
-            segment_iterator--;
+            --segment_iterator;
             Segment* prevSegment = *segment_iterator;
 
             // Segments need to be on the same track

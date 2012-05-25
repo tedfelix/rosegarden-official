@@ -159,7 +159,7 @@ MusicXmlExporter::exportTrack(Track *track)
             // Check whether the current segment is in the list of selected segments.
             //
             SegmentSelection selection = m_view->getSelection();
-            for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
+            for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); ++it) {
                 if ((*it)->getTrack() == track->getId()) {
                     selectedSegments = true;
                     break;
@@ -423,7 +423,7 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
                     instruments[id.str()] = mi;
                 }
                 for (InstrumentMap::iterator i = instruments.begin();
-                     i != instruments.end(); i++) {
+                     i != instruments.end(); ++i) {
                     str << "      <midi-instrument id=\"" << (*i).first << "\">" << std::endl;
                     int channelMaybe = (*i).second.channel;
                     if (channelMaybe >= 0) {
@@ -518,7 +518,7 @@ MusicXmlExporter::write()
 //         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
 //             (*c)->printSummary();
 
-        for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++) {
+        for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c) {
             str << "  <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
             int bar = pickup ? -1 : 0;
             while (m_composition->getBarStart(bar) < compositionEndTime) {
@@ -538,7 +538,7 @@ MusicXmlExporter::write()
             str << "  </part>" << std::endl;
         } // for (int trackPos = 0....
         str << "</score-partwise>" << std::endl;
-        for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
+        for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c)
             delete *c;
     } else {
         // XML header information
@@ -556,7 +556,7 @@ MusicXmlExporter::write()
         int bar = 0;
         while (m_composition->getBarStart(bar) < compositionEndTime) {
             str << "  <measure number=\"" << bar+1 << "\">" << std::endl;
-            for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++) {
+            for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c) {
                 // Allow some oportunities for user to cancel
                 if (isOperationCancelled()) {return false;}
 
@@ -571,7 +571,7 @@ MusicXmlExporter::write()
             bar++;
         } // while (m_composition->getBarEnd(bar) < ...
         str << "</score-timewise>" << std::endl;
-        for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
+        for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c)
             delete *c;
     }
     str.close();

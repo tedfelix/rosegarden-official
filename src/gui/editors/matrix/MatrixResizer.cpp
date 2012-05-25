@@ -127,7 +127,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
     EventSelection::eventcontainer::iterator it =
         selection->getSegmentEvents().begin();
 
-    for (; it != selection->getSegmentEvents().end(); it++) {
+    for (; it != selection->getSegmentEvents().end(); ++it) {
 
         MatrixElement *element = 0;
         ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
@@ -188,7 +188,7 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
     timeT normalizeStart = selection->getStartTime();
     timeT normalizeEnd = selection->getEndTime();
 
-    for (; it != selection->getSegmentEvents().end(); it++) {
+    for (; it != selection->getSegmentEvents().end(); ++it) {
 
         timeT t = (*it)->getAbsoluteTime();
         timeT d = (*it)->getDuration();

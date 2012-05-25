@@ -126,7 +126,7 @@ IconStackedWidget::slotPageSelect()
     iconbuttons::iterator i = m_iconButtons.begin();
     int index = 0;
     while (((*i)->isChecked() == false) && (i != m_iconButtons.end())) {
-        i++;
+        ++i;
         index++;
     }
     
@@ -150,7 +150,7 @@ IconStackedWidget::setPageByIndex(int index)
     int c = 0;
     while (i != m_iconButtons.end()) {
         if (c == index) (*i)->setChecked(true);
-        i++;
+        ++i;
         c++;
     }
 

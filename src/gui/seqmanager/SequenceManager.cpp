@@ -1302,7 +1302,7 @@ SequenceManager::preparePlayback(bool /*forceProgramChanges*/)
 
     // Send the MappedInstruments full information to the Sequencer 
     InstrumentList::iterator it = list.begin();
-    for (; it != list.end(); it++) {
+    for (; it != list.end(); ++it) {
 
         StudioControl::sendMappedInstrument(MappedInstrument(*it));
     }
@@ -1468,7 +1468,7 @@ SequenceManager::applyFiltering(const MappedEventList &mC,
     MappedEventList retMc;
     MappedEventList::const_iterator it = mC.begin();
 
-    for (; it != mC.end(); it++) {
+    for (; it != mC.end(); ++it) {
         if (!((*it)->getType() & filter))
             retMc.insert(new MappedEvent(*it));
     }

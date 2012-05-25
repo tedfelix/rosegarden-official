@@ -884,7 +884,7 @@ void RosegardenDocument::initialiseStudio()
         recordIns[i]->setMappedId(mappedId);
     }
 
-    for (; it != list.end(); it++) {
+    for (; it != list.end(); ++it) {
         if ((*it)->getType() == Instrument::Audio ||
                 (*it)->getType() == Instrument::SoftSynth) {
             MappedObjectId mappedId =
@@ -2853,7 +2853,7 @@ RosegardenDocument::clearAllPlugins()
     MappedEventList mC;
 
     InstrumentList::iterator it = list.begin();
-    for (; it != list.end(); it++) {
+    for (; it != list.end(); ++it) {
         if ((*it)->getType() == Instrument::Audio) {
             PluginInstanceIterator pIt = (*it)->beginPlugins();
 

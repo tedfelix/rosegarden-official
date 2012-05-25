@@ -539,7 +539,7 @@ SegmentParameterBox::populateBoxFromSegments()
     m_repeatValue->setEnabled(false);
 
 
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         // ok, first thing is we know we have at least one segment
         //
         // and since there is at least one segment, we can re-enable the edit button
@@ -828,7 +828,7 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
         (off ? 0 : m_standardQuantizations[qLevel]);
 
     std::vector<Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         command->addSegment(*it);
     }
 
@@ -847,7 +847,7 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
     //                                                                transposeValue));
 
     std::vector<Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         (*it)->setTranspose(transposeValue);
     }
 
@@ -869,7 +869,7 @@ SegmentParameterBox::slotChangeLinkTranspose()
     bool foundTransposedLinks = false;
     std::vector<Segment *> linkedSegs;
     std::vector<Segment *>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         Segment *linkedSeg = *it;
         if (linkedSeg->isLinked()) {
             if (linkedSeg->getLinkTransposeParams().m_semitones==0) {
@@ -917,7 +917,7 @@ SegmentParameterBox::slotResetLinkTranspose()
 
     std::vector<Segment *> linkedSegs;
     std::vector<Segment *>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         Segment *linkedSeg = *it;
         if (linkedSeg->isLinked()) {
             linkedSegs.push_back(linkedSeg);
@@ -948,7 +948,7 @@ SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
     if (delayValue > 0) {
 
         std::vector<Segment*>::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setDelay(delayValue);
             (*it)->setRealTimeDelay(RealTime::zeroTime);
         }
@@ -956,7 +956,7 @@ SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
     } else if (delayValue < 0) {
 
         std::vector<Segment*>::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setDelay(0);
             int sec = ( -delayValue) / 1000;
             int nsec = (( -delayValue) - 1000 * sec) * 1000000;
@@ -965,7 +965,7 @@ SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
     } else {
 
         std::vector<Segment*>::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setDelay(0);
             (*it)->setRealTimeDelay(RealTime::zeroTime);
         }
@@ -1069,7 +1069,7 @@ SegmentParameterBox::slotHighestPressed()
         m_highestPlayable = dialog.getPitch();
         updateHighLow();
 
-        for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setHighestPlayable(m_highestPlayable);
         }
 
@@ -1089,7 +1089,7 @@ SegmentParameterBox::slotLowestPressed()
         m_lowestPlayable = dialog.getPitch();
         updateHighLow();
 
-        for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setLowestPlayable(m_lowestPlayable);
         }
 

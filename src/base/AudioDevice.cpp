@@ -44,7 +44,7 @@ AudioDevice::AudioDevice(const AudioDevice &dev):
     //
     InstrumentList insList = dev.getAllInstruments();
     InstrumentList::iterator iIt = insList.begin();
-    for (; iIt != insList.end(); iIt++)
+    for (; iIt != insList.end(); ++iIt)
         m_instruments.push_back(new Instrument(**iIt));
 }
 

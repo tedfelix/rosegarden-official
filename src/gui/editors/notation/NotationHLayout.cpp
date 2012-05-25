@@ -841,7 +841,7 @@ NotationHLayout::preSquishBar(int barNo)
         timeT delay = std::numeric_limits<timeT>::max();
         BarData * dataPtr = 0;
         for (BarDataVector::iterator
-            j = i->second.begin(); j != i->second.end(); j++) {
+            j = i->second.begin(); j != i->second.end(); ++j) {
 
             // Hide all the time signatures
             (*j)->basicData.timeSignature.setHidden(true);  

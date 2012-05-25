@@ -157,7 +157,7 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
         // Check whether the current segment is in the list of selected segments.
         //
         SegmentSelection selection = m_view->getSelection();
-        for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
+        for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); ++it) {
             if ((*it) == seg) currentSegmentSelected = true;
         }
 #ifdef NOT_JUST_NOW //!!!

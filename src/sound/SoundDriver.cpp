@@ -73,7 +73,7 @@ SoundDriver::getMappedInstrument(InstrumentId id)
 {
     std::vector<MappedInstrument*>::const_iterator it;
 
-    for (it = m_instruments.begin(); it != m_instruments.end(); it++) {
+    for (it = m_instruments.begin(); it != m_instruments.end(); ++it) {
         if ((*it)->getId() == id)
             return (*it);
     }
@@ -243,7 +243,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     std::vector<MappedInstrument*>::iterator it;
 
     // If we match then change existing entry
-    for (it = m_instruments.begin(); it != m_instruments.end(); it++) {
+    for (it = m_instruments.begin(); it != m_instruments.end(); ++it) {
         if ((*it)->getId() == mI->getId()) {
             (*it)->setType(mI->getType());
             delete mI;
@@ -324,7 +324,7 @@ bool
 SoundDriver::removeAudioFile(unsigned int id)
 {
     std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++) {
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
         if ((*it)->getId() == id) {
             RG_DEBUG << "Sequencer::removeAudioFile() = \"" <<
                 (*it)->getFilename() << "\"";
@@ -342,7 +342,7 @@ AudioFile*
 SoundDriver::getAudioFile(unsigned int id)
 {
     std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++) {
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
         if ((*it)->getId() == id)
             return *it;
     }
@@ -356,7 +356,7 @@ SoundDriver::clearAudioFiles()
     //RG_DEBUG << "SoundDriver::clearAudioFiles() - clearing down audio files";
 
     std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it)
         delete(*it);
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());

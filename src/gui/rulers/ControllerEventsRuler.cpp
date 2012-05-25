@@ -147,7 +147,7 @@ ControllerEventsRuler::init()
     setMinItemValue(m_controller->getMin());
 
     for (Segment::iterator it = m_segment->begin();
-            it != m_segment->end(); it++) {
+            it != m_segment->end(); ++it) {
         if (isOnThisRuler(*it)) {
             addControlItem(*it);
         }
@@ -166,7 +166,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
         EventControlItem *item;
-        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
             item = static_cast <EventControlItem *> (it->second);
             item->reconfigure();
         }
@@ -213,7 +213,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         if (mapIt == m_lastVisibleItem) {
             mapIt = m_controlItemMap.end();
         } else {
-            mapIt++;
+            ++mapIt;
         }
     }
     

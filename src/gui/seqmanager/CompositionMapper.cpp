@@ -44,7 +44,7 @@ CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
 
     Composition &comp = m_doc->getComposition();
 
-    for (Composition::iterator it = comp.begin(); it != comp.end(); it++) {
+    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it) {
 
         Track *track = comp.getTrackById((*it)->getTrack());
 

@@ -88,7 +88,7 @@ void EventControlItem::reconfigure(float x, float y)
 
     // Clear the current polygon
     this->clear();
-    for (QPolygon::iterator it=m_symbol.begin(); it !=m_symbol.end(); it++)
+    for (QPolygon::iterator it=m_symbol.begin(); it !=m_symbol.end(); ++it)
     {
         *this << QPointF(x+it->x()*xscale,y+it->y()*yscale);
     }

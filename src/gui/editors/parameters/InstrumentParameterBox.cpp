@@ -66,7 +66,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 
-    for (; it != instrumentParamBoxes.end(); it++)
+    for (; it != instrumentParamBoxes.end(); ++it)
         if ((*it) == this)
             contains = true;
 
@@ -126,7 +126,7 @@ InstrumentParameterBox::~InstrumentParameterBox()
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 
-    for (; it != instrumentParamBoxes.end(); it++) {
+    for (; it != instrumentParamBoxes.end(); ++it) {
         if ((*it) == this) {
             instrumentParamBoxes.erase(it);
             break;
@@ -231,7 +231,7 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 
     // To update all open IPBs
     //
-    for (; it != instrumentParamBoxes.end(); it++) {
+    for (; it != instrumentParamBoxes.end(); ++it) {
         if ((*it) != this && getSelectedInstrument() &&
             (*it)->getSelectedInstrument() == getSelectedInstrument())
             (*it)->useInstrument(getSelectedInstrument());
@@ -246,7 +246,7 @@ InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 
     blockSignals(true);
 
-    for (; it != instrumentParamBoxes.end(); it++) {
+    for (; it != instrumentParamBoxes.end(); ++it) {
         if ((*it)->getSelectedInstrument()) {
             if ((*it)->getSelectedInstrument()->getId() == id) {
                 (*it)->useInstrument((*it)->getSelectedInstrument()); // refresh

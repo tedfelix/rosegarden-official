@@ -618,7 +618,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList list = studio.getPresentationInstruments();
 
     // For each instrument
-    for (InstrumentList::iterator it = list.begin(); it != list.end(); it++) {
+    for (InstrumentList::iterator it = list.begin(); it != list.end(); ++it) {
 
         if (!(*it)) continue; // sanity check
 

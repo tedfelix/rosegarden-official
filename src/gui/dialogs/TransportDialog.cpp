@@ -297,7 +297,7 @@ TransportDialog::getCurrentModeAsString()
     bool found = false;
     for (std::map<std::string, TimeDisplayMode>::iterator iter = m_modeMap.begin();
          iter != m_modeMap.end() && !found;
-         iter++)
+         ++iter)
     {
         if (iter->second == m_currentMode) {
             return iter->first;

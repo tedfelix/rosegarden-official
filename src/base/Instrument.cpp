@@ -61,7 +61,7 @@ PluginContainer::removePlugin(unsigned int position)
 {
     PluginInstanceIterator it = m_audioPlugins.begin();
 
-    for (; it != m_audioPlugins.end(); it++)
+    for (; it != m_audioPlugins.end(); ++it)
     {
         if ((*it)->getPosition() == position)
         {
@@ -79,7 +79,7 @@ void
 PluginContainer::clearPlugins()
 {
     PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
+    for (; it != m_audioPlugins.end(); ++it)
         delete (*it);
 
     m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
@@ -89,7 +89,7 @@ void
 PluginContainer::emptyPlugins()
 {
     PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
+    for (; it != m_audioPlugins.end(); ++it)
     {
         (*it)->setAssigned(false);
         (*it)->setBypass(false);
@@ -104,7 +104,7 @@ AudioPluginInstance*
 PluginContainer::getPlugin(unsigned int position)
 {
     PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
+    for (; it != m_audioPlugins.end(); ++it)
     {
         if ((*it)->getPosition() == position)
             return *it;
@@ -555,7 +555,7 @@ Instrument::toXmlString()
                    << m_alias << "\"/>" << std::endl;
 
         PluginInstanceIterator it = m_audioPlugins.begin();
-        for (; it != m_audioPlugins.end(); it++)
+        for (; it != m_audioPlugins.end(); ++it)
         {
             instrument << (*it)->toXmlString();
         }
@@ -718,7 +718,7 @@ Buss::toXmlString()
     buss << "       <level value=\"" << m_level << "\"/>" << std::endl;
 
     PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++) {
+    for (; it != m_audioPlugins.end(); ++it) {
 	buss << (*it)->toXmlString();
     }
 

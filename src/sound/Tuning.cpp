@@ -372,7 +372,7 @@ Tuning::Tuning(const std::string name,
                     //check interval & spelling list sizes match
                     for (SpellingListIterator it = spellings->begin();
                          it != spellings->end();
-                         it++) {
+                         ++it) {
                         if (it->second > m_size) {
                             qDebug() << "Spelling list does not match "
                                         "number of intervals!";
@@ -627,7 +627,7 @@ void Tuning::printTuning() const {
     
     for (SpellingListIterator sit = m_spellings->begin();
     sit != m_spellings->end();
-    sit++) {
+    ++sit) {
         
         std::cout << "Spelling '" << sit->first
                   << "'\tinterval " << sit->second

@@ -3672,14 +3672,14 @@ RosegardenMainWindow::slotAddTrack()
     bool have = false;
 
     for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; it++) {
+            it != devices->end() && !have; ++it) {
 
         if ((*it)->getType() != Device::Midi)
             continue;
 
         InstrumentList instruments = (*it)->getAllInstruments();
         for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); iit++) {
+                iit != instruments.end(); ++iit) {
 
             if ((*iit)->getId() >= MidiInstrumentBase) {
                 id = (*iit)->getId();
@@ -3715,14 +3715,14 @@ RosegardenMainWindow::slotAddTracks()
     bool have = false;
 
     for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; it++) {
+            it != devices->end() && !have; ++it) {
 
         if ((*it)->getType() != Device::Midi)
             continue;
 
         InstrumentList instruments = (*it)->getAllInstruments();
         for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); iit++) {
+                iit != instruments.end(); ++iit) {
 
             if ((*iit)->getId() >= MidiInstrumentBase) {
                 id = (*iit)->getId();

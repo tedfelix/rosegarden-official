@@ -786,7 +786,7 @@ AudioFileManager::getLastAudioFile()
 
     while (it != m_audioFiles.end()) {
         audioFile = (*it);
-        it++;
+        ++it;
     }
 
     return audioFile;
@@ -961,7 +961,7 @@ AudioFileManager::getAudioFile(AudioFileId id)
 
     for (it = m_audioFiles.begin();
             it != m_audioFiles.end();
-            it++) {
+            ++it) {
         if ((*it)->getId() == id)
             return (*it);
     }

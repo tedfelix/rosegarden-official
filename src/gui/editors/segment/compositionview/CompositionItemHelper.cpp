@@ -129,7 +129,7 @@ CompositionItem CompositionItemHelper::findSiblingCompositionItem(const Composit
     CompositionModel::itemcontainer::const_iterator it;
     Rosegarden::Segment* currentSegment = CompositionItemHelper::getSegment(referenceItem);
 
-    for (it = items.begin(); it != items.end(); it++) {
+    for (it = items.begin(); it != items.end(); ++it) {
         CompositionItem item = *it;
         Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
         if (segment == currentSegment) {

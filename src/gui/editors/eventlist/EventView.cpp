@@ -377,7 +377,7 @@ EventView::applyLayout(int /*staffNo*/)
         SegmentPerformanceHelper helper(*m_segments[i]);
 
         for (Segment::iterator it = m_segments[i]->begin();
-                m_segments[i]->isBeforeEndMarker(it); it++) {
+                m_segments[i]->isBeforeEndMarker(it); ++it) {
             timeT eventTime =
                 helper.getSoundingAbsoluteTime(it);
 

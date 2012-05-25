@@ -341,7 +341,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
         m_quickCopy = false;
     }
         
-    for (; it != selection->getSegmentEvents().end(); it++) {
+    for (; it != selection->getSegmentEvents().end(); ++it) {
 
         timeT newTime = (*it)->getAbsoluteTime() + diffTime;
 

@@ -78,7 +78,7 @@ void
 HeadersGroup::removeAllHeaders()
 {
     TrackHeaderVector::iterator i;
-    for (i=m_headers.begin(); i!=m_headers.end(); i++) {
+    for (i=m_headers.begin(); i!=m_headers.end(); ++i) {
         disconnect(*i, SIGNAL(showToolTip(QString)),
                    m_widget, SLOT(slotShowHeaderToolTip(QString)));
         delete *i;
@@ -191,7 +191,7 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
 //           << "   ["<< barStart << ", " << barEnd << "]\n";
 
         // Pass 1 : get the max width needed
-        for (i=m_headers.begin(); i!=m_headers.end(); i++) {
+        for (i=m_headers.begin(); i!=m_headers.end(); ++i) {
             int w = (*i)->lookAtStaff(x, headerMaxWidth);
             if (w > neededWidth) neededWidth = w;
         }
@@ -208,7 +208,7 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
         }
 
         // Pass 2 : redraw the headers when necessary
-        for (i=m_headers.begin(); i!=m_headers.end(); i++) {
+        for (i=m_headers.begin(); i!=m_headers.end(); ++i) {
            (*i)->updateHeader(neededWidth);
         }
 

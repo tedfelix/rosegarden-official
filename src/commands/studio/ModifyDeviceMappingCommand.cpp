@@ -52,7 +52,7 @@ ModifyDeviceMappingCommand::execute()
     Instrument *instr = 0;
     int index = 0;
 
-    for (; it != tracks.end(); it++) {
+    for (; it != tracks.end(); ++it) {
         instr = m_studio->getInstrumentById(it->second->getInstrument());
         if (!instr || !instr->getDevice())
             continue;
@@ -72,7 +72,7 @@ ModifyDeviceMappingCommand::execute()
 
                 InstrumentList::iterator dIt = destList.begin();
 
-                for (; dIt != destList.end(); dIt++) {
+                for (; dIt != destList.end(); ++dIt) {
                     if ((*dIt)->getNaturalChannel() == channel) {
                         break;
                     }
@@ -131,7 +131,7 @@ ModifyDeviceMappingCommand::unexecute()
     ::iterator it = m_mapping.begin();
     Track *track = 0;
 
-    for (; it != m_mapping.end(); it++) {
+    for (; it != m_mapping.end(); ++it) {
         track = m_composition->getTrackById(it->first);
         track->setInstrument(it->second);
     }

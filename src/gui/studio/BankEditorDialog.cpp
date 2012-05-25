@@ -1183,7 +1183,7 @@ BankEditorDialog::slotDelete()
             //
             ProgramList::iterator it;
             ProgramList tempList;
-            for (it = m_programList.begin(); it != m_programList.end(); it++)
+            for (it = m_programList.begin(); it != m_programList.end(); ++it)
                 if (!(it->getBank() == bank))
                     tempList.push_back(*it);
 
@@ -1686,7 +1686,7 @@ BankEditorDialog::slotEditPaste()
 
         // Remove programs that will be overwritten
         //
-        for (it = m_programList.begin(); it != m_programList.end(); it++) {
+        for (it = m_programList.begin(); it != m_programList.end(); ++it) {
             if (!(it->getBank() == m_lastBank))
                 tempProg.push_back(*it);
         }
@@ -1699,7 +1699,7 @@ BankEditorDialog::slotEditPaste()
 
         // Add the new programs
         //
-        for (it = tempProg.begin(); it != tempProg.end(); it++) {
+        for (it = tempProg.begin(); it != tempProg.end(); ++it) {
             if (it->getBank() == sourceBank) {
                 // Insert with new MSB and LSB
                 //

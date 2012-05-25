@@ -32,7 +32,7 @@ Device::~Device()
         << "~Device"
         << endl;
     InstrumentList::iterator it = m_instruments.begin();
-    for (; it != m_instruments.end(); it++) {
+    for (; it != m_instruments.end(); ++it) {
         (*it)->sendWholeDeviceDestroyed();
         delete (*it);
     }

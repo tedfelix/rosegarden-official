@@ -833,7 +833,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         for (TrackId i = 0; i < m_numberOfTracks; ++i) {
             for (midiEvent = m_midiComposition[i].begin();
                  midiEvent != m_midiComposition[i].end();
-                 midiEvent++) {        
+                 ++midiEvent) {        
                 if ((*midiEvent)->isMeta()) {
                     if ((*midiEvent)->getMetaEventCode() == MIDI_SET_TEMPO) {
                         MidiByte m0 = (*midiEvent)->getMetaMessage()[0];
@@ -911,7 +911,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
         for (midiEvent = m_midiComposition[i].begin();
 	     midiEvent != m_midiComposition[i].end();
-	     midiEvent++) {
+	     ++midiEvent) {
 
             rosegardenEvent = 0;
 
@@ -1590,7 +1590,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 
     for (midiEvent = m_midiComposition[trackNumber].begin();
             midiEvent != m_midiComposition[trackNumber].end();
-            midiEvent++) {
+            ++midiEvent) {
         // Write the time to the buffer in MIDI format
         //
         //
@@ -1750,7 +1750,7 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
     bool notesOnTrack = false;
     bool noteOffFound;
 
-    for (;mE != m_midiComposition[track].end(); mE++) {
+    for (;mE != m_midiComposition[track].end(); ++mE) {
         if ((*mE)->getMessageType() == MIDI_NOTE_ON && (*mE)->getVelocity() > 0) {
             // We've found a note - flag it
             //
@@ -1759,7 +1759,7 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
 
             noteOffFound = false;
 
-            for (nOE = mE; nOE != m_midiComposition[track].end(); nOE++) {
+            for (nOE = mE; nOE != m_midiComposition[track].end(); ++nOE) {
                 if (((*nOE)->getChannelNumber() == (*mE)->getChannelNumber()) &&
                         ((*nOE)->getPitch() == (*mE)->getPitch()) &&
                         ((*nOE)->getMessageType() == MIDI_NOTE_OFF ||

@@ -92,7 +92,7 @@ std::cerr << "setStaff(" << staff << ")\n";
         while (++it != m_tracks.end()) {
             ((*it).second)->setStaffBracket(Brackets::None);
         }
-        it--;
+        --it;
         ((*it).second)->setStaffBracket(Brackets::CurlyOff);
     }
 
@@ -140,7 +140,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
 bool
 MusicXMLImportHelper::setLabel(const QString &label)
 {
-    for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); i++) {
+    for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
         ((*i).second)->setLabel(label.toStdString());
     }
     return true;
@@ -159,7 +159,7 @@ MusicXMLImportHelper::insertKey(const Key &key, int number)
     if (number > 0) {
         std::cerr << "Different keys on multistaff systems not supported yet.\n";
     } else {
-        for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); i++) {
+        for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
             m_segments[(*i).first+"/"+m_mainVoice[m_staff]]->insert(key.getAsEvent(m_curTime));
         }
     }
@@ -182,7 +182,7 @@ MusicXMLImportHelper::insertClef(const Clef &clef, int number)
         setStaff(staff);
         m_segments[m_staff+"/"+m_voice]->insert(clef.getAsEvent(m_curTime));
     } else {
-        for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); i++) {
+        for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
             m_segments[(*i).first+"/"+m_mainVoice[m_staff]]->insert(clef.getAsEvent(m_curTime));
         }
     }
@@ -197,7 +197,7 @@ MusicXMLImportHelper::insert(Event *event)
         Segment::iterator start, end;
         segment->getTimeSlice(m_curTime, start, end);
         std::vector<Event *> toErase;
-        for (Segment::iterator e = start; e != end; e++) {
+        for (Segment::iterator e = start; e != end; ++e) {
             if ( ! (*e)->isa(Rosegarden::Note::EventType) &&
                     ! (*e)->isa(Rosegarden::Note::EventRestType)) continue;
             Event *tmp = new Event(*(*e),
@@ -209,7 +209,7 @@ MusicXMLImportHelper::insert(Event *event)
             segment->insert(tmp);
             toErase.push_back(*e);
         }
-        for (std::vector<Event *>::iterator e = toErase.begin(); e != toErase.end(); e++)
+        for (std::vector<Event *>::iterator e = toErase.begin(); e != toErase.end(); ++e)
             segment->erase(segment->findSingle((*e)));
     }
 
@@ -255,7 +255,7 @@ MusicXMLImportHelper::endIndication(const std::string name, int number, timeT ex
             ((*i).m_number = number)) {
             found = true;
         } else {
-            i++;
+            ++i;
         }
     }
 std::cerr << m_curTime << " : endIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
@@ -287,7 +287,7 @@ MusicXMLImportHelper::getPitch(const QString &instrument)
 void
 MusicXMLImportHelper::setInstrument(InstrumentId instrument)
 {
-    for (TrackMap::iterator t = m_tracks.begin(); t != m_tracks.end(); t++) {
+    for (TrackMap::iterator t = m_tracks.begin(); t != m_tracks.end(); ++t) {
         ((*t).second)->setInstrument(instrument);
     }
 }
@@ -299,7 +299,7 @@ MusicXMLImportHelper::setBracketType(int bracket)
 
     if ((bracket == Brackets::CurlyOff) || (bracket == Brackets::SquareOff)) {
         TrackMap::iterator it = m_tracks.end();
-        it--;
+        --it;
         Track *track = (*it).second;
         if (bracket == Brackets::CurlyOff) {
             if (track->getStaffBracket() == Brackets::SquareOff) {

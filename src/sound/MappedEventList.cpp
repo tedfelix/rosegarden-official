@@ -37,7 +37,7 @@ MappedEventList::MappedEventList(const MappedEventList &mC):
     clear();
 
     // deep copy
-    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); ++it)
         insert(new MappedEvent(**it));
 
 }
@@ -49,7 +49,7 @@ MappedEventList::operator=(const MappedEventList &c)
 
     clear();
 
-    for (MappedEventList::const_iterator it = c.begin(); it != c.end(); it++)
+    for (MappedEventList::const_iterator it = c.begin(); it != c.end(); ++it)
         insert(new MappedEvent(**it));
 
     return *this;
@@ -58,14 +58,14 @@ MappedEventList::operator=(const MappedEventList &c)
 void
 MappedEventList::merge(const MappedEventList &mC)
 {
-    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); ++it)
         insert(new MappedEvent(**it)); // deep copy
 }
 
 void
 MappedEventList::clear()
 {
-    for (MappedEventListIterator it = begin(); it != end(); it++)
+    for (MappedEventListIterator it = begin(); it != end(); ++it)
         delete (*it);
 
     erase(begin(), end());

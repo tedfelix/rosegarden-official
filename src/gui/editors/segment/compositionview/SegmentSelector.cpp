@@ -247,7 +247,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
             for (it = changingItems.begin();
                     it != changingItems.end();
-                    it++) {
+                    ++it) {
 
                 CompositionItem item = *it;
 
@@ -366,7 +366,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         SegmentSelection::iterator it;
         for (it = selectedItems.begin();
                 it != selectedItems.end();
-                it++) {
+                ++it) {
             Command *command = 0;
         
             if (m_segmentCopyingAsLink) {

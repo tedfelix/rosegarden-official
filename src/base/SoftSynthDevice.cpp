@@ -56,7 +56,7 @@ SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
     //
     InstrumentList insList = dev.getAllInstruments();
     InstrumentList::iterator iIt = insList.begin();
-    for (; iIt != insList.end(); iIt++)
+    for (; iIt != insList.end(); ++iIt)
         m_instruments.push_back(new Instrument(**iIt));
     if (dev.m_metronome) m_metronome = new MidiMetronome(*dev.m_metronome);
 }

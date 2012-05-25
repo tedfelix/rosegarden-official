@@ -699,7 +699,7 @@ TrackEditor::slotDeleteSelectedSegments()
 
     // Create the compound command
     //
-    for (it = segments.begin(); it != segments.end(); it++) {
+    for (it = segments.begin(); it != segments.end(); ++it) {
         macro->addCommand(new SegmentEraseCommand(*it,
                           &m_doc->getAudioFileManager()));
     }
@@ -724,7 +724,7 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
     MacroCommand *macro = new MacroCommand(text);
 
     SegmentSelection::iterator it = segments.begin();
-    for (; it != segments.end(); it++) {
+    for (; it != segments.end(); ++it) {
         if ((*it)->isRepeating()) {
             macro->addCommand(new SegmentRepeatToCopyCommand(*it));
         }
@@ -749,7 +749,7 @@ TrackEditor::slotTurnLinkedSegmentsToRealCopies()
     MacroCommand *macro = new MacroCommand(text);
 
     SegmentSelection::iterator it = segments.begin();
-    for (; it != segments.end(); it++) {
+    for (; it != segments.end(); ++it) {
         if ((*it)->isLinked()) {
             macro->addCommand(new SegmentLinkToCopyCommand(*it));
         }

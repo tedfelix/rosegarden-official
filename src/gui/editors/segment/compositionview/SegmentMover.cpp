@@ -162,7 +162,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
 
             for (it = changingItems.begin();
                     it != changingItems.end();
-                    it++) {
+                    ++it) {
 
                 CompositionItem item = *it;
 
@@ -241,7 +241,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
     for (it = changingItems.begin();
          it != changingItems.end();
-         it++) {
+         ++it) {
         //             it->second->showRepeatRect(false);
 
         int dx = e->pos().x() - m_clickPoint.x(),

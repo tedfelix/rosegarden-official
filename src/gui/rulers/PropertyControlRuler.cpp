@@ -236,7 +236,7 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
 //    }
 //
 //    m_selectedItems.clear();
-    for (std::vector<ViewElement*>::iterator elit = elementList->begin(); elit != elementList->end();elit++) {
+    for (std::vector<ViewElement*>::iterator elit = elementList->begin(); elit != elementList->end();++elit) {
         for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
             item = dynamic_cast<PropertyControlItem*>(it->second);
             if (item) {

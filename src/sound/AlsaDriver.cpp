@@ -2099,7 +2099,7 @@ AlsaDriver::clearPendSysExcMap()
                   << m_pendSysExcMap->size() << " incomplete system exclusive message(s). "
                   << std::endl;
         DeviceEventMap::iterator pendIt = m_pendSysExcMap->begin();
-        for(; pendIt != m_pendSysExcMap->end(); pendIt++) {
+        for(; pendIt != m_pendSysExcMap->end(); ++pendIt) {
             delete pendIt->second.first;
             m_pendSysExcMap->erase(pendIt->first);
         }

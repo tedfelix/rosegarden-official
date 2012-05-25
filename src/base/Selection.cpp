@@ -141,7 +141,7 @@ EventSelection::eraseThisEvent(Event *e)
 	interval = m_segmentEvents.equal_range(e);
 
     for (eventcontainer::iterator it = interval.first;
-         it != interval.second; it++) {
+         it != interval.second; ++it) {
 
         if (*it == e) {
 

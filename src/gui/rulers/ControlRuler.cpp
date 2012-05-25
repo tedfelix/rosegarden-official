@@ -151,7 +151,7 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
 
 //    ret = m_controlItemMap.equal_range(xstart);
 //    for (it = ret.first; it != ret.second; it++) {
-    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (it->second->getEvent() == event) break;
     }
 
@@ -167,7 +167,7 @@ ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
 {
     // Basic loop through until I get the equal_range thing working properly
     ControlItemMap::iterator it;
-    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (it->second == item) break;
     }
     return it;
@@ -269,7 +269,7 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
     // If this was the first visible item
     if (it == m_firstVisibleItem) {
         // Check the next item to the right
-        m_firstVisibleItem++;
+        ++m_firstVisibleItem;
         // If the next item to the right is invisible, there are no visible items
         // Note we have to check .end() before we dereference ->second
         if (m_firstVisibleItem != m_controlItemMap.end() &&
@@ -282,7 +282,7 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
         // and not the first in the list
         if (it != m_controlItemMap.begin()) {
             // check the next item to the left
-            m_lastVisibleItem--;
+            --m_lastVisibleItem;
             // If this is invisible, there are no visible items
             if (visiblePosition(m_lastVisibleItem->second)!=0) m_lastVisibleItem = m_controlItemMap.end();
         }
@@ -295,7 +295,7 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
         // and not the first in the list
         if (it != m_controlItemMap.begin()) {
             // use the next to the left (we know it is invisible)
-            m_nextItemLeft--;
+            --m_nextItemLeft;
         }
         // if it's first in the list then there are no invisible items to the left
         else m_nextItemLeft = m_controlItemMap.end();
@@ -377,7 +377,7 @@ void ControlRuler::updateSegment()
     // EventSelection::addEvent adds timeT(1) to its extentt for zero duration events so need to mimic this here
     timeT durationAdd = 0;
 
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
         if ((*it)->xEnd() > xmax) {
             xmax = (*it)->xEnd();
@@ -537,7 +537,7 @@ QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
 
     QPolygon newpoly;
     QPoint newpoint;
-    for (QPolygonF::iterator it = poly->begin(); it != poly->end(); it++) {
+    for (QPolygonF::iterator it = poly->begin(); it != poly->end(); ++it) {
         newpoint.setX(mapXToWidget((*it).x()));
         newpoint.setY(mapYToWidget((*it).y()));
         newpoly.push_back(newpoint);
@@ -715,7 +715,7 @@ void ControlRuler::updateSelection()
     if (m_eventSelection) delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         m_eventSelection->addEvent((*it)->getEvent());
     }
 

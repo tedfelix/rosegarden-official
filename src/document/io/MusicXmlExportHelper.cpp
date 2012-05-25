@@ -59,7 +59,7 @@ MusicXmlExportHelper::MusicXmlExportHelper(const std::string &name,
     m_staff = 0;
     std::vector<Segment *> allSegments;
     std::map<TrackId, int> mainvoice;
-    for (TrackVector::const_iterator t = tracklist.begin(); t != tracklist.end(); t++) {
+    for (TrackVector::const_iterator t = tracklist.begin(); t != tracklist.end(); ++t) {
         StaffInfo si(*t);
         mainvoice[si.trackId] = 0; // no mainvoice.
         bool first = true;
@@ -93,7 +93,7 @@ MusicXmlExportHelper::MusicXmlExportHelper(const std::string &name,
     int nvoices = 0;
     std::map<int, timeT> endTimes;
     for (std::vector<Segment *>::iterator s = allSegments.begin();
-         s != allSegments.end(); s++) {
+         s != allSegments.end(); ++s) {
 
         // Count the number of parallel segments.
         int voice = 1;
@@ -132,7 +132,7 @@ MusicXmlExportHelper::MusicXmlExportHelper(const std::string &name,
         bool repeating = false;
         Segment *repeatingSegment;
         for (std::vector<Segment *>::iterator s = trackSegments.begin();
-             s != trackSegments.end(); s++) {
+             s != trackSegments.end(); ++s) {
 
             // Keep track of the last voice of the track.
             if (m_voices[(*s)] > m_staves[i].lastVoice) {
@@ -307,7 +307,7 @@ MusicXmlExportHelper::quantizePercussion()
             std::vector<Event *> events;
             bool empty = true;
             for (std::vector<Segment *>::iterator s = segments.begin();
-                s != segments.end(); s++) {
+                s != segments.end(); ++s) {
                 for (Segment::iterator e = (*s)->begin(); e != (*s)->end(); ++e) {
                     int pp;
                     if ((*e)->isa(Rosegarden::Note::EventType)) {
@@ -363,7 +363,7 @@ MusicXmlExportHelper::emptyQuantizeQueue(PercussionMap &pm,
     Note note = Note::getNearestNote(duration);
     bool empty = true;
     for (std::vector<Event *>::iterator v = events.begin();
-         v != events.end(); v++) {
+         v != events.end(); ++v) {
         int pp = (*v)->get<Int>(BaseProperties::PITCH);
         timeT t = (*v)->getNotationAbsoluteTime();
         Event *tmp = new Event(*(*v), t, duration);
@@ -387,7 +387,7 @@ MusicXmlExportHelper::getNumberOfActiveVoices(timeT time)
     int activeVoices = 0;
     for (int v = m_staves[m_staff].firstVoice; v < m_staves[m_staff].lastVoice; v++) {
         for (std::vector<Segment *>::iterator s = m_staves[m_staff].segments.begin();
-             s != m_staves[m_staff].segments.end(); s++) {
+             s != m_staves[m_staff].segments.end(); ++s) {
             if ((*s)->getStartTime() > time) break;
             if ((*s)->getEndMarkerTime() <= time) continue;
             activeVoices++;
@@ -421,7 +421,7 @@ MusicXmlExportHelper::skipSegment(Segment *segment, bool selectedSegmentsOnly)
             // Check whether the current segment is in the list of selected segments.
             //
             SegmentSelection selection = m_view->getSelection();
-            for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
+            for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); ++it) {
                 if ((*it) == segment) {
                     segmentSelected = false;
                     break;
@@ -457,7 +457,7 @@ MusicXmlExportHelper::writeEvents(int bar, std::ostream &str)
         for (m_curVoice = m_staves[m_staff].firstVoice;
              m_curVoice <= m_staves[m_staff].lastVoice; m_curVoice++) {
             for (std::vector<Segment *>::iterator s = m_staves[m_staff].segments.begin();
-                s != m_staves[m_staff].segments.end(); s++) {
+                s != m_staves[m_staff].segments.end(); ++s) {
                 if (m_voices[(*s)] != m_curVoice) continue;
                 if ((*s)->getEndMarkerTime() < startTime) continue;
                 if ((*s)->getStartTime() > endTime) break;
@@ -572,7 +572,7 @@ MusicXmlExportHelper::printSummary()
                       << "   voices " << m_staves[i].firstVoice << " - "
                       << m_staves[i].lastVoice << std::endl;
             for (std::vector<Segment *>::iterator s = m_staves[i].segments.begin();
-                 s != m_staves[i].segments.end(); s++) {
+                 s != m_staves[i].segments.end(); ++s) {
                 Segment *segment = *s;
                 std::cerr << "     " << m_voices[segment] << " : \""
                           << segment->getLabel() << "\"   "
@@ -649,7 +649,7 @@ MusicXmlExportHelper::addKey(const Event &event)
     m_pendingAttributes = true;
     m_attributesTime = event.getNotationAbsoluteTime();
 
-    for (StaffMap::iterator i = m_staves.begin(); i != m_staves.end(); i++) {
+    for (StaffMap::iterator i = m_staves.begin(); i != m_staves.end(); ++i) {
         (*i).second.key = key;
        (*i).second.accTable = AccidentalTable(key, (*i).second.clef,
                                               m_octaveType, m_barResetType);
@@ -1313,28 +1313,28 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
         if (articulations.size() > 0) {
             tmpNote << "          <articulations>\n";
             for (std::vector<std::string>::iterator s = articulations.begin();
-                 s != articulations.end(); s++)
+                 s != articulations.end(); ++s)
                 tmpNote << "            " << *s << "\n";
             tmpNote << "          </articulations>\n";
         }
         if (ornaments.size() > 0) {
             tmpNote << "          <ornaments>\n";
             for (std::vector<std::string>::iterator s = ornaments.begin();
-                 s != ornaments.end(); s++)
+                 s != ornaments.end(); ++s)
                 tmpNote << "            "  << *s << "\n";
             tmpNote << "          </ornaments>\n";
         }
         if (technical.size() > 0) {
             tmpNote << "          <technical>\n";
             for (std::vector<std::string>::iterator s = technical.begin();
-                 s != technical.end(); s++)
+                 s != technical.end(); ++s)
                 tmpNote << "            "  << *s << "\n";
             tmpNote << "          </technical>\n";
         }
         if (dynamics.size() > 0) {
             tmpNote << "          <dynamics>\n";
             for (std::vector<std::string>::iterator s = dynamics.begin();
-                 s != dynamics.end(); s++)
+                 s != dynamics.end(); ++s)
                 tmpNote << "            "  << *s << "\n";
             tmpNote << "          </dynamics>\n";
         }
@@ -1468,7 +1468,7 @@ MusicXmlExportHelper::retrieve(bool direction, timeT time)
     std::string result = "";
     std::vector<std::vector<SimpleQueue>::iterator> toErase;
     for (std::vector<SimpleQueue>::iterator i = tmp_queue.begin();
-         i != tmp_queue.end(); i++) {
+         i != tmp_queue.end(); ++i) {
         SimpleQueue sq = *i;
         if ((sq.direction == direction) && (sq.staff == m_staff) &&
             (sq.voice == m_curVoice) && (sq.time <= time)) {

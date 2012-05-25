@@ -80,7 +80,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
         
         m_startPointList.clear();
         ControlItemList *selected = m_ruler->getSelectedItems();
-        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); it++) {
+        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
             m_startPointList.push_back(QPointF((*it)->xStart(),(*it)->y()));
         }
     } else {
@@ -150,7 +150,7 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
             y = std::max(y,0.0f);
             y = std::min(y,1.0f);
             if (item) item->reconfigure(x,y);
-            pIt++;
+            ++pIt;
         }
         return FollowHorizontal;
     }
