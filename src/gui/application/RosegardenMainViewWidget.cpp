@@ -2121,10 +2121,13 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
     MidiByte controller = e->getData1();
     MidiByte value = e->getData2();
 
-    if (controller == 82) { //!!! magic select-track controller
+    if (controller == 82) { // !!! magic select-track controller
         int tracks = comp.getNbTracks();
-        Track *track = comp.getTrackByPosition(value * tracks / 127);
+        Track *track = comp.getTrackByPosition(value * tracks / 128);
         if (track) {
+            comp.setSelectedTrack(track->getId());
+            comp.notifyTrackSelectionChanged(track->getId());
+
             slotSelectTrackSegments(track->getId());
         }
         return ;
