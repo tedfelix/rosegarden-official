@@ -140,12 +140,14 @@ public:
     bool isTrackRecording(TrackId track) const;
 
     /// Get the selected (solo) track.
+    /// rename: getSelectedTrackId()
     /// @see setSelectedTrack()
     /// @see setSolo()
-    TrackId getSelectedTrack() const { return m_selectedTrack; }
+    TrackId getSelectedTrack() const { return m_selectedTrackId; }
     /// Set the selected (solo) track.
+    /// rename: setSelectedTrackId()
     /// @see getSelectedTrack()
-    void setSelectedTrack(TrackId track);
+    void setSelectedTrack(TrackId trackId);
 
     /// Are we soloing the selected track?
     /// @see setSolo()
@@ -945,7 +947,8 @@ protected:
     // Are we soloing and if so which Track?
     //
     bool m_solo;
-    TrackId m_selectedTrack;
+
+    TrackId m_selectedTrackId;
 
     /**
      * This is a bit like a segment, but can only contain one sort of

@@ -175,7 +175,7 @@ int Composition::m_defaultNbBars = 100;
 
 Composition::Composition() :
     m_solo(false),   // default is not soloing
-    m_selectedTrack(0),
+    m_selectedTrackId(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
     m_barPositionsNeedCalculating(true),
@@ -623,7 +623,7 @@ Composition::clear()
     m_startMarker = 0;
     m_endMarker = getBarRange(m_defaultNbBars).first;
     m_solo = false;
-    m_selectedTrack = 0;
+    m_selectedTrackId = 0;
     updateRefreshStatuses();
 }
 
@@ -1672,9 +1672,9 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 }
 #endif
 
-void Composition::setSelectedTrack(TrackId track)
+void Composition::setSelectedTrack(TrackId trackId)
 {
-    m_selectedTrack = track;
+    m_selectedTrackId = trackId;
     notifySoloChanged();
 }
 
@@ -1755,23 +1755,22 @@ bool Composition::detachTrack(Rosegarden::Track *track)
 
 void Composition::checkSelectedAndRecordTracks()
 {
-    // reset m_selectedTrack and m_recordTrack to the next valid track id
+    // reset m_selectedTrackId and m_recordTrack to the next valid track id
     // if the track they point to has been deleted
 
-    if (m_tracks.find(m_selectedTrack) == m_tracks.end()) {
+    if (m_tracks.find(m_selectedTrackId) == m_tracks.end()) {
 
-        m_selectedTrack = getClosestValidTrackId(m_selectedTrack);
-	notifySoloChanged();
+        m_selectedTrackId = getClosestValidTrackId(m_selectedTrackId);
+        notifySoloChanged();
         
     }
 
     for (recordtrackcontainer::iterator i = m_recordTracks.begin();
-	 i != m_recordTracks.end(); ++i) {
-	if (m_tracks.find(*i) == m_tracks.end()) {
-	    m_recordTracks.erase(i);
-	}
+         i != m_recordTracks.end(); ++i) {
+        if (m_tracks.find(*i) == m_tracks.end()) {
+            m_recordTracks.erase(i);
+        }
     }
-
 }
 
 TrackId
@@ -1878,7 +1877,7 @@ std::string Composition::toXmlString()
     if (m_solo)
         composition << "\" solo=\"" << m_solo;
 
-    composition << "\" selected=\"" << m_selectedTrack;
+    composition << "\" selected=\"" << m_selectedTrackId;
     composition << "\" playmetronome=\"" << m_playMetronome;
     composition << "\" recordmetronome=\"" << m_recordMetronome;
     composition << "\" nexttriggerid=\"" << m_nextTriggerSegmentId;
