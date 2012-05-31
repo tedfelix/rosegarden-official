@@ -1256,6 +1256,7 @@ RosegardenMainWindow::initView()
     setCentralWidget(m_view); // this also deletes oldView (via deleteLater)
 
     // set the highlighted track
+    comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // play tracking on in the editor by default: turn off if need be
@@ -3757,8 +3758,7 @@ RosegardenMainWindow::slotDeleteTrack()
     TrackId trackId = comp.getSelectedTrack();
     Track *track = comp.getTrackById(trackId);
 
-    RG_DEBUG << "RosegardenMainWindow::slotDeleteTrack() : about to delete track id "
-    << trackId << endl;
+    //RG_DEBUG << "RosegardenMainWindow::slotDeleteTrack() : about to delete track id " << trackId;
 
     if (track == 0)
         return ;
@@ -3768,9 +3768,13 @@ RosegardenMainWindow::slotDeleteTrack()
     if (comp.getNbTracks() == 1)
         return ;
 
+    // Delete the segments on the selected tracks.
     // VLADA
     if (m_view->haveSelection()) {
 
+        // ??? If this will work fine when there is no selection, we
+        //     can get rid of the if and the else and just do these
+        //     four lines.  Try it sometime and see if it works.
         SegmentSelection selection = m_view->getSelection();
         m_view->slotSelectTrackSegments(trackId);
         m_view->getTrackEditor()->slotDeleteSelectedSegments();
@@ -3805,6 +3809,8 @@ RosegardenMainWindow::slotDeleteTrack()
     }
 
     comp.setSelectedTrack(trackId);
+    comp.notifyTrackSelectionChanged(trackId);
+    m_view->slotSelectTrackSegments(trackId);
 
 // unused:
 //    Instrument *inst = m_doc->getStudio().
