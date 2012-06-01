@@ -27,9 +27,9 @@ namespace Rosegarden
 // NB: We cannot use the RealTime constants here lest we fall victim to
 //     C++'s unpredictable static init order.
 // See RealTime::beforeZeroTime
-const RealTime ChannelInterval::m_beforeEarliestTime(-1,0);
+const RealTime ChannelInterval::m_beforeEarliestTime(std::numeric_limits<int>::min(),0);
 // See RealTime::zeroTime
-const RealTime ChannelInterval::m_earliestTime(0,0);
+const RealTime ChannelInterval::m_earliestTime(std::numeric_limits<int>::min()-1,0);
 // See RealTime::beforeMaxTime
 const RealTime ChannelInterval::m_latestTime(std::numeric_limits<int>::max(),0);
 // See RealTime::maxTime
