@@ -217,11 +217,8 @@ RealTime::toPerMinute(void)
     return beatsPerMinute;
 }
 
-const RealTime RealTime::beforeZeroTime(-1,0);
 const RealTime RealTime::zeroTime(0,0);
 const RealTime
 RealTime::beforeMaxTime(std::numeric_limits<int>::max(),0);
-const RealTime
-RealTime::maxTime(std::numeric_limits<int>::max(),ONE_BILLION-1);
 
 }

@@ -110,10 +110,8 @@ struct RealTime
     // Convert to frequency per minute.
     double toPerMinute(void);
 
-    static const RealTime beforeZeroTime;
     static const RealTime zeroTime;
     static const RealTime beforeMaxTime;
-    static const RealTime maxTime;
 };
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);

@@ -60,7 +60,7 @@ class ChannelInterval
  ChannelInterval(RealTime t) :
     m_channel(-1),
         m_start(t),
-        m_end(RealTime::maxTime),
+        m_end(m_latestTime),
         m_instrumentBefore(NULL),
         m_instrumentAfter(NULL),
         m_marginBefore(RealTime::zeroTime),
