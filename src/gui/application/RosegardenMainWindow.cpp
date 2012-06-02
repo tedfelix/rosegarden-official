@@ -3824,7 +3824,7 @@ RosegardenMainWindow::slotDeleteTrack()
 void
 RosegardenMainWindow::slotMoveTrackDown()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotMoveTrackDown" << endl;
+    //RG_DEBUG << "RosegardenMainWindow::slotMoveTrackDown";
 
     Composition &comp = m_doc->getComposition();
     Track *srcTrack = comp.getTrackById(comp.getSelectedTrack());
@@ -3848,14 +3848,21 @@ RosegardenMainWindow::slotMoveTrackDown()
     CommandHistory::getInstance()->addCommand(command);
 
     // make sure we're showing the right selection
-    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+    comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
+    // ??? This doesn't work right when the user uses the keyboard shortcut
+    //     "Shift + Down Arrow".  Since "Shift" is being held down, that
+    //     modifies the behavior of this call.  Keep pressing Shift + Down
+    //     and note that the segments alternate between selected and
+    //     unselected.
+    if (m_view)
+        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
 }
 
 void
 RosegardenMainWindow::slotMoveTrackUp()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotMoveTrackUp" << endl;
+    //RG_DEBUG << "RosegardenMainWindow::slotMoveTrackUp";
 
     Composition &comp = m_doc->getComposition();
     Track *srcTrack = comp.getTrackById(comp.getSelectedTrack());
@@ -3884,7 +3891,14 @@ RosegardenMainWindow::slotMoveTrackUp()
     CommandHistory::getInstance()->addCommand(command);
 
     // make sure we're showing the right selection
-    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+    comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
+    // ??? This doesn't work right when the user uses the keyboard shortcut
+    //     "Shift + Up Arrow".  Since "Shift" is being held down, that
+    //     modifies the behavior of this call.  Keep pressing Shift + Up
+    //     and note that the segments alternate between selected and
+    //     unselected.
+    if (m_view)
+        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 }
 
 void
@@ -6012,10 +6026,13 @@ RosegardenMainWindow::slotToggleSolo(bool value)
 void
 RosegardenMainWindow::slotTrackUp()
 {
+    if (!m_doc)
+        return;
+
     Composition &comp = m_doc->getComposition();
 
     TrackId tid = comp.getSelectedTrack();
-    TrackId pos = comp.getTrackById(tid)->getPosition();
+    int pos = comp.getTrackById(tid)->getPosition();
 
     // If at top already
     if (pos == 0)
@@ -6023,30 +6040,35 @@ RosegardenMainWindow::slotTrackUp()
 
     Track *track = comp.getTrackByPosition(pos - 1);
 
-    // If the track exists
-    if (track) {
-        comp.setSelectedTrack(track->getId());
-        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
-    }
+    if (!track)
+        return;
 
+    comp.setSelectedTrack(track->getId());
+    comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
+    if (m_view)
+        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 }
 
 void
 RosegardenMainWindow::slotTrackDown()
 {
+    if (!m_doc)
+        return;
+
     Composition &comp = m_doc->getComposition();
 
     TrackId tid = comp.getSelectedTrack();
-    TrackId pos = comp.getTrackById(tid)->getPosition();
+    int pos = comp.getTrackById(tid)->getPosition();
 
     Track *track = comp.getTrackByPosition(pos + 1);
 
-    // If the track exists
-    if (track) {
-        comp.setSelectedTrack(track->getId());
-        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
-    }
+    if (!track)
+        return;
 
+    comp.setSelectedTrack(track->getId());
+    comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
+    if (m_view)
+        m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 }
 
 void
