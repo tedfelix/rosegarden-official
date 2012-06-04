@@ -59,8 +59,13 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     m_pitch = new PitchChooser(tr("Starting split pitch"), frame, 60);
     layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
 
-    m_range = new QCheckBox(tr("Range up and down to follow music"), frame);
-    layout->addWidget(m_range,
+    m_strategy = new QComboBox(frame);
+    m_strategy->addItem(tr("Always split at this pitch"));
+    m_strategy->addItem(tr("Range up and down to follow music"));
+    m_strategy->addItem(tr("Split the lowest tone from each chord"));
+    m_strategy->addItem(tr("Split the highest tone from each chord"));
+    m_strategy->addItem(tr("Split all chords at the same relative tone"));
+    layout->addWidget(m_strategy,
                                1, 0,  // fromRow, fromCol
                                1, 3   // rowSpan, colSpan
                               );
@@ -76,7 +81,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     m_clefs->addItem(tr("Use treble and bass clefs"));
     layout->addWidget(m_clefs, 3, 1, 1, 2);
 
-    m_range->setChecked(true);
+    m_strategy->setCurrentIndex(2);
     m_duplicate->setChecked(true);
     m_clefs->setCurrentIndex(2);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -92,10 +97,23 @@ SplitByPitchDialog::getPitch()
     return m_pitch->getPitch();
 }
 
-bool
-SplitByPitchDialog::getShouldRange()
+int
+SplitByPitchDialog::getStrategy()
 {
-    return m_range->isChecked();
+    switch (m_strategy->currentIndex()) {
+    case 0:
+    default:
+        return (int)SegmentSplitByPitchCommand::ConstantPitch;
+    case 1:
+        return (int)SegmentSplitByPitchCommand::Ranging;
+    case 2:
+        return (int)SegmentSplitByPitchCommand::LowestTone;
+    case 3:
+        return (int)SegmentSplitByPitchCommand::HighestTone;
+    case 4:
+        return (int)SegmentSplitByPitchCommand::ChordToneOfInitialPitch;
+    }
+    /* NOTREACHED */ 
 }
 
 bool

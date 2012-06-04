@@ -41,14 +41,14 @@ public:
 
     int getPitch();
 
-    bool getShouldRange();
+    int getStrategy(void);
     bool getShouldDuplicateNonNoteEvents();
     int getClefHandling(); // actually SegmentSplitByPitchCommand::ClefHandling
 
 private:
     PitchChooser *m_pitch;
 
-    QCheckBox *m_range;
+    QComboBox *m_strategy;
     QCheckBox *m_duplicate;
     QComboBox *m_clefs;
 };

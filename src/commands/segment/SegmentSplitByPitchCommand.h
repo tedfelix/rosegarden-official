@@ -44,10 +44,17 @@ public:
         RecalculateClefs,
         UseTrebleAndBassClefs
     };
+    enum SplitStrategy {
+        ConstantPitch,
+        Ranging,
+        LowestTone,
+	HighestTone,
+	ChordToneOfInitialPitch,
+    };
     
     SegmentSplitByPitchCommand(Segment *segment,
                                int splitPitch,
-                               bool ranging,
+                               SplitStrategy splitStrategy,
                                bool duplicateNonNoteEvents,
                                ClefHandling clefHandling);
     virtual ~SegmentSplitByPitchCommand();
@@ -59,14 +66,19 @@ public:
     virtual void unexecute();
 
 private:
-    int getSplitPitchAt(Segment::iterator i, int lastSplitPitch);
+    int getSplitPitchAt(Segment::iterator i);
+    int
+      getNewRangingSplitPitch(Segment::iterator i,
+			      int lastSplitPitch,
+			      std::vector<int>& c0p);
 
     Composition *m_composition;
     Segment *m_segment;
     Segment *m_newSegmentA;
     Segment *m_newSegmentB;
     int m_splitPitch;
-    bool m_ranging;
+    SplitStrategy m_splitStrategy;
+    int m_toneIndex;  // Used for strategy ChordToneOfInitialPitch
     bool m_dupNonNoteEvents;
     ClefHandling m_clefHandling;
     bool m_executed;

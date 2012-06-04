@@ -32,12 +32,12 @@
 #include <QString>
 
 #include <vector>
-
+#include <algorithm>
 namespace Rosegarden
 {
 
 SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
-        int p, bool r, bool d,
+        int p, SplitStrategy splitStrategy, bool d,
         ClefHandling c) :
         NamedCommand(tr("Split by Pitch")),
         m_composition(segment->getComposition()),
@@ -45,7 +45,11 @@ SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
         m_newSegmentA(0),
         m_newSegmentB(0),
         m_splitPitch(p),
-        m_ranging(r),
+        m_splitStrategy(splitStrategy),
+        // Ctor initializes m_toneIndex to an invalid value.  If using
+        // ChordToneOfInitialPitch, we'll set it correctly the first
+        // time thru.
+        m_toneIndex(-1), 
         m_dupNonNoteEvents(d),
         m_clefHandling(c),
         m_executed(false)
@@ -75,8 +79,10 @@ SegmentSplitByPitchCommand::execute()
         m_newSegmentB->setTrack(m_segment->getTrack());
         m_newSegmentB->setStartTime(m_segment->getStartTime());
 
+        // This value persists between iterations of the loop, for
+        // Ranging strategy.
         int splitPitch(m_splitPitch);
-
+            
         for (Segment::iterator i = m_segment->begin();
                 m_segment->isBeforeEndMarker(i); ++i) {
 
@@ -89,11 +95,8 @@ SegmentSplitByPitchCommand::execute()
                 continue;
 
             if ((*i)->isa(Note::EventType)) {
-
-                if (m_ranging) {
-                    splitPitch = getSplitPitchAt(i, splitPitch);
-                }
-
+                splitPitch = getSplitPitchAt(i);
+                
                 if ((*i)->has(BaseProperties::PITCH) &&
                         (*i)->get
                         <Int>(BaseProperties::PITCH) <
@@ -184,14 +187,12 @@ SegmentSplitByPitchCommand::unexecute()
 }
 
 int
-SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
-                                            int lastSplitPitch)
+SegmentSplitByPitchCommand::getNewRangingSplitPitch(Segment::iterator prevNote,
+                                                    int lastSplitPitch,
+                                                    std::vector<int>& c0p)
 {
+    typedef std::set<int> Pitches;
     typedef std::set<int>::iterator PitchItr;
-    std::set<int> pitches;
-
-    // when this algorithm appears to be working ok, we should be
-    // able to make it much quicker
 
     const Quantizer *quantizer
     (m_segment->getComposition()->getNotationQuantizer());
@@ -199,20 +200,17 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
     int myHighest, myLowest;
     int prevHighest = 0, prevLowest = 0;
     bool havePrev = false;
-
-    Chord c0(*m_segment, i, quantizer);
-    std::vector<int> c0p(c0.getPitches());
+    std::set<int> pitches;
     pitches.insert(c0p.begin(), c0p.end());
 
     myLowest = c0p[0];
     myHighest = c0p[c0p.size() - 1];
 
-    Segment::iterator j(c0.getPreviousNote());
-    if (j != m_segment->end()) {
+    if (prevNote != m_segment->end()) {
 
         havePrev = true;
 
-        Chord c1(*m_segment, j, quantizer);
+        Chord c1(*m_segment, prevNote, quantizer);
         std::vector<int> c1p(c1.getPitches());
         pitches.insert(c1p.begin(), c1p.end());
 
@@ -231,14 +229,14 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
     int highest(*pi);
 
     if ((pitches.size() == 2 || highest - lowest <= 18) &&
-            myHighest > lastSplitPitch &&
-            myLowest < lastSplitPitch &&
-            prevHighest > lastSplitPitch &&
-            prevLowest < lastSplitPitch) {
+        myHighest > lastSplitPitch &&
+        myLowest < lastSplitPitch &&
+        prevHighest > lastSplitPitch &&
+        prevLowest < lastSplitPitch) {
 
         if (havePrev) {
             if ((myLowest > prevLowest && myHighest > prevHighest) ||
-                    (myLowest < prevLowest && myHighest < prevHighest)) {
+                (myLowest < prevLowest && myHighest < prevHighest)) {
                 int avgDiff = ((myLowest - prevLowest) +
                                (myHighest - prevHighest)) / 2;
                 if (avgDiff < -5)
@@ -273,4 +271,73 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
     return lastSplitPitch;
 }
 
+int
+SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i)
+{
+    // Can handle ConstantPitch immediately.
+    if (m_splitStrategy == ConstantPitch) { return m_splitPitch; }
+
+    // when this algorithm appears to be working ok, we should be
+    // able to make it much quicker
+
+    const Quantizer *quantizer
+    (m_segment->getComposition()->getNotationQuantizer());
+
+    Chord c0(*m_segment, i, quantizer);
+    // Pitches in the chord.
+    std::vector<int> c0p(c0.getPitches());
+
+    // Can handle ChordToneOfInitialPitch early if tone index hasn't
+    // been set.
+    if ((m_splitStrategy == ChordToneOfInitialPitch) &&
+        (m_toneIndex < 0)) {
+        // Find tone index.
+        typedef std::vector<int>::iterator iterator;
+        int toneIndex = 0;
+        for (iterator i = c0p.begin(); i != c0p.end(); ++i) {
+            if ((*i) < m_splitPitch) { toneIndex++; }
+        }
+        m_toneIndex = toneIndex;
+        // This time split-pitch will just be initial split-pitch, so
+        // return that.
+        return m_splitPitch;
+    }
+    
+    // Order pitches lowest to highest
+    sort(c0p.begin(), c0p.end());
+
+    switch (m_splitStrategy) {
+    case LowestTone:
+        return c0p[0] + 1; 
+
+        /* NOTREACHED */
+    case HighestTone:
+        return c0p.back() - 1;
+
+        /* NOTREACHED */
+    case ChordToneOfInitialPitch:
+        assert(m_toneIndex >= 0);
+
+        // Lower than the lowest tone (a pointless command but
+        // shouldn't be an error)
+        if (m_toneIndex == 0) { return c0p[0] - 1; }
+        // Higher than the highest tone (slightly more reasonable)
+        if (m_toneIndex == (int)c0p.size()) { return c0p.back() + 1; }
+        // Use a pitch between the adjacent tones (the usual case)
+        return (c0p[m_toneIndex - 1] + c0p[m_toneIndex])/2;
+
+        /* NOTREACHED */
+    case Ranging:
+        m_splitPitch =
+            getNewRangingSplitPitch(Segment::iterator(c0.getPreviousNote()),
+                                    m_splitPitch,
+                                    c0p);
+        return m_splitPitch;
+        /* NOTREACHED */
+        // Shouldn't get here.
+    case ConstantPitch:
+    default:
+        return 0;
+    }
 }
+} // namespace Rosegarden

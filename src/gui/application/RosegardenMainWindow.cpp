@@ -2925,7 +2925,8 @@ RosegardenMainWindow::slotSplitSelectionByPitch()
             (new SegmentSplitByPitchCommand
              (*i,
               dialog.getPitch(),
-              dialog.getShouldRange(),
+              (SegmentSplitByPitchCommand::SplitStrategy)
+              dialog.getStrategy(),
               dialog.getShouldDuplicateNonNoteEvents(),
               (SegmentSplitByPitchCommand::ClefHandling)
               dialog.getClefHandling()));
