@@ -94,7 +94,7 @@ public:
     virtual void addRecordingItem(const CompositionItem&);
     virtual void removeRecordingItem(const CompositionItem &);
     virtual void clearRecordingItems();
-    virtual bool haveRecordingItems() { return m_recordingSegments.size() > 0; }
+    virtual bool haveRecordingItems() { return !m_recordingSegments.empty(); }
 
     virtual void startChange(const CompositionItem&, ChangeType change);
     virtual void startChangeSelection(ChangeType change);

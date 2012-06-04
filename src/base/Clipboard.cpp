@@ -64,7 +64,7 @@ Clipboard::clear()
 bool
 Clipboard::isEmpty() const
 {
-    return (m_segments.size() == 0 &&
+    return (m_segments.empty() &&
         !m_haveTimeSigSelection &&
         !m_haveTempoSelection &&
         m_nominalStart == m_nominalEnd);

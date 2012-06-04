@@ -70,7 +70,7 @@ AudioSegmentAutoSplitCommand::~AudioSegmentAutoSplitCommand()
 void
 AudioSegmentAutoSplitCommand::execute()
 {
-    if (m_newSegments.size() == 0) {
+    if (m_newSegments.empty()) {
 
         std::vector<AutoSplitPoint> splitPoints;
 
@@ -162,7 +162,7 @@ AudioSegmentAutoSplitCommand::execute()
         m_composition->addSegment(m_newSegments[i]);
     }
 
-    if (m_newSegments.size() > 0) {
+    if (!m_newSegments.empty()) {
         m_composition->detachSegment(m_segment);
     }
 
@@ -175,7 +175,7 @@ AudioSegmentAutoSplitCommand::unexecute()
     for (size_t i = 0; i < m_newSegments.size(); ++i) {
         m_composition->detachSegment(m_newSegments[i]);
     }
-    if (m_newSegments.size() > 0) { // otherwise it was never detached
+    if (!m_newSegments.empty()) { // otherwise it was never detached
         m_composition->addSegment(m_segment);
     }
     m_detached = false;

@@ -177,7 +177,7 @@ NoteFontFactory::getDefaultFontName()
         fontNames = getFontNames(true);
         if (fontNames.find("Feta") != fontNames.end()) {
             defaultFont = "Feta";
-        } else if (fontNames.size() > 0) {
+        } else if (!fontNames.empty()) {
             defaultFont = *fontNames.begin();
         } else {
             QString message = tr("Can't obtain a default font -- no fonts found");

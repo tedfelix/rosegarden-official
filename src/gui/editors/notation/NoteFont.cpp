@@ -52,7 +52,7 @@ NoteFont::NoteFont(QString fontName, int size) :
 
     std::set<int> sizes = m_fontMap.getSizes();
 
-    if (sizes.size() > 0) {
+    if (!sizes.empty()) {
         m_size = *sizes.begin();
     } else {
         throw BadNoteFont(QObject::tr("No sizes listed for font \"%1\"").arg(fontName));

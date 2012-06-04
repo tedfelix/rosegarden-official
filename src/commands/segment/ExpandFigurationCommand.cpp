@@ -610,13 +610,13 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
          i != selection.end();
          ++i) {
         figuration = getFiguration(*i);
-        if (figuration.m_events.size() > 0) {
+        if (!figuration.m_events.empty()) {
             figurationSegment = *i;
             break;
         }
     }
     // If we didn't find a real figuration, there's nothing to do.
-    if (figuration.m_events.size() == 0) { return; }
+    if (figuration.m_events.empty()) { return; }
 
     
     // Expand figuration in each segment in selection except the

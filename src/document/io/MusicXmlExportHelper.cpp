@@ -1310,28 +1310,28 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
 
     if (notations) {
         tmpNote << "        <notations>\n";
-        if (articulations.size() > 0) {
+        if (!articulations.empty()) {
             tmpNote << "          <articulations>\n";
             for (std::vector<std::string>::iterator s = articulations.begin();
                  s != articulations.end(); ++s)
                 tmpNote << "            " << *s << "\n";
             tmpNote << "          </articulations>\n";
         }
-        if (ornaments.size() > 0) {
+        if (!ornaments.empty()) {
             tmpNote << "          <ornaments>\n";
             for (std::vector<std::string>::iterator s = ornaments.begin();
                  s != ornaments.end(); ++s)
                 tmpNote << "            "  << *s << "\n";
             tmpNote << "          </ornaments>\n";
         }
-        if (technical.size() > 0) {
+        if (!technical.empty()) {
             tmpNote << "          <technical>\n";
             for (std::vector<std::string>::iterator s = technical.begin();
                  s != technical.end(); ++s)
                 tmpNote << "            "  << *s << "\n";
             tmpNote << "          </technical>\n";
         }
-        if (dynamics.size() > 0) {
+        if (!dynamics.empty()) {
             tmpNote << "          <dynamics>\n";
             for (std::vector<std::string>::iterator s = dynamics.begin();
                  s != dynamics.end(); ++s)

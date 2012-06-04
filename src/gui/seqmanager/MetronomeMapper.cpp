@@ -123,20 +123,12 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
 
     sortTicks();
 
-    if (m_ticks.size() == 0) {
+    if (m_ticks.empty()) {
         SEQMAN_DEBUG << "MetronomeMapper : WARNING no ticks generated\n";
     }
 
     setMetronome(true);
 
-    // Done by init()
-
-    //     m_mappedSize = computeMappedSize();
-    //     if (m_mappedSize > 0) {
-    //         setFileSize(m_mappedSize);
-    //         doMap();
-    //         dump();
-    //     }
     settings.endGroup();
 }
 

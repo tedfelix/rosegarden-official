@@ -45,7 +45,7 @@ void
 SegmentLabelCommand::execute()
 {
     bool addLabels = false;
-    if (m_labels.size() == 0)
+    if (m_labels.empty())
         addLabels = true;
 
     for (size_t i = 0; i < m_segments.size(); ++i) {

@@ -45,7 +45,7 @@ PropertyName getMarkPropertyName(int markNo)
 {
     static std::vector<PropertyName> firstFive;
 
-    if (firstFive.size() == 0) {
+    if (firstFive.empty()) {
 	firstFive.push_back(PropertyName("mark1"));
 	firstFive.push_back(PropertyName("mark2"));
 	firstFive.push_back(PropertyName("mark3"));

@@ -62,7 +62,7 @@ SegmentAutoSplitCommand::~SegmentAutoSplitCommand()
 void
 SegmentAutoSplitCommand::execute()
 {
-    if (m_newSegments.size() == 0) {
+    if (m_newSegments.empty()) {
 
         std::vector<AutoSplitPoint> splitPoints;
 
@@ -96,7 +96,7 @@ SegmentAutoSplitCommand::execute()
                 // If there's a new time sig in this bar and we haven't
                 // already made a split in this bar, make one
 
-                if (splitPoints.size() == 0 ||
+                if (splitPoints.empty() ||
                         m_composition->getBarNumber
                         (splitPoints[splitPoints.size() - 1].time) < barNo) {
 

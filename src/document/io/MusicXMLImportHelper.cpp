@@ -62,7 +62,7 @@ std::cerr << "setStaff(" << staff << ")\n";
         // No such track, create a new one.
         TrackId id = m_composition->getNewTrackId();
         int pos = id;
-        if (m_tracks.size() > 0) {
+        if (!m_tracks.empty()) {
             pos = m_tracks["1"]->getPosition() + m_tracks.size();
             Composition::trackcontainer tracks = m_composition->getTracks();
             for (Composition::trackiterator t = tracks.begin(); t != tracks.end(); t++) {
@@ -295,7 +295,7 @@ MusicXMLImportHelper::setInstrument(InstrumentId instrument)
 void
 MusicXMLImportHelper::setBracketType(int bracket)
 {
-    if (m_tracks.size() == 0) return;
+    if (m_tracks.empty()) return;
 
     if ((bracket == Brackets::CurlyOff) || (bracket == Brackets::SquareOff)) {
         TrackMap::iterator it = m_tracks.end();

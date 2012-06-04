@@ -68,7 +68,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
     // TODO: It would be polite to check the mtime on the tunings file
     //       and to re-read it if it's been changed. For now, you need
     //       to restart Rosegarden.
-    if (m_tunings.size())
+    if (!m_tunings.empty())
         return &m_tunings;
     
     QString tuningsPath =

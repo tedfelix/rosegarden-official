@@ -61,7 +61,7 @@ PasteSegmentsCommand::~PasteSegmentsCommand()
 void
 PasteSegmentsCommand::execute()
 {
-    if (m_addedSegments.size() > 0) {
+    if (!m_addedSegments.empty()) {
         // been here before
         for (size_t i = 0; i < m_addedSegments.size(); ++i) {
             m_composition->addSegment(m_addedSegments[i]);

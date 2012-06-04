@@ -104,7 +104,7 @@ public:
     timeT getCurTime()  {return m_curTime;}
     void addPitch(const QString &instrument, int pitch);
     int getPitch(const QString &instrument);
-    bool isPercussion() {return m_unpitched.size() > 0;};
+    bool isPercussion() {return !m_unpitched.empty();};
     void setInstrument(InstrumentId instrument);
     void setBracketType(int bracket);
 

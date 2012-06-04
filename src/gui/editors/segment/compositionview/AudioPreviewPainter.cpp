@@ -66,7 +66,7 @@ void AudioPreviewPainter::paintPreviewImage()
 {
     const std::vector<float>& values = m_apData->getValues();
 
-    if (values.size() == 0)
+    if (values.empty())
         return;
         
     float gain[2] = { 1.0, 1.0 };

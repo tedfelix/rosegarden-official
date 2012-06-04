@@ -389,7 +389,7 @@ AudioBussMixer::generateBuffers()
         }
     }
 
-    if (m_processBuffers.size() == 0) {
+    if (m_processBuffers.empty()) {
         m_processBuffers.push_back(new sample_t[m_blockSize]);
         m_processBuffers.push_back(new sample_t[m_blockSize]);
     }

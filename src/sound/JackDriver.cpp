@@ -972,7 +972,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     // Reset monitor outs (if present) here prior to mixing
 
-    if (m_outputMonitors.size() > 0) {
+    if (!m_outputMonitors.empty()) {
         sample_t *buffer =
             static_cast<sample_t *>(jack_port_get_buffer(m_outputMonitors[0], nframes));
         if (buffer)
@@ -1391,7 +1391,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
                 m_tempOutBuffer[i] = sample;
             }
 
-            if (m_outputMonitors.size() > 0) {
+            if (!m_outputMonitors.empty()) {
                 sample_t *buf =
                     static_cast<sample_t *>
                     (jack_port_get_buffer(m_outputMonitors[0], nframes));
@@ -1442,7 +1442,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
         if (inputBufferLeft) {
 
             sample_t *buf = 0;
-            if (m_outputMonitors.size() > 0) {
+            if (!m_outputMonitors.empty()) {
                 buf = static_cast<sample_t *>
                     (jack_port_get_buffer(m_outputMonitors[0], nframes));
             }

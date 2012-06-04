@@ -2228,7 +2228,7 @@ LilyPondExporter::writeBar(Segment *s,
             for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
                 str << composeLilyMark(*j, stemUp);
             }
-            if (marks.size() > 0)
+            if (!marks.empty())
                 str << " ";
 
             handleEndingPostEvents(postEventsInProgress, i, str);
@@ -2368,7 +2368,7 @@ LilyPondExporter::writeBar(Segment *s,
                             // more often than not
                             str << composeLilyMark(*j, true);
                         }
-                        if (marks.size() > 0)
+                        if (!marks.empty())
                             str << " ";
                     }
                 }

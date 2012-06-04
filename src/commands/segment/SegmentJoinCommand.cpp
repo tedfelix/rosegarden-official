@@ -18,6 +18,7 @@
 
 #include "SegmentJoinCommand.h"
 
+#include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -42,7 +43,10 @@ SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &segments) :
     {
         m_oldSegments.push_back(*i);
     }
-    assert(m_oldSegments.size() > 0);
+
+    Q_ASSERT_X(!m_oldSegments.empty(),
+            "SegmentJoinCommand::SegmentJoinCommand()",
+            "No segments to join");
 }
 
 SegmentJoinCommand::~SegmentJoinCommand()
@@ -61,9 +65,7 @@ SegmentJoinCommand::execute()
 {
     Composition *composition = m_oldSegments[0]->getComposition();
     if (!composition) {
-        std::cerr
-        << "SegmentJoinCommand::execute: ERROR: old segments are not in composition!"
-        << std::endl;
+        RG_DEBUG << "SegmentJoinCommand::execute: ERROR: old segments are not in composition!";
         return ;
     }
 
@@ -118,7 +120,7 @@ SegmentJoinCommand::execute()
                 haveOverlapHere = true;
                 os = std::max(start, m_newSegment->getStartTime());
                 oe = std::min(end, m_newSegment->getEndMarkerTime());
-                std::cerr << "overlap here, os = " << os << ", oe = " << oe << std::endl;
+                RG_DEBUG << "overlap here, os = " << os << ", oe = " << oe;
             }
 
             if (haveOverlapHere) {

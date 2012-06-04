@@ -998,7 +998,7 @@ done:
     if (needLock)
         pthread_mutex_unlock(&m_processLock);
 
-    if (m_audioPortsOut.size() == 0) {
+    if (m_audioPortsOut.empty()) {
         // copy inputs to outputs
         for (size_t ch = 0; ch < m_idealChannelCount; ++ch) {
             size_t sch = ch % m_audioPortsIn.size();

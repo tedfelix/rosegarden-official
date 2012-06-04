@@ -174,7 +174,7 @@ bool RG21Loader::parseChordItem()
             <Bool>(TIED_BACKWARD, true);
         }
 
-        if (marks.size() > 0) {
+        if (!marks.empty()) {
             noteEvent->set
             <Int>(MARK_COUNT, int(marks.size()));
             for (unsigned int j = 0; j < (unsigned int)marks.size(); ++j) {

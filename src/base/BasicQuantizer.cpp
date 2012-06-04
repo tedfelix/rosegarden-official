@@ -169,7 +169,7 @@ BasicQuantizer::getStandardQuantizations()
 void
 BasicQuantizer::checkStandardQuantizations()
 {
-    if (m_standardQuantizations.size() > 0) return;
+    if (!m_standardQuantizations.empty()) return;
 
     for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 

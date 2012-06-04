@@ -123,7 +123,7 @@ AudioSegmentDistributeCommand::execute()
 
     }
 
-    if (!addNew && m_newSegments.size()) {
+    if (!addNew && !m_newSegments.empty()) {
         // Reattach new segments
         //
         for (size_t i = 0; i < m_newSegments.size(); ++i)

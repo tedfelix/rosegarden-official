@@ -49,7 +49,7 @@ SegmentRepeatToCopyCommand::~SegmentRepeatToCopyCommand()
 void
 SegmentRepeatToCopyCommand::execute()
 {
-    if (m_newSegments.size() == 0) {
+    if (m_newSegments.empty()) {
         timeT newStartTime = m_segment->getEndMarkerTime();
         timeT newDuration =
             m_segment->getEndMarkerTime() - m_segment->getStartTime();

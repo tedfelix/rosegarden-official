@@ -92,7 +92,7 @@ NotationHLayout::~NotationHLayout()
 std::vector<int>
 NotationHLayout::getAvailableSpacings()
 {
-    if (m_availableSpacings.size() == 0) {
+    if (m_availableSpacings.empty()) {
         m_availableSpacings.push_back(30);
         m_availableSpacings.push_back(60);
         m_availableSpacings.push_back(85);
@@ -107,7 +107,7 @@ NotationHLayout::getAvailableSpacings()
 std::vector<int>
 NotationHLayout::getAvailableProportions()
 {
-    if (m_availableProportions.size() == 0) {
+    if (m_availableProportions.empty()) {
         m_availableProportions.push_back(0);
         m_availableProportions.push_back(20);
         m_availableProportions.push_back(40);
