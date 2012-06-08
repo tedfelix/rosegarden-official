@@ -101,9 +101,6 @@ public:
     /// Handles a change to the Program in the Instrument Parameters box.
     void changeInstrumentName(InstrumentId id, QString programChangeName);
 
-    /// Select the given track.  This displays it with a highlight.
-    void selectTrack(int position);
-
     /// Fill the instrument popup menu with the available instruments.
     /**
      * @see RosegardenMainWindow::slotPopulateTrackInstrumentPopup()
@@ -359,6 +356,9 @@ private:
     // Hide copy ctor and op=
     TrackButtons(const TrackButtons &);
     TrackButtons &operator=(const TrackButtons &);
+
+    /// Select the given track.  This displays it with a highlight.
+    void selectTrack(int position);
 };
 
 

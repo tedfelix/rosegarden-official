@@ -1169,9 +1169,10 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
     }
     
 
-    // Show the selection on the track buttons.  Find the position.
-    //
-    m_trackEditor->getTrackButtons()->selectTrack(track->getPosition());
+    // This is now handled via Composition::notifyTrackSelectionChanged()
+    //m_trackEditor->getTrackButtons()->selectTrack(track->getPosition());
+
+    // Make sure the track is visible.
     m_trackEditor->slotScrollToTrack(track->getPosition());
 
     // Store the selected Track in the Composition

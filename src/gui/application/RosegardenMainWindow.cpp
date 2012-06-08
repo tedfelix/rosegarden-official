@@ -8232,10 +8232,16 @@ RosegardenMainWindow::slotDonate()
 void
 RosegardenMainWindow::slotBankEditorClosed()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotBankEditorClosed()\n";
+    RG_DEBUG << "RosegardenMainWindow::slotBankEditorClosed()";
 
     if (m_doc->isModified()) {
         if (m_view) {
+            // ??? Can't just remove this when the time comes.
+            // ??? I suspect this call is being made because the Track and
+            //     Instrument Parameters boxes need to be updated.  It
+            //     would be better to call
+            //     m_doc->getComposition().notifyTrackChanged() and have
+            //     the parameter boxes respond by updating.
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
         }
     }
@@ -8246,10 +8252,16 @@ RosegardenMainWindow::slotBankEditorClosed()
 void
 RosegardenMainWindow::slotDeviceManagerClosed()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()\n";
+    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()";
 
     if (m_doc->isModified()) {
         if (m_view) {
+            // ??? Can't just remove this when the time comes.
+            // ??? I suspect this call is being made because the Track and
+            //     Instrument Parameters boxes need to be updated.  It
+            //     would be better to call
+            //     m_doc->getComposition().notifyTrackChanged() and have
+            //     the parameter boxes respond by updating.
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
         }
     }
@@ -8284,11 +8296,18 @@ RosegardenMainWindow::slotMidiMixerClosed()
 void
 RosegardenMainWindow::slotAudioManagerClosed()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotAudioManagerClosed()\n";
+    // File > Manage Audio Files...
+    RG_DEBUG << "RosegardenMainWindow::slotAudioManagerClosed()";
 
     if (m_doc->isModified()) {
-        if (m_view)
+        if (m_view) {
+            // ??? Can't just remove this when the time comes.
+            // ??? This is needed to make sure newly added audio segments
+            //     are selected.  It may also update the parameter boxes.
+            //     We'll need to devise an appropriate way to handle this
+            //     before removing this call.
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+        }
     }
 
     m_audioManagerDialog = 0;
@@ -8528,6 +8547,12 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         m_doc->initialiseStudio(); // The other document will have reset it
         
         if (m_view) {
+            // ??? Can't just remove this when the time comes.
+            // ??? I suspect this call is being made because the Track and
+            //     Instrument Parameters boxes need to be updated.  It
+            //     would be better to call
+            //     m_doc->getComposition().notifyTrackChanged() and have
+            //     the parameter boxes respond by updating.
             m_view->slotSelectTrackSegments
                 (m_doc->getComposition().getSelectedTrack());
         }
