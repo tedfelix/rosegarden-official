@@ -64,7 +64,7 @@ class InternalSegmentMapper : public SegmentMapper
     };
     // This wants to be a priority_queue but we need to sometimes
     // filter noteoffs so it can't be.
-    typedef std::set<Noteoff, NoteoffCmp>
+    typedef std::multiset<Noteoff, NoteoffCmp>
         NoteoffContainer;
 
     InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
