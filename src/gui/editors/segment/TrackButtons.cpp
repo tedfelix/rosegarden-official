@@ -1113,6 +1113,9 @@ TrackButtons::trackSelectionChanged(const Composition *, TrackId trackId)
 void
 TrackButtons::slotTrackSelected(int trackId)
 {
+    // Select the track.
+    m_doc->getComposition().setSelectedTrack(trackId);
+
     // New notification mechanism
     // ??? Wouldn't a track pointer be more convenient for all involved?
     m_doc->getComposition().notifyTrackSelectionChanged(trackId);
