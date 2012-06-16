@@ -70,7 +70,17 @@ public slots:
     void slotInstrumentChanged(int index);
     void slotRecordingDeviceChanged(int index);
     void slotRecordingChannelChanged(int index);
-    void slotUpdateControls(int);
+    /// Update all controls in the Track Parameters box.
+    /** The "dummy" int is for compatibility with the
+     *  TrackButtons::instrumentSelected() signal.  See
+     *  RosegardenMainViewWidget's ctor which connects the two.  This
+     *  would probably be better handled with a separate
+     *  slotInstrumentSelected() that takes the instrument ID, ignores it,
+     *  and calls a new public updateControls() (which would no longer need
+     *  the dummy).  Then callers of updateControls() would no longer need
+     *  the cryptic "-1".
+     */
+    void slotUpdateControls(int dummy);
     void slotInstrumentLabelChanged(InstrumentId id, QString label);
 
     void slotClefChanged(int clef);
@@ -151,6 +161,7 @@ private:
     // CompositionObserver interface
     virtual void trackChanged(const Composition *comp, Track *track);
     virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
+    virtual void trackSelectionChanged(const Composition *, TrackId);
 
     void selectedTrackNameChanged();
 
