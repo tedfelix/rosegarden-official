@@ -1340,16 +1340,16 @@ RosegardenSequencer::sleep(const RealTime &rt)
     m_driver->sleep(rt);
 }
 
-
-// Send the last recorded MIDI block
-//
 void
 RosegardenSequencer::processRecordedMidi()
 {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi";
 #endif
+
     MappedEventList mC;
+
+    // Get the MIDI events from the ALSA driver
     m_driver->getMappedEventList(mC);
 
     if (mC.empty()) return;
@@ -1357,13 +1357,18 @@ RosegardenSequencer::processRecordedMidi()
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
 #endif
+
+    // Remove events that match the record filter
     applyFiltering(&mC, ControlBlock::getInstance()->getRecordFilter(), false);
 
+    // Store the events
     SequencerDataBlock::getInstance()->addRecordedEvents(&mC);
 
     if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
+        // Remove events that match the thru filter
         applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
 
+        // Route the MIDI thru events to MIDI out
         routeEvents(&mC, false);
     }
 }
@@ -1450,22 +1455,27 @@ RosegardenSequencer::processAsynchronousEvents()
     m_driver->processPending();
 }
 
-
 void
 RosegardenSequencer::applyFiltering(MappedEventList *mC,
                                        MidiFilter filter,
                                        bool filterControlDevice)
 {
+    // For each event in the list
     for (MappedEventList::iterator i = mC->begin();
-            i != mC->end(); ) { // increment in loop
+         i != mC->end();
+         /* increment in loop */) {
+
+        // Hold on to the current event for processing.
         MappedEventList::iterator j = i;
-        ++j;
-        if (((*i)->getType() & filter) ||
-                (filterControlDevice && ((*i)->getRecordedDevice() ==
+        // Move to the next in case the current is erased.
+        ++i;
+
+        // If this event matches the filter, erase it from the list
+        if (((*j)->getType() & filter) ||
+                (filterControlDevice && ((*j)->getRecordedDevice() ==
                                          Device::CONTROL_DEVICE))) {
-            mC->erase(i);
+            mC->erase(j);
         }
-        i = j;
     }
 }
 

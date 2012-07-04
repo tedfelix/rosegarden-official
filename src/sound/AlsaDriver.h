@@ -15,8 +15,8 @@
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
 //
 //
-#ifndef _ALSADRIVER_H_
-#define _ALSADRIVER_H_
+#ifndef RG_ALSADRIVER_H
+#define RG_ALSADRIVER_H
 
 #include <vector>
 #include <set>
@@ -61,6 +61,7 @@ public:
 
     virtual RealTime getSequencerTime();
 
+    /// Get MIDI data from ALSA while recording.
     virtual bool getMappedEventList(MappedEventList &composition);
     
     virtual bool record(RecordStatus recordStatus,

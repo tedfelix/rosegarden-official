@@ -272,10 +272,12 @@ public:
     // Update internal clock and send GUI position pointer movement
     void updateClocks();
 
-    // These two methods process any pending MIDI or audio
-    // and send them up to the gui for storage and display
-    //
+    /**
+     * Process any pending MIDI events and send them to SequencerDataBlock
+     * for storage and display, and route the MIDI events for MIDI thru.
+     */
     void processRecordedMidi();
+    /// Process any audio data that is waiting and send it to be stored.
     void processRecordedAudio();
 
     // Called during stopped or playing operation to process

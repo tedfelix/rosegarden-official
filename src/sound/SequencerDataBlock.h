@@ -41,8 +41,11 @@ class MappedEventList;
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
 
 /**
- * This class contains data that is being passed from sequencer
- * threads to GUI threads.  It used to be mapped into a shared memory
+ * This class contains recorded data that is being passed from sequencer
+ * threads (RosegardenSequencer::processRecordedMidi()) to GUI threads
+ * (RosegardenMainWindow::processRecordedEvents()).
+ *
+ * It used to be mapped into a shared memory
  * backed file, which had to be of fixed size and layout.  The design
  * reflects that history, though nowadays it is a simple singleton
  * class.

@@ -12,6 +12,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef RG_MAPPEDEVENT_H
+#define RG_MAPPEDEVENT_H
+
 #include <QDataStream>
 
 #include "base/RealTime.h"
@@ -19,37 +22,14 @@
 #include "base/Event.h"
 
 
-#ifndef _MAPPEDEVENT_H_
-#define _MAPPEDEVENT_H_
-
-// Used as a transformation stage between Composition, Events and output
-// at the Sequencer this class and MidiComposition eliminate the notion
-// of the Segment and Track for ease of Event access.  The MappedEvents
-// are ready for playing or routing through an Instrument or Effects
-// boxes.
-//
-// MappedEvents can also represent instructions for playback of audio
-// samples - if the m_type is Audio then the sequencer will attempt to
-// map the Pitch (m_data1) to the audio id.  Note that this limits us
-// to 256 audio files in the Composition unless we use a different
-// parameter for storing these IDs.
-// 
-// The MappedEvent/Instrument relationship is interesting - we don't
-// want to duplicate the entire Instrument at the Sequencer level as
-// it'd be messy and unnecessary.  Instead we use a MappedInstrument
-// which is just a very cut down Sequencer-side version of an Instrument.
-//
-// Some of these Events are unidirectional, some are bidirectional -
-// that is they only have a meaning in one direction (they are still
-// legal at either end).  They are broadcast in both directions using
-// the "getSequencerSlice" and "processAsync/Recorded" interfaces on
-// which the control messages can piggyback and eventually stripped out.
-//
-
 namespace Rosegarden
 {
 class MappedEvent;
 
+/// Used for storing data blocks for SysEx messages.
+/**
+ *  @see MappedEvent::m_dataBlockId
+ */
 class DataBlockRepository
 {
 public:
@@ -86,7 +66,31 @@ protected:
     static DataBlockRepository* m_instance;
 };
 
-
+/// A MIDI event
+/**
+ *  Used as a transformation stage between Composition, Events and output
+ *  at the Sequencer this class and MidiComposition eliminate the notion
+ *  of the Segment and Track for ease of Event access.  The MappedEvents
+ *  are ready for playing or routing through an Instrument or Effects
+ *  boxes.
+ *
+ *  MappedEvents can also represent instructions for playback of audio
+ *  samples - if the m_type is Audio then the sequencer will attempt to
+ *  map the Pitch (m_data1) to the audio id.  Note that this limits us
+ *  to 256 audio files in the Composition unless we use a different
+ *  parameter for storing these IDs.
+ *
+ *  The MappedEvent/Instrument relationship is interesting - we don't
+ *  want to duplicate the entire Instrument at the Sequencer level as
+ *  it'd be messy and unnecessary.  Instead we use a MappedInstrument
+ *  which is just a very cut down Sequencer-side version of an Instrument.
+ *
+ *  Some of these Events are unidirectional, some are bidirectional -
+ *  that is they only have a meaning in one direction (they are still
+ *  legal at either end).  They are broadcast in both directions using
+ *  the "getSequencerSlice" and "processAsync/Recorded" interfaces on
+ *  which the control messages can piggyback and eventually stripped out.
+ */
 class MappedEvent
 {
 public:
