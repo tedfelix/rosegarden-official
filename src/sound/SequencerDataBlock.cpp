@@ -19,7 +19,7 @@
 namespace Rosegarden
 {
 
-//!!! todo: review mutex requirements
+// !!! todo: review mutex requirements
 
 SequencerDataBlock *
 SequencerDataBlock::getInstance()

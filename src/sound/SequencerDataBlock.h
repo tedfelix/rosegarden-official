@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEQUENCER_DATA_BLOCK_H_
-#define _SEQUENCER_DATA_BLOCK_H_
+#ifndef RG_SEQUENCER_DATA_BLOCK_H
+#define RG_SEQUENCER_DATA_BLOCK_H
 
 #include "ControlBlock.h"
 #include "base/RealTime.h"
@@ -26,6 +26,9 @@ namespace Rosegarden
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  * (and this struct mustn't have a constructor)
+ *
+ * Since we no longer are using shared memory, it might be safe to lift
+ * the POD/no pointer restrictions.
  */
 struct LevelInfo
 {
@@ -40,15 +43,32 @@ class MappedEventList;
 #define SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS   64 // can't be a symbol
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
 
+/// Holds MIDI data going from RosegardenSequencer to RosegardenMainWindow
 /**
  * This class contains recorded data that is being passed from sequencer
  * threads (RosegardenSequencer::processRecordedMidi()) to GUI threads
  * (RosegardenMainWindow::processRecordedEvents()).
  *
- * It used to be mapped into a shared memory
+ * This used to be mapped into a shared memory
  * backed file, which had to be of fixed size and layout.  The design
  * reflects that history, though nowadays it is a simple singleton
  * class.
+ *
+ * Examples of some of the shared memory related design decisions:
+ * Position is represented as two ints (m_positionSec and m_positionNsec)
+ * rather than a RealTime, as the RealTime default ctor
+ * initialises the space & so can't be used from the GUI's
+ * placement-new ctor (which has no write access and doesn't want
+ * it anyway).  Likewise we use char[] instead of MappedEvents
+ * for m_visualEvent and m_recordBuffer.
+ *
+ * Since shared memory is no longer used,
+ * it should be possible to change this from being a fixed-layout
+ * C-style struct to something more "C++" (e.g. std::vector<MappedEvent>
+ * instead of char[sizeof(MappedEvent*CAPACITY_MAX)], RealTime instead of
+ * ints, etc...).  We would need to investigate each of the users to make
+ * sure things like placement new were replaced with conventional new.
+ * From a maintenance standpoint, this should improve the code significantly.
  */
 class SequencerDataBlock
 {
@@ -101,11 +121,6 @@ protected:
 
     int instrumentToIndex(InstrumentId id) const;
     int instrumentToIndexCreating(InstrumentId id);
-
-    // Two ints rather than a RealTime, as the RealTime default ctor
-    // initialises the space & so can't be used from the GUI's
-    // placement-new ctor (which has no write access and doesn't want
-    // it anyway).  Likewise we use char[] instead of MappedEvents
 
     int m_positionSec;
     int m_positionNsec;
