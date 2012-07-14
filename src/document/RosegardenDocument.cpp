@@ -1858,6 +1858,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
     bool haveMIDIRecordTrack = false;
 
+    // For each recording track
     for (Composition::recordtrackcontainer::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
@@ -1893,6 +1894,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         int lenx = int(m_viewList.size());
         RosegardenMainViewWidget *v;
         int k = 0;
+
+        // For each incoming event
         for (i = mC.begin(); i != mC.end(); ++i) {
 
             if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {

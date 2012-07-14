@@ -108,7 +108,15 @@ SequencerThread::run()
                 // Still process these so we can send up
                 // audio levels as MappedEvents
                 //
-                seq.processAsynchronousEvents();
+                // Bug #3542166.  This line can occasionally steal MIDI
+                // events that are needed by processRecordedMidi().
+                // Need to track down what the above "audio levels" comment
+                // means and whether it is a serious issue.  If so, we need
+                // to address it in a different way.  This line probably
+                // never did anything as by the time it was run,
+                // processRecordedMidi() would have cleaned out all the
+                // incoming events.
+                //seq.processAsynchronousEvents();
             }
             break;
 

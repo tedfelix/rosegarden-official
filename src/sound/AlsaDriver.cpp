@@ -2482,6 +2482,8 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 break;
             }
 
+            // FALLTHROUGH:  NOTEON with velocity 0 is treated as a NOTEOFF
+
         case SND_SEQ_EVENT_NOTEOFF: {
             if (fromController)
                 continue;
