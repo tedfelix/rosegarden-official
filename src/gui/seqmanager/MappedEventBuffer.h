@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MAPPEDSEGMENT_H_
-#define _MAPPEDSEGMENT_H_
+#ifndef RG_MAPPEDEVENTBUFFER_H
+#define RG_MAPPEDEVENTBUFFER_H
 
 #include "base/RealTime.h"
 #include <QReadWriteLock>
@@ -29,7 +29,13 @@ class MappedEvent;
 class MappedInserterBase;
 class RosegardenDocument;
 
+/// Abstract Base Class container for MappedEvent objects.
 /**
+ * MappedEventBuffer is an Abstract Base Class.  Consequently,
+ * MappedEventBuffer objects are never created.  See the three
+ * derived classes: MetronomeMapper, SegmentMapper, and
+ * SpecialSegmentMapper.
+ *
  * MappedEventBuffer is the container class for sound-making events
  * that have been mapped linearly into memory for ease of reading by
  * the sequencer code (after things like tempo mappings, repeats etc
@@ -47,10 +53,9 @@ class RosegardenDocument;
  * the user jumps around in time, it shouldn't change.  For the
  * current state of performance, see MappedEventBuffer::iterator.
  *
- * A MappedEventBuffer is jointly owned by one or more metaiterators
- * and by ChannelManager and deletes itself when the last owner is
- * removed.
- *
+ * A MappedEventBuffer-derived object is jointly owned by one or more
+ * metaiterators (MappedBufMetaIterator?) and by ChannelManager and deletes
+ * itself when the last owner is removed.  See addOwner() and removeOwner().
  */
 class MappedEventBuffer
 {
@@ -60,21 +65,61 @@ public:
     // virtual.
     virtual ~MappedEventBuffer();
 
+    /// Is this object a MetronomeMapper?
+    /**
+     * Used by MappedBufMetaIterator::fillNoncompeting() for special
+     * handling of the metronome.
+     *
+     * This might be implemented as a virtual function that just returns
+     * false, but is overridden in MetronomeMapper to return true.
+     * setMetronome() and m_isMetronome could then be removed.
+     * Switching on type like this is usually considered a Bad Thing.
+     * Examination of MappedBufMetaIterator might lead to a more useful
+     * function that could be overridden by MetronomeMapper.
+     *
+     * @see setMetronome()
+     */
     bool isMetronome() const { return m_isMetronome; }
+
+    /// Enables special handling related to MetronomeMapper
+    /**
+     * Used by MetronomeMapper to communicate with
+     * MappedBufMetaIterator::fillNoncompeting().
+     *
+     * @see isMetronome()
+     */
     void setMetronome(bool isMetronome) { m_isMetronome = isMetronome; }
 
-    MappedEvent *getBuffer() { return m_buffer; } // un-locked, use only from write/resize thread
-
-    int getBufferSize() const; // in mapped events
-    int getBufferFill() const; // in mapped events
-
-    void resizeBuffer(int newSize); // ignored if smaller than old size
-    void setBufferFill(int newFill); // must be no bigger than buffer size
-
+    /// Access to the internal buffer of events.  NOT LOCKED
     /**
-     * refresh the object after the segment has been modified
-     * returns true if size changed (and thus the sequencer
-     * needs to be told about it)
+     * un-locked, use only from write/resize thread
+     */
+    MappedEvent *getBuffer() { return m_buffer; }
+
+    /// Capacity of the buffer in MappedEvent's.  (STL's capacity().)
+    int getBufferSize() const;
+    /// Number of MappedEvent's in the buffer.  (STL's size().)
+    int getBufferFill() const;
+
+    /// Sets the buffer capacity.
+    /**
+     * Ignored if smaller than old capacity.
+     * @see getBufferSize()
+     */
+    void resizeBuffer(int newSize);
+
+    /// Sets the number of events in the buffer.
+    /**
+     * Must be no bigger than buffer capacity.
+     *
+     * @see getBufferFill()
+     */
+    void setBufferFill(int newFill);
+
+    /// Refresh the object after the segment has been modified.
+    /**
+     * Returns true if size changed (and thus the sequencer
+     * needs to be told about it).
      */
     bool refresh();
 
@@ -82,30 +127,61 @@ public:
 
     virtual int getSegmentRepeatCount()=0;
 
-    virtual int calculateSize()=0; // in MappedEvents
+    /// Calculates the required capacity based on the current document.
+    /**
+     * Overridden by each deriver to compute the number of MappedEvent's
+     * needed to hold the contents of the current document.
+     *
+     * Used by init() and refresh() to adjust the buffer capacity to be
+     * big enough to hold all the events in the current document.
+     *
+     * @see m_doc
+     * @see resizeBuffer()
+     */
+    virtual int calculateSize() = 0; // in MappedEvents
 
     /// actual setup, must be called after ctor, calls virtual methods
     void init();
 
-    // Initialization particular to various classes.  In fact it just
-    // debug-prints. 
-    virtual void initSpecial(void) {};
+    /// Initialization particular to various classes.  (UNUSED)
+    /**
+     * The only overrider is SegmentMapper and it just debug-prints.
+     */
+    virtual void initSpecial(void)  { }
     
     /// dump all segment data into m_buffer
     virtual void dump()=0;
 
-    // Insert a MappedEvent with appropriate setup for channel.
-    // refTime is not neccessarily the same as MappedEvent's
-    // getEventTime() because we might jump into the middle of a long
-    // note.
+    /// Insert a MappedEvent with appropriate setup for channel.
+    /**
+     * refTime is not neccessarily the same as MappedEvent's
+     * getEventTime() because we might jump into the middle of a long
+     * note.
+     */
     virtual void
         doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                  RealTime refTime, bool firstOutput);
 
-    // Record one more owner of this mapper, so we don't delete it
-    // while it's owned.
+    /// Record one more owner of this mapper.
+    /**
+     * This increases the reference count to prevent deletion of a mapper
+     * that is still owned.
+     *
+     * Called by:
+     *   - MappedEventBuffer::iterator's ctor
+     *   - CompositionMapper::mapSegment()
+     *   - SequenceManager::resetMetronomeMapper()
+     *   - SequenceManager::resetTempoSegmentMapper()
+     *   - SequenceManager::resetTimeSigSegmentMapper()
+     *
+     * @see removeOwner()
+     */
     void addOwner(void);
-    // Record one fewer owner.
+
+    /// Record one fewer owner of this mapper.
+    /**
+     * @see addOwner()
+     */
     void removeOwner(void);
 
     // Get the earliest and latest sounding times.
@@ -185,22 +261,56 @@ public:
 protected:
     friend class iterator;
 
+    /// Capacity of the buffer.
+    /**
+     * To be consistent with the STL, this would be better named m_capacity.
+     */
     mutable QAtomicInt m_size;
+
+    /// Number of events in the buffer.
+    /**
+     * To be consistent with the STL, this would be better named m_size.
+     */
     mutable QAtomicInt m_fill;
+
+    /// The Mapped Event Buffer
     MappedEvent *m_buffer;
+
     bool m_isMetronome;
 
     QReadWriteLock m_lock;
+
+    /// Not used here.  Convenience for derivers.
+    /**
+     * Derivers should probably use RosegardenMainWindow::self() to get to
+     * RosegardenDocument.
+     */
     RosegardenDocument *m_doc;
 
-    // Earliest and latest sounding times.  It is the responsibility
-    // of "dump" to keep these fields up to date.
+    /// Earliest sounding time.
+    /**
+     * It is the responsibility of "dump()" to keep this field up to date.
+     *
+     * @see m_end
+     */
     RealTime m_start;
+
+    /// Latest sounding time.
+    /**
+     * It is the responsibility of "dump()" to keep this field up to date.
+     *
+     * @see m_start
+     */
     RealTime m_end;
 
-    // How many metaiterators share this mapper.  We won't delete
-    // while it has any owner.  This is changed just in owner's ctors
-    // and dtors.
+    /// How many metaiterators share this mapper.
+    /**
+     * We won't delete while it has any owner.  This is changed just in
+     * owner's ctors and dtors.
+     *
+     * @see addOwner()
+     * @see removeOwner()
+     */
     int m_refCount;
 };
 
