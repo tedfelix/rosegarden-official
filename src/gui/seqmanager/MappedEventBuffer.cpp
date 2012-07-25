@@ -188,11 +188,16 @@ removeOwner(void)
     /*** MappedEventBuffer::iterator ***/
 
 MappedEventBuffer::iterator::iterator(MappedEventBuffer *s) :
-    m_s(s), m_index(0), m_ready(false)
+    m_s(s),
+    m_index(0),
+    m_ready(false),
+    m_active(false)  // ??? Hope this is correct.  It was garbage before.
 {
     s->addOwner();
 }
 
+#if 0
+// Turns out no one ever used this.  Good thing, too.
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator=(const iterator& it)
 {
@@ -201,8 +206,18 @@ MappedEventBuffer::iterator::operator=(const iterator& it)
     m_s     = it.m_s;
     m_index = it.m_index;
     m_ready = it.m_ready;
+
+    // ??? INCOMPLETE!!!
+    // This does not copy...
+    //     m_active
+    //     m_currentTime
+    // Why not?  Having an incomplete operator=() is *very bad form*.
+    // Either go with the default op= provided by the compiler, or
+    // explain this omission so that it doesn't raise eyebrows.
+
     return *this;
 }
+#endif
 
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator++()
@@ -215,6 +230,10 @@ MappedEventBuffer::iterator::operator++()
 MappedEventBuffer::iterator
 MappedEventBuffer::iterator::operator++(int)
 {
+    // This is a call to the copy ctor, not the bogus op= that was
+    // defined above.  So this was always calling the default
+    // bitwise copy ctor for this class, which turns out to be
+    // perfectly fine.
     iterator r = *this;
     int fill = m_s->getBufferFill();
     if (m_index < fill) ++m_index;

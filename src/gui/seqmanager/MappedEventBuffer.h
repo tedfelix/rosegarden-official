@@ -97,14 +97,28 @@ public:
     MappedEvent *getBuffer() { return m_buffer; }
 
     /// Capacity of the buffer in MappedEvent's.  (STL's capacity().)
+    /**
+     * The use of "size" and "fill" in this class is in conflict with STL
+     * terminology.  Recommend changing "size" to "capacity" and "fill"
+     * to "size" in keeping with the STL.  So this routine would be
+     * renamed to "capacity()".
+     *
+     * rename: capacity() (per STL)
+     */
     int getBufferSize() const;
     /// Number of MappedEvent's in the buffer.  (STL's size().)
+    /**
+     * rename: size() (per STL)
+     */
     int getBufferFill() const;
 
     /// Sets the buffer capacity.
     /**
      * Ignored if smaller than old capacity.
+     *
      * @see getBufferSize()
+     *
+     * rename: reserve() (per STL)
      */
     void resizeBuffer(int newSize);
 
@@ -113,6 +127,8 @@ public:
      * Must be no bigger than buffer capacity.
      *
      * @see getBufferFill()
+     *
+     * rename: resize() (per STL)
      */
     void setBufferFill(int newFill);
 
@@ -138,9 +154,13 @@ public:
      * @see m_doc
      * @see resizeBuffer()
      */
-    virtual int calculateSize() = 0; // in MappedEvents
+    virtual int calculateSize() = 0;
 
-    /// actual setup, must be called after ctor, calls virtual methods
+    /// Two-phase initialization.
+    /**
+     * Actual setup, must be called after ctor, calls virtual methods.
+     * Dynamic Binding During Initialization idiom.
+     */
     void init();
 
     /// Initialization particular to various classes.  (UNUSED)
@@ -204,7 +224,10 @@ public:
     public:
         iterator(MappedEventBuffer* s);
         ~iterator(void) { m_s->removeOwner(); };
-        iterator& operator=(const iterator&);
+
+        // Never used.  Default bitwise version is fine anyway.
+        //iterator& operator=(const iterator&);
+
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
 
@@ -238,7 +261,9 @@ public:
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
     private:
-         iterator();
+        // Hide the default ctor.
+        // (Why?  The other ctor will hide this anyway.)
+        //iterator();
 
     protected:
         MappedEventBuffer *m_s;
@@ -312,6 +337,11 @@ protected:
      * @see removeOwner()
      */
     int m_refCount;
+
+private:
+    // Hide copy ctor and op=
+    MappedEventBuffer(const MappedEventBuffer &);
+    MappedEventBuffer &operator=(const MappedEventBuffer &);
 };
 
 }
