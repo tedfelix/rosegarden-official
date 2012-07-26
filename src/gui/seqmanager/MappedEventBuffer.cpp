@@ -191,34 +191,53 @@ MappedEventBuffer::iterator::iterator(MappedEventBuffer *s) :
     m_s(s),
     m_index(0),
     m_ready(false),
-    m_active(false)  // ??? Hope this is correct.  It was garbage before.
+    m_active(false)
+    //m_currentTime
 {
     s->addOwner();
 }
 
-#if 0
-// Turns out no one ever used this.  Good thing, too.
-MappedEventBuffer::iterator &
-MappedEventBuffer::iterator::operator=(const iterator& it)
+// UNTESTED
+MappedEventBuffer::iterator::iterator(const iterator &i) :
+    m_s(i.m_s),
+    m_index(i.m_index),
+    m_ready(i.m_ready),
+    m_active(i.m_active),
+    m_currentTime(i.m_currentTime)
 {
-    if (&it == this) return *this;
+    // Add a reference count for this
+    m_s->addOwner();
+}
 
-    m_s     = it.m_s;
-    m_index = it.m_index;
-    m_ready = it.m_ready;
+// UNTESTED
+MappedEventBuffer::iterator &
+MappedEventBuffer::iterator::operator=(const iterator& rhs)
+{
+    // Handle self-assignment gracefully.
+    // With this particular class, the issue is that the call to
+    // removeOwner() might cause the MappedEventBuffer to be deleted.
+    // Then the following call to addOwner() would be on a deleted
+    // object.
+    if (&rhs == this)
+        return *this;
 
-    // ??? INCOMPLETE!!!
-    // This does not copy...
-    //     m_active
-    //     m_currentTime
-    // Why not?  Having an incomplete operator=() is *very bad form*.
-    // Either go with the default op= provided by the compiler, or
-    // explain this omission so that it doesn't raise eyebrows.
+    // Adjust reference count
+    m_s->removeOwner();
+
+    // Full bitwise copy
+    m_s = rhs.m_s;
+    m_index = rhs.m_index;
+    m_ready = rhs.m_ready;
+    m_active = rhs.m_active;
+    m_currentTime = rhs.m_currentTime;
+
+    // Adjust reference count
+    m_s->addOwner();
 
     return *this;
 }
-#endif
 
+// ++prefix
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator++()
 {
@@ -227,13 +246,11 @@ MappedEventBuffer::iterator::operator++()
     return *this;
 }
 
+// postfix++
 MappedEventBuffer::iterator
 MappedEventBuffer::iterator::operator++(int)
 {
-    // This is a call to the copy ctor, not the bogus op= that was
-    // defined above.  So this was always calling the default
-    // bitwise copy ctor for this class, which turns out to be
-    // perfectly fine.
+    // This line is the main reason we need a copy ctor.
     iterator r = *this;
     int fill = m_s->getBufferFill();
     if (m_index < fill) ++m_index;

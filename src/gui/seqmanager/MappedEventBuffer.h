@@ -223,10 +223,36 @@ public:
     {
     public:
         iterator(MappedEventBuffer* s);
-        ~iterator(void) { m_s->removeOwner(); };
 
-        // Never used.  Default bitwise version is fine anyway.
-        //iterator& operator=(const iterator&);
+        /// Destructor.
+        /**
+         * Since this destructor is "non-trivial", we are required to provide
+         * (or hide) the other two of the "big three".  I.e. the copy ctor
+         * and op=.
+         */
+        ~iterator(void)  { m_s->removeOwner(); }
+
+        /// Copy ctor.  (UNTESTED)
+        /**
+         * Copy ctors are not for the faint of heart, and should be avoided
+         * whenever possible.  In this case, the postfix op++ needs the copy
+         * ctor in its first line.  We could probably get rid of the postfix
+         * op++ and force users to use the prefix op++ which would then let
+         * us remove this copy ctor.
+         *
+         * UNTESTED.  Use carefully.
+         */
+        iterator(const iterator&);
+
+        /// Assignment operator.  (UNTESTED)
+        /**
+         * Turns out this is never used.  However, since there's a copy ctor
+         * and the non-trivial dtor that rounds out the "big three", we might
+         * as well be complete and correct.
+         *
+         * UNTESTED.  Use carefully.
+         */
+        iterator& operator=(const iterator&);  // never used
 
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
@@ -236,8 +262,21 @@ public:
         /// go back to beginning of stream
         void reset();
 
+        /// Prefix operator++
         iterator& operator++();
+
+        /// Postfix operator++  (UNTESTED)
+        /**
+         * This is never actually used anywhere.  But, unfortunately it
+         * triggers the need for a copy ctor.  It would probably be best to
+         * get rid of this and force all clients to use the prefix
+         * operator++.  But then someone might try to implement this and do
+         * it incorrectly.
+         *
+         * UNTESTED.  Use carefully.
+         */
         iterator  operator++(int);
+
         iterator& operator+=(int);
         iterator& operator-=(int);
 
@@ -260,13 +299,11 @@ public:
         // possibly setting up the channel.
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
-    private:
-        // Hide the default ctor.
-        // (Why?  The other ctor will hide this anyway.)
-        //iterator();
-
     protected:
+        /// The buffer this iterator points into.
         MappedEventBuffer *m_s;
+
+        /// Position of the iterator in the buffer.
         int m_index;
 
         // Whether we are ready with regard to performance time.  We
@@ -281,6 +318,11 @@ public:
         // the current event's time or the time the loop starts,
         // whichever is greater.  Used for calculating the correct controllers
         RealTime  m_currentTime;
+
+        // !!! WARNING !!!
+        // If any member objects are added to this class, the ctor, copy ctor,
+        // and op= must be updated.
+        // !!! WARNING !!!
     };
 
 protected:
@@ -339,11 +381,11 @@ protected:
     int m_refCount;
 
 private:
-    // Hide copy ctor and op=
+    // Hide copy ctor and op= (dtor is non-trivial)
     MappedEventBuffer(const MappedEventBuffer &);
     MappedEventBuffer &operator=(const MappedEventBuffer &);
 };
 
 }
 
-#endif /* ifndef _MAPPEDSEGMENT_H_ */
+#endif /* ifndef RG_MAPPEDEVENTBUFFER_H */
