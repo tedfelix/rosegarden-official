@@ -61,8 +61,6 @@ class MappedEventBuffer
 {
 public:
     MappedEventBuffer(RosegardenDocument *);
-    // Some derived classes need to release channels, so dtor is
-    // virtual.
     virtual ~MappedEventBuffer();
 
     /// Is this object a MetronomeMapper?
@@ -132,24 +130,31 @@ public:
      */
     void setBufferFill(int newFill);
 
-    /// Refresh the object after the segment has been modified.
+    /// Refresh the buffer
     /**
-     * Returns true if size changed (and thus the sequencer
+     * Called after the segment has been modified.  Resizes the buffer if
+     * needed, then calls dump() to fill it from the segment.
+     *
+     * Returns true if buffer size changed (and thus the sequencer
      * needs to be told about it).
      */
     bool refresh();
 
     /* Virtual functions */
 
-    virtual int getSegmentRepeatCount()=0;
+    /**
+     * Only SegmentMapper::getSegmentRepeatCount() does something interesting,
+     * the other derivers just return 1.
+     */
+    virtual int getSegmentRepeatCount() = 0;
 
     /// Calculates the required capacity based on the current document.
     /**
      * Overridden by each deriver to compute the number of MappedEvent's
-     * needed to hold the contents of the current document.
+     * needed to hold the contents of the current segment.
      *
      * Used by init() and refresh() to adjust the buffer capacity to be
-     * big enough to hold all the events in the current document.
+     * big enough to hold all the events in the current segment.
      *
      * @see m_doc
      * @see resizeBuffer()
@@ -169,12 +174,20 @@ public:
      */
     virtual void initSpecial(void)  { }
     
-    /// dump all segment data into m_buffer
-    virtual void dump()=0;
+    /// Fill buffer with data from the segment
+    /**
+     * This is provided by derivers to handle whatever sort of data is
+     * specific to each of them.  E.g. InternalSegmentMapper::dump()
+     * processes note events while TempoSegmentMapper processes tempo
+     * change events.
+     *
+     * rename: fillBuffer()  (or just fill())
+     */
+    virtual void dump() = 0;
 
     /// Insert a MappedEvent with appropriate setup for channel.
     /**
-     * refTime is not neccessarily the same as MappedEvent's
+     * refTime is not necessarily the same as MappedEvent's
      * getEventTime() because we might jump into the middle of a long
      * note.
      */

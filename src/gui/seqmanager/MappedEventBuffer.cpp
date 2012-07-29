@@ -66,7 +66,7 @@ MappedEventBuffer::init()
 bool
 MappedEventBuffer::refresh()
 {
-    bool res = false;
+    bool resized = false;
 
     int newFill = calculateSize();
     int oldSize = getBufferSize();
@@ -77,15 +77,17 @@ MappedEventBuffer::refresh()
                  << " - old fill = " << getBufferFill()
                  << " - new fill = " << newFill
                  << endl;
-#endif    
+#endif
+
+    // If we need to expand the buffer to hold the events
     if (newFill > oldSize) {
-        res = true;
+        resized = true;
         resizeBuffer(newFill);
     }
 
     dump();
 
-    return res;
+    return resized;
 }
 
 int
