@@ -145,7 +145,7 @@ mapAnEvent(MappedEvent *e)
         int newSize = 1 + float(getBufferSize()) * 1.5;
         resizeBuffer(newSize);
     }
-        
+
     getBuffer()[getBufferFill()] = e;
     // Some mappers need this to be done now because they may resize
     // the buffer later, which will only copy the filled part.
@@ -156,7 +156,9 @@ void
 MappedEventBuffer::
 doInsert(MappedInserterBase &inserter, MappedEvent &evt,
          RealTime /*start*/, bool /*firstOutput*/)
-{ inserter.insertCopy(evt); }
+{
+    inserter.insertCopy(evt);
+}
 
 void
 MappedEventBuffer::
@@ -300,6 +302,12 @@ MappedEventBuffer::iterator::operator*()
 MappedEvent *
 MappedEventBuffer::iterator::peek() const
 {
+    // ??? This lock seems odd.  We are returning a pointer to the
+    //     MappedEvent in the buffer.  So the caller uses a pointer
+    //     into the buffer after the read lock is released.  Is that
+    //     correct?  That would mean that this lock only locks the
+    //     container, not the elements in the container.  This would
+    //     prevent changes to the "fill" before getting the element.
     QReadLocker locker(&m_s->m_lock);
     if (m_index >= m_s->getBufferFill()) {
         return 0;

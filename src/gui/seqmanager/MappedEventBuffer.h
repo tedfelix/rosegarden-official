@@ -190,10 +190,11 @@ public:
      * refTime is not necessarily the same as MappedEvent's
      * getEventTime() because we might jump into the middle of a long
      * note.
+     *
+     * Only used by MappedEventBuffer::iterator::doInsert().
      */
-    virtual void
-        doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                 RealTime refTime, bool firstOutput);
+    virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                          RealTime refTime, bool firstOutput);
 
     /// Record one more owner of this mapper.
     /**
@@ -213,24 +214,40 @@ public:
 
     /// Record one fewer owner of this mapper.
     /**
+     * When the owner count reaches 0, this object will destroy itself
+     * with a "delete this".
+     *
      * @see addOwner()
      */
     void removeOwner(void);
 
-    // Get the earliest and latest sounding times.
-    void getStartEnd(RealTime &start, RealTime &end) {
+    /// Get the earliest and latest sounding times.
+    /**
+     * Called by MappedBufMetaIterator::fillCompositionWithEventsUntil() and
+     * MappedBufMetaIterator::fillNoncompeting().
+     *
+     * @see setStartEnd()
+     */
+    void getStartEnd(RealTime &start, RealTime &end) const {
         start = m_start;
         end   = m_end;
     }
 
  protected:
+    /// Add an event to the buffer.
     void mapAnEvent(MappedEvent *e);
 
-    // Set the sounding times.
+    /// Set the sounding times.
+    /**
+     * InternalSegmentMapper::dump() keeps this updated.
+     *
+     * @see getStartEnd()
+     */
     void setStartEnd(RealTime &start, RealTime &end) {
         m_start = start;
         m_end   = end;
     }
+
  public:
     class iterator 
     {
@@ -267,12 +284,16 @@ public:
          */
         iterator& operator=(const iterator&);  // never used
 
+        /// Equality
+        /**
+         * Only checks m_s (the iterator's MappedEventBuffer) and m_index.
+         */
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
 
         bool atEnd() const;
 
-        /// go back to beginning of stream
+        /// Go back to the beginning of the stream
         void reset();
 
         /// Prefix operator++
@@ -293,23 +314,83 @@ public:
         iterator& operator+=(int);
         iterator& operator-=(int);
 
-        MappedEvent operator*();  // returns MappedEvent() if atEnd()
-        MappedEvent *peek() const; // returns 0 if atEnd()
+        /// Dereference operator
+        /**
+         * Allows an expression like (*i) to give access to the element an
+         * iterator points to.
+         *
+         * Returns a default constructed MappedEvent if atEnd().
+         *
+         * @see peek()
+         */
+        MappedEvent operator*();
 
+        /// Dereference function
+        /**
+         * Returns a pointer to the MappedEvent the iterator is currently
+         * pointing to.
+         *
+         * Returns 0 if atEnd().
+         *
+         * @see operator*()
+         */
+        MappedEvent *peek() const;
+
+        /// Access to the segment the iterator is connected to.
         MappedEventBuffer *getSegment() { return m_s; }
+        /// Access to the segment the iterator is connected to.
         const MappedEventBuffer *getSegment() const { return m_s; }
 
+        /**
+         * Called by MappedBufMetaIterator::fillNoncompeting().
+         *
+         * @see setInactive()
+         * @see getActive()
+         */
         void setActive(bool value, RealTime currentTime) {
             m_active = value;
             m_currentTime = currentTime;
         }
-        void setInactive(void) { m_active = false; }
-        bool getActive(void) { return m_active; }
-        void setReady (bool value) { m_ready  = value; };
-        bool getReady(void)  { return m_ready; }
+        /**
+         * Called by MappedBufMetaIterator::fillNoncompeting().
+         *
+         * @see setActive()
+         * @see getActive()
+         */
+        void setInactive()  { m_active = false; }
+        /**
+         * Called by MappedBufMetaIterator::fillNoncompeting().
+         *
+         * @see setActive()
+         * @see setInactive()
+         * @see m_active
+         */
+        bool getActive() const  { return m_active; }
 
-        // Do appropriate preparation for inserting event, including
-        // possibly setting up the channel.
+        /**
+         * Set to true by doInsert().  Set to false by
+         * MappedBufMetaIterator::moveIteratorToTime() and
+         * MappedBufMetaIterator::resetIteratorForSegment().
+         *
+         * @see getReady()
+         */
+        void setReady(bool value)  { m_ready = value; };
+
+        /**
+         * Called by MappedEventBuffer::iterator::doInsert().
+         *
+         * @see m_ready
+         */
+        bool getReady() const  { return m_ready; }
+
+        /**
+         * Delegates to MappedEventBuffer::doInsert().
+         *
+         * The old comments seem misleading.  It doesn't do appear to do any
+         * of this:
+         * "Do appropriate preparation for inserting event, including
+         * possibly setting up the channel."
+         */
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
     protected:
@@ -319,18 +400,23 @@ public:
         /// Position of the iterator in the buffer.
         int m_index;
 
-        // Whether we are ready with regard to performance time.  We
-        // always are except when starting or jumping in time.  
-        // Making us ready is derived classes' job via "doInsert",
+        /// Whether we are ready with regard to performance time.
+        /**
+         * We always are except when starting or jumping in time.  Making us
+         * ready is derived classes' job via doInsert().
+         */
         bool m_ready;
-        // Whether this iterator has more events to give within the
-        // current time slice.
+
+        /**
+         * Whether this iterator has more events to give within the current
+         * time slice.
+         */
         bool m_active;
 
         // RealTime when the current event starts sounding.  Either
         // the current event's time or the time the loop starts,
         // whichever is greater.  Used for calculating the correct controllers
-        RealTime  m_currentTime;
+        RealTime m_currentTime;
 
         // !!! WARNING !!!
         // If any member objects are added to this class, the ctor, copy ctor,
@@ -397,6 +483,7 @@ private:
     // Hide copy ctor and op= (dtor is non-trivial)
     MappedEventBuffer(const MappedEventBuffer &);
     MappedEventBuffer &operator=(const MappedEventBuffer &);
+
 };
 
 }
