@@ -2399,6 +2399,14 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
 
     snd_seq_event_t *event;
 
+    // The ALSA documentation indicates that snd_seq_event_input() "returns
+    // the byte size of remaining events on the input buffer if an event is
+    // successfully received."  This is not true.  snd_seq_event_input()
+    // typically returns 1.  Not sure if this is "success" or the number of
+    // events read, or something else.  But the point is that although this
+    // code appears to be wrong per the ALSA docs, it is actually correct.
+
+    // While there's an event available...
     while (snd_seq_event_input(m_midiHandle, &event) > 0) {
         //        std::cerr << "AlsaDriver::getMappedEventList: found something" << std::endl;
 
@@ -2452,6 +2460,8 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
         switch (event->type) {
         case SND_SEQ_EVENT_NOTE:
         case SND_SEQ_EVENT_NOTEON:
+            //RG_DEBUG << "AD::gMEL()  NOTEON channel:" << channel << " pitch:" << event->data.note.note << " velocity:" << event->data.note.velocity;
+
             if (fromController)
                 continue;
             if (event->data.note.velocity > 0) {
@@ -2485,6 +2495,8 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             // FALLTHROUGH:  NOTEON with velocity 0 is treated as a NOTEOFF
 
         case SND_SEQ_EVENT_NOTEOFF: {
+            //RG_DEBUG << "AD::gMEL()  NOTEOFF channel:" << channel << " pitch:" << event->data.note.note;
+
             if (fromController)
                 continue;
 
