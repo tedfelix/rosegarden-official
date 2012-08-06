@@ -115,6 +115,7 @@ MappedEventBuffer::resizeBuffer(int newSize)
             newBuffer[i] = m_buffer[i];
         }
     }
+
     {
         QWriteLocker locker(&m_lock);
         m_buffer = newBuffer;
@@ -302,16 +303,20 @@ MappedEventBuffer::iterator::operator*()
 MappedEvent *
 MappedEventBuffer::iterator::peek() const
 {
-    // ??? This lock seems odd.  We are returning a pointer to the
-    //     MappedEvent in the buffer.  So the caller uses a pointer
-    //     into the buffer after the read lock is released.  Is that
-    //     correct?  That would mean that this lock only locks the
-    //     container, not the elements in the container.  This would
-    //     prevent changes to the "fill" before getting the element.
+    // This lock locks the container to make sure it isn't modified
+    // while we are getting the index of the last item, then getting
+    // that item.  It does not lock the item (MappedEvent) itself.
+    // ??? This could pose a problem as the caller is holding on to a
+    //     pointer to memory that might get deleted if the container
+    //     is resized.  See resizeBuffer() which deletes the oldBuffer at
+    //     the end.
     QReadLocker locker(&m_s->m_lock);
+
+    // If we're at the end
     if (m_index >= m_s->getBufferFill()) {
         return 0;
     }
+
     return &m_s->m_buffer[m_index];
 }
 

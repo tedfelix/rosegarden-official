@@ -42,11 +42,15 @@ class RosegardenDocument;
  * have been mapped and unfolded).
  *
  * The mapping logic is handled by mappers derived from this class; this
- * class provides the basic container and the reading logic.  Reading
- * and writing may take place simultaneously without locks (we are
+ * class provides the basic container and the reading logic.
+ *
+ * Reading and writing may take place simultaneously without locks (we are
  * prepared to accept the lossage from individual mangled MappedEvent
- * reads) but a read/write lock on the buffer space guards against bad
- * access caused by resizes.
+ * reads) but a read/write lock (m_lock) on the buffer space guards
+ * against bad
+ * access caused by resizes.  [Actually, it doesn't at all since the
+ * caller of peek() has a pointer they can access after the lock has
+ * been released.  See comments on m_lock below and in iterator::peek().]
  *
  * MappedEventBuffer only concerns itself with the state of the
  * composition, as opposed to the state of performance.  No matter how
@@ -444,6 +448,23 @@ protected:
 
     bool m_isMetronome;
 
+    /// Lock for iterator::peek() and resizeBuffer()
+    /**
+     * Used by resizeBuffer() to lock the swapping of the old for the new
+     * and the changing of the buffer capacity.
+     *
+     * Used by MappedEventBuffer::iterator::peek() to ensure that the
+     * buffer's capacity doesn't change while it is getting the current item.
+     *
+     * ??? Honestly, this lock doesn't seem very useful.  The worst case
+     *     scenario is that peek() is trying to get a pointer to the element,
+     *     and resizeBuffer() swaps the entire buffer out from under it.
+     *     This lock does nothing to prevent that.  Even if the locking
+     *     were made more coarse-grained to prevent this (maybe at the very
+     *     beginning of each routine), the caller of peek() would be
+     *     holding a pointer that could be pointing to deleted memory at
+     *     any moment.
+     */
     QReadWriteLock m_lock;
 
     /// Not used here.  Convenience for derivers.
