@@ -2110,7 +2110,14 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
                     }
                 }
 
-                haveKey = true;
+                // Is the key hide because redundant ?
+                if (m_hideRedundance &&
+                    m_notationScene->isEventRedundant(const_cast<Event *>(*i),
+                                                      const_cast<Segment &>(getSegment()))) {
+                    haveKey = false;
+                } else {
+                    haveKey = true;
+                }
 
             } catch (...) {
                 NOTATION_DEBUG << "getBarInset: Bad key in event" << endl;
@@ -2120,7 +2127,15 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
             try {
                 clef = Clef(**i);
-                haveClef = true;
+ 
+                // Is the clef hide because redundant ?
+                if (m_hideRedundance &&
+                    m_notationScene->isEventRedundant(const_cast<Event *>(*i),
+                                                      const_cast<Segment &>(getSegment()))) {
+                    haveClef = false;
+                } else {
+                    haveClef = true;
+                }
             } catch (...) {
                 NOTATION_DEBUG << "getBarInset: Bad clef in event" << endl;
             }

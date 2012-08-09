@@ -1859,7 +1859,7 @@ NotationScene::constrainToSegmentArea(QPointF &scenePos)
 }
 
 bool
-NotationScene::isEventRedundant(Event *ev, Segment &seg)
+NotationScene::isEventRedundant(Event *ev, Segment &seg) const
 {
     if (ev->isa(Clef::EventType)) {
         Clef clef = Clef(*ev);
@@ -1888,7 +1888,7 @@ NotationScene::isEventRedundant(Event *ev, Segment &seg)
 }
 
 bool
-NotationScene::isEventRedundant(Clef &clef, timeT time, Segment &seg)
+NotationScene::isEventRedundant(Clef &clef, timeT time, Segment &seg) const
 {
     TrackId track = seg.getTrack();
     Clef previousClef = m_clefKeyContext->getClefFromContext(track, time);
@@ -1902,7 +1902,7 @@ NotationScene::isEventRedundant(Clef &clef, timeT time, Segment &seg)
 }
 
 bool
-NotationScene::isEventRedundant(Key &key, timeT time, Segment &seg)
+NotationScene::isEventRedundant(Key &key, timeT time, Segment &seg) const
 {
     TrackId track = seg.getTrack();
     Key previousKey = m_clefKeyContext->getKeyFromContext(track, time);

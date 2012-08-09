@@ -185,9 +185,9 @@ public:
     void updateClefKeyContext() { m_clefKeyContext->setSegments(this); }
 
     /// Return true if element is a clef or a key which already is in use
-    bool isEventRedundant(Event *ev, Segment &seg);
-    bool isEventRedundant(Clef &clef, timeT time, Segment &seg);
-    bool isEventRedundant(Key &key, timeT time, Segment &seg);
+    bool isEventRedundant(Event *ev, Segment &seg) const;
+    bool isEventRedundant(Clef &clef, timeT time, Segment &seg) const;
+    bool isEventRedundant(Key &key, timeT time, Segment &seg) const;
 
     /// Return the segments about to be deleted if any
     std::vector<Segment *> * getSegmentsDeleted() { return &m_segmentsDeleted; }
