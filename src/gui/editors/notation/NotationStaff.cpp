@@ -106,6 +106,8 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
 
     m_hideRedundance = settings.value("hideredundantclefkey", "true").toBool();
 
+    m_distributeVerses =  settings.value("distributeverses", true).toBool();
+
     settings.endGroup();
 
     setLineThickness(m_notePixmapFactory->getStaffLineThickness());
@@ -1036,13 +1038,24 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 // nothing I guess
 
-            }
-            else if (elt->event()->has(Text::TextTypePropertyName) &&
-                     elt->event()->get<String>(Text::TextTypePropertyName) ==
-                     Text::LilyPondDirective &&
-                     !m_notationScene->areLilyPondDirectivesVisible()) {
+            } else if (elt->event()->has(Text::TextTypePropertyName) &&
+                       elt->event()->get<String>(Text::TextTypePropertyName) ==
+                       Text::LilyPondDirective &&
+                       !m_notationScene->areLilyPondDirectivesVisible()) {
 
                 // nothing here either
+
+            } else if (m_distributeVerses && 
+                       elt->event()->has(Text::TextTypePropertyName) &&
+                       elt->event()->get<String>(Text::TextTypePropertyName) ==
+                       Text::Lyric &&
+                       elt->event()->has(Text::LyricVersePropertyName) &&
+                       elt->event()->get<Int>(Text::LyricVersePropertyName) !=
+                       getSegment().getVerse()) {
+
+                // nothing here either
+                // (this verse have to be displayed with another view of
+                //  the current segment)
 
             } else {
 

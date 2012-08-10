@@ -98,6 +98,7 @@ protected:
     QCheckBox *m_showRepeated;
     QCheckBox *m_editRepeated;
     QCheckBox *m_hideRedundantClefKey;
+    QCheckBox *m_distributeVerses;
 
     void populateSizeCombo(QComboBox *combo, QString font, int dfltSize);
 };

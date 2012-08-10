@@ -587,6 +587,22 @@ public:
     int getTranspose() const { return m_transpose; }
     void setTranspose(int transpose);
 
+    /**
+     * Return the verse index of lyrics associated with the segment if
+     * this one is unfolded in the notation editor.
+     * (ie the verse which have to be written under the staff among all the
+     * verses included as text of lyrics inside the segment)
+     */
+    int getVerse() const { return m_verse; }
+
+    /**
+     * Used to set the value returned by getVerse().
+     * Should only be called from a method recomputing verse for all
+     * the segments in composition (or for the temporary segments in
+     * a notation editor)
+     */
+    void setVerse (int verse) { m_verse = verse; }
+
 
 
     //////
@@ -888,13 +904,15 @@ private:
 
     // Audio autofading
     //
-    bool                  m_autoFade;
+    bool      m_autoFade;
     RealTime  m_fadeInTime;
     RealTime  m_fadeOutTime;
 
+    // Linked segments
     SegmentLinker *m_segmentLinker;
     LinkTransposeParams m_linkTransposeParams;
     bool m_isTmp;   // Mark a segment (usually a link) as temporary
+    int m_verse;    // Used to distribute lyrics among repeated segments
 };
 
 typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;

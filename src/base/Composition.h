@@ -894,6 +894,10 @@ public:
     void notifyTrackSelectionChanged(TrackId) const;
 
     //////
+    // LYRICS WITH REPEATED SEGMENTS
+    void distributeVerses();
+
+    //////
     // DEBUG FACILITIES
     void dump(std::ostream&, bool full=false) const;
     

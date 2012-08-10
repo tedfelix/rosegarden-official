@@ -29,6 +29,7 @@
 #include <cmath>
 #include <typeinfo>
 #include <iterator>
+#include <map>
 #include <limits.h>
 
 #include <sstream>
@@ -224,6 +225,7 @@ Composition::addSegment(Segment *segment)
 
     if (res != end()) {
         updateRefreshStatuses();
+        distributeVerses();
 	notifySegmentAdded(segment);
     }
     
@@ -252,6 +254,7 @@ Composition::deleteSegment(Composition::iterator i)
     p->setComposition(0);
 
     m_segments.erase(i);
+    distributeVerses();
     notifySegmentRemoved(p);
     delete p;
 
@@ -274,6 +277,7 @@ Composition::detachSegment(Segment *segment)
     bool res = weakDetachSegment(segment);
 
     if (res) {
+        distributeVerses();
         notifySegmentRemoved(segment);
         updateRefreshStatuses();
     }
@@ -2383,6 +2387,43 @@ Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
 }
 
 void
+Composition::distributeVerses()
+{
+    typedef std::map<int, segmentcontainer> SegmentMap;
+    SegmentMap tracks;
+    SegmentMap repeats;
+
+    // Sort segments by track ID
+    for (iterator i = begin(); i != end(); ++i) {
+        Segment* s = *i;
+        tracks[s->getTrack()].insert(s);
+    }
+
+    // Work track after track
+    for (SegmentMap::iterator i = tracks.begin(); i != tracks.end(); ++i) {
+
+        // Reset all verse indexes and look for repeated segments
+        repeats.clear();
+        for (segmentcontainer::iterator j = i->second.begin(); j != i->second.end(); ++j) {
+             Segment* s = *j;
+             s->setVerse(0);
+             if (s->isPlainlyLinked()) {
+                 repeats[s->getLinker()->getSegmentLinkerId()].insert(s);
+            }
+        }
+
+        // Set verse indexes where needed
+        for (SegmentMap::iterator j = repeats.begin(); j != repeats.end(); ++j) {
+            int verse = 0;
+            for (segmentcontainer::iterator k = j->second.begin(); k != j->second.end(); ++k) {
+                Segment* s = *k;
+                s->setVerse(verse++);
+            }
+        }
+    }
+}
+
+void
 Composition::dump(std::ostream& out, bool) const
 {
     out << "Composition segments : " << endl;
@@ -2395,6 +2436,7 @@ Composition::dump(std::ostream& out, bool) const
             << " - repeating : " << s->isRepeating()
             << " - track id : " << s->getTrack()
             << " - label : " << s->getLabel()
+//            << " - verse : " << s->getVerse()
             << endl;
         
     }

@@ -78,9 +78,13 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 
     QSettings settings;
     settings.beginGroup(NotationOptionsConfigGroup);
-
     m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
     m_hideRedundance = settings.value("hideredundantclefkey", "true").toBool();
+    settings.endGroup();
+
+    settings.beginGroup(NotationViewConfigGroup);
+    m_showRepeated =  settings.value("showrepeated", true).toBool();
+    m_distributeVerses =  settings.value("distributeverses", true).toBool();
     settings.endGroup();
 }
 
@@ -420,17 +424,23 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
             } else if (el->event()->isa(Text::EventType)) {
 
+                bool isVerse = el->event()->has(Text::TextTypePropertyName) &&
+                    el->event()->get<String>(Text::TextTypePropertyName) ==
+                    Text::Lyric;
+                bool verseOk = el->event()->has(Text::LyricVersePropertyName) &&
+                    el->event()->get<Int>(Text::LyricVersePropertyName) ==
+                    segment.getVerse();
+
                 // the only text events of interest are lyrics, which
                 // contribute to a fixed area following the next chord
 
-                if (el->event()->has(Text::TextTypePropertyName) &&
-                    el->event()->get<String>(Text::TextTypePropertyName) ==
-                    Text::Lyric) {
+                if (isVerse && (!m_distributeVerses || m_distributeVerses && verseOk)) {
                     lyricWidth = std::max
                         (lyricWidth, float(npf->getTextWidth(Text(*el->event()))));
                     NOTATION_DEBUG << "Setting lyric width to " << lyricWidth
                                    << " for text " << el->event()->get<String>(Text::TextPropertyName) << endl;
                 }
+
                 chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
             } else if (el->isNote()) {

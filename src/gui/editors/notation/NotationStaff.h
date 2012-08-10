@@ -399,6 +399,7 @@ protected:
     bool m_showRanges;
     bool m_showCollisions;
     bool m_hideRedundance;
+    bool m_distributeVerses;
     int m_keySigCancelMode;
 
     QPainter *m_printPainter;

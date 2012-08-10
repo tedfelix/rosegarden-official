@@ -30,6 +30,7 @@
 #include "base/ViewSegment.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/editors/guitar/Chord.h"
+#include "misc/ConfigGroups.h"
 #include "NotationChord.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
@@ -37,6 +38,7 @@
 #include "NotePixmapFactory.h"
 #include <QMessageBox>
 #include <QObject>
+#include <QSettings>
 #include <QString>
 #include <QWidget>
 
@@ -56,7 +58,12 @@ NotationVLayout::NotationVLayout(Composition *c, NotePixmapFactory *npf,
         m_notationQuantizer(c->getNotationQuantizer()),
         m_properties(properties)
 {
-    // empty
+    // Get display settings
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    m_showRepeated =  settings.value("showrepeated", true).toBool();
+    m_distributeVerses =  settings.value("distributeverses", true).toBool();
+    settings.endGroup();
 }
 
 NotationVLayout::~NotationVLayout()
@@ -381,8 +388,10 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
                     el->setLayoutY(staff.getLayoutYForHeight(-7) + displacedY);
                 } else if (type == Text::Lyric) {
                     long verse = 0;
-                    // verses even further below the statff
-                    el->event()->get<Int>(Text::LyricVersePropertyName, verse);
+                    if (!m_distributeVerses) {
+                        // verses even further below the staff
+                        el->event()->get<Int>(Text::LyricVersePropertyName, verse);
+                    }
                     el->setLayoutY(staff.getLayoutYForHeight(-10 - 3 * verse) + displacedY);
                 } else if (type == Text::Annotation) {
                     // annotations way below the staff

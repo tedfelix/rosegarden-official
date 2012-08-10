@@ -449,7 +449,9 @@ protected:
     int m_spacing;
     int m_proportion;
     int m_keySigCancelMode;
-    bool m_hideRedundance;         // Don't show unneeded clefs and keys
+    bool m_hideRedundance;    // Don't show unneeded clefs and keys
+    bool m_showRepeated;      // Repeated segments are visible
+    bool m_distributeVerses;  // Lyrics are distributed among repeated segments
 
     //!!! This should not be here -- different staffs may have
     //different sizes in principle, so we should always be referring

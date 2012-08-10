@@ -374,6 +374,7 @@ NotationScene::createClonesFromRepeatedSegments()
             timeT repeatEnd = (*it)->getRepeatEndTime();
             timeT targetDuration = targetEnd - targetStart;
             TrackId track = (*it)->getTrack();
+            int verse = (*it)->getVerse();
 //             std::cerr << "Creating clones   track=" << track
 //                       << " targetStart=" << targetStart
 //                       << " targetEnd=" << targetEnd
@@ -388,6 +389,7 @@ NotationScene::createClonesFromRepeatedSegments()
 
                 s->setStartTime(ts);
                 s->setTrack(track);
+                s->setVerse(++verse);
                 s->setTmp();  // To avoid crash related to composition
                               // being undefined and to get notation
                               // with grey color

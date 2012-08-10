@@ -74,7 +74,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_fadeInTime(Rosegarden::RealTime::zeroTime),
     m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_segmentLinker(0),
-    m_isTmp(0)
+    m_isTmp(0),
+    m_verse(0)
 {
 }
 
@@ -116,7 +117,8 @@ Segment::Segment(const Segment &segment):
     m_fadeInTime(segment.getFadeInTime()),
     m_fadeOutTime(segment.getFadeOutTime()),
     m_segmentLinker(0), //yes, this is intentional. clone() handles this
-    m_isTmp(segment.isTmp())
+    m_isTmp(segment.isTmp()),
+    m_verse(0)   // Needs a global recomputation on the whole composition 
 {
     for (const_iterator it = segment.begin();
          it != segment.end(); ++it) {
@@ -268,6 +270,7 @@ Segment::setTrack(TrackId id)
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
+        c->distributeVerses();
         c->notifySegmentTrackChanged(this, oldTrackId, id);
     }
 }
@@ -1402,6 +1405,7 @@ Segment::notifyStartChanged(timeT newTime)
         (*i)->startChanged(this, newTime);
     }
     if (m_composition) {
+        m_composition->distributeVerses();
         m_composition->notifySegmentStartChanged(this, newTime);
     }
 }

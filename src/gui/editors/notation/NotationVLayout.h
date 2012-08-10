@@ -103,6 +103,9 @@ private:
     NotePixmapFactory *m_npf;
     const Quantizer *m_notationQuantizer;
     const NotationProperties &m_properties;
+
+    bool m_showRepeated;
+    bool m_distributeVerses;
 };
 
 
