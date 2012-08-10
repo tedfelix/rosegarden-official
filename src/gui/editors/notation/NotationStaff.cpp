@@ -1049,9 +1049,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                        elt->event()->has(Text::TextTypePropertyName) &&
                        elt->event()->get<String>(Text::TextTypePropertyName) ==
                        Text::Lyric &&
-                       elt->event()->has(Text::LyricVersePropertyName) &&
                        elt->event()->get<Int>(Text::LyricVersePropertyName) !=
-                       getSegment().getVerse()) {
+                       getSegment().getVerseWrapped()) {
 
                 // nothing here either
                 // (this verse have to be displayed with another view of

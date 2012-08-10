@@ -424,17 +424,17 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
             } else if (el->event()->isa(Text::EventType)) {
 
-                bool isVerse = el->event()->has(Text::TextTypePropertyName) &&
+                bool isLyric = el->event()->has(Text::TextTypePropertyName) &&
                     el->event()->get<String>(Text::TextTypePropertyName) ==
                     Text::Lyric;
                 bool verseOk = el->event()->has(Text::LyricVersePropertyName) &&
                     el->event()->get<Int>(Text::LyricVersePropertyName) ==
-                    segment.getVerse();
+                    segment.getVerseWrapped();
 
                 // the only text events of interest are lyrics, which
                 // contribute to a fixed area following the next chord
 
-                if (isVerse && (!m_distributeVerses || m_distributeVerses && verseOk)) {
+                if (isLyric && (!m_distributeVerses || (m_distributeVerses && verseOk))) {
                     lyricWidth = std::max
                         (lyricWidth, float(npf->getTextWidth(Text(*el->event()))));
                     NOTATION_DEBUG << "Setting lyric width to " << lyricWidth

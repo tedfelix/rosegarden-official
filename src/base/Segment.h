@@ -588,12 +588,31 @@ public:
     void setTranspose(int transpose);
 
     /**
+     * Return the number of verses in the lyrics
+     * (call countVerses() when needed)
+     */
+    int getVerseCount();
+    
+    /**
+     * (Re)compute the internally remembered verse count
+     */
+    void countVerses();
+
+    /**
      * Return the verse index of lyrics associated with the segment if
      * this one is unfolded in the notation editor.
      * (ie the verse which have to be written under the staff among all the
      * verses included as text of lyrics inside the segment)
      */
     int getVerse() const { return m_verse; }
+
+    /**
+     * Return the verse index of lyrics associated with the segment if
+     * this one is unfolded in the notation editor.
+     * As getVerse(), but return again the first verses when going beyond
+     * the total verses count.
+     */
+    int getVerseWrapped();
 
     /**
      * Used to set the value returned by getVerse().
@@ -911,8 +930,9 @@ private:
     // Linked segments
     SegmentLinker *m_segmentLinker;
     LinkTransposeParams m_linkTransposeParams;
-    bool m_isTmp;   // Mark a segment (usually a link) as temporary
-    int m_verse;    // Used to distribute lyrics among repeated segments
+    bool m_isTmp;      // Mark a segment (usually a link) as temporary
+    int m_verseCount;  // -1 means not computed still
+    int m_verse;       // Used to distribute lyrics among repeated segments
 };
 
 typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;

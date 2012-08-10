@@ -75,6 +75,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_segmentLinker(0),
     m_isTmp(0),
+    m_verseCount(-1),   // -1 => computation needed
     m_verse(0)
 {
 }
@@ -118,6 +119,7 @@ Segment::Segment(const Segment &segment):
     m_fadeOutTime(segment.getFadeOutTime()),
     m_segmentLinker(0), //yes, this is intentional. clone() handles this
     m_isTmp(segment.isTmp()),
+    m_verseCount(-1),   // -1 => computation needed
     m_verse(0)   // Needs a global recomputation on the whole composition 
 {
     for (const_iterator it = segment.begin();
@@ -1522,6 +1524,44 @@ Segment::getEventRuler(const std::string &type, int controllerValue)
             return *it;
 
     return 0;
+}
+
+
+int
+Segment::getVerseCount()
+{
+    if (m_verseCount == -1) countVerses();
+    return m_verseCount;
+}
+
+int
+Segment::getVerseWrapped()
+{
+    int count = getVerseCount();
+    return count ? getVerse() % count : 0;
+}
+
+// Following code moved from LyricEditDialog.cpp
+void
+Segment::countVerses()
+{
+    m_verseCount = 0;
+
+    for (iterator i = begin(); isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->isa(Text::EventType)) {
+
+            std::string textType;
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+
+                if (verse >= m_verseCount) m_verseCount = verse + 1;
+            }
+        }
+    }
 }
 
 

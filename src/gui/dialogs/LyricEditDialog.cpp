@@ -176,24 +176,8 @@ LyricEditDialog::slotRemoveVerse()
 void
 LyricEditDialog::countVerses()
 {
-    m_verseCount = 1;
-
-    for (Segment::iterator i = m_segment->begin();
-         m_segment->isBeforeEndMarker(i); ++i) {
-
-        if ((*i)->isa(Text::EventType)) {
-
-            std::string textType;
-            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
-                textType == Text::Lyric) {
-
-                long verse = 0;
-                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
-
-                if (verse >= m_verseCount) m_verseCount = verse + 1;
-            }
-        }
-    }
+    m_verseCount = m_segment->getVerseCount();
+    if (m_verseCount == 0) m_verseCount = 1;
 }
 
 void
