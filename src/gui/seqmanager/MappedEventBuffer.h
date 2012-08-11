@@ -67,30 +67,18 @@ public:
     MappedEventBuffer(RosegardenDocument *);
     virtual ~MappedEventBuffer();
 
-    /// Is this object a MetronomeMapper?
+    /// Two-phase initialization.
     /**
-     * Used by MappedBufMetaIterator::fillNoncompeting() for special
-     * handling of the metronome.
-     *
-     * This might be implemented as a virtual function that just returns
-     * false, but is overridden in MetronomeMapper to return true.
-     * setMetronome() and m_isMetronome could then be removed.
-     * Switching on type like this is usually considered a Bad Thing.
-     * Examination of MappedBufMetaIterator might lead to a more useful
-     * function that could be overridden by MetronomeMapper.
-     *
-     * @see setMetronome()
+     * Actual setup, must be called after ctor, calls virtual methods.
+     * Dynamic Binding During Initialization idiom.
      */
-    bool isMetronome() const { return m_isMetronome; }
+    void init();
 
-    /// Enables special handling related to MetronomeMapper
+    /// Initialization particular to various classes.  (UNUSED)
     /**
-     * Used by MetronomeMapper to communicate with
-     * MappedBufMetaIterator::fillNoncompeting().
-     *
-     * @see isMetronome()
+     * The only overrider is SegmentMapper and it just debug-prints.
      */
-    void setMetronome(bool isMetronome) { m_isMetronome = isMetronome; }
+    virtual void initSpecial(void)  { }
 
     /// Access to the internal buffer of events.  NOT LOCKED
     /**
@@ -165,19 +153,6 @@ public:
      */
     virtual int calculateSize() = 0;
 
-    /// Two-phase initialization.
-    /**
-     * Actual setup, must be called after ctor, calls virtual methods.
-     * Dynamic Binding During Initialization idiom.
-     */
-    void init();
-
-    /// Initialization particular to various classes.  (UNUSED)
-    /**
-     * The only overrider is SegmentMapper and it just debug-prints.
-     */
-    virtual void initSpecial(void)  { }
-    
     /// Fill buffer with data from the segment
     /**
      * This is provided by derivers to handle whatever sort of data is
@@ -237,22 +212,31 @@ public:
         end   = m_end;
     }
 
- protected:
-    /// Add an event to the buffer.
-    void mapAnEvent(MappedEvent *e);
-
-    /// Set the sounding times.
+    /// Is this object a MetronomeMapper?
     /**
-     * InternalSegmentMapper::dump() keeps this updated.
+     * Used by MappedBufMetaIterator::fillNoncompeting() for special
+     * handling of the metronome.
      *
-     * @see getStartEnd()
+     * This might be implemented as a virtual function that just returns
+     * false, but is overridden in MetronomeMapper to return true.
+     * setMetronome() and m_isMetronome could then be removed.
+     * Switching on type like this is usually considered a Bad Thing.
+     * Examination of MappedBufMetaIterator might lead to a more useful
+     * function that could be overridden by MetronomeMapper.
+     *
+     * @see setMetronome()
      */
-    void setStartEnd(RealTime &start, RealTime &end) {
-        m_start = start;
-        m_end   = end;
-    }
+    bool isMetronome() const { return m_isMetronome; }
 
- public:
+    /// Enables special handling related to MetronomeMapper
+    /**
+     * Used by MetronomeMapper to communicate with
+     * MappedBufMetaIterator::fillNoncompeting().
+     *
+     * @see isMetronome()
+     */
+    void setMetronome(bool isMetronome) { m_isMetronome = isMetronome; }
+
     class iterator 
     {
     public:
@@ -499,6 +483,20 @@ protected:
      * @see removeOwner()
      */
     int m_refCount;
+
+    /// Add an event to the buffer.
+    void mapAnEvent(MappedEvent *e);
+
+    /// Set the sounding times.
+    /**
+     * InternalSegmentMapper::dump() keeps this updated.
+     *
+     * @see getStartEnd()
+     */
+    void setStartEnd(RealTime &start, RealTime &end) {
+        m_start = start;
+        m_end   = end;
+    }
 
 private:
     // Hide copy ctor and op= (dtor is non-trivial)
