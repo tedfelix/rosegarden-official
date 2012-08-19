@@ -85,6 +85,7 @@ MappedEventBuffer::refresh()
         resizeBuffer(newFill);
     }
 
+    // Ask the deriver to fill the buffer from the document
     dump();
 
     return resized;
@@ -105,7 +106,7 @@ MappedEventBuffer::getBufferFill() const
 void
 MappedEventBuffer::resizeBuffer(int newSize)
 {
-    if (newSize <= getBufferSize()) return;
+    if (newSize <= getBufferSize())  return;
 
     MappedEvent *oldBuffer = m_buffer;
     MappedEvent *newBuffer = new MappedEvent[newSize];
@@ -125,6 +126,7 @@ MappedEventBuffer::resizeBuffer(int newSize)
 #ifdef DEBUG_MAPPED_EVENT_BUFFER
     SEQUENCER_DEBUG << "MappedEventBuffer::resizeBuffer: Resized to " << newSize << " events" << endl;
 #endif
+
     delete[] oldBuffer;
 }
 
@@ -165,7 +167,8 @@ void
 MappedEventBuffer::
 addOwner(void)
 {
-    m_refCount++;
+    ++m_refCount;
+
 #ifdef DEBUG_MAPPED_EVENT_BUFFER
     SEQUENCER_DEBUG << "MappedEventBuffer::addOwner"
                     << (void*)this
@@ -186,8 +189,9 @@ removeOwner(void)
                     << (int) m_refCount
                     << endl;
 #endif
-    m_refCount--;
-    if (!m_refCount) { delete this; }
+
+    --m_refCount;
+    if (!m_refCount)  delete this;
 }
 
     /*** MappedEventBuffer::iterator ***/
@@ -247,7 +251,7 @@ MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator++()
 {
     int fill = m_s->getBufferFill();
-    if (m_index < fill) ++m_index;
+    if (m_index < fill)  ++m_index;
     return *this;
 }
 
@@ -258,7 +262,7 @@ MappedEventBuffer::iterator::operator++(int)
     // This line is the main reason we need a copy ctor.
     iterator r = *this;
     int fill = m_s->getBufferFill();
-    if (m_index < fill) ++m_index;
+    if (m_index < fill)  ++m_index;
     return r;
 }
 
@@ -277,8 +281,11 @@ MappedEventBuffer::iterator::operator+=(int offset)
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator-=(int offset)
 {
-    if (m_index > offset) m_index -= offset;
-    else m_index = 0;
+    if (m_index > offset)
+        m_index -= offset;
+    else
+        m_index = 0;
+
     return *this;
 }
 
@@ -296,8 +303,11 @@ MappedEvent
 MappedEventBuffer::iterator::operator*()
 {
     const MappedEvent *e = peek();
-    if (e) return *e;
-    else return MappedEvent();
+
+    if (e)
+        return *e;
+    else
+        return MappedEvent();
 }
 
 MappedEvent *
@@ -313,9 +323,8 @@ MappedEventBuffer::iterator::peek() const
     QReadLocker locker(&m_s->m_lock);
 
     // If we're at the end
-    if (m_index >= m_s->getBufferFill()) {
+    if (m_index >= m_s->getBufferFill())
         return 0;
-    }
 
     return &m_s->m_buffer[m_index];
 }
@@ -336,7 +345,7 @@ doInsert(MappedInserterBase &inserter, MappedEvent &evt)
     // jumped into the middle of a long note, we'd wrongly find the
     // controller values as they are at the time the note starts.
     if (evt.getEventTime() > m_currentTime)
-        { m_currentTime = evt.getEventTime(); }
+        m_currentTime = evt.getEventTime();
 
     // Mapper does the actual insertion.
     getSegment()->doInsert(inserter, evt, m_currentTime, !getReady());

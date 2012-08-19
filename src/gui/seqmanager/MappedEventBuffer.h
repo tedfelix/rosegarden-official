@@ -166,6 +166,14 @@ public:
 
     /// Insert a MappedEvent with appropriate setup for channel.
     /**
+     * InternalSegmentMapper and MetronomeMapper override this to bring
+     * ChannelManager into the picture to dynamically allocate a channel
+     * for the event before inserting.
+     *
+     * The inserter can be as simple as a MappedEventInserter which just
+     * adds the events to a MappedEventList.  See MappedInserterBase and its
+     * derivers for more.
+     *
      * refTime is not necessarily the same as MappedEvent's
      * getEventTime() because we might jump into the middle of a long
      * note.
@@ -281,7 +289,7 @@ public:
 
         bool atEnd() const;
 
-        /// Go back to the beginning of the stream
+        /// Go back to the beginning of the MappedEventBuffer
         void reset();
 
         /// Prefix operator++
@@ -347,6 +355,9 @@ public:
          */
         void setInactive()  { m_active = false; }
         /**
+         * Whether this iterator has more events to give within the current
+         * time slice.
+         *
          * Called by MappedBufMetaIterator::fillNoncompeting().
          *
          * @see setActive()
@@ -364,6 +375,7 @@ public:
          */
         void setReady(bool value)  { m_ready = value; };
 
+        /// Whether we are ready with regard to performance time.
         /**
          * Called by MappedEventBuffer::iterator::doInsert().
          *
@@ -378,6 +390,7 @@ public:
          * of this:
          * "Do appropriate preparation for inserting event, including
          * possibly setting up the channel."
+         * The routine it delegates to does this.
          */
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
@@ -401,9 +414,12 @@ public:
          */
         bool m_active;
 
-        // RealTime when the current event starts sounding.  Either
-        // the current event's time or the time the loop starts,
-        // whichever is greater.  Used for calculating the correct controllers
+        /// RealTime when the current event starts sounding.
+        /**
+         * Either the current event's time or the time the loop starts,
+         * whichever is greater.  Used for calculating the correct
+         * controllers
+         */
         RealTime m_currentTime;
 
         // !!! WARNING !!!
@@ -414,6 +430,9 @@ public:
 
 protected:
     friend class iterator;
+
+    /// The Mapped Event Buffer
+    MappedEvent *m_buffer;
 
     /// Capacity of the buffer.
     /**
@@ -427,9 +446,9 @@ protected:
      */
     mutable QAtomicInt m_fill;
 
-    /// The Mapped Event Buffer
-    MappedEvent *m_buffer;
-
+    /*
+     * @see isMetronome()
+     */
     bool m_isMetronome;
 
     /// Lock for iterator::peek() and resizeBuffer()
@@ -478,16 +497,13 @@ protected:
     /**
      * We won't delete while it has any owner.  This is changed just in
      * owner's ctors and dtors.
-     *
-     * @see addOwner()
-     * @see removeOwner()
      */
     int m_refCount;
 
     /// Add an event to the buffer.
     void mapAnEvent(MappedEvent *e);
 
-    /// Set the sounding times.
+    /// Set the sounding times (m_start, m_end).
     /**
      * InternalSegmentMapper::dump() keeps this updated.
      *
@@ -499,10 +515,10 @@ protected:
     }
 
 private:
-    // Hide copy ctor and op= (dtor is non-trivial)
+    /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer(const MappedEventBuffer &);
+    /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer &operator=(const MappedEventBuffer &);
-
 };
 
 }
