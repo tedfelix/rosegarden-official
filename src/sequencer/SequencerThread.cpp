@@ -19,7 +19,6 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-
 #include <QDateTime>
 
 #include "base/Profiler.h"
@@ -33,7 +32,7 @@ namespace Rosegarden
 void
 SequencerThread::run()
 {
-    SEQUENCER_DEBUG << "SequencerThread::run" << endl;
+    SEQUENCER_DEBUG << "SequencerThread::run()";
 
     RosegardenSequencer &seq = *RosegardenSequencer::getInstance();
 
@@ -52,13 +51,13 @@ SequencerThread::run()
 
         bool atLeisure = true;
 
-//        std::cerr << "Sequencer status is " << seq.getStatus() << std::endl;
+        //SEQUENCER_DEBUG << "Sequencer status is " << seq.getStatus();
 
         switch (seq.getStatus()) {
-	    
-	case QUIT:
-	    exiting = true;
-	    break;
+
+        case QUIT:
+            exiting = true;
+            break;
 
         case STARTING_TO_PLAY:
             if (!seq.startPlaying()) {
@@ -121,20 +120,16 @@ SequencerThread::run()
             break;
 
         case STOPPING:
-            // There's no call to roseSeq to actually process the
+            // There's no call to RosegardenSequencer to actually process the
             // stop, because this arises from a call from the GUI
-            // direct to roseSeq to start with
+            // direct to RosegardenSequencer to start with
             seq.setStatus(STOPPED);
 
-            SEQUENCER_DEBUG << "RosegardenSequencer - Stopped" << endl;
+            SEQUENCER_DEBUG << "SequencerThread::run() - Stopped";
             break;
 
         case RECORDING_ARMED:
-            SEQUENCER_DEBUG << "RosegardenSequencer - "
-			    << "Sequencer can't enter \""
-			    << "RECORDING_ARMED\" state - "
-			    << "internal error"
-			    << endl;
+            SEQUENCER_DEBUG << "SequencerThread::run() - Sequencer can't enter \"RECORDING_ARMED\" state - internal error";
             break;
 
         case STOPPED:
@@ -153,25 +148,26 @@ SequencerThread::run()
         seq.updateClocks();
 
         if (lastSeqStatus != seq.getStatus()) {
-            SEQUENCER_DEBUG << "Sequencer status changed from " << lastSeqStatus << " to " << seq.getStatus() << endl;
+            SEQUENCER_DEBUG << "Sequencer status changed from " << lastSeqStatus << " to " << seq.getStatus();
             lastSeqStatus = seq.getStatus();
             atLeisure = false;
         }
 
-	if (timer.elapsed() > 3000) {
-	    seq.checkForNewClients();
-	    timer.restart();
-	}
+        if (timer.elapsed() > 3000) {
+            seq.checkForNewClients();
+            timer.restart();
+        }
 
-	seq.unlock();
+        seq.unlock();
 
-	// permitting synchronised calls from the gui or wherever to
-	// be made now
+        // permitting synchronised calls from the gui or wherever to
+        // be made now
 
-	if (atLeisure)
+        // If the sequencer status hasn't changed, sleep for a bit
+        if (atLeisure)
             seq.sleep(sleepTime);
 
-	seq.lock();
+        seq.lock();
     }
 
     seq.unlock();
