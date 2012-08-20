@@ -13,6 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef RG_SOUNDDRIVER_H
+#define RG_SOUNDDRIVER_H
+
 #include <string>
 #include <vector>
 #include <list>
@@ -25,19 +28,10 @@
 #include "SequencerDataBlock.h"
 #include "PlayableAudioFile.h"
 #include "Scavenger.h"
-#include "RIFFAudioFile.h" // for SubFormat enum
 
-// Abstract base to support SoundDrivers, such as ALSA.
-//
-// This base class provides the generic driver support for
-// these drivers with the Sequencer class owning an instance
-// of a sub class of this class and directing it and required
-// by the rosegardensequencer itself.
-//
-//
+// For SubFormat enum
+#include "RIFFAudioFile.h"
 
-#ifndef _SOUNDDRIVER_H_
-#define _SOUNDDRIVER_H_
 
 namespace Rosegarden
 {
@@ -75,9 +69,7 @@ typedef enum
 } TransportSyncStatus;
 
 
-// The NoteOffQueue holds a time ordered set of
-// pending MIDI NOTE OFF events.
-//
+/// Pending Note Off event for the NoteOffQueue
 class NoteOffEvent
 {
 public:
@@ -112,12 +104,14 @@ private:
     MidiByte     m_pitch;
     MidiByte     m_channel;
     InstrumentId m_instrument;
-
 };
 
 
-// The queue itself
-//
+/// The queue itself
+/**
+ * The NoteOffQueue holds a time ordered set of
+ * pending MIDI NoteOffEvent objects.
+ */
 class NoteOffQueue : public std::multiset<NoteOffEvent *,
                      NoteOffEvent::NoteOffEventCmp>
 {
@@ -134,9 +128,16 @@ class AudioPlayQueue;
 
 typedef std::vector<PlayableAudioFile *> PlayableAudioFileList;
 
-// The abstract SoundDriver
-//
-//
+
+/// The abstract SoundDriver
+/**
+ * Abstract Base Class (ABC) to support SoundDrivers, such as ALSA.
+ *
+ * This ABC provides the generic driver support for
+ * these drivers with the Sequencer class owning an instance
+ * of a sub class of this class and directing it as required
+ * by RosegardenSequencer itself.
+ */
 class SoundDriver
 {
 public:
@@ -512,5 +513,4 @@ protected:
 
 }
 
-#endif // _SOUNDDRIVER_H_
-
+#endif // RG_SOUNDDRIVER_H
