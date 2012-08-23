@@ -12,6 +12,9 @@
   COPYING included with this distribution for more information.
 */
 
+#ifndef RG_MAPPEDDEVICE_H
+#define RG_MAPPEDDEVICE_H
+
 #include <string>
 #include <vector>
 
@@ -20,9 +23,6 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "MappedCommon.h"
-
-#ifndef _MAPPEDDEVICE_H_
-#define _MAPPEDDEVICE_H_
 
 // A DCOP wrapper to get MappedInstruments across to the GUI
 //
@@ -100,5 +100,5 @@ typedef std::vector<MappedInstrument*>::iterator
 
 }
 
-#endif // _MAPPEDDEVICE_H_
+#endif // RG_MAPPEDDEVICE_H
 

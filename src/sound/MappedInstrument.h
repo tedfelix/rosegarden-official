@@ -12,12 +12,12 @@
   COPYING included with this distribution for more information.
 */
 
+#ifndef RG_MAPPEDINSTRUMENT_H
+#define RG_MAPPEDINSTRUMENT_H
+
 #include "base/Instrument.h"
 #include "MappedDevice.h"
 #include "MappedCommon.h"
-
-#ifndef _MAPPEDINSTRUMENT_H_
-#define _MAPPEDINSTRUMENT_H_
 
 // A scaled-down version of an Instrument that we keep Sequencer
 // side.  IDs match with those on the GUI.
@@ -92,4 +92,4 @@ private:
 
 }
 
-#endif // _MAPPEDINSTRUMENT_H_
+#endif // RG_MAPPEDINSTRUMENT_H

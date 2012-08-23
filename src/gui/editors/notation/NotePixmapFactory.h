@@ -74,7 +74,7 @@ public:
     int getSize() const;
 
    /**
-    \enum NotePixmapFactory::ColourType
+    \enum ColourType
 
     This enum describes the different colours that may be used to draw
     notation-related glyphs.  This aspect of drawing is handled through this

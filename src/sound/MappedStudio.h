@@ -12,6 +12,9 @@
   COPYING included with this distribution for more information.
 */
 
+#ifndef RG_MAPPEDSTUDIO_H
+#define RG_MAPPEDSTUDIO_H
+
 #include <map>
 #include <string>
 #include <vector>
@@ -23,9 +26,6 @@
 #include "base/Device.h"
 
 #include "base/AudioPluginInstance.h" // for PluginPort::PortDisplayHint //!!!???
-
-#ifndef _MAPPEDSTUDIO_H_
-#define _MAPPEDSTUDIO_H_
 
 
 // A sequencer-side representation of certain elements in the
@@ -542,4 +542,4 @@ protected:
     
 }
 
-#endif // _MAPPEDSTUDIO_H_
+#endif // RG_MAPPEDSTUDIO_H

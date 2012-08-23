@@ -33,13 +33,14 @@ namespace Rosegarden
 
 /***** Internal types *****/
 
-/// @typedef The types we retrieve from particular properties
+/// @typedef pitchT
+/// The types we retrieve from particular properties
 /// @author Tom Breton (Tehom)
 typedef PropertyDefn<Int>::basic_type pitchT;
 typedef PropertyDefn<Int>::basic_type velocityT;
 
-/// Class to describe a relative event
 /// @class RelativeEvent
+/// Class to describe a relative event
 /// @author Tom Breton (Tehom)
 class RelativeEvent
 {
@@ -62,8 +63,8 @@ protected:
     timeT            m_relativeTime;
 };
 
-/// Class to describe a relative note
 /// @class RelativeNote
+/// Class to describe a relative note
 /// @author Tom Breton (Tehom)
 class RelativeNote : public RelativeEvent
 {
@@ -76,8 +77,8 @@ public:
     virtual pitchT getResultPitch(const Key key, const Pitch & basePitch)=0;
 };
 
+/// @class ChromaticRelativeNote
 /// Class to describe a chromatically relative note
-/// @class RelativeNote
 /// @author Tom Breton (Tehom)
 class ChromaticRelativeNote : public RelativeNote
 {
@@ -99,8 +100,8 @@ private:
     int  m_interval;
 };
 
+/// @class DiatonicRelativeNote
 /// Class to describe a diatonically relative note
-/// @class RelativeNote
 /// @author Tom Breton (Tehom)
 class DiatonicRelativeNote : public RelativeNote
 {
@@ -115,11 +116,13 @@ private:
     int  m_interval;
 };
 
-/// @typedef Containers for RelativeEvent
+/// @typedef RelativeEventVec
+/// Containers for RelativeEvent
 /// @author Tom Breton (Tehom)
 typedef std::vector<RelativeEvent *> RelativeEventVec;
 
-/// @class A chord together with its start and end times.
+/// @class DelimitedChord
+/// A chord together with its start and end times.
 /// @author Tom Breton (Tehom)
 class DelimitedChord
 {
@@ -134,7 +137,8 @@ public:
     timeT              m_start;
     timeT              m_end;
 };
-/// @typedef Several DelimitedChords in the same bar (or other group)
+/// @typedef ChordSequence
+/// Several DelimitedChords in the same bar (or other group)
 /// @author Tom Breton (Tehom)
 typedef std::vector<DelimitedChord> ChordSequence;
 

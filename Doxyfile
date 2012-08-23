@@ -450,7 +450,7 @@ WARN_LOGFILE           = docs/doxygen/warning.log
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = src/base/ src/commands/ src/document/ src/gui/ src/helpers/ src/misc/ src/sequencer/ src/sound/
+INPUT                  = src/base/ src/commands/ src/document/ src/gui/ src/misc/ src/sequencer/ src/sound/
 
 # If the value of the INPUT tag contains directories, you can use the
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
@@ -488,7 +488,8 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = *.moc.cpp \
+EXCLUDE_PATTERNS       = *.moc \
+                         *.moc.cpp \
                          *_skel.cpp
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or

@@ -17,13 +17,13 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef RG_COLOURMAP_H
+#define RG_COLOURMAP_H
+
 #include <utility>
 #include <map>
 #include <string>
 #include "Colour.h"
-
-#ifndef _BASE_COLOURMAP_H_
-#define _BASE_COLOURMAP_H_
 
 // These are the default, default colour
 #define COLOUR_DEF_R 255
