@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEPIXMAPFACTORY_H_
-#define _RG_NOTEPIXMAPFACTORY_H_
+#ifndef RG_NOTEPIXMAPFACTORY_H
+#define RG_NOTEPIXMAPFACTORY_H
 
 #include <QGraphicsPixmapItem>
 
@@ -83,24 +83,16 @@ public:
     (realising that you have to hook it all up somewhere to make use of the new
     values defined!)
 
-    \value PlainColour       The default basic Qt::black (hard coded)
-    \value QuantizedColour   Defined in GUIPalette; used when quantized notes are indicated
-    \value HighlightedColour Defined in GUIPalette; used when notes (&c.) are shown in the selected state
-    \value TriggerColour     Defined in GUIPalette; used when trigger notes are indicated
-    \value OutRangeColour    Defined in GUIPalette; used when out-of-range notes are indicated
-    \value PlainColourLight  The default basic Qt::white (hard coded) used when drawing on a black background
-    \Value ConflictColour    Qt::red (hard coded) used by track headers to indicate, eg. a clef conflict
-
     \sa GUIPalette, TrackParameterBox, PresetHandlerDialog
     */
     enum ColourType {
-        PlainColour,
-        QuantizedColour,
-        HighlightedColour,
-        TriggerColour,
-        OutRangeColour,
-        PlainColourLight,
-        ConflictColour
+        PlainColour,        /**< The default basic Qt::black (hard coded) */
+        QuantizedColour,    /**< Defined in GUIPalette; used when quantized notes are indicated */
+        HighlightedColour,  /**< Defined in GUIPalette; used when notes (&c.) are shown in the selected state */
+        TriggerColour,      /**< Defined in GUIPalette; used when trigger notes are indicated */
+        OutRangeColour,     /**< Defined in GUIPalette; used when out-of-range notes are indicated */
+        PlainColourLight,   /**< The default basic Qt::white (hard coded) used when drawing on a black background */
+        ConflictColour      /**< Qt::red (hard coded) used by track headers to indicate, eg. a clef conflict */
     };
 
     /** Used to notify the drawing code that the character is selected, and
