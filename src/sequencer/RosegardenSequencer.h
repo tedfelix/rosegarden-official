@@ -12,53 +12,44 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSEGARDEN_SEQUENCER_H_
-#define _ROSEGARDEN_SEQUENCER_H_
- 
-// RosegardenSequencer is the sequencer application for Rosegarden.
-// It owns a Sequencer object which wraps the ALSA 
-// and JACK funtionality.  At this level we deal with comms with
-// the Rosegarden GUI application, the high level marshalling of data 
-// and main event loop of the sequencer.  [rwb]
-//
+#ifndef RG_ROSEGARDENSEQUENCER_H
+#define RG_ROSEGARDENSEQUENCER_H
 
-
-// include files for Qt
-#include <QStringList>
-
-#include <QMutex>
-
-#include "base/Composition.h"
 #include "gui/application/TransportStatus.h"
 
-#include "RosegardenSequencerIface.h"
-
 #include "sound/MappedEventList.h"
-#include "base/Event.h"
 #include "sound/MappedStudio.h"
 #include "sound/ExternalTransport.h"
 #include "sound/MappedBufMetaIterator.h"
 
+#include "base/MidiDevice.h"
+
+#include <QMutex>
+
 #include <deque>
 
-namespace Rosegarden { 
 
-// forward declaration of the RosegardenGUI classes
-class RosegardenDocument;
-class RosegardenMainViewWidget;
+namespace Rosegarden { 
 
 class MappedInstrument;
 class SoundDriver;
 
+/// MIDI and Audio recording and playback
 /**
- * The sequencer application
+ * RosegardenSequencer is a Singleton (see getInstance() and m_instance).
+ * It runs in its own thread separate from the GUI (see SequencerThread).
+ *
+ * RosegardenSequencer owns a SoundDriver object (m_driver) which wraps the
+ * ALSA and JACK functionality.  At this level we deal with communication with
+ * the Rosegarden GUI application, the high level marshalling of data,
+ * and the main event loop of the sequencer.
  */
-class RosegardenSequencer : public RosegardenSequencerIface,
-                            public ExternalTransport
+class RosegardenSequencer : public ExternalTransport
 {
 public:
-    ~RosegardenSequencer();
+    virtual ~RosegardenSequencer();
 
+    /// Singleton
     static RosegardenSequencer *getInstance();
 
     void lock();
@@ -68,11 +59,13 @@ public:
     //
     //
 
-    // Quit
-    virtual void quit();
+    /// Close the sequencer.
+    void quit();
 
-    // Based on RealTime timestamps
-    //
+    /// Play from a given time with given parameters.
+    /**
+     *  Based on RealTime timestamps.
+     */
     bool play(const RealTime &position,
               const RealTime &readAhead,
               const RealTime &audioMix,
@@ -80,7 +73,7 @@ public:
               const RealTime &audioWrite,
               long smallFileSize);
 
-    // recording
+    /// Record from a given time with given parameters.
     bool record(const RealTime &position,
                 const RealTime &readAhead,
                 const RealTime &audioMix,
@@ -89,165 +82,271 @@ public:
                 long smallFileSize,
                 long recordMode);
 
-    virtual bool punchOut();
+    /// Punch out from recording to playback
+    bool punchOut();
 
-    // looping
+    /// Set a loop on the sequencer.
     void setLoop(const RealTime &loopStart,
                  const RealTime &loopEnd);
 
-    // Jump to a pointer in the playback
-    virtual void jumpTo(const RealTime &rt);
+    /// Set the sequencer to a given time.
+    void jumpTo(const RealTime &rt);
  
-    // Return the Sound system status (audio/MIDI)
-    //
-    virtual unsigned int getSoundDriverStatus(const QString &guiVersion);
+    /// Return the Sound system status (audio/MIDI)
+    unsigned int getSoundDriverStatus(const QString &guiVersion);
 
-    // Add and remove Audio files on the sequencer
-    //
-    virtual bool addAudioFile(const QString &fileName, int id);
-    virtual bool removeAudioFile(int id);
+    /// Add an audio file to the sequencer
+    /**
+     * @see removeAudioFile()
+     */
+    bool addAudioFile(const QString &fileName, int id);
+    /// Remove an audio file from the sequencer
+    /**
+     * @see addAudioFile()
+     */
+    bool removeAudioFile(int id);
 
     // Deletes all the audio files and clears down any flapping i/o handles
     //
-    virtual void clearAllAudioFiles();
+    void clearAllAudioFiles();
 
-    // stops the sequencer
-    //
-    virtual void stop();
+    /// Stop the sequencer
+    void stop();
 
-    // Set a MappedInstrument at the Sequencer
-    //
-    virtual void setMappedInstrument(int type, unsigned int id);
+    /// Set a MappedInstrument at the Sequencer
+    /**
+     * Single set function as the MappedInstrument is so lightweight.
+     * Any mods on the GUI are sent only through this method.
+     */
+    void setMappedInstrument(int type, unsigned int id);
 
-    virtual void processMappedEvent(MappedEvent mE);
-/*!DEVPUSH
-    virtual unsigned int getDevices();
-    virtual MappedDevice getMappedDevice(unsigned int id);
-*/
-    virtual int canReconnect(Device::DeviceType deviceType);
-    virtual bool addDevice(Device::DeviceType type,
-                           DeviceId id,
-                           InstrumentId baseInstrumentId,
-                           MidiDevice::DeviceDirection direction);
-    virtual void removeDevice(unsigned int id);
-    virtual void removeAllDevices();
-    virtual void renameDevice(unsigned int id, QString name);
-    virtual unsigned int getConnections(Device::DeviceType type,
-                                        MidiDevice::DeviceDirection direction);
-    virtual QString getConnection(Device::DeviceType type,
-                                  MidiDevice::DeviceDirection direction,
-                                  unsigned int connectionNo);
-    virtual QString getConnection(DeviceId id);
-    virtual void setConnection(unsigned int deviceId,
-                               QString connection);
-    virtual void setPlausibleConnection(unsigned int deviceId,
-                                        QString idealConnection);
-    virtual void connectSomething();
+    /// The proper implementation
+    void processMappedEvent(MappedEvent mE);
 
-    virtual unsigned int getTimers();
-    virtual QString getTimer(unsigned int n);
-    virtual QString getCurrentTimer();
-    virtual void setCurrentTimer(QString timer);
+#if 0  // !DEVPUSH
+    /// Return device id following last existing one.
+    /**
+     * You can treat this as "number of devices" but there might be some
+     * holes if devices were deleted, which you will recognise because
+     * getMappedDevice(id) will return a device with id NO_DEVICE
+     */
+    unsigned int getDevices();
+    /// Return device by number
+    MappedDevice getMappedDevice(unsigned int id);
+#endif
 
-    virtual void setLowLatencyMode(bool);
+    /// Query whether the driver implements device reconnection.
+    /**
+     * Returns a non-zero value if the addDevice, removeDevice,
+     * getConnections, getConnection and setConnection methods
+     * may be used with devices of the given type.
+     */
+    int canReconnect(Device::DeviceType deviceType);
 
-    // Audio latencies
-    //
-    virtual RealTime getAudioPlayLatency();
-    virtual RealTime getAudioRecordLatency();
+    /**
+     * Create a device of the given type and direction (corresponding
+     * to MidiDevice::DeviceDirection enum) and return its id.
+     * The device will have no connection by default.  Direction is
+     * currently ignored for non-MIDI devices.
+     *
+     * Do not use this unless canReconnect(type) returned true.
+     */
+    bool addDevice(Device::DeviceType type,
+                   DeviceId id,
+                   InstrumentId baseInstrumentId,
+                   MidiDevice::DeviceDirection direction);
 
-    // Set a MappedObject 
-    //
-    virtual void setMappedProperty(int id,
-                                   const QString &property,
-                                   float value);
+    /// Remove the device of the given id.
+    /**
+     * Ignored if driver does not permit changing the number of devices
+     * (i.e. if canReconnect(type) would return false when given the
+     * type of the supplied device).
+     */
+    void removeDevice(unsigned int id);
+    /// Remove all of the devices (of types that can be added or removed).
+    /**
+     * Ignored if driver does not permit changing the number of devices
+     */
+    void removeAllDevices();
+    /// Rename the given device.
+    /**
+     * Ignored if the driver does not permit this operation.
+     */
+    void renameDevice(unsigned int id, QString name);
+    /**
+     * Return the number of permissible connections for a device of
+     * the given type and direction (corresponding to MidiDevice::
+     * DeviceDirection enum).  Direction is ignored for non-MIDI devices.
+     * Returns zero if devices of this type are non-reconnectable
+     * (i.e. if canReconnect(type) would return false).
+     */
+    unsigned int getConnections(Device::DeviceType type,
+                                MidiDevice::DeviceDirection direction);
+    /*
+     * Return one of the set of permissible connections for a device of
+     * the given type and direction (corresponding to
+     * MidiDevice::DeviceDirection enum).  Direction is ignored for non-MIDI
+     * devices.
+     *
+     * Returns the empty string for invalid parameters.
+     */
+    QString getConnection(Device::DeviceType type,
+                          MidiDevice::DeviceDirection direction,
+                          unsigned int connectionNo);
+    /**
+     * Return the current connection for the given device, or the
+     * empty string if the driver does not permit reconnections or the
+     * device is not connected.
+     */
+    QString getConnection(DeviceId id);
+    /// Reconnect a particular device.
+    /**
+     * Ignored if driver does not permit reconnections or the connection
+     * is not one of the permissible set for that device.
+     */
+    void setConnection(unsigned int deviceId,
+                       QString connection);
+    /**
+     * Reconnect a device to a particular connection or to the closest
+     * thing to that connection currently available (using some heuristic).
+     * Ignored if driver does not permit reconnections.
+     */
+    void setPlausibleConnection(unsigned int deviceId,
+                                QString idealConnection);
+    /**
+     * Ensure that at least one playback device is connected to
+     * something, if there is at least one very obvious candidate to
+     * connect it to
+     */
+    void connectSomething();
 
-    // Set many properties on many MappedObjects
-    //
-    virtual void setMappedProperties(const MappedObjectIdList &ids,
-                                     const MappedObjectPropertyList &properties,
-                                     const MappedObjectValueList &values);
+    /**
+     * Return the number of different timers we are capable of
+     * sychronising against.  This may return 0 if the driver has no
+     * ability to change the current timer.
+     */
+    unsigned int getTimers();
+    /// Return the name of a timer from the available set.
+    /*
+     * @param n is between 0 and the return value from getTimers() - 1
+     */
+    QString getTimer(unsigned int n);
+    /// The name of the timer we are currently synchronising against.
+    QString getCurrentTimer();
+    /// Set the timer we are currently synchronising against.
+    /**
+     * Invalid arguments are simply ignored.
+     */
+    void setCurrentTimer(QString timer);
 
-    // Set a MappedObject to a string
-    //
-    virtual void setMappedProperty(int id,
-                                   const QString &property,
-                                   const QString &value);
+    void setLowLatencyMode(bool);
 
-    // Set a MappedObject to a property list.  Return value is
-    // error string if any.
-    //
-    virtual QString setMappedPropertyList(int id,
-                                       const QString &property,
-                                       const MappedObjectPropertyList &values);
+    RealTime getAudioPlayLatency();
+    RealTime getAudioRecordLatency();
 
-    // Get a MappedObject for a type
-    //
-    virtual int getMappedObjectId(int type);
+    /// Set a property on a MappedObject
+    void setMappedProperty(int id,
+                           const QString &property,
+                           float value);
 
-    // Get a Property list from an Object
-    //
-    virtual std::vector<QString> getPropertyList(int id,
-                                                 const QString &property);
+    /// Set many properties on many MappedObjects
+    void setMappedProperties(const MappedObjectIdList &ids,
+                             const MappedObjectPropertyList &properties,
+                             const MappedObjectValueList &values);
 
-    virtual std::vector<QString> getPluginInformation();
+    /// Set a string property on a MappedObject
+    void setMappedProperty(int id,
+                           const QString &property,
+                           const QString &value);
 
-    virtual QString getPluginProgram(int id, int bank, int program);
+    /// Set a MappedObject to a property list.
+    /**
+     * Return value is error string if any.
+     */
+    QString setMappedPropertyList(int id,
+                                  const QString &property,
+                                  const MappedObjectPropertyList &values);
 
-    virtual unsigned long getPluginProgram(int id, const QString &name);
+    /// Get a MappedObject ID for an object type
+    int getMappedObjectId(int type);
 
-    // Set a plugin port
-    //
-    virtual void setMappedPort(int pluginId,
-                               unsigned long portId,
-                               float value);
+    /// Get a list of properties of a certain type from an object
+    std::vector<QString> getPropertyList(int id,
+                                         const QString &property);
 
-    virtual float getMappedPort(int pluginId,
-                                unsigned long portId);
+    /// Get a list of available plugins
+    std::vector<QString> getPluginInformation();
 
-    // Create a MappedObject
-    virtual int createMappedObject(int type);
+    /**
+     * Nasty hack: program name/number mappings are one thing that
+     * mapped object properties can't cope with
+     */
+    QString getPluginProgram(int id, int bank, int program);
 
-    // Destroy an object
-    //
-    virtual bool destroyMappedObject(int id);
+    /// Nastier hack: return value is bank << 16 + program
+    unsigned long getPluginProgram(int id, const QString &name);
 
-    // Connect two objects
-    //
-    virtual void connectMappedObjects(int id1, int id2);
+    /// Set a plugin port
+    /**
+     * Cheat - we can't use a call (getPropertyList) during playback
+     * so we use this method to set port N on plugin X.
+     */
+    void setMappedPort(int pluginId,
+                       unsigned long portId,
+                       float value);
+
+    float getMappedPort(int pluginId,
+                        unsigned long portId);
+
+    /// Create a (transient, writeable) MappedObject
+    int createMappedObject(int type);
+
+    /// Destroy an object
+    bool destroyMappedObject(int id);
+
+    /// Connect two objects
+    void connectMappedObjects(int id1, int id2);
     
-    // Disconnect two objects
-    //
-    virtual void disconnectMappedObjects(int id1, int id2);
+    /// Disconnect two objects
+    void disconnectMappedObjects(int id1, int id2);
 
-    // Disconnect an object from everything
-    //
-    virtual void disconnectMappedObject(int id);
+    /// Disconnect an object from everything
+    void disconnectMappedObject(int id);
 
-    // Sample rate
-    //
-    virtual unsigned int getSampleRate() const;
+    /// Driver sample rate
+    unsigned int getSampleRate() const;
 
-    // Clear the studio
-    //
-    virtual void clearStudio();
+    /**
+     * Initialise/Reinitialise the studio back down to read only objects
+     * and set to defaults.
+     */
+    void clearStudio();
 
-    // Debug stuff, to check MappedEventBuffer::iterator
-    virtual void dumpFirstSegment();
+    /// Debug stuff, to check MappedEventBuffer::iterator
+    void dumpFirstSegment();
 
-    virtual void segmentModified(MappedEventBuffer *);
-    virtual void segmentAdded(MappedEventBuffer *);
-    virtual void segmentAboutToBeDeleted(MappedEventBuffer *);
-    virtual void compositionAboutToBeDeleted();
-    virtual void remapTracks();
+    void segmentModified(MappedEventBuffer *);
+    void segmentAdded(MappedEventBuffer *);
+    void segmentAboutToBeDeleted(MappedEventBuffer *);
+    /// Close all mapped segments
+    void compositionAboutToBeDeleted();
+    /**
+     * Update mute (etc) statuses while playing. The sequencer handles
+     * this automatically (with no need for this call) for MIDI events,
+     * but it needs to be prodded when an already-playing audio segment
+     * drops in or out.
+     */
+    void remapTracks();
 
-    // Set Quarter note length
-    //
-    virtual void setQuarterNoteLength(RealTime rt);
+    /**
+     * Allow the GUI to tell the sequence the duration of a quarter
+     * note when the TEMPO changes - this is to allow the sequencer
+     * to generate MIDI clock (at 24 PPQN).
+     */
+    void setQuarterNoteLength(RealTime rt);
 
-    // Get a status report
-    // 
-    virtual QString getStatusLog();
+    /// Return a (potentially lengthy) human-readable status log
+    QString getStatusLog();
 
     bool getNextTransportRequest(TransportRequest &request, RealTime &time);
 
@@ -323,7 +422,7 @@ public:
     void initialiseStudio();
 
 
-    // --------- EXTERNAL TRANSPORT INTERFACE METHODS --------
+    // --------- ExternalTransport Interface --------
     //
     // Whereas the interface (above) is for the GUI to call to
     // make the sequencer follow its wishes, this interface is for
@@ -335,7 +434,10 @@ public:
     bool isTransportSyncComplete(TransportToken token);
     TransportToken getInvalidTransportToken() const { return 0; }
 
+    // ---------- End of ExternalTransport Interface -----------
+
 protected:
+    /// Singleton.  See getInstance().
     RosegardenSequencer();
 
     // get events whilst handling loop
@@ -417,4 +519,4 @@ protected:
 
 }
  
-#endif // _ROSEGARDEN_SEQUENCER_APP_H_
+#endif // RG_ROSEGARDENSEQUENCER_H
