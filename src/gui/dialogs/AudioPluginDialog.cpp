@@ -700,7 +700,7 @@ AudioPluginDialog::getProgramsForInstance(AudioPluginInstance *inst, int &curren
 void
 AudioPluginDialog::slotPluginPortChanged(float value)
 {
-    RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged()" << endl;
+    RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged(" << value << ")" << endl;
     const QObject* object = sender();
 
     const PluginControl* control = dynamic_cast<const PluginControl*>(object);
