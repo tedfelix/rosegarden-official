@@ -61,7 +61,7 @@ public:
 
     virtual RealTime getSequencerTime();
 
-    /// Get MIDI data from ALSA while recording.
+    /// Get MIDI data from ALSA while recording
     virtual bool getMappedEventList(MappedEventList &composition);
     
     virtual bool record(RecordStatus recordStatus,
