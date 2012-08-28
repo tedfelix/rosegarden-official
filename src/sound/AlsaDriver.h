@@ -108,7 +108,7 @@ public:
     virtual void processPending();
 
     // We can return audio control signals to the gui using MappedEvents.
-    // Meter levels or audio file completions can go in here.
+    // Meter levels or audio file completions can go in here
     //
     void insertMappedEventForReturn(MappedEvent *mE);
 
