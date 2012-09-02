@@ -52,13 +52,10 @@ public:
     /// Singleton
     static RosegardenSequencer *getInstance();
 
+    /// Locking mechanism used throughout.  See the LOCKED #define.
     void lock();
     void unlock();
 	
-    //      -------- START OF INTERFACE METHODS --------
-    //
-    //
-
     /// Close the sequencer.
     void quit();
 
@@ -83,6 +80,9 @@ public:
                 long recordMode);
 
     /// Punch out from recording to playback
+    /**
+     * For punch in, see SequenceManager::record().
+     */
     bool punchOut();
 
     /// Set a loop on the sequencer.
@@ -103,11 +103,11 @@ public:
     /// Remove an audio file from the sequencer
     /**
      * @see addAudioFile()
+     * @see clearAllAudioFiles()
      */
     bool removeAudioFile(int id);
 
-    // Deletes all the audio files and clears down any flapping i/o handles
-    //
+    /// Removes and closes all audio files
     void clearAllAudioFiles();
 
     /// Stop the sequencer
@@ -120,8 +120,11 @@ public:
      */
     void setMappedInstrument(int type, unsigned int id);
 
-    /// The proper implementation
+    /// Puts a mapped event on the m_asyncOutQueue
     void processMappedEvent(MappedEvent mE);
+
+
+    // --- DEVICES ---
 
 #if 0  // !DEVPUSH
     /// Return device id following last existing one.
@@ -182,7 +185,7 @@ public:
      */
     unsigned int getConnections(Device::DeviceType type,
                                 MidiDevice::DeviceDirection direction);
-    /*
+    /**
      * Return one of the set of permissible connections for a device of
      * the given type and direction (corresponding to
      * MidiDevice::DeviceDirection enum).  Direction is ignored for non-MIDI
@@ -220,6 +223,8 @@ public:
      */
     void connectSomething();
 
+    // --- TIMERS ---
+
     /**
      * Return the number of different timers we are capable of
      * sychronising against.  This may return 0 if the driver has no
@@ -227,8 +232,8 @@ public:
      */
     unsigned int getTimers();
     /// Return the name of a timer from the available set.
-    /*
-     * @param n is between 0 and the return value from getTimers() - 1
+    /**
+     * @param[in] n is between 0 and the return value from getTimers() - 1
      */
     QString getTimer(unsigned int n);
     /// The name of the timer we are currently synchronising against.
@@ -243,6 +248,8 @@ public:
 
     RealTime getAudioPlayLatency();
     RealTime getAudioRecordLatency();
+
+    // --- PROPERTIES ---
 
     /// Set a property on a MappedObject
     void setMappedProperty(int id,
@@ -352,23 +359,20 @@ public:
 
     MappedEventList pullAsynchronousMidiQueue();
 
-    //
-    //
-    //
-    //      -------- END OF INTERFACE --------
-
-
     void setStatus(TransportStatus status)
             { m_transportStatus = status; }
     TransportStatus getStatus() { return m_transportStatus; }
    
-    // Process the first chunk of Sequencer events
+    /// Process the first chunk of Sequencer events
+    /**
+     * How does this differ from play() and record()?
+     */
     bool startPlaying();
 
-    // Process all subsequent events
+    /// Process all subsequent events
     bool keepPlaying();
 
-    // Update internal clock and send GUI position pointer movement
+    /// Update internal clock and send GUI position pointer movement
     void updateClocks();
 
     /**
@@ -379,46 +383,47 @@ public:
     /// Process any audio data that is waiting and send it to be stored.
     void processRecordedAudio();
 
-    // Called during stopped or playing operation to process
-    // any pending incoming MIDI events that aren't being
-    // recorded (i.e. for display in Transport or on Mixer)
-    //
+    /**
+     * Called during stopped or playing operation to process any pending
+     * incoming MIDI events that aren't being recorded (i.e. for display
+     * in Transport or on Mixer)
+     */
     void processAsynchronousEvents();
 
-    // Sleep for the given time, approximately.  Called from the main
-    // loop in order to lighten CPU load (i.e. the timing quality of
-    // the sequencer does not depend on this being accurate).  A good
-    // implementation of this call would return right away when an
-    // incoming MIDI event needed to be handled.
-    //
+    /// Sleep for the given time, approximately.
+    /**
+     * Called from the main loop in order to lighten CPU load (i.e. the
+     * timing quality of the sequencer does not depend on this being
+     * accurate).  A good implementation of this call would return right
+     * away when an incoming MIDI event needed to be handled.
+     */
     void sleep(const RealTime &rt);
 
-    // Removes from a MappedEventList the events not matching
-    // the supplied filer.
-    //
+    /// Removes events not matching a MidiFilter from a MappedEventsList.
     void applyFiltering(MappedEventList *mC,
                         MidiFilter filter,
                         bool filterControlDevice);
 
-    // This method assigns an Instrument to each MappedEvent 
-    // belongin to the MappedEventList, and sends the 
-    // transformed events to the driver to be played.
-    //
+    /**
+     * This method assigns an Instrument to each MappedEvent belonging to
+     * the MappedEventList, and sends the transformed events to the driver
+     * to be played.
+     */
     void routeEvents(MappedEventList *mC, bool useSelectedTrack);
 
-    // Are we looping?
-    //
+    /// Are we looping?
     bool isLooping() const { return !(m_loopStart == m_loopEnd); }
 
-    // the call itself
+    /// the call itself
     void sequencerAlive();
 
-    // check for new external clients (ALSA sequencer or whatever) --
-    // polled regularly
+    /// Check for new external clients (ALSA sequencer or whatever).
+    /**
+     * Polled regularly.
+     */
     void checkForNewClients();
 
-    // Initialise the virtual studio at this end of the link
-    //
+    /// Initialise the virtual studio at this end of the link.
     void initialiseStudio();
 
 
@@ -440,27 +445,22 @@ protected:
     /// Singleton.  See getInstance().
     RosegardenSequencer();
 
-    // get events whilst handling loop
-    //
-    void fetchEvents(MappedEventList &,
+    /// get events whilst handling loop
+    void fetchEvents(MappedEventList &mappedEventList,
                      const RealTime &start,
                      const RealTime &end,
                      bool firstFetch);
 
-    // just get a slice of events between markers
-    //
-    void getSlice(MappedEventList &,
+    /// just get a slice of events between markers
+    void getSlice(MappedEventList &mappedEventList,
                   const RealTime &start,
                   const RealTime &end,
                   bool firstFetch);
 
-    // adjust event times according to relative instrument latencies
-    //
+    /// adjust event times according to relative instrument latencies
     void applyLatencyCompensation(MappedEventList &);
 
     void rationalisePlayingAudio();
-    void setEndOfCompReached(bool e) { m_isEndOfCompReached = e; }
-    bool isEndOfCompReached() { return m_isEndOfCompReached; }
     void incrementTransportToken();
 
     //--------------- Data members ---------------------------------
@@ -468,7 +468,7 @@ protected:
     SoundDriver *m_driver;
     TransportStatus m_transportStatus;
 
-    // Position pointer
+    /// Position pointer
     RealTime m_songPosition;
     RealTime m_lastFetchSongPosition;
 
@@ -483,11 +483,12 @@ protected:
 
     std::vector<MappedInstrument*> m_instruments;
 
-    // MappedStudio holds all of our session-persistent information -
-    // sliders and what have you.  It's also streamable over DCOP
-    // so you can reconstruct it at either end of the link for 
-    // presentation, storage etc.
-    //
+    /**
+     * MappedStudio holds all of our session-persistent information -
+     * sliders and what have you.  It's also streamable over DCOP
+     * so you can reconstruct it at either end of the link for
+     * presentation, storage etc.
+     */
     MappedStudio *m_studio;
 
     // mmap segments
@@ -495,18 +496,27 @@ protected:
     MappedBufMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
-    // m_asyncOutQueue is not a MappedEventList: order of receipt
-    // matters in ordering, timestamp doesn't
+    /**
+     * m_asyncOutQueue is not a MappedEventList: order of receipt
+     * matters in ordering, timestamp doesn't
+     */
     std::deque<MappedEvent *> m_asyncOutQueue;
 
-    // m_asyncInQueue is a MappedEventList because its events are
-    // properly timestamped and should be ordered thus
+    /**
+     * m_asyncInQueue is a MappedEventList because its events are
+     * properly timestamped and should be ordered thus
+     */
     MappedEventList m_asyncInQueue;
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair> m_transportRequests;
     TransportToken m_transportToken;
 
+    /// UNUSED
+    /**
+     * Was used to stop playback at the end of the composition, but it must
+     * not have worked as it was commented out everywhere it was used.
+     */
     bool m_isEndOfCompReached;
     
     QMutex m_mutex;

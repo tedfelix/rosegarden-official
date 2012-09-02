@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MAPPED_SEGMENT_H_
-#define _MAPPED_SEGMENT_H_
+#ifndef RG_MAPPEDBUFMETAITERATOR_H
+#define RG_MAPPEDBUFMETAITERATOR_H
 
 #include "gui/seqmanager/MappedEventBuffer.h"
 #include "sound/MappedEvent.h"
@@ -27,6 +27,11 @@ namespace Rosegarden {
 
 class MappedInserterBase;
 
+/// Iterates through mapped event buffers from a composition.
+/**
+ * It appears that this is where all the data from the various event buffers
+ * is gathered together for playback into a single event list.
+ */
 class MappedBufMetaIterator
 {
 public:
@@ -44,16 +49,18 @@ public:
 
     bool jumpToTime(const RealTime&);
 
+    /// Fetch events from start to end into a mapped event list (via inserter).
     /**
-     * Fill mapped composition with events from current point until
-     * specified time @return true if there are non-metronome events
-     * remaining, false if end of composition was reached
+     * @return true if there are non-metronome events remaining, false if end
+     * of composition [mapped event buffers?] was reached
+     *
+     * rename: fetchEvents() (like RosegardenSequencer::fetchEvents())
      */
     bool fillCompositionWithEventsUntil(bool firstFetch,
                                         MappedInserterBase &inserter,
                                         const RealTime& start,
                                         const RealTime& end);
-    
+
     /// re-seek to current time on the iterator for this segment
     void resetIteratorForSegment(MappedEventBuffer *s, bool immediate);
 
@@ -98,4 +105,4 @@ protected:
 
 }
 
-#endif // _MMAPPED_SEGMENT_H_
+#endif // RG_MAPPEDBUFMETAITERATOR_H

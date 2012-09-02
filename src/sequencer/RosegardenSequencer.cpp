@@ -1142,10 +1142,9 @@ RosegardenSequencer::pullAsynchronousMidiQueue()
 
 
 
-// Get a slice of events from the GUI
-//
+// Get a slice of events from the composition into a MappedEventList.
 void
-RosegardenSequencer::fetchEvents(MappedEventList &composition,
+RosegardenSequencer::fetchEvents(MappedEventList &mappedEventList,
                                     const RealTime &start,
                                     const RealTime &end,
                                     bool firstFetch)
@@ -1155,13 +1154,13 @@ RosegardenSequencer::fetchEvents(MappedEventList &composition,
     if ( m_transportStatus == STOPPED || m_transportStatus == STOPPING )
         return ;
 
-    getSlice(composition, start, end, firstFetch);
-    applyLatencyCompensation(composition);
+    getSlice(mappedEventList, start, end, firstFetch);
+    applyLatencyCompensation(mappedEventList);
 }
 
 
 void
-RosegardenSequencer::getSlice(MappedEventList &composition,
+RosegardenSequencer::getSlice(MappedEventList &mappedEventList,
                                  const RealTime &start,
                                  const RealTime &end,
                                  bool firstFetch)
@@ -1175,27 +1174,28 @@ RosegardenSequencer::getSlice(MappedEventList &composition,
         m_metaIterator.jumpToTime(start);
     }
 
-    MappedEventInserter inserter(composition);
+    MappedEventInserter inserter(mappedEventList);
 
     (void)m_metaIterator.fillCompositionWithEventsUntil
         (firstFetch, inserter, start, end);
 
-    //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
+    // don't do this, it breaks recording because
     // playing stops right after it starts.
+//  m_isEndOfCompReached = eventsRemaining;
 
     m_lastStartTime = start;
 }
 
 
 void
-RosegardenSequencer::applyLatencyCompensation(MappedEventList &composition)
+RosegardenSequencer::applyLatencyCompensation(MappedEventList &mappedEventList)
 {
     RealTime maxLatency = m_driver->getMaximumPlayLatency();
     if (maxLatency == RealTime::zeroTime)
         return ;
 
-    for (MappedEventList::iterator i = composition.begin();
-            i != composition.end(); ++i) {
+    for (MappedEventList::iterator i = mappedEventList.begin();
+            i != mappedEventList.end(); ++i) {
 
         RealTime instrumentLatency =
             m_driver->getInstrumentPlayLatency((*i)->getInstrument());
@@ -1215,8 +1215,7 @@ RosegardenSequencer::applyLatencyCompensation(MappedEventList &composition)
 bool
 RosegardenSequencer::startPlaying()
 {
-    // Fetch up to m_readHead microseconds worth of events
-    //
+    // Fetch up to m_readAhead microseconds worth of events
     m_lastFetchSongPosition = m_songPosition + m_readAhead;
 
     // This will reset the Sequencer's internal clock
@@ -1228,23 +1227,21 @@ RosegardenSequencer::startPlaying()
 
     // process whether we need to or not as this also processes
     // the audio queue for us
-    //
     m_driver->processEventsOut(c, m_songPosition, m_songPosition + m_readAhead);
 
     std::vector<MappedEvent> audioEvents;
     m_metaIterator.getAudioEvents(audioEvents);
     m_driver->initialiseAudioQueue(audioEvents);
 
-    //    SEQUENCER_DEBUG << "RosegardenSequencer::startPlaying: pausing to simulate high-load environment" << endl;
-    //    ::sleep(2);
+    //SEQUENCER_DEBUG << "RosegardenSequencer::startPlaying: pausing to simulate high-load environment" << endl;
+    //::sleep(2);
 
     // and only now do we signal to start the clock
-    //
     m_driver->startClocks();
 
     incrementTransportToken();
 
-    return true; // !isEndOfCompReached();
+    return true; // !m_isEndOfCompReached;
 }
 
 bool
@@ -1271,7 +1268,7 @@ RosegardenSequencer::keepPlaying()
         m_lastFetchSongPosition = fetchEnd;
     }
 
-    return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
+    return true; // !m_isEndOfCompReached; - until we sort this out, we don't stop at end of comp.
 }
 
 // Return current Sequencer time in GUI compatible terms
