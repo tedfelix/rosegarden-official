@@ -1449,13 +1449,14 @@ MidiFile::convertToMidi(Composition &comp)
     // fillCompositionWithEventsUntil's order is only approximately
     // right, so we sort events first.
     SortingInserter sorter;
-    MidiInserter inserter(comp, 480, end);
+    metaiterator->jumpToTime(start);
     // Give the end a little margin to make it insert noteoffs at the
     // end.  If they tied with the end they'd get lost.
     metaiterator->
         fillCompositionWithEventsUntil(true, sorter, start,
                                        end + RealTime(0,1000));
     delete metaiterator;
+    MidiInserter inserter(comp, 480, end);
     sorter.insertSorted(inserter);
     inserter.assignToMidiFile(*this);
 }
