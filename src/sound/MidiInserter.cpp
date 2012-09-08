@@ -238,6 +238,11 @@ insertCopy(const MappedEvent &evt)
         m_previousRealTime = evt.getEventTime();
         m_previousTime     = midiEventAbsoluteTime;
     }
+#ifdef MIDI_DEBUG
+    std::cerr << "Inserting an event for channel "
+              << (int)midiChannel + 1
+              << std::endl;
+#endif
 
     // !!! Add a type and mapper for text
 

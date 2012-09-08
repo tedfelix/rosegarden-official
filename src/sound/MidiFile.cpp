@@ -631,7 +631,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
 
 #ifdef MIDI_DEBUG
-                std::cerr << "MIDI event for channel " << channel << " (track "
+                std::cerr << "MIDI event for channel " << channel + 1 << " (track "
                 << trackNum << ")" << std::endl;
                 midiEvent->print();
 #endif

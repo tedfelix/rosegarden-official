@@ -71,6 +71,7 @@ connectInstrument(Instrument *instrument)
 
     setAllocationMode(instrument);
     m_instrument = instrument;
+    slotInstrumentChanged();
 }
 
 // Set default controllers for instrument on channel.
@@ -573,6 +574,16 @@ void
 ChannelManager::
 slotInstrumentChanged(void)
 {
+    // Reset to the fixedness of the instrument.  This is safe even
+    // when fixedness hasn't really changed.
+    if(m_instrument) {
+        if(m_instrument->hasFixedChannel())
+            { slotChannelBecomesFixed(); }
+        else
+            { slotChannelBecomesUnfixed(); }
+    }
+
+    // The above code won't always set dirty flag, so set it now.
     setDirty();
 }
 
