@@ -577,7 +577,8 @@ slotInstrumentChanged(void)
     // Reset to the fixedness of the instrument.  This is safe even
     // when fixedness hasn't really changed.
     if(m_instrument) {
-        if(m_instrument->hasFixedChannel())
+        if(m_instrument->hasFixedChannel() ||
+           (m_instrument->getType() != Instrument::Midi))
             { slotChannelBecomesFixed(); }
         else
             { slotChannelBecomesUnfixed(); }
