@@ -1978,7 +1978,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
                         // at this point we could quantize the bar if we were
                         // tracking in a notation view
                     } else {
-                        RG_DEBUG << " WARNING: NOTE OFF received without corresponding NOTE ON";
+                        RG_DEBUG << " WARNING: NOTE OFF received without corresponding NOTE ON  channel:" << channel << "  pitch:" << pitch;
                     }
                 }
 
@@ -2498,7 +2498,7 @@ RosegardenDocument::checkSequencerTimer()
 void
 RosegardenDocument::addRecordMIDISegment(TrackId tid)
 {
-    RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")" << endl;
+    RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")";
 //    std::cerr << kdBacktrace() << std::endl;
 
     Segment *recordMIDISegment;

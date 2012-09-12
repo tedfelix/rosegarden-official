@@ -25,6 +25,7 @@
 #include "base/MidiDevice.h"
 
 #include <QMutex>
+#include <QString>
 
 #include <deque>
 
@@ -413,9 +414,6 @@ public:
 
     /// Are we looping?
     bool isLooping() const { return !(m_loopStart == m_loopEnd); }
-
-    /// the call itself
-    void sequencerAlive();
 
     /// Check for new external clients (ALSA sequencer or whatever).
     /**

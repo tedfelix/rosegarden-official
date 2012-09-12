@@ -17,22 +17,14 @@
 
 #include "RosegardenSequencer.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <errno.h>
+//#include <sys/types.h>
+//#include <sys/stat.h>
+//#include <fcntl.h>
+//#include <sys/mman.h>
+//#include <unistd.h>
+//#include <errno.h>
 
-#include <iostream>
-
-#include <QDateTime>
-#include <QString>
-#include <QDir>
-#include <QBuffer>
 #include <QVector>
-#include <QMutex>
-#include <QDir>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -44,8 +36,8 @@
 #include "base/Profiler.h"
 #include "sound/PluginFactory.h"
 
-#include "gui/application/RosegardenApplication.h" 
-#include "gui/application/RosegardenMainWindow.h" 
+#include "gui/application/RosegardenApplication.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 // #define DEBUG_ROSEGARDEN_SEQUENCER
 
