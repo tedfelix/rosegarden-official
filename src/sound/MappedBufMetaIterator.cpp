@@ -44,7 +44,17 @@ MappedBufMetaIterator::~MappedBufMetaIterator()
 void
 MappedBufMetaIterator::addSegment(MappedEventBuffer *ms)
 {
+    // BUG #3546135
+    // If we already have this segment, bail, or else we'll have two
+    // iterators pointing to the same segment.  That will eventually
+    // cause an access to freed memory and a subsequent crash.
+    // This seems to happen when recording and we pass the end of the
+    // composition.
+    if (m_segments.find(ms) != m_segments.end())
+        return;
+
     m_segments.insert(ms);
+
     MappedEventBuffer::iterator *iter = new MappedEventBuffer::iterator(ms);
     moveIteratorToTime(*iter, m_currentTime);
     m_iterators.push_back(iter);
@@ -53,6 +63,7 @@ MappedBufMetaIterator::addSegment(MappedEventBuffer *ms)
 void
 MappedBufMetaIterator::removeSegment(MappedEventBuffer *ms)
 {
+    // Remove from m_iterators
     for (segmentiterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         if ((*i)->getSegment() == ms) {
@@ -62,6 +73,8 @@ MappedBufMetaIterator::removeSegment(MappedEventBuffer *ms)
             break;
         }
     }
+
+    // Remove from m_segments
     m_segments.erase(ms);
 }
 
