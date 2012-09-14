@@ -66,8 +66,12 @@ protected:
     static DataBlockRepository* m_instance;
 };
 
-/// A MIDI event
+/// A MIDI event that is ready for playback
 /**
+ *  Here, the term "Mapped" refers to the conversion of an Event in a Segment
+ *  to something (a MappedEvent) that is closer to what is needed to send
+ *  to ALSA for playback.
+ *
  *  Used as a transformation stage between Composition, Events and output
  *  at the Sequencer this class and MidiComposition eliminate the notion
  *  of the Segment and Track for ease of Event access.  The MappedEvents

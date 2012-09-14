@@ -31,8 +31,29 @@ namespace Rosegarden
 class TriggerSegmentRec;
 class Composition;
  
-// @class InternalSegmentMapper Mapper for an internal segment.
-// @author Tom Breton (Tehom)
+/// Converts (maps) Event objects into MappedEvent objects for a Segment
+/**
+ * @author Tom Breton (Tehom)
+ *
+ * InternalSegmentMapper.  What's in a name?  "Internal" refers either to
+ * the concept of segments that are internal to Rosegarden.  I.e. "MIDI"
+ * segments as opposed to audio segments.  Or it might refer to an internal
+ * form of a segment that is not seen outside of Rosegarden.  (An internal
+ * implementation detail.)  "Mapper" refers to the act of mapping (converting)
+ * Event objects from a Segment into MappedEvent objects which are ready for
+ * playback.  The key mapping routine is InternalSegmentMapper::dump().
+ *
+ * This class might be better named MappedMIDISegment as that is what it is
+ * rather than what it does.  It's a more "O-O" name, which in this case feels
+ * better.  Of course, the base class and other related classes would need
+ * to adopt similar names.  The entire MappedEventBuffer hierarchy probably
+ * needs to be examined to see if there are opportunities for simplification
+ * and renaming for increased clarity.
+ *
+ * This is the first part of a two-part process to convert the Event objects
+ * in a Composition into MappedEvent objects that can be sent to ALSA.  For
+ * the second part of this conversion, see MappedBufMetaIterator.
+ */
 class InternalSegmentMapper : public SegmentMapper
 {
     friend class SegmentMapperFactory;

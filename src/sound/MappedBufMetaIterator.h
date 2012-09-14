@@ -27,10 +27,22 @@ namespace Rosegarden {
 
 class MappedInserterBase;
 
-/// Iterates through mapped event buffers from a composition.
+/// Combines MappedEvent objects from a number of MappedEventBuffer objects.
 /**
- * It appears that this is where all the data from the various event buffers
- * is gathered together for playback into a single event list.
+ * MappedBufMetaIterator.  What's in a name?  "MappedBuf" refers to
+ * the MappedEventBuffer-derived classes that this class takes as input
+ * (see addSegment()).  The most important MappedEventBuffer-derived class is
+ * InternalSegmentMapper.  "MetaIterator" describes the main function of this
+ * class.  It is an iterator that coordinates other iterators.  Specifically,
+ * MappedEventBuffer::iterator objects.  fillCompositionWithEventsUntil()
+ * gets events from all the various MappedEventBuffer-derived objects
+ * that are connected and (typically) combines them together into a single
+ * MappedEventList via a MappedEventInserter.  A better name for this class
+ * might be MappedEventBufferMixer (or Combiner).
+ *
+ * This is the second part of a two-part process to convert the Event objects
+ * in a Composition into MappedEvent objects that can be sent to ALSA.  For
+ * the first part of this conversion, see InternalSegmentMapper.
  */
 class MappedBufMetaIterator
 {
