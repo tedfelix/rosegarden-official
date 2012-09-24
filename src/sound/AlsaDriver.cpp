@@ -1198,7 +1198,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     // Try to find one viable hardware and one viable software port, if
     // possible.  Use software preferentially.  Iterate through everything until
-    // we've exausted all possibilities for colleting one of each, then sort it
+    // we've exausted all possibilities for collecting one of each, then sort it
     // out afterwards.
     for (int testUsed = 1; testUsed >= 0; --testUsed) {
 
@@ -1889,7 +1889,7 @@ AlsaDriver::punchOut()
     std::cerr << "AlsaDriver::punchOut" << std::endl;
 #endif
 
-    // Flush any incomplete System Exclusive recieved from ALSA devices
+    // Flush any incomplete System Exclusive received from ALSA devices
     clearPendSysExcMap();
 
 #ifdef HAVE_LIBJACK
@@ -2367,7 +2367,7 @@ AlsaDriver::getAlsaTime()
 //
 //
 bool
-AlsaDriver::getMappedEventList(MappedEventList &composition)
+AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 {
     while (_failureReportReadIndex != _failureReportWriteIndex) {
         MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
@@ -2382,7 +2382,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
     if (!m_returnComposition.empty()) {
         for (MappedEventList::iterator i = m_returnComposition.begin();
              i != m_returnComposition.end(); ++i) {
-            composition.insert(new MappedEvent(**i));
+            mappedEventList.insert(new MappedEvent(**i));
         }
         m_returnComposition.clear();
     }
@@ -2486,7 +2486,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 // We shake out the two NOTE Ons after we've recorded
                 // them.
                 //
-                composition.insert(new MappedEvent(mE));
+                mappedEventList.insert(new MappedEvent(mE));
                 m_noteOnMap[deviceId].insert(std::pair<unsigned int, MappedEvent*>(chanNoteKey, mE));
 
                 break;
@@ -2501,14 +2501,19 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                 continue;
 
             // Check the note on map for any note on events to close.
-//            std::map<unsigned int, std::multimap<unsigned int, MappedEvent*> >::iterator noteOnMapIt = m_noteOnMap.find(deviceId);
-            std::multimap<unsigned int, MappedEvent*>::iterator noteOnIt = m_noteOnMap[deviceId].find(chanNoteKey);
-            
+            // find() prevents inadvertently adding an entry to the map.
+            // Since this is commented out, that must not have been an
+            // issue.
+            //NoteOnMap::iterator noteOnMapIt = m_noteOnMap.find(deviceId);
+            ChannelNoteOnMap::iterator noteOnIt = m_noteOnMap[deviceId].find(chanNoteKey);
+
+            // If a corresponding note on was found
             if (noteOnIt != m_noteOnMap[deviceId].end()) {
 
-                // Set duration correctly on the NOTE OFF
-                //
+                // Work with the MappedEvent in the map.
                 MappedEvent *mE = noteOnIt->second;
+
+                // Compute correct duration for the NOTE OFF
                 RealTime duration = eventTime - mE->getEventTime();
 
 #ifdef DEBUG_ALSA
@@ -2520,17 +2525,18 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                     mE->setEventTime(eventTime);
                 }
 
-                // Velocity 0 - NOTE OFF.  Set duration correctly
-                // for recovery later.
-                //
+                // Velocity 0 - NOTE OFF.
                 mE->setVelocity(0);
+
+                // Set duration correctly for recovery later.
                 mE->setDuration(duration);
 
-                // force shut off of note
-                composition.insert(mE);
+                // Insert this note-off into the mapped event list, forcing
+                // shut off of the note.
+                mappedEventList.insert(mE);
 
                 // reset the reference
-                //
+                // Remove the MappedEvent from the note on map.
                 m_noteOnMap[deviceId].erase(noteOnIt);
 
             }
@@ -2550,7 +2556,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             mE->setData2(event->data.note.velocity);
             mE->setRecordedChannel(channel);
             mE->setRecordedDevice(deviceId);
-            composition.insert(mE);
+            mappedEventList.insert(mE);
         }
             break;
 
@@ -2562,7 +2568,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             mE->setData2(event->data.control.value);
             mE->setRecordedChannel(channel);
             mE->setRecordedDevice(deviceId);
-            composition.insert(mE);
+            mappedEventList.insert(mE);
         }
             break;
 
@@ -2573,7 +2579,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             mE->setData1(event->data.control.value);
             mE->setRecordedChannel(channel);
             mE->setRecordedDevice(deviceId);
-            composition.insert(mE);
+            mappedEventList.insert(mE);
 
         }
             break;
@@ -2594,7 +2600,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             mE->setData2(d2);
             mE->setRecordedChannel(channel);
             mE->setRecordedDevice(deviceId);
-            composition.insert(mE);
+            mappedEventList.insert(mE);
         }
             break;
 
@@ -2611,7 +2617,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             mE->setData1(s);
             mE->setRecordedChannel(channel);
             mE->setRecordedDevice(deviceId);
-            composition.insert(mE);
+            mappedEventList.insert(mE);
         }
             break;
 
@@ -2647,8 +2653,8 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
 
                 // Thank you to Christoph Eckert for pointing out via
                 // Pedro Lopez-Cabanillas aseqmm code that we need to pool
-                // alsa system execlusive messages since they may be broken
-                // across several ALSA mesages.
+                // alsa system exclusive messages since they may be broken
+                // across several ALSA messages.
             
                 // Unfortunately, pooling these messages get very complicated
                 // since it creates many corner cases during this realtime
@@ -2716,9 +2722,9 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                                       << std::endl  << "This is probably a bad transmission"
                                       << std::endl;
 
-                            // Push previous (incomplete) message to composition
+                            // Push previous (incomplete) message to mapped event list
                             DataBlockRepository::setDataBlockForEvent(sysExcEvent, sysExcData);
-                            composition.insert(sysExcEvent);
+                            mappedEventList.insert(sysExcEvent);
                         } else {
                             // Previous message has no meaningful data.
                             std::cerr << "AlsaDriver::getMappedEventList - "
@@ -2751,9 +2757,9 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                         // Remove (EOX). RG doesn't use it. 
                         data.erase(lastChar);
 
-                        // Push message to composition
+                        // Push message to mapped event list
                         DataBlockRepository::setDataBlockForEvent(sysExcEvent, data);
-                        composition.insert(sysExcEvent);
+                        mappedEventList.insert(sysExcEvent);
                     } else {
 
                         pushOnMap = true;
@@ -2777,10 +2783,10 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
                                                            std::make_pair(sysExcEvent, data)));
 
                     if (beginNewMessage) { 
-                        // Let user know about pooling on first recieved event.
+                        // Let user know about pooling on first received event.
 
                         // Yes, standard output.
-                        // It is used elswhere in this file as well.
+                        // It is used elsewhere in this file as well.
                         std::cout << "AlsaDriver::getMappedEventList - "
                                   << "Encountered long System Exclusive Message "
                                   << "(pooling message until transmission complete)"
@@ -2911,6 +2917,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
     return true;
 }
 
+// This should probably be a non-static private member.
 static int lock_count = 0;
 
 void
@@ -4955,7 +4962,7 @@ AlsaDriver::unsetRecordDevices()
     tmp_addr.client = m_client;
     tmp_addr.port = m_inputPort;
 
-    // Unsubsribe any existing connections
+    // Unsubscribe any existing connections
     //
     snd_seq_query_subscribe_set_type(qSubs, SND_SEQ_QUERY_SUBS_WRITE);
     snd_seq_query_subscribe_set_index(qSubs, 0);

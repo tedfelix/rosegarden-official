@@ -461,7 +461,6 @@ protected:
 
     DeviceId                                    m_midiRecordDevice;
 
-    MappedEventList                           m_returnComposition;
     RecordStatus                                m_recordStatus;
 
 
