@@ -36,10 +36,7 @@ qrc               Rebuild data/data.qrc to include all .pfa .png .qm .qss .rc
                   that only exist in the developer's local working copy, which
                   breaks the repository for everyone else.)
 
-tarball           Prepare a tarball for release, stripping out unwanted
-                  development files, and giving the tarball an appropriate name.
-                  NOTE: this hasn't actually been ported to the new build system
-                  yet!! (should make the tarball target do locale first)
+tarball           DEPRECATED.  Use scripts/make-release-tarball instead.
 
 
 ========
