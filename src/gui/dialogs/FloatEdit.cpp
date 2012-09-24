@@ -56,7 +56,8 @@ FloatEdit::FloatEdit(QWidget *parent,
     double calDP = log10(step);
     int dps = 0;
     if (calDP < 0.0)
-        dps = int( -calDP);
+//      dps = int( -calDP);
+        dps = static_cast<int>(ceil(-calDP));
     //std::cout << "CAL DP = " << calDP << ", dps = " << dps << std::endl;
 
     m_spin = new QDoubleSpinBox(groupBox);

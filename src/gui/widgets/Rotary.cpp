@@ -436,8 +436,16 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
         minv = powf(10, minv);
         maxv = powf(10, maxv);
         val = powf(10, val);
-        step = powf(10, step);
-        if (step > 0.001) step = 0.001;
+//      step = powf(10, step);
+//      if (step > 0.001) step = 0.001;
+        step = (maxv - minv) / 100.0;
+        if (step > 1.0) {
+            step = .1;
+        } else if (step > .1) {
+            step = .01;
+        } else {
+            step = .001;
+        }
     }
 
     FloatEdit dialog(this,
@@ -468,7 +476,8 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
     if (dialog.exec() == QDialog::Accepted) {
         float newval = dialog.getValue();
         if (m_logarithmic) {
-            if (m_position < powf(10, -10)) m_position = -10;
+//          if (m_position < powf(10, -10)) m_position = -10;
+            if (m_position < -10) m_position = -10;
             else m_position = log10f(newval);
         } else {
             m_position = newval;
