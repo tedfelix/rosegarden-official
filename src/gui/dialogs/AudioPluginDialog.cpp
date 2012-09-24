@@ -487,7 +487,9 @@ AudioPluginDialog::slotPluginSelected(int i)
         // action (after the constructor)
         //
         if (m_generating == false) {
-            inst->clearPorts();
+///////
+//          inst->clearPorts();
+///////
             if (inst->getIdentifier() != identifier) {
                 inst->clearConfiguration();
             }

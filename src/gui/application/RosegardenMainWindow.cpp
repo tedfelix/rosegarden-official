@@ -7548,8 +7548,10 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                                        int index)
 {
     RG_DEBUG << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")" << endl;
-    if (!parent)
-        parent = this;
+///////
+//  if (!parent)
+//      parent = this;
+///////
 
     int key = (index << 16) + instrumentId;
 
@@ -7583,7 +7585,10 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     // Create the plugin dialog
     //
     AudioPluginDialog *dialog =
-        new AudioPluginDialog(parent,
+///////
+//      new AudioPluginDialog(parent,
+        new AudioPluginDialog(this,
+///////
                               m_doc->getPluginManager(),
                               m_pluginGUIManager,
                               container,
