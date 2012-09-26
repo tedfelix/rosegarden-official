@@ -72,7 +72,7 @@ static float iec_dB_to_fader(float db)
     } else if (db < -60.0f) {
         def = (db + 70.0f) * 0.25f;
     } else if (db < -50.0f) {
-        def = (db + 60.0f) * 0.5f + 5.0f;
+        def = (db + 60.0f) * 0.5f + 2.5f; // corrected from 5.0f base, thanks Robin Gareus
     } else if (db < -40.0f) {
         def = (db + 50.0f) * 0.75f + 7.5f;
     } else if (db < -30.0f) {
@@ -98,8 +98,8 @@ static float iec_fader_to_dB(float def)  // Meter deflection %age
 	db = (def - 15.0f) / 1.5f - 40.0f;
     } else if (def >= 7.5f) {
 	db = (def - 7.5f) / 0.75f - 50.0f;
-    } else if (def >= 5.0f) {
-	db = (def - 5.0f) / 0.5f - 60.0f;
+    } else if (def >= 2.5f) {
+	db = (def - 2.5f) / 0.5f - 60.0f;
     } else {
 	db = (def / 0.25f) - 70.0f;
     }
