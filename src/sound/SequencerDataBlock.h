@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_SEQUENCER_DATA_BLOCK_H
-#define RG_SEQUENCER_DATA_BLOCK_H
+#ifndef RG_SEQUENCERDATABLOCK_H
+#define RG_SEQUENCERDATABLOCK_H
 
 #include "ControlBlock.h"
 #include "base/RealTime.h"
@@ -51,9 +51,8 @@ class MappedEventList;
  * threads (RosegardenSequencer::processRecordedMidi()) to GUI threads
  * (RosegardenMainWindow::processRecordedEvents()).
  *
- * This class needs to be reviewed for thread safety.  A coarse-grained
- * lock has been added (m_recordLock) for MIDI events.  Other parts of
- * this class probably need locks as well.
+ * This class needs to be reviewed for thread safety.  See the comments
+ * in addRecordedEvents().
  *
  * This used to be mapped into a shared memory
  * backed file, which had to be of fixed size and layout.  The design
@@ -102,7 +101,7 @@ public:
     /**
      * Called by RosegardenMainWindow::processRecordedEvents().
      */
-    int getRecordedEvents(MappedEventList &) const;
+    int getRecordedEvents(MappedEventList &);
 
     bool getTrackLevel(TrackId track, LevelInfo &) const;
     void setTrackLevel(TrackId track, const LevelInfo &);
@@ -146,28 +145,29 @@ protected:
     
     /// Index of the next available position in m_recordBuffer.
     int m_recordEventIndex;
+    /// Read position in m_recordBuffer.
+    int m_readIndex;
     /// Ring buffer of recorded MIDI events.
     char m_recordBuffer[sizeof(MappedEvent) *
                         SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
-    mutable QMutex m_recordMutex;
 
-    // ??? Mutex?
+    // ??? Thread-safe?
     InstrumentId m_knownInstruments[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     int m_knownInstrumentCount;
 
-    // ??? Mutex?
+    // ??? Thread-safe?
     int m_levelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     LevelInfo m_levels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
-    // ??? Mutex?
+    // ??? Thread-safe?
     int m_recordLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     LevelInfo m_recordLevels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
-    // ??? Mutex?
+    // ??? Thread-safe?
     int m_submasterLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
     LevelInfo m_submasterLevels[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
 
-    // ??? Mutex?
+    // ??? Thread-safe?
     int m_masterLevelUpdateIndex;
     LevelInfo m_masterLevel;
 };

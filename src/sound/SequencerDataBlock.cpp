@@ -18,7 +18,7 @@
 
 //#include "misc/Debug.h"
 
-#include <QThread>
+//#include <QThread>
 #include <QMutexLocker>
 
 namespace Rosegarden
@@ -66,49 +66,49 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 }
 
 int
-SequencerDataBlock::getRecordedEvents(MappedEventList &mC) const
+SequencerDataBlock::getRecordedEvents(MappedEventList &mC)
 {
-    QMutexLocker lock(&m_recordMutex);
-
-    static int readIndex = -1;
-
-    // If this is the first call
-    if (readIndex == -1) {
-        readIndex = m_recordEventIndex;
-        return 0;
-    }
-
-    int currentIndex = m_recordEventIndex;
-    int count = 0;
+    // Grab a copy of the stopping point in case the other thread
+    // changes it while we are working.
+    int stopIndex = m_recordEventIndex;
 
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
-    // Copy each event in the ring buffer to the user's list.
-    while (readIndex != currentIndex) {
-        mC.insert(new MappedEvent(recordBuffer[readIndex]));
-        if (++readIndex == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
-            readIndex = 0;
-        ++count;
+    // While there are events in the record buffer, copy each event to
+    // the user's list.
+    while (m_readIndex != stopIndex) {
+        mC.insert(new MappedEvent(recordBuffer[m_readIndex]));
+
+        // Increment and wrap around to the beginning if needed.
+        if (++m_readIndex == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
+            m_readIndex = 0;
     }
 
-    return count;
+    return mC.size();
 }
 
 void
 SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
 {
-    QMutexLocker lock(&m_recordMutex);
-
+    // Grab a copy of the record position so we don't update it
+    // while the other thread is using it.
     int index = m_recordEventIndex;
+
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
     // Copy each incoming event into the ring buffer.
     for (MappedEventList::iterator i = mC->begin(); i != mC->end(); ++i) {
         recordBuffer[index] = **i;
+
+        // Increment and wrap around to the beginning if needed.
         if (++index == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
             index = 0;
     }
 
+    // Once the buffer is in a consistent state, move the record index
+    // so that the other thread will read the new events.
+    // ??? Is this guaranteed to be atomic and therefore thread safe?
+    //     I believe so, and that's why this has always worked.
     m_recordEventIndex = index;
 }
 
@@ -346,6 +346,7 @@ SequencerDataBlock::clearTemporaries()
     *((MappedEvent *)&m_visualEvent) = MappedEvent();
     m_haveVisualEvent = false;
     m_recordEventIndex = 0;
+    m_readIndex = 0;
     //!!!    m_recordLevel.level = 0;
     //!!!    m_recordLevel.levelRight = 0;
     memset(m_knownInstruments, 0,
