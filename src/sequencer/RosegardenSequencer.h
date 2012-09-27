@@ -377,8 +377,10 @@ public:
     void updateClocks();
 
     /**
-     * Process any pending MIDI events and send them to SequencerDataBlock
-     * for storage and display, and route the MIDI events for MIDI thru.
+     * Gets incoming MIDI events from AlsaDriver::getMappedEventList()
+     * and passes them on to SequencerDataBlock::addRecordedEvents()
+     * for storage and display.  Also routes MIDI events for MIDI thru
+     * via routeEvents().
      */
     void processRecordedMidi();
     /// Process any audio data that is waiting and send it to be stored.

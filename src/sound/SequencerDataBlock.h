@@ -20,6 +20,8 @@
 #include "base/RealTime.h"
 #include "MappedEvent.h"
 
+#include <QMutex>
+
 namespace Rosegarden
 {
         
@@ -27,8 +29,8 @@ namespace Rosegarden
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  * (and this struct mustn't have a constructor)
  *
- * Since we no longer are using shared memory, it might be safe to lift
- * the POD/no pointer restrictions.
+ * Since we no longer use shared memory, it might be safe to lift
+ * the POD/no pointer/no ctor restrictions.
  */
 struct LevelInfo
 {
@@ -48,6 +50,10 @@ class MappedEventList;
  * This class contains recorded data that is being passed from sequencer
  * threads (RosegardenSequencer::processRecordedMidi()) to GUI threads
  * (RosegardenMainWindow::processRecordedEvents()).
+ *
+ * This class needs to be reviewed for thread safety.  A coarse-grained
+ * lock has been added (m_recordLock) for MIDI events.  Other parts of
+ * this class probably need locks as well.
  *
  * This used to be mapped into a shared memory
  * backed file, which had to be of fixed size and layout.  The design
@@ -73,6 +79,7 @@ class MappedEventList;
 class SequencerDataBlock
 {
 public:
+    // Singleton.
     static SequencerDataBlock *getInstance();
 
     RealTime getPositionPointer() const {
@@ -86,8 +93,16 @@ public:
     bool getVisual(MappedEvent &ev) const;
     void setVisual(const MappedEvent *ev);
 
-    int getRecordedEvents(MappedEventList &) const;
+    /// Add events to the record ring buffer (m_recordBuffer).
+    /**
+     * Called by RosegardenSequencer::processRecordedMidi().
+     */
     void addRecordedEvents(MappedEventList *);
+    /// Get events from the record ring buffer (m_recordBuffer).
+    /**
+     * Called by RosegardenMainWindow::processRecordedEvents().
+     */
+    int getRecordedEvents(MappedEventList &) const;
 
     bool getTrackLevel(TrackId track, LevelInfo &) const;
     void setTrackLevel(TrackId track, const LevelInfo &);
@@ -129,22 +144,30 @@ protected:
     bool m_haveVisualEvent;
     char m_visualEvent[sizeof(MappedEvent)];
     
+    /// Index of the next available position in m_recordBuffer.
     int m_recordEventIndex;
+    /// Ring buffer of recorded MIDI events.
     char m_recordBuffer[sizeof(MappedEvent) *
                         SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
+    mutable QMutex m_recordMutex;
 
+    // ??? Mutex?
     InstrumentId m_knownInstruments[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     int m_knownInstrumentCount;
 
+    // ??? Mutex?
     int m_levelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     LevelInfo m_levels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
+    // ??? Mutex?
     int m_recordLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     LevelInfo m_recordLevels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
+    // ??? Mutex?
     int m_submasterLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
     LevelInfo m_submasterLevels[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
 
+    // ??? Mutex?
     int m_masterLevelUpdateIndex;
     LevelInfo m_masterLevel;
 };

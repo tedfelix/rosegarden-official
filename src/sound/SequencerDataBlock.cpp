@@ -16,10 +16,13 @@
 #include "SequencerDataBlock.h"
 #include "MappedEventList.h"
 
+//#include "misc/Debug.h"
+
+#include <QThread>
+#include <QMutexLocker>
+
 namespace Rosegarden
 {
-
-// !!! todo: review mutex requirements
 
 SequencerDataBlock *
 SequencerDataBlock::getInstance()
@@ -65,8 +68,11 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 int
 SequencerDataBlock::getRecordedEvents(MappedEventList &mC) const
 {
+    QMutexLocker lock(&m_recordMutex);
+
     static int readIndex = -1;
 
+    // If this is the first call
     if (readIndex == -1) {
         readIndex = m_recordEventIndex;
         return 0;
@@ -77,6 +83,7 @@ SequencerDataBlock::getRecordedEvents(MappedEventList &mC) const
 
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
+    // Copy each event in the ring buffer to the user's list.
     while (readIndex != currentIndex) {
         mC.insert(new MappedEvent(recordBuffer[readIndex]));
         if (++readIndex == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
@@ -90,10 +97,12 @@ SequencerDataBlock::getRecordedEvents(MappedEventList &mC) const
 void
 SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
 {
-    // ringbuffer
+    QMutexLocker lock(&m_recordMutex);
+
     int index = m_recordEventIndex;
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
+    // Copy each incoming event into the ring buffer.
     for (MappedEventList::iterator i = mC->begin(); i != mC->end(); ++i) {
         recordBuffer[index] = **i;
         if (++index == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)

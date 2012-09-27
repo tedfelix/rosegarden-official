@@ -2510,7 +2510,9 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             // If a corresponding note on was found
             if (noteOnIt != m_noteOnMap[deviceId].end()) {
 
-                // Work with the MappedEvent in the map.
+                // Work with the MappedEvent in the map.  We will transform
+                // it into a note off and insert it into the mapped event
+                // list.
                 MappedEvent *mE = noteOnIt->second;
 
                 // Compute correct duration for the NOTE OFF
@@ -2520,19 +2522,28 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 std::cerr << "NOTE OFF: found NOTE ON at " << mE->getEventTime() << std::endl;
 #endif
 
+                // Fix zero duration record bug.
                 if (duration <= RealTime::zeroTime) {
-                    duration = RealTime::fromMilliseconds(1); // Fix zero duration record bug.
+                    duration = RealTime::fromMilliseconds(1);
+
+                    // ??? It seems odd that we only set the event time for
+                    //     the note off in this case.  Otherwise it gets the
+                    //     event time of the matching note on.  That seems
+                    //     pretty misleading.  I guess a note-off's event time
+                    //     plus duration is its event time.  But if we see the
+                    //     duration is one millisecond, the eventTime will be
+                    //     the actual note-off event time.
                     mE->setEventTime(eventTime);
                 }
 
-                // Velocity 0 - NOTE OFF.
+                // Transform the note-on in the map to a note-off by setting
+                // the velocity to 0.
                 mE->setVelocity(0);
 
                 // Set duration correctly for recovery later.
                 mE->setDuration(duration);
 
-                // Insert this note-off into the mapped event list, forcing
-                // shut off of the note.
+                // Insert this note-off into the mapped event list.
                 mappedEventList.insert(mE);
 
                 // reset the reference
