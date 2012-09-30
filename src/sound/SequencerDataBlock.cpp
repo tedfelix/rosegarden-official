@@ -40,6 +40,8 @@ SequencerDataBlock::SequencerDataBlock()
 bool
 SequencerDataBlock::getVisual(MappedEvent &ev) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int eventIndex = 0;
 
     if (!m_haveVisualEvent) {
@@ -150,6 +152,8 @@ bool
 SequencerDataBlock::getInstrumentLevel(InstrumentId id,
                                        LevelInfo &info) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int index = instrumentToIndex(id);
@@ -179,6 +183,8 @@ bool
 SequencerDataBlock::getInstrumentLevelForMixer(InstrumentId id,
         LevelInfo &info) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int index = instrumentToIndex(id);
@@ -212,6 +218,8 @@ SequencerDataBlock::setInstrumentLevel(InstrumentId id, const LevelInfo &info)
 bool
 SequencerDataBlock::getInstrumentRecordLevel(InstrumentId id, LevelInfo &info) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int index = instrumentToIndex(id);
@@ -234,6 +242,8 @@ SequencerDataBlock::getInstrumentRecordLevel(InstrumentId id, LevelInfo &info) c
 bool
 SequencerDataBlock::getInstrumentRecordLevelForMixer(InstrumentId id, LevelInfo &info) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int index = instrumentToIndex(id);
@@ -285,6 +295,8 @@ SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
 bool
 SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
 
     if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
@@ -317,6 +329,8 @@ SequencerDataBlock::setSubmasterLevel(int submaster, const LevelInfo &info)
 bool
 SequencerDataBlock::getMasterLevel(LevelInfo &level) const
 {
+    // ??? Move statics to class scope non-static and clear them appropriately
+    //     in clearTemporaries().
     static int lastUpdateIndex = 0;
 
     int currentIndex = m_masterLevelUpdateIndex;
@@ -342,28 +356,31 @@ SequencerDataBlock::clearTemporaries()
 {
     m_positionSec = 0;
     m_positionNsec = 0;
+
     m_visualEventIndex = 0;
-    *((MappedEvent *)&m_visualEvent) = MappedEvent();
     m_haveVisualEvent = false;
+    *((MappedEvent *)&m_visualEvent) = MappedEvent();
+
     m_recordEventIndex = 0;
     m_readIndex = 0;
-    //!!!    m_recordLevel.level = 0;
-    //!!!    m_recordLevel.levelRight = 0;
-    memset(m_knownInstruments, 0,
-           SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(InstrumentId));
+    memset(m_recordBuffer, 0, sizeof(m_recordBuffer));
+
+    memset(m_knownInstruments, 0, sizeof(m_knownInstruments));
     m_knownInstrumentCount = 0;
-    memset(m_levelUpdateIndices, 0,
-           SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(int));
-    memset(m_levels, 0,
-           SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(LevelInfo));
+
+    memset(m_levelUpdateIndices, 0, sizeof(m_levelUpdateIndices));
+    memset(m_levels, 0, sizeof(m_levels));
+
+    memset(m_recordLevelUpdateIndices, 0, sizeof(m_recordLevelUpdateIndices));
+    memset(m_recordLevels, 0, sizeof(m_recordLevels));
+
     memset(m_submasterLevelUpdateIndices, 0,
-           SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(int));
-    memset(m_submasterLevels, 0,
-           SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(LevelInfo));
+            sizeof(m_submasterLevelUpdateIndices));
+    memset(m_submasterLevels, 0, sizeof(m_submasterLevels));
+
     m_masterLevelUpdateIndex = 0;
     m_masterLevel.level = 0;
     m_masterLevel.levelRight = 0;
-
 }
 
 }

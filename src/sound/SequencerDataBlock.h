@@ -49,7 +49,9 @@ class MappedEventList;
 /**
  * This class contains recorded data that is being passed from sequencer
  * threads (RosegardenSequencer::processRecordedMidi()) to GUI threads
- * (RosegardenMainWindow::processRecordedEvents()).
+ * (RosegardenMainWindow::processRecordedEvents()).  It is an important
+ * link in the chain from AlsaDriver::getMappedEventList() to
+ * RosegardenDocument::insertRecordedMidi().
  *
  * This class needs to be reviewed for thread safety.  See the comments
  * in addRecordedEvents().
@@ -126,8 +128,8 @@ public:
     bool getMasterLevel(LevelInfo &) const;
     void setMasterLevel(const LevelInfo &);
 
-    // Reset the temporaries on (for example) GUI restart
-    //
+    // Reset this class on (for example) GUI restart
+    // rename: reset()
     void clearTemporaries();
     
 protected:
