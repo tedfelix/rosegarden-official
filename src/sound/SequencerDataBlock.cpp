@@ -38,31 +38,49 @@ SequencerDataBlock::SequencerDataBlock()
 }
 
 bool
-SequencerDataBlock::getVisual(MappedEvent &ev) const
+SequencerDataBlock::getVisual(MappedEvent &ev)
 {
-    // ??? Move statics to class scope non-static and clear them appropriately
-    //     in clearTemporaries().
-    static int eventIndex = 0;
-
-    if (!m_haveVisualEvent) {
+    // If there is no visual event, or setVisual() is working, bail
+    if (!m_haveVisualEvent)
         return false;
-    } else {
-        int thisEventIndex = m_visualEventIndex;
-        if (thisEventIndex == eventIndex)
-            return false;
-        ev = *((MappedEvent *) & m_visualEvent);
-        eventIndex = thisEventIndex;
-        return true;
-    }
+
+    // Get the index in case setVisual() changes it.
+    int thisEventIndex = m_setVisualIndex;
+
+    // If we've already seen this one, bail.  This prevents reading
+    // before setVisual() is finished updating.
+    if (thisEventIndex == m_getVisualIndex)
+        return false;
+
+    // ??? A call to setVisual() could happen at this point and modify
+    //     m_visualEvent while we are reading it.  This isn't as safe as
+    //     it appears.  I think we need a mutex for this.  Though since
+    //     it is just the MIDI OUT display on playback, it's probably not
+    //     worth worrying about.
+
+    // Copy the event to the caller.
+    ev = *((MappedEvent *) & m_visualEvent);
+
+    // Remember where we were for next time.
+    m_getVisualIndex = thisEventIndex;
+
+    return true;
 }
 
 void
 SequencerDataBlock::setVisual(const MappedEvent *ev)
 {
+    // Prevent access by getVisual() while we are changing this.
     m_haveVisualEvent = false;
+
     if (ev) {
+        // Save the visual event
         *((MappedEvent *)&m_visualEvent) = *ev;
-        ++m_visualEventIndex;
+
+        // Indicate that it has changed and it is safe to read now.
+        ++m_setVisualIndex;
+
+        // Allow access once again.
         m_haveVisualEvent = true;
     }
 }
@@ -357,7 +375,8 @@ SequencerDataBlock::clearTemporaries()
     m_positionSec = 0;
     m_positionNsec = 0;
 
-    m_visualEventIndex = 0;
+    m_setVisualIndex = 0;
+    m_getVisualIndex = 0;
     m_haveVisualEvent = false;
     *((MappedEvent *)&m_visualEvent) = MappedEvent();
 

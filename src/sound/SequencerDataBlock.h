@@ -83,15 +83,19 @@ public:
     // Singleton.
     static SequencerDataBlock *getInstance();
 
+    /// Called by the UI.
     RealTime getPositionPointer() const {
         return RealTime(m_positionSec, m_positionNsec);
     }
+    /// Called by the sequencer.
     void setPositionPointer(const RealTime &rt) {
         m_positionSec = rt.sec;
         m_positionNsec = rt.nsec;
     }
     
-    bool getVisual(MappedEvent &ev) const;
+    /// Get the MIDI OUT event to show on the transport during playback.
+    bool getVisual(MappedEvent &ev);
+    /// Set the MIDI OUT event to show on the transport during playback.
     void setVisual(const MappedEvent *ev);
 
     /// Add events to the record ring buffer (m_recordBuffer).
@@ -138,11 +142,15 @@ protected:
     int instrumentToIndex(InstrumentId id) const;
     int instrumentToIndexCreating(InstrumentId id);
 
+    // ??? Thread-safe?  Probably not.  Seems like the worst-case is that
+    //     the pointer might jump forward about one second momentarily.
     int m_positionSec;
     int m_positionNsec;
 
-    int m_visualEventIndex;
+    int m_setVisualIndex;
+    int m_getVisualIndex;
     bool m_haveVisualEvent;
+    /// MIDI OUT event for display on the transport during playback.
     char m_visualEvent[sizeof(MappedEvent)];
     
     /// Index of the next available position in m_recordBuffer.
