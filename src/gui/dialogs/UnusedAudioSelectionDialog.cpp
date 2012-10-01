@@ -30,15 +30,16 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QDateTime>
+#include <iostream>
 
 
 namespace Rosegarden
 {
 
+
 UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
         QString introductoryText,
-        std::vector<QString> fileNames,
-        bool offerCancel 
+        std::vector<QString> fileNames
        ) :
         QDialog(parent)
 {
@@ -61,7 +62,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     QTableWidgetItem *item = 0;
     unsigned int i;
     unsigned int rc;
-    for (i=0; i < fileNames.size(); ++i) {
+    for (i = 0; i < fileNames.size(); i++) {
         QString fileName = fileNames[i];
         QFileInfo info(fileName);
         QString fileSize = tr(" (not found) ");
@@ -70,25 +71,23 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
             fileSize = QString(" %1 ").arg(info.size());
             fileDate = QString(" %1 ").arg((info.lastModified()).toString(Qt::ISODate));
         }
-        //QTableWidgetItem *item = new QTableWidgetItem(m_listView, fileName, fileSize, fileDate);
         rc = m_listView->rowCount();
         m_listView->insertRow(rc);
         
         item = new QTableWidgetItem(fileName);
-        m_listView->setItem(rc, i+0, item);
+        m_listView->setItem(rc, 0, item);
         item = new QTableWidgetItem(fileSize);
-        m_listView->setItem(rc, i+1, item);
+        m_listView->setItem(rc, 1, item);
         item = new QTableWidgetItem(fileDate);
-        m_listView->setItem(rc, i+2, item);
+        m_listView->setItem(rc, 2, item);
         
     }
 
     m_listView->setSelectionMode(QAbstractItemView::MultiSelection);
-    m_listView->setSelectionBehavior(QAbstractItemView::SelectItems); // or QAbstractItemView::SelectRows
+    m_listView->setSelectionBehavior(QAbstractItemView::SelectRows);
     
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     layout->addWidget(buttonBox);
-//    metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 };
@@ -101,16 +100,15 @@ UnusedAudioSelectionDialog::getSelectedAudioFileNames() const
     QList<QTableWidgetItem *> sItems = m_listView->selectedItems();
     QTableWidgetItem *item;
     
-    for(int i=0; i < sItems.size(); i++){
-        //if (m_listView->isSelected(item)) {
+    for (int i = 0; i < sItems.size(); i++) {
             item = sItems.at(i);
-            selectedNames.push_back(item->text());
-        //}
-
-        //item = m_listView->next();
+            // Only reutrn items from column 0, which contains the filename
+            // we're after:
+            if (item->column() == 0) selectedNames.push_back(item->text());
     }
 
     return selectedNames;
 };
+
 
 }

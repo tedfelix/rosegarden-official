@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -33,23 +32,19 @@ namespace Rosegarden
 {
 
 
-
 class UnusedAudioSelectionDialog : public QDialog
 {
     //Q_OBJECT
 public:
     UnusedAudioSelectionDialog(QWidget *,
                                QString introductoryText,
-                               std::vector<QString> fileNames,
-                               bool offerCancel = true);
+                               std::vector<QString> fileNames);
     
     std::vector<QString> getSelectedAudioFileNames() const;
 
 protected:
     QTableWidget *m_listView;
 };
-
-
 
 
 }
