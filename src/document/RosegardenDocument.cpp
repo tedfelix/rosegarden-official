@@ -1853,14 +1853,14 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
     //Track *midiRecordTrack = 0;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::recordtrackcontainer &recordTracks =
         getComposition().getRecordTracks();
 
     bool haveMIDIRecordTrack = false;
 
     // For each recording track
     for (Composition::recordtrackcontainer::const_iterator i =
-                tr.begin(); i != tr.end(); ++i) {
+            recordTracks.begin(); i != recordTracks.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
         if (track) {
@@ -1872,6 +1872,12 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
                 if (!m_recordMIDISegments[track->getInstrument()]) {
                     addRecordMIDISegment(track->getId());
                 }
+                // ??? This is a tad perplexing at first glance.  What if
+                //     two tracks are armed for record?  Don't we need to
+                //     create two segments?  Won't this end the for loop
+                //     after creating only one?  Maybe it works because this
+                //     routine is called over and over very quickly before
+                //     any events come in.  Seems unnecessary to break here.
                 break;
             }
         }
@@ -1880,247 +1886,259 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
     if (!haveMIDIRecordTrack)
         return ;
 
-    if (mC.size() > 0) {
+    // If there are no events, bail.
+    // ??? Seems like something we should do at the very top.  But beware the
+    //     odd "break" above which may depend on this being here.  And perhaps
+    //     we do want to make the record segments even if there is no data
+    //     yet.
+    if (mC.empty())
+        return;
+
+    timeT updateFrom = m_composition.getDuration();
+    bool haveNotes = false;
+
+    MappedEventList::const_iterator i;
+
+    // For each incoming event
+    for (i = mC.begin(); i != mC.end(); ++i) {
+
+        // Send events from the control device to the views
+        if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
+            const int viewCount = m_viewList.size();
+
+            //QList<RosegardenMainViewWidget *>::iterator v;
+            //for (v = m_viewList.begin(); v != m_viewList.end(); ++v) {
+
+            // For each view
+            for (int k = 0; k < viewCount; ++k) {
+                RosegardenMainViewWidget *v = m_viewList.value(k);
+                // Send the event to the view
+                v->slotControllerDeviceEventReceived(*i);
+            }
+
+            // No further processing is required for this event.
+            continue;
+        }
+
+        const timeT absTime = m_composition.getElapsedTimeForRealTime((*i)->getEventTime());
+
+        /* This is incorrect, unless the tempo at absTime happens to
+           be the same as the tempo at zero and there are no tempo
+           changes within the given duration after either zero or
+           absTime
+
+           timeT duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+        */
+        timeT duration = m_composition.
+                   getElapsedTimeForRealTime((*i)->getEventTime() +
+                                             (*i)->getDuration()) - absTime;
 
         Event *rEvent = 0;
-        timeT duration, absTime;
-        timeT updateFrom = m_composition.getDuration();
-        bool haveNotes = false;
+        bool isNoteOn = false;
+        const int pitch = (*i)->getPitch();
+        int channel = (*i)->getRecordedChannel();
+        const int device = (*i)->getRecordedDevice();
 
-        MappedEventList::const_iterator i;
+        switch ((*i)->getType()) {
 
-        // process all the incoming MappedEvents
-        //
-        int lenx = int(m_viewList.size());
-        RosegardenMainViewWidget *v;
-        int k = 0;
+        case MappedEvent::MidiNote:
 
-        // For each incoming event
-        for (i = mC.begin(); i != mC.end(); ++i) {
+            // If this is a note on event.
+            // (In AlsaDriver::getMappedEventList() we set the duration to
+            // -1 seconds to indicate a note-on event.)
+            if ((*i)->getDuration() < RealTime::zeroTime) {
 
-            if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
-                // send to GUI
-                
-                //QList<RosegardenMainViewWidget *>::iterator v;
-                //for( v=m_viewList.begin(); v!=m_viewList.end(); v++ ) {
-                for( k=0; k<lenx; k++){
-                    v = m_viewList.value( k );
-                    v->slotControllerDeviceEventReceived(*i);
-                }
-                continue;
-            }
+                // give it a default duration for insertion into the segment
+                duration = Note(Note::Crotchet).getDuration();
 
-            absTime = m_composition.getElapsedTimeForRealTime((*i)->getEventTime());
+                // make a mental note to stick it in the note-on map for when
+                // we see the corresponding note-off
+                isNoteOn = true;
 
-            /* This is incorrect, unless the tempo at absTime happens to
-               be the same as the tempo at zero and there are no tempo
-               changes within the given duration after either zero or
-               absTime
+                rEvent = new Event(Note::EventType,
+                                   absTime,
+                                   duration);
 
-               duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
-            */
-            duration = m_composition.
-                       getElapsedTimeForRealTime((*i)->getEventTime() +
-                                                 (*i)->getDuration()) - absTime;
+                rEvent->set<Int>(PITCH, pitch);
+                rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
-            rEvent = 0;
-            bool isNoteOn = false;
-            int pitch = (*i)->getPitch();
-            int channel = (*i)->getRecordedChannel();
-            int device = (*i)->getRecordedDevice();
+            } else {  // it's a note-off
 
-            switch ((*i)->getType()) {
+                PitchMap *pitchMap = &m_noteOnEvents[device][channel];
+                PitchMap::iterator mi = pitchMap->find(pitch);
 
-            case MappedEvent::MidiNote:
+                // If we have a matching note-on for this note-off
+                if (mi != pitchMap->end()) {
+                    // modify the previously held note-on event,
+                    // instead of assigning to rEvent
 
-                if ((*i)->getDuration() < RealTime::zeroTime) {
+                    NoteOnRecSet rec_vec = mi->second;
+                    Event *oldEv = *rec_vec[0].m_segmentIterator;
+                    Event *newEv = new Event(
+                            *oldEv, oldEv->getAbsoluteTime(), duration);
+                    newEv->set<Int>(RECORDED_CHANNEL, channel);
 
-                    // it's a note-on; give it a default duration
-                    // for insertion into the segment, and make a
-                    // mental note to stick it in the note-on map
-                    // for when we see the corresponding note-off
+                    NoteOnRecSet *replaced =
+                        replaceRecordedEvent(rec_vec, newEv);
+                    delete replaced;
 
-                    duration = Note(Note::Crotchet).getDuration();
-                    isNoteOn = true;
+                    // Remove the note-on from the pitch map
+                    pitchMap->erase(mi);
 
-                    rEvent = new Event(Note::EventType,
-                                       absTime,
-                                       duration);
+                    if (updateFrom > newEv->getAbsoluteTime()) {
+                        updateFrom = newEv->getAbsoluteTime();
+                    }
 
-                    rEvent->set<Int>(PITCH, pitch);
-                    rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                    haveNotes = true;
+
+                    delete newEv;
+
+                    // at this point we could quantize the bar if we were
+                    // tracking in a notation view
 
                 } else {
-
-                    // it's a note-off
-
-                    PitchMap *pm = &m_noteOnEvents[device][channel];
-                    PitchMap::iterator mi = pm->find(pitch);
-
-                    if (mi != pm->end()) {
-                        // modify the previously held note-on event,
-                        // instead of assigning to rEvent
-                        NoteOnRecSet rec_vec = mi->second;
-                        Event *oldEv = *rec_vec[0].m_segmentIterator;
-                        Event *newEv = new Event
-                            (*oldEv, oldEv->getAbsoluteTime(), duration);
-
-                        newEv->set<Int>(RECORDED_CHANNEL, channel);
-                        NoteOnRecSet *replaced =
-                            replaceRecordedEvent(rec_vec, newEv);
-                        delete replaced;
-                        pm->erase(mi);
-                        if (updateFrom > newEv->getAbsoluteTime()) {
-                            updateFrom = newEv->getAbsoluteTime();
-                        }
-                        haveNotes = true;
-                        delete newEv;
-                        // at this point we could quantize the bar if we were
-                        // tracking in a notation view
-                    } else {
-                        RG_DEBUG << " WARNING: NOTE OFF received without corresponding NOTE ON  channel:" << channel << "  pitch:" << pitch;
-                    }
+                    RG_DEBUG << " WARNING: NOTE OFF received without corresponding NOTE ON  channel:" << channel << "  pitch:" << pitch;
                 }
-
-                break;
-
-            case MappedEvent::MidiPitchBend:
-                rEvent = PitchBend
-                         ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                rEvent->set<Int>(RECORDED_CHANNEL, channel);
-                break;
-
-            case MappedEvent::MidiController:
-                rEvent = Controller
-                         ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                rEvent->set<Int>(RECORDED_CHANNEL, channel);
-                break;
-
-            case MappedEvent::MidiProgramChange:
-                RG_DEBUG << "RosegardenDocument::insertRecordedMidi()"
-                         << " - got Program Change (unsupported)"
-                         << endl;
-                break;
-
-            case MappedEvent::MidiKeyPressure:
-                rEvent = KeyPressure
-                         ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                rEvent->set<Int>(RECORDED_CHANNEL, channel);
-                break;
-
-            case MappedEvent::MidiChannelPressure:
-                rEvent = ChannelPressure
-                         ((*i)->getData1()).getAsEvent(absTime);
-                rEvent->set<Int>(RECORDED_CHANNEL, channel);
-                break;
-
-            case MappedEvent::MidiSystemMessage:
-                channel = -1;
-                if ((*i)->getData1() == MIDI_SYSTEM_EXCLUSIVE) {
-                    rEvent = SystemExclusive
-                             (DataBlockRepository::getDataBlockForEvent((*i))).getAsEvent(absTime);
-                }
-
-                // Ignore other SystemMessage events for the moment
-                //
-
-                break;
-
-            case MappedEvent::MidiNoteOneShot:
-                RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
-                         << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot";
-                break;
-
-                // Audio control signals - ignore these
-            case MappedEvent::Audio:
-            case MappedEvent::AudioCancel:
-            case MappedEvent::AudioLevel:
-            case MappedEvent::AudioStopped:
-            case MappedEvent::AudioGeneratePreview:
-            case MappedEvent::SystemUpdateInstruments:
-                break;
-
-
-            // list everything in the enum to avoid the annoying compiler
-            // warning
-            case MappedEvent::InvalidMappedEvent:
-            case MappedEvent::Marker:
-            case MappedEvent::SystemJackTransport:
-            case MappedEvent::SystemMMCTransport:
-            case MappedEvent::SystemMIDIClock:
-            case MappedEvent::SystemMetronomeDevice:
-            case MappedEvent::SystemAudioPortCounts:
-            case MappedEvent::SystemAudioPorts:
-            case MappedEvent::SystemFailure:
-            case MappedEvent::Text:
-            case MappedEvent::TimeSignature:
-            case MappedEvent::Tempo:
-            case MappedEvent::Panic:
-            case MappedEvent::SystemMTCTransport:
-            case MappedEvent::SystemMIDISyncAuto:
-            case MappedEvent::SystemAudioFileFormat:
-            default:
-                RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
-                         << "GOT UNSUPPORTED MAPPED EVENT";
-                break;
             }
 
-            // sanity check
-            //
-            if (rEvent == 0)
-                continue;
+            break;
 
-            // Set the recorded input port
-            //
-            rEvent->set<Int>(RECORDED_PORT, device);
+        case MappedEvent::MidiPitchBend:
+            rEvent = PitchBend
+                     ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+            rEvent->set<Int>(RECORDED_CHANNEL, channel);
+            break;
 
-            // Set the proper start index (if we haven't before)
+        case MappedEvent::MidiController:
+            rEvent = Controller
+                     ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+            rEvent->set<Int>(RECORDED_CHANNEL, channel);
+            break;
+
+        case MappedEvent::MidiProgramChange:
+            RG_DEBUG << "RosegardenDocument::insertRecordedMidi()"
+                     << " - got Program Change (unsupported)"
+                     << endl;
+            break;
+
+        case MappedEvent::MidiKeyPressure:
+            rEvent = KeyPressure
+                     ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+            rEvent->set<Int>(RECORDED_CHANNEL, channel);
+            break;
+
+        case MappedEvent::MidiChannelPressure:
+            rEvent = ChannelPressure
+                     ((*i)->getData1()).getAsEvent(absTime);
+            rEvent->set<Int>(RECORDED_CHANNEL, channel);
+            break;
+
+        case MappedEvent::MidiSystemMessage:
+            channel = -1;
+            if ((*i)->getData1() == MIDI_SYSTEM_EXCLUSIVE) {
+                rEvent = SystemExclusive
+                         (DataBlockRepository::getDataBlockForEvent((*i))).getAsEvent(absTime);
+            }
+
+            // Ignore other SystemMessage events for the moment
             //
+
+            break;
+
+        case MappedEvent::MidiNoteOneShot:
+            RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
+                     << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot";
+            break;
+
+            // Audio control signals - ignore these
+        case MappedEvent::Audio:
+        case MappedEvent::AudioCancel:
+        case MappedEvent::AudioLevel:
+        case MappedEvent::AudioStopped:
+        case MappedEvent::AudioGeneratePreview:
+        case MappedEvent::SystemUpdateInstruments:
+            break;
+
+
+        // list everything in the enum to avoid the annoying compiler
+        // warning
+        case MappedEvent::InvalidMappedEvent:
+        case MappedEvent::Marker:
+        case MappedEvent::SystemJackTransport:
+        case MappedEvent::SystemMMCTransport:
+        case MappedEvent::SystemMIDIClock:
+        case MappedEvent::SystemMetronomeDevice:
+        case MappedEvent::SystemAudioPortCounts:
+        case MappedEvent::SystemAudioPorts:
+        case MappedEvent::SystemFailure:
+        case MappedEvent::Text:
+        case MappedEvent::TimeSignature:
+        case MappedEvent::Tempo:
+        case MappedEvent::Panic:
+        case MappedEvent::SystemMTCTransport:
+        case MappedEvent::SystemMIDISyncAuto:
+        case MappedEvent::SystemAudioFileFormat:
+        default:
+            RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
+                     << "GOT UNSUPPORTED MAPPED EVENT";
+            break;
+        }
+
+        // sanity check
+        //
+        if (rEvent == 0)
+            continue;
+
+        // Set the recorded input port
+        //
+        rEvent->set<Int>(RECORDED_PORT, device);
+
+        // Set the proper start index (if we haven't before)
+        //
+        for (RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
+             it != m_recordMIDISegments.end(); ++it) {
+            Segment *recordMIDISegment = it->second;
+            if (recordMIDISegment->size() == 0) {
+                recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
+                recordMIDISegment->fillWithRests(absTime);
+            }
+        }
+
+        // Now insert the new event
+        //
+        insertRecordedEvent(rEvent, device, channel, isNoteOn);
+        delete rEvent;
+    }
+
+    // If we have note events, quantize the notation for the recording
+    // segments.
+    if (haveNotes) {
+
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        int tracking = settings.value("recordtracking", 0).toUInt() ;
+        settings.endGroup();
+        if (tracking == 1) { // notation
             for (RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
                  it != m_recordMIDISegments.end(); ++it) {
+
                 Segment *recordMIDISegment = it->second;
-                if (recordMIDISegment->size() == 0) {
-                    recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
-                    recordMIDISegment->fillWithRests(absTime);
-                }
-            }
 
-            // Now insert the new event
-            //
-            insertRecordedEvent(rEvent, device, channel, isNoteOn);
-            delete rEvent;
+                EventQuantizeCommand *command = new EventQuantizeCommand
+                    (*recordMIDISegment,
+                     updateFrom,
+                     recordMIDISegment->getEndTime(),
+                     NotationOptionsConfigGroup,
+                     EventQuantizeCommand::QUANTIZE_NOTATION_ONLY);
+                // don't add to history
+                command->execute();
+            }
         }
 
-        // If we have note events, quantize the notation for the recording
-        // segments.
-        if (haveNotes) {
-
-            QSettings settings;
-            settings.beginGroup( GeneralOptionsConfigGroup );
-
-            int tracking = settings.value("recordtracking", 0).toUInt() ;
-            settings.endGroup();
-            if (tracking == 1) { // notation
-                for (RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
-                     it != m_recordMIDISegments.end(); ++it) {
-
-                    Segment *recordMIDISegment = it->second;
-
-                    EventQuantizeCommand *command = new EventQuantizeCommand
-                        (*recordMIDISegment,
-                         updateFrom,
-                         recordMIDISegment->getEndTime(),
-                         NotationOptionsConfigGroup,
-                         EventQuantizeCommand::QUANTIZE_NOTATION_ONLY);
-                    // don't add to history
-                    command->execute();
-                }
-            }
-
-            // this signal is currently unused - leaving just in case
-            // recording segments are updated through the SegmentObserver::eventAdded() interface
-            //         emit recordMIDISegmentUpdated(m_recordMIDISegment, updateFrom);
-        }
+        // this signal is currently unused - leaving just in case
+        // recording segments are updated through the SegmentObserver::eventAdded() interface
+        //         emit recordMIDISegmentUpdated(m_recordMIDISegment, updateFrom);
     }
 }
 
