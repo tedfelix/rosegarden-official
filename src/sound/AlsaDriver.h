@@ -66,6 +66,9 @@ public:
      * Called by RosegardenSequencer::processRecordedMidi() when recording and
      * RosegardenSequencer::processAsynchronousEvents() when playing or
      * stopped.
+     *
+     * These events are processed by RosegardenDocument::insertRecordedMidi()
+     * in the GUI thread.
      */
     virtual bool getMappedEventList(MappedEventList &mappedEventList);
     

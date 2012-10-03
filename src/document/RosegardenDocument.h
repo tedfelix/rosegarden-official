@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENGUIDOC_H_
-#define _RG_ROSEGARDENGUIDOC_H_
+#ifndef RG_ROSEGARDENDOCUMENT_H
+#define RG_ROSEGARDENDOCUMENT_H
 
 #include "base/Composition.h"
 #include "base/Configuration.h"
@@ -291,8 +291,10 @@ public:
      */
     bool isSequencerRunning();
 
+    /// Insert some recorded MIDI events into our recording Segment.
     /**
-     * insert some recorded MIDI events into our recording Segment
+     * These MIDI events come from AlsaDriver::getMappedEventList() in
+     * the sequencer thread.
      */
     void insertRecordedMidi(const MappedEventList &mc);
 
