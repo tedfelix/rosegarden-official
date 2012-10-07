@@ -10964,7 +10964,7 @@
     <message>
         <location line="+8"/>
         <source>for submasters</source>
-        <translation>Keine Gruppenfader</translation>
+        <translation>für die Gruppenfader</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -11423,7 +11423,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location line="+96"/>
         <source>Sub %1</source>
-        <translation>Gruppe %1</translation>
+        <translation>Grp %1</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -11731,7 +11731,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <location line="-21"/>
         <location line="+23"/>
         <source>Sub %1</source>
-        <translation>Gruppe %1</translation>
+        <translation>Grp %1</translation>
     </message>
     <message>
         <location line="-17"/>
@@ -11756,12 +11756,12 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location line="+2"/>
         <source>Sub %1 R</source>
-        <translation>Gruppe %1 R</translation>
+        <translation>Grp %1 R</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sub %1 L</source>
-        <translation>Gruppe %1 L</translation>
+        <translation>Grp %1 L</translation>
     </message>
 </context>
 <context>
