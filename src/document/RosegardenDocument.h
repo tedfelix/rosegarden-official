@@ -612,10 +612,8 @@ protected:
      *
      * Replace recorded Note events in one or several segments, returning the
      * resulting NoteOnRecSet
-     *
-     * rename: adjustEndTimes() and take a "timeT endTime" instead of fresh
      */
-    NoteOnRecSet* replaceRecordedEvent(NoteOnRecSet &rec_vec, Event *fresh);
+    NoteOnRecSet* adjustEndTimes(NoteOnRecSet &rec_vec, timeT endTime);
     
     /**
      * Insert a recorded event in one or several segments

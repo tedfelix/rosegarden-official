@@ -1929,9 +1929,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
            timeT duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
         */
-        timeT duration = m_composition.
-                   getElapsedTimeForRealTime((*i)->getEventTime() +
-                                             (*i)->getDuration()) - absTime;
+        const timeT endTime = m_composition.getElapsedTimeForRealTime(
+                (*i)->getEventTime() + (*i)->getDuration());
+        timeT duration = endTime - absTime;
 
         Event *rEvent = 0;
         bool isNoteOn = false;
@@ -1975,29 +1975,30 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
                 // If we have a matching note-on for this note-off
                 if (mi != pitchMap->end()) {
-                    // modify the previously held note-on event,
-                    // instead of assigning to rEvent
 
+                    // Get the vector of note-ons that match with this
+                    // note-off.
                     NoteOnRecSet rec_vec = mi->second;
-                    Event *oldEv = *rec_vec[0].m_segmentIterator;
-                    Event *newEv = new Event(
-                            *oldEv, oldEv->getAbsoluteTime(), duration);
-                    newEv->set<Int>(RECORDED_CHANNEL, channel);
 
-                    NoteOnRecSet *replaced =
-                        replaceRecordedEvent(rec_vec, newEv);
+                    // Adjust updateFrom for quantization.
+
+                    Event *oldEv = *rec_vec[0].m_segmentIterator;
+                    timeT eventAbsTime = oldEv->getAbsoluteTime();
+
+                    // Make sure we quantize starting at the beginning of this
+                    // note at least.
+                    if (updateFrom > eventAbsTime)
+                        updateFrom = eventAbsTime;
+
+                    // Modify the previously held note-on Event(s), instead
+                    // of assigning to rEvent.
+                    NoteOnRecSet *replaced = adjustEndTimes(rec_vec, endTime);
                     delete replaced;
 
-                    // Remove the note-on from the pitch map
+                    // Remove the original note-on(s) from the pitch map.
                     pitchMap->erase(mi);
 
-                    if (updateFrom > newEv->getAbsoluteTime()) {
-                        updateFrom = newEv->getAbsoluteTime();
-                    }
-
                     haveNotes = true;
-
-                    delete newEv;
 
                     // at this point we could quantize the bar if we were
                     // tracking in a notation view
@@ -2012,13 +2013,11 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         case MappedEvent::MidiPitchBend:
             rEvent = PitchBend
                      ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-            rEvent->set<Int>(RECORDED_CHANNEL, channel);
             break;
 
         case MappedEvent::MidiController:
             rEvent = Controller
                      ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-            rEvent->set<Int>(RECORDED_CHANNEL, channel);
             break;
 
         case MappedEvent::MidiProgramChange:
@@ -2030,13 +2029,11 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         case MappedEvent::MidiKeyPressure:
             rEvent = KeyPressure
                      ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-            rEvent->set<Int>(RECORDED_CHANNEL, channel);
             break;
 
         case MappedEvent::MidiChannelPressure:
             rEvent = ChannelPressure
                      ((*i)->getData1()).getAsEvent(absTime);
-            rEvent->set<Int>(RECORDED_CHANNEL, channel);
             break;
 
         case MappedEvent::MidiSystemMessage:
@@ -2098,6 +2095,10 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         // Set the recorded input port
         //
         rEvent->set<Int>(RECORDED_PORT, device);
+
+        // Set the recorded channel, if this isn't a sysex event
+        if (channel >= 0)
+            rEvent->set<Int>(RECORDED_CHANNEL, channel);
 
         // Set the proper start index (if we haven't before)
         //
@@ -2174,14 +2175,8 @@ RosegardenDocument::updateRecordingMIDISegment()
                 // at the recording pointer
                 NoteOnRecSet rec_vec = pm->second;
                 if (rec_vec.size() > 0) {
-                    Event *oldEv = *rec_vec[0].m_segmentIterator;
-                    Event *newEv = new Event(
-                                       *oldEv, oldEv->getAbsoluteTime(),
-                                       m_composition.getPosition() - oldEv->getAbsoluteTime() );
-
                     tweakedNoteOnEvents[mi->first][cm->first][pm->first] =
-                        *replaceRecordedEvent(rec_vec, newEv);
-                    delete newEv;
+                        *adjustEndTimes(rec_vec, m_composition.getPosition());
                 }
             }
     m_noteOnEvents = tweakedNoteOnEvents;
@@ -2233,48 +2228,14 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
         }
 } 
 
-#if 0
-// Original version
 RosegardenDocument::NoteOnRecSet *
-RosegardenDocument::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
-{
-    NoteOnRecSet *new_vector = new NoteOnRecSet();
-
-    for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
-        // Remove the event from the segment
-        Segment *recordMIDISegment = i->m_segment;
-        recordMIDISegment->erase(i->m_segmentIterator);
-
-        // Insert the replacement event into the segment
-        NoteOnRec noteRec;
-        noteRec.m_segment = recordMIDISegment;
-        noteRec.m_segmentIterator = recordMIDISegment->insert(new Event(*fresh));
-        // don't need to transpose this event; it was copied from an
-        // event that had been transposed already (in storeNoteOnEvent)
-
-        // Collect the new NoteOnRec objects for return.
-        new_vector->push_back(noteRec);
-    }
-    return new_vector;
-}
-
-#else
-
-// New version
-RosegardenDocument::NoteOnRecSet *
-RosegardenDocument::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
+RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
-    //Profiler profiler("RosegardenDocument::replaceRecordedEvent()");
+    //Profiler profiler("RosegardenDocument::adjustEndTimes()");
 
     // Create a vector to hold the new note-on events for return.
     NoteOnRecSet *new_vector = new NoteOnRecSet();
-
-    // Compute the new endTime based on fresh.
-    // ??? We should just take an endTime and rename this routine
-    //     adjustEndTimes().  "endTime" is best as two out of three
-    //     callers prefer endTime.
-    timeT endTime = fresh->getAbsoluteTime() + fresh->getDuration();
 
     // For each note-on event
     for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
@@ -2320,8 +2281,6 @@ RosegardenDocument::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
 
     return new_vector;
 }
-
-#endif
 
 void
 RosegardenDocument::storeNoteOnEvent(Segment *s, Segment::iterator it, int device, int channel)
@@ -2468,17 +2427,10 @@ RosegardenDocument::stopRecordingMidi()
                 NoteOnRecSet rec_vec = pm->second;
 
                 if (rec_vec.size() > 0) {
-                    // Make a copy of the first note-on event and adjust its
-                    // end time.
-                    Event *oldEv = *rec_vec[0].m_segmentIterator;
-                    Event *newEv = new Event
-                        (*oldEv, oldEv->getAbsoluteTime(),
-                         endTime - oldEv->getAbsoluteTime());
-                    // Adjust the end times of any other note-on events for
+                    // Adjust the end times of the note-on events for
                     // this device/channel/pitch.
                     NoteOnRecSet *replaced =
-                        replaceRecordedEvent(rec_vec, newEv);
-                    delete newEv;
+                            adjustEndTimes(rec_vec, endTime);
                     delete replaced;
                 }
             }
