@@ -1948,6 +1948,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             // -1 seconds to indicate a note-on event.)
             if ((*i)->getDuration() < RealTime::zeroTime) {
 
+                //printf("Note On  ch %2d | ptch %3d | vel %3d\n", channel, pitch, (*i)->getVelocity());
+                //RG_DEBUG << "RD::iRM Note On cpv:" << channel << "/" << pitch << "/" << (*i)->getVelocity();
+
                 // give it a default duration for insertion into the segment
                 duration = Note(Note::Crotchet).getDuration();
 
@@ -1963,6 +1966,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
                 rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
             } else {  // it's a note-off
+
+                //printf("Note Off event on Channel %2d: %5d\n", channel, pitch);
+                //RG_DEBUG << "RD::iRM Note Off cp:" << channel << "/" << pitch;
 
                 PitchMap *pitchMap = &m_noteOnEvents[device][channel];
                 PitchMap::iterator mi = pitchMap->find(pitch);
@@ -2227,22 +2233,95 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
         }
 } 
 
+#if 0
+// Original version
 RosegardenDocument::NoteOnRecSet *
 RosegardenDocument::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
 {
     NoteOnRecSet *new_vector = new NoteOnRecSet();
+
     for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+        // Remove the event from the segment
         Segment *recordMIDISegment = i->m_segment;
         recordMIDISegment->erase(i->m_segmentIterator);
+
+        // Insert the replacement event into the segment
         NoteOnRec noteRec;
         noteRec.m_segment = recordMIDISegment;
         noteRec.m_segmentIterator = recordMIDISegment->insert(new Event(*fresh));
         // don't need to transpose this event; it was copied from an
         // event that had been transposed already (in storeNoteOnEvent)
+
+        // Collect the new NoteOnRec objects for return.
         new_vector->push_back(noteRec);
     }
     return new_vector;
 }
+
+#else
+
+// New version
+RosegardenDocument::NoteOnRecSet *
+RosegardenDocument::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
+{
+    // Not too keen on profilers, but I'll give it a shot for fun...
+    //Profiler profiler("RosegardenDocument::replaceRecordedEvent()");
+
+    // Create a vector to hold the new note-on events for return.
+    NoteOnRecSet *new_vector = new NoteOnRecSet();
+
+    // Compute the new endTime based on fresh.
+    // ??? We should just take an endTime and rename this routine
+    //     adjustEndTimes().  "endTime" is best as two out of three
+    //     callers prefer endTime.
+    timeT endTime = fresh->getAbsoluteTime() + fresh->getDuration();
+
+    // For each note-on event
+    for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+        // ??? All this removing and re-inserting of Events from the Segment
+        //     seems like a serious waste.  Can't we just modify the Event
+        //     in place?  Otherwise we are doing all of this:
+        //        1. Segment::erase() notifications.
+        //        2. Segment::insert() notifications.
+        //        3. Event delete and new.
+
+        Event *oldEvent = *(i->m_segmentIterator);
+
+        // Make a new copy of the event in the segment and modify the
+        // duration as needed.
+        // ??? Can't we modify the Event in place in the Segment?
+        //     No.  All setters are protected.  Events are read-only.
+        Event *newEvent = new Event(
+                *oldEvent,  // reference Event object
+                oldEvent->getAbsoluteTime(),  // absoluteTime (preserved)
+                endTime - oldEvent->getAbsoluteTime()  // duration (adjusted)
+                );
+
+        // Remove the old event from the segment
+        Segment *recordMIDISegment = i->m_segment;
+        recordMIDISegment->erase(i->m_segmentIterator);
+
+        // Insert the new event into the segment
+        NoteOnRec noteRec;
+        noteRec.m_segment = recordMIDISegment;
+        // ??? Performance: This causes a slew of change notifications to be
+        //        sent out by Segment::insert().  That may be causing the
+        //        performance issues when recording.  Try removing the
+        //        notifications from insert() and see if things improve.
+        //        Also take a look at Segment::erase() which is called above.
+        noteRec.m_segmentIterator = recordMIDISegment->insert(newEvent);
+
+        // don't need to transpose this event; it was copied from an
+        // event that had been transposed already (in storeNoteOnEvent)
+
+        // Collect the new NoteOnRec objects for return.
+        new_vector->push_back(noteRec);
+    }
+
+    return new_vector;
+}
+
+#endif
 
 void
 RosegardenDocument::storeNoteOnEvent(Segment *s, Segment::iterator it, int device, int channel)
@@ -2389,10 +2468,14 @@ RosegardenDocument::stopRecordingMidi()
                 NoteOnRecSet rec_vec = pm->second;
 
                 if (rec_vec.size() > 0) {
+                    // Make a copy of the first note-on event and adjust its
+                    // end time.
                     Event *oldEv = *rec_vec[0].m_segmentIterator;
                     Event *newEv = new Event
                         (*oldEv, oldEv->getAbsoluteTime(),
                          endTime - oldEv->getAbsoluteTime());
+                    // Adjust the end times of any other note-on events for
+                    // this device/channel/pitch.
                     NoteOnRecSet *replaced =
                         replaceRecordedEvent(rec_vec, newEv);
                     delete newEv;
