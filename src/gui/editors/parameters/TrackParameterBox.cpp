@@ -709,7 +709,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
     m_defClef->setCurrentIndex(trk->getClef());
-    m_defTranspose->setItemText(m_defTranspose->currentIndex(), QString("%1").arg(trk->getTranspose()));
+    m_defTranspose->setCurrentIndex(m_defTranspose->findText(QString("%1").arg(trk->getTranspose())));
     m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
@@ -1183,12 +1183,8 @@ TrackParameterBox::slotPresetPressed()
                 CommandHistory::getInstance()->addCommand(command);
             }
             m_defClef->setCurrentIndex(dialog.getClef());
-//             m_defTranspose->setCurrentIndex(QString("%1").arg
-//                     (dialog.getTranspose()), true);
-
                      
-            m_defTranspose->setItemText(m_defTranspose->currentIndex(), QString("%1").arg
-                    (dialog.getTranspose()));
+            m_defTranspose->setCurrentIndex(m_defTranspose->findText(QString("%1").arg(dialog.getTranspose())));
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();

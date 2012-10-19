@@ -709,23 +709,17 @@ SegmentParameterBox::populateBoxFromSegments()
     m_quantizeValue->setEnabled(quantized != NotApplicable);
 
     switch (transposed) {
-        // setCurrentIndex works with QStrings
-        // 2nd arg of "true" means "add if necessary"
     case All:
-        m_transposeValue->
-//           setCurrentIndex(QString("%1").arg(transposeLevel), true);
-          setItemText(m_transposeValue->currentIndex(), QString("%1").arg(transposeLevel) );
+          m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("%1").arg(transposeLevel)));
           break;
 
     case Some:
-//           m_transposeValue->setCurrentIndex(QString(""), true);
-          m_transposeValue->setItemText(m_transposeValue->currentIndex(), QString(""));
+          m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("")));
           break;
 
     case None:
     default:
-//           m_transposeValue->setCurrentIndex("0");
-          m_transposeValue->setItemText(m_delayValue->currentIndex(), "0");
+          m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("0")));
           break;
     }
 
@@ -740,25 +734,22 @@ SegmentParameterBox::populateBoxFromSegments()
             QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
                             true,
                             error);
-//                m_delayValue->setCurrentIndex(label, true);
-               m_delayValue->setItemText(m_delayValue->currentIndex(), label);
+               m_delayValue->setCurrentIndex(m_delayValue->findText(label));
 
         } else if (delayLevel < 0) {
 
-//                m_delayValue->setCurrentIndex(tr("%1 ms").arg(-delayLevel),true);
-               m_delayValue->setItemText(m_delayValue->currentIndex(), tr("%1 ms").arg(-delayLevel) );
+               m_delayValue->setCurrentIndex(m_delayValue->findText( tr("%1 ms").arg(-delayLevel) ));
           }
 
         break;
 
     case Some:
-//           m_delayValue->setCurrentIndex("", true);
-          m_delayValue->setItemText(m_delayValue->currentIndex(), "");
+          m_delayValue->setCurrentIndex(m_delayValue->findText(QString("")));
           break;
 
     case None:
     default:
-        m_delayValue->setCurrentIndex(0);
+        m_delayValue->setCurrentIndex(m_delayValue->findText(QString("0")));
         break;
     }
 
