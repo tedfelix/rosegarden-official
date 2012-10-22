@@ -158,8 +158,10 @@ public:
 
     // Modify ControlParameters
     //
-    void addControlParameter(const ControlParameter &con);
-    void addControlParameter(const ControlParameter &con, int index);
+    void addControlParameter(const ControlParameter &con,
+                             bool propagateToInstruments);
+    void addControlParameter(const ControlParameter &con, int index,
+                             bool propagateToInstruments);
     bool removeControlParameter(int index);
     bool modifyControlParameter(const ControlParameter &con, int index);
 

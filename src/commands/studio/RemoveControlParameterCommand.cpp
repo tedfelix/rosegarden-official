@@ -62,7 +62,7 @@ RemoveControlParameterCommand::unexecute()
         return ;
     }
 
-    md->addControlParameter(m_oldControl, m_id);
+    md->addControlParameter(m_oldControl, m_id, true);
 }
 
 }

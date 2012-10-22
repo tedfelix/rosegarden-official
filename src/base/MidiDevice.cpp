@@ -89,7 +89,7 @@ MidiDevice::MidiDevice(DeviceId id,
     // Populate device and Instrument with Controllers.
     ControlList::const_iterator cIt = dev.m_controlList.begin();
     for(; cIt != dev.m_controlList.end(); ++cIt) {
-        addControlParameter(*cIt);
+        addControlParameter(*cIt, true);
     }
     
     
@@ -274,7 +274,7 @@ MidiDevice::generateDefaultControllers()
                                          Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
                                          atoi(controls[i][7].c_str()),
                                          atoi(controls[i][8].c_str()));
-        addControlParameter(con);
+        addControlParameter(con, false);
     }
 }
 
@@ -789,38 +789,48 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
 }
 
 void
-MidiDevice::addControlParameter(const ControlParameter &con)
+MidiDevice::addControlParameter(const ControlParameter &con,
+                                bool propagateToInstruments)
 {
     if (isUniqueControlParameter(con)) { //Don't allow duplicates
         m_controlList.push_back(con);
-        if (isVisibleControlParameter(con)) {
+        if (propagateToInstruments && isVisibleControlParameter(con)) {
             addControlToInstrument(con);
         }
     }
 }
 
+// Add controller CON at INDEX, shifting further controllers one
+// position forwards.
+// Used only by RemoveControlParameterCommand.
 void
-MidiDevice::addControlParameter(const ControlParameter &con, int index)
+MidiDevice::addControlParameter(const ControlParameter &con, int index,
+                                bool propagateToInstruments)
 {
     ControlList controls;
 
     // if we're out of range just add the control
     if (index >= (int)m_controlList.size())
     {
-        addControlParameter(con);
+        addControlParameter(con, propagateToInstruments);
         return;
     }
 
-    // add new controller in at a position
+    // Rebuild the ControlList entry by entry, placing CON at INDEX.
+    // For entry INDEX we do two push_back's, for other entries we do
+    // one.
     for (int i = 0; i < (int)m_controlList.size(); ++i)
     {
         if (index == i) {
             controls.push_back(con);
-            addControlParameter(con);
+            // !!! This seems to do more than we need, since we
+            // discard the original m_controlList.
+            addControlParameter(con, propagateToInstruments);
         }
         controls.push_back(m_controlList[i]);
     }
 
+    // Assign the ControlList we just made.
     m_controlList = controls;
 }
 
@@ -872,7 +882,7 @@ MidiDevice::replaceControlParameters(const ControlList &con)
     // Now add the controllers to the device,    
     ControlList::const_iterator cIt = con.begin();
     for(; cIt != con.end(); ++cIt) {
-        addControlParameter(*cIt);
+        addControlParameter(*cIt, true);
     }
 }
 

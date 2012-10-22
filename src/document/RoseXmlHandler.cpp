@@ -1544,8 +1544,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                  colour.toInt(),
                                  ipbPosition.toInt());
 
+            // !!! Not clear whether this should propagate to
+            // instruments.  Conservatively keeping the original
+            // semantics, which may not be right.
             dynamic_cast<MidiDevice*>(m_device)->
-            addControlParameter(con);
+                addControlParameter(con, true);
         }
 
     } else if (lcName == "reverb") { // deprecated but we still read 'em

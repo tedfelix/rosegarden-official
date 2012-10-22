@@ -44,7 +44,7 @@ AddControlParameterCommand::execute()
         return ;
     }
 
-    md->addControlParameter(m_control);
+    md->addControlParameter(m_control, true);
 
     // store id of the new control
     m_id = int(md->getControlParameters().size()) - 1;
