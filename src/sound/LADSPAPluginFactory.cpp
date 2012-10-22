@@ -565,7 +565,8 @@ LADSPAPluginFactory::getPluginPath()
         path = cpath;
 
     if (path == "") {
-        path = "/usr/local/lib/ladspa:/usr/lib/ladspa";
+//      path = "/usr/local/lib/ladspa:/usr/lib/ladspa";
+        path = "/usr/local/lib/ladspa:/usr/lib/ladspa:/usr/local/lib64/ladspa:/usr/lib64/ladspa";
         char *home = getenv("HOME");
         if (home)
             path = std::string(home) + "/.ladspa:" + path;
@@ -753,9 +754,11 @@ LADSPAPluginFactory::generateFallbackCategories()
     std::vector<QString> path;
 
     for (size_t i = 0; i < pluginPath.size(); ++i) {
-        if (pluginPath[i].contains("/lib/")) {
+//      if (pluginPath[i].contains("/lib/")) {
+        if (pluginPath[i].contains("/lib/") || pluginPath[i].contains("/lib64/")) {
             QString p(pluginPath[i]);
             p.replace("/lib/", "/share/");
+            p.replace("/lib64/", "/share/");
             path.push_back(p);
             //	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << p << std::endl;
         }
