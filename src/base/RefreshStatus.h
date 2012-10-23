@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _REFRESH_STATUS_H_
-#define _REFRESH_STATUS_H_
+#ifndef RG_REFRESH_STATUS_H
+#define RG_REFRESH_STATUS_H
 
 #include <QtGlobal>
 #include <vector>
@@ -58,20 +58,30 @@ protected:
  * at a slower pace (usually to save CPU time).
  *
  * See Composition which instantiates this with RefreshStatus and
- * Segment which instantiates this with SegmentRefreshStatus.
+ * Segment which instantiates this with SegmentRefreshStatus (which adds
+ * a time range to the refresh flag in RefreshStatus).
  */
 template<class RS>
 class RefreshStatusArray
 {
 public:
-    /// Creates a new flag for an observer.  Use the returned ID when calling
-    /// getRefreshStatus() to check whether a refresh is needed.
+    /// Creates a new refresh status object for an observer.
+    /**
+     * Use the returned ID when calling getRefreshStatus() to check whether
+     * a refresh is needed.  This ID identifies a specific observer.  That
+     * observer can clear these refresh flags without affecting other
+     * observers.
+     */
     unsigned int getNewRefreshStatusId();
 
     /// Returns the number of observers.
     size_t size() { return m_refreshStatuses.size(); }
 
     /// Returns the refresh status object for a particular observer.
+    /**
+     * Observers can set or clear the flags via the reference that is
+     * returned.
+     */
     RS& getRefreshStatus(unsigned int id)
     {
         Q_ASSERT_X(id < m_refreshStatuses.size(),
@@ -82,8 +92,9 @@ public:
     }
 
     /// Sets all the refresh flags to true.
-    ///
-    /// Rename: needsRefresh()
+    /**
+     * rename: needsRefresh()
+     */
     void updateRefreshStatuses();
 
 protected:

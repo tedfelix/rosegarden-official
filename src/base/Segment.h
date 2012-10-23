@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENT_H_
-#define _SEGMENT_H_
+#ifndef RG_SEGMENT_H
+#define RG_SEGMENT_H
 
 #include <set>
 #include <list>
@@ -31,6 +31,7 @@
 namespace Rosegarden
 {
 
+/// A refresh flag with a time range.
 class SegmentRefreshStatus : public RefreshStatus
 {
 public:
@@ -46,7 +47,14 @@ protected:
     timeT m_to;
 };
 
+class SegmentObserver;
+class Quantizer;
+class BasicQuantizer;
+class Composition;
+class SegmentLinker;
+class BasicCommand;
 
+/// Container of Event objects.
 /**
  * Segment is the container for a set of Events that are all played on
  * the same track.  Each event has an absolute starting time,
@@ -65,14 +73,6 @@ protected:
  *
  * The Segment owns the Events its items are pointing at.
  */
-
-class SegmentObserver;
-class Quantizer;
-class BasicQuantizer;
-class Composition;
-class SegmentLinker;
-class BasicCommand;
-
 class Segment : public QObject, public std::multiset<Event*, Event::EventCmp>
 {
   Q_OBJECT
@@ -353,24 +353,16 @@ public:
     //
     // EVENT MANIPULATION
 
-    /**
-     * Inserts a single Event
-     */
+    /// Insert a single Event
     iterator insert(Event *e);
 
-    /**
-     * Erases a single Event
-     */
+    /// Erase a single Event
     void erase(iterator pos);
 
-    /**
-     * Erases a set of Events
-     */
+    /// Erase a set of Events
     void erase(iterator from, iterator to);
 
-    /**
-     * Clear the segment.
-     */
+    /// Clear the segment.
     void clear() { erase(begin(), end()); }
 
     /**
@@ -937,14 +929,16 @@ private:
 
 typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
 
+/// Base class interface for Segment notifications.
+/**
+ * See Segment::addObserver() and Segment::m_observers.
+ */
 class SegmentObserver
 {
 public:
     virtual ~SegmentObserver() {}
 
-    /**
-     * Called after the event has been added to the segment
-     */
+    /// Called after an event has been added to the segment.
     virtual void eventAdded(const Segment *, Event *) { }
 
     /**
@@ -959,22 +953,16 @@ public:
      */
     virtual void appearanceChanged(const Segment *) { }
 
-    /**
-     * Called after a change that affects the start time of the segment
-     */
+    /// Called after a change that affects the start time of the segment.
     virtual void startChanged(const Segment *, timeT) { }
 
+    /// Called after the segment's end marker time has been changed.
     /**
-     * Called after the segment's end marker time has been
-     * changed
-     *
      * @param shorten true if the marker change shortens the segment's duration
      */
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/) { }
 
-    /**
-     * Called after a change of the segment transposition
-     */
+    /// Called after a change of the segment transposition.
     virtual void transposeChanged(const Segment *, int /*transpose*/) { }
 
     /**
@@ -984,9 +972,6 @@ public:
     virtual void segmentDeleted(const Segment *) = 0;
 };
 
-
-
-// an abstract base
 
 class SegmentHelper
 {
