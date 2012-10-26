@@ -37,6 +37,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/LedButton.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PluginIdentifier.h"
@@ -820,8 +821,9 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
     //RG_DEBUG << "TrackButtons::slotInstrumentSelected: instrument " << inst;
 
     if (inst != 0) {
+        Composition &comp = m_doc->getComposition();
         Track *track =
-                m_doc->getComposition().getTrackByPosition(m_popupTrackPos);
+                comp.getTrackByPosition(m_popupTrackPos);
 
         if (track != 0) {
             // Select the new instrument for the track
@@ -835,6 +837,19 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
             // Udpate the LED color
             m_recordLeds[m_popupTrackPos]->setColor(getRecordLedColour(inst));
 
+            SequenceManager *sM =
+                m_doc->getSequenceManager();
+
+            // Segments on this track are now playing on a new
+            // instrument, so they're no longer ready (making them
+            // ready is done just-in-time elsewhere)
+            for (Composition::iterator i =
+                     comp.begin();
+                 i != comp.end(); ++i) {
+                if (((int)(*i)->getTrack()) == m_popupTrackPos) {
+                    sM->segmentInstrumentChanged(*i);
+                }
+            }    
         } else {
             RG_DEBUG << "slotInstrumentSelected() - can't find track!\n";
         }

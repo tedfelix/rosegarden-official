@@ -1796,6 +1796,16 @@ void SequenceManager::segmentEndMarkerChanged(const Composition*, Segment *s, bo
     segmentModified(s);
 }
 
+void SequenceManager::segmentInstrumentChanged(Segment *s)
+{
+#ifdef DEBUG_SEQUENCE_MANAGER
+    SEQMAN_DEBUG << "SequenceManager::segmentInstrumentChanged(" << s
+                 << ")" << endl;
+#endif    
+    // Quick and dirty: Redo the whole segment.
+    segmentModified(s);
+}
+
 void SequenceManager::processAddedSegment(Segment* s)
 {
 #ifdef DEBUG_SEQUENCE_MANAGER

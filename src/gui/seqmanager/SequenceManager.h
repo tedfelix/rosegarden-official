@@ -191,6 +191,7 @@ public:
     void processAddedSegment(Segment*);
     void processRemovedSegment(Segment*);
     void segmentModified(Segment*);
+    void segmentInstrumentChanged(Segment *s);
 
     virtual bool event(QEvent *e);
 

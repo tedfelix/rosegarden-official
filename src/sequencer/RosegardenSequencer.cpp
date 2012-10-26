@@ -1047,6 +1047,10 @@ RosegardenSequencer::segmentModified(MappedEventBuffer *mapper)
    SEQUENCER_DEBUG << "RosegardenSequencer::segmentModified(" << mapper << ")\n";
 #endif
    LOCKED;
+   /* We don't force an immediate rewind while recording.  It would be
+      "the right thing" soundwise, but historically we haven't,
+      there's been no demand and nobody knows what subtle problems
+      might be introduced. */
    bool immediate = (m_transportStatus == PLAYING);
    m_metaIterator.resetIteratorForSegment(mapper, immediate);
 }
