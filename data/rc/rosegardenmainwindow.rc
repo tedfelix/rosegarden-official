@@ -245,7 +245,7 @@
     <Menu name="Transport">
       <text>T&amp;ransport</text>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" shortcut="Enter, Media Play, Ctrl+Return" shortcut-context="application" />
+      <Action name="play" text="&amp;Play" icon="transport-play" shortcut="Ctrl+Enter, Enter, Media Play, Ctrl+Return, Return" shortcut-context="application" />
       <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Insert, Media Stop" shortcut-context="application" />
       <!-- JAS swapped rewind / ffwd to match matrix.rc -->
       <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" shortcut-context="application" />
