@@ -446,6 +446,7 @@
     <Action name="links_to_real_copies"/>
     <Action name="groove_quantize"/>
     <Action name="fit_beats"/>
+    <Action name="repeat_segment_onoff"/>
   </enable>
 </State>
 
