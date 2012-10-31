@@ -672,6 +672,7 @@ setFixedChannel(void)
         m_fixed = true;
         emit channelBecomesFixed();
         StudioControl::sendChannelSetup(this, m_channel);
+        ControlBlock::getInstance()->instrumentChangedFixity(getId());
     }
 }
 
@@ -690,6 +691,7 @@ releaseFixedChannel(void)
 
     m_fixed = false;
     emit channelBecomesUnfixed();
+    ControlBlock::getInstance()->instrumentChangedFixity(getId());
 }
 
 

@@ -40,6 +40,7 @@
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/LedButton.h"
 #include "sound/AudioFileManager.h"
+#include "sound/ControlBlock.h"
 #include "sound/PluginIdentifier.h"
 #include "sequencer/RosegardenSequencer.h"
 
@@ -826,9 +827,15 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
                 comp.getTrackByPosition(m_popupTrackPos);
 
         if (track != 0) {
-            // Select the new instrument for the track
+            // Select the new instrument for the track.  Seems like we
+            // need to do all 3 ways:
+            // For Track.cpp
             track->setInstrument(inst->getId());
+            // For TrackParameterBox
             emit instrumentSelected((int)inst->getId());
+            // For ControlBlock's representation of track.
+            ControlBlock::getInstance()->
+                setInstrumentForTrack(m_popupTrackPos, inst->getId());
 
             // Update the instrument names
             initInstrumentNames(inst, m_trackLabels[m_popupTrackPos]);
@@ -842,7 +849,8 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
 
             // Segments on this track are now playing on a new
             // instrument, so they're no longer ready (making them
-            // ready is done just-in-time elsewhere)
+            // ready is done just-in-time elsewhere), nor is thru
+            // channel ready.
             for (Composition::iterator i =
                      comp.begin();
                  i != comp.end(); ++i) {

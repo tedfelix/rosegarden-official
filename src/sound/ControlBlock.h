@@ -52,27 +52,32 @@ struct TrackInfo
     void conform(Studio &studio);
     void releaseThruChannel(Studio &studio);
     void makeChannelReady(Studio &studio);
+    void instrumentChangedFixity(Studio &studio);
 private:
     void allocateThruChannel(Studio &studio);
 
 public:
-    bool deleted;
-    bool muted;
-    bool armed;
-    char channelFilter;
-    DeviceId deviceFilter;
-    InstrumentId instrumentId;
+    bool m_deleted;
+    bool m_muted;
+    bool m_armed;
+    char m_channelFilter;
+    DeviceId m_deviceFilter;
+    InstrumentId m_instrumentId;
     // The channel to play thru MIDI events on, if any.  For unarmed
-    // unselected tracks, this will be an invalid channel.
-    int thruChannel;
+    // unselected tracks, this will be an invalid channel.  For
+    // fixed-channel instruments, this is the instrument's fixed channel.
+    int m_thruChannel;
     // Whether the thru channel is ready - the right program has been
     // sent, etc.
-    bool isThruChannelReady;
+    bool m_isThruChannelReady;
     // Whether we have allocated a thru channel.
-    bool hasThruChannel;
+    bool m_hasThruChannel;
     // This duplicates information in ControlBlock.  It exists so that
     // we can check if we need a thru channel using just this class.
-    bool selected;
+    bool m_selected;
+    // This is usually the same as Instrument's fixedness, but can
+    // disagree briefly when fixedness changes.  Meaningless if no channel.
+    bool m_useFixedChannel;
 };
 
 #define CONTROLBLOCK_MAX_NB_TRACKS 1024 // can't be a symbol
@@ -116,11 +121,13 @@ public:
     bool isInstrumentMuted(InstrumentId instrumentId) const;
     bool isInstrumentUnused(InstrumentId instrumentId) const;
 
-    void setInstrumentForMetronome(InstrumentId instId) { m_metronomeInfo.instrumentId = instId; }
-    InstrumentId getInstrumentForMetronome() const      { return m_metronomeInfo.instrumentId; }
+    void setInstrumentForMetronome(InstrumentId instId)
+    { m_metronomeInfo.m_instrumentId = instId; }
+    InstrumentId getInstrumentForMetronome() const
+    { return m_metronomeInfo.m_instrumentId; }
 
-    void setMetronomeMuted(bool mute) { m_metronomeInfo.muted = mute; }
-    bool isMetronomeMuted() const     { return m_metronomeInfo.muted; }
+    void setMetronomeMuted(bool mute) { m_metronomeInfo.m_muted = mute; }
+    bool isMetronomeMuted() const     { return m_metronomeInfo.m_muted; }
 
     bool isSolo() const      { return m_solo; }
     void setSolo(bool value) { m_solo = value; }
@@ -153,6 +160,7 @@ public:
 
     void vacateThruChannel(int channel);
     void instrumentChangedProgram(InstrumentId instrumentId);
+    void instrumentChangedFixity(InstrumentId instrumentId);
     
 protected:
     ControlBlock();
