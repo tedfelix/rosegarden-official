@@ -186,12 +186,15 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
     // ARE one unit, and having selections treat them that way solves a lot of
     // usability problems.
     //
+    // We have to recheck against end() because insertEraseFn can
+    // change that.
     // looking AHEAD:
-    if (e->has(BaseProperties::TIED_FORWARD)) {
+    if (e->has(BaseProperties::TIED_FORWARD) &&
+        (baseSegmentItr != m_originalSegment.end())) {
 
         long oldPitch = 0;
         if (e->has(BaseProperties::PITCH)) e->get<Int>(BaseProperties::PITCH, oldPitch);
-        
+
         // Set iterator to the next element in container after baseSegmentItr;
         Segment::const_iterator si = baseSegmentItr;
         ++si;
