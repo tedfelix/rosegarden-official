@@ -36,21 +36,22 @@
 
 #include "misc/ConfigGroups.h"
 
-#include "base/Clipboard.h"
-#include "base/Selection.h"
-#include "base/NotationQuantizer.h"
-#include "base/NotationTypes.h"
-#include "base/NotationRules.h"
-#include "base/BaseProperties.h"
-#include "base/CompositionTimeSliceAdapter.h"
 #include "base/AnalysisTypes.h"
+#include "base/BaseProperties.h"
+#include "base/Clipboard.h"
+#include "base/CompositionTimeSliceAdapter.h"
+#include "base/Controllable.h"
+#include "base/Device.h"
+#include "base/Event.h"
+#include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"
-#include "base/Controllable.h"
-#include "base/Studio.h"
-#include "base/Instrument.h"
-#include "base/Device.h"
+#include "base/NotationQuantizer.h"
+#include "base/NotationRules.h"
+#include "base/NotationTypes.h"
+#include "base/Selection.h"
 #include "base/SoftSynthDevice.h"
+#include "base/Studio.h"
 #include "base/parameterpattern/ParameterPattern.h"
 
 #include "commands/edit/CopyCommand.h"
@@ -3712,6 +3713,15 @@ NotationView::slotJogRight()
                                               *selection));
 }
 
+bool
+NotationView::
+isShowable(Event *e)
+{
+    if (e->isa(PitchBend::EventType)) { return false; }
+    if (e->isa(Controller::EventType)) { return false; }
+    return true;
+}
+
 void
 NotationView::slotStepBackward()
 {
@@ -3722,9 +3732,10 @@ NotationView::slotStepBackward()
     Segment::iterator i = segment->findTime(time);
 
     while (i != segment->begin() &&
-           (i == segment->end() || (*i)->getNotationAbsoluteTime() >= time)){
-        --i;
-    }
+           (i == segment->end() ||
+            (*i)->getNotationAbsoluteTime() >= time ||
+            !isShowable(*i)))
+        { --i; }
 
     if (i != segment->end()){
         m_document->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
@@ -3740,7 +3751,10 @@ NotationView::slotStepForward()
     timeT time = getInsertionTime();
     Segment::iterator i = segment->findTime(time);
 
-    while (i != segment->end() && (*i)->getNotationAbsoluteTime() <= time) ++i;
+    while (i != segment->end() &&
+           ((*i)->getNotationAbsoluteTime() <= time ||
+            !isShowable(*i)))
+        { ++i; }
 
     if (i == segment->end()){
         m_document->slotSetPointerPosition(segment->getEndMarkerTime());

@@ -33,6 +33,7 @@
 #include <vector>
 
 class QWidget;
+class Event;
 
 namespace Rosegarden
 {
@@ -430,6 +431,8 @@ private:
 
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
+
+    bool isShowable(Event *e);
 
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:
