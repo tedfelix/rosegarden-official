@@ -26,14 +26,15 @@
 #include "gui/editors/matrix/MatrixScene.h"
 
 #include "document/RosegardenDocument.h"
-#include "base/Controllable.h"
+#include "base/BaseProperties.h"
 #include "base/ControlParameter.h"
+#include "base/Controllable.h"
+#include "base/Event.h"
 #include "base/MidiDevice.h"
 #include "base/PropertyName.h"
-#include "base/BaseProperties.h"
-#include "base/Event.h"
 #include "base/RulerScale.h"
 #include "base/Selection.h"
+#include "base/SoftSynthDevice.h"
 
 #include "misc/Debug.h"
 
@@ -100,11 +101,16 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
         getInstrumentById(track->getInstrument());
 
     if (instr) {
+        Device *device = instr->getDevice();
 
-        MidiDevice *device = dynamic_cast <MidiDevice*> (instr->getDevice());
+        // Cast to a Controllable if possible, otherwise leave c NULL.
+        Controllable *c =
+            dynamic_cast<MidiDevice *>(device);
+        if (!c)
+            { c = dynamic_cast<SoftSynthDevice *>(device); }
 
-        if (device) {
-            m_controlList = &(device->getControlParameters());
+        if (c) {
+            m_controlList = &(c->getControlParameters());
         }
     }
 
