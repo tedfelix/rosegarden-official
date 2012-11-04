@@ -64,7 +64,7 @@ const int ControlRuler::MinItemHeight = 5;
 const int ControlRuler::MaxItemHeight = 64 + 5;
 const int ControlRuler::ItemHeightRange = 64;
 
-ControlRuler::ControlRuler(ViewSegment *viewsegment,
+    ControlRuler::ControlRuler(ViewSegment */*viewsegment*/,
                            RulerScale* rulerScale,
                            QWidget* parent
 						  ) :
@@ -437,7 +437,7 @@ void ControlRuler::slotUpdate()
 ///TODO Set some update flag?
 }
 
-void ControlRuler::notationLayoutUpdated(timeT startTime, timeT endTime)
+void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 {
     // notationLayoutUpdated should be called after notation has adjusted the layout
     // Clearly, for property control rulers, notes may have been moved so their position needs updating
@@ -471,7 +471,7 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT endTime)
     update();
 }
 
-void ControlRuler::paintEvent(QPaintEvent *event)
+void ControlRuler::paintEvent(QPaintEvent */*event*/)
 {
     RG_DEBUG << "ControlRuler::paintEvent: width()=" << width() << " height()=" << height();
     QPainter painter(this);
@@ -506,7 +506,7 @@ void ControlRuler::paintEvent(QPaintEvent *event)
     painter.drawLine(xstart, mapYToWidget(0.75f), xend, mapYToWidget(0.75f));
 }
 
-void ControlRuler::slotScrollHorizSmallSteps(int step)
+void ControlRuler::slotScrollHorizSmallSteps(int /*step*/)
 {
 }
 
@@ -602,7 +602,7 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     slotSetPannedRect(m_pannedRect);
 }
 
-void ControlRuler::slotSetTool(const QString &matrixtoolname)
+void ControlRuler::slotSetTool(const QString &/*matrixtoolname*/)
 {
 }
 
@@ -659,7 +659,7 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
 }
 
 void
-ControlRuler::wheelEvent(QWheelEvent *e)
+ControlRuler::wheelEvent(QWheelEvent */*e*/)
 {
     // not sure what to do yet
 
@@ -725,6 +725,12 @@ void ControlRuler::updateSelection()
 
 void ControlRuler::addToSelection(ControlItem *item)
 {
+    ControlItemList::iterator found = 
+        std::find (m_selectedItems.begin(),
+                   m_selectedItems.end(), item);
+    
+    // If we already have this item, do nothing.
+    if (found != m_selectedItems.end()) { return; }
     m_selectedItems.push_back(item);
     item->setSelected(true);
     m_eventSelection->addEvent(item->getEvent());
