@@ -79,6 +79,9 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     setModal(false);
     setWindowTitle(tr("Audio Plugin"));
 
+    // This will get rid of the dialog and the object on close.
+    setAttribute(Qt::WA_DeleteOnClose);
+
     QGridLayout *metagrid = new QGridLayout(this);
 //    metagrid->setMargin(0);
 
@@ -190,7 +193,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 
     m_editorButton = new QPushButton(tr("Editor"));
-    RG_DEBUG << "AudioPluginDialog::ctor - created Editor button" << endl;
+    //RG_DEBUG << "AudioPluginDialog::ctor - created Editor button" << endl;
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
     connect(m_editorButton, SIGNAL(clicked(bool)), this, SLOT(slotEditor()));
     m_editorButton->setEnabled(false);
@@ -198,10 +201,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
 
-    // ??? There is no "OK" button, so this is probably not needed.
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    // "Close" button has the RejectRole
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
+    // "Help" button has the HelpRole
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 
     RG_DEBUG << "AudioPluginDialog populating plugin category list...";
     populatePluginCategoryList();
@@ -214,7 +217,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
 AudioPluginDialog::~AudioPluginDialog()
 {
-    RG_DEBUG << "AudioPluginDialog dtor";
+    //RG_DEBUG << "AudioPluginDialog dtor";
     emit destroyed(m_containerId, m_index);
 }
 
@@ -883,24 +886,6 @@ AudioPluginDialog::windowActivationChange(bool /*oldState*/)
     }
 }
 
-void
-AudioPluginDialog::closeEvent(QCloseEvent *e)
-{
-    // This is called when the window manager close button is pressed.
-    // Oddly, this dialog is not destroyed in that case.
-    e->accept();
-}
-
-// Unused.  Was never connected to anything.
-#if 0
-void
-AudioPluginDialog::slotClose()
-{
-    RG_DEBUG << "AudioPluginDialog::slotClose() emitting destroyed()...";
-    emit destroyed(m_containerId, m_index);
-    reject();
-}
-#endif
 
 void
 AudioPluginDialog::slotCopy()

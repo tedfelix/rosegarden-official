@@ -34,7 +34,6 @@ class QLabel;
 class QGridLayout;
 //class QFrame;
 class QGroupBox;
-class QCloseEvent;
 class QCheckBox;
 class QShortcut;
 class QComboBox;
@@ -108,7 +107,6 @@ protected slots:
     //virtual void slotClose();
 
 protected:
-    virtual void closeEvent(QCloseEvent *e);
     virtual void windowActivationChange(bool);
 
     void makePluginParamsBox(QWidget*);
