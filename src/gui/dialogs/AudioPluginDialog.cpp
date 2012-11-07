@@ -197,16 +197,26 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
+
+    // ??? There is no "OK" button, so this is probably not needed.
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(buttonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
 
-    RG_DEBUG << "About to KABOOM in the ctor!" << endl;
+    RG_DEBUG << "AudioPluginDialog populating plugin category list...";
     populatePluginCategoryList();
+    RG_DEBUG << "AudioPluginDialog populating plugin list...";
     populatePluginList();
-    RG_DEBUG << "Or not. Whew!" << endl;
+
+    RG_DEBUG << "AudioPluginDialog ctor finished.";
 }
 
+
+AudioPluginDialog::~AudioPluginDialog()
+{
+    RG_DEBUG << "AudioPluginDialog dtor";
+    emit destroyed(m_containerId, m_index);
+}
 
 
 void
@@ -653,7 +663,8 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_guiShown = true;
     }
 
-    bool gui = false;
+    // unused
+    //bool gui = false;
     m_pluginGUIManager->hasGUI(m_containerId, m_index);
 //    std::cout << "gui is: " << gui
 //              << " container ID: " << m_containerId
@@ -865,7 +876,7 @@ AudioPluginDialog::slotBypassChanged(bool bp)
 }
 
 void
-AudioPluginDialog::windowActivationChange(bool oldState)
+AudioPluginDialog::windowActivationChange(bool /*oldState*/)
 {
     if (isActiveWindow()) {
         emit windowActivated();
@@ -875,16 +886,21 @@ AudioPluginDialog::windowActivationChange(bool oldState)
 void
 AudioPluginDialog::closeEvent(QCloseEvent *e)
 {
+    // This is called when the window manager close button is pressed.
+    // Oddly, this dialog is not destroyed in that case.
     e->accept();
-    emit destroyed(m_containerId, m_index);
 }
 
+// Unused.  Was never connected to anything.
+#if 0
 void
 AudioPluginDialog::slotClose()
 {
+    RG_DEBUG << "AudioPluginDialog::slotClose() emitting destroyed()...";
     emit destroyed(m_containerId, m_index);
     reject();
 }
+#endif
 
 void
 AudioPluginDialog::slotCopy()

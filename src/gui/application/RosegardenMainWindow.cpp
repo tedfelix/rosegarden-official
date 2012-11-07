@@ -7547,14 +7547,15 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                                        InstrumentId instrumentId,
                                        int index)
 {
-    RG_DEBUG << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")" << endl;
-///////
-//  if (!parent)
-//      parent = this;
-///////
+    RG_DEBUG << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")";
+
+    if (!parent)
+        parent = this;
 
     int key = (index << 16) + instrumentId;
+    RG_DEBUG << "  key:" << key;
 
+    // If we already have a dialog for this plugin, show it.
     if (m_pluginDialogs[key]) {
         m_pluginDialogs[key]->show();
         m_pluginDialogs[key]->raise();
@@ -7585,10 +7586,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     // Create the plugin dialog
     //
     AudioPluginDialog *dialog =
-///////
-//      new AudioPluginDialog(parent,
-        new AudioPluginDialog(this,
-///////
+        new AudioPluginDialog(parent,
                               m_doc->getPluginManager(),
                               m_pluginGUIManager,
                               container,
@@ -7649,6 +7647,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
 
     connect(this, SIGNAL(documentAboutToChange()), dialog, SLOT(close()));
 
+    // Hold onto this dialog so we don't have to create it again.
     m_pluginDialogs[key] = dialog;
     m_pluginDialogs[key]->show();
 
@@ -8095,7 +8094,12 @@ void
 RosegardenMainWindow::slotPluginDialogDestroyed(InstrumentId instrumentId,
         int index)
 {
+    RG_DEBUG << "RosegardenMainWindow::slotPluginDialogDestroyed()";
+
     int key = (index << 16) + instrumentId;
+
+    RG_DEBUG << "  key:" << key;
+
     m_pluginDialogs[key] = 0;
 }
 

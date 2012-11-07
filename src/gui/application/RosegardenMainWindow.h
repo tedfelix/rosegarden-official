@@ -1703,6 +1703,7 @@ private:
     TempoView             *m_tempoView;
     TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
+    /// List of plugin dialogs to make sure we don't launch more than one.
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
     AudioPluginOSCGUIManager *m_pluginGUIManager;
 

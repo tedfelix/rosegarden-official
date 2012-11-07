@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPLUGINDIALOG_H_
-#define _RG_AUDIOPLUGINDIALOG_H_
+#ifndef RG_AUDIOPLUGINDIALOG_H
+#define RG_AUDIOPLUGINDIALOG_H
 
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
@@ -60,6 +60,7 @@ public:
                       AudioPluginOSCGUIManager *aGM,
                       PluginContainer *instrument,
                       int index);
+    virtual ~AudioPluginDialog();
 
     PluginContainer* getPluginContainer() const { return m_pluginContainer; }
 
@@ -103,7 +104,8 @@ signals:
     void windowActivated();
 
 protected slots:
-    virtual void slotClose();
+    // Unused
+    //virtual void slotClose();
 
 protected:
     virtual void closeEvent(QCloseEvent *e);
