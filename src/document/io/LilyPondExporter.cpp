@@ -107,8 +107,8 @@ LilyPondExporter::LilyPondExporter(NotationView *parent,
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
-    m_view = NULL;
     m_notationView = ((NotationView *)parent);
+    m_view = static_cast<RosegardenMainViewWidget *>(m_notationView->parent());
 
     readConfigVariables();
     m_language = LilyPondLanguage::create(m_exportNoteLanguage);
@@ -126,6 +126,9 @@ LilyPondExporter::readConfigVariables(void)
     m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
     m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
+    if (settings.value("lilyexporteditedsegments", "false").toBool()) {
+        m_exportSelection = EXPORT_EDITED_SEGMENTS;
+    }
     m_exportLyrics = settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT).toUInt() ;
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false")) ;
@@ -160,10 +163,8 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
         for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); ++it) {
             if ((*it) == seg) currentSegmentSelected = true;
         }
-#ifdef NOT_JUST_NOW //!!!
-    } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
+    } else if ((m_exportSelection == EXPORT_EDITED_SEGMENTS) && (m_notationView != NULL)) {
         currentSegmentSelected = m_notationView->hasSegment(seg);
-#endif
     }
 
     // Check whether the track is a non-midi track.
@@ -177,14 +178,8 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
     bool ok3 = (m_exportSelection == EXPORT_SELECTED_TRACK)
                && (m_view != NULL)
                && (track->getId() == m_composition->getSelectedTrack());
-#ifdef NOT_JUST_NOW //!!!
-    bool ok4 = (m_exportSelection == EXPORT_SELECTED_TRACK)
-               && (m_notationView != NULL)
-               && (track->getId() == m_notationView->getCurrentSegment()->getTrack());
-#else
-    bool ok4 = false;
-#endif
-    bool ok5 = (m_exportSelection == EXPORT_SELECTED_SEGMENTS) && currentSegmentSelected;
+    bool ok4 = (m_exportSelection == EXPORT_SELECTED_SEGMENTS) && currentSegmentSelected;
+    bool ok5 = (m_exportSelection == EXPORT_EDITED_SEGMENTS) && currentSegmentSelected;
 
     // Skip non-midi tracks and return true if segment is selected
     return isMidiTrack && (ok1 || ok2 || ok3 || ok4 || ok5);

@@ -65,6 +65,8 @@ public:
     void initRulersToolbar();
     virtual void initStatusBar();
     virtual timeT getInsertionTime() const;
+    
+    bool hasSegment(Segment * seg) const;
 
     /** This turns out to be cruft that is rather annoying to eliminate.  We
      * don't use this for anything, and provide an empty implementation.

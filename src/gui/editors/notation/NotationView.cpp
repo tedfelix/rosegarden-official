@@ -369,6 +369,15 @@ NotationView::~NotationView()
     delete m_commandRegistry;
 }
 
+bool
+NotationView::hasSegment(Segment * seg) const
+{
+    for (std::vector<Segment *>::const_iterator it = m_segments.begin(); it != m_segments.end(); ++it) {
+        if ((*it) == seg) return true;
+    }
+    return false;
+}
+
 void
 NotationView::closeEvent(QCloseEvent *event)
 {
@@ -1264,7 +1273,7 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         heading = tr("LilyPond preview options");
     }
 
-    LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
+    LilyPondOptionsDialog dialog(this, m_doc, caption, heading, true);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }

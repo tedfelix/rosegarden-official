@@ -41,7 +41,9 @@ public:
     LilyPondOptionsDialog(QWidget *parent,
 			  RosegardenDocument *doc,
                           QString windowCaption = "",
-                          QString heading = "");
+                          QString heading = "",
+                          bool createdFromNotationEditor = false
+                         );
 
     static void setDefaultLilyPondVersion(QString version);
 
@@ -70,6 +72,11 @@ protected:
     QCheckBox *m_lilyDrawBarAtVolta;
     QCheckBox *m_cancelAccidentals;
     HeadersConfigurationPage *m_headersPage;
+
+    // Used to add the "edited segments" option when the dialog is opened
+    // from the notation editor
+    bool m_createdFromNotationEditor;
+    int m_editedSegmentsIndex;
 
     void populateDefaultValues();
 

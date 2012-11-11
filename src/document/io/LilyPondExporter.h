@@ -209,6 +209,7 @@ private:
     static const unsigned int EXPORT_NONMUTED_TRACKS = 1;
     static const unsigned int EXPORT_SELECTED_TRACK = 2;
     static const unsigned int EXPORT_SELECTED_SEGMENTS = 3;
+    static const unsigned int EXPORT_EDITED_SEGMENTS = 4;
 
     bool m_exportBeams;
     bool m_exportStaffGroup;

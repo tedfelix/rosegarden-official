@@ -53,9 +53,11 @@ namespace Rosegarden
 LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 	RosegardenDocument *doc,
         QString windowCaption,
-        QString heading) :
+        QString heading,
+        bool createdFromNotationEditor):
         QDialog(parent),
-	m_doc(doc)
+	m_doc(doc),
+	m_createdFromNotationEditor(createdFromNotationEditor)
 {
     setModal(true);
     setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
@@ -108,8 +110,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportSelection->setToolTip(tr("<qt>Choose which tracks or segments to export</qt>"));
     m_lilyExportSelection->addItem(tr("All tracks"));
     m_lilyExportSelection->addItem(tr("Non-muted tracks"));
-    m_lilyExportSelection->addItem(tr("Selected tracks"));
+    m_lilyExportSelection->addItem(tr("Selected track"));
     m_lilyExportSelection->addItem(tr("Selected segments"));
+    if (m_createdFromNotationEditor) {
+        // The following item is shown only when the dialog is opened
+        // from the notation editor
+        QString itemName = tr("Edited segments");
+        m_lilyExportSelection->addItem(itemName);
+        m_editedSegmentsIndex = m_lilyExportSelection->findText(itemName);
+    }
 
     layoutBasic->addWidget(m_lilyExportSelection, 0, 1);
 
@@ -343,7 +352,13 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyChordNamesMode->setChecked(qStrToBool(settings.value("lilychordnamesmode", "false")));
     m_lilyExportLyrics->setCurrentIndex(settings.value("lilyexportlyrics", 1).toUInt());
     m_lilyTempoMarks->setCurrentIndex(settings.value("lilyexporttempomarks", 0).toUInt());
-    m_lilyExportSelection->setCurrentIndex(settings.value("lilyexportselection", 1).toUInt());
+    if (m_createdFromNotationEditor) {
+        // This item is the default when the dialog is opened from the notation
+        // editor.
+        m_lilyExportSelection->setCurrentIndex(m_editedSegmentsIndex);
+    } else {
+        m_lilyExportSelection->setCurrentIndex(settings.value("lilyexportselection", 1).toUInt());
+    }
     m_lilyExportBeams->setChecked(settings.value("lilyexportbeamings", "false").toBool());
     m_lilyExportStaffGroup->setChecked(settings.value("lilyexportstaffbrackets", "true").toBool());
     m_lilyMarkerMode->setCurrentIndex(settings.value("lilyexportmarkermode", 0).toUInt());
@@ -376,7 +391,19 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
     settings.setValue("lilyexportlyrics", m_lilyExportLyrics->currentIndex());
     settings.setValue("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
-    settings.setValue("lilyexportselection", m_lilyExportSelection->currentIndex());
+    if (m_createdFromNotationEditor and
+            (m_lilyExportSelection->currentIndex() == m_editedSegmentsIndex)) {
+        // The folowing value means that the dialog is opened from the
+        // notation editor and that the "edited segments" option is selected.
+        // In such a case, "lilyexportselection" is not needed and keeps its
+        // previous value.
+        // "lilyexportselection" should never have the "edited segments" option
+        // value as it could latter be gotten from a place where it has no sense.
+        settings.setValue("lilyexporteditedsegments", true);
+    } else {
+        settings.setValue("lilyexporteditedsegments", false);
+        settings.setValue("lilyexportselection", m_lilyExportSelection->currentIndex());
+    }
     settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
