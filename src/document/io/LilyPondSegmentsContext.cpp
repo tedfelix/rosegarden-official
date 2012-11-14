@@ -72,6 +72,12 @@ LilyPondSegmentsContext::addSegment(Segment *segment)
     m_segments[trackPos].insert(SegmentData(segment));
 }
 
+bool
+LilyPondSegmentsContext::containsNoSegment()
+{
+    return m_segments.size() == 0;
+}
+
 void
 LilyPondSegmentsContext::precompute()
 {

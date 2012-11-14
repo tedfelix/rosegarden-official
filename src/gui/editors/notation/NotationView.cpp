@@ -1281,7 +1281,7 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     if (!e.write()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
         return false;
     }
 

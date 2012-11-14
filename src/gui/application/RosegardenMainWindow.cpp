@@ -5570,7 +5570,7 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
     if (!e.write()) {
         CurrentProgressDialog::freeze();
         if (!e.isOperationCancelled()) {
-            QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
+            QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
         }
         progressDlg->close();
         return false;

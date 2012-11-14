@@ -597,6 +597,7 @@ struct MarkerComp {
 bool
 LilyPondExporter::write()
 {
+    m_warningMessage = "";
     QString tmpName = strtoqstr(m_fileName);
 
     // dmm - modified to act upon the filename itself, rather than the whole
@@ -633,6 +634,7 @@ LilyPondExporter::write()
     std::ofstream str(qstrtostr(tmpName).c_str(), std::ios::out);
     if (!str) {
         std::cerr << "LilyPondExporter::write() - can't write file " << tmpName << std::endl;
+        m_warningMessage = tr("Export failed.  The file could not be opened for writing.");
         return false;
     }
 
@@ -774,6 +776,7 @@ LilyPondExporter::write()
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();
     if ((*i) == NULL) {
+        // The composition is empty!
         str << indent(col) << "\\score {" << std::endl;
         str << indent(++col) << "% no segments found" << std::endl;
         // bind staffs with or without staff group bracket
@@ -781,7 +784,8 @@ LilyPondExporter::write()
             << "<<" << " s4 " << ">>" << std::endl;
         str << indent(col) << "\\layout { }" << std::endl;
         str << indent(--col) << "}" << std::endl;
-        return true;
+        m_warningMessage = tr("Export succeeded, but the composition was empty.");
+        return false;
     }
     timeT compositionStartTime = (*i)->getStartTime();
     timeT compositionEndTime = (*i)->getEndMarkerTime();
@@ -809,6 +813,46 @@ LilyPondExporter::write()
         if (isSegmentToPrint(*i)) {
             lsc.addSegment(*i);
         }
+    }
+
+    // Don't continue if lsc is empty
+    if (lsc.containsNoSegment()) {
+        switch (m_exportSelection) {
+          
+            case EXPORT_ALL_TRACKS :
+                // We should have already exited this method if the composition is empty 
+                m_warningMessage = "No segments found while exporting all the"
+                                   " tracks : THIS IS A BUG.";
+                break;
+                
+            case EXPORT_NONMUTED_TRACKS :
+                m_warningMessage = tr("Export of unmuted tracks failed.  There"
+                                      " is no unmuted tracks or no segments on"
+                                      " them.");
+                break;
+                
+            case EXPORT_SELECTED_TRACK :
+                m_warningMessage = tr("Export of selected track failed.  There"
+                                      " is no segments on the selected track.");
+                break;
+                
+            case EXPORT_SELECTED_SEGMENTS :
+                m_warningMessage = tr("Export of selected segments failed.  No"
+                                      " segments are selected.");
+                break;
+                
+            case EXPORT_EDITED_SEGMENTS :
+                // Notation editor can't be open without any segment inside
+                m_warningMessage = "No segments found while exporting the"
+                                   " edited segments : THIS IS A BUG.";
+                break;
+                
+            default :
+                m_warningMessage = "Abnormal m_exportSelection value :"
+                                   " THIS IS A BUG.";
+        }
+
+        return false;
     }
 
     // Look for repeating segments

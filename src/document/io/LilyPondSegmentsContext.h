@@ -56,7 +56,7 @@ class LilyPondSegmentsContext
 
 public:
     /**
-     * Create an empty context
+     * Create an empty segment context
      */
     LilyPondSegmentsContext(LilyPondExporter *exporter, Composition *composition);
 
@@ -66,6 +66,11 @@ public:
      * Add a segment to the context
      */
     void addSegment(Segment *segment);
+
+    /**
+     * Return true if the segment context is empty
+     */
+    bool containsNoSegment();
 
     /**
      * Walk through all segments, find the repeating ones and compute

@@ -42,6 +42,7 @@
 
 
 class QObject;
+class QString;
 
 
 namespace Rosegarden
@@ -86,7 +87,19 @@ public:
     LilyPondExporter(NotationView *parent, RosegardenDocument *, std::string fileName);
     ~LilyPondExporter();
 
+   /**
+    * Write the LilyPond score into the specified file.
+    * @param warningMessage is set to a valid explanatory QString if some
+    * problem occurs. Otherwise it is set to an empty string.
+    * @return true if successfull, false otherwise.
+    */
     bool write();
+
+   /**
+    * @return an explanatory message on what goes wrong on the last
+    * call to write().
+    */
+    QString getMessage() { return m_warningMessage; }
 
 protected:
     RosegardenMainViewWidget *m_view;
@@ -245,8 +258,8 @@ private:
     };
 
     bool m_voltaBar;
-
     bool m_cancelAccidentals;
+    QString m_warningMessage;
 
     std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {
 	std::pair<int,int> z(
