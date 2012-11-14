@@ -89,8 +89,6 @@ public:
 
    /**
     * Write the LilyPond score into the specified file.
-    * @param warningMessage is set to a valid explanatory QString if some
-    * problem occurs. Otherwise it is set to an empty string.
     * @return true if successfull, false otherwise.
     */
     bool write();
