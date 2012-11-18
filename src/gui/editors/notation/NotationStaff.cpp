@@ -1029,6 +1029,19 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         } else if (elt->event()->isa(Text::EventType)) {
 
+            // If event is a lyric and doesn't have the verse property, the
+            // document was probably created before the multiple verses feature
+            // was written. In such a case there should be only one verse and
+            // the property is added with its value set to 0 (ie. first verse).
+            //!!! This code should be moved to the place where the rg file is read
+            if (elt->event()->has(Text::TextTypePropertyName) &&
+                  elt->event()->get<String>(Text::TextTypePropertyName) ==
+                  Text::Lyric) {
+                if (!elt->event()->has(Text::LyricVersePropertyName)) {
+                    elt->event()->set<Int>(Text::LyricVersePropertyName, 0);
+                }
+            }
+
             policy = MoveBackToFit;
 
             if (elt->event()->has(Text::TextTypePropertyName) &&
