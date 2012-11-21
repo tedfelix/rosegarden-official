@@ -70,13 +70,13 @@ public:
 
     //!!! NOT IMPLEMENTED YET
     // 
-    virtual bool decode(const unsigned char *sourceData,
-                        size_t sourceBytes,
-                        size_t targetSampleRate,
-                        size_t targetChannels,
-                        size_t targetFrames,
-                        std::vector<float *> &targetData,
-                        bool addToResultBuffers = false) { return false; }
+    virtual bool decode(const unsigned char */* sourceData */,
+                        size_t /* sourceBytes */,
+                        size_t /* targetSampleRate */,
+                        size_t /* targetChannels */,
+                        size_t /* targetFrames */,
+                        std::vector<float *> &/* targetData */,
+                        bool /* addToResultBuffers = false */) { return false; }
 
 protected:
 

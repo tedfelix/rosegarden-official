@@ -28,7 +28,7 @@
 namespace Rosegarden
 {
 
-ControlTool::ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler) :
+ControlTool::ControlTool(QString /* rcFileName */, QString menuName, ControlRuler *ruler) :
     BaseTool(menuName, ruler),
     m_ruler(ruler),
     m_overItem(false)

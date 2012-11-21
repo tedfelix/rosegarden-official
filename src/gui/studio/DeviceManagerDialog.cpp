@@ -223,7 +223,7 @@ DeviceManagerDialog::slotRecordDeviceSelected()
 
 
 void
-DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int column)
+DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int /* column */)
 {
     RG_DEBUG << "DeviceManagerDialog::slotOutputPortClicked(...)" << endl;
 
@@ -263,7 +263,7 @@ DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int column)
 
 void
 DeviceManagerDialog::slotInputPortClicked(QTreeWidgetItem *
-                                                   twItem, int column)
+                                                   twItem, int /* column */)
 {
     RG_DEBUG << "DeviceManagerDialog::slotInputPortClicked(...)" << endl;
 
@@ -657,8 +657,8 @@ DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice *mdev,
         //return;
     }
     
-    RosegardenSequencer *seq;
-    seq = RosegardenSequencer::getInstance();
+    // RosegardenSequencer *seq;
+    // seq = RosegardenSequencer::getInstance();
     
     QString outPort = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
 
@@ -930,7 +930,7 @@ DeviceManagerDialog::slotEdit(QTreeWidgetItem * item, int)
 
 void
 DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
-                                         int column)
+                                         int /* column */)
 {
     RG_DEBUG << "DeviceManagerDialog::slotDeviceItemChanged(...)" << endl;
 

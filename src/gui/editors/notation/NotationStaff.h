@@ -76,11 +76,11 @@ public:
         m_barNumbersEvery = barNumbersEvery;
     }
 
-    StaffLayout::setPageMode;
-    StaffLayout::setPageWidth;
-    StaffLayout::setRowsPerPage;
-    StaffLayout::setRowSpacing;
-    StaffLayout::setConnectingLineLength;
+    using StaffLayout::setPageMode;
+    using StaffLayout::setPageWidth;
+    using StaffLayout::setRowsPerPage;
+    using StaffLayout::setRowSpacing;
+    using StaffLayout::setConnectingLineLength;
 
     SegmentRefreshStatus &getRefreshStatus() const;
     void resetRefreshStatus();

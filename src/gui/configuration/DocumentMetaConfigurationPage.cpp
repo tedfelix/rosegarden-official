@@ -54,7 +54,7 @@ namespace Rosegarden
 class SegmentDataItem : public QTableWidgetItem
 {
 public:
-    SegmentDataItem(QTableWidget *t, QString s) : QTableWidgetItem(s) { }    //### removed t from p-class
+    SegmentDataItem(QTableWidget */* t */, QString s) : QTableWidgetItem(s) { }    //### removed t from p-class
     
     virtual int alignment() const { return Qt::AlignCenter; }
 

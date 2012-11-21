@@ -58,7 +58,7 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, QUrl url) :
 ImportDeviceDialog::~ImportDeviceDialog()
 {
     delete m_device;
-    for (int i = 0; i < m_devices.size(); ++i) delete m_devices[i];
+    for (int i = 0; i < (int)m_devices.size(); ++i) delete m_devices[i];
 }
 
 bool
@@ -240,7 +240,7 @@ ImportDeviceDialog::accept()
 {
     int index = 0;
     if (m_deviceCombo) index = m_deviceCombo->currentIndex();
-    if (m_devices.size() > index) {
+    if ((int)m_devices.size() > index) {
         m_device = new MidiDevice(*m_devices[index]);
     }
 
@@ -348,7 +348,7 @@ ImportDeviceDialog::importFromRG(QString fileName)
         return false;
     }
 
-    for (int i = 0; i < m_devices.size(); ++i) delete m_devices[i];
+    for (int i = 0; i < (int)m_devices.size(); ++i) delete m_devices[i];
     m_devices.clear();
 
     DeviceList *list = fileDoc.getStudio().getDevices();

@@ -210,7 +210,7 @@ PitchDragLabel::sizeHint() const
 }
 
 void
-PitchDragLabel::calculatePixmap(int pitch, int octave, int step) const
+PitchDragLabel::calculatePixmap(int /* pitch */, int octave, int step) const
 {
     std::string clefType = Clef::Treble;
     int octaveOffset = 0;

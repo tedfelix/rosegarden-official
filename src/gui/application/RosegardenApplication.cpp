@@ -84,14 +84,14 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
 }
 
 void
-RosegardenApplication::refreshGUI(int maxTime)
+RosegardenApplication::refreshGUI(int /* maxTime */)
 {
 //    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |			//&&& eventLoop()->processEvents()
 //                               QEventLoop::ExcludeSocketNotifiers,
    //                            maxTime);
 }
 
-void RosegardenApplication::saveState(QSessionManager& sm)
+void RosegardenApplication::saveState(QSessionManager& /* sm */)
 {
     emit aboutToSaveState();
 //&&&    KUniqueApplication::saveState(sm);

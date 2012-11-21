@@ -189,7 +189,7 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
         if ( plugin )
             identifier = plugin->getIdentifier();
 
-        int currentIndex = 0;
+        // int currentIndex = 0;
 
         QComboBox *pluginCombo = new QComboBox ( m_scrollWidget );
         pluginCombo->addItem ( tr ( "<none>" ) );

@@ -48,7 +48,7 @@ PropertyControlItem::~PropertyControlItem()
 void PropertyControlItem::update()
 {
     if (!m_element) return;
-    RulerScale *rulerScale = m_controlRuler->getRulerScale();    
+    // RulerScale *rulerScale = m_controlRuler->getRulerScale();    
     double x0,x1;
 
     long val = 0;    

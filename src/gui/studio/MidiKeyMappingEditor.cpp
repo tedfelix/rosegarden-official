@@ -60,7 +60,7 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
 }
 
 QWidget *
-MidiKeyMappingEditor::makeAdditionalWidget(QWidget *parent)
+MidiKeyMappingEditor::makeAdditionalWidget(QWidget */* parent */)
 {
     return 0;
 }
@@ -142,7 +142,7 @@ MidiKeyMappingEditor::reset()
 
             int index = it->first;
 
-            if ( i == index) {
+            if ( (int)i == index) {
                 QString name = strtoqstr(it->second);
                 m_completions << name;
                 m_names[i]->setText(name);

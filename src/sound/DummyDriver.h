@@ -141,7 +141,7 @@ public:
         i = 0; n = 0;
     }
 
-    virtual void claimUnwantedPlugin(void *plugin) { }
+    virtual void claimUnwantedPlugin(void */* plugin */) { }
     virtual void scavengePlugins() { }
 
     virtual bool areClocksRunning() const { return true; }

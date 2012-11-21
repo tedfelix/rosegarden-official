@@ -300,7 +300,7 @@ MusicXMLXMLHandler::endDocument()
 
 bool
 MusicXMLXMLHandler::startHeader(const QString& qName,
-                                const QXmlAttributes& atts)
+                                const QXmlAttributes& /* atts */)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1101,7 +1101,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startBackupData(const QString& qName,
-                                   const QXmlAttributes& atts)
+                                   const QXmlAttributes& /* atts */)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1238,6 +1238,10 @@ MusicXMLXMLHandler::endDirectionData(const QString& qName)
             m_parts[m_partId]->endIndication(m_indicationEnd, m_number, m_duration);
             break;
 
+            // Do-nothing cases to satisfy the compiler.
+        case NotActive:
+        default:
+            break;
         }
     } else if (m_currentElement == "direction-type") {
         //
@@ -1464,7 +1468,7 @@ MusicXMLXMLHandler::endAttributesData(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startBarlineData(const QString& qName,
-                                   const QXmlAttributes& atts)
+                                   const QXmlAttributes& /* atts */)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();

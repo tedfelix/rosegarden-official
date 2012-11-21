@@ -109,7 +109,7 @@ AddMarkCommand::getActionName(Mark mark)
 }
 
 QString
-AddMarkCommand::getShortcut(Mark mark)
+AddMarkCommand::getShortcut(Mark /* mark */)
 {
     return "";
 }    

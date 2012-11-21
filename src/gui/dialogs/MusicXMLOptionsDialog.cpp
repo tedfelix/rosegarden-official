@@ -52,7 +52,7 @@ namespace Rosegarden
 MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
                                              RosegardenDocument *doc,
                                              QString windowCaption,
-                                             QString heading) :
+                                             QString /* heading */) :
                        QDialog(parent),
                        m_doc(doc)
 {

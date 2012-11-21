@@ -170,8 +170,9 @@ TempoRuler::connectSignals()
 void
 TempoRuler::slotScrollHoriz(int x)
 {
-    int w = width(), h = height();
-    int dx = x - ( -m_currentXOffset);
+    // int w = width();
+    // int h = height();
+    // int dx = x - ( -m_currentXOffset);
     m_currentXOffset = -x;
 
     update();
@@ -451,7 +452,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 }
 
 void
-TempoRuler::wheelEvent(QWheelEvent *e)
+TempoRuler::wheelEvent(QWheelEvent */* e */)
 {}
 
 void

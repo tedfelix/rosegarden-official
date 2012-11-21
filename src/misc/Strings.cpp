@@ -185,6 +185,11 @@ splitQuotedString(QString s)
 		c = s[i];
 		switch (mode) {
 		case sep: mode = unq; tok += c; break;
+
+                    // All fall thru to default.
+                case unq:
+                case q1:
+                case q2:
 		default: tok += c; break;
 		}
 	    }
@@ -192,6 +197,11 @@ splitQuotedString(QString s)
 	} else {
 	    switch (mode) {
 	    case sep: mode = unq; tok += c; break;
+
+                // All fall thru to default.
+            case unq:
+            case q1:
+            case q2:
 	    default: tok += c; break;
 	    }
 	}

@@ -1866,7 +1866,7 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
 
         name = name.right(name.length() - 7);
 
-        int modify = 0;
+        // int modify = 0;
         int octave = 0;
 
         if (name.right(5) == "_high") {
@@ -1882,13 +1882,13 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
 
         if (name.right(6) == "_sharp") {
 
-            modify = 1;
+            // modify = 1;
             accidental = Sharp;
             name = name.left(name.length() - 6);
 
         } else if (name.right(5) == "_flat") {
 
-            modify = -1;
+            // modify = -1;
             accidental = Flat;
             name = name.left(name.length() - 5);
         }

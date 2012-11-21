@@ -75,6 +75,9 @@ const int ControlRuler::ItemHeightRange = 64;
         m_notationStaff(0),
         m_segment(0),
 //        m_assignedEventSelection(0),
+        m_firstVisibleItem(m_controlItemMap.end()),
+        m_lastVisibleItem(m_controlItemMap.end()),
+        m_nextItemLeft(m_controlItemMap.end()),
         m_currentIndex(0),
         m_currentTool(0),
         m_xScale(0),
@@ -87,10 +90,7 @@ const int ControlRuler::ItemHeightRange = 64;
         m_itemMoved(false),
         m_selecting(false),
         m_selectionRect(0),
-        m_menu(0),
-        m_firstVisibleItem(m_controlItemMap.end()),
-        m_lastVisibleItem(m_controlItemMap.end()),
-        m_nextItemLeft(m_controlItemMap.end())
+        m_menu(0)
 {
 //    setViewSegment(viewsegment);
 
@@ -144,7 +144,7 @@ ControlItemMap::iterator ControlRuler::findControlItem(float x)
 
 ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
 {
-    double xstart = getRulerScale()->getXForTime(event->getAbsoluteTime());
+    // double xstart = getRulerScale()->getXForTime(event->getAbsoluteTime());
 
     ControlItemMap::iterator it;
     std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
@@ -365,7 +365,7 @@ void ControlRuler::updateSegment()
     // Either run through the ruler's EventSelection, updating from each item
     //  or, if there isn't one, go through m_selectedItems
     timeT start,end;
-    bool segmentModified = false;
+    // bool segmentModified = false;
 
     QString commandLabel = "Adjust control/property";
 
@@ -402,7 +402,7 @@ void ControlRuler::updateSegment()
         commandLabel = "Add control";
         macro->setName(commandLabel);
 
-        segmentModified = true;
+        // segmentModified = true;
     } else {
         // Check for movement in time here and delete events if necessary
         if (start != m_eventSelection->getStartTime() || end != m_eventSelection->getEndTime()) {
@@ -413,7 +413,7 @@ void ControlRuler::updateSegment()
             start = std::min(start,m_eventSelection->getStartTime());
             end = std::max(end,m_eventSelection->getEndTime());
 
-            segmentModified = true;
+            // segmentModified = true;
         }
     }
 
@@ -794,14 +794,14 @@ QColor ControlRuler::valueToColour(int max, int val)
 void ControlRuler::flipForwards()
 {
     ///CJ Expect to drop tghis with a better way of ordering bars
-    std::pair<int, int> minMax = getZMinMax();
+    // std::pair<int, int> minMax = getZMinMax();
 
 }
 
 void ControlRuler::flipBackwards()
 {
     ///CJ Expect to drop tghis with a better way of ordering bars
-    std::pair<int, int> minMax = getZMinMax();
+    // std::pair<int, int> minMax = getZMinMax();
 
 }
 

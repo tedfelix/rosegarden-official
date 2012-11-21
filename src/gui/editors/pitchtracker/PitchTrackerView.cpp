@@ -144,7 +144,7 @@ PitchTrackerView::~PitchTrackerView()
 
 void
 PitchTrackerView::setSegments(RosegardenDocument *document,
-                              std::vector<Segment *> segments)
+                              std::vector<Segment *> /* segments */)
 {
     // m_document is owned by our parent, NotationView
     if (m_document) {

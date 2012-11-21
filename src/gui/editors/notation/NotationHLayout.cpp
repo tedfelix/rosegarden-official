@@ -348,7 +348,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         chunks.clear();
 
         float lyricWidth = 0;
-        int graceCount = 0;
+        // int graceCount = 0;
 
         typedef std::set
             <long> GroupIdSet;
@@ -1894,7 +1894,7 @@ NotationHLayout::positionChord(ViewSegment &staff,
 
 float
 NotationHLayout::getLayoutWidth(ViewElement &ve,
-                                NotePixmapFactory *npf,
+                                NotePixmapFactory */* npf */,
                                 const ::Rosegarden::Key &previousKey) const
 {
     NotationElement& e = static_cast<NotationElement&>(ve);

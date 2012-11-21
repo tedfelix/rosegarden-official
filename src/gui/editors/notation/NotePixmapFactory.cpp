@@ -1686,7 +1686,7 @@ NotePixmapFactory::makeRest(const NotePixmapParameters &params)
         charName = m_style->getRestCharName(params.m_noteType,
                                             !params.m_restOutsideStave);
 
-    bool encache = false;
+    // bool encache = false;
 
     if (params.m_tupletCount == 0 && !m_selected && !m_shaded &&
         !params.m_restOutsideStave) {
@@ -1850,6 +1850,10 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
             break;
 
         case PlainColour:
+        case QuantizedColour:
+        case HighlightedColour:
+        case TriggerColour:
+        case OutRangeColour:
         default:
             // fix bug with ottava marks not reflecting invisibility properly
             QColor plain = (m_shaded ? Qt::gray : Qt::black);
@@ -2090,7 +2094,12 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef,
     case PlainColourLight:
         lines = Qt::white;    
         break;
+    case ConflictColour:
+    case HighlightedColour:
+    case OutRangeColour:
     case PlainColour:
+    case QuantizedColour:
+    case TriggerColour:
     default:
         lines = Qt::black;
     }
@@ -2152,7 +2161,12 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef,
     case PlainColourLight:
         kuller = Qt::white;    
         break;
+    case ConflictColour:
+    case HighlightedColour:
+    case OutRangeColour:
     case PlainColour:
+    case QuantizedColour:
+    case TriggerColour:
     default:
         kuller = Qt::black;
     }
@@ -2280,7 +2294,12 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     case PlainColourLight:
         kuller = Qt::white;    
         break;
+    case ConflictColour:
+    case HighlightedColour:
+    case OutRangeColour:
     case PlainColour:
+    case QuantizedColour:
+    case TriggerColour:
     default:
         kuller = Qt::black;
     }
@@ -2377,7 +2396,12 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     case PlainColourLight:
         kuller = Qt::white;    
         break;
+    case ConflictColour:
+    case HighlightedColour:
+    case OutRangeColour:
     case PlainColour:
+    case QuantizedColour:
+    case TriggerColour:
     default:
         kuller = Qt::black;
     }

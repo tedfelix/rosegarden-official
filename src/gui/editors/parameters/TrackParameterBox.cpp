@@ -899,7 +899,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
         // swallowing two entire days of my life to put back with the following
         // magic lines of code:
         int prepend = 0;
-        for (unsigned int n = 0; n < m_playDevice->currentIndex(); n++) {
+        for (int n = 0; n < m_playDevice->currentIndex(); n++) {
             DeviceId id = m_playDeviceIds[n];
             Device *dev = m_doc->getStudio().getDevice(id);
 

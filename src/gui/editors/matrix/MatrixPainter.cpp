@@ -314,9 +314,9 @@ void MatrixPainter::stow()
 //               this, SLOT(slotMatrixScrolled(int, int)));
 }
 
-void MatrixPainter::slotMatrixScrolled(int newX, int newY)
+void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
 {
-    newX = newY = 42;
+    // newX = newY = 42;
 /*!!!
     if (!m_currentElement)
         return ;

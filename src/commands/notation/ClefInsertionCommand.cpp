@@ -166,7 +166,7 @@ ClefLinkInsertionCommand::getThisGlobalName(Clef *clef)
 }
 
 QString
-ClefLinkInsertionCommand::getGlobalName(Clef *clef) 
+ClefLinkInsertionCommand::getGlobalName(Clef */* clef */) 
 { 
     return tr("Add Cl&ef Change for linked segment..."); 
 }

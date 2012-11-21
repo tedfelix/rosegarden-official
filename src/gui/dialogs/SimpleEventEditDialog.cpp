@@ -1066,7 +1066,7 @@ SimpleEventEditDialog::slotSysexLoad()
     char c;
     bool ioOk;
 
-    while (ioOk = file.getChar(&c)) {
+    while ((ioOk = file.getChar(&c))) {
         if (c == static_cast<char>(0xf0)) break;
     }
     while (ioOk) {

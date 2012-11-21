@@ -525,7 +525,7 @@ NotationScene::getNextStaffOnTrack()
 NotationStaff *
 NotationScene::getNextStaffVertically(int direction)
 {
-    if (m_staffs.size() < 2 || m_currentStaff >= m_staffs.size()) return 0;
+    if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return 0;
 
     NotationStaff *current = m_staffs[m_currentStaff];
     Composition *composition = &m_document->getComposition();
@@ -550,7 +550,7 @@ NotationScene::getNextStaffVertically(int direction)
 NotationStaff *
 NotationScene::getNextStaffHorizontally(int direction, bool cycle)
 {
-    if (m_staffs.size() < 2 || m_currentStaff >= m_staffs.size()) return 0;
+    if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return 0;
 
     NotationStaff *current = m_staffs[m_currentStaff];
     //Composition *composition = &m_document->getComposition();

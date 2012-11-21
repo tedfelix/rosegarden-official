@@ -701,6 +701,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
         // Assuming "Off" is always the last field
     case None:
+    case NotApplicable:
     default:
         m_quantizeValue->setCurrentIndex(m_quantizeValue->count() - 1);
         break;
@@ -718,6 +719,7 @@ SegmentParameterBox::populateBoxFromSegments()
           break;
 
     case None:
+    case NotApplicable:
     default:
           m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("0")));
           break;
@@ -748,6 +750,7 @@ SegmentParameterBox::populateBoxFromSegments()
           break;
 
     case None:
+    case NotApplicable:
     default:
         m_delayValue->setCurrentIndex(m_delayValue->findText(QString("0")));
         break;
@@ -768,6 +771,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
     case All:
     case NotApplicable:
+    case Some:
     default:
         m_colourValue->setCurrentIndex(0);
         break;
@@ -1173,7 +1177,7 @@ SegmentParameterBox::slotFadeOutChanged(int value)
 }
 
 void
-SegmentParameterBox::showAdditionalControls(bool showThem)
+SegmentParameterBox::showAdditionalControls(bool /* showThem */)
 {
 }
 

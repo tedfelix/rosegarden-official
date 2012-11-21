@@ -53,7 +53,7 @@ namespace Rosegarden
 LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 	RosegardenDocument *doc,
         QString windowCaption,
-        QString heading,
+        QString /* heading */,
         bool createdFromNotationEditor):
         QDialog(parent),
 	m_doc(doc),

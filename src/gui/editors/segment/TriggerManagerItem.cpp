@@ -20,7 +20,7 @@
 namespace Rosegarden {
 
 int
-TriggerManagerItem::compare(QTreeWidgetItem * i, int col, bool ascending) const
+TriggerManagerItem::compare(QTreeWidgetItem * /* i */, int /* col */, bool /* ascending */) const
 {
 	return 1;
 	//&&& FIX: disabled TriggerManagerItem::compare function

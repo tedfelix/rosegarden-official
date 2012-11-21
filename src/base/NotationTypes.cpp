@@ -1065,7 +1065,7 @@ resolveNoAccidental(int pitch,
  */
 void
 resolveSpecifiedAccidental(int pitch,
-			      const Clef &clef,
+			      const Clef &/* clef */,
 			      const Key &key,
 			      int &height,
 			      int &octave,

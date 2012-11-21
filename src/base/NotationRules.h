@@ -67,14 +67,14 @@ public:
         // this class is used by that class, and so on.  So let's use them all
         // one time for something totally pointless, just to shut up these
         // compiler warnings once and for all.
-        int foo = scale_Cmajor[0];
-        foo = scale_Cminor[0];
-        foo = scale_Cminor_harmonic[0];
-        foo = steps_Cmajor[0];
-        foo = steps_Cminor[0];
-        foo = steps_Cminor_harmonic[0];
-        foo = steps_Cmajor_with_sharps[0];
-        foo = steps_Cmajor_with_flats[0];    
+        (void)scale_Cmajor[0];
+        (void)scale_Cminor[0];
+        (void)scale_Cminor_harmonic[0];
+        (void)steps_Cmajor[0];
+        (void)steps_Cminor[0];
+        (void)steps_Cminor_harmonic[0];
+        (void)steps_Cmajor_with_sharps[0];
+        (void)steps_Cmajor_with_flats[0];
     };
     ~NotationRules() { };
 

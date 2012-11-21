@@ -389,7 +389,7 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 }
 
 void
-ControlRulerWidget::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
+ControlRulerWidget::slotHoveredOverNoteChanged(int /* evPitch */, bool /* haveEvent */, timeT /* evTime */)
 {
     slotHoveredOverNoteChanged();
 }

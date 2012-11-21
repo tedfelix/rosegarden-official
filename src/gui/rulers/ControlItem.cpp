@@ -58,7 +58,7 @@ void ControlItem::updateFromValue()
 {
 }
 
-void ControlItem::draw(QPainter &painter)
+void ControlItem::draw(QPainter &/* painter */)
 {
 }
 
@@ -70,7 +70,7 @@ void ControlItem::handleMouseButtonRelease(QMouseEvent*)
 {
 }
 
-void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
+void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int /* deltaY */)
 {
 }
 
@@ -96,11 +96,11 @@ void ControlItem::reconfigure()
     m_lastxstart = m_xstart;
 }
 
-void ControlItem::setX(int x)
+void ControlItem::setX(int /* x */)
 {
 }
 
-void ControlItem::setWidth(int width)
+void ControlItem::setWidth(int /* width */)
 {
 }
 

@@ -186,7 +186,7 @@ EditViewBase::slotOpenInPitchTracker()
     emit slotOpenInPitchTracker(m_segments);
 }
 
-void EditViewBase::closeEvent(QCloseEvent* e)
+void EditViewBase::closeEvent(QCloseEvent* /* e */)
 {
     RG_DEBUG << "EditViewBase::closeEvent()\n";
 /*!!!
@@ -352,7 +352,7 @@ EditViewBase::slotCompositionStateUpdate()
 }
 
 void
-EditViewBase::windowActivationChange(bool oldState)
+EditViewBase::windowActivationChange(bool /* oldState */)
 {
     if (isActiveWindow()) {
         emit windowActivated();
@@ -360,7 +360,7 @@ EditViewBase::windowActivationChange(bool oldState)
 }
 
 void
-EditViewBase::handleEventRemoved(Event *event)
+EditViewBase::handleEventRemoved(Event */* event */)
 {
 }
 

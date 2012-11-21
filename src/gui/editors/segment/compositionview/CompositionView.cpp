@@ -140,7 +140,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
 
     slotUpdateSize();
 
-    QScrollBar* hsb = horizontalScrollBar();
+    // QScrollBar* hsb = horizontalScrollBar();
 
     // dynamically adjust content size when scrolling past current composition's end
     //   connect(hsb, SIGNAL(nextLine()),
@@ -315,7 +315,7 @@ void CompositionView::updateSelectionContents()
 //    update(selectionRect);
 }
 
-void CompositionView::slotContentsMoving(int x, int y)
+void CompositionView::slotContentsMoving(int /* x */, int /* y */)
 {
     //     qDebug("contents moving : x=%d", x);
 }
@@ -1133,7 +1133,7 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
     p->restore();
 }
 
-void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect)
+void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& /* clipRect */)
 {
     // draw segment label
     //
@@ -1459,7 +1459,7 @@ bool CompositionView::event(QEvent* e)
     return RosegardenScrollView::event(e);
 }
 
-void CompositionView::enterEvent(QEvent *e)
+void CompositionView::enterEvent(QEvent */* e */)
 {
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -1474,7 +1474,7 @@ void CompositionView::enterEvent(QEvent *e)
     m_contextHelpShown = true;
 }
 
-void CompositionView::leaveEvent(QEvent *e)
+void CompositionView::leaveEvent(QEvent */* e */)
 {
     emit showContextHelp("");
     m_contextHelpShown = false;
@@ -1525,6 +1525,10 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
             RG_DEBUG << "CompositionView::contentsMousePressEvent() :"
                      << this << " no tool\n";
         break;
+    case Qt::MouseButtonMask:
+    case Qt::NoButton:
+    case Qt::XButton1:
+    case Qt::XButton2:
     default:
         break;
     }

@@ -429,7 +429,7 @@ MatrixSelector::slotHideSelection()
 }
 
 void
-MatrixSelector::slotMatrixScrolled(int newX, int newY)
+MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
 {
 /*!!!
     if (m_updateRect) {

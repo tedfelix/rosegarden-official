@@ -24,7 +24,7 @@
 namespace Rosegarden {
 
 int
-MarkerEditorViewItem::compare(QTreeWidgetItem * i, int col, bool ascending) const
+MarkerEditorViewItem::compare(QTreeWidgetItem * /* i */, int /* col */, bool /* ascending */) const
 {
 	return 0;
 	//MarkerEditorViewItem::compare //&&& FIX : QTreeWidgetItem::compare does not exist

@@ -43,7 +43,7 @@ public:
     void setRawTime(Rosegarden::timeT rawTime) { m_rawTime = rawTime; }
     Rosegarden::timeT getRawTime() const { return m_rawTime; }
 
-    void setFake(bool fake) { m_fake = true; }
+    void setFake(bool fake) { m_fake = fake; }
     bool isFake() const { return m_fake; }
 
     int getID() const { return m_id; }

@@ -138,7 +138,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
                           .arg(100 - (int)(100.0 * kBAvail / kBSize) ));
 
 
-    AudioPluginManager *apm = m_doc->getPluginManager();
+    // AudioPluginManager *apm = m_doc->getPluginManager();
 
     int sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 

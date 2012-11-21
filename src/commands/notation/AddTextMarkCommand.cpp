@@ -40,7 +40,7 @@ AddTextMarkCommand::registerCommand(CommandRegistry *r)
 }
 
 std::string
-AddTextMarkCommand::getArgument(QString actionName, CommandArgumentQuerier &querier)
+AddTextMarkCommand::getArgument(QString /* actionName */, CommandArgumentQuerier &querier)
 {
     bool ok = false;
     QString str = querier.getText(tr("Text:"), &ok);

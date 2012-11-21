@@ -856,7 +856,7 @@ TransportDialog::setTimeSignature(const TimeSignature &timeSig)
 void
 TransportDialog::setMidiInLabel(const MappedEvent *mE)
 {
-    assert(mE > 0);
+    assert(mE != 0);
 
     switch (mE->getType()) {
     case MappedEvent::MidiNote:
@@ -945,7 +945,7 @@ TransportDialog::slotClearMidiInLabel()
 void
 TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 {
-    assert(mE > 0);
+    assert(mE != 0);
 
     switch (mE->getType()) {
     case MappedEvent::MidiNote:
@@ -1068,7 +1068,7 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
 void
 TransportDialog::slotPanelOpenButtonClicked()
 {
-    int rfh = m_transport->RecordingFrame->height();
+    // int rfh = m_transport->RecordingFrame->height();
 
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
@@ -1096,7 +1096,7 @@ TransportDialog::slotPanelOpenButtonClicked()
 void
 TransportDialog::slotPanelCloseButtonClicked()
 {
-    int rfh = m_transport->RecordingFrame->height();
+    // int rfh = m_transport->RecordingFrame->height();
 
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();

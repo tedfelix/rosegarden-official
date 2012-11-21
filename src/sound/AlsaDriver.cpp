@@ -1972,7 +1972,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
         unsigned char locateDataArr[7] = {
             0x06,
             0x01,
-            0x60 + t_hrs,    // (30fps flag) + hh
+            (unsigned char)(0x60 + t_hrs),    // (30fps flag) + hh
             t_min,         // mm
             t_sec,         // ss
             t_frm,         // frames
@@ -2261,8 +2261,8 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         bool scheduled = (offTime > alsaTime) && !now;
         if (!scheduled) offTime = RealTime::zeroTime;
 
-        snd_seq_real_time_t alsaOffTime = { offTime.sec,
-                                            offTime.nsec };
+        snd_seq_real_time_t alsaOffTime = { (unsigned int)offTime.sec,
+                                            (unsigned int)offTime.nsec };
 
         snd_seq_ev_set_noteoff(&event,
                                ev->getChannel(),
@@ -3123,7 +3123,8 @@ AlsaDriver::insertMTCFullFrame(RealTime time)
     m_mtcFrames = (unsigned)m_mtcEncodedTime.nsec / 40000000U;
 
     time = time + m_alsaPlayStartTime - m_playStartPosition;
-    snd_seq_real_time_t atime = { time.sec, time.nsec };
+    snd_seq_real_time_t atime =
+        { (unsigned int)time.sec, (unsigned int)time.nsec };
 
     unsigned char data[10] =
         { MIDI_SYSTEM_EXCLUSIVE,
@@ -3228,7 +3229,9 @@ AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
         }
 
         RealTime scheduleTime = t + m_alsaPlayStartTime - m_playStartPosition;
-        snd_seq_real_time_t atime = { scheduleTime.sec, scheduleTime.nsec };
+        snd_seq_real_time_t atime =
+            { (unsigned int)scheduleTime.sec,
+              (unsigned int)scheduleTime.nsec };
 
         event.type = SND_SEQ_EVENT_QFRAME;
         event.data.control.value = c;
@@ -3600,7 +3603,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         // Second and nanoseconds for ALSA
         //
-        snd_seq_real_time_t time = { outputTime.sec, outputTime.nsec };
+        snd_seq_real_time_t time =
+            { (unsigned int)outputTime.sec, (unsigned int)outputTime.nsec };
 
         if (!isSoftSynth) {
 
@@ -4760,7 +4764,7 @@ bool
 AlsaDriver::checkForNewClients()
 {
     Audit audit;
-    bool madeChange = false;
+    // bool madeChange = false; 
 
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::checkForNewClients" << std::endl;
@@ -4827,7 +4831,7 @@ AlsaDriver::checkForNewClients()
                 if (j != m_devicePortMap.end()) {
                     j->second = ClientPortPair( -1, -1);
                     setConnectionToDevice(**i, "");
-                    madeChange = true;
+                    // madeChange = true;
                 }
             } else {
                 for (AlsaPortList::iterator k = m_alsaPorts.begin();
@@ -4836,7 +4840,7 @@ AlsaDriver::checkForNewClients()
                         (*k)->m_port == firstOther.second) {
                         m_devicePortMap[(*i)->getId()] = firstOther;
                         setConnectionToDevice(**i, (*k)->m_name.c_str(), firstOther);
-                        madeChange = true;
+                        // madeChange = true;
                         break;
                     }
                 }
@@ -5089,7 +5093,8 @@ AlsaDriver::sendSystemQueued(MidiByte command,
     snd_seq_ev_set_source(&event, m_syncOutputPort);
     snd_seq_ev_set_subs(&event);
 
-    snd_seq_real_time_t sendTime = { time.sec, time.nsec };
+    snd_seq_real_time_t sendTime =
+        { (unsigned int)time.sec, (unsigned int)time.nsec };
 
     // Schedule the command
     //

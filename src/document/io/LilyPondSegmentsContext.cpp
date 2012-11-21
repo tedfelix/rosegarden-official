@@ -100,8 +100,8 @@ LilyPondSegmentsContext::precompute()
 
     // Compute the duration and repeat count of each segment
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        int trackPos = tit->first;
-        Track * track = m_composition->getTrackByPosition(trackPos);
+        /* int trackPos = tit->first; */
+        /* Track * track = m_composition->getTrackByPosition(trackPos); */
         SegmentSet &segSet = tit->second;
         for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
             Segment * seg = sit->segment;
@@ -140,8 +140,8 @@ LilyPondSegmentsContext::precompute()
     // For each segment, look at all the other ones and clear the synchronous
     // flag when the segments can't be printed out with repeat bars.
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        int trackPos = tit->first;
-        Track * track = m_composition->getTrackByPosition(trackPos);
+        /* int trackPos = tit->first; */
+        /* Track * track = m_composition->getTrackByPosition(trackPos); */
         SegmentSet &segSet = tit->second;
         for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
             Segment * seg = sit->segment;
@@ -151,8 +151,8 @@ LilyPondSegmentsContext::precompute()
             TrackMap::iterator tit2;
             SegmentSet::iterator sit2;
             for (tit2 = m_segments.begin(); tit2 != m_segments.end(); ++tit2) {
-                int trackPos2 = tit2->first;
-                Track * track2 = m_composition->getTrackByPosition(trackPos2);
+                /* int trackPos2 = tit2->first; */
+                /* Track * track2 = m_composition->getTrackByPosition(trackPos2); */
                 SegmentSet &segSet2 = tit2->second;
                 for (sit2 = segSet2.begin(); sit2 != segSet2.end(); ++sit2) {
                     Segment * seg2 = sit2->segment;
@@ -273,8 +273,8 @@ LilyPondSegmentsContext::precompute()
 
     // Compute the LilyPond start times with all segments unfolded.
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        int trackPos = tit->first;
-        Track * track = m_composition->getTrackByPosition(trackPos);
+        /* int trackPos = tit->first; */
+        /* Track * track = m_composition->getTrackByPosition(trackPos); */
         SegmentSet &segSet = tit->second;
         for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
             Segment * seg = sit->segment;

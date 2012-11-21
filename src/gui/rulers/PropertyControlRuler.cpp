@@ -50,7 +50,7 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
                                            ViewSegment *segment,
                                            RulerScale *rulerScale,
                                            QWidget *parent,
-                                           const char *name) :
+                                           const char */* name */) :
     ControlRuler(segment, rulerScale,
                  parent),
     m_propertyName(propertyName)
@@ -275,7 +275,7 @@ void PropertyControlRuler::updateSelectedItems()
 //    update();
 //}
 
-void PropertyControlRuler::slotSetTool(const QString &matrixtoolname)
+void PropertyControlRuler::slotSetTool(const QString &/* matrixtoolname */)
 {
     ///TODO Write mechanism to select correct control tool for the given matrix tool
     QString controltoolname = "adjuster";

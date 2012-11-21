@@ -987,9 +987,9 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
     // of the staff lines somewhat to make them less intrusive
 
     int level = 0;
-    int z = 2;
+    // int z = 2;
     if (m_resolution < 6) {
-        z = -1;
+        // z = -1;
         level = (9 - m_resolution) * 32;
         if (level > 200)
             level = 200;

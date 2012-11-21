@@ -134,7 +134,7 @@ FitToBeatsCommand::initialise(Segment *s)
         RealTime nextRealTime = finalRealTime;
         // nextTempo is unused, it will be used if we make ramped
         // tempi.
-        tempoT   nextTempo    = defaultTempo;
+        /* tempoT   nextTempo    = defaultTempo; */
 
 
         // Treat all the other beats.
@@ -152,7 +152,7 @@ FitToBeatsCommand::initialise(Segment *s)
             // Step
             nextBeatTime = timeNow;
             nextRealTime = realTimeNow;
-            nextTempo    = tempo;
+            /* nextTempo    = tempo; */
             ++i;
         }
     }

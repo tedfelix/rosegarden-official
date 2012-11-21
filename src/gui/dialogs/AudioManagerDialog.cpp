@@ -273,12 +273,12 @@ AudioManagerDialog::slotPopulateFileList()
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
-    AudioListItem* auItem;
+    // AudioListItem* auItem;
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end()) {
         // Turn off selection and report empty list
         //
-        auItem = new AudioListItem(m_fileList, QStringList(tr("<no audio files>")));
+        // auItem = new AudioListItem(m_fileList, QStringList(tr("<no audio files>")));
         
         m_fileList->setSelectionMode(QAbstractItemView::NoSelection);
 
@@ -1254,7 +1254,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
 
 void
-AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidget*, QStringList sl){
+AudioManagerDialog::slotDropped(QDropEvent */* event */, QTreeWidget*, QStringList sl){
     /// signaled from AudioListView on dropEvent, sl = list of items (filenames)
     if( sl.empty() ) return;
     

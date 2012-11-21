@@ -152,7 +152,7 @@ InstrumentParameterBox::getSelectedInstrument()
 }
 
 QString
-InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
+InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement /* arrangement */) const
 {
     return tr("Track");
 }

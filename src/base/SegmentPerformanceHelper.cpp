@@ -336,7 +336,7 @@ SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 
 
 bool
-SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool host, iterator i,
+SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, iterator i,
 						      timeT &t, timeT &d)
 {
     // [This code currently assumes appoggiatura.  Acciaccatura later.]

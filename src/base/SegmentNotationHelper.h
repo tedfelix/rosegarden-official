@@ -28,7 +28,7 @@ public:
     SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }
     virtual ~SegmentNotationHelper();
 
-    SegmentHelper::segment;
+    using SegmentHelper::segment;
 
     /**
      * Set the NOTE_TYPE and NOTE_DOTS properties on the events

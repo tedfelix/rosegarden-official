@@ -132,7 +132,8 @@ ColourConfigurationPage::slotAddNew()
                                            tr("Enter new name"), LineEdit::Normal,
                                            tr("New"),
                                            &ok, 0);
-    
+
+    // !!! This is very suspicious
     bool c_ok;
     
     if ((ok == true) && (!newName.isEmpty())) {
@@ -140,7 +141,7 @@ ColourConfigurationPage::slotAddNew()
 
         //int result = box.getColor( temp );
         //QColor col = QColorDialog::getColor();
-        QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
+        // QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
         
         if ( c_ok ) {
             Colour temp2 = GUIPalette::convertColour(temp);

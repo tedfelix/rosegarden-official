@@ -125,14 +125,15 @@ MusicXmlExporter::exportTrack(Track *track)
         return false;
     }
 
-    bool hasSegments = false;
-    for (Composition::iterator s = m_composition->begin();
-         s != m_composition->end(); ++s) {
-        if ((*s)->getTrack() == track->getId()) {
-            hasSegments = true;
-            break;
-        }
-    }
+    // hasSegments was never used.
+    // bool hasSegments = false;
+    // for (Composition::iterator s = m_composition->begin();
+    //      s != m_composition->end(); ++s) {
+    //     if ((*s)->getTrack() == track->getId()) {
+    //         hasSegments = true;
+    //         break;
+    //     }
+    // }
 
     if (m_exportSelection == EXPORT_ALL_TRACKS) {
         // Obvious.

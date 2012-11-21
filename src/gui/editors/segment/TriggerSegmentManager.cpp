@@ -437,7 +437,7 @@ TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
 }
 
 void
-TriggerSegmentManager::closeEvent(QCloseEvent *e)
+TriggerSegmentManager::closeEvent(QCloseEvent */* e */)
 {
     emit closing();
     close();
@@ -455,7 +455,7 @@ TriggerSegmentManager::setDocument(RosegardenDocument *doc)
 }
 
 void
-TriggerSegmentManager::slotItemClicked(QTreeWidgetItem *item)
+TriggerSegmentManager::slotItemClicked(QTreeWidgetItem */* item */)
 {
     RG_DEBUG << "TriggerSegmentManager::slotItemClicked" << endl;
 }

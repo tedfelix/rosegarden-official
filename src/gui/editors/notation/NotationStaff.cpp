@@ -1110,7 +1110,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 std::string indicationType = indication.getIndicationType();
 
-                int length, y1;
+                int length;
+                // int y1;
 
                 if ((indicationType == Indication::Slur ||
                         indicationType == Indication::PhrasingSlur) &&
@@ -1145,7 +1146,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     }
                 }
 
-                y1 = (int)(*indicationEnd)->getLayoutY();
+                // y1 = (int)(*indicationEnd)->getLayoutY();
 
                 if (length < m_notePixmapFactory->getNoteBodyWidth()) {
                     length = m_notePixmapFactory->getNoteBodyWidth();

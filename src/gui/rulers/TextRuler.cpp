@@ -66,7 +66,8 @@ TextRuler::~TextRuler()
 void
 TextRuler::slotScrollHoriz(int x)
 {
-    int w = width(), h = height();
+    int w = width();
+    // int h = height();
     int dx = x - ( -m_currentXOffset);
     m_currentXOffset = -x;
 

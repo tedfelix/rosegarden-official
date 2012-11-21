@@ -105,8 +105,8 @@ void AudioPreviewPainter::paintPreviewImage()
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1] << endl;
 
-    double audioDuration = double(m_segment->getAudioEndTime().sec) +
-	double(m_segment->getAudioEndTime().nsec) / 1000000000.0;
+    // double audioDuration = double(m_segment->getAudioEndTime().sec) +
+    //     double(m_segment->getAudioEndTime().nsec) / 1000000000.0;
 
     // We need to take each pixel value and map it onto a point within
     // the preview.  We have samplePoints preview points in a known
@@ -213,7 +213,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	l1 *= gain[0];
 	l2 *= gain[1];
 
-        int width = 1;
+        // int width = 1;
 	int pixel;
 
         // h1 left, h2 right

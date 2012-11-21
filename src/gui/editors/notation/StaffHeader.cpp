@@ -599,7 +599,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     int transpose = 0, transpose0 = 0, transpose1 = 0;
     unsigned int colourIndex = 0, colourIndex0 = 0;
 
-    size_t staff;
+    // size_t staff;
 
     Composition *comp = m_headersGroup->getComposition();
     Track *track = comp->getTrackById(m_track);
@@ -650,7 +650,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                     status |= SEGMENT_HERE;
                 }
 
-                staff = i;
+                // staff = i;
 
                 // If current value is visible, remember it
                 if (key.getAccidentalCount()) key1 = key;
@@ -862,7 +862,7 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 
 
 void
-StaffHeader::enterEvent(QEvent *event)
+StaffHeader::enterEvent(QEvent */* event */)
 {
     // Start timer when mouse enters
     m_toolTipTimer->start();
@@ -870,7 +870,7 @@ StaffHeader::enterEvent(QEvent *event)
 }
 
 void
-StaffHeader::leaveEvent(QEvent *event)
+StaffHeader::leaveEvent(QEvent */* event */)
 {
     // Stop timer when mouse leaves
     m_toolTipTimer->stop();
@@ -965,7 +965,7 @@ StaffHeader::slotShowInconsistencies()
 }
 
 void
-StaffHeader::eventAdded(const Segment *seg, Event *ev)
+StaffHeader::eventAdded(const Segment */* seg */, Event *ev)
 {
    if (ev->isa(Key::EventType) || ev->isa(Clef::EventType)) {
         emit(staffModified());
@@ -973,7 +973,7 @@ StaffHeader::eventAdded(const Segment *seg, Event *ev)
 }
 
 void
-StaffHeader::eventRemoved(const Segment *seg, Event *ev)
+StaffHeader::eventRemoved(const Segment */* seg */, Event *ev)
 {
     if (ev->isa(Key::EventType) || ev->isa(Clef::EventType)) {
         emit(staffModified());
@@ -981,25 +981,25 @@ StaffHeader::eventRemoved(const Segment *seg, Event *ev)
 }
 
 void
-StaffHeader::appearanceChanged(const Segment *seg)
+StaffHeader::appearanceChanged(const Segment */* seg */)
 {
         emit(staffModified());
 }
 
 void
-StaffHeader::startChanged(const Segment *seg, timeT)
+StaffHeader::startChanged(const Segment */* seg */, timeT)
 {
         emit(staffModified());
 }
 
 void
-StaffHeader::endMarkerTimeChanged(const Segment *seg, bool /*shorten*/)
+StaffHeader::endMarkerTimeChanged(const Segment */* seg */, bool /*shorten*/)
 {
         emit(staffModified());
 }
 
 void
-StaffHeader::transposeChanged(const Segment *seg, int)
+StaffHeader::transposeChanged(const Segment */* seg */, int)
 {
         emit(staffModified());
 }

@@ -186,7 +186,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         m_jackTransport->addItem(tr("Sync, and offer timebase master"));
     */
 
-    bool jackMaster = settings.value("jackmaster", false).toBool();
+    // bool jackMaster = settings.value("jackmaster", false).toBool();
     bool jackTransport = settings.value("jacktransport", false).toBool();
 /*
     if (jackTransport)
@@ -416,6 +416,8 @@ void GeneralConfigurationPage::apply()
     int graphicsSystem = getGraphicsSystem();
     settings.setValue("graphics_system", graphicsSystem);
     bool graphicsSystemChanged = false;
+    // !!! This comparison is suspicious.  Need to clarify the role,
+    // if any, of negative values.
     if (graphicsSystem != m_lastGraphicsSystemIndex) graphicsSystemChanged = true;
 
     int client = getDblClickClient();
@@ -424,12 +426,12 @@ void GeneralConfigurationPage::apply()
     int namestyle = getNoteNameStyle();
     settings.setValue("notenamestyle", namestyle);
     
-    bool texturesChanged = false;
+    // bool texturesChanged = false;
     bool mainTextureChanged = false;
 
     if (settings.value("backgroundtextures", true).toBool() !=
         m_backgroundTextures->isChecked()) {
-        texturesChanged = true;
+        // texturesChanged = true;
         mainTextureChanged = true;
         settings.endGroup();
     } else {
@@ -437,7 +439,7 @@ void GeneralConfigurationPage::apply()
         settings.beginGroup(NotationViewConfigGroup);
         if (settings.value("backgroundtextures", true).toBool() !=
             m_notationBackgroundTextures->isChecked()) {
-            texturesChanged = true;
+            // texturesChanged = true;
         }
         settings.endGroup();
     }

@@ -38,8 +38,9 @@ SetTriggerCommand::modifySegment()
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 
-        if (!m_notesOnly || (*i)->isa(Note::EventType)
-            && !(*i)->has(BaseProperties::TIED_BACKWARD)) {
+        if (!m_notesOnly ||
+            ((*i)->isa(Note::EventType) &&
+             !(*i)->has(BaseProperties::TIED_BACKWARD))) {
             (*i)->set
             <Int>(TRIGGER_SEGMENT_ID, m_triggerSegmentId);
             (*i)->set

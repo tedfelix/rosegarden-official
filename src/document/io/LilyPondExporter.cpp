@@ -1110,7 +1110,7 @@ LilyPondExporter::write()
             return false;
         }
 
-        timeT repeatOffset = 0;
+        /* timeT repeatOffset = 0; */
 
         Segment *seg;
         for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {

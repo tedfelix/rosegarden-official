@@ -1353,7 +1353,7 @@ BankEditorDialog::getMidiDevice(QTreeWidgetItem* item)
 }
 
 std::pair<int, int>
-BankEditorDialog::getFirstFreeBank(QTreeWidgetItem* item)
+BankEditorDialog::getFirstFreeBank(QTreeWidgetItem* /* item */)
 {
     //!!! percussion? this is actually only called in the expectation
     // that percussion==false at the moment

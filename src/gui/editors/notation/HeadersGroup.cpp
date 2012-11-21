@@ -94,7 +94,7 @@ HeadersGroup::removeAllHeaders()
 }
 
 void
-HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
+HeadersGroup::addHeader(int trackId, int height, int ypos, double /* xcur */)
 {
     StaffHeader *sh = new StaffHeader(this, trackId, height, ypos);
     m_layout->addWidget(sh);

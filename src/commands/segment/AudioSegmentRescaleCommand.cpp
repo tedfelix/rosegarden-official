@@ -106,7 +106,7 @@ AudioSegmentRescaleCommand::disconnectProgressDialog(ProgressDialog *dlg)
 void
 AudioSegmentRescaleCommand::execute()
 {
-    timeT startTime = m_segment->getStartTime();
+    /* timeT startTime = m_segment->getStartTime(); */
 
     if (m_segment->getType() != Segment::Audio) {
         return;

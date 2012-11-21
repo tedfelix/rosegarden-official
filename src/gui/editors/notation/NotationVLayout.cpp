@@ -482,8 +482,10 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
     int startX = (int)(*i)->getLayoutX(), endX = startX + 10;
     bool startStemUp = false, endStemUp = false;
-    long startMarks = 0, endMarks = 0;
-    bool startTied = false, endTied = false;
+    long startMarks = 0;
+    // long endMarks = 0;
+    // bool startTied = false;
+    // bool endTied = false;
     bool beamAbove = false, beamBelow = false;
     bool dynamic = false;
 
@@ -545,12 +547,12 @@ NotationVLayout::positionSlur(NotationStaff &staff,
                     startStemUp = stemUp;
                     startMarks = chord.getMarkCountForChord();
 
-                    bool tied = false;
-                    if ((event->get
-                            <Bool>(TIED_FORWARD, tied) && tied) ||
-                            (event->get<Bool>(TIED_BACKWARD, tied) && tied)) {
-                        startTied = true;
-                    }
+                    // bool tied = false;
+                    // if ((event->get
+                    //         <Bool>(TIED_FORWARD, tied) && tied) ||
+                    //         (event->get<Bool>(TIED_BACKWARD, tied) && tied)) {
+                    //     startTied = true;
+                    // }
 
                     haveStart = true;
 
@@ -569,14 +571,14 @@ NotationVLayout::positionSlur(NotationStaff &staff,
                 endTopHeight = chord.getHighestNoteHeight();
                 endX = (int)(*scooter)->getLayoutX();
                 endStemUp = stemUp;
-                endMarks = chord.getMarkCountForChord();
+                // endMarks = chord.getMarkCountForChord();
 
-                bool tied = false;
-                if ((event->get
-                        <Bool>(TIED_FORWARD, tied) && tied) ||
-                        (event->get<Bool>(TIED_BACKWARD, tied) && tied)) {
-                    endTied = true;
-                }
+                // bool tied = false;
+                // if ((event->get
+                //         <Bool>(TIED_FORWARD, tied) && tied) ||
+                //         (event->get<Bool>(TIED_BACKWARD, tied) && tied)) {
+                //     endTied = true;
+                // }
             }
 
             if (!beamed) {

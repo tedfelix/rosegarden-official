@@ -121,11 +121,11 @@ NotationWidget::NotationWidget() :
     m_chordMode(false),
     m_tupletMode(false),
     m_graceMode(false),
+    m_tupledCount(2),
+    m_untupledCount(3),
     m_updatesSuspended(false),
     m_hSliderHacked(false),
-    m_vSliderHacked(false),
-    m_tupledCount(2),
-    m_untupledCount(3) {
+    m_vSliderHacked(false) {
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
