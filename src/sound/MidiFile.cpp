@@ -1442,18 +1442,18 @@ MidiFile::convertToMidi(Composition &comp)
         RosegardenMainWindow::self()->
         getSequenceManager()->
         makeTempMetaiterator();
-        
+
     RealTime start = comp.getElapsedRealTime(comp.getStartMarker());
     RealTime end   = comp.getElapsedRealTime(comp.getEndMarker());
     // For ramping, we need to get MappedEvents in order, but
-    // fillCompositionWithEventsUntil's order is only approximately
+    // fetchEvents's order is only approximately
     // right, so we sort events first.
     SortingInserter sorter;
     metaiterator->jumpToTime(start);
     // Give the end a little margin to make it insert noteoffs at the
     // end.  If they tied with the end they'd get lost.
     metaiterator->
-        fillCompositionWithEventsUntil(true, sorter, start,
+        fetchEvents(sorter, start,
                                        end + RealTime(0,1000));
     delete metaiterator;
     MidiInserter inserter(comp, 480, end);

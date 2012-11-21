@@ -32,6 +32,7 @@
 #include "misc/Debug.h"
 #include "sound/ControlBlock.h"
 #include "sound/MappedEvent.h"
+#include "sound/Midi.h" // For MIDI_SYSTEM_EXCLUSIVE
 
 #include "assert.h"
 #include <limits>
@@ -55,7 +56,7 @@ InternalSegmentMapper::
     if(m_triggeredEvents) { delete m_triggeredEvents; }
 }
 
-void InternalSegmentMapper::dump()
+void InternalSegmentMapper::fillBuffer()
 {
     Composition &comp = m_doc->getComposition();
 
@@ -64,7 +65,7 @@ void InternalSegmentMapper::dump()
     Track* track = comp.getTrackById(m_segment->getTrack());
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
     SEQUENCER_DEBUG
-        << "InternalSegmentMapper::dump track number"
+        << "InternalSegmentMapper::fillBuffer track number"
         << (int)track->getId()
         << endl;
 #endif
@@ -79,12 +80,11 @@ void InternalSegmentMapper::dump()
     if (repeatCount > 0)
         repeatEndTime = m_segment->getRepeatEndTime();
 
-    int size = 0;
-    setBufferFill(0);
+    resize(0);
 
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
     SEQMAN_DEBUG
-        << "InternalSegmentMapper::dump"
+        << "InternalSegmentMapper::fillBuffer"
         << (void *)this
         << "Segment"
         << (void *)m_segment
@@ -180,13 +180,13 @@ void InternalSegmentMapper::dump()
                                 Segment::iterator
                                 (m_triggeredEvents->findTime(refTime));
 
-                            // Recalculate how much buffer space we'll
-                            // need.  
-                            size = calculateSize();
-                            size = addSize(size, rec->getSegment());
-                            // Get more space if we need to.
-                            if (size > getBufferSize()) {
-                                resizeBuffer(size);
+                            // Recalculate how much buffer space to
+                            // reserve.
+                            int spaceNeeded =
+                                addSize(calculateSize(), rec->getSegment());
+                            // Reserve more space if we will need it.
+                            if (spaceNeeded > capacity()) {
+                                reserve(spaceNeeded);
                             }
                         }
                     }
@@ -260,7 +260,7 @@ void InternalSegmentMapper::dump()
                         
                     } catch (...) {
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
-                        SEQMAN_DEBUG << "SegmentMapper::dump - caught exception while trying to create MappedEvent\n";
+                        SEQMAN_DEBUG << "SegmentMapper::fillBuffer - caught exception while trying to create MappedEvent\n";
 #endif
                     }
                 }
@@ -275,13 +275,13 @@ void InternalSegmentMapper::dump()
         popInsertNoteoff(track->getId(), comp);
     }
 
-    bool anything = (getBufferFill() != 0);
+    bool anything = (size() != 0);
 
     RealTime minRealTime;
     RealTime maxRealTime;
     if (anything) {
         minRealTime = getBuffer()[0].getEventTime();
-        maxRealTime = getBuffer()[getBufferFill() - 1].getEventTime();
+        maxRealTime = getBuffer()[size() - 1].getEventTime();
     } else {
         minRealTime = maxRealTime = RealTime::zeroTime;
     }
@@ -491,6 +491,27 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     m_channelManager.doInsert(inserter, evt, start, &functionality,
                               dirtyIter, m_segment->getTrack());
 }
+
+bool
+InternalSegmentMapper::
+shouldPlay(MappedEvent *evt, RealTime sliceStart)
+{
+    // #1048388:
+    // Ensure sysex heeds mute status, but ensure clocks etc still get
+    // through
+    if (evt->getType() == MappedEvent::MidiSystemMessage &&
+        evt->getData1() != MIDI_SYSTEM_EXCLUSIVE)
+        { return true; }
+    
+    // Otherwise if it's muted it doesn't play.
+    if (mutedEtc()) { return false; }
+
+    // Otherwise it should play if it's not already all done sounding.
+    // The timeslice logic will have already excluded events that
+    // start too late.
+    return !evt->EndedBefore(sliceStart);
+}
+
 /***  InternalSegmentMapper::Callback ***/
 
 ControllerAndPBList
@@ -543,4 +564,3 @@ getControllers(Instrument *instrument, RealTime start)
 }
 
 }
-

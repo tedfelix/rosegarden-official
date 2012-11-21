@@ -35,13 +35,13 @@ class Composition;
 /**
  * @author Tom Breton (Tehom)
  *
- * InternalSegmentMapper.  What's in a name?  "Internal" refers either to
- * the concept of segments that are internal to Rosegarden.  I.e. "MIDI"
- * segments as opposed to audio segments.  Or it might refer to an internal
- * form of a segment that is not seen outside of Rosegarden.  (An internal
- * implementation detail.)  "Mapper" refers to the act of mapping (converting)
- * Event objects from a Segment into MappedEvent objects which are ready for
- * playback.  The key mapping routine is InternalSegmentMapper::dump().
+ * InternalSegmentMapper.  What's in a name?  "Internal" qualifies a
+ * Segment as containing Rosegarden's internal representation of MIDI
+ * notes etc, as opposed to an audio segment.  The term "Mapper" is
+ * used largely for historical reasons, but can be understood as
+ * mapping (converting) Event objects from a Segment into MappedEvent
+ * objects which are ready for playback.  The key mapping routine is
+ * InternalSegmentMapper::fillBuffer().
  *
  * This class might be better named MappedMIDISegment as that is what it is
  * rather than what it does.  It's a more "O-O" name, which in this case feels
@@ -95,12 +95,15 @@ class InternalSegmentMapper : public SegmentMapper
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                          RealTime start, bool firstOutput);
 
+    // Return whether the event should be played.
+    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
+
     virtual int calculateSize();
 
     int addSize(int size, Segment *);
 
     /// dump all segment data in the file
-    virtual void dump();
+    virtual void fillBuffer();
 
     Instrument *getInstrument(void)
     { return m_channelManager.m_instrument; }
@@ -120,7 +123,7 @@ class InternalSegmentMapper : public SegmentMapper
     IntervalChannelManager m_channelManager;
 
     // Separate storage for triggered events.  This storage, like
-    // original segment, contains just one time thru; logic in "dump"
+    // original segment, contains just one time thru; logic in "fillBuffer"
     // turns it into repeats as needed.
     Segment               *m_triggeredEvents;
     

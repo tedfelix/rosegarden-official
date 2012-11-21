@@ -28,9 +28,9 @@
 namespace Rosegarden
 {
 
-void TempoSegmentMapper::dump()
+void TempoSegmentMapper::fillBuffer()
 {
-    setBufferFill(0);
+    resize(0);
     Composition& comp = m_doc->getComposition();
     bool wroteInitialTempo = false;
 
@@ -114,5 +114,11 @@ TempoSegmentMapper::calculateSize()
 {
     return m_doc->getComposition().getTempoChangeCount() + 1;
 }
+
+// Tempo changes always "play"
+bool
+TempoSegmentMapper::
+shouldPlay(MappedEvent */*evt*/, RealTime /*startTime*/)
+{ return true; }
 
 }

@@ -1172,8 +1172,7 @@ RosegardenSequencer::getSlice(MappedEventList &mappedEventList,
 
     MappedEventInserter inserter(mappedEventList);
 
-    (void)m_metaIterator.fillCompositionWithEventsUntil
-        (firstFetch, inserter, start, end);
+    m_metaIterator.fetchEvents(inserter, start, end);
 
     // don't do this, it breaks recording because
     // playing stops right after it starts.
@@ -1567,4 +1566,3 @@ RosegardenSequencer::incrementTransportToken()
 }
 
 }
-

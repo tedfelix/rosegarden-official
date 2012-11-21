@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 // @class MidiInserter is an inserter suitable for
-// fillCompositionWithEventsUntil and meant to support MidiFile.
+// fetchEvents and meant to support MidiFile.
 // @author Tom Breton (Tehom)
 class MidiInserter : public MappedInserterBase
 {

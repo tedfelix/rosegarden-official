@@ -61,17 +61,18 @@ public:
 
     bool jumpToTime(const RealTime&);
 
-    /// Fetch events from start to end into a mapped event list (via inserter).
+        /// Fetch events from start to end into a mapped event list (via inserter).
     /**
-     * @return true if there are non-metronome events remaining, false if end
-     * of composition [mapped event buffers?] was reached
+     * Fetch events that play during the interval from start to end.
+     * They are passed to inserter, which normally inserts them into a
+     * mapped event list.
+     * @return void.  It used to return whether there were
+     * non-metronome events remaining, but this was never used.
      *
-     * rename: fetchEvents() (like RosegardenSequencer::fetchEvents())
      */
-    bool fillCompositionWithEventsUntil(bool firstFetch,
-                                        MappedInserterBase &inserter,
-                                        const RealTime& start,
-                                        const RealTime& end);
+    void fetchEvents(MappedInserterBase &inserter,
+                     const RealTime& start,
+                     const RealTime& end);
 
     /// re-seek to current time on the iterator for this segment
     void resetIteratorForSegment(MappedEventBuffer *s, bool immediate);
@@ -90,14 +91,16 @@ public:
     (const RealTime &songPosition);
 
 protected:
-    // Fill with events.  Caller guarantees that the mappers are
-    // non-competing, meaning that no active mappers use the same
-    // channel during this slice (except for fixed instruments).
-    bool fillNoncompeting(MappedInserterBase &inserter,
-                          const RealTime& start,
-                          const RealTime& end);
-
-    bool acceptEvent(MappedEvent*, bool evtIsFromMetronome);
+    // Fetch events during an interval, with non-competing mappers.
+    /**
+     * Caller guarantees that the mappers are non-competing, meaning
+     * that no active mappers use the same channel during this slice
+     * (except for fixed instruments, for which that guarantee is
+     * impossible).
+    */
+    void fetchEventsNoncompeting(MappedInserterBase &inserter,
+                                 const RealTime& start,
+                                 const RealTime& end);
 
     bool moveIteratorToTime(MappedEventBuffer::iterator&,
                             const RealTime&);

@@ -39,8 +39,9 @@ protected:
     virtual int calculateSize();
 
     // override from MappedEventBuffer
-    virtual void dump();
+    virtual void fillBuffer();
 
+    virtual bool shouldPlay(MappedEvent *evt, RealTime /*startTime*/);
 };
 
 }

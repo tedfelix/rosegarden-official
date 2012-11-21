@@ -41,6 +41,8 @@ public:
 protected:
     SegmentMapper(RosegardenDocument *, Segment *);
 
+    bool mutedEtc(void);
+
     //--------------- Data members ---------------------------------
     Segment *m_segment;
 };

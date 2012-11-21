@@ -379,4 +379,3 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 
 }
 
-

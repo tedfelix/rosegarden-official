@@ -40,7 +40,9 @@ protected:
     virtual int calculateSize();
 
     // override from SegmentMapper
-    virtual void dump();
+    virtual void fillBuffer();
+
+    virtual bool shouldPlay(MappedEvent *evt, RealTime /*startTime*/);
 };
 
 

@@ -76,4 +76,3 @@ Developers who use emacs may want to use the auto-insert templates.
  * Customize auto-insert-alist according to the instructions in
    auto-insert-rosegarden-templates.el.  The instructions in
    auto-insert-choose.el will work too.
-

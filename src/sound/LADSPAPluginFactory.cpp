@@ -823,4 +823,3 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
 }
 
 }
-

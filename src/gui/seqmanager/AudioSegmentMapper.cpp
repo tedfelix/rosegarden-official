@@ -39,7 +39,7 @@ AudioSegmentMapper::AudioSegmentMapper(RosegardenDocument *doc,
 }
 
 void
-AudioSegmentMapper::dump()
+AudioSegmentMapper::fillBuffer()
 {
     Composition &comp = m_doc->getComposition();
 
@@ -48,7 +48,7 @@ AudioSegmentMapper::dump()
 
     // Can't write out if no track
     if (!track) {
-        std::cerr << "AudioSegmentMapper::dump: ERROR: No track for segment!"
+        std::cerr << "AudioSegmentMapper::fillBuffer: ERROR: No track for segment!"
                   << std::endl;
         return ;
     }
@@ -97,13 +97,13 @@ AudioSegmentMapper::dump()
             e.setAutoFade(true);
             e.setFadeInTime(m_segment->getFadeInTime());
             e.setFadeOutTime(m_segment->getFadeOutTime());
-            std::cout << "AudioSegmentMapper::dump - "
+            std::cout << "AudioSegmentMapper::fillBuffer - "
                       << "SETTING AUTOFADE "
                       << "in = " << m_segment->getFadeInTime()
                       << ", out = " << m_segment->getFadeOutTime()
                       << std::endl;
         } else {
-            //            std::cout << "AudioSegmentMapper::dump - "
+            //            std::cout << "AudioSegmentMapper::fillBuffer - "
             //                      << "NO AUTOFADE SET ON SEGMENT" << std::endl;
         }
 
@@ -111,7 +111,7 @@ AudioSegmentMapper::dump()
         ++index;
     }
 
-    setBufferFill(index);
+    resize(index);
     // Instead of calling setStartEnd, we let m_start and m_end remain
     // at their defaults because metaiterator does nothing special for
     // audio segments.
@@ -128,5 +128,17 @@ AudioSegmentMapper::calculateSize()
     return (repeatCount + 1) * 1;
 }
 
+bool
+AudioSegmentMapper::
+shouldPlay(MappedEvent *evt, RealTime sliceStart)
+{
+    // If it's muted etc it doesn't play.
+    if (mutedEtc()) { return false; }
+
+    // Otherwise it should play if it's not already all done sounding.
+    // The timeslice logic will have already excluded events that
+    // start too late.
+    return !evt->EndedBefore(sliceStart);
 }
 
+}

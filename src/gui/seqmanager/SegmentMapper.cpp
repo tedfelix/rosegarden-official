@@ -23,6 +23,7 @@
 #include "base/BaseProperties.h"
 #include "base/Segment.h"
 #include "document/RosegardenDocument.h"
+#include "sound/ControlBlock.h"
 
 namespace Rosegarden
 {
@@ -68,6 +69,23 @@ SegmentMapper::getSegmentRepeatCount()
     }
 
     return repeatCount;
+}
+
+bool
+SegmentMapper::
+mutedEtc(void)
+{
+    TrackId trackId = m_segment->getTrack();
+
+    // If we're soloing (i.e. playing only a selected track), that
+    // overrides the usual muting logic.  We're effectively muted if
+    // the solo track isn't ours.
+    if (ControlBlock::getInstance()->isSolo()) {
+        return (trackId != ControlBlock::getInstance()->getSelectedTrack());
+    }
+
+    // Otherwise use the normal muting logic.
+    return ControlBlock::getInstance()->isTrackMuted(trackId);
 }
 
 }

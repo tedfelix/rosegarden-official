@@ -32,9 +32,9 @@ MarkerMapper(RosegardenDocument *doc) :
   SpecialSegmentMapper(doc)
 { }
 
-void MarkerMapper::dump()
+void MarkerMapper::fillBuffer()
 {
-    setBufferFill(0);
+    resize(0);
 
     Composition& comp = m_doc->getComposition();
     Composition::markercontainer &marks = comp.getMarkers();
@@ -46,7 +46,7 @@ void MarkerMapper::dump()
       RealTime eventTime = comp.getElapsedRealTime((*i)->getTime());
 #ifdef DEBUG_MARKER_MAPPER
     SEQUENCER_DEBUG
-        << "MarkerMapper::dump inserting marker message"
+        << "MarkerMapper::fillBuffer inserting marker message"
         << metaMessage
         << "at" << eventTime
         << endl;
@@ -66,6 +66,12 @@ MarkerMapper::calculateSize()
     return m_doc->getComposition().getMarkers().size();
 }
 
-}
+// Markers always "play".  When we don't want them, we simply don't
+// include a marker mapper.
+bool
+MarkerMapper::
+shouldPlay(MappedEvent */*evt*/, RealTime /*startTime*/)
+{ return true; }
 
+}
 

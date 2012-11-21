@@ -1059,4 +1059,3 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
 
 }
 
-

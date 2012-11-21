@@ -9,4 +9,3 @@
 # We might want to switch to this at some point in the future.
 
 aclocal -I . && autoconf
-

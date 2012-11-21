@@ -36,7 +36,9 @@ protected:
     virtual int calculateSize();
 
     /// dump all segment data in the file
-    virtual void dump();
+    virtual void fillBuffer();
+    // Return whether the event should be played.
+    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
 };
 
 

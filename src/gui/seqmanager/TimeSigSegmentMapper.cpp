@@ -28,7 +28,7 @@ namespace Rosegarden
 {
 
 void
-TimeSigSegmentMapper::dump()
+TimeSigSegmentMapper::fillBuffer()
 {
     RealTime eventTime;
 
@@ -52,7 +52,7 @@ TimeSigSegmentMapper::dump()
         ++index;
     }
 
-    setBufferFill(index);
+    resize(index);
 }
 
 int
@@ -61,4 +61,11 @@ TimeSigSegmentMapper::calculateSize()
     return m_doc->getComposition().getTimeSignatureCount();
 }
 
+// Time signatures always "play", even not-yet-played signatures
+// before the beginning of a slice.
+bool
+TimeSigSegmentMapper::
+shouldPlay(MappedEvent */*evt*/, RealTime /*startTime*/)
+{ return true; }
+    
 }

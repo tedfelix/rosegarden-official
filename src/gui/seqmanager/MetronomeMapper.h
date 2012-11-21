@@ -49,6 +49,8 @@ class MetronomeMapper : public MappedEventBuffer
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                          RealTime start, bool firstOutput);
 
+    // Return whether the event should be played.
+    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
  protected:
     MetronomeMapper(RosegardenDocument *doc);
 
@@ -57,8 +59,10 @@ class MetronomeMapper : public MappedEventBuffer
     void sortTicks();
 
     // override from SegmentMapper
-    virtual void dump();
+    virtual void fillBuffer();
 
+    // Whether the metronome is muted regarding this event.
+    bool mutedEtc(MappedEvent *evt);
     
     //--------------- Data members ---------------------------------
     typedef std::pair<timeT, int> Tick;

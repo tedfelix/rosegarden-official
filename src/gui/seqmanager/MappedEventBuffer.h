@@ -63,6 +63,7 @@ class RosegardenDocument;
  */
 class MappedEventBuffer
 {
+   
 public:
     MappedEventBuffer(RosegardenDocument *);
     virtual ~MappedEventBuffer();
@@ -87,45 +88,34 @@ public:
     MappedEvent *getBuffer() { return m_buffer; }
 
     /// Capacity of the buffer in MappedEvent's.  (STL's capacity().)
-    /**
-     * The use of "size" and "fill" in this class is in conflict with STL
-     * terminology.  Recommend changing "size" to "capacity" and "fill"
-     * to "size" in keeping with the STL.  So this routine would be
-     * renamed to "capacity()".
-     *
-     * rename: capacity() (per STL)
-     */
-    int getBufferSize() const;
+    /* Was getBufferSize() */
+    int capacity() const;
     /// Number of MappedEvent's in the buffer.  (STL's size().)
-    /**
-     * rename: size() (per STL)
-     */
-    int getBufferFill() const;
+    /* Was getBufferFill() */
+    int size() const;
 
     /// Sets the buffer capacity.
     /**
      * Ignored if smaller than old capacity.
      *
-     * @see getBufferSize()
+     * @see capacity()
      *
-     * rename: reserve() (per STL)
      */
-    void resizeBuffer(int newSize);
+    void reserve(int newSize);
 
     /// Sets the number of events in the buffer.
     /**
      * Must be no bigger than buffer capacity.
      *
-     * @see getBufferFill()
+     * @see size()
      *
-     * rename: resize() (per STL)
      */
-    void setBufferFill(int newFill);
+    void resize(int newFill);
 
     /// Refresh the buffer
     /**
      * Called after the segment has been modified.  Resizes the buffer if
-     * needed, then calls dump() to fill it from the segment.
+     * needed, then calls fillBuffer() to fill it from the segment.
      *
      * Returns true if buffer size changed (and thus the sequencer
      * needs to be told about it).
@@ -149,20 +139,19 @@ public:
      * big enough to hold all the events in the current segment.
      *
      * @see m_doc
-     * @see resizeBuffer()
+     * @see reserve()
      */
     virtual int calculateSize() = 0;
 
     /// Fill buffer with data from the segment
     /**
      * This is provided by derivers to handle whatever sort of data is
-     * specific to each of them.  E.g. InternalSegmentMapper::dump()
+     * specific to each of them.  E.g. InternalSegmentMapper::fillBuffer()
      * processes note events while TempoSegmentMapper processes tempo
      * change events.
      *
-     * rename: fillBuffer()  (or just fill())
      */
-    virtual void dump() = 0;
+    virtual void fillBuffer() = 0;
 
     /// Insert a MappedEvent with appropriate setup for channel.
     /**
@@ -183,6 +172,14 @@ public:
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime refTime, bool firstOutput);
 
+    // Return whether the event would even sound.  
+    /**
+     * For instance, it might be on a muted track and shouldn't be
+     * played, or it might have already ended by startTime.  The exact
+     * logic differs across derived classes.
+     */
+    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime)=0;
+    
     /// Record one more owner of this mapper.
     /**
      * This increases the reference count to prevent deletion of a mapper
@@ -210,8 +207,8 @@ public:
 
     /// Get the earliest and latest sounding times.
     /**
-     * Called by MappedBufMetaIterator::fillCompositionWithEventsUntil() and
-     * MappedBufMetaIterator::fillNoncompeting().
+     * Called by MappedBufMetaIterator::fetchEvents() and
+     * MappedBufMetaIterator::fetchEventsNoncompeting().
      *
      * @see setStartEnd()
      */
@@ -219,31 +216,6 @@ public:
         start = m_start;
         end   = m_end;
     }
-
-    /// Is this object a MetronomeMapper?
-    /**
-     * Used by MappedBufMetaIterator::fillNoncompeting() for special
-     * handling of the metronome.
-     *
-     * This might be implemented as a virtual function that just returns
-     * false, but is overridden in MetronomeMapper to return true.
-     * setMetronome() and m_isMetronome could then be removed.
-     * Switching on type like this is usually considered a Bad Thing.
-     * Examination of MappedBufMetaIterator might lead to a more useful
-     * function that could be overridden by MetronomeMapper.
-     *
-     * @see setMetronome()
-     */
-    bool isMetronome() const { return m_isMetronome; }
-
-    /// Enables special handling related to MetronomeMapper
-    /**
-     * Used by MetronomeMapper to communicate with
-     * MappedBufMetaIterator::fillNoncompeting().
-     *
-     * @see isMetronome()
-     */
-    void setMetronome(bool isMetronome) { m_isMetronome = isMetronome; }
 
     class iterator 
     {
@@ -328,6 +300,9 @@ public:
          *
          * Returns 0 if atEnd().
          *
+         * Callers should lock getLock() with QReadLocker for as long
+         * as they are holding the pointer.
+         *
          * @see operator*()
          */
         MappedEvent *peek() const;
@@ -338,7 +313,7 @@ public:
         const MappedEventBuffer *getSegment() const { return m_s; }
 
         /**
-         * Called by MappedBufMetaIterator::fillNoncompeting().
+         * Called by MappedBufMetaIterator::fetchEventsNoncompeting().
          *
          * @see setInactive()
          * @see getActive()
@@ -348,7 +323,7 @@ public:
             m_currentTime = currentTime;
         }
         /**
-         * Called by MappedBufMetaIterator::fillNoncompeting().
+         * Called by MappedBufMetaIterator::fetchEventsNoncompeting().
          *
          * @see setActive()
          * @see getActive()
@@ -358,7 +333,7 @@ public:
          * Whether this iterator has more events to give within the current
          * time slice.
          *
-         * Called by MappedBufMetaIterator::fillNoncompeting().
+         * Called by MappedBufMetaIterator::fetchEventsNoncompeting().
          *
          * @see setActive()
          * @see setInactive()
@@ -386,13 +361,23 @@ public:
         /**
          * Delegates to MappedEventBuffer::doInsert().
          *
-         * The old comments seem misleading.  It doesn't do appear to do any
-         * of this:
-         * "Do appropriate preparation for inserting event, including
-         * possibly setting up the channel."
-         * The routine it delegates to does this.
+         * Guarantees the caller that appropriate preparation will be
+         * done for evt, such as first inserting other events to set
+         * the program.
          */
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
+
+        // Return whether the event should be played at all
+        /**
+         * For instance, it might be on a muted track and shouldn't
+         * actually sound.  Delegates to MappedEventBuffer::shouldPlay().
+         */
+        bool shouldPlay(MappedEvent *evt, RealTime startTime)
+        { return m_s->shouldPlay(evt, startTime); }
+
+        // Get a pointer to the MappedEventBuffer's lock.
+        QReadWriteLock* getLock(void) const
+        { return &m_s->m_lock; }
 
     protected:
         /// The buffer this iterator points into.
@@ -428,6 +413,7 @@ public:
         // !!! WARNING !!!
     };
 
+        
 protected:
     friend class iterator;
 
@@ -435,38 +421,21 @@ protected:
     MappedEvent *m_buffer;
 
     /// Capacity of the buffer.
-    /**
-     * To be consistent with the STL, this would be better named m_capacity.
-     */
-    mutable QAtomicInt m_size;
+    mutable QAtomicInt m_capacity;
 
     /// Number of events in the buffer.
-    /**
-     * To be consistent with the STL, this would be better named m_size.
-     */
-    mutable QAtomicInt m_fill;
+    mutable QAtomicInt m_size;
 
-    /*
-     * @see isMetronome()
-     */
-    bool m_isMetronome;
-
-    /// Lock for iterator::peek() and resizeBuffer()
+    /// Lock for reserve() and callers to iterator::peek()
     /**
-     * Used by resizeBuffer() to lock the swapping of the old for the new
+     * Used by reserve() to lock the swapping of the old for the new
      * and the changing of the buffer capacity.
      *
-     * Used by MappedEventBuffer::iterator::peek() to ensure that the
-     * buffer's capacity doesn't change while it is getting the current item.
-     *
-     * ??? Honestly, this lock doesn't seem very useful.  The worst case
-     *     scenario is that peek() is trying to get a pointer to the element,
-     *     and resizeBuffer() swaps the entire buffer out from under it.
-     *     This lock does nothing to prevent that.  Even if the locking
-     *     were made more coarse-grained to prevent this (maybe at the very
-     *     beginning of each routine), the caller of peek() would be
-     *     holding a pointer that could be pointing to deleted memory at
-     *     any moment.
+     * Used by callers to MappedEventBuffer::iterator::peek() to
+     * ensure that buffer isn't reallocated while the caller is
+     * holding the current item.  Doing so avoids the scenario where
+     * peek() gets a pointer to the element and then reserve() swaps
+     * the entire buffer out from under it.
      */
     QReadWriteLock m_lock;
 
@@ -479,7 +448,8 @@ protected:
 
     /// Earliest sounding time.
     /**
-     * It is the responsibility of "dump()" to keep this field up to date.
+     * It is the responsibility of "fillBuffer()" to keep this field
+     * up to date.
      *
      * @see m_end
      */
@@ -487,7 +457,8 @@ protected:
 
     /// Latest sounding time.
     /**
-     * It is the responsibility of "dump()" to keep this field up to date.
+     * It is the responsibility of "fillBuffer()" to keep this field
+     * up to date.
      *
      * @see m_start
      */
@@ -505,7 +476,7 @@ protected:
 
     /// Set the sounding times (m_start, m_end).
     /**
-     * InternalSegmentMapper::dump() keeps this updated.
+     * InternalSegmentMapper::fillBuffer() keeps this updated.
      *
      * @see getStartEnd()
      */

@@ -789,4 +789,3 @@ LilyPondSegmentsContext::dump()
 
 }
 
-

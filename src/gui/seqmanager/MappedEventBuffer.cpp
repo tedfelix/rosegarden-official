@@ -28,10 +28,9 @@ namespace Rosegarden
 {
 
 MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
-    m_size(0),
-    m_fill(0),
     m_buffer(0),
-    m_isMetronome(false),
+    m_capacity(0),
+    m_size(0),
     m_doc(doc),
     m_start(RealTime::zeroTime),
     m_end(RealTime::beforeMaxTime),
@@ -51,13 +50,13 @@ MappedEventBuffer::init()
     int size = calculateSize();
 
     if (size > 0) {
-        resizeBuffer(size);
+        reserve(size);
 
         SEQMAN_DEBUG << "SegmentMapper::init : size = " << size
                      << endl;
 
         initSpecial();
-        dump();
+        fillBuffer();
     } else {
         SEQMAN_DEBUG << "SegmentMapper::init : mmap size = 0 - skipping mmapping for now\n";
     }
@@ -69,12 +68,12 @@ MappedEventBuffer::refresh()
     bool resized = false;
 
     int newFill = calculateSize();
-    int oldSize = getBufferSize();
+    int oldSize = capacity();
 
 #ifdef DEBUG_MAPPED_EVENT_BUFFER    
     SEQMAN_DEBUG << "SegmentMapper::refresh() - " << this
                  << " - old size = " << oldSize
-                 << " - old fill = " << getBufferFill()
+                 << " - old fill = " << size()
                  << " - new fill = " << newFill
                  << endl;
 #endif
@@ -82,37 +81,37 @@ MappedEventBuffer::refresh()
     // If we need to expand the buffer to hold the events
     if (newFill > oldSize) {
         resized = true;
-        resizeBuffer(newFill);
+        reserve(newFill);
     }
 
     // Ask the deriver to fill the buffer from the document
-    dump();
+    fillBuffer();
 
     return resized;
 }
 
 int
-MappedEventBuffer::getBufferSize() const
+MappedEventBuffer::capacity() const
+{
+    return m_capacity.fetchAndAddRelaxed(0);
+}
+
+int
+MappedEventBuffer::size() const
 {
     return m_size.fetchAndAddRelaxed(0);
 }
 
-int
-MappedEventBuffer::getBufferFill() const
-{
-    return m_fill.fetchAndAddRelaxed(0);
-}
-
 void
-MappedEventBuffer::resizeBuffer(int newSize)
+MappedEventBuffer::reserve(int newSize)
 {
-    if (newSize <= getBufferSize())  return;
+    if (newSize <= capacity())  return;
 
     MappedEvent *oldBuffer = m_buffer;
     MappedEvent *newBuffer = new MappedEvent[newSize];
 
     if (oldBuffer) {
-        for (int i = 0; i < m_fill; ++i) {
+        for (int i = 0; i < m_size; ++i) {
             newBuffer[i] = m_buffer[i];
         }
     }
@@ -120,39 +119,39 @@ MappedEventBuffer::resizeBuffer(int newSize)
     {
         QWriteLocker locker(&m_lock);
         m_buffer = newBuffer;
-        m_size.fetchAndStoreRelease(newSize);
+        m_capacity.fetchAndStoreRelease(newSize);
     }
 
 #ifdef DEBUG_MAPPED_EVENT_BUFFER
-    SEQUENCER_DEBUG << "MappedEventBuffer::resizeBuffer: Resized to " << newSize << " events" << endl;
+    SEQUENCER_DEBUG << "MappedEventBuffer::reserve: Resized to " << newSize << " events" << endl;
 #endif
 
     delete[] oldBuffer;
 }
 
 void
-MappedEventBuffer::setBufferFill(int newFill)
+MappedEventBuffer::resize(int newFill)
 {
-    m_fill.fetchAndStoreRelaxed(newFill);
+    m_size.fetchAndStoreRelaxed(newFill);
 }
 
 void
 MappedEventBuffer::
 mapAnEvent(MappedEvent *e)
 {
-    if (getBufferFill() >= getBufferSize()) {
+    if (size() >= capacity()) {
         // We need a bigger buffer.  We scale by 1.5, a compromise
         // between allocating too often and wasting too much space.
         // We also add 1 in case the space didn't increase due to
         // rounding.
-        int newSize = 1 + float(getBufferSize()) * 1.5;
-        resizeBuffer(newSize);
+        int newSize = 1 + float(capacity()) * 1.5;
+        reserve(newSize);
     }
 
-    getBuffer()[getBufferFill()] = e;
+    getBuffer()[size()] = e;
     // Some mappers need this to be done now because they may resize
     // the buffer later, which will only copy the filled part.
-    setBufferFill(getBufferFill() + 1);
+    resize(size() + 1);
 }
 
 void
@@ -250,7 +249,7 @@ MappedEventBuffer::iterator::operator=(const iterator& rhs)
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator++()
 {
-    int fill = m_s->getBufferFill();
+    int fill = m_s->size();
     if (m_index < fill)  ++m_index;
     return *this;
 }
@@ -261,7 +260,7 @@ MappedEventBuffer::iterator::operator++(int)
 {
     // This line is the main reason we need a copy ctor.
     iterator r = *this;
-    int fill = m_s->getBufferFill();
+    int fill = m_s->size();
     if (m_index < fill)  ++m_index;
     return r;
 }
@@ -269,7 +268,7 @@ MappedEventBuffer::iterator::operator++(int)
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator+=(int offset)
 {
-    int fill = m_s->getBufferFill();
+    int fill = m_s->size();
     if (m_index + offset <= fill) {
         m_index += offset;
     } else {
@@ -313,27 +312,21 @@ MappedEventBuffer::iterator::operator*()
 MappedEvent *
 MappedEventBuffer::iterator::peek() const
 {
-    // This lock locks the container to make sure it isn't modified
-    // while we are getting the index of the last item, then getting
-    // that item.  It does not lock the item (MappedEvent) itself.
-    // ??? This could pose a problem as the caller is holding on to a
-    //     pointer to memory that might get deleted if the container
-    //     is resized.  See resizeBuffer() which deletes the oldBuffer at
-    //     the end.
-    QReadLocker locker(&m_s->m_lock);
+    // The lock formerly here has moved out to callers.
 
-    // If we're at the end
-    if (m_index >= m_s->getBufferFill())
+    // If we're at the end, return NULL
+    if (m_index >= m_s->size())
         return 0;
 
+    // Otherwise return a pointer into the buffer.
     return &m_s->m_buffer[m_index];
 }
 
 bool
 MappedEventBuffer::iterator::atEnd() const
 {
-    int fill = m_s->getBufferFill();
-    return (m_index >= fill);
+    int size = m_s->size();
+    return (m_index >= size);
 }
 
 void

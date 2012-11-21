@@ -26,8 +26,8 @@ namespace Rosegarden
 {
 
 // @class SortingInserter is a pseudo-inserter that accepts events,
-// sorts them (as fillCompositionWithEventsUntil does not wholly do)
-// and re-inserts them somewhere, sorted.
+// sorts them (as fetchEvents does not wholly do) and re-inserts them
+// somewhere, sorted.
 // @author Tom Breton (Tehom)
 class SortingInserter : public MappedInserterBase
 {

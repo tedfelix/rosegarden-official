@@ -446,7 +446,20 @@ public:
     //
     DataBlockRepository::blockid getDataBlockId() const { return m_dataBlockId; }
     void setDataBlockId(DataBlockRepository::blockid dataBlockId) { m_dataBlockId = dataBlockId; }
-    
+
+    // Whether the event is all done sounding at time t.
+    /**
+     * Zero-duration events at exactly time t are not all done, but
+     * non-zeroes that end at exactly time t are.
+     */
+    bool EndedBefore(RealTime t)
+    {
+        return
+            ((getEventTime() + getDuration() <= t) &&
+             (getDuration() != RealTime::zeroTime ||
+              getEventTime() != t));
+    }
+
     // How MappedEvents are ordered in the MappedEventList
     //
     struct MappedEventCmp

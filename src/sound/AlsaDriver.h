@@ -609,4 +609,3 @@ private:
 #endif // HAVE_ALSA
 
 #endif // RG_ALSADRIVER_H
-

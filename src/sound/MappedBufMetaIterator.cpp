@@ -21,7 +21,6 @@
 #include "misc/Debug.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedInserterBase.h"
-#include "sound/Midi.h"
 #include "sound/ControlBlock.h"
 
 #include <queue>
@@ -54,7 +53,6 @@ MappedBufMetaIterator::addSegment(MappedEventBuffer *ms)
         return;
 
     m_segments.insert(ms);
-
     MappedEventBuffer::iterator *iter = new MappedEventBuffer::iterator(ms);
     moveIteratorToTime(*iter, m_currentTime);
     m_iterators.push_back(iter);
@@ -125,12 +123,18 @@ bool
 MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
                                                const RealTime &startTime)
 {
+    // Rather than briefly unlock and immediately relock each
+    // iteration, we leave the lock on until we're done.
+    QReadLocker locker(iter.getLock());
+
     while (1) {
 
         if (iter.atEnd()) break;
+
         // We use peek because it's safe even if we have not fully
         // filled the buffer yet.  That means we can get NULL e.
         const MappedEvent *e = iter.peek();
+        
         // If the event sounds past startTime, stop.  If e is NULL, we
         // also stop because we know nothing about the event yet.
         if (!e ||
@@ -146,47 +150,6 @@ MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
     return res;
 }
 
-bool
-MappedBufMetaIterator::acceptEvent(MappedEvent *evt,
-                                        bool evtIsFromMetronome)
-{
-    if (evt->getType() == 0) return false; // discard those right away
-
-    if (evtIsFromMetronome) {
-        if (evt->getType() == MappedEvent::MidiSystemMessage &&
-            evt->getData1() == MIDI_TIMING_CLOCK) {
-            /*
-            std::cout << "MappedBufMetaIterator::acceptEvent - " 
-                      << "found clock" << std::endl;
-                      */ 
-            return true;
-        }
-
-        bool play = !ControlBlock::getInstance()->isMetronomeMuted();
-#ifdef DEBUG_META_ITERATOR
-        SEQUENCER_DEBUG << "MBMI::acceptEvent: Metronome event, play = " << play << endl;
-#endif
-        return play;
-    }
-
-    // else, evt is not from metronome : first check if we're soloing
-    // (i.e. playing only the selected track)
-    if (ControlBlock::getInstance()->isSolo()) {
-        return (evt->getTrackId() ==
-                ControlBlock::getInstance()->getSelectedTrack());
-    }
-
-    // finally we're not soloing, so check if track is muted
-    TrackId track = evt->getTrackId();
-    bool muted = ControlBlock::getInstance()->isTrackMuted(track);
-
-#ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "MBMI::acceptEvent: track " << track << " muted status: " << muted << endl;
-#endif
-
-    return !muted;
-}
-
 // Support for the start-time priority queue
 struct reverseCmpRealTime
 { bool operator()(RealTime &a, RealTime &b) { return a > b; } };
@@ -196,23 +159,23 @@ typedef std::priority_queue<RealTime,
     LowfirstRealTimeQueue;
 
 
-bool
+void
 MappedBufMetaIterator::
-fillCompositionWithEventsUntil(bool /*firstFetch*/,
-                               MappedInserterBase &inserter,
+fetchEvents(MappedInserterBase &inserter,
                                const RealTime& startTime,
                                const RealTime& endTime)
 {
-    Profiler profiler("MappedBufMetaIterator::fillCompositionWithEventsUntil", false);
+    Profiler profiler("MappedBufMetaIterator::fetchEvents", false);
 #ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "MBMI::fillCompositionWithEventsUntil "
+    SEQUENCER_DEBUG << "MBMI::fetchEvents "
                     << startTime << " -> "
                     << endTime << endl;
 #endif
     // To keep mappers on the same channel from interfering, for
     // instance sending their initializations while another is playing
     // on the channel, we slice the timeslice into slices during which
-    // no new mappers start.  We could re-slice it smarter but this
+    // no new mappers start and pass each slice to
+    // fetchEventsNoncompeting.  We could re-slice it smarter but this
     // suffices.
 
     // Make a queue of all segment starts that occur during the slice.
@@ -235,36 +198,33 @@ fillCompositionWithEventsUntil(bool /*firstFetch*/,
         RealTime innerEnd = segStarts.top();
         segStarts.pop();
         if (innerEnd == innerStart) { continue; }
-        (void)fillNoncompeting(inserter, innerStart, innerEnd);
+        fetchEventsNoncompeting(inserter, innerStart, innerEnd);
         innerStart = innerEnd;
     }
 
     // Do one more slice to take us to the end time.  This is always
     // correct to do, since segStarts can't contain a start equal to
     // endTime.
-    bool eventsLeft = fillNoncompeting(inserter, innerStart, endTime);
+    fetchEventsNoncompeting(inserter, innerStart, endTime);
 
-    return eventsLeft;
+    return;
 }
 
-bool
+void
 MappedBufMetaIterator::
-fillNoncompeting(MappedInserterBase &inserter,
+fetchEventsNoncompeting(MappedInserterBase &inserter,
                  const RealTime& startTime,
                  const RealTime& endTime)
 {
 #ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "MBMI::fillNoncompeting "
+    SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting "
                     << startTime << " -> "
                     << endTime << endl;
 #endif
-    Profiler profiler("MappedBufMetaIterator::fillNoncompeting", false);
+    Profiler profiler("MappedBufMetaIterator::fetchEventsNoncompeting", false);
 
-    RealTime loopTime = startTime;
     m_currentTime = endTime;
     
-    bool foundOneEvent = false, eventsRemaining = false;
-
     // Activate segments that have anything playing during this
     // slice.  We include segments that end exactly when we start, but
     // not segments that start exactly when we end.
@@ -275,57 +235,75 @@ fillNoncompeting(MappedInserterBase &inserter,
         (*i)->getSegment()->getStartEnd(start, end);
         bool active = ((start < endTime) && (end >= startTime));
         (*i)->setActive(active, startTime);
-        // If some are yet to even start, we have events remaining.
-        // Record that now because the loop won't discover it.
-        if (start >= endTime) { eventsRemaining = true; }
     }
 
+    // State variable to allow the outer loop to run until the inner
+    // loop has nothing to do.
+    bool innerLoopHasMore = false;
     do {
-        foundOneEvent = false;
+        innerLoopHasMore = false;
 
         for (size_t i = 0; i < m_iterators.size(); ++i) {
             MappedEventBuffer::iterator *iter = m_iterators[i];
 
-            //std::cerr << "Iterating on Segment #" << i << std::endl;
-
 #ifdef DEBUG_META_ITERATOR
-            SEQUENCER_DEBUG << "MBMI::fillCompositionWithEventsUntil : "
+            SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : "
                             << "checking segment #" << i << endl;
 #endif
 
             if (!iter->getActive()) {
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MBMI::fillCompositionWithEventsUntil : "
-                                << "no more events to get for this slice "
+                SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : "
+                                << "no more events to get for this slice"
                                 << "in segment #" << i << endl;
 #endif
 
-                continue; // skip this segment
+                continue; // skip this iterator
             }
-
-            bool evtIsFromMetronome = iter->getSegment()->isMetronome();
 
             if (iter->atEnd()) {
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MBMI::fillCompositionWithEventsUntil : "
+                SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : "
                                 << endTime
                                 << " reached end of segment #"
                                 << i << endl;
 #endif
+                // Make this iterator abort early in future
+                // iterations, since we know it's all done.
+                iter->setInactive();
                 continue;
-            } else if (!evtIsFromMetronome) {
-                eventsRemaining = true;
             }
+
+            // This locks the iterator's buffer against writes, lest
+            // writing cause reallocating the buffer while we are
+            // holding a pointer into it.  No function we call will
+            // hold the `cur' pointer past its own scope, implying
+            // that nothing holds it past an iteration of this loop,
+            // which is this lock's scope.
+            QReadLocker locker(iter->getLock());
 
             MappedEvent *cur = iter->peek();
 
-            if (cur &&
-                cur->isValid() &&
-                cur->getEventTime() < endTime) {
+            // We couldn't fetch an event or it failed a sanity check.
+            // So proceed to the next iterator but keep looking at
+            // this one - incrementing it does nothing useful, and it
+            // might get more events.  But don't set innerLoopHasMore,
+            // lest we loop forever waiting for a valid event.
+            if (!cur || !cur->isValid()) { continue; }
 
+            if (cur->getEventTime() < endTime) {
+                // Increment the iterator, since we're taking this
+                // event.  NB, in the other branch it is not yet used
+                // so we leave `iter' where it is.
+                ++(*iter);
+                
+                // If we got this far, we'll want to try the next
+                // iteration, so note it.
+                innerLoopHasMore = true;
+                
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MBMI::fillCompositionWithEventsUntil : " << endTime
-                                << " inserting evt from segment #"
+                SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : " << endTime
+                                << " seeing evt from segment #"
                                 << i
                                 << " : trackId: " << cur->getTrackId()
                                 << " channel: " << (unsigned int) cur->getRecordedChannel()
@@ -335,79 +313,34 @@ fillNoncompeting(MappedInserterBase &inserter,
                                 << " - duration: " << cur->getDuration()
                                 << " - data1: " << (unsigned int)cur->getData1()
                                 << " - data2: " << (unsigned int)cur->getData2()
-                                << " - metronome event: " << evtIsFromMetronome
                                 << endl;
 #endif
 
-                if (cur->getType() == MappedEvent::TimeSignature) {
-
-                    // Process time sig and tempo changes along with
-                    // everything else, as the sound driver probably
-                    // wants to know when they happen
-
-                    inserter.insertCopy(*cur);
-
-                } else if (cur->getType() == MappedEvent::Tempo) {
-
-                    inserter.insertCopy(*cur);
-
-                } else if (cur->getType() == MappedEvent::Marker) {
-
-                    inserter.insertCopy(*cur);
-
-                } else if (cur->getType() == MappedEvent::MidiSystemMessage &&
-
-                           // #1048388:
-                           // Ensure sysex heeds mute status, but ensure
-                           // clocks etc still get through
-                           cur->getData1() != MIDI_SYSTEM_EXCLUSIVE) {
-
-                    inserter.insertCopy(*cur);
-
-                } else if (acceptEvent(cur, evtIsFromMetronome) &&
-
-                           ((cur->getEventTime() + cur->getDuration() > startTime) ||
-                            (cur->getDuration() == RealTime::zeroTime &&
-                             cur->getEventTime() == startTime))) {
-
-#ifdef DEBUG_META_ITERATOR
-                    std::cout
-                        << "Inserting event (type = "
-                        << cur->getType() << ")" << std::endl;
-#endif
-
+                if(iter->shouldPlay(cur, startTime)) {
                     iter->doInsert(inserter, *cur);
-                } else {
-
 #ifdef DEBUG_META_ITERATOR
-                    std::cout << "MBMI: skipping event"
-                    << " - event time = " << cur->getEventTime()
-                    << ", duration = " << cur->getDuration()
-                    << ", startTime = " << startTime << std::endl;
+                    SEQUENCER_DEBUG << "Inserting event" << endl;
+#endif
+
+                } else {
+#ifdef DEBUG_META_ITERATOR
+                    SEQUENCER_DEBUG << "Skipping event" << endl;
 #endif
                 }
-
-                if (!evtIsFromMetronome) {
-                    foundOneEvent = true;
-                }
-                ++(*iter);
-
-            } else if (cur->isValid()) {
-                iter->setInactive(); // no more events to get from this segment
+            } else {
+                // This iterator has more events but they only sound
+                // after the end of this slice, so it's done.
+                iter->setInactive();
 
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"
+                SEQUENCER_DEBUG << "fetchEventsNoncompeting : Event is past end for segment #"
                                 << i << endl;
 #endif
             }
         }
-    } while (foundOneEvent);
+    } while (innerLoopHasMore);
 
-#ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
-#endif
-
-    return eventsRemaining || foundOneEvent;
+    return;
 }
 
 // @param immediate means to reset it right away, presumably because
@@ -563,4 +496,3 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
 }
 
 }
-

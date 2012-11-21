@@ -403,4 +403,3 @@ SequencerDataBlock::clearTemporaries()
 }
 
 }
-
