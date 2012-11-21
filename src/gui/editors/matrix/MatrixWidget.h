@@ -98,6 +98,9 @@ public:
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection *s, bool preview);
 
+    ControlRulerWidget *getControlsWidget(void)
+    { return m_controlsWidget; }
+    
     // This delegates to MatrixScene
     const SnapGrid *getSnapGrid() const;
 

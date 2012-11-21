@@ -44,7 +44,9 @@ class NotationElement;
 class NotationStaff;
 class Segment;
 class CommandRegistry;
-	
+class ControlRulerWidget;
+class ControlParameter;
+ 
 class NotationView : public EditViewBase,
                         public SelectionManager
 {
@@ -137,6 +139,10 @@ protected slots:
     void slotVelocityUp();
     void slotVelocityDown();
     void slotSetVelocities();
+    void slotEditCutControllers();
+    void slotEditCopyControllers();
+    void slotSetControllers();
+    void slotPlaceControllers();
 
     void slotSetSelectTool();
     void slotSetEraseTool();
@@ -351,6 +357,7 @@ protected slots:
 
     // Open insert pitch bends sequence dialog
     void slotPitchBendSequence();
+    void slotControllerSequence();
 
     // Update the "Show staff headers" check box in the menu
     void slotCheckShowHeadersMenu(bool checked);
@@ -435,6 +442,8 @@ private:
     void setCurrentNotePixmapFrom(QAction *);
 
     bool isShowable(Event *e);
+    void conformRulerSelectionState(void);
+    void insertControllerSequence(const ControlParameter &cp);
 
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:

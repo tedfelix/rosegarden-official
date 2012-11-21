@@ -17,7 +17,6 @@
 #define SELECTION_H
 
 #include <set>
-#include "base/PropertyName.h"
 #include "Event.h"
 #include "base/Segment.h"
 #include "base/NotationTypes.h"
@@ -133,18 +132,6 @@ public:
      * Return the total notation duration spanned by the selection.
      */
     timeT getTotalNotationDuration() const;
-
-    /**
-     * Return the average value of an integer-valued property for
-     * events in the selection.
-     */
-    int   getAverageProperty(PropertyName property) const;
-
-    /**
-     * Return the maximum and minimum values of an integer-valued
-     * property for events in the selection.
-     */
-    std::pair<int,int> getMinMaxProperty(PropertyName property) const;
 
     typedef std::vector<std::pair<Segment::iterator,
                                   Segment::iterator> > RangeList;

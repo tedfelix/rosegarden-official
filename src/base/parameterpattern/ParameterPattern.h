@@ -19,7 +19,7 @@
 #define _RG_PARAMETERPATTERN_H_
 
 #include "base/PropertyName.h"
-#include "base/Selection.h"
+#include "base/parameterpattern/SelectionSituation.h"
 #include <QMainWindow>
 #include <QString>
 #include <map>
@@ -52,6 +52,7 @@ struct ParameterPattern
     // friend derived classes, it'll have to do.
     friend class EventParameterDialog;
     friend class SelectionPropertyCommand;
+    friend class ControlRulerWidget;
 
     typedef EventSelection::eventcontainer::iterator iterator;
     typedef std::pair<timeT,timeT> StartAndDuration;
@@ -66,11 +67,12 @@ protected:
     // @author Tom Breton (Tehom)
     struct SliderSpec
     {
-    SliderSpec(QString label, int defaultValue)
+    SliderSpec(QString label, int defaultValue,
+               const SelectionSituation *situation)
     : m_label(label),
             m_defaultValue(defaultValue),
             m_minValue(0),
-            m_maxValue(127)
+            m_maxValue(situation->maxValue())
         {}
         QString m_label;
         int m_defaultValue;
@@ -79,44 +81,6 @@ protected:
     };
 
     typedef std::vector<SliderSpec>  SliderSpecVector;
-
-    /*** Nested class Situation  ***/
-
-protected:
-    // @class Situation Non-gui-related situation data for
-    // EventParameterDialog and SelectionPropertyCommand.  It's all
-    // public because there's no way to friend all derived classes of
-    // ParameterPattern.
-    // @author Tom Breton (Tehom)
-    class Situation
-    {
-
-    public:
-    Situation(std::string eventType,
-              const PropertyName &property,
-              EventSelection *selection,
-              int currentFlatValue = 0)
-        : m_eventType(eventType),
-            m_property(property),
-            m_selection(selection),
-            m_currentFlatValue(currentFlatValue)
-            {};
-
-        QString getPropertyNameQString(void) const;
-
-    public:
-        // We are treating this event type...
-        const std::string          m_eventType;
-        // ...and this property
-        const PropertyName         m_property;
-        // ...in this selection.  m_selection can't be const pointer
-        // because SelectionPropertyCommand passes it as non-const to
-        // BasicSelectionCommand.
-        EventSelection            *m_selection;
-        // A reference value from outside.  Some patterns use it as
-        // default. 
-        const int                  m_currentFlatValue;
-    };
 
     /*** Nested class Result  ***/
     
@@ -128,7 +92,7 @@ protected:
     // @author Tom Breton (Tehom)
     struct Result
     {
-    Result(const Situation        *situation,
+    Result(const SelectionSituation *situation,
            const ParameterPattern *pattern,
            const BareParams        parameters)
     : m_situation(situation),
@@ -136,7 +100,7 @@ protected:
             m_parameters(parameters)
         {}
 
-    Result(const Situation        *situation,
+    Result(const SelectionSituation *situation,
            const ParameterPattern *pattern,
            int                     soleParameter)
     : m_situation(situation),
@@ -147,9 +111,9 @@ protected:
         EventSelection *getSelection(void);
         void            modifySegment(void);
         
-        const Situation        *m_situation;
-        const ParameterPattern *m_pattern;
-        const BareParams        m_parameters;
+        const SelectionSituation *m_situation;
+        const ParameterPattern   *m_pattern;
+        const BareParams          m_parameters;
     };
 
     /*** End-to-end methods that do the complete operation  ***/
@@ -162,7 +126,6 @@ public:
     // Set some property flat, no dialog. 
     static void setPropertyFlat(EventSelection *selection,
                                 const std::string eventType,
-                                PropertyName property,
                                 int targetValue);
     
     // Set velocities, with a dialog
@@ -174,9 +137,12 @@ public:
     static void setProperties(QMainWindow *parent,
                               EventSelection *selection,
                               const std::string eventType,
-                              PropertyName property,
                               const ParameterPatternVec *patterns,
                               int normValue = -1);
+
+    static void setProperties(QMainWindow *parent,
+                              SelectionSituation   *situation,
+                              const ParameterPatternVec *patterns);
 
     /*** The abstract virtual methods ***/
 
@@ -187,7 +153,7 @@ protected:
     // makes whatever number the parameter pattern think is
     // appropriate, it's up to EventParameterDialog to handle it.
     virtual SliderSpecVector
-    getSliderSpec(const Situation *situation) const =0;
+    getSliderSpec(const SelectionSituation *situation) const =0;
 
     // Set the properties of events from begin to end
     // @param result is the result of an EventParameterDialog.
@@ -206,6 +172,9 @@ public:
     static ParameterPatternVec VelocityPatterns;
     // The flat pattern, for setPropertyFlat
     static ParameterPattern *FlatPattern;
+    // All the ParameterPatterns that are useful with controllers
+    static ParameterPatternVec ControllerPatterns;
+
 };
 
 

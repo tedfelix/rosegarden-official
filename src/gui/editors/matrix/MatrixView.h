@@ -45,6 +45,8 @@ class CommandRegistry;
 class EventSelection;
 class SnapGrid;
 class Device;
+class ControlRulerWidget;
+class ControlParameter;
 
 /**
  * MatrixView is the top-level window containing the matrix editor.
@@ -112,6 +114,11 @@ protected slots:
     void slotVelocityDown();
     void slotSetVelocities();
     void slotSetVelocitiesToCurrent();
+    void slotEditCutControllers();
+    void slotEditCopyControllers();
+    void slotSetControllers();
+    void slotPlaceControllers();
+    
     void slotTriggerSegment();
     void slotRemoveTriggers();
     void slotSelectAll();
@@ -224,7 +231,8 @@ protected slots:
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
     void slotPitchBendSequence();
-
+    void slotControllerSequence();
+    
     void slotToggleStepByStep();
     void slotStepByStepTargetRequested(QObject *);
 
@@ -244,6 +252,8 @@ protected slots:
 protected:
     const SnapGrid *getSnapGrid() const;
     virtual void readOptions();
+    void conformRulerSelectionState(void);
+    void insertControllerSequence(const ControlParameter &cp);
 
 private:
     RosegardenDocument *m_document;

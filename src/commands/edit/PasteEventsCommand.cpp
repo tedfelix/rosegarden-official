@@ -282,8 +282,7 @@ PasteEventsCommand::modifySegment()
             m_pastedEvents.addEvent(e);
         }
 
-        destination->normalizeRests
-        (source->getStartTime(), source->getEndTime());
+        destination->normalizeRests(pasteTime, pasteTime + duration);
 
         return ;
     }
@@ -301,8 +300,7 @@ PasteEventsCommand::modifySegment()
         m_pastedEvents.addEvent(e);
     }
 
-    destination->normalizeRests
-    (source->getStartTime(), source->getEndTime());
+    destination->normalizeRests(pasteTime, pasteTime + duration);
 }
 
 EventSelection

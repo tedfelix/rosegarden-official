@@ -75,6 +75,7 @@
 #include "commands/edit/CollapseNotesCommand.h"
 #include "commands/edit/AddDotCommand.h"
 #include "commands/edit/SetNoteTypeCommand.h"
+#include "commands/edit/PlaceControllersCommand.h"
 
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
@@ -126,7 +127,7 @@
 #include "gui/general/LilyPondProcessor.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "gui/general/ClefIndex.h"
-
+#include "gui/rulers/ControlRulerWidget.h"
 #include "gui/widgets/TmpStatusMsg.h"
 
 #include "gui/application/RosegardenMainWindow.h"
@@ -426,6 +427,7 @@ NotationView::setupActions()
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
     createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
+    createAction("controller_sequence", SLOT(slotControllerSequence()));    
 
     
     //"view" MenuBar menu
@@ -608,6 +610,12 @@ NotationView::setupActions()
 
     //"visibility" subMenu
     //Where are "make_invisible" & "make_visible" created?
+
+    //"controllers" Menubar menu
+    createAction("copy_controllers",  SLOT(slotEditCopyControllers()));
+    createAction("cut_controllers",   SLOT(slotEditCutControllers()));
+    createAction("set_controllers",   SLOT(slotSetControllers()));
+    createAction("place_controllers", SLOT(slotPlaceControllers()));
 
     //Actions first appear in "Tools" Menubar menu
     createAction("select", SLOT(slotSetSelectTool()));
@@ -1062,6 +1070,28 @@ NotationView::slotUpdateMenuStates()
     Segment *segment = getCurrentSegment();
     if (segment && segment->isLinked()) {
         enterActionState("have_linked_segment");
+    }
+
+    conformRulerSelectionState();
+}
+
+void
+NotationView::
+conformRulerSelectionState(void)
+{
+    ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
+    if (cr->isAnyRulerVisible())
+        {
+            enterActionState("have_control_ruler");
+            if (cr->hasSelection())
+                { enterActionState("have_controller_selection"); }
+            else
+                { leaveActionState("have_controller_selection"); }
+        }
+    else {
+        leaveActionState("have_control_ruler");
+        // No ruler implies no controller selection
+        leaveActionState("have_controller_selection"); 
     }
 }
 
@@ -1760,6 +1790,58 @@ NotationView::slotSetVelocities()
 }
 
 void
+NotationView::slotEditCopyControllers()
+{
+    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
+    EventSelection *selection = cr->getSelection();
+    if (!selection) return;
+    CommandHistory::getInstance()->addCommand
+        (new CopyCommand(*selection, m_document->getClipboard()));
+}
+
+void
+NotationView::slotEditCutControllers()
+{
+    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
+    EventSelection *selection = cr->getSelection();
+    if (!selection) return;
+    CommandHistory::getInstance()->addCommand
+        (new CutCommand(*selection, m_document->getClipboard()));
+}
+
+void
+NotationView::slotSetControllers()
+{
+    ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
+    ParameterPattern::
+        setProperties(this, cr->getSituation(),
+                      &ParameterPattern::VelocityPatterns);
+}
+
+void
+NotationView::slotPlaceControllers()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) { return; }
+    
+    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
+    if (!cr) { return; }
+    
+    ControlParameter *cp = cr->getControlParameter();
+    if (!cp) { return; }
+
+    const Instrument *instrument =
+        getDocument()->getInstrument(getCurrentSegment());
+    if (!instrument) { return; }
+    
+    PlaceControllersCommand *command =
+        new PlaceControllersCommand(*selection,
+                                    instrument,
+                                    cp);
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
 NotationView::slotClearLoop()
 {
     getDocument()->slotSetLoop(0, 0);
@@ -2318,6 +2400,25 @@ NotationView::getPitchFromNoteInsertAction(QString name,
 void
 NotationView::slotPitchBendSequence()
 {
+    insertControllerSequence(ControlParameter::getPitchBend());
+}
+
+void
+NotationView::slotControllerSequence()
+{
+    ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
+    if (!cr) { return; }
+    
+    const ControlParameter *cp = cr->getControlParameter();
+    if (!cp) { return; }
+
+    insertControllerSequence(*cp);
+}
+
+void
+NotationView::
+insertControllerSequence(const ControlParameter &cp)
+{
     timeT startTime=0;
     timeT endTime=0;
 
@@ -2328,7 +2429,7 @@ NotationView::slotPitchBendSequence()
         startTime = getInsertionTime();
     }
 
-    PitchBendSequenceDialog dialog(this, getCurrentSegment(), startTime,
+    PitchBendSequenceDialog dialog(this, getCurrentSegment(), cp, startTime,
                                    endTime);
     dialog.exec();
 }
@@ -4037,18 +4138,21 @@ void
 NotationView::slotToggleVelocityRuler()
 {
     m_notationWidget->slotToggleVelocityRuler();
+    conformRulerSelectionState();
 }
 
 void
 NotationView::slotTogglePitchbendRuler()
 {
     m_notationWidget->slotTogglePitchbendRuler();
+    conformRulerSelectionState();
 }
 
 void
 NotationView::slotAddControlRuler(QAction *action)
 {
     m_notationWidget->slotAddControlRuler(action);
+    conformRulerSelectionState();
 }
 
 Device *

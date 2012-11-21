@@ -86,7 +86,7 @@ EventParameterDialog::ParamWidget::hide(void)
 EventParameterDialog::EventParameterDialog(
     QWidget *parent,
     const QString &name,
-    ParameterPattern::Situation *situation,
+    SelectionSituation *situation,
     const ParameterPatternVec *patterns):
         QDialog(parent),
         m_situation(situation),

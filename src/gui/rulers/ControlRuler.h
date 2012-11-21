@@ -111,6 +111,8 @@ public:
     void clearSelectedItems();
     void addToSelection(ControlItem*);
     void removeFromSelection(ControlItem*);
+    EventSelection *getEventSelection(void)
+    { return m_eventSelection; }
 
     virtual ControlItemMap::iterator findControlItem(float x);
     virtual void moveItem(ControlItem*);

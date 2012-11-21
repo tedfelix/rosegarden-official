@@ -27,21 +27,12 @@
 #include "document/CommandHistory.h"
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/widgets/TmpStatusMsg.h"
-#include "misc/Strings.h"
 #include <limits>
 
 namespace Rosegarden
 {
 
-    /*** Nested class Situation  ***/
 
-// Get the property name as a QString
-// @author Tom Breton (Tehom)
-QString
-ParameterPattern::Situation::getPropertyNameQString(void) const
-{
-    return strtoqstr(m_property);
-}
     /*** Nested class Result  ***/
 
 
@@ -49,7 +40,7 @@ ParameterPattern::Situation::getPropertyNameQString(void) const
 EventSelection *
 ParameterPattern::Result::getSelection(void)
 {
-    return m_situation->m_selection;
+    return m_situation->getEventSelection();
 }
 
 // Modify the segment we have.  This is the guts of
@@ -58,7 +49,7 @@ void
 ParameterPattern::Result::modifySegment(void)
 {
     typedef EventSelection::eventcontainer::iterator iterator;
-    const EventSelection *selection = m_situation->m_selection;
+    const EventSelection *selection = m_situation->getEventSelection();
 
     iterator begin =
         selection->getSegmentEvents().begin();
@@ -76,7 +67,12 @@ ParameterPattern::FlatPattern = &FlatParameterPattern::single;
 // Making the vector is tricky.  To get past std::vector's lack of
 // nice static initialization, we put everything into an array and
 // initialize the vector from that.
-       
+
+#define ENDOFARRAY(X) ((X) + sizeof(X)/sizeof(X[0]))
+#define DEFINE_PPVEC_FROM_ARRAY(NAME, SOURCE)           \
+    ParameterPattern::ParameterPatternVec               \
+    ParameterPattern::NAME(SOURCE, ENDOFARRAY(SOURCE))
+
 // Internal
 ParameterPattern * _VelocityPatterns[] = {
     &FlatParameterPattern::single,
@@ -86,16 +82,24 @@ ParameterPattern * _VelocityPatterns[] = {
     &RingingParameterPattern::single,
     &IncreaseParameterPattern::decrease,
     &IncreaseParameterPattern::increase,
-
 };
+
 // Internal
-ParameterPattern ** _EndVelocityPatterns = 
-    _VelocityPatterns + sizeof(_VelocityPatterns)/sizeof(_VelocityPatterns[0]);
+ParameterPattern ** _EndVelocityPatterns = ENDOFARRAY(_VelocityPatterns);
 
 // A vector of all the patterns that are useful for setting velocity.
 ParameterPattern::ParameterPatternVec
 ParameterPattern::VelocityPatterns(_VelocityPatterns, _EndVelocityPatterns);
- 
+
+ParameterPattern * _ControllerPatterns[] = {
+    &LinearParameterPattern::crescendo,
+    &LinearParameterPattern::diminuendo,
+    &IncreaseParameterPattern::decrease,
+    &IncreaseParameterPattern::increase,
+};
+
+DEFINE_PPVEC_FROM_ARRAY(ControllerPatterns, _ControllerPatterns);
+
 /* ***** Helper functions ***** */
    
 // Get the start and duration in timeT of the interval defined by
@@ -123,27 +127,14 @@ ParameterPattern::getTimes (iterator begin, iterator end)
 
 /* ***** End-to-end functions ***** */
 
-// Set some property, with a dialog
+// Set some property, with a dialog.  Safe to call with NULL
+// selection.
+// @param situation This call will take ownership of situation.
 void
-ParameterPattern::
-setProperties(QMainWindow *parent,
-              EventSelection *selection,
-              const std::string eventType,
-              PropertyName property,
-              const ParameterPatternVec *patterns,
-              int normValue)
+ParameterPattern::setProperties(QMainWindow *parent,
+                                SelectionSituation   *situation,
+                                const ParameterPatternVec *patterns)
 {
-    if (!selection) { return; }
-
-    if (normValue < 0) {
-        normValue = selection->getAverageProperty(property);
-    }
-
-    // situation will ultimately be owned by SelectionPropertyCommand via
-    // dialog result
-    Situation * situation =
-        new Situation(eventType, property, selection, normValue);
-
     EventParameterDialog
         dialog(parent,
                EventParameterDialog::tr("Set Event Velocities"),
@@ -157,6 +148,23 @@ setProperties(QMainWindow *parent,
             (new SelectionPropertyCommand(dialog.getResult()));
     } else { delete situation; }
 }
+    
+void
+ParameterPattern::
+setProperties(QMainWindow *parent,
+              EventSelection *selection,
+              const std::string eventType,
+              const ParameterPatternVec *patterns,
+              int normValue)
+{
+    if (!selection) { return; }
+
+    // situation will ultimately be owned by SelectionPropertyCommand via
+    // dialog result
+    setProperties(parent,
+                  new SelectionSituation(eventType, selection, normValue),
+                  patterns);
+}
 
 // Set velocities, with a dialog
 void
@@ -166,7 +174,6 @@ setVelocities(QMainWindow *parent,
               int normVelocity)
 {
     setProperties(parent, selection, Note::EventType,
-                  BaseProperties::VELOCITY,
                   &ParameterPattern::VelocityPatterns, normVelocity);
 }
 
@@ -175,13 +182,12 @@ void
 ParameterPattern::
 setPropertyFlat(EventSelection *selection,
                 const std::string eventType,
-                PropertyName property,
                 int targetValue)
 {
     if (!selection) { return; }
 
     Result
-        result(new Situation(eventType, property, selection),
+        result(new SelectionSituation(eventType, selection),
                ParameterPattern::FlatPattern,
                targetValue);
 
@@ -195,7 +201,6 @@ ParameterPattern::
 setVelocitiesFlat(EventSelection *selection, int targetVelocity)
 {
     setPropertyFlat(selection, Note::EventType,
-                    BaseProperties::VELOCITY,
                     targetVelocity);
 }
 

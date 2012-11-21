@@ -22,6 +22,7 @@
 #include "base/Event.h"
 #include "base/ViewElement.h"
 #include "base/MidiDevice.h"
+#include "base/parameterpattern/SelectionSituation.h"
 
 class QStackedWidget;
 class QTabBar;
@@ -38,7 +39,8 @@ class RulerScale;
 class PropertyName;
 class ViewSegment;
 class EventSelection;
-
+class ControllerEventsRuler;
+ 
 class ControlRulerWidget : public QWidget //, Observer
 {
 Q_OBJECT
@@ -63,6 +65,10 @@ public:
      * widget as appropriate for the sort of notation layout in effect.
      */
     bool isAnyRulerVisible();
+    EventSelection *getSelection(void);
+    bool hasSelection(void);
+    SelectionSituation *getSituation(void);
+    ControlParameter   *getControlParameter(void);
 
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);
@@ -85,6 +91,8 @@ signals:
     void childRulerSelectionChanged(EventSelection *);
     
 protected:
+    ControllerEventsRuler *getActiveRuler(void);
+    
     QStackedWidget *m_stackedWidget;
     ControlRulerTabBar *m_tabBar;
     

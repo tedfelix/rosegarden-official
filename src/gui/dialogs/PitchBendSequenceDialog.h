@@ -32,6 +32,7 @@ namespace Rosegarden
 {
 
 class Segment;
+class ControlParameter;
 
 class PitchBendSequenceDialog : public QDialog
 {
@@ -39,6 +40,7 @@ class PitchBendSequenceDialog : public QDialog
 
 public:
     PitchBendSequenceDialog(QWidget *parent, Segment *segment,
+			    const ControlParameter &control,
                             timeT startTime, timeT endTime);
 
 public slots:
@@ -47,8 +49,16 @@ public slots:
     void slotHelpRequested();
 
 protected:
+    int spinboxToControl(const QDoubleSpinBox *spinbox) const;
+    int spinboxToControlDelta(const QDoubleSpinBox *spinbox) const;
+    double maxPercent(void) const;
+    double minPercent(void) const;
+    double valueDeltaToPercent(int valueDelta) const;
+    int percentToValueDelta(double) const;
+    
     Segment *m_segment;
-
+    const ControlParameter &m_control;
+  
     QDoubleSpinBox *m_prebendValue;
     QDoubleSpinBox *m_prebendDuration;
     QDoubleSpinBox *m_sequenceRampDuration;
@@ -63,10 +73,11 @@ protected:
     timeT m_endTime;
 
     enum {
-        USER,
         LINEAR_RAMP,
         FAST_VIBRATO_ARM_RELEASE,
         VIBRATO,
+        USER,
+	LASTUSERENTRY = USER + 10,
     };
 };
 

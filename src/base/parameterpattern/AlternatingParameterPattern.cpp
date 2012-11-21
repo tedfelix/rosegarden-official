@@ -31,17 +31,17 @@ AlternatingParameterPattern::getText(QString propertyName) const
 }
 
 ParameterPattern::SliderSpecVector
-AlternatingParameterPattern::getSliderSpec(const Situation *situation) const
+AlternatingParameterPattern::getSliderSpec(const SelectionSituation *situation) const
 {
     SliderSpecVector result;
     std::pair<int,int> minMax =
-        situation->m_selection-> getMinMaxProperty(situation->m_property);
+        situation->getMinMax();
 
     // First is high value, second is low.
     result.push_back(SliderSpec(EventParameterDialog::tr("First Value"),  
-                                minMax.second));
+                                minMax.second, situation));
     result.push_back(SliderSpec(EventParameterDialog::tr("Second Value"), 
-                                minMax.first));
+                                minMax.first, situation));
     return result;
 }
     
@@ -51,16 +51,17 @@ AlternatingParameterPattern::
 setEventProperties(iterator begin, iterator end,
                    Result *result) const
 {
-    const PropertyName property = result->m_situation->m_property;
     const int          value1   = result->m_parameters[0];
     const int          value2   = result->m_parameters[1];
     int count = 0;
     for (iterator i = begin; i != end; ++i) {
-        if ((*i)->isa(result->m_situation->m_eventType)) {
+        // Only change count on suitable events, in case non-notes
+        // like key sigs are selected
+        if (result->m_situation->isSuitable(*i)) {
             if (count % 2 == 0)
-                { (*i)->set<Int>(property, value1); }
+                { result->m_situation->setValue(*i, value1);}
             else
-                { (*i)->set<Int>(property, value2); }
+                { result->m_situation->setValue(*i, value2);}
             ++count;
         }
     }

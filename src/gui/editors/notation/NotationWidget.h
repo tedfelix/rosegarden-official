@@ -71,6 +71,8 @@ public:
                      std::vector<Segment *> segments);
 
     NotationScene *getScene() { return m_scene; }
+    ControlRulerWidget *getControlsWidget(void)
+        { return m_controlsWidget; }
 
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection* s, bool preview);

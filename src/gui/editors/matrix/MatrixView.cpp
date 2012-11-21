@@ -52,6 +52,7 @@
 
 #include "commands/edit/InvertCommand.h"
 #include "commands/edit/MoveCommand.h"
+#include "commands/edit/PlaceControllersCommand.h"
 #include "commands/edit/RescaleCommand.h"
 #include "commands/edit/RetrogradeCommand.h"
 #include "commands/edit/RetrogradeInvertCommand.h"
@@ -68,6 +69,8 @@
 
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
+#include "gui/rulers/ControlRulerWidget.h"
 
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
@@ -397,7 +400,14 @@ MatrixView::setupActions()
     createAction("filter_selection", SLOT(slotFilterSelection()));
 
     createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
-    
+
+    //"controllers" Menubar menu
+    createAction("controller_sequence", SLOT(slotControllerSequence()));
+    createAction("copy_controllers",  SLOT(slotEditCopyControllers()));
+    createAction("cut_controllers",   SLOT(slotEditCutControllers()));
+    createAction("set_controllers",   SLOT(slotSetControllers()));
+    createAction("place_controllers", SLOT(slotPlaceControllers()));
+
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
     
@@ -720,7 +730,28 @@ MatrixView::slotUpdateMenuStates()
     } else {
         leaveActionState("have_selection");
     }
+    conformRulerSelectionState();
 }
+
+void
+MatrixView::
+conformRulerSelectionState(void)
+{
+    ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
+    if (cr->isAnyRulerVisible())
+        {
+            enterActionState("have_control_ruler");
+            if (cr->hasSelection())
+                { enterActionState("have_controller_selection"); }
+            else
+                { leaveActionState("have_controller_selection"); }
+        }
+    else {
+        leaveActionState("have_control_ruler");
+        // No ruler implies no controller selection
+        leaveActionState("have_controller_selection"); 
+    }
+ }
 
 void
 MatrixView::slotSetPaintTool()
@@ -1009,6 +1040,59 @@ MatrixView::slotSetVelocitiesToCurrent()
 }
 
 void
+MatrixView::slotEditCopyControllers()
+{
+    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
+    EventSelection *selection = cr->getSelection();
+    if (!selection) return;
+    CommandHistory::getInstance()->addCommand
+        (new CopyCommand(*selection, m_document->getClipboard()));
+}
+
+void
+MatrixView::slotEditCutControllers()
+{
+    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
+    EventSelection *selection = cr->getSelection();
+    if (!selection) return;
+    CommandHistory::getInstance()->addCommand
+        (new CutCommand(*selection, m_document->getClipboard()));
+}
+
+void
+MatrixView::slotSetControllers()
+{
+    ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
+    ParameterPattern::
+        setProperties(this, cr->getSituation(),
+                      &ParameterPattern::VelocityPatterns);
+}
+
+void
+MatrixView::slotPlaceControllers()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) { return; }
+    
+    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
+    if (!cr) { return; }
+    
+    ControlParameter *cp = cr->getControlParameter();
+    if (!cp) { return; }
+
+    const Instrument *instrument =
+        getDocument()->getInstrument(getCurrentSegment());
+    if (!instrument) { return; }
+    
+    PlaceControllersCommand *command =
+        new PlaceControllersCommand(*selection,
+                                    instrument,
+                                    cp);
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+
+void
 MatrixView::slotTriggerSegment()
 {
     if (!getSelection()) return;
@@ -1169,18 +1253,21 @@ void
 MatrixView::slotToggleVelocityRuler()
 {
     m_matrixWidget->slotToggleVelocityRuler();
+    conformRulerSelectionState();
 }
 
 void
 MatrixView::slotTogglePitchbendRuler()
 {
     m_matrixWidget->slotTogglePitchbendRuler();
+    conformRulerSelectionState();
 }
 
 void
 MatrixView::slotAddControlRuler(QAction *action)
 {
     m_matrixWidget->slotAddControlRuler(action);
+    conformRulerSelectionState();
 }
 
 void
@@ -1503,7 +1590,7 @@ MatrixView::slotStepBackward()
     timeT time = getInsertionTime();  // Un-checked current insertion time
     
     timeT segmentEndTime = segment->getEndMarkerTime();
-    if (time > segment->getEndMarkerTime()) {
+    if (time > segmentEndTime) {
         // Move to inside the current segment
         time = segment->getStartTime();
     }
@@ -1671,6 +1758,25 @@ MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 void
 MatrixView::slotPitchBendSequence()
 {
+    insertControllerSequence(ControlParameter::getPitchBend());
+}
+
+void
+MatrixView::slotControllerSequence()
+{
+    ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
+    if (!cr) { return; }
+    
+    const ControlParameter *cp = cr->getControlParameter();
+    if (!cp) { return; }
+
+    insertControllerSequence(*cp);
+}
+
+void
+MatrixView::
+insertControllerSequence(const ControlParameter &cp)
+{
     timeT startTime=0;
     timeT endTime=0;
 
@@ -1681,8 +1787,8 @@ MatrixView::slotPitchBendSequence()
         startTime = getInsertionTime();
     }
 
-    PitchBendSequenceDialog dialog(this, getCurrentSegment(), startTime,
-                                   endTime);
+    PitchBendSequenceDialog dialog(this, getCurrentSegment(), cp, startTime,
+                                    endTime);
     dialog.exec();
 }
 

@@ -18,7 +18,7 @@
 #include "SegmentNotationHelper.h"
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
-#include <limits>
+
 
 namespace Rosegarden {
 
@@ -383,49 +383,6 @@ EventSelection::getTotalNotationDuration() const
 	first = false;
     }
     return end - start;
-}
-
-
-// Return the average value of an integer-valued property for events
-// in the selection.
-int
-EventSelection::getAverageProperty(PropertyName property) const
-{
-    float total = 0;
-    int count = 0;
-    for (eventcontainer::iterator i = getSegmentEvents().begin();
-         i != getSegmentEvents().end();
-         ++i) {
-        if ((*i)->has(property)) {
-            total += (*i)->get<Int>(property);
-            ++count;
-        }
-    }
-
-    if (count > 0) { return (total / count) + 0.5; }
-    else { return 0; }
-}
-
-
-// Return the maximum and minimum values of an integer-valued property
-// for events in the selection.
-std::pair<int,int>
-EventSelection::getMinMaxProperty(PropertyName property) const
-{
-    // Start with values such that anything we find will supersede
-    // them.
-    int min = std::numeric_limits<int>::max(),
-        max = std::numeric_limits<int>::min();
-    for (eventcontainer::iterator i = getSegmentEvents().begin();
-         i != getSegmentEvents().end();
-         ++i) {
-        if ((*i)->has(property)) {
-            int value = (*i)->get<Int>(property);
-            if (max < value) { max = value; }
-            if (value < min) { min = value; }
-        }
-    }
-    return std::pair<int,int>(min,max);
 }
 
 EventSelection::RangeList

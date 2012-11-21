@@ -78,7 +78,7 @@ protected:
 public:
     EventParameterDialog(QWidget *parent,
                          const QString &name,
-			 ParameterPattern::Situation *situation,
+			 SelectionSituation *situation,
 			 const ParameterPatternVec *patterns);
 private:
     // Initialize just the pattern-choosing widgets.
@@ -107,7 +107,7 @@ protected:
     ParamWidgetVec       m_paramVec;
     // Helper containing non-gui data, which will outlive
     // EventParameterDialog.
-    const ParameterPattern::Situation  *m_situation;
+    const SelectionSituation  *m_situation;
     // The available patterns.
     const ParameterPatternVec *m_patterns;
     // Number of parameters currently in use.  Not always the same as

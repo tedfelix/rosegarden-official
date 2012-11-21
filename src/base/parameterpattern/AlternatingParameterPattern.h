@@ -34,7 +34,7 @@ class AlternatingParameterPattern : public ParameterPattern
     // Make as many sliders as we need.  EventParameterDialog will
     // truncate or pad as needed.
     virtual SliderSpecVector
-        getSliderSpec(const Situation *situation) const;
+        getSliderSpec(const SelectionSituation *situation) const;
 
     // Set the properties of events from begin to end.
     virtual void

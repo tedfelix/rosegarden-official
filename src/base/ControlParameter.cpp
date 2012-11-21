@@ -18,6 +18,7 @@
 
 #include "ControlParameter.h"
 #include "base/MidiTypes.h"
+#include "gui/rulers/ControllerEventAdapter.h"
 
 namespace Rosegarden
 {
@@ -126,5 +127,39 @@ ControlParameter::toXmlString()
 
     return control.str();
 }
+
+// Return a new event setting our controller to VALUE at TIME
+// @author Tom Breton (Tehom)
+Event *
+ControlParameter::
+newEvent(timeT time, int value) const
+{
+    Event *event = new Event (getType(), time);
+    ControllerEventAdapter(event).setValue(value);
+    
+    if (getType() == Controller::EventType) {
+        event->set<Int>(Controller::NUMBER, m_controllerValue);
+    }
+    return event;
+}
+
+    
+// This exists to support calling PitchBendSequenceDialog because some
+// calls to PitchBendSequenceDialog always pitchbend rather than
+// getting a ControlParameter from a ruler or device.  This can't be
+// just a static member of ControlParameter, in order to prevent the
+// "static initialization order fiasco".
+const ControlParameter&
+ControlParameter::
+getPitchBend(void)
+{
+    static const ControlParameter
+        pitchBend(
+                  "PitchBend", Rosegarden::PitchBend::EventType, "<none>", 
+                  0, 16383, 8192, MidiByte(1), 4, -1);
+    return pitchBend;
+}
+
+    
 
 }

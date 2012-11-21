@@ -61,7 +61,7 @@ public:
 
     bool jumpToTime(const RealTime&);
 
-        /// Fetch events from start to end into a mapped event list (via inserter).
+    /// Fetch events from start to end into a mapped event list (via inserter).
     /**
      * Fetch events that play during the interval from start to end.
      * They are passed to inserter, which normally inserts them into a

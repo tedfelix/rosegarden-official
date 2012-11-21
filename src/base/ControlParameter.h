@@ -18,12 +18,14 @@
 
 #include <string>
 
+#include "base/Event.h"
 #include "XmlExportable.h"
 #include "MidiProgram.h"
 
 namespace Rosegarden
 {
-
+class Event;
+    
 class ControlParameter : public XmlExportable
 {
 public:
@@ -67,6 +69,11 @@ public:
     int getMin() const { return m_min; }
     int getMax() const { return m_max; }
     int getDefault() const { return m_default; }
+    int clamp(int value) const {
+        if (value < m_min) { return m_min; }
+        if (value > m_max) { return m_max; }
+        return value;
+    }
 
     MidiByte getControllerValue() const { return m_controllerValue; }
 
@@ -90,14 +97,19 @@ public:
 
     virtual std::string toXmlString();
 
+    Event *newEvent(timeT time, int value) const;
+    static const ControlParameter& getPitchBend(void);
+
 protected:
 
-    // ControlParameter name as it's displayed ("Velocity", "Controller")
+    // ControlParameter name as it's displayed (eg "Velocity" or "Controller")
     std::string    m_name;
 
-    // use event types in here ("controller", "pitchbend");
+    // The type of event this controller controls (eg "controller" or
+    // "pitchbend"); 
     std::string    m_type;
 
+    // Descriptive name for this control parameter, or "<none>".
     std::string    m_description;
 
     int            m_min;

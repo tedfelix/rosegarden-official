@@ -16,7 +16,9 @@
 */
 
 #include "ControllerEventAdapter.h"
+#include "base/BaseProperties.h"
 #include "base/MidiTypes.h"
+#include "base/NotationTypes.h"
 #include "misc/Debug.h"
 
 namespace Rosegarden {
@@ -42,6 +44,10 @@ bool ControllerEventAdapter::getValue(long& val)
         val = value;
         return true;
     }
+    else if (m_event->getType() == Note::EventType)
+    {
+        return m_event->get<Int>(BaseProperties::VELOCITY, val);
+    }
 
     return false;
 }
@@ -50,6 +56,8 @@ void ControllerEventAdapter::setValue(long val)
 {
     if (m_event->getType() == Rosegarden::Controller::EventType)
     {
+        if (val > 127) { val = 127; }
+        else if (val < 0) { val = 0; }
         m_event->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
     }
     else if (m_event->getType() == Rosegarden::PitchBend::EventType)
@@ -61,6 +69,13 @@ void ControllerEventAdapter::setValue(long val)
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
+    else if (m_event->getType() == Rosegarden::Note::EventType)
+    {
+        if (val > 127) { val = 127; }
+        else if (val < 0) { val = 0; }
+        m_event->set<Int>(BaseProperties::VELOCITY, val);
+    }
+    
 }
 
 timeT ControllerEventAdapter::getTime()

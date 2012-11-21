@@ -41,16 +41,16 @@ LinearParameterPattern::getText(QString propertyName) const
 }
 
 ParameterPattern::SliderSpecVector
-LinearParameterPattern::getSliderSpec(const Situation *situation) const
+LinearParameterPattern::getSliderSpec(const SelectionSituation *situation) const
 {
     SliderSpecVector result;
     std::pair<int,int> minMax =
-        situation->m_selection-> getMinMaxProperty(situation->m_property);
+        situation->getMinMax();
 
     SliderSpec lowArg = SliderSpec(EventParameterDialog::tr("Low Value"), 
-                                    minMax.first);
+                                    minMax.first, situation);
     SliderSpec highArg = SliderSpec(EventParameterDialog::tr("High Value"), 
-                                    minMax.second);
+                                    minMax.second, situation);
 
     if(m_isDiminuendo) {
         result.push_back(highArg);
@@ -68,7 +68,6 @@ LinearParameterPattern::
 setEventProperties(iterator begin, iterator end,
                    Result *result) const
 {
-    const PropertyName property = result->m_situation->m_property;
     const int          value1   = result->m_parameters[0];
     const int          value2   = result->m_parameters[1];
 
@@ -79,11 +78,9 @@ setEventProperties(iterator begin, iterator end,
     double step = double(value1 - value2) / double(duration);
 
     for (iterator i = begin; i != end; ++i) {
-        if ((*i)->isa(result->m_situation->m_eventType)) {
-            timeT relativeTime = (*i)->getAbsoluteTime() - startTime;
-            int value = value1 - int(step * relativeTime);
-            (*i)->set<Int>(property, value);
-        }
+        timeT relativeTime = (*i)->getAbsoluteTime() - startTime;
+        int value = value1 - int(step * relativeTime);
+        result->m_situation->setValue(*i, value);
     }
 }
 

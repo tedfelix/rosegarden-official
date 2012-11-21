@@ -155,6 +155,19 @@
     <Action name="remove_trigger" text="Remove &amp;Triggers" />
   </Menu>
 
+  <Menu name="controllers">
+    <text>Co&amp;ntrollers</text>
+    <Action name="cut_controllers" text="Cut controller events (&amp;X)" />
+    <Action name="copy_controllers" text="&amp;Copy controller events" />
+    <!-- This is the same edit_paste as elsewhere in this file -->
+    <Action name="edit_paste" text="Paste events (&amp;V)"/>
+    <Action name="set_controllers" text="&amp;Set Controller Values" />
+    <Action name="place_controllers" text="&amp;Place a controller for each note" />
+    <!-- This is the same pitch_bend_sequence as elsewhere in this file -->
+    <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
+    <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
+  </Menu>
+
   <Menu name="Move">
       <text>&amp;Move</text>
     <Separator/>
@@ -388,6 +401,24 @@
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>
     <Action name="pitch_bend_sequence"/>
+    <Action name="place_controllers"/>
+  </enable>
+</State>
+
+<State name="have_controller_selection">
+  <enable>
+    <Action name="cut_controllers"/>
+    <Action name="copy_controllers"/>
+    <Action name="set_controllers"/>
+  </enable>
+</State>
+
+<State name="have_control_ruler">
+  <enable>
+    <Action name="cut_controllers" text="Cut controller events (&amp;X)" />
+    <Action name="copy_controllers" text="&amp;Copy controller events" />
+    <Action name="set_controllers" text="&amp;Set Controller Values" />
+    <Action name="place_controllers" text="&amp;Place a controller for each note" />
   </enable>
 </State>
 

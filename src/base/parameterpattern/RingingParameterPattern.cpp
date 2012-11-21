@@ -31,16 +31,15 @@ RingingParameterPattern::getText(QString propertyName) const
 }
 
 ParameterPattern::SliderSpecVector
-RingingParameterPattern::getSliderSpec(const Situation *situation) const
+RingingParameterPattern::getSliderSpec(const SelectionSituation *situation) const
 {
     SliderSpecVector result;
-    std::pair<int,int> minMax =
-        situation->m_selection-> getMinMaxProperty(situation->m_property);
+    std::pair<int,int> minMax = situation->getMinMax();
 
     result.push_back(SliderSpec(EventParameterDialog::tr("First Value"),  
-                                minMax.second));
+                                minMax.second, situation));
     result.push_back(SliderSpec(EventParameterDialog::tr("Second Value"), 
-                                minMax.first));
+                                minMax.first, situation));
     return result;
 }
     
@@ -50,7 +49,6 @@ RingingParameterPattern::
 setEventProperties(iterator begin, iterator end,
                    Result *result) const
 {
-    const PropertyName property = result->m_situation->m_property;
     const int          value1   = result->m_parameters[0];
     const int          value2   = result->m_parameters[1];
 
@@ -63,13 +61,15 @@ setEventProperties(iterator begin, iterator end,
     double lowStep = double(value2) / double(duration);
 
     for (iterator i = begin; i != end; ++i) {
-        if ((*i)->isa(result->m_situation->m_eventType)) {
+        // Only change count on suitable events, in case non-notes
+        // like key sigs are selected
+        if  (result->m_situation->isSuitable(*i)) {
             timeT  relativeTime = (*i)->getAbsoluteTime() - startTime;
             double realStep  = (count % 2 == 0) ? step   : lowStep;
             int    baseValue = (count % 2 == 0) ? value1 : value2;
             int value = baseValue - int(realStep * relativeTime);
             if (value < 0) { value = 0; }
-            (*i)->set<Int>(property, value);
+            result->m_situation->setValue(*i, value);
             ++count;
         }
     }

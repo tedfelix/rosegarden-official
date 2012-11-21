@@ -42,11 +42,11 @@ IncreaseParameterPattern::getText(QString propertyName) const
 }
 
 ParameterPattern::SliderSpecVector
-IncreaseParameterPattern::getSliderSpec(const Situation *) const
+IncreaseParameterPattern::getSliderSpec(const SelectionSituation * situation) const
 {
     SliderSpecVector result;
     int defaultValue = 10;
-    result.push_back(SliderSpec(m_valueText, defaultValue));
+    result.push_back(SliderSpec(m_valueText, defaultValue, situation));
     return result;
 }
     
@@ -54,18 +54,11 @@ void
 IncreaseParameterPattern::setEventProperties(iterator begin, iterator end,
                                              Result *result) const
 {
-    const PropertyName property = result->m_situation->m_property;
     const int          delta    = result->m_parameters[0];
     const int          increase = m_isIncrease ? delta : -delta;
     for (iterator i = begin; i != end; ++i) {
-        if ((*i)->isa(result->m_situation->m_eventType)) {
-            int oldValue = (*i)->get<Int>(property);
-            int newValue = oldValue + increase;
-            // This assumes a 0-127 value, as for velocity.
-            if (newValue > 127) { newValue = 127; }
-            else if (newValue < 0) { newValue = 0; }
-            (*i)->set<Int>(property, newValue);
-        }}
+        result->m_situation->addToValue(*i, increase);
+    }
 }
 
 } // End namespace Rosegarden 

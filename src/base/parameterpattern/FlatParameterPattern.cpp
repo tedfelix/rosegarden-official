@@ -32,12 +32,12 @@ FlatParameterPattern::getText(QString propertyName) const
 
 
 ParameterPattern::SliderSpecVector
-FlatParameterPattern::getSliderSpec(const Situation *situation) const
+FlatParameterPattern::getSliderSpec(const SelectionSituation *situation) const
 {
     SliderSpecVector result;
-    int defaultVelocity = situation->m_currentFlatValue;
+    int defaultVelocity = situation->getFlatValue();
     result.push_back(SliderSpec(EventParameterDialog::tr("Value"),
-                                defaultVelocity));
+                                defaultVelocity, situation));
     return result;
 }
     
@@ -46,11 +46,9 @@ void
 FlatParameterPattern::setEventProperties(iterator begin, iterator end,
                                          Result *result) const
 {
-    const PropertyName property = result->m_situation->m_property;
     const int          value    = result->m_parameters[0];
     for (iterator i = begin; i != end; ++i) {
-        if ((*i)->isa(result->m_situation->m_eventType))
-            { (*i)->set<Int>(property, value); }
+        result->m_situation->setValue(*i, value);
     }
 }
 
