@@ -4138,10 +4138,10 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     //
     RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
 
-    QString fname(QFile::encodeName(file));
+//    QString fname(QFile::encodeName(file));
 
-    MidiFile midiFile(fname,
-                      &newDoc->getStudio());
+//    MidiFile midiFile(fname, &newDoc->getStudio());
+    MidiFile midiFile(file, &newDoc->getStudio());
 
     StartupLogo::hideIfStillThere();
     ProgressDialog *progressDlg = new ProgressDialog(tr("Importing MIDI file..."),
@@ -5384,10 +5384,10 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     ProgressDialog * progressDlg = new ProgressDialog(tr("Exporting MIDI file..."),
                                (QWidget*)this);
 
-    QString fname(QFile::encodeName(file));
+//    QString fname(QFile::encodeName(file));
 
-    MidiFile midiFile(fname,
-                      &m_doc->getStudio());
+//    MidiFile midiFile(fname, &m_doc->getStudio());
+    MidiFile midiFile(file, &m_doc->getStudio());
 
     connect(&midiFile, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
@@ -5422,8 +5422,8 @@ RosegardenMainWindow::exportCsoundFile(QString file)
 {
     ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting Csound score file..."),
                                (QWidget*)this);
-
-    CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
+//    CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
+    CsoundExporter e(this, &m_doc->getComposition(), std::string(file.toLocal8Bit()));
 
     connect(&e, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
@@ -5456,7 +5456,8 @@ RosegardenMainWindow::exportMupFile(QString file)
     ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting Mup file..."),
                                                      (QWidget*)this);
 
-    MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
+//    MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
+    MupExporter e(this, &m_doc->getComposition(), std::string(file.toLocal8Bit()));
 
     connect(&e, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
@@ -5559,7 +5560,8 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
     ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting LilyPond file..."),
                                (QWidget*)this);
 
-    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+//    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    LilyPondExporter e(this, m_doc, std::string(file.toLocal8Bit()));
 
     connect(&e, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
@@ -5607,7 +5609,8 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
     ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting MusicXML file..."),
                                                      (QWidget*)this);
 
-    MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+//    MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    MusicXmlExporter e(this, m_doc, std::string(file.toLocal8Bit()));
 
     connect(&e, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
