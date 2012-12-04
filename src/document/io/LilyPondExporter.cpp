@@ -827,13 +827,13 @@ LilyPondExporter::write()
                 
             case EXPORT_NONMUTED_TRACKS :
                 m_warningMessage = tr("Export of unmuted tracks failed.  There"
-                                      " is no unmuted tracks or no segments on"
+                                      " are no unmuted tracks or no segments on"
                                       " them.");
                 break;
                 
             case EXPORT_SELECTED_TRACK :
                 m_warningMessage = tr("Export of selected track failed.  There"
-                                      " is no segments on the selected track.");
+                                      " are no segments on the selected track.");
                 break;
                 
             case EXPORT_SELECTED_SEGMENTS :
