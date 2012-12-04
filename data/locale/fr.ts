@@ -3795,7 +3795,7 @@
         <location line="+991"/>
         <location line="+1095"/>
         <source>&amp;Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir le&amp;s valeurs des contrôleurs</translation>
     </message>
     <message>
         <location line="-2791"/>
@@ -3803,13 +3803,13 @@
         <location line="+991"/>
         <location line="+1095"/>
         <source>&amp;Place a controller for each note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Associer un contrôleur à chaque note</translation>
     </message>
     <message>
         <location line="-2790"/>
         <location line="+1697"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Insérer une séquence de &amp;contrôleurs...</translation>
     </message>
     <message>
         <location line="-611"/>
@@ -10606,12 +10606,15 @@
         <source>No sound driver available: Sound driver startup failed, log follows: 
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun pilote audio n&apos;est disponible.
+Le démarrage du pilote a échoué avec le message suivant :
+
+%1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>No sound driver available: Application compiled without sound support?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun pilote audio n&apos;est disponible. L&apos;application aurait-elle été compilée sans le support audio ?</translation>
     </message>
 </context>
 <context>
@@ -15397,27 +15400,27 @@ Voulez-vous utiliser
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de l&apos;exportation.  Le fichier ne peut pas être écrit.</translation>
     </message>
     <message>
         <location line="+150"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;exportation s&apos;est bien passée, mais la composition est vide.</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de l&apos;exportation des pistes non assourdies.  Il n&apos;y a pas de pistes non assourdies ou elles ne contiennent pas de segments.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de l&apos;exportation de la piste sélectionnée.  Il n&apos;y a pas de segment sur la piste sélectionnée.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de l&apos;exportation des segments sélectionnés.  Aucun segment n&apos;est sélectionné.</translation>
     </message>
     <message>
         <location line="+1795"/>
@@ -15597,7 +15600,7 @@ Voulez-vous utiliser
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished">de la piste sélectionnée</translation>
+        <translation>de la piste sélectionnée</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15607,7 +15610,7 @@ Voulez-vous utiliser
     <message>
         <location line="+4"/>
         <source>Edited segments</source>
-        <translation type="unfinished"></translation>
+        <translation>des segments édités</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -17670,7 +17673,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+13"/>
         <source>Distribute verses among repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribuer les vers sur les répétitions des segments</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -18578,7 +18581,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+4"/>
         <source>User %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur %1</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -21011,7 +21014,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Joindre</translation>
+        <translation>&amp;Joindre</translation>
     </message>
 </context>
 <context>
@@ -22026,17 +22029,17 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="+42"/>
         <source>Split by Pitch</source>
-        <translation>Séparation par ton</translation>
+        <translation>Séparation par hauteur</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Starting split pitch</source>
-        <translation>Démarrage de la séparation par ton</translation>
+        <translation>Démarrage de la séparation par hauteur</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Always split at this pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Toujours séparer à cette hauteur</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -22046,17 +22049,17 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+1"/>
         <source>Split the lowest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer la note la plus basse de chaque accord</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split the highest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer la note la plus haute de chaque accord</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split all chords at the same relative tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer tous les accords à la même hauteur relative</translation>
     </message>
     <message>
         <location line="+6"/>
