@@ -76,6 +76,8 @@ class MappedEventList;
  * ints, etc...).  We would need to investigate each of the users to make
  * sure things like placement new were replaced with conventional new.
  * From a maintenance standpoint, this should improve the code significantly.
+ *
+ * @see ControlBlock
  */
 class SequencerDataBlock
 {
