@@ -156,10 +156,26 @@ protected:
     char m_visualEvent[sizeof(MappedEvent)];
     
     /// Index of the next available position in m_recordBuffer.
-    int m_recordEventIndex;
+    /**
+     * volatile is needed here (and probably other places) since this is used
+     * across threads.  volatile prevents compiler optimizations (caching)
+     * that might render the data useless.  The chances that the compiler
+     * might optimize in this fashion are very slim given the code that uses
+     * this variable.  However, better safe than sorry.
+     */
+    volatile int m_recordEventIndex;
     /// Read position in m_recordBuffer.
+    /**
+     * It's iffy as to whether "volatile" is actually needed here.  The two
+     * functions that use this may or may not be on different threads.
+     */
     int m_readIndex;
     /// Ring buffer of recorded MIDI events.
+    /**
+     * This should probably be volatile for thread-safety, but that means
+     * the memset() call would need to be rewritten as a loop.  Or the
+     * volatile could be cast away.
+     */
     char m_recordBuffer[sizeof(MappedEvent) *
                         SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
 
