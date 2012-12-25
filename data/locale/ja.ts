@@ -230,7 +230,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">均一 - %1 を均一に設定</translation>
+        <translation>均一 - %1 を均一に設定</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -1446,7 +1446,7 @@
         <location line="+5"/>
         <location line="+1697"/>
         <source>Co&amp;ntrollers</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラ(&amp;n)</translation>
     </message>
     <message>
         <location line="-1696"/>
@@ -1454,7 +1454,7 @@
         <location line="+990"/>
         <location line="+1096"/>
         <source>Cut controller events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローライベントをカット (&amp;X)</translation>
     </message>
     <message>
         <location line="-2792"/>
@@ -1462,13 +1462,13 @@
         <location line="+990"/>
         <location line="+1096"/>
         <source>&amp;Copy controller events</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローライベントをコピー (&amp;C)</translation>
     </message>
     <message>
         <location line="-2792"/>
         <location line="+1697"/>
         <source>Paste events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation>イベントを貼り付け (&amp;V)</translation>
     </message>
     <message>
         <location line="-1696"/>
@@ -1476,7 +1476,7 @@
         <location line="+991"/>
         <location line="+1095"/>
         <source>&amp;Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラの値を設定 (&amp;S)</translation>
     </message>
     <message>
         <location line="-2791"/>
@@ -1484,13 +1484,13 @@
         <location line="+991"/>
         <location line="+1095"/>
         <source>&amp;Place a controller for each note</source>
-        <translation type="unfinished"></translation>
+        <translation>各ノートにコントローラを配置 (&amp;P)</translation>
     </message>
     <message>
         <location line="-2790"/>
         <location line="+1697"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラシーケンスを挿入 (&amp;o)</translation>
     </message>
     <message>
         <location line="-1688"/>
@@ -3963,7 +3963,7 @@
     <message>
         <location line="+90"/>
         <source>&amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>装飾 (&amp;F)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3973,7 +3973,7 @@
     <message>
         <location line="+1"/>
         <source>Mark Selection as &amp;Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">選択したものを装飾としてマーク (&amp;F)</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -4521,7 +4521,7 @@
     <message>
         <location line="+1"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation type="unfinished">MusicXMLファイルのインポート（&amp;L)...</translation>
+        <translation>MusicXMLファイルのインポート（&amp;L)...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4546,7 +4546,7 @@
     <message>
         <location line="+1"/>
         <source>Merge MusicXM&amp;L file...</source>
-        <translation type="unfinished"></translation>
+        <translation>ミュージックXMLファイルを併合 (&amp;L)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4947,7 +4947,7 @@
         <location line="+26"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return, Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Enter, Enter, メディア再生, Ctrl+Return, Return</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -10433,7 +10433,7 @@
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">不正なサウンドファイル</translation>
+        <translation>不正なサウンドファイル</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+110"/>
@@ -10538,12 +10538,12 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">不正なピークファイル</translation>
+        <translation>不正なピークファイル</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">不正なピークファイル(壊れたオーディオ?)</translation>
+        <translation>不正なピークファイル(壊れたオーディオ?)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
@@ -10607,12 +10607,14 @@
         <source>No sound driver available: Sound driver startup failed, log follows: 
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>サウンドドライバがありません:サウンドドライバ起動に失敗し、ログは以下のとおりです: 
+
+%1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>No sound driver available: Application compiled without sound support?</source>
-        <translation type="unfinished"></translation>
+        <translation>サウンドドライバがありません: アプリケーションがサウンドサポートなしでコンパイルされている?</translation>
     </message>
 </context>
 <context>
@@ -10761,7 +10763,7 @@
     <message>
         <location line="+2"/>
         <source>Add Figuration</source>
-        <translation type="unfinished"></translation>
+        <translation>装飾の追加</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -15385,27 +15387,27 @@ Would you like to use
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">エクスポートに失敗しました。書き込みできませんでした。</translation>
+        <translation>エクスポートに失敗しました。書き込みできませんでした。</translation>
     </message>
     <message>
         <location line="+150"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポートに成功しましたが、コンポジションは空でした。</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished"></translation>
+        <translation>ミュートされていないトラックのエクスポートに失敗しました。 ミュートされていないトラックかセグメントがありません。</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished"></translation>
+        <translation>選択されたとラックのエクスポートに失敗しました。 選択されたトラックにはセグメントがありません。</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>選択されたセグメントのエクスポートに失敗しました。 セグメントが１つも選択されていません。</translation>
     </message>
     <message>
         <location line="+1795"/>
@@ -15540,7 +15542,7 @@ Would you like to use
     <message>
         <location line="+40"/>
         <source>Notation language</source>
-        <translation type="unfinished"></translation>
+        <translation>楽譜の言語</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -15595,7 +15597,7 @@ Would you like to use
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished">選択されたトラック</translation>
+        <translation>選択されたトラック</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15605,7 +15607,7 @@ Would you like to use
     <message>
         <location line="+4"/>
         <source>Edited segments</source>
-        <translation type="unfinished"></translation>
+        <translation>編集済セグメント</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -18533,7 +18535,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+4"/>
         <source>User %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザ %1</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18628,7 +18630,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+9"/>
         <source>Tuning System:</source>
-        <translation type="unfinished"></translation>
+        <translation>チューニングシステム:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18665,7 +18667,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+65"/>
         <source>Tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>チューニング</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -20956,7 +20958,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">結合(&amp;J)</translation>
+        <translation>結合(&amp;J)</translation>
     </message>
 </context>
 <context>
