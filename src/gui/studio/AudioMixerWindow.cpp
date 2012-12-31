@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2013 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -618,7 +618,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             //!!! Hacky.  We still rely on the old "colour" property to figure
             // out the state, instead of doing something far more pleasant and
             // intelligible three years from now.  (Remember this when you wince
-            // in 2012.  Kind of like that photo of you wearing nothing but a
+            // in 2013.  Kind of like that photo of you wearing nothing but a
             // sock and an electric guitar, drunk off your ass, innit?)
             QColor pluginBgColour = Qt::blue;  // anything random will do
 

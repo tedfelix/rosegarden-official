@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2013 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -1794,7 +1794,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 
     // from qt4-doc : " don't use a (modal) QProgressDialog inside a paintEvent() !"
 
-    //cc 20120508: because ProgressDialog has WA_DeleteOnClose set, it
+    //cc 20130508: because ProgressDialog has WA_DeleteOnClose set, it
     // is destroyed if the user closes it during event processing --
     // use a QPointer to avoid dereferencing it afterwards
     QPointer<ProgressDialog> progressDlg =
