@@ -240,4 +240,22 @@ sendChannelSetup(Instrument *instrument, int channel)
     sendMappedEventList(mC);
 }
 
+// Send a single controller to output.  This is used for fixed-channel
+// instruments.
+void
+StudioControl::
+sendController(const Instrument *instrument, int channel,
+               MidiByte controller, MidiByte value)
+{
+    MappedEventList mC;
+    MappedEventInserter inserter(mC);
+
+    // Acquire it from ChannelManager.  Passing -1 for trackId which
+    // is unused here.
+    ChannelManager::insertController(channel, instrument, inserter,
+                                     RealTime::zeroTime, -1,
+                                     controller, value);
+    sendMappedEventList(mC);
+}
+
 }

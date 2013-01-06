@@ -100,6 +100,10 @@ class MapperFunctionalitySimple : public MapperFunctionality
                      MappedInserterBase &inserter,
                      RealTime reftime, RealTime insertTime,
                      MapperFunctionality *functionality, int trackId);
+  static void
+      insertController(ChannelId channel, const Instrument *instrument,
+                       MappedInserterBase &inserter, RealTime insertTime,
+                       int trackId, MidiByte controller, MidiByte value);
 
 protected slots:
   // Something is kicking everything off channel in our device.

@@ -603,6 +603,10 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
         {
             it->second = value;
             emit changedChannelSetup();
+            if (hasFixedChannel()) {
+                StudioControl::sendController(this, m_channel,
+                                              controller, value);
+                }
             return;
         }
     }

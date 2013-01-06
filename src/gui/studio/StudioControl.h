@@ -130,6 +130,9 @@ public:
                                 bool oneshot = true);
 
     static void sendChannelSetup(Instrument *instrument, int channel);
+    static void sendController(const Instrument *instrument, int channel,
+                               MidiByte controller, MidiByte value);
+
  private:
     static ImmediateNote *getFiller(void);
 

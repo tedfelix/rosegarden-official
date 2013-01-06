@@ -74,6 +74,23 @@ connectInstrument(Instrument *instrument)
     slotInstrumentChanged();
 }
 
+void
+ChannelManager::
+insertController(ChannelId channel, const Instrument *instrument,
+                 MappedInserterBase &inserter, RealTime insertTime,
+                 int trackId, MidiByte controller, MidiByte value)
+{
+    MappedEvent mE(instrument->getId(),
+                   MappedEvent::MidiController,
+                   controller,
+                   value);
+                        
+    mE.setRecordedChannel(channel);
+    mE.setEventTime(insertTime);
+    mE.setTrackId(trackId);
+    inserter.insertCopy(mE);
+}
+
 // Set default controllers for instrument on channel.
 // Adapted from SequenceManager
 void
@@ -130,15 +147,9 @@ setControllers(ChannelId channel, Instrument *instrument,
                  << endl;
 #endif
         try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           controlId,
-                           controlValue);
-                        
-            mE.setRecordedChannel(channel);
-            mE.setEventTime(insertTime);
-            mE.setTrackId(trackId);
-            inserter.insertCopy(mE);
+            insertController
+                (channel, instrument, inserter, insertTime, trackId,
+                 controlId, controlValue);
         } catch (...) { continue; }
     }
 
