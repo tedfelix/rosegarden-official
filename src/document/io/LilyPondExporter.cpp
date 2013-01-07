@@ -125,6 +125,7 @@ LilyPondExporter::readConfigVariables(void)
     m_paperLandscape = qStrToBool(settings.value("lilypaperlandscape", "false")) ;
     m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
     m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
+    m_exportEmptyStaves = qStrToBool(settings.value("lilyexportemptystaves", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
     if (settings.value("lilyexporteditedsegments", "false").toBool()) {
         m_exportSelection = EXPORT_EDITED_SEGMENTS;
@@ -1799,6 +1800,9 @@ LilyPondExporter::write()
 
     // write \layout block
     str << indent(col++) << "\\layout {" << std::endl;
+    if (!m_exportEmptyStaves) {
+        str << indent(col) << "\\context { \\GrandStaff \\RemoveEmptyStaves }" << std::endl;
+    }
     if (m_chordNamesMode) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;
     }

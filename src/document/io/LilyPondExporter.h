@@ -226,6 +226,7 @@ private:
     bool m_exportStaffGroup;
 
     bool m_raggedBottom;
+    bool m_exportEmptyStaves;
 
     unsigned int m_exportMarkerMode;
 

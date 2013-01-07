@@ -290,9 +290,13 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                                     "begins in the middle of a bar.</qt>"));
     layoutNotation->addWidget(m_lilyDrawBarAtVolta, 9, 0);
 
-    m_cancelAccidentals = new QCheckBox("Cancel accidentals");
+    m_cancelAccidentals = new QCheckBox(tr("Cancel accidentals"));
     layoutNotation->addWidget(m_cancelAccidentals, 10, 0);
     m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</qt>"));
+
+    m_lilyExportEmptyStaves = new QCheckBox(tr("Export empty staves"));
+    layoutNotation->addWidget(m_lilyExportEmptyStaves, 11, 0);
+    m_lilyExportEmptyStaves->setToolTip(tr("<qt>When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.</qt>"));
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);
@@ -349,6 +353,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyPaperLandscape->setChecked(qStrToBool(settings.value("lilypaperlandscape", "false")));
     m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", FONT_20).toUInt());
     m_lilyRaggedBottom->setChecked(qStrToBool(settings.value("lilyraggedbottom", "false")));
+    m_lilyExportEmptyStaves->setChecked(qStrToBool(settings.value("lilyexportemptystaves", "false")));
     m_lilyChordNamesMode->setChecked(qStrToBool(settings.value("lilychordnamesmode", "false")));
     m_lilyExportLyrics->setCurrentIndex(settings.value("lilyexportlyrics", 1).toUInt());
     m_lilyTempoMarks->setCurrentIndex(settings.value("lilyexporttempomarks", 0).toUInt());
@@ -388,6 +393,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
     settings.setValue("lilyfontsize", m_lilyFontSize->currentIndex());
     settings.setValue("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
+    settings.setValue("lilyexportemptystaves", m_lilyExportEmptyStaves->isChecked());
     settings.setValue("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
     settings.setValue("lilyexportlyrics", m_lilyExportLyrics->currentIndex());
     settings.setValue("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
