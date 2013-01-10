@@ -17,23 +17,26 @@
 
 #include "SortingInserter.h"
 
-
 namespace Rosegarden
 {
 void
 SortingInserter::
-insertSorted(MappedInserterBase &inserter)
+insertSorted(MappedInserterBase &exporter)
 {
-  while(!m_queue.empty()) {
-    inserter.insertCopy(m_queue.top());
-    m_queue.pop();
-  }
+    static MappedEventCmp merc;
+    // std::list sort is stable, so we get same-time events in the
+    // order we inserted them, important for NoteOffs.
+    m_list.sort(merc);
+    typedef std::list<MappedEvent>::const_iterator iterator;
+    for(iterator i = m_list.begin(); i != m_list.end(); ++i) {
+        exporter.insertCopy(*i);
+    }
 }
 void
 SortingInserter::
 insertCopy(const MappedEvent &evt)
 {
-    m_queue.push(evt);
+    m_list.push_back(evt);
 }
   
 }

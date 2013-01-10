@@ -20,7 +20,7 @@
 
 #include "sound/MappedInserterBase.h"
 #include "sound/MappedEvent.h"
-#include <queue>
+#include <list>
 
 namespace Rosegarden
 {
@@ -31,10 +31,10 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class SortingInserter : public MappedInserterBase
 {
-    struct MappedEventRevCmp
+    struct MappedEventCmp
     {
         bool operator()(const MappedEvent &a, const MappedEvent &b) const {
-            return b < a;
+            return a < b;
         }
     };
     
@@ -42,7 +42,9 @@ class SortingInserter : public MappedInserterBase
   void insertSorted(MappedInserterBase &);
  private:
   virtual void insertCopy(const MappedEvent &evt);
-  std::priority_queue<MappedEvent, std::deque<MappedEvent>, MappedEventRevCmp> m_queue;
+  // NB, this is not the same as MappedEventList which is actually a
+  // std::multiset.
+  std::list<MappedEvent> m_list;
 };
 
 }
