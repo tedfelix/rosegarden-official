@@ -1453,8 +1453,7 @@ MidiFile::convertToMidi(Composition &comp)
     // Give the end a little margin to make it insert noteoffs at the
     // end.  If they tied with the end they'd get lost.
     metaiterator->
-        fetchEvents(sorter, start,
-                                       end + RealTime(0,1000));
+        fetchEvents(sorter, start, end + RealTime(0,1000));
     delete metaiterator;
     MidiInserter inserter(comp, 480, end);
     sorter.insertSorted(inserter);

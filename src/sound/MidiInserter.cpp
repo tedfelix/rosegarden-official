@@ -332,12 +332,16 @@ insertCopy(const MappedEvent &evt)
                     if ((evt.getType() == MappedEvent::MidiNote) &&
                         (midiVelocity == 0)) {
                         // It's actually a NOTE_OFF.
+                        // "MIDI devices that can generate Note Off
+                        // messages, but don't implement velocity
+                        // features, will transmit Note Off messages
+                        // with a preset velocity of 64"
                         trackData.
                             insertMidiEvent
                             (new MidiEvent(midiEventAbsoluteTime,
                                            MIDI_NOTE_OFF | midiChannel,
                                            pitch,
-                                           127)); // full volume silence
+                                           64));
                     } else {
                         // It's a NOTE_ON.
                         trackData.
