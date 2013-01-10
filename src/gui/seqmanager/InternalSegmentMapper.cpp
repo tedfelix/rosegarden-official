@@ -56,12 +56,18 @@ InternalSegmentMapper::
     if(m_triggeredEvents) { delete m_triggeredEvents; }
 }
 
+RealTime
+InternalSegmentMapper::
+toRealTime(Composition &comp, timeT t)
+{
+    return 
+        comp.getElapsedRealTime(t) + m_segment->getRealTimeDelay();
+}
+
+
 void InternalSegmentMapper::fillBuffer()
 {
     Composition &comp = m_doc->getComposition();
-
-    RealTime eventTime;
-    RealTime duration;
     Track* track = comp.getTrackById(m_segment->getTrack());
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
     SEQUENCER_DEBUG
@@ -222,14 +228,12 @@ void InternalSegmentMapper::fillBuffer()
                         playDuration = repeatEndTime - playTime;
 
                     playTime = playTime + m_segment->getDelay();
-                    eventTime = comp.getElapsedRealTime(playTime);
+                    const RealTime eventTime = toRealTime(comp, playTime);
 
                     // slightly quicker than calling helper.getRealSoundingDuration()
                     RealTime endTime =
-                        comp.getElapsedRealTime(playTime + playDuration);
-                    duration = endTime - eventTime;
-
-                    eventTime = eventTime + m_segment->getRealTimeDelay();
+                        toRealTime(comp, playTime + playDuration);
+                    const RealTime duration = endTime - eventTime;
 
                     try {
                         // Create mapped event and put it in buffer.
@@ -356,7 +360,7 @@ popInsertNoteoff(int trackid, Composition &comp)
     // Our noteoffs already have performance pitch, so
     // don't add segment's transpose.
     MappedEvent event(0, MappedEvent::MidiNote, pitch, 0);
-    event.setEventTime(comp.getElapsedRealTime(internalTime));
+    event.setEventTime(toRealTime(comp, internalTime));
     event.setTrackId(trackid);
     mapAnEvent(&event);
 

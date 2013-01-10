@@ -30,6 +30,7 @@ namespace Rosegarden
 
 class TriggerSegmentRec;
 class Composition;
+class RealTime;
  
 /// Converts (maps) Event objects into MappedEvent objects for a Segment
 /**
@@ -117,7 +118,7 @@ class InternalSegmentMapper : public SegmentMapper
     void enqueueNoteoff(timeT time, int pitch);
 
     bool haveEarlierNoteoff(timeT t);
-
+    RealTime toRealTime(Composition &comp, timeT t);
     /** Data members **/
 
     IntervalChannelManager m_channelManager;
