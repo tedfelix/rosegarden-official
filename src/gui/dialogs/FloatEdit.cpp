@@ -34,7 +34,7 @@ namespace Rosegarden
 
 FloatEdit::FloatEdit(QWidget *parent,
                      const QString &title,
-                     const QString &text,
+                     const QString &/*text*/,
                      float min,
                      float max,
                      float value,

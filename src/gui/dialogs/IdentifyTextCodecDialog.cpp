@@ -86,7 +86,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     gl->addWidget(codecs);
 
     QString defaultCodec;
-    QTextCodec *codec = 0;
+    // QTextCodec *codec = 0;
 
     QMap<QString, QString> codecDescriptions;
     codecDescriptions["UTF-8"] = tr("Unicode variable-width");
@@ -111,7 +111,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     codecDescriptions["KOI8-U"] = tr("Ukrainian");
     codecDescriptions["TSCII"] = tr("Tamil");
 
-    int i = 0;
+    // int i = 0;
     int current = -1;
 
     QList<int> mibs = QTextCodec::availableMibs();
@@ -236,7 +236,7 @@ IdentifyTextCodecDialog::getExampleText()
 //    std::cerr << "codec->name() returns " << codec->name().data() << std::endl;
 
     int offset = 0;
-    for (; offset + 80 < m_text.length(); ++offset) {
+    for (; offset + 80 < (int)m_text.length(); ++offset) {
         if (!isascii(m_text[offset])) {
             for (int i = 0; i < 80; ++i) {
                 if (offset == 0) {

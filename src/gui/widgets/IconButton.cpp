@@ -47,7 +47,7 @@ IconButton::IconButton(QWidget* parent, const QPixmap& icon, const QString & nam
     setMinimumSize(std::max(icon.width(),m_labelSize.width())+2*m_margin, icon.height()+m_labelSize.height()+3*m_margin);
 }
 
-void IconButton::paintEvent(QPaintEvent* event)
+void IconButton::paintEvent(QPaintEvent* /* event */)
 {
     QPainter paint(this);
 

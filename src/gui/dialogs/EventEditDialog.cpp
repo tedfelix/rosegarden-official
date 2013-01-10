@@ -468,12 +468,12 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
     QString propertyName = propertyFullName.section('%', 0, 0),
                            nsecOrSec = propertyFullName.section('%', 1, 1);
 
-    RealTime realTime = m_event.get<RealTimeT>(qstrtostr(propertyName));
+    // RealTime realTime = m_event.get<RealTimeT>(qstrtostr(propertyName));
 
-    if (nsecOrSec == "sec")
-        realTime.sec = value;
-    else
-        realTime.nsec = value;
+    // if (nsecOrSec == "sec")
+    //     realTime.sec = value;
+    // else
+    //     realTime.nsec = value;
 
     m_event.set<Int>(qstrtostr(propertyName), value);
 }

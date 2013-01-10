@@ -63,7 +63,7 @@ ProgressBar::ProgressBar(int totalSteps,
 }
 
 void
-ProgressBar::WTF(int wtf)
+ProgressBar::WTF(int /* wtf */)
 {
     /*
     std::cout << "I am a ProgressBar, and my value changed to " << wtf << "!  Why am I still blank?!" << std::endl;

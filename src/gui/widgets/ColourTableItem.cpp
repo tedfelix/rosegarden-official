@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-ColourTableItem::ColourTableItem(QTableWidget *t, const QColor &input)
+ColourTableItem::ColourTableItem(QTableWidget */* t */, const QColor &input)
         : currentColour(input)
 {
     //@@@ If this is crap in the real world, refer to the old line of code to

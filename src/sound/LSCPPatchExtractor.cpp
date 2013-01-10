@@ -64,7 +64,7 @@ LSCPPatchExtractor::extractContent(const QString& fileName)
 
     QStringList splitLine;
 
-    unsigned int bank, program;
+    // unsigned int bank, program;
     std::string programName;
     std::string bankName;
     std::string tempDeviceName, tempBankName;

@@ -58,8 +58,8 @@ NoteItem::boundingRect() const
 
 void
 NoteItem::paint(QPainter *painter,
-		const QStyleOptionGraphicsItem *option,
-		QWidget *widget)
+		const QStyleOptionGraphicsItem */* option */,
+		QWidget */* widget */)
 {
     if (!m_haveDimensions) {
 	getDimensions();

@@ -27,7 +27,7 @@ MappedInstrument::MappedInstrument():
 {}
 
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
-                                   MidiByte channel,
+                                   MidiByte /*channel*/,
                                    InstrumentId id):
         m_type(type),
         m_id(id),
@@ -36,7 +36,7 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
 {}
 
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
-                                   MidiByte channel,
+                                   MidiByte /*channel*/,
                                    InstrumentId id,
                                    const std::string &name,
                                    DeviceId device):

@@ -241,7 +241,7 @@ QPoint RosegardenScrollView::viewportToContents(const QPoint& vp)
                   vp.y() + contentsY());
 }
 
-void RosegardenScrollView::viewportPaintEvent( QPaintEvent* event )
+void RosegardenScrollView::viewportPaintEvent( QPaintEvent* /* event */ )
 {
 }
 
@@ -259,7 +259,7 @@ void RosegardenScrollView::viewportMousePressEvent(QMouseEvent* e)
         e->ignore();
 }
 
-void RosegardenScrollView::contentsMousePressEvent( QMouseEvent* event )
+void RosegardenScrollView::contentsMousePressEvent( QMouseEvent* /* event */ )
 {
 }
 
@@ -277,7 +277,7 @@ void RosegardenScrollView::viewportMouseReleaseEvent(QMouseEvent* e)
         e->ignore();
 }
 
-void RosegardenScrollView::contentsMouseReleaseEvent( QMouseEvent* event )
+void RosegardenScrollView::contentsMouseReleaseEvent( QMouseEvent* /* event */ )
 {
 }
 
@@ -295,7 +295,7 @@ void RosegardenScrollView::viewportMouseMoveEvent(QMouseEvent* e)
         e->ignore();
 }
 
-void RosegardenScrollView::contentsMouseMoveEvent( QMouseEvent* event )
+void RosegardenScrollView::contentsMouseMoveEvent( QMouseEvent* /* event */ )
 {
 }
 
@@ -313,7 +313,7 @@ void RosegardenScrollView::viewportMouseDoubleClickEvent(QMouseEvent* e)
         e->ignore();
 }
 
-void RosegardenScrollView::contentsMouseDoubleClickEvent( QMouseEvent* event )
+void RosegardenScrollView::contentsMouseDoubleClickEvent( QMouseEvent* /* event */ )
 {
 }
 
@@ -440,8 +440,8 @@ const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
 
 bool RosegardenScrollView::isTimeForSmoothScroll()
 {
-    static int desktopWidth = QApplication::desktop()->width(),
-        desktopHeight = QApplication::desktop()->height();
+    // static int desktopWidth = QApplication::desktop()->width(),
+    //    desktopHeight = QApplication::desktop()->height();
 
     if (m_smoothScroll) {
         int ta = m_scrollShortcuterationTimer.elapsed();
@@ -626,7 +626,7 @@ void RosegardenScrollView::resizeEvent(QResizeEvent* e)
     updateBottomWidgetGeometry();
 }
 
-void RosegardenScrollView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
+void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, int /* y */, int /* w */, int /* h */)
 {
     ///@TODO Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
 //	hbar.setGeometry( x,y, w,h );

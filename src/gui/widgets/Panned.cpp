@@ -162,7 +162,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
 
     double leftThreshold = left + ws * leftDist;
     double rightThreshold = right - ws * rightDist;
-    double delta = x - leftThreshold;
+    // double delta = x - leftThreshold;
 
     // Is x inside the scene? If not do nothing.
     if ((x < x1) || (x > x2)) return;

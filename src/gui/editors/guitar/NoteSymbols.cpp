@@ -139,7 +139,7 @@ NoteSymbols::drawOpenSymbol ( bool big,
 }
 
 void
-NoteSymbols::drawNoteSymbol ( bool big,
+NoteSymbols::drawNoteSymbol ( bool /* big */,
                               QPainter* p,
                               unsigned int stringNb,
                               int fretNb,
@@ -398,7 +398,7 @@ NoteSymbols::getGuitarChordHeight ( int imgHeight ) const
 }
 
 unsigned int
-NoteSymbols::getFontPixelSize ( int imgWidth, int imgHeight ) const
+NoteSymbols::getFontPixelSize ( int /* imgWidth */, int imgHeight ) const
 {
     return std::max(8, imgHeight / 10);
 }

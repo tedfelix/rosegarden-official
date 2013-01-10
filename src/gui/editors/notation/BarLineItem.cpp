@@ -71,8 +71,8 @@ BarLineItem::boundingRect() const
 
 void
 BarLineItem::paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget)
+                   const QStyleOptionGraphicsItem */* option */,
+                   QWidget */* widget */)
 {
     int bx = 0;
     int by = 0;

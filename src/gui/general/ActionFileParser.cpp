@@ -88,8 +88,8 @@ ActionFileParser::startDocument()
 }
 
 bool
-ActionFileParser::startElement(const QString& namespaceURI,
-                               const QString& localName,
+ActionFileParser::startElement(const QString& /* namespaceURI */,
+                               const QString& /* localName */,
                                const QString& qName,
                                const QXmlAttributes& atts)
 {
@@ -249,8 +249,8 @@ ActionFileParser::startElement(const QString& namespaceURI,
 }
 
 bool
-ActionFileParser::endElement(const QString& namespaceURI,
-                             const QString& localName,
+ActionFileParser::endElement(const QString& /* namespaceURI */,
+                             const QString& /* localName */,
                              const QString& qName)
 {
     QString name = qName.toLower();
@@ -596,7 +596,7 @@ ActionFileParser::addSeparatorToMenu(QString menuName)
 }
 
 bool
-ActionFileParser::setToolbarText(QString name, QString text)
+ActionFileParser::setToolbarText(QString /* name */, QString /* text */)
 {
     //!!! This doesn't appear to be possible (no QToolBar::setTitle
     //!!! method), but I don't think that will be a big problem in

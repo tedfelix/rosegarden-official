@@ -29,9 +29,9 @@ namespace Rosegarden
 // the QString compare().
 //
 int
-EventViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
+EventViewItem::compare(QTreeWidgetItem */* i */, int /* col */, bool /* ascending */) const
 {
-    EventViewItem *ei = dynamic_cast<EventViewItem *>(i);
+    // EventViewItem *ei = dynamic_cast<EventViewItem *>(i);
 
 	return 0;
 	//&&& reimplement compare ?? required ??

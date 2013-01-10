@@ -65,7 +65,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
 }
 
 void
-AudioVUMeter::paintEvent(QPaintEvent *e)
+AudioVUMeter::paintEvent(QPaintEvent */* e */)
 {
     //###
     // See note in VUMeter.cpp explaining the width/height - 1 issue

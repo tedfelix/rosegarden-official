@@ -23,10 +23,12 @@
 namespace Rosegarden 
 {
 
-static double mod(double x, double y) { return x - (y * floor(x / y)); }
+    // (Unused)
+    // static double mod(double x, double y) { return x - (y * floor(x / y)); }
 static float modf(float x, float y) { return x - (y * floorf(x / y)); }
 
-static double princarg(double a) { return mod(a + M_PI, -2 * M_PI) + M_PI; }
+    // (Unused)
+    // static double princarg(double a) { return mod(a + M_PI, -2 * M_PI) + M_PI; }
 static float princargf(float a) { return modf(a + M_PI, -2 * M_PI) + M_PI; }
 
 

@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 
-ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const char *name  )
+    ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString /*label*/, const char *name  )
 : QDialog(parent)
 {
     this->setAttribute( Qt::WA_DeleteOnClose );

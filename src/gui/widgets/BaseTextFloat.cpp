@@ -136,7 +136,7 @@ BaseTextFloat::display(QPoint offset)
 }
 
 void
-BaseTextFloat::hideAfterDelay(int delay)
+BaseTextFloat::hideAfterDelay(int /* delay */)
 {
     m_timer->start(500);
 }

@@ -126,7 +126,7 @@ void PlayList::slotOpenFiles()
 }
 
 
-void PlayList::slotDroppedURIs(QDropEvent* ev, QTreeWidget* twid, QStringList sl){
+void PlayList::slotDroppedURIs(QDropEvent* /* ev */, QTreeWidget* /* twid */, QStringList sl){
     // new
     for( int i=0; i<sl.count(); i++ ){
         new PlayListViewItem( m_listView, QUrl(sl[i]) );
@@ -249,7 +249,7 @@ void PlayList::slotDeleteCurrent()
         delete currentIndex;
 }
 
-void PlayList::slotCurrentItemChanged(QTreeWidgetItem* currentItem, QTreeWidgetItem* prevItem)
+void PlayList::slotCurrentItemChanged(QTreeWidgetItem* currentItem, QTreeWidgetItem* /* prevItem */)
 {
 //     RG_DEBUG << "PlayList::slotCurrentItemChanged() - selection Changed. " << endl;
     enableButtons(currentItem);

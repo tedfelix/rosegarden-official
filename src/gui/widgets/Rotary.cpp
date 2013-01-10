@@ -165,6 +165,7 @@ Rotary::paintEvent(QPaintEvent *)
     case StepTicks:
         numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
         break;
+    case NoTicks:
     default:
         break;
     }

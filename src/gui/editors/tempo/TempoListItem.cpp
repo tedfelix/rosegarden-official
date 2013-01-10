@@ -20,7 +20,7 @@
 namespace Rosegarden {
 
 int
-TempoListItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
+TempoListItem::compare(QTreeWidgetItem */* i */, int /* col */, bool /* ascending */) const
 {
 	//&&& FIX: disabled TempoListItem::compare function
 	return 1;

@@ -71,7 +71,7 @@ FingeringBox::init()
 }
 
 void
-FingeringBox::paintEvent(QPaintEvent *e)
+FingeringBox::paintEvent(QPaintEvent */* e */)
 {
     std::cerr << "FingeringBox::paintEvent()" << std::endl;
     QPainter p;

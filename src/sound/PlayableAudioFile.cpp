@@ -580,8 +580,8 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 	    std::cerr << "PlayableAudioFile::addSamples: it's a small file: want frames " << scanFrame << " to " << endFrame << " of " << cframes << std::endl;
 #endif
 
-	    size_t xfadeIn = (m_firstRead ? m_xfadeFrames : 0);
-	    size_t xfadeOut = (m_fileEnded ? m_xfadeFrames : 0);
+	    // size_t xfadeIn = (m_firstRead ? m_xfadeFrames : 0);
+	    // size_t xfadeOut = (m_fileEnded ? m_xfadeFrames : 0);
 
 	    // all this could be neater!
 

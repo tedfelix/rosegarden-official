@@ -35,8 +35,8 @@ bool ChordXmlHandler::startDocument()
     return true;
 }
 
-bool ChordXmlHandler::startElement(const QString& namespaceURI,
-                                   const QString& localName,
+bool ChordXmlHandler::startElement(const QString& /* namespaceURI */,
+                                   const QString& /* localName */,
                                    const QString& qName,
                                    const QXmlAttributes& atts)
 {
@@ -68,8 +68,8 @@ bool ChordXmlHandler::startElement(const QString& namespaceURI,
     return true;
 }
 
-bool ChordXmlHandler::endElement(const QString& namespaceURI,
-                                 const QString& localName,
+bool ChordXmlHandler::endElement(const QString& /* namespaceURI */,
+                                 const QString& /* localName */,
                                  const QString& qName)
 {
     QString lcName = qName.toLower();
