@@ -78,6 +78,9 @@ public:
     void setLabel(const std::string &label);
     std::string getLabel() const { return m_label; }
 
+    void setShortLabel(const std::string &shortLabel);
+    std::string getShortLabel() const { return m_shortLabel; }
+
     void setPresetLabel(const std::string &label);
     std::string getPresetLabel() const { return m_presetLabel; }
 
@@ -136,6 +139,7 @@ private:
     TrackId        m_id;
     bool           m_muted;
     std::string    m_label;
+    std::string    m_shortLabel;
     std::string    m_presetLabel;
     int            m_position;
     InstrumentId   m_instrument;

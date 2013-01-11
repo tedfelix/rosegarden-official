@@ -1304,6 +1304,9 @@ LilyPondExporter::write()
                     staffName << protectIllegalChars(m_composition->
                                                     getTrackById(lastTrackIndex)->getLabel());
 
+                    std::string shortStaffName = protectIllegalChars(m_composition->
+                            getTrackById(lastTrackIndex)->getShortLabel());
+
                     /*
                     * The context name is unique to a single track.
                     */
@@ -1341,8 +1344,16 @@ LilyPondExporter::write()
                         str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
                             << std::endl;
                     } else {
+                        // always write long staff name
                         str << indent(++col) << "\\set Staff.instrumentName = "
                             << staffNameWithTranspose.str() << std::endl;
+
+                        // write short staff name if non-empty AND (conditions?
+                        // we need some other conditions!)
+                        if (shortStaffName.size()) {
+                            str << indent(col) << "\\set Staff.shortInstrumentName = \""
+                                << shortStaffName << "\"" << std::endl;
+                        }
                     }
 
                     // Set always midi instrument for the Staff
@@ -1801,7 +1812,7 @@ LilyPondExporter::write()
     // write \layout block
     str << indent(col++) << "\\layout {" << std::endl;
     if (!m_exportEmptyStaves) {
-        str << indent(col) << "\\context { \\GrandStaff \\RemoveEmptyStaves }" << std::endl;
+        str << indent(col) << "\\context { \\Staff \\RemoveEmptyStaves }" << std::endl;
     }
     if (m_chordNamesMode) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;

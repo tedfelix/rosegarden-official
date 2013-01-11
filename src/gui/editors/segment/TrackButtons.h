@@ -154,7 +154,7 @@ public slots:
      *
      * @see changeTrackName()
      */
-    void slotRenameTrack(QString newName, TrackId trackId);
+    void slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId);
 
     /// Sets the level of the VU meter on a track.
     /**

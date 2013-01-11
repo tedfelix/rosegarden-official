@@ -18,9 +18,8 @@
 
 #include "TrackLabel.h"
 
-#include "gui/widgets/LineEdit.h"
-#include "gui/widgets/InputDialog.h"
 #include "misc/Debug.h"
+#include "gui/dialogs/TrackLabelDialog.h"
 
 #include <QFont>
 #include <QFrame>
@@ -160,18 +159,25 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
     //
     setSelected(true);
 
-    bool ok = false;
 
-    QString newText = InputDialog::getText(this,
-                                           tr("Change track name"),
-                                           tr("Enter new track name"),
-                                           LineEdit::Normal,
-                                           m_trackName,
-                                           &ok
-                                           );
+    TrackLabelDialog dlg(this,
+                         tr("Change track name"),
+                         tr("Enter new track name"),
+                         m_trackName,
+                         tr("The track name is also the notation staff name, eg. &quot;Trumpet.&quot;"),
+                         tr("Enter short name"),
+                         m_shortName,
+                         tr("The short name is an alternate name that appears each time the staff system wraps, eg. &quot;Tr.&quot;")
+                         );
 
-    if ( ok )
-        emit renameTrack(newText, m_id);
+    if (dlg.exec() == QDialog::Accepted) {
+
+        QString longLabel = dlg.getPrimaryText();
+        QString shortLabel = dlg.getSecondaryText();
+
+        emit renameTrack(longLabel, shortLabel, m_id);
+    }
+
 }
 
 }

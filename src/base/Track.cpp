@@ -52,6 +52,7 @@ Track::Track(TrackId id,
    m_id(id),
    m_muted(muted),
    m_label(label),
+   m_shortLabel(""),
    m_position(position),
    m_instrument(instrument),
    m_owningComposition(0),
@@ -84,6 +85,13 @@ void Track::setLabel(const std::string &label)
     if (m_label == label) return;
 
     m_label = label;
+}
+
+void Track::setShortLabel(const std::string &shortLabel)
+{
+    if (m_shortLabel == shortLabel) return;
+
+    m_shortLabel = shortLabel;
 }
 
 void Track::setPresetLabel(const std::string &label)
@@ -143,6 +151,7 @@ std::string Track::toXmlString()
 
     track << "<track id=\"" << m_id;
     track << "\" label=\"" << encode(m_label);
+    track << "\" shortLabel=\"" << encode(m_shortLabel);
     track << "\" position=\"" << m_position;
 
     track << "\" muted=";

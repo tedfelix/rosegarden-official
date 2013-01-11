@@ -750,6 +750,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                  label,
                                  muted);
 
+        QString shortLabelStr = atts.value("shortLabel");
+        if (!shortLabelStr.isEmpty()) {
+            track->setShortLabel(shortLabelStr.toStdString());
+        }
+
         // track properties affecting newly created segments are initialized
         // to default values in the ctor, so they don't need to be initialized
         // here

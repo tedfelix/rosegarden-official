@@ -194,6 +194,7 @@ TrackButtons::updateUI(Track *track)
         }
     } else {
         label->setTrackName(track->getLabel().c_str());
+        label->setShortName(track->getShortLabel().c_str());
     }
 
     initInstrumentNames(ins, label);
@@ -480,30 +481,26 @@ TrackButtons::getHighlightedTracks()
 #endif
 
 void
-TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
+TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId)
 {
-    if (!m_doc)
-        return;
+    if (!m_doc) return;
 
     Track *track = m_doc->getComposition().getTrackById(trackId);
 
-    if (!track)
-        return;
+    if (!track) return;
 
     TrackLabel *label = m_trackLabels[track->getPosition()];
 
-    // If the name isn't really changing
-    if (label->getTrackName() == newName)
-        return;
+    // If neither label is changing, skip it
+    if (label->getTrackName() == longLabel &&
+        QString::fromStdString(track->getShortLabel()) == shortLabel) return;
 
     // Rename the track
     CommandHistory::getInstance()->addCommand(
             new RenameTrackCommand(&m_doc->getComposition(),
                                    trackId,
-                                   qstrtostr(newName)));
-
-    // Width cannot change.  Remove this.
-    //emit widthChanged();
+                                   longLabel,
+                                   shortLabel));
 }
 
 void
@@ -1052,8 +1049,8 @@ TrackButtons::makeButton(Track *track)
     trackLabel->setFixedHeight(m_cellSize - m_buttonGap);
     trackLabel->setIndent(7);
 
-    connect(trackLabel, SIGNAL(renameTrack(QString, TrackId)),
-            SLOT(slotRenameTrack(QString, TrackId)));
+    connect(trackLabel, SIGNAL(renameTrack(QString, QString, TrackId)),
+            SLOT(slotRenameTrack(QString, QString, TrackId)));
 
     m_trackLabels.push_back(trackLabel);
 
