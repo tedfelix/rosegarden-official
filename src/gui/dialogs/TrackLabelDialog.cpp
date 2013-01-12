@@ -17,11 +17,13 @@
 
 #include "TrackLabelDialog.h"
 #include "gui/widgets/LineEdit.h"
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDialogButtonBox>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -38,9 +40,16 @@ TrackLabelDialog::TrackLabelDialog(QWidget *parent,
                                    const QString &secondaryTooltip) :
             QDialog(parent)
 {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    QString localStyle("QDialog {background-color: #000000} QLabel{background-color: transparent; color: #FFFFFF}");
+    if (Thorn) setStyleSheet(localStyle);
+
     setModal(true);
     setWindowTitle(title);
-    // stylesheet is all to hell; bad parent style needs override
 
     QVBoxLayout *layout = new QVBoxLayout;
 
