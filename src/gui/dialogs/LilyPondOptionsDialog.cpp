@@ -250,7 +250,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyMarkerMode->addItem(tr("Marker text"));
 
     layoutNotation->addWidget(new QLabel(
-                                   tr("Export markers"), frameNotation),6, 0);
+                                   tr("Export markers"), frameNotation), 7, 0);
     layoutNotation->addWidget(m_lilyMarkerMode, 7, 1);
     m_lilyMarkerMode->setToolTip(tr("<qt>Markers are found on the <b>Marker Ruler</b>.  They may be exported as text, or as rehearsal marks.</qt>"));
 
@@ -270,7 +270,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyNoteLanguage->addItem("Vlaams");
 
     layoutNotation->addWidget(new QLabel(
-            tr("Notation language"), frameNotation), 7, 0);
+            tr("Notation language"), frameNotation), 8, 0);
     layoutNotation->addWidget(m_lilyNoteLanguage, 8, 1);
     m_lilyNoteLanguage->setToolTip(tr("<qt>Outputs note names and accidentals in any of LilyPond's supported languages</qt>"));
 
