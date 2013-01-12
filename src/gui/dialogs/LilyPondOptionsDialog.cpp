@@ -217,26 +217,31 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     m_lilyExportBeams = new QCheckBox(
                             tr("Export beamings"), frameNotation);
-    layoutNotation->addWidget(m_lilyExportBeams, 2, 0, 0+1, 1- 0+1);
+    layoutNotation->addWidget(m_lilyExportBeams, 2, 0, 1, 2);
     m_lilyExportBeams->setToolTip(tr("<qt>If checked, Rosegarden's beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.</qt>"));
 
     // recycle this for a new option to ignore the track brackets (so it is less
     // obnoxious to print single parts where brackets are in place)
     m_lilyExportStaffGroup = new QCheckBox(
                                  tr("Export track staff brackets"), frameNotation);
-    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1);
+    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 1, 2);
     m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
+
+    m_useShortNames = new QCheckBox(
+                          tr("Print short staff names"), frameNotation);
+    m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages</qt>"));
+    layoutNotation->addWidget(m_useShortNames, 4, 0, 1, 2);
 
     layoutGrid->setRowStretch(4, 10);
 
     m_lilyChordNamesMode = new QCheckBox(
                            tr("Interpret chord texts as lead sheet chord names"), frameNotation);
-    layoutNotation->addWidget(m_lilyChordNamesMode, 4, 0, 0+1, 1- 0+1);
+    layoutNotation->addWidget(m_lilyChordNamesMode, 5, 0, 1, 2);
     m_lilyChordNamesMode->setToolTip(tr("<qt><p>There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html</p></qt>"));
 
     m_lilyRaggedBottom = new QCheckBox(
                            tr("Ragged bottom (systems will not be spread vertically across the page)"), frameNotation);
-    layoutNotation->addWidget(m_lilyRaggedBottom, 5, 0, 0+1, 1- 0+1);
+    layoutNotation->addWidget(m_lilyRaggedBottom, 6, 0, 1, 2);
     m_lilyRaggedBottom->setToolTip(tr("<qt><p>Useful for multi-page scores: this may prevent ugly final pages</p></qt>"));
 
     m_lilyMarkerMode = new QComboBox(frameNotation);
@@ -246,7 +251,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     layoutNotation->addWidget(new QLabel(
                                    tr("Export markers"), frameNotation),6, 0);
-    layoutNotation->addWidget(m_lilyMarkerMode, 6, 1);
+    layoutNotation->addWidget(m_lilyMarkerMode, 7, 1);
     m_lilyMarkerMode->setToolTip(tr("<qt>Markers are found on the <b>Marker Ruler</b>.  They may be exported as text, or as rehearsal marks.</qt>"));
 
     m_lilyNoteLanguage = new QComboBox(frameNotation);
@@ -266,7 +271,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     layoutNotation->addWidget(new QLabel(
             tr("Notation language"), frameNotation), 7, 0);
-    layoutNotation->addWidget(m_lilyNoteLanguage, 7, 1);
+    layoutNotation->addWidget(m_lilyNoteLanguage, 8, 1);
     m_lilyNoteLanguage->setToolTip(tr("<qt>Outputs note names and accidentals in any of LilyPond's supported languages</qt>"));
 
 //     m_lilyRepeatMode = new QComboBox(frameNotation);
@@ -281,21 +286,21 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                            tr("Use repeat when possible"), frameNotation);
     m_lilyRepeatMode->setToolTip(tr("<qt>How to export repeating segments: When unchecked, "
                                     "repeating segments are always unfolded.</qt>"));
-    layoutNotation->addWidget(m_lilyRepeatMode, 8, 0);
+    layoutNotation->addWidget(m_lilyRepeatMode, 9, 0);
 
     m_lilyDrawBarAtVolta = new QCheckBox(
                            tr("Draw bar line at volta"), frameNotation);
     m_lilyDrawBarAtVolta->setToolTip(tr("<qt>If checked a bar line is always "
                                     "drawn when a volta begins even if it "
                                     "begins in the middle of a bar.</qt>"));
-    layoutNotation->addWidget(m_lilyDrawBarAtVolta, 9, 0);
+    layoutNotation->addWidget(m_lilyDrawBarAtVolta, 10, 0);
 
     m_cancelAccidentals = new QCheckBox(tr("Cancel accidentals"));
-    layoutNotation->addWidget(m_cancelAccidentals, 10, 0);
+    layoutNotation->addWidget(m_cancelAccidentals, 11, 0);
     m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</qt>"));
 
     m_lilyExportEmptyStaves = new QCheckBox(tr("Export empty staves"));
-    layoutNotation->addWidget(m_lilyExportEmptyStaves, 11, 0);
+    layoutNotation->addWidget(m_lilyExportEmptyStaves, 12, 0);
     m_lilyExportEmptyStaves->setToolTip(tr("<qt>When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.</qt>"));
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
@@ -353,6 +358,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyPaperLandscape->setChecked(qStrToBool(settings.value("lilypaperlandscape", "false")));
     m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", FONT_20).toUInt());
     m_lilyRaggedBottom->setChecked(qStrToBool(settings.value("lilyraggedbottom", "false")));
+    m_useShortNames->setChecked(qStrToBool(settings.value("lilyuseshortnames", "true")));
     m_lilyExportEmptyStaves->setChecked(qStrToBool(settings.value("lilyexportemptystaves", "false")));
     m_lilyChordNamesMode->setChecked(qStrToBool(settings.value("lilychordnamesmode", "false")));
     m_lilyExportLyrics->setCurrentIndex(settings.value("lilyexportlyrics", 1).toUInt());
@@ -393,6 +399,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
     settings.setValue("lilyfontsize", m_lilyFontSize->currentIndex());
     settings.setValue("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
+    settings.setValue("lilyuseshortnames", m_useShortNames->isChecked());
     settings.setValue("lilyexportemptystaves", m_lilyExportEmptyStaves->isChecked());
     settings.setValue("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
     settings.setValue("lilyexportlyrics", m_lilyExportLyrics->currentIndex());

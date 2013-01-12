@@ -121,25 +121,26 @@ LilyPondExporter::readConfigVariables(void)
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
 
-    m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt() ;
-    m_paperLandscape = qStrToBool(settings.value("lilypaperlandscape", "false")) ;
-    m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
-    m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
-    m_exportEmptyStaves = qStrToBool(settings.value("lilyexportemptystaves", "false")) ;
-    m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
+    m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt();
+    m_paperLandscape = qStrToBool(settings.value("lilypaperlandscape", "false"));
+    m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt();
+    m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false"));
+    m_exportEmptyStaves = qStrToBool(settings.value("lilyexportemptystaves", "false"));
+    m_useShortNames = qStrToBool(settings.value("lilyuseshortnames", "true"));
+    m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt();
     if (settings.value("lilyexporteditedsegments", "false").toBool()) {
         m_exportSelection = EXPORT_EDITED_SEGMENTS;
     }
-    m_exportLyrics = settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT).toUInt() ;
-    m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
-    m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false")) ;
-    m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true")) ;
+    m_exportLyrics = settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT).toUInt();
+    m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt();
+    m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false"));
+    m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true"));
 
-    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt() ;
-    m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt() ;
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt();
+    m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
-    m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
-//    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt() ;
+    m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
+//    m_repeatMode = settings.value("lilyrepeatmode", REPEAT_BASIC).toUInt();
     m_repeatMode = settings.value("lilyexportrepeat", "true").toBool() ? REPEAT_VOLTA : REPEAT_UNFOLD;
     m_voltaBar = settings.value("lilydrawbaratvolta", "true").toBool();
     m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
@@ -1348,9 +1349,9 @@ LilyPondExporter::write()
                         str << indent(++col) << "\\set Staff.instrumentName = "
                             << staffNameWithTranspose.str() << std::endl;
 
-                        // write short staff name if non-empty AND (conditions?
-                        // we need some other conditions!)
-                        if (shortStaffName.size()) {
+                        // write short staff name if user desires, and if
+                        // non-empty
+                        if (m_useShortNames && shortStaffName.size()) {
                             str << indent(col) << "\\set Staff.shortInstrumentName = \""
                                 << shortStaffName << "\"" << std::endl;
                         }

@@ -227,6 +227,7 @@ private:
 
     bool m_raggedBottom;
     bool m_exportEmptyStaves;
+    bool m_useShortNames;
 
     unsigned int m_exportMarkerMode;
 

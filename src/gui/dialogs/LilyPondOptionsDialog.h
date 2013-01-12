@@ -63,6 +63,7 @@ protected:
     QComboBox *m_lilyExportLyrics;
     QCheckBox *m_lilyPaperLandscape;
     QCheckBox *m_lilyRaggedBottom;
+    QCheckBox *m_useShortNames;
     QCheckBox *m_lilyExportEmptyStaves;
     QCheckBox *m_lilyChordNamesMode;
     QCheckBox *m_lilyExportBeams;
