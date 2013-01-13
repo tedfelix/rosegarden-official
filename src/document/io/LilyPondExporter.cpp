@@ -1322,10 +1322,13 @@ LilyPondExporter::write()
                     // HJJ: Should it be automatically added to the clef: G^8 ?
                     // What if two segments have different transpose in a track?
                     std::ostringstream staffNameWithTranspose;
-                    staffNameWithTranspose << "\\markup { \\column { \"" << staffName.str() << " \"";
+                    staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName.str() << " \"";
                     if ((seg->getTranspose() % 12) != 0) {
                         staffNameWithTranspose << " \\line { ";
-                        switch (seg->getTranspose() % 12) {
+                        int t = seg->getTranspose();
+                        t %= 12;
+                        if (t < 0) t+= 12;
+                        switch (t) {
                         case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
                         case 2 : staffNameWithTranspose << "\"in D\""; break;
                         case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
