@@ -536,6 +536,7 @@ PixmapArray CompositionModelImpl::getAudioPreviewPixmap(const Segment* s)
 void CompositionModelImpl::eventAdded(const Segment *s, Event *)
 {
     //RG_DEBUG << "CompositionModelImpl::eventAdded()";
+    Profiler profiler("CompositionModelImpl::eventAdded()");
     removePreviewCache(s);
     emit needContentUpdate(computeSegmentRect(*s));
 }
@@ -543,6 +544,7 @@ void CompositionModelImpl::eventAdded(const Segment *s, Event *)
 void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
 {
     //RG_DEBUG << "CompositionModelImpl::eventRemoved";
+    Profiler profiler("CompositionModelImpl::eventRemoved()");
     removePreviewCache(s);
     emit needContentUpdate(computeSegmentRect(*s));
 }

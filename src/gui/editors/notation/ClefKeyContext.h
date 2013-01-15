@@ -33,7 +33,7 @@
  * one depending of segments opened in each editor).
  */
 
-//!!! Currently, clefs and keys lists used by notation editor are maintained
+// !!! Currently, clefs and keys lists used by notation editor are maintained
 // in three different places:
 //     - 1) In NotationStaff (m_clefChanges and m_keyChanges)
 //     - 2) In StaffHeader (m_clefOverlaps and m_keyOverlaps)

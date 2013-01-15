@@ -27,7 +27,7 @@
 #include <cstdio>
 #include <typeinfo>
 
-/// YG: Only for debug (dumpObservers)
+// YG: Only for debug (dumpObservers)
 #include "gui/editors/notation/StaffHeader.h"
 
 namespace Rosegarden
@@ -475,6 +475,10 @@ Segment::getRawEndMarkerTime() const
 void
 Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
+    Profiler profiler("Segment::updateRefreshStatuses()");
+
+    // For each observer, indicate that a refresh is needed for this time
+    // span.
     for(size_t i = 0; i < m_refreshStatusArray.size(); ++i)
         m_refreshStatusArray.getRefreshStatus(i).push(startTime, endTime);
 }
@@ -485,9 +489,12 @@ Segment::insert(Event *e)
 {
     assert(e);
 
+    // Event Start Time
     timeT t0 = e->getAbsoluteTime();
+    // Event End Time
     timeT t1 = t0 + e->getDuration();
 
+    // If this event starts before the segment start time
     if (t0 < m_startTime ||
         (begin() == end() && t0 > m_startTime)) {
 
@@ -496,6 +503,7 @@ Segment::insert(Event *e)
         notifyStartChanged(m_startTime);
     }
 
+    // If this event ends after the segment end time
     if (t1 > m_endTime ||
         begin() == end()) {
         timeT oldTime = m_endTime;
@@ -1355,6 +1363,8 @@ Segment::getRepeatEndTime() const
 void
 Segment::notifyAdd(Event *e) const
 {
+    Profiler profiler("Segment::notifyAdd()");
+
     if (e->isa(Clef::EventType) || e->isa(Key::EventType)) {
         if (!m_clefKeyList) m_clefKeyList = new ClefKeyList;
         m_clefKeyList->insert(e);
@@ -1370,6 +1380,8 @@ Segment::notifyAdd(Event *e) const
 void
 Segment::notifyRemove(Event *e) const
 {
+    Profiler profiler("Segment::notifyRemove()");
+
     if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
         ClefKeyList::iterator i;
         for (i = m_clefKeyList->find(e); i != m_clefKeyList->end(); ++i) {
@@ -1416,6 +1428,8 @@ Segment::notifyStartChanged(timeT newTime)
 void
 Segment::notifyEndMarkerChange(bool shorten)
 {
+    Profiler profiler("Segment::notifyEndMarkerChange()");
+
     if (m_notifyResizeLocked) return;
 
     for (ObserverSet::const_iterator i = m_observers.begin();

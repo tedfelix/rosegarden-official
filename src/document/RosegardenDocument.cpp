@@ -1844,6 +1844,8 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 void
 RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 {
+    Profiler profiler("RosegardenDocument::insertRecordedMidi()");
+
     //RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events";
 
     // Just create a new record Segment if we don't have one already.
@@ -2124,6 +2126,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         QSettings settings;
         settings.beginGroup( GeneralOptionsConfigGroup );
 
+        // This is usually 0.  I don't think there is even a way to change
+        // this through the UI.
         int tracking = settings.value("recordtracking", 0).toUInt() ;
         settings.endGroup();
         if (tracking == 1) { // notation
@@ -2152,6 +2156,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 void
 RosegardenDocument::updateRecordingMIDISegment()
 {
+    Profiler profiler("RosegardenDocument::updateRecordingMIDISegment()");
+
 //    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
 
     if (m_recordMIDISegments.size() == 0) {
@@ -2232,7 +2238,7 @@ RosegardenDocument::NoteOnRecSet *
 RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
-    //Profiler profiler("RosegardenDocument::adjustEndTimes()");
+    Profiler profiler("RosegardenDocument::adjustEndTimes()");
 
     // Create a vector to hold the new note-on events for return.
     NoteOnRecSet *new_vector = new NoteOnRecSet();
@@ -2297,6 +2303,8 @@ RosegardenDocument::storeNoteOnEvent(Segment *s, Segment::iterator it, int devic
 void
 RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool isNoteOn)
 {
+    Profiler profiler("RosegardenDocument::insertRecordedEvent()");
+
     Segment::iterator it;
     for ( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
             i != m_recordMIDISegments.end(); ++i) {
