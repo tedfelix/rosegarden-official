@@ -33,8 +33,10 @@ class MappedInserterBase;
 class Segment;
 class RosegardenDocument;
 
-// @class ControllerAndPBList Set of controllers and pitchbends
-// @author Tom Breton (Tehom)
+/// Set of controllers and pitchbends
+/**
+ * @author Tom Breton (Tehom)
+ */
 struct ControllerAndPBList
 {
     ControllerAndPBList(void) { }
@@ -49,9 +51,12 @@ struct ControllerAndPBList
     int               m_pitchbend;
 };
 
-// @class ChannelManager Channel manager for use by a mapper.  Base
-// class for the specialized channel managers.
-// @author Tom Breton (Tehom)
+/// Channel manager for use by a mapper.
+/**
+ * Base class for the specialized channel managers.
+ *
+ * @author Tom Breton (Tehom)
+ */
 class ChannelManager : public QObject
 {
     Q_OBJECT
@@ -61,11 +66,13 @@ class ChannelManager : public QObject
     friend class ImmediateNote;
 
 public:
-    // @class MapperFunctionality Base class to provide covariance with
-    // MIDI-type mappers.  InternalSegmentMapper and MetronomeMapper
-    // subclass this, add a pointer member to themselves, and pass that as
-    // a callback argument.
-    // @author Tom Breton (Tehom)
+    /// Base class to provide covariance with MIDI-type mappers.
+    /**
+     * InternalSegmentMapper and MetronomeMapper subclass this, add a
+     * pointer member to themselves, and pass that as a callback argument.
+     *
+     * @author Tom Breton (Tehom)
+     */
     class MapperFunctionality
     {
     public:
@@ -120,28 +127,32 @@ public:
         MidiByte value);
 
 protected slots:
-    // Something is kicking everything off channel in our device.
+    /// Something is kicking everything off channel in our device.
     void slotVacateChannel(ChannelId channel);
-    // Our instrument and its entire device are being destroyed.  This
-    // exists so we can take a shortcut.
+    /// Our instrument and its entire device are being destroyed.
+    /**
+     * This exists so we can take a shortcut.
+     */
     void slotLosingDevice(void);
-    // Our instrument is being destroyed.  We may or may not have
-    // received slotLosingDevice first.
+    /// Our instrument is being destroyed.
+    /**
+     * We may or may not have received slotLosingDevice first.
+     */
     void slotLosingInstrument(void);
 
-    // Our instrument now has different settings so we must reinit the
-    // channel. 
+    /// Our instrument now has different settings so we must reinit the channel.
     void slotInstrumentChanged(void);
 
-    // Our instrument now has/lacks a fixed channel.
+    /// Our instrument now has a fixed channel.
     void slotChannelBecomesFixed(void);
+    /// Our instrument now lacks a fixed channel.
     void slotChannelBecomesUnfixed(void);
 
 public:
-    // Free the channel interval it owned.
+    /// Free the channel interval it owned.
     void freeChannelInterval(void);
 
-    // Insert event via inserter, pre-inserting appropriate setup.
+    /// Insert event via inserter, pre-inserting appropriate setup.
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                 RealTime reftime,
                 MapperFunctionality *functionality,
@@ -151,8 +162,10 @@ public:
 
     void setDirty(void)  { m_inittedForOutput = false; }
 
-    // Set an interval that this ChannelManager must cover.  This does
-    // not do allocation.
+    /// Set an interval that this ChannelManager must cover.
+    /**
+     * This does not do allocation.
+     */
     void setRequiredInterval(RealTime start, RealTime end,
                              RealTime startMargin, RealTime endMargin)
     {
@@ -162,26 +175,33 @@ public:
         m_endMargin   = endMargin;
     }
 
-    // Allocate a sufficient channel interval if possible.  It is safe
-    // to call this more than once, ie even if we already have a channel
-    // interval.
+    /// Allocate a sufficient channel interval if possible.
+    /*
+     * It is safe to call this more than once, ie even if we already have a
+     * channel interval.
+     */
     void reallocate(bool changedInstrument);
 
     void debugPrintStatus(void);
 
 protected:
 
+    /**************************/
     /*** Internal functions ***/
 
-    /* Functions about allocating. */
+    /*** Functions about allocating. ***/
 
     AllocateChannels *getAllocator(void);
     void setChannelIdDirectly(void);
 
-    // (Dis)connect signals to allocator.  We disconnect just when we
-    // don't have a valid channel given by the allocator.  Note that
-    // this doesn't neccessarily correspond to m_usingAllocator's state.
+    /// Connect signals to allocator.
     void connectAllocator(void);
+    /// Disconnect signals from allocator.
+    /**
+     * We disconnect just when we don't have a valid channel given by
+     * the allocator.  Note that this doesn't necessarily correspond
+     * to m_usingAllocator's state.
+     */
     void disconnectAllocator(void);
 
     void setAllocationMode(Instrument *instrument);
@@ -195,40 +215,53 @@ protected:
                             RealTime reftime, RealTime insertTime,
                             MapperFunctionality *functionality, int trackId);
 
+    /********************/
     /*** Data members ***/
 
-    // The channel interval that is allocated for this segment.
+    /// The channel interval that is allocated for this segment.
+    /**
+     * rename: m_channelInterval
+     */
     ChannelInterval m_channel;
 
-    // Whether we are to get a channel interval thru Device's allocator.
-    // The alternative is to get one as a fixed channel.  Can be true
-    // even when we don't currently have a valid a channel.
+    /// Whether we are to get a channel interval thru Device's allocator.
+    /**
+     * The alternative is to get one as a fixed channel.  Can be true
+     * even when we don't currently have a valid a channel.
+     */
     bool m_usingAllocator;
 
-    // The times required for start and end.  m_channel may be larger
-    // but never smaller.
+    /// The times required for start and end.
+    /**
+     * m_channel may be larger but never smaller.
+     */
     RealTime m_start, m_end;
 
-    // Margins required if instrument has changed.
+    /// Margins required if instrument has changed.
     RealTime m_startMargin, m_endMargin;
 
-    // The instrument this plays on.  I don't own this.
+    /// The instrument this plays on.  I don't own this.
     Instrument *m_instrument;
 
-    // Whether the output channel has been set up for m_channel.  Here
-    // we only deal with having the right channel.  doInsert's firstOutput
-    // argument tells us if we need setup for some other reason such as jumping
-    // in time.
+    /// Whether the output channel has been set up for m_channel.
+    /**
+     * Here we only deal with having the right channel.  doInsert's
+     * firstOutput argument tells us if we need setup for some other
+     * reason such as jumping in time.
+     */
     bool m_inittedForOutput;
-    // Whether we have tried to allocate a channel interval, not
-    // neccessarily successfully.  This allows some flexibility without
-    // making us search again every time we insert a note.
+    /// Whether we have tried to allocate a channel interval.
+    /**
+     * Does not imply success.  This allows some flexibility without
+     * making us search again every time we insert a note.
+     */
     bool m_triedToGetChannel;
 };
 
-// @class EternalChannelManager Channel manager of an channel
-// that encompasses the entire playing time.
-// @author Tom Breton (Tehom)
+/// Channel manager of a channel that encompasses the entire playing time.
+/**
+ * @author Tom Breton (Tehom)
+ */
 class EternalChannelManager : public ChannelManager
 {
 public:
@@ -241,13 +274,14 @@ public:
                             RealTime::zeroTime);
     }
 
-    // Reallocate its channel
+    /// Reallocate its channel
     void reallocateEternalChannel(void)  { reallocate(false); }
 };
 
-// @class IntervalChannelManager Channel manager of an channel
-// interval. 
-// @author Tom Breton (Tehom)
+/// Channel manager of a channel interval.
+/**
+ * @author Tom Breton (Tehom)
+ */
 class IntervalChannelManager : public ChannelManager
 {
 public:
@@ -255,7 +289,7 @@ public:
         ChannelManager(instrument) 
     { }
 
-    // Reallocate its channel interval.
+    /// Reallocate its channel interval.
     void reallocateChannel(RealTime start, RealTime end) 
     {
         setRequiredInterval(start, end, RealTime::zeroTime, RealTime(1,0));
