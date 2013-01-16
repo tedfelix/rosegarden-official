@@ -15,19 +15,36 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MAPPEDINSERTERBASE_H_
-#define _MAPPEDINSERTERBASE_H_
+#ifndef RG_MAPPEDINSERTERBASE_H
+#define RG_MAPPEDINSERTERBASE_H
 
 namespace Rosegarden
 {
 class MappedEvent;
-  
+
+/// Base class for the polymorphic event inserters.
+/**
+ * There are three derivers:
+ *
+ *   - MappedEventInserter for playback
+ *   - SortingInserter for sorting events when generating standard MIDI files
+ *   - MidiInserter for generating standard MIDI files
+ *
+ * See each of the above for more details.
+ *
+ * Polymorphism in this case lets us use the same code to drive playback
+ * and MIDI file generation.
+ */
 class MappedInserterBase
 {
- public:
-  virtual void insertCopy(const MappedEvent &evt)=0;
+public:
+    // Make sure the proper derived dtor gets called.
+    virtual ~MappedInserterBase()  { }
+
+    /// Derivers override this to provide more specific insertion behavior.
+    virtual void insertCopy(const MappedEvent &evt) = 0;
 };
 
 }
 
-#endif /* ifndef _MAPPEDINSERTERBASE_H_ */
+#endif /* ifndef RG_MAPPEDINSERTERBASE_H */

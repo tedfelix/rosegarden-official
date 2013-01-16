@@ -19,6 +19,7 @@
 
 namespace Rosegarden
 {
+
 void
 SortingInserter::
 insertSorted(MappedInserterBase &exporter)
@@ -32,6 +33,7 @@ insertSorted(MappedInserterBase &exporter)
         exporter.insertCopy(*i);
     }
 }
+
 void
 SortingInserter::
 insertCopy(const MappedEvent &evt)

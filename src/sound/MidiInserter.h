@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MIDIINSERTER_H_
-#define _MIDIINSERTER_H_
+#ifndef RG_MIDIINSERTER_H
+#define RG_MIDIINSERTER_H
 
 #include "base/RealTime.h"
 #include "sound/MappedInserterBase.h"
@@ -25,9 +25,12 @@
 namespace Rosegarden
 {
 
-// @class MidiInserter is an inserter suitable for
-// fetchEvents and meant to support MidiFile.
-// @author Tom Breton (Tehom)
+/// Inserter used to generate a standard MIDI file.
+/**
+ * @see MidiFile::convertToMidi()
+ *
+ * @author Tom Breton (Tehom)
+ */
 class MidiInserter : public MappedInserterBase
 {
     // @class MidiInserter::TrackData describes and contains a track
@@ -52,6 +55,7 @@ class MidiInserter : public MappedInserterBase
 
  public:
     MidiInserter(Composition &composition, int timingDivision, RealTime trueEnd);
+
     virtual void insertCopy(const MappedEvent &evt);
 
     void assignToMidiFile(MidiFile &midifile);
@@ -99,4 +103,4 @@ class MidiInserter : public MappedInserterBase
 };
 }
 
-#endif /* ifndef _MIDIINSERTER_H_ */
+#endif /* ifndef RG_MIDIINSERTER_H */
