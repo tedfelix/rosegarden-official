@@ -308,7 +308,7 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
     }
 }
 
-// Set the channel when we're not using allocator.
+// Set a fixed channel when we're not using an allocator.
 // @author Tom Breton (Tehom) 
 void
 ChannelManager::

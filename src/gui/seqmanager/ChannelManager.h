@@ -39,11 +39,15 @@ class RosegardenDocument;
  */
 struct ControllerAndPBList
 {
-    ControllerAndPBList(void) { }
+    ControllerAndPBList(void) :
+        m_havePitchbend(false),
+        m_pitchbend(0)
+    { }
 
     ControllerAndPBList(StaticControllers &controllers) :
         m_controllers(controllers),
-        m_havePitchbend(false) 
+        m_havePitchbend(false),
+        m_pitchbend(0)
     { }
 
     StaticControllers m_controllers;
@@ -51,9 +55,33 @@ struct ControllerAndPBList
     int               m_pitchbend;
 };
 
-/// Channel manager for use by a mapper.
+/// Owns and services a channel interval for an instrument.
 /**
  * Base class for the specialized channel managers.
+ *
+ * ChannelManager's purpose is to own and service a channel interval
+ * (m_channel),
+ * relative to an instrument that wants to play on it.  It is owned by some
+ * note-producing source: InternalSegmentMapper, MetronomeMapper, or
+ * ImmediateNote (for preview notes etc).
+ *
+ * Special cases it deals with:
+ *
+ *   - Eternal channels, eg for the metronome.  Its derived class
+ *     (EternalChannelManager) just makes a channel interval that's
+ *     guaranteed to be longer than the composition.
+ *
+ *   - Fixed channels, for which it doesn't use a channel allocator
+ *     (AllocateChannels), but pretends to be doing all the same stuff.
+ *
+ * ChannelManager adapts to changes to the instrument, so it may become
+ * fixed/unfixed and ready/unready as the instrument is changed.
+ *
+ * One way in which it services channels is by providing setup events (bank &
+ * program, etc).  The note-producing source
+ * calls it with an inserter, and ChannelManager puts the respective events
+ * into the inserter and then (trusting the note-producing source to insert
+ * those events) flags itself ready.
  *
  * @author Tom Breton (Tehom)
  */
@@ -88,7 +116,7 @@ public:
     };
 
 protected:
-    // Like an ABC, only objects of a derived type are valid.
+    // Like an ABC, only objects of a derived type can be constructed.
     ChannelManager(Instrument *instrument);
 
 private:
@@ -99,8 +127,13 @@ private:
 public:
     ~ChannelManager(void)  { freeChannelInterval(); }
 
+    /// Connect signals from instrument.  Safe even for NULL.
     void connectInstrument(Instrument *instrument);
 
+    /// Send program control for instrument on channel.
+    /**
+     * Adapted from SequenceManager
+     */
     static void sendProgramForInstrument(
         ChannelId channel, 
         Instrument *instrument,
@@ -108,6 +141,10 @@ public:
         RealTime insertTime,
         int trackId);
 
+    /// Set default controllers for instrument on channel.
+    /**
+     * Adapted from SequenceManager
+     */
     static void setControllers(
         ChannelId channel, 
         Instrument *instrument,
@@ -127,11 +164,16 @@ public:
         MidiByte value);
 
 protected slots:
-    /// Something is kicking everything off channel in our device.
+    /// Something is kicking everything off "channel" in our device.
+    /**
+     * It is the signaller's responsibility to put AllocateChannels right (in
+     * fact this signal only sent by AllocateChannels)
+     */
     void slotVacateChannel(ChannelId channel);
     /// Our instrument and its entire device are being destroyed.
     /**
-     * This exists so we can take a shortcut.
+     * This exists so we can take a shortcut.  We can skip setting the
+     * device's allocator right since it's going away.
      */
     void slotLosingDevice(void);
     /// Our instrument is being destroyed.
@@ -149,15 +191,19 @@ protected slots:
     void slotChannelBecomesUnfixed(void);
 
 public:
-    /// Free the channel interval it owned.
+    /// Free the owned channel interval (m_channel).
+    /**
+     * Safe even when m_usingAllocator is false.
+     */
     void freeChannelInterval(void);
 
-    /// Insert event via inserter, pre-inserting appropriate setup.
+    /// Insert event via inserter, pre-inserting appropriate channel setup.
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                 RealTime reftime,
                 MapperFunctionality *functionality,
                 bool firstOutput, int trackId);
 
+    /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);
 
     void setDirty(void)  { m_inittedForOutput = false; }
@@ -175,13 +221,14 @@ public:
         m_endMargin   = endMargin;
     }
 
-    /// Allocate a sufficient channel interval if possible.
+    /// Allocate a sufficient channel interval in the current allocation mode.
     /*
      * It is safe to call this more than once, ie even if we already have a
      * channel interval.
      */
     void reallocate(bool changedInstrument);
 
+    /// Print our status, for tracing.
     void debugPrintStatus(void);
 
 protected:
@@ -191,12 +238,20 @@ protected:
 
     /*** Functions about allocating. ***/
 
+    /// Get the channel allocator (AllocateChannels) from the device.
     AllocateChannels *getAllocator(void);
+    /// Set a fixed channel.
+    /**
+     * @see Instrument::getNaturalChannel()
+     */
     void setChannelIdDirectly(void);
 
-    /// Connect signals to allocator.
+    /// Connect to allocator for sigVacateChannel().
+    /**
+     * @see AllocateChannels::sigVacateChannel(), slotVacateChannel()
+     */
     void connectAllocator(void);
-    /// Disconnect signals from allocator.
+    /// Disconnect from the allocator's signals.
     /**
      * We disconnect just when we don't have a valid channel given by
      * the allocator.  Note that this doesn't necessarily correspond
@@ -204,6 +259,10 @@ protected:
      */
     void disconnectAllocator(void);
 
+    /// Set m_usingAllocator appropriately for instrument.
+    /**
+     * It is safe to pass NULL here.
+     */
     void setAllocationMode(Instrument *instrument);
 
     /*** Functions about setting up the channel ***/
@@ -211,6 +270,7 @@ protected:
     void setInitted(bool initted)  { m_inittedForOutput = initted; }
     bool needsInit(void)  { return !m_inittedForOutput; }
 
+    /// Insert appropriate MIDI channel-setup.
     void insertChannelSetup(MappedInserterBase &inserter,
                             RealTime reftime, RealTime insertTime,
                             MapperFunctionality *functionality, int trackId);
@@ -231,11 +291,18 @@ protected:
      */
     bool m_usingAllocator;
 
-    /// The times required for start and end.
+    /// Required start time.
     /**
-     * m_channel may be larger but never smaller.
+     * m_channel may be larger but never smaller than m_start to m_end.
+     *
+     * @see m_end, m_channel
      */
-    RealTime m_start, m_end;
+    RealTime m_start;
+    /// Required end time.
+    /**
+     * @see m_start, m_channel
+     */
+    RealTime m_end;
 
     /// Margins required if instrument has changed.
     RealTime m_startMargin, m_endMargin;
