@@ -39,10 +39,10 @@
     </Menu>
     <Menu name="Submasters">
       <text>&amp;Number of Submasters</text>
-      <Action name="submasters_0" text="No Submasters" checked="true" group="submasters" />
-      <Action name="submasters_2" text="&amp;2 Submasters" checked="false" group="submasters" />
-      <Action name="submasters_4" text="&amp;4 Submasters" checked="false" group="submasters" />
-      <Action name="submasters_8" text="&amp;8 Submasters" checked="false" group="submasters" />
+      <Action name="submasters_0" text="No Submasters" group="submasters" />
+      <Action name="submasters_2" text="&amp;2 Submasters" group="submasters" />
+      <Action name="submasters_4" text="&amp;4 Submasters" group="submasters" />
+      <Action name="submasters_8" text="&amp;8 Submasters" group="submasters" />
     </Menu>
     <!-- JAS "show_midi" does not appear in pulldown menu. -->
     <Action name="show_midi" append="show_merge" />
