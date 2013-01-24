@@ -60,10 +60,10 @@ struct ControllerAndPBList
  * Base class for the specialized channel managers.
  *
  * ChannelManager's purpose is to own and service a channel interval
- * (m_channel),
- * relative to an instrument that wants to play on it.  It is owned by some
- * note-producing source: InternalSegmentMapper, MetronomeMapper, or
- * ImmediateNote (for preview notes etc).
+ * (ChannelManager::m_channel), relative to an instrument that wants to
+ * play on it.  It is owned by some note-producing source:
+ * InternalSegmentMapper, MetronomeMapper, or ImmediateNote (for preview
+ * notes etc).
  *
  * Special cases it deals with:
  *
@@ -94,10 +94,22 @@ class ChannelManager : public QObject
     friend class ImmediateNote;
 
 public:
-    /// Base class to provide covariance with MIDI-type mappers.
+    /// %Controller and pitchbend info callback interface.
     /**
-     * InternalSegmentMapper and MetronomeMapper subclass this, add a
+     * Base class to provide covariance with MIDI-type mappers.
+     *
+     * InternalSegmentMapper and MetronomeMapper(?) subclass this, add a
      * pointer member to themselves, and pass that as a callback argument.
+     *
+     * Assuming this class will not grow to offer more callback interfaces,
+     * a better name might be ControllerAndPitchbendCB.  Since there is
+     * only a single CB interface (getControllers()) this could be renamed
+     * to be operator()() making this class into a functor.
+     *
+     * If this class is going to grow, then this is an interface class
+     * used to decouple Instrument and InternalSegmentMapper from
+     * ChannelManager.  In that case a name like ChannelMgrCBInterfaces
+     * or IChannelMgrCallbacks might be more descriptive.
      *
      * @author Tom Breton (Tehom)
      */
@@ -108,6 +120,14 @@ public:
             Instrument *instrument, RealTime start) = 0;
     };
 
+    /// %Controller and pitchbend callback that obtains info from the Instrument.
+    /**
+     * This is a simple implementation of the controller and pitchbend
+     * callback functor (MapperFunctionality) that gets controller and
+     * pitchbend info from the Instrument object.
+     *
+     * rename: CPBFromInstrument (assuming MapperFunctionality won't grow)
+     */
     class MapperFunctionalitySimple : public MapperFunctionality
     {
     public:
@@ -143,6 +163,12 @@ public:
 
     /// Set default controllers for instrument on channel.
     /**
+     * Inserts the following via the inserter:
+     *
+     *   - All controllers off
+     *   - Controllers obtained via MapperFunctionality callback
+     *   - Pitchbend from MapperFunctionality callback
+     *
      * Adapted from SequenceManager
      */
     static void setControllers(
