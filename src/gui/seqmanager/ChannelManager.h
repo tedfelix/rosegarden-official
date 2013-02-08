@@ -20,6 +20,7 @@
 
 #include "base/ChannelInterval.h"
 #include "base/Instrument.h"
+#include "base/RealTime.h"
 
 #include <QObject>
 
@@ -145,7 +146,7 @@ private:
     ChannelManager &operator=(const ChannelManager &);
 
 public:
-    ~ChannelManager(void)  { freeChannelInterval(); }
+    virtual ~ChannelManager(void)  { freeChannelInterval(); }
 
     /// Connect signals from instrument.  Safe even for NULL.
     void connectInstrument(Instrument *instrument);
