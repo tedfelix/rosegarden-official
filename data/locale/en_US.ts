@@ -23026,12 +23026,14 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
         <translation>
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+25"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
         <translation>
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -23065,17 +23067,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
     <message>
         <location line="+2"/>
-        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
+        <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
+        <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location line="-2"/>
         <source>Enter short name</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
         <translation></translation>
     </message>
 </context>

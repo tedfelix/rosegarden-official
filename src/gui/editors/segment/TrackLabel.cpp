@@ -164,10 +164,10 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
                          tr("Change track name"),
                          tr("Enter new track name"),
                          m_trackName,
-                         tr("The track name is also the notation staff name, eg. &quot;Trumpet.&quot;"),
+                         tr("<qt>The track name is also the notation staff name, eg. &quot;Trumpet.&quot;</qt>"),
                          tr("Enter short name"),
                          m_shortName,
-                         tr("The short name is an alternate name that appears each time the staff system wraps, eg. &quot;Tr.&quot;")
+                         tr("<qt>The short name is an alternate name that appears each time the staff system wraps, eg. &quot;Tr.&quot;</qt>")
                          );
 
     if (dlg.exec() == QDialog::Accepted) {

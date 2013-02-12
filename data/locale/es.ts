@@ -23182,18 +23182,26 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     </message>
     <message>
         <location line="+2"/>
-        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
-        <translation>El nombre de pista es también el nombre del pentagrama de partitura, p. ej. «Trompeta»</translation>
+        <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;El nombre de pista es también el nombre del pentagrama de partitura, p. ej. «Trompeta»&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
+        <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;El nombre corto es un nombre alternativo que aparece cada vez que se encuentra un a nueva línea, p. ej. «Tr.»&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
+        <translation type="obsolete">El nombre de pista es también el nombre del pentagrama de partitura, p. ej. «Trompeta»</translation>
+    </message>
+    <message>
+        <location line="-2"/>
         <source>Enter short name</source>
         <translation>Introducir nombre corto</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
-        <translation>El nombre corto es un nombre alternativo que aparece cada vez que se encuentra un a nueva línea, p. ej. «Tr.»</translation>
+        <translation type="obsolete">El nombre corto es un nombre alternativo que aparece cada vez que se encuentra un a nueva línea, p. ej. «Tr.»</translation>
     </message>
 </context>
 <context>
