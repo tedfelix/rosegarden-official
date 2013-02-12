@@ -5536,7 +5536,7 @@
     </message>
     <message>
         <location line="+26"/>
-        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return, Return</source>
+        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -10815,7 +10815,7 @@ red1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11622,7 +11622,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+239"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+258"/>
         <source>Audio Mixer</source>
         <translation>Mixer de Audio</translation>
     </message>
@@ -11665,12 +11665,12 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
         <location line="+133"/>
         <location line="+143"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;nenhum&gt;</translation>
     </message>
     <message>
-        <location line="-514"/>
+        <location line="-516"/>
         <location line="+133"/>
         <source>Click to load an audio plugin</source>
         <translation>Clique para carregar um plugin de áudio</translation>
@@ -11714,12 +11714,12 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
     <message>
         <location line="+90"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;no plugin&gt;</translation>
     </message>
     <message>
-        <location line="+828"/>
+        <location line="+835"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-pt</translation>
     </message>
@@ -15510,7 +15510,7 @@ Exemplo de texto a partir do arquivo:</translation>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+626"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+628"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15552,7 +15552,7 @@ Você gostaria de usar
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1795"/>
+        <location line="+1817"/>
         <source>warning: overlong bar truncated here</source>
         <translation>aviso: barra longo demais truncada aqui</translation>
     </message>
@@ -15818,7 +15818,17 @@ Você gostaria de usar
         <translation>&lt;qt&gt;Parênteses em faixa de pentagrama são encontrados na caixa &lt;b&gt;Parâmetros da Faixa&lt;/b&gt;, e podem ser usados pelo grupo de pentagramas de várias maneiras&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
+        <source>Print short staff names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Interpret chord texts as lead sheet chord names</source>
         <translation>Interpretar textos em acordes e levar folha com nome de acordes</translation>
     </message>
@@ -15893,9 +15903,24 @@ Você gostaria de usar
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+5"/>
+        <source>Cancel accidentals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Quando marcada, notas naturais são automaticamente impressas para cancelar quaisquer acidentes anteriores da Armadura de clave . Este comportamento de cancelamento é separado, e não relacionado à forma como Rosegarden exibe cancelamento acidental no editor de partituras.&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Export empty staves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+36"/>
@@ -19535,7 +19560,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
 <context>
     <name>Rosegarden::RenameTrackCommand</name>
     <message>
-        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+47"/>
+        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+48"/>
         <source>Rename Track</source>
         <translation>Renomear Faixa</translation>
     </message>
@@ -19699,7 +19724,7 @@ There may be some incompatibilities with the file format.</source>
 Pode haver algumas incompatibilidades com o formato do arquivo.</translation>
     </message>
     <message>
-        <location line="+1313"/>
+        <location line="+1318"/>
         <source>Loading plugins...</source>
         <translation>Carregando plugins...</translation>
     </message>
@@ -19739,12 +19764,12 @@ Pode haver algumas incompatibilidades com o formato do arquivo.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1007"/>
+        <location line="+1015"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2465"/>
+        <location line="-2473"/>
         <source>Could not save document at %1
 (%2)</source>
         <translation>Não foi possível salvar o documento em %1
@@ -19903,7 +19928,7 @@ Suporte para esses elementos podem desaparecer em versões futuras do Rosegarden
 Nós recomendamos que você salve novamente o arquivo a partir desta versão do Rosegarden para garantir que ele ainda pode ser re-carregado em futuras versões.</translation>
     </message>
     <message>
-        <location line="+1207"/>
+        <location line="+1215"/>
         <source>Warning</source>
         <translation type="unfinished">Aviso</translation>
     </message>
@@ -20974,7 +20999,7 @@ Erro foi %2</translation>
         <translation>&lt;qt&gt;&lt;p&gt;Clique e arraste para cima e para baixo ou para a esquerda e direita para modificar.&lt;/p&gt;&lt;p&gt;Duplo clique para editar o valor diretamente.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+360"/>
+        <location line="+361"/>
         <source>Select a new value</source>
         <translation>Selecionar um novo valor</translation>
     </message>
@@ -23255,12 +23280,12 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+253"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+254"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;no instrument&gt;</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-63"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;untitled audio&gt;</translation>
     </message>
@@ -23282,7 +23307,7 @@ Por favor, defina o caminho do arquivo de áudio para um diretório válido em P
 Gostaria de configurá-lo agora?</translation>
     </message>
     <message>
-        <location line="+818"/>
+        <location line="+815"/>
         <source>Mute track</source>
         <translation>Silenciar faixa</translation>
     </message>
@@ -23324,12 +23349,12 @@ Gostaria de configurá-lo agora?</translation>
 <context>
     <name>Rosegarden::TrackLabel</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+62"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Clique para selecionar todos os segmentos nesta faixa.&lt;/p&gt;&lt;p&gt;Shift + clique para adicionar ou remover da seleção todos os segmentos nesta faixa.&lt;/p&gt;&lt;p&gt;Clique e segure com o botão do mouse para atribuir um instrumento a esta faixa.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+103"/>
         <source>Change track name</source>
         <translation>Alterar nome da faixa</translation>
     </message>
@@ -23337,6 +23362,21 @@ Gostaria de configurá-lo agora?</translation>
         <location line="+1"/>
         <source>Enter new track name</source>
         <translation>Digite o nome da faixa nova</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter short name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -24531,7 +24571,7 @@ Gostaria de configurá-lo agora?</translation>
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="-9"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="-21"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="-30"/>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="+11"/>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="-5"/>
@@ -24542,7 +24582,7 @@ Gostaria de configurá-lo agora?</translation>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="-5"/>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="-5"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="-5"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="-5"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="-33"/>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="-5"/>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="-5"/>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="-4"/>

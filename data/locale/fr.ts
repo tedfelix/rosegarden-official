@@ -801,7 +801,13 @@
         <translation></translation>
     </message>
     <message>
-        <location line="+132"/>
+        <location line="+123"/>
+        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -4936,13 +4942,7 @@
         <translation>&amp;Redimensionner</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return, Return</source>
-        <comment>keyboard shortcut</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+64"/>
         <source>P&amp;unch in Record</source>
         <translation>&amp;Pointer enregistrement</translation>
     </message>
@@ -10631,8 +10631,12 @@ Le démarrage du pilote a échoué avec le message suivant :
     </message>
     <message>
         <location line="+6"/>
+        <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; {2000-2013 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Copyright 2000-2012 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Copyright 2000-2012 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -11442,7 +11446,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+239"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+258"/>
         <source>Audio Mixer</source>
         <translation>Mixeur audio</translation>
     </message>
@@ -11485,12 +11489,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+133"/>
         <location line="+143"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;Aucun&gt;</translation>
     </message>
     <message>
-        <location line="-514"/>
+        <location line="-516"/>
         <location line="+133"/>
         <source>Click to load an audio plugin</source>
         <translation>Cliquer pour charger un greffon audio</translation>
@@ -11534,12 +11538,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+90"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;pas de greffon&gt;</translation>
     </message>
     <message>
-        <location line="+828"/>
+        <location line="+835"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation></translation>
     </message>
@@ -15381,7 +15385,7 @@ Texte d&apos;exemple depuis le fichier:</translation>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+626"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+628"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15423,7 +15427,7 @@ Voulez-vous utiliser
         <translation>Echec de l&apos;exportation des segments sélectionnés.  Aucun segment n&apos;est sélectionné.</translation>
     </message>
     <message>
-        <location line="+1795"/>
+        <location line="+1817"/>
         <source>warning: overlong bar truncated here</source>
         <translation>avertissement: une mesure anormalement longue a été tronquée</translation>
     </message>
@@ -15543,7 +15547,17 @@ Voulez-vous utiliser
         <translation>A l&apos;italienne</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+79"/>
+        <source>Print short staff names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>Notation language</source>
         <translation>Langue du fichier LilyPond</translation>
     </message>
@@ -15573,9 +15587,24 @@ Voulez-vous utiliser
         <translation>&lt;qt&gt;Si coché, une barre est toujours tracée au début d&apos;une alternative de répétition, même si cette dernière commence au milieu d&apos;une mesure.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+5"/>
+        <source>Cancel accidentals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Si coché, des bécarres sont imprimés automatiquement pour annuler les accidents de l&apos;armature précédente. Cette annulation diffère de la façon dont Rosegarden annule les accidents dans l&apos;éditeur de partition.&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Export empty staves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+36"/>
@@ -15583,7 +15612,7 @@ Voulez-vous utiliser
         <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-fr</translation>
     </message>
     <message>
-        <location line="-224"/>
+        <location line="-233"/>
         <source>Export content</source>
         <translation>Exporter le contenu</translation>
     </message>
@@ -15679,7 +15708,7 @@ Voulez-vous utiliser
         <translation>&lt;qt&gt;Les accolades de portées se définissent dans la boîte des &lt;b&gt;Paramètres de la Piste&lt;/b&gt;, et peuvent être utilisées pour regrouper les portées de différentes façons&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Utile pour les partitions de plusieurs pages: peut permettre d&apos;éviter une dernière page déséquilibrée&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -15689,7 +15718,7 @@ Voulez-vous utiliser
         <translation>&lt;qt&gt;Les marqueurs se trouvent sur la &lt;b&gt;réglette des marqueurs&lt;/b&gt;.  Ils peuvent être exportés comme texte ou comme marqueurs de répétition.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-47"/>
         <source>Export lyrics</source>
         <translation>Exporter les paroles</translation>
     </message>
@@ -15739,7 +15768,7 @@ Voulez-vous utiliser
         <translation>&lt;qt&gt;Si coché les ligatures deRosegardenseront exportées.  Sinon les ligatures seront recalculées automatiquement par LilyPond.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+22"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation>Bas de page inutilisé (les systèmes ne seront pas
 répartis verticalement sur la page)</translation>
@@ -19457,7 +19486,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
 <context>
     <name>Rosegarden::RenameTrackCommand</name>
     <message>
-        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+47"/>
+        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+48"/>
         <source>Rename Track</source>
         <translation>Renommer la piste</translation>
     </message>
@@ -19621,7 +19650,7 @@ Il peut y avoir des incompatibilités avec ce format de fichier.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1313"/>
+        <location line="+1318"/>
         <source>Loading plugins...</source>
         <translation>Chargement des greffons...</translation>
     </message>
@@ -19668,12 +19697,12 @@ Il peut y avoir des incompatibilités avec ce format de fichier.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1007"/>
+        <location line="+1015"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2463"/>
+        <location line="-2471"/>
         <source>Could not save document at %1</source>
         <translation>Echec sauvegarde du document en %1</translation>
     </message>
@@ -19767,7 +19796,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <translation>Echec du renommage du fichier de sortie temporaire &apos;%1&apos; vers le nom souhaité &apos;%2&apos;</translation>
     </message>
     <message>
-        <location line="+1805"/>
+        <location line="+1813"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
@@ -19785,7 +19814,7 @@ Souhaitez vous le faire tout de suite ?</translation>
         <translation type="obsolete">Enregistrement du fichier...</translation>
     </message>
     <message>
-        <location line="-1619"/>
+        <location line="-1627"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Erreur d&apos;écriture en &apos;%1&apos;</translation>
     </message>
@@ -19848,7 +19877,7 @@ Nous vous recommandons de sauver à nouveau ce fichier en utilisant la version c
         <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Les canaux ont été redistribués&lt;/h2&gt;&lt;p&gt;A partir de la version 10.02, Rosegarden ne permet plus de modifier le numéro de canal associé à un instrument MIDI.  Maintenant, chaque instrument utilise le canal de même numéro.  Par exemple, &quot;MIDI Input System Device #12&quot; utilise toujours le canal 12.&lt;/p&gt;&lt;p&gt;Le fichier que vous venez de charger contient des instruments associés à des canaux dont les numéros sont différents.  Ces canaux doivent être réassignés afin que l&apos;instrument n°1 utilise toujours le canal n°1, quelque fut le canal qui était utilisé auparavant.  La plupart du temps vous ne constaterez aucune différence, il se peut cependant qu&apos;une légère modification du fichier soit nécessaire pour obtenir le résultat attendu.  Dans ce cas, nous vous recommandons de sauvegarder ce fichier si vous ne voulez plus revoir cet avertissement.&lt;/p&gt;&lt;p&gt;Nous vous prions de bien vouloir nous excuser si cette évolution vous à occasionné un dérangement.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+637"/>
+        <location line="+645"/>
         <source>Insert Recorded MIDI</source>
         <translation>Insérer un enregistrement Midi</translation>
     </message>
@@ -20900,7 +20929,7 @@ Erreur obtenue : %2</translation>
         <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser de haut en bas ou de droite à gauche pour modifier.&lt;/p&gt;&lt;p&gt;Double-cliquer pour éditer directement la valeur.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+360"/>
+        <location line="+361"/>
         <source>Select a new value</source>
         <translation>Sélectionner une nouvelle valeur</translation>
     </message>
@@ -23189,12 +23218,12 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+253"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+254"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;Sans instrument&gt;</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-63"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;Fichier audio sans titre&gt;</translation>
     </message>
@@ -23216,7 +23245,7 @@ Veuillez déclarer un répertoire valide comme chemin du fichier audio dans les 
 Souhaitez vous le faire tout de suite ?</translation>
     </message>
     <message>
-        <location line="+818"/>
+        <location line="+815"/>
         <source>Mute track</source>
         <translation>Assourdir la piste</translation>
     </message>
@@ -23266,12 +23295,12 @@ Souhaitez vous le faire tout de suite ?</translation>
 <context>
     <name>Rosegarden::TrackLabel</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+62"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cliquer pour sélectionner tous les segments de cette piste.&lt;/p&gt;&lt;p&gt;Majuscules + cliquer pour ajouter à la sélection tous les segments de cette piste ou pour les en retirer.&lt;/p&gt;&lt;p&gt;Cliquer et maintenir pour associer un instrument à cette piste.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+103"/>
         <source>Change track name</source>
         <translation>Renommer une piste</translation>
     </message>
@@ -23279,6 +23308,21 @@ Souhaitez vous le faire tout de suite ?</translation>
         <location line="+1"/>
         <source>Enter new track name</source>
         <translation>Entrer le nouveau nom de la piste</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter short name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

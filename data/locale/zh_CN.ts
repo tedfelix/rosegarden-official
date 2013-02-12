@@ -5053,13 +5053,7 @@
         <translation>调整大小(&amp;R)</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return, Return</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+64"/>
         <source>P&amp;unch in Record</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5190,7 +5184,13 @@
         <translation>Rosegarden 软件支持(&amp;S)</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="-79"/>
+        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+109"/>
         <source>Insert Tempo Change</source>
         <translation>插入速度变化</translation>
     </message>
@@ -10764,7 +10764,7 @@
     </message>
     <message>
         <location line="+6"/>
-        <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11579,7 +11579,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+239"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+258"/>
         <source>Audio Mixer</source>
         <translation>混音器</translation>
     </message>
@@ -11630,12 +11630,12 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+133"/>
         <location line="+143"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;无&gt;</translation>
     </message>
     <message>
-        <location line="-514"/>
+        <location line="-516"/>
         <location line="+133"/>
         <source>Click to load an audio plugin</source>
         <translation>点击加载一个音频插件</translation>
@@ -11679,12 +11679,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+90"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;没有插件&gt;</translation>
     </message>
     <message>
-        <location line="+828"/>
+        <location line="+835"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
@@ -15720,7 +15720,7 @@ The latency values will be stored by Rosegarden for use next time.</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+626"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+628"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15762,7 +15762,7 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1795"/>
+        <location line="+1817"/>
         <source>warning: overlong bar truncated here</source>
         <translation>警告: 过长的小节截断于此</translation>
     </message>
@@ -15892,7 +15892,17 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+3"/>
+        <source>Print short staff names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>Notation language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15922,8 +15932,23 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+5"/>
+        <source>Cancel accidentals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Export empty staves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -15932,7 +15957,7 @@ Would you like to use
         <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
     </message>
     <message>
-        <location line="-224"/>
+        <location line="-233"/>
         <source>Export content</source>
         <translation>导出内容</translation>
     </message>
@@ -16023,7 +16048,7 @@ Would you like to use
         <translation>到处速度标记</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+42"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;针对多页面的乐谱: 此功能可以避免造成丑陋的末尾页&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -16033,7 +16058,7 @@ Would you like to use
         <translation>&lt;qt&gt;标签可在 &lt;b&gt;标签标尺&lt;/b&gt;上找到.  它们可能会作为文字或排练记号导出.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-47"/>
         <source>Export lyrics</source>
         <translation>导出歌词</translation>
     </message>
@@ -16078,7 +16103,7 @@ Would you like to use
         <translation>&lt;qt&gt;如果勾选此功能, Rosegarden 的符杠将被导出.  否则 LilyPond 将自动计算符杠.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+22"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation type="unfinished">Ragged bottom (systems will not be spread vertically across the page)</translation>
     </message>
@@ -20300,7 +20325,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RenameTrackCommand</name>
     <message>
-        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+47"/>
+        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+48"/>
         <source>Rename Track</source>
         <translation>重命名音轨</translation>
     </message>
@@ -20463,7 +20488,7 @@ There may be some incompatibilities with the file format.</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1313"/>
+        <location line="+1318"/>
         <source>Loading plugins...</source>
         <translation>正在加载插件...</translation>
     </message>
@@ -20516,12 +20541,12 @@ Do you want to save it?</source>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1007"/>
+        <location line="+1015"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2463"/>
+        <location line="-2471"/>
         <source>Could not save document at %1</source>
         <translation>无法保存文档到 %1</translation>
     </message>
@@ -20606,7 +20631,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>将临时输出文件 &apos;%1&apos;重命名为输出文件 &apos;%2&apos; 失败</translation>
     </message>
     <message>
-        <location line="+1805"/>
+        <location line="+1813"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
@@ -20622,7 +20647,7 @@ Would you like to set it now?</source>
         <translation type="obsolete">正在保存文件...</translation>
     </message>
     <message>
-        <location line="-1619"/>
+        <location line="-1627"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>写入 &apos;%1&apos; 时出错</translation>
     </message>
@@ -20679,7 +20704,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+637"/>
+        <location line="+645"/>
         <source>Insert Recorded MIDI</source>
         <translation>插入录制好的 MIDI</translation>
     </message>
@@ -21778,7 +21803,7 @@ Would you like to set it now?</source>
         <translation>&lt;qt&gt;&lt;p&gt;点击并向上下左右拖拽来改动.&lt;/p&gt;&lt;p&gt;双击直接编辑值.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+360"/>
+        <location line="+361"/>
         <source>Select a new value</source>
         <translation>选择一个新的值</translation>
     </message>
@@ -24088,12 +24113,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+253"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+254"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;无乐器&gt;</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-63"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;未命名音频&gt;</translation>
     </message>
@@ -24115,7 +24140,7 @@ Would you like to set it now?</source>
 现在要设置吗?</translation>
     </message>
     <message>
-        <location line="+818"/>
+        <location line="+815"/>
         <source>Mute track</source>
         <translation>音轨静音</translation>
     </message>
@@ -24163,12 +24188,12 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::TrackLabel</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+62"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;点击选中此音轨上的所有片段.&lt;/p&gt;&lt;p&gt;按住Shift并点击以添加或移除此音轨中选择的片段.&lt;/p&gt;&lt;p&gt;点击并按住鼠标键以为该音轨分配一件乐器.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+103"/>
         <source>Change track name</source>
         <translation>改变音轨名称</translation>
     </message>
@@ -24176,6 +24201,21 @@ Would you like to set it now?</source>
         <location line="+1"/>
         <source>Enter new track name</source>
         <translation>输入新的音轨名称</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter short name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

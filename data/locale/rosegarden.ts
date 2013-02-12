@@ -5331,7 +5331,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4214"/>
-        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return, Return</source>
+        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -10621,7 +10621,7 @@
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
-        <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11410,104 +11410,104 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="239"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="258"/>
         <source>Audio Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="271"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="290"/>
         <source>Record input source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="281"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="300"/>
         <source>Output destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="294"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="443"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="313"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="462"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="302"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="303"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="450"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="451"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="321"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="322"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="469"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="470"/>
         <source>Audio level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="310"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="329"/>
         <source>Mono or stereo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="318"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="337"/>
         <source>Arm recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="329"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="462"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="605"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="662"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="845"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="348"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="481"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="624"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="681"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="866"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="331"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="464"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="483"/>
         <source>Click to load an audio plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="342"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="361"/>
         <source>Click to rename this instrument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="358"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="377"/>
         <source>Audio %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="367"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="386"/>
         <source>Synth %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="376"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="395"/>
         <source>Click the button above to rename this instrument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="472"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="491"/>
         <source>Sub %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="513"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="514"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="532"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="533"/>
         <source>Audio master output level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="516"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="535"/>
         <source>Master</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="606"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="663"/>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="846"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="625"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="682"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="867"/>
         <source>&lt;no plugin&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="1674"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="1702"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15288,7 +15288,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="626"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="628"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15299,37 +15299,37 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="637"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="639"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="787"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="789"/>
         <source>Export succeeded, but the composition was empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="829"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="831"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="835"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="837"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="840"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="842"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="2635"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="2659"/>
         <source>warning: overlong bar truncated here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="2646"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="2670"/>
         <source>warning: bar too short, padding with rests</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15586,87 +15586,112 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="233"/>
-        <source>Interpret chord texts as lead sheet chord names</source>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
+        <source>Print short staff names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="235"/>
-        <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="232"/>
+        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="238"/>
-        <source>Ragged bottom (systems will not be spread vertically across the page)</source>
+        <source>Interpret chord texts as lead sheet chord names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="240"/>
-        <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="243"/>
-        <source>No markers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="244"/>
-        <source>Rehearsal marks</source>
+        <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="245"/>
-        <source>Marker text</source>
+        <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="248"/>
-        <source>Export markers</source>
+        <source>No markers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="249"/>
+        <source>Rehearsal marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="250"/>
+        <source>Marker text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="253"/>
+        <source>Export markers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="255"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="268"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="273"/>
         <source>Notation language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="270"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="275"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="281"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="286"/>
         <source>Use repeat when possible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="282"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="287"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="287"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="292"/>
         <source>Draw bar line at volta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="288"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="293"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="295"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="298"/>
+        <source>Cancel accidentals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="300"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="331"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="302"/>
+        <source>Export empty staves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="304"/>
+        <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="340"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19279,7 +19304,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RenameTrackCommand</name>
     <message>
-        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="47"/>
+        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="48"/>
         <source>Rename Track</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19441,7 +19466,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="1766"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="1771"/>
         <source>Loading plugins...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19481,7 +19506,7 @@ There may be some incompatibilities with the file format.</source>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1782"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1811"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1824"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2831"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2839"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19634,30 +19659,30 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="3026"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="3034"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="3027"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="3035"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2456"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2464"/>
         <source>Insert Recorded MIDI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2583"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2667"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2591"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2675"/>
         <source>(recorded)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2816"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2824"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20680,12 +20705,12 @@ Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="452"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="453"/>
         <source>Select a new value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="453"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="454"/>
         <source>Enter a new value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22953,7 +22978,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="253"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="254"/>
         <source>&lt;no instrument&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22968,12 +22993,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1011"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1008"/>
         <source>Mute track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1029"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1026"/>
         <source>Record on this track</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23008,18 +23033,33 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackLabel</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="62"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="166"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="164"/>
         <source>Change track name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="167"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="165"/>
         <source>Enter new track name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="167"/>
+        <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="168"/>
+        <source>Enter short name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="170"/>
+        <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
