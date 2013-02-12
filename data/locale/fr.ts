@@ -23312,12 +23312,12 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le nom de la piste est aussi le nom de la portée sur la partition, exemple &amp;quot;Trompette&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le nom court est une autre version du nom qui est affiché à chaque saut de ligne du système de portées, exemple &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
