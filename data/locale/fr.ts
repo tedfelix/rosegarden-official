@@ -804,7 +804,7 @@
         <location line="+123"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Entrée, Entrée, Lire media, Ctrl+Return</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -1484,27 +1484,27 @@
     <message>
         <location line="+1"/>
         <source>&amp;Number of Submasters</source>
-        <translation>&amp;Nombre de sous-maîtres</translation>
+        <translation>&amp;Nombre de groupes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>No Submasters</source>
-        <translation>Pas de sous-maître</translation>
+        <translation>Pas de groupe</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;2 Submasters</source>
-        <translation>&amp;2 sous-maîtres</translation>
+        <translation>&amp;2 groupes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;4 Submasters</source>
-        <translation>&amp;4 sous-maîtres</translation>
+        <translation>&amp;4 groupes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;8 Submasters</source>
-        <translation>&amp;8 sous-maîtres</translation>
+        <translation>&amp;8 groupes</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1519,7 +1519,7 @@
     <message>
         <location line="+1"/>
         <source>Show Audio Su&amp;bmasters</source>
-        <translation>Montrer les sous-maîtres au&amp;dio</translation>
+        <translation>Montrer les groupes au&amp;dio</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10632,7 +10632,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; {2000-2013 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2013 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -11076,7 +11076,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location line="+8"/>
         <source>for submasters</source>
-        <translation>pour les sous-maîtres</translation>
+        <translation>pour les groupes</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -11522,13 +11522,13 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+96"/>
         <source>Sub %1</source>
-        <translation>Sous %1</translation>
+        <translation>Groupe %1</translation>
     </message>
     <message>
         <location line="+41"/>
         <location line="+1"/>
         <source>Audio master output level</source>
-        <translation>Niveau maître de sortie audio</translation>
+        <translation>Niveau principal de sortie audio</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -11830,7 +11830,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="-21"/>
         <location line="+23"/>
         <source>Sub %1</source>
-        <translation>Sous %1</translation>
+        <translation>Groupe %1</translation>
     </message>
     <message>
         <location line="-17"/>
@@ -11855,12 +11855,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+2"/>
         <source>Sub %1 R</source>
-        <translation>Sous %1 D</translation>
+        <translation>Grp %1 D</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sub %1 L</source>
-        <translation>Sous %1 G</translation>
+        <translation>Grp %1 G</translation>
     </message>
 </context>
 <context>
@@ -15549,12 +15549,12 @@ Voulez-vous utiliser
     <message>
         <location line="+79"/>
         <source>Print short staff names</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer les noms de portées courts</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Utile pour les partitions complexes et de grande taille. Un nom court est imprimé a chaque changement de ligne dans la partition. Ceci facilite la reconnaissance de l&apos;instrument associés à chaque ligne sur les différentes pages.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -15589,7 +15589,7 @@ Voulez-vous utiliser
     <message>
         <location line="+5"/>
         <source>Cancel accidentals</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler les accidents</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -15599,12 +15599,12 @@ Voulez-vous utiliser
     <message>
         <location line="+2"/>
         <source>Export empty staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter les portées vides</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si coché, LilyPond imprimera toutes les portées, y compris les vides.  Décocher cette option permet de limiter la place perdue sur la partition par les longs silences de certains instruments.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -23312,17 +23312,17 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+2"/>
         <source>The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le nom de la piste est aussi le nom de la portée sur la partition, exemple &amp;quot;Trompette&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter short name</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer le nom court</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le nom court est une autre version du nom qui est affiché à chaque saut de ligne du système de portées, exemple &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
