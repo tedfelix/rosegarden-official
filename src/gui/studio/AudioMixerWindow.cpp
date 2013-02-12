@@ -130,26 +130,45 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()))
         ->setChecked(mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
-    QAction *action = 0;
+    QAction *ri_action[17];
+    for (int i = 0; i < 17; i++){
+      ri_action[i] = 0;
+    }
 
     for (int i = 1; i <= 16; i *= 2) {
-        action = createAction
+        ri_action[i] = createAction
             (QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()));
-        if (i == int(m_studio->getRecordIns().size()))
-            action->setChecked(true);
+    }
+
+    QAction *sm_action[9];
+    for (int i = 0; i < 9; i++){
+      sm_action[i] = 0;
     }
 
     createAction("submasters_0", SLOT(slotSetSubmasterCountFromAction()));
     
     for (int i = 2; i <= 8; i *= 2) {
-        action = createAction
+        sm_action[i] = createAction
             (QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()));
-        
-        if (i == int(m_studio->getBusses().size()) - 1)
-            action->setChecked(true);
     }
 
     createGUI("mixer.rc");
+
+    // The action->setChecked() stuff must be done after createGUI("mixer.rc"),
+    // if the initial "Number of stereo Inputs" and "Number of Submasters"
+    // menus are to reflect reality.
+    for (int i = 1; i <= 16; i *= 2) {
+        if (i == int(m_studio->getRecordIns().size())) {
+            ri_action[i]->setChecked(true);
+        }
+    }
+    // "submasters_0" is checked by default in data/rc/mixer.rc
+    for (int i = 2; i <= 8; i *= 2) {
+        if (i == int(m_studio->getBusses().size()) - 1) {
+            sm_action[i]->setChecked(true);
+        }
+    }
+
     setRewFFwdToAutoRepeat();
 
     // We must populate AFTER the actions are created, or else all the
@@ -692,6 +711,8 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 //            rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
         }
     }
+    // Force an immediate update of button colors.
+    populate();
 }
 
 void
@@ -1411,25 +1432,32 @@ AudioMixerWindow::slotSetSubmasterCountFromAction()
 
         // offset by 1 generally to take into account the fact that
         // the first buss in the studio is the master, not a submaster
-
         if (count + 1 == current)
             return ;
 
-        BussList dups;
-        for (int i = 0; i < count; ++i) {
-            if (i + 1 < int(busses.size())) {
-                dups.push_back(new Buss(*busses[i + 1]));
-            } else {
-                dups.push_back(new Buss(i + 1));
+        if (count + 1 < current) {
+
+            BussList::iterator it = busses.end();
+            it--;  // Now this actually points to something
+
+            while (count + 1 < current--) {
+                m_studio->removeBuss((*it--)->getId());
             }
-        }
 
-        m_studio->clearBusses();
+        } else {
 
-        for (BussList::iterator i = dups.begin();
-                i != dups.end(); ++i) {
-            m_studio->addBuss(*i);
+            BussList::iterator it = busses.end();
+            it--;
+            unsigned int lastId = (*it)->getId();
+
+            while (count + 1 > current++) {
+                m_studio->addBuss(new Buss(++lastId));
+            }
+
         }
+//      busses = m_studio->getBusses();
+//      for (BussList::iterator it = busses.begin(); it != busses.end(); it++)
+//          std::cout << "******* BussId:" << (*it)->getId() << std::endl;
     }
 
     m_document->initialiseStudio();

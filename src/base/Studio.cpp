@@ -322,6 +322,18 @@ Studio::addBuss(Buss *buss)
     m_busses.push_back(buss);
 }
 
+void
+Studio::removeBuss(BussId id)
+{
+    for (BussList::iterator i = m_busses.begin(); i != m_busses.end(); ++i) {
+        if ((*i)->getId() == id) {
+            delete *i;
+            m_busses.erase(i);
+            return;
+        }
+    }
+}
+
 PluginContainer *
 Studio::getContainerById(InstrumentId id)
 {
