@@ -804,7 +804,7 @@
         <location line="+123"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Entrée, Entrée, Lire media, Ctrl+Return</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -2481,26 +2481,26 @@
         <location line="+1770"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+O</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+43"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Q</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+91"/>
         <location line="+649"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+V</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-640"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Ins</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+25"/>
@@ -2641,7 +2641,7 @@
         <location line="+106"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+W</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-4395"/>
@@ -2658,7 +2658,7 @@
         <location line="+58"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
-        <translation>F1</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-4415"/>
@@ -3059,7 +3059,7 @@
         <location line="+1697"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Left</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1695"/>
@@ -3072,7 +3072,7 @@
         <location line="+1697"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Shift+Right</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1688"/>
@@ -3188,7 +3188,7 @@
         <location line="+1871"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
-        <translation></translation>
+        <translation>Shift+Q</translation>
     </message>
     <message>
         <location line="-1869"/>
@@ -3694,7 +3694,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+V</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+V</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+229"/>
@@ -3749,7 +3749,7 @@
         <location line="+392"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+1</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-347"/>
@@ -3832,7 +3832,7 @@
         <location line="-2024"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt++</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+47"/>
@@ -3908,7 +3908,7 @@
         <location line="+9"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+B</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4007,7 +4007,7 @@
         <location line="+7"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+Alt+.</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4018,7 +4018,7 @@
         <location line="+7"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+5</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4029,7 +4029,7 @@
         <location line="+7"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+1</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4040,7 +4040,7 @@
         <location line="+7"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+2</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4051,7 +4051,7 @@
         <location line="+7"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+4</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4062,7 +4062,7 @@
         <location line="+7"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+8</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4084,7 +4084,7 @@
         <location line="+7"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+3</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4095,7 +4095,7 @@
         <location line="+7"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
-        <translation>Ctrl+0</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
