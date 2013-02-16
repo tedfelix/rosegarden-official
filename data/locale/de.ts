@@ -3741,7 +3741,7 @@
         <location line="+169"/>
         <location line="+1697"/>
         <source>Co&amp;ntrollers</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler (&amp;N)</translation>
     </message>
     <message>
         <location line="-1696"/>
@@ -3749,7 +3749,7 @@
         <location line="+990"/>
         <location line="+1096"/>
         <source>Cut controller events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Event ausschneiden (&amp;X)</translation>
     </message>
     <message>
         <location line="-2792"/>
@@ -3757,13 +3757,13 @@
         <location line="+990"/>
         <location line="+1096"/>
         <source>&amp;Copy controller events</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Event kopieren (&amp;C)</translation>
     </message>
     <message>
         <location line="-2792"/>
         <location line="+1697"/>
         <source>Paste events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Event einfügen (&amp;V)</translation>
     </message>
     <message>
         <location line="-1696"/>
@@ -3771,7 +3771,7 @@
         <location line="+991"/>
         <location line="+1095"/>
         <source>&amp;Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Werte für die Regler ein&amp;stellen</translation>
     </message>
     <message>
         <location line="-2791"/>
@@ -3779,13 +3779,13 @@
         <location line="+991"/>
         <location line="+1095"/>
         <source>&amp;Place a controller for each note</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler für jede Note &amp;platzieren</translation>
     </message>
     <message>
         <location line="-2790"/>
         <location line="+1697"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Sequenz einfügen (&amp;o)...</translation>
     </message>
     <message>
         <location line="-611"/>
@@ -5082,7 +5082,7 @@
         <location line="-79"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Enter; Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
         <location line="+109"/>
@@ -10441,7 +10441,7 @@
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">Ungültige Sound Datei </translation>
+        <translation>Ungültige Sound Datei </translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+110"/>
@@ -10546,12 +10546,12 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">Ungültige Datei mit Höchstwerten </translation>
+        <translation>Ungültige Datei mit Höchstwerten </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">Ungültige Datei mit Höchstwerten (deformierte Datei?) </translation>
+        <translation>Ungültige Datei mit Höchstwerten (deformierte Datei?) </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -10611,12 +10611,14 @@
         <source>No sound driver available: Sound driver startup failed, log follows: 
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Sound-Treiber verfügbar: Start fehlgeschlagen, Protokoll folgt:
+
+%1 </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>No sound driver available: Application compiled without sound support?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Sound-Treiber verfügbar: Software ohne Sound-Unterstützung kompiliert?</translation>
     </message>
 </context>
 <context>
@@ -10634,7 +10636,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2 oder später&lt;/p&gt; {2000-2013 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2013 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2 oder später&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -15418,27 +15420,27 @@ Wollen Sie stattdessen
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Der Export ist fehlgeschlagen. Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
+        <translation>Der Export ist fehlgeschlagen. Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
         <location line="+150"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export war erfolgreich, aber die Komposition war leer.</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export nicht stummgeschalteter Spuren fehlgeschlagen.  Es gibt keine nicht stummgeschaltetet Spuren oder sie beinhalten keine Segmente. </translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export der ausgewählten Spuren fehlgeschlagen-  Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Export der ausgewählten Segmente fehlgeschlagen.  Es wurde keine Segmente ausgewählt.</translation>
     </message>
     <message>
         <location line="+1817"/>
@@ -15563,12 +15565,12 @@ Wollen Sie stattdessen
     <message>
         <location line="+79"/>
         <source>Print short staff names</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurzbezeichnungen des Notensystems drucken</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Nützlich für große, komplexe Partituren; hier werden die Kurzbezeichnungen bei jedem Zeilenumbruch in der Paritur gedruckt. Dadurch kann man leichter über mehrere Seiten verfolgen, welche Zeile zu welchem Instrument gehört.&lt;/qt&gt;  </translation>
     </message>
     <message>
         <location line="+41"/>
@@ -15603,7 +15605,7 @@ Wollen Sie stattdessen
     <message>
         <location line="+5"/>
         <source>Cancel accidentals</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorzeichen aufheben</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -15613,12 +15615,12 @@ Wollen Sie stattdessen
     <message>
         <location line="+2"/>
         <source>Export empty staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Leere Notenlinien exportieren</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Wenn ausgewählt druckt LilyPond alle Notenlinien, auch wenn sie leer sind.  Das Ausschalten dieser Option könnte etwas die Unordnung in einer Partitur vermindern, welche lange Ruhephasen für einige Instrumente beinhaltet.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -15643,7 +15645,7 @@ Wollen Sie stattdessen
     <message>
         <location line="+1"/>
         <source>Selected track</source>
-        <translation type="unfinished">Ausgewählte Spur</translation>
+        <translation>Ausgewählte Spur</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15653,7 +15655,7 @@ Wollen Sie stattdessen
     <message>
         <location line="+4"/>
         <source>Edited segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Editierte Segmente</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -17697,7 +17699,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location line="+13"/>
         <source>Distribute verses among repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Strophe auf wiederholte Segmente verteilen</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -18605,7 +18607,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+4"/>
         <source>User %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nutzer %1</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -21059,7 +21061,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Verbinden</translation>
+        <translation>&amp;Verbinden</translation>
     </message>
 </context>
 <context>
@@ -22084,7 +22086,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location line="+4"/>
         <source>Always split at this pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Immer bei dieser Tonhöhe aufteilen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -22094,17 +22096,17 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location line="+1"/>
         <source>Split the lowest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Den tiefsten Ton von jedem Akkord abspalten</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split the highest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Den höchsten Ton von jedem Akkord abspalten</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split all chords at the same relative tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Akkorde beim selben relativen Ton aufteilen</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -23334,17 +23336,17 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Der Name der Spur entspricht dem Namen der Liniennotation, z.B. &amp;quot;Trompete &amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Die Kurzbezeichnung ist ein alternativer Name, der bei jedem Zeilenumbruch erscheint, z.B. &amp;quot;Tr&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-2"/>
         <source>Enter short name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurzbezeichnung eingeben</translation>
     </message>
 </context>
 <context>
