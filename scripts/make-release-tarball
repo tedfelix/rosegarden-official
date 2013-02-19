@@ -128,8 +128,31 @@ echo "Cleaning up..."
 rm -rf $outDir
 
 # deal with tagging later, but it will be nice to automate this
-# read -p "Do you want to tag this release?"
-# "copied from trunk/rosegarden to tags/rosegarden-1.7.1-rc1"
+# svn copy from trunk/rosegarden to tags/$outDir
+
+# Not done yet.
+#fini=0
+
+# While not done
+#while [ $fini -eq 0 ]; do
+#    read -p "Do you want to tag this release (Y/n)? " answer
+#    # This is pretty wordy.  Can we do better?
+#    if [ "$answer" == "Y" ] || [ "$answer" == "y" ] || [ -z "$answer" ]; then
+#        #echo we got yes...
+#        answer="y"
+#        fini=1
+#    elif [ "$answer" == "N" ] || [ "$answer" == "n" ]; then
+#        #echo we got no...
+#        fini=1
+#    else
+#      echo Please enter y or n...
+#    fi
+#done
+
+#if [ "$answer" == "y" ]; then
+#    user=tedfelix
+#    svn copy svn+ssh://$user@svn.code.sf.net/p/rosegarden/code/trunk/rosegarden svn+ssh://$user@svn.code.sf.net/p/rosegarden/code/tags/$outDir -m "Tag release $NEW_VERSION"
+#fi
 
 # hack around my personal umask, to ensure files are world readable if I forget
 chmod 644 $outFile
