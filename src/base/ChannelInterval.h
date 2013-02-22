@@ -103,9 +103,8 @@ public:
         bool operator()(const ChannelInterval &cs1, const ChannelInterval &cs2) const {
             return cs1.m_start < cs2.m_start;
         }
-        // ??? This appears unused.  It is rather surprising as it converts a
-        //     pointer comparison to an object comparison.  Could be risky in
-        //     situations where the user expects the pointers to be compared.
+        // ??? This appears unused.  ChannelInterval pointers are not stored
+        //     in a container.
         bool operator()(const ChannelInterval *cs1, const ChannelInterval *cs2) const {
             return operator()(*cs1, *cs2);
         }

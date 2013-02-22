@@ -58,7 +58,8 @@ struct ControllerAndPBList
 
 /// Owns and services a channel interval for an instrument.
 /**
- * Base class for the specialized channel managers.
+ * Base class for the specialized channel managers IntervalChannelManager
+ * and EternalChannelManager.
  *
  * ChannelManager's purpose is to own and service a channel interval
  * (ChannelManager::m_channel), relative to an instrument that wants to
@@ -354,6 +355,8 @@ protected:
 
 /// Channel manager of a channel that encompasses the entire playing time.
 /**
+ * MetronomeMapper and ImmediateNote have an EternalChannelManager.
+ *
  * @author Tom Breton (Tehom)
  */
 class EternalChannelManager : public ChannelManager
@@ -374,6 +377,8 @@ public:
 
 /// Channel manager of a channel interval.
 /**
+ * InternalSegmentMapper has an IntervalChannelManager.
+ *
  * @author Tom Breton (Tehom)
  */
 class IntervalChannelManager : public ChannelManager

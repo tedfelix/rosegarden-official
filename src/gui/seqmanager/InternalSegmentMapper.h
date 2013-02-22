@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _INTERNALSEGMENTMAPPER_H_
-#define _INTERNALSEGMENTMAPPER_H_
+#ifndef RG_INTERNALSEGMENTMAPPER_H
+#define RG_INTERNALSEGMENTMAPPER_H
 
 #include "base/ControllerContext.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
@@ -136,4 +136,4 @@ class InternalSegmentMapper : public SegmentMapper
   
 }
 
-#endif /* ifndef _INTERNALSEGMENTMAPPER_H_ */
+#endif /* ifndef RG_INTERNALSEGMENTMAPPER_H */
