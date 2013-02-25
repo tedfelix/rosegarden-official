@@ -39,6 +39,13 @@ have been installed, and then run:
     make
     make install
 
+NOTE: Now that Linux is becoming more common on alternative architectures,
+distros have adopted more complex schemes than Rosegarden's simple build system
+can handle with a simple ./configure command.  For example, on 64-bit Ubuntu,
+it's necessary to use:
+
+    ./configure --with-qtlibdir=/usr/lib/x86_64-linux-gnu/
+
 New starting with 10.02, most of the application data files are bundled in the
 rosegarden binary.  The install process will only copy a few files to various
 directories under [PREFIX]:
