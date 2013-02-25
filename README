@@ -46,6 +46,10 @@ it's necessary to use:
 
     ./configure --with-qtlibdir=/usr/lib/x86_64-linux-gnu/
 
+32-bit i386 users need:
+
+    ./configure --with-qtlibdir=/usr/lib/i386-linux-gnu/
+
 New starting with 10.02, most of the application data files are bundled in the
 rosegarden binary.  The install process will only copy a few files to various
 directories under [PREFIX]:
