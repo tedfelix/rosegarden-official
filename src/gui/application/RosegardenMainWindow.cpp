@@ -84,7 +84,7 @@
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
-#include "document/io/HydrogenLoader.h"
+//#include "document/io/HydrogenLoader.h"
 #include "document/io/MusicXMLLoader.h"
 #include "document/io/LilyPondExporter.h"
 #include "document/CommandHistory.h"
@@ -764,12 +764,12 @@ RosegardenMainWindow::setupActions()
     createAction("file_import_project", SLOT(slotImportProject()));
     createAction("file_import_midi", SLOT(slotImportMIDI()));
     createAction("file_import_rg21", SLOT(slotImportRG21()));
-    createAction("file_import_hydrogen", SLOT(slotImportHydrogen()));
+//    createAction("file_import_hydrogen", SLOT(slotImportHydrogen()));
     createAction("file_import_musicxml", SLOT(slotImportMusicXML()));
     createAction("file_merge", SLOT(slotMerge()));
     createAction("file_merge_midi", SLOT(slotMergeMIDI()));
     createAction("file_merge_rg21", SLOT(slotMergeRG21()));
-    createAction("file_merge_hydrogen", SLOT(slotMergeHydrogen()));
+//    createAction("file_merge_hydrogen", SLOT(slotMergeHydrogen()));
     createAction("file_merge_musicxml", SLOT(slotMergeMusicXML()));
     createAction("file_export_project", SLOT(slotExportProject()));
     createAction("file_export_midi", SLOT(slotExportMIDI()));
@@ -1565,8 +1565,10 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
             importType = ImportRG4;
         else if (testFileType.endsWith(".rose"))
             importType = ImportRG21;
+        /*
         else if (testFileType.endsWith(".h2song"))
             importType = ImportHydrogen;
+        */
         else if (testFileType.endsWith(".xml"))
             importType = ImportMusicXML;
     }
@@ -1579,9 +1581,11 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
     case ImportRG21:
         doc = createDocumentFromRG21File(filePath);
         break;
+/*
     case ImportHydrogen:
         doc = createDocumentFromHydrogenFile(filePath);
         break;
+ */
     case ImportMusicXML:
         doc = createDocumentFromMusicXMLFile(filePath);
         break;
@@ -4396,6 +4400,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 
 }
 
+/*
 void
 RosegardenMainWindow::slotImportHydrogen()
 {
@@ -4469,6 +4474,7 @@ RosegardenMainWindow::slotMergeHydrogen()
     mergeFile(tmpfile, ImportHydrogen);
 }
 
+
 RosegardenDocument*
 RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
 {
@@ -4514,6 +4520,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     return newDoc;
 
 }
+*/
 
 void
 RosegardenMainWindow::slotImportMusicXML()

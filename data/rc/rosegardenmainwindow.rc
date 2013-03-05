@@ -14,7 +14,7 @@
       <Separator/>
       <Action name="file_import_midi" text="Import &amp;MIDI file..." />
       <Action name="file_import_rg21" text="Import &amp;X11 Rosegarden file..." />
-      <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." />
+<!--      <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." /> -->
       <Action name="file_import_musicxml" text="Import MusicXM&amp;L file..." />
     </Menu>
     <Menu name="merge" append="new_merge">
@@ -22,7 +22,7 @@
       <Action name="file_merge" text="Merge &amp;File..." />
       <Action name="file_merge_midi" text="Merge &amp;MIDI file..." />
       <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden file..." />
-      <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file..." />
+<!--      <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file..." /> -->
       <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L file..." />
     </Menu>
     <!-- this one would like to be save_merge, but that sticks it at

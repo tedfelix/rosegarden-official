@@ -384,7 +384,7 @@ protected:
     /**
      * Create document from Hydrogen drum machine file
      */
-    RosegardenDocument* createDocumentFromHydrogenFile(QString filePath);
+//    RosegardenDocument* createDocumentFromHydrogenFile(QString filePath);
 
     /**
      * Create document from MusicXML file
@@ -625,7 +625,7 @@ public slots:
     /**
      * Select a Hydrogen drum machine file for import
      */
-    void slotImportHydrogen();
+//    void slotImportHydrogen();
 
     /**
      * Let the user select a MusicXML file for import
@@ -650,7 +650,7 @@ public slots:
     /**
      * Select a Hydrogen drum machine file for merge
      */
-    void slotMergeHydrogen();
+//    void slotMergeHydrogen();
 
     /**
      * Let the user select a MusicXML file for merge
