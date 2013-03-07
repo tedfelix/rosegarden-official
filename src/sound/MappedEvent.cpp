@@ -99,10 +99,10 @@ MappedEvent::MappedEvent(InstrumentId id,
         } else if (e.isa(Text::EventType)) {
             const Rosegarden::Text text(e);
 
-            // Somewhat hacky: We know that annotations aren't to be
-            // output, so we make their MappedEvents invalid.
+            // Somewhat hacky: We know that annotations and LilyPond directives
+            // aren't to be output, so we make their MappedEvents invalid.
             // InternalSegmentMapper will then discard those.
-            if (text.getTextType() == Text::Annotation) {
+            if (text.getTextType() == Text::Annotation || text.getTextType() == Text::LilyPondDirective) {
                 setType(InvalidMappedEvent);
             } else {
                 setType(MappedEvent::Text);
