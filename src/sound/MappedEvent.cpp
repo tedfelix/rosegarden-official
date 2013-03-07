@@ -96,6 +96,27 @@ MappedEvent::MappedEvent(InstrumentId id,
             SystemExclusive s(e);
             std::string dataBlock = s.getRawData();
             DataBlockRepository::getInstance()->registerDataBlockForEvent(dataBlock, this);
+        } else if (e.isa(Text::EventType)) {
+            const Rosegarden::Text text(e);
+
+            // Somewhat hacky: We know that annotations aren't to be
+            // output, so we make their MappedEvents invalid.
+            // InternalSegmentMapper will then discard those.
+            if (text.getTextType() == Text::Annotation) {
+                setType(InvalidMappedEvent);
+            } else {
+                setType(MappedEvent::Text);
+
+                MidiByte midiTextType =
+                    (text.getTextType() == Text::Lyric) ?
+                    MIDI_LYRIC :
+                    MIDI_TEXT_EVENT;
+                setData1(midiTextType);
+                                
+                std::string metaMessage = text.getText();
+                addDataString(metaMessage);
+            }            
+            
         } else {
             m_type = InvalidMappedEvent;
         }

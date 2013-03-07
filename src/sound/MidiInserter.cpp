@@ -244,8 +244,6 @@ insertCopy(const MappedEvent &evt)
               << std::endl;
 #endif
 
-    // !!! Add a type and mapper for text
-
     try {
         switch (evt.getType())
             {
@@ -422,34 +420,24 @@ insertCopy(const MappedEvent &evt)
 
                     break;
                 }
-#if 0
+
             case MappedEvent::Text:
                 {
-                    // !!! This code would be part of a mapper, which
-                    // would withhold annotations.
-                    // Text text(**el);
-                    // std::string metaMessage = text.getText();
+                    MidiByte midiTextType = evt.getData1();
 
-                    MidiByte midiTextType = MIDI_TEXT_EVENT;
+                    std::string metaMessage = 
+                        DataBlockRepository::getInstance()->
+                        getDataBlockForEvent(&evt);
 
-                    if (text.getTextType() == Text::Lyric) {
-                        midiTextType = MIDI_LYRIC;
-                    }
-
-                    if (text.getTextType() != Text::Annotation) {
-                        // (we don't write annotations)
-
-                        trackData.
-                            insertMidiEvent
-                            (new MidiEvent(midiEventAbsoluteTime,
-                                           MIDI_FILE_META_EVENT,
-                                           midiTextType,
-                                           metaMessage));
-
-                    }
+                    trackData.
+                        insertMidiEvent
+                        (new MidiEvent(midiEventAbsoluteTime,
+                                       MIDI_FILE_META_EVENT,
+                                       midiTextType,
+                                       metaMessage));
                     break;
                 }
-#endif
+
             
                 // Pacify compiler warnings about missed cases.
             case MappedEvent::InvalidMappedEvent:
@@ -470,7 +458,6 @@ insertCopy(const MappedEvent &evt)
             case MappedEvent::SystemMTCTransport:
             case MappedEvent::SystemMIDISyncAuto:
             case MappedEvent::SystemAudioFileFormat:
-            case MappedEvent::Text:
             default:
                 break;
             }

@@ -243,6 +243,9 @@ void InternalSegmentMapper::fillBuffer()
                                       ***k,  // three stars! what an accolade
                                       eventTime,
                                       duration);
+
+                        // Somewhat hacky: The MappedEvent ctor makes
+                        // events that needn't be inserted invalid.
                         if (e.isValid()) {
                             e.setTrackId(track->getId());
 
@@ -259,7 +262,7 @@ void InternalSegmentMapper::fillBuffer()
                                 enqueueNoteoff(playTime + playDuration,
                                                e.getPitch());
                             }
-                            mapAnEvent(&e);
+                            mapAnEvent(&e); 
                         } else {}
                         
                     } catch (...) {
