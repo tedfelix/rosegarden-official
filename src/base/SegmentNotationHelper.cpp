@@ -1521,10 +1521,13 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
     Composition *comp = segment().getComposition();
 
+    // Get bar range for selection.  Since this is inclusive, we subtract 1 from
+    // the "to" time to ensure we don't get an additional bar (bug #703).
+
     int fromBar = comp->getBarNumber((*from)->getAbsoluteTime());
     int toBar = comp->getBarNumber(segment().isBeforeEndMarker(to) ?
-				   (*to)->getAbsoluteTime() :
-				   segment().getEndMarkerTime());
+				   (*to)->getAbsoluteTime() - 1 :
+				   segment().getEndMarkerTime() - 1);
 
     for (int barNo = fromBar; barNo <= toBar; ++barNo) {
 
