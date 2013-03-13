@@ -2159,7 +2159,7 @@ makeTempMetaiterator(void)
     // We don't hold on to the marker mapper because we only use it
     // when exporting.
     metaiterator->addSegment(SegmentMapperFactory::makeMarker(m_doc));
-    typedef CompositionMapper::segmentmappers container;
+    typedef CompositionMapper::SegmentMappers container;
     typedef container::iterator iterator;
     container &mapperContainer = m_compositionMapper->m_segmentMappers;
     for (iterator i = mapperContainer.begin();
