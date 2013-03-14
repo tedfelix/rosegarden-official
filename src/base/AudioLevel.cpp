@@ -260,6 +260,76 @@ AudioLevel::preview_to_multiplier(int level, int levels)
     const LevelList &ll = getPreviewLevelCache(levels);
     return ll[level];
 }
-	
+
+int AudioLevel::m_panLaw = 0;
+
+float
+AudioLevel::panGainLeft(float pan)  // Apply panning law to left channel
+{
+    if (m_panLaw == 3) {
+        // -3dB Panning Law (variant)
+        //
+        // This law has the same characteristics as the -3dB law described
+        // below, except that a channel's gain begins at +3dB and decreases to
+        // 0dB as the control is moved through the center position.  This
+        // setting must be used with caution, as the increased edge gains could
+        // introduce clipping.
+        //
+        return sqrtf(fabsf((100.0 - pan) / 100.0));  // -3dB pan law  (variant)
+
+    } else if (m_panLaw == 2) {
+        // -6dB Panning Law
+        //
+        // A channel's gain begins at 0dB and decreases to -6dB as the control
+        // is moved to the center.  From there on the signal continues to
+        // decrease until it is completely attenuated at the opposite edge.
+        // The 3dB dip in the combined power of both channels when the control
+        // is centered will cause the extremes to sound louder than the center.
+        //
+        return (100.0 - pan) / 200.0;
+
+    } else if (m_panLaw == 1) {
+        // -3dB Panning Law
+        //
+        // A channel's gain begins at 0dB and decreases to -3dB as the control
+        // is centered.  From there on the signal continues to decrease until
+        // it is completely attenuated at the opposite edge.  The combined
+        // power of both channels remains constant throughout the panning
+        // range, resulting in an apparent constant loudness.
+        //
+        return sqrtf(fabsf((100.0 - pan) / 200.0));
+
+    } else {
+        // OdB Panning Law (default)
+        //
+        // A channel's gain begins at 0dB and remains at 0dB as the control is
+        // moved to the the center.  From there on the signal decreases
+        // linearly till it is completely attenuated at the opposite edge.
+        // Since both channels have a gain of 0dB at the center, the net
+        // effect is a 3dB boost in apparent loudness when the control is
+        // centered.  This is a basic balance pot.
+        //
+        return (pan > 0.0) ? (100.0 - pan) / 100.0 : 1.0;
+
+    }
+}
+
+float
+AudioLevel::panGainRight(float pan)  // Apply panning law to right channel
+{
+    if (m_panLaw == 3) {
+        return sqrtf(fabsf((100.0 + pan) / 100.0));  // -3dB pannig law (variant)
+
+    } else if (m_panLaw == 2) {
+        return (100.0 + pan) / 200.0;  // -6dB pan law
+
+    } else if (m_panLaw == 1) {
+        return sqrtf(fabsf((100.0 + pan) / 200.0));  // -3dB panning law
+
+    } else {
+        return (pan < 0.0) ? (100.0 + pan) / 100.0 : 1.0;  // 0dB panning law (default)
+
+    }
+}
 
 }

@@ -101,6 +101,7 @@ protected slots:
 
     void slotSetInputCountFromAction();
     void slotSetSubmasterCountFromAction();
+    void slotSetPanLaw();
 
     void slotToggleFaders();
     void slotToggleSynthFaders();

@@ -703,6 +703,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             getComposition().setEndMarker(endMarkerStr.toInt());
         }
 
+        QString panLawStr = atts.value("panlaw");
+        if (!panLawStr.isEmpty()) {
+            int panLaw = panLawStr.toInt();
+            AudioLevel::setPanLaw(panLaw);
+        } else {
+            // Since no "panlaw" was found in this tag, apply the default.
+            AudioLevel::setPanLaw(0);
+        }
+
     } else if (lcName == "track") {
 
         if (m_section != InComposition) {

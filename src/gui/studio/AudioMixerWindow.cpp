@@ -152,11 +152,19 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
             (QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()));
     }
 
+    QAction *pl_action[4];
+    for (int i = 0; i < 4; i++){
+        pl_action[i] = 0;
+    }
+
+    for (int i = 0; i < 4; i++){
+        pl_action[i] = createAction
+                (QString("panlaw_%1").arg(i), SLOT(slotSetPanLaw()));
+    }
+
     createGUI("mixer.rc");
 
-    // The action->setChecked() stuff must be done after createGUI("mixer.rc"),
-    // if the initial "Number of stereo Inputs" and "Number of Submasters"
-    // menus are to reflect reality.
+    // The action->setChecked() stuff must be done after createGUI("mixer.rc").
     for (int i = 1; i <= 16; i *= 2) {
         if (i == int(m_studio->getRecordIns().size())) {
             ri_action[i]->setChecked(true);
@@ -166,6 +174,12 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     for (int i = 2; i <= 8; i *= 2) {
         if (i == int(m_studio->getBusses().size()) - 1) {
             sm_action[i]->setChecked(true);
+        }
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (i == AudioLevel::getPanLaw()) {
+            pl_action[i]->setChecked(true);
         }
     }
 
@@ -1463,6 +1477,17 @@ AudioMixerWindow::slotSetSubmasterCountFromAction()
     m_document->initialiseStudio();
 
     populate();
+}
+
+void AudioMixerWindow::slotSetPanLaw()
+{
+    const QObject *s = sender();
+    QString name = s->objectName();
+
+    if (name.left(7) == "panlaw_") {
+        int panLaw = name.right(name.length() - 7).toInt();
+        AudioLevel::setPanLaw(panLaw);
+    }
 }
 
 void AudioMixerWindow::FaderRec::setVisible(bool visible)

@@ -478,6 +478,7 @@ AudioBussMixer::setBussLevels(int bussId, float dB, float pan)
 
     float volume = AudioLevel::dB_to_multiplier(dB);
 
+     // Basic balance control.  Panning laws are not applied to submasters.
     rec.gainLeft = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
     rec.gainRight = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
 }
@@ -1541,8 +1542,12 @@ AudioInstrumentMixer::setInstrumentLevels(InstrumentId id, float dB, float pan)
 
     float volume = AudioLevel::dB_to_multiplier(dB);
 
-    rec.gainLeft = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
-    rec.gainRight = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+//  rec.gainLeft = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+//  rec.gainRight = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+
+    // Apply panning law.
+    rec.gainLeft = volume * AudioLevel::panGainLeft(pan);
+    rec.gainRight = volume * AudioLevel::panGainRight(pan);
     rec.volume = volume;
 }
 

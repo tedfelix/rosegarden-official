@@ -22,6 +22,7 @@
 #include "base/Profiler.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
+#include "base/AudioLevel.h"
 
 #include <iostream>
 #include <iomanip>
@@ -1885,6 +1886,10 @@ std::string Composition::toXmlString()
     composition << "\" playmetronome=\"" << m_playMetronome;
     composition << "\" recordmetronome=\"" << m_recordMetronome;
     composition << "\" nexttriggerid=\"" << m_nextTriggerSegmentId;
+
+    // Place the number of the current pan law in the composition tag.
+    int panLaw = AudioLevel::getPanLaw();
+    composition << "\" panlaw=\"" << panLaw;
     composition << "\">" << endl << endl;
 
     composition << endl;

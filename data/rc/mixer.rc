@@ -44,6 +44,13 @@
       <Action name="submasters_4" text="&amp;4 Submasters" checked="false" group="submasters" />
       <Action name="submasters_8" text="&amp;8 Submasters" checked="false" group="submasters" />
     </Menu>
+    <Menu name="Panning Law">
+      <text>Panning &amp;Law</text>
+      <Action name="panlaw_0" text="&amp;0dB Law (Basic Balance Control)" checked="true" group="pan_laws" />
+      <Action name="panlaw_1" text="-&amp;3dB Law (Constant Power)" checked="false" group="pan_laws" />
+      <Action name="panlaw_2" text="-&amp;6dB Law (Reduced Center)" checked="false" group="pan_laws" />
+      <Action name="panlaw_3" text="&amp;Alternate -3dB Law (Constant Power, 0dB Center)" checked="false" group="pan_laws" />
+    </Menu>
     <!-- JAS "show_midi" does not appear in pulldown menu. -->
     <Action name="show_midi" append="show_merge" />
     <Action name="show_audio_faders" text="Show &amp;Audio Faders" checked="true" append="show_merge" />
