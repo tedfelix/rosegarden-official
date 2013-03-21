@@ -841,8 +841,8 @@ NotationHLayout::preSquishBar(int barNo)
 
         // If only one bar keep its time signature and update fixedWidth
         if (i->second.size() == 1) {
-          BarData * dataPtr = *(i->second.begin());
-            dataPtr->sizeData.fixedWidth += dataPtr->sizeData.timeSigFixedWidth;
+            BarData *dataPtr = *(i->second.begin());
+            dataPtr->sizeData.fixedWidth = dataPtr->sizeData.timeSigFixedWidth;
             continue;
         }
 
