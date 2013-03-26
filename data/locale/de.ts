@@ -3790,27 +3790,27 @@
     <message>
         <location line="-784"/>
         <source>Panning &amp;Law</source>
-        <translation type="unfinished"></translation>
+        <translation>Stereo-Pan-Modus (&amp;L)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;0dB Law (Basic Balance Control)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;0dB Regel (einfacher Balanceregler) </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;3dB Law (Constant Power)</source>
-        <translation type="unfinished"></translation>
+        <translation>-&amp;3dB Regel (konstante Lautstärke)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;6dB Law (Reduced Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>-&amp;6dB Regel (reduzierte Mitte)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Alternative -3dB Regel (konstante Lautstärke, 0dB Mitte)</translation>
     </message>
     <message>
         <location line="+169"/>
