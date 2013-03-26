@@ -372,6 +372,7 @@ setAllocationMode(Instrument *instrument)
         { m_usingAllocator = false; }
     else
         {
+            bool wasUsingAllocator = m_usingAllocator;
             switch (instrument->getType()) {
             case Instrument::Midi :
                 m_usingAllocator = !instrument->hasFixedChannel();
@@ -387,6 +388,11 @@ setAllocationMode(Instrument *instrument)
                              << endl;
 #endif
                 break;
+            }
+
+            // Clear m_channel, otherwise its old value will appear valid.
+            if (m_usingAllocator != wasUsingAllocator) {
+                m_channel.clearChannelId();
             }
         }
 }    

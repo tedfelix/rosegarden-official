@@ -192,8 +192,9 @@ freeChannelInterval(ChannelInterval &old)
 
     // Remove "before" if we incorporated it.
     if (mergeBefore) { erase(before); }
-    // Remove "after" if we incorporated it.
-    if (mergeAfter)  { erase(after); }
+    // Remove "after" if we incorporated it and it's distinct from
+    // "before", otherwise 0-length intervals can cause problems.
+    if (mergeAfter && (before != after))  { erase(after); }
     old.clearChannelId();
 }
 
