@@ -389,7 +389,8 @@ public:
     /**
      * Called during stopped or playing operation to process any pending
      * incoming MIDI events that aren't being recorded (i.e. for display
-     * in Transport or on Mixer)
+     * in Transport or on Mixer).  It also echoes incoming MIDI back out
+     * when stopped.
      */
     void processAsynchronousEvents();
 
@@ -411,6 +412,8 @@ public:
      * This method assigns an Instrument to each MappedEvent belonging to
      * the MappedEventList, and sends the transformed events to the driver
      * to be played.
+     *
+     * Used by processAsynchronousEvents() and processRecordedMidi().
      */
     void routeEvents(MappedEventList *mC, bool useSelectedTrack);
 

@@ -1360,7 +1360,8 @@ RosegardenSequencer::processRecordedMidi()
         // Remove events that match the thru filter
         applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
 
-        // Route the MIDI thru events to MIDI out
+        // Route the MIDI thru events to MIDI out.  Use the instrument and
+        // track information from each event.
         routeEvents(&mC, false);
     }
 }
@@ -1401,11 +1402,6 @@ RosegardenSequencer::processRecordedAudio()
     // in the sequencer mapper as a normal case.
 }
 
-
-// This method is called during STOPPED or PLAYING operations
-// to mop up any async (unexpected) incoming MIDI or Audio events
-// and forward them to the GUI for display
-//
 void
 RosegardenSequencer::processAsynchronousEvents()
 {
@@ -1437,6 +1433,8 @@ RosegardenSequencer::processAsynchronousEvents()
         m_asyncQueueMutex.unlock();
         if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
             applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
+            // Send the incoming events back out using the instrument and
+            // track for the selected track.
             routeEvents(&mC, true);
         }
     }
