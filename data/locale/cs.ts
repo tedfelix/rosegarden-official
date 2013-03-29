@@ -2071,7 +2071,7 @@
         <location filename="../QMenuStrings.cpp" line="839"/>
         <location filename="../QMenuStrings.cpp" line="2541"/>
         <source>Co&amp;ntrollers</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ovladače</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="840"/>
@@ -2079,7 +2079,7 @@
         <location filename="../QMenuStrings.cpp" line="2542"/>
         <location filename="../QMenuStrings.cpp" line="3638"/>
         <source>Cut controller events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyjmout události ovládacího prvku (&amp;X)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="841"/>
@@ -2087,13 +2087,13 @@
         <location filename="../QMenuStrings.cpp" line="2543"/>
         <location filename="../QMenuStrings.cpp" line="3639"/>
         <source>&amp;Copy controller events</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopírovat události ovládacího prvku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="842"/>
         <location filename="../QMenuStrings.cpp" line="2544"/>
         <source>Paste events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit události (&amp;V)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="843"/>
@@ -2101,7 +2101,7 @@
         <location filename="../QMenuStrings.cpp" line="2545"/>
         <location filename="../QMenuStrings.cpp" line="3640"/>
         <source>&amp;Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nastavit hodnoty ovládacího prvku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="844"/>
@@ -2109,13 +2109,13 @@
         <location filename="../QMenuStrings.cpp" line="2546"/>
         <location filename="../QMenuStrings.cpp" line="3641"/>
         <source>&amp;Place a controller for each note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Umístit ovládací prvek pro každou notu</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="846"/>
         <location filename="../QMenuStrings.cpp" line="2548"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit pořadí &amp;ovládacího prvku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="866"/>
@@ -2758,27 +2758,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1764"/>
         <source>Panning &amp;Law</source>
-        <translation type="unfinished"></translation>
+        <translation>Stereo režim vyvážení (&amp;L)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1765"/>
         <source>&amp;0dB Law (Basic Balance Control)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravidlo &amp;0dB (jednoduché ovládání vyvážení)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1766"/>
         <source>-&amp;3dB Law (Constant Power)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravidlo -&amp;3dB (stálá hlasitost)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1767"/>
         <source>-&amp;6dB Law (Reduced Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravidlo -&amp;6dB (snížený střed)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1768"/>
         <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Náhradní pravidlo -3dB (stálá hlasitost, střed 0dB)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1769"/>
@@ -5379,7 +5379,7 @@
         <location filename="../QMenuStrings.cpp" line="4219"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Enter, Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4328"/>
@@ -10769,19 +10769,19 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <location filename="../../src/sound/PeakFileManager.h" line="61"/>
         <location filename="../../src/sound/PeakFileManager.h" line="63"/>
         <source>Bad peak file </source>
-        <translation type="unfinished">Neplatný soubor s nejvyššími hodnotami</translation>
+        <translation>Neplatný soubor s nejvyššími hodnotami</translation>
     </message>
     <message>
         <location filename="../../src/sound/PeakFileManager.h" line="65"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="unfinished">Neplatný soubor s nejvyššími hodnotami (poškozený soubor?)</translation>
+        <translation>Neplatný soubor s nejvyššími hodnotami (poškozený soubor?)</translation>
     </message>
     <message>
         <location filename="../../src/sound/SoundFile.h" line="67"/>
         <location filename="../../src/sound/SoundFile.h" line="69"/>
         <location filename="../../src/sound/SoundFile.h" line="71"/>
         <source>Bad sound file </source>
-        <translation type="unfinished">Neplatný zvukový soubor</translation>
+        <translation>Neplatný zvukový soubor</translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="110"/>
@@ -11007,12 +11007,14 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <source>No sound driver available: Sound driver startup failed, log follows: 
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Není dostupný žádný ovladač zvuku. Ovladač zvuku se nepodařilo spustit. Následuje zápis:
+
+%1</translation>
     </message>
     <message>
         <location filename="../../src/sound/DummyDriver.cpp" line="39"/>
         <source>No sound driver available: Application compiled without sound support?</source>
-        <translation type="unfinished"></translation>
+        <translation>Není dostupný žádný ovladač zvuku. Program byl sestaven bez podpory pro zvuk?</translation>
     </message>
 </context>
 <context>
@@ -11030,7 +11032,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Vývojářský tým programu Rosgarden&lt;/p&gt;&lt;p&gt;Verze: %1 &amp;nbsp; Verze Qt: %2&lt;br&gt;Klíč: %3&lt;/p&gt;&lt;p&gt;Rosegarden byl vyvíjen skupinou dobrovolníků z celého světa. Seznam přispěvatelů je k prohlédnutí na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;. &lt;br&gt;Další informace o Rosegardenu jsou dostupné na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Povolení: GNU General Public License Version 2 nebo pozdější&lt;/p&gt; {2000-2013 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2013 Vývojářský tým programu Rosgarden&lt;/p&gt;&lt;p&gt;Verze: %1 &amp;nbsp; Verze Qt: %2&lt;br&gt;Klíč: %3&lt;/p&gt;&lt;p&gt;Rosegarden byl vyvíjen skupinou dobrovolníků z celého světa. Seznam přispěvatelů je k prohlédnutí na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;. &lt;br&gt;Další informace o Rosegardenu jsou dostupné na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Povolení: GNU General Public License Version 2 nebo pozdější&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -16124,37 +16126,37 @@ Chcete použít
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="639"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložení v jiném formátu se nezdařilo.  Soubor nebylo možné otevřít pro zápis.</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="789"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložení v jiném formátu se pozdařilo, ale skladba byla prázdná.</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="831"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložení neztlumených stop v jiném formátu se nezdařilo.  Nejsou žádné neztlumené stopy nebo v nich nejsou žádné části.</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="837"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložení vybrané stopy v jiném formátu se nezdařil.  Ve vybrané stopě nejsou žádné části.</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="842"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložení vybrané části v jiném formátu se nezdařil.  Nejsou vybrány žádné části.</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="2659"/>
         <source>warning: overlong bar truncated here</source>
-        <translation>varování: byl zde zkrácen příliš dlouhý takt</translation>
+        <translation>Varování: byl zde zkrácen příliš dlouhý takt</translation>
     </message>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="2670"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation>varování: takt je příliš krátký, bude doplněn pomlkami</translation>
+        <translation>Varování: takt je příliš krátký, bude doplněn pomlkami</translation>
     </message>
 </context>
 <context>
@@ -16313,7 +16315,7 @@ Chcete použít
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
         <source>Selected track</source>
-        <translation type="unfinished">Vybrané stopy</translation>
+        <translation>Vybraná stopa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="114"/>
@@ -16323,7 +16325,7 @@ Chcete použít
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="118"/>
         <source>Edited segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravené části</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="129"/>
@@ -16394,12 +16396,12 @@ Chcete použít
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
         <source>Print short staff names</source>
-        <translation type="unfinished"></translation>
+        <translation>Tisknout krátké názvy osnov</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="232"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Užitečné pro rozsáhlé, složité notové zápisy. Vytiskne krátký název pokaždé, když je v notovém zápisu zalomení řádku, čímž je  snadnější sledovat, který řádek patří na stranách ke kterému nástroji.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="245"/>
@@ -16444,7 +16446,7 @@ Chcete použít
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="298"/>
         <source>Cancel accidentals</source>
-        <translation type="unfinished"></translation>
+        <translation>Zrušit posuvky</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="300"/>
@@ -16454,12 +16456,12 @@ Chcete použít
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="302"/>
         <source>Export empty staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést prázdné osnovy</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="304"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Je-li zaškrtnuto, LilyPond bude tisknout všechny osnovy, i když jsou prázdné.  Vypnutí této volby může zmenšit &quot;nepořádek&quot; v notových osnovách, což představuje dlouhá ticha pro některé nástroje.&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Choose how often to show Tempo Marks in your score.&lt;/qt&gt;</source>
@@ -18896,7 +18898,7 @@ Ujistěte se, že je zařízení správně konfigurováno v dialogu Správa zař
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="590"/>
         <source>Distribute verses among repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělovat sloky mezi opakované části</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="605"/>
@@ -19935,7 +19937,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="83"/>
         <source>User %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatel %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="87"/>
@@ -22532,7 +22534,7 @@ Chyba byla: %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="48"/>
         <source>&amp;Join</source>
-        <translation type="unfinished">&amp;Spojit</translation>
+        <translation>&amp;Spojit</translation>
     </message>
 </context>
 <context>
@@ -23562,7 +23564,7 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="63"/>
         <source>Always split at this pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělit vždy na této výšce tónu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="64"/>
@@ -23572,17 +23574,17 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="65"/>
         <source>Split the lowest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělit nejnižší tón v každém akordu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="66"/>
         <source>Split the highest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělit nejvyšší tón v každém akordu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="67"/>
         <source>Split all chords at the same relative tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělit všechny akordy na tomtéž relativním tónu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/SplitByPitchDialog.cpp" line="73"/>
@@ -24883,17 +24885,17 @@ Chcete cestu nastavit nyní?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="167"/>
         <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Název stopy je rovněž název osnovy notového zápisu, tj. &amp;quot;Trubka.&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="170"/>
         <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Krátký název je náhradní název, který se objeví pokaždé, když je osnova zalomena, tj. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="168"/>
         <source>Enter short name</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte krátký název</translation>
     </message>
 </context>
 <context>
