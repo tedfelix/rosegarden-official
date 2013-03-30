@@ -174,7 +174,9 @@ Panned::slotEnsurePositionPointerInView(bool page)
 //    std::cerr << "x = " << x << ", left = " << left << ", leftThreshold = " << leftThreshold << ", right = " << right << ", rightThreshold = " << rightThreshold << std::endl;
 
     // Is x inside the view?
-    if (x < leftThreshold || (x > rightThreshold && x < right && page)) {
+//  if (x < leftThreshold || (x > rightThreshold && x < right && page)) {
+    // Allow a little room for x to overshoot the left threshold when the scrollbar is updated.
+    if (x < leftThreshold - 100 || (x > rightThreshold && x < right && page)) {
 //        std::cerr << "big scroll (x is off left, or paging)" << std::endl;
         // scroll to have the left of the view, plus threshold, at x
         value = hMin + (((x - ws * leftDist) - x1) * (hMax - hMin)) / (length - ws);
