@@ -3511,7 +3511,7 @@
         <location line="-1717"/>
         <location line="+1732"/>
         <source>Step &amp;Forward</source>
-        <translation>ステップ単位で前進(&amp;F)ro</translation>
+        <translation>ステップ単位で前進(&amp;F)</translation>
     </message>
     <message>
         <location line="+147"/>
@@ -5037,7 +5037,7 @@
     <message>
         <location line="-181"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation>LikyPondファイルのエクスポート(&amp;L)...</translation>
+        <translation>LilyPondファイルのエクスポート(&amp;L)...</translation>
     </message>
     <message>
         <location line="+182"/>
@@ -11101,7 +11101,7 @@
     <message>
         <location line="+7"/>
         <source>for individual audio instruments</source>
-        <translation>個々のオーディオイントゥルメント</translation>
+        <translation>個々のオーディオインストゥルメント</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -12880,7 +12880,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+322"/>
         <source>Velocity</source>
-        <translation>ベロシティ(Volocity)</translation>
+        <translation>ベロシティ(Velocity)</translation>
     </message>
 </context>
 <context>
@@ -14387,7 +14387,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+168"/>
         <source>Always use US names (e.g. quarter, 8th)</source>
-        <translation>常時英語名を使う(例: quater,8th)</translation>
+        <translation>常時英語名を使う(例: quarter,8th)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15782,7 +15782,7 @@ Would you like to use
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;もしチェックすると、Rosegardenの連桁はエクスポートされます。そうでない場合、Lilypondは連桁を自動的に計算します。&lt;/b&gt;</translation>
+        <translation>&lt;qt&gt;もしチェックすると、Rosegardenの連桁はエクスポートされます。そうでない場合、Lilypondは連桁を自動的に計算します。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -16037,17 +16037,17 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+26"/>
         <source>Load SoundFont to SoundBlaster card at startup</source>
-        <translation>起動時にSoundBlastarカードにフォントをロード</translation>
+        <translation>起動時にSoundBlasterカードにフォントをロード</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched</source>
-        <translation>これをチェックすると,Rosegardenの起動時にEMU10Kベースのカード上にサウンドフォントをロードします</translation>
+        <translation>これをチェックすると、Rosegardenの起動時にEMU10Kベースのカード上にサウンドフォントをロードします</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
-        <translation>&apos;asfload&apos;又は&apos;sfxload&apos;コマンドのパス</translation>
+        <translation>&apos;asfxload&apos;又は&apos;sfxload&apos;コマンドのパス</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -19077,7 +19077,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="-240"/>
         <source>Checking for wavpack...</source>
-        <translation>wapvackをチェック中...</translation>
+        <translation>wavpackをチェック中...</translation>
     </message>
     <message>
         <location line="-475"/>
@@ -19617,7 +19617,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/document/RoseXmlHandler.cpp" line="+443"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
-        <translation>このファイルはRosegaarden %1で書き込まれたが、このバージョンでは
+        <translation>このファイルはRosegarden %1で書き込まれたが、このバージョンでは
 読めない異なったファイル形式として使われる。</translation>
     </message>
     <message>
@@ -21130,7 +21130,7 @@ Error was : %2</source>
     <message>
         <location line="+31"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;この半音の数値で選択された任意のセグメントの再生を上げたり下げたりします。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意:このコントロールは既に存在するセグメントを変更します。&lt;/i&gt;&lt;/p&gt;&lt;i&gt;新しいセグメントの描画か録音設定の前に、これをあらかじめ選択するため、&lt;b&gt;セグメントの作成&lt;/b&gt;配下の&lt;b&gt;トラックパラメータ&lt;/b&gt;中のトランスポーズコントロールを使ってください。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;この半音の数値で選択された任意のセグメントの再生を上げたり下げたりします。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意:このコントロールは既に存在するセグメントを変更します。&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;新しいセグメントの描画か録音設定の前に、これをあらかじめ選択するため、&lt;b&gt;セグメントの作成&lt;/b&gt;配下の&lt;b&gt;トラックパラメータ&lt;/b&gt;中のトランスポーズコントロールを使ってください。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -21631,7 +21631,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+35"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegardenは、MIDIパフォーマンスのための高解像度タイミングソースを見つけられませんでした。&lt;/p&gt;&lt;Ｐ&gt;これは、使用しているLinuxシステムのkernelタイマの解像度が小さすぎるという理由と思われます。詳細についてはLinuxディストリビュータに聞いてください。&lt;/p&gt;&lt;p&gt;いくつかのLinuxディストリビュータはすでに低レイテンシkernelを提供しています。説明は、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden webサイト&lt;/a&gt;を見てください。&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegardenは、MIDIパフォーマンスのための高解像度タイミングソースを見つけられませんでした。&lt;/p&gt;&lt;p&gt;これは、使用しているLinuxシステムのkernelタイマの解像度が小さすぎるという理由と思われます。詳細についてはLinuxディストリビュータに聞いてください。&lt;/p&gt;&lt;p&gt;いくつかのLinuxディストリビュータはすでに低レイテンシkernelを提供しています。説明は、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden webサイト&lt;/a&gt;を見てください。&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -24213,7 +24213,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Rosegardenmは安全なグラフィックモードを使っています。  これは、とても安定していますが、画面描画能力はとても劣ります。&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;編集 -&gt; 設定 -&gt; 振る舞い -&gt; グラフぃcuすパフォーマンス&lt;/b&gt;を選び、よりパフォーマンスを向上させるために、&quot;通常&quot; か &quot;高速&quot; を選んでもよいでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegardenは安全なグラフィックモードを使っています。  これは、とても安定していますが、画面描画能力はとても劣ります。&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;編集 -&gt; 設定 -&gt; 振る舞い -&gt; グラフィクスパフォーマンス&lt;/b&gt;を選び、よりパフォーマンスを向上させるために、&quot;通常&quot; か &quot;高速&quot; を選んでもよいでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
