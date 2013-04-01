@@ -132,7 +132,8 @@ rm -rf $outDir
 # svn copy from trunk/rosegarden to tags/$outDir
 
 user=dmmcintyr
-tagcmd="svn copy svn+ssh://$user@svn.code.sf.net/p/rosegarden/code/trunk/rosegarden svn+ssh://$user@svn.code.sf.net/p/rosegarden/code/tags/$outDir -m \"Tag release $NEW_VERSION\""
+
+tagcmd="svn copy https://svn.code.sf.net/p/rosegarden/code/trunk/rosegarden https://svn.code.sf.net/p/rosegarden/code/tags/$outDir -m \"Tag release $NEW_VERSION\""
 
 echo "About to tag release with the following command:"
 echo "$tagcmd"
