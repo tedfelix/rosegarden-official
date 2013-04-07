@@ -1840,6 +1840,13 @@ NotationHLayout::positionChord(ViewSegment &staff,
             continue;
         }
 
+        // Make a copy of the next event if available.
+        NotationElement *nextNote = note;
+        if (++citr != staff.getViewElementList()->end()) {
+            nextNote = static_cast<NotationElement*>(*citr);
+        }
+        --citr;
+
         bool tiedForwards = false;
         bool tiedBack = false;
 
@@ -1875,7 +1882,14 @@ NotationHLayout::positionChord(ViewSegment &staff,
         }
 
         if (tiedForwards) {
-            note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
+//          note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
+
+            // Don't modify tie info here, unless the next note has become
+            // something other than a note.
+            if (!nextNote->isNote()) {
+                note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
+            }
+
             tieMap[pitch] = citr;
         } else {
             note->event()->unset(m_properties.TIE_LENGTH);
