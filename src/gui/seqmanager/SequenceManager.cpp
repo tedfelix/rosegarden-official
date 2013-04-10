@@ -672,23 +672,36 @@ punchin:
         }
 
         if (haveMIDIInstrument) {
-            // Create the record MIDI segment now, so that the
-            // composition view has a real segment to display.  It
-            // won't actually be added to the composition until the
-            // first recorded event arrives.  We don't have to do this
-            // from here for audio, because for audio the sequencer
-            // calls back on createRecordAudioFiles so as to find out
-            // what files it needs to write to.
-            /*m_doc->addRecordMIDISegment(recordMIDITrack);*/
+            // For each recording segment...
             for (Composition::recordtrackcontainer::const_iterator i =
                         comp.getRecordTracks().begin(); i != comp.getRecordTracks().end(); ++i) {
+                // Get the Instrument for this Track
                 InstrumentId iid = comp.getTrackById(*i)->getInstrument();
                 Instrument *inst = studio.getInstrumentById(iid);
+
+                // If this is a MIDI instrument
                 if (inst && (inst->getType() != Instrument::Audio)) {
 #ifdef DEBUG_SEQUENCE_MANAGER
                     SEQMAN_DEBUG << "SequenceManager:  mdoc->addRecordMIDISegment(" << *i << ")" << endl;
 #endif
+                    // Create the record MIDI segment now, so that the
+                    // composition view has a real segment to display.  It
+                    // won't actually be added to the composition until the
+                    // first recorded event arrives.  We don't have to do this
+                    // from here for audio, because for audio the sequencer
+                    // calls back on createRecordAudioFiles so as to find out
+                    // what files it needs to write to.
                     m_doc->addRecordMIDISegment(*i);
+
+                    // Get the channel based on the instrument number.  E.g.
+                    // MIDI Instrument #1 is channel 0.
+                    int channel = inst->getNaturalChannel();
+
+                    // Send Program Changes on recording tracks like 11.11.42
+                    // used to.  Fix for bug #1356 "Wrong instrument when
+                    // recording on multiple tracks/channels".  This is a
+                    // simple way to support multiple MIDI controllers.
+                    StudioControl::sendChannelSetup(inst, channel);
                 }
             }
         }
