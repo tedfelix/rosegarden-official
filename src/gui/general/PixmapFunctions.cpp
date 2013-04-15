@@ -87,8 +87,9 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
 
     QImage image = map.toImage();
 
+// This function has become obsolete and is no longer needed here anyway.
     // save a copy of the original alpha channel
-    QImage alpha = image.alphaChannel();
+//  QImage alpha = image.alphaChannel();
 
     int s, v;
 
@@ -99,7 +100,11 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
         for (int x = 0; x < image.width(); ++x) {
 
             QRgb oldPixel = image.pixel(x, y);
-            QColor oldColour(oldPixel);
+            QColor oldColour(oldPixel);  // This doesn't seem to pick up the alpha channel.
+
+            // Explicitly set the alpha channel, making it a little stronger so that
+            // colored note heads won't appear smaller than ordinary black ones.
+            oldColour.setAlpha(int(qAlpha(oldPixel) * 1.5) > 255 ? 255 : int(qAlpha(oldPixel) * 1.5));
 
             int oldHue;
             oldColour.getHsv(&oldHue, &s, &v);
@@ -127,20 +132,33 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
                                  newSaturation,
                                  v > minimum ? v : minimum);
 
-            QRgb newPixel = qRgba(newColour.red(),
-                                  newColour.green(),
-                                  newColour.blue(),
-                                  qAlpha(oldPixel));
+//          QRgb newPixel = qRgba(newColour.red(),
+//                                newColour.green(),
+//                                newColour.blue(),
+//                                qAlpha(oldPixel));
+
+            // For some reason, while in the raster-graphics mode, the alpha channel
+            // inverts the hues, rather than simply controlling pixel transparency.
+            //
+            // One way around the problem seems to be to modulate the individual
+            // color components with the alpha channel, in addition to applying the
+            // alpha channel in the usual way.
+            QRgb newPixel = qRgba(int(newColour.red() * oldColour.alphaF()),
+                                  int(newColour.green() * oldColour.alphaF()),
+                                  int(newColour.blue() * oldColour.alphaF()),
+                                  oldColour.alpha());
 
             image.setPixel(x, y, newPixel);
         }
     }
 
+// This function has become obsolete and is no longer needed here anyway.
     // restore the original alpha channel
-    image.setAlphaChannel(alpha);
+//  image.setAlphaChannel(alpha);
 
     QPixmap rmap = QPixmap::fromImage(image);
-    if (!map.mask().isNull()) rmap.setMask(map.mask());
+// This function is no longer needed here.
+//  if (!map.mask().isNull()) rmap.setMask(map.mask());
     return rmap;
 }
 
