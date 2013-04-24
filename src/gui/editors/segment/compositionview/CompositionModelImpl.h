@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONMODELIMPL_H_
-#define _RG_COMPOSITIONMODELIMPL_H_
+#ifndef RG_COMPOSITIONMODELIMPL_H
+#define RG_COMPOSITIONMODELIMPL_H
 
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
@@ -51,9 +51,13 @@ class Composition;
 class AudioPreviewUpdater;
 class AudioPreviewThread;
 
-/// Composition UI state and behavior.
+/// Composition User Interface Controller.
 /**
- * See Composition and CompositionView.
+ * In the Entity/Boundary/Control model, this is (roughly) a control class.
+ * Composition is the associated entity (problem domain object) class, while
+ * CompositionView is the associated boundary (interface) class.
+ *
+ * This class might be renamed CompositionUIController.
  */
 class CompositionModelImpl : public CompositionModel
 {
@@ -66,7 +70,7 @@ public:
                          int vStep);
 
     virtual ~CompositionModelImpl();
-    
+
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
                                                  RectRanges* notationRects, AudioPreviewDrawData* audioRects);
@@ -113,8 +117,8 @@ public:
     void clearPreviewCache();
     void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
 
-    rectlist*            makeNotationPreviewDataCache(const Segment *s);
-    AudioPreviewData*    makeAudioPreviewDataCache(const Segment *s);
+    rectlist*         makeNotationPreviewDataCache(const Segment *s);
+    AudioPreviewData* makeAudioPreviewDataCache(const Segment *s);
 
     CompositionRect computeSegmentRect(const Segment&, bool computeZ = false);
     QColor          computeSegmentPreviewColor(const Segment*);
@@ -160,11 +164,11 @@ protected:
     bool wasTmpSelected(const Segment*) const;
     bool isMoving(const Segment*) const;
     bool isRecording(const Segment*) const;
-    
+
     void computeRepeatMarks(CompositionRect& sr, const Segment* s);
-        unsigned int computeZForSegment(const Segment* s);
+    unsigned int computeZForSegment(const Segment* s);
         
-        // segment preview stuff
+    // segment preview stuff
 
     void updatePreviewCacheForNotationSegment(const Segment* s, rectlist*);
     void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData*);
@@ -200,7 +204,6 @@ protected:
     typedef std::set<Segment *> recordingsegmentset;
     recordingsegmentset          m_recordingSegments;
 
-    typedef std::vector<CompositionItem> itemgc;
     AudioPreviewThread*          m_audioPreviewThread;
 
     typedef std::map<const Segment *, rectlist *> NotationPreviewDataCache;
@@ -212,6 +215,8 @@ protected:
     rectcontainer m_res;
     itemcontainer m_changingItems;
     ChangeType    m_changeType;
+
+    typedef std::vector<CompositionItem> itemgc;
     itemgc m_itemGC;
 
     QRect m_selectionRect;
@@ -221,11 +226,11 @@ protected:
     std::map<const Segment*, timeT> m_segmentEndTimeMap;
     std::map<const Segment*, PixmapArray> m_audioSegmentPreviewMap;
     std::map<TrackId, int> m_trackHeights;
-    
+
     typedef std::map<const Segment*, AudioPreviewUpdater *>
         AudioPreviewUpdaterMap;
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
-    
+
     SegmentOrderer m_segmentOrderer;
 };
 

@@ -558,6 +558,7 @@ void CompositionModelImpl::appearanceChanged(const Segment *s)
 
 void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
+    Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
     //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
     clearInCache(s, true);
     if (shorten) {
@@ -636,6 +637,7 @@ void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, 
 
 void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
 {
+    Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
 //    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
     if (setTrackHeights(s)) {
 //        RG_DEBUG << "... changed, updating";
