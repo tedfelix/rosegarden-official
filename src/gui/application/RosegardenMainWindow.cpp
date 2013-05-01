@@ -579,6 +579,9 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_doc;
     Profiles::getInstance()->dump();
 
+    // ??? I don't think any of these need to be deleted.  They were created
+    //     and passed the "this" pointer as their parent QObject.  That means
+    //     that they will be deleted when their parent (this) goes away.
 //    delete m_playTimer;
 //    delete m_stopTimer;
     delete m_inputTimer;

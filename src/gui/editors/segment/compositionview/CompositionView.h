@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONVIEW_H_
-#define _RG_COMPOSITIONVIEW_H_
+#ifndef RG_COMPOSITIONVIEW_H
+#define RG_COMPOSITIONVIEW_H
 
 #include "base/Selection.h"
 #include "CompositionModel.h"
