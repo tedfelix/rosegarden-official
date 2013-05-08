@@ -209,6 +209,8 @@ private:
     QTimer *m_midiOutTimer;
     QTimer *m_clearMetronomeTimer;
 
+    bool m_enableMIDILabels;
+
     QPixmap m_panelOpen;
     QPixmap m_panelClosed;
 

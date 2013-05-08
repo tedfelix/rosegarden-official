@@ -57,6 +57,9 @@ namespace Rosegarden
 TransportDialog::TransportDialog(QWidget *parent):
     QDialog(parent, 0),
     m_transport(0),
+    //m_lcdList(),
+    //m_lcdListDefault(),
+    //m_lcdNegative(),
     m_lastTenHours(0),
     m_lastUnitHours(0),
     m_lastTenMinutes(0),
@@ -70,15 +73,34 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_lastNegative(false),
     m_lastMode(RealMode),
     m_currentMode(RealMode),
+    m_tenHours(0),
+    m_unitHours(0),
+    m_tenMinutes(0),
+    m_unitMinutes(0),
+    m_tenSeconds(0),
+    m_unitSeconds(0),
+    m_tenths(0),
+    m_hundreths(0),
+    m_thousandths(0),
+    m_tenThousandths(0),
     m_tempo(0),
     m_numerator(0),
     m_denominator(0),
     m_framesPerSecond(24),
     m_bitsPerFrame(80),
+    m_midiInTimer(0),
+    m_midiOutTimer(0),
+    m_clearMetronomeTimer(0),
+    m_enableMIDILabels(true),
+    //m_panelOpen(),
+    //m_panelClosed(),
+    m_shortcuts(0),
     m_isExpanded(true),
     m_haveOriginalBackground(false),
     m_isBackgroundSet(false),
+    //m_originalBackground(),
     m_sampleRate(0)
+    //m_modeMap()
 {
     // So we can identify it in RosegardenMainWindow::awaitDialogClearance().
     // Do not change this string:
@@ -276,6 +298,21 @@ TransportDialog::TransportDialog(QWidget *parent):
     // shortcut object
     //
     m_shortcuts = new QShortcut(this);
+
+
+    // Performance Testing
+
+    QSettings settings;
+    settings.beginGroup("Performance_Testing");
+
+    m_enableMIDILabels =
+            (settings.value("TransportDialog_MIDI_Labels", 1).toInt() != 0);
+
+    // Write it to the file to make it easier to find.
+    settings.setValue("TransportDialog_MIDI_Labels",
+                      m_enableMIDILabels ? 1 : 0);
+
+    settings.endGroup();
 }
 
 TransportDialog::~TransportDialog()
@@ -856,6 +893,10 @@ TransportDialog::setTimeSignature(const TimeSignature &timeSig)
 void
 TransportDialog::setMidiInLabel(const MappedEvent *mE)
 {
+    // If MIDI label updates have been turned off, bail.
+    if (!m_enableMIDILabels)
+        return;
+
     assert(mE != 0);
 
     switch (mE->getType()) {
@@ -945,6 +986,10 @@ TransportDialog::slotClearMidiInLabel()
 void
 TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 {
+    // If MIDI label updates have been turned off, bail.
+    if (!m_enableMIDILabels)
+        return;
+
     assert(mE != 0);
 
     switch (mE->getType()) {
