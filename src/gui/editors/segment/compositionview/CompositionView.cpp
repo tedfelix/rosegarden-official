@@ -91,6 +91,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_currentIndex(0),
     m_tool(0),
     m_toolBox(0),
+    m_enableDrawing(true),
     m_showPreviews(false),
     m_showSegmentLabels(true),
     m_fineGrain(false),
@@ -190,6 +191,16 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     if (doc) {
         doc->getAudioPreviewThread().setEmptyQueueListener(this);
     }
+
+    QSettings settings;
+    settings.beginGroup("Performance_Testing");
+
+    m_enableDrawing = (settings.value("CompositionView", 1).toInt() != 0);
+
+    // Write it to the file to make it easier to find.
+    settings.setValue("CompositionView", m_enableDrawing ? 1 : 0);
+
+    settings.endGroup();
 }
 
 void CompositionView::endAudioPreviewGeneration()
@@ -464,6 +475,10 @@ void CompositionView::slotUpdateSegmentsDrawBuffer()
 
 void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
 {
+    // Bail if drawing is turned off in the settings.
+    if (!m_enableDrawing)
+        return;
+
     // This one gets hit pretty hard while recording.
     Profiler profiler("CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)");
 

@@ -496,6 +496,9 @@ protected:
     SegmentTool*    m_tool;
     SegmentToolBox* m_toolBox;
 
+    /// Performance testing.
+    bool         m_enableDrawing;
+
     bool         m_showPreviews;
     bool         m_showSegmentLabels;
     bool         m_fineGrain;
