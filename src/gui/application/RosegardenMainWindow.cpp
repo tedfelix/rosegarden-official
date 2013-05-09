@@ -534,13 +534,20 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     if (!installSignalHandlers())
         qWarning("%s", "Signal handlers not installed!");
 
+    // Update UI time interval
+    settings.beginGroup("Performance_Testing");
+    int updateUITime = settings.value("Update_UI_Time", 50).toInt();
+    // Write it to the file to make it easier to find.
+    settings.setValue("Update_UI_Time", updateUITime);
+    settings.endGroup();
+
     // Connect the various timers to their handlers.
 //    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
 //    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
 //    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
 //    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
     connect(m_updateUITimer, SIGNAL(timeout()), this, SLOT(slotUpdateUI()));
-    m_updateUITimer->start(50);
+    m_updateUITimer->start(updateUITime);
     connect(m_inputTimer, SIGNAL(timeout()), this, SLOT(slotHandleInputs()));
     m_inputTimer->start(20);
     connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
