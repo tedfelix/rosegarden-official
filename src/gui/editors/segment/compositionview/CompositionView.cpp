@@ -120,7 +120,10 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_lastBufferRefreshX(0),
     m_lastBufferRefreshY(0),
     m_lastPointerRefreshX(0),
-    m_contextHelpShown(false)
+    m_contextHelpShown(false),
+    m_updateTimer(new QTimer(static_cast<QObject *>(this))),
+    m_updateNeeded(false)
+//  m_updateRect()
 {
     if (doc) {
         m_toolBox = new SegmentToolBox(this, doc);
@@ -191,6 +194,10 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     if (doc) {
         doc->getAudioPreviewThread().setEmptyQueueListener(this);
     }
+
+    // Update timer
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
+    m_updateTimer->start(100);
 
     QSettings settings;
     settings.beginGroup("Performance_Testing");
@@ -473,17 +480,24 @@ void CompositionView::slotUpdateSegmentsDrawBuffer()
 //    update();
 }
 
-void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
+void CompositionView::slotUpdateTimer()
 {
-    // Bail if drawing is turned off in the settings.
-    if (!m_enableDrawing)
-        return;
+    //RG_DEBUG << "CompositionView::slotUpdateTimer()";
 
-    // This one gets hit pretty hard while recording.
-    Profiler profiler("CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)");
+    if (m_updateNeeded)
+    {
+        updateSegmentsDrawBuffer(m_updateRect);
 
-    //RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer() rect "
-    //         << rect << " - valid : " << rect.isValid();
+        //m_updateRect.setRect(0,0,0,0);  // Not needed.
+        m_updateNeeded = false;
+    }
+}
+
+void CompositionView::updateSegmentsDrawBuffer(const QRect& rect)
+{
+    Profiler profiler("CompositionView::updateSegmentsDrawBuffer(const QRect& rect)");
+
+    //RG_DEBUG << "CompositionView::updateSegmentsDrawBuffer() rect " << rect << " - valid : " << rect.isValid();
 
     slotAllDrawBuffersNeedRefresh(rect);
 
@@ -494,6 +508,45 @@ void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
         updateContents();
 //        update();
     }
+}
+
+void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
+{
+    // Bail if drawing is turned off in the settings.
+    if (!m_enableDrawing)
+        return;
+
+    // This one gets hit pretty hard while recording.
+    Profiler profiler("CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)");
+
+#if 0
+// Old way.  Just do the work for every update.  Very expensive.
+    updateSegmentsDrawBuffer(rect);
+#else
+// Alternate approach with a timer to throttle updates
+
+    // Note: This new approach normalizes the incoming rect.  This means
+    //   that it will never trigger a full refresh given an invalid rect
+    //   like it used to.  See updateSegmentsDrawBuffer().  Some rough
+    //   testing reveals that the following test cases trigger this
+    //   invalid rect situation:
+    //       1. Move a segment.
+    //       2. Click with the arrow tool where there is no segment.
+    //   Testing of these situations reveals no (or minor) refresh issues.
+
+    // If an update is now needed, set m_updateRect, otherwise accumulate it.
+    if (!m_updateNeeded)
+    {
+        // Let slotUpdateTimer() know an update is needed next time.
+        m_updateNeeded = true;
+        m_updateRect = rect.normalized();
+    }
+    else
+    {
+        // Accumulate the update rect
+        m_updateRect |= rect.normalized();
+    }
+#endif
 }
 
 void CompositionView::slotRefreshColourCache()

@@ -30,6 +30,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QString>
+#include <QTimer>
 #include "base/Event.h"
 
 
@@ -263,6 +264,12 @@ public slots:
     /// Redraws everything.  Segments and artifacts.
     void slotUpdateSegmentsDrawBuffer();
     /// Redraws everything (segments and artifacts) within the specified rect.
+    /**
+     * Because this routine is called so frequently, it doesn't actually
+     * do any work.  Instead it sets a flag, m_updateNeeded, and
+     * slotUpdateTimer() does the actual work by calling
+     * updateSegmentsDrawBuffer() on a more leisurely schedule.
+     */
     void slotUpdateSegmentsDrawBuffer(const QRect&);
 
     /// Redraws everything with the new color scheme.
@@ -447,6 +454,9 @@ protected:
              & r);
     }
 
+    /// Does the actual work for slotUpdateSegmentsDrawBuffer()
+    void updateSegmentsDrawBuffer(const QRect& rect);
+
 protected slots:
 
     /// Updates the artifacts in the entire viewport.
@@ -485,6 +495,13 @@ protected slots:
     /// Connected to SegmentToolBox::showContextHelp().
     /// See showContextHelp().
     void slotToolHelpChanged(const QString &);
+
+    /// Used to reduce updates.
+    /**
+     * slotUpdateSegmentsDrawBuffer() sets the m_updateNeeded flag to
+     * tell slotUpdateTimer() that it needs to perform an update.
+     */
+    void slotUpdateTimer();
 
 protected:
 
@@ -560,6 +577,13 @@ protected:
 
     mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
     mutable CompositionModel::RectRanges m_notationPreviewRects;
+
+    /// Drives slotUpdateTimer().
+    QTimer *m_updateTimer;
+    /// Lets slotUpdateTimer() know there's work to do.
+    bool m_updateNeeded;
+    /// Accumulated update rectangle.
+    QRect m_updateRect;
 };
 
 
