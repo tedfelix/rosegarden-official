@@ -2085,7 +2085,7 @@ JackDriver::updateAudioData()
             }
         } else if (!empty) {
             pluginLatency +=
-                m_instrumentMixer->getPluginLatency((unsigned int) * connections.begin());
+                m_instrumentMixer->getPluginLatency((unsigned int) * connections.begin() - 1);
         }
 
         if (empty) {
