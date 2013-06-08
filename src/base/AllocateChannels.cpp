@@ -147,54 +147,52 @@ freeChannelInterval(ChannelInterval &old)
         << old.getChannelId()
         << endl;
 #endif
-    // Mutable, to be found.
-    iterator before = end(), after = end();
 
-    // Find the free ChannelInterval before it.
-    {
-        iterator rEnd = --begin();
-        ChannelInterval dummy(old.m_start);
-        for (iterator i = upper_bound(dummy); i != rEnd; --i) {
-            const ChannelInterval cs = (*i);
-            if (cs.getChannelId() == old.getChannelId()) {
-                before = i;
-                break;
-            }
+    // The first element which is not considered to go before val
+    // (i.e., either it is equivalent or goes after).
+    iterator atOrAfter = lower_bound(ChannelInterval(old.m_start));
+    iterator prevIterator = end();
+    iterator nextIterator = end();
+
+    for (iterator i = begin(); i != atOrAfter; ++i) {
+        const ChannelInterval &cs = (*i);
+        if (cs.getChannelId() == old.getChannelId() &&
+            (cs.m_end == old.m_start)) {
+            prevIterator = i;
+            break;
         }
     }
 
-    // Figure out whether we will merge with "before"
-    bool mergeBefore = (before != end() && (before->m_end   == old.m_start));
-    const ChannelInterval &ciBefore = mergeBefore ? *before : old;
-
-    // Find the free ChannelInterval after it.
-    {
-        ChannelInterval dummy(old.m_end);
-        for (iterator i = lower_bound(dummy); i != end(); ++i) {
-            const ChannelInterval cs = (*i);
-            if (cs.getChannelId() == old.getChannelId()) {
-                after = i;
-                break;
-            }
+    for (iterator i = atOrAfter; i != end(); ++i) {
+        const ChannelInterval &cs = (*i);
+        if (cs.getChannelId() == old.getChannelId() &&
+            (cs.m_start == old.m_end)) {
+            nextIterator = i;
+            break;
         }
     }
 
-    // Figure out whether we will merge with "after"
-    bool mergeAfter  = (after  != end() && (after ->m_start == old.m_end));
-    const ChannelInterval &ciAfter = mergeAfter ? *after : old;
+    // Figure out the actual endpoints.
+    const ChannelInterval &ciBefore =
+        (prevIterator == end()) ? old : *prevIterator;
     
+    const ChannelInterval &ciAfter = 
+        (nextIterator == end()) ? old : *nextIterator;
 
-    // Add a channelsegment incorporating the whole contiguous time.
-    insert(ChannelInterval(old.getChannelId(),
+    const ChannelInterval
+        newChannelInterval(old.getChannelId(),
                            ciBefore.m_start,             ciAfter.m_end,
                            ciBefore.m_instrumentBefore,  ciAfter.m_instrumentAfter,
-                           ciBefore.m_marginBefore,      ciAfter.m_marginAfter));
+                           ciBefore.m_marginBefore,      ciAfter.m_marginAfter);
+    
+    // Physically remove the adjacent intervals that we are merging
+    // with.
+    if (prevIterator != end()) { erase(prevIterator); }
+    if (nextIterator != end()) { erase(nextIterator); }
 
-    // Remove "before" if we incorporated it.
-    if (mergeBefore) { erase(before); }
-    // Remove "after" if we incorporated it and it's distinct from
-    // "before", otherwise 0-length intervals can cause problems.
-    if (mergeAfter && (before != after))  { erase(after); }
+    // Add a channelsegment incorporating the whole contiguous time.
+    insert(newChannelInterval);
+    
     old.clearChannelId();
 }
 
