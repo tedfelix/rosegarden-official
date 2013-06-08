@@ -33,7 +33,6 @@ namespace Rosegarden
 class Segment;
 class Composition;
 
-
 /**
  * Pull all segments, time sigs, tempos etc starting after the end of
  * a given range back by the duration of that range, so as to fill in
@@ -61,6 +60,7 @@ private:
     timeT m_endTime;
 
     bool m_prepared;
+    bool m_hasExecuted;
     bool m_opening;
 
     std::vector<Segment *> m_moving;
@@ -70,6 +70,10 @@ private:
 
     TempoSelection m_temposPre;
     TempoSelection m_temposPost;
+
+    // I own the markers that aren't currently in the composition.
+    MarkerSelection m_markersPre;
+    MarkerSelection m_markersPost;
 
     timeT m_loopBegin;
     timeT m_loopEnd;

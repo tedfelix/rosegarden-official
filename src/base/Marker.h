@@ -42,7 +42,13 @@ public:
     Marker(timeT time, const std::string &name,
            const std::string &description):
         m_time(time), m_name(name), m_description(description) { m_id = nextSeqVal(); }
-
+    Marker(const Marker &other, timeT time) :
+        m_id(other.m_id),
+        m_time(time),
+        m_name(other.m_name),
+        m_description(other.m_description)
+            {}
+        
     int getID() const { return m_id; }
     timeT getTime() const { return m_time; }
     std::string getName() const { return m_name; }

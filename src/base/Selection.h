@@ -217,6 +217,50 @@ public:
     bool hasNonAudioSegment() const;
 };
 
+/**
+ * Template for a selection that includes only elements of type
+ * ElementInfo::value_type, indexed by time.  Unlike EventSelection,
+ * this does copy its contents, not just refer to them.
+ *
+ */
+template <typename ElementInfo>
+class TimewiseSelection
+{
+public:
+    typedef typename ElementInfo::value_type Element;
+    typedef std::multiset<Element> Container;
+
+    virtual ~TimewiseSelection() {}
+
+    /**
+     * Add an element to the selection
+     */
+    void addRaw(const Element & element)
+    { m_contents.insert(element); }
+
+    /**
+     * Add a copy of an element to the selection, offset by time t.
+     */
+    void addCopyAtOffset(timeT offset, const Element &element) {
+        timeT t = ElementInfo::getTime(element);
+        addRaw(ElementInfo::copyAtTime(t + offset, element));
+    }
+    
+    const Container &getContents() const { return m_contents; }
+    typename Container::const_iterator begin() const
+        { return m_contents.begin(); }
+    typename Container::const_iterator end() const
+        { return m_contents.end(); }
+    bool empty() const { return m_contents.empty(); }
+    void RemoveFromComposition(Composition *composition);
+    void AddToComposition(Composition *composition);
+
+protected:
+    Container m_contents;
+};
+
+// TimeSignatureSelection and TempoSelection could be realized as
+// descendants of TimewiseSelection, reducing their code a great deal.
 
 /**
  * A selection that includes (only) time signatures.  Unlike
@@ -310,7 +354,35 @@ public:
 protected:
     tempocontainer m_tempos;
 };
+
+/**
+ * A selection that includes (only) markers.
+ */
+
+// A helper class containing static information to guide the template.
+class MarkerElementInfo
+{
+    friend class TimewiseSelection<MarkerElementInfo>;
+    typedef Marker* value_type;
     
+    static void RemoveFromComposition(Composition *composition,
+                                      const value_type& element);
+    static void AddToComposition(Composition *composition,
+                                 const value_type& element);
+    static value_type copyAtTime(timeT t, const value_type& element)
+    { return new Marker(*element, t); }
+    static timeT getTime(const value_type& element)
+    { return element->getTime(); }
+};
+    
+// The marker selection class itself
+class MarkerSelection : public TimewiseSelection<MarkerElementInfo>
+{
+public:
+   MarkerSelection(void) : TimewiseSelection<MarkerElementInfo>() {};
+   MarkerSelection(Composition &, timeT beginTime, timeT endTime);
+
+};
 
 }
 

@@ -457,6 +457,29 @@ bool SegmentSelection::hasNonAudioSegment() const
     return false;
 }
 
+/** Templates that define methods of TimewiseSelection **/
+
+template <typename ElementInfo>
+void
+TimewiseSelection<ElementInfo>::
+RemoveFromComposition(Composition *composition)
+{
+    for (typename Container::const_iterator i = begin(); i != end(); ++i) {
+        ElementInfo::RemoveFromComposition(composition, *i);
+    }
+}
+
+template <typename ElementInfo>
+void
+TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition)
+{
+    for (typename Container::const_iterator i = begin(); i != end(); ++i) {
+        ElementInfo::AddToComposition(composition, *i);
+    }
+}
+
+
+/** Methods of TimeSignatureSelection **/
 
 TimeSignatureSelection::TimeSignatureSelection() { }
 
@@ -514,6 +537,8 @@ TimeSignatureSelection::AddToComposition(Composition *composition)
         composition->addTimeSignature(i->first, i->second);
     }    
 }
+
+/** Methods of TempoSelection **/
 
 TempoSelection::TempoSelection() { }
 
@@ -581,6 +606,47 @@ TempoSelection::AddToComposition(Composition *composition)
         composition->addTempoAtTime(i->first,
                                     i->second.first,
                                     i->second.second);
+    }
+}
+
+/** Methods of template helper MarkerElementInfo **/
+
+void
+MarkerElementInfo::
+RemoveFromComposition(Composition *composition,
+                      const value_type& element)
+{
+    composition->detachMarker(element);
+}
+
+void
+MarkerElementInfo::
+AddToComposition(Composition *composition,
+                 const value_type& element)
+{
+    composition->addMarker(element);
+}
+
+// Explicit template instantiation, so other cpp files don't need to
+// see the method definitions.
+template class TimewiseSelection<MarkerElementInfo>;
+
+/** Methods of MarkerSelection **/
+
+MarkerSelection::MarkerSelection(Composition &composition, timeT beginTime,
+                                 timeT endTime)
+{
+    typedef Composition::markercontainer MarkerContainer;
+    const MarkerContainer& markers = composition.getMarkers();
+    for (MarkerContainer::const_iterator i = markers.begin();
+         i != markers.end();
+         ++i) {
+        timeT markerTime = (*i)->getTime();
+        if ((markerTime >= beginTime) && markerTime < endTime) {
+            // Deliberately a shared copy.  Composition recognizes
+            // markers by address.
+            addRaw(*i);
+        }
     }
 }
 
