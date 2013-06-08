@@ -21,13 +21,13 @@
 
 #include "document/BasicCommand.h"
 #include "base/Selection.h"
-#include <map>
-#include <QString>
 #include "base/Event.h"
+
+#include <QString>
 #include <QCoreApplication>
 
-
-
+#include <map>
+#include <vector>
 
 namespace Rosegarden
 {
@@ -53,6 +53,8 @@ public:
 
     typedef std::map<PasteType, QString> PasteTypeMap;
     static PasteTypeMap getPasteTypes(); // type, descrip
+
+    typedef std::vector<Event*> EventVec;
 
     /**
      * Construct a Paste command from a clipboard that already contains
@@ -80,7 +82,7 @@ public:
 
     virtual ~PasteEventsCommand();
 
-    EventSelection getPastedEvents();
+    EventSelection * getSubsequentSelection();
 
     static QString getGlobalName() { return tr("&Paste"); }
 
@@ -97,7 +99,7 @@ protected:
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
-    EventSelection m_pastedEvents;
+    EventVec m_pastedEvents;
 };
 
 

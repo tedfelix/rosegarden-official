@@ -904,7 +904,7 @@ MatrixView::slotEditPaste()
         return;
     } else {
         CommandHistory::getInstance()->addCommand(command);
-        setSelection(new EventSelection(command->getPastedEvents()), false);
+        setSelection(command->getSubsequentSelection(), false);
     }
 }
 

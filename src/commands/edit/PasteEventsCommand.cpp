@@ -43,7 +43,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType),
-    m_pastedEvents(segment)
+    m_pastedEvents()
 {
     if (pasteType != OpenAndPaste) {
 
@@ -72,7 +72,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType),
-    m_pastedEvents(segment)
+    m_pastedEvents()
 {}
 
 PasteEventsCommand::~PasteEventsCommand()
@@ -228,7 +228,7 @@ PasteEventsCommand::modifySegment()
 
             for (size_t i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
-                m_pastedEvents.addEvent(copies[i]);
+                m_pastedEvents.push_back(copies[i]);
             }
 
             break;
@@ -247,10 +247,10 @@ PasteEventsCommand::modifySegment()
                 // e is model event: we retain ownership of it
                 Segment::iterator i = helper.insertNote(e);
                 delete e;
-                if (i != destination->end()) m_pastedEvents.addEvent(*i);
+                if (i != destination->end()) m_pastedEvents.push_back(*i);
             } else {
                 destination->insert(e);
-                m_pastedEvents.addEvent(e);
+                m_pastedEvents.push_back(e);
             }
         }
 
@@ -279,7 +279,7 @@ PasteEventsCommand::modifySegment()
             }
 
             destination->insert(e);
-            m_pastedEvents.addEvent(e);
+            m_pastedEvents.push_back(e);
         }
 
         destination->normalizeRests(pasteTime, pasteTime + duration);
@@ -297,16 +297,22 @@ PasteEventsCommand::modifySegment()
                                               <Int>(BEAMED_GROUP_ID)]);
         }
         destination->insert(e);
-        m_pastedEvents.addEvent(e);
+        m_pastedEvents.push_back(e);
     }
 
     destination->normalizeRests(pasteTime, pasteTime + duration);
 }
 
-EventSelection
-PasteEventsCommand::getPastedEvents()
+EventSelection *
+PasteEventsCommand::getSubsequentSelection()
 {
-    return m_pastedEvents;
-}
+    EventSelection *selection = new EventSelection(getSegment());
+    for (EventVec::const_iterator i = m_pastedEvents.begin();
+         i != m_pastedEvents.end();
+         ++i) {
+        selection->addEvent(*i);
+    }
+    return selection;
+}    
 
 }
