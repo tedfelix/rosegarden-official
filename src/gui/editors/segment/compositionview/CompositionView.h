@@ -308,6 +308,11 @@ public slots:
 //    void slotTextFloatTimeout();
 
     /// Redraw everything.  Segments and artifacts.
+    /**
+     * Name seems wrong for this if it redraws everything.  There are many
+     * update routines in here.  Need to walk through them all and see if
+     * we can simplify and reorganize.
+     */
     void slotUpdateSegmentsDrawBuffer();
     /// Redraw everything (segments and artifacts) within the specified rect.
     /**
@@ -315,6 +320,10 @@ public slots:
      * do any work.  Instead it sets a flag, m_updateNeeded, and
      * slotUpdateTimer() does the actual work by calling
      * updateSegmentsDrawBuffer() on a more leisurely schedule.
+     *
+     * Name seems wrong for this if it redraws everything.  There are many
+     * update routines in here.  Need to walk through them all and see if
+     * we can simplify and reorganize.
      */
     void slotUpdateSegmentsDrawBuffer(const QRect&);
 
@@ -435,17 +444,17 @@ protected:
      */
     virtual void leaveEvent(QEvent *);
 
-    /// Draws the segments and artifacts on the viewport (screen).
+    /// Draw the segments and artifacts on the viewport (screen).
     /**
-     * First, the segments draw buffer is copied to the artifacts
-     * draw buffer.  Then the artifacts are drawn over top of the
-     * segments in the artifacts (overlay) draw buffer by
-     * refreshArtifactsDrawBuffer().
-     * Finally, the artifacts draw buffer is copied to the viewport.
+     * First, the segments layer (m_segmentsDrawBuffer) is copied to the
+     * double-buffer (m_artifactsDrawBuffer).  Then the artifacts are drawn
+     * over top of the segments in the double-buffer by
+     * refreshArtifactsDrawBuffer().  Finally, the double-buffer is copied to
+     * the viewport.
      */
     virtual void viewportPaintRect(QRect);
     
-    /// Scrolls and refreshes the segment draw buffer if needed.
+    /// Scrolls and refreshes the segment layer (m_segmentsDrawBuffer) if needed.
     /**
      * Returns enough information to determine how much additional work
      * needs to be done to update the viewport.
@@ -453,26 +462,35 @@ protected:
      */
     bool scrollSegmentsDrawBuffer(QRect &rect, bool& scroll);
 
-    /// Draws the background then calls drawArea() to draw the segments on the
-    /// segments draw buffer.
-    /// Used by scrollSegmentsDrawBuffer().
+    /// Draw the segments on the segment layer (m_segmentsDrawBuffer).
+    /**
+     * Draws the background then calls drawArea() to draw the segments on the
+     * segments layer (m_segmentsDrawBuffer).  Used by
+     * scrollSegmentsDrawBuffer().
+     *
+     * rename: drawSegments()
+     */
     void refreshSegmentsDrawBuffer(const QRect&);
-    /// Calls drawAreaArtifacts() to draw the artifacts on the artifacts draw
-    /// buffer.
-    /// Used by viewportPaintRect().
+    /// Draw the artifacts on the double-buffer (m_artifactsDrawBuffer).
+    /*
+     * Calls drawAreaArtifacts() to draw the artifacts on the double-buffer
+     * (m_artifactsDrawBuffer).  Used by viewportPaintRect().
+     *
+     * rename: refreshArtifacts()
+     */
     void refreshArtifactsDrawBuffer(const QRect&);
 
-    /// Draws the segments on the segments draw buffer.
+    /// Draws the segments on the segments layer (m_segmentsDrawBuffer).
     /**
      * Used by refreshSegmentsDrawBuffer().
      */
     void drawArea(QPainter * p, const QRect& rect);
-    /// Draws the previews for any audio segments on the segments draw buffer.
+    /// Draw the previews for audio segments on the segments layer (m_segmentsDrawBuffer).
     /**
      * Used by drawArea().
      */
     void drawAreaAudioPreviews(QPainter * p, const QRect& rect);
-    /// Draws the overlay artifacts on the artifacts buffer.
+    /// Draws the overlay artifacts on the double-buffer.
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
      * position pointer, guides, and the "rubber band" selection.  Used by
@@ -503,7 +521,7 @@ protected:
      * @see setPointerPos() and setPointerPosition()
      */
     void drawPointer(QPainter * p, const QRect& clipRect);
-    /// Used by drawAreaArtifacts() to draw the guides on the artifacts buffer.
+    /// Used by drawAreaArtifacts() to draw the guides on the double-buffer.
     /**
      * @see setGuidesPos() and setDrawGuides()
      */
@@ -523,19 +541,19 @@ protected:
     /// Helper function to make it easier to get the segment selector tool.
     SegmentSelector* getSegmentSelectorTool();
 
-    /// Adds the entire viewport to the segments draw buffer refresh rect.
+    /// Adds the entire viewport to the segments refresh rect.
     /**
      * This will cause scrollSegmentsDrawBuffer() to refresh the entire
-     * segment draw buffer the next time it is called.  This in turn will
-     * cause viewportPaintRect() to redraw the entire viewport the next
-     * time it is called.
+     * segments layer (m_segmentsDrawBuffer) the next time it is called.
+     * This in turn will cause viewportPaintRect() to redraw the entire
+     * viewport the next time it is called.
      */
     void slotSegmentsDrawBufferNeedsRefresh() {
         m_segmentsDrawBufferRefresh =
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
     }
 
-    /// Adds the specified rect to the segments draw buffer refresh rect.
+    /// Adds the specified rect to the segments refresh rect.
     /**
      * This will cause the given portion of the viewport to be refreshed
      * the next time viewportPaintRect() is called.
@@ -648,29 +666,56 @@ protected:
     QString      m_textFloatText;
     QPoint       m_textFloatPos;
 
-    /// Drawing layer that contains the segment rectangles.
+    /// Layer that contains the segment rectangles.
     /**
-     * The segments draw buffer is drawn on by drawArea().
-     * refreshSegmentsDrawBuffer() draws on the segment buffer with
+     * The segments layer is drawn on by drawArea().
+     * refreshSegmentsDrawBuffer() draws on the segments layer with
      * drawArea().
+     *
+     * rename: m_segmentsLayer
      *
      * @see viewportPaintRect()
      */
     QPixmap      m_segmentsDrawBuffer;
 
-    /// Overlay that includes everything other than the segment rectangles.
+    /// The display double-buffer.
     /**
-     * The artifacts draw buffer is drawn on by drawAreaArtifacts().
-     * Artifacts include the playback position pointer, guides, and the
-     * "rubber band" selection rect.  These artifacts are drawn as an overlay
-     * on top of the segments.
+     * Double-buffers are used to reduce flicker and reduce the complexity
+     * of drawing code (e.g. no need to erase anything, just redraw it all).
      *
-     * @see viewportPaintRect()
+     * viewportPaintRect() first copies the appropriate portion of
+     * the segment layer (m_segmentsDrawBuffer) onto this double buffer, then
+     * calls refreshArtifactsDrawBuffer() to draw the artifacts over top of the
+     * segments in this double-buffer.  Finally, viewportPaintRect() copies
+     * this double-buffer to the display (QAbstractScrollArea::viewport()).
+     *
+     * m_artifactsDrawBuffer is misnamed.  It is actually the double-buffer
+     * for the CompositionView.  The entire view (segments and artifacts) is
+     * drawn into this buffer which is then drawn to the display.  It's not
+     * just for artifacts.
+     *
+     * rename: m_doubleBuffer
      */
     QPixmap      m_artifactsDrawBuffer;
 
+    /// Portion of the viewport that needs segments refreshed.
+    /**
+     * Used only by scrollSegmentsDrawBuffer() to limit work done redrawing
+     * the segment rectangles.
+     *
+     * rename: m_segmentsRefresh
+     */
     QRect        m_segmentsDrawBufferRefresh;
+
+    /// Portion of the viewport that needs artifacts refreshed.
+    /**
+     * Used only by viewportPaintRect() to limit work done redrawing the
+     * artifacts.
+     *
+     * rename: m_artifactsRefresh
+     */
     QRect        m_artifactsDrawBufferRefresh;
+
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;
     int          m_lastPointerRefreshX;
