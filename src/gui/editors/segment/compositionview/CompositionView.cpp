@@ -113,8 +113,8 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_foreGuidePos(0),
     m_drawSelectionRect(false),
     m_drawTextFloat(false),
-    m_segmentsDrawBuffer(visibleWidth(), visibleHeight()),
-    m_artifactsDrawBuffer(visibleWidth(), visibleHeight()),
+    m_segmentsLayer(visibleWidth(), visibleHeight()),
+    m_doubleBuffer(visibleWidth(), visibleHeight()),
     m_segmentsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
     m_artifactsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
     m_lastBufferRefreshX(0),
@@ -580,14 +580,14 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     RosegardenScrollView::resizeEvent(e);
     slotUpdateSize();
 
-    int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());
-    int h = std::max(m_segmentsDrawBuffer.height(), visibleHeight());
+    int w = std::max(m_segmentsLayer.width(), visibleWidth());
+    int h = std::max(m_segmentsLayer.height(), visibleHeight());
 
-    m_segmentsDrawBuffer = QPixmap(w, h);
-    m_artifactsDrawBuffer = QPixmap(w, h);
+    m_segmentsLayer = QPixmap(w, h);
+    m_doubleBuffer = QPixmap(w, h);
     slotAllDrawBuffersNeedRefresh();
 
-    RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsDrawBuffer.size() << endl;
+    RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsLayer.size() << endl;
 }
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
@@ -634,9 +634,9 @@ void CompositionView::viewportPaintRect(QRect r)
 
         // Copy the segments to the artifacts draw buffer.
         QPainter ap;
-        ap.begin(&m_artifactsDrawBuffer);
+        ap.begin(&m_doubleBuffer);
         ap.drawPixmap(copyRect.x(), copyRect.y(),
-                      m_segmentsDrawBuffer,
+                      m_segmentsLayer,
                       copyRect.x(), copyRect.y(),
                       copyRect.width(), copyRect.height());
         ap.end();
@@ -658,13 +658,13 @@ void CompositionView::viewportPaintRect(QRect r)
     if (scroll) {
         // Redraw the entire artifacts draw buffer.
         p.drawPixmap(0, 0, 
-                     m_artifactsDrawBuffer,
+                     m_doubleBuffer,
                      0, 0,
-                     m_artifactsDrawBuffer.width(),
-                     m_artifactsDrawBuffer.height());
+                     m_doubleBuffer.width(),
+                     m_doubleBuffer.height());
     } else {
         p.drawPixmap(updateRect.x(), updateRect.y(),
-                     m_artifactsDrawBuffer,
+                     m_doubleBuffer,
                      updateRect.x(), updateRect.y(),
                      updateRect.width(), updateRect.height());
     }
@@ -714,8 +714,8 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
             // platforms.  Use a temporary pixmap instead
 
             static QPixmap map;
-            if (map.size() != m_segmentsDrawBuffer.size()) {
-                map = QPixmap(m_segmentsDrawBuffer.size());
+            if (map.size() != m_segmentsLayer.size()) {
+                map = QPixmap(m_segmentsLayer.size());
             }
 
             // If we're scrolling sideways
@@ -730,9 +730,9 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
                     // Scroll the segments draw buffer sideways
                     QPainter cp;
                     cp.begin(&map);
-                    cp.drawPixmap(0, 0, m_segmentsDrawBuffer);
+                    cp.drawPixmap(0, 0, m_segmentsLayer);
                     cp.end();
-                    cp.begin(&m_segmentsDrawBuffer);
+                    cp.begin(&m_segmentsLayer);
                     cp.drawPixmap(dx, 0, map);
                     cp.end();
 
@@ -764,9 +764,9 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
                     // Scroll the segments draw buffer vertically
                     QPainter cp;
                     cp.begin(&map);
-                    cp.drawPixmap(0, 0, m_segmentsDrawBuffer);
+                    cp.drawPixmap(0, 0, m_segmentsLayer);
                     cp.end();
-                    cp.begin(&m_segmentsDrawBuffer);
+                    cp.begin(&m_segmentsLayer);
                     cp.drawPixmap(0, dy, map);
                     cp.end();
 
@@ -821,9 +821,9 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
     //           << rect << endl;
 
 //### This constructor used to mean "start painting on the draw buffer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
-//@@@    QPainter p(&m_segmentsDrawBuffer, viewport());
+//@@@    QPainter p(&m_segmentsLayer, viewport());
 // Let's see how we get on with:
-    QPainter p(&m_segmentsDrawBuffer);
+    QPainter p(&m_segmentsLayer);
 
     p.setRenderHint(QPainter::Antialiasing, false);
 
@@ -855,11 +855,11 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
 
     QPainter p;
 
-//@@@ see comment in refreshSegmentsDrawBuffer    p.begin(&m_artifactsDrawBuffer, viewport());
-    p.begin(&m_artifactsDrawBuffer);
+//@@@ see comment in refreshSegmentsDrawBuffer    p.begin(&m_doubleBuffer, viewport());
+    p.begin(&m_doubleBuffer);
 
     p.translate( -contentsX(), -contentsY());
-    //     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
+    //     QRect r(contentsX(), contentsY(), m_doubleBuffer.width(), m_doubleBuffer.height());
     drawAreaArtifacts(&p, rect);
     p.end();
 

@@ -446,15 +446,15 @@ protected:
 
     /// Draw the segments and artifacts on the viewport (screen).
     /**
-     * First, the segments layer (m_segmentsDrawBuffer) is copied to the
-     * double-buffer (m_artifactsDrawBuffer).  Then the artifacts are drawn
-     * over top of the segments in the double-buffer by
+     * First, the appropriate portion of the segments layer (m_segmentsLayer)
+     * is copied to the double-buffer (m_doubleBuffer).  Then the artifacts
+     * are drawn over top of the segments in the double-buffer by
      * refreshArtifactsDrawBuffer().  Finally, the double-buffer is copied to
-     * the viewport.
+     * the display (QAbstractScrollArea::viewport()).
      */
     virtual void viewportPaintRect(QRect);
     
-    /// Scrolls and refreshes the segment layer (m_segmentsDrawBuffer) if needed.
+    /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
      * Returns enough information to determine how much additional work
      * needs to be done to update the viewport.
@@ -462,30 +462,30 @@ protected:
      */
     bool scrollSegmentsDrawBuffer(QRect &rect, bool& scroll);
 
-    /// Draw the segments on the segment layer (m_segmentsDrawBuffer).
+    /// Draw the segments on the segment layer (m_segmentsLayer).
     /**
      * Draws the background then calls drawArea() to draw the segments on the
-     * segments layer (m_segmentsDrawBuffer).  Used by
+     * segments layer (m_segmentsLayer).  Used by
      * scrollSegmentsDrawBuffer().
      *
      * rename: drawSegments()
      */
     void refreshSegmentsDrawBuffer(const QRect&);
-    /// Draw the artifacts on the double-buffer (m_artifactsDrawBuffer).
+    /// Draw the artifacts on the double-buffer (m_doubleBuffer).
     /*
      * Calls drawAreaArtifacts() to draw the artifacts on the double-buffer
-     * (m_artifactsDrawBuffer).  Used by viewportPaintRect().
+     * (m_doubleBuffer).  Used by viewportPaintRect().
      *
      * rename: refreshArtifacts()
      */
     void refreshArtifactsDrawBuffer(const QRect&);
 
-    /// Draws the segments on the segments layer (m_segmentsDrawBuffer).
+    /// Draws the segments on the segments layer (m_segmentsLayer).
     /**
      * Used by refreshSegmentsDrawBuffer().
      */
     void drawArea(QPainter * p, const QRect& rect);
-    /// Draw the previews for audio segments on the segments layer (m_segmentsDrawBuffer).
+    /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
      * Used by drawArea().
      */
@@ -544,7 +544,7 @@ protected:
     /// Adds the entire viewport to the segments refresh rect.
     /**
      * This will cause scrollSegmentsDrawBuffer() to refresh the entire
-     * segments layer (m_segmentsDrawBuffer) the next time it is called.
+     * segments layer (m_segmentsLayer) the next time it is called.
      * This in turn will cause viewportPaintRect() to redraw the entire
      * viewport the next time it is called.
      */
@@ -668,35 +668,18 @@ protected:
 
     /// Layer that contains the segment rectangles.
     /**
-     * The segments layer is drawn on by drawArea().
-     * refreshSegmentsDrawBuffer() draws on the segments layer with
-     * drawArea().
-     *
-     * rename: m_segmentsLayer
-     *
-     * @see viewportPaintRect()
+     * @see viewportPaintRect() and drawArea()
      */
-    QPixmap      m_segmentsDrawBuffer;
+    QPixmap      m_segmentsLayer;
 
     /// The display double-buffer.
     /**
      * Double-buffers are used to reduce flicker and reduce the complexity
      * of drawing code (e.g. no need to erase anything, just redraw it all).
      *
-     * viewportPaintRect() first copies the appropriate portion of
-     * the segment layer (m_segmentsDrawBuffer) onto this double buffer, then
-     * calls refreshArtifactsDrawBuffer() to draw the artifacts over top of the
-     * segments in this double-buffer.  Finally, viewportPaintRect() copies
-     * this double-buffer to the display (QAbstractScrollArea::viewport()).
-     *
-     * m_artifactsDrawBuffer is misnamed.  It is actually the double-buffer
-     * for the CompositionView.  The entire view (segments and artifacts) is
-     * drawn into this buffer which is then drawn to the display.  It's not
-     * just for artifacts.
-     *
-     * rename: m_doubleBuffer
+     * @see viewportPaintRect()
      */
-    QPixmap      m_artifactsDrawBuffer;
+    QPixmap      m_doubleBuffer;
 
     /// Portion of the viewport that needs segments refreshed.
     /**
