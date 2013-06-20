@@ -449,7 +449,7 @@ protected:
      * First, the appropriate portion of the segments layer (m_segmentsLayer)
      * is copied to the double-buffer (m_doubleBuffer).  Then the artifacts
      * are drawn over top of the segments in the double-buffer by
-     * refreshArtifactsDrawBuffer().  Finally, the double-buffer is copied to
+     * refreshArtifacts().  Finally, the double-buffer is copied to
      * the display (QAbstractScrollArea::viewport()).
      */
     virtual void viewportPaintRect(QRect);
@@ -475,10 +475,8 @@ protected:
     /*
      * Calls drawAreaArtifacts() to draw the artifacts on the double-buffer
      * (m_doubleBuffer).  Used by viewportPaintRect().
-     *
-     * rename: refreshArtifacts()
      */
-    void refreshArtifactsDrawBuffer(const QRect&);
+    void refreshArtifacts(const QRect&);
 
     /// Draws the segments on the segments layer (m_segmentsLayer).
     /**
@@ -494,7 +492,7 @@ protected:
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
      * position pointer, guides, and the "rubber band" selection.  Used by
-     * refreshArtifactsDrawBuffer().
+     * refreshArtifacts().
      */
     void drawAreaArtifacts(QPainter * p, const QRect& rect);
     /// Draws a rectangle on the given painter with proper clipping.
@@ -574,16 +572,16 @@ protected slots:
      * In addition to being used locally several times, this is also
      * connected to CompositionModelImpl::needArtifactsUpdate().
      */
-    void slotArtifactsDrawBufferNeedsRefresh() {
-        m_artifactsDrawBufferRefresh = 
+    void slotArtifactsNeedRefresh() {
+        m_artifactsRefresh = 
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
         updateContents();
     }
 
 protected:
     /// Updates the artifacts in the given rect.
-    void slotArtifactsDrawBufferNeedsRefresh(QRect r) {
-        m_artifactsDrawBufferRefresh |=
+    void artifactsNeedRefresh(QRect r) {
+        m_artifactsRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
         updateContents(r);
@@ -592,13 +590,13 @@ protected:
     /// Updates the entire viewport.
     void slotAllDrawBuffersNeedRefresh() {
         slotSegmentsDrawBufferNeedsRefresh();
-        slotArtifactsDrawBufferNeedsRefresh();
+        slotArtifactsNeedRefresh();
     }
 
     /// Updates the given rect on the view.
     void slotAllDrawBuffersNeedRefresh(QRect r) {
         slotSegmentsDrawBufferNeedsRefresh(r);
-        slotArtifactsDrawBufferNeedsRefresh(r);
+        artifactsNeedRefresh(r);
     }
 
 protected slots:
@@ -694,10 +692,8 @@ protected:
     /**
      * Used only by viewportPaintRect() to limit work done redrawing the
      * artifacts.
-     *
-     * rename: m_artifactsRefresh
      */
-    QRect        m_artifactsDrawBufferRefresh;
+    QRect        m_artifactsRefresh;
 
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;

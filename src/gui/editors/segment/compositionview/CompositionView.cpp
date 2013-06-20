@@ -116,7 +116,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_segmentsLayer(visibleWidth(), visibleHeight()),
     m_doubleBuffer(visibleWidth(), visibleHeight()),
     m_segmentsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
-    m_artifactsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
+    m_artifactsRefresh(0, 0, visibleWidth(), visibleHeight()),
     m_lastBufferRefreshX(0),
     m_lastBufferRefreshY(0),
     m_lastPointerRefreshX(0),
@@ -163,7 +163,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     connect(model, SIGNAL(needContentUpdate(const QRect&)),
             this, SLOT(slotUpdateSegmentsDrawBuffer(const QRect&)));
     connect(model, SIGNAL(needArtifactsUpdate()),
-            this, SLOT(slotArtifactsDrawBufferNeedsRefresh()));
+            this, SLOT(slotArtifactsNeedRefresh()));
     connect(model, SIGNAL(needSizeUpdate()),
             this, SLOT(slotUpdateSize()));
 
@@ -306,7 +306,7 @@ void CompositionView::setDrawSelectionRect(bool d)
 {
     if (m_drawSelectionRect != d) {
         m_drawSelectionRect = d;
-        slotArtifactsDrawBufferNeedsRefresh();
+        slotArtifactsNeedRefresh();
         slotUpdateSegmentsDrawBuffer(m_selectionRect);
     }
 }
@@ -619,20 +619,20 @@ void CompositionView::viewportPaintRect(QRect r)
 
     bool scroll = false;
 
-    // Scroll and refresh the segment draw buffer.
+    // Scroll and refresh the segments layer.
     bool changed = scrollSegmentsDrawBuffer(r, scroll);
 
     // r is now the combination of the requested refresh rect and the refresh
     // needed by any scrolling.
 
-    if (changed || m_artifactsDrawBufferRefresh.isValid()) {
+    if (changed || m_artifactsRefresh.isValid()) {
 
-        QRect copyRect(r | m_artifactsDrawBufferRefresh);
+        QRect copyRect(r | m_artifactsRefresh);
         copyRect.translate(-contentsX(), -contentsY());
 
-//        std::cerr << "changed = " << changed << ", artrefresh " << m_artifactsDrawBufferRefresh.x() << "," << m_artifactsDrawBufferRefresh.y() << " " << m_artifactsDrawBufferRefresh.width() << "x" << m_artifactsDrawBufferRefresh.height() << ": copying from segment to artifacts buffer: " << copyRect.width() << "x" << copyRect.height() << std::endl;
+//        std::cerr << "changed = " << changed << ", artrefresh " << m_artifactsRefresh.x() << "," << m_artifactsRefresh.y() << " " << m_artifactsRefresh.width() << "x" << m_artifactsRefresh.height() << ": copying from segment to artifacts buffer: " << copyRect.width() << "x" << copyRect.height() << std::endl;
 
-        // Copy the segments to the artifacts draw buffer.
+        // Copy the segments to the double buffer.
         QPainter ap;
         ap.begin(&m_doubleBuffer);
         ap.drawPixmap(copyRect.x(), copyRect.y(),
@@ -641,22 +641,21 @@ void CompositionView::viewportPaintRect(QRect r)
                       copyRect.width(), copyRect.height());
         ap.end();
 
-        m_artifactsDrawBufferRefresh |= r;
+        m_artifactsRefresh |= r;
     }
 
-    if (m_artifactsDrawBufferRefresh.isValid()) {
-        // Draw the artifacts over top of the segments on the artifacts
-        // draw buffer.
-        refreshArtifactsDrawBuffer(m_artifactsDrawBufferRefresh);
-        m_artifactsDrawBufferRefresh = QRect();
+    if (m_artifactsRefresh.isValid()) {
+        // Draw the artifacts over top of the segments on the double-buffer.
+        refreshArtifacts(m_artifactsRefresh);
+        m_artifactsRefresh = QRect();
     }
 
-    // Display the artifacts draw buffer on the viewport.
+    // Display the double buffer on the viewport.
 
     QPainter p;
     p.begin(viewport());
     if (scroll) {
-        // Redraw the entire artifacts draw buffer.
+        // Redraw the entire double buffer.
         p.drawPixmap(0, 0, 
                      m_doubleBuffer,
                      0, 0,
@@ -727,7 +726,7 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
                 // If we're scrolling less than the entire viewport
                 if (dx > -w && dx < w) {
 
-                    // Scroll the segments draw buffer sideways
+                    // Scroll the segments layer sideways
                     QPainter cp;
                     cp.begin(&map);
                     cp.drawPixmap(0, 0, m_segmentsLayer);
@@ -761,7 +760,7 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
                 // If we're scrolling less than the entire viewport
                 if (dy > -h && dy < h) {
 
-                    // Scroll the segments draw buffer vertically
+                    // Scroll the segments layer vertically
                     QPainter cp;
                     cp.begin(&map);
                     cp.drawPixmap(0, 0, m_segmentsLayer);
@@ -787,7 +786,7 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
         }
     }
 
-    // Refresh the segments draw buffer for the exposed portion.
+    // Refresh the segments layer for the exposed portion.
 
     bool needRefresh = false;
 
@@ -820,7 +819,7 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
     //      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
     //           << rect << endl;
 
-//### This constructor used to mean "start painting on the draw buffer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
+//### This constructor used to mean "start painting on the segments layer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
 //@@@    QPainter p(&m_segmentsLayer, viewport());
 // Let's see how we get on with:
     QPainter p(&m_segmentsLayer);
@@ -846,11 +845,11 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
     //    m_segmentsDrawBufferNeedsRefresh = false;
 }
 
-void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
+void CompositionView::refreshArtifacts(const QRect& rect)
 {
-    Profiler profiler("CompositionView::refreshArtifactsDrawBuffer");
+    Profiler profiler("CompositionView::refreshArtifacts");
 
-    //      RG_DEBUG << "CompositionView::refreshArtifactsDrawBuffer() r = "
+    //      RG_DEBUG << "CompositionView::refreshArtifacts() r = "
     //               << rect << endl;
 
     QPainter p;
@@ -863,7 +862,7 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
     drawAreaArtifacts(&p, rect);
     p.end();
 
-    //    m_artifactsDrawBufferNeedsRefresh = false;
+    //    m_artifactsNeedRefresh = false;
 }
 
 void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
@@ -1726,7 +1725,7 @@ void CompositionView::setPointerPos(int pos)
     if (contentsX() != m_lastPointerRefreshX) {
         m_lastPointerRefreshX = contentsX();
         // We'll need to shift the whole canvas anyway, so
-        slotArtifactsDrawBufferNeedsRefresh();
+        slotArtifactsNeedRefresh();
         return ;
     }
 
@@ -1738,15 +1737,15 @@ void CompositionView::setPointerPos(int pos)
             (std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
              deltaW + m_pointerPen.width() * 2, contentsHeight());
 
-        slotArtifactsDrawBufferNeedsRefresh(updateRect);
+        artifactsNeedRefresh(updateRect);
 
     } else {
 
-        slotArtifactsDrawBufferNeedsRefresh
+        artifactsNeedRefresh
             (QRect(m_pointerPos - m_pointerPen.width(), 0,
                    m_pointerPen.width() * 2, contentsHeight()));
 
-        slotArtifactsDrawBufferNeedsRefresh
+        artifactsNeedRefresh
             (QRect(oldPos - m_pointerPen.width(), 0,
                    m_pointerPen.width() * 2, contentsHeight()));
     }
@@ -1756,20 +1755,20 @@ void CompositionView::setGuidesPos(int x, int y)
 {
     m_topGuidePos = x;
     m_foreGuidePos = y;
-    slotArtifactsDrawBufferNeedsRefresh();
+    slotArtifactsNeedRefresh();
 }
 
 void CompositionView::setGuidesPos(const QPoint& p)
 {
     m_topGuidePos = p.x();
     m_foreGuidePos = p.y();
-    slotArtifactsDrawBufferNeedsRefresh();
+    slotArtifactsNeedRefresh();
 }
 
 void CompositionView::setDrawGuides(bool d)
 {
     m_drawGuides = d;
-    slotArtifactsDrawBufferNeedsRefresh();
+    slotArtifactsNeedRefresh();
 }
 
 void CompositionView::setTmpRect(const QRect& r)
@@ -1791,7 +1790,7 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     m_textFloatPos.setY(y);
     m_textFloatText = text;
     m_drawTextFloat = true;
-    slotArtifactsDrawBufferNeedsRefresh();
+    slotArtifactsNeedRefresh();
 
     // most of the time when the floating text is drawn
     // we want to update a larger part of the view
@@ -1819,7 +1818,7 @@ void
 CompositionView::slotTextFloatTimeout()
 {
     hideTextFloat();
-    slotArtifactsDrawBufferNeedsRefresh();
+    slotArtifactsNeedRefresh();
     //    mainWindow->slotSetStatusMessage(QString::null);
 }
 #endif
