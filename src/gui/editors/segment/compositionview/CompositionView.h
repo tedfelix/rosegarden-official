@@ -314,7 +314,7 @@ public slots:
      * Because this routine is called so frequently, it doesn't actually
      * do any work.  Instead it sets a flag, m_updateNeeded, and
      * slotUpdateTimer() does the actual work by calling
-     * updateSegmentsDrawBuffer() on a more leisurely schedule.
+     * updateAll() on a more leisurely schedule.
      */
     void slotUpdateAll(const QRect &rect);
 
@@ -451,15 +451,16 @@ protected:
      * needs to be done to update the viewport.
      * Used by viewportPaintRect().
      */
-    bool scrollSegmentsDrawBuffer(QRect &rect, bool& scroll);
+    bool scrollSegmentsLayer(QRect &rect, bool& scroll);
 
     /// Draw the segments on the segment layer (m_segmentsLayer).
     /**
      * Draws the background then calls drawArea() to draw the segments on the
      * segments layer (m_segmentsLayer).  Used by
-     * scrollSegmentsDrawBuffer().
+     * scrollSegmentsLayer().
      *
-     * rename: drawSegments()
+     * rename: drawSegments(), refreshSegmentsLayer(), or refreshSegments()?
+     *         refreshSegments() matches refreshArtifacts() for now.
      */
     void refreshSegmentsDrawBuffer(const QRect&);
     /// Draw the artifacts on the double-buffer (m_doubleBuffer).
@@ -532,7 +533,7 @@ protected:
 
     /// Adds the entire viewport to the segments refresh rect.
     /**
-     * This will cause scrollSegmentsDrawBuffer() to refresh the entire
+     * This will cause scrollSegmentsLayer() to refresh the entire
      * segments layer (m_segmentsLayer) the next time it is called.
      * This in turn will cause viewportPaintRect() to redraw the entire
      * viewport the next time it is called.
@@ -554,10 +555,7 @@ protected:
     }
 
     /// Does the actual work for slotUpdateAll()
-    /**
-     * rename: updateAll()
-     */
-    void updateSegmentsDrawBuffer(const QRect& rect);
+    void updateAll(const QRect& rect);
 
 protected slots:
 
@@ -675,7 +673,7 @@ protected:
 
     /// Portion of the viewport that needs segments refreshed.
     /**
-     * Used only by scrollSegmentsDrawBuffer() to limit work done redrawing
+     * Used only by scrollSegmentsLayer() to limit work done redrawing
      * the segment rectangles.
      *
      * rename: m_segmentsRefresh

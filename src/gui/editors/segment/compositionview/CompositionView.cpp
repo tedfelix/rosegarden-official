@@ -486,18 +486,18 @@ void CompositionView::slotUpdateTimer()
 
     if (m_updateNeeded)
     {
-        updateSegmentsDrawBuffer(m_updateRect);
+        updateAll(m_updateRect);
 
         //m_updateRect.setRect(0,0,0,0);  // Not needed.
         m_updateNeeded = false;
     }
 }
 
-void CompositionView::updateSegmentsDrawBuffer(const QRect& rect)
+void CompositionView::updateAll(const QRect& rect)
 {
-    Profiler profiler("CompositionView::updateSegmentsDrawBuffer(const QRect& rect)");
+    Profiler profiler("CompositionView::updateAll(const QRect& rect)");
 
-    //RG_DEBUG << "CompositionView::updateSegmentsDrawBuffer() rect " << rect << " - valid : " << rect.isValid();
+    //RG_DEBUG << "CompositionView::updateAll() rect " << rect << " - valid : " << rect.isValid();
 
     slotAllDrawBuffersNeedRefresh(rect);
 
@@ -521,13 +521,13 @@ void CompositionView::slotUpdateAll(const QRect& rect)
 
 #if 0
 // Old way.  Just do the work for every update.  Very expensive.
-    updateSegmentsDrawBuffer(rect);
+    updateAll(rect);
 #else
 // Alternate approach with a timer to throttle updates
 
     // Note: This new approach normalizes the incoming rect.  This means
     //   that it will never trigger a full refresh given an invalid rect
-    //   like it used to.  See updateSegmentsDrawBuffer().  Some rough
+    //   like it used to.  See updateAll().  Some rough
     //   testing reveals that the following test cases trigger this
     //   invalid rect situation:
     //       1. Move a segment.
@@ -620,7 +620,7 @@ void CompositionView::viewportPaintRect(QRect r)
     bool scroll = false;
 
     // Scroll and refresh the segments layer.
-    bool changed = scrollSegmentsDrawBuffer(r, scroll);
+    bool changed = scrollSegmentsLayer(r, scroll);
 
     // r is now the combination of the requested refresh rect and the refresh
     // needed by any scrolling.
@@ -678,9 +678,9 @@ void CompositionView::viewportPaintRect(QRect r)
 
 }
 
-bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
+bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
 {
-    Profiler profiler("CompositionView::scrollSegmentsDrawBuffer");
+    Profiler profiler("CompositionView::scrollSegmentsLayer");
 
     bool all = false;
     QRect refreshRect = m_segmentsDrawBufferRefresh;
@@ -692,7 +692,7 @@ bool CompositionView::scrollSegmentsDrawBuffer(QRect &rect, bool& scroll)
 
     if (scroll) {
 
-        //    RG_DEBUG << "scrollSegmentsDrawBuffer: scrolling by ("
+        //    RG_DEBUG << "scrollSegmentsLayer: scrolling by ("
         //         << cx - m_lastBufferRefreshX << "," << cy - m_lastBufferRefreshY << ")" << endl;
 
         if (refreshRect.isValid()) {
