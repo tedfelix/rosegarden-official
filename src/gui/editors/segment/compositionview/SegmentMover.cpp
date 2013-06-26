@@ -202,7 +202,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
         m_canvas->hideTextFloat();
         m_canvas->setDrawGuides(false);
         m_canvas->getModel()->endChange();
-        m_canvas->slotUpdateSegmentsDrawBuffer();
+        m_canvas->slotUpdateAll();
 
     }
 

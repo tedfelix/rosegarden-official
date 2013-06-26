@@ -159,9 +159,9 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     //             this, SLOT(slotContentsMoving(int, int)));
 
     connect(model, SIGNAL(needContentUpdate()),
-            this, SLOT(slotUpdateSegmentsDrawBuffer()));
+            this, SLOT(slotUpdateAll()));
     connect(model, SIGNAL(needContentUpdate(const QRect&)),
-            this, SLOT(slotUpdateSegmentsDrawBuffer(const QRect&)));
+            this, SLOT(slotUpdateAll(const QRect&)));
     connect(model, SIGNAL(needArtifactsUpdate()),
             this, SLOT(slotArtifactsNeedRefresh()));
     connect(model, SIGNAL(needSizeUpdate()),
@@ -307,7 +307,7 @@ void CompositionView::setDrawSelectionRect(bool d)
     if (m_drawSelectionRect != d) {
         m_drawSelectionRect = d;
         slotArtifactsNeedRefresh();
-        slotUpdateSegmentsDrawBuffer(m_selectionRect);
+        slotUpdateAll(m_selectionRect);
     }
 }
 
@@ -368,7 +368,7 @@ void CompositionView::slotSelectSegments(const SegmentSelection &segments)
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
         getModel()->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
     }
-    slotUpdateSegmentsDrawBuffer();
+    slotUpdateAll();
 }
 
 SegmentSelector*
@@ -469,12 +469,12 @@ void CompositionView::setSnapGrain(bool fine)
     }
 }
 
-void CompositionView::slotUpdateSegmentsDrawBuffer()
+void CompositionView::slotUpdateAll()
 {
     // This one doesn't get called too often while recording.
-    Profiler profiler("CompositionView::slotUpdateSegmentsDrawBuffer()");
+    Profiler profiler("CompositionView::slotUpdateAll()");
 
-    //RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()";
+    //RG_DEBUG << "CompositionView::slotUpdateAll()";
     slotAllDrawBuffersNeedRefresh();
     updateContents();
 //    update();
@@ -510,14 +510,14 @@ void CompositionView::updateSegmentsDrawBuffer(const QRect& rect)
     }
 }
 
-void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
+void CompositionView::slotUpdateAll(const QRect& rect)
 {
     // Bail if drawing is turned off in the settings.
     if (!m_enableDrawing)
         return;
 
     // This one gets hit pretty hard while recording.
-    Profiler profiler("CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)");
+    Profiler profiler("CompositionView::slotUpdateAll(const QRect& rect)");
 
 #if 0
 // Old way.  Just do the work for every update.  Very expensive.
@@ -553,7 +553,7 @@ void CompositionView::slotRefreshColourCache()
 {
     CompositionColourCache::getInstance()->init();
     clearSegmentRectsCache();
-    slotUpdateSegmentsDrawBuffer();
+    slotUpdateAll();
 }
 
 void CompositionView::slotNewMIDIRecordingSegment(Segment* s)
@@ -1781,7 +1781,7 @@ void CompositionView::setTmpRect(const QRect& r, const QColor &c)
     QRect pRect = m_tmpRect;
     m_tmpRect = r;
     m_tmpRectFill = c;
-    slotUpdateSegmentsDrawBuffer(m_tmpRect | pRect);
+    slotUpdateAll(m_tmpRect | pRect);
 }
 
 void CompositionView::setTextFloat(int x, int y, const QString &text)
@@ -1796,7 +1796,7 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     // we want to update a larger part of the view
     // so don't update here
     //     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignLeft, m_textFloatText);
-    //     slotUpdateSegmentsDrawBuffer(r);
+    //     slotUpdateAll(r);
 
 
     //    mainWindow->slotSetStatusMessage(text);

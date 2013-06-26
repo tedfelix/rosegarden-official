@@ -308,24 +308,15 @@ public slots:
 //    void slotTextFloatTimeout();
 
     /// Redraw everything.  Segments and artifacts.
-    /**
-     * Name seems wrong for this if it redraws everything.  There are many
-     * update routines in here.  Need to walk through them all and see if
-     * we can simplify and reorganize.
-     */
-    void slotUpdateSegmentsDrawBuffer();
+    void slotUpdateAll();
     /// Redraw everything (segments and artifacts) within the specified rect.
     /**
      * Because this routine is called so frequently, it doesn't actually
      * do any work.  Instead it sets a flag, m_updateNeeded, and
      * slotUpdateTimer() does the actual work by calling
      * updateSegmentsDrawBuffer() on a more leisurely schedule.
-     *
-     * Name seems wrong for this if it redraws everything.  There are many
-     * update routines in here.  Need to walk through them all and see if
-     * we can simplify and reorganize.
      */
-    void slotUpdateSegmentsDrawBuffer(const QRect&);
+    void slotUpdateAll(const QRect &rect);
 
     /// Redraw everything with the new color scheme.
     /**
@@ -562,7 +553,10 @@ protected:
              & r);
     }
 
-    /// Does the actual work for slotUpdateSegmentsDrawBuffer()
+    /// Does the actual work for slotUpdateAll()
+    /**
+     * rename: updateAll()
+     */
     void updateSegmentsDrawBuffer(const QRect& rect);
 
 protected slots:
@@ -612,7 +606,7 @@ protected slots:
 
     /// Used to reduce the frequency of updates.
     /**
-     * slotUpdateSegmentsDrawBuffer() sets the m_updateNeeded flag to
+     * slotUpdateAll() sets the m_updateNeeded flag to
      * tell slotUpdateTimer() that it needs to perform an update.
      */
     void slotUpdateTimer();

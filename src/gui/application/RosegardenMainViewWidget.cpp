@@ -1067,7 +1067,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
     compositionView->clearSegmentRectsCache(true);
     compositionView->slotUpdateSize();
-    compositionView->slotUpdateSegmentsDrawBuffer();
+    compositionView->slotUpdateAll();
 
     // At this point, the scroll bar's range has been updated.
     // We can now safely modify it.
@@ -1575,13 +1575,13 @@ void RosegardenMainViewWidget::slotShowChordNameRuler(bool v)
 void RosegardenMainViewWidget::slotShowPreviews(bool v)
 {
     m_trackEditor->getCompositionView()->setShowPreviews(v);
-    m_trackEditor->getCompositionView()->slotUpdateSegmentsDrawBuffer();
+    m_trackEditor->getCompositionView()->slotUpdateAll();
 }
 
 void RosegardenMainViewWidget::slotShowSegmentLabels(bool v)
 {
     m_trackEditor->getCompositionView()->setShowSegmentLabels(v);
-    m_trackEditor->getCompositionView()->slotUpdateSegmentsDrawBuffer();
+    m_trackEditor->getCompositionView()->slotUpdateAll();
 }
 
 void RosegardenMainViewWidget::slotAddTracks(unsigned int nbTracks,

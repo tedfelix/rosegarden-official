@@ -217,7 +217,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         m_canvas->getModel()->signalSelection();
 
         m_canvas->setTmpRect(QRect());
-        m_canvas->slotUpdateSegmentsDrawBuffer();
+        m_canvas->slotUpdateAll();
 
     }
 }

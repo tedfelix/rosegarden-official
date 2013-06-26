@@ -368,7 +368,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     }
 
     // Redraw the canvas
-    m_canvas->slotUpdateSegmentsDrawBuffer(m_currentIndex->rect() | oldRect);
+    m_canvas->slotUpdateAll(m_currentIndex->rect() | oldRect);
 
     return RosegardenScrollView::FollowHorizontal;
 }

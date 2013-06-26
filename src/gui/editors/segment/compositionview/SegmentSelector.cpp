@@ -288,7 +288,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         }
 
         m_canvas->getModel()->endChange();
-        m_canvas->slotUpdateSegmentsDrawBuffer();
+        m_canvas->slotUpdateAll();
     }
 
     // if we've just finished a quick copy then drop the Z level back

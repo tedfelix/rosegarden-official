@@ -7093,7 +7093,7 @@ RosegardenMainWindow::slotRelabelSegments()
     if (ok) {
         CommandHistory::getInstance()->addCommand
         (new SegmentLabelCommand(selection, newLabel));
-        m_view->getTrackEditor()->getCompositionView()->slotUpdateSegmentsDrawBuffer();
+        m_view->getTrackEditor()->getCompositionView()->slotUpdateAll();
     }
 }
 
