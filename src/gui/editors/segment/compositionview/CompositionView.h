@@ -450,6 +450,11 @@ protected:
      * Returns enough information to determine how much additional work
      * needs to be done to update the viewport.
      * Used by viewportPaintRect().
+     *
+     * This routine appears to mainly refresh the segments layer.  Scrolling
+     * only happens if needed.  Having "scroll" in the name might be
+     * misleading.  However, calling this refreshSegmentsLayer() confuses
+     * it with refreshSegments().  Need to dig a bit more.
      */
     bool scrollSegmentsLayer(QRect &rect, bool& scroll);
 
@@ -458,11 +463,8 @@ protected:
      * Draws the background then calls drawArea() to draw the segments on the
      * segments layer (m_segmentsLayer).  Used by
      * scrollSegmentsLayer().
-     *
-     * rename: drawSegments(), refreshSegmentsLayer(), or refreshSegments()?
-     *         refreshSegments() matches refreshArtifacts() for now.
      */
-    void refreshSegmentsDrawBuffer(const QRect&);
+    void refreshSegments(const QRect&);
     /// Draw the artifacts on the double-buffer (m_doubleBuffer).
     /*
      * Calls drawAreaArtifacts() to draw the artifacts on the double-buffer
@@ -472,7 +474,7 @@ protected:
 
     /// Draws the segments on the segments layer (m_segmentsLayer).
     /**
-     * Used by refreshSegmentsDrawBuffer().
+     * Used by refreshSegments().
      */
     void drawArea(QPainter * p, const QRect& rect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
@@ -538,7 +540,7 @@ protected:
      * This in turn will cause viewportPaintRect() to redraw the entire
      * viewport the next time it is called.
      */
-    void slotSegmentsDrawBufferNeedsRefresh() {
+    void segmentsDrawBufferNeedsRefresh() {
         m_segmentsDrawBufferRefresh =
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
     }
@@ -548,7 +550,7 @@ protected:
      * This will cause the given portion of the viewport to be refreshed
      * the next time viewportPaintRect() is called.
      */
-    void slotSegmentsDrawBufferNeedsRefresh(QRect r) {
+    void segmentsDrawBufferNeedsRefresh(QRect r) {
         m_segmentsDrawBufferRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
@@ -580,14 +582,20 @@ protected:
     }
 
     /// Updates the entire viewport.
+    /**
+     * rename: This is not a slot.
+     */
     void slotAllDrawBuffersNeedRefresh() {
-        slotSegmentsDrawBufferNeedsRefresh();
+        segmentsDrawBufferNeedsRefresh();
         slotArtifactsNeedRefresh();
     }
 
     /// Updates the given rect on the view.
+    /**
+     * rename: This is not a slot.
+     */
     void slotAllDrawBuffersNeedRefresh(QRect r) {
-        slotSegmentsDrawBufferNeedsRefresh(r);
+        segmentsDrawBufferNeedsRefresh(r);
         artifactsNeedRefresh(r);
     }
 

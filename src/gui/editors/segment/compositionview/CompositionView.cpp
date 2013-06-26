@@ -795,9 +795,9 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     }
 
     if (needRefresh)
-        refreshSegmentsDrawBuffer(refreshRect);
+        refreshSegments(refreshRect);
 
-    // ??? Move these lines to the end of refreshSegmentsDrawBuffer()?
+    // ??? Move these lines to the end of refreshSegments()?
     //     Or do they still need to run even when needRefresh is false?
     m_segmentsDrawBufferRefresh = QRect();
     m_lastBufferRefreshX = cx;
@@ -812,11 +812,11 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     return needRefresh;
 }
 
-void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
+void CompositionView::refreshSegments(const QRect& rect)
 {
-    Profiler profiler("CompositionView::refreshSegmentsDrawBuffer");
+    Profiler profiler("CompositionView::refreshSegments");
 
-    //      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
+    //      RG_DEBUG << "CompositionView::refreshSegments() r = "
     //           << rect << endl;
 
 //### This constructor used to mean "start painting on the segments layer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
@@ -854,7 +854,7 @@ void CompositionView::refreshArtifacts(const QRect& rect)
 
     QPainter p;
 
-//@@@ see comment in refreshSegmentsDrawBuffer    p.begin(&m_doubleBuffer, viewport());
+//@@@ see comment in refreshSegments    p.begin(&m_doubleBuffer, viewport());
     p.begin(&m_doubleBuffer);
 
     p.translate( -contentsX(), -contentsY());
@@ -1524,7 +1524,7 @@ bool CompositionView::event(QEvent* e)
 {
     if (e->type() == AudioPreviewThread::AudioPreviewQueueEmpty) {
         RG_DEBUG << "CompositionView::event - AudioPreviewQueueEmpty\n";
-        slotSegmentsDrawBufferNeedsRefresh();
+        segmentsDrawBufferNeedsRefresh();
         viewport()->update();
         return true;
     }
