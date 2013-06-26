@@ -115,7 +115,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_drawTextFloat(false),
     m_segmentsLayer(visibleWidth(), visibleHeight()),
     m_doubleBuffer(visibleWidth(), visibleHeight()),
-    m_segmentsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
+    m_segmentsRefresh(0, 0, visibleWidth(), visibleHeight()),
     m_artifactsRefresh(0, 0, visibleWidth(), visibleHeight()),
     m_lastBufferRefreshX(0),
     m_lastBufferRefreshY(0),
@@ -153,7 +153,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     //          this, SLOT(scrollLeft()));
 
     //    connect(this, SIGNAL(contentsMoving(int, int)),
-    //            this, SLOT(slotAllDrawBuffersNeedRefresh()));
+    //            this, SLOT(allNeedRefresh()));
 
     //     connect(this, SIGNAL(contentsMoving(int, int)),
     //             this, SLOT(slotContentsMoving(int, int)));
@@ -475,7 +475,7 @@ void CompositionView::slotUpdateAll()
     Profiler profiler("CompositionView::slotUpdateAll()");
 
     //RG_DEBUG << "CompositionView::slotUpdateAll()";
-    slotAllDrawBuffersNeedRefresh();
+    allNeedRefresh();
     updateContents();
 //    update();
 }
@@ -499,7 +499,7 @@ void CompositionView::updateAll(const QRect& rect)
 
     //RG_DEBUG << "CompositionView::updateAll() rect " << rect << " - valid : " << rect.isValid();
 
-    slotAllDrawBuffersNeedRefresh(rect);
+    allNeedRefresh(rect);
 
     if (rect.isValid()) {
         updateContents(rect);
@@ -585,7 +585,7 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
     m_segmentsLayer = QPixmap(w, h);
     m_doubleBuffer = QPixmap(w, h);
-    slotAllDrawBuffersNeedRefresh();
+    allNeedRefresh();
 
     RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsLayer.size() << endl;
 }
@@ -683,7 +683,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     Profiler profiler("CompositionView::scrollSegmentsLayer");
 
     bool all = false;
-    QRect refreshRect = m_segmentsDrawBufferRefresh;
+    QRect refreshRect = m_segmentsRefresh;
 
     int w = visibleWidth(), h = visibleHeight();
     int cx = contentsX(), cy = contentsY();
@@ -799,7 +799,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
 
     // ??? Move these lines to the end of refreshSegments()?
     //     Or do they still need to run even when needRefresh is false?
-    m_segmentsDrawBufferRefresh = QRect();
+    m_segmentsRefresh = QRect();
     m_lastBufferRefreshX = cx;
     m_lastBufferRefreshY = cy;
 
@@ -1524,7 +1524,7 @@ bool CompositionView::event(QEvent* e)
 {
     if (e->type() == AudioPreviewThread::AudioPreviewQueueEmpty) {
         RG_DEBUG << "CompositionView::event - AudioPreviewQueueEmpty\n";
-        segmentsDrawBufferNeedsRefresh();
+        segmentsNeedRefresh();
         viewport()->update();
         return true;
     }
