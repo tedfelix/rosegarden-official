@@ -245,7 +245,7 @@ RosegardenMainViewWidget::getDocument() const
 
 void RosegardenMainViewWidget::selectTool(QString toolName)
 {
-    m_trackEditor->getCompositionView()->slotSetTool(toolName);
+    m_trackEditor->getCompositionView()->setTool(toolName);
 }
 
 bool
@@ -1212,7 +1212,7 @@ void RosegardenMainViewWidget::slotPropagateSegmentSelection(const SegmentSelect
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
     //
-    m_trackEditor->getCompositionView()->slotSelectSegments(segments);
+    m_trackEditor->getCompositionView()->selectSegments(segments);
 
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
@@ -1265,7 +1265,7 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
     //
-    m_trackEditor->getCompositionView()->slotSelectSegments(segments);
+    m_trackEditor->getCompositionView()->selectSegments(segments);
 
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);

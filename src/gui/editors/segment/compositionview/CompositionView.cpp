@@ -333,14 +333,16 @@ void CompositionView::updateSelectionContents()
 //    update(selectionRect);
 }
 
+#if 0
 void CompositionView::slotContentsMoving(int /* x */, int /* y */)
 {
     //     qDebug("contents moving : x=%d", x);
 }
+#endif
 
-void CompositionView::slotSetTool(const QString& toolName)
+void CompositionView::setTool(const QString& toolName)
 {
-    RG_DEBUG << "CompositionView::slotSetTool(" << toolName << ")"
+    RG_DEBUG << "CompositionView::setTool(" << toolName << ")"
              << this << "\n";
 
     if (m_tool)
@@ -353,13 +355,13 @@ void CompositionView::slotSetTool(const QString& toolName)
     if (m_tool)
         m_tool->ready();
     else {
-        QMessageBox::critical(0, tr("Rosegarden"), QString("CompositionView::slotSetTool() : unknown tool name %1").arg(toolName));
+        QMessageBox::critical(0, tr("Rosegarden"), QString("CompositionView::setTool() : unknown tool name %1").arg(toolName));
     }
 }
 
-void CompositionView::slotSelectSegments(const SegmentSelection &segments)
+void CompositionView::selectSegments(const SegmentSelection &segments)
 {
-    RG_DEBUG << "CompositionView::slotSelectSegments\n";
+    RG_DEBUG << "CompositionView::selectSegments\n";
 
     static QRect dummy;
 
@@ -377,7 +379,7 @@ CompositionView::getSegmentSelectorTool()
     return dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 }
 
-void CompositionView::slotSetSelectAdd(bool value)
+void CompositionView::setSelectAdd(bool value)
 {
     SegmentSelector* selTool = getSegmentSelectorTool();
 
@@ -387,7 +389,7 @@ void CompositionView::slotSetSelectAdd(bool value)
     selTool->setSegmentAdd(value);
 }
 
-void CompositionView::slotSetSelectCopy(bool value)
+void CompositionView::setSelectCopy(bool value)
 {
     SegmentSelector* selTool = getSegmentSelectorTool();
 
@@ -397,7 +399,7 @@ void CompositionView::slotSetSelectCopy(bool value)
     selTool->setSegmentCopy(value);
 }
 
-void CompositionView::slotSetSelectCopyingAsLink(bool value)
+void CompositionView::setSelectCopyingAsLink(bool value)
 {
     SegmentSelector* selTool = getSegmentSelectorTool();
 
@@ -407,13 +409,13 @@ void CompositionView::slotSetSelectCopyingAsLink(bool value)
     selTool->setSegmentCopyingAsLink(value);
 }
 
-void CompositionView::slotShowSplitLine(int x, int y)
+void CompositionView::showSplitLine(int x, int y)
 {
     m_splitLinePos.setX(x);
     m_splitLinePos.setY(y);
 }
 
-void CompositionView::slotHideSplitLine()
+void CompositionView::hideSplitLine()
 {
     m_splitLinePos.setX( -1);
     m_splitLinePos.setY( -1);
@@ -587,7 +589,7 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     m_doubleBuffer = QPixmap(w, h);
     allNeedRefresh();
 
-    RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsLayer.size() << endl;
+    RG_DEBUG << "CompositionView::resizeEvent() : segments layer size = " << m_segmentsLayer.size() << endl;
 }
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
@@ -842,7 +844,7 @@ void CompositionView::refreshSegments(const QRect& rect)
     //    p.setPen(framePen);
     //    p.drawRect(rect);
 
-    //    m_segmentsDrawBufferNeedsRefresh = false;
+    //    m_segmentsNeedRefresh = false;
 }
 
 void CompositionView::refreshArtifacts(const QRect& rect)
@@ -1573,12 +1575,12 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 {
-    slotSetSelectCopy((e->modifiers() & Qt::ControlModifier) != 0);
-    slotSetSelectCopyingAsLink(((e->modifiers() & Qt::AltModifier) != 0) &&
+    setSelectCopy((e->modifiers() & Qt::ControlModifier) != 0);
+    setSelectCopyingAsLink(((e->modifiers() & Qt::AltModifier) != 0) &&
                                ((e->modifiers() & Qt::ControlModifier) != 0));
-    slotSetSelectAdd((e->modifiers() & Qt::ShiftModifier) != 0);
-    slotSetFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
-    slotSetPencilOverExisting((e->modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
+    setSelectAdd((e->modifiers() & Qt::ShiftModifier) != 0);
+    setFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
+    setPencilOverExisting((e->modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
 
     switch (e->button()) {
     case Qt::LeftButton:
@@ -1656,8 +1658,8 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool)
         return ;
 
-    slotSetFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
-    slotSetPencilOverExisting((e->modifiers() & Qt::AltModifier) != 0);
+    setFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
+    setPencilOverExisting((e->modifiers() & Qt::AltModifier) != 0);
 
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);
@@ -1802,12 +1804,12 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     //    mainWindow->slotSetStatusMessage(text);
 }
 
-void CompositionView::slotSetFineGrain(bool value)
+void CompositionView::setFineGrain(bool value)
 {
     m_fineGrain = value;
 }
 
-void CompositionView::slotSetPencilOverExisting(bool value)
+void CompositionView::setPencilOverExisting(bool value)
 {
     m_pencilOverExisting = value;
 }

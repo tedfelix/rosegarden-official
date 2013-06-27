@@ -122,7 +122,7 @@ public:
     /// Get the topmost item (segment) at the given position on the view.
     CompositionItem getFirstItemAt(QPoint pos);
 
-    /// Returns the segment tool box.  See slotSetTool() and m_toolBox.
+    /// Returns the segment tool box.  See setTool() and m_toolBox.
     SegmentToolBox* getToolBox() { return m_toolBox; }
 
     /// Returns the composition model.  See m_model.
@@ -146,7 +146,7 @@ public:
      * fine indicates whether the current tool is a fine-grain sort
      * (such as the resize or move tools) or a coarse one (such as the
      * segment creation pencil).  If the user is requesting extra-fine
-     * resolution (through slotSetFineGrain()) that will also be
+     * resolution (through setFineGrain()) that will also be
      * taken into account.
      */
     void setSnapGrain(bool fine);
@@ -159,7 +159,7 @@ public:
      * adjusted appropriately by the view when interactions take
      * place.
      *
-     * @see slotSetFineGrain()
+     * @see setFineGrain()
      */
     bool isFineGrain() const { return m_fineGrain; }
 
@@ -171,7 +171,7 @@ public:
      * an existing segment, and this is all necessary in order to avoid breaking
      * the double-click-to-open behavior.
      *
-     * @see slotSetPencilOverExisting()
+     * @see setPencilOverExisting()
      */
     bool pencilOverExisting() const { return m_pencilOverExisting; }
 
@@ -242,64 +242,32 @@ public:
     /// Delegates to CompositionModelImpl::setAudioPreviewThread().
     void endAudioPreviewGeneration();
 	
-	
-
-public slots:
-//    void scrollRight();
-//    void scrollLeft();
-
-    void slotContentsMoving(int x, int y);
-
     /// Set the current segment editing tool.
     /**
      * @see getToolBox()
      */
-    void slotSetTool(const QString& toolName);
+    void setTool(const QString& toolName);
 
     /// Selects the segments via CompositionModelImpl::setSelected().
     /**
      * Used by RosegardenMainViewWidget.
      */
-    void slotSelectSegments(const SegmentSelection &segment);
-
-    // These are sent from the top level app when it gets key
-    // depresses relating to selection add (usually Qt::SHIFT) and
-    // selection copy (usually CONTROL)
-
-    /// Handle SHIFT key.
-    /**
-     * Delegates to SegmentSelector::setSegmentAdd().  Used by
-     * contentsMousePressEvent() with "value" indicating whether the user
-     * is holding down the SHIFT key.
-     */
-    void slotSetSelectAdd(bool value);
-    /// Handle CONTROL key.
-    /**
-     * Delegates to SegmentSelector::setSegmentCopy().  Used by
-     * contentsMousePressEvent() with "value" indicating whether the user is
-     * holding down the CONTROL key.
-     */
-    void slotSetSelectCopy(bool value);
-    /// Handle ALT and CONTROL keys.
-    /**
-     * Delegates to SegmentSelector::setSegmentCopyingAsLink().
-     * Used by contentsMousePressEvent() with "value" indicating whether the
-     * user is holding down the ALT and CONTROL keys.
-     */
-    void slotSetSelectCopyingAsLink(bool value);
-
-    /// See isFineGrain().
-    void slotSetFineGrain(bool value);
-    /// See pencilOverExisting().
-    void slotSetPencilOverExisting(bool value);
+    void selectSegments(const SegmentSelection &segment);
 
     /// Show the splitting line on a Segment.  Used by SegmentSplitter.
     /**
-     * @see slotHideSplitLine()
+     * @see hideSplitLine()
      */
-    void slotShowSplitLine(int x, int y);
-    /// See slotShowSplitLine().
-    void slotHideSplitLine();
+    void showSplitLine(int x, int y);
+    /// See showSplitLine().
+    void hideSplitLine();
+
+
+public slots:
+//    void scrollRight();
+//    void scrollLeft();
+
+    //void slotContentsMoving(int x, int y);
 
     /// Handle scroll wheel events from TrackEditor::m_trackButtonScroll.
     void slotExternalWheelEvent(QWheelEvent*);
@@ -416,6 +384,37 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     /// Handles resize.  Uses slotUpdateSize().
     virtual void resizeEvent(QResizeEvent*);
+
+    // These are sent from the top level app when it gets key
+    // depresses relating to selection add (usually Qt::SHIFT) and
+    // selection copy (usually CONTROL)
+
+    /// Handle SHIFT key.
+    /**
+     * Delegates to SegmentSelector::setSegmentAdd().  Used by
+     * contentsMousePressEvent() with "value" indicating whether the user
+     * is holding down the SHIFT key.
+     */
+    void setSelectAdd(bool value);
+    /// Handle CONTROL key.
+    /**
+     * Delegates to SegmentSelector::setSegmentCopy().  Used by
+     * contentsMousePressEvent() with "value" indicating whether the user is
+     * holding down the CONTROL key.
+     */
+    void setSelectCopy(bool value);
+    /// Handle ALT and CONTROL keys.
+    /**
+     * Delegates to SegmentSelector::setSegmentCopyingAsLink().
+     * Used by contentsMousePressEvent() with "value" indicating whether the
+     * user is holding down the ALT and CONTROL keys.
+     */
+    void setSelectCopyingAsLink(bool value);
+
+    /// See isFineGrain().
+    void setFineGrain(bool value);
+    /// See pencilOverExisting().
+    void setPencilOverExisting(bool value);
 
     /// Called when the mouse enters the view.
     /**

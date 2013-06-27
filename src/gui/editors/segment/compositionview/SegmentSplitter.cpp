@@ -104,7 +104,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 
     // Reinstate the cursor
     m_canvas->viewport()->setCursor(Qt::SplitHCursor);
-    m_canvas->slotHideSplitLine();
+    m_canvas->hideSplitLine();
 }
 
 int
@@ -121,7 +121,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
         return RosegardenScrollView::FollowHorizontal;
     } else {
         m_canvas->viewport()->setCursor(Qt::SplitHCursor);
-        m_canvas->slotHideSplitLine();
+        m_canvas->hideSplitLine();
         return RosegardenScrollView::NoFollow;
     }
 }
@@ -141,7 +141,7 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
     //
     int y = m_canvas->grid().snapY(e->pos().y());
 
-    m_canvas->slotShowSplitLine(x, y);
+    m_canvas->showSplitLine(x, y);
 
     QRect updateRect(std::max(0, std::min(x, m_prevX) - 5), y,
                      std::max(m_prevX, x) + 5, m_prevY + m_canvas->grid().getYSnap());
