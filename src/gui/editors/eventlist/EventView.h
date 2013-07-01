@@ -70,7 +70,9 @@ class EventView : public ListEditView, public SegmentObserver
         ChannelPressure    = 0x0080,
         KeyPressure        = 0x0100,
         Indication         = 0x0200,
-        Other              = 0x0400
+        Other              = 0x0400,
+        GeneratedRegion    = 0x0800,
+        SegmentID          = 0x1000,
     };
 
 public:
@@ -195,6 +197,8 @@ protected:
     QCheckBox   *m_keyPressureCheckBox;
     QCheckBox   *m_channelPressureCheckBox;
     QCheckBox   *m_indicationCheckBox;
+    QCheckBox   *m_generatedRegionCheckBox;
+    QCheckBox   *m_segmentIDCheckBox;
     QCheckBox   *m_otherCheckBox;
 
     std::vector<int> m_listSelection;

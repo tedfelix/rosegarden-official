@@ -20,6 +20,7 @@
 #include "BasicQuantizer.h"
 #include "base/Profiler.h"
 #include "base/SegmentLinker.h"
+#include "document/DocumentGet.h"
 
 #include <iostream>
 #include <algorithm>
@@ -1634,6 +1635,13 @@ Segment::countVerses()
     }
 }
 
+segmentcontainer&
+Segment::
+getCompositionSegments(void)
+{
+    Composition* composition = DocumentGet::getComposition();
+    return composition->getSegments();
+}
 
 SegmentHelper::~SegmentHelper() { }
 

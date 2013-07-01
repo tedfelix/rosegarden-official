@@ -854,6 +854,11 @@ public slots:
     void slotExpandFiguration();
 
     /**
+     * Update existing figurations
+     */
+    void slotUpdateFigurations(void);
+    
+    /**
      * Tempo to Segment length
      */
     void slotTempoToSegmentLength();

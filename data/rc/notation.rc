@@ -301,6 +301,7 @@
       <text>&amp;Figuration</text>
       <Action name="parameter_chord" text="Make &amp;Parameter Chord" />
       <Action name="figuration" text="Mark Selection as &amp;Figuration" />
+      <Action name="generated" text="Mark Selection as auto-generated" />
     </Menu>
   </Menu>
 
@@ -916,6 +917,7 @@
     <Action name="trill_line"/> <!-- the new indication version -->
     <Action name="parameter_chord"/>
     <Action name="figuration"/>
+    <Action name="generated"/>
     <Action name="add_turn"/>
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>

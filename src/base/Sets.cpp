@@ -98,38 +98,5 @@ setMaybe__String(Event *e, const PropertyName &name, const std::string &value)
     e->setMaybe<String>(name, value);
 }
 
-/***** Methods for ChordFromCounterpoint *****/
-
-/// Return true if i might be within the chord timewise.  We allow any
-/// preceding event within m_preDuration of the target time.
-/// @author Tom Breton (Tehom)
-bool
-ChordFromCounterpoint::test(const Iterator &i)
-{
-    timeT onTime = (*i)->getAbsoluteTime();
-    // We don't use event's own duration here.  Using it wouldn't help
-    // much, because we'd still mostly lose preceding notes if we
-    // underestimate preDuration.
-    return
-        (onTime <= m_time) &&
-        (onTime + m_preDuration > m_time);
-}
-
-/// Return true if i is definitely within the chord timewise.  Mostly
-/// works via the base functions, which also do some assigning
-/// @author Tom Breton (Tehom)
-bool
-ChordFromCounterpoint::sample(const Iterator &i, bool goingForwards)
-{
-    Event *e = getAsEvent(i);
-    timeT onTime    = e->getAbsoluteTime();
-    timeT duration  = e->getDuration();
-    
-    if (onTime + duration <= m_time) { return false; }
-    if (onTime > m_time) { return false; }
-    return GenericChord<Element, Container, singleStaff>::sample(i, goingForwards);
-}
-
-
 }
 

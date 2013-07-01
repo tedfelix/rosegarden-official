@@ -30,6 +30,8 @@
 #include "base/Selection.h"
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
+#include "base/figuration/GeneratedRegion.h"
+#include "base/figuration/SegmentID.h"
 #include "commands/edit/CopyCommand.h"
 #include "commands/edit/CutCommand.h"
 #include "commands/edit/EraseCommand.h"
@@ -92,7 +94,8 @@ EventView::EventView(RosegardenDocument *doc,
                      QWidget *parent):
         ListEditView(doc, segments, 2, parent),
         m_eventFilter(Note | Text | SystemExclusive | Controller |
-                      ProgramChange | PitchBend | Indication | Other),
+                      ProgramChange | PitchBend | Indication | Other |
+                      GeneratedRegion | SegmentID),
         m_menu(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -128,6 +131,8 @@ EventView::EventView(RosegardenDocument *doc,
     m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
     m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
     m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
+    m_generatedRegionCheckBox = new QCheckBox(tr("Generated regions"), m_filterGroup);
+    m_segmentIDCheckBox = new QCheckBox(tr("Segment ID"), m_filterGroup);
     m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
 
     filterGroupLayout->addWidget(m_noteCheckBox);
@@ -140,6 +145,8 @@ EventView::EventView(RosegardenDocument *doc,
     filterGroupLayout->addWidget(m_restCheckBox);
     filterGroupLayout->addWidget(m_indicationCheckBox);
     filterGroupLayout->addWidget(m_textCheckBox);
+    filterGroupLayout->addWidget(m_generatedRegionCheckBox);
+    filterGroupLayout->addWidget(m_segmentIDCheckBox);
     filterGroupLayout->addWidget(m_otherCheckBox);
     m_filterGroup->setLayout(filterGroupLayout);
 
@@ -281,6 +288,8 @@ EventView::EventView(RosegardenDocument *doc,
     connect(m_restCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
     connect(m_indicationCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
     connect(m_textCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_generatedRegionCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_segmentIDCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
     connect(m_otherCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
 
     makeInitialSelection(doc->getComposition().getPosition());
@@ -431,6 +440,14 @@ EventView::applyLayout(int /*staffNo*/)
                 if (!(m_eventFilter & Text))
                     continue;
 
+            } else if ((*it)->isa(GeneratedRegion::EventType)) {
+                if (!(m_eventFilter & GeneratedRegion))
+                    continue;
+
+            } else if ((*it)->isa(SegmentID::EventType)) {
+                if (!(m_eventFilter & SegmentID))
+                    continue;
+
             } else {
                 if (!(m_eventFilter & Other))
                     continue;
@@ -490,6 +507,14 @@ EventView::applyLayout(int /*staffNo*/)
                            arg(strtoqstr((*it)->get
                                          <String>
                                          (BaseProperties::BEAMED_GROUP_TYPE)));
+            } else if ((*it)->has(GeneratedRegion::FigurationPropertyName)) {
+                data1Str = QString("%1  ").
+                           arg((*it)->get
+                               <Int>(GeneratedRegion::FigurationPropertyName));
+            } else if ((*it)->has(SegmentID::IDPropertyName)) {
+                data1Str = QString("%1  ").
+                           arg((*it)->get
+                               <Int>(SegmentID::IDPropertyName));
             }
 
             if ((*it)->has(Controller::VALUE)) {
@@ -516,6 +541,15 @@ EventView::applyLayout(int /*staffNo*/)
                 data2Str = tr("(group %1)  ")
                            .arg((*it)->get
                                <Int>(BaseProperties::BEAMED_GROUP_ID));
+            } else if ((*it)->has(GeneratedRegion::ChordPropertyName)) {
+                data2Str = QString("%1  ").
+                           arg((*it)->get
+                               <Int>(GeneratedRegion::ChordPropertyName));
+            } else if ((*it)->has(SegmentID::SubtypePropertyName)) {
+                data2Str = QString("%1  ").
+                    arg(strtoqstr((*it)->get
+                                  <String>
+                                  (SegmentID::SubtypePropertyName)));
             }
 
             if ((*it)->has(ProgramChange::PROGRAM)) {
@@ -1344,6 +1378,10 @@ EventView::slotModifyFilter()
 
     if (m_textCheckBox->isChecked()) m_eventFilter |= EventView::Text;
 
+    if (m_generatedRegionCheckBox->isChecked()) m_eventFilter |= EventView::GeneratedRegion;
+    
+    if (m_segmentIDCheckBox->isChecked()) m_eventFilter |= EventView::SegmentID;
+    
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
 
     applyLayout(0);
@@ -1362,6 +1400,8 @@ EventView::setButtonsToFilter()
     m_channelPressureCheckBox->setChecked(m_eventFilter & ChannelPressure);
     m_keyPressureCheckBox->setChecked    (m_eventFilter & KeyPressure);
     m_indicationCheckBox->setChecked     (m_eventFilter & Indication);
+    m_generatedRegionCheckBox->setChecked(m_eventFilter & GeneratedRegion);
+    m_segmentIDCheckBox->setChecked      (m_eventFilter & SegmentID);
     m_otherCheckBox->setChecked          (m_eventFilter & Other);
 }
 

@@ -37,6 +37,7 @@
  *   TimeSignature
  *   AccidentalTable
  *   Symbol
+ *   GeneratedRegion
  *
  * The classes in this file are _not_ actually used for storing
  * events.  Events are always stored in Event objects (see Event.h).
@@ -633,7 +634,8 @@ public:
     static const std::string QuindicesimaDown;
 
     static const std::string TrillLine;
-    static const std::string ParameterChord;
+
+    static const std::string FigParameterChord;
     static const std::string Figuration;
 
     Indication(const Event &e)
@@ -723,7 +725,7 @@ public:
     static const std::string Tiny;        // begin \tiny font section
     static const std::string Small;       // begin \small font section
     static const std::string NormalSize;  // begin \normalsize font section
-
+    
     Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Text(const std::string &text,
@@ -735,7 +737,8 @@ public:
     std::string getText() const { return m_text; }
     std::string getTextType() const { return m_type; }
 
-    int getVerse() const { return m_verse; } // only relevant for lyrics
+    // Relevant for lyrics, and borrowed for figuration IDs.
+    int getVerse() const { return m_verse; } 
     void setVerse(int verse) { m_verse = verse; }
 
     static bool isTextOfType(Event *, std::string type);
@@ -1407,7 +1410,6 @@ public:
 private:
     std::string m_type;
 };
-
 
 }
 

@@ -76,6 +76,12 @@ protected:
                  timeT start, timeT end,
                  bool bruteForceRedoRequired = false);
 
+    // Variant ctor to be used when events to insert are known when
+    // the command is cted.  Implies brute force redo.
+    BasicCommand(const QString &name,
+                 Segment &segment,
+		 Segment *redoEvents);
+
     virtual void modifySegment() = 0;
 
     virtual void beginExecute();

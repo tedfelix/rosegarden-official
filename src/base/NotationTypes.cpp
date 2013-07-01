@@ -753,7 +753,7 @@ const std::string Indication::OttavaUp = "ottavaup";
 const std::string Indication::OttavaDown = "ottavadown";
 const std::string Indication::QuindicesimaDown = "ottava2down";
 const std::string Indication::TrillLine = "trill-line";
-const std::string Indication::ParameterChord = "parameter-chord";
+const std::string Indication::FigParameterChord = "parameter-chord";
 const std::string Indication::Figuration = "figuration";
 
 Indication::Indication(const Event &e)
@@ -816,7 +816,7 @@ Indication::isValid(const std::string &s) const
          s == TrillLine ||
 	 s == QuindicesimaUp || s == OttavaUp ||
 	 s == OttavaDown || s == QuindicesimaDown ||
-         s == ParameterChord ||
+         s == FigParameterChord ||
          s == Figuration);
 }
 
@@ -2518,6 +2518,5 @@ Symbol::getAsEvent(timeT absoluteTime) const
     e->set<String>(SymbolTypePropertyName, m_type);
     return e;
 }
-
 
 } // end namespace Rosegarden

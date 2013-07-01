@@ -686,6 +686,11 @@ public:
         }
     };
 
+    typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
+
+    // Get the segments in the current composition.
+    static segmentcontainer& getCompositionSegments(void);
+    
     void  addObserver(SegmentObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
 
@@ -929,7 +934,7 @@ private:
     int m_verse;       // Used to distribute lyrics among repeated segments
 };
 
-typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
+typedef Segment::segmentcontainer segmentcontainer;
 
 /// Base class interface for Segment notifications.
 /**

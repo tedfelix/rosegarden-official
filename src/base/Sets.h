@@ -259,33 +259,6 @@ class GlobalChord : public GenericChord<Event, CompositionTimeSliceAdapter, fals
         { initialise(); }
 };
 
-/// Class to describe a chord whose notes might not start at the same
-/// time
-/// @class ChordFromCounterpoint
-/// @author Tom Breton (Tehom)
-class ChordFromCounterpoint : public GenericChord<Event, Segment, false>
-{
-    typedef Event    Element;
-    typedef Segment  Container;
-    static const bool singleStaff = false;
-
-public:
-    ChordFromCounterpoint(Container &c,
-                      Iterator elementInChord,
-                      const Quantizer *quantizer,
-                      timeT preDuration)
-        : GenericChord<Element, Container, singleStaff>
-              (c, elementInChord, quantizer),
-          m_preDuration(preDuration)
-          { initialise(); }
-
-protected:
-    virtual bool     test(const Iterator &i);
-    virtual bool     sample(const Iterator &i, bool goingForwards);
-    // The longest duration we expect a preceding note to have.
-    timeT    m_preDuration;
-};
-
 ///
 /// Implementation only from here on.
 ///

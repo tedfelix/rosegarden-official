@@ -205,6 +205,7 @@
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />
   <Separator/>
     <Action name="expand_figuration" text="E&amp;xpand Block Chord Segments by Figuration" />
+    <Action name="update_figurations" text="&amp;Update all figurations" />
   <Separator/>
     <Action name="manage_trigger_segments" text="Manage Tri&amp;ggered Segments" />
   </Menu>

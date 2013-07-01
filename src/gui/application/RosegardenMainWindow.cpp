@@ -81,6 +81,7 @@
 #include "commands/segment/SegmentSplitCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/SegmentSyncCommand.h"
+#include "commands/segment/UpdateFigurationCommand.h"
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
@@ -865,6 +866,7 @@ RosegardenMainWindow::setupActions()
     createAction("set_segment_duration", SLOT(slotSetSegmentDurations()));
     createAction("join_segments", SLOT(slotJoinSegments()));
     createAction("expand_figuration", SLOT(slotExpandFiguration()));
+    createAction("update_figurations", SLOT(slotUpdateFigurations()));
     createAction("repeats_to_real_copies", SLOT(slotRepeatingSegments()));
     createAction("links_to_real_copies", SLOT(slotLinksToCopies()));
     createAction("manage_trigger_segments", SLOT(slotManageTriggerSegments()));
@@ -2671,6 +2673,12 @@ RosegardenMainWindow::slotExpandFiguration()
 
     m_view->slotAddCommandToHistory(new ExpandFigurationCommand(selection));
     m_view->updateSelectionContents();
+}
+
+void
+RosegardenMainWindow::slotUpdateFigurations(void)
+{
+    m_view->slotAddCommandToHistory(new UpdateFigurationCommand());
 }
 
 void

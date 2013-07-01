@@ -84,12 +84,12 @@
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
+#include "commands/notation/GeneratedRegionInsertionCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
 #include "commands/notation/TupletCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
-#include "commands/notation/ClefInsertionCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
@@ -104,6 +104,7 @@
 #include "gui/dialogs/MakeOrnamentDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/dialogs/ClefDialog.h"
+#include "gui/dialogs/GeneratedRegionDialog.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
@@ -4353,6 +4354,46 @@ NotationView::slotEditElement(NotationStaff *staff,
                      (staff->getSegment(), element->event()->getAbsoluteTime(),
                       dialog.getClef(), shouldChangeOctave, shouldTranspose));
             }
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
+        }
+
+        return ;
+
+    } else if (element->event()->isa(GeneratedRegion::EventType)) {
+
+        try {
+            GeneratedRegionDialog dialog(this, npf,
+                                         GeneratedRegion(*element->event()),
+                                         tr("Edit Generated region mark"));
+
+            if (dialog.exec() == QDialog::Accepted) {
+                GeneratedRegionInsertionCommand * command =
+                    new GeneratedRegionInsertionCommand
+                    (staff->getSegment(),
+                     element->event()->getAbsoluteTime(),
+                     dialog.getGeneratedRegion());
+                
+                MacroCommand *macroCommand = dialog.extractCommand();
+
+                macroCommand->addCommand(new
+                                         EraseEventCommand(staff->getSegment(),
+                                                           element->event(),
+                                                           false));
+                macroCommand->addCommand(command);
+                CommandHistory::getInstance()->addCommand(macroCommand);
+                 
+            } else {
+                /* Still execute the command but without erase+insert,
+                   because it may still contain legitimate commands
+                   (eg to update tags). */
+                MacroCommand *macroCommand = dialog.extractCommand();
+                if (macroCommand->haveCommands()) {
+                    macroCommand->setName(tr("Updated tags for aborted edit"));
+                    CommandHistory::getInstance()->addCommand(macroCommand);
+                }
+            }
+                
         } catch (Exception e) {
             std::cerr << e.getMessage() << std::endl;
         }

@@ -39,6 +39,8 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
+#include "base/figuration/SegmentID.h"
+#include "base/figuration/GeneratedRegion.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/PixmapFunctions.h"
@@ -1206,7 +1208,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                              indicationType == Indication::PhrasingSlur);
                     }
 
-                } else if (indicationType == Indication::ParameterChord) {
+                } else if (indicationType == Indication::FigParameterChord) {
                     Text text = Text("Chord");
                     item = m_notePixmapFactory->makeText(text);
                 } else if (indicationType == Indication::Figuration) {
@@ -1332,6 +1334,14 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 NOTATION_DEBUG << "Bad guitar chord event" << endl;
             }
 
+        } else if (elt->event()->isa(SegmentID::EventType)) {
+            policy = MoveBackToFit;
+            Text text(SegmentID(*elt->event()).NotationString());
+            item = m_notePixmapFactory->makeText(text);
+        } else if (elt->event()->isa(GeneratedRegion::EventType)) {
+            policy = MoveBackToFit;
+            Text text(GeneratedRegion(*elt->event()).NotationString());
+            item = m_notePixmapFactory->makeText(text);
         } else {
 
             if (m_showUnknowns) {
