@@ -404,6 +404,7 @@
     <Action name="edit_paste" text="Paste events (&amp;V)"/>
     <Action name="set_controllers" text="&amp;Set Controller Values" />
     <Action name="place_controllers" text="&amp;Place a controller for each note" />
+    <Action name="expression_sequence" text="Insert &amp;expression controller Sequence..." />
     <!-- This is the same pitch_bend_sequence as elsewhere in this file -->
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
     <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
@@ -845,6 +846,9 @@
     <Action name="add_text_mark"/>
     <Action name="normalize_rests"/> 
     <Action name="collapse_rests_aggressively"/>
+    <Action name="expression_sequence"/>
+    <Action name="pitch_bend_sequence"/>
+    <Action name="controller_sequence"/>
     <Menu name="Adjust"/>
   </enable>
 </State>
@@ -950,7 +954,9 @@
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>
     <Action name="set_velocities"/>
+    <Action name="expression_sequence"/>
     <Action name="pitch_bend_sequence"/>
+    <Action name="controller_sequence"/>
     <Action name="place_controllers"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>

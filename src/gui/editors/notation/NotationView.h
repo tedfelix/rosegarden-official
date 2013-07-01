@@ -356,6 +356,7 @@ protected slots:
     virtual void slotConfigure();
 
     // Open insert pitch bends sequence dialog
+    void slotExpressionSequence();
     void slotPitchBendSequence();
     void slotControllerSequence();
 

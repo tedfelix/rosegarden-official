@@ -71,17 +71,26 @@ setEventProperties(iterator begin, iterator end,
     const int          value1   = result->m_parameters[0];
     const int          value2   = result->m_parameters[1];
 
-    StartAndDuration times = getTimes (begin, end);
-    timeT startTime = times.first;
-    timeT duration  = times.second;
+    const StartAndDuration times = getTimes (begin, end);
+    const timeT startTime = times.first;
+    const timeT duration  = times.second;
 
-    double step = double(value1 - value2) / double(duration);
+    const double valueChange = value2 - value1;
 
     for (iterator i = begin; i != end; ++i) {
-        timeT relativeTime = (*i)->getAbsoluteTime() - startTime;
-        int value = value1 - int(step * relativeTime);
+        const timeT relativeTime = (*i)->getAbsoluteTime() - startTime;
+	const double timeRatio = double(relativeTime)/double(duration);
+        const int value = value1 + int(getValueDelta(valueChange, timeRatio));
         result->m_situation->setValue(*i, value);
     }
 }
+
+double
+LinearParameterPattern::
+getValueDelta(double valueChange, double timeRatio) const
+{
+    return valueChange * timeRatio;
+}
+    
 
 } // End namespace Rosegarden 

@@ -68,10 +68,11 @@ protected:
     struct SliderSpec
     {
     SliderSpec(QString label, int defaultValue,
-               const SelectionSituation *situation)
+               const SelectionSituation *situation,
+               int minValue = 0)
     : m_label(label),
             m_defaultValue(defaultValue),
-            m_minValue(0),
+            m_minValue(minValue),
             m_maxValue(situation->maxValue())
         {}
         QString m_label;

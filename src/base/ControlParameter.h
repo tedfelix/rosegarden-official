@@ -97,8 +97,13 @@ public:
 
     virtual std::string toXmlString();
 
+    // Return a new event setting this controller to VALUE at TIME
     Event *newEvent(timeT time, int value) const;
+    // True if "e" is this type of controller / pitchbend.
+    bool matches(Event *e) const;
+    
     static const ControlParameter& getPitchBend(void);
+    static const ControlParameter& getExpression(void);
 
 protected:
 

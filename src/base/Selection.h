@@ -74,7 +74,7 @@ public:
      * the Segment that was passed to the constructor.  Will
      * silently drop any event that is already in the selection.
      */
-    void addEvent(Event* e);
+    void addEvent(Event* e, bool ties = true);
 
     /**
      * Add all the Events in the given Selection to this one.

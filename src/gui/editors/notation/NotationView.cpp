@@ -426,6 +426,7 @@ NotationView::setupActions()
     createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
+    createAction("expression_sequence", SLOT(slotExpressionSequence()));    
     createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
     createAction("controller_sequence", SLOT(slotControllerSequence()));    
 
@@ -2395,6 +2396,12 @@ NotationView::getPitchFromNoteInsertAction(QString name,
         throw Exception("Not an insert action",
                         __FILE__, __LINE__);
     }
+}
+
+void
+NotationView::slotExpressionSequence()
+{
+    insertControllerSequence(ControlParameter::getExpression());
 }
 
 void

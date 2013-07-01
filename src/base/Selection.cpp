@@ -283,7 +283,7 @@ EventSelection::removeObserver(EventSelectionObserver *obs) {
 
 
 void
-EventSelection::addEvent(Event *e)
+EventSelection::addEvent(Event *e, bool /*ties*/)
 {
     addRemoveEvent(e, &EventSelection::insertThisEvent);
 }

@@ -143,12 +143,25 @@ newEvent(timeT time, int value) const
     return event;
 }
 
+// Return whether "e" is this type of controller / pitchbend.
+// @author Tom Breton (Tehom)
+bool
+ControlParameter::
+matches(Event *e) const
+{
+    return 
+        e->isa(m_type) &&
+        ((m_type != Controller::EventType) ||
+         (e->has(Controller::NUMBER) &&
+          e->get <Int>(Controller::NUMBER) == m_controllerValue));    
+}
+
     
-// This exists to support calling PitchBendSequenceDialog because some
-// calls to PitchBendSequenceDialog always pitchbend rather than
-// getting a ControlParameter from a ruler or device.  This can't be
-// just a static member of ControlParameter, in order to prevent the
-// "static initialization order fiasco".
+// These exists to support calling PitchBendSequenceDialog because
+// some calls to PitchBendSequenceDialog always pitchbend or
+// expression rather than getting a ControlParameter from a ruler or
+// device.  This can't be just a static member of ControlParameter, in
+// order to prevent the "static initialization order fiasco".
 const ControlParameter&
 ControlParameter::
 getPitchBend(void)
@@ -160,6 +173,15 @@ getPitchBend(void)
     return pitchBend;
 }
 
+const ControlParameter&
+ControlParameter::
+getExpression(void)
+{
+    static const ControlParameter
+        expression(
+                  "Expression", Rosegarden::Controller::EventType,
+                  "<none>", 0, 127, 100, MidiByte(11), 2, -1);
+    return expression;
+}
     
-
 }

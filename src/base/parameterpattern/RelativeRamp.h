@@ -15,23 +15,21 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LINEARPARAMETERPATTERN_H_
-#define _RG_LINEARPARAMETERPATTERN_H_
+#ifndef _RAMPEDINCREASE_H_
+#define _RAMPEDINCREASE_H_
 
 #include "ParameterPattern.h"
 
 namespace Rosegarden
 {
 
-// @class LinearParameterPattern Implement the Crescendo and Diminuendo
-// parameter patterns
+// @class RelativeRamp
+// Implement the Relative Ramp parameter pattern
 // @author Tom Breton (Tehom)
-class LinearParameterPattern : public ParameterPattern
+class RelativeRamp : public ParameterPattern
 {
     virtual QString getText(QString propertyName) const;
 
-    // Make as many sliders as we need.  EventParameterDialog will
-    // truncate or pad as needed.
     virtual SliderSpecVector
         getSliderSpec(const SelectionSituation *situation) const;
 
@@ -39,22 +37,12 @@ class LinearParameterPattern : public ParameterPattern
     virtual void
         setEventProperties(iterator begin, iterator end,
                            Result *result) const;
-    virtual double getValueDelta(double valueChange, double timeRatio)
-        const;
-    
-    QString m_patternText;
-    bool    m_isDiminuendo;
 
 public:
-    LinearParameterPattern(QString patternText,
-                           bool isDiminuendo) :
-        m_patternText(patternText),
-        m_isDiminuendo(isDiminuendo)
+    RelativeRamp(void) 
     {};
-    static LinearParameterPattern crescendo;
-    static LinearParameterPattern diminuendo;
+    static RelativeRamp single;
 };
 
 }
-
-#endif
+#endif /* ifndef _RAMPEDINCREASE_H_ */

@@ -19,8 +19,11 @@
 
 #include "AlternatingParameterPattern.h"
 #include "FlatParameterPattern.h"
+#include "HalfSinePattern.h"
 #include "IncreaseParameterPattern.h"
 #include "LinearParameterPattern.h"
+#include "QuarterSinePattern.h"
+#include "RelativeRamp.h"
 #include "RingingParameterPattern.h"
 
 #include "base/BaseProperties.h"
@@ -82,6 +85,11 @@ ParameterPattern * _VelocityPatterns[] = {
     &RingingParameterPattern::single,
     &IncreaseParameterPattern::decrease,
     &IncreaseParameterPattern::increase,
+    &QuarterSinePattern::crescendo,
+    &QuarterSinePattern::diminuendo,
+    &HalfSinePattern::crescendo,
+    &HalfSinePattern::diminuendo,
+    &RelativeRamp::single,
 };
 
 // Internal
@@ -96,6 +104,11 @@ ParameterPattern * _ControllerPatterns[] = {
     &LinearParameterPattern::diminuendo,
     &IncreaseParameterPattern::decrease,
     &IncreaseParameterPattern::increase,
+    &QuarterSinePattern::crescendo,
+    &QuarterSinePattern::diminuendo,
+    &HalfSinePattern::crescendo,
+    &HalfSinePattern::diminuendo,
+    &RelativeRamp::single,
 };
 
 DEFINE_PPVEC_FROM_ARRAY(ControllerPatterns, _ControllerPatterns);
