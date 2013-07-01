@@ -46,6 +46,7 @@ class Segment;
 class CommandRegistry;
 class ControlRulerWidget;
 class ControlParameter;
+class TriggerSegmentRec;
  
 class NotationView : public EditViewBase,
                         public SelectionManager
@@ -53,6 +54,8 @@ class NotationView : public EditViewBase,
     Q_OBJECT
 
 public:
+    typedef std::vector<Segment *> SegmentVector;
+    typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
     NotationView(RosegardenDocument *doc,
                     std::vector<Segment *> segments,
                     QWidget *parent = 0);
@@ -74,6 +77,11 @@ public:
      * don't use this for anything, and provide an empty implementation.
      */
     virtual void updateViewCaption() { }
+
+    // Adopt a segment that doesn't live in Composition.
+    void adoptSegment(Segment *s);
+    // Unadopt a segment that we previously adopted.
+    void unadoptSegment(Segment *s);
 
 signals:
     void play();
@@ -145,6 +153,8 @@ protected slots:
     void slotPlaceControllers();
 
     void slotSetSelectTool();
+    void slotSetSelectNoTiesTool(void);
+
     void slotSetEraseTool();
     
     /**
@@ -226,7 +236,12 @@ protected slots:
     void slotMakeOrnament();
     void slotUseOrnament();
     void slotRemoveOrnament();
-
+    void slotEditOrnamentInline();
+    void slotShowOrnamentExpansion();
+    void slotMaskOrnament();
+    void slotUnmaskOrnament();
+    void slotUnadoptSegment();
+   
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
@@ -442,12 +457,19 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
-    bool isShowable(Event *e);
     void conformRulerSelectionState(void);
     void insertControllerSequence(const ControlParameter &cp);
+    bool isShowable(Event *e);
+    void setWidgetSegments(void);
+    void EditOrnamentInline(Event *trigger, Segment *containing);
+    void ShowOrnamentExpansion(Event *trigger, Segment *containing);
+    SegmentVector::iterator findAdopted(Segment *s);
+    void ForAllSelection(opOnEvent op);
+    void setCurrentStaff(NotationStaff *staff);
 
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:
+    // !!! Duplicates m_doc in base class
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
 private:
@@ -490,7 +512,11 @@ private:
     std::vector<int>     m_availableFontSizes;
     std::vector<int>     m_availableSpacings;
 
-    std::vector<Segment *> m_segments;
+    // !!! Is m_segments ever different than m_segments in base class?
+    SegmentVector      m_segments;      // I do not own these
+    // These Segments are not in Composition, they are dummies for
+    // viewing a triggered segment's expansion.
+    SegmentVector      m_adoptedSegments;    // I own these
 
     /**
      * Set the <<< << >> >>> buttons in the transport toolbar to auto repeat

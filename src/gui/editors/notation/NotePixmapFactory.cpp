@@ -594,7 +594,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         (charName,
          params.m_highlighted ? HighlightedColour :
          params.m_quantized ? QuantizedColour :
-         params.m_trigger ? TriggerColour :
+         (params.m_trigger == NotePixmapParameters::triggerYes) ? TriggerColour :
+         (params.m_trigger == NotePixmapParameters::triggerSkip) ? TriggerSkipColour :
          params.m_inRange ? PlainColour : OutRangeColour,
          inverted);
 
@@ -1853,6 +1854,7 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
         case QuantizedColour:
         case HighlightedColour:
         case TriggerColour:
+        case TriggerSkipColour:
         case OutRangeColour:
         default:
             // fix bug with ottava marks not reflecting invisibility properly
@@ -2100,6 +2102,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef,
     case PlainColour:
     case QuantizedColour:
     case TriggerColour:
+    case TriggerSkipColour:
     default:
         lines = Qt::black;
     }
@@ -2167,6 +2170,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef,
     case PlainColour:
     case QuantizedColour:
     case TriggerColour:
+    case TriggerSkipColour:
     default:
         kuller = Qt::black;
     }
@@ -2300,6 +2304,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     case PlainColour:
     case QuantizedColour:
     case TriggerColour:
+    case TriggerSkipColour:
     default:
         kuller = Qt::black;
     }
@@ -2402,6 +2407,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     case PlainColour:
     case QuantizedColour:
     case TriggerColour:
+    case TriggerSkipColour:
     default:
         kuller = Qt::black;
     }
@@ -3551,6 +3557,13 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
             (name,
              GUIPalette::TriggerNoteHue,
              GUIPalette::TriggerNoteMinValue,
+             ch, charType, inverted);
+
+    case TriggerSkipColour:
+        return font->getCharacterColoured
+            (name,
+             GUIPalette::TriggerSkipHue,
+             GUIPalette::TriggerSkipMinValue,
              ch, charType, inverted);
 
     case OutRangeColour:

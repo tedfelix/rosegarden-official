@@ -52,6 +52,7 @@
 #include "base/Selection.h"
 #include "base/SoftSynthDevice.h"
 #include "base/Studio.h"
+#include "base/TriggerSegment.h"
 #include "base/parameterpattern/ParameterPattern.h"
 
 #include "commands/edit/CopyCommand.h"
@@ -75,13 +76,10 @@
 #include "commands/edit/CollapseNotesCommand.h"
 #include "commands/edit/AddDotCommand.h"
 #include "commands/edit/SetNoteTypeCommand.h"
+#include "commands/edit/MaskTriggerCommand.h"
 #include "commands/edit/PlaceControllersCommand.h"
 
-#include "commands/segment/AddTempoChangeCommand.h"
-#include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
-#include "commands/segment/AddTimeSignatureCommand.h"
-#include "commands/segment/AddLayerCommand.h"
-
+#include "commands/notation/AdoptSegmentCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
 #include "commands/notation/GeneratedRegionInsertionCommand.h"
@@ -95,7 +93,11 @@
 #include "commands/notation/NormalizeRestsCommand.h"
 #include "commands/notation/CycleSlashesCommand.h"
 
-#include "commands/segment/PasteToTriggerSegmentCommand.h"
+#include "commands/segment/AddTempoChangeCommand.h"
+#include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
+#include "commands/segment/AddTimeSignatureCommand.h"
+#include "commands/segment/AddLayerCommand.h"
+#include "commands/segment/CutToTriggerSegmentCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/SegmentSyncCommand.h"
 
@@ -156,6 +158,8 @@
 #include <algorithm>
 #include <set>
 
+#define CALL_MEMBER_FN(OBJECT,PTRTOMEMBER)  ((OBJECT).*(PTRTOMEMBER))
+
 namespace Rosegarden
 {
 
@@ -186,7 +190,7 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     m_notationWidget->suspendLayoutUpdates();
 
-    m_notationWidget->setSegments(doc, segments);
+    setWidgetSegments();
 
     // connect the editElement signal from NotationSelector, relayed through
     // NotationWidget to be acted upon here in NotationView
@@ -368,6 +372,14 @@ NotationView::NotationView(RosegardenDocument *doc,
 NotationView::~NotationView()
 {
     NOTATION_DEBUG << "Deleting notation view" << endl;
+    m_notationWidget->clearAll();
+    
+    // I own the m_adoptedSegments segments.
+    for (SegmentVector::iterator it = m_adoptedSegments.begin();
+         it != m_adoptedSegments.end(); ++it) {
+        delete (*it);
+    }
+    
     delete m_commandRegistry;
 }
 
@@ -392,6 +404,60 @@ NotationView::closeEvent(QCloseEvent *event)
     settings.endGroup();
 
     QWidget::closeEvent(event);
+}
+
+// Adopt a segment that doesn't live in Composition.  Take ownership
+// of s; it is caller's responsibility to guarantee that s is not
+// owned by something else.
+void
+NotationView::
+adoptSegment(Segment *s)
+{
+    m_adoptedSegments.push_back(s);
+    // We have at least 2 staffs.
+    enterActionState("have_multiple_staffs");
+    slotRegenerateScene();
+    slotUpdateMenuStates();
+}
+
+// Unadopt a segment that we adopted earlier.  If s was not adopted
+// earlier, do nothing.
+void
+NotationView::
+unadoptSegment(Segment *s)
+{
+    SegmentVector::iterator found = findAdopted(s);
+
+    if (found != m_adoptedSegments.end()) {
+        m_adoptedSegments.erase(found);
+        if (m_adoptedSegments.size() + m_segments.size() == 1)
+            { leaveActionState("have_multiple_staffs"); }
+        slotRegenerateScene();
+        slotUpdateMenuStates();
+    }
+}
+
+NotationView::SegmentVector::iterator
+NotationView::
+findAdopted(Segment *s)
+{
+    return
+        std::find(m_adoptedSegments.begin(), m_adoptedSegments.end(), s);
+}
+
+
+// Set NotationWidget's segments.
+void
+NotationView::setWidgetSegments(void)
+{
+    SegmentVector allSegments = m_segments;
+    allSegments.insert(allSegments.end(),
+                       m_adoptedSegments.begin(),
+                       m_adoptedSegments.end());
+    m_notationWidget->setSegments(m_document, allSegments);
+    // Reconnect because there's a new scene.
+    connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
+            this, SLOT(slotUpdateMenuStates()));
 }
 
 void
@@ -492,6 +558,10 @@ NotationView::setupActions()
     createAction("use_ornament", SLOT(slotUseOrnament()));
     createAction("make_ornament", SLOT(slotMakeOrnament()));
     createAction("remove_ornament", SLOT(slotRemoveOrnament()));
+    createAction("edit_ornament_inline", SLOT(slotEditOrnamentInline()));
+    createAction("show_ornament_expansion", SLOT(slotShowOrnamentExpansion()));
+    createAction("mask_ornament", SLOT(slotMaskOrnament()));
+    createAction("unmask_ornament", SLOT(slotUnmaskOrnament()));
 
     // "Fingering" subMenu
     // Created in Constructor via NotationCommandRegistry()
@@ -621,6 +691,7 @@ NotationView::setupActions()
 
     //Actions first appear in "Tools" Menubar menu
     createAction("select", SLOT(slotSetSelectTool()));
+    createAction("selectnoties", SLOT(slotSetSelectNoTiesTool()));
     createAction("erase", SLOT(slotSetEraseTool()));
     createAction("draw", SLOT(slotSetNoteRestInserter()));
 
@@ -730,6 +801,7 @@ NotationView::setupActions()
     createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
     createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
     createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
+    createAction("unadopt_segment", SLOT(slotUnadoptSegment()));
 
     //"Transport" subMenu
     createAction("play", SIGNAL(play()));
@@ -1857,7 +1929,7 @@ NotationView::slotCurrentStaffUp()
     timeT targetTime = m_doc->getComposition().getPosition();
     NotationStaff *staff = scene->getStaffAbove(targetTime);
     if (!staff) return;
-    scene->setCurrentStaff(staff);
+    setCurrentStaff(staff);
 }
 
 void
@@ -1868,7 +1940,7 @@ NotationView::slotCurrentStaffDown()
     timeT targetTime = m_doc->getComposition().getPosition();
     NotationStaff *staff = scene->getStaffBelow(targetTime);
     if (!staff) return;
-    scene->setCurrentStaff(staff);
+    setCurrentStaff(staff);
 }
 
 void
@@ -1878,7 +1950,7 @@ NotationView::slotCurrentSegmentPrior()
     if (!scene) return;
     NotationStaff *staff = scene->getPriorStaffOnTrack();
     if (!staff) return;
-    scene->setCurrentStaff(staff);
+    setCurrentStaff(staff);
     slotEditSelectWholeStaff();
 }
 
@@ -1889,8 +1961,24 @@ NotationView::slotCurrentSegmentNext()
     if (!scene) return;
     NotationStaff *staff = scene->getNextStaffOnTrack();
     if (!staff) return;
-    scene->setCurrentStaff(staff);
+    setCurrentStaff(staff);
     slotEditSelectWholeStaff();
+}
+
+void
+NotationView::
+setCurrentStaff(NotationStaff *staff)
+{
+    if (!staff) return;
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+
+    if (findAdopted(&staff->getSegment()) != m_adoptedSegments.end())
+        { enterActionState("focus_adopted_segment"); }
+    else
+        { leaveActionState("focus_adopted_segment"); }
+
+    scene->setCurrentStaff(staff);
 }
 
 void
@@ -1999,6 +2087,13 @@ void
 NotationView::slotSetSelectTool()
 {
     if (m_notationWidget) m_notationWidget->slotSetSelectTool();
+    slotUpdateMenuStates();
+}    
+
+void
+NotationView::slotSetSelectNoTiesTool()
+{
+    if (m_notationWidget) m_notationWidget->slotSetSelectNoTiesTool();
     slotUpdateMenuStates();
 }    
 
@@ -2870,8 +2965,6 @@ NotationView::slotMakeOrnament()
     if (!segment) return;
 
     timeT absTime = getSelection()->getStartTime();
-    timeT duration = getSelection()->getTotalDuration();
-    Note note(Note::getNearestNote(duration));
 
     Track *track =
         segment->getComposition()->getTrackById(segment->getTrack());
@@ -2890,30 +2983,13 @@ NotationView::slotMakeOrnament()
     name = dialog.getName();
     basePitch = dialog.getBasePitch();
 
-    MacroCommand *command = new MacroCommand(tr("Make Ornament"));
-
-    command->addCommand(new CopyCommand
-                        (*getSelection(),
-                         getDocument()->getClipboard()));
-
-    command->addCommand(new CutCommand
-                        (*getSelection(),
-                         getDocument()->getClipboard()));
-
-    command->addCommand(new PasteToTriggerSegmentCommand
-                        (&getDocument()->getComposition(),
-                         getDocument()->getClipboard(),
-                         name, basePitch));
-
-    command->addCommand(new InsertTriggerNoteCommand
-                        (*segment, absTime, note, basePitch, baseVelocity,
-                         style->getName(),
-                         getDocument()->getComposition().getNextTriggerSegmentId(),
-                         true,
-                         BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH,
-                         Marks::NoMark));
-
-    CommandHistory::getInstance()->addCommand(command);
+    CommandHistory::getInstance()->
+        addCommand(new CutToTriggerSegmentCommand
+                   (getSelection(), getDocument()->getComposition(),
+                    name, basePitch, baseVelocity,
+                    style->getName(), true,
+                    BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE,
+                    Marks::NoMark));
 }
 
 void
@@ -2947,6 +3023,122 @@ NotationView::slotRemoveOrnament()
     CommandHistory::getInstance()->addCommand(
             new ClearTriggersCommand(*getSelection(),
                                      tr("Remove Ornaments")));
+}
+
+void
+NotationView::slotEditOrnamentInline()
+{
+    ForAllSelection(&NotationView::EditOrnamentInline);
+}
+
+void
+NotationView::slotShowOrnamentExpansion()
+{
+    ForAllSelection(&NotationView::ShowOrnamentExpansion);
+}
+
+void
+NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
+{
+    TriggerSegmentRec *rec =
+        getDocument()->getComposition().getTriggerSegmentRec(trigger);
+    
+    if (!rec) { return; }
+    Segment *link = rec->makeLinkedSegment(trigger, containing);
+
+    // makeLinkedSegment can return NULL, eg if ornament was squashed.
+    if (!link) { return; }
+
+    link->setParticipation(Segment::editableClone);
+    // The same track the host segment had
+    link->setTrack(containing->getTrack());
+    // Give it a composition so it doesn't get into trouble.
+    link->setComposition(&getDocument()->getComposition());
+
+    // Adopt it into the view.
+    CommandHistory::getInstance()->addCommand
+        (new AdoptSegmentCommand
+         (tr("Edit ornament inline"), *this, link, true));
+}
+
+
+void
+NotationView::ShowOrnamentExpansion(Event *trigger, Segment *containing)
+{
+    TriggerSegmentRec *rec =
+        getDocument()->getComposition().getTriggerSegmentRec(trigger);
+    if (!rec) { return; }
+    Instrument *instrument = getDocument()->getInstrument(containing);
+
+    Segment *s =
+        rec->makeExpansion(trigger, containing, instrument);
+
+    if (!s) { return; }
+
+    s->setParticipation(Segment::readOnly);
+    s->setGreyOut();
+    // The same track the host segment had
+    s->setTrack(containing->getTrack());
+    s->setComposition(&getDocument()->getComposition());
+    s->normalizeRests(s->getStartTime(), s->getEndTime());
+
+    // Adopt it into the view.
+    CommandHistory::getInstance()->addCommand
+        (new AdoptSegmentCommand
+         (tr("Show ornament expansion"), *this, s, true));
+}
+
+void
+NotationView::
+ForAllSelection(opOnEvent op)
+{
+    EventSelection *selection = getSelection();
+    if (!selection) { return; }
+
+    EventSelection::eventcontainer &ec =
+        selection->getSegmentEvents();
+
+    for (EventSelection::eventcontainer::iterator i = ec.begin();
+         i != ec.end();
+         ++i) {
+        CALL_MEMBER_FN(*this,op)(*i, getCurrentSegment());
+    }
+}
+
+void
+NotationView::
+slotUnadoptSegment()
+{
+    // unadoptSegment checks this too, but we check now so that (a) we
+    // don't have a did-nothing command on the history, and (b)
+    // because undoing that command would be very wrong.
+    SegmentVector::iterator found = findAdopted(getCurrentSegment());
+
+    if (found == m_adoptedSegments.end()) { return; }    
+
+    CommandHistory::getInstance()->addCommand
+        (new AdoptSegmentCommand
+         (tr("Unadopt Segment"), *this, *found, false));
+}
+
+void
+NotationView::slotMaskOrnament()
+{
+    if (!getSelection())
+        { return; }
+
+    CommandHistory::getInstance()->addCommand
+        (new MaskTriggerCommand(*getSelection(), false));
+}
+
+void
+NotationView::slotUnmaskOrnament()
+{
+    if (!getSelection())
+        { return; }
+
+    CommandHistory::getInstance()->addCommand
+        (new MaskTriggerCommand(*getSelection(), true));
 }
 
 void
@@ -3334,6 +3526,13 @@ NotationView::slotRegenerateScene()
                    << m_notationWidget->getScene()->getSegmentsDeleted()->size()
                    << " segments deleted" << endl;
 
+    // The scene is going to be deleted then restored.  To continue
+    // processing at best is useless and at the worst may cause a
+    // crash.  This call could replace the multiple calls in
+    // NotationScene.
+    disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
+               m_notationWidget->getScene(), SLOT(slotCommandExecuted()));
+    
     // Look for segments to be removed from vector
     std::vector<Segment *> * segmentDeleted =
         m_notationWidget->getScene()->getSegmentsDeleted();
@@ -3384,7 +3583,7 @@ NotationView::slotRegenerateScene()
     // TODO: remember scene position
     
     // regenerate the whole notation widget .
-    m_notationWidget->setSegments(m_document, m_segments);
+    setWidgetSegments();
     
     // restore size and spacing of notation police
     m_notationWidget->slotSetFontName(m_fontName);
@@ -4462,8 +4661,8 @@ NotationView::slotEditElement(NotationStaff *staff,
         int id = element->event()->get
             <Int>
             (BaseProperties::TRIGGER_SEGMENT_ID);
-
-        emit editTriggerSegment(id);
+        
+        emit editTriggerSegment(id); 
         return ;
 
     } else {
@@ -4773,7 +4972,7 @@ NotationView::slotAddLayer()
     m_segments.push_back(command->getSegment());
 
     // re-invoke setSegments with the ammended m_segments
-    m_notationWidget->setSegments(m_doc, m_segments);
+    setWidgetSegments();
 
     // try to make the new segment active immediately
     slotCurrentSegmentNext();

@@ -509,8 +509,9 @@ public:
     /**
      * Locate the given event and, if it's a note, collapse it with
      * any following adjacent note of the same pitch, so long as its
-     * start time is before the the given limit.  Does not care
-     * whether the resulting note is viable.
+     * start time is before the the given limit and both notes behave
+     * the same way in ornament expansion.  Does not care whether the
+     * resulting note is viable.
      *
      * Returns an iterator pointing to the event that replaced the
      * original one if a collapse happened, segment.end() if no

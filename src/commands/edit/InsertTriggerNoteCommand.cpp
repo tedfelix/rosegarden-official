@@ -21,7 +21,7 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "base/SegmentMatrixHelper.h"
+#include "base/SegmentNotationHelper.h"
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
 #include "document/BasicCommand.h"
@@ -37,7 +37,7 @@ using namespace BaseProperties;
 
 InsertTriggerNoteCommand::InsertTriggerNoteCommand(Segment &segment,
         timeT time,
-        Note note,
+        timeT duration,
         int pitch,
         int velocity,
         NoteStyleName noteStyle,
@@ -46,9 +46,9 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Segment &segment,
         std::string timeAdjust,
         Mark mark) :
         BasicCommand(tr("Insert Trigger Note"), segment,
-                     time, time + note.getDuration()),
+                     time, time + duration),
         m_time(time),
-        m_note(note),
+        m_duration(duration),
         m_pitch(pitch),
         m_velocity(velocity),
         m_noteStyle(noteStyle),
@@ -71,15 +71,24 @@ InsertTriggerNoteCommand::modifySegment()
     // Insert via a model event, so as to apply the note style.
     // This is a subset of the work done by NoteInsertionCommand
 
-    Event *e = new Event(Note::EventType, m_time, m_note.getDuration());
+    Event *e = new Event(Note::EventType, m_time, m_duration);
 
+    // Could 
     e->set<Int>(PITCH, m_pitch);
     e->set<Int>(VELOCITY, m_velocity);
+    e->set<Bool>(TRIGGER_EXPAND, true);
 
     if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
         e->set<String>(NotationProperties::NOTE_STYLE, qstrtostr(m_noteStyle));
     }
 
+    Segment &s(getSegment());
+    Segment::iterator i = s.insert(e);
+    SegmentNotationHelper(s).makeThisNoteViable(i);
+    s.normalizeRests(m_time, m_time + m_duration);
+
+    // Add these properties only after the note is possibly
+    // split-and-tied.
     e->set<Int>(TRIGGER_SEGMENT_ID, m_id);
     e->set<Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
     e->set<String>(TRIGGER_SEGMENT_ADJUST_TIMES, m_timeAdjust);
@@ -88,27 +97,9 @@ InsertTriggerNoteCommand::modifySegment()
         Marks::addMark(*e, m_mark, true);
     }
 
-    Segment &s(getSegment());
-    Segment::iterator i = SegmentMatrixHelper(s).insertNote(e);
-
-    Segment::iterator j = i;
-    while (++j != s.end()) {
-        if ((*j)->getAbsoluteTime() >
-            (*i)->getAbsoluteTime() + (*i)->getDuration())
-            break;
-        if ((*j)->isa(Note::EventType)) {
-            if ((*j)->getAbsoluteTime() ==
-                (*i)->getAbsoluteTime() + (*i)->getDuration()) {
-                if ((*j)->has(TIED_BACKWARD) && (*j)->get<Bool>(TIED_BACKWARD) &&
-                    (*j)->has(PITCH) && ((*j)->get<Int>(PITCH) == m_pitch)) {
-                    (*i)->set<Bool>(TIED_FORWARD, true);
-                }
-            }
-        }
-    }
-
+    
     TriggerSegmentRec *rec =
-        getSegment().getComposition()->getTriggerSegmentRec(m_id);
+        s.getComposition()->getTriggerSegmentRec(m_id);
 
     if (rec)
         rec->updateReferences();

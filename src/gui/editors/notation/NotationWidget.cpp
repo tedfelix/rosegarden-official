@@ -378,12 +378,20 @@ NotationWidget::NotationWidget() :
 }
 
 NotationWidget::~NotationWidget()
+{ clearAll(); }
+
+// Safe to call this more than once.
+void
+NotationWidget::clearAll(void)
 {
     delete m_scene;
+    m_scene = 0;
     delete m_headersScene;
+    m_headersScene = 0;
     delete m_referenceScale;
+    m_referenceScale = 0;
 }
-
+    
 void
 NotationWidget::setSegments(RosegardenDocument *document,
                             std::vector<Segment *> segments)
@@ -747,6 +755,12 @@ void
 NotationWidget::slotSetSelectTool()
 {
     slotSetTool(NotationSelector::ToolName);
+}
+
+void
+NotationWidget::slotSetSelectNoTiesTool()
+{
+    slotSetTool(NotationSelectorNoTies::ToolName);
 }
 
 void

@@ -155,7 +155,9 @@ void InternalSegmentMapper::fillBuffer()
                 continue;
             }
 
-            if (!usingImplied) { // don't permit nested triggered segments
+            // We handle nested ornament expansion elsewhere, so
+            // trigger events won't be found in implied.
+            if (!usingImplied) { 
 
                 long triggerId = -1;
                 (**k)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID, triggerId);
@@ -164,39 +166,38 @@ void InternalSegmentMapper::fillBuffer()
 
                     TriggerSegmentRec *rec =
                         comp.getTriggerSegmentRec(triggerId);
+                    // We will invalidate `implied' so we arrange to
+                    // re-find it later.  Since we're always treating
+                    // a normal note here, we always use the findTime
+                    // method.
+                    timeT refTime = (*j)->getAbsoluteTime();
+                    ControllerContextParams
+                        params(refTime, getInstrument(), m_segment,
+                               m_triggeredEvents, m_controllerCache, 0);
 
-                    if (rec && rec->getSegment()) {
-                        timeT performanceDuration =
-                            SegmentPerformanceHelper(*m_segment).
-                            getSoundingDuration(j);
-                        if (performanceDuration > 0) {
-                            // This will invalidate "implied" so we
-                            // arrange to re-find it later.  Since
-                            // we're always treating a normal note
-                            // here, we always use the findTime method.
-                            timeT refTime = (*j)->getAbsoluteTime();
-                            // Put triggered events into
-                            // m_triggeredEvents.  This may
-                            // invalidates "implied" because it may
-                            // insert notes.
-                            mergeTriggerSegment(m_triggeredEvents, *j,
-                                                performanceDuration, rec);
-                            // Re-find "implied".
-                            implied =
-                                Segment::iterator
-                                (m_triggeredEvents->findTime(refTime));
+                    // Add triggered events into m_triggeredEvents.
+                    // This invalidates `implied'.
+                    bool insertedSomething =
+                        rec->ExpandInto(m_triggeredEvents,
+                                        j, m_segment, &params);
+                    if (insertedSomething) {
+                        // Re-find `implied'
+                        implied =
+                            Segment::iterator
+                            (m_triggeredEvents->findTime(refTime));
 
-                            // Recalculate how much buffer space to
-                            // reserve.
-                            int spaceNeeded =
-                                addSize(calculateSize(), rec->getSegment());
-                            // Reserve more space if we will need it.
-                            if (spaceNeeded > capacity()) {
-                                reserve(spaceNeeded);
-                            }
+                        // Recalculate how much buffer space to
+                        // reserve.  !!! Probably should calculate the
+                        // extra from m_triggeredEvents rather than
+                        // rec->getSegment()
+                        int spaceNeeded =
+                            addSize(calculateSize(), rec->getSegment());
+                        // Reserve more space if we will need it.
+                        if (spaceNeeded > capacity()) {
+                            reserve(spaceNeeded);
                         }
                     }
-
+                        
                     // whatever happens, we don't want to write this one
                     ++j; 
 
@@ -371,107 +372,6 @@ popInsertNoteoff(int trackid, Composition &comp)
     m_noteOffs.erase(m_noteOffs.begin());
 }
 
-void
-InternalSegmentMapper::
-mergeTriggerSegment(Segment *target,
-                    Event *trigger,
-                    timeT evDuration,
-                    TriggerSegmentRec *rec)
-{
-    if (!rec || !rec->getSegment() || rec->getSegment()->empty()) return;
-
-    timeT evTime = trigger->getAbsoluteTime();
-
-    ControllerContextMap controllerContextMap;
-
-    timeT trStart = rec->getSegment()->getStartTime();
-    timeT trEnd = rec->getSegment()->getEndMarkerTime();
-    timeT trDuration = trEnd - trStart;
-    if (trDuration == 0) return;
-
-    bool retune = false;
-    std::string timeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
-
-    trigger->get<Bool>(BaseProperties::TRIGGER_SEGMENT_RETUNE, retune);
-    trigger->get<String>(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
-
-    long evPitch = rec->getBasePitch();
-    (void)trigger->get<Int>(BaseProperties::PITCH, evPitch);
-    int pitchDiff = evPitch - rec->getBasePitch();
-
-    long evVelocity = rec->getBaseVelocity();
-    (void)trigger->get<Int>(BaseProperties::VELOCITY, evVelocity);
-    int velocityDiff = evVelocity - rec->getBaseVelocity();
-
-    timeT offset = 0;
-    if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
-        offset = evDuration - trDuration;
-    }
-
-    for (Segment::iterator i = rec->getSegment()->begin();
-         rec->getSegment()->isBeforeEndMarker(i); ++i) {
-
-        timeT t = (*i)->getAbsoluteTime() - trStart;
-        timeT d = (*i)->getDuration();
-
-        if (evDuration != trDuration &&
-            timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
-            t = timeT(double(t * evDuration) / double(trDuration));
-            d = timeT(double(d * evDuration) / double(trDuration));
-        }
-
-        t += evTime + offset;
-
-        if (t < evTime) {
-            if (t + d <= evTime)
-                continue;
-            else {
-                d -= (evTime - t);
-                t = evTime;
-            }
-        }
-
-        if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
-            if (t + d > evTime + evDuration) {
-                if (t >= evTime + evDuration)
-                    continue;
-                else {
-                    d = evTime + evDuration - t;
-                }
-            }
-        }
-
-        Event *newEvent = new Event(**i, t, d);
-
-        if (retune && newEvent->has(BaseProperties::PITCH)) {
-            int pitch =
-                newEvent->get<Int>(BaseProperties::PITCH) + pitchDiff;
-            if (pitch > 127)
-                pitch = 127;
-            if (pitch < 0)
-                pitch = 0;
-            newEvent->set<Int>(BaseProperties::PITCH, pitch);
-        }
-
-        if (newEvent->has(BaseProperties::VELOCITY)) {
-            int velocity =
-                newEvent->get<Int>(BaseProperties::VELOCITY) + velocityDiff;
-            if (velocity > 127)
-                velocity = 127;
-            if (velocity < 0)
-                velocity = 0;
-            newEvent->set<Int>(BaseProperties::VELOCITY, velocity);
-        }
-
-        if (newEvent->isa(Controller::EventType) ||
-            newEvent->isa(PitchBend::EventType)) {
-            m_controllerCache.
-                makeControlValueAbsolute(this, newEvent, evTime);
-        }
-        target->insert(newEvent);
-    }
-}
-
 int
 InternalSegmentMapper::addSize(int size, Segment *s)
 {
@@ -497,6 +397,17 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     Callback functionality(this);
     m_channelManager.doInsert(inserter, evt, start, &functionality,
                               dirtyIter, m_segment->getTrack());
+}
+
+int
+InternalSegmentMapper::
+getControllerValue(timeT searchTime, const std::string eventType,
+                   int controllerId)
+{
+    return
+        m_controllerCache.
+        getControllerValue(getInstrument(), m_segment, m_triggeredEvents,
+                           searchTime, eventType, controllerId);
 }
 
 bool
@@ -543,9 +454,7 @@ getControllers(Instrument *instrument, RealTime start)
         MidiByte controlId = cIt->first;
         MidiByte controlValue =
             m_mapper->
-            m_controllerCache.
-            getControllerValue(m_mapper,
-                               startTime,
+            getControllerValue(startTime,
                                Controller::EventType,
                                controlId);
         returnValue.m_controllers.
@@ -558,9 +467,7 @@ getControllers(Instrument *instrument, RealTime start)
     {
         MidiByte controlValue =
             m_mapper->
-            m_controllerCache.
-            getControllerValue(m_mapper,
-                               startTime,
+            getControllerValue(startTime,
                                PitchBend::EventType,
                                0);
 

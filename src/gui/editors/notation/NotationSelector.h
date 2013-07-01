@@ -122,7 +122,7 @@ public slots:
     void slotClickTimeout();
 
 protected:
-    NotationSelector(NotationWidget *);
+    NotationSelector(NotationWidget *, bool ties = true);
 
     /**
      * Set the current selection on the parent NotationView
@@ -157,8 +157,22 @@ protected:
 
     bool m_justSelectedBar;
     bool m_wholeStaffSelectionComplete;
+    bool m_ties;
 };
 
+class NotationSelectorNoTies : public NotationSelector
+{
+    friend class NotationToolBox;
+ public:
+    static const QString ToolName;
+
+ private:
+ NotationSelectorNoTies(NotationWidget *widget) :
+    NotationSelector(widget, false)
+        {}
+
+};
+ 
 
 }
 

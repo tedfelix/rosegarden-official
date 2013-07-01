@@ -423,6 +423,7 @@ ControlRulerWidget::slotSetToolName(const QString &toolname)
     QString rulertoolname = toolname;
     // Translate Notation tool names
     if (toolname == "notationselector") rulertoolname = "selector";
+    if (toolname == "notationselectornoties") rulertoolname = "selector";
     if (toolname == "noterestinserter") rulertoolname = "painter";
     if (toolname == "notationeraser") rulertoolname = "eraser";
     

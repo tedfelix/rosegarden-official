@@ -360,6 +360,15 @@ Event::dumpStats(ostream&)
 
 #endif
 
+bool
+Event::maskedInTrigger(void) const
+{
+    using namespace BaseProperties;
+    
+    if (!has(TRIGGER_EXPAND)) { return false; }
+    return !get<Bool>(TRIGGER_EXPAND);
+}
+
 Event::PropertyNames
 Event::getPropertyNames() const
 {

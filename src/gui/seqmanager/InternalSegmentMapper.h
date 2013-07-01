@@ -72,6 +72,7 @@ class InternalSegmentMapper : public SegmentMapper
                 getControllers(Instrument *instrument, RealTime start);
             InternalSegmentMapper *m_mapper;
         };
+    friend class Callback;
 
     typedef std::pair<timeT, int> Noteoff;
     struct NoteoffCmp
@@ -109,16 +110,15 @@ class InternalSegmentMapper : public SegmentMapper
     Instrument *getInstrument(void)
     { return m_channelManager.m_instrument; }
 
-    void mergeTriggerSegment(Segment *target,
-                             Event *trigger,
-                             timeT performanceDuration,
-                             TriggerSegmentRec *rec);
-
     void popInsertNoteoff(int trackid, Composition &comp);
     void enqueueNoteoff(timeT time, int pitch);
 
     bool haveEarlierNoteoff(timeT t);
     RealTime toRealTime(Composition &comp, timeT t);
+    int getControllerValue(timeT searchTime,
+                           const std::string eventType,
+                           int controllerId);
+
     /** Data members **/
 
     IntervalChannelManager m_channelManager;

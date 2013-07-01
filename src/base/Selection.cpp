@@ -160,7 +160,8 @@ EventSelection::eraseThisEvent(Event *e)
 }
 
 void
-EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
+EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
+                               bool ties)
 {
     const Segment::const_iterator baseSegmentItr = m_originalSegment.find(e);
     
@@ -180,6 +181,8 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn)
     // Always add/remove at least the one Event we were called with.
     (this->*insertEraseFn)(e);
 
+    if (!ties) { return; }
+    
     // Now we handle the tied notes themselves.  If the event we're adding is
     // tied, then we iterate forward and back to try to find all of its linked
     // neighbors, and treat them as though they were one unit.  Musically, they
@@ -283,25 +286,25 @@ EventSelection::removeObserver(EventSelectionObserver *obs) {
 
 
 void
-EventSelection::addEvent(Event *e, bool /*ties*/)
+EventSelection::addEvent(Event *e, bool ties)
 {
-    addRemoveEvent(e, &EventSelection::insertThisEvent);
+    addRemoveEvent(e, &EventSelection::insertThisEvent, ties);
 }
 
 void
-EventSelection::addFromSelection(EventSelection *sel)
+EventSelection::addFromSelection(EventSelection *sel, bool ties)
 {
     for (eventcontainer::iterator i = sel->getSegmentEvents().begin();
 	 i != sel->getSegmentEvents().end(); ++i) {
 	// contains() checked a bit deeper now
-	addEvent(*i);
+	addEvent(*i, ties);
     }
 }
 
 void
-EventSelection::removeEvent(Event *e) 
+EventSelection::removeEvent(Event *e, bool ties) 
 {
-    addRemoveEvent(e, &EventSelection::eraseThisEvent);
+    addRemoveEvent(e, &EventSelection::eraseThisEvent, ties);
 }
 
 bool

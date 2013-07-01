@@ -1988,8 +1988,15 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
     if (i == end()) return end();
 
     iterator j = getNextAdjacentNote(i, true, true);
-    if (j == end() || (*j)->getAbsoluteTime() >= rangeEnd) return end();
 
+    if (j == end() || (*j)->getAbsoluteTime() >= rangeEnd) return end();
+    if ((*i)->maskedInTrigger() != (*j)->maskedInTrigger()) {
+        // They should be just tied, just not merged.
+        (*i)->set<Bool>(TIED_FORWARD, true);
+        (*j)->set<Bool>(TIED_BACKWARD, true);
+        return end();
+    }
+    
     timeT iEnd = (*i)->getAbsoluteTime() + (*i)->getDuration();
     timeT jEnd = (*j)->getAbsoluteTime() + (*j)->getDuration();
 

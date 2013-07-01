@@ -81,12 +81,12 @@ public:
      * Will silently drop any events that are already in the
      * selection.
      */
-    void addFromSelection(EventSelection *sel);
+    void addFromSelection(EventSelection *sel, bool ties = true);
 
     /**
      * If the given Event is in the selection, take it out.
      */
-    void removeEvent(Event *e);
+    void removeEvent(Event *e, bool ties = true);
 
     /**
      * Test whether a given Event (in the Segment) is part of
@@ -187,7 +187,8 @@ private:
      * This method encapsulates all of the logic needed to add and remove events
      * from the selection set.
      */
-    void addRemoveEvent(Event *e, EventFuncPtr insertEraseFn);
+    void addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
+                        bool ties = true);
         
     typedef std::list<EventSelectionObserver *> ObserverSet;
     ObserverSet m_observers;

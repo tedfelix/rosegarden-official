@@ -29,7 +29,6 @@ namespace Rosegarden
   class ControlParameter;
   class Instrument;
   class Segment;
-  class InternalSegmentMapper;
 
 // @class ControllerSearchValue A (possibly intermediate) value in a
 // parameter search, including what time it was found at.
@@ -64,11 +63,12 @@ class ControllerSearch
     typedef ControllerSearchValue::Maybe Maybe;
 
     ControllerSearch(const std::string eventType,
-                     int controllerId,
-                     InternalSegmentMapper *mapper);
+                     int controllerId);
     
+    // Search Segments A and B for the latest controller value.  B may
+    // be NULL but A must exist. 
     Maybe
-        search(InternalSegmentMapper *mapper, timeT noLaterThan) const;
+        doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const;
 
  private:
     Maybe
@@ -94,11 +94,17 @@ struct ControllerContextMap
     m_PitchBendLatestValue(Maybe(false,ControllerSearchValue()))
     {};
 
-    void makeControlValueAbsolute(InternalSegmentMapper *mapper,
-                                  Event *e, timeT at);
+    void makeControlValueAbsolute(Instrument *instrument, Segment *a,
+                                  Segment *b, Event *e, timeT at);
 
-    int getControllerValue(InternalSegmentMapper *mapper, 
-                           timeT noLaterThan, const std::string eventType,
+    // Return the respective controller value at searchTime.  Segment
+    // A is primary and governs timing and repitition.  Segment
+    // B, if non-NULL, will be searched too.  In any case the latest event
+    // takes priority.  Defaults from Instrument will be used if
+    // neccessary. 
+    int getControllerValue(Instrument *instrument,
+                           Segment *a, Segment *b, 
+                           timeT searchTime, const std::string eventType,
                            int controllerId);
 
     void storeLatestValue(Event *e);
@@ -108,17 +114,49 @@ struct ControllerContextMap
     int makeAbsolute(const ControlParameter * controlParameter,
                      int value) const;
     const ControlParameter
-        *getControlParameter(InternalSegmentMapper *mapper,
-                             const std::string eventType,
-                             const int controllerId);
+    *getControlParameter(Instrument *instrument,
+                         const std::string eventType,
+                         const int controllerId);
     static int
-    getStaticValue(InternalSegmentMapper *mapper,
+    getStaticValue(Instrument *instrument,
                    const std::string eventType, int controllerId);
 
     Cache             m_latestValues;
     Maybe             m_PitchBendLatestValue;
  };
 
+class ControllerContextParams
+{
+public:
+  ControllerContextParams(timeT                     triggerTime,
+			  Instrument               *instrument,
+			  Segment                  *a,
+			  Segment                  *b,
+			  ControllerContextMap     &controllerContext,
+			  ControllerContextParams  *parentContext) :
+    m_triggerTime(triggerTime),
+    m_instrument(instrument),
+    m_a(a),
+    m_b(b),
+    m_controllerContext(controllerContext),
+    m_parentContext(parentContext)
+  {}
+
+  void makeControlValueAbsolute(Event *e) {
+    m_controllerContext.
+      makeControlValueAbsolute(m_instrument, m_a, m_b, e, m_triggerTime);
+  };
+
+private:
+  timeT                     m_triggerTime;
+  Instrument               *m_instrument;
+  Segment                  *m_a;
+  // May be NULL
+  Segment                  *m_b;
+  ControllerContextMap     &m_controllerContext;
+  // May be NULL
+  ControllerContextParams  *m_parentContext;
+};
 }
 
 #endif /* ifndef _CONTROLLERCONTEXT_H_ */

@@ -86,6 +86,18 @@ public:
     } SegmentType;
 
     /**
+     * The manners in which a segment can participate in the
+     * composition.  The ones other than `normal' are for various
+     * forms of dummies for display or editing.
+     */
+    typedef enum {
+        normal,
+        editableClone,
+        readOnly,
+        justForShow,
+    } Participation;
+
+    /**
      * Construct a Segment of a given type with a given formal starting time.
      */
     Segment(SegmentType segmentType = Internal,
@@ -156,6 +168,18 @@ public:
      * rename: setTrackId()
      */
     void setTrack(TrackId trackId);
+
+    /**
+     * Values other than `normal' make the segment act like it's not
+     * really in the composition.  Eg, setTrack won't actually move it
+     * to track N.  Actually attaching/detaching it from the
+     * Composition is not handled by this.
+     */
+    void setParticipation(Participation participation)
+    { m_participation = participation; }
+
+    Participation getParticipation(void)
+    { return m_participation; }
 
     // label
     //
@@ -281,7 +305,7 @@ public:
      * Return an iterator pointing to the nominal end of the
      * Segment.  This may be earlier than the end() iterator.
      */
-    iterator getEndMarker();
+    iterator getEndMarker() const;
 
     /**
      * Return true if the given iterator points earlier in the
@@ -808,6 +832,12 @@ public:
     bool isTmp() const { return m_isTmp; }
 
     /**
+     * Set the segment to display as greyed out, a visual indication
+     * that it is temporary or read-only.
+     **/
+    void setGreyOut(void);
+    
+    /**
      * Set the current segment as the reference of the linked segment group and
      * return true.
      * Return false if the segment is not linked and can't have a reference.
@@ -929,7 +959,14 @@ private:
     // Linked segments
     SegmentLinker *m_segmentLinker;
     LinkTransposeParams m_linkTransposeParams;
-    bool m_isTmp;      // Mark a segment (usually a link) as temporary
+    bool m_isTmp;      // Mark a segment (must be a link) as temporary
+
+    /**
+     * Values other than `normal' make the segment act like it's not
+     * really in the composition.  Eg, setTrack won't actually move it
+     * to track N.
+     */
+    Participation m_participation;
     int m_verseCount;  // -1 means not computed still
     int m_verse;       // Used to distribute lyrics among repeated segments
 };

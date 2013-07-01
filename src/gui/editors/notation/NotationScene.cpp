@@ -372,6 +372,9 @@ NotationScene::setStaffs(RosegardenDocument *document,
 void
 NotationScene::createClonesFromRepeatedSegments()
 {
+    const Segment::Participation participation = 
+        m_editRepeated ? Segment::editableClone : Segment::justForShow;
+    
     // Create clones (if needed)
     for (std::vector<Segment *>::iterator it = m_externalSegments.begin();
         it != m_externalSegments.end(); ++it) {
@@ -393,10 +396,10 @@ NotationScene::createClonesFromRepeatedSegments()
 
                 /// Segment *s = (*it)->clone();
                 Segment *s = SegmentLinker::createLinkedSegment(*it);
-
                 s->setStartTime(ts);
                 s->setTrack(track);
                 s->setVerse(++verse);
+                s->setParticipation(participation);
                 s->setTmp();  // To avoid crash related to composition
                               // being undefined and to get notation
                               // with grey color

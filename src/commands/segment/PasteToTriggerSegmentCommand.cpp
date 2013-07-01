@@ -31,14 +31,50 @@
 namespace Rosegarden
 {
 
-PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composition,
+/** PasteToTriggerSegmentCommand itself **/
+
+/**
+   PasteToTriggerSegmentCommand delegates essentially all of its work
+   to PasteToTriggerSegmentWorker so that its code can be shared with
+   CutToTriggerSegmentCommand, which can't be neatly derived from
+   PasteToTriggerSegmentCommand.
+ */
+    
+PasteToTriggerSegmentCommand::
+PasteToTriggerSegmentCommand(Composition *composition,
+                             Clipboard *clipboard,
+                             QString label,
+                             int basePitch,
+                             int baseVelocity) :
+    NamedCommand(tr("Paste as New Triggered Segment")),
+    m_worker(composition, new Clipboard(*clipboard),
+             label, basePitch, baseVelocity)
+{
+    // nothing else
+}
+
+PasteToTriggerSegmentCommand::
+~PasteToTriggerSegmentCommand(void)
+{}
+    
+void
+PasteToTriggerSegmentCommand::execute()
+{ m_worker.execute(); }
+
+void
+PasteToTriggerSegmentCommand::unexecute()
+{ m_worker.unexecute(); }
+
+/** PasteToTriggerSegmentWorker **/
+
+    
+PasteToTriggerSegmentWorker::PasteToTriggerSegmentWorker(Composition *composition,
         Clipboard *clipboard,
         QString label,
         int basePitch,
         int baseVelocity) :
-        NamedCommand(tr("Paste as New Triggered Segment")),
         m_composition(composition),
-        m_clipboard(new Clipboard(*clipboard)),
+        m_clipboard(clipboard ? clipboard : new Clipboard),
         m_label(label),
         m_basePitch(basePitch),
         m_baseVelocity(baseVelocity),
@@ -48,7 +84,24 @@ PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composit
     // nothing else
 }
 
-PasteToTriggerSegmentCommand::~PasteToTriggerSegmentCommand()
+PasteToTriggerSegmentWorker::
+PasteToTriggerSegmentWorker(Composition *composition,
+                            const EventSelection * selection,
+                            QString label,
+                            int basePitch,
+                            int baseVelocity) :
+        m_composition(composition),
+        m_clipboard(new Clipboard),
+        m_label(label),
+        m_basePitch(basePitch),
+        m_baseVelocity(baseVelocity),
+        m_segment(0),
+        m_detached(false)
+{
+    m_clipboard->newSegment(selection);
+}
+
+PasteToTriggerSegmentWorker::~PasteToTriggerSegmentWorker()
 {
     if (m_detached)
         delete m_segment;
@@ -56,17 +109,20 @@ PasteToTriggerSegmentCommand::~PasteToTriggerSegmentCommand()
 }
 
 void
-PasteToTriggerSegmentCommand::execute()
+PasteToTriggerSegmentWorker::execute()
 {
-    std::cerr << "PasteToTriggerSegmentCommand::execute()" << std::endl;
+    std::cerr << "PasteToTriggerSegmentWorker::execute()" << std::endl;
 
     if (m_segment) {
-
+        // Not the first time executing.
+        
         std::cerr << " - m_segment == TRUE" << std::endl;
 
         m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
 
     } else {
+        // The first time executing, so get values for m_segment,
+        // m_id.
 
         std::cerr << " - m_segment == FALSE" << std::endl;
 
@@ -126,7 +182,7 @@ PasteToTriggerSegmentCommand::execute()
 }
 
 void
-PasteToTriggerSegmentCommand::unexecute()
+PasteToTriggerSegmentWorker::unexecute()
 {
     if (m_segment)
         m_composition->detachTriggerSegment(m_id);

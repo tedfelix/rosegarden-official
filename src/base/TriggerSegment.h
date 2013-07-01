@@ -25,6 +25,8 @@ namespace Rosegarden
 
 typedef unsigned int TriggerSegmentId;
 
+class ControllerContextParams;
+class Event;
 class Segment;
 
 class TriggerSegmentRec
@@ -58,6 +60,20 @@ public:
 
     void updateReferences();
 
+    // Return a new linked segment that corresponds in timing and
+    // pitch to this triggered segment as invoked by trigger.  
+    // Returns NULL if it can't make a meaningful linked segment.
+    Segment *makeLinkedSegment(Event *trigger, Segment *containing);
+    Segment* makeExpansion(Event *trigger,
+                           Segment *containing,
+                           Instrument *instrument) const;
+    bool ExpandInto(Segment *target,
+                    Segment::iterator iTrigger,
+                    Segment *containing,
+                    ControllerContextParams *controllerContextParams) const;
+    int getTranspose(const Event *trigger) const;
+    int getVelocityDiff(const Event *trigger) const;
+    
 protected:
     friend class Composition;
     TriggerSegmentRec(TriggerSegmentId id, Segment *segment,
@@ -87,34 +103,6 @@ struct TriggerSegmentCmp
     bool operator()(const TriggerSegmentRec *r1, const TriggerSegmentRec *r2) const {
         return r1->getId() < r2->getId();
     }
-};
-
-// @class TriggerSegmentTimeAdjust represents a linear transform of
-// time to and from the internal times of a triggered segment.
-// "Squishing" converts a triggered segment's intrinsic times to
-// outside times, "unsquishing" does the reverse.
-// @author Tom Breton (Tehom)
-// Adapted from SegmentMapper.cpp
-class TriggerSegmentTimeAdjust
-{
- public:
-    TriggerSegmentTimeAdjust(TriggerSegmentRec *rec,
-                             Segment::iterator  trigger,
-                             Segment           *oversegment);
-    timeT  toSquished(timeT t)
-    { return timeT((t + m_offset) * m_ratio); }
-    timeT  toUnsquished(timeT t)
-    { return timeT((t/m_ratio) - m_offset); }
-    timeT  toSquishedDuration(timeT t)
-    { return timeT(t * m_ratio); }
-    timeT  toUnsquishedDuration(timeT t)
-    { return timeT(t/m_ratio); }
-
- private:
-    double m_ratio;
-    timeT  m_offset;
-    timeT  m_start;
-    timeT  m_end;
 };
 
 }

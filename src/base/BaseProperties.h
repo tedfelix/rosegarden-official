@@ -51,6 +51,8 @@ extern const std::string GROUP_TYPE_BEAMED;
 extern const std::string GROUP_TYPE_TUPLED;
 extern const std::string GROUP_TYPE_GRACE; // obsolete
 
+extern const PropertyName TRIGGER_EXPAND;
+extern const PropertyName TRIGGER_EXPANSION_DEPTH;
 extern const PropertyName TRIGGER_SEGMENT_ID;
 extern const PropertyName TRIGGER_SEGMENT_RETUNE;
 extern const PropertyName TRIGGER_SEGMENT_ADJUST_TIMES;

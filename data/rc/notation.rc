@@ -150,6 +150,8 @@
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   <Separator/>
     <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt++" />
+  <Separator/>
+    <Action name="unadopt_segment" text="Unadopt an adopted Segment" />
   </Menu>
 
   <Menu name="Notes">
@@ -188,6 +190,11 @@
       <Action name="use_ornament" text="Trigger &amp;Ornament..." />
       <Action name="remove_ornament" text="&amp;Remove Ornament..." />
       <Action name="make_ornament" text="Ma&amp;ke Ornament..." />
+      <Action name="edit_ornament_inline" text="&amp;Edit Ornament as notation" />
+      <Action name="show_ornament_expansion" text="&amp;Show expansion of Ornament" />
+      <Action name="mask_ornament" text="Skip this part of ornament (&amp;mask tied note)" />
+      <Action name="unmask_ornament" text="Don't skip this part (&amp;unmask tied note)" />
+      
       <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
       <Action name="ornament_actionmenu" />
     </Menu>
@@ -442,6 +449,7 @@
     <text>&amp;Tools</text>
     <!-- JAS Other tools in group are not selectable from menu -->
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_note" checked="true" />
+    <Action name="selectnoties" text="Select but don't follow ties" group="tools_note" checked="false" />
     <Action name="draw" text="Draw &amp;Notes and Rests" icon="pencil" shortcut="F3" group="tools_note" checked="false"/>
     <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
     <!-- <Menu noMerge="1" name="NoteTools"> -->
@@ -931,6 +939,10 @@
     <Action name="make_ornament"/>
     <Action name="remove_ornament"/>
     <Action name="use_ornament"/>
+    <Action name="edit_ornament_inline"/>
+    <Action name="show_ornament_expansion"/>
+    <Action name="mask_ornament"/>
+    <Action name="unmask_ornament"/>
     <Action name="collapse_notes"/>
     <Action name="tie_notes"/>
     <Action name="untie_notes"/>
@@ -1017,6 +1029,11 @@
     <Action name="cursor_next_segment"/>
     <Action name="move_events_up_staff"/>
     <Action name="move_events_down_staff"/>
+  </enable>
+</State>
+<State name="focus_adopted_segment">
+  <enable>
+    <Action name="unadopt_segment"/>
   </enable>
 </State>
 

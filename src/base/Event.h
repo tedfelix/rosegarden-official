@@ -294,6 +294,13 @@ public:
     timeT getNotationAbsoluteTime() const { return m_data->getNotationTime(); }
     timeT getNotationDuration() const { return m_data->getNotationDuration(); }
 
+    /**
+     * Return whether this event's section of a triggered ornament
+     * is masked, for use when the event is part of a multiple-tied-note
+     * ornament trigger.
+     **/
+    bool maskedInTrigger(void) const;
+    
     typedef std::vector<PropertyName> PropertyNames;
     PropertyNames getPropertyNames() const;
     PropertyNames getPersistentPropertyNames() const;

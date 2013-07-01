@@ -962,6 +962,7 @@ StaffHeader::slotShowInconsistencies()
     warning->setWindowFlags(Qt::Dialog); // Get a popup in middle of screen
     warning->setMinimumWidth(500);
     warning->show();
+    connect(this, SIGNAL(destroyed()), warning, SLOT(close()));
 }
 
 void

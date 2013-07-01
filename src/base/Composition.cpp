@@ -552,7 +552,17 @@ Composition::getTriggerSegmentRec(TriggerSegmentId id)
     triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return 0;
     return *i;
-}    
+}
+
+TriggerSegmentRec *
+Composition::getTriggerSegmentRec(Event* e)
+{
+    if (!e->has(BaseProperties::TRIGGER_SEGMENT_ID))
+        { return 0; }
+
+    const int id = e->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
+    return getTriggerSegmentRec(id);
+}
 
 TriggerSegmentId
 Composition::getNextTriggerSegmentId() const

@@ -34,6 +34,8 @@ namespace Rosegarden
 class NotePixmapParameters
 {
 public:
+    enum Triggering { triggerNone, triggerYes, triggerSkip, };
+    
     NotePixmapParameters(Note::Type noteType,
                          int dots,
                          Accidental accidental =
@@ -61,7 +63,7 @@ public:
     void setSelected(bool selected)       { m_selected         = selected;  }
     void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
     void setQuantized(bool quantized)     { m_quantized        = quantized; }
-    void setTrigger(bool trigger)         { m_trigger          = trigger;   }
+    void setTrigger(Triggering trigger)   { m_trigger          = trigger;   }
     void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
     void setSafeVertDistance(int safe)    { m_safeVertDistance = safe;      }
 
@@ -174,7 +176,7 @@ private:
     bool    m_selected;
     bool    m_highlighted;
     bool    m_quantized;
-    bool    m_trigger;
+    Triggering m_trigger;
     bool    m_onLine;
     int     m_safeVertDistance;
     bool    m_restOutsideStave;

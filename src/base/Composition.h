@@ -390,6 +390,10 @@ public:
     TriggerSegmentRec *getTriggerSegmentRec(TriggerSegmentId);
 
     /**
+     * As above for a given Event, or NULL if none.
+     **/
+    TriggerSegmentRec *getTriggerSegmentRec(Event* e);
+    /**
      * Add a new trigger Segment with a given ID and base pitch and
      * velocity.  Fails and returns 0 if the ID is already in use.
      * This is intended for use from file load or from undo/redo.

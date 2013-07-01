@@ -76,6 +76,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_segmentLinker(0),
     m_isTmp(0),
+    m_participation(normal),
     m_verseCount(-1),   // -1 => computation needed
     m_verse(0)
 {
@@ -120,6 +121,7 @@ Segment::Segment(const Segment &segment):
     m_fadeOutTime(segment.getFadeOutTime()),
     m_segmentLinker(0), //yes, this is intentional. clone() handles this
     m_isTmp(segment.isTmp()),
+    m_participation(segment.m_participation),
     m_verseCount(-1),   // -1 => computation needed
     m_verse(0)   // Needs a global recomputation on the whole composition 
 {
@@ -203,6 +205,11 @@ Segment::getRealSegment() const {
 void
 Segment::setTmp() {
     m_isTmp = true;
+    setGreyOut();
+}
+
+void
+Segment::setGreyOut(void) {
     for (iterator it = begin(); it != end(); ++it) {
         (*it)->set<Bool>(BaseProperties::TMP, true, false);
     }
@@ -266,6 +273,11 @@ Segment::isPlainlyLinkedTo(Segment * seg) const {
 void
 Segment::setTrack(TrackId id)
 {
+    if (m_participation != normal) {
+        m_trackId = id;
+        return;
+    }
+    
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
     TrackId oldTrackId = m_trackId;
@@ -487,7 +499,7 @@ Segment::setEndTime(timeT t)
 }
 
 Segment::iterator
-Segment::getEndMarker()
+Segment::getEndMarker() const
 {
     if (m_endMarkerTime) {
         return findTime(*m_endMarkerTime);

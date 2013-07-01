@@ -126,6 +126,8 @@ public:
     static const int QuantizedNoteMinValue;
     static const int TriggerNoteHue;
     static const int TriggerNoteMinValue;
+    static const int TriggerSkipHue;
+    static const int TriggerSkipMinValue;
     static const int OutRangeNoteHue;
     static const int OutRangeNoteMinValue;
 

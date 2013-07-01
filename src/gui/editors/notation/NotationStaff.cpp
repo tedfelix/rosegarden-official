@@ -1580,9 +1580,20 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     }
     params.setQuantized(quantized);
 
-    bool trigger = false;
-    if (elt->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) trigger = true;
-    params.setTrigger(trigger);
+    Event *e = elt->event();
+    NotePixmapParameters::Triggering triggering;
+    if (e->has(BaseProperties::TRIGGER_EXPAND)) {
+        bool sounds = (e->get<Bool>(BaseProperties::TRIGGER_EXPAND));
+        if (sounds)
+            { triggering = NotePixmapParameters::triggerYes; }
+        else { triggering = NotePixmapParameters::triggerSkip; }
+    } else {
+        if (e->has(BaseProperties::TRIGGER_SEGMENT_ID))
+            { triggering = NotePixmapParameters::triggerYes; }
+        else { triggering = NotePixmapParameters::triggerNone; }
+    }
+
+    params.setTrigger(triggering);
 
     bool inRange = true;
     Pitch p(*elt->event());

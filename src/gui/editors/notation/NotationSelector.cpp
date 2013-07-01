@@ -57,7 +57,7 @@ namespace Rosegarden
  
 using namespace BaseProperties;
 
-NotationSelector::NotationSelector(NotationWidget *widget) :
+NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     NotationTool("notationselector.rc", "NotationSelector", widget),
     m_selectionRect(0),
     m_updateRect(false),
@@ -65,7 +65,8 @@ NotationSelector::NotationSelector(NotationWidget *widget) :
     m_clickedElement(0),
     m_selectionToMerge(0),
     m_justSelectedBar(false),
-    m_wholeStaffSelectionComplete(false)
+    m_wholeStaffSelectionComplete(false),
+    m_ties(ties)
 {
     connect(m_widget, SIGNAL(usedSelection()),
             this, SLOT(slotHideSelection()));
@@ -300,6 +301,10 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     NOTATION_DEBUG << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
 
+    // We can lose m_selectionRect since the click under some
+    // conditions.
+    if (!m_selectionRect) { return; }
+
     // Test how far we've moved from the original click position -- not
     // how big the rectangle is (if we were dragging an event, the
     // rectangle size will still be zero).
@@ -340,9 +345,11 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
                 // if the event was already part of the selection, we want to
                 // remove it
                 if (m_selectionToMerge->contains(m_clickedElement->event())) {
-                    m_selectionToMerge->removeEvent(m_clickedElement->event());
+                    m_selectionToMerge->removeEvent(m_clickedElement->event(),
+                                                    m_ties);
                 } else {
-                    m_selectionToMerge->addEvent(m_clickedElement->event());
+                    m_selectionToMerge->addEvent(m_clickedElement->event(),
+                                                 m_ties);
                 }
                 
                 m_scene->setSelection(m_selectionToMerge, true);
@@ -409,7 +416,7 @@ void NotationSelector::drag(int x, int y, bool final)
     if (!selection || !selection->contains(m_clickedElement->event())) {
         selection = new EventSelection(m_selectedStaff->getSegment());
         NOTATION_DEBUG << "(selection does not contain our event " << m_clickedElement->event() << " of type " << m_clickedElement->event()->getType() << ", adding it)" << endl;
-        selection->addEvent(m_clickedElement->event());
+        selection->addEvent(m_clickedElement->event(), m_ties);
     }
     m_scene->setSelection(selection, false);
 
@@ -613,7 +620,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
     if (!selection)
         selection = new EventSelection(m_selectedStaff->getSegment());
     if (!selection->contains(m_clickedElement->event()))
-        selection->addEvent(m_clickedElement->event());
+        selection->addEvent(m_clickedElement->event(), m_ties);
     m_scene->setSelection(selection, false);
 
     // Fine drag modifies the DISPLACED_X and DISPLACED_Y properties on
@@ -886,7 +893,7 @@ NotationSelector::getEventsInSelectionRect()
         // we can't select events across multiple segments
         if (selection->getSegment().findSingle(element->event()) !=
             selection->getSegment().end()) {
-            selection->addEvent(element->event());
+            selection->addEvent(element->event(), m_ties);
         }
     }
 
@@ -899,6 +906,8 @@ NotationSelector::getEventsInSelectionRect()
 }
 
 const QString NotationSelector::ToolName = "notationselector";
+
+const QString NotationSelectorNoTies::ToolName = "notationselectornoties";
 
 }
 #include "NotationSelector.moc"

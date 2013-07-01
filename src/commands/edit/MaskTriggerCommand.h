@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2013 the Rosegarden development team.
+    Copyright 2000-2012 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,50 +15,39 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ERASECOMMAND_H_
-#define _RG_ERASECOMMAND_H_
+#ifndef _MASKTRIGGERCOMMAND_H_
+#define _MASKTRIGGERCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
-
-
-
 
 namespace Rosegarden
 {
-
 class EventSelection;
 
 
-/// Erase a selection from within a segment
-
-class EraseCommand : public BasicSelectionCommand
+/** Add or subtract a constant from all event velocities.
+    Use SelectionPropertyCommand if you want to do something more
+    creative. */
+class MaskTriggerCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MaskTriggerCommand)
 
 public:
-    EraseCommand(EventSelection &selection);
+    MaskTriggerCommand(EventSelection &selection, bool sounding) :
+        BasicSelectionCommand(getGlobalName(sounding), selection, true),
+        m_selection(&selection), m_sounding(sounding) { }
 
-    static QString getGlobalName() { return tr("&Erase"); }
-
-    // Return whether any deletions that affect later in the segment
-    // were done, meaning key or clef deletions.
-    static bool eraseInSegment(EventSelection *selection);
-    
-    virtual timeT getRelayoutEndTime();
+	static QString getGlobalName(bool sounding);
 
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    timeT m_relayoutEndTime;
+    bool m_sounding;
 };
-
 
 
 }
 
-#endif
+#endif /* ifndef _MASKTRIGGERCOMMAND_H_ */

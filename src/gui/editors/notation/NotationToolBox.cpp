@@ -73,6 +73,10 @@ NotationToolBox::createTool(QString toolName)
 
         tool = new NotationSelector(m_widget);
 
+    else if (toolNamelc == NotationSelectorNoTies::ToolName)
+
+        tool = new NotationSelectorNoTies(m_widget);
+
     else if (toolNamelc == NoteRestInserter::ToolName)
 
         tool = new NoteRestInserter(m_widget);

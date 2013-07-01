@@ -29,10 +29,60 @@
 namespace Rosegarden
 {
 
-class Segment;
 class Composition;
 class Clipboard;
+class Segment;
+class EventSelection;
 
+ class PasteToTriggerSegmentWorker
+{
+public:
+    /// If basePitch is -1, the first pitch in the selection will be used
+    PasteToTriggerSegmentWorker
+      (Composition *composition,
+       // This takes ownership of clipboard.
+       // OK to pass NULL clipboard
+       Clipboard *clipboard,
+       // The label given to the ornament.
+       QString label,
+       int basePitch = -1,
+       int baseVelocity = -1);
+
+    PasteToTriggerSegmentWorker
+      (Composition *composition,
+       const EventSelection * selection,
+       // The label given to the ornament.
+       QString label,
+       int basePitch = -1,
+       int baseVelocity = -1);
+    
+    ~PasteToTriggerSegmentWorker();
+
+    void execute();
+    void unexecute();
+
+    // Since TriggerSegmentId is unsigned, we can't "x<0" it to check
+    // if it's valid.  So we resort to a hack: since m_segment gets a
+    // non-null value at the same time, we check for that.
+    bool hasTriggerSegmentId(void)
+    { return m_segment != 0; }
+    TriggerSegmentId getTriggerSegmentId(void)
+    { return m_id; }
+    int getBasePitch(void)
+    { return m_basePitch;}
+    int getBaseVelocity(void)
+    { return m_baseVelocity;}
+    
+protected:
+    Composition *m_composition;
+    Clipboard *m_clipboard;
+    QString m_label;
+    int m_basePitch;
+    int m_baseVelocity;
+    Segment *m_segment;
+    TriggerSegmentId m_id;
+    bool m_detached;
+};
 
 class PasteToTriggerSegmentCommand : public NamedCommand
 {
@@ -51,14 +101,7 @@ public:
     virtual void unexecute();
 
 protected:
-    Composition *m_composition;
-    Clipboard *m_clipboard;
-    QString m_label;
-    int m_basePitch;
-    int m_baseVelocity;
-    Segment *m_segment;
-    TriggerSegmentId m_id;
-    bool m_detached;
+    PasteToTriggerSegmentWorker m_worker;
 };
 
 

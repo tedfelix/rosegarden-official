@@ -67,6 +67,10 @@ public:
     NotationWidget();
     virtual ~NotationWidget();
 
+    // Delete and zero the pointer members if they are allocated.  For
+    // 2-stage deletion.
+    void clearAll(void);
+
     void setSegments(RosegardenDocument *document, 
                      std::vector<Segment *> segments);
 
@@ -139,6 +143,7 @@ signals:
 public slots:
     void slotSetTool(QString name);
     void slotSetSelectTool();
+    void slotSetSelectNoTiesTool();
     void slotSetEraseTool();
     void slotSetNoteRestInserter();
     void slotSetNoteInserter();
