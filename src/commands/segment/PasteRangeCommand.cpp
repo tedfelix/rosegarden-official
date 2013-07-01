@@ -18,14 +18,13 @@
 
 #include "PasteRangeCommand.h"
 
-#include "AudioSegmentSplitCommand.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "commands/edit/PasteSegmentsCommand.h"
+#include "commands/segment/InsertRangeCommand.h"
 #include "OpenOrCloseRangeCommand.h"
 #include "PasteConductorDataCommand.h"
-#include "SegmentSplitCommand.h"
 
 
 namespace Rosegarden
@@ -68,28 +67,9 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
         t1 = t0 + duration;
     }
 
-    // Need to split segments before opening, at t0
-    
-    // ??? Is this similar to InsertRangeCommand?  Can we use that instead?
+    InsertRangeCommand::addInsertionCommands(this, composition,
+                                             t0, t1 - t0);
 
-    // For each segment in the composition
-    for (Composition::iterator i = composition->begin();
-            i != composition->end(); ++i) {
-
-        // If the segment doesn't cross the paste point (t0), try the next.
-        if ((*i)->getStartTime() >= t0 || (*i)->getEndMarkerTime() <= t0) {
-            continue;
-        }
-
-        // Split this segment at the paste point (t0).
-        if ((*i)->getType() == Segment::Audio) {
-            addCommand(new AudioSegmentSplitCommand(*i, t0));
-        } else {
-            addCommand(new SegmentSplitCommand(*i, t0));
-        }
-    }
-
-    addCommand(new OpenOrCloseRangeCommand(composition, t0, t1, true));
     addCommand(new PasteSegmentsCommand
                (composition, clipboard, t0,
                 composition->getTrackByPosition(0)->getId(),

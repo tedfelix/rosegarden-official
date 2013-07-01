@@ -310,12 +310,30 @@ Composition::addAllSegments(segmentcontainer segments)
         { addSegment(*i); }
 }
 
+void
+Composition::addAllSegments(SegmentVec segments)
+{
+    for (SegmentVec::iterator i = segments.begin();
+         i != segments.end();
+         ++i)
+        { addSegment(*i); }
+}
+
 // Detach every segment in segmentcontainer
 // @author Tom Breton (Tehom)
 void
 Composition::detachAllSegments(segmentcontainer segments)
 {
     for (segmentcontainer::iterator i = segments.begin();
+         i != segments.end();
+         ++i)
+        { detachSegment(*i); }    
+}
+
+void
+Composition::detachAllSegments(SegmentVec segments)
+{
+    for (SegmentVec::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { detachSegment(*i); }    

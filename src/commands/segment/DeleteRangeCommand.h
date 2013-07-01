@@ -41,35 +41,6 @@ public:
                        timeT begin,
                        timeT end);
     virtual ~DeleteRangeCommand();
-
-
-    class RejoinCommand : public NamedCommand
-    {
-    public:
-        // This command rejoins pairs of subsequent segment on the same
-        // track. Segments pairs are defined using the addSegmentsPair
-        // method.
-
-        RejoinCommand() :
-            NamedCommand(tr("Rejoin Command"))
-            { }
-
-        virtual ~RejoinCommand();
-
-        // Add a pair of segments that will be jointed later
-        void addSegmentsPair(Segment *s1, Segment *s2);
-
-        void execute();
-        void unexecute();
-
-
-    private:
-        Segment *m_segment;
-        timeT m_endMarkerTime;
-        Composition *m_composition;
-
-        std::vector<SegmentJoinCommand *> m_rejoins;
-    };
 };
 
 

@@ -66,6 +66,8 @@ public:
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
 
+    typedef std::vector<Segment *> SegmentVec;
+
     typedef std::map<TrackId, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
     typedef trackcontainer::const_iterator trackconstiterator;
@@ -333,11 +335,13 @@ public:
      * Add every segment in segmentcontainer
      */
     void addAllSegments(segmentcontainer segments);
+    void addAllSegments(SegmentVec segments);
 
     /**
      * Detach every segment in segmentcontainer
      */
     void detachAllSegments(segmentcontainer segments);
+    void detachAllSegments(SegmentVec segments);
 
     //////
     //

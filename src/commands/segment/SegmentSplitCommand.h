@@ -25,6 +25,7 @@
 
 #include <QCoreApplication>
 
+#include <vector>
 
 namespace Rosegarden
 {
@@ -37,6 +38,7 @@ class SegmentSplitCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSplitCommand)
 
 public:
+    typedef std::vector<Segment *> SegmentVec;
 
     // If keepLabel is true, "(split)" is not append to the new segments label
     SegmentSplitCommand(Segment *segment,
@@ -44,11 +46,14 @@ public:
                         bool keepLabel = false);
     virtual ~SegmentSplitCommand();
 
-    bool isValid();
+    bool isValid() { return isValid(m_segment, m_splitTime); }
+    bool isValid(Segment * segment, timeT splitTime);
 
     virtual void execute();
     virtual void unexecute();
-    
+
+    static SegmentVec getNewSegments(Segment *segment, timeT splitTime,
+				     bool keepLabel);
     Segment *getSegmentA() { return m_newSegmentA; }
     Segment *getSegmentB() { return m_newSegmentB; }
 

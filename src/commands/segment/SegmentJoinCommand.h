@@ -39,16 +39,18 @@ class SegmentJoinCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand)
 
 public:
+    typedef std::vector<Segment *> SegmentVec;
     SegmentJoinCommand(SegmentSelection &segments);
     virtual ~SegmentJoinCommand();
 
     virtual void execute();
     virtual void unexecute();
+    static Segment *makeSegment(SegmentVec oldSegments);
 
     static QString getGlobalName() { return tr("&Join"); }
     
 private:
-    std::vector<Segment *> m_oldSegments;
+    SegmentVec m_oldSegments;
     Segment *m_newSegment;
     bool m_detached;
 };

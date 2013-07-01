@@ -36,6 +36,9 @@ class InsertRangeCommand : public MacroCommand
 public:
     InsertRangeCommand(Composition *composition,
 		       timeT startTime, timeT duration);
+    static void addInsertionCommands(MacroCommand *macroCommand,
+				     Composition *composition,
+				     timeT startTime, timeT duration);
 };
     
 

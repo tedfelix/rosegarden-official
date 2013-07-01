@@ -59,46 +59,31 @@ SegmentSplitCommand::~SegmentSplitCommand()
 //   deal with failure within CommandHistory::addCommand().  That seems
 //   like a big project, however.
 bool 
-SegmentSplitCommand::isValid()
+SegmentSplitCommand::isValid(Segment * segment, timeT splitTime)
 {
     // Can't split before or at the very start of a segment.
-    if (m_splitTime <= m_segment->getStartTime())
+    if (splitTime <= segment->getStartTime())
         return false;
 
     // Can't split after or at the very end of a segment.
-    if (m_splitTime >= m_segment->getEndMarkerTime())
+    if (splitTime >= segment->getEndMarkerTime())
         return false;
 
     return true;
 }
 
-void
-SegmentSplitCommand::execute()
+SegmentSplitCommand::SegmentVec
+SegmentSplitCommand::
+getNewSegments(Segment *segment, timeT splitTime, bool keepLabel)
 {
-    m_wasSelected =
-        RosegardenMainWindow::self()->getView()->getTrackEditor()->
-            getCompositionView()->getModel()->isSelected(m_segment);
+    Segment * newSegmentA = segment->clone(false);
+    Segment * newSegmentB = new Segment();
 
-    if (m_newSegmentA) {
-        
-        m_segment->getComposition()->addSegment(m_newSegmentA);
-        m_segment->getComposition()->addSegment(m_newSegmentB);
+    newSegmentB->setTrack(segment->getTrack());
+    newSegmentB->setStartTime(splitTime);
 
-        m_segment->getComposition()->detachSegment(m_segment);
-
-        m_detached = false; // i.e. new segments are not detached
-        return;
-    }
-
-    m_newSegmentA = m_segment->clone(false);
-    m_newSegmentB = new Segment();
-
-    m_newSegmentB->setTrack(m_segment->getTrack());
-    m_newSegmentB->setStartTime(m_splitTime);
-
-    m_segment->getComposition()->addSegment(m_newSegmentA);
-    m_segment->getComposition()->addSegment(m_newSegmentB);
-
+    // !!! Set Composition?
+    
     Event *clefEvent = 0;
     Event *keyEvent = 0;
 
@@ -106,18 +91,18 @@ SegmentSplitCommand::execute()
     // from the left hand side of the split (nb. timesig events
     // don't appear in segments, only in composition)
     //
-    Segment::iterator it = m_segment->findTime(m_splitTime);
+    Segment::iterator it = segment->findTime(splitTime);
 
-    while (it != m_segment->begin()) {
+    while (it != segment->begin()) {
 
         --it;
 
         if (!clefEvent && (*it)->isa(Clef::EventType)) {
-            clefEvent = new Event(**it, m_splitTime);
+            clefEvent = new Event(**it, splitTime);
         }
 
         if (!keyEvent && (*it)->isa(Key::EventType)) {
-            keyEvent = new Event(**it, m_splitTime);
+            keyEvent = new Event(**it, splitTime);
         }
 
         if (clefEvent && keyEvent)
@@ -127,65 +112,87 @@ SegmentSplitCommand::execute()
     // Insert relevant meta info if we've found some
     //
     if (clefEvent)
-        m_newSegmentB->insert(clefEvent);
+        newSegmentB->insert(clefEvent);
 
     if (keyEvent)
-        m_newSegmentB->insert(keyEvent);
+        newSegmentB->insert(keyEvent);
 
     // Copy through the Events
     //
-    it = m_segment->findTime(m_splitTime);
+    it = segment->findTime(splitTime);
 
-    if (it != m_segment->end() && (*it)->getAbsoluteTime() > m_splitTime) {
-        m_newSegmentB->fillWithRests((*it)->getAbsoluteTime());
+    if (it != segment->end() && (*it)->getAbsoluteTime() > splitTime) {
+        newSegmentB->fillWithRests((*it)->getAbsoluteTime());
     }
 
-    while (it != m_segment->end()) {
-        m_newSegmentB->insert(new Event(**it));
+    while (it != segment->end()) {
+        newSegmentB->insert(new Event(**it));
         ++it;
     }
-    m_newSegmentB->setEndTime(m_segment->getEndTime());
-    m_newSegmentB->setEndMarkerTime(m_segment->getEndMarkerTime());
+    newSegmentB->setEndTime(segment->getEndTime());
+    newSegmentB->setEndMarkerTime(segment->getEndMarkerTime());
 
     // Set labels
     //
-    std::string label = m_segment->getLabel();
-    m_newSegmentA->setLabel(label);
-    m_newSegmentB->setLabel(label);
-    if (!m_keepLabel) {
-        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
-        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
+    std::string label = segment->getLabel();
+    newSegmentA->setLabel(label);
+    newSegmentB->setLabel(label);
+    if (!keepLabel) {
+        newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
+        newSegmentB->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
     }
 
-    m_newSegmentB->setColourIndex(m_segment->getColourIndex());
-    m_newSegmentB->setTranspose(m_segment->getTranspose());
-    m_newSegmentB->setDelay(m_segment->getDelay());
+    newSegmentB->setColourIndex(segment->getColourIndex());
+    newSegmentB->setTranspose(segment->getTranspose());
+    newSegmentB->setDelay(segment->getDelay());
 
     // Resize left hand Segment
     //
     std::vector<Event *> toErase, toInsert;
-    for (Segment::iterator i = m_newSegmentA->findTime(m_splitTime);
-         i != m_newSegmentA->end(); ++i) {
-        if ((*i)->getAbsoluteTime() >= m_splitTime) break;
-        if ((*i)->getAbsoluteTime() + (*i)->getDuration() > m_splitTime) {
+    for (Segment::iterator i = newSegmentA->findTime(splitTime);
+         i != newSegmentA->end(); ++i) {
+        if ((*i)->getAbsoluteTime() >= splitTime) break;
+        if ((*i)->getAbsoluteTime() + (*i)->getDuration() > splitTime) {
             Event *e = new Event(**i, (*i)->getAbsoluteTime(),
-                                 m_splitTime - (*i)->getAbsoluteTime());
+                                 splitTime - (*i)->getAbsoluteTime());
             toErase.push_back(*i);
             toInsert.push_back(e);
         }
     }
 
     for (size_t i = 0; i < toErase.size(); ++i) {
-        m_newSegmentA->eraseSingle(toErase[i]);
+        newSegmentA->eraseSingle(toErase[i]);
         delete toErase[i];
     }
     for (size_t i = 0; i < toInsert.size(); ++i) {
-        m_newSegmentA->insert(toInsert[i]);
+        newSegmentA->insert(toInsert[i]);
     }
 
-    m_newSegmentA->setEndTime(m_splitTime);
-    m_newSegmentA->setEndMarkerTime(m_splitTime);
+    newSegmentA->setEndTime(splitTime);
+    newSegmentA->setEndMarkerTime(splitTime);
+    SegmentVec segmentVec;
+    segmentVec.reserve(2);
+    segmentVec.push_back(newSegmentA);
+    segmentVec.push_back(newSegmentB);
+    return segmentVec;
+}
 
+void
+SegmentSplitCommand::execute()
+{
+    m_wasSelected =
+        RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getCompositionView()->getModel()->isSelected(m_segment);
+
+    if (!m_newSegmentA) {
+        SegmentVec splitSegments =
+            getNewSegments(m_segment, m_splitTime, m_keepLabel);
+        m_newSegmentA = splitSegments[0];
+        m_newSegmentB = splitSegments[1];
+    }
+    
+    m_segment->getComposition()->addSegment(m_newSegmentA);
+    m_segment->getComposition()->addSegment(m_newSegmentB);
     m_segment->getComposition()->detachSegment(m_segment);
 
     m_detached = false; // i.e. new segments are not detached
