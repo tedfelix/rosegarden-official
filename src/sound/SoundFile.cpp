@@ -233,7 +233,7 @@ SoundFile::getShortFilename() const
     QString rS = m_fileName;
     size_t pos = rS.lastIndexOf("/");
 
-    if (pos > 0 && ( pos + 1 ) < (int)rS.length())
+    if (pos > 0 && ( pos + 1 ) < (size_t)rS.length())
         rS = rS.mid(pos + 1, rS.length());
 
     return rS;

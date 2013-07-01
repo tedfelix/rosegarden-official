@@ -306,6 +306,8 @@ PeakFileManager::stopPreview()
             std::cout << "PeakFileManager::stopPreview() - removed preview"
             << std::endl;
         }
+#else
+        (void)removed;
 #endif
         //delete m_currentPeakFile;
         m_currentPeakFile = 0;

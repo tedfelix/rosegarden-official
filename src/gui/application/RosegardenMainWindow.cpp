@@ -1599,6 +1599,7 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
     case ImportMusicXML:
         doc = createDocumentFromMusicXMLFile(filePath);
         break;
+    case ImportHydrogen:
     case ImportRG4:
     case ImportCheckType:
     default:

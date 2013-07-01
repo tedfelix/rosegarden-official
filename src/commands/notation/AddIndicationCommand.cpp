@@ -52,34 +52,6 @@ static std::vector<std::string> getStandardIndications()
     return v;
 }
 
-static const char *shortcuts[] = {
-    ")",
-    "Ctrl+)",
-    "",
-    "<",
-    ">",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""
-};
-static const char *icons[] = {
-    "group-slur",
-    "",
-    "group-glissando",
-    "group-crescendo",
-    "group-decrescendo",
-    "",
-    "group-ottava",
-    "",
-    "",
-    "trill_line",
-    "",
-    ""
-};
 static const char *actionNames[] = {
     "slur",
     "phrasing_slur",

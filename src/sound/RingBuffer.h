@@ -291,7 +291,7 @@ RingBuffer<T, N>::resized(int newSize, int R) const
     while (r != w) {
         T value = m_buffer[r];
         newBuffer->write(&value, 1);
-        if (++r == m_size) r = 0;
+        if (++r == (int)m_size) r = 0;
     }
 
     return newBuffer;
