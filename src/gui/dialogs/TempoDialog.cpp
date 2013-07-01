@@ -213,7 +213,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         connect(m_tempoChangeGlobal, SIGNAL(clicked()),
                 SLOT(slotActionChanged()));
 
-        m_tempoChangeHere->setChecked(true);
+        m_tempoChangeBefore->setChecked(true);
 
         // disable initially
         m_defaultBox->setEnabled(false);
