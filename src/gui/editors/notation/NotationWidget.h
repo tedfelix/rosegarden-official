@@ -168,7 +168,7 @@ public slots:
     void slotTogglePitchbendRuler();
     void slotAddControlRuler(QAction*);
 
-    void slotUpdatePointerPosition(bool moveView = true);
+    void slotUpdatePointerPosition(bool moveView = false);
     
     void slotRegenerateHeaders();
 
