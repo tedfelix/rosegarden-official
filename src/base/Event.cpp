@@ -411,6 +411,17 @@ Event::clearNonPersistentProperties()
     if (m_nonPersistentProperties) m_nonPersistentProperties->clear();
 }
 
+void
+Event::unsafeChangeTime(timeT offset)
+{
+    // Get the values first, because notation time will sometimes use
+    // m_absoluteTime, sometimes not.
+    const timeT oldTime = getAbsoluteTime();
+    const timeT oldNotationTime = getNotationAbsoluteTime();
+    setAbsoluteTime(oldTime + offset);
+    setNotationAbsoluteTime(oldNotationTime + offset);
+}
+
 size_t
 Event::getStorageSize() const
 {

@@ -14,6 +14,7 @@
 */
 
 #include "ViewSegment.h"
+#include "base/Profiler.h"
 
 namespace Rosegarden 
 {
@@ -102,6 +103,7 @@ ViewSegment::findEvent(Event *e)
 void
 ViewSegment::eventAdded(const Segment *t, Event *e)
 {
+    Profiler profiler("ViewSegment::eventAdded");
     assert(t == &m_segment);
     (void)t; // avoid warnings
 
@@ -115,6 +117,7 @@ ViewSegment::eventAdded(const Segment *t, Event *e)
 void
 ViewSegment::eventRemoved(const Segment *t, Event *e)
 {
+    Profiler profiler("ViewSegment::eventRemoved");
     assert(t == &m_segment);
     (void)t; // avoid warnings
 
@@ -178,6 +181,7 @@ ViewSegment::segmentDeleted(const Segment *s)
 void
 ViewSegment::notifyAdd(ViewElement *e) const
 {
+    Profiler profiler("ViewSegment::notifyAdd");
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->elementAdded(this, e);
@@ -187,6 +191,7 @@ ViewSegment::notifyAdd(ViewElement *e) const
 void
 ViewSegment::notifyRemove(ViewElement *e) const
 {
+    Profiler profiler("ViewSegment::notifyRemove");
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->elementRemoved(this, e);

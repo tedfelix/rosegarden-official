@@ -142,6 +142,7 @@ public:
     // SegmentObserver
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
+    virtual void AllEventsChanged(const Segment *s);
     virtual void appearanceChanged(const Segment *);
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
     virtual void segmentDeleted(const Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };

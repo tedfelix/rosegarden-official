@@ -338,8 +338,11 @@ Segment::getEndTime() const
 void
 Segment::setStartTime(timeT t)
 {
+    Profiler profiler("Segment::setStartTime()");
+    typedef std::multiset<Event*, Event::EventCmp> base;
     int dt = t - m_startTime;
     if (dt == 0) return;
+    timeT previousEndTime = m_endTime;
 
     // reset the time of all events.  can't just setAbsoluteTime on these,
     // partly 'cos we're not allowed, partly 'cos it might screw up the
@@ -349,24 +352,71 @@ Segment::setStartTime(timeT t)
 
     FastVector<Event *> events;
 
+    /** This is effectively calling Segment::erase on each event after
+        copyMoving it.  Segment::erase did the following:
+        
+        1. base::erase
+	2. Delete the event
+	3. Kept m_startTime up to date
+	4. Kept m_endTime up to date
+	5. updateRefreshStatuses
+        6. Thru notifyRemove, notify observers eventRemoved
+        7. Thru notifyRemove, remove clefs and keys from
+	   m_clefKeyList
+
+      1 is done explicitly here.  3, 4, 5, and 7 are done en masse
+      below.  6 is accomplished via AllEventsChanged.  2 is no longer
+      wanted since we need to insert the same event.
+     **/
+
+    // We do the removing in two phases: A lightweight removal that
+    // leaves events still in the multiset, and then we clear the
+    // whole set.
     for (iterator i = begin(); i != end(); ++i) {
-        events.push_back((*i)->copyMoving(dt));
+        Event *e = *i;
+        // AllEventsChanged is allowed to assume the address points to
+        // the Event it knew about, so we need the same object to be
+        // removed and added, so we can't use copyMoving.
+        e->unsafeChangeTime(dt);
+        events.push_back(e);
     }
+    base::clear();
 
-    timeT previousEndTime = m_endTime;
-
-    erase(begin(), end());
-
+    if (m_clefKeyList) { m_clefKeyList->clear(); }
+    
     m_endTime = previousEndTime + dt;
     if (m_endMarkerTime) *m_endMarkerTime += dt;
 
     if (m_composition) m_composition->setSegmentStartTime(this, t);
     else m_startTime = t;
 
+    /** This is effectively calling Segment::insert on each event.
+        Segment::insert did the following:
+
+	1. base::insert
+	2. Kept m_startTime up to date
+	3. Kept m_endTime up to date
+	4. Set the TMP property if applicable
+	5. updateRefreshStatuses
+        6. Thru notifyAdd, notified observers eventAdded
+        7. Thru notifyAdd, added clefs and keys to m_clefKeyList
+
+        1 and 7 are done explicitly here.  2, 3 & 5 are done en masse.
+        6 is accomplished via AllEventsChanged.  4 works because we
+        keep the same event object.
+     **/
     for (int i = 0; i < int(events.size()); ++i) {
-        insert(events[i]);
+        Event *e = events[i];
+        base::insert(e);
+        checkInsertAsClefKey(e);
     }
 
+    // Handle updates and notifications just once.
+    for (ObserverSet::const_iterator i = m_observers.begin();
+         i != m_observers.end(); ++i) {
+        (*i)->AllEventsChanged(this);
+    }
+    notifyEndMarkerChange(dt < 0);
     notifyStartChanged(m_startTime);
     updateRefreshStatuses(m_startTime, m_endTime);
 }
@@ -1359,16 +1409,21 @@ Segment::getRepeatEndTime() const
     return endMarker;
 }
 
+void
+Segment::
+checkInsertAsClefKey(Event *e) const
+{
+    if (e->isa(Clef::EventType) || e->isa(Key::EventType)) {
+        if (!m_clefKeyList) m_clefKeyList = new ClefKeyList;
+        m_clefKeyList->insert(e);
+    }
+}
 
 void
 Segment::notifyAdd(Event *e) const
 {
     Profiler profiler("Segment::notifyAdd()");
-
-    if (e->isa(Clef::EventType) || e->isa(Key::EventType)) {
-        if (!m_clefKeyList) m_clefKeyList = new ClefKeyList;
-        m_clefKeyList->insert(e);
-    }
+    checkInsertAsClefKey(e);
 
     for (ObserverSet::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
@@ -1412,6 +1467,7 @@ Segment::notifyAppearanceChange() const
 void
 Segment::notifyStartChanged(timeT newTime)
 {
+    Profiler profiler("Segment::notifyStartChanged()");
     if (m_notifyResizeLocked) return;
 
     for (ObserverSet::const_iterator i = m_observers.begin();
@@ -1623,6 +1679,17 @@ Segment::dumpObservers()
     }
 }
 
+void
+SegmentObserver::
+AllEventsChanged(const Segment *s)
+{
+    Profiler profiler("SegmentObserver::AllEventsChanged");
+    for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+        Event *e = *i;
+        eventRemoved(s, e);
+        eventAdded(s, e);
+    }
+}
 
 }
 

@@ -344,6 +344,7 @@ Composition::findSegment(const Segment *s)
 
 void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 {
+    Profiler profiler("Composition::setSegmentStartTime");
     // remove the segment from the multiset
     iterator i = findSegment(segment);
     if (i == end()) return;

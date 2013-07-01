@@ -826,6 +826,8 @@ public:
 
 
 private:
+    void checkInsertAsClefKey(Event *e) const;
+    
     Composition *m_composition; // owns me, if it exists
 
     timeT  m_startTime;
@@ -946,6 +948,11 @@ public:
      * and just before it is deleted
      */
     virtual void eventRemoved(const Segment *, Event *) { }
+
+    // Exists just for performance reasons.  Called in lieu of calling
+    // eventAdded or eventRemoved many times.  The default just calls
+    // both eventRemoved() and eventAdded() on every event.
+    virtual void AllEventsChanged(const Segment *);
 
     /**
      * Called after a change in the segment that will change the way its displays,

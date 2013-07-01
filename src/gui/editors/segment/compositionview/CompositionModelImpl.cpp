@@ -549,6 +549,13 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
     emit needContentUpdate(computeSegmentRect(*s));
 }
 
+void CompositionModelImpl::AllEventsChanged(const Segment *s)
+{
+     Profiler profiler("CompositionModelImpl::AllEventsChanged()");
+    removePreviewCache(s);
+    emit needContentUpdate(computeSegmentRect(*s));
+}
+
 void CompositionModelImpl::appearanceChanged(const Segment *s)
 {
     //RG_DEBUG << "CompositionModelImpl::appearanceChanged";

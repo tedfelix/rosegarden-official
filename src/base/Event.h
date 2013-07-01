@@ -304,6 +304,13 @@ public:
      */
     void clearNonPersistentProperties();
 
+    // Move Event in time without any ancillary co-ordination.
+    /**
+     * UNSAFE.  Don't call this unless you know exactly what you're
+     * doing.
+     */
+    void unsafeChangeTime(timeT offset);
+
     /**
      * Comparator structure used when creating sets and multisets of
      * Event, like Segment
