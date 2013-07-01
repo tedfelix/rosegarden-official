@@ -2204,4 +2204,22 @@ NotationStaff::makeViewElement(Rosegarden::Event* e)
     return new NotationElement(e);
 }
 
+bool
+NotationStaff::includesTime(timeT t)
+{
+    Composition *composition = getSegment().getComposition();
+    
+    // In order to find the correct starting and ending bar of the
+    // segment, make infinitesimal shifts (+1 and -1) towards its
+    // center.
+
+    timeT t0 = composition->getBarStartForTime
+        (getSegment().getClippedStartTime() + 1);
+
+    timeT t1 = composition->getBarEndForTime
+        (getSegment().getEndMarkerTime() - 1);
+
+    return (t >= t0 && t < t1);
+}
+
 }

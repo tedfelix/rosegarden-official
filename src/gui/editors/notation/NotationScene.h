@@ -90,15 +90,12 @@ public:
     NotationStaff *getCurrentStaff();
     void setCurrentStaff(NotationStaff *);
 
-    NotationStaff *getStaffAbove();
-    NotationStaff *getStaffBelow();
+    NotationStaff *getStaffAbove(timeT t);
+    NotationStaff *getStaffBelow(timeT t);
     NotationStaff *getPriorStaffOnTrack();
     NotationStaff *getNextStaffOnTrack();
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
-
-    NotationStaff *getNextStaffVertically(int direction);
-    NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
 
     Segment *getCurrentSegment();
 
@@ -272,6 +269,10 @@ protected:
 
 private:
     void setNotePixmapFactories(QString fontName = "", int size = -1);
+    NotationStaff *getNextStaffVertically(int direction, timeT t);
+    NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
+    NotationStaff *getStaffbyTrackAndTime(const Track *track, timeT targetTime);
+    void initCurrentStaffIndex(void);
 
     NotationWidget *m_widget; // I do not own this
 
@@ -346,6 +347,7 @@ private:
     bool m_sceneIsEmpty;   // No more segment in scene
     bool m_showRepeated;   // Repeated segments are visible
     bool m_editRepeated;   // Direct edition of repeated segments is allowed
+    bool m_haveInittedCurrentStaff;
 };
 
 }

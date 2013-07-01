@@ -79,7 +79,8 @@ NotationScene::NotationScene() :
     m_finished(false),
     m_sceneIsEmpty(false),
     m_showRepeated(false),
-    m_editRepeated(false)
+    m_editRepeated(false),
+    m_haveInittedCurrentStaff(false)
 {
     QString prefix(QString("NotationScene%1::").arg(instanceCount++));
     m_properties = new NotationProperties(qstrtostr(prefix));
@@ -350,10 +351,16 @@ NotationScene::setStaffs(RosegardenDocument *document,
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         m_segments[i]->addObserver(m_clefKeyContext);
     }
-
+    
+    // We don't know a good current staff now.  This is correct even
+    // if we are resetting an existing NotationScene because the old
+    // current staff may not even exist.
+    m_haveInittedCurrentStaff = false;
+    
     if (!m_updatesSuspended) {
         positionStaffs();
         layoutAll();
+        initCurrentStaffIndex();
     }
 
 
@@ -427,6 +434,7 @@ NotationScene::resumeLayoutUpdates()
     // happened while updates were suspended
     positionStaffs();
     layoutAll();
+    initCurrentStaffIndex();
 }
 
 NotationStaff *
@@ -447,17 +455,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 
         timeT t = m_hlayout->getTimeForX(coords.first);
 
-	// In order to find the correct starting and ending bar of the
-	// segment, make infinitesimal shifts (+1 and -1) towards its
-	// center.
-
-	timeT t0 = m_document->getComposition().getBarStartForTime
-            (m_staffs[m_currentStaff]->getSegment().getClippedStartTime() + 1);
-
-	timeT t1 = m_document->getComposition().getBarEndForTime
-            (m_staffs[m_currentStaff]->getSegment().getEndMarkerTime() - 1);
-
-        if (t >= t0 && t < t1) {
+        if (m_staffs[m_currentStaff]->includesTime(t)) {
             return m_staffs[m_currentStaff];
         }
     }
@@ -480,16 +478,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 
 	    timeT t = m_hlayout->getTimeForX(coords.first);
 
-	    // In order to find the correct starting and ending bar of
-	    // the segment, make infinitesimal shifts (+1 and -1)
-	    // towards its center.
-
-	    timeT t0 = m_document->getComposition().getBarStartForTime
-                (m_staffs[i]->getSegment().getClippedStartTime() + 1);
-	    timeT t1 = m_document->getComposition().getBarEndForTime
-                (m_staffs[i]->getSegment().getEndMarkerTime() - 1);
-
-	    if (t >= t0 && t < t1) {
+	    if (m_staffs[i]->includesTime(t)) {
                 return m_staffs[i];
             }
         }
@@ -499,15 +488,15 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 }
 
 NotationStaff *
-NotationScene::getStaffAbove()
+NotationScene::getStaffAbove(timeT t)
 {
-    return getNextStaffVertically(-1);
+    return getNextStaffVertically(-1, t);
 }
 
 NotationStaff *
-NotationScene::getStaffBelow()
+NotationScene::getStaffBelow(timeT t)
 {
-    return getNextStaffVertically(1);
+    return getNextStaffVertically(1, t);
 }
 
 NotationStaff *
@@ -523,7 +512,37 @@ NotationScene::getNextStaffOnTrack()
 }
 
 NotationStaff *
-NotationScene::getNextStaffVertically(int direction)
+NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
+{
+    // Prepare a fallback: If this is the right track but no staff
+    // includes time t, we'll return the fallback instead.  We
+    // don't try to find the best fallback.
+    bool haveFallback = false;
+    NotationStaff * fallback = 0;
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
+            if(m_staffs[i]->includesTime(targetTime)) {
+                return m_staffs[i];
+            } else {
+                haveFallback = true;
+                fallback = m_staffs[i];
+            }
+        }
+    }
+    // We found segments on the track, but none that include time
+    // t.  In this circumstance, we still want to return a staff
+    // so return the fallback.
+    if (haveFallback) { return fallback; }
+    
+    return 0;
+}
+
+// @params
+// direction is 1 if higher-numbered tracks are wanted, -1 if
+// lower-numbered ones are.
+// t is a time that the found staff should contain if possible.
+NotationStaff *
+NotationScene::getNextStaffVertically(int direction, timeT t)
 {
     if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return 0;
 
@@ -536,11 +555,8 @@ NotationScene::getNextStaffVertically(int direction)
     Track *newTrack = 0;
 
     while ((newTrack = composition->getTrackByPosition(position + direction))) {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                return m_staffs[i];
-            }
-        }
+        NotationStaff * staff = getStaffbyTrackAndTime(newTrack, t);
+        if (staff) { return staff; }
         position += direction;
     }
 
@@ -587,6 +603,51 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle)
 
     return i.value();
 }
+
+// Initialize which staff is current.  We try to choose one containing
+// the playback pointer.
+void
+NotationScene::initCurrentStaffIndex(void)
+{
+    // Only do this if we haven't done it before since the last reset,
+    // otherwise we'll annoy the user.
+    if (m_haveInittedCurrentStaff) { return; }
+    m_haveInittedCurrentStaff = true;
+    
+    // Can't do much if we have no staffs.
+    if (m_staffs.empty()) { return; }
+
+    Composition &composition = m_document->getComposition();
+    timeT targetTime = composition.getPosition();
+    
+    // Try the globally selected track (which we may not even include
+    // any segments from)
+    {
+        const Track *track = composition.getTrackById(composition.getSelectedTrack());
+        NotationStaff *staff = getStaffbyTrackAndTime(track, targetTime);
+        if (staff) {
+            setCurrentStaff(staff);
+            return;
+        }
+    }
+
+    // Try m_minTrack, which we surely include some segment from.
+    {
+        // Careful, m_minTrack is an int indicating position, not a
+        // TrackId, and must be converted.
+        const Track *track = 
+            composition.getTrackByPosition(m_minTrack);
+        NotationStaff *staff = getStaffbyTrackAndTime(track, targetTime);
+        if (staff) {
+            setCurrentStaff(staff);
+            return;
+        }
+    }
+    
+    // We shouldn't reach here.
+    std::cerr << "Argh! Failed to find a staff!" << std::endl;
+}
+
 
 Segment *
 NotationScene::getCurrentSegment()

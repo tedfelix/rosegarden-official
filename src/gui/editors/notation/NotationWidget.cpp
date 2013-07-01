@@ -440,7 +440,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, SIGNAL(sceneNeedsRebuilding()), Qt::QueuedConnection);
 
     connect(m_scene, SIGNAL(currentStaffChanged()),
-            this, SLOT(slotUpdatePointerPosition()));
+            this, SLOT(slotUpdatePointerPosition(true)));
 
     connect(m_scene, SIGNAL(selectionChanged()),
             m_view, SLOT(updateScene()));
@@ -561,6 +561,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // position.
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     slotHScroll();
+
+    // This call lets scene do setup and layout that didn't happen
+    // while updates were suspended.  We need this now so that scene
+    // calculates position correctly for slotPointerPositionChanged.
+    resumeLayoutUpdates();
+
+    slotPointerPositionChanged(m_document->getComposition().getPosition(),
+                               true);
 }
 
 void
@@ -709,7 +717,7 @@ NotationWidget::slotSetFontSize(int size)
     // Force standard rulers and pointer pointer to refresh -- otherwise
     m_bottomStandardRuler->updateStandardRuler();
     m_topStandardRuler->updateStandardRuler();
-    slotUpdatePointerPosition();
+    slotUpdatePointerPosition(false);
 }
 
 NotationTool *
@@ -832,10 +840,10 @@ NotationWidget::slotTogglePlayTracking()
 }
 
 void
-NotationWidget::slotUpdatePointerPosition()
+NotationWidget::slotUpdatePointerPosition(bool moveView)
 {
-    // Update pointer position, but don't scroll
-    slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
+    slotPointerPositionChanged(m_document->getComposition().getPosition(),
+                               moveView);
 }
 
 void

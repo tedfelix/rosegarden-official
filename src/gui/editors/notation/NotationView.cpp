@@ -1853,7 +1853,8 @@ NotationView::slotCurrentStaffUp()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    NotationStaff *staff = scene->getStaffAbove();
+    timeT targetTime = m_doc->getComposition().getPosition();
+    NotationStaff *staff = scene->getStaffAbove(targetTime);
     if (!staff) return;
     scene->setCurrentStaff(staff);
 }
@@ -1863,7 +1864,8 @@ NotationView::slotCurrentStaffDown()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    NotationStaff *staff = scene->getStaffBelow();
+    timeT targetTime = m_doc->getComposition().getPosition();
+    NotationStaff *staff = scene->getStaffBelow(targetTime);
     if (!staff) return;
     scene->setCurrentStaff(staff);
 }
@@ -4250,7 +4252,8 @@ NotationView::slotMoveEventsUpStaff()
 
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    NotationStaff *target_staff = scene->getStaffAbove();
+    timeT targetTime = selection->getStartTime();
+    NotationStaff *target_staff = scene->getStaffAbove(targetTime);
     if (!target_staff) return;
 
     Segment *segment = &target_staff->getSegment();
@@ -4282,7 +4285,8 @@ NotationView::slotMoveEventsDownStaff()
 
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    NotationStaff *target_staff = scene->getStaffBelow();
+    timeT targetTime = selection->getStartTime();
+    NotationStaff *target_staff = scene->getStaffBelow(targetTime);
     if (!target_staff) return;
 
     Segment *segment = &target_staff->getSegment();

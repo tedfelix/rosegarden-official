@@ -282,6 +282,8 @@ public:
      */
     timeT getTimeAtSceneCoords(double x, int y) const;
 
+    bool includesTime(timeT t);
+    
 protected:
 
     virtual ViewElement* makeViewElement(Event*);
