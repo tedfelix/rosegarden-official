@@ -42,7 +42,7 @@ using std::string;
 static int _runtimeSegmentId = 0;
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
-    std::multiset<Event*, Event::EventCmp>(),
+    EventContainer(),
     m_composition(0),
     m_startTime(startTime),
     m_endMarkerTime(0),
@@ -84,7 +84,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
 
 Segment::Segment(const Segment &segment):
     QObject(),
-    std::multiset<Event*, Event::EventCmp>(),
+    EventContainer(),
     m_composition(0), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
     m_endMarkerTime(segment.m_endMarkerTime ?
@@ -352,7 +352,7 @@ void
 Segment::setStartTime(timeT t)
 {
     Profiler profiler("Segment::setStartTime()");
-    typedef std::multiset<Event*, Event::EventCmp> base;
+    typedef EventContainer base;
     int dt = t - m_startTime;
     if (dt == 0) return;
     timeT previousEndTime = m_endTime;
@@ -578,7 +578,7 @@ Segment::insert(Event *e)
     // To do so each event in such a segment needs the TMP property.
     if (isTmp()) e->set<Bool>(BaseProperties::TMP, true, false);
 
-    iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
+    iterator i = EventContainer::insert(e);
     notifyAdd(e);
     updateRefreshStatuses(e->getAbsoluteTime(),
                           e->getAbsoluteTime() + e->getDuration());
@@ -608,7 +608,7 @@ Segment::erase(iterator pos)
     timeT t0 = e->getAbsoluteTime();
     timeT t1 = t0 + e->getDuration();
 
-    std::multiset<Event*, Event::EventCmp>::erase(pos);
+    EventContainer::erase(pos);
     notifyRemove(e);
     delete e;
     updateRefreshStatuses(t0, t1);
@@ -647,7 +647,7 @@ Segment::erase(iterator from, iterator to)
         Event *e = *i;
         assert(e);
 
-        std::multiset<Event*, Event::EventCmp>::erase(i);
+        EventContainer::erase(i);
         notifyRemove(e);
         delete e;
 
@@ -1709,6 +1709,18 @@ AllEventsChanged(const Segment *s)
         eventRemoved(s, e);
         eventAdded(s, e);
     }
+}
+
+// Find the next Event of "type".
+EventContainer::iterator
+EventContainer::findEventOfType(EventContainer::iterator i,
+                                const std::string &type)
+{
+    for (; i != end(); ++i) {
+        Event *e = *i;
+        if (e->isa(type)) { return i; }
+    }
+    return i;
 }
 
 }

@@ -56,6 +56,18 @@ class BasicCommand;
 
 /// Container of Event objects.
 /**
+ * EventContainer is a precursor to Segment, used in code that needs
+ * to store events but doesn't need all the ancillary data and
+ * behaviors that Segment provides.
+ **/
+class EventContainer : public std::multiset<Event*, Event::EventCmp>
+{
+ public:
+    iterator findEventOfType(iterator i, const std::string &type);
+};
+
+/// Container of Event objects.
+/**
  * Segment is the container for a set of Events that are all played on
  * the same track.  Each event has an absolute starting time,
  * which is used as the index within the segment.  Multiple events may
@@ -73,7 +85,7 @@ class BasicCommand;
  *
  * The Segment owns the Events its items are pointing at.
  */
-class Segment : public QObject, public std::multiset<Event*, Event::EventCmp>
+class Segment : public QObject, public EventContainer
 {
   Q_OBJECT
 

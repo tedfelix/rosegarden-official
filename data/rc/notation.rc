@@ -28,14 +28,21 @@
     <Action name="general_paste" text="Pa&amp;ste..." shortcut="Alt+Shift+V" />
     <Action name="delete" text="De&amp;lete" shortcut="Delete" />
   <Separator/>
-    <Action name="move_events_up_staff" text="&amp;Move to Staff Above" />
-    <Action name="move_events_down_staff" text="Move to Staff &amp;Below" />
+    <Action name="move_events_up_staff" 
+	    text="&amp;Move to Staff Above" />
+    <Action name="general_move_events_up_staff" 
+	    text="&amp;Move to Staff Above..." />
+    <Action name="move_events_down_staff" 
+	    text="Move to Staff &amp;Below" />
+    <Action name="general_move_events_down_staff" 
+	    text="Move to Staff &amp;Below..." />
   <Separator/>
     <Action name="select_from_start" text="Select from Sta&amp;rt" />
     <Action name="select_to_end" text="Select to &amp;End" />
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
+    <Action name="select_evenly_spaced_notes" text="Select Evenl&amp;y Spaced Notes" />
   <Separator/>
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
   <Separator/>
@@ -844,6 +851,8 @@
     <Action name="make_visible"/>
     <Action name="move_events_up_staff"/>
     <Action name="move_events_down_staff"/>
+    <Action name="general_move_events_up_staff"/>
+    <Action name="general_move_events_down_staff"/>
   </enable>
 </State>
 
@@ -1029,6 +1038,8 @@
     <Action name="cursor_next_segment"/>
     <Action name="move_events_up_staff"/>
     <Action name="move_events_down_staff"/>
+    <Action name="general_move_events_up_staff"/>
+    <Action name="general_move_events_down_staff"/>
   </enable>
 </State>
 <State name="focus_adopted_segment">

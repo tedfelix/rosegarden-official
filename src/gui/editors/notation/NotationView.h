@@ -134,8 +134,7 @@ protected slots:
     void slotEditTranspose();
     void slotEditSwitchPreset();
 
-    void slotMoveEventsUpStaff();
-    void slotMoveEventsDownStaff();
+    void slotGeneralMoveEventsToStaff(bool upStaff, bool useDialog);
 
     void slotPreviewSelection();
     void slotClearLoop();
@@ -144,6 +143,7 @@ protected slots:
     void slotEditSelectToEnd();
     void slotEditSelectWholeStaff();
     void slotFilterSelection();
+    void slotSelectEvenlySpacedNotes();
     void slotVelocityUp();
     void slotVelocityDown();
     void slotSetVelocities();

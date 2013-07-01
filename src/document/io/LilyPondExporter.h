@@ -79,7 +79,7 @@ class LilyPondExporter : public ProgressReporter
 {
     //Q_OBJECT
 public:
-    typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
+    typedef EventContainer eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 
 public:

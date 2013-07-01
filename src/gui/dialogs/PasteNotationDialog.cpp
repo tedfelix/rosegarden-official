@@ -19,25 +19,27 @@
 #include "PasteNotationDialog.h"
 
 #include "commands/edit/PasteEventsCommand.h"
+#include "misc/ConfigGroups.h"
+
+#include <QCheckBox>
+#include <QDesktopServices>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
-#include <QCheckBox>
 #include <QObject>
 #include <QRadioButton>
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QSettings>
 #include <QUrl>
-#include <QDesktopServices>
+#include <QVBoxLayout>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-PasteNotationDialog::PasteNotationDialog(QWidget *parent,
-        PasteEventsCommand::PasteType defaultType) :
-        QDialog(parent),
-        m_defaultType(defaultType)
+PasteNotationDialog::PasteNotationDialog(QWidget *parent) :
+    QDialog(parent),
+    m_defaultType(getSavedPasteType())
 {
     //setHelp("nv-paste-types");
 
@@ -92,6 +94,19 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 }
 
 PasteEventsCommand::PasteType
+PasteNotationDialog::getSavedPasteType()
+{
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    PasteEventsCommand::PasteType type =
+        (PasteEventsCommand::PasteType)
+        settings.value("pastetype",
+                       PasteEventsCommand::Restricted).toUInt();
+    settings.endGroup();
+    return type;
+}
+
+PasteEventsCommand::PasteType
 PasteNotationDialog::getPasteType() const
 {
     for (unsigned int i = 0; i < m_pasteTypeButtons.size(); ++i) {
@@ -115,6 +130,17 @@ PasteNotationDialog::slotPasteTypeChanged()
     m_setAsDefaultButton->setChecked(m_defaultType == getPasteType());
 }
 
+void
+PasteNotationDialog::accept()
+{
+    if (setAsDefault()) {
+        QSettings settings;
+        settings.beginGroup(NotationViewConfigGroup);
+        settings.setValue("pastetype", getPasteType());
+        settings.endGroup();
+    }
+    QDialog::accept();
+}
 
 void
 PasteNotationDialog::slotHelpRequested()

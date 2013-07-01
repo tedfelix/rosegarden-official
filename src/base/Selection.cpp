@@ -137,10 +137,10 @@ EventSelection::eraseThisEvent(Event *e)
     
     if (!contains(e)) return;  // This probably not needed.
 
-    std::pair<eventcontainer::iterator, eventcontainer::iterator> 
+    std::pair<EventContainer::iterator, EventContainer::iterator> 
 	interval = m_segmentEvents.equal_range(e);
 
-    for (eventcontainer::iterator it = interval.first;
+    for (EventContainer::iterator it = interval.first;
          it != interval.second; ++it) {
 
         if (*it == e) {
@@ -294,7 +294,7 @@ EventSelection::addEvent(Event *e, bool ties)
 void
 EventSelection::addFromSelection(EventSelection *sel, bool ties)
 {
-    for (eventcontainer::iterator i = sel->getSegmentEvents().begin();
+    for (EventContainer::iterator i = sel->getSegmentEvents().begin();
 	 i != sel->getSegmentEvents().end(); ++i) {
 	// contains() checked a bit deeper now
 	addEvent(*i, ties);
@@ -310,10 +310,10 @@ EventSelection::removeEvent(Event *e, bool ties)
 bool
 EventSelection::contains(Event *e) const
 {
-    std::pair<eventcontainer::const_iterator, eventcontainer::const_iterator> 
+    std::pair<EventContainer::const_iterator, EventContainer::const_iterator> 
 	interval = m_segmentEvents.equal_range(e);
 
-    for (eventcontainer::const_iterator it = interval.first;
+    for (EventContainer::const_iterator it = interval.first;
          it != interval.second; ++it)
     {
         if (*it == e) return true;
@@ -325,7 +325,7 @@ EventSelection::contains(Event *e) const
 bool
 EventSelection::contains(const std::string &type) const
 {
-    for (eventcontainer::const_iterator i = m_segmentEvents.begin();
+    for (EventContainer::const_iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
 	if ((*i)->isa(type)) return true;
     }
@@ -345,7 +345,7 @@ EventSelection::getNotationStartTime() const
     bool first = true;
     // inefficient, but the simplest way to be sure (since events are
     // not ordered in notation time)
-    for (eventcontainer::const_iterator i = m_segmentEvents.begin();
+    for (EventContainer::const_iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
 	timeT t = (*i)->getNotationAbsoluteTime();
 	if (first || t < start) start = t;
@@ -361,7 +361,7 @@ EventSelection::getNotationEndTime() const
     bool first = true;
     // inefficient, but the simplest way to be sure (since events are
     // not ordered in notation time)
-    for (eventcontainer::const_iterator i = m_segmentEvents.begin();
+    for (EventContainer::const_iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
 	timeT t = (*i)->getNotationAbsoluteTime() + (*i)->getNotationDuration();
 	if (first || t > end) end = t;
@@ -377,7 +377,7 @@ EventSelection::getTotalNotationDuration() const
     bool first = true;
     // inefficient, but the simplest way to be sure (since events are
     // not ordered in notation time)
-    for (eventcontainer::const_iterator i = m_segmentEvents.begin();
+    for (EventContainer::const_iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
 	timeT t = (*i)->getNotationAbsoluteTime();
 	if (first || t < start) start = t;

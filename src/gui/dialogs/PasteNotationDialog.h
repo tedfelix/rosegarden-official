@@ -39,17 +39,18 @@ class PasteNotationDialog : public QDialog
     Q_OBJECT
 
 public:
-    PasteNotationDialog(QWidget *parent,
-                        PasteEventsCommand::PasteType defaultType);
+    PasteNotationDialog(QWidget *parent);
 
     PasteEventsCommand::PasteType getPasteType() const;
-    bool setAsDefault() const;
+    static PasteEventsCommand::PasteType getSavedPasteType();
 
 public slots:
     void slotPasteTypeChanged();
     void slotHelpRequested();
 
 protected:
+    bool setAsDefault() const;
+    virtual void accept();
 
     //--------------- Data members ---------------------------------
 

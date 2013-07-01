@@ -42,7 +42,7 @@ public:
 class EventSelection : public SegmentObserver
 {
 public:
-    typedef std::multiset<Event*, Event::EventCmp> eventcontainer;
+    typedef EventContainer eventcontainer;
 
     /**
      * Construct an empty EventSelection based on the given Segment.
@@ -153,8 +153,8 @@ public:
      */
     unsigned int getAddedEvents() const { return m_segmentEvents.size(); }
 
-    const eventcontainer &getSegmentEvents() const { return m_segmentEvents; }
-    eventcontainer &getSegmentEvents()             { return m_segmentEvents; }
+    const EventContainer &getSegmentEvents() const { return m_segmentEvents; }
+    EventContainer &getSegmentEvents()             { return m_segmentEvents; }
 
     const Segment &getSegment() const { return m_originalSegment; }
     Segment &getSegment()             { return m_originalSegment; }
@@ -199,7 +199,7 @@ protected:
     Segment& m_originalSegment;
 
     /// pointers to Events in the original Segment
-    eventcontainer m_segmentEvents;
+    EventContainer m_segmentEvents;
 
     timeT m_beginTime;
     timeT m_endTime;

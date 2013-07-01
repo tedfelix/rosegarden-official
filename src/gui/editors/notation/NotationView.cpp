@@ -76,6 +76,7 @@
 #include "commands/edit/CollapseNotesCommand.h"
 #include "commands/edit/AddDotCommand.h"
 #include "commands/edit/SetNoteTypeCommand.h"
+#include "commands/edit/SelectAddEvenNotesCommand.h"
 #include "commands/edit/MaskTriggerCommand.h"
 #include "commands/edit/PlaceControllersCommand.h"
 
@@ -486,13 +487,20 @@ NotationView::setupActions()
     createAction("cut_and_close", SLOT(slotEditCutAndClose()));
     createAction("general_paste", SLOT(slotEditGeneralPaste()));
     createAction("delete", SLOT(slotEditDelete()));
-    createAction("move_events_up_staff", SLOT(slotMoveEventsUpStaff()));
-    createAction("move_events_down_staff", SLOT(slotMoveEventsDownStaff()));
+    createAction("move_events_up_staff",
+                 SLOT(slotGeneralMoveEventsToStaff(true, false)));
+    createAction("general_move_events_up_staff",
+                 SLOT(slotGeneralMoveEventsToStaff(true, true)));
+    createAction("move_events_down_staff",
+                 SLOT(slotGeneralMoveEventsToStaff(false, false)));
+    createAction("general_move_events_down_staff",
+                 SLOT(slotGeneralMoveEventsToStaff(false, true)));
     createAction("select_from_start", SLOT(slotEditSelectFromStart()));
     createAction("select_to_end", SLOT(slotEditSelectToEnd()));
     createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
+    createAction("select_evenly_spaced_notes", SLOT(slotSelectEvenlySpacedNotes()));
     createAction("expression_sequence", SLOT(slotExpressionSequence()));    
     createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));    
     createAction("controller_sequence", SLOT(slotControllerSequence()));    
@@ -1631,12 +1639,8 @@ NotationView::slotEditPaste()
         (clipboard->getSingleSegment()->getEndTime() -
          clipboard->getSingleSegment()->getStartTime());
 
-    QSettings settings;
-    settings.beginGroup(NotationViewConfigGroup);
-
-    PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
-        settings.value("pastetype",
-                       PasteEventsCommand::Restricted).toUInt();
+    PasteEventsCommand::PasteType defaultType =
+        PasteNotationDialog::getSavedPasteType();
 
     PasteEventsCommand *command = new PasteEventsCommand
         (*segment, clipboard, insertionTime, defaultType);
@@ -1666,8 +1670,6 @@ NotationView::slotEditPaste()
 //!!!        slotSetInsertCursorPosition(endTime, true, false);
         m_document->slotSetPointerPosition(endTime);
     }
-
-    settings.endGroup();
 }
 
 void
@@ -1685,22 +1687,11 @@ NotationView::slotEditGeneralPaste()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    QSettings settings;
-    settings.beginGroup(NotationViewConfigGroup);
-
-    PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
-        settings.value("pastetype",
-                       PasteEventsCommand::Restricted).toUInt();
-    
-    PasteNotationDialog dialog(this, defaultType);
+    PasteNotationDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
 
         PasteEventsCommand::PasteType type = dialog.getPasteType();
-        if (dialog.setAsDefault()) {
-            //###settings.beginGroup( NotationViewConfigGroup );
-            settings.setValue("pastetype", type);
-        }
 
         timeT insertionTime = getInsertionTime();
         timeT endTime = insertionTime +
@@ -1737,8 +1728,6 @@ NotationView::slotEditGeneralPaste()
             m_document->slotSetPointerPosition(endTime);
         }
     }
-
-    settings.endGroup();
 }
 
 void
@@ -1832,6 +1821,21 @@ NotationView::slotFilterSelection()
             setSelection(0, false);
         }
     }
+}
+
+// Launch SelectAddEvenNotesCommand
+void
+NotationView::slotSelectEvenlySpacedNotes()
+{
+    if (!getSelection()) { return; }
+
+    EventSelection *eventSelection = getSelection();
+    BasicCommand *command = new
+        SelectAddEvenNotesCommand(SelectAddEvenNotesCommand::findBeatEvents(eventSelection),
+                           &eventSelection->getSegment());
+
+    CommandHistory::getInstance()->addCommand(command);
+    setSelection(command->getSubsequentSelection(), false);    
 }
 
 void
@@ -4444,8 +4448,15 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
     action->setChecked(obj == this);
 }
 
+// Move the selected events to another staff
+// @param upStaff
+// if true, move them to the staff above this one, otherwise to the
+// staff below.
+// @param useDialog
+// Whether to use a dialog, otherwise use default values and no
+// interaction.
 void
-NotationView::slotMoveEventsUpStaff()
+NotationView::slotGeneralMoveEventsToStaff(bool upStaff, bool useDialog)
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -4453,45 +4464,31 @@ NotationView::slotMoveEventsUpStaff()
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
     timeT targetTime = selection->getStartTime();
-    NotationStaff *target_staff = scene->getStaffAbove(targetTime);
-    if (!target_staff) return;
 
-    Segment *segment = &target_staff->getSegment();
+    PasteEventsCommand::PasteType type;
 
-    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Above"));
+    if (useDialog) {
+        PasteNotationDialog dialog(this);
+        if (dialog.exec() != QDialog::Accepted) { return; } 
+        type = dialog.getPasteType();
+    } else {
+        type = PasteEventsCommand::NoteOverlay;
+    }
 
-    timeT insertionTime = selection->getStartTime();
-
-    Clipboard *c = new Clipboard;
-    CopyCommand *cc = new CopyCommand(*selection, c);
-    cc->execute();
-
-    command->addCommand(new EraseCommand(*selection));
-
-    command->addCommand(new PasteEventsCommand
-                        (*segment, c, insertionTime,
-                         PasteEventsCommand::NoteOverlay));
+    NotationStaff *target_staff =
+        upStaff ?
+        scene->getStaffAbove(targetTime) :
+        scene->getStaffBelow(targetTime);
+    QString commandName = 
+        upStaff ?
+        tr("Move Events to Staff Above") :
+        tr("Move Events to Staff Below");
     
-    CommandHistory::getInstance()->addCommand(command);
-
-    delete c;
-}
-
-void
-NotationView::slotMoveEventsDownStaff()
-{
-    EventSelection *selection = getSelection();
-    if (!selection) return;
-
-    NotationScene *scene = m_notationWidget->getScene();
-    if (!scene) return;
-    timeT targetTime = selection->getStartTime();
-    NotationStaff *target_staff = scene->getStaffBelow(targetTime);
     if (!target_staff) return;
 
     Segment *segment = &target_staff->getSegment();
 
-    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Below"));
+    MacroCommand *command = new MacroCommand(commandName);
 
     timeT insertionTime = selection->getStartTime();
 
@@ -4503,7 +4500,7 @@ NotationView::slotMoveEventsDownStaff()
 
     command->addCommand(new PasteEventsCommand
                         (*segment, c, insertionTime,
-                         PasteEventsCommand::NoteOverlay));
+                         type));
     
     CommandHistory::getInstance()->addCommand(command);
 
