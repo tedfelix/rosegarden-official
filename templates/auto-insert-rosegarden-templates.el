@@ -124,6 +124,14 @@
 namespace Rosegarden
 \{
    "(strings->comment short-desc)"
+class "base-file-name"
+\{
+public:
+    "base-file-name"()
+    {}
+
+private:
+\};
 }
 
 #endif "(strings->comment " ifndef "guard-str)"
