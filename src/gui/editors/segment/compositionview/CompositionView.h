@@ -428,35 +428,37 @@ protected:
 
     /// Draw the segments on the segment layer (m_segmentsLayer).
     /**
-     * Draws the background then calls drawArea() to draw the segments on the
+     * Draws the background then calls drawSegments() to draw the segments on the
      * segments layer (m_segmentsLayer).  Used by
      * scrollSegmentsLayer().
      */
     void refreshSegments(const QRect&);
     /// Draw the artifacts on the double-buffer (m_doubleBuffer).
     /*
-     * Calls drawAreaArtifacts() to draw the artifacts on the double-buffer
+     * Calls drawArtifacts() to draw the artifacts on the double-buffer
      * (m_doubleBuffer).  Used by viewportPaintRect().
      */
     void refreshArtifacts(const QRect&);
 
     /// Draws the segments on the segments layer (m_segmentsLayer).
     /**
+     * Also draws the track dividers.
+     *
      * Used by refreshSegments().
      */
-    void drawArea(QPainter *segmentLayerPainter, const QRect& rect);
+    void drawSegments(QPainter *segmentLayerPainter, const QRect& rect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
-     * Used by drawArea().
+     * Used by drawSegments().
      */
-    void drawAreaAudioPreviews(QPainter * p, const QRect& rect);
+    void drawAudioPreviews(QPainter * p, const QRect& rect);
     /// Draws the overlay artifacts on the double-buffer.
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
      * position pointer, guides, and the "rubber band" selection.  Used by
      * refreshArtifacts().
      */
-    void drawAreaArtifacts(QPainter * p, const QRect& rect);
+    void drawArtifacts(QPainter * p, const QRect& rect);
     /// Draws a rectangle on the given painter with proper clipping.
     /**
      * This is an improved QPainter::drawRect().
@@ -468,25 +470,25 @@ protected:
     /// A version of drawRect() that handles segment repeats.
     void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
                       int intersectLvl = 0, bool fill = true);
-    /// Used by drawArea() to draw the segment labels.
+    /// Used by drawSegments() to draw the segment labels.
     /**
      * @see setShowSegmentLabels()
      */
     void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
-    /// Used by drawArea() to draw any intersections between rectangles.
+    /// Used by drawSegments() to draw any intersections between rectangles.
     void drawIntersections(const CompositionModel::rectcontainer&, QPainter * p, const QRect& clipRect);
 
-    /// Used by drawAreaArtifacts() to draw the playback position pointer.
+    /// Used by drawArtifacts() to draw the playback position pointer.
     /**
      * @see setPointerPos() and setPointerPosition()
      */
     void drawPointer(QPainter * p, const QRect& clipRect);
-    /// Used by drawAreaArtifacts() to draw the guides on the double-buffer.
+    /// Used by drawArtifacts() to draw the guides on the double-buffer.
     /**
      * @see setGuidesPos() and setDrawGuides()
      */
     void drawGuides(QPainter * p, const QRect& clipRect);
-    /// Used by drawAreaArtifacts() to draw floating text.
+    /// Used by drawArtifacts() to draw floating text.
     /**
      * @see setTextFloat()
      */
@@ -659,7 +661,7 @@ protected:
 
     /// Layer that contains the segment rectangles.
     /**
-     * @see viewportPaintRect() and drawArea()
+     * @see viewportPaintRect() and drawSegments()
      */
     QPixmap      m_segmentsLayer;
 
