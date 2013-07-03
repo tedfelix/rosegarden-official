@@ -867,53 +867,76 @@ void CompositionView::refreshArtifacts(const QRect& rect)
     //    m_artifactsNeedRefresh = false;
 }
 
-void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
+void CompositionView::drawArea(QPainter *segmentLayerPainter, const QRect& clipRect)
 {
     Profiler profiler("CompositionView::drawArea");
 
-    //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
-    //
-    // Fetch track dividing lines
-    //
-    CompositionModel::heightlist lineHeights = getModel()->getTrackDividersIn(clipRect);
+    //RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect;
 
-    if (!lineHeights.empty()) {
+    // Fetch track Y coordinates within the clip rectangle.  We expand the
+    // clip rectangle slightly because we are drawing a rather wide track
+    // divider, so we need enough divider coords to do the drawing even
+    // though the center of the divider might be slightly outside of the
+    // viewport.
+    // This is not a height list.
+    CompositionModel::heightlist trackYCoords =
+            getModel()->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
+
+    if (!trackYCoords.empty()) {
 
         Profiler profiler("CompositionModel::drawArea: dividing lines");
 
-        p->save();
+        segmentLayerPainter->save();
+
+        // Select the lighter (middle) divider color.
         QColor light = m_trackDividerColor.light();
-        p->setPen(light);
-        
-        for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
-             hi != lineHeights.end(); ++hi) {
-            int y = *hi;
-            if (y-1 >= clipRect.y()) {
-                p->drawLine(clipRect.x(), y-1,
-                            clipRect.x() + clipRect.width() - 1, y-1);
+        segmentLayerPainter->setPen(light);
+
+        // For each track Y coordinate, draw the two light lines in the middle
+        // of the track divider.
+        for (CompositionModel::heightlist::const_iterator yi = trackYCoords.begin();
+             yi != trackYCoords.end(); ++yi) {
+            // Upper line.
+            int y = *yi - 1;
+            // If it's in the clipping area, draw it
+            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+                segmentLayerPainter->drawLine(
+                        clipRect.left(), y,
+                        clipRect.right(), y);
             }
-            if (y >= clipRect.y()) {
-                p->drawLine(clipRect.x(), y,
-                            clipRect.x() + clipRect.width() - 1, y);
+            // Lower line.
+            ++y;
+            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+                segmentLayerPainter->drawLine(
+                        clipRect.left(), y,
+                        clipRect.right(), y);
             }
         }
 
-        p->setPen(m_trackDividerColor);
+        // Switch to the darker divider color.
+        segmentLayerPainter->setPen(m_trackDividerColor);
 
-        for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
-             hi != lineHeights.end(); ++hi) {
-            int y = *hi;
-            if (y-2 >= clipRect.y()) {
-                p->drawLine(clipRect.x(), y-2,
-                            clipRect.x() + clipRect.width() - 1, y-2);
+        // For each track Y coordinate, draw the two dark lines on the outside
+        // of the track divider.
+        for (CompositionModel::heightlist::const_iterator yi = trackYCoords.begin();
+             yi != trackYCoords.end(); ++yi) {
+            // Upper line
+            int y = *yi - 2;
+            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+                segmentLayerPainter->drawLine(
+                        clipRect.x(), y,
+                        clipRect.x() + clipRect.width() - 1, y);
             }
-            if (y+1 >= clipRect.y()) {
-                p->drawLine(clipRect.x(), y+1,
-                            clipRect.x() + clipRect.width() - 1, y+1);
+            // Lower line
+            y += 3;
+            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+                segmentLayerPainter->drawLine(
+                        clipRect.x(), y,
+                        clipRect.x() + clipRect.width() - 1, y);
             }
         }
 
-        p->restore();
+        segmentLayerPainter->restore();
     }
 
     CompositionModel::AudioPreviewDrawData* audioPreviewData = 0;
@@ -944,16 +967,16 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         //
         // Draw Segment Rectangles
         //
-        p->save();
+        segmentLayerPainter->save();
         for (; i != end; ++i) {
-            p->setBrush(i->getBrush());
-            p->setPen(i->getPen());
+            segmentLayerPainter->setBrush(i->getBrush());
+            segmentLayerPainter->setPen(i->getPen());
 
             //         RG_DEBUG << "CompositionView::drawArea : draw comp rect " << *i << endl;
-            drawCompRect(*i, p, clipRect);
+            drawCompRect(*i, segmentLayerPainter, clipRect);
         }
 
-        p->restore();
+        segmentLayerPainter->restore();
 
     }
 
@@ -962,7 +985,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
         if (rects.size() > 1) {
             //         RG_DEBUG << "CompositionView::drawArea : drawing intersections\n";
-            drawIntersections(rects, p, clipRect);
+            drawIntersections(rects, segmentLayerPainter, clipRect);
         }
     }
 
@@ -970,14 +993,14 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     // Previews
     //
     if (m_showPreviews) {
-        p->save();
+        segmentLayerPainter->save();
 
         {
             Profiler profiler("CompositionView::drawArea: audio previews");
 
             // draw audio previews
             //
-            drawAreaAudioPreviews(p, clipRect);
+            drawAreaAudioPreviews(segmentLayerPainter, clipRect);
         }
 
         Profiler profiler("CompositionView::drawArea: note previews");
@@ -989,22 +1012,23 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
         for (; npi != npEnd; ++npi) {
             CompositionModel::RectRange interval = *npi;
-            p->save();
-            p->translate(interval.basePoint.x(), interval.basePoint.y());
+            segmentLayerPainter->save();
+            segmentLayerPainter->translate(
+                    interval.basePoint.x(), interval.basePoint.y());
 //            RG_DEBUG << "CompositionView::drawArea : translating to x = " << interval.basePoint.x() << endl;
             for (; interval.range.first != interval.range.second; ++interval.range.first) {
                 const PreviewRect& pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
-                p->setBrush(col);
-                p->setPen(QPen(col, 0));
+                segmentLayerPainter->setBrush(col);
+                segmentLayerPainter->setPen(QPen(col, 0));
                 //              RG_DEBUG << "CompositionView::drawArea : drawing preview rect at x = " << pr.x() << endl;
-                p->drawRect(pr);
+                segmentLayerPainter->drawRect(pr);
             }
-            p->restore();
+            segmentLayerPainter->restore();
         }
 
-        p->restore();
+        segmentLayerPainter->restore();
     }
 
     //
@@ -1013,7 +1037,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     if (m_showSegmentLabels) {
         Profiler profiler("CompositionView::drawArea: labels");
         for (i = rects.begin(); i != end; ++i) {
-            drawCompRectLabel(*i, p, clipRect);
+            drawCompRectLabel(*i, segmentLayerPainter, clipRect);
         }
     }
 

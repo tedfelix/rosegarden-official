@@ -286,37 +286,6 @@ public slots:
      */
     void slotUpdateAll(const QRect &rect);
 
-    /// Redraw everything with the new color scheme.
-    /**
-     * Connected to RosegardenDocument::docColoursChanged().
-     */
-    void slotRefreshColourCache();
-
-    /**
-     * Delegates to CompositionModelImpl::addRecordingItem().
-     * Connected to RosegardenDocument::newMIDIRecordingSegment().
-     *
-     * Suggestion: Try eliminating this middleman.
-     */
-    void slotNewMIDIRecordingSegment(Segment*);
-    /**
-     * Delegates to CompositionModelImpl::addRecordingItem().
-     * Connected to RosegardenDocument::newAudioRecordingSegment().
-     *
-     * Suggestion: Try eliminating this middleman.
-     */
-    void slotNewAudioRecordingSegment(Segment*);
-
-    // no longer used, see RosegardenDocument::insertRecordedMidi()
-//     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
-
-    /**
-     * Delegates to CompositionModelImpl::clearRecordingItems().
-     * Connected to RosegardenDocument::stoppedAudioRecording() and
-     * RosegardenDocument::stoppedMIDIRecording().
-     */
-    void slotStoppedRecording();
-
     /// Handles a view size change.
     /**
      * @see RosegardenScrollView::resizeContents().
@@ -475,7 +444,7 @@ protected:
     /**
      * Used by refreshSegments().
      */
-    void drawArea(QPainter * p, const QRect& rect);
+    void drawArea(QPainter *segmentLayerPainter, const QRect& rect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
      * Used by drawArea().
@@ -593,6 +562,37 @@ protected:
     }
 
 protected slots:
+    /// Redraw everything with the new color scheme.
+    /**
+     * Connected to RosegardenDocument::docColoursChanged().
+     */
+    void slotRefreshColourCache();
+
+    /**
+     * Delegates to CompositionModelImpl::addRecordingItem().
+     * Connected to RosegardenDocument::newMIDIRecordingSegment().
+     *
+     * Suggestion: Try eliminating this middleman.
+     */
+    void slotNewMIDIRecordingSegment(Segment*);
+    /**
+     * Delegates to CompositionModelImpl::addRecordingItem().
+     * Connected to RosegardenDocument::newAudioRecordingSegment().
+     *
+     * Suggestion: Try eliminating this middleman.
+     */
+    void slotNewAudioRecordingSegment(Segment*);
+
+    // no longer used, see RosegardenDocument::insertRecordedMidi()
+    //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
+
+    /**
+     * Delegates to CompositionModelImpl::clearRecordingItems().
+     * Connected to RosegardenDocument::stoppedAudioRecording() and
+     * RosegardenDocument::stoppedMIDIRecording().
+     */
+    void slotStoppedRecording();
+
     /// Updates the tool context help and shows it if the mouse is in the view.
     /**
      * The tool context help appears in the status bar at the bottom.
@@ -694,8 +694,8 @@ protected:
     QString      m_toolContextHelp;
     bool         m_contextHelpShown;
 
-    mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
-    mutable CompositionModel::RectRanges m_notationPreviewRects;
+    CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
+    CompositionModel::RectRanges m_notationPreviewRects;
 
     /// Drives slotUpdateTimer().
     QTimer *m_updateTimer;

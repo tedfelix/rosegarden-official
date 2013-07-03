@@ -64,6 +64,7 @@ public:
     };
 
     typedef std::vector<QRect> rectlist;
+    // ??? rename: ycoordlist  This is not a height list.
     typedef std::vector<int> heightlist;
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
