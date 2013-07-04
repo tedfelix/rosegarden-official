@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioPluginOSCGUI]"
+
 #include "AudioPluginOSCGUI.h"
 
 #include "misc/Debug.h"

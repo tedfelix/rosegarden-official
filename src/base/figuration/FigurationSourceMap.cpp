@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[FigurationSourceMap]"
+
 #include "FigurationSourceMap.h"
 #include "base/BaseProperties.h"
 #include "base/Event.h"

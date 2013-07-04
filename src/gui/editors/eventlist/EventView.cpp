@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[EventView]"
+
 #include "EventView.h"
 #include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"

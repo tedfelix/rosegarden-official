@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MidiInserter]"
+
 #include "MidiInserter.h"
 #include "base/Composition.h"
 #include "base/MidiTypes.h"

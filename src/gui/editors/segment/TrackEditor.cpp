@@ -17,6 +17,7 @@
 
 
 
+#define RG_MODULE_STRING "[TrackEditor]"
 
 #include "TrackEditor.h"
 #include "TrackButtons.h"

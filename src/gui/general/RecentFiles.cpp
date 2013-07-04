@@ -14,6 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[RecentFiles]"
+
 #include "RecentFiles.h"
 
 //#include "Preferences.h"

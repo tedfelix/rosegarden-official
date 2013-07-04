@@ -14,6 +14,9 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[ControlRulerWidget]"
+
 #include "ControlRulerWidget.h"
 
 #include "ControlRuler.h"

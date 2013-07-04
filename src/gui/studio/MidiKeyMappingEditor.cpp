@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MidiKeyMappingEditor]"
 
 #include "MidiKeyMappingEditor.h"
 #include "NameSetEditor.h"

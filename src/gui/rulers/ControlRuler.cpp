@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlRuler]"
+
 #include "ControlRuler.h"
 
 #include "base/Event.h"

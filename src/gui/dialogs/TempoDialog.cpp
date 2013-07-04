@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TempoDialog]"
 
 #include "TempoDialog.h"
 #include "misc/Debug.h"

@@ -15,7 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
-// #define NDEBUG 1
+#define RG_NO_DEBUG_PRINT
+#define RG_MODULE_STRING "[SelectAddEvenNotesCommand]"
+
 #include "SelectAddEvenNotesCommand.h"
 
 #include "base/Event.h"

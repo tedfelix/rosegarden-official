@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControllerEventAdapter]"
+
 #include "ControllerEventAdapter.h"
 #include "base/BaseProperties.h"
 #include "base/MidiTypes.h"

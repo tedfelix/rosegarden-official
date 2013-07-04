@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[main]"
+
 #include "misc/ConfigGroups.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"

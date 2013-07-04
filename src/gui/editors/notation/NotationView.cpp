@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationView]"
+
 #include "NotationView.h"
 
 #include "NotationWidget.h"

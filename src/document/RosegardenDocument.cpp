@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#define RG_MODULE_STRING "[RosegardenDocument]"
 #include "RosegardenDocument.h"
 
 #include "CommandHistory.h"

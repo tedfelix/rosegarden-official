@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[RosegardenMainWindow]"
+
 #include "RosegardenMainWindow.h"
 
 #include "gui/editors/segment/TrackEditor.h"

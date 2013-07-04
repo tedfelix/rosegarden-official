@@ -18,6 +18,7 @@
 
  */
 
+#define RG_MODULE_STRING "[DeviceManagerDialog]"
 
 #include "DeviceManagerDialog.h"
 

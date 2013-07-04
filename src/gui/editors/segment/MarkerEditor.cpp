@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MarkerEditor]"
+
 #include "MarkerEditor.h"
 #include "MarkerEditorViewItem.h"
 

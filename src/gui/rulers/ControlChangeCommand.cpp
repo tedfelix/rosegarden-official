@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlChangeCommand]"
+
 #include "ControlChangeCommand.h"
 #include "ControlItem.h"
 #include "misc/Debug.h"

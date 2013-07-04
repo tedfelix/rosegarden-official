@@ -18,6 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PresetGroup]"
 
 #include "PresetGroup.h"
 

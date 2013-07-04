@@ -12,6 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ResourceFinder]"
+
 #include "ResourceFinder.h"
 
 #include <QDir>

@@ -16,6 +16,7 @@
 */
 
 
+#define RG_MODULE_STRING "[MidiProgramsEditor]"
 
 #include "MidiProgramsEditor.h"
 #include "MidiBankTreeWidgetItem.h"

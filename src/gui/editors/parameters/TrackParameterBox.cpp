@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TrackParameterBox]"
 
 #include "TrackParameterBox.h"
 

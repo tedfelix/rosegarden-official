@@ -18,6 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TranzportClient]"
+
 #include "base/Exception.h"
 #include "commands/edit/AddMarkerCommand.h"
 #include "TranzportClient.h"

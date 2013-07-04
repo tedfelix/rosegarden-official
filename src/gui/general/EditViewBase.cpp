@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[EditViewBase]"
+
 #include "EditViewBase.h"
 
 #include "document/RosegardenDocument.h"

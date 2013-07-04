@@ -16,6 +16,8 @@
 */
 
 #define RG_NO_DEBUG_PRINT 1
+#define RG_MODULE_STRING "[BasicCommand]"
+
 #include "BasicCommand.h"
 
 #include "base/Segment.h"

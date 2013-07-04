@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TransportDialog]"
+
 #include "TransportDialog.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"

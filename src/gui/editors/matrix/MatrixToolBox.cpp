@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixToolBox]"
 
 #include "MatrixToolBox.h"
 #include "MatrixTool.h"

@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Panned]"
+
 #include "Panned.h"
 
 #include "misc/Debug.h"

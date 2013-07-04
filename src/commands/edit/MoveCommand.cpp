@@ -16,6 +16,8 @@
 */
 
 
+#define RG_MODULE_STRING "[MoveCommand]"
+
 #include "MoveCommand.h"
 
 #include "misc/Debug.h"

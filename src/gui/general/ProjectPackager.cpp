@@ -15,6 +15,8 @@
     COPYING included with this distribution for more m_information.
 */
 
+#define RG_MODULE_STRING "[ProjectPackager]"
+
 #include "ProjectPackager.h"
 
 #include "document/RosegardenDocument.h"

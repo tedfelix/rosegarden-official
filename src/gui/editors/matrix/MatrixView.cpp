@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixView]"
+
 #include "MatrixView.h"
 
 #include "MatrixWidget.h"
