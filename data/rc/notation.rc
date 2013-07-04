@@ -42,7 +42,7 @@
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
-    <Action name="select_evenly_spaced_notes" text="Select Evenl&amp;y Spaced Notes" />
+    <Action name="select_evenly_spaced_notes" text="&amp;Guess Beats" />
   <Separator/>
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
   <Separator/>
