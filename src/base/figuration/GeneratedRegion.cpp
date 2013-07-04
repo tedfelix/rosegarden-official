@@ -61,7 +61,7 @@ GeneratedRegion::getAsEvent(timeT absoluteTime) const
 const std::string
 GeneratedRegion::NotationString(void) const
 {
-    return qStrToStrLocal8(QObject::tr("G"));
+    return std::string("G");
 }
 }
 
