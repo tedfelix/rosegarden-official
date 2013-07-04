@@ -12,8 +12,8 @@
   <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="Nothing to &amp;undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="Nothing to &amp;redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <Action name="edit_undo" text="Nothing to &amp;Undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="Nothing to &amp;Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -157,12 +157,12 @@
 
   <Menu name="controllers">
     <text>Co&amp;ntrollers</text>
-    <Action name="cut_controllers" text="Cut controller events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy controller events" />
+    <Action name="cut_controllers" text="Cut Controller Events (&amp;X)" />
+    <Action name="copy_controllers" text="&amp;Copy Controller Events" />
     <!-- This is the same edit_paste as elsewhere in this file -->
-    <Action name="edit_paste" text="Paste events (&amp;V)"/>
+    <Action name="edit_paste" text="Paste Events (&amp;V)"/>
     <Action name="set_controllers" text="&amp;Set Controller Values" />
-    <Action name="place_controllers" text="&amp;Place a controller for each note" />
+    <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
     <!-- This is the same pitch_bend_sequence as elsewhere in this file -->
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
     <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
@@ -304,7 +304,7 @@
     <text>&amp;Help</text>
     <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
   <Separator/>
-    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="tutorial" text="&amp;Rosegarden Tutorial" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
   <Separator/>
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
@@ -415,10 +415,10 @@
 
 <State name="have_control_ruler">
   <enable>
-    <Action name="cut_controllers" text="Cut controller events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy controller events" />
-    <Action name="set_controllers" text="&amp;Set Controller Values" />
-    <Action name="place_controllers" text="&amp;Place a controller for each note" />
+    <Action name="cut_controllers" />
+    <Action name="copy_controllers" />
+    <Action name="set_controllers" />
+    <Action name="place_controllers" />
   </enable>
 </State>
 

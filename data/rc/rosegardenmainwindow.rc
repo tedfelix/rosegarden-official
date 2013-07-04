@@ -10,34 +10,34 @@
 	 the very bottom in older KDE3 versions: -->
     <Menu name="import" append="new_merge">
       <text>&amp;Import</text>
-      <Action name="file_import_project" text="Import Rosegarden &amp;Project file..." />
+      <Action name="file_import_project" text="Import Rosegarden &amp;Project File..." />
       <Separator/>
-      <Action name="file_import_midi" text="Import &amp;MIDI file..." />
-      <Action name="file_import_rg21" text="Import &amp;X11 Rosegarden file..." />
+      <Action name="file_import_midi" text="Import &amp;MIDI File..." />
+      <Action name="file_import_rg21" text="Import &amp;X11 Rosegarden File..." />
 <!--      <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." /> -->
-      <Action name="file_import_musicxml" text="Import MusicXM&amp;L file..." />
+      <Action name="file_import_musicxml" text="Import MusicXM&amp;L File..." />
     </Menu>
     <Menu name="merge" append="new_merge">
       <text>&amp;Merge</text>
       <Action name="file_merge" text="Merge &amp;File..." />
-      <Action name="file_merge_midi" text="Merge &amp;MIDI file..." />
-      <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden file..." />
+      <Action name="file_merge_midi" text="Merge &amp;MIDI File..." />
+      <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden File..." />
 <!--      <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file..." /> -->
-      <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L file..." />
+      <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L File..." />
     </Menu>
     <!-- this one would like to be save_merge, but that sticks it at
 	 the very bottom in older KDE3 versions: -->
     <Menu name="export" append="new_merge">
       <text>&amp;Export</text>
-      <Action name="file_export_project" text="Export Rosegarden &amp;Project file..." />
+      <Action name="file_export_project" text="Export Rosegarden &amp;Project File..." />
       <Separator/>
-      <Action name="file_export_lilypond" text="Export &amp;LilyPond file..." />
+      <Action name="file_export_lilypond" text="Export &amp;LilyPond File..." />
       <Separator/>
-      <Action name="file_export_midi" text="Export &amp;MIDI file..." />
+      <Action name="file_export_midi" text="Export &amp;MIDI File..." />
       <Separator/>
-      <Action name="file_export_csound" text="Export &amp;Csound score file..." />
-      <Action name="file_export_mup" text="Export M&amp;up file..." />
-      <Action name="file_export_musicxml" text="Export Music&amp;XML file..." />
+      <Action name="file_export_csound" text="Export &amp;Csound Score File..." />
+      <Action name="file_export_mup" text="Export M&amp;up File..." />
+      <Action name="file_export_musicxml" text="Export Music&amp;XML File..." />
     </Menu>
     <Action name="file_open" text="&amp;Open..." icon="fileopen" shortcut="Ctrl+O" />
     <!-- JAS Might need to place 'icon' tag elsewhere. -->
@@ -47,7 +47,7 @@
     </Menu>
   <Separator/>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
-    <Action name="file_save_as" text="Save &amp;As..." icon="filesaveas" shortcut="Ctrl+Shift+S" />
+    <Action name="file_save_as" text="Save &amp;as..." icon="filesaveas" shortcut="Ctrl+Shift+S" />
     <Action name="file_save_as_template" text="Save as &amp;Template..." icon="filesaveas" />
     <Action name="file_revert" text="Re&amp;vert" icon="revert" />
   <Separator/>
@@ -66,8 +66,8 @@
   <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -131,7 +131,7 @@
   <Separator/>
     <Action name="set_tempo_to_segment_length" text="Set &amp;Tempo to Audio Segment Duration" />
     <Action name="groove_quantize" text="Set Tempos from &amp;Beat Segment" />
-    <Action name="fit_beats" text="Fit existing beats to beat segment" />
+    <Action name="fit_beats" text="Fit Existing Beats to Beat Segment" />
   <Separator/>
     <Action name="change_composition_length" text="Change &amp;Composition Start and End..." />
   <Separator/>
@@ -170,7 +170,7 @@
 
     <Menu name="edit_with">
       <text>Edit &amp;With</text>
-      <Action name="edit_default" text="Open in &amp;Default editor" shortcut="Return" />
+      <Action name="edit_default" text="Open in &amp;Default Editor" shortcut="Return" />
     <Separator/>
       <Action name="edit_matrix" text="Open in Matri&amp;x Editor" icon="matrix" shortcut="M" />
       <Action name="edit_percussion_matrix" text="Open in &amp;Percussion Matrix Editor" icon="matrix-percussion" shortcut="D" />
@@ -205,7 +205,7 @@
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />
   <Separator/>
     <Action name="expand_figuration" text="E&amp;xpand Block Chord Segments by Figuration" />
-    <Action name="update_figurations" text="&amp;Update all figurations" />
+    <Action name="update_figurations" text="&amp;Update all Figurations" />
   <Separator/>
     <Action name="manage_trigger_segments" text="Manage Tri&amp;ggered Segments" />
   </Menu>
@@ -281,8 +281,8 @@
   <Action name="file_preview_lilypond"/>
   <Action name="file_print_lilypond"/>
   <Separator/>
-  <Action name="edit_toolbar_undo" text="&amp;Nothing to undo" icon="undo"/>
-  <Action name="edit_toolbar_redo" text="N&amp;othing to redo" icon="redo"/>
+  <Action name="edit_toolbar_undo" text="&amp;Nothing to Undo" icon="undo"/>
+  <Action name="edit_toolbar_redo" text="N&amp;othing to Redo" icon="redo"/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>

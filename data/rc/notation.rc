@@ -16,8 +16,8 @@
   <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -144,7 +144,7 @@
     </Menu>
   <Separator/>
     <Action name="add_clef" text="Add Cle&amp;f Change..." />
-    <Action name="add_clef_this_link_only" text="Add Clef Change in this link only..." />
+    <Action name="add_clef_this_link_only" text="Add Clef Change in This Link Only..." />
     <Action name="add_key_signature" text="Add &amp;Key Change..." />
   <Separator/>
     <Action name="add_sustain_down" text="Add Pedal &amp;Press" icon="notation-pedal-down" />
@@ -158,7 +158,7 @@
   <Separator/>
     <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt++" />
   <Separator/>
-    <Action name="unadopt_segment" text="Unadopt an adopted Segment" />
+    <Action name="unadopt_segment" text="Unadopt an Adopted Segment" />
   </Menu>
 
   <Menu name="Notes">
@@ -197,10 +197,10 @@
       <Action name="use_ornament" text="Trigger &amp;Ornament..." />
       <Action name="remove_ornament" text="&amp;Remove Ornament..." />
       <Action name="make_ornament" text="Ma&amp;ke Ornament..." />
-      <Action name="edit_ornament_inline" text="&amp;Edit Ornament as notation" />
-      <Action name="show_ornament_expansion" text="&amp;Show expansion of Ornament" />
-      <Action name="mask_ornament" text="Skip this part of ornament (&amp;mask tied note)" />
-      <Action name="unmask_ornament" text="Don't skip this part (&amp;unmask tied note)" />
+      <Action name="edit_ornament_inline" text="&amp;Edit Ornament as Notation" />
+      <Action name="show_ornament_expansion" text="&amp;Show Expansion of Ornament" />
+      <Action name="mask_ornament" text="Skip This Part of Ornament (&amp;Mask Tied Note)" />
+      <Action name="unmask_ornament" text="Don't Skip This Part (&amp;Unmask Tied Note)" />
       
       <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
       <Action name="ornament_actionmenu" />
@@ -315,7 +315,7 @@
       <text>&amp;Figuration</text>
       <Action name="parameter_chord" text="Make &amp;Parameter Chord" />
       <Action name="figuration" text="Mark Selection as &amp;Figuration" />
-      <Action name="generated" text="Mark Selection as auto-generated" />
+      <Action name="generated" text="Mark Selection as Auto-Generated" />
     </Menu>
   </Menu>
 
@@ -413,13 +413,13 @@
   </Menu>
   <Menu name="controllers">
     <text>Co&amp;ntrollers</text>
-    <Action name="cut_controllers" text="Cut controller events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy controller events" />
+    <Action name="cut_controllers" text="Cut Controller Events (&amp;X)" />
+    <Action name="copy_controllers" text="&amp;Copy Controller Events" />
     <!-- This is the same edit_paste as elsewhere in this file -->
-    <Action name="edit_paste" text="Paste events (&amp;V)"/>
+    <Action name="edit_paste" text="Paste Events (&amp;V)"/>
     <Action name="set_controllers" text="&amp;Set Controller Values" />
-    <Action name="place_controllers" text="&amp;Place a controller for each note" />
-    <Action name="expression_sequence" text="Insert &amp;expression controller Sequence..." />
+    <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
+    <Action name="expression_sequence" text="Insert &amp;Expression Controller Sequence..." />
     <!-- This is the same pitch_bend_sequence as elsewhere in this file -->
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
     <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
@@ -456,7 +456,7 @@
     <text>&amp;Tools</text>
     <!-- JAS Other tools in group are not selectable from menu -->
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_note" checked="true" />
-    <Action name="selectnoties" text="Select but don't follow ties" group="tools_note" checked="false" />
+    <Action name="selectnoties" text="Select but Don't Follow Ties" group="tools_note" checked="false" />
     <Action name="draw" text="Draw &amp;Notes and Rests" icon="pencil" shortcut="F3" group="tools_note" checked="false"/>
     <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
     <!-- <Menu noMerge="1" name="NoteTools"> -->
@@ -507,10 +507,10 @@
       <Action name="duration_dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" checked="false" group="duration_shortcut" />
     <Separator/>
       <!-- Yes these share the same shortcut, only one of each will be visible at a time -->
-      <Action name="switch_to_notes" text="Switch To &amp;Notes" icon="switch-to-notes" shortcut="Y" />
-      <Action name="switch_to_rests" text="Switch To &amp;Rests" icon="switch-to-rests" shortcut="Y" />
-      <Action name="switch_dots_on" text="To&amp;ggle Dot On" icon="switch-dots-on" shortcut="." />
-      <Action name="switch_dots_off" text="To&amp;ggle Dot Off" icon="switch-dots-off" shortcut="." />
+      <Action name="switch_to_notes" text="Switch to &amp;Notes" icon="switch-to-notes" shortcut="Y" />
+      <Action name="switch_to_rests" text="Switch to &amp;Rests" icon="switch-to-rests" shortcut="Y" />
+      <Action name="switch_dots_on" text="To&amp;ggle Dot on" icon="switch-dots-on" shortcut="." />
+      <Action name="switch_dots_off" text="To&amp;ggle Dot off" icon="switch-dots-off" shortcut="." />
     </Menu>
 
 
@@ -612,7 +612,7 @@
     <text>&amp;Help</text>
     <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
   <Separator/>
-    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="tutorial" text="&amp;Rosegarden Tutorial" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
   <Separator/>
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
@@ -1016,10 +1016,10 @@
 
 <State name="have_control_ruler">
   <enable>
-    <Action name="cut_controllers" text="Cut controller events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy controller events" />
-    <Action name="set_controllers" text="&amp;Set Controller Values" />
-    <Action name="place_controllers" text="&amp;Place a controller for each note" />
+    <Action name="cut_controllers" />
+    <Action name="copy_controllers" />
+    <Action name="set_controllers" />
+    <Action name="place_controllers" />
   </enable>
 </State>
 
