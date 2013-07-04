@@ -20,6 +20,7 @@
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include <QString>
@@ -31,11 +32,13 @@ namespace Rosegarden
 void
 AddDotCommand::modifySegment()
 {
-    std::vector<Event *> toErase;
-    std::vector<Event *> toInsert;
+    typedef std::vector<Event *> EventVec;
+    EventVec toErase;
+    EventVec toInsert;
 
     EventSelection::eventcontainer::iterator i;
     timeT endTime = getEndTime();
+    SegmentNotationHelper segmentNotationHelper(m_selection->getSegment());
 
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
@@ -76,13 +79,19 @@ AddDotCommand::modifySegment()
         }
     }
 
-    for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end(); ++i) {
+    for (EventVec::iterator i = toErase.begin(); i != toErase.end(); ++i) {
         m_selection->getSegment().eraseSingle(*i);
     }
 
-    for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
-        m_selection->getSegment().insert(*i);
-        m_selection->addEvent(*i);
+    for (EventVec::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
+        Segment::iterator note =
+            m_selection->getSegment().insert(*i);
+        // segmentNotationHelper sometimes erases the event and makes
+        // new ones.  actualEvent is always the first event timewise,
+        // though it may be followed by tied notes.
+        Event *actualEvent =
+            segmentNotationHelper.makeThisNoteViable(note, true);
+        m_selection->addEvent(actualEvent);
     }
 
     m_selection->getSegment().normalizeRests(getStartTime(), endTime);
