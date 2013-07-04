@@ -17,7 +17,7 @@
 
 // #define DEBUG_SEQUENCE_MANAGER 1
 #if !defined DEBUG_SEQUENCE_MANAGER
-#define NDEBUG 1
+#define RG_NO_DEBUG_PRINT 1
 #endif
 
 #include "SequenceManager.h"

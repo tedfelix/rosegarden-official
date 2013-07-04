@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#define NDEBUG 1
+#define RG_NO_DEBUG_PRINT 1
 #include "BasicCommand.h"
 
 #include "base/Segment.h"

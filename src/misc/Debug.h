@@ -30,7 +30,7 @@ namespace Rosegarden {
 	class Chord;
     }
 
-#ifndef NDEBUG
+#if !defined NDEBUG && !defined RG_NO_DEBUG_PRINT
 
 QDebug &operator<<(QDebug &, const std::string &);
 QDebug &operator<<(QDebug &, const Rosegarden::Event &);
@@ -39,7 +39,11 @@ QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
 QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
 QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
 
-#define RG_DEBUG        QDebug(QtDebugMsg) << "[generic] "
+#if !defined RG_MODULE_STRING
+#define RG_MODULE_STRING "[generic] "
+#endif
+ 
+#define RG_DEBUG        QDebug(QtDebugMsg) << RG_MODULE_STRING
 #define NOTATION_DEBUG  QDebug(QtDebugMsg) << "[notation] "
 #define MATRIX_DEBUG    QDebug(QtDebugMsg) << "[matrix] "
 #define SEQUENCER_DEBUG QDebug(QtDebugMsg) << "[sequencer] "
