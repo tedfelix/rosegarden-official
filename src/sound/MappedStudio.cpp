@@ -40,6 +40,8 @@ static inline void getLock(const char *file, int line)
 {
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cerr << "Acquiring MappedStudio container lock at " << file << ":" << line << ": count " << _approxLockCount++ << std::endl;
+#else
+    (void)file; (void)line;
 #endif
 
     pthread_mutex_lock(&_mappedObjectContainerLock);
@@ -51,6 +53,8 @@ static inline void releaseLock(const char *file, int line)
 #ifdef DEBUG_MAPPEDSTUDIO
 
     std::cerr << "Released container lock at " << file << ":" << line << ": count " << --_approxLockCount << std::endl;
+#else
+    (void)file; (void)line;
 #endif
 }
 
