@@ -316,6 +316,10 @@ NotationView::NotationView(RosegardenDocument *doc,
         leaveActionState("have_multiple_staffs");
     }
 
+    // We never start with any adopted segments so we don't need to
+    // test for this.
+    leaveActionState("focus_adopted_segment"); 
+
     initLayoutToolbar();
     initRulersToolbar();
     initStatusBar();
