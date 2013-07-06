@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRACKEDITOR_H_
-#define _RG_TRACKEDITOR_H_
+#ifndef RG_TRACKEDITOR_H
+#define RG_TRACKEDITOR_H
 
 #include "base/MidiProgram.h"
 #include "base/Event.h"
@@ -46,7 +46,7 @@ class RulerScale;
 class RosegardenDocument;
 class QDeferScrollView;
 class CompositionView;
-class CompositionModel;
+class CompositionModelImpl;
 class ChordNameRuler;
 class StandardRuler;
 
@@ -226,7 +226,7 @@ protected:
     StandardRuler           *m_bottomStandardRuler;
     TrackButtons            *m_trackButtons;
     CompositionView         *m_compositionView;
-    CompositionModel        *m_compositionModel;
+    CompositionModelImpl    *m_compositionModel;
     QScrollArea             *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;

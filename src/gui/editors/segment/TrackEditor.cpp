@@ -39,7 +39,6 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRepeatToCopyCommand.h"
 #include "commands/segment/SegmentLinkToCopyCommand.h"
-#include "compositionview/CompositionModel.h"
 #include "compositionview/CompositionModelImpl.h"
 #include "compositionview/CompositionView.h"
 #include "document/CommandHistory.h"

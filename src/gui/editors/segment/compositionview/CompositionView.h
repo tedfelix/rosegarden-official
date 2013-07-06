@@ -20,7 +20,7 @@
 #define RG_COMPOSITIONVIEW_H
 
 #include "base/Selection.h"
-#include "CompositionModel.h"
+#include "CompositionModelImpl.h"
 #include "CompositionItem.h"
 #include "gui/general/RosegardenScrollView.h"
 #include <QBrush>
@@ -65,7 +65,7 @@ class CompositionView : public RosegardenScrollView
 {
     Q_OBJECT
 public:
-    CompositionView(RosegardenDocument*, CompositionModel*,
+    CompositionView(RosegardenDocument*, CompositionModelImpl *,
                     QWidget * parent=0);
 
     /// Move the playback position pointer to a new X coordinate.
@@ -126,7 +126,7 @@ public:
     SegmentToolBox* getToolBox() { return m_toolBox; }
 
     /// Returns the composition model.  See m_model.
-    CompositionModel* getModel() { return m_model; }
+    CompositionModelImpl* getModel() { return m_model; }
 
     /// See getTmpRect().
     void setTmpRect(const QRect& r);
@@ -616,7 +616,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    CompositionModel* m_model;
+    CompositionModelImpl* m_model;
     CompositionItem m_currentIndex;
 
     SegmentTool*    m_tool;

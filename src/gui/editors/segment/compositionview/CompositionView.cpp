@@ -30,8 +30,6 @@
 #include "CompositionColourCache.h"
 #include "CompositionItemHelper.h"
 #include "CompositionItemImpl.h"
-#include "CompositionModel.h"
-#include "CompositionModelImpl.h"
 #include "CompositionRect.h"
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenDocument.h"
@@ -85,7 +83,7 @@ protected:
 };
 
 CompositionView::CompositionView(RosegardenDocument* doc,
-                                 CompositionModel* model,
+                                 CompositionModelImpl* model,
                                  QWidget * parent) :
     RosegardenScrollView(parent),
     m_model(model),
