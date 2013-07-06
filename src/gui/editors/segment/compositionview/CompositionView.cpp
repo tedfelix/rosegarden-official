@@ -421,7 +421,7 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
 
 CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 {
-    CompositionModel::itemcontainer items = getModel()->getItemsAt(pos);
+    CompositionModelImpl::itemcontainer items = getModel()->getItemsAt(pos);
 
     if (items.size()) {
         // find topmost item
@@ -429,9 +429,9 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 
         unsigned int maxZ = res->z();
 
-        CompositionModel::itemcontainer::iterator maxZItemPos = items.begin();
+        CompositionModelImpl::itemcontainer::iterator maxZItemPos = items.begin();
 
-        for (CompositionModel::itemcontainer::iterator i = items.begin();
+        for (CompositionModelImpl::itemcontainer::iterator i = items.begin();
              i != items.end(); ++i) {
             CompositionItem ic = *i;
             if (ic->z() > maxZ) {
@@ -443,7 +443,7 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 
         // get rid of the rest;
         items.erase(maxZItemPos);
-        for (CompositionModel::itemcontainer::iterator i = items.begin();
+        for (CompositionModelImpl::itemcontainer::iterator i = items.begin();
              i != items.end(); ++i)
             delete *i;
 
@@ -873,7 +873,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
     // though the center of the divider might be slightly outside of the
     // viewport.
     // This is not a height list.
-    CompositionModel::heightlist trackYCoords =
+    CompositionModelImpl::heightlist trackYCoords =
             getModel()->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
 
     if (!trackYCoords.empty()) {
@@ -888,7 +888,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
 
         // For each track Y coordinate, draw the two light lines in the middle
         // of the track divider.
-        for (CompositionModel::heightlist::const_iterator yi = trackYCoords.begin();
+        for (CompositionModelImpl::heightlist::const_iterator yi = trackYCoords.begin();
              yi != trackYCoords.end(); ++yi) {
             // Upper line.
             int y = *yi - 1;
@@ -912,7 +912,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
 
         // For each track Y coordinate, draw the two dark lines on the outside
         // of the track divider.
-        for (CompositionModel::heightlist::const_iterator yi = trackYCoords.begin();
+        for (CompositionModelImpl::heightlist::const_iterator yi = trackYCoords.begin();
              yi != trackYCoords.end(); ++yi) {
             // Upper line
             int y = *yi - 2;
@@ -934,7 +934,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
     }
 
     CompositionModelImpl::AudioPreviewDrawData* audioPreviewData = 0;
-    CompositionModel::RectRanges* notationPreviewData = 0;
+    CompositionModelImpl::RectRanges* notationPreviewData = 0;
 
     // *** Segment Rectangles
 
@@ -951,11 +951,11 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
     //
     // Fetch segment rectangles to draw
     //
-    const CompositionModel::rectcontainer& rects =
+    const CompositionModelImpl::rectcontainer& rects =
         getModel()->getRectanglesIn(clipRect,
                                     notationPreviewData, audioPreviewData);
-    CompositionModel::rectcontainer::const_iterator i = rects.begin();
-    CompositionModel::rectcontainer::const_iterator end = rects.end();
+    CompositionModelImpl::rectcontainer::const_iterator i = rects.begin();
+    CompositionModelImpl::rectcontainer::const_iterator end = rects.end();
 
     {
         Profiler profiler("CompositionView::drawSegments: segment rectangles");
@@ -1002,11 +1002,11 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
 
         // draw notation previews
         //
-        CompositionModel::RectRanges::const_iterator npi = m_notationPreviewRects.begin();
-        CompositionModel::RectRanges::const_iterator npEnd = m_notationPreviewRects.end();
+        CompositionModelImpl::RectRanges::const_iterator npi = m_notationPreviewRects.begin();
+        CompositionModelImpl::RectRanges::const_iterator npEnd = m_notationPreviewRects.end();
 
         for (; npi != npEnd; ++npi) {
-            CompositionModel::RectRange interval = *npi;
+            CompositionModelImpl::RectRange interval = *npi;
             segmentLayerPainter->save();
             segmentLayerPainter->translate(
                     interval.basePoint.x(), interval.basePoint.y());
@@ -1405,15 +1405,15 @@ QColor CompositionView::mixBrushes(QBrush a, QBrush b)
     return ac;
 }
 
-void CompositionView::drawIntersections(const CompositionModel::rectcontainer& rects,
+void CompositionView::drawIntersections(const CompositionModelImpl::rectcontainer& rects,
                                         QPainter * p, const QRect& clipRect)
 {
     if (! (rects.size() > 1))
         return ;
 
-    CompositionModel::rectcontainer intersections;
+    CompositionModelImpl::rectcontainer intersections;
 
-    CompositionModel::rectcontainer::const_iterator i = rects.begin(),
+    CompositionModelImpl::rectcontainer::const_iterator i = rects.begin(),
         j = rects.begin();
 
     for (; j != rects.end(); ++j) {
@@ -1428,7 +1428,7 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
         for (; i != rects.end(); ++i) {
             CompositionRect ri = testRect.intersect(*i);
             if (!ri.isEmpty()) {
-                CompositionModel::rectcontainer::iterator t = std::find(intersections.begin(),
+                CompositionModelImpl::rectcontainer::iterator t = std::find(intersections.begin(),
                                                                         intersections.end(), ri);
                 if (t == intersections.end()) {
                     ri.setBrush(mixBrushes(testRect.getBrush(), i->getBrush()));
@@ -1447,7 +1447,7 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
 
     while (!intersections.empty()) {
 
-        for (CompositionModel::rectcontainer::iterator intIter = intersections.begin();
+        for (CompositionModelImpl::rectcontainer::iterator intIter = intersections.begin();
              intIter != intersections.end(); ++intIter) {
             CompositionRect r = *intIter;
             drawCompRect(r, p, clipRect, intersectionLvl);
@@ -1458,9 +1458,9 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
 
         ++intersectionLvl;
 
-        CompositionModel::rectcontainer intersections2;
+        CompositionModelImpl::rectcontainer intersections2;
 
-        CompositionModel::rectcontainer::iterator i = intersections.begin(),
+        CompositionModelImpl::rectcontainer::iterator i = intersections.begin(),
             j = intersections.begin();
 
         for (; j != intersections.end(); ++j) {
@@ -1475,7 +1475,7 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
             for (; i != intersections.end(); ++i) {
                 CompositionRect ri = testRect.intersect(*i);
                 if (!ri.isEmpty() && ri != *i) {
-                    CompositionModel::rectcontainer::iterator t = std::find(intersections2.begin(),
+                    CompositionModelImpl::rectcontainer::iterator t = std::find(intersections2.begin(),
                                                                             intersections2.end(), ri);
                     if (t == intersections2.end())
                         ri.setBrush(mixBrushes(testRect.getBrush(), i->getBrush()));

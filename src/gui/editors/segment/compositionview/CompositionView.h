@@ -114,7 +114,7 @@ public:
      */
     void setDrawSelectionRect(bool d);
 
-    /// Get the snap grid from the CompositionModel.
+    /// Get the snap grid from the CompositionModelImpl.
     SnapGrid& grid() { return m_model->grid(); }
 
     /// Get the topmost item (segment) at the given position on the view.
@@ -474,7 +474,7 @@ protected:
      */
     void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
     /// Used by drawSegments() to draw any intersections between rectangles.
-    void drawIntersections(const CompositionModel::rectcontainer&, QPainter * p, const QRect& clipRect);
+    void drawIntersections(const CompositionModelImpl::rectcontainer&, QPainter * p, const QRect& clipRect);
 
     /// Used by drawArtifacts() to draw the playback position pointer.
     /**
@@ -695,7 +695,7 @@ protected:
     bool         m_contextHelpShown;
 
     CompositionModelImpl::AudioPreviewDrawData m_audioPreviewRects;
-    CompositionModel::RectRanges m_notationPreviewRects;
+    CompositionModelImpl::RectRanges m_notationPreviewRects;
 
     /// Drives slotUpdateTimer().
     QTimer *m_updateTimer;

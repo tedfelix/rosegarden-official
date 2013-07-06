@@ -24,7 +24,6 @@
 #include "AudioPreviewPainter.h"
 #include "CompositionItemHelper.h"
 #include "CompositionItemImpl.h"
-#include "CompositionModel.h"
 #include "CompositionRect.h"
 #include "CompositionColourCache.h"
 
@@ -795,7 +794,7 @@ bool CompositionModelImpl::isRecording(const Segment* s) const
     return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
 }
 
-CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& point)
+CompositionModelImpl::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& point)
 {
     //RG_DEBUG << "CompositionModelImpl::getItemsAt()";
 
@@ -917,7 +916,7 @@ bool CompositionModelImpl::wasTmpSelected(const Segment* s) const
     return m_previousTmpSelectedSegments.find(const_cast<Segment*>(s)) != m_previousTmpSelectedSegments.end();
 }
 
-void CompositionModelImpl::startChange(const CompositionItem& item, CompositionModel::ChangeType change)
+void CompositionModelImpl::startChange(const CompositionItem& item, ChangeType change)
 {
     m_changeType = change;
 
@@ -933,7 +932,7 @@ void CompositionModelImpl::startChange(const CompositionItem& item, CompositionM
     }
 }
 
-void CompositionModelImpl::startChangeSelection(CompositionModel::ChangeType change)
+void CompositionModelImpl::startChangeSelection(ChangeType change)
 {
     SegmentSelection::iterator i = m_selectedSegments.begin();
     for (; i != m_selectedSegments.end(); ++i) {
@@ -1181,7 +1180,7 @@ unsigned int CompositionModelImpl::getNbRows()
     return m_composition.getNbTracks();
 }
 
-const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
+const CompositionModelImpl::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
         RectRanges* npData,
         AudioPreviewDrawData* apData)
 {
@@ -1286,7 +1285,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     return m_res;
 }
 
-CompositionModel::heightlist CompositionModelImpl::getTrackDividersIn(const QRect& rect)
+CompositionModelImpl::heightlist CompositionModelImpl::getTrackDividersIn(const QRect& rect)
 {
     int top = m_grid.getYBin(rect.y());
     int bottom = m_grid.getYBin(rect.y() + rect.height());
@@ -1298,7 +1297,7 @@ CompositionModel::heightlist CompositionModelImpl::getTrackDividersIn(const QRec
     
     setTrackHeights();
     
-    CompositionModel::heightlist list;
+    CompositionModelImpl::heightlist list;
 
     for (int pos = top; pos <= bottom; ++pos) {
         int divider = m_grid.getYBinCoordinate(pos);
@@ -1309,7 +1308,7 @@ CompositionModel::heightlist CompositionModelImpl::getTrackDividersIn(const QRec
     return list;
 }
 
-CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const Segment* s)
+CompositionModelImpl::rectlist* CompositionModelImpl::getNotationPreviewData(const Segment* s)
 {
     rectlist* npData = m_notationPreviewDataCache[s];
 
@@ -1335,7 +1334,7 @@ CompositionModelImpl::AudioPreviewData* CompositionModelImpl::getAudioPreviewDat
     return apData;
 }
 
-CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+CompositionModelImpl::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
     rectlist* npData = new rectlist();
     updatePreviewCacheForNotationSegment(s, npData);
