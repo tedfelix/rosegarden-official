@@ -36,7 +36,7 @@
 namespace Rosegarden {
 
 AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
-					 CompositionModel::AudioPreviewData* apData,
+					 CompositionModelImpl::AudioPreviewData* apData,
 					 const Composition &composition,
 					 const Segment* segment)
     : m_model(model),

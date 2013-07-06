@@ -940,7 +940,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
         segmentLayerPainter->restore();
     }
 
-    CompositionModel::AudioPreviewDrawData* audioPreviewData = 0;
+    CompositionModelImpl::AudioPreviewDrawData* audioPreviewData = 0;
     CompositionModel::RectRanges* notationPreviewData = 0;
 
     // *** Segment Rectangles
@@ -1053,8 +1053,8 @@ void CompositionView::drawAudioPreviews(QPainter * p, const QRect& clipRect)
 {
     Profiler profiler("CompositionView::drawAudioPreviews");
 
-    CompositionModel::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
-    CompositionModel::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
+    CompositionModelImpl::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
+    CompositionModelImpl::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
     QRect rectToFill,  // rect to fill on canvas
         localRect; // the rect of the tile to draw on the canvas
     QPoint basePoint,  // origin of segment rect

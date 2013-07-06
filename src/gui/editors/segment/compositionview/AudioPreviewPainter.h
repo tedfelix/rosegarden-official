@@ -33,7 +33,7 @@ class CompositionRect;
 class AudioPreviewPainter {
 public:
     AudioPreviewPainter(CompositionModelImpl& model,
-			CompositionModel::AudioPreviewData* apData,
+			CompositionModelImpl::AudioPreviewData* apData,
 			const Composition &composition,
 			const Segment* segment);
 
@@ -49,7 +49,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     CompositionModelImpl& m_model;
-    CompositionModel::AudioPreviewData* m_apData;
+    CompositionModelImpl::AudioPreviewData* m_apData;
     const Composition &m_composition;
     const Segment* m_segment;
     CompositionRect m_rect;

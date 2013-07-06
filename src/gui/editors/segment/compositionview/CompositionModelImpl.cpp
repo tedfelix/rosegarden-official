@@ -1320,7 +1320,7 @@ CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const S
     return npData;
 }
 
-CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Segment* s)
+CompositionModelImpl::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Segment* s)
 {
     Profiler profiler("CompositionModelImpl::getAudioPreviewData");
     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData";
@@ -1343,7 +1343,7 @@ CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(c
     return npData;
 }
 
-CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
+CompositionModelImpl::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
 {
     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")";
 
