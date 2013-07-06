@@ -124,10 +124,10 @@ CompositionItem CompositionItemHelper::makeCompositionItem(Rosegarden::Segment* 
     return CompositionItem(new CompositionItemImpl(*segment, QRect()));
 }
 
-CompositionItem CompositionItemHelper::findSiblingCompositionItem(const CompositionModel::itemcontainer& items,
+CompositionItem CompositionItemHelper::findSiblingCompositionItem(const CompositionModelImpl::itemcontainer& items,
                                                                   const CompositionItem& referenceItem)
 {
-    CompositionModel::itemcontainer::const_iterator it;
+    CompositionModelImpl::itemcontainer::const_iterator it;
     Rosegarden::Segment* currentSegment = CompositionItemHelper::getSegment(referenceItem);
 
     for (it = items.begin(); it != items.end(); ++it) {

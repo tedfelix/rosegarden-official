@@ -151,7 +151,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             selecting = false;
         } else {
             // put the segment in 'move' mode only if it's being selected
-            m_canvas->getModel()->startChange(item, CompositionModel::ChangeMove);                 
+            m_canvas->getModel()->startChange(item, CompositionModelImpl::ChangeMove);
         }
 
         m_canvas->getModel()->setSelected(item, selecting);
@@ -237,8 +237,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     if (m_canvas->getModel()->isSelected(m_currentIndex)) {
 
-        CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
-        CompositionModel::itemcontainer::iterator it;
+        CompositionModelImpl::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
+        CompositionModelImpl::itemcontainer::iterator it;
 
         if (changeMade()) {
 
@@ -406,14 +406,14 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
 
         if (!m_selectionMoveStarted) { // start move on selected items only once
-            m_canvas->getModel()->startChangeSelection(CompositionModel::ChangeMove);
+            m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
             m_selectionMoveStarted = true;
         }
 
-        CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
+        CompositionModelImpl::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
         setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
 
-        CompositionModel::itemcontainer::iterator it;
+        CompositionModelImpl::itemcontainer::iterator it;
         int guideX = 0;
         int guideY = 0;
 

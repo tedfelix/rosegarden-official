@@ -44,7 +44,7 @@ public:
     /**
      * return the CompositionItem in the model which references the same segment as referenceItem
      */
-    static CompositionItem findSiblingCompositionItem(const CompositionModel::itemcontainer& items, const CompositionItem& referenceItem);
+    static CompositionItem findSiblingCompositionItem(const CompositionModelImpl::itemcontainer& items, const CompositionItem& referenceItem);
 
 };
 

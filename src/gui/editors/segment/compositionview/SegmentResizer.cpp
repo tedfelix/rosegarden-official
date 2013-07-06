@@ -102,8 +102,8 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
         }
 
         m_canvas->getModel()->startChange(item, 
-            m_resizeStart ? CompositionModel::ChangeResizeFromStart :
-                            CompositionModel::ChangeResizeFromEnd);
+            m_resizeStart ? CompositionModelImpl::ChangeResizeFromStart :
+                            CompositionModelImpl::ChangeResizeFromEnd);
 
     }
 }
