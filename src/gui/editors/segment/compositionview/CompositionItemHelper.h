@@ -19,7 +19,7 @@
 #ifndef _RG_COMPOSITIONITEMHELPER_H_
 #define _RG_COMPOSITIONITEMHELPER_H_
 
-#include "CompositionModel.h"
+#include "CompositionModelImpl.h"
 #include "base/Event.h"
 
 

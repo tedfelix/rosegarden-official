@@ -31,7 +31,7 @@
 #include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "CompositionItemHelper.h"
-#include "CompositionModel.h"
+#include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"

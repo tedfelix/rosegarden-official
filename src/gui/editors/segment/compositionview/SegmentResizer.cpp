@@ -33,7 +33,7 @@
 #include "commands/segment/SegmentResizeFromStartCommand.h"
 #include "commands/segment/SegmentLinkToCopyCommand.h"
 #include "CompositionItemHelper.h"
-#include "CompositionModel.h"
+#include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"

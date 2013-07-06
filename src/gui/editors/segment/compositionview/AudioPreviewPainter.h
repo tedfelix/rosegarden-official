@@ -18,7 +18,7 @@
 #ifndef _RG_AUDIOPREVIEWPAINTER_H_
 #define _RG_AUDIOPREVIEWPAINTER_H_
 
-#include "CompositionModel.h"
+#include "CompositionModelImpl.h"
 
 #include <QPainter>
 #include <QColor>

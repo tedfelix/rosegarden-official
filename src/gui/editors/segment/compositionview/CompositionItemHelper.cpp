@@ -24,7 +24,6 @@
 #include "base/Segment.h"
 #include "base/SnapGrid.h"
 #include "misc/Debug.h"
-#include "CompositionModel.h"
 #include "CompositionItemImpl.h"
 #include <QColor>
 #include <QPoint>
