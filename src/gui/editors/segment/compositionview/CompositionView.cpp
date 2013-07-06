@@ -19,12 +19,10 @@
 
 #include "CompositionView.h"
 
-#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "AudioPreviewThread.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
-#include "base/Selection.h"
 #include "base/SnapGrid.h"
 #include "base/Profiler.h"
 #include "CompositionColourCache.h"
@@ -36,10 +34,8 @@
 #include "misc/ConfigGroups.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenScrollView.h"
-#include "gui/general/RosegardenScrollView.h"
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
-#include "SegmentTool.h"
 
 #include <QMessageBox>
 #include <QBrush>
@@ -53,15 +49,12 @@
 #include <QPixmap>
 #include <QPoint>
 #include <QRect>
-#include <QScrollBar>
+//#include <QScrollBar>
 #include <QSize>
 #include <QString>
 #include <QWidget>
-#include <QApplication>
 #include <QSettings>
 #include <QMouseEvent>
-
-#include <algorithm>
 
 
 namespace Rosegarden

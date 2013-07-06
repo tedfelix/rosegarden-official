@@ -19,7 +19,6 @@
 #ifndef RG_COMPOSITIONVIEW_H
 #define RG_COMPOSITIONVIEW_H
 
-#include "base/Selection.h"
 #include "CompositionModelImpl.h"
 #include "CompositionItem.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -31,7 +30,6 @@
 #include <QRect>
 #include <QString>
 #include <QTimer>
-#include "base/Event.h"
 
 
 class QWidget;
