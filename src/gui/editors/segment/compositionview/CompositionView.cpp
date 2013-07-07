@@ -56,6 +56,8 @@
 #include <QSettings>
 #include <QMouseEvent>
 
+#include <algorithm>
+
 
 namespace Rosegarden
 {
