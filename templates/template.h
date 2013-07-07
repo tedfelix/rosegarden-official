@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _TEMPLATE_H_
-#define _TEMPLATE_H_
+#ifndef TEMPLATE_H
+#define TEMPLATE_H
 
 // local includes
 #include <local/LocalInclude.h>
