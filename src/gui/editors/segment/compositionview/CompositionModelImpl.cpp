@@ -59,6 +59,11 @@
 namespace Rosegarden
 {
 
+bool CompositionModelImpl::CompositionItemCompare::operator()(const CompositionItem &c1, const CompositionItem &c2) const
+{
+    return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
+}
+
 CompositionModelImpl::CompositionModelImpl(Composition& compo,
         Studio& studio,
         RulerScale *rulerScale,

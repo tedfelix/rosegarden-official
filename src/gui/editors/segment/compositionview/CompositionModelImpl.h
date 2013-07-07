@@ -20,8 +20,8 @@
 
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
-#include "CompositionModel.h"
 #include "CompositionRect.h"
+#include "CompositionItem.h"
 #include "SegmentOrderer.h"
 #include "base/Event.h"
 
@@ -35,7 +35,6 @@
 #include <vector>
 
 class RectRanges;
-class CompositionItem;
 class AudioPreviewDrawData;
 class AudioPreviewData;
 
@@ -51,6 +50,8 @@ class Composition;
 class AudioPreviewUpdater;
 class AudioPreviewThread;
 
+typedef std::vector<QImage> PixmapArray;
+
 /// Composition User Interface Controller.
 /**
  * In the Entity/Boundary/Control model, this is (roughly) a control class.
@@ -59,10 +60,73 @@ class AudioPreviewThread;
  *
  * This class might be renamed CompositionUIController.
  */
-class CompositionModelImpl : public CompositionModel
+class CompositionModelImpl : public QObject, public CompositionObserver, public SegmentObserver
 {
     Q_OBJECT
 public:
+
+    struct CompositionItemCompare {
+        bool operator()(const CompositionItem &c1, const CompositionItem &c2) const;
+    };
+
+    typedef std::vector<QRect> rectlist;
+    // ??? rename: ycoordlist  This is not a height list.
+    typedef std::vector<int> heightlist;
+    typedef std::vector<CompositionRect> rectcontainer;
+    typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
+
+    struct AudioPreviewDrawDataItem {
+        AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
+            pixmap(p), basePoint(bp), rect(r), resizeOffset(0) {};
+        PixmapArray pixmap;
+        QPoint basePoint;
+        QRect rect;
+
+        // when showing a segment that is being resized from the
+        // beginning, this contains the offset between the current
+        // rect of the segment and the resized one
+        int resizeOffset;
+    };
+
+    typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
+
+    struct RectRange {
+        std::pair<rectlist::iterator, rectlist::iterator> range;
+        QPoint basePoint;
+        QColor color;
+    };
+
+    typedef std::vector<RectRange> RectRanges;
+
+    class AudioPreviewData {
+    public:
+        AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
+        // ~AudioPreviewData();
+
+        bool showsMinima()              { return m_showMinima; }
+        void setShowMinima(bool s)      { m_showMinima = s;    }
+
+        unsigned int getChannels()       { return m_channels;   }
+        void setChannels(unsigned int c) { m_channels = c;      }
+
+        const std::vector<float> &getValues() const { return m_values;  }
+        void setValues(const std::vector<float>&v) { m_values = v; }
+
+        QRect getSegmentRect()              { return m_segmentRect; }
+        void setSegmentRect(const QRect& r) { m_segmentRect = r; }
+
+    protected:
+        std::vector<float> m_values;
+        bool               m_showMinima;
+        unsigned int       m_channels;
+        QRect              m_segmentRect;
+
+    private:
+        // no copy ctor
+        AudioPreviewData(const AudioPreviewData&);
+    };
+
+    enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
     CompositionModelImpl(Composition& compo,
                          Studio& studio,
@@ -148,6 +212,9 @@ public:
     virtual void segmentDeleted(const Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
 
 signals:
+    void needContentUpdate();
+    void needContentUpdate(const QRect&);
+    void needArtifactsUpdate();
     void selectedSegments(const SegmentSelection &);
     void needSizeUpdate();
 
@@ -233,6 +300,9 @@ protected:
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
 
     SegmentOrderer m_segmentOrderer;
+
+    CompositionItem* m_currentCompositionItem;
+
 };
 
 
