@@ -26,15 +26,13 @@ namespace Rosegarden
 QuarterSinePattern
 QuarterSinePattern::
 crescendo(EventParameterDialog::
-          tr("Quarter-wave crescendo - set %1 rising from min to max"
-	      "in a quarter sine wave contour"),
+          tr("Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour"),
           false);
 
 QuarterSinePattern
 QuarterSinePattern::
 diminuendo(EventParameterDialog::
-           tr("Quarter-wave diminuendo - set %1 falling from max to min"
-	      "in a quarter sine wave contour"),
+           tr("Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour"),
            true);
 
 double

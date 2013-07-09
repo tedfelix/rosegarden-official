@@ -305,22 +305,22 @@
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
-        <source>Half-wave crescendo - set %1 rising from min to maxin a half sine wave contour</source>
+        <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Half-wave diminuendo - set %1 falling from max to minin a half sine wave contour</source>
+        <location line="+6"/>
+        <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
-        <source>Quarter-wave crescendo - set %1 rising from min to maxin a quarter sine wave contour</source>
+        <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Quarter-wave diminuendo - set %1 falling from max to minin a quarter sine wave contour</source>
+        <location line="+6"/>
+        <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -19080,7 +19080,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="obsolete">Taivutusjakso</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+133"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+125"/>
         <source>Preset</source>
         <translation>Esivalinta</translation>
     </message>
@@ -19094,13 +19094,13 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="obsolete">Käyttäjä</translation>
     </message>
     <message>
-        <location line="-71"/>
-        <location line="+722"/>
+        <location line="-63"/>
+        <location line="+674"/>
         <source>%1 Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-691"/>
+        <location line="-643"/>
         <source>Replacement mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19115,7 +19115,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+2"/>
         <source>Add new events to old ones</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19125,7 +19125,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
         <source>Just erase old events</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19135,12 +19135,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
-        <source>&lt;qt&gt;Use this saved or built-in setting.  You can edit it.  For saved (but not built-in) settings, that will become the new saved setting&lt;/qt&gt;</source>
+        <location line="+21"/>
+        <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+8"/>
         <source>Linear ramp</source>
         <translation>Lineaarinen ramppi</translation>
     </message>
@@ -19151,12 +19151,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     </message>
     <message>
         <location line="+1"/>
-        <location line="+97"/>
+        <location line="+90"/>
         <source>Vibrato</source>
         <translation>Vibraatto</translation>
     </message>
     <message>
-        <location line="-91"/>
+        <location line="-84"/>
         <source>Saved setting %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19186,7 +19186,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+12"/>
         <source>Ramp Sequence</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19196,7 +19196,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+31"/>
         <source>Tremolo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19207,11 +19207,21 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
     </message>
     <message>
         <location line="+3"/>
-        <source>&lt;qt&gt;Low-frequency oscillation for this controller.  This is only possible when Ramp mode is linear and `Use this many steps&apos; is set.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+34"/>
+        <source>Hertz (Hz):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-46"/>
         <source>Start amplitude:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19231,17 +19241,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Hertz:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+13"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+12"/>
         <source>Ramp mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19251,12 +19256,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if `Use this many steps&apos; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+3"/>
         <source>Logarithmic</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19266,7 +19266,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+1"/>
         <source>Half sine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19276,7 +19276,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+1"/>
         <source>Quarter sine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19286,7 +19286,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+10"/>
         <source>How many steps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19301,7 +19301,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>Use this many steps:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19311,12 +19311,12 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+704"/>
+        <location line="+700"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-901"/>
+        <location line="-866"/>
         <source>Pre Bend</source>
         <translation>Esitaivutus</translation>
     </message>
@@ -19329,7 +19329,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="obsolete">Kesto (%):</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+49"/>
         <source>Ramp duration (%):</source>
         <translation>Rampin kesto (%):</translation>
     </message>
@@ -19339,7 +19339,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+11"/>
         <source>End value:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19357,7 +19357,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="obsolete">Vibraaton loppuamplitudi (%):</translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-28"/>
         <source>Bend Sequence</source>
         <translation>Taivutusjakso</translation>
     </message>
@@ -19370,7 +19370,7 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <translation type="obsolete">Tarkkuus:</translation>
     </message>
     <message>
-        <location line="+215"/>
+        <location line="+184"/>
         <source>Invalid end time. Have you selected some events?</source>
         <translation>Loppuaika ei ole kelvollinen. Oletko valinnut tapahtumia?</translation>
     </message>

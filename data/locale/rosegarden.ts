@@ -295,22 +295,22 @@
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="28"/>
-        <source>Half-wave crescendo - set %1 rising from min to maxin a half sine wave contour</source>
+        <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="35"/>
-        <source>Half-wave diminuendo - set %1 falling from max to minin a half sine wave contour</source>
+        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="34"/>
+        <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="29"/>
-        <source>Quarter-wave crescendo - set %1 rising from min to maxin a quarter sine wave contour</source>
+        <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="36"/>
-        <source>Quarter-wave diminuendo - set %1 falling from max to minin a quarter sine wave contour</source>
+        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="35"/>
+        <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -18642,7 +18642,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="67"/>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="789"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="741"/>
         <source>%1 Sequence</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18662,248 +18662,248 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="110"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="107"/>
         <source>Add new events to old ones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="111"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="108"/>
         <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="115"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="110"/>
         <source>Just erase old events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="116"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="111"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="133"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="125"/>
         <source>Preset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="138"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="130"/>
         <source>Preset:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="140"/>
-        <source>&lt;qt&gt;Use this saved or built-in setting.  You can edit it.  For saved (but not built-in) settings, that will become the new saved setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="153"/>
         <source>Linear ramp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="154"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="141"/>
         <source>Fast vibrato arm release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="155"/>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="252"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="142"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="232"/>
         <source>Vibrato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="161"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="148"/>
         <source>Saved setting %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="168"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="155"/>
         <source>Pre Ramp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="177"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="164"/>
         <source>Start at value:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="178"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="165"/>
         <source>Start at value (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="190"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="177"/>
         <source>Wait (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="193"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="180"/>
         <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="253"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="233"/>
         <source>Tremolo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="254"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="234"/>
         <source>LFO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="257"/>
-        <source>&lt;qt&gt;Low-frequency oscillation for this controller.  This is only possible when Ramp mode is linear and `Use this many steps&apos; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="271"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="246"/>
         <source>Start amplitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="272"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="247"/>
         <source>Start amplitude (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="284"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="259"/>
         <source>End amplitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="285"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="260"/>
         <source>End amplitude (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="296"/>
-        <source>Hertz:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="298"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="273"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="313"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="285"/>
         <source>Ramp mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="318"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="290"/>
         <source>Linear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="320"/>
-        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if `Use this many steps&apos; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="325"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="293"/>
         <source>Logarithmic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="327"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="295"/>
         <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="330"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="296"/>
         <source>Half sine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="332"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="298"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="336"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="299"/>
         <source>Quarter sine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="338"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="301"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="351"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="311"/>
         <source>How many steps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="355"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="315"/>
         <source>Use step size (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="357"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="317"/>
         <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="362"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="318"/>
         <source>Use this many steps:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="364"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="320"/>
         <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="1068"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="1020"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="167"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="154"/>
         <source>Pre Bend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="208"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="132"/>
+        <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="191"/>
         <source>Bend Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="209"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="192"/>
         <source>Ramp Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="219"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="202"/>
         <source>Bend duration (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="220"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="203"/>
         <source>Ramp duration (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="224"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="207"/>
         <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="238"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="218"/>
         <source>End value:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="239"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="219"/>
         <source>End value (%):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="423"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="237"/>
+        <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="271"/>
+        <source>Hertz (Hz):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="292"/>
+        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="375"/>
         <source>Invalid end time. Have you selected some events?</source>
         <translation type="unfinished"></translation>
     </message>

@@ -102,21 +102,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         replaceModeGroupBox->setLayout(replaceModeGroupLayoutBox);
 
         m_radioReplace = new QRadioButton(tr("Replace old events"));
-        m_radioReplace->setToolTip(tr("<qt>Erase existing pitchbends"
-                                      " or controllers of this type"
-                                      " in this range before"
-                                      " adding new ones</qt>"));
+        m_radioReplace->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
         
         m_radioOnlyAdd = new QRadioButton(tr("Add new events to old ones"));
-        m_radioOnlyAdd->setToolTip(tr("<qt>Add new pitchbends"
-                                      " or controllers without affecting"
-                                      " existing ones.</qt>"));
+        m_radioOnlyAdd->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
 
         m_radioOnlyErase = new QRadioButton(tr("Just erase old events"));
-        m_radioOnlyErase->setToolTip(tr("<qt>Don't add any events, just"
-                                        " erase existing pitchbends"
-                                        " or controllers of this type"
-                                        " in this range.</qt>"));
+        m_radioOnlyErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
 
         
         QHBoxLayout *replaceModeBox = new QHBoxLayout();
@@ -137,12 +129,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         vboxLayout->addWidget(presetBox);
         QLabel *presetLabel = new QLabel(tr("Preset:"));
         presetLabel->
-            setToolTip(tr("<qt>"
-                          "Use this saved or built-in setting.  "
-                          "You can edit it.  For saved (but not "
-                          "built-in) settings, that will become "
-                          "the new saved setting"
-                          "</qt>"));
+            setToolTip(tr("<qt>Use this saved, user editable setting.</qt>"));
         presetGrid->addWidget(presetLabel, 0, 0);
         m_sequencePreset = new QComboBox;
         presetGrid->addWidget(m_sequencePreset, 0, 1);
@@ -190,11 +177,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         QLabel *durationLabel = new QLabel(tr("Wait (%):"),
                                            prebendBox);
         durationLabel->
-            setToolTip(tr("<qt>"
-                          "How long to wait before starting the "
-                          "bend or ramp, as a "
-                          "percentage of the total time"
-                          "</qt>"));
+            setToolTip(tr("<qt>How long to wait before starting the bend or ramp, as a percentage of the total time</qt>"));
         prebendGrid->addWidget(durationLabel, 1, 0);
         m_prebendDuration = new QDoubleSpinBox(prebendBox);
         m_prebendDuration->setAccelerated(true);
@@ -221,10 +204,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         QLabel *sequenceDurationLabel =
             new QLabel(sequenceDurationText, sequencebox);
         sequenceDurationLabel->
-            setToolTip(tr("<qt>"
-                          "How long the bend or ramp lasts, as "
-                          "a percentage of the remaining time"
-                          "</qt>"));
+            setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
         sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
         m_sequenceRampDuration = new QDoubleSpinBox(sequencebox);
         m_sequenceRampDuration->setAccelerated(true);
@@ -254,12 +234,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             tr("LFO");
         QGroupBox *m_vibratoBox = new QGroupBox(vibratoBoxText, vbox );
         m_vibratoBox->
-            setToolTip(tr("<qt>"
-                          "Low-frequency oscillation for this controller.  "
-                          "This is only possible when "
-                          "Ramp mode is linear "
-                          "and `Use this many steps' is set."
-                          "</qt>"));
+            setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
         m_vibratoBox->setContentsMargins(5, 5, 5, 5);
         QGridLayout *vibratoGrid = new QGridLayout;
         vibratoGrid->setSpacing(5);
@@ -293,12 +268,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         vibratoGrid->addWidget(m_vibratoEndAmplitude, 4, 1);
 
         QLabel * vibratoFrequencyLabel =
-            new QLabel(tr("Hertz:"), m_vibratoBox);
+            new QLabel(tr("Hertz (Hz):"), m_vibratoBox);
         vibratoFrequencyLabel->
-            setToolTip(tr("<qt>"
-                          "Frequency in hertz "
-                          "(cycles per second)"
-                          "</qt>"));
+            setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
         vibratoGrid->addWidget(vibratoFrequencyLabel, 5, 0);
         m_vibratoFrequency = new QDoubleSpinBox(m_vibratoBox);
         m_vibratoFrequency->setAccelerated(true);
@@ -317,28 +289,16 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
         m_radioRampLinear = new QRadioButton(tr("Linear"));
         m_radioRampLinear->
-            setToolTip(tr("<qt>"
-                          "Ramp slopes linearly. Vibrato "
-                          "is possible if `Use this many steps' "
-                          "is set"
-                          "</qt>"));
+            setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
         m_radioRampLogarithmic = new QRadioButton(tr("Logarithmic"));
         m_radioRampLogarithmic->
-            setToolTip(tr("<qt>"
-                          "Ramp slopes logarithmically"
-                          "</qt>"));
+            setToolTip(tr("<qt>Ramp slopes logarithmically</qt>"));
         m_radioRampHalfSine = new QRadioButton(tr("Half sine"));
         m_radioRampHalfSine->
-            setToolTip(tr("<qt>"
-                          "Ramp slopes like one half "
-                          "of a sine wave (trough to peak)"
-                          "</qt>"));
+            setToolTip(tr("<qt>Ramp slopes like one half of a sine wave (trough to peak)</qt>"));
         m_radioRampQuarterSine = new QRadioButton(tr("Quarter sine"));
         m_radioRampQuarterSine->
-            setToolTip(tr("<qt>"
-                          "Ramp slopes like one quarter "
-                          "of a sine wave (zero to peak)"
-                          "</qt>"));
+            setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
 
         rampModeGroupLayoutBox->addWidget(m_radioRampLinear);
         rampModeGroupLayoutBox->addWidget(m_radioRampLogarithmic);
@@ -354,18 +314,10 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         /* Stepsize -> SELECT */
         m_radioStepSizeDirect = new QRadioButton(tr("Use step size (%):"));
         m_radioStepSizeDirect->
-            setToolTip(tr("<qt>"
-                          "Each step in the ramp will be "
-                          "as close to this size as possible. "
-                          "Vibrato is not possible with this setting"
-                          "</qt>"));
+            setToolTip(tr("<qt>Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting</qt>"));
         m_radioStepSizeByCount = new QRadioButton(tr("Use this many steps:"));
         m_radioStepSizeByCount->
-            setToolTip(tr("<qt>"
-                          "The sequence will have exactly this many "
-                          "steps.  Vibrato is possible if "
-                          "Ramp mode is linear"
-                          "</qt>"));
+            setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
         
         /* Stepsize -> direct -> step size */
         m_stepSize = new QDoubleSpinBox(stepSizeStyleGroupBox);

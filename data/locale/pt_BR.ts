@@ -298,22 +298,22 @@
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
-        <source>Half-wave crescendo - set %1 rising from min to maxin a half sine wave contour</source>
+        <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Half-wave diminuendo - set %1 falling from max to minin a half sine wave contour</source>
+        <location line="+6"/>
+        <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
-        <source>Quarter-wave crescendo - set %1 rising from min to maxin a quarter sine wave contour</source>
+        <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Quarter-wave diminuendo - set %1 falling from max to minin a quarter sine wave contour</source>
+        <location line="+6"/>
+        <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -18980,7 +18980,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="obsolete">Sequência Pitch Bend</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+133"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+125"/>
         <source>Preset</source>
         <translation>Predefinições</translation>
     </message>
@@ -18994,13 +18994,13 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="obsolete">Usuário</translation>
     </message>
     <message>
-        <location line="-71"/>
-        <location line="+722"/>
+        <location line="-63"/>
+        <location line="+674"/>
         <source>%1 Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-691"/>
+        <location line="-643"/>
         <source>Replacement mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19015,7 +19015,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+2"/>
         <source>Add new events to old ones</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19025,7 +19025,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
         <source>Just erase old events</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19035,12 +19035,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
-        <source>&lt;qt&gt;Use this saved or built-in setting.  You can edit it.  For saved (but not built-in) settings, that will become the new saved setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
+        <location line="+29"/>
         <source>Linear ramp</source>
         <translation>rampa linear</translation>
     </message>
@@ -19051,12 +19046,12 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
     </message>
     <message>
         <location line="+1"/>
-        <location line="+97"/>
+        <location line="+90"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location line="-91"/>
+        <location line="-84"/>
         <source>Saved setting %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19086,7 +19081,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+53"/>
         <source>Tremolo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19096,12 +19091,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>&lt;qt&gt;Low-frequency oscillation for this controller.  This is only possible when Ramp mode is linear and `Use this many steps&apos; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
+        <location line="+12"/>
         <source>Start amplitude:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19121,17 +19111,12 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Hertz:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+13"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+12"/>
         <source>Ramp mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19141,12 +19126,27 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if `Use this many steps&apos; is set&lt;/qt&gt;</source>
+        <location line="-158"/>
+        <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+105"/>
+        <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>Hertz (Hz):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Logarithmic</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19156,7 +19156,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+1"/>
         <source>Half sine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19166,7 +19166,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+1"/>
         <source>Quarter sine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19176,7 +19176,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+10"/>
         <source>How many steps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19191,7 +19191,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+1"/>
         <source>Use this many steps:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19201,12 +19201,12 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+704"/>
+        <location line="+700"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-901"/>
+        <location line="-866"/>
         <source>Pre Bend</source>
         <translation>Pre Bend</translation>
     </message>
@@ -19219,7 +19219,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="obsolete">Duração (%):</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+37"/>
         <source>Bend Sequence</source>
         <translation>Curva de Sequência</translation>
     </message>
@@ -19244,7 +19244,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+11"/>
         <source>End value:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19270,7 +19270,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation type="obsolete">Resolução:</translation>
     </message>
     <message>
-        <location line="+184"/>
+        <location line="+156"/>
         <source>Invalid end time. Have you selected some events?</source>
         <translation>Tempo final inválido. Você selecionou alguns eventos?</translation>
     </message>
@@ -25112,7 +25112,7 @@ Gostaria de configurá-lo agora?</translation>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="+11"/>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="-31"/>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="-120"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="-72"/>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="-6"/>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="-5"/>
