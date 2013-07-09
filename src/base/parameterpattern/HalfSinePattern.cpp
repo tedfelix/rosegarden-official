@@ -25,7 +25,7 @@ namespace Rosegarden
 HalfSinePattern
 HalfSinePattern::
 crescendo(EventParameterDialog::
-          tr("Half-wave crescendo - set %1 rising from min to max n a half sine wave contour"),
+          tr("Half-wave crescendo - set %1 rising from min to max in a half sine wave contour"),
           false);
 
 HalfSinePattern
