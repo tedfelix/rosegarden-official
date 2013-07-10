@@ -935,38 +935,41 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
         segmentLayerPainter->restore();
     }
 
+    // *** Get Segment and Preview Rectangles
+
+    // Assume we aren't going to show previews.
     CompositionModelImpl::AudioPreviewDrawData* audioPreviewData = 0;
     CompositionModelImpl::RectRanges* notationPreviewData = 0;
 
-    // *** Segment Rectangles
-
-    //
-    // Fetch previews
-    //
     if (m_showPreviews) {
-        notationPreviewData = &m_notationPreviewRects;
+        // Clear the rect containers.  Apparently getRectanglesIn() will not.
+        // Given that this is the only caller, this should be moved into
+        // getRectanglesIn().
         m_notationPreviewRects.clear();
-        audioPreviewData = &m_audioPreviewRects;
         m_audioPreviewRects.clear();
+
+        // Indicate that we want preview rects.
+        notationPreviewData = &m_notationPreviewRects;
+        audioPreviewData = &m_audioPreviewRects;
     }
 
-    //
-    // Fetch segment rectangles to draw
-    //
+    // Fetch segment rectangles and (optionally) preview rectangles
     const CompositionModelImpl::rectcontainer& rects =
         getModel()->getRectanglesIn(clipRect,
                                     notationPreviewData, audioPreviewData);
-    CompositionModelImpl::rectcontainer::const_iterator i = rects.begin();
+
     CompositionModelImpl::rectcontainer::const_iterator end = rects.end();
 
-    {
-        Profiler profiler("CompositionView::drawSegments: segment rectangles");
+    // *** Draw Segment Rectangles
 
-        //
-        // Draw Segment Rectangles
-        //
+    {
+        Profiler profiler("CompositionView::drawSegments(): segment rectangles");
+
         segmentLayerPainter->save();
-        for (; i != end; ++i) {
+
+        // For each segment rectangle, draw it
+        for (CompositionModelImpl::rectcontainer::const_iterator i = rects.begin();
+             i != end; ++i) {
             segmentLayerPainter->setBrush(i->getBrush());
             segmentLayerPainter->setPen(i->getPen());
 
@@ -975,11 +978,10 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
         }
 
         segmentLayerPainter->restore();
-
     }
 
     {
-        Profiler profiler("CompositionView::drawSegments: intersections");
+        Profiler profiler("CompositionView::drawSegments(): intersections");
 
         if (rects.size() > 1) {
             //RG_DEBUG << "CompositionView::drawSegments : drawing intersections\n";
@@ -987,7 +989,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
         }
     }
 
-    // *** Segment Previews
+    // *** Draw Segment Previews
 
     if (m_showPreviews) {
         segmentLayerPainter->save();
@@ -1028,14 +1030,15 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
         segmentLayerPainter->restore();
     }
 
-    // *** Segment Labels
+    // *** Draw Segment Labels
 
     //
     // Draw segment labels (they must be drawn over the preview rects)
     //
     if (m_showSegmentLabels) {
         Profiler profiler("CompositionView::drawSegments: labels");
-        for (i = rects.begin(); i != end; ++i) {
+        for (CompositionModelImpl::rectcontainer::const_iterator i = rects.begin();
+             i != end; ++i) {
             drawCompRectLabel(*i, segmentLayerPainter, clipRect);
         }
     }
