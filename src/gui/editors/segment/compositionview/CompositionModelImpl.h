@@ -136,8 +136,9 @@ public:
     virtual ~CompositionModelImpl();
 
     virtual unsigned int getNbRows();
-    virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 RectRanges* notationRects, AudioPreviewDrawData* audioRects);
+    /// Get the segment rectangles and segment previews
+    virtual const rectcontainer& getSegmentRects(const QRect& clipRect,
+                                                 RectRanges* notationPreview, AudioPreviewDrawData* audioPreview);
     virtual heightlist getTrackDividersIn(const QRect& rect);
     virtual itemcontainer getItemsAt (const QPoint&);
     virtual timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
@@ -280,7 +281,8 @@ protected:
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
 
-    rectcontainer m_res;
+    /// Member object which allows us to return a reference for speed.
+    rectcontainer m_segmentRects;
     itemcontainer m_changingItems;
     ChangeType    m_changeType;
 

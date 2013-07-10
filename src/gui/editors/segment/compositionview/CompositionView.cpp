@@ -955,7 +955,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
 
     // Fetch segment rectangles and (optionally) preview rectangles
     const CompositionModelImpl::rectcontainer& rects =
-        getModel()->getRectanglesIn(clipRect,
+        getModel()->getSegmentRects(clipRect,
                                     notationPreviewData, audioPreviewData);
 
     CompositionModelImpl::rectcontainer::const_iterator end = rects.end();

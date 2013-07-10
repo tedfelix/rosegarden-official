@@ -1185,13 +1185,16 @@ unsigned int CompositionModelImpl::getNbRows()
     return m_composition.getNbTracks();
 }
 
-const CompositionModelImpl::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
-        RectRanges* npData,
-        AudioPreviewDrawData* apData)
+const CompositionModelImpl::rectcontainer&
+CompositionModelImpl::getSegmentRects(
+        const QRect& clipRect,
+        RectRanges* notationPreview,
+        AudioPreviewDrawData* audioPreview)
 {
     Profiler profiler("CompositionModelImpl::getRectanglesIn");
 
-    m_res.clear();
+    // Clear the container we'll be returning.
+    m_segmentRects.clear();
 
     //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
     //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
@@ -1209,22 +1212,22 @@ const CompositionModelImpl::rectcontainer& CompositionModelImpl::getRectanglesIn
         if (isMoving(s))
             continue;
 
-        CompositionRect sr = computeSegmentRect(*s);
+        CompositionRect segmentRect = computeSegmentRect(*s);
         //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr;
 
-        if (sr.intersects(rect)) {
+        if (segmentRect.intersects(clipRect)) {
             bool tmpSelected = isTmpSelected(s),
                  pTmpSelected = wasTmpSelected(s);
 
 //            RG_DEBUG << "CompositionModelImpl::getRectanglesIn: segment " << s 
 //                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s);
                        
-            if (isSelected(s) || isTmpSelected(s) || sr.intersects(m_selectionRect)) {
-                sr.setSelected(true);
+            if (isSelected(s) || isTmpSelected(s) || segmentRect.intersects(m_selectionRect)) {
+                segmentRect.setSelected(true);
             }
 
             if (pTmpSelected != tmpSelected)
-                sr.setNeedsFullUpdate(true);
+                segmentRect.setNeedsFullUpdate(true);
 
             bool isAudio = (s && s->getType() == Segment::Audio);
 
@@ -1233,29 +1236,29 @@ const CompositionModelImpl::rectcontainer& CompositionModelImpl::getRectanglesIn
                                     getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 Qt::BrushStyle brushPattern =
                     s->isTrulyLinked() ? Qt::Dense2Pattern : Qt::SolidPattern;
-                sr.setBrush(QBrush(brushColor, brushPattern));
-                sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+                segmentRect.setBrush(QBrush(brushColor, brushPattern));
+                segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
             } else {
                 // border is the same for both audio and MIDI
-                sr.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
+                segmentRect.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
                 // audio color
                 if (isAudio) {
-                    sr.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
+                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
                     // MIDI/default color
                 } else {
-                    sr.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
+                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
                 }
             }
 
             // Notation preview data
-            if (npData && s->getType() == Segment::Internal) {
-                makeNotationPreviewRects(npData, QPoint(0, sr.y()), s, rect);
+            if (notationPreview  &&  s->getType() == Segment::Internal) {
+                makeNotationPreviewRects(notationPreview, QPoint(0, segmentRect.y()), s, clipRect);
                 // Audio preview data
-            } else if (apData && s->getType() == Segment::Audio) {
-                makeAudioPreviewRects(apData, s, sr, rect);
+            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
+                makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
             }
 
-            m_res.push_back(sr);
+            m_segmentRects.push_back(segmentRect);
         } else {
             //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: - segment out of rect";
         }
@@ -1266,28 +1269,28 @@ const CompositionModelImpl::rectcontainer& CompositionModelImpl::getRectanglesIn
 
     itemcontainer::iterator movEnd = m_changingItems.end();
     for (itemcontainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
-        CompositionRect sr((*i)->rect());
-        if (sr.intersects(rect)) {
+        CompositionRect segmentRect((*i)->rect());
+        if (segmentRect.intersects(clipRect)) {
             Segment* s = CompositionItemHelper::getSegment(*i);
-            sr.setSelected(true);
+            segmentRect.setSelected(true);
             QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-            sr.setBrush(brushColor);
+            segmentRect.setBrush(brushColor);
 
-            sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+            segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
 
             // Notation preview data
-            if (npData && s->getType() == Segment::Internal) {
-                makeNotationPreviewRectsMovingSegment(npData, sr.topLeft(), s, sr);
+            if (notationPreview  &&  s->getType() == Segment::Internal) {
+                makeNotationPreviewRectsMovingSegment(notationPreview, segmentRect.topLeft(), s, segmentRect);
                 // Audio preview data
-            } else if (apData && s->getType() == Segment::Audio) {
-                makeAudioPreviewRects(apData, s, sr, rect);
+            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
+                makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
             }
 
-            m_res.push_back(sr);
+            m_segmentRects.push_back(segmentRect);
         }
     }
 
-    return m_res;
+    return m_segmentRects;
 }
 
 CompositionModelImpl::heightlist CompositionModelImpl::getTrackDividersIn(const QRect& rect)
