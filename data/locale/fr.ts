@@ -2862,12 +2862,12 @@
     <message>
         <location line="-3684"/>
         <source>Nothing to &amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rien à &amp;défaire</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Nothing to &amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rien à &amp;refaire</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -3059,25 +3059,25 @@
         <location line="+6"/>
         <location line="+1707"/>
         <source>Cut Controller Events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation>Couper événements contrôleurs (&amp;X)</translation>
     </message>
     <message>
         <location line="-1706"/>
         <location line="+1707"/>
         <source>&amp;Copy Controller Events</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Copier événements contrôleurs</translation>
     </message>
     <message>
         <location line="-1706"/>
         <location line="+1707"/>
         <source>Paste Events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller événements (&amp;V)</translation>
     </message>
     <message>
         <location line="-1705"/>
         <location line="+1707"/>
         <source>&amp;Place a Controller for Each Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Associer un contrôleur à chaque note</translation>
     </message>
     <message>
         <location line="-1696"/>
@@ -3734,36 +3734,36 @@
         <location line="-1879"/>
         <location line="+1911"/>
         <source>&amp;Rosegarden Tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tutoriel Rosegarden</translation>
     </message>
     <message>
         <location line="-1641"/>
         <location line="+1946"/>
         <location line="+551"/>
         <source>&amp;Nothing to Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rie&amp;n à défaire</translation>
     </message>
     <message>
         <location line="-2488"/>
         <location line="+1946"/>
         <location line="+543"/>
         <source>N&amp;othing to Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rien à re&amp;faire</translation>
     </message>
     <message>
         <location line="-2393"/>
         <source>&amp;Guess Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Deviner la pulsation</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>Add Clef Change in This Link Only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un changement de clef dans ce lien précis...</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Unadopt an Adopted Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Abandonner un segment adopté</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -3803,92 +3803,92 @@
     <message>
         <location line="+133"/>
         <source>Switch to &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer des &amp;notes</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Switch to &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer des &amp;silences</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>To&amp;ggle Dot on</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pointer les notes et silences</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>To&amp;ggle Dot off</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne pas &amp;pointer les notes et silences</translation>
     </message>
     <message>
         <location line="+753"/>
         <source>Import Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer un fichier &amp;Projet Rosegarden...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer un fichier &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer un fichier Rosegarden &amp;X11...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Import MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer un fichier MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Merge &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner un fichier &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner un fichier Rosegarden &amp;X11...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Merge MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner un fichier MusicXM&amp;L...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Export Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter un fichier &amp;Projet Rosegarden...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;LilyPond File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter en Fichier &amp;Lilypond...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter en fichier &amp;MIDI...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;Csound Score File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter en fichier partition &amp;Csound...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export M&amp;up File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter en fichier M&amp;up...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export Music&amp;XML File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter en fichier Music&amp;XML...</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Enre&amp;gistrer sous...</translation>
     </message>
     <message>
         <location line="+79"/>
@@ -3904,12 +3904,12 @@
     <message>
         <location line="+100"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished">Ajuster la pulsation existante à celle du segment de pulsation</translation>
+        <translation>Ajuster la pulsation existante à celle du segment de pulsation</translation>
     </message>
     <message>
         <location line="+53"/>
         <source>Open in &amp;Default Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir dans l&apos;éditeur par &amp;défaut</translation>
     </message>
     <message>
         <location line="+76"/>
@@ -4043,12 +4043,12 @@
     <message>
         <location line="+116"/>
         <source>&amp;Move to Staff Above...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dé&amp;placer vers la portée du dessus</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move to Staff &amp;Below...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dép&amp;lacer vers la portée du dessous</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -10880,7 +10880,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre à jour les traits</translation>
     </message>
 </context>
 <context>
@@ -11332,7 +11332,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location line="+8"/>
         <source>Create JACK outputs</source>
-        <translation>Créer des sorties JACK</translation>
+        <translation type="unfinished">Créer des sorties JACK</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -11347,17 +11347,17 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location line="+12"/>
         <source>Make default JACK connections for</source>
-        <translation>Fair connexions de JACK par défaut</translation>
+        <translation>Créer des connexions JACK par défaut</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio outputs</source>
-        <translation>sorties audio</translation>
+        <translation>pour les sorties audio</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>audio inputs</source>
-        <translation>entrées audio</translation>
+        <translation>pour les entrées audio</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -13257,7 +13257,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Réaliser un ornement</translation>
+        <translation>Réaliser un ornement</translation>
     </message>
 </context>
 <context>
