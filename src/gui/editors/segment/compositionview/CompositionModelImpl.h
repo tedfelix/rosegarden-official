@@ -135,46 +135,46 @@ public:
 
     virtual ~CompositionModelImpl();
 
-    virtual unsigned int getNbRows();
+    unsigned int getNbRows();
     /// Get the segment rectangles and segment previews
-    virtual const rectcontainer& getSegmentRects(const QRect& clipRect,
-                                                 RectRanges* notationPreview, AudioPreviewDrawData* audioPreview);
-    virtual heightlist getTrackDividersIn(const QRect& rect);
-    virtual itemcontainer getItemsAt (const QPoint&);
-    virtual timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
+    const rectcontainer& getSegmentRects(const QRect& clipRect,
+                                         RectRanges* notationPreview, AudioPreviewDrawData* audioPreview);
+    heightlist getTrackDividersIn(const QRect& rect);
+    itemcontainer getItemsAt (const QPoint&);
+    timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
-    virtual SnapGrid& grid() { return m_grid; }
+    SnapGrid& grid() { return m_grid; }
 
-    virtual void setPointerPos(int xPos);
-    virtual void setSelected(const CompositionItem&, bool selected = true);
-    virtual bool isSelected(const CompositionItem&) const;
-    virtual void setSelected(const itemcontainer&);
-    virtual void setSelected(const Segment*, bool selected = true);
-    virtual bool isSelected(const Segment*) const;
-    virtual void clearSelected();
-    virtual bool haveSelection() const { return !m_selectedSegments.empty(); }
-    virtual bool haveMultipleSelection() const { return m_selectedSegments.size() > 1; }
-    virtual void signalSelection();
-    virtual void setSelectionRect(const QRect&);
-    virtual void finalizeSelectionRect();
-    virtual QRect getSelectionContentsRect();
-    virtual void signalContentChange();
+    void setPointerPos(int xPos);
+    void setSelected(const CompositionItem&, bool selected = true);
+    bool isSelected(const CompositionItem&) const;
+    void setSelected(const itemcontainer&);
+    void setSelected(const Segment*, bool selected = true);
+    bool isSelected(const Segment*) const;
+    void clearSelected();
+    bool haveSelection() const { return !m_selectedSegments.empty(); }
+    bool haveMultipleSelection() const { return m_selectedSegments.size() > 1; }
+    void signalSelection();
+    void setSelectionRect(const QRect&);
+    void finalizeSelectionRect();
+    QRect getSelectionContentsRect();
+    void signalContentChange();
 
-    virtual void addRecordingItem(const CompositionItem&);
-    virtual void removeRecordingItem(const CompositionItem &);
-    virtual void clearRecordingItems();
-    virtual bool haveRecordingItems() { return !m_recordingSegments.empty(); }
+    void addRecordingItem(const CompositionItem&);
+    void removeRecordingItem(const CompositionItem &);
+    void clearRecordingItems();
+    bool haveRecordingItems() { return !m_recordingSegments.empty(); }
 
-    virtual void startChange(const CompositionItem&, ChangeType change);
-    virtual void startChangeSelection(ChangeType change);
-    virtual itemcontainer& getChangingItems() { return m_changingItems; }
-    virtual void endChange();
-    virtual ChangeType getChangeType() { return m_changeType; }
+    void startChange(const CompositionItem&, ChangeType change);
+    void startChangeSelection(ChangeType change);
+    itemcontainer& getChangingItems() { return m_changingItems; }
+    void endChange();
+    ChangeType getChangeType() { return m_changeType; }
 
-    virtual void setLength(int width);
-    virtual int  getLength();
+    void setLength(int width);
+    int  getLength();
 
-    virtual unsigned int getHeight();
+    unsigned int getHeight();
     
     void setAudioPreviewThread(AudioPreviewThread *thread);
     AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
@@ -192,7 +192,7 @@ public:
     Studio&          getStudio()           { return m_studio; }
 
 
-    // CompositionObserver
+    // CompositionObserver Interface
     virtual void segmentAdded(const Composition *, Segment *);
     virtual void segmentRemoved(const Composition *, Segment *);
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
@@ -201,7 +201,7 @@ public:
     virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
     virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
 
-    // SegmentObserver
+    // SegmentObserver Interface
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
     virtual void AllEventsChanged(const Segment *s);
