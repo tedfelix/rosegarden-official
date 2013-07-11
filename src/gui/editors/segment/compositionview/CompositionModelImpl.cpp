@@ -352,7 +352,7 @@ void CompositionModelImpl::clearPreviewCache()
     }
 }
 
-void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, rectlist* npData)
+void CompositionModelImpl::createEventRects(const Segment* segment, rectlist* npData)
 {
     npData->clear();
 
@@ -386,7 +386,7 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
                                   (eventStart,
                                    eventEnd - eventStart)));
 
-        //RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment: x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")";
+        //RG_DEBUG << "CompositionModelImpl::createEventRects: x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")";
 
         if (x <= segStartX) {
             ++x;
@@ -1209,6 +1209,7 @@ CompositionModelImpl::getSegmentRects(
         
         const Segment* s = *i;
 
+        // Moving segments are handled in the next for loop.
         if (isMoving(s))
             continue;
 
@@ -1216,9 +1217,6 @@ CompositionModelImpl::getSegmentRects(
         //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr;
 
         if (segmentRect.intersects(clipRect)) {
-            bool tmpSelected = isTmpSelected(s),
-                 pTmpSelected = wasTmpSelected(s);
-
 //            RG_DEBUG << "CompositionModelImpl::getRectanglesIn: segment " << s 
 //                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s);
                        
@@ -1226,7 +1224,7 @@ CompositionModelImpl::getSegmentRects(
                 segmentRect.setSelected(true);
             }
 
-            if (pTmpSelected != tmpSelected)
+            if (wasTmpSelected(s) != isTmpSelected(s))
                 segmentRect.setNeedsFullUpdate(true);
 
             bool isAudio = (s && s->getType() == Segment::Audio);
@@ -1265,7 +1263,7 @@ CompositionModelImpl::getSegmentRects(
 
     }
 
-    // changing items
+    // changing items (moving segments)
 
     itemcontainer::iterator movEnd = m_changingItems.end();
     for (itemcontainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
@@ -1345,7 +1343,7 @@ CompositionModelImpl::AudioPreviewData* CompositionModelImpl::getAudioPreviewDat
 CompositionModelImpl::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
     rectlist* npData = new rectlist();
-    updatePreviewCacheForNotationSegment(s, npData);
+    createEventRects(s, npData);
     m_notationPreviewDataCache[s] = npData;
     return npData;
 }

@@ -182,9 +182,6 @@ public:
     void clearPreviewCache();
     void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
 
-    rectlist*         makeNotationPreviewDataCache(const Segment *s);
-    AudioPreviewData* makeAudioPreviewDataCache(const Segment *s);
-
     CompositionRect computeSegmentRect(const Segment&, bool computeZ = false);
     QColor          computeSegmentPreviewColor(const Segment*);
     QPoint          computeSegmentOrigin(const Segment&);
@@ -239,20 +236,27 @@ protected:
         
     // segment preview stuff
 
-    void updatePreviewCacheForNotationSegment(const Segment* s, rectlist*);
-    void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData*);
+    // Notation Previews
+    void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint,
+                                  const Segment* segment, const QRect& clipRect);
+    void makeNotationPreviewRectsMovingSegment(
+            RectRanges* npData, QPoint basePoint, const Segment* segment,
+            const QRect& currentSR);
     rectlist* getNotationPreviewData(const Segment* s);
+    rectlist* makeNotationPreviewDataCache(const Segment *s);
+    void createEventRects(const Segment* segment, rectlist*);
+
+    // Audio Previews
+    void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData*);
     AudioPreviewData* getAudioPreviewData(const Segment* s);
     PixmapArray getAudioPreviewPixmap(const Segment* s);
     QRect postProcessAudioPreview(AudioPreviewData*, const Segment*);
+    void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Segment*,
+                               const CompositionRect& segRect, const QRect& clipRect);
+    AudioPreviewData* makeAudioPreviewDataCache(const Segment *s);
 
     void makePreviewCache(const Segment* s);
     void removePreviewCache(const Segment* s);
-    void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint, const Segment*, const QRect&);
-    void makeNotationPreviewRectsMovingSegment(RectRanges* npData, QPoint basePoint, const Segment*,
-                                               const QRect&);
-    void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Segment*,
-                               const CompositionRect& segRect, const QRect& clipRect);
 
     void clearInCache(const Segment*, bool clearPreviewCache = false);
     void putInCache(const Segment*, const CompositionRect&);
@@ -275,10 +279,12 @@ protected:
 
     AudioPreviewThread*          m_audioPreviewThread;
 
+    // Notation Preview
     typedef std::map<const Segment *, rectlist *> NotationPreviewDataCache;
-    typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
-
     NotationPreviewDataCache     m_notationPreviewDataCache;
+
+    // Audio Preview
+    typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
 
     /// Member object which allows us to return a reference for speed.
