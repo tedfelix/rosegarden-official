@@ -2880,12 +2880,12 @@
     <message>
         <location line="-3684"/>
         <source>Nothing to &amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichts rückgängig zu machen (&amp;U)</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Nothing to &amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichts zu wiederholen (&amp;R)</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -3077,25 +3077,25 @@
         <location line="+6"/>
         <location line="+1707"/>
         <source>Cut Controller Events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Event ausschneiden (&amp;X)</translation>
     </message>
     <message>
         <location line="-1706"/>
         <location line="+1707"/>
         <source>&amp;Copy Controller Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Event kopieren (&amp;C)</translation>
     </message>
     <message>
         <location line="-1706"/>
         <location line="+1707"/>
         <source>Paste Events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Event einfügen (&amp;V)</translation>
     </message>
     <message>
         <location line="-1705"/>
         <location line="+1707"/>
         <source>&amp;Place a Controller for Each Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler für jede Note platzieren (&amp;P)</translation>
     </message>
     <message>
         <location line="-1696"/>
@@ -3752,21 +3752,21 @@
         <location line="-1879"/>
         <location line="+1911"/>
         <source>&amp;Rosegarden Tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rosegarden Handbuch</translation>
     </message>
     <message>
         <location line="-1641"/>
         <location line="+1946"/>
         <location line="+551"/>
         <source>&amp;Nothing to Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nichts rückgängig zu machen</translation>
     </message>
     <message>
         <location line="-2488"/>
         <location line="+1946"/>
         <location line="+543"/>
         <source>N&amp;othing to Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichts zu wiederh&amp;olen</translation>
     </message>
     <message>
         <location line="-2446"/>
@@ -3783,12 +3783,12 @@
     <message>
         <location line="+44"/>
         <source>&amp;Guess Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktschläge raten (&amp;G)</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>Add Clef Change in This Link Only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur in diesem Link die Änderung des Notenschlüssels hinzufügen...</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -3823,7 +3823,7 @@
     <message>
         <location line="+227"/>
         <source>Mark Selection as Auto-Generated</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl als &quot;automatisch erzeugt&quot; markieren</translation>
     </message>
     <message>
         <location line="+131"/>
@@ -3909,12 +3909,12 @@
     <message>
         <location line="+116"/>
         <source>&amp;Move to Staff Above...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Notensystem oberhalb verschieben (&amp;M)...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move to Staff &amp;Below...</source>
-        <translation type="unfinished"></translation>
+        <translation>Notensystem unterhalb schieben (&amp;B)...</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -4334,7 +4334,7 @@
     <message>
         <location line="+81"/>
         <source>Switch to &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu &amp;Noten umschalten</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4346,12 +4346,12 @@
     <message>
         <location line="-7"/>
         <source>Switch to &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu &amp;Pausen umschalten</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>To&amp;ggle Dot on</source>
-        <translation type="unfinished"></translation>
+        <translation>Umschaltun&amp;g Punktierung ein</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4363,7 +4363,7 @@
     <message>
         <location line="-7"/>
         <source>To&amp;ggle Dot off</source>
-        <translation type="unfinished"></translation>
+        <translation>Umschaltun&amp;g Punktierung aus</translation>
     </message>
     <message>
         <location line="+478"/>
@@ -5213,82 +5213,82 @@
     <message>
         <location line="-620"/>
         <source>Import Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden &amp;Projekt-Datei importieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI-Datei importieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;X11 Rosegarden Datei importieren...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Import MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXM&amp;L Datei importieren...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Merge &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit &amp;MIDI-Datei zusammenfügen...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit &amp;X11 Rosegarden Datei zusammenfügen...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Merge MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit MusicXM&amp;L--Datei zusammenfügen...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Export Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden &amp;Projekt-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;LilyPond File...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;LilyPond-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;Csound Score File...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Csound-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export M&amp;up File...</source>
-        <translation type="unfinished"></translation>
+        <translation>M&amp;up-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export Music&amp;XML File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Music&amp;XML-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern &amp;als...</translation>
     </message>
     <message>
         <location line="+186"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished">Existierende Takte an Takt-Segment anpassen</translation>
+        <translation>Existierende Takte an Takt-Segment anpassen</translation>
     </message>
     <message>
         <location line="+53"/>
         <source>Open in &amp;Default Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Im Standard Editor öffnen (&amp;D)</translation>
     </message>
     <message>
         <location line="+114"/>
@@ -10859,12 +10859,12 @@
     <message>
         <location line="+2"/>
         <source>Generated Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzeugtes Segment</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment of unknown type</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment mit unbekanntem Typ</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
@@ -10884,7 +10884,7 @@
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Figurationen anpassen</translation>
     </message>
 </context>
 <context>
@@ -13273,7 +13273,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Verzierung hinzufügen</translation>
+        <translation>Verzierung hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -14078,12 +14078,12 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location line="+1"/>
         <source>Generated regions</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzeugte Regionen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment ID</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14764,7 +14764,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="+40"/>
         <source>Generated region</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzeugte Region</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -18937,7 +18937,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location line="-63"/>
         <location line="+674"/>
         <source>%1 Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Sequenz</translation>
     </message>
     <message>
         <location line="-643"/>
@@ -19008,17 +19008,17 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+9"/>
         <source>Start at value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Beginn bei Wert:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start at value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Beginn bei Wert (%):</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Wait (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Warte (%):</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -19038,12 +19038,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+31"/>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tremolo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LFO</source>
-        <translation type="unfinished"></translation>
+        <translation>LFO</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -19053,7 +19053,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+34"/>
         <source>Hertz (Hz):</source>
-        <translation type="unfinished"></translation>
+        <translation>Hertz (Hz):</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -19093,12 +19093,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+5"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Linear</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation>Logarithmisch</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19128,7 +19128,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+10"/>
         <source>How many steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Wie viele Stufen</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -19153,7 +19153,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+700"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</translation>
     </message>
     <message>
         <source>User %1</source>
@@ -19185,7 +19185,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+11"/>
         <source>End value:</source>
-        <translation type="unfinished"></translation>
+        <translation>End Wert:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -22187,7 +22187,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/commands/edit/SelectAddEvenNotesCommand.h" line="+91"/>
         <source>Select Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktschläge auswählen</translation>
     </message>
 </context>
 <context>
