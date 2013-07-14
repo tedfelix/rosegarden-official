@@ -219,7 +219,7 @@
         <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+39"/>
         <source>First Value</source>
-        <translation>最初の価</translation>
+        <translation>最初の値</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -240,22 +240,22 @@
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+27"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">増加 - 値を %1 上げる</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Increase by</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">によって増加</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">減少 - 値を %1 下げる</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Decrease by</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">によって減少</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+28"/>
@@ -2305,7 +2305,7 @@
     <message>
         <location line="-3312"/>
         <source>&amp;Repeat Last Quantize</source>
-        <translation>最後のクォンタイズを繰り返す(&amp;R)</translation>
+		<translation>直前のクォンタイズを繰り返す(&amp;R)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4096,7 +4096,7 @@
     <message>
         <location line="+1"/>
         <source>Make &amp;Parameter Chord</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished">コードのパラメータを表示(&amp;D)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4303,7 +4303,7 @@
     <message>
         <location line="+69"/>
         <source>Solo the Active Track</source>
-        <translation></translation>
+        <translation>アクティブなトラックだけにする</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -4884,7 +4884,7 @@
     <message>
         <location line="+1"/>
         <source>MIDI &amp;Thru Routing</source>
-        <translation></translation>
+		<translation>MIDI &amp;Thruルーティング</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4992,7 +4992,7 @@
     <message>
         <location line="+1"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished">&amp;装飾のブロックコードセグメントを展開</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -5047,7 +5047,7 @@
     <message>
         <location line="+9"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
-        <translation></translation>
+        <translation>トラックの録音を用意、又は解除</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -5296,7 +5296,7 @@
         <location line="+151"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+Enter, Enter, メディア再生, Ctrl+Return, Return</translation>
     </message>
     <message>
         <location line="+109"/>
@@ -5371,7 +5371,7 @@
     <message>
         <location line="+5"/>
         <source>Font &quot;%1&quot; not available in size %2</source>
-        <translation>フォント &quot;%1&quot;では%2というサイズは無効</translation>
+        <translation>フォント &quot;%1&quot;ではサイズ%2は無効</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="+72"/>
@@ -5459,7 +5459,7 @@
     <message>
         <location line="+1"/>
         <source>Plucked strings</source>
-        <translation></translation>
+        <translation>弦をはじく(撥)ストリング</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6363,7 +6363,7 @@
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="-23"/>
         <source>Timpani</source>
-        <translation></translation>
+        <translation>ティンパニ</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7115,7 +7115,7 @@
     <message>
         <location line="+1"/>
         <source>Duck call</source>
-        <translation></translation>
+		<translation>アヒルの鳴き声</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8125,7 +8125,7 @@
     <message>
         <location line="+1"/>
         <source>Side Stick</source>
-        <translation></translation>
+		<translation>サイドスティック</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8150,7 +8150,7 @@
     <message>
         <location line="+1"/>
         <source>Closed Hi-Hat</source>
-        <translation></translation>
+		<translation>クローズドハイハット</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8160,7 +8160,7 @@
     <message>
         <location line="+1"/>
         <source>Pedal Hi-Hat</source>
-        <translation></translation>
+        <translation>ペダルハイハット</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8170,7 +8170,7 @@
     <message>
         <location line="+1"/>
         <source>Open Hi-Hat</source>
-        <translation></translation>
+        <translation>オープンハイハット</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8195,7 +8195,7 @@
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 1</source>
-        <translation></translation>
+        <translation>ライドシンバル1</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8205,7 +8205,7 @@
     <message>
         <location line="+1"/>
         <source>Ride Bell</source>
-        <translation></translation>
+        <translation>ライドベル</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -8230,7 +8230,7 @@
     <message>
         <location line="+1"/>
         <source>Ride Cymbal 2</source>
-        <translation></translation>
+		<translation>ライドシンバル2</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8285,7 +8285,7 @@
     <message>
         <location line="+1"/>
         <source>Long Whistle</source>
-        <translation></translation>
+        <translation>長い笛</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8325,7 +8325,7 @@
     <message>
         <location line="+1"/>
         <source>Open Triangle</source>
-        <translation></translation>
+        <translation>オープントライアングル</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10899,7 +10899,7 @@
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt; {2000-2013 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -10974,12 +10974,12 @@
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+107"/>
         <source>Can&apos;t add identical overlapping indications</source>
-        <translation></translation>
+        <translation>同一の指標の追加はできません</translation>
     </message>
     <message>
         <location line="+114"/>
         <source>Add S&amp;lur</source>
-        <translation>スラー追加(&amp;l)</translation>
+        <translation>スラーを追加(&amp;l)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -11029,7 +11029,7 @@
     <message>
         <location line="+2"/>
         <source>Add Parameter Chord</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">パラメータコードの追加</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -13457,7 +13457,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="+48"/>
         <location line="+1"/>
         <source>About</source>
-        <translation>について</translation>
+        <translation>概要</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -13477,12 +13477,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+3"/>
         <source>Formal duration (to end marker):</source>
-        <translation></translation>
+        <translation>形式持続時間(マーカーの最後まで):</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Playing duration:</source>
-        <translation>再生のデュレーション</translation>
+        <translation>再生のデュレーション:</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -13649,7 +13649,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/segment/EraseTempiInRangeCommand.cpp" line="+30"/>
         <source>Erase Tempos in Range</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">範囲のテンポを削除</translation>
     </message>
 </context>
 <context>
@@ -13954,7 +13954,7 @@ This could cause problems if it overrides a different computed value later on.</
     </message>
     <message>
         <source>First Value</source>
-        <translation type="obsolete">最初の価</translation>
+        <translation type="obsolete">最初の値</translation>
     </message>
     <message>
         <source>Second Value</source>
@@ -15851,17 +15851,17 @@ Would you like to use
     <message>
         <location line="+76"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;五線の括弧書き楽器名は &lt;b&gt;トラックパラメータ&lt;/b&gt; ボックスに見つかりました、楽器をグループ化するよう様々な方法で使用するかもしれません。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Print short staff names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">楽器の短縮名を印刷</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;大規模で複雑なスコアに便利です。これは譜面の行を壊すことがある時は毎回短縮名を印刷し、ページをまたがって行に属する楽器を追うのをより容易にします。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -15871,12 +15871,12 @@ Would you like to use
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;ノート名と臨時記号をLilyPondがサポートする言語で出力&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Use repeat when possible</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">可能な時は繰り返しを使用</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15886,27 +15886,27 @@ Would you like to use
     <message>
         <location line="+5"/>
         <source>Draw bar line at volta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ヴォルタに小節線を描く</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;繰り返しセグメントのエクスポート方法: チェックがない時は,繰り返しセグメントは常に折りたたまれません。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Cancel accidentals</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished">臨時記号のキャンセル</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;チェックした場合、LilyPondは全ての譜面を空でも印刷します。  このオプションを切った場合はいくつかの音を長く発しない譜面を備える楽器に対しての混乱を抑える事ができます。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Export empty staves</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">空の五線譜をエクスポート</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -16032,7 +16032,7 @@ Would you like to use
     <message>
         <location line="+7"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">五線の括弧書き楽器名をエクスポート</translation>
     </message>
     <message>
         <location line="-15"/>
@@ -16072,7 +16072,7 @@ Would you like to use
     <message>
         <location line="-5"/>
         <source>Interpret chord texts as lead sheet chord names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">コードの文字をリード・シートのコード名として解釈する</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -17611,12 +17611,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+3"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">トラックの五線の括弧をエクスポート</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;トラックの楽器の括弧は &lt;b&gt;トラックパラメータ&lt;/b&gt; ボックスに見つかりました、 また、色々な方法で楽器をグループ化するのにも用いられます。&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -17631,7 +17631,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Set the MusicXML version you want export&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;エクスポート死体MusicXMLバージョンを設定&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;エクスポートしたいMusicXMLバージョンを設定&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -17651,7 +17651,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Exporting percussion is still experimental.&lt;/p&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion.&amp;quot;  When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;/p&gt;&lt;p&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn&apos;t have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;パーカッションのエクスポートはまだ実験的機能です。&lt;/p&gt;パーカッションは &amp;quot;音符として&amp;quot;又は &amp;quot;パーカッションとして&amp;quot;エクスポートできます。  &amp;quot;音符として&amp;quot;パーカッションのトラックを出力する時はの通常のトラックとして扱われます。&lt;/p&gt;&lt;p&gt;&amp;quot;パーカッションとして&amp;quot;出力されるならば、MusicXMLのパーカッションパートとしてエクスポートされます。 Rosegardenがパーカッションの表記法を有してない為に、 MusicXML出力はパーカッショントラックをパーカッション表記に変換するよう試みます。このオプションはまだ &lt;b&gt;実験的&lt;/b&gt;です。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -17676,7 +17676,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+8"/>
         <source>Use &quot;&lt;octave-shift&gt;&quot; for transposing instruments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">再生する楽器に対して &quot;&lt;オクターブ・シフト&gt;&quot; を使用</translation>
     </message>
     <message>
         <location line="+45"/>
@@ -17689,7 +17689,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+67"/>
         <source>Provided by</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">による提供</translation>
     </message>
 </context>
 <context>
@@ -17968,7 +17968,7 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+17"/>
         <source>Show repeated segments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">繰り返しセグメントを表示</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -19133,7 +19133,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+49"/>
         <source>Ramp duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">デュレーションの立ちあがり(%):</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -19157,7 +19157,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="-28"/>
         <source>Bend Sequence</source>
-        <translation></translation>
+        <translation>ベンドシーケンス</translation>
     </message>
     <message>
         <source>Vibrato wavelength:</source>
@@ -19282,7 +19282,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+14"/>
         <source>Ignore Octave Errors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">オクターブの誤りを無視</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -19292,17 +19292,17 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+7"/>
         <source>Graph Width (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">グラフの幅(ms)</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Graph Height (cents)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">グラフの高さ(セント)</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished">アピアランス</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -21077,7 +21077,7 @@ No segment will be split.</source>
     <message>
         <location line="+9"/>
         <source>Anacrusis Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">弱拍（上拍）の量</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -21087,7 +21087,7 @@ No segment will be split.</source>
     <message>
         <location line="+28"/>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">訂正したテンポと拍子記号を挿入します</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -21387,7 +21387,7 @@ Error was : %2</source>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Rosegardenはオーディオパス&quot;%1&quot;をオーディオ録音とドロップされたオーディオファイルの受け取りに使用するよう作成しました。&lt;/p&gt;&lt;p&gt;違うパスを使うなら、&lt;b&gt;表示 -&gt; ドキュメント プロパティ -&gt; オーディオ&lt;/b&gt;から変更してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22165,7 +22165,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+52"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;システム大麻の解像度が小さすぎます!&lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;システムタイマーの解像度が小さすぎます!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -22276,7 +22276,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.cpp" line="+32"/>
         <source>Set Default Time Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">規定値の時間調整に設定する</translation>
     </message>
 </context>
 <context>
@@ -22568,7 +22568,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+4"/>
         <source>Always split at this pitch</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished">このピッチで常に分割する</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -22578,17 +22578,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+1"/>
         <source>Split the lowest tone from each chord</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished">それぞれのコードの最低音を分割する</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split the highest tone from each chord</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">それぞれのコードの最高音を分割する</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split all chords at the same relative tone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">全てのコードで同一の相対音を分割する</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22668,7 +22668,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+6"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished"></translation>
+		<translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -22703,7 +22703,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+48"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;表記が一貫していません。&lt;/p&gt;&lt;p&gt;クリックして更なる情報を得る&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+166"/>
@@ -23802,7 +23802,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;トラック名は楽器の表記名でもあります、 例: &amp;quot;トランペット&amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -23812,7 +23812,7 @@ Would you like to set it now?</source>
     <message>
         <location line="-2"/>
         <source>Enter short name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">短縮名を入力</translation>
     </message>
 </context>
 <context>
@@ -23902,7 +23902,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;LilyPondでの譜の括弧&lt;br&gt;(壊れやすいので慎重に使うこと)&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -23997,7 +23997,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+35"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;LilyPondにエクスポートする時、この(通常サイズの)譜面上の音符要素に対するフォントさイズを、通常/小/大フォントサイズから選択。&lt;/p&gt;&lt;p&gt;これは、キューさイズでパーツを印刷する異を出来るようにし始めるのと同じくらい緻密である。(This is as close as we get to enabling you to print parts in cue size)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;LilyPondにエクスポートする時、この(通常サイズの)譜面上の音符要素に対するフォントサイズを、通常/小/大フォントサイズから選択。&lt;/p&gt;&lt;p&gt;これは、キューサイズでパーツを印刷する異を出来るようにし始めるのと同じくらい緻密である。(This is as close as we get to enabling you to print parts in cue size)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+60"/>
