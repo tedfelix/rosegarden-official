@@ -2269,7 +2269,7 @@
     <message>
         <location line="+217"/>
         <source>Select but Don&apos;t Follow Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswählen, aber Bögen nicht folgen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3798,27 +3798,27 @@
     <message>
         <location line="+9"/>
         <source>Unadopt an Adopted Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Angenommenes Segment abgeben</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>&amp;Edit Ornament as Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzierung als Notation ändern (&amp;E)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Show Expansion of Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweiterung der Verzierung anzeigen (&amp;S)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diesen Teil der Verzieung überspringen (gebundene Note maskieren (&amp;M))</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diesen Teil nicht überspingen (gebundene Note aufdecken (&amp;U)) </translation>
     </message>
     <message>
         <location line="+227"/>
@@ -5293,7 +5293,7 @@
     <message>
         <location line="+114"/>
         <source>&amp;Update all Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Figurationen anpassen (&amp;U)</translation>
     </message>
     <message>
         <location line="+151"/>
@@ -10844,7 +10844,7 @@
     <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+51"/>
         <source>Replace segment contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhalt des Segmentes ersetzen</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
