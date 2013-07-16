@@ -2264,7 +2264,7 @@
     <message>
         <location line="+7"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sequenz für Ausdrucks-Regler einfügen (&amp;E)... </translation>
     </message>
     <message>
         <location line="+217"/>
@@ -10849,12 +10849,12 @@
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
         <source>Chord Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment-Quelle für Akkord</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Figuration Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment-Quelle für Figuration</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10869,17 +10869,17 @@
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
         <source>Relative Ramp - modify existing %1 values linearly</source>
-        <translation type="unfinished"></translation>
+        <translation>Relativer Anstieg - ändere existierende %1 Werte linear</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Increase first value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Erhöhe den ersten Wert um:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Increase last value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Erhöhe den letzten Wert um:</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
@@ -14769,12 +14769,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+10"/>
         <source>Figuration source</source>
-        <translation type="unfinished"></translation>
+        <translation>Quelle der Figurationen</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Chord source</source>
-        <translation type="unfinished"></translation>
+        <translation>Quelle der Akkorde</translation>
     </message>
 </context>
 <context>
@@ -14782,7 +14782,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
         <source>Insert Generated Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzeugte Region einfügen</translation>
     </message>
 </context>
 <context>
@@ -16903,12 +16903,12 @@ Doppel-Klick öffnet den Marker Editor.</translation>
     <message>
         <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+35"/>
         <source>&amp;Unmask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzierung aufdecken (&amp;U)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Mask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzierung verstecken (&amp;M)</translation>
     </message>
 </context>
 <context>
@@ -18543,17 +18543,17 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location line="+36"/>
         <source>Edit ornament inline</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzierung intern bearbeiten</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Show ornament expansion</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweiterung der Verzierung anzeigen</translation>
     </message>
     <message>
         <location line="+33"/>
         <source>Unadopt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment freigeben</translation>
     </message>
     <message>
         <location line="+116"/>
@@ -18638,12 +18638,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+79"/>
         <source>Edit Generated region mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Markierung der erzeugten Region bearbeiten</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Updated tags for aborted edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Angepasste Markierung für abgebrochene Änderung</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -18942,12 +18942,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="-643"/>
         <source>Replacement mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersetzungs Modus</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Replace old events</source>
-        <translation type="unfinished"></translation>
+        <translation>alte Events ersetzen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18998,12 +18998,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="-84"/>
         <source>Saved setting %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Setting %1 abspeichern</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Pre Ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Pre Rampe</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -19023,17 +19023,17 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Wartezeit, bevor die Biegung oder Rampe beginnt, als Prozentwert oder Gesamtzeit&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampen Sequenz</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Bend duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Dauer der Biegung (%):</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -19048,7 +19048,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Niedrigfrequenz Oszillator (LFO) für diesen Regler. Diese Einstellung ist nur möglich, falls der Rampen-Modus &lt;i&gt;linear&lt;/i&gt; ist und &lt;i&gt;Verwende diese Anzahl an Schritten&lt;/i&gt; gesetzt ist.&lt;/qt&gt; </translation>
     </message>
     <message>
         <location line="+34"/>
@@ -19058,37 +19058,37 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rampen-Steigung linear. Vibrato ist möglich, falls &lt;i&gt;Verwende diese Anzahl an Schritten&lt;/i&gt; gesetzt ist &lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>Start amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude am Anfang:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude am Anfang (%):</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>End amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude am Ende:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude am Ende (%):</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Frequenz in Hertz (Perioden pro Sekunde)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampen Modus</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -19103,27 +19103,27 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rampen-Steigung logarithmisch&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Half sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbsinus</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rampen-Steigung wie eine Sinus-Halbwelle (Minimum bis Maximum)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Quarter sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertelsinus</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rampen-Steigung wie ein Viertel der Sinus-Welle (Nullpunkt bis Maximum)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -19133,22 +19133,22 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+4"/>
         <source>Use step size (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende Schrittweite (%):</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Jeder Schritt der Rampe wird so genau wie möglich diesem Wert entsprechen. Vibrato ist mit dieser Einstellung nicht möglich&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Use this many steps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende diese Anzahl an Schritten:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Die Sequenz wird genau diese Anzahl an Schritten enthalten. Vibrato ist möglich, falls der Rampen-Modus &lt;i&gt;linear&lt;/i&gt; ist&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+700"/>
@@ -19180,7 +19180,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Länge der Biegung oder Rampe als Prozentwert der restlichen Zeit&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -21594,7 +21594,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="-278"/>
         <source>Delete Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfen für Bereich löschen</translation>
     </message>
 </context>
 <context>
@@ -21602,7 +21602,7 @@ Fehler: %2</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="-167"/>
         <source>Insert Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfen für Bereich einfügen</translation>
     </message>
 </context>
 <context>
