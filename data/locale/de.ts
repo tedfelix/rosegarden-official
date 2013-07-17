@@ -299,22 +299,22 @@
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
         <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbwellen Crescendo - setzte %1 aufsteigend von min bis max in einer halben Sinuswelle als Einhüllende</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbwellen Diminuendo - setzte %1 fallend von max bis min in einer halben Sinuswelle als Einhüllende</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
         <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertelwellen Crescendo - setzte %1 aufsteigend von min bis max in einer viertel Sinuswelle als Einhüllende</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertelwellen Diminuendo - setzte %1 fallend von max bis min in einer viertel Sinuswelle als Einhüllende</translation>
     </message>
 </context>
 <context>
@@ -18952,32 +18952,32 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Erase existing pitchbends or controllers of this type in this range before adding new ones&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Lösche existierende Tonlagen oder Regler von diesem Typ und in diesem Bereich, bevor etwas Neues hinzugefügt wird&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add new events to old ones</source>
-        <translation type="unfinished"></translation>
+        <translation>Füge neue Events zu den alten hinzu</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Füge neue Tonlagen oder Regler hinzu, ohne die vorhandenen zu beeinflussen.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Just erase old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur die alten Events löschen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Füge keine Events hinzu, es werden nur die vorhandenen Tonlagen oder Regler von diesem Typ und in diesem Bereich gelöscht.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Verwende diese gespeicherten, vom Nutzer veränderbaren Einstellungen.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
