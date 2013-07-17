@@ -315,7 +315,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="28"/>
         <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Crescendo - nastavit %1 na zvětšující se od nejmenšího po největší</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="34"/>
@@ -1336,12 +1336,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="502"/>
         <source>Nothing to &amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nic pro vzetí &amp;zpět</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Nothing to &amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nic pro provedení z&amp;novu</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="554"/>
@@ -1671,25 +1671,25 @@
         <location filename="../QMenuStrings.cpp" line="840"/>
         <location filename="../QMenuStrings.cpp" line="2547"/>
         <source>Cut Controller Events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyjmout události ovládacího prvku (&amp;X)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="841"/>
         <location filename="../QMenuStrings.cpp" line="2548"/>
         <source>&amp;Copy Controller Events</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopírovat události ovládacího prvku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="842"/>
         <location filename="../QMenuStrings.cpp" line="2549"/>
         <source>Paste Events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit události (&amp;V)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="844"/>
         <location filename="../QMenuStrings.cpp" line="2551"/>
         <source>&amp;Place a Controller for Each Note</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Umístit ovládací prvek pro každou notu</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="855"/>
@@ -2709,7 +2709,7 @@
         <location filename="../QMenuStrings.cpp" line="1537"/>
         <location filename="../QMenuStrings.cpp" line="3448"/>
         <source>&amp;Rosegarden Tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Výukový materiál pro Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1543"/>
@@ -3021,29 +3021,29 @@
         <location filename="../QMenuStrings.cpp" line="3753"/>
         <location filename="../QMenuStrings.cpp" line="4304"/>
         <source>&amp;Nothing to Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nic pro vzetí zpět</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1816"/>
         <location filename="../QMenuStrings.cpp" line="3762"/>
         <location filename="../QMenuStrings.cpp" line="4305"/>
         <source>N&amp;othing to Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;ic pro provedení znovu</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1912"/>
         <source>&amp;Guess Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hádat doby</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1960"/>
         <source>Add Clef Change in This Link Only...</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat změnu klíče pouze v tomto odkazu...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1977"/>
         <source>Unadopt an Adopted Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Zrušit přijetí přijmuté části</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1979"/>
@@ -3168,22 +3168,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2005"/>
         <source>&amp;Edit Ornament as Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Upravit ozdobu jako notový zápis</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2006"/>
         <source>&amp;Show Expansion of Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ukázat rozklad ozdoby</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2007"/>
         <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Přeskočit tuto část ozdoby (&amp;zakrýt svázanou notu)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2008"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepřeskakovat tuto část ozdoby (&amp;zrušit zakrytí svázané noty)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2009"/>
@@ -4400,12 +4400,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1880"/>
         <source>&amp;Move to Staff Above...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Přesunout na osnovu výše...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1882"/>
         <source>Move to Staff &amp;Below...</source>
-        <translation type="unfinished"></translation>
+        <translation>Přesunout na osnovu &amp;níže...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1914"/>
@@ -4472,37 +4472,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="2235"/>
         <source>Mark Selection as Auto-Generated</source>
-        <translation type="unfinished"></translation>
+        <translation>Označit výběr jako automaticky vytvořený</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2552"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit pořadí ovládacího prvku &amp;výrazu...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2769"/>
         <source>Select but Don&apos;t Follow Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat ale nesledovat ligatury</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2902"/>
         <source>Switch to &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Přepnout na &amp;noty</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2911"/>
         <source>Switch to &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Přepnout na &amp;pomlky</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2920"/>
         <source>To&amp;ggle Dot on</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zapnout tečky</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2929"/>
         <source>To&amp;ggle Dot off</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vypnout tečky</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3427"/>
@@ -5062,82 +5062,82 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="3682"/>
         <source>Import Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést soubor s &amp;projektem Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3683"/>
         <source>Import &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést soubor &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3684"/>
         <source>Import &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést soubor &amp;Rosegarden X11...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3686"/>
         <source>Import MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést soubor MusicXM&amp;L...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3689"/>
         <source>Merge &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojit soubor &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3690"/>
         <source>Merge &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojit soubor &amp;Rosegarden X11...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3692"/>
         <source>Merge MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojit soubor MusicXM&amp;L...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3694"/>
         <source>Export Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést jako soubor s &amp;projektem Rosegarden...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3695"/>
         <source>Export &amp;LilyPond File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést jako soubor ve formátu &amp;LilyPond...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3696"/>
         <source>Export &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést jako soubor &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3697"/>
         <source>Export &amp;Csound Score File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést jako soubor s notovým zápisem pro &amp;Csound...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3698"/>
         <source>Export M&amp;up File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést jako soubor M&amp;up...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3699"/>
         <source>Export Music&amp;XML File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést jako soubor Music&amp;XML...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3719"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit &amp;jako...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3905"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished">Umístit stávající doby do části s dobami</translation>
+        <translation>Umístit stávající doby do části s dobami</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="3958"/>
         <source>Open in &amp;Default Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevřít ve &amp;výchozím editoru</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4055"/>
@@ -5177,7 +5177,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="4072"/>
         <source>&amp;Update all Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aktualizovat všechny figurace</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4073"/>
@@ -11211,47 +11211,47 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
     <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="51"/>
         <source>Replace segment contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahradit obsah části</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="69"/>
         <source>Chord Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Část se zdrojem akordu</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="71"/>
         <source>Figuration Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Část se zdrojem figurace</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="73"/>
         <source>Generated Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořená část</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="74"/>
         <source>Segment of unknown type</source>
-        <translation type="unfinished"></translation>
+        <translation>Část neznámého typu</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="30"/>
         <source>Relative Ramp - modify existing %1 values linearly</source>
-        <translation type="unfinished"></translation>
+        <translation>Relativní zvýšení - změnit atávající %1 hodnoty lineárně</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="39"/>
         <source>Increase first value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Zvýšit první hodnotu tolik: </translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="42"/>
         <source>Increase last value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Zvýšit poslední hodnotu tolik: </translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="27"/>
         <source>Update Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizovat figurace</translation>
     </message>
 </context>
 <context>
@@ -13690,7 +13690,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     <message>
         <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="50"/>
         <source>Make Ornament</source>
-        <translation type="unfinished">Vytvořit melodickou ozdobu</translation>
+        <translation>Vytvořit melodickou ozdobu</translation>
     </message>
 </context>
 <context>
@@ -14662,12 +14662,12 @@ Mohlo by to způsobit problémy, pokud by takto byla později potlačena nějak�
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="136"/>
         <source>Generated regions</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořené oblasti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="137"/>
         <source>Segment ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID části</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="138"/>
@@ -15376,17 +15376,17 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
     <message>
         <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="40"/>
         <source>Generated region</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořená oblast</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="50"/>
         <source>Figuration source</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdroj figurace</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="55"/>
         <source>Chord source</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdroj akordu</translation>
     </message>
 </context>
 <context>
@@ -15394,7 +15394,7 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
     <message>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="32"/>
         <source>Insert Generated Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit vytvořenou oblast</translation>
     </message>
 </context>
 <context>
@@ -17658,12 +17658,12 @@ Poklepáním otevřete editor značek.</translation>
     <message>
         <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="35"/>
         <source>&amp;Unmask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zrušit zakrytí ozdoby</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="36"/>
         <source>&amp;Mask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zakrýt ozdobu</translation>
     </message>
 </context>
 <context>
@@ -19843,17 +19843,17 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3075"/>
         <source>Edit ornament inline</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravit ozdobu řadově</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3102"/>
         <source>Show ornament expansion</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat rozklad ozdoby</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3135"/>
         <source>Unadopt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Zrušit přijetí části</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3251"/>
@@ -19939,12 +19939,12 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4574"/>
         <source>Edit Generated region mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravit značku vytvořené oblasti</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4598"/>
         <source>Updated tags for aborted edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizované značky pro zrušenou úpravu</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4915"/>
@@ -20238,47 +20238,47 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="67"/>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="741"/>
         <source>%1 Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 řada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="98"/>
         <source>Replacement mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahrazovací režim</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="104"/>
         <source>Replace old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahradit staré události</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="105"/>
         <source>&lt;qt&gt;Erase existing pitchbends or controllers of this type in this range before adding new ones&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Vymazat stávající změny výšek tónů nebo ovládací prvky tohoto typu v tomto rozsahu před přidáním nových.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="107"/>
         <source>Add new events to old ones</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat nové události ke starým</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="108"/>
         <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Přidat nové změny výšek tónů nebo ovládací prvky bez ovlivnění stávajících.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="110"/>
         <source>Just erase old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Pouze vymazat staré události</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="111"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Nepřidávat žádné události, pouze vymazat stávající změny výšek tónů nebo ovládací prvky tohoto typu v tomto rozsahu.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="132"/>
         <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Použít toto uložené, uživatelsky upravovatelné nastavení.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="140"/>
@@ -20299,162 +20299,162 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="148"/>
         <source>Saved setting %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložené nastavení %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="155"/>
         <source>Pre Ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Před zvýšení</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="164"/>
         <source>Start at value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Začít na hodnotě:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="165"/>
         <source>Start at value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Začít na hodnotě (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="177"/>
         <source>Wait (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Počkat (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="180"/>
         <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Jak dlouho čekat před započetím změny nebo zvýšení, jako procento celkového času.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="192"/>
         <source>Ramp Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Pořadí zvýšení</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="202"/>
         <source>Bend duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Doba trvání změny (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="233"/>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tremolo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="234"/>
         <source>LFO</source>
-        <translation type="unfinished"></translation>
+        <translation>LFO</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="237"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Nízkokmitočtová oscilace pro tento ovládací prvek. Toto je možné jen tehdy, když je režim zvýšení lineární a je nastaveno &lt;i&gt;Použít tolik kroků:&lt;/i&gt;.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="271"/>
         <source>Hertz (Hz):</source>
-        <translation type="unfinished"></translation>
+        <translation>Hertz (Hz):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="292"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Zvýšení se svažuje lineárně. Vibrato je možné, pokud je nastaveno &lt;i&gt;Použít tolik kroků:&lt;/i&gt;.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="246"/>
         <source>Start amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Začít rozkmit:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="247"/>
         <source>Start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Začít rozkmit (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="259"/>
         <source>End amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skončit rozkmit:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="260"/>
         <source>End amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Skončit rozkmit (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="273"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Kmitočet v hertzích (kmitů za sekundu)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="285"/>
         <source>Ramp mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim zvýšení</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="290"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="293"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation>Logaritmický</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="295"/>
         <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Zvýšení se svažuje logaritmicky&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="296"/>
         <source>Half sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Poloviční sinus</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="298"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Zvýšení se svažuje jako polovina sinusové vlny (dno k vrcholu)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="299"/>
         <source>Quarter sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Čtvrtinový sinus</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="301"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Zvýšení se svažuje jako čtvrtina sinusové vlny (nula k vrcholu)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="311"/>
         <source>How many steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolik kroků</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="315"/>
         <source>Use step size (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Použít velikost kroku (%):</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="317"/>
         <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Každý krok ve zvýšení bude k této velikosti co nejbližší. Vibrato s tímto nastavením není možné.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="318"/>
         <source>Use this many steps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Použít tolik kroků:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="320"/>
         <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Řada bude mít přesně tolik kroků.  Vibrato je možné, pokud je režim zvýšení lineární.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="1020"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</translation>
     </message>
     <message>
         <source>User %1</source>
@@ -20481,12 +20481,12 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="207"/>
         <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Jak dlouho trvá změna nebo zvýšení, jako procento zbývajícího času&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="218"/>
         <source>End value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Koncová hodnota:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="219"/>
@@ -23049,7 +23049,7 @@ Chyba byla: %2</translation>
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="42"/>
         <source>Delete Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation>Smazat pomocníka s rozsahem</translation>
     </message>
 </context>
 <context>
@@ -23057,7 +23057,7 @@ Chyba byla: %2</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="43"/>
         <source>Insert Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit pomocníka s rozsahem</translation>
     </message>
 </context>
 <context>
@@ -23647,7 +23647,7 @@ Chcete cestu nastavit nyní?</translation>
     <message>
         <location filename="../../src/commands/edit/SelectAddEvenNotesCommand.h" line="91"/>
         <source>Select Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat doby</translation>
     </message>
 </context>
 <context>
