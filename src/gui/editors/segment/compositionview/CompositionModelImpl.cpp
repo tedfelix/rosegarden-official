@@ -132,8 +132,8 @@ struct RectCompare {
     }
 };
 
-void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint basePoint,
-        const Segment* segment, const QRect& clipRect)
+void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
+        const Segment* segment, const QRect& clipRect, RectRanges* npRects)
 {
     Profiler profiler("CompositionModelImpl::makeNotationPreviewRects");
 
@@ -144,27 +144,48 @@ void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint 
 
     rectlist::iterator npEnd = cachedNPData->end();
 
+    // Find the first preview rect that *starts within* the clipRect.
+    // Probably not the right thing to do as this means any event that starts
+    // prior to the clipRect but stretches through the clipRect will be
+    // dropped.  And this explains why long notes disappear from the segment
+    // previews.
+    // Note that rectlist is a std::vector, so this call will take increasing
+    // amounts of time as the number of events to the left of the clipRect
+    // increases.  This is probably at least a small part of the "CPU usage
+    // increasing over time" issue.
+    // If cachedNPData is sorted by start time, we could at least do a binary
+    // search.
     rectlist::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
 
+    // If no preview rects were within the clipRect, bail.
     if (npi == npEnd)
         return ;
 
+    // ??? Go back one event if we aren't already at the beginning.  Why?
+    // Hilariously, this partially "fixes" the "missing event in preview"
+    // problem.  However, it only "fixes" the problem for a single event.
+    // Is that why this is here?
+    // When testing, to get around the fact that the segments are drawn on a
+    // segment layer in CompositionView, just disable then re-enable segment
+    // previews in the menu and the "missing event in preview" problem is easy
+    // to see.
     if (npi != cachedNPData->begin())
         --npi;
 
-    RectRange interval;
+    // Compute the interval within the Notation Preview for this segment.
 
+    RectRange interval;
     interval.range.first = npi;
 
+    // Compute the rightmost x coord (xLim)
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
-    int xLim = std::min(clipRect.topRight().x(), segEndX);
+    int xLim = std::min(clipRect.right(), segEndX);
 
     //RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : basePoint.x : "
     //         << basePoint.x();
 
-    // move iterator forward
-    //
-    while (npi != npEnd && npi->x() < xLim)
+    // Search sequentially for the last preview rect in the segment.
+    while (npi != npEnd  &&  npi->x() < xLim)
         ++npi;
 
     interval.range.second = npi;
@@ -172,11 +193,12 @@ void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint 
     interval.basePoint.setY(basePoint.y());
     interval.color = computeSegmentPreviewColor(segment);
 
+    // Add the interval to the caller's interval list.
     npRects->push_back(interval);
 }
 
-void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(RectRanges* npRects, QPoint basePoint,
-        const Segment* segment, const QRect& currentSR)
+void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
+        const Segment* segment, const QRect& currentSR, RectRanges* npRects)
 {
     CompositionRect unmovedSR = computeSegmentRect(*segment);
 
@@ -1250,7 +1272,7 @@ CompositionModelImpl::getSegmentRects(
 
             // Notation preview data
             if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRects(notationPreview, QPoint(0, segmentRect.y()), s, clipRect);
+                makeNotationPreviewRects(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
                 // Audio preview data
             } else if (audioPreview  &&  s->getType() == Segment::Audio) {
                 makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
@@ -1278,7 +1300,7 @@ CompositionModelImpl::getSegmentRects(
 
             // Notation preview data
             if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRectsMovingSegment(notationPreview, segmentRect.topLeft(), s, segmentRect);
+                makeNotationPreviewRectsMovingSegment(segmentRect.topLeft(), s, segmentRect, notationPreview);
                 // Audio preview data
             } else if (audioPreview  &&  s->getType() == Segment::Audio) {
                 makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);

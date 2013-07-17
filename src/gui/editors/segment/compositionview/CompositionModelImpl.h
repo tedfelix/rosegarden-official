@@ -98,6 +98,7 @@ public:
 
     typedef std::vector<RectRange> RectRanges;
 
+    /// rename: AudioPreview
     class AudioPreviewData {
     public:
         AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
@@ -234,35 +235,44 @@ protected:
     void computeRepeatMarks(CompositionRect& sr, const Segment* s);
     unsigned int computeZForSegment(const Segment* s);
         
-    // segment preview stuff
+    // Segment Previews
+    /// Make and cache notation or audio preview for segment.
+    void makePreviewCache(const Segment* s);
+    /// Remove cached notation or audio preview for segment.
+    void removePreviewCache(const Segment* s);
 
     // Notation Previews
-    void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint,
-                                  const Segment* segment, const QRect& clipRect);
+    /// rename: getNotationPreviewStatic()?
+    void makeNotationPreviewRects(QPoint basePoint, const Segment* segment,
+                                  const QRect& clipRect, RectRanges* npData);
+    /// rename: getNotationPreviewMoving()?
     void makeNotationPreviewRectsMovingSegment(
-            RectRanges* npData, QPoint basePoint, const Segment* segment,
-            const QRect& currentSR);
+            QPoint basePoint, const Segment* segment,
+            const QRect& currentSR, RectRanges* npData);
+    /// rename: getNotationPreview()
     rectlist* getNotationPreviewData(const Segment* s);
+    /// rename: cacheNotationPreview()
     rectlist* makeNotationPreviewDataCache(const Segment *s);
+    /// For notation preview
     void createEventRects(const Segment* segment, rectlist*);
 
     // Audio Previews
-    void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData*);
-    AudioPreviewData* getAudioPreviewData(const Segment* s);
-    PixmapArray getAudioPreviewPixmap(const Segment* s);
-    QRect postProcessAudioPreview(AudioPreviewData*, const Segment*);
     void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Segment*,
                                const CompositionRect& segRect, const QRect& clipRect);
+    PixmapArray getAudioPreviewPixmap(const Segment* s);
+    AudioPreviewData* getAudioPreviewData(const Segment* s);
+    QRect postProcessAudioPreview(AudioPreviewData* apData, const Segment*);
+    /// rename: cacheAudioPreview()
     AudioPreviewData* makeAudioPreviewDataCache(const Segment *s);
+    /// rename: makeAudioPreview()
+    void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData* apData);
 
-    void makePreviewCache(const Segment* s);
-    void removePreviewCache(const Segment* s);
-
-    void clearInCache(const Segment*, bool clearPreviewCache = false);
+    // Segment Rects (m_segmentRectMap)
     void putInCache(const Segment*, const CompositionRect&);
     const CompositionRect& getFromCache(const Segment*, timeT& endTime);
     bool isCachedRectCurrent(const Segment& s, const CompositionRect& r,
                              QPoint segmentOrigin, timeT segmentEndTime);
+    void clearInCache(const Segment*, bool clearPreviewCache = false);
 
     //--------------- Data members ---------------------------------
     Composition&     m_composition;
