@@ -899,12 +899,17 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
 
     if (numSteps < 1) { numSteps = 1; }
 
+    // This constant is used to avoid computing timeRatio = 0/0 when
+    // rampMode is logarithmic. On some systems, this may give a nan which
+    // leads to events inserted at a very large negative value resulting in
+    // a weird behaviour of rthe GUI.
+    const float epsilon = 0.01;
 
     // Step size is floating-point so we can find exactly correct
     // fractional values and then round each one to the nearest
     // integer.  Since we want it to exactly divide the interval, we
     // recalculate it even if StepSizeDirect provided it
-    const float stepSize = float(valueChange) / float(numSteps);
+    const float stepSize = (float(valueChange) + epsilon) / float(numSteps);
 
     /* Compute values used to step thru multiple timesteps. */
     const timeT fullDuration = m_endTime - m_startTime;
@@ -977,7 +982,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         case Logarithmic: {
                 timeRatio = (
                                (log(startValue + 0.1 + i * stepSize) - log(startValue + 0.1))
-                               / (log(endValue + 0.1) - log(startValue + 0.1)));
+                               / (log(endValue + 0.1 + epsilon) - log(startValue + 0.1)));
             break;
             }
 
