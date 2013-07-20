@@ -799,7 +799,7 @@
     <message>
         <location line="+10"/>
         <source>&amp;Update all Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mettre à jour tous les traits</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -3768,37 +3768,37 @@
     <message>
         <location line="+28"/>
         <source>&amp;Edit Ornament as Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Editer l&apos;ornement comme une partition</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Show Expansion of Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Montrer l&apos;expansion d&apos;un ornement</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer cette partie de l&apos;ornement (&amp;Cacher les notes liées)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne pas ignorer cette partie (&amp;Montrer les notes liées)</translation>
     </message>
     <message>
         <location line="+227"/>
         <source>Mark Selection as Auto-Generated</source>
-        <translation type="unfinished"></translation>
+        <translation>Marquer la sélection comme engendrée automatiquement</translation>
     </message>
     <message>
         <location line="+317"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Insérer une séquence de contrôleurs d&apos;&amp;expression</translation>
     </message>
     <message>
         <location line="+217"/>
         <source>Select but Don&apos;t Follow Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner sans tenir compte des liés</translation>
     </message>
     <message>
         <location line="+133"/>
@@ -10840,27 +10840,27 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+51"/>
         <source>Replace segment contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer le contenu des segments</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
         <source>Chord Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment source des accords</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Figuration Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment source des traits</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Generated Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment engendré</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment of unknown type</source>
-        <translation type="unfinished"></translation>
+        <translation>Segment de type inconnu</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
@@ -11332,7 +11332,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location line="+8"/>
         <source>Create JACK outputs</source>
-        <translation type="unfinished">Créer des sorties JACK</translation>
+        <translation>Créer des sorties JACK</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -14753,12 +14753,12 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+10"/>
         <source>Figuration source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source du trait</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Chord source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source de l&apos;accord</translation>
     </message>
 </context>
 <context>
@@ -16568,7 +16568,7 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;The name is used to identify both the ornament and the triggered segment that stores the ornament&apos;s notes.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Le même nom est utilisé pour identifier l&apos;ornement and le segment déclenché qui contient les notes de cet ornement.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Le même nom est utilisé pour identifier l&apos;ornement et le segment déclenché qui contient les notes de cet ornement.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -16886,12 +16886,12 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+35"/>
         <source>&amp;Unmask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Montrer l&apos;ornement</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Mask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cacher l&apos;ornement</translation>
     </message>
 </context>
 <context>
@@ -18546,17 +18546,17 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message>
         <location line="+36"/>
         <source>Edit ornament inline</source>
-        <translation type="unfinished"></translation>
+        <translation>Editer l&apos;ornement sur place</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Show ornament expansion</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer l&apos;expansion de l&apos;ornement</translation>
     </message>
     <message>
         <location line="+33"/>
         <source>Unadopt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Abandonner le segment</translation>
     </message>
     <message>
         <location line="+116"/>
@@ -18940,7 +18940,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <location line="-63"/>
         <location line="+674"/>
         <source>%1 Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Séquence de %1</translation>
     </message>
     <message>
         <location line="-643"/>
@@ -18950,7 +18950,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+6"/>
         <source>Replace old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer les anciens événements</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18965,22 +18965,22 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ajouter de nouveaux pitchbends ou contrôleurs sans toucher à ceux qui préexistent.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Just erase old events</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer les événements</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;N&apos;ajouter aucun événements. Supprimer les pitchbends ou contrôleurs du type spécifié dans la plage spécifiée.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Utiliser cette mémorisation de réglages modifiables par l&apos;utilisateur.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -19001,37 +19001,37 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="-84"/>
         <source>Saved setting %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages mémorisés %1</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Pre Ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Pré-rampe</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Start at value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur initiale :</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start at value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur initiale (%) :</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Wait (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Retard (%) :</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Temps d&apos;attente avant le début de la rampe exprimé en pourcentage de la durée totale&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampe</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -19041,122 +19041,122 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+31"/>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation>Trémolo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LFO</source>
-        <translation type="unfinished"></translation>
+        <translation>LFO</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Oscillations basse fréquence de ce contrôleur. Ce n&apos;est possible qu&apos;avec une rampe en mode linéaire et un nombre de pas imposé.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Hertz (Hz):</source>
-        <translation type="unfinished"></translation>
+        <translation>Hertz (Hz) :</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rampe linéaire. Un vibrato est possible si le nombre des pas est imposé.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>Start amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude initiale :</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude initiale (%) :</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>End amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude finale :</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitude finale (%) :</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Frequence en hertz (cycles par seconde)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de la rampe</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Linéaire</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation>logarithmique</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le profil de la rampe varie d&apos;une façon logarithmique&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Half sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Demi sinusoïde</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le profil de la rampe est identique à la demi période d&apos;une sinusoïde (du minimum au maximum) (&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Quarter sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Quart de sinusoïde</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Le profil de la rampe est identique au quart d&apos;une période de sinusoïde (de zéro au maximum) (&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>How many steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de pas</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Use step size (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de pas imposée (%) :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Chaque pas de la rampe sera aussi proche que possible de la valeur spécifiée. Le vibrato n&apos;est pas possible.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Use this many steps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de pas imposé :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;La sequence aura exactement le nombre de pas spécifié. Le vibrato est possible si le mode de la rampe est linéaire.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+700"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>User %1</source>
@@ -19183,12 +19183,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Durée de la rampe exprimée en pourcentage du temps restant&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>End value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur finale :</translation>
     </message>
     <message>
         <location line="+1"/>
