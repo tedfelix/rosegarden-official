@@ -295,22 +295,22 @@
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
         <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescendo demi onde - Croissance de %1 avec une variation analogue à la moitié d&apos;une période de sinusoïde</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuendo demi d&apos;onde - Décroissance de %1 avec une variation analogue à la moitié d&apos;une période de sinusoïde</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
         <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescendo quart d&apos;onde - Croissance de %1 avec une variation analogue au quart d&apos;une période de sinusoïde</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuendo quart d&apos;onde - Décroissance de %1 avec une variation analogue au quart d&apos;une période de sinusoïde</translation>
     </message>
 </context>
 <context>
@@ -4018,27 +4018,27 @@
     <message>
         <location line="-794"/>
         <source>Panning &amp;Law</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;équilibrage (&amp;Balance)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;0dB Law (Basic Balance Control)</source>
-        <translation type="unfinished"></translation>
+        <translation>Loi à &amp;0 dB (Equilibrage classique)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;3dB Law (Constant Power)</source>
-        <translation type="unfinished"></translation>
+        <translation>Loi à -&amp;3 dB (Puissance constante)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;6dB Law (Reduced Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Loi à -&amp;6 dB (Atténuation au centre)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Autre loi à -3 dB (Puissance constante et 0 dB au centre)</translation>
     </message>
     <message>
         <location line="+116"/>
@@ -10865,17 +10865,17 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
         <source>Relative Ramp - modify existing %1 values linearly</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampe relative - Modifie linéairement les valeurs existantes de %1</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Increase first value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Augmentation de la première valeur :</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Increase last value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation>Augmentation de la dernière valeur :</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
@@ -14062,12 +14062,12 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+1"/>
         <source>Generated regions</source>
-        <translation type="unfinished"></translation>
+        <translation>Régions engendrées</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificateur de segment</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14748,7 +14748,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="+40"/>
         <source>Generated region</source>
-        <translation type="unfinished"></translation>
+        <translation>Région engendrée</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -14766,7 +14766,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
         <source>Insert Generated Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Insérer la région engendrée</translation>
     </message>
 </context>
 <context>
@@ -18641,12 +18641,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+79"/>
         <source>Edit Generated region mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Editer le marqueur de la région engendrée</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Updated tags for aborted edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Marqueurs mis à jour en raison d&apos;une édition interrompue</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -18945,7 +18945,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="-643"/>
         <source>Replacement mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode remplacement</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -18955,12 +18955,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Erase existing pitchbends or controllers of this type in this range before adding new ones&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Effacer les contrôleurs de ce type qui préexistent dans cette plage avant d&apos;ajouter les nouveaux&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add new events to old ones</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter les nouveaux événements aux anciens</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18990,7 +18990,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1"/>
         <source>Fast vibrato arm release</source>
-        <translation>Relâche rapide du bras de vibrato</translation>
+        <translation>Vibrato rapidement atténué</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -19036,7 +19036,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+10"/>
         <source>Bend duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée du glissement (%)</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -19116,7 +19116,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Le profil de la rampe est identique à la demi période d&apos;une sinusoïde (du minimum au maximum) (&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Le profil de la rampe est identique à la demi période d&apos;une sinusoïde (du minimum au maximum) &lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -19126,7 +19126,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Le profil de la rampe est identique au quart d&apos;une période de sinusoïde (de zéro au maximum) (&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Le profil de la rampe est identique au quart d&apos;une période de sinusoïde (de zéro au maximum) &lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -22165,7 +22165,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/edit/SelectAddEvenNotesCommand.h" line="+91"/>
         <source>Select Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner les pulsations</translation>
     </message>
 </context>
 <context>
