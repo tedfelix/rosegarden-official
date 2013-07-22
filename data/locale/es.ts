@@ -10871,7 +10871,7 @@
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
         <source>Relative Ramp - modify existing %1 values linearly</source>
-        <translation>Cambio relativo - modificar %1 valores existentes de un a manera linear</translation>
+        <translation>Cambio gradual relativo - modificar %1 valores existentes de un a manera linear</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -18962,102 +18962,102 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Cambio gradual inclina de manera linear.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>Start amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitúd inicial:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitúd inicial (%):</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>End amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitúd final:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Amplitúd final (%):</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Frecuencia en hercios (ciclos por segundo)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de cambio gradual</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Linear</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation>Logarítmico</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Cambio gradual inclina logarítmicamente&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Half sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Medio sinusoidal</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Cambio gradual inclina como medio sinusoide (pico a pico)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Quarter sine</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuarto sinusoidal</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Cambio gradual inclina como cuarto sinusoide (0 a pico) &lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>How many steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Etapas</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Use step size (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de etapa (%):</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Cada etapa será de este tamaño.  Vibrato no es posible&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Use this many steps:</source>
-        <translation type="unfinished"></translation>
+        <translation>Etapas:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Etapas&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+700"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
-        <translation type="unfinished"></translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-es</translation>
     </message>
     <message>
         <source>User %1</source>
@@ -19084,12 +19084,12 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Duración de la inflexión o cambio gradual, como porcentage del tiempo restante&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>End value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor final:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21467,7 +21467,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="-278"/>
         <source>Delete Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayudante para borrar ámbito</translation>
     </message>
 </context>
 <context>
@@ -21475,7 +21475,7 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="-167"/>
         <source>Insert Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayudante para insertar ámbito</translation>
     </message>
 </context>
 <context>

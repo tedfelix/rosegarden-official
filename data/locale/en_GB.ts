@@ -295,22 +295,22 @@
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
         <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
         <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2112,12 +2112,12 @@
     <message>
         <location line="+12"/>
         <source>&amp;Move to Staff Above...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Move to Staff &amp;Below...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+54"/>
@@ -3042,61 +3042,61 @@
     <message>
         <location line="-1459"/>
         <source>Nothing to &amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Nothing to &amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+329"/>
         <location line="+1707"/>
         <source>Cut Controller Events (&amp;X)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1706"/>
         <location line="+1707"/>
         <source>&amp;Copy Controller Events</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1706"/>
         <location line="+1707"/>
         <source>Paste Events (&amp;V)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1705"/>
         <location line="+1707"/>
         <source>&amp;Place a Controller for Each Note</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1014"/>
         <location line="+1911"/>
         <source>&amp;Rosegarden Tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-1641"/>
         <location line="+1946"/>
         <location line="+551"/>
         <source>&amp;Nothing to Undo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-2488"/>
         <location line="+1946"/>
         <location line="+543"/>
         <source>N&amp;othing to Redo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-2393"/>
         <source>&amp;Guess Beats</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+22"/>
@@ -3106,7 +3106,7 @@
     <message>
         <location line="+26"/>
         <source>Add Clef Change in This Link Only...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3121,7 +3121,7 @@
     <message>
         <location line="+14"/>
         <source>Unadopt an Adopted Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3251,22 +3251,22 @@
     <message>
         <location line="+1"/>
         <source>&amp;Edit Ornament as Notation</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Show Expansion of Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3552,7 +3552,7 @@
     <message>
         <location line="+4"/>
         <source>Mark Selection as Auto-Generated</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3796,7 +3796,7 @@
     <message>
         <location line="+296"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+65"/>
@@ -3833,7 +3833,7 @@
     <message>
         <location line="+12"/>
         <source>Select but Don&apos;t Follow Ties</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+43"/>
@@ -3850,7 +3850,7 @@
     <message>
         <location line="+81"/>
         <source>Switch to &amp;Notes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3862,12 +3862,12 @@
     <message>
         <location line="-7"/>
         <source>Switch to &amp;Rests</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
         <source>To&amp;ggle Dot on</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3879,7 +3879,7 @@
     <message>
         <location line="-7"/>
         <source>To&amp;ggle Dot off</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+478"/>
@@ -5059,17 +5059,17 @@
     <message>
         <location line="+34"/>
         <source>Import Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Import &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5079,52 +5079,52 @@
     <message>
         <location line="+1"/>
         <source>Import MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Merge &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Merge &amp;X11 Rosegarden File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Merge MusicXM&amp;L File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Export Rosegarden &amp;Project File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;LilyPond File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;MIDI File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export &amp;Csound Score File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export M&amp;up File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Export Music&amp;XML File...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+8"/>
@@ -5135,7 +5135,7 @@
     <message>
         <location line="+12"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+31"/>
@@ -5165,7 +5165,7 @@
     <message>
         <location line="+21"/>
         <source>Fit Existing Beats to Beat Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -5193,7 +5193,7 @@
     <message>
         <location line="+3"/>
         <source>Open in &amp;Default Editor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
@@ -5210,7 +5210,7 @@
     <message>
         <location line="+10"/>
         <source>&amp;Update all Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+19"/>
@@ -10733,47 +10733,47 @@
     <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+51"/>
         <source>Replace segment contents</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
         <source>Chord Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Figuration Source Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Generated Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment of unknown type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
         <source>Relative Ramp - modify existing %1 values linearly</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Increase first value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Increase last value this much: </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -13125,7 +13125,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
         <source>Make Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -13888,12 +13888,12 @@ This could cause problems if it overrides a different computed value later on.</
     <message>
         <location line="+1"/>
         <source>Generated regions</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Segment ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14565,17 +14565,17 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="+40"/>
         <source>Generated region</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Figuration source</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Chord source</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -14583,7 +14583,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
         <source>Insert Generated Region</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -16676,12 +16676,12 @@ Double-click to open the marker editor.</source>
     <message>
         <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+35"/>
         <source>&amp;Unmask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Mask Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -18250,17 +18250,17 @@ This is a bug (the program would previously have crashed by now)</source>
     <message>
         <location line="+36"/>
         <source>Edit ornament inline</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Show ornament expansion</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+33"/>
         <source>Unadopt Segment</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+116"/>
@@ -18356,12 +18356,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+79"/>
         <source>Edit Generated region mark</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Updated tags for aborted edit</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+54"/>
@@ -18658,42 +18658,42 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+67"/>
         <location line="+674"/>
         <source>%1 Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-643"/>
         <source>Replacement mode</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Replace old events</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Erase existing pitchbends or controllers of this type in this range before adding new ones&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Add new events to old ones</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Just erase old events</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+14"/>
@@ -18724,147 +18724,147 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="-84"/>
         <source>Saved setting %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Pre Ramp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Start at value:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start at value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Wait (%):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Bend duration (%):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LFO</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Start amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+12"/>
         <source>End amplitude:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End amplitude (%):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Ramp mode</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Half sine</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Quarter sine</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+10"/>
         <source>How many steps</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Use step size (%):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Use this many steps:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+700"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-866"/>
@@ -18874,7 +18874,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="-22"/>
         <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+71"/>
@@ -18884,12 +18884,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+11"/>
         <source>End value:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18904,17 +18904,17 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location line="+46"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Hertz (Hz):</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+83"/>
@@ -21213,7 +21213,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="-278"/>
         <source>Delete Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -21221,7 +21221,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="-167"/>
         <source>Insert Range Helper</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -21788,7 +21788,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/edit/SelectAddEvenNotesCommand.h" line="+91"/>
         <source>Select Beats</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -23430,14 +23430,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
         <translation>
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+25"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
         <translation>
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
