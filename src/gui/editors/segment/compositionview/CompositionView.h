@@ -474,7 +474,7 @@ protected:
      */
     void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
     /// Used by drawSegments() to draw any intersections between rectangles.
-    void drawIntersections(const CompositionModelImpl::rectcontainer&, QPainter * p, const QRect& clipRect);
+    void drawIntersections(const CompositionModelImpl::RectContainer &, QPainter *p, const QRect &clipRect);
 
     /// Used by drawArtifacts() to draw the playback position pointer.
     /**

@@ -137,25 +137,25 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
 {
     Profiler profiler("CompositionModelImpl::makeNotationPreviewRects");
 
-    rectlist* cachedNPData = getNotationPreviewData(segment);
+    RectList* cachedNPData = getNotationPreviewData(segment);
 
     if (cachedNPData->empty())
         return ;
 
-    rectlist::iterator npEnd = cachedNPData->end();
+    RectList::iterator npEnd = cachedNPData->end();
 
     // Find the first preview rect that *starts within* the clipRect.
     // Probably not the right thing to do as this means any event that starts
     // prior to the clipRect but stretches through the clipRect will be
     // dropped.  And this explains why long notes disappear from the segment
     // previews.
-    // Note that rectlist is a std::vector, so this call will take increasing
+    // Note that RectList is a std::vector, so this call will take increasing
     // amounts of time as the number of events to the left of the clipRect
     // increases.  This is probably at least a small part of the "CPU usage
     // increasing over time" issue.
     // If cachedNPData is sorted by start time, we could at least do a binary
     // search.
-    rectlist::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
+    RectList::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
 
     // If no preview rects were within the clipRect, bail.
     if (npi == npEnd)
@@ -202,15 +202,15 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
 {
     CompositionRect unmovedSR = computeSegmentRect(*segment);
 
-    rectlist* cachedNPData = getNotationPreviewData(segment);
+    RectList* cachedNPData = getNotationPreviewData(segment);
 
     if (cachedNPData->empty())
         return ;
 
-    rectlist::iterator npBegin = cachedNPData->begin();
-    rectlist::iterator npEnd = cachedNPData->end();
+    RectList::iterator npBegin = cachedNPData->begin();
+    RectList::iterator npEnd = cachedNPData->end();
 
-    rectlist::iterator npi;
+    RectList::iterator npi;
 
     if (getChangeType() == ChangeResizeFromStart)
         npi = std::lower_bound(npBegin, npEnd, currentSR, RectCompare());
@@ -377,11 +377,12 @@ void CompositionModelImpl::clearPreviewCache()
     }
 }
 
-void CompositionModelImpl::createEventRects(const Segment* segment, rectlist* npData)
+void CompositionModelImpl::createEventRects(const Segment *segment, RectList *npData)
 {
     npData->clear();
 
-    int segStartX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
+    int segStartX = static_cast<int>(nearbyint(
+            m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
 
     bool isPercussion = false;
     Track *track = m_composition.getTrackById(segment->getTrack());
@@ -391,6 +392,7 @@ void CompositionModelImpl::createEventRects(const Segment* segment, rectlist* np
         if (instrument && instrument->isPercussion()) isPercussion = true;
     }
 
+    // For each event in the segment
     for (Segment::const_iterator i = segment->begin();
          i != segment->end(); ++i) {
 
@@ -406,10 +408,11 @@ void CompositionModelImpl::createEventRects(const Segment* segment, rectlist* np
         // 	    eventEnd = segment->getEndMarkerTime();
         // 	}
 
-        int x = int(nearbyint(m_grid.getRulerScale()->getXForTime(eventStart)));
-        int width = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration
-                                  (eventStart,
-                                   eventEnd - eventStart)));
+        int x = static_cast<int>(nearbyint(
+                m_grid.getRulerScale()->getXForTime(eventStart)));
+        int width = static_cast<int>(nearbyint(
+                m_grid.getRulerScale()->getWidthForDuration(
+                        eventStart, eventEnd - eventStart)));
 
         //RG_DEBUG << "CompositionModelImpl::createEventRects: x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")";
 
@@ -420,8 +423,8 @@ void CompositionModelImpl::createEventRects(const Segment* segment, rectlist* np
         if (width > 1) --width;
         if (width < 1) ++width;
 
-        double y0 = 0;
-        double y1 = m_grid.getYSnap();
+        const double y0 = 0;
+        const double y1 = m_grid.getYSnap();
         double y = y1 + ((y0 - y1) * (pitch - 16)) / 96;
 
         int height = 1;
@@ -434,7 +437,8 @@ void CompositionModelImpl::createEventRects(const Segment* segment, rectlist* np
         if (y < y0) y = y0;
         if (y > y1 - height + 1) y = y1 - height + 1;
 
-        QRect r(x, (int)y, width, height);
+        // ??? static_cast<int>(nearbyint(y))?
+        QRect r(x, static_cast<int>(y), width, height);
 
         npData->push_back(r);
     }
@@ -618,7 +622,7 @@ void CompositionModelImpl::makePreviewCache(const Segment *s)
 void CompositionModelImpl::removePreviewCache(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
-        rectlist *rl = m_notationPreviewDataCache[s];
+        RectList *rl = m_notationPreviewDataCache[s];
         delete rl;
         m_notationPreviewDataCache.erase(s);
     } else {
@@ -1210,39 +1214,40 @@ unsigned int CompositionModelImpl::getNbRows()
     return m_composition.getNbTracks();
 }
 
-const CompositionModelImpl::rectcontainer&
+const CompositionModelImpl::RectContainer &
 CompositionModelImpl::getSegmentRects(
-        const QRect& clipRect,
-        RectRanges* notationPreview,
-        AudioPreviewDrawData* audioPreview)
+        const QRect &clipRect,
+        RectRanges *notationPreview,
+        AudioPreviewDrawData *audioPreview)
 {
-    Profiler profiler("CompositionModelImpl::getRectanglesIn");
+    Profiler profiler("CompositionModelImpl::getSegmentRects()");
 
     // Clear the container we'll be returning.
     m_segmentRects.clear();
 
-    //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
+    //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): ruler scale is "
     //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
 
-    const segmentcontainer& segments = m_composition.getSegments();
-    segmentcontainer::const_iterator segEnd = segments.end();
+    const segmentcontainer &segments = m_composition.getSegments();
+    segmentcontainer::const_iterator segmentsEnd = segments.end();
 
+    // For each segment in the composition
     for (segmentcontainer::const_iterator i = segments.begin();
-         i != segEnd; ++i) {
+         i != segmentsEnd; ++i) {
 
-        //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";
+        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";
         
-        const Segment* s = *i;
+        const Segment *s = *i;
 
         // Moving segments are handled in the next for loop.
         if (isMoving(s))
             continue;
 
         CompositionRect segmentRect = computeSegmentRect(*s);
-        //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr;
+        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): seg rect = " << sr;
 
         if (segmentRect.intersects(clipRect)) {
-//            RG_DEBUG << "CompositionModelImpl::getRectanglesIn: segment " << s 
+//            RG_DEBUG << "CompositionModelImpl::getSegmentRects(): segment " << s
 //                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s);
                        
             if (isSelected(s) || isTmpSelected(s) || segmentRect.intersects(m_selectionRect)) {
@@ -1283,7 +1288,7 @@ CompositionModelImpl::getSegmentRects(
 
             m_segmentRects.push_back(segmentRect);
         } else {
-            //RG_DEBUG << "CompositionModelImpl::getRectanglesIn: - segment out of rect";
+            //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): - segment out of rect";
         }
 
     }
@@ -1294,7 +1299,7 @@ CompositionModelImpl::getSegmentRects(
     for (itemcontainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
         CompositionRect segmentRect((*i)->rect());
         if (segmentRect.intersects(clipRect)) {
-            Segment* s = CompositionItemHelper::getSegment(*i);
+            Segment *s = CompositionItemHelper::getSegment(*i);
             segmentRect.setSelected(true);
             QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
             segmentRect.setBrush(brushColor);
@@ -1316,7 +1321,7 @@ CompositionModelImpl::getSegmentRects(
     return m_segmentRects;
 }
 
-CompositionModelImpl::heightlist CompositionModelImpl::getTrackDividersIn(const QRect& rect)
+CompositionModelImpl::YCoordList CompositionModelImpl::getTrackDividersIn(const QRect& rect)
 {
     int top = m_grid.getYBin(rect.y());
     int bottom = m_grid.getYBin(rect.y() + rect.height());
@@ -1328,7 +1333,7 @@ CompositionModelImpl::heightlist CompositionModelImpl::getTrackDividersIn(const 
     
     setTrackHeights();
     
-    CompositionModelImpl::heightlist list;
+    CompositionModelImpl::YCoordList list;
 
     for (int pos = top; pos <= bottom; ++pos) {
         int divider = m_grid.getYBinCoordinate(pos);
@@ -1339,9 +1344,9 @@ CompositionModelImpl::heightlist CompositionModelImpl::getTrackDividersIn(const 
     return list;
 }
 
-CompositionModelImpl::rectlist* CompositionModelImpl::getNotationPreviewData(const Segment* s)
+CompositionModelImpl::RectList* CompositionModelImpl::getNotationPreviewData(const Segment* s)
 {
-    rectlist* npData = m_notationPreviewDataCache[s];
+    RectList* npData = m_notationPreviewDataCache[s];
 
     if (!npData) {
         npData = makeNotationPreviewDataCache(s);
@@ -1365,11 +1370,18 @@ CompositionModelImpl::AudioPreviewData* CompositionModelImpl::getAudioPreviewDat
     return apData;
 }
 
-CompositionModelImpl::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+CompositionModelImpl::RectList* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
-    rectlist* npData = new rectlist();
+    RectList* npData = new RectList();
+
+    // Create the preview
     createEventRects(s, npData);
+
+    // Store in the cache.
+    // Callers guarantee that m_notationPreviewDataCache[s] is not currently
+    // pointing to anything.
     m_notationPreviewDataCache[s] = npData;
+
     return npData;
 }
 

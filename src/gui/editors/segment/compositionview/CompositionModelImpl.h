@@ -69,10 +69,9 @@ public:
         bool operator()(const CompositionItem &c1, const CompositionItem &c2) const;
     };
 
-    typedef std::vector<QRect> rectlist;
-    // ??? rename: ycoordlist  This is not a height list.
-    typedef std::vector<int> heightlist;
-    typedef std::vector<CompositionRect> rectcontainer;
+    typedef std::vector<QRect> RectList;
+    typedef std::vector<int> YCoordList;
+    typedef std::vector<CompositionRect> RectContainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
     struct AudioPreviewDrawDataItem {
@@ -91,7 +90,7 @@ public:
     typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
 
     struct RectRange {
-        std::pair<rectlist::iterator, rectlist::iterator> range;
+        std::pair<RectList::iterator, RectList::iterator> range;
         QPoint basePoint;
         QColor color;
     };
@@ -138,11 +137,12 @@ public:
 
     unsigned int getNbRows();
     /// Get the segment rectangles and segment previews
-    const rectcontainer& getSegmentRects(const QRect& clipRect,
-                                         RectRanges* notationPreview, AudioPreviewDrawData* audioPreview);
-    heightlist getTrackDividersIn(const QRect& rect);
-    itemcontainer getItemsAt (const QPoint&);
-    timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
+    const RectContainer& getSegmentRects(const QRect &clipRect,
+                                         RectRanges *notationPreview,
+                                         AudioPreviewDrawData *audioPreview);
+    YCoordList getTrackDividersIn(const QRect &clipRect);
+    itemcontainer getItemsAt(const QPoint &);
+    timeT getRepeatTimeAt(const QPoint &, const CompositionItem &);
 
     SnapGrid& grid() { return m_grid; }
 
@@ -250,11 +250,11 @@ protected:
             QPoint basePoint, const Segment* segment,
             const QRect& currentSR, RectRanges* npData);
     /// rename: getNotationPreview()
-    rectlist* getNotationPreviewData(const Segment* s);
+    RectList* getNotationPreviewData(const Segment* s);
     /// rename: cacheNotationPreview()
-    rectlist* makeNotationPreviewDataCache(const Segment *s);
+    RectList* makeNotationPreviewDataCache(const Segment *s);
     /// For notation preview
-    void createEventRects(const Segment* segment, rectlist*);
+    void createEventRects(const Segment* segment, RectList*);
 
     // Audio Previews
     void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Segment*,
@@ -290,7 +290,7 @@ protected:
     AudioPreviewThread*          m_audioPreviewThread;
 
     // Notation Preview
-    typedef std::map<const Segment *, rectlist *> NotationPreviewDataCache;
+    typedef std::map<const Segment *, RectList *> NotationPreviewDataCache;
     NotationPreviewDataCache     m_notationPreviewDataCache;
 
     // Audio Preview
@@ -298,7 +298,7 @@ protected:
     AudioPreviewDataCache        m_audioPreviewDataCache;
 
     /// Member object which allows us to return a reference for speed.
-    rectcontainer m_segmentRects;
+    RectContainer m_segmentRects;
     itemcontainer m_changingItems;
     ChangeType    m_changeType;
 
