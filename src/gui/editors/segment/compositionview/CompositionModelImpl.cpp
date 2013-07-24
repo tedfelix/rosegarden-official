@@ -811,9 +811,9 @@ void CompositionModelImpl::clearRecordingItems()
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
 {
-    itemcontainer::const_iterator movEnd = m_changingItems.end();
+    ItemContainer::const_iterator movEnd = m_changingItems.end();
 
-    for (itemcontainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
+    for (ItemContainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
         const CompositionItemImpl* ci = dynamic_cast<const CompositionItemImpl*>((_CompositionItem*)(*i));
         const Segment* s = ci->getSegment();
         if (sm == s)
@@ -828,11 +828,11 @@ bool CompositionModelImpl::isRecording(const Segment* s) const
     return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
 }
 
-CompositionModelImpl::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& point)
+CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoint& point)
 {
     //RG_DEBUG << "CompositionModelImpl::getItemsAt()";
 
-    itemcontainer res;
+    ItemContainer res;
 
     const segmentcontainer& segments = m_composition.getSegments();
 
@@ -885,9 +885,9 @@ void CompositionModelImpl::setSelected(const CompositionItem& item, bool selecte
     }
 }
 
-void CompositionModelImpl::setSelected(const itemcontainer& items)
+void CompositionModelImpl::setSelected(const ItemContainer& items)
 {
-    for (itemcontainer::const_iterator i = items.begin(); i != items.end(); ++i) {
+    for (ItemContainer::const_iterator i = items.begin(); i != items.end(); ++i) {
         setSelected(*i);
     }
 }
@@ -954,7 +954,7 @@ void CompositionModelImpl::startChange(const CompositionItem& item, ChangeType c
 {
     m_changeType = change;
 
-    itemcontainer::iterator i = m_changingItems.find(item);
+    ItemContainer::iterator i = m_changingItems.find(item);
 
     // if an "identical" composition item has already been inserted, drop this one
     if (i != m_changingItems.end()) {
@@ -979,7 +979,7 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
 
 void CompositionModelImpl::endChange()
 {
-    for (itemcontainer::const_iterator i = m_changingItems.begin(); i != m_changingItems.end(); ++i) {
+    for (ItemContainer::const_iterator i = m_changingItems.begin(); i != m_changingItems.end(); ++i) {
         delete *i;
     }
 
@@ -1295,8 +1295,8 @@ CompositionModelImpl::getSegmentRects(
 
     // changing items (moving segments)
 
-    itemcontainer::iterator movEnd = m_changingItems.end();
-    for (itemcontainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
+    ItemContainer::iterator movEnd = m_changingItems.end();
+    for (ItemContainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
         CompositionRect segmentRect((*i)->rect());
         if (segmentRect.intersects(clipRect)) {
             Segment *s = CompositionItemHelper::getSegment(*i);

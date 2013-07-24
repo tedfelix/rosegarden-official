@@ -237,8 +237,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     if (m_canvas->getModel()->isSelected(m_currentIndex)) {
 
-        CompositionModelImpl::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
-        CompositionModelImpl::itemcontainer::iterator it;
+        CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
+        CompositionModelImpl::ItemContainer::iterator it;
 
         if (changeMade()) {
 
@@ -410,10 +410,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             m_selectionMoveStarted = true;
         }
 
-        CompositionModelImpl::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
+        CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
         setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
 
-        CompositionModelImpl::itemcontainer::iterator it;
+        CompositionModelImpl::ItemContainer::iterator it;
         int guideX = 0;
         int guideY = 0;
 

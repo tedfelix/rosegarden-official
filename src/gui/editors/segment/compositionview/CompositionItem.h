@@ -54,7 +54,7 @@ public:
     virtual unsigned int  z() = 0;
     virtual void setWidth(int w) = 0;
 
-    // used by itemcontainer
+    // used by ItemContainer
     virtual long hashKey() = 0;
 
     QRect savedRect() const   { return m_savedRect; }

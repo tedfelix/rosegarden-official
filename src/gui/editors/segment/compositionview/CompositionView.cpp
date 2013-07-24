@@ -423,7 +423,7 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
 
 CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 {
-    CompositionModelImpl::itemcontainer items = getModel()->getItemsAt(pos);
+    CompositionModelImpl::ItemContainer items = getModel()->getItemsAt(pos);
 
     if (items.size()) {
         // find topmost item
@@ -431,9 +431,9 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 
         unsigned int maxZ = res->z();
 
-        CompositionModelImpl::itemcontainer::iterator maxZItemPos = items.begin();
+        CompositionModelImpl::ItemContainer::iterator maxZItemPos = items.begin();
 
-        for (CompositionModelImpl::itemcontainer::iterator i = items.begin();
+        for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
              i != items.end(); ++i) {
             CompositionItem ic = *i;
             if (ic->z() > maxZ) {
@@ -445,7 +445,7 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 
         // get rid of the rest;
         items.erase(maxZItemPos);
-        for (CompositionModelImpl::itemcontainer::iterator i = items.begin();
+        for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
              i != items.end(); ++i)
             delete *i;
 

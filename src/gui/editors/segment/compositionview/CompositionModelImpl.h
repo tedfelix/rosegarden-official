@@ -72,7 +72,7 @@ public:
     typedef std::vector<QRect> RectList;
     typedef std::vector<int> YCoordList;
     typedef std::vector<CompositionRect> RectContainer;
-    typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
+    typedef std::set<CompositionItem, CompositionItemCompare> ItemContainer;
 
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
@@ -141,7 +141,7 @@ public:
                                          RectRanges *notationPreview,
                                          AudioPreviewDrawData *audioPreview);
     YCoordList getTrackDividersIn(const QRect &clipRect);
-    itemcontainer getItemsAt(const QPoint &);
+    ItemContainer getItemsAt(const QPoint &);
     timeT getRepeatTimeAt(const QPoint &, const CompositionItem &);
 
     SnapGrid& grid() { return m_grid; }
@@ -149,7 +149,7 @@ public:
     void setPointerPos(int xPos);
     void setSelected(const CompositionItem&, bool selected = true);
     bool isSelected(const CompositionItem&) const;
-    void setSelected(const itemcontainer&);
+    void setSelected(const ItemContainer&);
     void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
     void clearSelected();
@@ -168,7 +168,7 @@ public:
 
     void startChange(const CompositionItem&, ChangeType change);
     void startChangeSelection(ChangeType change);
-    itemcontainer& getChangingItems() { return m_changingItems; }
+    ItemContainer& getChangingItems() { return m_changingItems; }
     void endChange();
     ChangeType getChangeType() { return m_changeType; }
 
@@ -299,7 +299,7 @@ protected:
 
     /// Member object which allows us to return a reference for speed.
     RectContainer m_segmentRects;
-    itemcontainer m_changingItems;
+    ItemContainer m_changingItems;
     ChangeType    m_changeType;
 
     typedef std::vector<CompositionItem> itemgc;
