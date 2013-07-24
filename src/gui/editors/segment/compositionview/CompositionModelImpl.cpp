@@ -207,8 +207,8 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     if (cachedNPData->empty())
         return ;
 
-    rectlist::iterator npEnd = cachedNPData->end(),
-                               npBegin = cachedNPData->begin();
+    rectlist::iterator npBegin = cachedNPData->begin();
+    rectlist::iterator npEnd = cachedNPData->end();
 
     rectlist::iterator npi;
 
@@ -220,22 +220,25 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     if (npi == npEnd)
         return ;
 
-    if (npi != npBegin && getChangeType() != ChangeResizeFromStart) {
+    // ??? Bump iterator back one to try and pick up the previous event
+    //     rectangle which might be needed.
+    if (npi != npBegin  &&  getChangeType() != ChangeResizeFromStart) {
         --npi;
     }
 
-    RectRange interval;
+    // Compute the interval within the Notation Preview for this segment.
 
+    RectRange interval;
     interval.range.first = npi;
 
-    int xLim = getChangeType() == ChangeMove ? unmovedSR.topRight().x() : currentSR.topRight().x();
+    // Compute the rightmost x coord (xLim)
+    int xLim = getChangeType() == ChangeMove ? unmovedSR.right() : currentSR.right();
 
     //RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRectsMovingSegment : basePoint.x : "
     //         << basePoint.x();
 
-    // move iterator forward
-    //
-    while (npi != npEnd && npi->x() < xLim)
+    // Search sequentially for the last preview rect in the segment.
+    while (npi != npEnd  &&  npi->x() < xLim)
         ++npi;
 
     interval.range.second = npi;

@@ -861,7 +861,7 @@ void CompositionView::refreshArtifacts(const QRect& rect)
     //    m_artifactsNeedRefresh = false;
 }
 
-void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& clipRect)
+void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect)
 {
     Profiler profiler("CompositionView::drawSegments");
 
@@ -938,27 +938,26 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
     // *** Get Segment and Preview Rectangles
 
     // Assume we aren't going to show previews.
-    CompositionModelImpl::AudioPreviewDrawData* audioPreviewData = 0;
-    CompositionModelImpl::RectRanges* notationPreviewData = 0;
+    CompositionModelImpl::RectRanges *notationPreview = 0;
+    CompositionModelImpl::AudioPreviewDrawData *audioPreview = 0;
 
     if (m_showPreviews) {
-        // Clear the rect containers.  Apparently getRectanglesIn() will not.
+        // Clear the previews.  Apparently getSegmentRects() will not.
         // Given that this is the only caller, this should be moved into
-        // getRectanglesIn().
-        m_notationPreviewRects.clear();
-        m_audioPreviewRects.clear();
+        // getSegmentRects().
+        m_notationPreview.clear();
+        m_audioPreview.clear();
 
-        // Indicate that we want preview rects.
-        notationPreviewData = &m_notationPreviewRects;
-        audioPreviewData = &m_audioPreviewRects;
+        // Indicate that we want previews.
+        notationPreview = &m_notationPreview;
+        audioPreview = &m_audioPreview;
     }
 
-    // Fetch segment rectangles and (optionally) preview rectangles
-    const CompositionModelImpl::rectcontainer& rects =
-        getModel()->getSegmentRects(clipRect,
-                                    notationPreviewData, audioPreviewData);
+    // Fetch segment rectangles and (optionally) previews
+    const CompositionModelImpl::rectcontainer &segmentRects =
+        getModel()->getSegmentRects(clipRect, notationPreview, audioPreview);
 
-    CompositionModelImpl::rectcontainer::const_iterator end = rects.end();
+    CompositionModelImpl::rectcontainer::const_iterator end = segmentRects.end();
 
     // *** Draw Segment Rectangles
 
@@ -968,7 +967,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
         segmentLayerPainter->save();
 
         // For each segment rectangle, draw it
-        for (CompositionModelImpl::rectcontainer::const_iterator i = rects.begin();
+        for (CompositionModelImpl::rectcontainer::const_iterator i = segmentRects.begin();
              i != end; ++i) {
             segmentLayerPainter->setBrush(i->getBrush());
             segmentLayerPainter->setPen(i->getPen());
@@ -983,9 +982,9 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
     {
         Profiler profiler("CompositionView::drawSegments(): intersections");
 
-        if (rects.size() > 1) {
+        if (segmentRects.size() > 1) {
             //RG_DEBUG << "CompositionView::drawSegments : drawing intersections\n";
-            drawIntersections(rects, segmentLayerPainter, clipRect);
+            drawIntersections(segmentRects, segmentLayerPainter, clipRect);
         }
     }
 
@@ -1006,8 +1005,8 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
 
         // draw notation previews
         //
-        CompositionModelImpl::RectRanges::const_iterator npi = m_notationPreviewRects.begin();
-        CompositionModelImpl::RectRanges::const_iterator npEnd = m_notationPreviewRects.end();
+        CompositionModelImpl::RectRanges::const_iterator npi = m_notationPreview.begin();
+        CompositionModelImpl::RectRanges::const_iterator npEnd = m_notationPreview.end();
 
         for (; npi != npEnd; ++npi) {
             CompositionModelImpl::RectRange interval = *npi;
@@ -1037,7 +1036,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect& c
     //
     if (m_showSegmentLabels) {
         Profiler profiler("CompositionView::drawSegments: labels");
-        for (CompositionModelImpl::rectcontainer::const_iterator i = rects.begin();
+        for (CompositionModelImpl::rectcontainer::const_iterator i = segmentRects.begin();
              i != end; ++i) {
             drawCompRectLabel(*i, segmentLayerPainter, clipRect);
         }
@@ -1051,8 +1050,8 @@ void CompositionView::drawAudioPreviews(QPainter * p, const QRect& clipRect)
 {
     Profiler profiler("CompositionView::drawAudioPreviews");
 
-    CompositionModelImpl::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
-    CompositionModelImpl::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
+    CompositionModelImpl::AudioPreviewDrawData::const_iterator api = m_audioPreview.begin();
+    CompositionModelImpl::AudioPreviewDrawData::const_iterator apEnd = m_audioPreview.end();
     QRect rectToFill,  // rect to fill on canvas
         localRect; // the rect of the tile to draw on the canvas
     QPoint basePoint,  // origin of segment rect

@@ -694,8 +694,8 @@ protected:
     QString      m_toolContextHelp;
     bool         m_contextHelpShown;
 
-    CompositionModelImpl::AudioPreviewDrawData m_audioPreviewRects;
-    CompositionModelImpl::RectRanges m_notationPreviewRects;
+    CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
+    CompositionModelImpl::RectRanges m_notationPreview;
 
     /// Drives slotUpdateTimer().
     QTimer *m_updateTimer;
