@@ -993,27 +993,32 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
     if (m_showPreviews) {
         segmentLayerPainter->save();
 
+        // Audio Previews
+
         {
             Profiler profiler("CompositionView::drawSegments: audio previews");
 
-            // draw audio previews
-            //
             drawAudioPreviews(segmentLayerPainter, clipRect);
         }
 
+        // Notation Previews
+
         Profiler profiler("CompositionView::drawSegments: note previews");
 
-        // draw notation previews
-        //
         CompositionModelImpl::RectRanges::const_iterator npi = m_notationPreview.begin();
         CompositionModelImpl::RectRanges::const_iterator npEnd = m_notationPreview.end();
 
+        // For each preview range
+        // ??? I think there is never more than one range here.  We should be
+        //     able to switch from RectRanges to RectRange.
         for (; npi != npEnd; ++npi) {
             CompositionModelImpl::RectRange interval = *npi;
             segmentLayerPainter->save();
             segmentLayerPainter->translate(
                     interval.basePoint.x(), interval.basePoint.y());
-//            RG_DEBUG << "CompositionView::drawSegments : translating to x = " << interval.basePoint.x() << endl;
+            //RG_DEBUG << "CompositionView::drawSegments : translating to x = " << interval.basePoint.x() << endl;
+
+            // For each event rectangle
             for (; interval.range.first != interval.range.second; ++interval.range.first) {
                 const PreviewRect& pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;

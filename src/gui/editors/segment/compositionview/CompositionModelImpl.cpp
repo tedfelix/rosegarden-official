@@ -799,7 +799,7 @@ void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 
 void CompositionModelImpl::clearRecordingItems()
 {
-    for (recordingsegmentset::iterator i = m_recordingSegments.begin();
+    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i)
         clearInCache(*i, true);
 
@@ -869,7 +869,7 @@ void CompositionModelImpl::setPointerPos(int xPos)
     //RG_DEBUG << "CompositionModelImpl::setPointerPos() begin";
     m_pointerTimePos = grid().getRulerScale()->getTimeForX(xPos);
 
-    for (recordingsegmentset::iterator i = m_recordingSegments.begin();
+    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i) {
         emit needContentUpdate(computeSegmentRect(**i));
     }
@@ -985,7 +985,7 @@ void CompositionModelImpl::endChange()
 
     m_changingItems.clear();
 
-    for (itemgc::iterator i = m_itemGC.begin(); i != m_itemGC.end(); ++i) {
+    for (ItemGC::iterator i = m_itemGC.begin(); i != m_itemGC.end(); ++i) {
         delete *i;
     }
     m_itemGC.clear();

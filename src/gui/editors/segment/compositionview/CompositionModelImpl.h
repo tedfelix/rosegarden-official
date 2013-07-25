@@ -25,14 +25,14 @@
 #include "SegmentOrderer.h"
 #include "base/Event.h"
 
-#include <map>
-#include <set>
-
 #include <QColor>
 #include <QPoint>
 
 #include <QRect>
+
 #include <vector>
+#include <map>
+#include <set>
 
 class RectRanges;
 class AudioPreviewDrawData;
@@ -41,6 +41,7 @@ class AudioPreviewData;
 
 namespace Rosegarden
 {
+
 
 class Studio;
 class Segment;
@@ -284,8 +285,8 @@ protected:
 
     timeT            m_pointerTimePos;
 
-    typedef std::set<Segment *> recordingsegmentset;
-    recordingsegmentset          m_recordingSegments;
+    typedef std::set<Segment *>  RecordingSegmentSet;
+    RecordingSegmentSet          m_recordingSegments;
 
     AudioPreviewThread*          m_audioPreviewThread;
 
@@ -297,13 +298,13 @@ protected:
     typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
 
-    /// Member object which allows us to return a reference for speed.
+    /// Used by getSegmentRects() to return a reference for speed.
     RectContainer m_segmentRects;
     ItemContainer m_changingItems;
     ChangeType    m_changeType;
 
-    typedef std::vector<CompositionItem> itemgc;
-    itemgc m_itemGC;
+    typedef std::vector<CompositionItem> ItemGC;
+    ItemGC m_itemGC;
 
     QRect m_selectionRect;
     QRect m_previousSelectionUpdateRect;
