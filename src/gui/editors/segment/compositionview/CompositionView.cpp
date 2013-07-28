@@ -62,20 +62,6 @@
 namespace Rosegarden
 {
 
-class PreviewRect : public QRect {
-public:
-    PreviewRect(int left, int top, int width, int height) :
-        QRect(left, top, width, height) {};
-
-    PreviewRect(const QRect& r) :
-        QRect(r) {};
-
-    const QColor& getColor() const { return m_color; }
-    void setColor(QColor c) { m_color = c; }
-
-protected:
-    QColor m_color;
-};
 
 CompositionView::CompositionView(RosegardenDocument* doc,
                                  CompositionModelImpl* model,
@@ -1020,7 +1006,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
 
             // For each event rectangle
             for (; interval.range.first != interval.range.second; ++interval.range.first) {
-                const PreviewRect& pr = *(interval.range.first);
+                const QRect &pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
                 segmentLayerPainter->setBrush(col);
