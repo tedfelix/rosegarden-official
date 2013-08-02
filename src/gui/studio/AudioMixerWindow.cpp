@@ -76,7 +76,7 @@
 #include <QDesktopServices>
 #include <QToolBar>
 #include <QToolButton>
-
+#include <QtGlobal>
 
 namespace Rosegarden
 {

@@ -25,6 +25,8 @@
 #include "gui/studio/StudioControl.h"
 #include "misc/Debug.h"
 
+#include <QtGlobal>
+
 #define DEBUG_CONTROL_BLOCK 1
 
 
@@ -438,7 +440,7 @@ TrackInfo::makeChannelReady(Studio &studio)
         // Re-acquire channel.  It may change if instrument's program
         // became percussion or became non-percussion.
         Device* device = instrument->getDevice();
-        assert(device);
+        Q_CHECK_PTR(device);
         AllocateChannels *allocator = device->getAllocator();
         if (allocator) {
             m_thruChannel =
@@ -482,7 +484,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
     }
 
     Device* device = instrument->getDevice();
-    assert(device);
+    Q_CHECK_PTR(device);
     AllocateChannels *allocator = device->getAllocator();
 
 #ifdef DEBUG_CONTROL_BLOCK
@@ -530,7 +532,7 @@ TrackInfo::releaseThruChannel(Studio &studio)
     if (instrument && !m_useFixedChannel) {
 
         Device* device = instrument->getDevice();
-        assert(device);
+        Q_CHECK_PTR(device);
         AllocateChannels *allocator = device->getAllocator();
 
         // Device is a channel-managing device (Midi), so release the

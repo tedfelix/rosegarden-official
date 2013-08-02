@@ -20,7 +20,7 @@
 #include "base/PropertyName.h"
 #include "base/Exception.h"
 
-#include <cassert>
+#include <QtGlobal>
 
 namespace Rosegarden 
 {
@@ -70,7 +70,7 @@ string PropertyName::getName() const
     }
     std::cerr << std::endl;
 
-    assert(0); // exit if debug is on
+    Q_ASSERT(0); // exit if debug is on
     throw Exception
 	("Serious problem in PropertyName::getName(): property "
 	 "name's internal value is corrupted -- see stderr for details");

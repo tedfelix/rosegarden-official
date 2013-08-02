@@ -15,7 +15,8 @@
 
 #include "ViewElement.h"
 #include <iostream>
-#include <cassert>
+
+#include <QtGlobal>
 
 namespace Rosegarden 
 {

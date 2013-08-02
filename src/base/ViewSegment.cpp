@@ -16,6 +16,8 @@
 #include "ViewSegment.h"
 #include "base/Profiler.h"
 
+#include <QtGlobal>
+
 namespace Rosegarden 
 {
 
@@ -104,7 +106,7 @@ void
 ViewSegment::eventAdded(const Segment *t, Event *e)
 {
     Profiler profiler("ViewSegment::eventAdded");
-    assert(t == &m_segment);
+    Q_ASSERT(t == &m_segment);
     (void)t; // avoid warnings
 
     if (wrapEvent(e)) {
@@ -118,7 +120,7 @@ void
 ViewSegment::eventRemoved(const Segment *t, Event *e)
 {
     Profiler profiler("ViewSegment::eventRemoved");
-    assert(t == &m_segment);
+    Q_ASSERT(t == &m_segment);
     (void)t; // avoid warnings
 
     // If we have it, lose it
@@ -139,7 +141,7 @@ ViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
 {
     Segment *s = const_cast<Segment *>(segment);
 
-    assert(s == &m_segment);
+    Q_ASSERT(s == &m_segment);
 
     if (shorten) {
 
@@ -170,7 +172,7 @@ ViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
 void
 ViewSegment::segmentDeleted(const Segment *s)
 {
-    assert(s == &m_segment);
+    Q_ASSERT(s == &m_segment);
     (void)s; // avoid warnings
     /*
     std::cerr << "WARNING: ViewSegment notified of segment deletion: this is probably a bug "

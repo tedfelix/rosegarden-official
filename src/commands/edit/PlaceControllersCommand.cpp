@@ -21,6 +21,8 @@
 #include "base/Segment.h"
 #include "gui/rulers/ControllerEventAdapter.h"
 
+#include <QtGlobal>
+
 namespace Rosegarden
 {
 
@@ -41,7 +43,7 @@ int
 PlaceControllersCommand::getDefaultValue(const Instrument *instrument,
                                          const ControlParameter *cp)
 {
-    assert(cp);
+    Q_CHECK_PTR(cp);
     if (cp->getType() == Controller::EventType)
         // For controllers, use the static value if there is one.
         {

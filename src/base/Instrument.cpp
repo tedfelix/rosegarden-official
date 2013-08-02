@@ -30,6 +30,7 @@
 
 #include <QString>
 #include <QCoreApplication>
+#include <QtGlobal>
 
 namespace Rosegarden
 {
@@ -144,7 +145,7 @@ Instrument::Instrument(InstrumentId id,
     m_audioInputChannel(0),
     m_audioOutput(0)
 {
-    assert(m_id >= AudioInstrumentBase);//!DEVPUSH
+    Q_ASSERT(m_id >= AudioInstrumentBase);//!DEVPUSH
 
     if (it == Audio || it == SoftSynth)
     {
@@ -192,7 +193,7 @@ Instrument::Instrument(InstrumentId id,
     m_audioInputChannel(0),
     m_audioOutput(0)
 {
-    assert(m_id >= AudioInstrumentBase);//!DEVPUSH
+    Q_ASSERT(m_id >= AudioInstrumentBase);//!DEVPUSH
 
     // Add a number of plugin place holders (unassigned)
     //

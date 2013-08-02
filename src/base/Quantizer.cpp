@@ -22,6 +22,8 @@
 #include "Sets.h"
 #include "base/Profiler.h"
 
+#include <QtGlobal>
+
 #include <iostream>
 #include <cmath>
 #include <cstdio> // for sprintf
@@ -72,7 +74,7 @@ Quantizer::quantize(Segment *s,
 		    Segment::iterator from,
 		    Segment::iterator to) const
 {
-    assert(m_toInsert.size() == 0);
+    Q_ASSERT(m_toInsert.size() == 0);
 
     quantizeRange(s, from, to);
 
@@ -82,7 +84,7 @@ Quantizer::quantize(Segment *s,
 void
 Quantizer::quantize(EventSelection *selection)
 {
-    assert(m_toInsert.size() == 0);
+    Q_ASSERT(m_toInsert.size() == 0);
 
     Segment &segment = selection->getSegment();
 
@@ -137,7 +139,7 @@ Quantizer::fixQuantizedValues(Segment *s,
 			      Segment::iterator from,
 			      Segment::iterator to) const
 {
-    assert(m_toInsert.size() == 0);
+    Q_ASSERT(m_toInsert.size() == 0);
 
     quantize(s, from, to);
 
@@ -225,7 +227,7 @@ Quantizer::unquantize(Segment *s,
 		      Segment::iterator from,
 		      Segment::iterator to) const
 {
-    assert(m_toInsert.size() == 0);
+    Q_ASSERT(m_toInsert.size() == 0);
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 	++nextFrom;
@@ -246,7 +248,7 @@ Quantizer::unquantize(Segment *s,
 void
 Quantizer::unquantize(EventSelection *selection) const
 {
-    assert(m_toInsert.size() == 0);
+    Q_ASSERT(m_toInsert.size() == 0);
 
     Segment *s = &selection->getSegment();
 

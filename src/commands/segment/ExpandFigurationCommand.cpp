@@ -28,6 +28,8 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "misc/Debug.h"
 
+#include <QtGlobal>
+
 namespace Rosegarden
 {
 
@@ -109,7 +111,9 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
          ++i) {
         Segment *s = (*i);
         SegmentFigData::SegmentFigDataMap::iterator it = segMap.find(*i);
-        assert (it != segMap.end());
+        Q_ASSERT_X(it != segMap.end(),
+                   "ExpandFigurationCommand::initialise",
+                   "didn't find the segment");
         SegmentFigData& segmentData = it->second;
         
         if (!segmentData.isa(SegmentFigData::ChordSource))

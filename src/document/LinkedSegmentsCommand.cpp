@@ -19,6 +19,8 @@
 
 #include "base/Composition.h"
 
+#include <QtGlobal>
+
 namespace Rosegarden
 {
 
@@ -31,14 +33,14 @@ LinkedSegmentsCommand::LinkedSegmentsCommand(const QString &name,
   m_detached(true)
 {
 #if !defined NDEBUG
-  assert(!m_originalSegments.empty());
+  Q_ASSERT(!m_originalSegments.empty());
   timeT startTime = m_originalSegments[0]->getStartTime();
   for (SegmentVec::const_iterator i = m_originalSegments.begin();
        i != m_originalSegments.end();
        ++i) {
-    assert((*i)->getStartTime() == startTime);
+    Q_ASSERT((*i)->getStartTime() == startTime);
     if (m_originalSegments.size() > 1) {
-      assert((*i)->getLinker() != 0);
+      Q_CHECK_PTR((*i)->getLinker());
     }
   }
 #endif            

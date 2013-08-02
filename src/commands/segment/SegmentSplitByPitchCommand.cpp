@@ -30,6 +30,7 @@
 #include "base/SegmentNotationHelper.h"
 
 #include <QString>
+#include <QtGlobal>
 
 #include <vector>
 #include <algorithm>
@@ -316,7 +317,7 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i)
 
         /* NOTREACHED */
     case ChordToneOfInitialPitch:
-        assert(m_toneIndex >= 0);
+        Q_ASSERT(m_toneIndex >= 0);
 
         // Lower than the lowest tone (a pointless command but
         // shouldn't be an error)

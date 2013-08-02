@@ -19,9 +19,7 @@
 #include "VelocityColour.h"
 
 #include <QColor>
-
-// #include <cassert>
-
+// #include <QtGlobal>
 
 namespace Rosegarden
 {
@@ -44,9 +42,9 @@ VelocityColour::VelocityColour(const QColor &loud,
         m_multiplyFactor(1000)
 {
 
-//    assert(maximum > loudKnee);
-//    assert(loudKnee > mediumKnee);
-//    assert(mediumKnee > quietKnee);
+//    Q_ASSERT(maximum > loudKnee);
+//    Q_ASSERT(loudKnee > mediumKnee);
+//    Q_ASSERT(mediumKnee > quietKnee);
 
     // These are the colours for the first band from Quiet to Medium.
     // We use a multiplication factor to keep ourselves in the realms

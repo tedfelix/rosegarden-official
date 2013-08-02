@@ -29,7 +29,7 @@
 #include "document/LinkedSegmentsCommand.h"
 
 #include <QObject>
-
+#include <QtGlobal>
 
 namespace Rosegarden
 {
@@ -45,7 +45,7 @@ public:
         m_splitTime(splitTime),
         m_duration(duration)
         {
-            assert(duration > 0);
+            Q_ASSERT(duration > 0);
         }
     virtual ~SegmentGroupInsertRangeCommand();
 
@@ -134,7 +134,7 @@ splitRejoin(Segment *segment)
 void
 SegmentGroupInsertRangeCommand::calculateNewSegments(void)
 {
-    assert(!m_originalSegments.empty());
+    Q_ASSERT(!m_originalSegments.empty());
 
     // Pick one original segment to work on.  The rest will just
     // be links to its result.
@@ -156,7 +156,7 @@ SegmentGroupInsertRangeCommand::calculateNewSegments(void)
 
     // We shouldn't have been called if there's not at least one
     // segment to split.
-    assert(segment->getStartTime() < m_splitTime);
+    Q_ASSERT(segment->getStartTime() < m_splitTime);
 
     // Get the resulting segment.
     Segment * segmentFinal = splitRejoin(segment);

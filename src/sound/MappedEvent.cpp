@@ -12,19 +12,17 @@
     COPYING included with this distribution for more information.
 */
 
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-
-#include <QDir>
-
 #include "MappedEvent.h"
 #include "base/BaseProperties.h"
 #include "Midi.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h" // for Note::EventType
 
-#include <cassert>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QtGlobal>
+
 #include <cstdlib>
 
 // #define DEBUG_MAPPEDEVENT 1
@@ -309,7 +307,7 @@ void DataBlockFile::prepareToWrite()
     if (!m_file.isWritable()) {
         m_file.close();
         m_file.open(QIODevice::WriteOnly | QIODevice::Append);
-        assert(m_file.isWritable());
+        Q_ASSERT(m_file.isWritable());
     }
 }
 
@@ -319,7 +317,7 @@ void DataBlockFile::prepareToRead()
     if (!m_file.isReadable()) {
         m_file.close();
         m_file.open(QIODevice::ReadOnly);
-        assert(m_file.isReadable());
+        Q_ASSERT(m_file.isReadable());
     }
 }
 

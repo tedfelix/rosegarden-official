@@ -40,6 +40,8 @@
 #include <QGraphicsLineItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsSimpleTextItem>
+#include <QtGlobal>
+
 #include <algorithm>
 
 
@@ -921,7 +923,7 @@ StaffLayout::resizeStaffLines()
              << " (startLayoutX " << m_startLayoutX
              << ", endLayoutX " << m_endLayoutX << ")" << endl;
 
-    assert(lastRow >= firstRow);
+    Q_ASSERT(lastRow >= firstRow);
 
     int i;
     while ((int)m_staffLines.size() <= lastRow) {

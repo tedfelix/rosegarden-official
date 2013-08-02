@@ -33,8 +33,10 @@
 #include "document/BasicCommand.h"
 #include "document/DocumentGet.h"
 #include "misc/Debug.h"
-#include <cassert>
+
 #include <QObject>
+#include <QtGlobal>
+
 #include <vector>
 
 
@@ -148,7 +150,7 @@ update(ChordSegmentMap& chordSources,
        FigurationSourceMap& figurationSources,
        MacroCommand* command)
 {
-    assert(command);
+    Q_CHECK_PTR(command);
     Composition *comp = DocumentGet::getComposition();
     Segment* s = m_s;
     // Initialize `target' as NULL.  We allocate it just-in-time
@@ -164,7 +166,7 @@ update(ChordSegmentMap& chordSources,
     // Expand for each target
     for (iterator i = begin(); i != end(); ++i) {
         Event* e = (*i);
-        assert(e->isa(GeneratedRegion::EventType));
+        Q_ASSERT(e->isa(GeneratedRegion::EventType));
         GeneratedRegion generatedRegion(*e);
               
         /*** Find the respective sources ***/
@@ -465,7 +467,7 @@ updateComposition(MacroCommand* command)
         Segment *s = i->first;
         SegmentFigData &data = i->second;
 
-        assert (!data.m_needsTag);
+        Q_ASSERT(!data.m_needsTag);
       
         // Set the relevant ID max, if any, to the maximum of its
         // previous value and this id.
@@ -498,7 +500,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
                        timeT       startTime)
 {
     // Target had better be in a composition at least temporarily.
-    assert(target->getComposition());
+    Q_ASSERT(target->getComposition());
 
     /*** Get preliminary data ***/
 

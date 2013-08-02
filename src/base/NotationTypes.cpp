@@ -20,7 +20,6 @@
 #include <iostream>
 #include <cstdlib> // for atoi
 #include <limits.h> // for SHRT_MIN
-#include <cassert>
 #include <sstream>
 #include <cstdio> // needed for sprintf()
 

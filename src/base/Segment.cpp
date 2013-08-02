@@ -22,6 +22,8 @@
 #include "base/SegmentLinker.h"
 #include "document/DocumentGet.h"
 
+#include <QtGlobal>
+
 #include <iostream>
 #include <algorithm>
 #include <iterator>
@@ -550,7 +552,7 @@ Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 Segment::iterator
 Segment::insert(Event *e)
 {
-    assert(e);
+    Q_CHECK_PTR(e);
 
     // Event Start Time
     timeT t0 = e->getAbsoluteTime();
@@ -602,7 +604,7 @@ Segment::erase(iterator pos)
 {
     Event *e = *pos;
 
-    assert(e);
+    Q_CHECK_PTR(e);
     
 
     timeT t0 = e->getAbsoluteTime();
@@ -645,7 +647,7 @@ Segment::erase(iterator from, iterator to)
         ++j;
 
         Event *e = *i;
-        assert(e);
+        Q_CHECK_PTR(e);
 
         EventContainer::erase(i);
         notifyRemove(e);
@@ -1408,7 +1410,7 @@ Segment::getRepeatEndTime() const
 
     if (m_repeating && m_composition) {
         Composition::iterator i(m_composition->findSegment(this));
-        assert(i != m_composition->end());
+        Q_ASSERT(i != m_composition->end());
         ++i;
         if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
             timeT t = (*i)->getStartTime();

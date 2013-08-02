@@ -42,8 +42,8 @@
 #include <QCloseEvent>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QtGlobal>
 
-#include <cassert>
 #include <cmath>
 
 namespace Rosegarden
@@ -729,7 +729,8 @@ PitchBendSequenceDialog::accept()
 
     // We don't enable "OK" if the interval isn't sensible, so
     // something's badly wrong if this test fails.
-    assert(m_startTime < m_endTime);
+    Q_ASSERT_X(m_startTime < m_endTime, "accept",
+             "got a zero or negative time interval");
 
     /* Save current settings.  They'll be the defaults next time. */
     saveSettings();
@@ -1000,7 +1001,8 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
                 // exactly zero, but since that once caused a serious
                 // bug let's always check it (If it's not exactly 0.0
                 // it wouldn't cause a divide-by-zero)
-                assert(denominator != 0.0);
+                Q_ASSERT_X(denominator != 0.0, "addStepwiseEvents",
+                           "got a denominator of exactly zero");
                 timeRatio = (
                              (log(startValue + epsilon + i * stepSize) - log(startValue + epsilon))
                              / denominator);

@@ -13,15 +13,17 @@
     COPYING included with this distribution for more information.
 */
 
-#include <iostream>
-#include <cassert>
-#include <cstdlib>
-
 #include "DSSIPluginInstance.h"
 #include "PluginIdentifier.h"
 #include "LADSPAPluginFactory.h"
 
 #include <misc/Strings.h>
+
+#include <QtGlobal>
+
+#include <iostream>
+#include <cstdlib>
+
 
 #ifdef __FreeBSD__
 #include <stdlib.h>
@@ -653,8 +655,8 @@ DSSIPluginInstance::connectPorts()
     << m_outputBufferCount << " output buffers" << std::endl;
 #endif
 
-    assert(sizeof(LADSPA_Data) == sizeof(float));
-    assert(sizeof(sample_t) == sizeof(float));
+    Q_ASSERT(sizeof(LADSPA_Data) == sizeof(float));
+    Q_ASSERT(sizeof(sample_t) == sizeof(float));
 
     size_t inbuf = 0, outbuf = 0;
 

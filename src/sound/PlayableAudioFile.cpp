@@ -14,7 +14,6 @@
 */
 
 #include "PlayableAudioFile.h"
-#include <cassert>
 
 namespace Rosegarden
 {

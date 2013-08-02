@@ -34,7 +34,7 @@
 #include "base/Track.h"
 
 #include <QString>
-#include <assert.h>
+#include <QtGlobal>
 
 namespace Rosegarden
 
@@ -377,7 +377,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // processed via endElement().
     } else {
         // For debugging
-        assert(0);
+        Q_ASSERT(0);
     }
     
     return ret;

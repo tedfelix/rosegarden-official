@@ -24,7 +24,6 @@
 #include <QSettings>
 
 #include <iostream>
-#include <cassert>
 
 #include <signal.h>
 

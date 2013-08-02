@@ -23,7 +23,9 @@
 #include "misc/Debug.h"
 #include "sound/MidiFile.h"
 #include "sound/MappedEvent.h"
-#include "assert.h"
+
+#include <QtGlobal>
+
 #include <string>
 
 // #define MIDI_DEBUG 1
@@ -216,7 +218,7 @@ void
 MidiInserter::
 insertCopy(const MappedEvent &evt)
 {
-    assert(!m_finished);
+    Q_ASSERT(!m_finished);
 
     MidiByte   midiChannel = evt.getRecordedChannel();
     TrackData& trackData   = getTrackData(evt.getTrackId(), midiChannel);

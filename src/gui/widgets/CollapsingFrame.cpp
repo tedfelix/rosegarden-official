@@ -31,9 +31,7 @@
 #include <QString>
 #include <QToolButton>
 #include <QWidget>
-
-#include <cassert>
-
+#include <QtGlobal>
 
 namespace Rosegarden
 {
@@ -91,7 +89,7 @@ CollapsingFrame::setFont(QFont font)
 void
 CollapsingFrame::setWidget(QWidget *widget)
 {
-    assert(!m_widget);
+    Q_ASSERT(!m_widget);
     m_widget = widget;
     if (m_fill) {
         m_layout->addWidget(widget, 1, 0, 1, 3);

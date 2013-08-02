@@ -29,6 +29,8 @@
 #include "commands/segment/SegmentSplitCommand.h"
 #include "document/LinkedSegmentsCommand.h"
 
+#include <QtGlobal>
+
 namespace Rosegarden
 {
 
@@ -44,7 +46,7 @@ public:
         m_firstSplitTime(firstSplitTime),
         m_secondSplitTime(secondSplitTime)
         {
-            assert(firstSplitTime < secondSplitTime);
+            Q_ASSERT(firstSplitTime < secondSplitTime);
         }
     virtual ~SegmentGroupDeleteRangeCommand();
 
@@ -227,7 +229,7 @@ void
 SegmentGroupDeleteRangeCommand::
 calculateNewSegments(void)
 {
-    assert(!m_originalSegments.empty());
+    Q_ASSERT(!m_originalSegments.empty());
 
     // Pick one original segment to work on.  The rest will just
     // be links to its result.

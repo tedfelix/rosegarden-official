@@ -15,9 +15,10 @@
 
 #include "AudioTimeStretcher.h"
 
+#include <QtGlobal>
+
 #include <iostream>
 #include <fstream>
-#include <cassert>
 #include <cstring>
 
 namespace Rosegarden 
@@ -380,7 +381,7 @@ AudioTimeStretcher::putInput(float **input, size_t samples)
             for (size_t c = 0; c < m_channels; ++c) {
 
                 size_t got = m_inbuf[c]->peek(m_tempbuf, m_wlen);
-                assert(got == m_wlen);
+                Q_ASSERT(got == m_wlen);
 
                 analyseBlock(c, m_tempbuf);
             }

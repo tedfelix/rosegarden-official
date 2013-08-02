@@ -28,7 +28,9 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/editors/segment/compositionview/CompositionView.h"
+
 #include <QString>
+#include <QtGlobal>
 
 
 namespace Rosegarden

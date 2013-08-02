@@ -40,7 +40,7 @@ SnapGrid::SnapGrid(const RulerScale *rulerScale, int ysnap) :
 void
 SnapGrid::setSnapTime(timeT snap)
 {
-    assert(snap > 0 ||
+    Q_ASSERT(snap > 0 ||
 	   snap == NoSnap ||
 	   snap == SnapToBar ||
 	   snap == SnapToBeat ||

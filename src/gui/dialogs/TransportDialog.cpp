@@ -50,7 +50,7 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QPainter>
-
+#include <QtGlobal>
 
 
 namespace Rosegarden
@@ -899,7 +899,7 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
     if (!m_enableMIDILabels)
         return;
 
-    assert(mE != 0);
+    Q_CHECK_PTR(mE);
 
     switch (mE->getType()) {
     case MappedEvent::MidiNote:
@@ -992,7 +992,7 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
     if (!m_enableMIDILabels)
         return;
 
-    assert(mE != 0);
+    Q_CHECK_PTR(mE);
 
     switch (mE->getType()) {
     case MappedEvent::MidiNote:

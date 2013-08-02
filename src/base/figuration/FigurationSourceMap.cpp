@@ -29,8 +29,10 @@
 #include "base/figuration/FigChord.h"
 #include "base/figuration/RelativeEvent.h"
 #include "misc/Debug.h"
+
+#include <QtGlobal>
+
 #include <algorithm>
-#include <cassert>
 #include <cmath>
 
 namespace Rosegarden
@@ -246,7 +248,9 @@ class ProximityNote : public RelativeEvent
                                       m_originalPitches.end(),
                                       *i);
 
-                assert (found != m_originalPitches.end());
+                Q_ASSERT_X(found != m_originalPitches.end(),
+                           "SharedData::init",
+                           "didn't find this pitch");
                 const int targetIndex = i - unorderedPitches.begin();
                 const int sourceIndex = found - m_originalPitches.begin();
                 m_indexes[targetIndex] = sourceIndex;
@@ -297,7 +301,9 @@ class ProximityNote : public RelativeEvent
             // If the old data is still valid, done.
             if (m_oldFigChord == notes) { return; }
 
-            assert (!notes->empty());
+            Q_ASSERT_X(!notes->empty(),
+                       "SharedData::update",
+                       "the chord has no notes");
 
             if (m_pitchDeltas) { delete m_pitchDeltas; }
             m_pitchDeltas = 0;
@@ -330,7 +336,7 @@ class ProximityNote : public RelativeEvent
 
                 // Since notes isn't empty, something must have beaten
                 // the initial leastPenalty.
-                assert (bestTonePressure);
+                Q_CHECK_PTR(bestTonePressure);
 
                 // Add this index to the best match.  TonePressure
                 // maintains the sorting invariant.
@@ -568,7 +574,7 @@ class ProximityNote : public RelativeEvent
                     // loop continue.
                     if (breakInnerLoop) { break; }
                     
-                    assert (chosenCascadeIncrement != 0);
+                    Q_ASSERT(chosenCascadeIncrement != 0);
 
                     // chosenCascadeIncrement is 1 or -1, so we are
                     // actually taking single steps.
@@ -1052,7 +1058,7 @@ getFigurations(Segment *s)
 {
     RG_DEBUG << "Looking for figuration in segment " << s->getLabel()
              << endl;
-    assert(s);
+    Q_CHECK_PTR(s);
 
     FigurationVector figs;
     FigChord  *parameterChord = 0;

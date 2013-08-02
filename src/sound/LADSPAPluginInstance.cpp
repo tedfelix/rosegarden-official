@@ -12,11 +12,13 @@
   COPYING included with this distribution for more information.
 */
 
-#include <iostream>
-#include <cassert>
 
 #include "LADSPAPluginInstance.h"
 #include "LADSPAPluginFactory.h"
+
+#include <QtGlobal>
+
+#include <iostream>
 
 //#define DEBUG_LADSPA 1
 
@@ -298,8 +300,8 @@ LADSPAPluginInstance::connectPorts()
     if (!m_descriptor || !m_descriptor->connect_port)
         return ;
 
-    assert(sizeof(LADSPA_Data) == sizeof(float));
-    assert(sizeof(sample_t) == sizeof(float));
+    Q_ASSERT(sizeof(LADSPA_Data) == sizeof(float));
+    Q_ASSERT(sizeof(sample_t) == sizeof(float));
 
     size_t inbuf = 0, outbuf = 0;
 

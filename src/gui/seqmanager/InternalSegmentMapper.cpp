@@ -34,7 +34,6 @@
 #include "sound/MappedEvent.h"
 #include "sound/Midi.h" // For MIDI_SYSTEM_EXCLUSIVE
 
-#include "assert.h"
 #include <limits>
 #include <algorithm>
 

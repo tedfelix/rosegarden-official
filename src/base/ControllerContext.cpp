@@ -25,7 +25,9 @@
 #include "base/Segment.h"
 #include "gui/rulers/ControllerEventAdapter.h"
 #include "misc/Debug.h"
-#include <assert.h>
+
+#include <QtGlobal>
+
 #include <limits>
 
 // #define DEBUG_CONTROLLER_CONTEXT 1
@@ -137,8 +139,10 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
     Profiler profiler("ControllerContextMap::getControllerValue", false);
 
     // Should only get these two types.
-    assert((eventType == Controller::EventType) ||
-           (eventType == PitchBend::EventType));
+    Q_ASSERT_X((eventType == Controller::EventType) ||
+               (eventType == PitchBend::EventType),
+               "getControllerValue",
+               "got an unexpected event type");
     
     // We have cached the latest value of all controllers we've
     // inserted.  Find the relevant cache.
@@ -221,7 +225,7 @@ getControlParameter(Instrument *instrument,
 {
     Device * device = instrument->getDevice();
     const Controllable *c = device->getControllable();
-    assert(c);
+    Q_CHECK_PTR(c);
     return c->getControlParameter(eventType, controllerId);
 }
 
@@ -308,7 +312,9 @@ storeLatestValue(Event *e)
         m_latestValues[controllerId] = toCache;
     } else {
         // We are only expecting these two types.
-        assert(eventType == PitchBend::EventType);
+        Q_ASSERT_X(eventType == PitchBend::EventType,
+                   "storeLatestValue",
+                   "got an unexpected event type");
         // Set it.
         m_PitchBendLatestValue = Maybe(true, toCache);
     } 
