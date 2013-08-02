@@ -394,6 +394,8 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::initialise: buffer size is " << bufferSize << " frames, file size is " << m_audioFile->getSize() << std::endl;
+#else
+    (void)bufferSize;
 #endif
 
     if (m_targetChannels <= 0)
