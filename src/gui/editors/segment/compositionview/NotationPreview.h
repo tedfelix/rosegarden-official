@@ -114,7 +114,7 @@ private:
 
     struct RectCompare {
         bool operator()(const QRect &r1, const QRect &r2) const {
-            return r1.x() < r2.x();
+            return r1.left() < r2.left();
         }
     };
 

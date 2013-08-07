@@ -185,7 +185,6 @@ public:
     void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
 
     CompositionRect computeSegmentRect(const Segment&, bool computeZ = false);
-    QColor          computeSegmentPreviewColor(const Segment*);
     QPoint          computeSegmentOrigin(const Segment&);
     void            computeRepeatMarks(CompositionItem&);
 

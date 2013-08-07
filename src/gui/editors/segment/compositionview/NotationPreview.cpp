@@ -24,6 +24,7 @@
 #include "base/Composition.h"
 #include "base/Studio.h"
 #include "base/BaseProperties.h"
+#include "base/Profiler.h"
 
 // System
 #include <math.h>
@@ -104,7 +105,7 @@ void NotationPreview::makeNotationPreviewRects(QPoint basePoint,
     interval.range.second = npi;
     interval.basePoint.setX(0);
     interval.basePoint.setY(basePoint.y());
-    interval.color = computeSegmentPreviewColor(segment);
+    interval.color = segment->getPreviewColour();
 
     // Add the interval to the caller's interval list.
     npRects->push_back(interval);
@@ -162,7 +163,7 @@ void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
     else
         interval.basePoint.setX(0);
 
-    interval.color = computeSegmentPreviewColor(segment);
+    interval.color = segment->getPreviewColour();
 
     npRects->push_back(interval);
 }

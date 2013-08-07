@@ -21,6 +21,7 @@
 #include "base/Profiler.h"
 #include "base/SegmentLinker.h"
 #include "document/DocumentGet.h"
+#include "gui/general/GUIPalette.h"
 
 #include <QtGlobal>
 
@@ -1567,6 +1568,35 @@ Segment::setColourIndex(const unsigned int input)
     updateRefreshStatuses(getStartTime(), getEndTime());
     if (m_composition) m_composition->updateRefreshStatuses();
     notifyAppearanceChange();
+}
+
+QColor
+Segment::getPreviewColour() const
+{
+    // Select a preview colour for best visibility against the segment's
+    // colour.
+
+    // StaffHeader::updateHeader() does something similar.  Might want
+    // to offer a Colour::getVisibleForeground() to handle this concept
+    // in a more central location.  Like the unused
+    // Colour::getContrastingColour().
+
+    if (!m_composition) {
+        return Qt::black;
+    }
+
+    QColor segmentColour = GUIPalette::convertColour(
+            m_composition->getSegmentColourMap().getColourByIndex(m_colourIndex));
+
+    int intensity = qGray(segmentColour.rgb());
+
+    // Go with black for bright backgrounds
+    if (intensity > 127) {
+        return Qt::black;
+    }
+
+    // And white for dark backgrounds
+    return Qt::white;
 }
 
 void

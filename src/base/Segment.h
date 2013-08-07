@@ -28,6 +28,8 @@
 #include "RealTime.h"
 #include "MidiProgram.h"
 
+#include <QColor>
+
 namespace Rosegarden
 {
 
@@ -201,6 +203,8 @@ public:
     // Colour information
     void setColourIndex(const unsigned int input);
     unsigned int getColourIndex() const { return m_colourIndex; }
+    /// Get a high-contrast color to use for segment previews
+    QColor getPreviewColour() const;
 
     /**
      * Returns a numeric id of some sort

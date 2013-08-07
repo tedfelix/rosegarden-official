@@ -128,7 +128,7 @@ CompositionModelImpl::~CompositionModelImpl()
 
 struct RectCompare {
     bool operator()(const QRect &r1, const QRect &r2) const {
-        return r1.x() < r2.x();
+        return r1.left() < r2.left();
     }
 };
 
@@ -191,7 +191,7 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
     interval.range.second = npi;
     interval.basePoint.setX(0);
     interval.basePoint.setY(basePoint.y());
-    interval.color = computeSegmentPreviewColor(segment);
+    interval.color = segment->getPreviewColour();
 
     // Add the interval to the caller's interval list.
     npRects->push_back(interval);
@@ -249,7 +249,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     else
         interval.basePoint.setX(0);
 
-    interval.color = computeSegmentPreviewColor(segment);
+    interval.color = segment->getPreviewColour();
 
     npRects->push_back(interval);
 }
@@ -442,21 +442,6 @@ void CompositionModelImpl::createEventRects(const Segment *segment, RectList *np
 
         npData->push_back(r);
     }
-}
-
-QColor CompositionModelImpl::computeSegmentPreviewColor(const Segment* segment)
-{
-    // compute the preview color so it's as visible as possible over the segment's color
-    QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
-
-    int intensity = qGray(segColor.rgb());
-    if (intensity > 127) {
-        segColor = Qt::black;
-    } else {
-        segColor = Qt::white;
-    }
-
-    return segColor;
 }
 
 void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, AudioPreviewData* apData)

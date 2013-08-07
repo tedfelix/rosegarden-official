@@ -287,8 +287,8 @@ void AudioPreviewPainter::initializeNewSlice()
     // transparent background
     m_image.setColor(0, qRgba(255, 255, 255, 0));
 
-    // foreground from computeSegmentPreviewColor
-    QColor c = m_model.computeSegmentPreviewColor(m_segment);
+    // foreground from getPreviewColour()
+    QColor c = m_segment->getPreviewColour();
     QRgb rgba = qRgba(c.red(), c.green(), c.blue(), 255);
     m_image.setColor(1, rgba);
 
