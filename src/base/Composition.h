@@ -13,13 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _COMPOSITION_H_
-#define _COMPOSITION_H_
+#ifndef RG_COMPOSITION_H
+#define RG_COMPOSITION_H
 
-#include <set>
-#include <map>
-
-#include <QtCore/QWeakPointer>
 
 #include "FastVector.h"
 
@@ -32,6 +28,13 @@
 #include "TriggerSegment.h"
 
 #include "Marker.h"
+
+// Qt
+#include <QtCore/QWeakPointer>
+
+// System
+#include <set>
+#include <map>
 
 namespace Rosegarden 
 {
