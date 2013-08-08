@@ -21,6 +21,8 @@
 #include "NotationPreview.h"
 
 // Rosegarden
+#include "CompositionRect.h"
+#include "CompositionModelImpl.h"
 #include "base/Composition.h"
 #include "base/Studio.h"
 #include "base/BaseProperties.h"
@@ -35,17 +37,17 @@ namespace Rosegarden
 
 
 NotationPreview::NotationPreview(Composition &composition,
+                                 CompositionModelImpl &compositionModelImpl,
                                  Studio &studio,
                                  RulerScale *rulerScale,
                                  int vStep) :
     m_composition(composition),
+    m_compositionModelImpl(compositionModelImpl),
     m_studio(studio),
     m_grid(rulerScale, vStep)
 {
 }
 
-#if 0
-// Almost builds.  Just a few properties are needed.
 void NotationPreview::makeNotationPreviewRects(QPoint basePoint,
         const Segment* segment, const QRect& clipRect, RectRanges* npRects)
 {
@@ -114,7 +116,8 @@ void NotationPreview::makeNotationPreviewRects(QPoint basePoint,
 void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
         const Segment* segment, const QRect& currentSR, RectRanges* npRects)
 {
-    CompositionRect unmovedSR = computeSegmentRect(*segment);
+    CompositionRect unmovedSR =
+            m_compositionModelImpl.computeSegmentRect(*segment);
 
     RectList* cachedNPData = getNotationPreviewData(segment);
 
@@ -126,7 +129,8 @@ void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
 
     RectList::iterator npi;
 
-    if (getChangeType() == ChangeResizeFromStart)
+    if (m_compositionModelImpl.getChangeType() ==
+            CompositionModelImpl::ChangeResizeFromStart)
         npi = std::lower_bound(npBegin, npEnd, currentSR, RectCompare());
     else
         npi = std::lower_bound(npBegin, npEnd, unmovedSR, RectCompare());
@@ -136,7 +140,9 @@ void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
 
     // ??? Bump iterator back one to try and pick up the previous event
     //     rectangle which might be needed.
-    if (npi != npBegin  &&  getChangeType() != ChangeResizeFromStart) {
+    if (npi != npBegin  &&
+            m_compositionModelImpl.getChangeType() !=
+                    CompositionModelImpl::ChangeResizeFromStart) {
         --npi;
     }
 
@@ -146,7 +152,9 @@ void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
     interval.range.first = npi;
 
     // Compute the rightmost x coord (xLim)
-    int xLim = getChangeType() == ChangeMove ? unmovedSR.right() : currentSR.right();
+    int xLim = m_compositionModelImpl.getChangeType() ==
+            CompositionModelImpl::ChangeMove ?
+                    unmovedSR.right() : currentSR.right();
 
     //RG_DEBUG << "NotationPreview::makeNotationPreviewRectsMovingSegment : basePoint.x : "
     //         << basePoint.x();
@@ -158,7 +166,8 @@ void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
     interval.range.second = npi;
     interval.basePoint.setY(basePoint.y());
 
-    if (getChangeType() == ChangeMove)
+    if (m_compositionModelImpl.getChangeType() ==
+            CompositionModelImpl::ChangeMove)
         interval.basePoint.setX(basePoint.x() - unmovedSR.x());
     else
         interval.basePoint.setX(0);
@@ -167,7 +176,6 @@ void NotationPreview::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
 
     npRects->push_back(interval);
 }
-#endif
 
 NotationPreview::RectList* NotationPreview::getNotationPreviewData(const Segment* s)
 {

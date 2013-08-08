@@ -212,7 +212,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
 
     RectList::iterator npi;
 
-    if (getChangeType() == ChangeResizeFromStart)
+    if (m_changeType == ChangeResizeFromStart)
         npi = std::lower_bound(npBegin, npEnd, currentSR, RectCompare());
     else
         npi = std::lower_bound(npBegin, npEnd, unmovedSR, RectCompare());
@@ -222,7 +222,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
 
     // ??? Bump iterator back one to try and pick up the previous event
     //     rectangle which might be needed.
-    if (npi != npBegin  &&  getChangeType() != ChangeResizeFromStart) {
+    if (npi != npBegin  &&  m_changeType != ChangeResizeFromStart) {
         --npi;
     }
 
@@ -232,7 +232,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     interval.range.first = npi;
 
     // Compute the rightmost x coord (xLim)
-    int xLim = getChangeType() == ChangeMove ? unmovedSR.right() : currentSR.right();
+    int xLim = m_changeType == ChangeMove ? unmovedSR.right() : currentSR.right();
 
     //RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRectsMovingSegment : basePoint.x : "
     //         << basePoint.x();
@@ -244,7 +244,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     interval.range.second = npi;
     interval.basePoint.setY(basePoint.y());
 
-    if (getChangeType() == ChangeMove)
+    if (m_changeType == ChangeMove)
         interval.basePoint.setX(basePoint.x() - unmovedSR.x());
     else
         interval.basePoint.setX(0);
@@ -267,7 +267,7 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
 
     AudioPreviewDrawDataItem previewItem(previewImage, basePoint, segRect);
 
-    if (getChangeType() == ChangeResizeFromStart) {
+    if (m_changeType == ChangeResizeFromStart) {
         CompositionRect originalRect = computeSegmentRect(*segment);
         previewItem.resizeOffset = segRect.x() - originalRect.x();
     }

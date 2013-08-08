@@ -35,6 +35,7 @@ namespace Rosegarden
 
 // Forward declares
 class Composition;
+class CompositionModelImpl;
 class Studio;
 class Segment;
 
@@ -75,6 +76,7 @@ class NotationPreview
 {
 public:
     NotationPreview(Composition &composition,
+                    CompositionModelImpl &compositionModelImpl,
                     Studio &studio,
                     RulerScale *rulerScale,
                     int vStep);
@@ -109,6 +111,7 @@ public:
 
 private:
     Composition &m_composition;
+    CompositionModelImpl &m_compositionModelImpl;
     Studio &m_studio;
     SnapGrid m_grid;
 
