@@ -494,13 +494,13 @@ NotationView::setupActions()
     createAction("general_paste", SLOT(slotEditGeneralPaste()));
     createAction("delete", SLOT(slotEditDelete()));
     createAction("move_events_up_staff",
-                 SLOT(slotGeneralMoveEventsToStaff(true, false)));
+                 SLOT(slotMoveEventsUpStaff()));
     createAction("general_move_events_up_staff",
-                 SLOT(slotGeneralMoveEventsToStaff(true, true)));
+                 SLOT(slotMoveEventsUpStaffInteractive()));
     createAction("move_events_down_staff",
-                 SLOT(slotGeneralMoveEventsToStaff(false, false)));
+                 SLOT(slotMoveEventsDownStaff()));
     createAction("general_move_events_down_staff",
-                 SLOT(slotGeneralMoveEventsToStaff(false, true)));
+                 SLOT(slotMoveEventsDownStaffInteractive()));
     createAction("select_from_start", SLOT(slotEditSelectFromStart()));
     createAction("select_to_end", SLOT(slotEditSelectToEnd()));
     createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
@@ -4458,6 +4458,22 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
     action->setChecked(obj == this);
 }
 
+void
+NotationView::slotMoveEventsUpStaffInteractive(void)
+{ generalMoveEventsToStaff(true, true); }
+
+void
+NotationView::slotMoveEventsDownStaffInteractive(void)
+{ generalMoveEventsToStaff(false, true); }
+
+void
+NotationView::slotMoveEventsUpStaff(void)
+{ generalMoveEventsToStaff(true, false); }
+
+void
+NotationView::slotMoveEventsDownStaff(void)
+{ generalMoveEventsToStaff(false, false); }
+
 // Move the selected events to another staff
 // @param upStaff
 // if true, move them to the staff above this one, otherwise to the
@@ -4466,7 +4482,7 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 // Whether to use a dialog, otherwise use default values and no
 // interaction.
 void
-NotationView::slotGeneralMoveEventsToStaff(bool upStaff, bool useDialog)
+NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
 {
     EventSelection *selection = getSelection();
     if (!selection) return;

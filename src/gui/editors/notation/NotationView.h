@@ -134,8 +134,6 @@ protected slots:
     void slotEditTranspose();
     void slotEditSwitchPreset();
 
-    void slotGeneralMoveEventsToStaff(bool upStaff, bool useDialog);
-
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
@@ -320,6 +318,11 @@ protected slots:
      */
     void slotSymbolAction();
 
+    void slotMoveEventsUpStaffInteractive(void);
+    void slotMoveEventsDownStaffInteractive(void);
+    void slotMoveEventsUpStaff(void);
+    void slotMoveEventsDownStaff(void);
+
     /**
      * Called when the mouse cursor moves over a different height on
      * the staff
@@ -406,6 +409,8 @@ private:
      * Return the device of the current segment, if any
      */
     Device *getCurrentDevice();
+
+    void generalMoveEventsToStaff(bool upStaff, bool useDialog);
 
     /**
      * The DurationMonobar needs to know how to convolute itself somehow to
