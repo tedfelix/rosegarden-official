@@ -27,11 +27,11 @@
 #include "PitchDialog.h"
 #include "TimeDialog.h"
 #include "gui/widgets/LineEdit.h"
+#include "gui/widgets/FileDialog.h"
 
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QFileDialog>
 #include <QCheckBox>
 #include <QFile>
 #include <QGroupBox>
@@ -1053,7 +1053,7 @@ SimpleEventEditDialog::slotEditPitch()
 void
 SimpleEventEditDialog::slotSysexLoad()
 {
-    QString path = QFileDialog::getOpenFileName( this, tr("Load System Exclusive data in File"), QDir::currentPath(),
+    QString path = FileDialog::getOpenFileName( this, tr("Load System Exclusive data in File"), QDir::currentPath(),
                    tr("System exclusive files") + " (*.syx *.SYX)" + ";;" +
                    tr("All files") + " (*)"); //":SYSTEMEXCLUSIVE",
 
@@ -1082,7 +1082,7 @@ SimpleEventEditDialog::slotSysexLoad()
 void
 SimpleEventEditDialog::slotSysexSave()
 {
-    QString path = QFileDialog::getSaveFileName( this, //":SYSTEMEXCLUSIVE",
+    QString path = FileDialog::getSaveFileName( this, //":SYSTEMEXCLUSIVE",
 			tr("Save System Exclusive data to..."),
 					tr("*.syx|System exclusive files (*.syx)")
 					);
