@@ -497,6 +497,7 @@ Segment::setEndTime(timeT t)
             }
         } else if (t > endTime) {
             fillWithRests(endTime, t);
+            normalizeRests(endTime, t);
         }
     }
 }
