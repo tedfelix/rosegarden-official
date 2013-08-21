@@ -31,7 +31,7 @@ namespace Rosegarden
 /**
  * This is primarily an interface (abstract base) class that defines the
  * interface for a composition item.  It also has a saved rectangle which
- * is a common property of composition items.  CompositionItem is a
+ * is a common property of composition items.  CompositionItemPtr is a
  * QPointer to this class.
  *
  * See the deriver (CompositionItemImpl) for details.
@@ -63,9 +63,7 @@ protected:
     mutable QRect m_savedRect;
 };
 
-typedef QPointer<CompositionItemBase> CompositionItem;
-
-bool operator<(const CompositionItem& , const CompositionItem& );
+typedef QPointer<CompositionItemBase> CompositionItemPtr;
 
 
 }

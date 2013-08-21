@@ -93,7 +93,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // Check if mouse click was on a rect
     //
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
     // If user clicked a rect, and pencilAnyway is false, then there's nothing
     // left to do here
@@ -211,7 +211,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
             segment->setLabel( track->getPresetLabel().c_str() );
         }
 
-        CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);
+        CompositionItemPtr item = CompositionItemHelper::makeCompositionItem(segment);
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->setSelected(item);
         m_canvas->getModel()->signalSelection();

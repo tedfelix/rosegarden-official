@@ -62,7 +62,7 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 {
     // Remove cursor and replace with line on a SegmentItem
     // at where the cut will be made
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
         m_canvas->viewport()->setCursor(Qt::BlankCursor);
@@ -79,7 +79,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
     setBasicContextHelp();
 
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
         m_canvas->setSnapGrain(true);
@@ -113,7 +113,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
     setBasicContextHelp();
 
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
 //        m_canvas->viewport()->setCursor(Qt::blankCursor);

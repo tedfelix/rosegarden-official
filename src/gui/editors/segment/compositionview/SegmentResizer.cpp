@@ -88,7 +88,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
 
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
         RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
@@ -252,7 +252,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
     m_canvas->update();
     
     setChangeMade(false);
-    m_currentIndex = CompositionItem();
+    m_currentIndex = CompositionItemPtr();
     setBasicContextHelp();
 }
 
@@ -288,7 +288,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     /*!!!
         if (segment->getType() == Segment::Audio)
         {
-            m_currentIndex = CompositionItem();
+            m_currentIndex = CompositionItemPtr();
             QMessageBox::information(m_canvas,
                     tr("You can't yet resize an audio segment!"));
             return RosegardenScrollView::NoFollow;
@@ -374,7 +374,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     return RosegardenScrollView::FollowHorizontal;
 }
 
-bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const QPoint &coord,
+bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItemPtr& p, const QPoint &coord,
         int edgeThreshold, bool &start)
 {
     if (abs(p->rect().x() + p->rect().width() - coord.x()) < edgeThreshold) {

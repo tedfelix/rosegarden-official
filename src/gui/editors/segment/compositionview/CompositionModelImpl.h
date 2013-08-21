@@ -67,13 +67,13 @@ class CompositionModelImpl : public QObject, public CompositionObserver, public 
 public:
 
     struct CompositionItemCompare {
-        bool operator()(const CompositionItem &c1, const CompositionItem &c2) const;
+        bool operator()(const CompositionItemPtr &c1, const CompositionItemPtr &c2) const;
     };
 
     typedef std::vector<QRect> RectList;
     typedef std::vector<int> YCoordList;
     typedef std::vector<CompositionRect> RectContainer;
-    typedef std::set<CompositionItem, CompositionItemCompare> ItemContainer;
+    typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
 
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
@@ -143,13 +143,13 @@ public:
                                          AudioPreviewDrawData *audioPreview);
     YCoordList getTrackDividersIn(const QRect &clipRect);
     ItemContainer getItemsAt(const QPoint &);
-    timeT getRepeatTimeAt(const QPoint &, const CompositionItem &);
+    timeT getRepeatTimeAt(const QPoint &, const CompositionItemPtr &);
 
     SnapGrid& grid() { return m_grid; }
 
     void setPointerPos(int xPos);
-    void setSelected(const CompositionItem&, bool selected = true);
-    bool isSelected(const CompositionItem&) const;
+    void setSelected(const CompositionItemPtr&, bool selected = true);
+    bool isSelected(const CompositionItemPtr&) const;
     void setSelected(const ItemContainer&);
     void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
@@ -162,12 +162,12 @@ public:
     QRect getSelectionContentsRect();
     void signalContentChange();
 
-    void addRecordingItem(const CompositionItem&);
-    void removeRecordingItem(const CompositionItem &);
+    void addRecordingItem(const CompositionItemPtr&);
+    void removeRecordingItem(const CompositionItemPtr &);
     void clearRecordingItems();
     bool haveRecordingItems() { return !m_recordingSegments.empty(); }
 
-    void startChange(const CompositionItem&, ChangeType change);
+    void startChange(const CompositionItemPtr&, ChangeType change);
     void startChangeSelection(ChangeType change);
     ItemContainer& getChangingItems() { return m_changingItems; }
     void endChange();
@@ -186,7 +186,7 @@ public:
 
     CompositionRect computeSegmentRect(const Segment&, bool computeZ = false);
     QPoint          computeSegmentOrigin(const Segment&);
-    void            computeRepeatMarks(CompositionItem&);
+    void            computeRepeatMarks(CompositionItemPtr&);
 
     SegmentSelection getSelectedSegments() { return m_selectedSegments; }
     Composition&     getComposition()      { return m_composition; }
@@ -302,7 +302,7 @@ protected:
     ItemContainer m_changingItems;
     ChangeType    m_changeType;
 
-    typedef std::vector<CompositionItem> ItemGC;
+    typedef std::vector<CompositionItemPtr> ItemGC;
     ItemGC m_itemGC;
 
     QRect m_selectionRect;
@@ -319,7 +319,7 @@ protected:
 
     SegmentOrderer m_segmentOrderer;
 
-    CompositionItem* m_currentCompositionItem;
+    CompositionItemPtr* m_currentCompositionItem;
 
 };
 

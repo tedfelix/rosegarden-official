@@ -348,7 +348,7 @@ void CompositionView::selectSegments(const SegmentSelection &segments)
     getModel()->clearSelected();
 
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
-        getModel()->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
+        getModel()->setSelected(CompositionItemPtr(new CompositionItemImpl(**i, dummy)));
     }
     slotUpdateAll();
 }
@@ -407,13 +407,13 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
     wheelEvent(e);
 }
 
-CompositionItem CompositionView::getFirstItemAt(QPoint pos)
+CompositionItemPtr CompositionView::getFirstItemAt(QPoint pos)
 {
     CompositionModelImpl::ItemContainer items = getModel()->getItemsAt(pos);
 
     if (items.size()) {
         // find topmost item
-        CompositionItem res = *(items.begin());
+        CompositionItemPtr res = *(items.begin());
 
         unsigned int maxZ = res->z();
 
@@ -421,7 +421,7 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
 
         for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
              i != items.end(); ++i) {
-            CompositionItem ic = *i;
+            CompositionItemPtr ic = *i;
             if (ic->z() > maxZ) {
                 res = ic;
                 maxZ = ic->z();
@@ -439,7 +439,7 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
     }
 
 
-    return CompositionItem();
+    return CompositionItemPtr();
 }
 
 void CompositionView::setSnapGrain(bool fine)

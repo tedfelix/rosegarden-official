@@ -95,7 +95,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     RG_DEBUG << "SegmentSelector::handleMouseButtonPress\n";
     m_buttonPressed = true;
 
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
     // If we're in segmentAddMode or not clicking on an item then we don't
     // clear the selection vector.  If we're clicking on an item and it's
@@ -250,7 +250,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                     it != changingItems.end();
                     ++it) {
 
-                CompositionItem item = *it;
+                CompositionItemPtr item = *it;
 
                 Segment* segment = CompositionItemHelper::getSegment(item);
 
@@ -302,7 +302,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     m_selectionMoveStarted = false;
 
-    m_currentIndex = CompositionItem();
+    m_currentIndex = CompositionItemPtr();
 
     setContextHelpFor(e->pos());
 }
@@ -503,7 +503,7 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
     }
     settings.endGroup();
 
-    CompositionItem item = m_canvas->getFirstItemAt(p);
+    CompositionItemPtr item = m_canvas->getFirstItemAt(p);
 
     if (!item) {
         setContextHelp(tr("Click and drag to select segments; middle-click and drag to draw an empty segment"));

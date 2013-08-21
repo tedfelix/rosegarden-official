@@ -59,7 +59,7 @@
 namespace Rosegarden
 {
 
-bool CompositionModelImpl::CompositionItemCompare::operator()(const CompositionItem &c1, const CompositionItem &c2) const
+bool CompositionModelImpl::CompositionItemCompare::operator()(const CompositionItemPtr &c1, const CompositionItemPtr &c2) const
 {
     return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
 }
@@ -275,7 +275,7 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
     apRects->push_back(previewItem);
 }
 
-void CompositionModelImpl::computeRepeatMarks(CompositionItem& item)
+void CompositionModelImpl::computeRepeatMarks(CompositionItemPtr& item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
     CompositionRect& sr = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)item)->getCompRect();
@@ -760,7 +760,7 @@ QRect CompositionModelImpl::getSelectionContentsRect()
     return selectionRect;
 }
 
-void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
+void CompositionModelImpl::addRecordingItem(const CompositionItemPtr& item)
 {
     m_recordingSegments.insert(CompositionItemHelper::getSegment(item));
     emit needContentUpdate();
@@ -769,7 +769,7 @@ void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
              << m_recordingSegments.size() << " recording items";
 }
 
-void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
+void CompositionModelImpl::removeRecordingItem(const CompositionItemPtr &item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
 
@@ -829,7 +829,7 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s;
-            CompositionItem item(new CompositionItemImpl(*const_cast<Segment *>(s),
+            CompositionItemPtr item(new CompositionItemImpl(*const_cast<Segment *>(s),
                                                          sr));
             unsigned int z = computeZForSegment(s);
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z;
@@ -861,7 +861,7 @@ void CompositionModelImpl::setPointerPos(int xPos)
     //RG_DEBUG << "CompositionModelImpl::setPointerPos() end";
 }
 
-void CompositionModelImpl::setSelected(const CompositionItem& item, bool selected)
+void CompositionModelImpl::setSelected(const CompositionItemPtr& item, bool selected)
 {
     const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)item);
     if (itemImpl) {
@@ -914,7 +914,7 @@ void CompositionModelImpl::clearSelected()
     emit needContentUpdate();
 }
 
-bool CompositionModelImpl::isSelected(const CompositionItem& ci) const
+bool CompositionModelImpl::isSelected(const CompositionItemPtr& ci) const
 {
     const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)ci);
     return itemImpl ? isSelected(itemImpl->getSegment()) : 0;
@@ -935,7 +935,7 @@ bool CompositionModelImpl::wasTmpSelected(const Segment* s) const
     return m_previousTmpSelectedSegments.find(const_cast<Segment*>(s)) != m_previousTmpSelectedSegments.end();
 }
 
-void CompositionModelImpl::startChange(const CompositionItem& item, ChangeType change)
+void CompositionModelImpl::startChange(const CompositionItemPtr& item, ChangeType change)
 {
     m_changeType = change;
 
@@ -957,7 +957,7 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
     for (; i != m_selectedSegments.end(); ++i) {
         Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s);
-        startChange(CompositionItem(new CompositionItemImpl(*s, sr)), change);
+        startChange(CompositionItemPtr(new CompositionItemImpl(*s, sr)), change);
     }
 
 }
@@ -996,7 +996,7 @@ unsigned int CompositionModelImpl::getHeight()
     return (unsigned int)m_grid.getYBinCoordinate(getNbRows());
 }
 
-timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionItem& cItem)
+timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionItemPtr& cItem)
 {
     //     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());
 

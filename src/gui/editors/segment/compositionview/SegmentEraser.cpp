@@ -62,7 +62,7 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
     }
 
-    setCurrentIndex(CompositionItem());
+    setCurrentIndex(CompositionItemPtr());
 }
 
 int SegmentEraser::handleMouseMove(QMouseEvent*)

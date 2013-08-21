@@ -73,7 +73,7 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     }
 
     showMenu();
-    setCurrentIndex(CompositionItem());
+    setCurrentIndex(CompositionItemPtr());
 }
 
 void
@@ -102,7 +102,7 @@ SegmentTool::addCommandToHistory(Command *command)
     CommandHistory::getInstance()->addCommand(command);
 }
 
-void SegmentTool::setCurrentIndex(CompositionItem item) 
+void SegmentTool::setCurrentIndex(CompositionItemPtr item)
 {
     if (item != m_currentIndex) 
     {

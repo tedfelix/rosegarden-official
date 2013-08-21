@@ -80,7 +80,7 @@ void SegmentMover::slotCanvasScrolled(int newX, int newY)
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
-    CompositionItem item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
     SegmentSelector* selector = dynamic_cast<SegmentSelector*>
                                 (getToolBox()->getTool("segmentselector"));
 
@@ -165,7 +165,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
                     it != changingItems.end();
                     ++it) {
 
-                CompositionItem item = *it;
+                CompositionItemPtr item = *it;
 
                 Segment* segment = CompositionItemHelper::getSegment(item);
 
@@ -208,7 +208,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     setChangeMade(false);
-    m_currentIndex = CompositionItem();
+    m_currentIndex = CompositionItemPtr();
 
     setBasicContextHelp();
 }

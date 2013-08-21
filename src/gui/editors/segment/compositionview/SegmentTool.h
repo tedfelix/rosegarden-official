@@ -46,7 +46,7 @@ class SegmentSelector;
 // Allow the tools to share the Selector tool's selection
 // through these.
 //
-typedef std::pair<QPoint, CompositionItem> SegmentItemPair;
+typedef std::pair<QPoint, CompositionItemPtr> SegmentItemPair;
 typedef std::vector<SegmentItemPair> SegmentItemList;
 
 class SegmentTool : public BaseTool
@@ -76,7 +76,7 @@ protected:
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
     
-    void setCurrentIndex(CompositionItem item);
+    void setCurrentIndex(CompositionItemPtr item);
 
     SegmentToolBox* getToolBox();
 
@@ -86,7 +86,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     CompositionView*  m_canvas;
-    CompositionItem   m_currentIndex;
+    CompositionItemPtr   m_currentIndex;
     RosegardenDocument* m_doc;
 //    QPoint            m_origPos;
     bool              m_changeMade;

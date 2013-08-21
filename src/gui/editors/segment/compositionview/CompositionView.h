@@ -118,7 +118,7 @@ public:
     SnapGrid& grid() { return m_model->grid(); }
 
     /// Get the topmost item (segment) at the given position on the view.
-    CompositionItem getFirstItemAt(QPoint pos);
+    CompositionItemPtr getFirstItemAt(QPoint pos);
 
     /// Returns the segment tool box.  See setTool() and m_toolBox.
     SegmentToolBox* getToolBox() { return m_toolBox; }
@@ -615,7 +615,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     CompositionModelImpl* m_model;
-    CompositionItem m_currentIndex;
+    CompositionItemPtr m_currentIndex;
 
     SegmentTool*    m_tool;
     SegmentToolBox* m_toolBox;
