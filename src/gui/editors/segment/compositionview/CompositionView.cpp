@@ -1714,7 +1714,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 // Dead Code.
 void CompositionView::releaseCurrentItem()
 {
-    m_currentIndex = CompositionItem();
+    m_currentIndex = CompositionItemPtr();
 }
 #endif
 

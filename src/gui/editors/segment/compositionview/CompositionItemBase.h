@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_COMPOSITIONITEM_H
-#define RG_COMPOSITIONITEM_H
+#ifndef RG_COMPOSITIONITEMBASE_H
+#define RG_COMPOSITIONITEMBASE_H
 
 #include <QObject>
 #include <QRect>

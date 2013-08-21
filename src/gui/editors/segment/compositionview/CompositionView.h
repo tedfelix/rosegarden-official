@@ -20,7 +20,7 @@
 #define RG_COMPOSITIONVIEW_H
 
 #include "CompositionModelImpl.h"
-#include "CompositionItem.h"
+#include "CompositionItemBase.h"
 #include "gui/general/RosegardenScrollView.h"
 #include <QBrush>
 #include <QColor>

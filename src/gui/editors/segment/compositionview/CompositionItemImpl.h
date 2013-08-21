@@ -20,7 +20,7 @@
 #define _RG_COMPOSITIONITEMIMPL_H_
 
 #include "CompositionRect.h"
-#include "CompositionItem.h"
+#include "CompositionItemBase.h"
 #include <QRect>
 
 
