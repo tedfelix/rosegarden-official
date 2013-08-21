@@ -41,6 +41,14 @@ class Segment;
 
 /// Draw Event objects on a QPainter
 /**
+ * WORK ABANDONED
+ *
+ * This will likely be abandoned.  I've come to the conclusion that although
+ * this is a good idea, the code isn't currently organized in a way that is
+ * amenable to cleanly teasing out the concept of a Notation Preview.  That's
+ * ok.  I'm considering attacking this from a different direction.  One way or
+ * another, we'll get there.
+ *
  * WORK IN PROGRESS
  *
  * This code is not used by any part of the system yet.  I am working on
@@ -51,6 +59,7 @@ class Segment;
  * TODO
  * - Finish bringing in all necessary pieces.
  * - Evaluate all use of m_notationPreviewDataCache in CompositionModelImpl.
+ *   We need to bring all of it in here.
  * - Come up with a clever way to swap this in without disturbing anything
  *   so we can easily go back to the old way.
  *
@@ -107,7 +116,7 @@ public:
     //     This would mean that CompositionModelImpl might own the object.
     //     Probably easiest to go with this first, then see if moving
     //     draw into here is possible and whether it helps simplify things.
-    void getSegmentRects();
+    void getSegmentRects(const QRect &clipRect, RectRanges *notationPreview);
 
 private:
     Composition &m_composition;

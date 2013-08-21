@@ -17,6 +17,8 @@
 
 #define RG_MODULE_STRING "[NotationPreview]"
 
+#if 0  // Abandoning.  No sense dragging down the build...
+
 // Local
 #include "NotationPreview.h"
 
@@ -46,6 +48,34 @@ NotationPreview::NotationPreview(Composition &composition,
     m_studio(studio),
     m_grid(rulerScale, vStep)
 {
+}
+
+void NotationPreview::getSegmentRects(
+        const QRect &clipRect, RectRanges *notationPreview)
+{
+    // The code here must mimic the code in
+    // CompositionModelImpl::getSegmentRects().
+
+    // This is interesting as CompositionModelImpl::getSegmentRects() is
+    // essentially a renderer for all the segments and previews.  It just
+    // renders to rectangles.  It's then up to CompositionView to draw
+    // those rectangles on the screen.
+
+    // The code in CompositionModelImpl::getSegmentRects() is interleaved
+    // in such a way that all the work gets done at the same time.  This
+    // makes sense.  For NotationPreview::getSegmentRects() to make sense,
+    // we might need to turn CompositionModelImpl::getSegmentRects() inside
+    // out and redesign it.  At this point, it would probably be good to
+    // think through an "ideal" design and see if that gives us any ideas.
+
+    // for each segment in the composition
+
+        // if the segment is moving, continue
+
+    // end for
+
+    // for each moving segment
+    // end for
 }
 
 void NotationPreview::makeNotationPreviewRects(QPoint basePoint,
@@ -275,3 +305,4 @@ void NotationPreview::createEventRects(const Segment *segment, RectList *npData)
 
 // We're not a QObject just yet.
 //#include "NotationPreview.moc"
+#endif
