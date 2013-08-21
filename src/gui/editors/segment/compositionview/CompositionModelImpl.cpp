@@ -278,7 +278,7 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
 void CompositionModelImpl::computeRepeatMarks(CompositionItem& item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
-    CompositionRect& sr = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)item)->getCompRect();
+    CompositionRect& sr = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)item)->getCompRect();
     computeRepeatMarks(sr, s);
 }
 
@@ -799,7 +799,7 @@ bool CompositionModelImpl::isMoving(const Segment* sm) const
     ItemContainer::const_iterator movEnd = m_changingItems.end();
 
     for (ItemContainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
-        const CompositionItemImpl* ci = dynamic_cast<const CompositionItemImpl*>((_CompositionItem*)(*i));
+        const CompositionItemImpl* ci = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)(*i));
         const Segment* s = ci->getSegment();
         if (sm == s)
             return true;
@@ -863,7 +863,7 @@ void CompositionModelImpl::setPointerPos(int xPos)
 
 void CompositionModelImpl::setSelected(const CompositionItem& item, bool selected)
 {
-    const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((_CompositionItem*)item);
+    const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)item);
     if (itemImpl) {
         Segment* segment = const_cast<Segment*>(itemImpl->getSegment());
         setSelected(segment, selected);
@@ -916,7 +916,7 @@ void CompositionModelImpl::clearSelected()
 
 bool CompositionModelImpl::isSelected(const CompositionItem& ci) const
 {
-    const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((_CompositionItem*)ci);
+    const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)ci);
     return itemImpl ? isSelected(itemImpl->getSegment()) : 0;
 }
 
@@ -1000,7 +1000,7 @@ timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionIt
 {
     //     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());
 
-    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)cItem);
+    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)cItem);
 
     const Segment* s = itemImpl->getSegment();
 

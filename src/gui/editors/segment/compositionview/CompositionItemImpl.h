@@ -37,7 +37,7 @@ class Segment;
  * creates CompositionItemImpl objects to represent those changing segments
  * as they change.
  */
-class CompositionItemImpl : public _CompositionItem {
+class CompositionItemImpl : public CompositionItemBase {
 public:
     CompositionItemImpl(Segment& s, const CompositionRect&);
     virtual bool isRepeating() const              { return m_rect.isRepeating(); }

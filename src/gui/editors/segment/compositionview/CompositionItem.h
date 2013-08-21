@@ -16,17 +16,16 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONITEM_H_
-#define _RG_COMPOSITIONITEM_H_
+#ifndef RG_COMPOSITIONITEM_H
+#define RG_COMPOSITIONITEM_H
 
-//#include <qguardedptr.h>
 #include <QObject>
 #include <QRect>
 #include <QPointer>
 
-
 namespace Rosegarden
 {
+
 
 /// The interface for a composition item.
 /**
@@ -40,7 +39,7 @@ namespace Rosegarden
  * Given that there is only one deriver from this interface and
  * probably has been for quite some time, this class can probably be removed.
  */
-class _CompositionItem : public QObject {	
+class CompositionItemBase : public QObject {
 public:
     virtual bool isRepeating() const = 0;
     virtual QRect rect() const = 0;
@@ -64,8 +63,7 @@ protected:
     mutable QRect m_savedRect;
 };
 
-
-typedef QPointer<_CompositionItem> CompositionItem;  
+typedef QPointer<CompositionItemBase> CompositionItem;
 
 bool operator<(const CompositionItem& , const CompositionItem& );
 

@@ -57,7 +57,7 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentIndex) {
         // no need to test the result, we know it's good (see handleMouseButtonPress)
-        CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentIndex);
+        CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)m_currentIndex);
 
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
     }
