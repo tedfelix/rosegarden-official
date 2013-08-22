@@ -75,22 +75,16 @@ Track::~Track()
 
 void Track::setMuted(bool muted)
 {
-    if (m_muted == muted) return;
-
     m_muted = muted;
 }
 
 void Track::setLabel(const std::string &label)
 {
-    if (m_label == label) return;
-
     m_label = label;
 }
 
 void Track::setShortLabel(const std::string &shortLabel)
 {
-    if (m_shortLabel == shortLabel) return;
-
     m_shortLabel = shortLabel;
 }
 
