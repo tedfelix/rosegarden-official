@@ -530,7 +530,7 @@ SegmentParameterBox::populateBoxFromSegments()
     if (m_segments.size() == 0)
         m_label->setText("");
     else 
-        m_label->setText(QObject::tr(m_segments[0]->getLabel().c_str()));
+        m_label->setText(QObject::trUtf8(m_segments[0]->getLabel().c_str()));
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
@@ -563,7 +563,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
         // Set label to "*" when multiple labels don't match
         //
-        if (QObject::tr((*it)->getLabel().c_str()) != m_label->text())
+        if (QObject::trUtf8((*it)->getLabel().c_str()) != m_label->text())
             m_label->setText("*");
 
         // Are all, some or none of the Segments repeating?
