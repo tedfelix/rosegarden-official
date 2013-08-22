@@ -20,6 +20,7 @@
 #include "RenameTrackCommand.h"
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Track.h"
 #include <QString>
@@ -66,8 +67,8 @@ RenameTrackCommand::execute()
     if (!track)
         return;
 
-    track->setLabel(m_newLongName.toStdString());
-    track->setShortLabel(m_newShortName.toStdString());
+    track->setLabel(qstrtostr(m_newLongName));
+    track->setShortLabel(qstrtostr(m_newShortName));
     m_composition->notifyTrackChanged(track);
 }
 

@@ -194,8 +194,8 @@ TrackButtons::updateUI(Track *track)
             label->setTrackName(tr("<untitled>"));
         }
     } else {
-        label->setTrackName(track->getLabel().c_str());
-        label->setShortName(track->getShortLabel().c_str());
+        label->setTrackName(strtoqstr(track->getLabel()));
+        label->setShortName(strtoqstr(track->getShortLabel()));
     }
 
     initInstrumentNames(ins, label);
