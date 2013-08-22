@@ -787,13 +787,13 @@ TrackParameterBox::selectedTrackNameChanged()
     }
 
     Track *trk = comp.getTrackById(m_selectedTrackId);
-    QString m_trackName = strtoqstr(trk->getLabel());
-    if (m_trackName.isEmpty())
-        m_trackName = tr("<untitled>");
+    QString trackName = strtoqstr(trk->getLabel());
+    if (trackName.isEmpty())
+        trackName = tr("<untitled>");
     else
-        m_trackName.truncate(20);
+        trackName.truncate(20);
     int trackNum = trk->getPosition() + 1;
-    m_trackLabel->setText(tr("[ Track %1 - %2 ]").arg(trackNum).arg(m_trackName));
+    m_trackLabel->setText(tr("[ Track %1 - %2 ]").arg(trackNum).arg(trackName));
 }
 
 void
