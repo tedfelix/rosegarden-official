@@ -20,8 +20,9 @@
 #define RG_COMPOSITIONITEM_H
 
 #include "CompositionRect.h"
-#include "CompositionItemBase.h"
+
 #include <QRect>
+#include <QPointer>
 
 namespace Rosegarden
 {
@@ -35,26 +36,29 @@ class Segment;
  * creates CompositionItem objects to represent those changing segments
  * as they change.
  */
-class CompositionItem : public CompositionItemBase {
+class CompositionItem : public QObject {
 public:
     CompositionItem(Segment& s, const CompositionRect&);
-    virtual bool isRepeating() const              { return m_rect.isRepeating(); }
+    bool isRepeating() const           { return m_rect.isRepeating(); }
     virtual QRect rect() const;
-    virtual void translate(int x, int y)          { m_rect.translate(x, y); }
-    virtual void moveTo(int x, int y)             { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
-    virtual void setX(int x)                      { m_rect.setX(x); }
-    virtual void setY(int y)                      { m_rect.setY(y); }
-    virtual void setZ(unsigned int z)             { m_z = z; }
-    virtual int x()                               { return m_rect.x(); }
-    virtual int y()                               { return m_rect.y(); }
-    virtual unsigned int z()                      { return m_z; }
-    virtual void setWidth(int w)                  { m_rect.setWidth(w); }
+    void translate(int x, int y)       { m_rect.translate(x, y); }
+    void moveTo(int x, int y)          { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
+    void setX(int x)                   { m_rect.setX(x); }
+    void setY(int y)                   { m_rect.setY(y); }
+    void setZ(unsigned int z)          { m_z = z; }
+    int x()                            { return m_rect.x(); }
+    int y()                            { return m_rect.y(); }
+    unsigned int z()                   { return m_z; }
+    void setWidth(int w)               { m_rect.setWidth(w); }
     // use segment address as hash key
-    virtual long hashKey()                        { return (long)getSegment(); }
+    long hashKey()                     { return (long)getSegment(); }
 
-    Segment* getSegment()             { return &m_segment; }
-    const Segment* getSegment() const { return &m_segment; }
-    CompositionRect& getCompRect()                { return m_rect; }
+    Segment* getSegment()              { return &m_segment; }
+    const Segment* getSegment() const  { return &m_segment; }
+    CompositionRect& getCompRect()     { return m_rect; }
+
+    QRect savedRect() const            { return m_savedRect; }
+    void saveRect() const              { m_savedRect = rect(); }
 
 protected:
 
@@ -62,6 +66,8 @@ protected:
     Segment& m_segment;
     CompositionRect m_rect;
     unsigned int m_z;
+    mutable QRect m_savedRect;
+
 };
 
 typedef QPointer<CompositionItem> CompositionItemPtr;
