@@ -278,7 +278,7 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
 void CompositionModelImpl::computeRepeatMarks(CompositionItemPtr& item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
-    CompositionRect& sr = dynamic_cast<CompositionItem*>((CompositionItemBase*)item)->getCompRect();
+    CompositionRect& sr = item->getCompRect();
     computeRepeatMarks(sr, s);
 }
 
@@ -799,7 +799,7 @@ bool CompositionModelImpl::isMoving(const Segment* sm) const
     ItemContainer::const_iterator movEnd = m_changingItems.end();
 
     for (ItemContainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
-        const CompositionItem* ci = dynamic_cast<const CompositionItem*>((CompositionItemBase*)(*i));
+        const CompositionItem* ci = *i;
         const Segment* s = ci->getSegment();
         if (sm == s)
             return true;
@@ -863,7 +863,7 @@ void CompositionModelImpl::setPointerPos(int xPos)
 
 void CompositionModelImpl::setSelected(const CompositionItemPtr& item, bool selected)
 {
-    const CompositionItem* itemImpl = dynamic_cast<const CompositionItem*>((CompositionItemBase*)item);
+    const CompositionItem* itemImpl = item;
     if (itemImpl) {
         Segment* segment = const_cast<Segment*>(itemImpl->getSegment());
         setSelected(segment, selected);
@@ -916,7 +916,7 @@ void CompositionModelImpl::clearSelected()
 
 bool CompositionModelImpl::isSelected(const CompositionItemPtr& ci) const
 {
-    const CompositionItem* itemImpl = dynamic_cast<const CompositionItem*>((CompositionItemBase*)ci);
+    const CompositionItem* itemImpl = ci;
     return itemImpl ? isSelected(itemImpl->getSegment()) : 0;
 }
 
@@ -1000,7 +1000,7 @@ timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionIt
 {
     //     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());
 
-    CompositionItem* itemImpl = dynamic_cast<CompositionItem*>((CompositionItemBase*)cItem);
+    CompositionItem* itemImpl = cItem;
 
     const Segment* s = itemImpl->getSegment();
 

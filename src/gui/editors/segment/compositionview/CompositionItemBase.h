@@ -63,8 +63,6 @@ protected:
     mutable QRect m_savedRect;
 };
 
-typedef QPointer<CompositionItemBase> CompositionItemPtr;
-
 
 }
 

@@ -64,6 +64,8 @@ protected:
     unsigned int m_z;
 };
 
+typedef QPointer<CompositionItem> CompositionItemPtr;
+
 
 }
 

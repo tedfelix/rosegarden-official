@@ -21,7 +21,7 @@
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
 #include "CompositionRect.h"
-#include "CompositionItemBase.h"
+#include "CompositionItem.h"
 #include "SegmentOrderer.h"
 #include "base/Event.h"
 

@@ -82,7 +82,7 @@ void CompositionItemHelper::setStartTime(CompositionItemPtr& item, timeT time,
         item->setX(x);
         if (item->isRepeating()) {
             int deltaX = curX - x;
-            CompositionRect& sr = dynamic_cast<CompositionItem*>((CompositionItemBase*)item)->getCompRect();
+            CompositionRect& sr = item->getCompRect();
             int curW = sr.getBaseWidth();
             sr.setBaseWidth(curW + deltaX);
         }
@@ -103,7 +103,7 @@ void CompositionItemHelper::setEndTime(CompositionItemPtr& item, timeT time,
         item->setWidth(r.width());
 
         if (item->isRepeating()) {
-            CompositionRect& sr = dynamic_cast<CompositionItem*>((CompositionItemBase*)item)->getCompRect();
+            CompositionRect& sr = item->getCompRect();
             sr.setBaseWidth(r.width());
         }
     }
@@ -116,7 +116,7 @@ int CompositionItemHelper::getTrackPos(const CompositionItemPtr& item, const Ros
 
 Rosegarden::Segment* CompositionItemHelper::getSegment(CompositionItemPtr item)
 {
-    return (dynamic_cast<CompositionItem*>((CompositionItemBase*)item))->getSegment();
+    return item->getSegment();
 }
 
 CompositionItemPtr CompositionItemHelper::makeCompositionItem(Rosegarden::Segment* segment)

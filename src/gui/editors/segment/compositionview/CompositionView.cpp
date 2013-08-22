@@ -1652,7 +1652,7 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - have currentIndex\n";
 
-    CompositionItem* itemImpl = dynamic_cast<CompositionItem*>((CompositionItemBase*)m_currentIndex);
+    CompositionItem* itemImpl = m_currentIndex;
 
     if (m_currentIndex->isRepeating()) {
         timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentIndex);

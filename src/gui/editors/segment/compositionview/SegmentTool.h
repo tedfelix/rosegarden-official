@@ -20,7 +20,7 @@
 #define _RG_SEGMENTTOOL_H_
 
 #include "gui/general/BaseTool.h"
-#include "CompositionItemBase.h"
+#include "CompositionItem.h"
 #include <QPoint>
 #include <utility>
 #include <vector>
