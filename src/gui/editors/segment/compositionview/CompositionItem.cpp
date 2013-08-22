@@ -16,7 +16,7 @@
 */
 
 
-#include "CompositionItemImpl.h"
+#include "CompositionItem.h"
 
 #include "misc/Debug.h"
 #include "base/Segment.h"
@@ -33,24 +33,24 @@
 namespace Rosegarden
 {
 
-CompositionItemImpl::CompositionItemImpl(Segment& s, const CompositionRect& rect)
+CompositionItem::CompositionItem(Segment& s, const CompositionRect& rect)
         : m_segment(s),
         m_rect(rect),
         m_z(0)
 {}
 
-QRect CompositionItemImpl::rect() const
+QRect CompositionItem::rect() const
 {
     QRect res = m_rect;
     if (m_rect.isRepeating()) {
         CompositionRect::repeatmarks repeatMarks = m_rect.getRepeatMarks();
         int neww = m_rect.getBaseWidth();
 
-        //         RG_DEBUG << "CompositionItemImpl::rect() -  width = "
+        //         RG_DEBUG << "CompositionItem::rect() -  width = "
         //                  << m_rect.width() << " - base w = " << neww << endl;
         res.setWidth(neww);
     } else {
-        //         RG_DEBUG << "CompositionItemImpl::rect() m_rect not repeating\n";
+        //         RG_DEBUG << "CompositionItem::rect() m_rect not repeating\n";
     }
 
 

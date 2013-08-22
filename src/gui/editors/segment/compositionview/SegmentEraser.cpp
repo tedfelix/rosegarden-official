@@ -22,7 +22,7 @@
 #include "misc/Debug.h"
 #include "commands/segment/SegmentEraseCommand.h"
 #include "CompositionView.h"
-#include "CompositionItemImpl.h"
+#include "CompositionItem.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -57,7 +57,7 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentIndex) {
         // no need to test the result, we know it's good (see handleMouseButtonPress)
-        CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)m_currentIndex);
+        CompositionItem* item = dynamic_cast<CompositionItem*>((CompositionItemBase*)m_currentIndex);
 
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
     }

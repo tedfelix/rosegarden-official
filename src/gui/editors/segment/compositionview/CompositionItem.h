@@ -16,30 +16,28 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONITEMIMPL_H_
-#define _RG_COMPOSITIONITEMIMPL_H_
+#ifndef RG_COMPOSITIONITEM_H
+#define RG_COMPOSITIONITEM_H
 
 #include "CompositionRect.h"
 #include "CompositionItemBase.h"
 #include <QRect>
 
-
-
-
 namespace Rosegarden
 {
+
 
 class Segment;
 
 /// Representation of segments that are changing.
 /**
  * When segments are being selected, moved, or resized, CompositionModelImpl
- * creates CompositionItemImpl objects to represent those changing segments
+ * creates CompositionItem objects to represent those changing segments
  * as they change.
  */
-class CompositionItemImpl : public CompositionItemBase {
+class CompositionItem : public CompositionItemBase {
 public:
-    CompositionItemImpl(Segment& s, const CompositionRect&);
+    CompositionItem(Segment& s, const CompositionRect&);
     virtual bool isRepeating() const              { return m_rect.isRepeating(); }
     virtual QRect rect() const;
     virtual void translate(int x, int y)          { m_rect.translate(x, y); }

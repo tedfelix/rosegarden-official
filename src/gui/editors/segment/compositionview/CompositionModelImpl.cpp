@@ -23,7 +23,7 @@
 #include "AudioPreviewUpdater.h"
 #include "AudioPreviewPainter.h"
 #include "CompositionItemHelper.h"
-#include "CompositionItemImpl.h"
+#include "CompositionItem.h"
 #include "CompositionRect.h"
 #include "CompositionColourCache.h"
 
@@ -278,7 +278,7 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
 void CompositionModelImpl::computeRepeatMarks(CompositionItemPtr& item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
-    CompositionRect& sr = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)item)->getCompRect();
+    CompositionRect& sr = dynamic_cast<CompositionItem*>((CompositionItemBase*)item)->getCompRect();
     computeRepeatMarks(sr, s);
 }
 
@@ -799,7 +799,7 @@ bool CompositionModelImpl::isMoving(const Segment* sm) const
     ItemContainer::const_iterator movEnd = m_changingItems.end();
 
     for (ItemContainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
-        const CompositionItemImpl* ci = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)(*i));
+        const CompositionItem* ci = dynamic_cast<const CompositionItem*>((CompositionItemBase*)(*i));
         const Segment* s = ci->getSegment();
         if (sm == s)
             return true;
@@ -829,7 +829,7 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s;
-            CompositionItemPtr item(new CompositionItemImpl(*const_cast<Segment *>(s),
+            CompositionItemPtr item(new CompositionItem(*const_cast<Segment *>(s),
                                                          sr));
             unsigned int z = computeZForSegment(s);
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z;
@@ -863,7 +863,7 @@ void CompositionModelImpl::setPointerPos(int xPos)
 
 void CompositionModelImpl::setSelected(const CompositionItemPtr& item, bool selected)
 {
-    const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)item);
+    const CompositionItem* itemImpl = dynamic_cast<const CompositionItem*>((CompositionItemBase*)item);
     if (itemImpl) {
         Segment* segment = const_cast<Segment*>(itemImpl->getSegment());
         setSelected(segment, selected);
@@ -916,7 +916,7 @@ void CompositionModelImpl::clearSelected()
 
 bool CompositionModelImpl::isSelected(const CompositionItemPtr& ci) const
 {
-    const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((CompositionItemBase*)ci);
+    const CompositionItem* itemImpl = dynamic_cast<const CompositionItem*>((CompositionItemBase*)ci);
     return itemImpl ? isSelected(itemImpl->getSegment()) : 0;
 }
 
@@ -957,7 +957,7 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
     for (; i != m_selectedSegments.end(); ++i) {
         Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s);
-        startChange(CompositionItemPtr(new CompositionItemImpl(*s, sr)), change);
+        startChange(CompositionItemPtr(new CompositionItem(*s, sr)), change);
     }
 
 }
@@ -1000,7 +1000,7 @@ timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionIt
 {
     //     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());
 
-    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)cItem);
+    CompositionItem* itemImpl = dynamic_cast<CompositionItem*>((CompositionItemBase*)cItem);
 
     const Segment* s = itemImpl->getSegment();
 

@@ -27,7 +27,7 @@
 #include "base/Profiler.h"
 #include "CompositionColourCache.h"
 #include "CompositionItemHelper.h"
-#include "CompositionItemImpl.h"
+#include "CompositionItem.h"
 #include "CompositionRect.h"
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenDocument.h"
@@ -348,7 +348,7 @@ void CompositionView::selectSegments(const SegmentSelection &segments)
     getModel()->clearSelected();
 
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
-        getModel()->setSelected(CompositionItemPtr(new CompositionItemImpl(**i, dummy)));
+        getModel()->setSelected(CompositionItemPtr(new CompositionItem(**i, dummy)));
     }
     slotUpdateAll();
 }
@@ -1652,7 +1652,7 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - have currentIndex\n";
 
-    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((CompositionItemBase*)m_currentIndex);
+    CompositionItem* itemImpl = dynamic_cast<CompositionItem*>((CompositionItemBase*)m_currentIndex);
 
     if (m_currentIndex->isRepeating()) {
         timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentIndex);

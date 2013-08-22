@@ -34,7 +34,7 @@ namespace Rosegarden
  * is a common property of composition items.  CompositionItemPtr is a
  * QPointer to this class.
  *
- * See the deriver (CompositionItemImpl) for details.
+ * See the deriver (CompositionItem) for details.
  *
  * Given that there is only one deriver from this interface and
  * probably has been for quite some time, this class can probably be removed.
