@@ -317,7 +317,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     // Was only emitted from dead code.
     //connect(this, SIGNAL(needUpdate()),
-    //        m_compositionView, SLOT(slotUpdateSegmentsDrawBuffer()));
+    //        m_compositionView, SLOT(slotUpdateAll()));
 
     connect(m_compositionView->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),

@@ -228,7 +228,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
 
         QObject::connect
         (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-         m_trackEditor->getCompositionView(), SLOT(slotUpdateSegmentsDrawBuffer()));
+         m_trackEditor->getCompositionView(), SLOT(slotUpdateAll()));
     }
 }
 
