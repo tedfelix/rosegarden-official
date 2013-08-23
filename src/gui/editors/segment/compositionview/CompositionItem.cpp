@@ -18,22 +18,16 @@
 
 #include "CompositionItem.h"
 
-#include "misc/Debug.h"
-#include "base/Segment.h"
 #include "CompositionRect.h"
-#include <QBrush>
-#include <QColor>
-#include <QPen>
-#include <QPoint>
+
 #include <QRect>
-#include <QSize>
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-CompositionItem::CompositionItem(Segment& s, const CompositionRect& rect)
+
+CompositionItem::CompositionItem(Segment &s, const CompositionRect &rect)
         : m_segment(s),
         m_rect(rect),
         m_z(0)
@@ -42,19 +36,14 @@ CompositionItem::CompositionItem(Segment& s, const CompositionRect& rect)
 QRect CompositionItem::rect() const
 {
     QRect res = m_rect;
+
+    // For repeating segments, use the base width
     if (m_rect.isRepeating()) {
-        CompositionRect::repeatmarks repeatMarks = m_rect.getRepeatMarks();
-        int neww = m_rect.getBaseWidth();
-
-        //         RG_DEBUG << "CompositionItem::rect() -  width = "
-        //                  << m_rect.width() << " - base w = " << neww << endl;
-        res.setWidth(neww);
-    } else {
-        //         RG_DEBUG << "CompositionItem::rect() m_rect not repeating\n";
+        res.setWidth(m_rect.getBaseWidth());
     }
-
 
     return res;
 }
+
 
 }

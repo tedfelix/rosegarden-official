@@ -21,6 +21,7 @@
 
 #include "CompositionRect.h"
 
+#include <QObject>
 #include <QRect>
 #include <QPointer>
 
@@ -35,41 +36,57 @@ class Segment;
  * When segments are being selected, moved, or resized, CompositionModelImpl
  * creates CompositionItem objects to represent those changing segments
  * as they change.
+ *
+ * All these accessors and mutators strike me as being rather unsavory.
+ * Might want to just turn this into a wide-open struct.  That's essentially
+ * what it is.  rect() could be a helper function, and m_savedRect could
+ * be kept private since its mutator is interesting.
+ * It would be a lot easier to understand.
  */
 class CompositionItem : public QObject {
 public:
-    CompositionItem(Segment& s, const CompositionRect&);
-    bool isRepeating() const           { return m_rect.isRepeating(); }
-    virtual QRect rect() const;
-    void translate(int x, int y)       { m_rect.translate(x, y); }
-    void moveTo(int x, int y)          { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
+    CompositionItem(Segment &s, const CompositionRect &r);
+
+    // Rect Mutators
+
     void setX(int x)                   { m_rect.setX(x); }
     void setY(int y)                   { m_rect.setY(y); }
-    void setZ(unsigned int z)          { m_z = z; }
-    int x()                            { return m_rect.x(); }
-    int y()                            { return m_rect.y(); }
-    unsigned int z()                   { return m_z; }
     void setWidth(int w)               { m_rect.setWidth(w); }
-    // use segment address as hash key
-    long hashKey()                     { return (long)getSegment(); }
+    void setZ(unsigned int z)          { m_z = z; }
 
-    Segment* getSegment()              { return &m_segment; }
-    const Segment* getSegment() const  { return &m_segment; }
+    // ??? Can this be implemented as:
+    //     m_rect.translate(x, y);
+    void moveTo(int x, int y)          { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
+
+    // Rect Accessors
+
+    // rename: baseRect()?  Since it has only the baseWidth().
+    QRect rect() const;
+    int x() const                      { return m_rect.x(); }
+    int y() const                      { return m_rect.y(); }
+    unsigned int z() const             { return m_z; }
+    bool isRepeating() const           { return m_rect.isRepeating(); }
     CompositionRect& getCompRect()     { return m_rect; }
 
+    // Access to the contained segment
+    Segment *getSegment()              { return &m_segment; }
+    const Segment *getSegment() const  { return &m_segment; }
+
+    // Saved rect.  Used to store the original rect before changing it.
+    void saveRect()                    { m_savedRect = rect(); }
     QRect savedRect() const            { return m_savedRect; }
-    void saveRect() const              { m_savedRect = rect(); }
 
-protected:
+private:
 
-    //--------------- Data members ---------------------------------
-    Segment& m_segment;
+    Segment &m_segment;
     CompositionRect m_rect;
     unsigned int m_z;
-    mutable QRect m_savedRect;
 
+    QRect m_savedRect;
 };
 
+// ??? Need to clean up users of this.  They are doing things like passing
+//     references to this, which is pretty hard to follow.
 typedef QPointer<CompositionItem> CompositionItemPtr;
 
 
