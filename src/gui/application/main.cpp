@@ -367,6 +367,12 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifndef NDEBUG
+    // Force all Qt warnings to crash the system.
+    // ??? We're not at a point where this is safe yet.
+    //setenv("QT_FATAL_WARNINGS", "1", 1);
+#endif
+
     QPixmapCache::setCacheLimit(8192); // KB
 
     setsid(); // acquire shiny new process group
