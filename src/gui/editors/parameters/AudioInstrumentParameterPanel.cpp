@@ -79,7 +79,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
     m_aliasButton = new InstrumentAliasButton(this, 0);
     m_aliasButton->setFixedSize(10, 6); // golden rectangle
     m_aliasButton->setToolTip(tr("Click to rename this instrument"));
-    connect (m_aliasButton, SIGNAL(changed()), this, SLOT(updateAllBoxes()));
+    // ??? updateAllBoxes() is not a slot, it is a signal.
+//    connect (m_aliasButton, SIGNAL(changed()), this, SLOT(updateAllBoxes()));
     // cheat on the layout, both this and the label at 0, 0; this all the way
     // left, the label centered.
     gridLayout->addWidget(m_aliasButton, 0, 0, 1, 2, Qt::AlignLeft);

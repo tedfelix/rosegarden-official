@@ -49,9 +49,11 @@ AudioRouteMenu::AudioRouteMenu(QWidget *par,
         m_direction(direction),
         m_format(format)
 {
-    // Make instrument tell us if it gets destroyed.
-    connect(instrument, SIGNAL(destroyed()),
-            this, SLOT(slotInstrumentGone()));
+    if (instrument) {
+        // Make instrument tell us if it gets destroyed.
+        connect(instrument, SIGNAL(destroyed()),
+                this, SLOT(slotInstrumentGone()));
+    }
     
     switch (format) {
 
@@ -110,9 +112,11 @@ AudioRouteMenu::slotSetInstrument(Studio *studio,
     m_studio = studio;
     m_instrument = instrument;
     slotRepopulate();
-    // Make instrument tell us if it gets destroyed.
-    connect(instrument, SIGNAL(destroyed()),
-            this, SLOT(slotInstrumentGone()));
+    if (instrument) {
+        // Make instrument tell us if it gets destroyed.
+        connect(instrument, SIGNAL(destroyed()),
+                this, SLOT(slotInstrumentGone()));
+    }
 }
 
 void

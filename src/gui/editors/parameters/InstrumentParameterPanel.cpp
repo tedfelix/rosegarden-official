@@ -52,9 +52,11 @@ InstrumentParameterPanel::
 setSelectedInstrument(Instrument *instrument, QString label)
 {
     m_selectedInstrument = instrument;
-    // Make instrument tell us if it gets destroyed.
-    connect(instrument, SIGNAL(destroyed()),
-            this, SLOT(slotInstrumentGone()));
+    if (instrument) {
+        // Make instrument tell us if it gets destroyed.
+        connect(instrument, SIGNAL(destroyed()),
+                this, SLOT(slotInstrumentGone()));
+    }
     m_instrumentLabel->setText(label);
 }
 
