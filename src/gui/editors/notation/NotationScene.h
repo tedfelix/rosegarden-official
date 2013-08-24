@@ -264,6 +264,7 @@ protected:
     void segmentRepeatEndChanged(const Composition *, Segment *, timeT);
     void segmentStartChanged(const Composition *, Segment *, timeT);
     void segmentEndMarkerChanged(const Composition *, Segment *, bool);
+    void trackChanged(const Composition *, Track *);
 
 
 
@@ -348,6 +349,9 @@ private:
     bool m_showRepeated;   // Repeated segments are visible
     bool m_editRepeated;   // Direct edition of repeated segments is allowed
     bool m_haveInittedCurrentStaff;
+
+    // Remember current labels of tracks
+    std::map<int, std::string> m_trackLabels;
 };
 
 }

@@ -279,6 +279,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
 
     m_document = document;
     m_externalSegments = segments;
+    Composition * composition = &m_document->getComposition();
 
 
     /// Look for repeating segments
@@ -299,20 +300,19 @@ NotationScene::setStaffs(RosegardenDocument *document,
     }
 
 
-    m_document->getComposition().addObserver(this);
+    composition->addObserver(this);
 
-    m_compositionRefreshStatusId =
-        document->getComposition().getNewRefreshStatusId();
+    m_compositionRefreshStatusId = composition->getNewRefreshStatusId();
 
     delete m_hlayout;
     delete m_vlayout;
 
-    m_hlayout = new NotationHLayout(&m_document->getComposition(),
+    m_hlayout = new NotationHLayout(composition,
                                     m_notePixmapFactory,
                                     *m_properties,
                                     this);
 
-    m_vlayout = new NotationVLayout(&m_document->getComposition(),
+    m_vlayout = new NotationVLayout(composition,
                                     m_notePixmapFactory,
                                     *m_properties,
                                     this);
@@ -345,18 +345,25 @@ NotationScene::setStaffs(RosegardenDocument *document,
     m_visibleStaffs = trackIds.size();
 
     m_clefKeyContext->setSegments(this);
+    
+    // Remember the names of the tracks
+    for (std::set<TrackId>::iterator i = trackIds.begin();
+         i != trackIds.end(); ++i) {
+        Track *track = composition->getTrackById(*i);
+        m_trackLabels[*i] = track->getLabel();
+    }
 
     // ClefKeyContext doesn't keep any segments list. So notation scene
     // has to maintain segment observer connections for it.
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         m_segments[i]->addObserver(m_clefKeyContext);
     }
-    
+
     // We don't know a good current staff now.  This is correct even
     // if we are resetting an existing NotationScene because the old
     // current staff may not even exist.
     m_haveInittedCurrentStaff = false;
-    
+
     if (!m_updatesSuspended) {
         positionStaffs();
         layoutAll();
@@ -1278,6 +1285,41 @@ NotationScene::segmentEndMarkerChanged(const Composition *c, Segment *s, bool)
             break;
         }
     }
+}
+
+void
+NotationScene::trackChanged(const Composition *c, Track *t)
+{
+    if (!m_document || !c || (c != &m_document->getComposition())) return;
+
+    // Signal must be emitted only once (or the same scene will be recreated
+    // several time which may be very time consuming).
+    if (m_finished) return;
+
+    TrackId trackId = t->getId();   // Id of changed track
+
+    for (std::vector<Segment *>::iterator i = m_externalSegments.begin();
+         i != m_externalSegments.end(); ++i) {
+
+        // Is the segment part of the changed track ?
+        if ((*i)->getTrack() == trackId) {
+
+            // The scene needs a rebuild only if what has changed is the 
+            // name of the track
+            if (t->getLabel() == m_trackLabels[trackId]) break;
+
+            // The whole scene is going to be deleted then restored
+            // (from NotationView). To continue processing at best is
+            // useless and at worst may cause a crash related to deleted clones.
+            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
+                       this, SLOT(slotCommandExecuted()));
+            suspendLayoutUpdates();
+            m_finished = true;    // Stop further processing from this scene
+
+            emit sceneNeedsRebuilding();
+            break;
+        }
+   }
 }
 
 void
