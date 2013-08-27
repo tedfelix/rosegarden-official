@@ -91,8 +91,11 @@ NotationToolBox::createTool(QString toolName)
 
     if (m_scene) {
         tool->setScene(m_scene);
-        connect(m_scene, SIGNAL(eventRemoved(Event *)),
-                tool, SLOT(handleEventRemoved(Event *)));
+        // This would be great, if NotationTool had such a slot.  All
+        // of its derivers do.  This needs to be reworked and carefully
+        // tested to make sure it is doing what it should be doing.
+        //connect(m_scene, SIGNAL(eventRemoved(Event *)),
+        //        tool, SLOT(handleEventRemoved(Event *)));
     }
 
     return tool;
@@ -108,8 +111,11 @@ NotationToolBox::setScene(NotationScene *scene)
         NotationTool *nt = dynamic_cast<NotationTool *>(*i);
         if (nt) {
             nt->setScene(scene);
-            connect(scene, SIGNAL(eventRemoved(Event *)),
-                    nt, SLOT(handleEventRemoved(Event *)));
+            // This would be great, if NotationTool had such a slot.  All
+            // of its derivers do.  This needs to be reworked and carefully
+            // tested to make sure it is doing what it should be doing.
+            //connect(scene, SIGNAL(eventRemoved(Event *)),
+            //        nt, SLOT(handleEventRemoved(Event *)));
         }
     }
 }

@@ -466,12 +466,12 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     connect(notationView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
     // No such signal comes from NotationView
-//    connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
-//            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
+    //connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
+    //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
     connect(notationView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
-    connect(notationView, SIGNAL(editTimeSignature(timeT)),
-            RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
+    //connect(notationView, SIGNAL(editTimeSignature(timeT)),
+    //        RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
 
     SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -641,12 +641,12 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
     connect(pitchTrackerView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
     // No such signal comes from PitchTrackerView
-//    connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
-//            this, SLOT(slotChangeTrackLabel(TrackId, QString)));
+    //connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
+    //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
     connect(pitchTrackerView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
-    connect(pitchTrackerView, SIGNAL(editTimeSignature(timeT)),
-            RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
+    //connect(pitchTrackerView, SIGNAL(editTimeSignature(timeT)),
+    //        RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
 
     SequenceManager *sM = getDocument()->getSequenceManager();
 

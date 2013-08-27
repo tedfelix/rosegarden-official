@@ -447,15 +447,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(sceneNeedsRebuilding()),
             this, SIGNAL(sceneNeedsRebuilding()), Qt::QueuedConnection);
 
-    // ??? This needs to be fixed.  It should use a different slot that
-    //     doesn't require a bool which in turn will call
-    //     slotUpdatePointerPosition(true).  Call it
-    //     slotCurrentStaffChanged().
-    connect(m_scene, SIGNAL(currentStaffChanged()),
-            this, SLOT(slotUpdatePointerPosition(true)));
+    // To fix this, create a new slot called slotCurrentStaffChanged() and
+    // have it call slotUpdatePointerPosition(true).
+    //connect(m_scene, SIGNAL(currentStaffChanged()),
+    //        this, SLOT(slotUpdatePointerPosition(true)));
 
-    connect(m_scene, SIGNAL(selectionChanged()),
-            m_view, SLOT(updateScene()));
+    // There is a Panner::updateScene(), but it's not a slot.
+    //connect(m_scene, SIGNAL(selectionChanged()),
+    //        m_view, SLOT(updateScene()));
 
     m_view->setScene(m_scene);
 
@@ -481,8 +480,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
 
-    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
-            this, SLOT(slotEnsureTimeVisible(timeT)));
+    // There's a slotEnsureTimeVisible in MatrixWidget.  Maybe this was
+    // copied from there?
+    //connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
+    //        this, SLOT(slotEnsureTimeVisible(timeT)));
 
     connect(m_scene, SIGNAL(layoutUpdated(timeT,timeT)),
             m_controlsWidget, SLOT(slotUpdateRulers(timeT,timeT)));

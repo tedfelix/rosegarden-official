@@ -366,8 +366,8 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
     int approximateHeight = (y - getSceneYForTopLine(row)) * getHeightPerLine() / getLineSpacing();
     approximateHeight = getTopLineHeight() - approximateHeight;
 
-    std::cout << "approximateHeight: " << approximateHeight
-              << " originalHeight: " << originalHeight << std::endl;
+    NOTATION_DEBUG << "approximateHeight: " << approximateHeight
+                   << " originalHeight: " << originalHeight;
 
     int difference = approximateHeight - originalHeight;
     if (difference < 0) difference *= -1;
