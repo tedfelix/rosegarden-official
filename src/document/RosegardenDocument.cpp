@@ -1682,7 +1682,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     RoseXmlHandler handler(this, elementCount, permanent);
 
     if (progress) {
-        std::cout << "I am here!" << std::endl;
+        RG_DEBUG << "RosegardenDocument::xmlParse(), have progress dialog.";
 
         connect(&handler, SIGNAL(setValue(int)),
                 progress, SLOT(setValue(int)));

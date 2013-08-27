@@ -39,7 +39,7 @@
 // 1: summary printout of tunings after they've been read (default)
 // 2: detail while parsing tunings file (quite verbose)
 // 3: more detail on XML parser state (rather verbose)
-#define TUNING_DEBUG 1
+#define TUNING_DEBUG 0
 
 using namespace Rosegarden::Accidentals;
 
@@ -610,7 +610,7 @@ double Tuning::getFrequency(Rosegarden::Pitch p) const {
 */
 void Tuning::printTuning() const {
     
-    std::cout << "Print Tuning\n";
+    std::cout << "Tuning::printTuning()\n";
     std::cout << "Name: '" << m_name << "'\n";
     
     Rosegarden::Key keyofc; // use key of C to obtain unbiased accidental
