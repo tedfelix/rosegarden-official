@@ -57,15 +57,15 @@ SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
 void SegmentPencil::ready()
 {
     m_canvas->viewport()->setCursor(Qt::IBeamCursor);
-    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotCanvasScrolled(int, int)));
+    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+    //        this, SLOT(slotCanvasScrolled(int, int)));
     setContextHelpFor(QPoint(0, 0));
 }
 
 void SegmentPencil::stow()
 {
-    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotCanvasScrolled(int, int)));
+    //disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
+    //           this, SLOT(slotCanvasScrolled(int, int)));
 }
 
 void SegmentPencil::slotCanvasScrolled(int newX, int newY)

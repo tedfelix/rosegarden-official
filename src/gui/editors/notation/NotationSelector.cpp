@@ -68,8 +68,8 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     m_wholeStaffSelectionComplete(false),
     m_ties(ties)
 {
-    connect(m_widget, SIGNAL(usedSelection()),
-            this, SLOT(slotHideSelection()));
+    //connect(m_widget, SIGNAL(usedSelection()),
+    //        this, SLOT(slotHideSelection()));
 
     connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
             m_widget, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)));

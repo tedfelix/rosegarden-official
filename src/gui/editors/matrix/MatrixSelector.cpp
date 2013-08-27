@@ -57,8 +57,8 @@ MatrixSelector::MatrixSelector(MatrixWidget *widget) :
     m_justSelectedBar(false),
     m_selectionToMerge(0)
 {
-    connect(m_widget, SIGNAL(usedSelection()),
-            this, SLOT(slotHideSelection()));
+    //connect(m_widget, SIGNAL(usedSelection()),
+    //        this, SLOT(slotHideSelection()));
 
     createAction("resize", SLOT(slotResizeSelected()));
     createAction("draw", SLOT(slotDrawSelected()));

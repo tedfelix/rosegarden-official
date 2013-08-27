@@ -73,8 +73,8 @@ SegmentSelector::~SegmentSelector()
 void SegmentSelector::ready()
 {
     m_canvas->viewport()->setCursor(Qt::ArrowCursor);
-    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotCanvasScrolled(int, int)));
+    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+    //        this, SLOT(slotCanvasScrolled(int, int)));
     setContextHelp(tr("Click and drag to select segments"));
 }
 

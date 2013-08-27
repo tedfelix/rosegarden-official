@@ -447,6 +447,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(sceneNeedsRebuilding()),
             this, SIGNAL(sceneNeedsRebuilding()), Qt::QueuedConnection);
 
+    // ??? This needs to be fixed.  It should use a different slot that
+    //     doesn't require a bool which in turn will call
+    //     slotUpdatePointerPosition(true).  Call it
+    //     slotCurrentStaffChanged().
     connect(m_scene, SIGNAL(currentStaffChanged()),
             this, SLOT(slotUpdatePointerPosition(true)));
 

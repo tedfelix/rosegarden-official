@@ -148,29 +148,29 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             SIGNAL(editSegment(Segment*)),
             SLOT(slotEditSegment(Segment*)));
 
-    connect(m_trackEditor->getCompositionView(),
-            SIGNAL(editSegmentNotation(Segment*)),
-            SLOT(slotEditSegmentNotation(Segment*)));
+    //connect(m_trackEditor->getCompositionView(),
+    //        SIGNAL(editSegmentNotation(Segment*)),
+    //        SLOT(slotEditSegmentNotation(Segment*)));
 
-    connect(m_trackEditor->getCompositionView(),
-            SIGNAL(editSegmentPitchView(Segment*)),
-            SLOT(slotEditSegmentPitchView(Segment*)));
+    //connect(m_trackEditor->getCompositionView(),
+    //        SIGNAL(editSegmentPitchView(Segment*)),
+    //        SLOT(slotEditSegmentPitchView(Segment*)));
 
-    connect(m_trackEditor->getCompositionView(),
-            SIGNAL(editSegmentMatrix(Segment*)),
-            SLOT(slotEditSegmentMatrix(Segment*)));
+    //connect(m_trackEditor->getCompositionView(),
+    //        SIGNAL(editSegmentMatrix(Segment*)),
+    //        SLOT(slotEditSegmentMatrix(Segment*)));
 
-    connect(m_trackEditor->getCompositionView(),
-            SIGNAL(editSegmentAudio(Segment*)),
-            SLOT(slotEditSegmentAudio(Segment*)));
+    //connect(m_trackEditor->getCompositionView(),
+    //        SIGNAL(editSegmentAudio(Segment*)),
+    //        SLOT(slotEditSegmentAudio(Segment*)));
 
-    connect(m_trackEditor->getCompositionView(),
-            SIGNAL(audioSegmentAutoSplit(Segment*)),
-            SLOT(slotSegmentAutoSplit(Segment*)));
+    //connect(m_trackEditor->getCompositionView(),
+    //        SIGNAL(audioSegmentAutoSplit(Segment*)),
+    //        SLOT(slotSegmentAutoSplit(Segment*)));
 
-    connect(m_trackEditor->getCompositionView(),
-            SIGNAL(editSegmentEventList(Segment*)),
-            SLOT(slotEditSegmentEventList(Segment*)));
+    //connect(m_trackEditor->getCompositionView(),
+    //        SIGNAL(editSegmentEventList(Segment*)),
+    //        SLOT(slotEditSegmentEventList(Segment*)));
 
     connect(m_trackEditor->getCompositionView(),
             SIGNAL(editRepeat(Segment*, timeT)),
@@ -850,8 +850,8 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
             this, SLOT(slotEditTriggerSegment(int)));
     connect(matrixView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
-    connect(matrixView, SIGNAL(editTimeSignature(timeT)),
-            RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
+    //connect(matrixView, SIGNAL(editTimeSignature(timeT)),
+    //        RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
 
     SequenceManager *sM = getDocument()->getSequenceManager();
 

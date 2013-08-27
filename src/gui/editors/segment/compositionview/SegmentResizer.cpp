@@ -65,15 +65,15 @@ SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d,
 void SegmentResizer::ready()
 {
     m_canvas->viewport()->setCursor(Qt::SizeHorCursor);
-    connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotCanvasScrolled(int, int)));
+    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
+    //        this, SLOT(slotCanvasScrolled(int, int)));
     setBasicContextHelp(false);
 }
 
 void SegmentResizer::stow()
 {
-    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotCanvasScrolled(int, int)));
+    //disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
+    //           this, SLOT(slotCanvasScrolled(int, int)));
 }
 
 void SegmentResizer::slotCanvasScrolled(int newX, int newY)
