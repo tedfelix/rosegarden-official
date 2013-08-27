@@ -559,7 +559,7 @@ NotationView::setupActions()
 
     createAction("transpose_segment", SLOT(slotEditTranspose()));
     createAction("switch_preset", SLOT(slotEditSwitchPreset()));
-    createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
+    //createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
 
     //"Notes" Menubar menu
 
@@ -926,8 +926,8 @@ NotationView::setupActions()
     createAction("show_raw_note_ruler", SLOT(slotToggleRawNoteRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
 
-    createAction("show_annotations", SLOT(slotToggleAnnotations()));
-    createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
+    //createAction("show_annotations", SLOT(slotToggleAnnotations()));
+    //createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
 
     createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
     createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
