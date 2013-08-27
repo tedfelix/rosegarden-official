@@ -742,9 +742,8 @@ NotationView::setupActions()
     // to draw a lot of fancy icons for disabled durations, we have this dummy
     // filler to keep spacing the same across all toolbars, and there have to
     // two of them
-    // ??? Ok, but this causes a Qt runtime warning.  Need to provide a
-    //     slotDummyAction() for this to connect to.  It can just be empty.
-    createAction("dummy_1", SLOT());
+    // Without this handler, the action takes up no space on the toolbar.
+    createAction("dummy_1", SLOT(slotDummy1()));
 
     //"NoteTool" subMenu
     //NEED to create action methods
@@ -2760,6 +2759,12 @@ NotationView::slotNoteAction()
     }
 
     setCurrentNotePixmapFrom(a);
+}
+
+void
+NotationView::slotDummy1()
+{
+    // Empty function required to appease Qt.
 }
 
 void

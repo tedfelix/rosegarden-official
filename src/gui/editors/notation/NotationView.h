@@ -203,6 +203,7 @@ protected slots:
      * Process calls to insert a notes.
      */
     void slotNoteAction();
+    void slotDummy1();
     void slotNoAccidental();
     void slotFollowAccidental();
     void slotSharp();
