@@ -25,8 +25,6 @@
     <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   <Separator/>
-    <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
-  <Separator/>
     <Action name="options_configure" text="Preferences..." icon="configure" />
   </Menu>
 
@@ -159,11 +157,8 @@
     <text>Co&amp;ntrollers</text>
     <Action name="cut_controllers" text="Cut Controller Events (&amp;X)" />
     <Action name="copy_controllers" text="&amp;Copy Controller Events" />
-    <!-- This is the same edit_paste as elsewhere in this file -->
-    <Action name="edit_paste" text="Paste Events (&amp;V)"/>
     <Action name="set_controllers" text="&amp;Set Controller Values" />
     <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
-    <!-- This is the same pitch_bend_sequence as elsewhere in this file -->
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
     <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
   </Menu>
