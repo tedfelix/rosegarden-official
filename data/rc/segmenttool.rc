@@ -1,0 +1,37 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::SegmentTool" version="1230">
+
+<Menu name="SegmentTool">
+  <Action name="edit_default" />
+<Separator/>
+  <Action name="edit_matrix" />
+  <Action name="edit_percussion_matrix" />
+  <Action name="edit_notation" />
+  <Action name="edit_event_list" />
+  <Action name="edit_pitch_tracker" />
+<Separator/>
+  <Action name="edit_undo" />
+  <Action name="edit_redo" />
+<Separator/>
+  <Action name="edit_cut" />
+  <Action name="edit_copy" />
+  <Action name="edit_paste" />
+<Separator/>
+  <Action name="delete" />
+  <Action name="join_segments" />
+<Separator/>
+  <Action name="quantize_selection" />
+  <Action name="repeat_quantize" />
+  <Action name="relabel_segment" />
+  <Action name="transpose" />
+<Separator/>
+  <Action name="select" />
+  <Action name="move" />
+  <Action name="draw" />
+  <Action name="erase" />
+  <Action name="resize" />
+  <Action name="split" />
+</Menu>
+
+</kpartgui>
