@@ -342,6 +342,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     RosegardenDocument* doc = new RosegardenDocument(this, m_pluginManager);
 
     m_dockLeft = new QDockWidget(tr("Special Parameters"), this);
+    m_dockLeft->setObjectName("SpecialParametersDock");
     m_dockLeft->setMinimumSize(180, 200);    //### fix arbitrary value for min-size
     addDockWidget(Qt::LeftDockWidgetArea, m_dockLeft);
 

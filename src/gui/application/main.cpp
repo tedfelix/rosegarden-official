@@ -367,10 +367,9 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifndef NDEBUG
+#ifdef DEBUG
     // Force all Qt warnings to crash the system.
-    // ??? We're not at a point where this is safe yet.
-    //setenv("QT_FATAL_WARNINGS", "1", 1);
+    setenv("QT_FATAL_WARNINGS", "1", 1);
 #endif
 
     QPixmapCache::setCacheLimit(8192); // KB
@@ -841,6 +840,12 @@ int main(int argc, char *argv[])
     QMessageBox::warning(0, "Rosegarden", "Warning!", QMessageBox::Ok, QMessageBox::Ok);
 #endif
 
-    return theApp.exec();
+    int returnCode = theApp.exec();
+
+    // Announce end of run so that we can tell if we have crashed on
+    // the way down.
+    RG_DEBUG << "Rosegarden main() exiting with rc:" << returnCode;
+
+    return returnCode;
 }
 
