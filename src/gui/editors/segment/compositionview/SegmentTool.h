@@ -16,11 +16,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTTOOL_H_
-#define _RG_SEGMENTTOOL_H_
+#ifndef RG_SEGMENTTOOL_H
+#define RG_SEGMENTTOOL_H
 
 #include "gui/general/BaseTool.h"
+#include "gui/general/ActionFileClient.h"
 #include "CompositionItem.h"
+
 #include <QPoint>
 #include <utility>
 #include <vector>
@@ -49,8 +51,10 @@ class SegmentSelector;
 typedef std::pair<QPoint, CompositionItemPtr> SegmentItemPair;
 typedef std::vector<SegmentItemPair> SegmentItemList;
 
-class SegmentTool : public BaseTool
+class SegmentTool : public BaseTool, public ActionFileClient
 {
+    Q_OBJECT
+
 public:
     friend class SegmentToolBox;
 
@@ -90,6 +94,32 @@ protected:
     RosegardenDocument* m_doc;
 //    QPoint            m_origPos;
     bool              m_changeMade;
+
+private slots:
+    // This is just a mess of forwarding functions to RosegardenMainWindow.
+    // Is there a better way to get the menu items to appear and to go to
+    // RosegardenMainWindow?
+    void slotEdit();
+    void slotEditInMatrix();
+    void slotEditInPercussionMatrix();
+    void slotEditAsNotation();
+    void slotEditInEventList();
+    void slotEditInPitchTracker();
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
+    void slotDeleteSelectedSegments();
+    void slotJoinSegments();
+    void slotQuantizeSelection();
+    void slotRepeatQuantizeSelection();
+    void slotRelabelSegments();
+    void slotTransposeSegments();
+    void slotPointerSelected();
+    void slotMoveSelected();
+    void slotDrawSelected();
+    void slotEraseSelected();
+    void slotResizeSelected();
+    void slotSplitSelected();
 };
 
 

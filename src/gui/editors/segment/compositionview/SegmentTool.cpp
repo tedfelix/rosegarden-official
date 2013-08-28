@@ -28,8 +28,6 @@
 #include "SegmentToolBox.h"
 #include "document/Command.h"
 
-#include <QMainWindow>
-#include <QPoint>
 #include <QMenu>
 #include <QMouseEvent>
 
@@ -38,11 +36,41 @@ namespace Rosegarden
 {
 
 SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
-        : BaseTool("segment_tool_menu", canvas),
+        : BaseTool("SegmentTool", canvas),
         m_canvas(canvas),
         m_doc(doc),
         m_changeMade(false)
-{}
+{
+    //RG_DEBUG << "SegmentTool::SegmentTool()";
+
+    // Set up the actions for the right-click context menu.  Note that
+    // all of these end up simply delegating to RosegardenMainWindow.
+    createAction("edit_default", SLOT(slotEdit()));
+    createAction("edit_matrix", SLOT(slotEditInMatrix()));
+    createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
+    createAction("edit_notation", SLOT(slotEditAsNotation()));
+    createAction("edit_event_list", SLOT(slotEditInEventList()));
+    createAction("edit_pitch_tracker", SLOT(slotEditInPitchTracker()));
+    // Can we get some of the following connectionless mojo for some
+    // of these others too?
+    //createAction("edit_undo", ...);  // handled by a higher authority?
+    //createAction("edit_redo", ...);  // handled by a higher authority?
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("delete", SLOT(slotDeleteSelectedSegments()));
+    createAction("join_segments", SLOT(slotJoinSegments()));
+    createAction("quantize_selection", SLOT(slotQuantizeSelection()));
+    createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
+    createAction("relabel_segment", SLOT(slotRelabelSegments()));
+    createAction("transpose", SLOT(slotTransposeSegments()));
+    createAction("select", SLOT(slotPointerSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
+    createAction("draw", SLOT(slotDrawSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("split", SLOT(slotSplitSelected()));
+}
 
 SegmentTool::~SegmentTool()
 {}
@@ -59,7 +87,7 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     if (m_currentIndex) // mouse button is pressed for some tool
         return ;
 
-    RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
+    //RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
 
     setCurrentIndex(m_canvas->getFirstItemAt(e->pos()));
 
@@ -79,21 +107,28 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
 void
 SegmentTool::createMenu()
 {
-    RG_DEBUG << "SegmentTool::createMenu()\n";
+    // New version based on the one in MatrixTool.
 
-    RosegardenMainWindow *mainWindow =
-        dynamic_cast<RosegardenMainWindow*>(m_doc->parent());
+    const QString rcFileName = "segmenttool.rc";
 
-    if (mainWindow) {
+    //RG_DEBUG << "SegmentTool::createMenu() " << rcFileName << " - " << m_menuName << endl;
 
-        m_menu = mainWindow->findChild<QMenu*>( "segment_tool_menu" );
-
-        if (!m_menu) {
-            RG_DEBUG << "SegmentTool::createMenu() failed\n";
-        }
-    } else {
-        RG_DEBUG << "SegmentTool::createMenu() failed: !app\n";
+    if (!createGUI(rcFileName)) {
+        std::cerr << "SegmentTool::createMenu(" << rcFileName
+                  << "): menu creation failed\n";
+        m_menu = 0;
+        return;
     }
+
+    QMenu *menu = findMenu(m_menuName);
+    if (!menu) {
+        std::cerr << "SegmentTool::createMenu(" << rcFileName
+                  << "): menu name "
+                  << m_menuName << " not created by RC file\n";
+        return;
+    }
+
+    m_menu = menu;
 }
 
 void
@@ -116,4 +151,92 @@ SegmentToolBox* SegmentTool::getToolBox()
     return m_canvas->getToolBox();
 }
 
+void SegmentTool::slotEdit()
+{
+    RosegardenMainWindow::self()->slotEdit();
 }
+void SegmentTool::slotEditInMatrix()
+{
+    RosegardenMainWindow::self()->slotEditInMatrix();
+}
+void SegmentTool::slotEditInPercussionMatrix()
+{
+    RosegardenMainWindow::self()->slotEditInPercussionMatrix();
+}
+void SegmentTool::slotEditAsNotation()
+{
+    RosegardenMainWindow::self()->slotEditAsNotation();
+}
+void SegmentTool::slotEditInEventList()
+{
+    RosegardenMainWindow::self()->slotEditInEventList();
+}
+void SegmentTool::slotEditInPitchTracker()
+{
+    RosegardenMainWindow::self()->slotEditInPitchTracker();
+}
+void SegmentTool::slotEditCut()
+{
+    RosegardenMainWindow::self()->slotEditCut();
+}
+void SegmentTool::slotEditCopy()
+{
+    RosegardenMainWindow::self()->slotEditCopy();
+}
+void SegmentTool::slotEditPaste()
+{
+    RosegardenMainWindow::self()->slotEditPaste();
+}
+void SegmentTool::slotDeleteSelectedSegments()
+{
+    RosegardenMainWindow::self()->slotDeleteSelectedSegments();
+}
+void SegmentTool::slotJoinSegments()
+{
+    RosegardenMainWindow::self()->slotJoinSegments();
+}
+void SegmentTool::slotQuantizeSelection()
+{
+    RosegardenMainWindow::self()->slotQuantizeSelection();
+}
+void SegmentTool::slotRepeatQuantizeSelection()
+{
+    RosegardenMainWindow::self()->slotRepeatQuantizeSelection();
+}
+void SegmentTool::slotRelabelSegments()
+{
+    RosegardenMainWindow::self()->slotRelabelSegments();
+}
+void SegmentTool::slotTransposeSegments()
+{
+    RosegardenMainWindow::self()->slotTransposeSegments();
+}
+void SegmentTool::slotPointerSelected()
+{
+    RosegardenMainWindow::self()->slotPointerSelected();
+}
+void SegmentTool::slotMoveSelected()
+{
+    RosegardenMainWindow::self()->slotMoveSelected();
+}
+void SegmentTool::slotDrawSelected()
+{
+    RosegardenMainWindow::self()->slotDrawSelected();
+}
+void SegmentTool::slotEraseSelected()
+{
+    RosegardenMainWindow::self()->slotEraseSelected();
+}
+void SegmentTool::slotResizeSelected()
+{
+    RosegardenMainWindow::self()->slotResizeSelected();
+}
+void SegmentTool::slotSplitSelected()
+{
+    RosegardenMainWindow::self()->slotSplitSelected();
+}
+
+
+}
+
+#include "SegmentTool.moc"
