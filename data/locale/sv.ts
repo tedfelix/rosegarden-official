@@ -5,7 +5,7 @@
     <name>:</name>
     <message>
         <source></source>
-        <comment>&quot;long&quot; is a C++ data type</comment>
+        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
         <translation></translation>
     </message>
 </context>
@@ -13,31 +13,37 @@
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
         <translation>Hantera MIDI-enheter</translation>
     </message>
     <message>
         <location line="+26"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
         <translation>MIDI-uppspelning</translation>
     </message>
     <message>
         <location line="+57"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Sends its data through</source>
         <translation>Skickar data genom</translation>
     </message>
     <message>
         <location line="-5"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Rosegarden uppspelningsenhet</translation>
     </message>
     <message>
         <location line="+253"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
         <source>Internal Synth</source>
         <translation>Intern synt</translation>
     </message>
     <message>
         <location line="-243"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
         <source>Default playback device</source>
         <translation>Standarduppspelningsenhet</translation>
     </message>
@@ -47,132 +53,161 @@
     </message>
     <message>
         <location line="+44"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Bankdefinitioner gör det möjligt att tala om för Rosegarden vilka program eller patcher som är tillgängliga att använda i utrustningen (verklig synt eller programvarusynt) ansluten till enheten.&lt;/p&gt;&lt;p&gt;Någonting måste vara definierat för alla program- eller bankändringar du vill sända, eftersom Rosegarden döljer alla program- och banknummer som är odefinierade.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Banker...</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Redigera effekter kopplade till enheten.&lt;p&gt;&lt;p&gt;Du måste definiera effekter här för att kunna använda dem var som helst i Rosegarden, såsom på styrlinjaler eller i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;. Du kan ändra vilka effekter som visas i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;, och arrangera om deras utläggning&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
         <translation>Effekter...</translation>
     </message>
     <message>
         <location line="+43"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa en ny uppspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+250"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+28"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
         <location line="-228"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Radera den markerade uppspelningsenheten. Alla spår som använder enheten måste tilldelas på nytt, och alla program- eller bankändringar för dessa spår kommer att förloras permanent&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <translation>Radera</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
         <translation>MIDI-utgångar</translation>
     </message>
     <message>
         <location line="+69"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
         <translation>Tillgängliga utgångar</translation>
     </message>
     <message>
         <location line="+5"/>
         <location line="+344"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+41"/>
         <source>No port</source>
         <translation>Ingen utgång</translation>
     </message>
     <message>
         <location line="-394"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-utgångar (maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+344"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-ingångar (från maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-244"/>
         <location line="+340"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-36"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka för att uppdatera portlistan efter att ha anslutit ny utrustning eller startat en ny programsynt&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-667"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-73"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
         <location line="+330"/>
         <location line="+340"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
+        <location line="+39"/>
         <source>Refresh</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
         <location line="-303"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
         <translation>MIDI-inspelning</translation>
     </message>
     <message>
         <location line="+39"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa en ny inspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Radera den markerade inspelningsenheten&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Radera</translation>
     </message>
     <message>
         <location line="+82"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
         <translation>Tar emot sin data från</translation>
     </message>
     <message>
         <location line="-5"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Rosegarden inspelningsenhet</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
         <translation>Standardinspelningsenhet</translation>
     </message>
     <message>
         <location line="+26"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
         <translation>MIDI-ingångar</translation>
     </message>
     <message>
         <location line="+69"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
         <translation>Tillgängliga ingångar</translation>
     </message>
@@ -186,7 +221,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+40"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+39"/>
         <source>First Value</source>
         <translation>Första värdet</translation>
     </message>
@@ -247,7 +282,7 @@
         <translation>Högsta värdet</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+149"/>
+        <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+153"/>
         <source>Set Event Velocities</source>
         <translation>Ställ in händelseljudstyrkor</translation>
     </message>
@@ -257,9 +292,29 @@
         <translation>Ställer in ljudstyrkor...</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-12"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-11"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
         <translation>Ringning: Ställ in %1 växlande från maximum till minimum med båda bortdöende till tystnad</translation>
+    </message>
+    <message>
+        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
+        <source>Half-wave crescendo - set %1 rising from min to max in a half sine wave contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
+        <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -286,17 +341,17 @@
         <location line="+49"/>
         <location line="+152"/>
         <location line="+157"/>
-        <location line="+1174"/>
+        <location line="+1180"/>
         <location line="+48"/>
-        <location line="+68"/>
-        <location line="+1867"/>
-        <location line="+668"/>
+        <location line="+73"/>
+        <location line="+1884"/>
+        <location line="+860"/>
         <location line="+115"/>
         <source>&amp;File</source>
         <translation>&amp;Arkiv</translation>
     </message>
     <message>
-        <location line="-4391"/>
+        <location line="-4611"/>
         <source>&amp;Add Audio File...</source>
         <translation>&amp;Lägg till ljudfil...</translation>
     </message>
@@ -312,48 +367,48 @@
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
-        <location line="+1174"/>
+        <location line="+1180"/>
         <location line="+48"/>
-        <location line="+70"/>
-        <location line="+1918"/>
-        <location line="+615"/>
+        <location line="+75"/>
+        <location line="+1935"/>
+        <location line="+807"/>
         <location line="+106"/>
         <source>&amp;Close</source>
         <translation>Stä&amp;ng</translation>
     </message>
     <message>
-        <location line="-4383"/>
+        <location line="-4603"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
-        <location line="+1174"/>
+        <location line="+1180"/>
         <location line="+48"/>
-        <location line="+70"/>
-        <location line="+1918"/>
-        <location line="+615"/>
+        <location line="+75"/>
+        <location line="+1935"/>
+        <location line="+807"/>
         <location line="+106"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location line="-4388"/>
+        <location line="-4608"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
-        <location line="+606"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+798"/>
         <location line="+106"/>
         <source>&amp;Edit</source>
         <translation>&amp;Redigera</translation>
     </message>
     <message>
-        <location line="-4389"/>
+        <location line="-4609"/>
         <source>&amp;Unload Audio File</source>
         <translation>&amp;Stäng ljudfil</translation>
     </message>
@@ -387,14 +442,14 @@
         <location line="+1"/>
         <location line="+51"/>
         <location line="+1"/>
-        <location line="+1160"/>
+        <location line="+1166"/>
         <location line="+173"/>
         <location line="+1"/>
-        <location line="+64"/>
+        <location line="+69"/>
         <location line="+1"/>
-        <location line="+1648"/>
-        <location line="+849"/>
-        <location line="+151"/>
+        <location line="+1665"/>
+        <location line="+850"/>
+        <location line="+342"/>
         <location line="+1"/>
         <location line="+57"/>
         <location line="+1"/>
@@ -402,295 +457,298 @@
         <translation>&amp;Hjälp</translation>
     </message>
     <message>
-        <location line="-4406"/>
+        <location line="-4626"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+144"/>
         <location line="+52"/>
-        <location line="+1161"/>
+        <location line="+1167"/>
         <location line="+173"/>
-        <location line="+65"/>
-        <location line="+1649"/>
-        <location line="+849"/>
-        <location line="+151"/>
+        <location line="+70"/>
+        <location line="+1666"/>
+        <location line="+850"/>
+        <location line="+342"/>
         <location line="+58"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation>F1</translation>
     </message>
     <message>
-        <location line="-2943"/>
-        <location line="+1887"/>
         <source>&amp;Rosegarden tutorial</source>
-        <translation>Rosegarden &amp;handledning</translation>
+        <translation type="obsolete">Rosegarden &amp;handledning</translation>
     </message>
     <message>
-        <location line="-1886"/>
-        <location line="+1887"/>
-        <location line="+849"/>
+        <location line="-3156"/>
+        <location line="+1909"/>
+        <location line="+850"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>Riktlinjer för &amp;felrapportering</translation>
     </message>
     <message>
-        <location line="-4205"/>
+        <location line="-4234"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+144"/>
         <location line="+52"/>
-        <location line="+1163"/>
+        <location line="+1169"/>
         <location line="+171"/>
-        <location line="+65"/>
-        <location line="+1651"/>
-        <location line="+849"/>
-        <location line="+149"/>
+        <location line="+70"/>
+        <location line="+1668"/>
+        <location line="+850"/>
+        <location line="+340"/>
         <location line="+58"/>
         <source>&amp;About Rosegarden</source>
         <translation>Om &amp;Rosegarden</translation>
     </message>
     <message>
-        <location line="-4412"/>
-        <location line="+1472"/>
-        <location line="+1887"/>
+        <location line="-4632"/>
+        <location line="+1478"/>
+        <location line="+1909"/>
         <source>General Toolbar</source>
         <translation>Redigeringsverktygslist</translation>
     </message>
     <message>
-        <location line="-3347"/>
+        <location line="-3375"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
-        <location line="+1458"/>
-        <location line="+1927"/>
-        <location line="+550"/>
-        <location line="+56"/>
+        <location line="+4211"/>
         <location line="+106"/>
         <source>&amp;Nothing to undo</source>
         <translation>Ingenting att å&amp;ngra</translation>
     </message>
     <message>
-        <location line="-4352"/>
+        <location line="-4572"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
-        <location line="+606"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
+        <location line="+168"/>
         <location line="+106"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-4357"/>
+        <location line="-4577"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
-        <location line="+1458"/>
-        <location line="+1927"/>
-        <location line="+542"/>
-        <location line="+64"/>
+        <location line="+4211"/>
         <location line="+106"/>
         <source>N&amp;othing to redo</source>
         <translation>Ingenting att &amp;göra om</translation>
     </message>
     <message>
-        <location line="-4352"/>
+        <location line="-4572"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+143"/>
         <location line="+166"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
-        <location line="+606"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
+        <location line="+168"/>
         <location line="+106"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-4357"/>
+        <location line="-4577"/>
         <location line="+156"/>
         <location line="+281"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
         <source>&amp;Copy</source>
         <translation>K&amp;opiera</translation>
     </message>
     <message>
-        <location line="-3649"/>
+        <location line="-4307"/>
         <location line="+156"/>
         <location line="+281"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-3654"/>
+        <location line="-4312"/>
         <location line="+156"/>
         <location line="+281"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
         <source>&amp;Paste</source>
         <translation>K&amp;listra in</translation>
     </message>
     <message>
-        <location line="-3649"/>
+        <location line="-4307"/>
         <location line="+156"/>
         <location line="+281"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-3643"/>
+        <location line="-4301"/>
         <location line="+201"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+1093"/>
+        <location line="+1099"/>
         <location line="+72"/>
-        <location line="+158"/>
-        <location line="+1856"/>
-        <location line="+671"/>
+        <location line="+163"/>
+        <location line="+1873"/>
+        <location line="+863"/>
         <location line="+123"/>
         <source>Switch to Select Tool</source>
         <translation>Byt till markeringsverktyg</translation>
     </message>
     <message>
-        <location line="-4297"/>
+        <location line="-4517"/>
         <location line="+201"/>
-        <location line="+3974"/>
+        <location line="+4194"/>
         <location line="+123"/>
         <source>Switch to Inserting Notes</source>
         <translation>Byt till att infoga noter</translation>
     </message>
     <message>
-        <location line="-4297"/>
+        <location line="-4517"/>
         <location line="+201"/>
         <location line="+104"/>
         <location line="+36"/>
-        <location line="+1102"/>
+        <location line="+1108"/>
         <location line="+27"/>
         <location line="+36"/>
-        <location line="+1985"/>
+        <location line="+2007"/>
         <location line="+12"/>
-        <location line="+672"/>
+        <location line="+864"/>
         <location line="+123"/>
         <source>Switch to Erase Tool</source>
         <translation>Byt till raderingsverktyg</translation>
     </message>
     <message>
-        <location line="-4296"/>
+        <location line="-4516"/>
         <location line="+49"/>
         <location line="+309"/>
-        <location line="+1174"/>
+        <location line="+1180"/>
         <location line="+48"/>
-        <location line="+68"/>
-        <location line="+1905"/>
-        <location line="+630"/>
+        <location line="+73"/>
+        <location line="+1922"/>
+        <location line="+822"/>
         <source>&amp;Save</source>
         <translation>&amp;Spara</translation>
     </message>
     <message>
-        <location line="-4176"/>
+        <location line="-4396"/>
         <location line="+49"/>
         <location line="+309"/>
-        <location line="+1174"/>
+        <location line="+1180"/>
         <location line="+48"/>
-        <location line="+68"/>
-        <location line="+1905"/>
-        <location line="+630"/>
+        <location line="+73"/>
+        <location line="+1922"/>
+        <location line="+822"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location line="-4104"/>
+        <location line="-4324"/>
         <source>&amp;Insert Event</source>
         <translation>&amp;Infoga händelse</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+1108"/>
-        <location line="+1859"/>
+        <location line="+1114"/>
+        <location line="+1881"/>
         <location line="+793"/>
-        <location line="+374"/>
+        <location line="+371"/>
+        <location line="+195"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
         <translation>I</translation>
     </message>
     <message>
-        <location line="-4132"/>
+        <location line="-4352"/>
         <source>&amp;Delete Event</source>
         <translation>Ta &amp;bort händelse</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+1637"/>
-        <location line="+1918"/>
+        <location line="+1648"/>
+        <location line="+1935"/>
+        <location line="+621"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete</translation>
     </message>
     <message>
-        <location line="-3553"/>
+        <location line="-4202"/>
         <source>&amp;Edit Event</source>
         <translation>&amp;Redigera händelse</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+1027"/>
-        <location line="+1859"/>
+        <location line="+1033"/>
+        <location line="+1881"/>
         <location line="+847"/>
-        <location line="+410"/>
+        <location line="+371"/>
+        <location line="+231"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location line="-4141"/>
+        <location line="-4361"/>
         <source>&amp;Advanced Event Editor</source>
         <translation>&amp;Avancerad händelseeditor</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+281"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
         <source>Cu&amp;t</source>
         <translation>Klipp u&amp;t</translation>
     </message>
     <message>
-        <location line="-3493"/>
+        <location line="-4151"/>
         <location line="+281"/>
-        <location line="+1292"/>
-        <location line="+1927"/>
+        <location line="+1303"/>
+        <location line="+1944"/>
+        <location line="+630"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-3480"/>
+        <location line="-4138"/>
         <source>&amp;Select All</source>
         <translation>Markera &amp;alla</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+290"/>
-        <location line="+1314"/>
-        <location line="+1952"/>
-        <location line="+559"/>
+        <location line="+1327"/>
+        <location line="+1967"/>
+        <location line="+751"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location line="-4113"/>
+        <location line="-4333"/>
         <location line="+290"/>
         <source>C&amp;lear Selection</source>
         <translation>&amp;Rensa markering</translation>
@@ -698,29 +756,29 @@
     <message>
         <location line="-283"/>
         <location line="+290"/>
-        <location line="+1314"/>
-        <location line="+2511"/>
+        <location line="+1327"/>
+        <location line="+2718"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation>Escape</translation>
     </message>
     <message>
-        <location line="-4113"/>
+        <location line="-4333"/>
         <location line="+290"/>
-        <location line="+1314"/>
+        <location line="+1327"/>
         <source>&amp;Filter Selection</source>
         <translation>&amp;Filtrera</translation>
     </message>
     <message>
-        <location line="-1597"/>
+        <location line="-1610"/>
         <location line="+290"/>
-        <location line="+1314"/>
+        <location line="+1327"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location line="-1602"/>
+        <location line="-1615"/>
         <source>Set Se&amp;gment Start Time...</source>
         <translation>Ställ in starttid för se&amp;gment...</translation>
     </message>
@@ -732,78 +790,80 @@
     <message>
         <location line="+2"/>
         <location line="+58"/>
-        <location line="+231"/>
-        <location line="+1314"/>
-        <location line="+1933"/>
-        <location line="+568"/>
+        <location line="+230"/>
+        <location line="+1328"/>
+        <location line="+1948"/>
+        <location line="+760"/>
         <location line="+60"/>
         <source>&amp;View</source>
         <translation>&amp;Visa</translation>
     </message>
     <message>
-        <location line="-4163"/>
+        <location line="-4383"/>
         <location line="+58"/>
-        <location line="+4046"/>
+        <location line="+4266"/>
         <location line="+60"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Metronomtider</translation>
     </message>
     <message>
-        <location line="-4163"/>
+        <location line="-4383"/>
         <location line="+58"/>
-        <location line="+4046"/>
+        <location line="+4266"/>
         <location line="+60"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Klocktider</translation>
     </message>
     <message>
-        <location line="-4163"/>
+        <location line="-4383"/>
         <location line="+58"/>
-        <location line="+4046"/>
+        <location line="+4266"/>
         <location line="+60"/>
         <source>Ra&amp;w Times</source>
         <translation>&amp;Obehandlade tider</translation>
     </message>
     <message>
-        <location line="-4161"/>
-        <location line="+379"/>
-        <location line="+1256"/>
-        <location line="+1978"/>
+        <location line="-4381"/>
+        <location line="+378"/>
+        <location line="+1270"/>
+        <location line="+1993"/>
         <source>Se&amp;gment</source>
         <translation>Seg&amp;ment</translation>
     </message>
     <message>
-        <location line="-3612"/>
-        <location line="+379"/>
-        <location line="+1256"/>
-        <location line="+1987"/>
+        <location line="-3640"/>
+        <location line="+378"/>
+        <location line="+1270"/>
+        <location line="+2002"/>
         <source>Edit &amp;With</source>
         <translation>Redigera &amp;med</translation>
     </message>
     <message>
-        <location line="-3621"/>
-        <location line="+381"/>
-        <location line="+1255"/>
-        <location line="+1995"/>
+        <location line="-3649"/>
+        <location line="+380"/>
+        <location line="+1269"/>
+        <location line="+2010"/>
+        <location line="+371"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>Öppna i &amp;matriseditor</translation>
     </message>
     <message>
-        <location line="-3630"/>
-        <location line="+379"/>
-        <location line="+3269"/>
+        <location line="-4029"/>
+        <location line="+378"/>
+        <location line="+3298"/>
+        <location line="+371"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>Öppna i &amp;noteditor</translation>
     </message>
     <message>
-        <location line="-2421"/>
-        <location line="+1887"/>
-        <location line="+849"/>
+        <location line="-2814"/>
+        <location line="+1909"/>
+        <location line="+850"/>
         <source>About &amp;Qt</source>
         <translation>Om &amp;Qt</translation>
     </message>
     <message>
-        <location line="-1498"/>
+        <location line="-1499"/>
         <source>Add &amp;Segno</source>
         <translation>Lägg till &amp;Segno</translation>
     </message>
@@ -818,7 +878,7 @@
         <translation>Lägg till &amp;andningstecken</translation>
     </message>
     <message>
-        <location line="-804"/>
+        <location line="-818"/>
         <source>Add &amp;Open</source>
         <translation>Lägg till ö&amp;ppen</translation>
     </message>
@@ -828,41 +888,37 @@
         <translation>Lägg till &amp;sluten</translation>
     </message>
     <message>
-        <location line="+896"/>
+        <location line="+910"/>
         <source>Dotted Ha&amp;lf Note</source>
         <translation>Punkterad ha&amp;lvnot</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+757"/>
+        <location line="+762"/>
         <source>Switch To &amp;Notes</source>
         <translation>B&amp;yt till noter</translation>
     </message>
     <message>
-        <location line="-748"/>
-        <location line="+749"/>
+        <location line="+1"/>
         <source>Switch To &amp;Rests</source>
         <translation>B&amp;yt till pauser</translation>
     </message>
     <message>
-        <location line="-740"/>
-        <location line="+741"/>
+        <location line="+1"/>
         <source>To&amp;ggle Dot On</source>
         <translation>Visa &amp;punkt</translation>
     </message>
     <message>
-        <location line="-732"/>
-        <location line="+733"/>
+        <location line="+1"/>
         <source>To&amp;ggle Dot Off</source>
         <translation>Dölj &amp;punkt</translation>
     </message>
     <message>
-        <location line="-1715"/>
+        <location line="-1730"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>Visa &amp;symbolverktygslist</translation>
     </message>
     <message>
-        <location line="+1509"/>
+        <location line="+1524"/>
         <source>Duration Toolbar</source>
         <translation>Längdverktygslist</translation>
     </message>
@@ -891,18 +947,20 @@
     </message>
     <message>
         <location line="+10"/>
+        <location line="+371"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Return</translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="-274"/>
+        <location line="+382"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="-353"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+T</translation>
@@ -914,13 +972,12 @@
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location line="+123"/>
         <source>Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
-        <translation>Enter, Media Play, Ctrl+Return</translation>
+        <translation type="obsolete">Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+132"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
         <translation>Insert, Media Stop</translation>
@@ -967,7 +1024,7 @@
         <translation>End</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+302"/>
         <source>Show &amp;Toolbar</source>
         <translation>Visa verk&amp;tygslist</translation>
     </message>
@@ -977,7 +1034,7 @@
         <translation>Dölj st&amp;atusrad</translation>
     </message>
     <message>
-        <location line="-4356"/>
+        <location line="-4576"/>
         <source>Insert into Selected Audio Track</source>
         <translation>Infoga i markerat ljudspår</translation>
     </message>
@@ -994,37 +1051,37 @@
     <message>
         <location line="+265"/>
         <location line="+3"/>
-        <location line="+1217"/>
-        <location line="+2880"/>
+        <location line="+1223"/>
+        <location line="+3094"/>
         <source>Actions Toolbar</source>
         <translation>Åtgärdsverktygslist</translation>
     </message>
     <message>
-        <location line="-4099"/>
+        <location line="-4319"/>
         <location line="+51"/>
-        <location line="+4049"/>
+        <location line="+4269"/>
         <location line="+57"/>
         <source>Time Toolbar</source>
         <translation>Tidsverktygslist</translation>
     </message>
     <message>
-        <location line="-4156"/>
-        <location line="+1217"/>
+        <location line="-4376"/>
+        <location line="+1223"/>
         <location line="+167"/>
-        <location line="+65"/>
-        <location line="+1655"/>
-        <location line="+853"/>
+        <location line="+70"/>
+        <location line="+1672"/>
+        <location line="+854"/>
         <source>Transport Toolbar</source>
         <translation>Spelarverktygslist</translation>
     </message>
     <message>
-        <location line="-3955"/>
-        <location line="+3974"/>
+        <location line="-3984"/>
+        <location line="+4003"/>
         <source>Zoom Toolbar</source>
         <translation>Zoomverktygslist</translation>
     </message>
     <message>
-        <location line="-3925"/>
+        <location line="-3954"/>
         <source>Insert Marker</source>
         <translation>Infoga markering</translation>
     </message>
@@ -1047,118 +1104,122 @@
         <location line="+8"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+538"/>
+        <location line="+544"/>
         <location line="+555"/>
         <location line="+72"/>
-        <location line="+1118"/>
-        <location line="+1399"/>
+        <location line="+1139"/>
+        <location line="+1401"/>
+        <location line="+305"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation>F2</translation>
     </message>
     <message>
-        <location line="-3752"/>
+        <location line="-4086"/>
         <location line="+72"/>
-        <location line="+1093"/>
+        <location line="+1099"/>
         <location line="+36"/>
         <location line="+54"/>
         <source>Switch to Move Tool</source>
         <translation>Byt till förflyttningsverktyg</translation>
     </message>
     <message>
-        <location line="-1248"/>
+        <location line="-1254"/>
         <location line="+72"/>
-        <location line="+556"/>
+        <location line="+562"/>
         <location line="+537"/>
         <location line="+36"/>
         <location line="+54"/>
-        <location line="+2517"/>
+        <location line="+2540"/>
+        <location line="+287"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation>F5</translation>
     </message>
     <message>
-        <location line="-3770"/>
+        <location line="-4086"/>
         <location line="+27"/>
-        <location line="+1138"/>
+        <location line="+1144"/>
         <location line="+18"/>
         <location line="+45"/>
         <source>Switch to Draw Tool</source>
         <translation>Byt till ritverktyg</translation>
     </message>
     <message>
-        <location line="-1221"/>
+        <location line="-1227"/>
         <location line="+27"/>
-        <location line="+574"/>
+        <location line="+580"/>
         <location line="+564"/>
         <location line="+18"/>
         <location line="+45"/>
-        <location line="+1118"/>
-        <location line="+1399"/>
+        <location line="+1140"/>
+        <location line="+1400"/>
+        <location line="+314"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation>F3</translation>
     </message>
     <message>
-        <location line="-3743"/>
+        <location line="-4086"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+1129"/>
+        <location line="+1135"/>
         <location line="+45"/>
         <source>Switch to Resize Tool</source>
         <translation>Byt till storleksändringsverktyg</translation>
     </message>
     <message>
-        <location line="-1239"/>
+        <location line="-1245"/>
         <location line="+36"/>
         <location line="+36"/>
-        <location line="+547"/>
+        <location line="+553"/>
         <location line="+582"/>
         <location line="+45"/>
-        <location line="+2517"/>
+        <location line="+2540"/>
+        <location line="+305"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation>F6</translation>
     </message>
     <message>
-        <location line="-3736"/>
+        <location line="-4070"/>
         <location line="+36"/>
-        <location line="+538"/>
+        <location line="+544"/>
         <location line="+564"/>
         <location line="+27"/>
         <location line="+36"/>
-        <location line="+1118"/>
-        <location line="+1399"/>
+        <location line="+1140"/>
+        <location line="+1400"/>
+        <location line="+314"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
     </message>
     <message>
-        <location line="-3651"/>
         <source>Nothing to &amp;undo</source>
-        <translation>Ingenting att å&amp;ngra</translation>
+        <translation type="obsolete">Ingenting att å&amp;ngra</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Nothing to &amp;redo</source>
-        <translation>Ingenting att &amp;göra om</translation>
+        <translation type="obsolete">Ingenting att &amp;göra om</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location line="+3228"/>
-        <location line="+588"/>
+        <location line="-3949"/>
+        <location line="+3256"/>
+        <location line="+621"/>
+        <location line="+159"/>
         <source>&amp;Delete</source>
         <translation>Ta &amp;bort</translation>
     </message>
     <message>
-        <location line="-3809"/>
-        <location line="+3816"/>
+        <location line="-4029"/>
+        <location line="+4036"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete, Ctrl+D</translation>
     </message>
     <message>
-        <location line="-3784"/>
+        <location line="-4005"/>
         <source>&amp;Grid</source>
         <translation>&amp;Rutnät</translation>
     </message>
@@ -1174,13 +1235,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2267"/>
+        <location line="+2296"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation>0</translation>
     </message>
     <message>
-        <location line="-2265"/>
+        <location line="-2294"/>
         <source>Snap to &amp;1/48</source>
         <translation>Lås till &amp;fyrtioåttondel</translation>
     </message>
@@ -1191,13 +1252,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2248"/>
+        <location line="+2277"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation>3</translation>
     </message>
     <message>
-        <location line="-2246"/>
+        <location line="-2275"/>
         <source>Snap to 1/&amp;24</source>
         <translation>Lås till t&amp;jugofjärdedel</translation>
     </message>
@@ -1208,13 +1269,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2229"/>
+        <location line="+2258"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation>6</translation>
     </message>
     <message>
-        <location line="-2227"/>
+        <location line="-2256"/>
         <source>Snap t&amp;o 1/12</source>
         <translation>Lås till t&amp;olftedel</translation>
     </message>
@@ -1225,13 +1286,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2210"/>
+        <location line="+2239"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation>8</translation>
     </message>
     <message>
-        <location line="-2208"/>
+        <location line="-2237"/>
         <source>Snap to &amp;3/16</source>
         <translation>Lås till t&amp;resextondel</translation>
     </message>
@@ -1242,13 +1303,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2191"/>
+        <location line="+2220"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation>4</translation>
     </message>
     <message>
-        <location line="-2189"/>
+        <location line="-2218"/>
         <source>Snap to 3/8</source>
         <translation>Lås till treåttondedel</translation>
     </message>
@@ -1259,37 +1320,37 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2172"/>
+        <location line="+2201"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation>2</translation>
     </message>
     <message>
-        <location line="-2170"/>
+        <location line="-2199"/>
         <source>Snap to Bea&amp;t</source>
         <translation>Lås till &amp;taktslag</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2154"/>
+        <location line="+2183"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation>1</translation>
     </message>
     <message>
-        <location line="-2152"/>
+        <location line="-2181"/>
         <source>Snap to &amp;Bar</source>
         <translation>Lås t&amp;ill takt</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2136"/>
+        <location line="+2165"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
     </message>
     <message>
-        <location line="-2130"/>
+        <location line="-2159"/>
         <source>Show A&amp;ctions Toolbar</source>
         <translation>Visa åt&amp;gärdsverktygslist</translation>
     </message>
@@ -1300,139 +1361,142 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+1251"/>
+        <location line="+1265"/>
         <source>Add &amp;Control Ruler</source>
         <translation>Lägg till &amp;styrlinjal</translation>
     </message>
     <message>
-        <location line="-1250"/>
-        <location line="+1256"/>
-        <location line="+1933"/>
+        <location line="-1264"/>
+        <location line="+1270"/>
+        <location line="+1948"/>
         <source>&amp;Composition</source>
         <translation>&amp;Komposition</translation>
     </message>
     <message>
-        <location line="-3188"/>
-        <location line="+1256"/>
-        <location line="+1933"/>
-        <location line="+477"/>
+        <location line="-3217"/>
+        <location line="+1270"/>
+        <location line="+1948"/>
+        <location line="+669"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Lägg till te&amp;mpobyte...</translation>
     </message>
     <message>
-        <location line="-3665"/>
-        <location line="+1256"/>
-        <location line="+1933"/>
-        <location line="+485"/>
+        <location line="-3886"/>
+        <location line="+1270"/>
+        <location line="+1948"/>
+        <location line="+677"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Lägg till ta&amp;ktartsändring...</translation>
     </message>
     <message>
-        <location line="-3671"/>
-        <location line="+1256"/>
-        <location line="+2023"/>
+        <location line="-3892"/>
+        <location line="+1270"/>
+        <location line="+2038"/>
+        <location line="+371"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Öppna i &amp;editor av händelselista</translation>
     </message>
     <message>
-        <location line="-3263"/>
-        <location line="+1709"/>
-        <location line="+1580"/>
+        <location line="-3663"/>
+        <location line="+1729"/>
+        <location line="+1589"/>
+        <location line="+433"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation>=</translation>
     </message>
     <message>
-        <location line="-3280"/>
-        <location line="+3289"/>
+        <location line="-3742"/>
+        <location line="+3318"/>
+        <location line="+433"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation>+</translation>
     </message>
     <message>
-        <location line="-3280"/>
+        <location line="-3742"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation>-</translation>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1783"/>
-        <location line="+1502"/>
+        <location line="+1803"/>
+        <location line="+1511"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Left</translation>
     </message>
     <message>
-        <location line="-3276"/>
-        <location line="+1783"/>
-        <location line="+1502"/>
+        <location line="-3305"/>
+        <location line="+1803"/>
+        <location line="+1511"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Right</translation>
     </message>
     <message>
-        <location line="-3276"/>
-        <location line="+1739"/>
-        <location line="+1601"/>
+        <location line="-3305"/>
+        <location line="+1759"/>
+        <location line="+1611"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Up</translation>
     </message>
     <message>
-        <location line="-3331"/>
-        <location line="+1739"/>
-        <location line="+1583"/>
+        <location line="-3361"/>
+        <location line="+1759"/>
+        <location line="+1593"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Down</translation>
     </message>
     <message>
-        <location line="-3310"/>
-        <location line="+1655"/>
+        <location line="-3340"/>
+        <location line="+1675"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
-        <location line="-1644"/>
-        <location line="+1655"/>
-        <location line="+1662"/>
+        <location line="-1664"/>
+        <location line="+1675"/>
+        <location line="+1672"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Up</translation>
     </message>
     <message>
-        <location line="-3308"/>
-        <location line="+1655"/>
-        <location line="+1644"/>
+        <location line="-3338"/>
+        <location line="+1675"/>
+        <location line="+1654"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Down</translation>
     </message>
     <message>
-        <location line="-3290"/>
-        <location line="+1655"/>
+        <location line="-3320"/>
+        <location line="+1675"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Up</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Down</translation>
     </message>
     <message>
-        <location line="-1643"/>
+        <location line="-1663"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Alt+I</translation>
@@ -1444,658 +1508,745 @@
         <translation>Shift+Alt+R</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+1685"/>
+        <location line="+5"/>
+        <location line="+1705"/>
+        <source>Co&amp;ntrollers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1704"/>
+        <location line="+1705"/>
+        <source>Cut Controller Events (&amp;X)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1704"/>
+        <location line="+1705"/>
+        <source>&amp;Copy Controller Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1704"/>
+        <location line="+1705"/>
+        <source>&amp;Set Controller Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1704"/>
+        <location line="+1705"/>
+        <source>&amp;Place a Controller for Each Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1703"/>
+        <location line="+1706"/>
+        <source>Insert C&amp;ontroller  Sequence...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1697"/>
+        <location line="+1706"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Left</translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+1685"/>
+        <location line="-1697"/>
+        <location line="+1706"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Right</translation>
     </message>
     <message>
-        <location line="-1683"/>
-        <location line="+1685"/>
+        <location line="-1704"/>
+        <location line="+1706"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>Markör bakåt &amp;takt och markera</translation>
     </message>
     <message>
-        <location line="-1678"/>
-        <location line="+1685"/>
+        <location line="-1699"/>
+        <location line="+1706"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Left</translation>
     </message>
     <message>
-        <location line="-1683"/>
-        <location line="+1685"/>
+        <location line="-1704"/>
+        <location line="+1706"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>Markör fram&amp;åt och markera</translation>
     </message>
     <message>
-        <location line="-1678"/>
-        <location line="+1685"/>
+        <location line="-1699"/>
+        <location line="+1706"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Right</translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+1685"/>
+        <location line="-1697"/>
+        <location line="+1706"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+;</translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+1685"/>
+        <location line="-1697"/>
+        <location line="+1706"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+:</translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+1703"/>
+        <location line="-1697"/>
+        <location line="+1724"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgUp</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1715"/>
+        <location line="+1724"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgDown</translation>
     </message>
     <message>
-        <location line="-1692"/>
-        <location line="+1715"/>
+        <location line="-1713"/>
+        <location line="+1736"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Left</translation>
     </message>
     <message>
-        <location line="-1700"/>
-        <location line="+1715"/>
+        <location line="-1721"/>
+        <location line="+1736"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Right</translation>
     </message>
     <message>
-        <location line="-1700"/>
-        <location line="+1715"/>
+        <location line="-1721"/>
+        <location line="+1736"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Left</translation>
     </message>
     <message>
-        <location line="-1706"/>
-        <location line="+1715"/>
+        <location line="-1727"/>
+        <location line="+1736"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Right</translation>
     </message>
     <message>
-        <location line="-1703"/>
-        <location line="+1733"/>
-        <location line="+1539"/>
+        <location line="-1724"/>
+        <location line="+1754"/>
+        <location line="+1541"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation>Pause</translation>
     </message>
     <message>
-        <location line="-3263"/>
+        <location line="-3286"/>
         <location line="+709"/>
         <location line="+48"/>
-        <location line="+982"/>
-        <location line="+1533"/>
+        <location line="+1003"/>
+        <location line="+1535"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
-        <location line="-3217"/>
+        <location line="-3240"/>
         <location line="+9"/>
-        <location line="+3135"/>
+        <location line="+3158"/>
+        <location line="+305"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
         <translation>F7</translation>
     </message>
     <message>
-        <location line="-3132"/>
+        <location line="-3460"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do</source>
         <translation>C</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do sharp</source>
         <translation>Ciss</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+A</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re flat</source>
         <translation>Dess</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <location line="+762"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location line="-2619"/>
+        <location line="-2641"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re</source>
         <translation>D</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
         <translation>S</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re sharp</source>
         <translation>Diss</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+S</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi flat</source>
         <translation>Ess</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi</source>
         <translation>E</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <location line="+983"/>
+        <location line="+371"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location line="-2840"/>
+        <location line="-3233"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa</source>
         <translation>F</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa sharp</source>
         <translation>Fiss</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+F</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol flat</source>
         <translation>Gess</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol</source>
         <translation>G</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
         <translation>J</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol sharp</source>
         <translation>Giss</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+J</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la flat</source>
         <translation>Ass</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la</source>
         <translation>A</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
         <translation>K</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la sharp</source>
         <translation>Aiss</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+K</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti flat</source>
         <translation>B</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
-        <location line="-1857"/>
+        <location line="-1879"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1551"/>
+        <location line="+1573"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti</source>
         <translation>H</translation>
     </message>
     <message>
-        <location line="-2160"/>
-        <location line="+1859"/>
+        <location line="-2182"/>
+        <location line="+1881"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
         <translation>L</translation>
     </message>
     <message>
-        <location line="-1849"/>
-        <location line="+1859"/>
+        <location line="-1871"/>
+        <location line="+1881"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Q</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Q</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
         <translation>W</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+W</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
-        <location line="-1841"/>
-        <location line="+1859"/>
-        <location line="+990"/>
+        <location line="-1863"/>
+        <location line="+1881"/>
+        <location line="+991"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation>R</translation>
     </message>
     <message>
-        <location line="-2840"/>
-        <location line="+1859"/>
+        <location line="-2863"/>
+        <location line="+1881"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+R</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
-        <location line="+954"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
+        <location line="+955"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation>U</translation>
     </message>
     <message>
-        <location line="-2804"/>
-        <location line="+1859"/>
+        <location line="-2827"/>
+        <location line="+1881"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+U</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location line="-1841"/>
-        <location line="+1859"/>
+        <location line="-1863"/>
+        <location line="+1881"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+I</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
         <translation>O</translation>
     </message>
     <message>
-        <location line="-1849"/>
-        <location line="+1859"/>
+        <location line="-1871"/>
+        <location line="+1881"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Z</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Z</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <location line="+551"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
-        <location line="-2401"/>
-        <location line="+1859"/>
+        <location line="-2423"/>
+        <location line="+1881"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
         <translation>X</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+X</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <location line="+533"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
-        <location line="-2383"/>
-        <location line="+1859"/>
+        <location line="-2405"/>
+        <location line="+1881"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
         <translation>V</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+V</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+B</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <location line="+621"/>
+        <location line="+371"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation>N</translation>
     </message>
     <message>
-        <location line="-2471"/>
-        <location line="+1859"/>
+        <location line="-2864"/>
+        <location line="+1881"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+N</translation>
     </message>
     <message>
-        <location line="-1850"/>
-        <location line="+1859"/>
+        <location line="-1872"/>
+        <location line="+1881"/>
         <location line="+535"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
-        <location line="-2385"/>
-        <location line="+1859"/>
+        <location line="-2407"/>
+        <location line="+1881"/>
         <location line="+576"/>
+        <location line="+371"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation>M</translation>
     </message>
     <message>
-        <location line="-2426"/>
-        <location line="+1868"/>
+        <location line="-2819"/>
+        <location line="+1890"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
         <translation>H</translation>
     </message>
     <message>
-        <location line="-1538"/>
+        <location line="-1877"/>
+        <location line="+1909"/>
+        <source>&amp;Rosegarden Tutorial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1686"/>
+        <source>Panning &amp;Law</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;0dB Law (Basic Balance Control)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>-&amp;3dB Law (Constant Power)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>-&amp;6dB Law (Reduced Center)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <location line="+1944"/>
+        <location line="+551"/>
+        <location line="+79"/>
+        <source>&amp;Nothing to Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-2565"/>
+        <location line="+1944"/>
+        <location line="+543"/>
+        <location line="+87"/>
+        <source>N&amp;othing to Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-2531"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Shift+X</translation>
@@ -2107,7 +2258,22 @@
         <translation>Alt+Shift+V</translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+12"/>
+        <source>&amp;Move to Staff Above...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Move to Staff &amp;Below...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>&amp;Guess Beats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>Show &amp;Duration Toolbar</source>
         <translation>Visa &amp;längdverktygslist</translation>
     </message>
@@ -2123,17 +2289,17 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+2029"/>
+        <location line="+2044"/>
+        <location line="+371"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation>Öppna i ton&amp;höjdsföljare</translation>
     </message>
     <message>
-        <location line="-2027"/>
         <source>Add Clef Change in this link only...</source>
-        <translation>Lägg till klavändring enbart för den här länken...</translation>
+        <translation type="obsolete">Lägg till klavändring enbart för den här länken...</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-2405"/>
         <source>Add &amp;Layer</source>
         <translation>Lägg till &amp;lager</translation>
     </message>
@@ -2144,7 +2310,7 @@
         <translation>Ctrl+Alt++</translation>
     </message>
     <message>
-        <location line="+252"/>
+        <location line="+257"/>
         <source>&amp;Figuration</source>
         <translation>&amp;Figuration</translation>
     </message>
@@ -2159,7 +2325,7 @@
         <translation>Ange att markering är en &amp;figuration</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+44"/>
         <source>Double Whole Note</source>
         <translation>Brevis</translation>
     </message>
@@ -2269,7 +2435,7 @@
         <translation>Ctrl+Alt+1</translation>
     </message>
     <message>
-        <location line="-347"/>
+        <location line="-348"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+0</translation>
@@ -2353,13 +2519,13 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1910"/>
+        <location line="+1921"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location line="-1901"/>
+        <location line="-1912"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+R</translation>
@@ -2395,26 +2561,27 @@
         <translation>&amp;gt;</translation>
     </message>
     <message>
-        <location line="-1513"/>
-        <location line="+1524"/>
+        <location line="-1532"/>
+        <location line="+1544"/>
         <source>Ad&amp;just</source>
         <translation>&amp;Justera</translation>
     </message>
     <message>
-        <location line="-1523"/>
-        <location line="+1709"/>
+        <location line="-1543"/>
+        <location line="+1729"/>
         <source>&amp;Quantize</source>
         <translation>&amp;Kvantisera</translation>
     </message>
     <message>
-        <location line="-1708"/>
-        <location line="+1709"/>
-        <location line="+1580"/>
+        <location line="-1728"/>
+        <location line="+1729"/>
+        <location line="+1589"/>
+        <location line="+433"/>
         <source>&amp;Quantize...</source>
         <translation>&amp;Kvantisera...</translation>
     </message>
     <message>
-        <location line="-3280"/>
+        <location line="-3742"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>Upp&amp;repa senaste kvantisering</translation>
     </message>
@@ -2425,36 +2592,36 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1508"/>
+        <location line="+1528"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>&amp;Lägg ihop noter med samma tonhöjd</translation>
     </message>
     <message>
-        <location line="-1507"/>
-        <location line="+1783"/>
-        <location line="+1502"/>
+        <location line="-1527"/>
+        <location line="+1803"/>
+        <location line="+1511"/>
         <source>Jog &amp;Left</source>
         <translation>Knuffa åt &amp;vänster</translation>
     </message>
     <message>
-        <location line="-3276"/>
+        <location line="-3305"/>
         <source>&amp;Jog Right</source>
         <translation>Knuffa åt &amp;höger</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1739"/>
+        <location line="+1759"/>
         <source>&amp;Increase Velocity</source>
         <translation>&amp;Öka ljudstyrka</translation>
     </message>
     <message>
-        <location line="-1730"/>
-        <location line="+1739"/>
+        <location line="-1750"/>
+        <location line="+1759"/>
         <source>&amp;Reduce Velocity</source>
         <translation>&amp;Reducera ljudstyrka</translation>
     </message>
     <message>
-        <location line="-1730"/>
+        <location line="-1750"/>
         <source>&amp;Set to Current Velocity</source>
         <translation>Ställ in till &amp;nuvarande ljudstyrka</translation>
     </message>
@@ -2470,309 +2637,315 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1655"/>
+        <location line="+1675"/>
         <source>&amp;Halve Durations</source>
         <translation>&amp;Halvera notvärden</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>&amp;Double Durations</source>
         <translation>&amp;Dubblera notvärden</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>Sträck eller tr&amp;yck ihop...</translation>
     </message>
     <message>
-        <location line="-1654"/>
-        <location line="+1655"/>
+        <location line="-1674"/>
+        <location line="+1675"/>
         <source>Trans&amp;pose</source>
         <translation>&amp;Transponera</translation>
     </message>
     <message>
-        <location line="-1654"/>
-        <location line="+1655"/>
+        <location line="-1674"/>
+        <location line="+1675"/>
         <source>&amp;Up a Semitone</source>
         <translation>&amp;Upp ett halvtonsteg</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>&amp;Down a Semitone</source>
         <translation>&amp;Ner ett halvtonsteg</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>Up an &amp;Octave</source>
         <translation>Upp en &amp;oktav</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>Down an Octa&amp;ve</source>
         <translation>Ner en okta&amp;v</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1655"/>
+        <location line="-1666"/>
+        <location line="+1675"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>Transponera med &amp;halvtonsteg...</translation>
     </message>
     <message>
-        <location line="-1654"/>
-        <location line="+1134"/>
-        <location line="+521"/>
-        <location line="+1528"/>
+        <location line="-1674"/>
+        <location line="+1148"/>
+        <location line="+527"/>
+        <location line="+1537"/>
+        <location line="+434"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>Transponera med &amp;intervall...</translation>
     </message>
     <message>
-        <location line="-3182"/>
+        <location line="-3645"/>
         <source>&amp;Convert</source>
         <translation>K&amp;onvertera</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1655"/>
+        <location line="+1675"/>
         <source>&amp;Invert</source>
         <translation>&amp;Invertera</translation>
     </message>
     <message>
-        <location line="-1646"/>
-        <location line="+1647"/>
+        <location line="-1666"/>
+        <location line="+1667"/>
         <source>&amp;Retrograde</source>
         <translation>&amp;Retrograd</translation>
     </message>
     <message>
-        <location line="-1638"/>
-        <location line="+1639"/>
+        <location line="-1658"/>
+        <location line="+1659"/>
         <source>Re&amp;trograde Invert</source>
         <translation>Re&amp;trograd inversion</translation>
     </message>
     <message>
-        <location line="-1638"/>
+        <location line="-1658"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>Utlösande se&amp;gment...</translation>
     </message>
     <message>
-        <location line="+146"/>
-        <location line="+1745"/>
-        <location line="+1399"/>
+        <location line="+153"/>
+        <location line="+1766"/>
+        <location line="+1401"/>
         <source>&amp;Tools</source>
         <translation>Verk&amp;tyg</translation>
     </message>
     <message>
-        <location line="-3143"/>
-        <location line="+1745"/>
-        <location line="+1399"/>
+        <location line="-3166"/>
+        <location line="+1766"/>
+        <location line="+1401"/>
+        <location line="+305"/>
         <source>&amp;Select and Edit</source>
         <translation>&amp;Markera och redigera</translation>
     </message>
     <message>
-        <location line="-3135"/>
-        <location line="+3144"/>
+        <location line="-3463"/>
+        <location line="+3167"/>
+        <location line="+314"/>
         <source>&amp;Draw</source>
         <translation>&amp;Rita</translation>
     </message>
     <message>
-        <location line="-3135"/>
-        <location line="+1745"/>
-        <location line="+1399"/>
+        <location line="-3472"/>
+        <location line="+1767"/>
+        <location line="+1400"/>
+        <location line="+314"/>
         <source>&amp;Erase</source>
         <translation>Rad&amp;era</translation>
     </message>
     <message>
-        <location line="-3307"/>
+        <location line="-3644"/>
         <location line="+172"/>
-        <location line="+1513"/>
-        <location line="+1631"/>
+        <location line="+1534"/>
+        <location line="+1633"/>
+        <location line="+287"/>
         <source>&amp;Move</source>
         <translation>&amp;Flytta</translation>
     </message>
     <message>
-        <location line="-3135"/>
+        <location line="-3445"/>
         <source>Resi&amp;ze</source>
         <translation>Ändra &amp;storlek</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+3144"/>
+        <location line="+3167"/>
+        <location line="+305"/>
         <source>S&amp;plit</source>
         <translation>&amp;Dela</translation>
     </message>
     <message>
-        <location line="-3135"/>
+        <location line="-3463"/>
         <source>&amp;Velocity</source>
         <translation>L&amp;judstyrka</translation>
     </message>
     <message>
-        <location line="+1487"/>
+        <location line="+1508"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>Markör bakåt och mar&amp;kera</translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+1685"/>
+        <location line="-1697"/>
+        <location line="+1706"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>Markör framåt och &amp;markera</translation>
     </message>
     <message>
-        <location line="-1658"/>
-        <location line="+1685"/>
+        <location line="-1679"/>
+        <location line="+1706"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>Ställ in upprepning &amp;till markering</translation>
     </message>
     <message>
-        <location line="-1676"/>
-        <location line="+1685"/>
+        <location line="-1697"/>
+        <location line="+1706"/>
         <source>Clear L&amp;oop</source>
         <translation>R&amp;ensa upprepning</translation>
     </message>
     <message>
-        <location line="-895"/>
+        <location line="-916"/>
         <location line="+48"/>
-        <location line="+2459"/>
+        <location line="+2482"/>
         <source>T&amp;ransport</source>
         <translation>Spel&amp;kontroller</translation>
     </message>
     <message>
-        <location line="-3270"/>
+        <location line="-3293"/>
         <location line="+764"/>
         <location line="+48"/>
-        <location line="+891"/>
-        <location line="+1568"/>
+        <location line="+912"/>
+        <location line="+1570"/>
         <source>&amp;Play</source>
         <translation>S&amp;pela</translation>
     </message>
     <message>
-        <location line="-3270"/>
+        <location line="-3293"/>
         <location line="+764"/>
         <location line="+48"/>
-        <location line="+897"/>
-        <location line="+1570"/>
+        <location line="+918"/>
+        <location line="+1572"/>
         <source>&amp;Stop</source>
         <translation>&amp;Stoppa</translation>
     </message>
     <message>
-        <location line="-3248"/>
+        <location line="-3271"/>
         <location line="+734"/>
         <location line="+48"/>
-        <location line="+933"/>
-        <location line="+1542"/>
+        <location line="+954"/>
+        <location line="+1544"/>
         <source>Re&amp;wind</source>
         <translation>Spola &amp;tillbaka</translation>
     </message>
     <message>
-        <location line="-3248"/>
+        <location line="-3271"/>
         <location line="+726"/>
         <location line="+48"/>
-        <location line="+941"/>
-        <location line="+1542"/>
+        <location line="+962"/>
+        <location line="+1544"/>
         <source>&amp;Fast Forward</source>
         <translation>Spola f&amp;ram</translation>
     </message>
     <message>
-        <location line="-3248"/>
+        <location line="-3271"/>
         <location line="+718"/>
         <location line="+48"/>
-        <location line="+949"/>
+        <location line="+970"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>Spola tillbaka till bör&amp;jan</translation>
     </message>
     <message>
-        <location line="-1714"/>
+        <location line="-1735"/>
         <location line="+718"/>
         <location line="+48"/>
-        <location line="+955"/>
+        <location line="+976"/>
         <source>Fast Forward to &amp;End</source>
         <translation>Spola fram till s&amp;lutet</translation>
     </message>
     <message>
-        <location line="-1720"/>
-        <location line="+1727"/>
+        <location line="-1741"/>
+        <location line="+1748"/>
         <source>S&amp;olo</source>
         <translation>S&amp;olo</translation>
     </message>
     <message>
-        <location line="-1726"/>
-        <location line="+1733"/>
-        <location line="+1539"/>
+        <location line="-1747"/>
+        <location line="+1754"/>
+        <location line="+1541"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>&amp;Rulla för att följa uppspelning</translation>
     </message>
     <message>
-        <location line="-3263"/>
+        <location line="-3286"/>
         <location line="+709"/>
         <location line="+48"/>
-        <location line="+982"/>
-        <location line="+1533"/>
+        <location line="+1003"/>
+        <location line="+1535"/>
         <source>P&amp;anic</source>
         <translation>&amp;Panik</translation>
     </message>
     <message>
-        <location line="-3045"/>
-        <location line="+1859"/>
+        <location line="-3068"/>
+        <location line="+1881"/>
         <source>&amp;Upper Octave</source>
         <translation>&amp;Övre oktav</translation>
     </message>
     <message>
-        <location line="-1551"/>
-        <location line="+1868"/>
+        <location line="-1573"/>
+        <location line="+1890"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>Infogningsläge för &amp;ackord</translation>
     </message>
     <message>
-        <location line="-1859"/>
-        <location line="+1887"/>
+        <location line="-1881"/>
+        <location line="+1909"/>
         <source>Ste&amp;p Recording</source>
         <translation>&amp;Stegvis inspelning</translation>
     </message>
     <message>
-        <location line="-2740"/>
-        <location line="+1243"/>
-        <location line="+1926"/>
+        <location line="-2769"/>
+        <location line="+1257"/>
+        <location line="+1941"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Verktygslister</translation>
     </message>
     <message>
-        <location line="-3162"/>
-        <location line="+1250"/>
-        <location line="+1919"/>
+        <location line="-3191"/>
+        <location line="+1264"/>
+        <location line="+1934"/>
         <source>&amp;Rulers</source>
         <translation>&amp;Linjaler</translation>
     </message>
     <message>
-        <location line="-3168"/>
-        <location line="+1250"/>
+        <location line="-3197"/>
+        <location line="+1264"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>Visa &amp;ackordnamnslinjal</translation>
     </message>
     <message>
-        <location line="-1249"/>
-        <location line="+1251"/>
+        <location line="-1263"/>
+        <location line="+1265"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation>Visa &amp;tempolinjal</translation>
     </message>
     <message>
-        <location line="-390"/>
-        <location line="+1887"/>
-        <location line="+851"/>
+        <location line="-397"/>
+        <location line="+1909"/>
+        <location line="+852"/>
         <source>Tools Toolbar</source>
         <translation>Redigeringsverktygslist</translation>
     </message>
     <message>
-        <location line="-2591"/>
+        <location line="-2614"/>
         <location line="+48"/>
-        <location line="+2489"/>
+        <location line="+2512"/>
         <source>&amp;Record</source>
         <translation>Spela &amp;in</translation>
     </message>
     <message>
-        <location line="-2479"/>
+        <location line="-2502"/>
         <source>&amp;Settings</source>
         <translation>In&amp;ställningar</translation>
     </message>
@@ -2832,7 +3005,7 @@
         <translation>&amp;8 delnivåer</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+6"/>
         <source>Show &amp;Audio Faders</source>
         <translation>Visa toningsregl&amp;age för ljud</translation>
     </message>
@@ -2868,7 +3041,7 @@
     </message>
     <message>
         <location line="+12"/>
-        <location line="+1916"/>
+        <location line="+1933"/>
         <source>&amp;Print...</source>
         <translation>Skriv &amp;ut...</translation>
     </message>
@@ -2877,7 +3050,7 @@
         <translation type="obsolete">&amp;Förhandsgranska utskrift...</translation>
     </message>
     <message>
-        <location line="-1860"/>
+        <location line="-1877"/>
         <source>C&amp;ut and Close</source>
         <translation>Klipp &amp;ut och dra tillbaka</translation>
     </message>
@@ -2897,12 +3070,12 @@
         <translation>Flytta till systemet &amp;ovanför</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Move to Staff &amp;Below</source>
         <translation>Flytta till systemet &amp;nedanför</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Select from Sta&amp;rt</source>
         <translation>M&amp;arkera från början</translation>
     </message>
@@ -2967,25 +3140,41 @@
         <translation>Visa spår&amp;namn</translation>
     </message>
     <message>
-        <location line="-1243"/>
-        <location line="+1255"/>
-        <location line="+2003"/>
+        <location line="-1257"/>
+        <location line="+1269"/>
+        <location line="+2018"/>
+        <location line="+371"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>Öppna i slagverksmatrise&amp;ditor</translation>
     </message>
     <message>
-        <location line="-2001"/>
+        <location line="-2387"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>Lägg till &amp;klavbyte...</translation>
     </message>
     <message>
-        <location line="-1256"/>
-        <location line="+1258"/>
+        <location line="-1270"/>
+        <location line="+1272"/>
         <source>Add &amp;Key Change...</source>
         <translation>Lägg till &amp;tonartsbyte...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-1456"/>
+        <source>Nothing to &amp;Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Nothing to &amp;Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1446"/>
+        <source>Add Clef Change in This Link Only...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Add Pedal &amp;Press</source>
         <translation>Lägg till pedalt&amp;ryck</translation>
     </message>
@@ -2996,12 +3185,17 @@
     </message>
     <message>
         <location line="+4"/>
-        <location line="+2049"/>
+        <location line="+2064"/>
         <source>&amp;Convert Notation for...</source>
         <translation>K&amp;onvertera notskrift för...</translation>
     </message>
     <message>
-        <location line="-2039"/>
+        <location line="-2054"/>
+        <source>Unadopt an Adopted Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>N&amp;ote</source>
         <translation>&amp;Not</translation>
     </message>
@@ -3127,6 +3321,26 @@
     </message>
     <message>
         <location line="+1"/>
+        <source>&amp;Edit Ornament as Notation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Show Expansion of Ornament</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>&amp;Fingerings</source>
         <translation>&amp;Fingersättningar</translation>
     </message>
@@ -3238,12 +3452,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+681"/>
+        <location line="+691"/>
         <source>&amp;Accidentals</source>
         <translation>T&amp;illfälliga förtecken</translation>
     </message>
     <message>
-        <location line="-680"/>
+        <location line="-690"/>
         <source>&amp;Restore Accidentals</source>
         <translation>&amp;Återställ förtecken</translation>
     </message>
@@ -3438,7 +3652,12 @@
         <translation>Lägg till quindicesima n&amp;eråt</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+4"/>
+        <source>Mark Selection as Auto-Generated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>R&amp;ests</source>
         <translation>&amp;Pauser</translation>
     </message>
@@ -3449,13 +3668,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+1424"/>
+        <location line="+1433"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location line="-1422"/>
+        <location line="-1431"/>
         <source>&amp;Collapse Rests</source>
         <translation>Lägg ihop pau&amp;ser</translation>
     </message>
@@ -3552,12 +3771,12 @@
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1502"/>
+        <location line="+1511"/>
         <source>Jog &amp;Right</source>
         <translation>Knuffa åt &amp;höger</translation>
     </message>
     <message>
-        <location line="-1493"/>
+        <location line="-1502"/>
         <source>&amp;Visibility</source>
         <translation>S&amp;ynlighet</translation>
     </message>
@@ -3572,7 +3791,12 @@
         <translation>Gör &amp;synlig</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+6"/>
+        <source>Insert &amp;Expression Controller Sequence...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+65"/>
         <source>Alt+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Up</translation>
@@ -3585,6 +3809,11 @@
     </message>
     <message>
         <location line="+143"/>
+        <source>Select but Don&apos;t Follow Ties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Draw &amp;Notes and Rests</source>
         <translation>Rita &amp;noter och pauser</translation>
     </message>
@@ -3594,7 +3823,7 @@
         <translation>S&amp;ymboler</translation>
     </message>
     <message>
-        <location line="-190"/>
+        <location line="-191"/>
         <source>Next Staff &amp;Up</source>
         <translation>Nästa notsystem &amp;uppåt</translation>
     </message>
@@ -3604,31 +3833,31 @@
         <translation>Nästa notsystem &amp;neråt</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1715"/>
+        <location line="+1724"/>
         <source>Pre&amp;vious Segment</source>
         <translation>Före&amp;gående segment</translation>
     </message>
     <message>
-        <location line="-1694"/>
-        <location line="+1703"/>
+        <location line="-1715"/>
+        <location line="+1724"/>
         <source>Ne&amp;xt Segment</source>
         <translation>&amp;Nästa segment</translation>
     </message>
     <message>
-        <location line="-1692"/>
-        <location line="+1715"/>
+        <location line="-1713"/>
+        <location line="+1736"/>
         <source>Step &amp;Back</source>
         <translation>Stega &amp;bakåt</translation>
     </message>
     <message>
-        <location line="-1700"/>
-        <location line="+1715"/>
+        <location line="-1721"/>
+        <location line="+1736"/>
         <source>Step &amp;Forward</source>
         <translation>Stega &amp;framåt</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+148"/>
         <source>&amp;Durations</source>
         <translation>Not&amp;värden</translation>
     </message>
@@ -3768,14 +3997,14 @@
         <translation>&amp;Gitarrackord</translation>
     </message>
     <message>
-        <location line="-1735"/>
-        <location line="+1859"/>
+        <location line="-1757"/>
+        <location line="+1881"/>
         <source>&amp;Insert Note</source>
         <translation>&amp;Infoga not</translation>
     </message>
     <message>
-        <location line="-1551"/>
-        <location line="+1859"/>
+        <location line="-1573"/>
+        <location line="+1881"/>
         <source>&amp;Lower Octave</source>
         <translation>&amp;Undre oktav</translation>
     </message>
@@ -3795,13 +4024,13 @@
         <translation>Infogningsläge för &amp;prydnadsnoter</translation>
     </message>
     <message>
-        <location line="-1494"/>
-        <location line="+1926"/>
+        <location line="-1509"/>
+        <location line="+1941"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>Visa verktygslist med &amp;verktyg</translation>
     </message>
     <message>
-        <location line="-1925"/>
+        <location line="-1940"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>Visa verktygslist med tillfälliga &amp;förtecken</translation>
     </message>
@@ -3822,17 +4051,17 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+1923"/>
+        <location line="+1938"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>Visa verktygslist med s&amp;pelkontroller</translation>
     </message>
     <message>
-        <location line="-1922"/>
+        <location line="-1937"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>Visa &amp;utläggningsverktygslist</translation>
     </message>
     <message>
-        <location line="+1758"/>
+        <location line="+1773"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+O</translation>
@@ -3845,13 +4074,13 @@
     </message>
     <message>
         <location line="+91"/>
-        <location line="+649"/>
+        <location line="+841"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location line="-640"/>
+        <location line="-832"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Ins</translation>
@@ -3862,7 +4091,7 @@
         <translation>Visa &amp;ackordnamnslinjal</translation>
     </message>
     <message>
-        <location line="-1919"/>
+        <location line="-1934"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation>Visa linjal med &amp;obehandlade noter</translation>
     </message>
@@ -3877,7 +4106,7 @@
         <translation>Visa Lily&amp;pond-direktiv</translation>
     </message>
     <message>
-        <location line="+1674"/>
+        <location line="+1689"/>
         <source>Clefs Toolbar</source>
         <translation>Klavverktygslist</translation>
     </message>
@@ -3897,12 +4126,12 @@
         <translation>Verktygslist med föredragsbeteckningar och ornament</translation>
     </message>
     <message>
-        <location line="-3052"/>
+        <location line="-3080"/>
         <source>Select &amp;All Events</source>
         <translation>Markera &amp;alla händelser</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+110"/>
         <source>Show To&amp;ols</source>
         <translation>Visa verkt&amp;yg</translation>
     </message>
@@ -3917,55 +4146,55 @@
         <translation>Visa verktygslist med s&amp;pelkontroller</translation>
     </message>
     <message>
-        <location line="+852"/>
-        <location line="+1887"/>
-        <location line="+849"/>
+        <location line="+859"/>
+        <location line="+1909"/>
+        <location line="+850"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Rosegarden hand&amp;bok</translation>
     </message>
     <message>
-        <location line="-3961"/>
-        <location line="+289"/>
+        <location line="-3990"/>
+        <location line="+288"/>
         <source>Preferences...</source>
         <translation>Inställningar...</translation>
     </message>
     <message>
         <location line="+91"/>
-        <location line="+1251"/>
+        <location line="+1265"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>&amp;Visa ljudstyrkelinjal</translation>
     </message>
     <message>
-        <location line="-1250"/>
-        <location line="+1251"/>
+        <location line="-1264"/>
+        <location line="+1265"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Visa ton&amp;höjdsavvikelselinjal</translation>
     </message>
     <message>
-        <location line="-1087"/>
+        <location line="-1094"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Markör bakåt och mar&amp;kera</translation>
     </message>
     <message>
         <location line="+698"/>
-        <location line="+2074"/>
+        <location line="+2096"/>
         <source>Rulers Toolbar</source>
         <translation>Linjalverktygslist</translation>
     </message>
     <message>
-        <location line="-1714"/>
-        <location line="+1933"/>
+        <location line="-1729"/>
+        <location line="+1948"/>
         <source>&amp;Preferences...</source>
         <translation>In&amp;ställningar...</translation>
     </message>
     <message>
-        <location line="-1912"/>
+        <location line="-1927"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Visa lin&amp;jalverktygslist</translation>
     </message>
     <message>
-        <location line="-992"/>
-        <location line="+1715"/>
+        <location line="-999"/>
+        <location line="+1736"/>
         <source>Step Back (Left)</source>
         <translation>Stega bakåt (vänster)</translation>
     </message>
@@ -3975,29 +4204,29 @@
         <translation>Spela</translation>
     </message>
     <message>
-        <location line="-1678"/>
-        <location line="+1715"/>
+        <location line="-1699"/>
+        <location line="+1736"/>
         <source>Step Forward (Right)</source>
         <translation>Stega framåt (höger)</translation>
     </message>
     <message>
-        <location line="-2610"/>
+        <location line="-2637"/>
         <source>&amp;Action</source>
         <translation>Åt&amp;gärd</translation>
     </message>
     <message>
-        <location line="+536"/>
-        <location line="+1314"/>
+        <location line="+796"/>
+        <location line="+1706"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>Infoga tonhöjdsav&amp;vikelse för sekvens...</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="-618"/>
         <source>Show La&amp;yer Toolbar</source>
         <translation>Visa &amp;lagerverktygslist</translation>
     </message>
     <message>
-        <location line="+320"/>
+        <location line="+326"/>
         <source>Cycle &amp;Dots</source>
         <translation>Vä&amp;xla punkter</translation>
     </message>
@@ -4085,7 +4314,7 @@
         <translation>Ctrl+Alt+0</translation>
     </message>
     <message>
-        <location line="+229"/>
+        <location line="+237"/>
         <source>Stop</source>
         <translation>Stoppa</translation>
     </message>
@@ -4105,7 +4334,7 @@
         <translation>Panik! (Ctrl+Alt+P)</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>F8</source>
         <comment>keyboard shortcut</comment>
         <translation>F8</translation>
@@ -4117,21 +4346,41 @@
         <translation>F9</translation>
     </message>
     <message>
-        <location line="+88"/>
+        <location line="+81"/>
+        <source>Switch to &amp;Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <location line="+9"/>
         <source>Y</source>
         <comment>keyboard shortcut</comment>
         <translation>Y</translation>
     </message>
     <message>
+        <location line="-7"/>
+        <source>Switch to &amp;Rests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>To&amp;ggle Dot on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <location line="+9"/>
         <source>.</source>
         <comment>keyboard shortcut</comment>
         <translation>.</translation>
     </message>
     <message>
-        <location line="+471"/>
+        <location line="-7"/>
+        <source>To&amp;ggle Dot off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+478"/>
         <location line="+486"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
@@ -4139,13 +4388,13 @@
     </message>
     <message>
         <location line="-468"/>
-        <location line="+968"/>
+        <location line="+1160"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location line="-966"/>
+        <location line="-1158"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation>Infogningsläge för annan&amp;delning</translation>
     </message>
@@ -4421,27 +4670,24 @@
         <translation>&amp;Importera</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Import Rosegarden &amp;Project file...</source>
-        <translation>Importera Rosegarden-&amp;projektfil...</translation>
+        <translation type="obsolete">Importera Rosegarden-&amp;projektfil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Import &amp;MIDI file...</source>
-        <translation>Importera &amp;MIDI-fil...</translation>
+        <translation type="obsolete">Importera &amp;MIDI-fil...</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Importera &amp;Hydrogen-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Import MusicXM&amp;L file...</source>
-        <translation>Importera MusicXM&amp;L-fil...</translation>
+        <translation type="obsolete">Importera MusicXM&amp;L-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Merge</source>
         <translation>Samman&amp;foga</translation>
     </message>
@@ -4451,52 +4697,45 @@
         <translation>Sammanfoga &amp;fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Merge &amp;MIDI file...</source>
-        <translation>Sammanfoga &amp;MIDI-fil...</translation>
+        <translation type="obsolete">Sammanfoga &amp;MIDI-fil...</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Sammanfoga &amp;Hydrogen-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Merge MusicXM&amp;L file...</source>
-        <translation>Sammanfoga MusicXM&amp;L-fil...</translation>
+        <translation type="obsolete">Sammanfoga MusicXM&amp;L-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Export</source>
         <translation>E&amp;xportera</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Export Rosegarden &amp;Project file...</source>
-        <translation>Exportera Rosegarden-&amp;projektfil...</translation>
+        <translation type="obsolete">Exportera Rosegarden-&amp;projektfil...</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Export &amp;MIDI file...</source>
-        <translation>Exportera &amp;MIDI-fil...</translation>
+        <translation type="obsolete">Exportera &amp;MIDI-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Export &amp;Csound score file...</source>
-        <translation>Exportera &amp;Csound-partiturfil...</translation>
+        <translation type="obsolete">Exportera &amp;Csound-partiturfil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Export M&amp;up file...</source>
-        <translation>Exportera M&amp;up-fil...</translation>
+        <translation type="obsolete">Exportera M&amp;up-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Export Music&amp;XML file...</source>
-        <translation>Exportera Music&amp;XML-fil...</translation>
+        <translation type="obsolete">Exportera Music&amp;XML-fil...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+7"/>
         <source>&amp;Open...</source>
         <translation>Ö&amp;ppna...</translation>
     </message>
@@ -4506,12 +4745,11 @@
         <translation>Öppna s&amp;enaste</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Save &amp;As...</source>
-        <translation>Spara s&amp;om...</translation>
+        <translation type="obsolete">Spara s&amp;om...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+19"/>
         <source>Save as &amp;Template...</source>
         <translation>Spara som &amp;mall...</translation>
     </message>
@@ -4606,12 +4844,11 @@
         <translation>Ställ in tempon från takt&amp;segment</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Fit existing beats to beat segment</source>
-        <translation>Passa in befintliga takter i taktsegment</translation>
+        <translation type="obsolete">Passa in befintliga takter i taktsegment</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Change &amp;Composition Start and End...</source>
         <translation>Ändra kompositionens &amp;början och slut...</translation>
     </message>
@@ -4696,51 +4933,134 @@
         <translation>Ändra upprepning</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Open in &amp;Default editor</source>
-        <translation>Öppna i &amp;standardeditor</translation>
+        <translation type="obsolete">Öppna i &amp;standardeditor</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+64"/>
+        <location line="+452"/>
         <source>R&amp;elabel...</source>
         <translation>Ändra &amp;namn...</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="-442"/>
+        <location line="+433"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>Upp&amp;repa senaste kvantisering</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="-422"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>Sträck eller tr&amp;yck ihop...</translation>
     </message>
     <message>
-        <location line="-3313"/>
-        <location line="+1260"/>
-        <location line="+2055"/>
+        <location line="-3342"/>
+        <location line="+1274"/>
+        <location line="+2070"/>
         <source>Set Start &amp;Time...</source>
         <translation>Ställ in start&amp;tid...</translation>
     </message>
     <message>
-        <location line="-3314"/>
-        <location line="+1260"/>
-        <location line="+2055"/>
+        <location line="-3343"/>
+        <location line="+1274"/>
+        <location line="+2070"/>
         <source>Set &amp;Duration...</source>
         <translation>Ställ in n&amp;otvärde...</translation>
     </message>
     <message>
-        <location line="-2"/>
+        <location line="-354"/>
+        <source>Import Rosegarden &amp;Project File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Import &amp;MIDI File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Import &amp;X11 Rosegarden File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Import MusicXM&amp;L File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Merge &amp;MIDI File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Merge &amp;X11 Rosegarden File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Merge MusicXM&amp;L File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Export Rosegarden &amp;Project File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Export &amp;LilyPond File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Export &amp;MIDI File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Export &amp;Csound Score File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Export M&amp;up File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Export Music&amp;XML File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+186"/>
+        <source>Fit Existing Beats to Beat Segment</source>
+        <translation type="unfinished">Passa in befintliga takter i taktsegment</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <location line="+371"/>
+        <source>Open in &amp;Default Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-295"/>
         <source>Create &amp;Anacrusis...</source>
         <translation>Skapa uppt&amp;akt...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+382"/>
         <source>Join</source>
         <translation>Sammanfoga</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-373"/>
         <source>&amp;Split</source>
         <translation>&amp;Dela</translation>
     </message>
@@ -4778,6 +5098,11 @@
         <location line="+1"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
         <translation>E&amp;xpandera segment med blockackord enligt figuration</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Update all Figurations</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4856,19 +5181,26 @@
     </message>
     <message>
         <location line="+38"/>
+        <location line="+305"/>
         <source>&amp;Resize</source>
         <translation>Ändra &amp;storlek</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="-279"/>
+        <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>P&amp;unch in Record</source>
         <translation>Pu&amp;nch-in-inspelning</translation>
     </message>
     <message>
-        <location line="-3928"/>
-        <location line="+366"/>
-        <location line="+1243"/>
-        <location line="+1926"/>
+        <location line="-3957"/>
+        <location line="+365"/>
+        <location line="+1257"/>
+        <location line="+1941"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>Visa &amp;huvudverktygslist</translation>
     </message>
@@ -4888,10 +5220,10 @@
         <translation>Visa &amp;zoomverktygslist</translation>
     </message>
     <message>
-        <location line="-3539"/>
-        <location line="+370"/>
-        <location line="+1250"/>
-        <location line="+1945"/>
+        <location line="-3567"/>
+        <location line="+369"/>
+        <location line="+1264"/>
+        <location line="+1960"/>
         <source>Show St&amp;atusbar</source>
         <translation>Visa &amp;statusrad</translation>
     </message>
@@ -4901,17 +5233,15 @@
         <translation>Visa &amp;uppspelningslinjal</translation>
     </message>
     <message>
-        <location line="-190"/>
         <source>Import &amp;X11 Rosegarden file...</source>
-        <translation>Importera &amp;X11 Rosegarden-fil...</translation>
+        <translation type="obsolete">Importera &amp;X11 Rosegarden-fil...</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation>Sammanfoga &amp;X11 Rosegarden-fil...</translation>
+        <translation type="obsolete">Sammanfoga &amp;X11 Rosegarden-fil...</translation>
     </message>
     <message>
-        <location line="+247"/>
+        <location line="+63"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>MIDI-mi&amp;xer</translation>
     </message>
@@ -4921,12 +5251,11 @@
         <translation>Visa &amp;tempolinjal</translation>
     </message>
     <message>
-        <location line="-181"/>
         <source>Export &amp;LilyPond file...</source>
-        <translation>Exportera &amp;Lilypond-fil...</translation>
+        <translation type="obsolete">Exportera &amp;Lilypond-fil...</translation>
     </message>
     <message>
-        <location line="+182"/>
+        <location line="+1"/>
         <source>Show Tra&amp;nsport</source>
         <translation>Visa spelkon&amp;trollfönster</translation>
     </message>
@@ -4957,7 +5286,7 @@
         <translation>Visa spår&amp;namn</translation>
     </message>
     <message>
-        <location line="+405"/>
+        <location line="+406"/>
         <source>Main Toolbar</source>
         <translation>Huvudverktygslist</translation>
     </message>
@@ -4972,26 +5301,26 @@
         <translation>Editorverktygslist</translation>
     </message>
     <message>
-        <location line="-1593"/>
-        <location line="+1595"/>
+        <location line="-1595"/>
+        <location line="+1597"/>
         <source>Rewind to Beginning</source>
         <translation>Spola tillbaka till början</translation>
     </message>
     <message>
-        <location line="-1588"/>
-        <location line="+1597"/>
+        <location line="-1590"/>
+        <location line="+1599"/>
         <source>Fast Forward to End</source>
         <translation>Spola fram till slutet</translation>
     </message>
     <message>
-        <location line="-2753"/>
-        <location line="+1887"/>
-        <location line="+849"/>
+        <location line="-2776"/>
+        <location line="+1909"/>
+        <location line="+850"/>
         <source>&amp;Support Rosegarden</source>
         <translation>&amp;Stöd Rosegarden</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+221"/>
         <source>Insert Tempo Change</source>
         <translation>Infoga tempobyte</translation>
     </message>
@@ -8032,7 +8361,7 @@
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+525"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+526"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
         <translation>Syntinsticksmodul</translation>
@@ -10184,7 +10513,7 @@
         <translation>Okänd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+291"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+292"/>
         <source>[ %1 ]</source>
         <translation>[ %1 ]</translation>
     </message>
@@ -10195,9 +10524,9 @@
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+641"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+643"/>
         <location line="+7"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+457"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+458"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10212,20 +10541,20 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+452"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1005"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+784"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1620"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+464"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1012"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+891"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1647"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 effekt %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+320"/>
+        <location filename="../../src/gui/application/main.cpp" line="+322"/>
         <source>Rosegarden - A sequencer and musical notation editor</source>
         <translation>Rosegarden - Ett musikbehandlingsprogram och noteditor</translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+147"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -10328,23 +10657,26 @@
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+525"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+511"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>Ljud-undersystemet är inte tillgängligt - kan inte spela in ljud</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+99"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Inga spår är förberedda för inspelning.&lt;/p&gt;&lt;p&gt;Markera minst en av lysdioderna för inspelning &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; och försök igen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+179"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte starta inspelning av ljud.&lt;/p&gt;&lt;p&gt;Ställ in en giltig sökväg för inspelningar med &lt;b&gt;Komposition -&gt; Redgera dokumentegenskaper... -&gt; Ljud&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/sound/SoundFile.h" line="+67"/>
+        <location line="+2"/>
+        <location line="+2"/>
         <source>Bad sound file </source>
-        <translation type="obsolete">Felaktig ljudfil </translation>
+        <translation type="unfinished">Felaktig ljudfil </translation>
     </message>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+110"/>
@@ -10425,7 +10757,7 @@
         <translation>Rosegarden stöder för närvarande bara 32-bitars flyttal i RIFF-filer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/TranzportClient.cpp" line="+60"/>
+        <location filename="../../src/gui/application/TranzportClient.cpp" line="+62"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
         <translation>Misslyckades öppna tranzport-enhet /dev/tranzport0</translation>
     </message>
@@ -10446,12 +10778,15 @@
         <translation>Avbruten</translation>
     </message>
     <message>
+        <location filename="../../src/sound/PeakFileManager.h" line="+61"/>
+        <location line="+2"/>
         <source>Bad peak file </source>
-        <translation type="obsolete">Felaktig toppfil </translation>
+        <translation type="unfinished">Felaktig toppfil </translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation type="obsolete">Felaktig toppfil (felformat ljud?) </translation>
+        <translation type="unfinished">Felaktig toppfil (felformat ljud?) </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/Inconsistencies.h" line="+64"/>
@@ -10479,17 +10814,17 @@
         <translation>dur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+297"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+298"/>
         <source>Synth plugin </source>
         <translation>Syntinsticksmodul </translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-2669"/>
+        <location filename="../QMenuStrings.cpp" line="-2878"/>
         <source>P&amp;rint Preview...</source>
         <translation>Fö&amp;rhandsgranska utskrift...</translation>
     </message>
     <message>
-        <location line="+1916"/>
+        <location line="+1933"/>
         <source>Prin&amp;t Preview...</source>
         <translation>Förhandsgranska u&amp;tskrift...</translation>
     </message>
@@ -10520,6 +10855,63 @@
         <comment>Pitch determination (DSP)</comment>
         <translation>Harmoniskt produktspektrum</translation>
     </message>
+    <message>
+        <location filename="../../src/sound/DummyDriver.cpp" line="+37"/>
+        <source>No sound driver available: Sound driver startup failed, log follows: 
+
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>No sound driver available: Application compiled without sound support?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
+        <source>Replace segment contents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
+        <source>Chord Source Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Figuration Source Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Generated Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Segment of unknown type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/base/parameterpattern/RelativeRamp.cpp" line="+30"/>
+        <source>Relative Ramp - modify existing %1 values linearly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Increase first value this much: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Increase last value this much: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
+        <source>Update Figurations</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10535,8 +10927,12 @@
     </message>
     <message>
         <location line="+6"/>
+        <source>&lt;p&gt;Copyright 2000-2013 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2 or later&lt;/p&gt; {2000-2013 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Copyright 2000-2012 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Copyright 2000-2012 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
@@ -10605,7 +11001,7 @@
 <context>
     <name>Rosegarden::AddIndicationCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+135"/>
+        <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+107"/>
         <source>Can&apos;t add identical overlapping indications</source>
         <translation>Kan inte lägga till identiska överlappande indikeringar</translation>
     </message>
@@ -11017,7 +11413,7 @@
 <context>
     <name>Rosegarden::AudioFaderBox</name>
     <message>
-        <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="+79"/>
+        <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="+80"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;ingen modul&gt;</translation>
     </message>
@@ -11095,7 +11491,7 @@
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Converting audio file...</source>
         <translation>Konverterar ljudfil...</translation>
     </message>
@@ -11108,12 +11504,12 @@
         <translation type="obsolete">Konverterar och samplar om ljudfil...</translation>
     </message>
     <message>
-        <location line="-24"/>
+        <location line="-30"/>
         <source>Importing audio file...</source>
         <translation>Importerar ljudfil...</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+37"/>
         <source>Failed to convert or resample audio file on import</source>
         <translation>Misslyckades att konvertera eller sampla om en ljudfil vid import</translation>
     </message>
@@ -11121,12 +11517,12 @@
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+80"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+81"/>
         <source>Click to rename this instrument</source>
         <translation>Klicka för att byta namn på instrumentet</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Click the button above to rename this instrument</source>
         <translation>Klicka på knappen ovanför för att byta namn på instrumentet</translation>
     </message>
@@ -11146,7 +11542,7 @@
 <context>
     <name>Rosegarden::AudioManagerDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+108"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+110"/>
         <source>Audio File Manager</source>
         <translation>Ljudfilshantering</translation>
     </message>
@@ -11191,12 +11587,11 @@
         <translation>Fil</translation>
     </message>
     <message>
-        <location line="+100"/>
         <source>&lt;no audio files&gt;</source>
-        <translation>&lt;inga ljudfiler&gt;</translation>
+        <translation type="obsolete">&lt;inga ljudfiler&gt;</translation>
     </message>
     <message>
-        <location line="+232"/>
+        <location line="+332"/>
         <source>Save File As</source>
         <translation>Spara fil som</translation>
     </message>
@@ -11206,12 +11601,12 @@
         <translation>*.wav|WAV-filer (*.wav)</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>Exporting audio file...</source>
         <translation>Exporterar ljudfil...</translation>
     </message>
     <message>
-        <location line="+119"/>
+        <location line="+121"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
         <translation>Det här stänger ljudfilen &quot;%1&quot; och tar bort alla tillhörande ljudsegment. Är du säker?</translation>
     </message>
@@ -11221,14 +11616,14 @@
         <location line="+37"/>
         <location line="+75"/>
         <location line="+11"/>
-        <location line="+233"/>
+        <location line="+236"/>
         <location line="+6"/>
-        <location line="+23"/>
+        <location line="+25"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-498"/>
         <location line="+8"/>
         <source>WAV files</source>
         <translation>WAV-filer</translation>
@@ -11330,7 +11725,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>importerar en ljudfil som måste konverteras eller samplas om</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <source>Adding audio file...</source>
         <translation>Lägger till ljudfil...</translation>
     </message>
@@ -11341,17 +11736,17 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Misslyckades med att lägga till ljudfil.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Försök att kopiera filen till en katalog där du har skrivrättighet och lägga till den igen</translation>
     </message>
     <message>
-        <location line="+164"/>
+        <location line="+168"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioManager-en</translation>
     </message>
@@ -11359,7 +11754,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+239"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+273"/>
         <source>Audio Mixer</source>
         <translation>Ljudmixer</translation>
     </message>
@@ -11402,12 +11797,12 @@ Välj de du vill ta bort permanent från hårddisken.
         <location line="+133"/>
         <location line="+143"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;ingen&gt;</translation>
     </message>
     <message>
-        <location line="-514"/>
+        <location line="-516"/>
         <location line="+133"/>
         <source>Click to load an audio plugin</source>
         <translation>Klicka för att läsa in en ljudmodul</translation>
@@ -11451,12 +11846,12 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location line="+90"/>
         <location line="+57"/>
-        <location line="+183"/>
+        <location line="+185"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;ingen modul&gt;</translation>
     </message>
     <message>
-        <location line="+828"/>
+        <location line="+846"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
@@ -11477,12 +11872,12 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+80"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+81"/>
         <source>Audio Plugin</source>
         <translation>Ljudinsticksmodul</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+13"/>
         <source>Plugin</source>
         <translation>Insticksmodul</translation>
     </message>
@@ -11503,7 +11898,7 @@ Välj de du vill ta bort permanent från hårddisken.
     </message>
     <message>
         <location line="+9"/>
-        <location line="+279"/>
+        <location line="+289"/>
         <source>&lt;ports&gt;</source>
         <translation>&lt;portar&gt;</translation>
     </message>
@@ -11513,7 +11908,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>&lt;id&gt;</translation>
     </message>
     <message>
-        <location line="-259"/>
+        <location line="-269"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
     </message>
@@ -11538,7 +11933,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Editor</translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+86"/>
         <source>(any)</source>
         <translation>(godtyckligt)</translation>
     </message>
@@ -11558,13 +11953,13 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>&lt;ingen modul&gt;</translation>
     </message>
     <message>
-        <location line="-295"/>
-        <location line="+299"/>
+        <location line="-305"/>
+        <location line="+309"/>
         <source>Select a plugin from this list</source>
         <translation>Markera en modul i listan</translation>
     </message>
     <message>
-        <location line="-288"/>
+        <location line="-298"/>
         <source>Bypass this plugin</source>
         <translation>Koppla förbi modulen</translation>
     </message>
@@ -11595,7 +11990,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Återställ insticksmodulens styrdon till fördefinierade värden</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+289"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Insticksmodulen har för många styrdon för att redigera dem här.&lt;/p&gt;&lt;p&gt;Använd den externa editorn, om tillgänglig.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -11610,7 +12005,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Id: %1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+50"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
@@ -11626,21 +12021,21 @@ Välj de du vill ta bort permanent från hårddisken.
     </message>
     <message>
         <location line="+23"/>
-        <location line="+253"/>
+        <location line="+254"/>
         <source>Program:  </source>
         <translation>Program:  </translation>
     </message>
     <message>
-        <location line="-249"/>
+        <location line="-250"/>
         <location line="+7"/>
-        <location line="+246"/>
+        <location line="+247"/>
         <location line="+5"/>
         <location line="+29"/>
         <source>&lt;none selected&gt;</source>
         <translation>&lt;inget markerat&gt;</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+165"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</translation>
     </message>
@@ -11648,7 +12043,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioPluginOSCGUIManager</name>
     <message>
-        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+432"/>
+        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+434"/>
         <source>Rosegarden Plugin</source>
         <translation>Insticksmodul för Rosegarden</translation>
     </message>
@@ -11724,7 +12119,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioRouteMenu</name>
     <message>
-        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+229"/>
+        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+233"/>
         <source>none</source>
         <translation>ingen</translation>
     </message>
@@ -11784,7 +12179,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>&amp;Dela vid paus</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="+142"/>
+        <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="+143"/>
         <source>(part %1)</source>
         <translation>(del %1)</translation>
     </message>
@@ -11800,7 +12195,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioSegmentInsertCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="+44"/>
+        <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="+45"/>
         <source>Create Segment</source>
         <translation>Skapa segment</translation>
     </message>
@@ -11839,7 +12234,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioSegmentSplitCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="+36"/>
         <source>Split Audio Segment</source>
         <translation>Dela ljudsegment</translation>
     </message>
@@ -11852,7 +12247,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioSplitDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="+71"/>
+        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="+72"/>
         <source>Autosplit Audio Segment</source>
         <translation>Dela ljudsegment automatiskt</translation>
     </message>
@@ -11893,7 +12288,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+96"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+97"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>Hantera MIDI-banker och program</translation>
     </message>
@@ -12394,7 +12789,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Färginställningar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="+67"/>
+        <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="+68"/>
         <source>Add New Color</source>
         <translation>Lägg till ny färg</translation>
     </message>
@@ -12553,7 +12948,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ConfigureDialogBase</name>
     <message>
-        <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="+47"/>
+        <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="+48"/>
         <source>Configure Rosegarden</source>
         <translation>Anpassa Rosegarden</translation>
     </message>
@@ -12561,7 +12956,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControlChangeCommand</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="+27"/>
+        <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="+29"/>
         <source>Control Change</source>
         <translation>Styrändring</translation>
     </message>
@@ -12569,7 +12964,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControlEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+94"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+95"/>
         <source>&lt;no device&gt;</source>
         <translation>&lt;ingen enhet&gt;</translation>
     </message>
@@ -12683,7 +13078,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControlParameterEditDialog</name>
     <message>
-        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="+76"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="+77"/>
         <source>Name:</source>
         <translation>Namn:</translation>
     </message>
@@ -12746,7 +13141,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControlRulerEventEraseCommand</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+29"/>
+        <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+31"/>
         <source>Erase Controller Event(s)</source>
         <translation>Ta bort effekthändelse(r)</translation>
     </message>
@@ -12762,7 +13157,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+315"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+325"/>
         <source>Velocity</source>
         <translation>Ljudstyrka</translation>
     </message>
@@ -12778,7 +13173,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+286"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+288"/>
         <source>Unsupported Event Type</source>
         <translation>Händelsetyp som inte stöds</translation>
     </message>
@@ -12829,7 +13224,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::CountdownDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="+48"/>
+        <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="+49"/>
         <source>Recording...</source>
         <translation>Spelar in...</translation>
     </message>
@@ -12870,7 +13265,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::CreateTempoMapFromSegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="+32"/>
+        <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="+33"/>
         <source>Set Tempos from Beat Segment</source>
         <translation>Ställ in tempon från taktsegment</translation>
     </message>
@@ -12900,6 +13295,14 @@ Välj de du vill ta bort permanent från hårddisken.
     </message>
 </context>
 <context>
+    <name>Rosegarden::CutToTriggerSegmentCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
+        <source>Make Ornament</source>
+        <translation type="unfinished">Skapa ornament</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::CycleSlashesCommand</name>
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+37"/>
@@ -12918,12 +13321,11 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::DeleteRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/DeleteRangeCommand.h" line="+54"/>
         <source>Rejoin Command</source>
-        <translation>Återförena</translation>
+        <translation type="obsolete">Återförena</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+37"/>
+        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+322"/>
         <source>Delete Range</source>
         <translation>Ta bort omfång</translation>
     </message>
@@ -13243,12 +13645,12 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::EditViewBase</name>
     <message>
-        <location filename="../../src/gui/general/EditViewBase.cpp" line="+220"/>
+        <location filename="../../src/gui/general/EditViewBase.cpp" line="+222"/>
         <source>Toggle the statusbar...</source>
         <translation>Växla statuslisten...</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+72"/>
         <source>Segment Start Time</source>
         <translation>Starttid för segment</translation>
     </message>
@@ -13440,7 +13842,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
 <context>
     <name>Rosegarden::EventFilterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="+78"/>
+        <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="+79"/>
         <source>Event Filter</source>
         <translation>Händelsefilter</translation>
     </message>
@@ -13645,7 +14047,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
 <context>
     <name>Rosegarden::EventView</name>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+117"/>
+        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+122"/>
         <source>Event filters</source>
         <translation>Händelsefilter</translation>
     </message>
@@ -13701,11 +14103,21 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
     </message>
     <message>
         <location line="+1"/>
+        <source>Generated regions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Segment ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Other</source>
         <translation>Annan</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+31"/>
         <source>Triggered Segment Properties</source>
         <translation>Egenskaper för utlösande segment</translation>
     </message>
@@ -13773,18 +14185,18 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
         <translation>Värde (data2)</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+201"/>
         <location line="+8"/>
         <source>&lt;not set&gt;</source>
         <translation>&lt;inte angiven&gt;</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+69"/>
         <source>(group %1)  </source>
         <translation>(grupp %1)  </translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+71"/>
         <source>&lt;no events at this filter level&gt;</source>
         <translation>&lt;inga händelser på den här filternivån&gt;</translation>
     </message>
@@ -13829,7 +14241,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
         <translation>Kunde inte klistra in på den här platsen</translation>
     </message>
     <message>
-        <location line="+467"/>
+        <location line="+473"/>
         <source>Open in Event Editor</source>
         <translation>Öppna i händelseeditor</translation>
     </message>
@@ -13862,7 +14274,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
 <context>
     <name>Rosegarden::ExpandFigurationCommand</name>
     <message>
-        <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+75"/>
+        <location filename="../../src/commands/segment/ExpandFigurationCommand.h" line="+46"/>
         <source>Expand Block Chords to Figurations</source>
         <translation>Expandera segment med blockackord enligt figuration</translation>
     </message>
@@ -13893,7 +14305,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
 <context>
     <name>Rosegarden::FileLocateDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="+50"/>
+        <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="+51"/>
         <source>Locate audio file</source>
         <translation>Sök efter ljudfil</translation>
     </message>
@@ -14233,7 +14645,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location line="+186"/>
+        <location line="+188"/>
         <location line="+4"/>
         <location line="+4"/>
         <source>Rosegarden</source>
@@ -14250,7 +14662,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Du måste starta om Rosegarden för att ändringen av utseendet ska få effekt.</translation>
     </message>
     <message>
-        <location line="-290"/>
+        <location line="-292"/>
         <source>Note name style</source>
         <translation>Stil för notnamn</translation>
     </message>
@@ -14368,9 +14780,35 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Externa program</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+168"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Ändringar av strukturbakgrunderna i huvudfönstret träder inte i kraft förrän du startar om Rosegarden.</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::GeneratedRegionDialog</name>
+    <message>
+        <location filename="../../src/gui/dialogs/GeneratedRegionDialog.cpp" line="+40"/>
+        <source>Generated region</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Figuration source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Chord source</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::GeneratedRegionInsertionCommand</name>
+    <message>
+        <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
+        <source>Insert Generated Region</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14483,7 +14921,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
 <context>
     <name>Rosegarden::HeadersConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="+60"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="+62"/>
         <source>Printable headers</source>
         <translation>Utskrivningsbara rubriker</translation>
     </message>
@@ -14596,7 +15034,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
 <context>
     <name>Rosegarden::HydrogenXMLHandler</name>
     <message>
-        <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+296"/>
+        <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+297"/>
         <source> imported from Hydrogen </source>
         <translation> importerad från Hydrogen </translation>
     </message>
@@ -14843,7 +15281,7 @@ Exempeltext från filen:</translation>
 <context>
     <name>Rosegarden::InsertRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="+210"/>
         <source>Insert Range</source>
         <translation>Infoga omfång</translation>
     </message>
@@ -14882,7 +15320,7 @@ Exempeltext från filen:</translation>
 <context>
     <name>Rosegarden::InstrumentAliasButton</name>
     <message>
-        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="+52"/>
+        <location filename="../../src/gui/widgets/InstrumentAliasButton.cpp" line="+54"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -14895,7 +15333,7 @@ Exempeltext från filen:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="+46"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="+47"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
@@ -14913,7 +15351,7 @@ Exempeltext från filen:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+67"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+69"/>
         <source>none</source>
         <translation>ingen</translation>
     </message>
@@ -15298,7 +15736,7 @@ Exempeltext från filen:</translation>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+630"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+629"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15315,7 +15753,32 @@ Vill du använda
  istället?</translation>
     </message>
     <message>
-        <location line="+1966"/>
+        <location line="+11"/>
+        <source>Export failed.  The file could not be opened for writing.</source>
+        <translation type="unfinished">Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
+    </message>
+    <message>
+        <location line="+150"/>
+        <source>Export succeeded, but the composition was empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Export of selected track failed.  There are no segments on the selected track.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Export of selected segments failed.  No segments are selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1817"/>
         <source>warning: overlong bar truncated here</source>
         <translation>varning: alltför lång takt avkortad här</translation>
     </message>
@@ -15328,7 +15791,7 @@ Vill du använda
 <context>
     <name>Rosegarden::LilyPondOptionsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="+61"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="+63"/>
         <source>LilyPond Export/Preview</source>
         <translation>Lilypond export och förhandsgranskning</translation>
     </message>
@@ -15353,12 +15816,11 @@ Vill du använda
         <translation>&lt;qt&gt;Välj vilka spår eller segment att exportera&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Selected tracks</source>
-        <translation>Valda spår</translation>
+        <translation type="obsolete">Valda spår</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+16"/>
         <source>Compatibility level</source>
         <translation>Kompatibilitetsnivå</translation>
     </message>
@@ -15446,7 +15908,17 @@ Vill du använda
         <translation>&lt;qt&gt;Spårsystemklamrar finns i rutan &lt;b&gt;Spårparametrar&lt;/b&gt;, och kan användas för att gruppera system på olika sätt&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+3"/>
+        <source>Print short staff names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>Notation language</source>
         <translation>Notationsspråk</translation>
     </message>
@@ -15476,9 +15948,24 @@ Vill du använda
         <translation>&lt;qt&gt;Om markerad ritas alltid ett taktstreck när en repris börjar, även om den börjar i mitten av en takt.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+5"/>
+        <source>Cancel accidentals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Om markerat, skrivs återställningstecken automatiskt ut för att återställa eventuella förtecken från föregående tonartssignaturer. Återställningsbeteende är separat från, och inte relaterat till, hur Rosegarden visar återställning av förtecken i noteditorn.&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Export empty staves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+36"/>
@@ -15486,7 +15973,7 @@ Vill du använda
         <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
     </message>
     <message>
-        <location line="-217"/>
+        <location line="-233"/>
         <source>Export content</source>
         <translation>Exportera innehåll</translation>
     </message>
@@ -15501,12 +15988,22 @@ Vill du använda
         <translation>Ljudande spår</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Selected track</source>
+        <translation type="unfinished">Markerat spår</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Selected segments</source>
         <translation>Markerade segment</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+4"/>
+        <source>Edited segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>&lt;qt&gt;Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ställ in versionen av Lilypond som är installerad. Om du har en nyare version av LilyPond, välj då den senaste versionen som Rosegarden stöder.&lt;/qt&gt;</translation>
     </message>
@@ -15567,7 +16064,7 @@ Vill du använda
         <translation>Exportera tempobeteckningar</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+42"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Användbart för partitur med flera sidor. Det kan förhindra fula avslutande sidor&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -15577,7 +16074,7 @@ Vill du använda
         <translation>&lt;qt&gt;Markeringar finns på &lt;b&gt;Markeringslinjalen&lt;/b&gt;. De kan exporteras som text, eller som orienteringstecken.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-47"/>
         <source>Export lyrics</source>
         <translation>Exportera sångtext</translation>
     </message>
@@ -15622,7 +16119,7 @@ Vill du använda
         <translation>&lt;qt&gt;Om markerat, exporteras Rosegardens balkningar. Annars beräknar Lilypond automatiskt balkar.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+22"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation>Riven botten (ackoladerna kommer inte att spridas vertikalt över sidan)</translation>
     </message>
@@ -15792,7 +16289,7 @@ Vill du använda
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningsmarkören.&lt;/p&gt;&lt;p&gt;Skift-klicka och dra för att ange ett intervall för upprepning eller redigering.&lt;/p&gt;&lt;p&gt;Skift-klicka för att rensa upprepningen eller intervallet.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att starta uppspelning.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+78"/>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+80"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningspekaren.&lt;/p&gt;&lt;p&gt;Skift-klicka och dra för att ange ett intervall att repetera eller redigera.&lt;/p&gt;&lt;p&gt;Skift-klicka för att ta bort repetition eller intervall.&lt;/p&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningspekaren låst till takter.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att starta uppspelning.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -15820,7 +16317,7 @@ Vill du använda
         <translation>Ta bort strof</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+218"/>
         <source>Verse %1</source>
         <translation>Strof %1</translation>
     </message>
@@ -15843,7 +16340,7 @@ Vill du använda
         <translation>MIDI-inställningar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+90"/>
+        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+91"/>
         <source>Base octave number for MIDI pitch display</source>
         <translation>Huvudoktavnummer för MIDI-tonhöjdsvisning</translation>
     </message>
@@ -16289,7 +16786,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::MarkerEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+79"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+81"/>
         <source>Manage Markers</source>
         <translation>Hantera markeringar</translation>
     </message>
@@ -16416,13 +16913,26 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::MarkerRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+93"/>
+        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+94"/>
         <source>Click on a marker to move the playback pointer.
 Shift-click to set a range between markers.
 Double-click to open the marker editor.</source>
         <translation>Klicka på en markering för att flytta uppspelningspekaren.
 Skift-klicka för att ange ett område mellan markeringarna.
 Dubbel-klicka för att öppna markeringsredigeraren.</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::MaskTriggerCommand</name>
+    <message>
+        <location filename="../../src/commands/edit/MaskTriggerCommand.cpp" line="+35"/>
+        <source>&amp;Unmask Ornament</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Mask Ornament</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16620,7 +17130,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixToolBox</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixToolBox.cpp" line="+81"/>
+        <location filename="../../src/gui/editors/matrix/MatrixToolBox.cpp" line="+82"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -16656,12 +17166,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1265"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1361"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
     <message>
-        <location line="-1400"/>
+        <location line="-1503"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
@@ -16684,7 +17194,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         </translation>
     </message>
     <message>
-        <location line="+247"/>
+        <location line="+254"/>
         <source> Grid: </source>
         <translation> Rutnät: </translation>
     </message>
@@ -16724,7 +17234,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Av</translation>
     </message>
     <message>
-        <location line="+794"/>
+        <location line="+871"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
@@ -16741,17 +17251,17 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
     <message>
         <location line="+13"/>
         <location line="+155"/>
-        <location line="+76"/>
+        <location line="+95"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+389"/>
+        <location line="+382"/>
         <source>Estimated key signature shown</source>
         <translation>Uppskattad tonartssignatur visas</translation>
     </message>
     <message>
-        <location line="-852"/>
+        <location line="-864"/>
         <source>Estimated time signature shown</source>
         <translation>Uppskattad taktart visas</translation>
     </message>
@@ -16770,7 +17280,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation type="obsolete">Ställ in händelseljudstyrkor</translation>
     </message>
     <message>
-        <location line="-317"/>
+        <location line="-320"/>
         <source>Trigger Segment</source>
         <translation>Utlösande segment</translation>
     </message>
@@ -16780,12 +17290,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Ta bort utlösare</translation>
     </message>
     <message>
-        <location line="-743"/>
+        <location line="-824"/>
         <source>Matrix</source>
         <translation>Matris</translation>
     </message>
     <message>
-        <location line="+1348"/>
+        <location line="+1432"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation>Kan inte infoga not: Ingen rutnätslängd vald</translation>
     </message>
@@ -16793,7 +17303,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-813"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-818"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
@@ -16813,7 +17323,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Återställ zoom</translation>
     </message>
     <message>
-        <location line="+1088"/>
+        <location line="+1094"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rotera hjulet för att byta aktivt segment&lt;/qt&gt;</translation>
     </message>
@@ -16929,7 +17439,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MidiKeyMappingEditor</name>
     <message>
-        <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+52"/>
+        <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+53"/>
         <location line="+24"/>
         <source>Key Mapping details</source>
         <translation>Information om tonartsändring</translation>
@@ -16943,7 +17453,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+116"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+117"/>
         <source>MIDI Mixer</source>
         <translation>MIDI-mixer</translation>
     </message>
@@ -16966,7 +17476,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MidiProgramsEditor</name>
     <message>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+65"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+66"/>
         <location line="+98"/>
         <source>Bank and Program details</source>
         <translation>Bank- och programinformation</translation>
@@ -17072,7 +17582,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MoveCommand</name>
     <message>
-        <location filename="../../src/commands/edit/MoveCommand.cpp" line="+52"/>
+        <location filename="../../src/commands/edit/MoveCommand.cpp" line="+54"/>
         <source>&amp;Move Events</source>
         <translation>&amp;Flytta händelser</translation>
     </message>
@@ -17533,6 +18043,11 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Dölj redundanta klaver och tonarter</translation>
     </message>
     <message>
+        <location line="+13"/>
+        <source>Distribute verses among repeated segments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+15"/>
         <source>Segments</source>
         <translation>Segment</translation>
@@ -17557,7 +18072,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+466"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+470"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
@@ -17582,7 +18097,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+332"/>
+        <location line="+356"/>
         <source>Sustain</source>
         <translation>Förlängning</translation>
     </message>
@@ -17790,7 +18305,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::NotationToolBox</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationToolBox.cpp" line="+81"/>
+        <location filename="../../src/gui/editors/notation/NotationToolBox.cpp" line="+85"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -17798,7 +18313,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::NotationVLayout</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="+499"/>
+        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="+510"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
         <translation>Överlappande not vid %1 har ingen HEIGHT_ON_STAFF-egenskap!
@@ -17831,7 +18346,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         </translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+150"/>
         <source>  Font:  </source>
         <translation>  Teckensnitt:  </translation>
     </message>
@@ -17851,7 +18366,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>  Avstånd:  </translation>
     </message>
     <message>
-        <location line="-93"/>
+        <location line="-115"/>
         <source>  No selection </source>
         <translation>  Ingen markering </translation>
     </message>
@@ -17860,7 +18375,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Triol</translation>
     </message>
     <message>
-        <location line="+2401"/>
+        <location line="+2628"/>
         <source>Chord</source>
         <translation>Ackord</translation>
     </message>
@@ -17877,7 +18392,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2030"/>
+        <location line="-2235"/>
         <source>Unknown spacing action %1</source>
         <translation>Okänd avståndsåtgärd %1</translation>
     </message>
@@ -17902,22 +18417,21 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation>Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
+        <translation type="obsolete">Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+296"/>
         <source>Clipboard is empty</source>
         <translation>Klippbordet är tomt</translation>
     </message>
     <message>
-        <location line="-59"/>
+        <location line="-53"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation>Kan inte klistra in flera segment i ett</translation>
     </message>
     <message numerus="yes">
-        <location line="-462"/>
+        <location line="-484"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>%n händels markerad </numerusform>
@@ -17925,23 +18439,23 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         </translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+86"/>
         <location line="+166"/>
         <location line="+52"/>
         <location line="+57"/>
         <location line="+26"/>
         <location line="+25"/>
-        <location line="+107"/>
-        <location line="+69"/>
-        <location line="+761"/>
-        <location line="+633"/>
-        <location line="+810"/>
-        <location line="+266"/>
+        <location line="+103"/>
+        <location line="+56"/>
+        <location line="+880"/>
+        <location line="+729"/>
+        <location line="+830"/>
+        <location line="+269"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2796"/>
+        <location line="-3017"/>
         <source>Printing with LilyPond...</source>
         <translation>Skriver ut med Lilypond...</translation>
     </message>
@@ -17956,29 +18470,29 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>&lt;qt&gt;&lt;p&gt;Misslyckades öppna en tillfällig fil för export till Lilypond.&lt;/p&gt;&lt;p&gt;Detta betyder troligen att diskutrymmet på &lt;pre&gt;%1&lt;/pre&gt; har tagit slut&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+217"/>
-        <location line="+69"/>
+        <location line="+213"/>
+        <location line="+56"/>
         <source>&lt;qt&gt;&lt;p&gt;The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.&lt;/p&gt;&lt;p&gt;Not enough space was found.&lt;/p&gt;&lt;p&gt;If you want to paste anyway, consider using one of the other paste types from the &lt;b&gt;Paste...&lt;/b&gt; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Den begränsade typen av inklistring kräver tillräckligt med tomt utrymme (som bara innehåller pauser) på stället för inklistringen för att få plats med alla händelser som ska klistras in.&lt;/p&gt;&lt;p&gt;Tillräckligt utrymme fanns inte.&lt;/p&gt;&lt;p&gt;Om du vill klistra in ändå, fundera på att använda någon av de andra inklistringstyperna i alternativet &lt;b&gt;Klistra in...&lt;/b&gt; på menyn Redigera. Du kan också ändra standardtypen för inklistring till något annat än begränsat om du önskar.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-44"/>
+        <location line="-33"/>
         <source>Inserting clipboard contents...</source>
         <translation>Infogar klippbordets innehåll...</translation>
     </message>
     <message>
-        <location line="-26"/>
-        <location line="+69"/>
+        <location line="-24"/>
+        <location line="+56"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation>Kunde inte klistra in på den här platsen.</translation>
     </message>
     <message>
-        <location line="+2519"/>
+        <location line="+2793"/>
         <source>Move Events to Staff Above</source>
         <translation>Flytta händelser till systemet ovanför</translation>
     </message>
     <message>
-        <location line="-2403"/>
+        <location line="-2664"/>
         <source>Raising velocities...</source>
         <translation>Ökar ljudstyrkor...</translation>
     </message>
@@ -17996,7 +18510,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation type="obsolete">Ställer in ljudstyrkor...</translation>
     </message>
     <message>
-        <location line="+2535"/>
+        <location line="+2811"/>
         <source>Edit Text Event</source>
         <translation>Redigera texthändelse</translation>
     </message>
@@ -18011,7 +18525,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Lägger ihop noter...</translation>
     </message>
     <message>
-        <location line="-1963"/>
+        <location line="-2133"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
@@ -18021,13 +18535,13 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Infogar not</translation>
     </message>
     <message>
-        <location line="+2137"/>
+        <location line="+2307"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation>Lägger till punkt...</translation>
     </message>
     <message>
-        <location line="-1762"/>
+        <location line="-1928"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Ornament spår %1 takt %2</translation>
     </message>
@@ -18037,12 +18551,11 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Ornament takt %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Make Ornament</source>
-        <translation>Skapa ornament</translation>
+        <translation type="obsolete">Skapa ornament</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+38"/>
         <source>Use Ornament</source>
         <translation>Använd ornament</translation>
     </message>
@@ -18052,7 +18565,22 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Ta bort ornament</translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+36"/>
+        <source>Edit ornament inline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Show ornament expansion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <source>Unadopt Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+116"/>
         <source>Estimated key signature shown</source>
         <translation>Uppskattad tonartssignatur visas</translation>
     </message>
@@ -18074,7 +18602,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Uppskattad taktart visas</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+148"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - segment spår nummer %3 - notskrift</translation>
     </message>
@@ -18107,12 +18635,12 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Med antal halvtonsteg: </translation>
     </message>
     <message>
-        <location line="+366"/>
+        <location line="+379"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Tid: %1 (%2,%3 s)</translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+78"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
@@ -18127,12 +18655,22 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+101"/>
         <source>Move Events to Staff Below</source>
         <translation>Flytta händelser till systemet under</translation>
     </message>
     <message>
-        <location line="+374"/>
+        <location line="+79"/>
+        <source>Edit Generated region mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Updated tags for aborted edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+317"/>
         <source>Set Note Type...</source>
         <translation>Ange nottyp...</translation>
     </message>
@@ -18147,7 +18685,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Växlar tvärbalkar...</translation>
     </message>
     <message>
-        <location line="-767"/>
+        <location line="-821"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation>Kan inte infoga not: Inget notvärde valt</translation>
     </message>
@@ -18155,7 +18693,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1399"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1426"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
@@ -18180,7 +18718,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Stäng spårnamn</translation>
     </message>
     <message>
-        <location line="+1409"/>
+        <location line="+1436"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rotera hjulet för att byta aktivt segment&lt;/qt&gt;</translation>
@@ -18286,7 +18824,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::OpenOrCloseRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="+37"/>
+        <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="+38"/>
         <source>Open or Close Range</source>
         <translation>Öppna eller stäng omfång</translation>
     </message>
@@ -18302,12 +18840,12 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PasteEventsCommand</name>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+85"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+87"/>
         <source>&amp;Paste</source>
         <translation>K&amp;listra in</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+91"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+92"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
         <translation>Klistra in i befintligt utrymme [&quot;begränsat&quot;]</translation>
     </message>
@@ -18335,7 +18873,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PasteNotationDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="+45"/>
+        <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="+47"/>
         <source>Paste</source>
         <translation>Klistra in</translation>
     </message>
@@ -18355,7 +18893,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Gör det här till förvald inklistringstyp</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+70"/>
         <source>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:pasteNotationDialog-en</translation>
     </message>
@@ -18363,7 +18901,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PasteRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/PasteRangeCommand.cpp" line="+37"/>
+        <location filename="../../src/commands/segment/PasteRangeCommand.cpp" line="+36"/>
         <source>Paste Range</source>
         <translation>Inklistringsomfång</translation>
     </message>
@@ -18379,7 +18917,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PasteToTriggerSegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="+39"/>
+        <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="+49"/>
         <source>Paste as New Triggered Segment</source>
         <translation>Klistra in som nytt utlösande segment</translation>
     </message>
@@ -18402,28 +18940,71 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+52"/>
-        <location line="+189"/>
         <source>Pitch Bend Sequence</source>
-        <translation>Tonhöjdsavvikelse för sekvens</translation>
+        <translation type="obsolete">Tonhöjdsavvikelse för sekvens</translation>
     </message>
     <message>
-        <location line="-180"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+125"/>
         <source>Preset</source>
         <translation>Förinställning</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+5"/>
         <source>Preset:</source>
         <translation>Förinställning:</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>User</source>
-        <translation>Användare</translation>
+        <translation type="obsolete">Användare</translation>
+    </message>
+    <message>
+        <location line="-63"/>
+        <location line="+675"/>
+        <source>%1 Sequence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-644"/>
+        <source>Replacement mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Replace old events</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
+        <source>&lt;qt&gt;Erase existing pitchbends or controllers of this type in this range before adding new ones&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Add new events to old ones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;Add new pitchbends or controllers without affecting existing ones.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Just erase old events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;Don&apos;t add any events, just erase existing pitchbends or controllers of this type in this range.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>&lt;qt&gt;Use this saved, user editable setting.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Linear ramp</source>
         <translation>Linjär ramp</translation>
     </message>
@@ -18434,66 +19015,230 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     </message>
     <message>
         <location line="+1"/>
+        <location line="+90"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="-84"/>
+        <source>Saved setting %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Pre Bend</source>
         <translation>Föravvikelse</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Value (%):</source>
-        <translation>Värde (%):</translation>
+        <location line="+1"/>
+        <source>Pre Ramp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Start at value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Start at value (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Wait (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;qt&gt;How long to wait before starting the bend or ramp, as a percentage of the total time&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Ramp Sequence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Bend duration (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Tremolo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>LFO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Start amplitude:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Start amplitude (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>End amplitude:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>End amplitude (%):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+11"/>
-        <source>Duration (%):</source>
-        <translation>Varaktighet (%):</translation>
+        <source>Hertz (Hz):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Frequency in hertz (cycles per second)&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Ramp mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Logarithmic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Ramp slopes logarithmically&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Half sine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Ramp slopes like one half of a sine wave (trough to peak)&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Quarter sine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Ramp slopes like one quarter of a sine wave (zero to peak)&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>How many steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Use step size (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use this many steps:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+729"/>
+        <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value (%):</source>
+        <translation type="obsolete">Värde (%):</translation>
+    </message>
+    <message>
+        <source>Duration (%):</source>
+        <translation type="obsolete">Varaktighet (%):</translation>
+    </message>
+    <message>
+        <location line="-846"/>
         <source>Ramp duration (%):</source>
         <translation>Rampens varaktighet (%):</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+4"/>
+        <source>&lt;qt&gt;How long the bend or ramp lasts, as a percentage of the remaining time&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>End value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>End value (%):</source>
         <translation>Slutvärde (%):</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Vibrato start amplitude (%):</source>
-        <translation>Startamplitud för vibrato (%):</translation>
+        <translation type="obsolete">Startamplitud för vibrato (%):</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Vibrato end amplitude (%):</source>
-        <translation>Slutamplitud för vibrato (%):</translation>
+        <translation type="obsolete">Slutamplitud för vibrato (%):</translation>
     </message>
     <message>
-        <location line="+175"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
+        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
     </message>
     <message>
-        <location line="-206"/>
+        <location line="-28"/>
         <source>Bend Sequence</source>
         <translation>Avvikelseföljd</translation>
     </message>
     <message>
-        <location line="+40"/>
         <source>Vibrato wavelength:</source>
-        <translation>Våglängd för vibrato:</translation>
+        <translation type="obsolete">Våglängd för vibrato:</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Resolution:</source>
-        <translation>Upplösning:</translation>
+        <translation type="obsolete">Upplösning:</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+184"/>
         <source>Invalid end time. Have you selected some events?</source>
         <translation>Felaktig sluttid. Har du markerat några händelser?</translation>
     </message>
@@ -18646,7 +19391,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PlayList</name>
     <message>
-        <location filename="../../src/gui/editors/segment/PlayList.cpp" line="+73"/>
+        <location filename="../../src/gui/editors/segment/PlayList.cpp" line="+74"/>
         <source>Add...</source>
         <translation>Lägg till...</translation>
     </message>
@@ -18704,7 +19449,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PlayListView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="+41"/>
+        <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="+43"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
@@ -18717,7 +19462,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PresetGroup</name>
     <message>
-        <location filename="../../src/gui/general/PresetGroup.cpp" line="+44"/>
+        <location filename="../../src/gui/general/PresetGroup.cpp" line="+45"/>
         <source>unknown error</source>
         <translation>okänt fel</translation>
     </message>
@@ -18730,7 +19475,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PresetHandlerDialog</name>
     <message>
-        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+55"/>
+        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+56"/>
         <source>Convert notation for...</source>
         <translation>Konvertera notskrift för...</translation>
     </message>
@@ -18813,7 +19558,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+64"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+65"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -18825,7 +19570,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::ProjectPackager</name>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+77"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+79"/>
         <source>Unpack</source>
         <translation>Packa upp</translation>
     </message>
@@ -19185,7 +19930,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+469"/>
+        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+470"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
         <translation>Spår nummer %1, segment &quot;%2&quot; (körtids-id %3)</translation>
     </message>
@@ -19314,7 +20059,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::RenameTrackCommand</name>
     <message>
-        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+47"/>
+        <location filename="../../src/commands/segment/RenameTrackCommand.h" line="+48"/>
         <source>Rename Track</source>
         <translation>Byt namn på spår</translation>
     </message>
@@ -19459,7 +20204,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+443"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+444"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation>Den här filen är skriven av Rosegarden %1, och använder
@@ -19482,7 +20227,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <translation type="obsolete">Öppna katalog</translation>
     </message>
     <message>
-        <location line="+1310"/>
+        <location line="+1327"/>
         <source>Loading plugins...</source>
         <translation>Läser in insticksmoduler...</translation>
     </message>
@@ -19490,7 +20235,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
 <context>
     <name>Rosegarden::RosegardenApplication</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenApplication.cpp" line="+67"/>
+        <location filename="../../src/gui/application/RosegardenApplication.cpp" line="+68"/>
         <source>Failed to load soundfont %1</source>
         <translation>Misslyckades att ladda ljudsamplingar från %1</translation>
     </message>
@@ -19498,7 +20243,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+344"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+345"/>
         <source>Rosegarden - Warning</source>
         <translation>Rosegarden - Varning</translation>
     </message>
@@ -19519,7 +20264,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <location line="+2"/>
         <location line="+170"/>
         <location line="+55"/>
-        <location line="+43"/>
+        <location line="+45"/>
         <location line="+42"/>
         <location line="+387"/>
         <location line="+640"/>
@@ -19529,12 +20274,12 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+951"/>
+        <location line="+1015"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2405"/>
+        <location line="-2471"/>
         <source>Could not save document at %1</source>
         <translation>Kunde inte spara dokument i %1</translation>
     </message>
@@ -19587,7 +20332,7 @@ Välj alla du vill ta bort permanent från hårddisken.
         <translation>Kan inte öppna filen &apos;%1&apos;</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+10"/>
         <source>Reading file...</source>
         <translation>Läser fil...</translation>
     </message>
@@ -19627,7 +20372,7 @@ Välj alla du vill ta bort permanent från hårddisken.
         <translation>Misslyckades byta namn på tillfällig utdatafil &apos;%1&apos; till den önskade utdatafilen &apos;%2&apos;</translation>
     </message>
     <message>
-        <location line="+1749"/>
+        <location line="+1813"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -19645,7 +20390,7 @@ Vill du ställa in den nu?</translation>
         <translation type="obsolete">Sparar fil...</translation>
     </message>
     <message>
-        <location line="-1563"/>
+        <location line="-1627"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fel vid skrivning till &apos;%1&apos;</translation>
     </message>
@@ -19709,7 +20454,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Kanalernas avbildning har ändrats&lt;/h2&gt;&lt;p&gt;Från och med version 10.02 tillhandahåller inte Rosegarden längre kontroller för att ändra kanalen som hör ihop med varje MIDI-instrument. Istället använder varje instrument samma kanal som sitt instrumentnummer. Exempelvis använder alltid &quot;MIDI-systemingångsenhet 12&quot; kanal 12.&lt;/p&gt;&lt;p&gt;Filen du just har läst in innehåller instrument vars kanaler skiljer sig från instrumentnumren. Tilldelningen av dessa kanaler har ändrats så att instrument 1 alltid använder kanal 1, oberoende av vilken kanal det tidigare kan ha använt. I de flesta fall kommer du inte att märka någon skillnad, men du kanske måste göra några små ändringar av filen för att den ska spelas upp som avsett. Vi rekommenderar att du sparar filen för att undvika den här varningen i fortsättningen.&lt;/p&gt;&lt;p&gt;Vi ber om ursäkt för alla eventuella olägenheter.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+581"/>
+        <location line="+645"/>
         <source>Insert Recorded MIDI</source>
         <translation>Infoga inspelad MIDI</translation>
     </message>
@@ -19728,48 +20473,48 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+307"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+303"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>Markering får bara innehålla segment med eller utan ljud</translation>
     </message>
     <message>
         <location line="+0"/>
         <location line="+100"/>
-        <location line="+332"/>
+        <location line="+336"/>
         <location line="+39"/>
-        <location line="+139"/>
+        <location line="+141"/>
         <location line="+77"/>
-        <location line="+763"/>
+        <location line="+764"/>
         <location line="+3"/>
-        <location line="+55"/>
+        <location line="+61"/>
         <location line="+6"/>
         <location line="+19"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1433"/>
-        <location line="+146"/>
-        <location line="+186"/>
+        <location line="-1446"/>
+        <location line="+148"/>
+        <location line="+188"/>
         <location line="+39"/>
-        <location line="+139"/>
+        <location line="+141"/>
         <source>No non-audio segments selected</source>
         <translation>Inga segment utan ljud markerade</translation>
     </message>
     <message>
-        <location line="-357"/>
+        <location line="-361"/>
         <source>Pitch Tracker can only contain 1 segment.</source>
         <translation>Tonhöjdsföljaren kan bara innehålla ett segment.</translation>
     </message>
     <message>
-        <location line="+435"/>
+        <location line="+439"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Du har inte ännu definierat en ljudeditor som Rosegarden kan använda.
 Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
     </message>
     <message>
-        <location line="+763"/>
+        <location line="+764"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation>Kan inte lägga till släppt fil. Ljudservern JACK är inte tillgänglig.</translation>
     </message>
@@ -19788,23 +20533,23 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <translation>Importerar en ljudfil som behöver konverteras ell omsamplas</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Adding audio file...</source>
         <translation>Lägger till ljudfil...</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+21"/>
         <location line="+6"/>
         <source>Can&apos;t add dropped file. </source>
         <translation>Kan inte lägga till släppt fil. </translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+7"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
         <translation>Försök att kopiera filen till en katalog där du har skrivrättighet och lägga till den igen</translation>
     </message>
@@ -19812,22 +20557,22 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+329"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+332"/>
         <source>Initializing plugin manager...</source>
         <translation>Initierar instickshantering...</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+43"/>
         <source>Initializing view...</source>
         <translation>Initierar vy...</translation>
     </message>
     <message>
-        <location line="-30"/>
+        <location line="-31"/>
         <source>Special Parameters</source>
         <translation>Speciella parametrar</translation>
     </message>
     <message>
-        <location line="+81"/>
+        <location line="+82"/>
         <source>Starting sequence manager...</source>
         <translation>Startar spelarhanteraren...</translation>
     </message>
@@ -19842,20 +20587,20 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <translation>Startar...</translation>
     </message>
     <message>
-        <location line="+534"/>
+        <location line="+545"/>
         <source>  Zoom:  </source>
         <translation>  Zooma:  </translation>
     </message>
     <message>
         <location line="+143"/>
-        <location line="+173"/>
-        <location line="+488"/>
+        <location line="+174"/>
+        <location line="+493"/>
         <location line="+491"/>
         <source>%1 - %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-789"/>
+        <location line="-794"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Filen &quot;%1&quot; finns inte</translation>
     </message>
@@ -19870,7 +20615,7 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <translation>Du har inte läsrättigheter till &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+90"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>En automatiskt sparad fil för det här dokumentet har hittats.
@@ -19878,12 +20623,12 @@ Vill du öppna den istället?</translation>
     </message>
     <message>
         <location line="+147"/>
-        <location line="+4955"/>
+        <location line="+5001"/>
         <source>Untitled</source>
         <translation>Namnlös</translation>
     </message>
     <message>
-        <location line="-4942"/>
+        <location line="-4988"/>
         <location line="+354"/>
         <location line="+166"/>
         <source>Could not save document at %1
@@ -19923,12 +20668,12 @@ Felet är: %2</translation>
     </message>
     <message>
         <location line="-79"/>
-        <location line="+6361"/>
+        <location line="+6435"/>
         <source>All supported files</source>
         <translation>Alla filer som stöds</translation>
     </message>
     <message>
-        <location line="-6360"/>
+        <location line="-6434"/>
         <location line="+34"/>
         <location line="+215"/>
         <source>Rosegarden files</source>
@@ -19936,68 +20681,64 @@ Felet är: %2</translation>
     </message>
     <message>
         <location line="-248"/>
-        <location line="+1932"/>
+        <location line="+1964"/>
         <location line="+36"/>
         <source>MIDI files</source>
         <translation>MIDI-filer</translation>
     </message>
     <message>
-        <location line="-1967"/>
+        <location line="-1999"/>
         <location line="+33"/>
         <location line="+220"/>
-        <location line="+1627"/>
+        <location line="+1659"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+268"/>
         <location line="+36"/>
-        <location line="+84"/>
-        <location line="+35"/>
-        <location line="+85"/>
+        <location line="+207"/>
         <location line="+36"/>
         <location line="+767"/>
         <location line="+39"/>
         <location line="+39"/>
         <location line="+34"/>
-        <location line="+33"/>
-        <location line="+112"/>
-        <location line="+2823"/>
+        <location line="+34"/>
+        <location line="+113"/>
+        <location line="+2860"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location line="-6363"/>
+        <location line="-6437"/>
         <location line="+35"/>
         <source>Open File</source>
         <translation>Öppna fil</translation>
     </message>
     <message>
-        <location line="-1112"/>
+        <location line="-1118"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location line="+966"/>
+        <location line="+972"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
     <message>
         <location line="+56"/>
         <location line="+110"/>
-        <location line="+1846"/>
+        <location line="+1878"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+268"/>
         <location line="+36"/>
-        <location line="+84"/>
-        <location line="+35"/>
-        <location line="+85"/>
+        <location line="+207"/>
         <location line="+36"/>
-        <location line="+3843"/>
+        <location line="+3882"/>
         <source>Cannot open file %1</source>
         <translation>Kan inte öppna filen %1</translation>
     </message>
     <message>
-        <location line="-6279"/>
+        <location line="-6353"/>
         <source>Saving file...</source>
         <translation>Sparar fil...</translation>
     </message>
@@ -20083,28 +20824,28 @@ Felet är: %2</translation>
         <translation>Kan inte expandera ljudsegment med figuration</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+60"/>
         <source>rescaling an audio file</source>
         <translation>storleksändrar en ljudfil</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+18"/>
         <source>Rescaling audio file...</source>
         <translation>Storleksändrar en ljudfil...</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+18"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location line="+31"/>
-        <location line="+2951"/>
+        <location line="+32"/>
+        <location line="+2977"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
     <message>
-        <location line="-2950"/>
+        <location line="-2976"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -20118,7 +20859,7 @@ Vill du ange den nu?</translation>
         <translation>Knuffa markering</translation>
     </message>
     <message numerus="yes">
-        <location line="+142"/>
+        <location line="+143"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
@@ -20160,12 +20901,12 @@ Vill du ange den nu?</translation>
     </message>
     <message>
         <location line="+110"/>
-        <location line="+3082"/>
+        <location line="+3115"/>
         <source>Set Global Tempo</source>
         <translation>Ställ in övergripande tempo</translation>
     </message>
     <message>
-        <location line="-3009"/>
+        <location line="-3042"/>
         <source>Toggle the toolbar...</source>
         <translation>Växla verktygslist...</translation>
     </message>
@@ -20222,7 +20963,7 @@ Segment -&gt; Sammanfoga segment.
         <translation>Sammanfogningsverktyg ännu inte implementerat</translation>
     </message>
     <message>
-        <location line="+244"/>
+        <location line="+263"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>Återställ ändrat dokument till tidigare sparad version?</translation>
     </message>
@@ -20233,24 +20974,24 @@ Segment -&gt; Sammanfoga segment.
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1399"/>
+        <location line="+1402"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegarden projektfiler</translation>
     </message>
     <message>
-        <location line="+1731"/>
+        <location line="+1742"/>
         <source>Input</source>
         <translation>Indata</translation>
     </message>
     <message>
-        <location line="+1123"/>
+        <location line="+1132"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6932"/>
-        <location line="+313"/>
-        <location line="+82"/>
+        <location line="-6993"/>
+        <location line="+314"/>
+        <location line="+87"/>
         <location line="+161"/>
         <location line="+2"/>
         <location line="+165"/>
@@ -20267,9 +21008,9 @@ Segment -&gt; Sammanfoga segment.
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
-        <location line="+369"/>
+        <location line="+382"/>
         <location line="+26"/>
-        <location line="+840"/>
+        <location line="+859"/>
         <location line="+39"/>
         <location line="+52"/>
         <location line="+36"/>
@@ -20277,10 +21018,7 @@ Segment -&gt; Sammanfoga segment.
         <location line="+146"/>
         <location line="+36"/>
         <location line="+35"/>
-        <location line="+49"/>
-        <location line="+35"/>
-        <location line="+35"/>
-        <location line="+50"/>
+        <location line="+172"/>
         <location line="+36"/>
         <location line="+35"/>
         <location line="+439"/>
@@ -20289,10 +21027,10 @@ Segment -&gt; Sammanfoga segment.
         <location line="+36"/>
         <location line="+46"/>
         <location line="+34"/>
-        <location line="+33"/>
+        <location line="+34"/>
         <location line="+66"/>
-        <location line="+41"/>
-        <location line="+47"/>
+        <location line="+42"/>
+        <location line="+48"/>
         <location line="+117"/>
         <location line="+22"/>
         <location line="+30"/>
@@ -20301,12 +21039,12 @@ Segment -&gt; Sammanfoga segment.
         <location line="+74"/>
         <location line="+4"/>
         <location line="+36"/>
-        <location line="+816"/>
+        <location line="+824"/>
         <location line="+96"/>
         <location line="+122"/>
         <location line="+13"/>
-        <location line="+1228"/>
-        <location line="+140"/>
+        <location line="+1237"/>
+        <location line="+159"/>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
@@ -20315,12 +21053,12 @@ Segment -&gt; Sammanfoga segment.
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-233"/>
+        <location line="-252"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
-        <location line="+479"/>
+        <location line="+504"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Nyare version tillgänglig&lt;/h3&gt;</translation>
     </message>
@@ -20330,7 +21068,7 @@ Segment -&gt; Sammanfoga segment.
         <translation>&lt;p&gt;Du använder version %1.  Version %2 är nu tillgänglig.&lt;/p&gt;&lt;p&gt;Besök gärna &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegardens hemsida&lt;/a&gt; för mer information.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4689"/>
+        <location line="-4737"/>
         <source>Open MIDI File</source>
         <translation>Öppna MIDI-fil</translation>
     </message>
@@ -20377,40 +21115,36 @@ Segment -&gt; Sammanfoga segment.
         <translation>Kan inte läsa in X11 Rosegarden-fil. Den verkar vara skadad.</translation>
     </message>
     <message>
-        <location line="+30"/>
-        <location line="+35"/>
         <source>Open Hydrogen File</source>
-        <translation>Öppna Hydrogen-fil</translation>
+        <translation type="obsolete">Öppna Hydrogen-fil</translation>
     </message>
     <message>
-        <location line="+33"/>
         <source>Importing Hydrogen file...</source>
-        <translation>Importerar Hydrogen-fil...</translation>
+        <translation type="obsolete">Importerar Hydrogen-fil...</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation>Kan inte läsa in Hydrogen-fil. Den verkar vara skadad.</translation>
+        <translation type="obsolete">Kan inte läsa in Hydrogen-fil. Den verkar vara skadad.</translation>
     </message>
     <message>
-        <location line="+1034"/>
+        <location line="+1157"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Misslyckades öppna en tillfällig fil för export till LilyPond.&lt;/p&gt;&lt;p&gt;Detta betyder troligen att diskutrymmet på &lt;pre&gt;%1&lt;/pre&gt; har tagit slut&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-219"/>
+        <location line="-220"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Rosegardens spelarprocess har oväntat avslutats. Ljud och inspelning är inte längre tillgängliga för den här sessionen.
 Avsluta och starta om Rosegarden för att återställa ljudfunktionen.</translation>
     </message>
     <message>
-        <location line="-4963"/>
+        <location line="-5016"/>
         <source>Starting sequencer...</source>
         <translation>Startar spelarhanteraren...</translation>
     </message>
     <message>
-        <location line="+1947"/>
+        <location line="+1965"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Spara filen%1med ett nytt filnamn...</translation>
@@ -20421,7 +21155,7 @@ Avsluta och starta om Rosegarden för att återställa ljudfunktionen.</translat
         <translation>som en mall</translation>
     </message>
     <message>
-        <location line="+748"/>
+        <location line="+761"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation>Delningstid är inte inom ett markerat segment.
@@ -20453,7 +21187,7 @@ Inget segment kommer att delas.</translation>
         <translation>Ta bort ursprungligt tempo och taktart</translation>
     </message>
     <message>
-        <location line="+1392"/>
+        <location line="+1414"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
         <translation>Öppna MusicXML-fil</translation>
@@ -20486,13 +21220,13 @@ För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegard
         <location line="+39"/>
         <location line="+39"/>
         <location line="+34"/>
-        <location line="+33"/>
-        <location line="+112"/>
+        <location line="+34"/>
+        <location line="+113"/>
         <source>Export as...</source>
         <translation>Exportera som...</translation>
     </message>
     <message>
-        <location line="-238"/>
+        <location line="-240"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Misslyckades spara Rosegarden-fil till paket: %1</translation>
     </message>
@@ -20510,14 +21244,13 @@ För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegard
     <message>
         <location line="+28"/>
         <location line="+34"/>
-        <location line="+33"/>
-        <location line="+107"/>
-        <location line="+47"/>
+        <location line="+34"/>
+        <location line="+156"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
     <message>
-        <location line="-213"/>
+        <location line="-216"/>
         <location line="+16"/>
         <source>Exporting Csound score file...</source>
         <translation>Exporterar Csound-partiturfil...</translation>
@@ -20539,7 +21272,7 @@ För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegard
         <translation>Mup-filer</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+31"/>
         <location line="+85"/>
         <source>Exporting LilyPond file...</source>
         <translation>Exporterar Lilypond-fil...</translation>
@@ -20570,20 +21303,20 @@ För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegard
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+36"/>
         <location line="+21"/>
         <source>Exporting MusicXML file...</source>
         <translation>Exporterar MusicXML-fil...</translation>
     </message>
     <message>
-        <location line="-1078"/>
+        <location line="-1080"/>
         <location line="+36"/>
-        <location line="+1024"/>
+        <location line="+1026"/>
         <source>XML files</source>
         <translation>XML-filer</translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location line="+158"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -20606,7 +21339,7 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location line="+518"/>
+        <location line="+526"/>
         <source>Move playback pointer to time</source>
         <translation>Flytta uppspelningsvisaren till tid</translation>
     </message>
@@ -20676,7 +21409,7 @@ Vill du ställa in den nu?</translation>
         <translation>Skriv nytt namn</translation>
     </message>
     <message>
-        <location line="+1086"/>
+        <location line="+1095"/>
         <source>Play List</source>
         <translation>Spellista</translation>
     </message>
@@ -20690,7 +21423,7 @@ Vill du ställa in den nu?</translation>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+118"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Köar MIDI-panikhändelser för att skicka...</translation>
     </message>
@@ -20732,7 +21465,7 @@ Felet är: %2</translation>
         <translation>Importera studio</translation>
     </message>
     <message>
-        <location line="+323"/>
+        <location line="+329"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Felaktig ljudsökväg&lt;/h3&gt;</translation>
     </message>
@@ -20770,7 +21503,7 @@ Felet är: %2</translation>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka och dra uppåt, neråt, åt vänster eller åt höger för att ändra.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att direkt redigera värdet.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+352"/>
+        <location line="+361"/>
         <source>Select a new value</source>
         <translation>Välj ett nytt värde</translation>
     </message>
@@ -20788,7 +21521,7 @@ Felet är: %2</translation>
         <translation>&amp;Dela vid paus</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/SegmentAutoSplitCommand.cpp" line="+143"/>
+        <location filename="../../src/commands/segment/SegmentAutoSplitCommand.cpp" line="+144"/>
         <source>(part %1)</source>
         <translation>(del %1)</translation>
     </message>
@@ -20856,7 +21589,7 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::SegmentEraseCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentEraseCommand.cpp" line="+32"/>
+        <location filename="../../src/commands/segment/SegmentEraseCommand.cpp" line="+33"/>
         <location line="+12"/>
         <source>Erase Segment</source>
         <translation>Ta bort segment</translation>
@@ -20865,9 +21598,25 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::SegmentEraser</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="+75"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="+76"/>
         <source>Click on a segment to delete it</source>
         <translation>Klicka på ett segment för att radera det</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::SegmentGroupDeleteRangeCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="-278"/>
+        <source>Delete Range Helper</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::SegmentGroupInsertRangeCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/InsertRangeCommand.cpp" line="-167"/>
+        <source>Insert Range Helper</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20882,8 +21631,9 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::SegmentJoinCommand</name>
     <message>
+        <location filename="../../src/commands/segment/SegmentJoinCommand.h" line="+50"/>
         <source>&amp;Join</source>
-        <translation type="obsolete">&amp;Sammanfoga</translation>
+        <translation type="unfinished">&amp;Sammanfoga</translation>
     </message>
 </context>
 <context>
@@ -20926,7 +21676,7 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::SegmentMover</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+158"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+159"/>
         <source>Move Segment</source>
         <translation>Flytta segment</translation>
     </message>
@@ -20949,7 +21699,7 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::SegmentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+88"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+89"/>
         <source>Segment</source>
         <translation>Segment</translation>
     </message>
@@ -21051,12 +21801,12 @@ Felet är: %2</translation>
     </message>
     <message>
         <location line="+38"/>
-        <location line="+358"/>
+        <location line="+352"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location line="-291"/>
+        <location line="-285"/>
         <source>Default</source>
         <translation>Förval</translation>
     </message>
@@ -21066,7 +21816,7 @@ Felet är: %2</translation>
         <translation>Lägg till ny färg</translation>
     </message>
     <message>
-        <location line="+411"/>
+        <location line="+406"/>
         <location line="+46"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -21213,7 +21963,7 @@ innan en ny transponering kan utföras.</translation>
 <context>
     <name>Rosegarden::SegmentResizer</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+151"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+152"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -21227,17 +21977,17 @@ Du måste ange sökvägen för ljudfiler till en giltig katalog i Dokumentegensk
 Vill du ange den nu?</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+19"/>
         <source>Rescaling audio file...</source>
         <translation>Storleksändrar en ljudfil...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Generating audio preview...</source>
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location line="+89"/>
+        <location line="+90"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Håll ner Skift för att undvika rutnätet för taktslag</translation>
     </message>
@@ -21260,7 +22010,7 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SegmentSelector</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+77"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+78"/>
         <source>Click and drag to select segments</source>
         <translation>Klicka och dra för att markera segment</translation>
     </message>
@@ -21332,17 +22082,17 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SegmentSplitByPitchCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="+56"/>
+        <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="+63"/>
         <source>Split by &amp;Pitch...</source>
         <translation>Dela &amp;efter tonhöjd...</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="+42"/>
+        <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="+43"/>
         <source>Split by Pitch</source>
         <translation>Dela efter tonhöjd</translation>
     </message>
     <message>
-        <location line="+126"/>
+        <location line="+129"/>
         <source>(upper)</source>
         <translation>(övre del)</translation>
     </message>
@@ -21379,7 +22129,7 @@ Vill du ange den nu?</translation>
         <translation>Dela segment</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+101"/>
         <location line="+1"/>
         <source>(split)</source>
         <translation>(dela)</translation>
@@ -21388,15 +22138,14 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SegmentSplitTwiceCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentSplitTwiceCommand.cpp" line="+44"/>
         <source>Split Twice Segment</source>
-        <translation>Dela segment två gånger</translation>
+        <translation type="obsolete">Dela segment två gånger</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+166"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+167"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation>Klicka på ett segment för att dela det itu; håll ner Skift för att undvika fästande på rutnätet för taktslag</translation>
     </message>
@@ -21448,6 +22197,14 @@ Vill du ange den nu?</translation>
     </message>
 </context>
 <context>
+    <name>Rosegarden::SelectAddEvenNotesCommand</name>
+    <message>
+        <location filename="../../src/commands/edit/SelectAddEvenNotesCommand.h" line="+91"/>
+        <source>Select Beats</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::SelectionPropertyCommand</name>
     <message>
         <location filename="../../src/commands/edit/SelectionPropertyCommand.h" line="+43"/>
@@ -21458,8 +22215,8 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+138"/>
-        <location line="+152"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+137"/>
+        <location line="+150"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -21468,8 +22225,8 @@ Starta om Rosegarden för att fortsätta arbeta med ljud.
 Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</translation>
     </message>
     <message>
-        <location line="-146"/>
-        <location line="+155"/>
+        <location line="-144"/>
+        <location line="+153"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -21478,12 +22235,12 @@ Ett försök att starta om ljudtjänsten har gjorts, men vissa problem kan vara 
 Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</translation>
     </message>
     <message>
-        <location line="-144"/>
+        <location line="-142"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation>Slut på processorkraft för realtidsbehandling av ljud. Kan inte fortsätta.</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+26"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation>Ett allvarligt fel har inträffat i ALSA-MIDI-delsystemet. Det kanske inte är möjligt att fortsätta köra spelaren. Kontrollera terminalutmatningen för mer information.</translation>
     </message>
@@ -21518,7 +22275,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;p&gt;Rosegarden kunde inte hitta en tidkälla med hög upplösning för MIDI-återgivning.&lt;/p&gt;&lt;p&gt;Det kanske går att lösa problemet genom att ladda kärnans RTC-tidmodul. För att göra det, försök köra &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; i ett terminalfönster, och därefter starta om Rosegarden.&lt;/p&gt;&lt;p&gt;Som alternativ kan du kontrollera om Linux-distributören tillhandahåller en kärna optimerad för multimedia. Se &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegardens hemsida&lt;/a&gt; för anmärkningar om detta.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+110"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Spelare ej tillgänglig!&lt;/h3&gt;</translation>
     </message>
@@ -21543,7 +22300,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;p&gt;Rosegarden kunde inte ansluta till ljudservern JACK. Det betyder troligen att Rosegarden inte kunde starta ljudserver på grund av ett problem med dina inställningar, din systeminstallation, eller båda.&lt;/p&gt;&lt;p&gt;Om du vill kunna spela upp eller spela in ljudfiler, eller använda insticksmoduler, föreslår vi att du avslutar Rosegarden och använder JACK:s styrverktyg (qjackctl) för att prova olika inställningar till du uppnår en inställning som tillåter att JACK startas. Du kanske också behöver installera en realtidskärna, redigera systemets säkerhetsinställningar, med mera. Tyvärr är detta ett ytterst komplext ämne.&lt;/p&gt;&lt;p&gt;När du väl har upprättat en fungerade inställning av JACK, kommer Rosegarden att kunna starta ljudservern automatiskt i fortsättningen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-248"/>
+        <location line="-240"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>Ljudmixersystemet klarar inte av att hänga med.</translation>
     </message>
@@ -21558,7 +22315,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Okänt fel i spelaren!</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+214"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;MIDI-undersystemet kunde inte initialiseras.&lt;/p&gt;&lt;p&gt;Du kan fortsätta utan spelaren men vi föreslår att du stänger Rosegarden, kör &quot;modprobe snd-seq-midi&quot; som rotanvändare, och startar Rosegarden ånyo. Om du önskar köra utan spelare, använd &quot;rosegarden --nosequencer&quot; för att slippa se detta i fel fortsättningen.&lt;/p&gt;</translation>
     </message>
@@ -21635,7 +22392,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Spelarstatus</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Sequencer status:</source>
         <translation>Spelarstatus:</translation>
     </message>
@@ -21906,9 +22663,29 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Börjar dela efter tonhöjd</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
+        <source>Always split at this pitch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Range up and down to follow music</source>
         <translation>Flytta område upp och ner för att följa musiken</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Split the lowest tone from each chord</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Split the highest tone from each chord</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Split all chords at the same relative tone</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22188,7 +22965,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::SynthPluginManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="+69"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="+70"/>
         <source>Manage Synth Plugins</source>
         <translation>Hantera syntinsticksmoduler</translation>
     </message>
@@ -22216,7 +22993,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TempoDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+56"/>
+        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+57"/>
         <source>Insert Tempo Change</source>
         <translation>Infoga tempobyte</translation>
     </message>
@@ -22334,7 +23111,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+534"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+536"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation>%1,%2%3 (%4,%5%6 taktslag/min)</translation>
     </message>
@@ -22352,7 +23129,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TempoView</name>
     <message>
-        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="+73"/>
+        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="+74"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
@@ -22948,7 +23725,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TimeWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+101"/>
+        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+102"/>
         <source>Note:</source>
         <translation>Not:</translation>
     </message>
@@ -23043,7 +23820,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;inget instrument&gt;</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-63"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;namnlöst ljud&gt;</translation>
     </message>
@@ -23065,7 +23842,7 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location line="+805"/>
+        <location line="+815"/>
         <source>Mute track</source>
         <translation>Gör spår stumt</translation>
     </message>
@@ -23119,12 +23896,12 @@ Vill du ställa in den nu?</translation>
         <translation type="obsolete">&lt;qt&gt;Klicka och håll med endera musknapp för att tilldela spåret till ett instrument.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+62"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka för att markera alla segment i spåret.&lt;/p&gt;&lt;p&gt;Skiftklicka för att lägga till eller ta bort från markeringen alla segment i det här spåret.&lt;/p&gt;&lt;p&gt;Klicka och håll nere endera musknappen för att tilldela det här spåret till ett instrument.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+103"/>
         <source>Change track name</source>
         <translation>Ändra spårnamn</translation>
     </message>
@@ -23132,6 +23909,21 @@ Vill du ställa in den nu?</translation>
         <location line="+1"/>
         <source>Enter new track name</source>
         <translation>Skriv in nytt spårnamn</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter short name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;The short name is an alternate name that appears each time the staff system wraps, eg. &amp;quot;Tr.&amp;quot;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -23148,12 +23940,12 @@ Vill du ställa in den nu?</translation>
     </message>
     <message>
         <location line="+48"/>
-        <location line="+645"/>
+        <location line="+652"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location line="-638"/>
+        <location line="-645"/>
         <source>Playback parameters</source>
         <translation>Uppspelningsparametrar</translation>
     </message>
@@ -23463,7 +24255,7 @@ Vill du ställa in den nu?</translation>
         <translation> %1</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+107"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Spår %1 - %2 ]</translation>
     </message>
@@ -23503,7 +24295,7 @@ Vill du ställa in den nu?</translation>
         <translation>Lägsta spelbara ton</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+59"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Instrumentdatabasen är korrupt. Kontrollera din installation.</translation>
     </message>
@@ -23521,43 +24313,43 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+96"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+120"/>
         <source>Rosegarden Transport</source>
         <translation>Spelkontrollpanel</translation>
     </message>
     <message>
-        <location line="+782"/>
-        <location line="+84"/>
+        <location line="+801"/>
+        <location line="+88"/>
         <source>PITCH WHEEL</source>
         <translation>TONHJUL</translation>
     </message>
     <message>
-        <location line="-80"/>
-        <location line="+84"/>
+        <location line="-84"/>
+        <location line="+88"/>
         <source>CONTROLLER</source>
         <translation>EFFEKT</translation>
     </message>
     <message>
-        <location line="-80"/>
-        <location line="+84"/>
+        <location line="-84"/>
+        <location line="+88"/>
         <source>PROG CHNGE</source>
         <translation>PROG ÄNDR</translation>
     </message>
     <message>
-        <location line="-79"/>
-        <location line="+84"/>
+        <location line="-83"/>
+        <location line="+88"/>
         <source>PRESSURE</source>
         <translation>TRYCK</translation>
     </message>
     <message>
-        <location line="-80"/>
-        <location line="+84"/>
+        <location line="-84"/>
+        <location line="+88"/>
         <source>SYS MESSAGE</source>
         <translation>SYS MEDDEL</translation>
     </message>
     <message>
-        <location line="-40"/>
-        <location line="+84"/>
+        <location line="-44"/>
+        <location line="+88"/>
         <source>NO EVENTS</source>
         <translation>INGENTING</translation>
     </message>
@@ -23641,7 +24433,7 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>Rosegarden::TriggerSegmentManager</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+84"/>
+        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+85"/>
         <source>Manage Triggered Segments</source>
         <translation>Hantera utlösande segment</translation>
     </message>
@@ -23874,12 +24666,12 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>Rosegarden::UnusedAudioSelectionDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="+46"/>
+        <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="+47"/>
         <source>Select Unused Audio Files</source>
         <translation>Markera oanvända ljudfiler</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+12"/>
         <source>File name</source>
         <translation>Filnamn</translation>
     </message>
@@ -23894,7 +24686,7 @@ Vill du ställa in den nu?</translation>
         <translation>Senaste ändringsdatum</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source> (not found) </source>
         <translation> (hittades inte) </translation>
     </message>
@@ -24043,7 +24835,7 @@ Vill du ställa in den nu?</translation>
 <context>
     <name>Rosegarden::WarningWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+65"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+67"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Prestandaproblems detekterade!&lt;/p&gt;&lt;p&gt;Klicka för att visa detaljinformation&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
