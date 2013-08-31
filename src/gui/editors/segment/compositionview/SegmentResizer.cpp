@@ -374,7 +374,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     return RosegardenScrollView::FollowHorizontal;
 }
 
-bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItemPtr& p, const QPoint &coord,
+bool SegmentResizer::cursorIsCloseEnoughToEdge(CompositionItemPtr p, const QPoint &coord,
         int edgeThreshold, bool &start)
 {
     if (abs(p->rect().x() + p->rect().width() - coord.x()) < edgeThreshold) {

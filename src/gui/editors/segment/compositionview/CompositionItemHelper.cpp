@@ -32,7 +32,7 @@
 namespace Rosegarden
 {
     
-timeT CompositionItemHelper::getStartTime(const CompositionItemPtr& item, const Rosegarden::SnapGrid& grid)
+timeT CompositionItemHelper::getStartTime(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
 {
     timeT t = 0;
 
@@ -49,7 +49,7 @@ timeT CompositionItemHelper::getStartTime(const CompositionItemPtr& item, const 
     return t;
 }
 
-timeT CompositionItemHelper::getEndTime(const CompositionItemPtr& item, const Rosegarden::SnapGrid& grid)
+timeT CompositionItemHelper::getEndTime(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
 {
     timeT t = 0;
 
@@ -69,7 +69,7 @@ timeT CompositionItemHelper::getEndTime(const CompositionItemPtr& item, const Ro
     return t;
 }
 
-void CompositionItemHelper::setStartTime(CompositionItemPtr& item, timeT time,
+void CompositionItemHelper::setStartTime(CompositionItemPtr item, timeT time,
                                          const Rosegarden::SnapGrid& grid)
 {
     if (item) {
@@ -91,7 +91,7 @@ void CompositionItemHelper::setStartTime(CompositionItemPtr& item, timeT time,
     
 }
 
-void CompositionItemHelper::setEndTime(CompositionItemPtr& item, timeT time,
+void CompositionItemHelper::setEndTime(CompositionItemPtr item, timeT time,
                                        const Rosegarden::SnapGrid& grid)
 {
     if (item) {
@@ -109,7 +109,7 @@ void CompositionItemHelper::setEndTime(CompositionItemPtr& item, timeT time,
     }
 }
 
-int CompositionItemHelper::getTrackPos(const CompositionItemPtr& item, const Rosegarden::SnapGrid& grid)
+int CompositionItemHelper::getTrackPos(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
 {
     return grid.getYBin(item->rect().y());
 }
@@ -125,7 +125,7 @@ CompositionItemPtr CompositionItemHelper::makeCompositionItem(Rosegarden::Segmen
 }
 
 CompositionItemPtr CompositionItemHelper::findSiblingCompositionItem(const CompositionModelImpl::ItemContainer& items,
-                                                                  const CompositionItemPtr& referenceItem)
+                                                                  CompositionItemPtr referenceItem)
 {
     CompositionModelImpl::ItemContainer::const_iterator it;
     Rosegarden::Segment* currentSegment = CompositionItemHelper::getSegment(referenceItem);

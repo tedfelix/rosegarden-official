@@ -67,7 +67,7 @@ class CompositionModelImpl : public QObject, public CompositionObserver, public 
 public:
 
     struct CompositionItemCompare {
-        bool operator()(const CompositionItemPtr &c1, const CompositionItemPtr &c2) const;
+        bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const;
     };
 
     typedef std::vector<QRect> RectList;
@@ -143,13 +143,13 @@ public:
                                          AudioPreviewDrawData *audioPreview);
     YCoordList getTrackDividersIn(const QRect &clipRect);
     ItemContainer getItemsAt(const QPoint &);
-    timeT getRepeatTimeAt(const QPoint &, const CompositionItemPtr &);
+    timeT getRepeatTimeAt(const QPoint &, CompositionItemPtr);
 
     SnapGrid& grid() { return m_grid; }
 
     void setPointerPos(int xPos);
-    void setSelected(const CompositionItemPtr&, bool selected = true);
-    bool isSelected(const CompositionItemPtr&) const;
+    void setSelected(CompositionItemPtr, bool selected = true);
+    bool isSelected(CompositionItemPtr) const;
     void setSelected(const ItemContainer&);
     void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
@@ -162,12 +162,12 @@ public:
     QRect getSelectionContentsRect();
     void signalContentChange();
 
-    void addRecordingItem(const CompositionItemPtr&);
-    void removeRecordingItem(const CompositionItemPtr &);
+    void addRecordingItem(CompositionItemPtr);
+    void removeRecordingItem(CompositionItemPtr);
     void clearRecordingItems();
     bool haveRecordingItems() { return !m_recordingSegments.empty(); }
 
-    void startChange(const CompositionItemPtr&, ChangeType change);
+    void startChange(CompositionItemPtr, ChangeType change);
     void startChangeSelection(ChangeType change);
     ItemContainer& getChangingItems() { return m_changingItems; }
     void endChange();
@@ -186,7 +186,7 @@ public:
 
     CompositionRect computeSegmentRect(const Segment&, bool computeZ = false);
     QPoint          computeSegmentOrigin(const Segment&);
-    void            computeRepeatMarks(CompositionItemPtr&);
+    void            computeRepeatMarks(CompositionItemPtr);
 
     SegmentSelection getSelectedSegments() { return m_selectedSegments; }
     Composition&     getComposition()      { return m_composition; }
@@ -318,8 +318,6 @@ protected:
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
 
     SegmentOrderer m_segmentOrderer;
-
-    CompositionItemPtr* m_currentCompositionItem;
 
 };
 

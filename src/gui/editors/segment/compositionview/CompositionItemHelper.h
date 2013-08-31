@@ -16,35 +16,32 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONITEMHELPER_H_
-#define _RG_COMPOSITIONITEMHELPER_H_
+#ifndef RG_COMPOSITIONITEMHELPER_H
+#define RG_COMPOSITIONITEMHELPER_H
 
 #include "CompositionModelImpl.h"
 #include "base/Event.h"
 
-
-
-
 namespace Rosegarden
 {
+
 
 class SnapGrid;
 class Segment;
 
-
 class CompositionItemHelper {
 public:
-    static timeT getStartTime(const CompositionItemPtr&, const SnapGrid&);
-    static timeT getEndTime(const CompositionItemPtr&, const SnapGrid&);
-    static int getTrackPos(const CompositionItemPtr&, const SnapGrid&);
-    static void setStartTime(CompositionItemPtr&, timeT, const SnapGrid&);
-    static void setEndTime(CompositionItemPtr&, timeT, const SnapGrid&);
+    static timeT getStartTime(CompositionItemPtr, const SnapGrid&);
+    static timeT getEndTime(CompositionItemPtr, const SnapGrid&);
+    static int getTrackPos(CompositionItemPtr, const SnapGrid&);
+    static void setStartTime(CompositionItemPtr, timeT, const SnapGrid&);
+    static void setEndTime(CompositionItemPtr, timeT, const SnapGrid&);
     static Segment* getSegment(CompositionItemPtr);
     static CompositionItemPtr makeCompositionItem(Segment*);
     /**
      * return the CompositionItemPtr in the model which references the same segment as referenceItem
      */
-    static CompositionItemPtr findSiblingCompositionItem(const CompositionModelImpl::ItemContainer& items, const CompositionItemPtr& referenceItem);
+    static CompositionItemPtr findSiblingCompositionItem(const CompositionModelImpl::ItemContainer& items, CompositionItemPtr referenceItem);
 
 };
 
