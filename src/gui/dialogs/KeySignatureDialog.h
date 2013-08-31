@@ -70,7 +70,7 @@ public:
 public slots:
     void slotKeyUp();
     void slotKeyDown();
-    void slotKeyNameChanged(const QString &);
+    void slotKeyNameChanged(int);
     void slotMajorMinorChanged(const QString &);
     void slotHelpRequested();
 
