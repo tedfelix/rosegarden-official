@@ -2034,9 +2034,9 @@ RosegardenMainWindow::slotFileOpen()
         QString recentString = settings.value("ROSEGARDEN", "").toString() ;
         settings.setValue
             ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
-    }
 
-    settings.endGroup();
+        settings.endGroup();
+    }
 
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("open_file", QDir::homePath()).toString();
