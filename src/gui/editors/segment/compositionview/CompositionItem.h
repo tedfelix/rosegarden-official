@@ -51,12 +51,9 @@ public:
 
     void setX(int x)                   { m_rect.setX(x); }
     void setY(int y)                   { m_rect.setY(y); }
+    void moveTo(int x, int y)          { m_rect.moveTo(x, y); }
     void setWidth(int w)               { m_rect.setWidth(w); }
     void setZ(unsigned int z)          { m_z = z; }
-
-    // ??? Can this be implemented as:
-    //     m_rect.translate(x, y);
-    void moveTo(int x, int y)          { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
 
     // Rect Accessors
 
@@ -85,8 +82,8 @@ private:
     QRect m_savedRect;
 };
 
-// ??? Need to clean up users of this.  They are doing things like passing
-//     references to this, which is pretty hard to follow.
+// ??? It might be educational to investigate whether QPointer is actually
+//     needed for this.
 typedef QPointer<CompositionItem> CompositionItemPtr;
 
 
