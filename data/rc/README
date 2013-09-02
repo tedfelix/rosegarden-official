@@ -1,0 +1,5 @@
+Rosegarden ".rc" Files README
+
+The .rc files in this directory are XML files that describe menus and actions.  In a way, they are like MS's .rc files which can also describe menus, albeit in a completely different format.  This format is Rosegarden-specific.  ActionFileParser processes these files.
+
+

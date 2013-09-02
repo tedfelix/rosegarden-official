@@ -58,6 +58,10 @@ class CompositionRect;
  * and the artifacts (playback position pointer, guides, "rubber band"
  * selection, ...) on the viewport (the portion of the composition that
  * is currently visible).
+ *
+ * TrackEditor creates and owns the only instance of this class.  This
+ * class works together with CompositionModelImpl to provide the composition
+ * user interface (the segment canvas).
  */
 class CompositionView : public RosegardenScrollView 
 {

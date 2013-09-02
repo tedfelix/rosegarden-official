@@ -60,6 +60,10 @@ typedef std::vector<QImage> PixmapArray;
  * CompositionView is the associated boundary (interface) class.
  *
  * This class might be renamed CompositionUIController.
+ *
+ * This class works together with CompositionView to provide the composition
+ * user interface (the segment canvas).  TrackEditor creates and owns the
+ * only instance of this class.
  */
 class CompositionModelImpl : public QObject, public CompositionObserver, public SegmentObserver
 {
@@ -221,10 +225,10 @@ public slots:
     void slotAudioFileFinalized(Segment*);
     void slotInstrumentParametersChanged(InstrumentId);
 
-protected slots:
+private slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
-protected:
+private:
     bool setTrackHeights(Segment *changed = 0); // true if something changed
 
     bool isTmpSelected(const Segment*) const;

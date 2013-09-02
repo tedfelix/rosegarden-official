@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ACTIONFILEPARSER_H_
-#define _RG_ACTIONFILEPARSER_H_
+#ifndef RG_ACTIONFILEPARSER_H
+#define RG_ACTIONFILEPARSER_H
 
 #include <QXmlDefaultHandler>
 #include <QMap>
@@ -31,6 +31,11 @@ class QToolBar;
 namespace Rosegarden
 {
 
+
+/// Convert .rc files to menus and actions.
+/*
+ * @see ActionFileClient
+ */
 class ActionFileParser : public QObject, public QXmlDefaultHandler
 {
     Q_OBJECT
@@ -41,33 +46,13 @@ public:
     
     bool load(QString actionRcFile);
 
-    // XML handler methods
-
-    virtual bool startDocument();
-
-    virtual bool startElement(const QString& namespaceURI,
-                              const QString& localName,
-                              const QString& qName,
-                              const QXmlAttributes& atts);
-
-    virtual bool endElement(const QString& namespaceURI,
-                            const QString& localName,
-                            const QString& qName);
-
-    virtual bool characters(const QString& ch);
-
-    virtual bool endDocument();
-
-    bool error(const QXmlParseException &exception);
-    bool fatalError(const QXmlParseException &exception);
-    
     void enterActionState(QString stateName);
     void leaveActionState(QString stateName);
 
-protected slots:
+private slots:
     void slotObjectDestroyed();
 
-protected:
+private:
     enum Position { Top, Bottom, Left, Right, Default };
 
     bool setActionText(QString actionName, QString text);
@@ -131,12 +116,12 @@ protected:
     StateMap m_stateInvisibleMap;
 
     /**
-     * Null safe settter for QAction->enable(bool).
+     * Null safe setter for QAction->enable(bool).
      */
     void setEnabled(QAction *, bool);
 
     /**
-     * Null safe settter for QAction->setVisibe(bool).
+     * Null safe setter for QAction->setVisible(bool).
      */
     void setVisible(QAction *, bool);
 
@@ -155,6 +140,26 @@ protected:
     QString m_currentText;
     QString m_currentFile;
     Position m_lastToolbarPosition;
+
+    // QXmlDefaultHandler methods
+
+    virtual bool startDocument();
+
+    virtual bool startElement(const QString& namespaceURI,
+                              const QString& localName,
+                              const QString& qName,
+                              const QXmlAttributes& atts);
+
+    virtual bool endElement(const QString& namespaceURI,
+                            const QString& localName,
+                            const QString& qName);
+
+    virtual bool characters(const QString& ch);
+
+    virtual bool endDocument();
+
+    bool error(const QXmlParseException &exception);
+    bool fatalError(const QXmlParseException &exception);
 };
 
 // A QMenu needs a QWidget as its parent, but the action file client
@@ -177,9 +182,7 @@ private:
     QMenu *m_menu;
 };
 
+
 }
 
 #endif
-
-    
-    

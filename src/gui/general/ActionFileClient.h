@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ACTIONFILECLIENT_H_
-#define _RG_ACTIONFILECLIENT_H_
+#ifndef RG_ACTIONFILECLIENT_H
+#define RG_ACTIONFILECLIENT_H
 
 #include <QString>
 
