@@ -163,8 +163,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             useTrueValues() ?
             tr("Start at value:") :
             tr("Start at value (%):");
-        prebendGrid->addWidget(new QLabel(prebendValueText, prebendBox), 0, 0);
-        m_prebendValue = new QDoubleSpinBox(prebendBox);
+        prebendGrid->addWidget(new QLabel(prebendValueText), 0, 0);
+        m_prebendValue = new QDoubleSpinBox();
         m_prebendValue->setAccelerated(true);
         m_prebendValue->setMaximum(maxSpinboxValue);
         m_prebendValue->setMinimum(minSpinboxValue);
@@ -174,12 +174,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
     
         prebendBox->setLayout(prebendGrid);
 
-        QLabel *durationLabel = new QLabel(tr("Wait (%):"),
-                                           prebendBox);
+        QLabel *durationLabel = new QLabel(tr("Wait (%):"));
         durationLabel->
             setToolTip(tr("<qt>How long to wait before starting the bend or ramp, as a percentage of the total time</qt>"));
         prebendGrid->addWidget(durationLabel, 1, 0);
-        m_prebendDuration = new QDoubleSpinBox(prebendBox);
+        m_prebendDuration = new QDoubleSpinBox();
         m_prebendDuration->setAccelerated(true);
         m_prebendDuration->setMaximum(100);
         m_prebendDuration->setMinimum(0);
@@ -190,7 +189,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             (whatVaries == Pitch) ?
             tr("Bend Sequence") :
             tr("Ramp Sequence");
-        QGroupBox *sequencebox = new QGroupBox(sequenceText, vbox );
+        QGroupBox *sequencebox = new QGroupBox(sequenceText);
         sequencebox->setContentsMargins(5, 5, 5, 5);
         QGridLayout *sequencegrid = new QGridLayout;
         sequencegrid->setSpacing(5);
@@ -202,11 +201,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             tr("Bend duration (%):") :
             tr("Ramp duration (%):");
         QLabel *sequenceDurationLabel =
-            new QLabel(sequenceDurationText, sequencebox);
+            new QLabel(sequenceDurationText);
         sequenceDurationLabel->
             setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
         sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
-        m_sequenceRampDuration = new QDoubleSpinBox(sequencebox);
+        m_sequenceRampDuration = new QDoubleSpinBox();
         m_sequenceRampDuration->setAccelerated(true);
         m_sequenceRampDuration->setMaximum(100);
         m_sequenceRampDuration->setMinimum(0);
@@ -217,8 +216,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             useTrueValues() ?
             tr("End value:") :
             tr("End value (%):");
-        sequencegrid->addWidget(new QLabel(sequenceEndValueText, sequencebox), 2, 0);
-        m_sequenceEndValue = new QDoubleSpinBox(sequencebox);
+        sequencegrid->addWidget(new QLabel(sequenceEndValueText), 2, 0);
+        m_sequenceEndValue = new QDoubleSpinBox();
         m_sequenceEndValue->setAccelerated(true);
         m_sequenceEndValue->setMaximum(maxSpinboxValue);
         m_sequenceEndValue->setMinimum(minSpinboxValue);
@@ -232,7 +231,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             (whatVaries == Pitch)  ? tr("Vibrato") :
             (whatVaries == Volume) ? tr("Tremolo") :
             tr("LFO");
-        QGroupBox *m_vibratoBox = new QGroupBox(vibratoBoxText, vbox );
+        QGroupBox *m_vibratoBox = new QGroupBox(vibratoBoxText);
         m_vibratoBox->
             setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
         m_vibratoBox->setContentsMargins(5, 5, 5, 5);
@@ -245,9 +244,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             useTrueValues() ?
             tr("Start amplitude:") :
             tr("Start amplitude (%):");
-        vibratoGrid->addWidget(new QLabel(vibratoStartAmplitudeText, 
-                                           m_vibratoBox), 3, 0);
-        m_vibratoStartAmplitude = new QDoubleSpinBox(m_vibratoBox);
+        vibratoGrid->addWidget(new QLabel(vibratoStartAmplitudeText), 3, 0);
+        m_vibratoStartAmplitude = new QDoubleSpinBox();
         m_vibratoStartAmplitude->setAccelerated(true);
         m_vibratoStartAmplitude->setMaximum(maxSpinboxAbsValue);
         m_vibratoStartAmplitude->setMinimum(0);
@@ -258,9 +256,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             useTrueValues() ?
             tr("End amplitude:") :
             tr("End amplitude (%):");
-        vibratoGrid->addWidget(new QLabel(vibratoEndAmplitudeText,
-                                           m_vibratoBox), 4, 0);
-        m_vibratoEndAmplitude = new QDoubleSpinBox(m_vibratoBox);
+        vibratoGrid->addWidget(new QLabel(vibratoEndAmplitudeText), 4, 0);
+        m_vibratoEndAmplitude = new QDoubleSpinBox();
         m_vibratoEndAmplitude->setAccelerated(true);
         m_vibratoEndAmplitude->setMaximum(maxSpinboxAbsValue);
         m_vibratoEndAmplitude->setMinimum(0);
@@ -268,11 +265,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         vibratoGrid->addWidget(m_vibratoEndAmplitude, 4, 1);
 
         QLabel * vibratoFrequencyLabel =
-            new QLabel(tr("Hertz (Hz):"), m_vibratoBox);
+            new QLabel(tr("Hertz (Hz):"));
         vibratoFrequencyLabel->
             setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
         vibratoGrid->addWidget(vibratoFrequencyLabel, 5, 0);
-        m_vibratoFrequency = new QDoubleSpinBox(m_vibratoBox);
+        m_vibratoFrequency = new QDoubleSpinBox();
         m_vibratoFrequency->setAccelerated(true);
         m_vibratoFrequency->setMaximum(200);
         m_vibratoFrequency->setMinimum(0.1);
@@ -320,7 +317,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
         
         /* Stepsize -> direct -> step size */
-        m_stepSize = new QDoubleSpinBox(stepSizeStyleGroupBox);
+        m_stepSize = new QDoubleSpinBox();
         m_stepSize->setAccelerated(true);
         m_stepSize->setMaximum(maxSpinboxAbsValue);
         m_stepSize->setMinimum(getSmallestSpinboxStep());
@@ -333,7 +330,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         stepSizeManualHBox->addWidget(m_stepSize);
 
         /* Stepsize -> by count -> Resolution */        
-        m_resolution = new QDoubleSpinBox(stepSizeStyleGroupBox);
+        m_resolution = new QDoubleSpinBox();
         m_resolution->setAccelerated(true);
         m_resolution->setMaximum(300);
         m_resolution->setMinimum(2);
@@ -689,6 +686,7 @@ PitchBendSequenceDialog::savePreset(int preset)
     settings.setValue("step_size", m_stepSize->value());
     settings.setValue("ramp_mode", getRampMode());
     settings.setValue("step_size_calculation", getStepSizeCalculation());
+    settings.endArray();
     settings.endGroup();
 }
 
@@ -718,6 +716,7 @@ PitchBendSequenceDialog::restorePreset(int preset)
         (StepSizeCalculation
          (settings.value("step_size_calculation", StepSizeDirect).toInt()));
 
+    settings.endArray();
     settings.endGroup();
 }
 
