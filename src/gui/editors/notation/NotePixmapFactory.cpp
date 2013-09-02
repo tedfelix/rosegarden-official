@@ -2311,9 +2311,6 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int hue, saturation, value;
     kuller.getHsv(&hue, &saturation, &value);
 
-    m_p->painter().setPen(kuller);
-    m_p->painter().setBrush(kuller);
-
     // I can't think of any real use for the ability to draw all notation in
     // white, and given the complexity of adding that ability to all the various
     // bits and bobs called upon to draw a note, what we're going to do instead
@@ -2334,6 +2331,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     }
 
     createPixmap(width, pixmapHeight);
+
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
 
     int x =
         getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
