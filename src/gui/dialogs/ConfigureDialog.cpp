@@ -62,8 +62,9 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
 
     connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SIGNAL(updateAutoSaveInterval(unsigned int)));
-    connect(page, SIGNAL(updateSidebarStyle(unsigned int)),
-            this, SIGNAL(updateSidebarStyle(unsigned int)));
+    // No such signal in GeneralConfigurationPage.
+    //connect(page, SIGNAL(updateSidebarStyle(unsigned int)),
+    //        this, SIGNAL(updateSidebarStyle(unsigned int)));
 
     page = new MIDIConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
