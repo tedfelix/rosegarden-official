@@ -138,8 +138,8 @@
     <Action name="edit_markers" text="Edit Mar&amp;kers..." shortcut="Ctrl+K" />
     <Action name="edit_doc_properties" text="Edit Document P&amp;roperties..." />
   <Separator/>
-    <Action name="set_quick_marker" text="&amp;Set Quick Marker at Playback Position" shortcut="Ctrl+Shift+M" shortcut-context="application" />
-    <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" shortcut-context="application" />
+    <Action name="set_quick_marker" text="&amp;Set Quick Marker at Playback Position" shortcut="Ctrl+Shift+M" />
+    <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" />
   </Menu>
 
   <Menu name="Studio">
