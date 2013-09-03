@@ -231,7 +231,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
             (whatVaries == Pitch)  ? tr("Vibrato") :
             (whatVaries == Volume) ? tr("Tremolo") :
             tr("LFO");
-        QGroupBox *m_vibratoBox = new QGroupBox(vibratoBoxText);
+        m_vibratoBox = new QGroupBox(vibratoBoxText);
         m_vibratoBox->
             setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
         m_vibratoBox->setContentsMargins(5, 5, 5, 5);
@@ -351,8 +351,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
         
         slotSequencePresetChanged(m_sequencePreset->currentIndex());
-        slotStepSizeStyleChanged(true);
-        maybeEnableVibratoFields();
+        // the above called slotStepSizeStyleChanged() which called
+        // maybeEnableVibratoFields()
         m_radioReplace->setChecked(true);
 
         connect(m_sequencePreset, SIGNAL(activated(int)), this,
@@ -413,7 +413,7 @@ PitchBendSequenceDialog::slotOnlyEraseClicked(bool checked)
         m_vibratoFrequency->setEnabled(false);
     } else {
         slotStepSizeStyleChanged(true);
-        maybeEnableVibratoFields();
+        //maybeEnableVibratoFields();
     }
 }
 
@@ -424,10 +424,7 @@ PitchBendSequenceDialog::maybeEnableVibratoFields(void)
         m_radioRampLinear->isChecked() &&
         m_radioStepSizeByCount->isChecked();
     
-    m_vibratoStartAmplitude->setEnabled(enable);
-    m_vibratoEndAmplitude->setEnabled(enable);
-    m_vibratoFrequency->setEnabled(enable);
-    // show()/hide() on m_vibratoBox is buggy so we don't use it.
+    m_vibratoBox->setVisible(enable);
 }
 
 void
@@ -495,7 +492,7 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
         }
     }
     slotStepSizeStyleChanged(true);
-    maybeEnableVibratoFields();
+    // the above called maybeEnableVibratoFields();
 }
 
 bool
