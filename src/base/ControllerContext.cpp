@@ -273,10 +273,10 @@ makeControlValueAbsolute(Instrument *instrument, Segment *a,
     ControllerEventAdapter adapter(e);
     long oldValue;
     adapter.getValue(oldValue);
-    const ControlParameter * m_controlParameter =
+    const ControlParameter * controlParameter =
         getControlParameter(instrument, eventType, controllerId);
     long newValue =
-        makeAbsolute(m_controlParameter, oldValue + baseline);
+        makeAbsolute(controlParameter, oldValue + baseline);
     adapter.setValue(newValue);
 #ifdef DEBUG_CONTROLLER_CONTEXT
     SEQMAN_DEBUG << "ControllerContextMap::makeControlValueAbsolute"

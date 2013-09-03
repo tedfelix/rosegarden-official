@@ -115,18 +115,18 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     updateTupledCombo();
 
     m_timingDisplayGrid = new QGroupBox( tr("Timing calculations"), vbox );
-    QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayGrid);
+    QGridLayout *timingDisplayLayout = new QGridLayout(m_timingDisplayGrid);
     vboxLayout->addWidget(m_timingDisplayGrid);
 
     int row = 0;
 
     if (maxDuration > 0) {
 
-        m_timingDisplayLayout->addWidget(new QLabel(tr("Selected region:")),
+        timingDisplayLayout->addWidget(new QLabel(tr("Selected region:")),
                                          row, 0);
-        m_timingDisplayLayout->addWidget(new QLabel(""), row, 1);
+        timingDisplayLayout->addWidget(new QLabel(""), row, 1);
         m_selectionDurationDisplay = new QLabel("x");
-        m_timingDisplayLayout->addWidget(m_selectionDurationDisplay, row, 2);
+        timingDisplayLayout->addWidget(m_selectionDurationDisplay, row, 2);
         m_selectionDurationDisplay->setAlignment(Qt::AlignVCenter |
                 Qt::AlignRight);
         row++;
@@ -134,56 +134,56 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
         m_selectionDurationDisplay = 0;
     }
 
-    m_timingDisplayLayout->addWidget(new QLabel(tr("Group with current timing:")),
+    timingDisplayLayout->addWidget(new QLabel(tr("Group with current timing:")),
                                      row, 0);
     m_untupledDurationCalculationDisplay = new QLabel("x");
-    m_timingDisplayLayout->addWidget(m_untupledDurationCalculationDisplay,
+    timingDisplayLayout->addWidget(m_untupledDurationCalculationDisplay,
                                      row, 1);
     m_untupledDurationDisplay = new QLabel("x");
     m_untupledDurationDisplay->setAlignment(Qt::AlignVCenter |
                                             Qt::AlignRight);
-    m_timingDisplayLayout->addWidget(m_untupledDurationDisplay, row, 2);
+    timingDisplayLayout->addWidget(m_untupledDurationDisplay, row, 2);
     row++;
 
-    m_timingDisplayLayout->addWidget(new QLabel(tr("Group with new timing:")),
+    timingDisplayLayout->addWidget(new QLabel(tr("Group with new timing:")),
                                      row, 0);
     m_tupledDurationCalculationDisplay = new QLabel("x");
-    m_timingDisplayLayout->addWidget(m_tupledDurationCalculationDisplay,
+    timingDisplayLayout->addWidget(m_tupledDurationCalculationDisplay,
                                      row, 1);
     m_tupledDurationDisplay = new QLabel("x");
     m_tupledDurationDisplay->setAlignment(Qt::AlignVCenter |
                                           Qt::AlignRight);
-    m_timingDisplayLayout->addWidget(m_tupledDurationDisplay, row, 2);
+    timingDisplayLayout->addWidget(m_tupledDurationDisplay, row, 2);
     row++;
 
-    m_timingDisplayLayout->addWidget(new QLabel(tr("Gap created by timing change:")),
+    timingDisplayLayout->addWidget(new QLabel(tr("Gap created by timing change:")),
                                      row, 0);
     m_newGapDurationCalculationDisplay = new QLabel("x");
-    m_timingDisplayLayout->addWidget(m_newGapDurationCalculationDisplay,
+    timingDisplayLayout->addWidget(m_newGapDurationCalculationDisplay,
                                      row, 1);
     m_newGapDurationDisplay = new QLabel("x");
     m_newGapDurationDisplay->setAlignment(Qt::AlignVCenter |
                                           Qt::AlignRight);
-    m_timingDisplayLayout->addWidget(m_newGapDurationDisplay, row, 2);
+    timingDisplayLayout->addWidget(m_newGapDurationDisplay, row, 2);
     row++;
 
     if (maxDuration > 0) {
 
-        m_timingDisplayLayout->addWidget(new QLabel(tr("Unchanged at end of selection:")),
+        timingDisplayLayout->addWidget(new QLabel(tr("Unchanged at end of selection:")),
                                          row, 0);
         m_unchangedDurationCalculationDisplay = new QLabel("x");
-        m_timingDisplayLayout->addWidget(m_unchangedDurationCalculationDisplay,
+        timingDisplayLayout->addWidget(m_unchangedDurationCalculationDisplay,
                                          row, 1);
         m_unchangedDurationDisplay = new QLabel("x");
         m_unchangedDurationDisplay->setAlignment(Qt::AlignVCenter |
                                                  Qt::AlignRight);
-        m_timingDisplayLayout->addWidget(m_unchangedDurationDisplay, row, 2);
+        timingDisplayLayout->addWidget(m_unchangedDurationDisplay, row, 2);
 
     } else {
         m_unchangedDurationDisplay = 0;
     }
 
-    m_timingDisplayGrid->setLayout(m_timingDisplayLayout);
+    m_timingDisplayGrid->setLayout(timingDisplayLayout);
 
     vbox->setLayout(vboxLayout);
 
