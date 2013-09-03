@@ -149,11 +149,11 @@ TranzportClient::pointerPositionChanged(timeT time)
 }
 
 void
-TranzportClient::documentChanged(RosegardenDocument* m_doc)
+TranzportClient::documentChanged(RosegardenDocument* doc)
 {
     RG_DEBUG << "TranzportClient::DocumentChanged " << endl;
 
-    m_rgDocument = m_doc;
+    m_rgDocument = doc;
     m_composition = &m_rgDocument->getComposition();
     m_composition->addObserver(this);
     connect(m_rgDocument, SIGNAL(pointerPositionChanged(timeT)),
