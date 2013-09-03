@@ -122,10 +122,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
         // Preset can change what's shown, which normally stretches
         // the layout and thus moves preset out from under the user's
-        // mouse.  To avoid this, we don't let positions before
-        // presetBox stretch.
-        vboxLayout->setStretch(0,0);
-        vboxLayout->setStretch(1,0);
+        // mouse.  To avoid this, we call `vboxLayout->addStretch'
+        // generously after this point in the layout and never call it
+        // before this point.
 
         QGroupBox *presetBox = new QGroupBox(tr("Preset"));
         QGridLayout *presetGrid = new QGridLayout;
