@@ -2414,9 +2414,6 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int hue, saturation, value;
     kuller.getHsv(&hue, &saturation, &value);
 
-    m_p->painter().setPen(kuller);
-    m_p->painter().setBrush(kuller);
-
     //!!! NOTE: I started this white on gray notation for dialogs thing on a
     // whim, and I tore it down bit by bit doing everything else before arriving
     // here in the "draw the notes" code.  The "draw the notes" code was so
@@ -2429,6 +2426,8 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     // problems of making notation displayed in dialog contexts draw itself in
     // white.  Now that I can see the forest for the trees, this annoys me, and
     // I vow to fix all of this one day soon.  But not today.
+    //
+    // Years later, and still not today!  dmm
     //!!!
 
     // I can't think of any real use for the ability to draw all notation in
@@ -2450,6 +2449,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     }
 
     createPixmap(width, pixmapHeight);
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
+
 
     int x =
         getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
