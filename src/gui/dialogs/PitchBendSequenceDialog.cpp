@@ -120,7 +120,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
         vboxLayout->addSpacing(15);
 
-    
+        // Preset can change what's shown, which normally stretches
+        // the layout and thus moves preset out from under the user's
+        // mouse.  To avoid this, we don't let positions before
+        // presetBox stretch.
+        vboxLayout->setStretch(0,0);
+        vboxLayout->setStretch(1,0);
 
         QGroupBox *presetBox = new QGroupBox(tr("Preset"));
         QGridLayout *presetGrid = new QGridLayout;
@@ -148,6 +153,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
                 m_sequencePreset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
             }
         m_sequencePreset->setCurrentIndex(settings.value("sequence_preset", int(startSavedSettings)).toInt());
+
+        vboxLayout->addStretch(15);
 
         QString prebendText =
             (whatVaries == Pitch) ?
@@ -184,6 +191,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         m_prebendDuration->setMinimum(0);
         m_prebendDuration->setSingleStep(5);
         prebendGrid->addWidget(m_prebendDuration, 1 , 1);
+
+        vboxLayout->addStretch(15);
 
         QString sequenceText =
             (whatVaries == Pitch) ?
@@ -224,6 +233,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         m_sequenceEndValue->setDecimals(valueSpinboxDecimals);
         m_sequenceEndValue->setSingleStep(5);
         sequencegrid->addWidget(m_sequenceEndValue, 2, 1);
+
+        vboxLayout->addStretch(15);
 
         /*** Sub-group vibrato ****/
 
@@ -277,6 +288,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         m_vibratoFrequency->setDecimals(2);
         vibratoGrid->addWidget(m_vibratoFrequency, 5, 1);
         
+        vboxLayout->addStretch(15);
+
         /*** Sub-group the contour of the ramp ****/
         
         QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
@@ -302,6 +315,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         rampModeGroupLayoutBox->addWidget(m_radioRampQuarterSine);
         rampModeGroupLayoutBox->addWidget(m_radioRampHalfSine);
         
+        vboxLayout->addStretch(15);
+
         /*** Sub-group how we set step size or step count ****/
 
         QGroupBox *stepSizeStyleGroupBox =
@@ -348,6 +363,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
         stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
         stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
+
+        vboxLayout->addStretch(15);
 
         
         slotSequencePresetChanged(m_sequencePreset->currentIndex());
