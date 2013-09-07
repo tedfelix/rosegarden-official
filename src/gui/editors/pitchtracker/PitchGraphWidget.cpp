@@ -61,7 +61,8 @@ PitchGraphWidget::PitchGraphWidget(PitchHistory &history, QWidget *parent) :
         settings.value("ignoreoctave",
                        PitchTrackerConfigurationPage::defaultIgnore8ve).
                        toBool();
-    
+
+    settings.endGroup();
     qDebug("******************** end pitchgraphwidget ctor");
 }
 

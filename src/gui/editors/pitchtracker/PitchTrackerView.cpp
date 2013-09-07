@@ -67,6 +67,11 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
                                  PitchDetector::defaultFrameSize).toInt();
     m_stepsize = settings.value("stepsize",
                                 PitchDetector::defaultStepSize).toInt();
+
+    int tuning = settings.value("tuning", 0).toInt();
+    int method = settings.value("method", 0).toInt();
+    settings.endGroup();
+
     // The frame size and step size are set from the default properties
     // of PitchDetector or by reading the settings file. In principle,
     // the latter method is open to attack by someone editing the settings
@@ -83,7 +88,6 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     }
     
     // Find the current tuning index in use by the pitch tracker
-    int tuning = settings.value("tuning", 0).toInt();
     // The static method Tuning::getTunings() returns a pointer to a
     // std::vector of pointers to tunings. i.e.
     //     std::vector<Rosegarden::Accidentals::Tuning*>* getTunings(void);
@@ -127,7 +131,6 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     int sampleRate = m_jackCaptureClient->getSampleRate();
 
     // pitch detector
-    int method = settings.value("method", 0).toInt();
     if (method < 0 or method > PitchDetector::getMethods()->size()) method = 0;
     PitchDetector::Method pdMethod = (*PitchDetector::getMethods())[method];
     m_pitchDetector = new PitchDetector(m_framesize, m_stepsize, sampleRate);

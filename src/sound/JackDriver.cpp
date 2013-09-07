@@ -316,6 +316,7 @@ JackDriver::initialise(bool reinitialise)
     settings.beginGroup(SequencerOptionsConfigGroup);
     bool connectDefaultOutputs = settings.value("connect_default_jack_outputs", true).toBool();
     bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();
+    settings.endGroup();
 
     const char **ports = jack_get_ports(m_client, NULL, NULL,
             JackPortIsPhysical | JackPortIsInput);

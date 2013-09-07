@@ -642,6 +642,7 @@ NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
 
     QString defaultFont = settings.value
         ("notefont", NoteFontFactory::getDefaultFontName()).toString();
+    settings.endGroup();
 
     try {
         (void)NoteFontFactory::getFont
@@ -690,6 +691,7 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         (m_multiStaffSize, fontStr,
          settings.value("multistaffnotesize",
                         NoteFontFactory::getDefaultMultiSize(fontStr)).toInt());
+    settings.endGroup();
 
     try {
         NoteFont *noteFont = NoteFontFactory::getFont
