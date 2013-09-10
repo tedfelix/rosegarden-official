@@ -2023,9 +2023,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             break;
 
         case MappedEvent::MidiProgramChange:
-            RG_DEBUG << "RosegardenDocument::insertRecordedMidi()"
-                     << " - got Program Change (unsupported)"
-                     << endl;
+            rEvent = ProgramChange
+                     ((*i)->getData1()).getAsEvent(absTime);
             break;
 
         case MappedEvent::MidiKeyPressure:
