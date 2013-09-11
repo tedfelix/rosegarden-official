@@ -429,6 +429,13 @@ void DataBlockRepository::clear()
     QString tmpPath = QDir::tempPath();
 
     QDir segmentsDir(tmpPath, "rosegarden_datablock_*");
+
+    if (segmentsDir.count() > 2000) {
+        std::cerr << "DataBlockRepository::clear(): A rather large number of rosegarden_datablock_*\n" <<
+                     "  files (" << segmentsDir.count() << " of them) have been found in " << tmpPath.toStdString() << ".\n" <<
+                     "  It may take a while to delete them all.  Working...\n";
+    }
+
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
         QString segmentName = tmpPath + '/' + segmentsDir[i];
         QFile::remove
