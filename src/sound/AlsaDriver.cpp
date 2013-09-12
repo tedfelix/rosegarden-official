@@ -4439,9 +4439,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             }
         }
 
-        if ((*i)->getType() == MappedEvent::SystemAudioPortCounts) {
+        //if ((*i)->getType() == MappedEvent::SystemAudioPortCounts) {
             // never actually used, I think?
-        }
+        //}
 
         if ((*i)->getType() == MappedEvent::SystemAudioPorts) {
 #ifdef HAVE_LIBJACK

@@ -404,6 +404,10 @@ public:
     void sleep(const RealTime &rt);
 
     /// Removes events not matching a MidiFilter from a MappedEventsList.
+    /**
+     * From the menu, Studio > Modify MIDI Filters... allows the user to
+     * control this filtering.
+     */
     void applyFiltering(MappedEventList *mC,
                         MidiFilter filter,
                         bool filterControlDevice);
