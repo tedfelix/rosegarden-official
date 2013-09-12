@@ -1339,31 +1339,36 @@ RosegardenSequencer::processRecordedMidi()
     SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi";
 #endif
 
-    MappedEventList mC;
+    MappedEventList recordList;
 
     // Get the MIDI events from the ALSA driver
-    m_driver->getMappedEventList(mC);
+    m_driver->getMappedEventList(recordList);
 
-    if (mC.empty()) return;
+    if (recordList.empty()) return;
+
+    // Handle "thru" first to reduce latency.
+
+    if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
+        // Make a copy so we don't mess up the list for recording.
+        MappedEventList thruList = recordList;
+
+        // Remove events that match the thru filter
+        applyFiltering(&thruList, ControlBlock::getInstance()->getThruFilter(), true);
+
+        // Route the MIDI thru events to MIDI out.  Use the instrument and
+        // track information from each event.
+        routeEvents(&thruList, false);
+    }
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
 #endif
 
     // Remove events that match the record filter
-    applyFiltering(&mC, ControlBlock::getInstance()->getRecordFilter(), false);
+    applyFiltering(&recordList, ControlBlock::getInstance()->getRecordFilter(), false);
 
     // Store the events
-    SequencerDataBlock::getInstance()->addRecordedEvents(&mC);
-
-    if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
-        // Remove events that match the thru filter
-        applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
-
-        // Route the MIDI thru events to MIDI out.  Use the instrument and
-        // track information from each event.
-        routeEvents(&mC, false);
-    }
+    SequencerDataBlock::getInstance()->addRecordedEvents(&recordList);
 }
 
 void
