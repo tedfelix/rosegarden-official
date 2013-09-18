@@ -81,7 +81,17 @@ public:
     virtual void stopClocks();
     virtual bool areClocksRunning() const { return m_queueRunning; }
 
+    /// Send both MIDI and audio events out, unqueued
+    /**
+     * This version sends MIDI data to ALSA for transmission via MIDI
+     * immediately.  (I assume audio events are also sent immediately.)
+     */
     virtual void processEventsOut(const MappedEventList &mC);
+    /// Send both MIDI and audio events out, queued
+    /**
+     * Used by RosegardenSequencer::keepPlaying() to send events out
+     * during playback.
+     */
     virtual void processEventsOut(const MappedEventList &mC,
                                   const RealTime &sliceStart,
                                   const RealTime &sliceEnd);
@@ -420,6 +430,14 @@ protected:
     MappedDevice *createMidiDevice(DeviceId deviceId,
                                    MidiDevice::DeviceDirection);
 
+    /// Send MIDI out via ALSA.
+    /**
+     * For unqueued (immediate) send, specify RealTime::zeroTime for
+     * sliceStart and sliceEnd.  Otherwise events will be queued for
+     * future send at appropriate times.
+     *
+     * Used by processEventsOut() to send MIDI out via ALSA.
+     */
     virtual void processMidiOut(const MappedEventList &mC,
                                 const RealTime &sliceStart,
                                 const RealTime &sliceEnd);

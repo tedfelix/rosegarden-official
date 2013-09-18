@@ -57,18 +57,18 @@
 using std::cerr;
 using std::endl;
 
-static size_t _debug_jack_frame_count = 0;
-
 #define AUTO_TIMER_NAME "(auto)"
-#define LOCKED QMutexLocker _locker(&m_mutex)
+#define LOCKED QMutexLocker rg_alsa_locker(&m_mutex)
 
 namespace Rosegarden
 {
 
+static size_t debug_jack_frame_count = 0;
+
 #define FAILURE_REPORT_COUNT 256
-static MappedEvent::FailureCode _failureReports[FAILURE_REPORT_COUNT];
-static int _failureReportWriteIndex = 0;
-static int _failureReportReadIndex = 0;
+static MappedEvent::FailureCode failureReports[FAILURE_REPORT_COUNT];
+static int failureReportWriteIndex = 0;
+static int failureReportReadIndex = 0;
 
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio,
@@ -2369,14 +2369,14 @@ AlsaDriver::getAlsaTime()
 bool
 AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 {
-    while (_failureReportReadIndex != _failureReportWriteIndex) {
-        MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
+    while (failureReportReadIndex != failureReportWriteIndex) {
+        MappedEvent::FailureCode code = failureReports[failureReportReadIndex];
         //    std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
         MappedEvent *mE = new MappedEvent
             (0, MappedEvent::SystemFailure, code, 0);
         m_returnComposition.insert(mE);
-        _failureReportReadIndex =
-            (_failureReportReadIndex + 1) % FAILURE_REPORT_COUNT;
+        failureReportReadIndex =
+            (failureReportReadIndex + 1) % FAILURE_REPORT_COUNT;
     }
 
     if (!m_returnComposition.empty()) {
@@ -3491,11 +3491,6 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                            const RealTime &sliceEnd)
 {
     LOCKED;
-    RealTime outputTime;
-    RealTime outputStopTime;
-    MappedInstrument *instrument;
-    ClientPortPair outputDevice;
-    MidiByte channel;
 
     // special case for unqueued events
     bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
@@ -3521,7 +3516,9 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
+    // For each event
     for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
+        // Skip all non-MIDI events.
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
@@ -3534,7 +3531,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         bool isSoftSynth = (!isControllerOut &&
                             ((*i)->getInstrument() >= SoftSynthInstrumentBase));
 
-        outputTime = (*i)->getEventTime() - m_playStartPosition +
+        RealTime outputTime = (*i)->getEventTime() - m_playStartPosition +
             m_alsaPlayStartTime;
 
         if (now && !m_playing && m_queueRunning) {
@@ -3592,7 +3589,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) {
             size_t frameCount = m_jackDriver->getFramesProcessed();
-            size_t elapsed = frameCount - _debug_jack_frame_count;
+            size_t elapsed = frameCount - debug_jack_frame_count;
             RealTime rt = RealTime::frame2RealTime(elapsed, m_jackDriver->getSampleRate());
             rt = rt - getAlsaTime();
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -3634,15 +3631,17 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             event.time.time = time;
         }
 
-        instrument = getMappedInstrument((*i)->getInstrument());
+        MappedInstrument *instrument = getMappedInstrument((*i)->getInstrument());
 
         // set the stop time for Note Off
         //
-        outputStopTime = outputTime + (*i)->getDuration()
+        RealTime outputStopTime = outputTime + (*i)->getDuration()
             - RealTime(0, 1); // notch it back 1nsec just to ensure
         // correct ordering against any other
         // note-ons at the same nominal time
         bool needNoteOff = false;
+
+        MidiByte channel = 0;
 
         if (isControllerOut) {
             channel = (*i)->getRecordedChannel();
@@ -3663,7 +3662,10 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 #endif
             channel = 0;
         }
-        if (channel < 0) { continue; }
+
+        // channel is a MidiByte which is unsigned.  This will never be true.
+        //if (channel < 0) { continue; }
+
         switch ((*i)->getType()) {
 
         case MappedEvent::MidiNoteOneShot:
@@ -4002,7 +4004,7 @@ AlsaDriver::startClocks()
                     std::cerr << "AlsaDriver::startClocks: Waiting for startClocksApproved" << std::endl;
 #endif
                     // need to wait for transport sync
-                    _debug_jack_frame_count = m_jackDriver->getFramesProcessed();
+                    debug_jack_frame_count = m_jackDriver->getFramesProcessed();
                     return ;
                 }
             }
@@ -4027,7 +4029,7 @@ AlsaDriver::startClocks()
 #ifdef HAVE_LIBJACK
 
     if (m_jackDriver) {
-        _debug_jack_frame_count = m_jackDriver->getFramesProcessed();
+        debug_jack_frame_count = m_jackDriver->getFramesProcessed();
     }
 #endif
 
@@ -4134,7 +4136,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
     AudioFile *audioFile = 0;
     bool haveNewAudio = false;
 
-    // insert audio events if we find them
+    // For each incoming event, insert audio events if we find them
     for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
 #ifdef HAVE_LIBJACK
 
@@ -5231,15 +5233,15 @@ AlsaDriver::reportFailure(MappedEvent::FailureCode code)
 #endif
 
     // Ignore consecutive duplicates
-    if (_failureReportWriteIndex > 0 &&
-        _failureReportWriteIndex != _failureReportReadIndex) {
-        if (code == _failureReports[_failureReportWriteIndex - 1])
+    if (failureReportWriteIndex > 0 &&
+        failureReportWriteIndex != failureReportReadIndex) {
+        if (code == failureReports[failureReportWriteIndex - 1])
             return ;
     }
 
-    _failureReports[_failureReportWriteIndex] = code;
-    _failureReportWriteIndex =
-        (_failureReportWriteIndex + 1) % FAILURE_REPORT_COUNT;
+    failureReports[failureReportWriteIndex] = code;
+    failureReportWriteIndex =
+        (failureReportWriteIndex + 1) % FAILURE_REPORT_COUNT;
 }
 
 std::string
