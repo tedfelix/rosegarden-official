@@ -3551,7 +3551,10 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             if (!m_playing) {
                 outputTime = alsaTimeNow;
             } else if (outputTime < alsaTimeNow) {
-                outputTime = alsaTimeNow + RealTime(0, 10000000);
+                // This isn't really necessary as ALSA will immediately
+                // send out events that are prior to the current time.
+                // And that's what we want anyway.
+                outputTime = alsaTimeNow;
             }
         }
 
