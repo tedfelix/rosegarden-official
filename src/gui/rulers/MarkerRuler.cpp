@@ -246,9 +246,7 @@ MarkerRuler::getMarkerAtClickPosition()
     timeT end = comp.getBarEnd(lastBar);
 
     // need these to calculate the visible extents of a marker tag
-    QPainter painter(this);
-    painter.setFont(*m_barFont);
-    QFontMetrics metrics = painter.fontMetrics();
+    QFontMetrics metrics(*m_barFont);
 
     for (Composition::markerconstiterator i = markers.begin();
             i != markers.end(); ++i) {
