@@ -132,6 +132,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.8")));
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.10")));
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.12")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.14")));
     layoutBasic->addWidget(m_lilyLanguage, 1, 1);
 
     layoutBasic->addWidget(new QLabel(
@@ -168,7 +169,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
         switch (printSize) {
             case 11:
             case 13:
-            case 16:
+            case 14:
             case 19:
             case 20:
             case 23:

@@ -248,6 +248,7 @@ private:
         LILYPOND_VERSION_2_8,
         LILYPOND_VERSION_2_10,
         LILYPOND_VERSION_2_12,
+        LILYPOND_VERSION_2_14
     };
 
     int m_repeatMode;

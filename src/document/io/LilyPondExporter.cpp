@@ -663,12 +663,16 @@ LilyPondExporter::write()
         str << "\\version \"2.12.0\"" << std::endl;
         break;
 
+    case LILYPOND_VERSION_2_14:
+        str << "\\version \"2.14.0\"" << std::endl;
+        break;
+
     default:
         // force the default version if there was an error
         std::cerr << "ERROR: Unknown language level " << m_languageLevel
-                  << ", using \\version \"2.12.0\" instead" << std::endl;
-        str << "\\version \"2.12.0\"" << std::endl;
-        m_languageLevel = LILYPOND_VERSION_2_12;
+                  << ", using \\version \"2.14.0\" instead" << std::endl;
+        str << "\\version \"2.14.0\"" << std::endl;
+        m_languageLevel = LILYPOND_VERSION_2_14;
     }
 
     // LilyPond \header block
