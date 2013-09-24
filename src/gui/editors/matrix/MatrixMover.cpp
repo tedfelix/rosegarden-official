@@ -396,46 +396,15 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
 void MatrixMover::ready()
 {
-//    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//            this, SLOT(slotMatrixScrolled(int, int)));
-
-    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-
     m_widget->setCanvasCursor(Qt::SizeAllCursor);
     setBasicContextHelp();
 }
 
 void MatrixMover::stow()
 {
-//    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//               this, SLOT(slotMatrixScrolled(int, int)));
-    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+    // Nothing of this vestigial code remains in modern Qt Rosegarden.
 }
 
-/*
-void MatrixMover::slotMatrixScrolled(int newX, int newY)
-{
-    if (!m_currentElement)
-        return ;
-
-    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
-                                    m_parentView->getCanvasView()->contentsY());
-
-    QPoint offset = newP1 - oldP1;
-
-    offset = m_mParentView->inverseMapPoint(offset);
-
-    QPoint p(m_currentElement->getCanvasX(), m_currentElement->getCanvasY());
-    p += offset;
-
-    timeT newTime = getSnapGrid().snapX(p.x());
-    int newPitch = m_currentViewSegment->getHeightAtCanvasCoords(p.x(), p.y());
-
-    handleMouseMove(newTime, newPitch, 0);
-}
-*/
 void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 {
     EventSelection *selection = m_scene->getSelection();
