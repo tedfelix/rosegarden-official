@@ -353,8 +353,8 @@ EventEditDialog::addPersistentProperty(const PropertyName &name)
             checkBox->setObjectName(strtoqstr(name));
             checkBox->setChecked(m_originalEvent.get<Bool>(name));
             m_persistentGridLay->addWidget(checkBox, m_persistentGridRow, 2);
-            QObject::connect(checkBox, SIGNAL(activated()),
-                              this, SLOT(slotBoolPropertyChanged()));
+            QObject::connect(checkBox, SIGNAL(toggled(bool)),
+                              this, SLOT(slotBoolPropertyChanged(bool)));
             checkBox->show();
             break;
         }
@@ -479,7 +479,7 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
 }
 
 void
-EventEditDialog::slotBoolPropertyChanged()
+EventEditDialog::slotBoolPropertyChanged(bool)
 {
     const QObject *s = sender();
     const QCheckBox *checkBox = dynamic_cast<const QCheckBox *>(s);
