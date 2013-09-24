@@ -66,7 +66,7 @@ public slots:
 
     void slotIntPropertyChanged(int);
     void slotRealTimePropertyChanged(int);
-    void slotBoolPropertyChanged();
+    void slotBoolPropertyChanged(bool);
     void slotStringPropertyChanged(const QString &);
 
     void slotPropertyDeleted();
