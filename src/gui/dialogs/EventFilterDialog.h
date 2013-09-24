@@ -127,6 +127,7 @@ protected slots:
     // create a pitch chooser widget sub-dialog to show pitch on staff
     void slotPitchFromChooser();
     void slotPitchToChooser();
+
     
 private:
     //---------[ data members ]-----------------------------
@@ -148,6 +149,9 @@ private:
     QSpinBox*    m_pitchToSpinBox;
     QSpinBox*    m_velocityFromSpinBox;
     QSpinBox*    m_velocityToSpinBox;
+
+    QCheckBox*   m_useNotationDuration;
+    QCheckBox*   m_selectRests;
 
     std::vector<timeT> m_standardQuantizations;
 

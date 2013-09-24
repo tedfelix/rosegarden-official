@@ -108,6 +108,12 @@ EventFilterDialog::initDialog()
     QLabel* durationLabel = new QLabel(tr("Duration:"), noteFrame);
     noteFrameLayout->addWidget(durationLabel, 3, 1);
 
+    m_useNotationDuration = new QCheckBox();
+    noteFrameLayout->addWidget(m_useNotationDuration, 4, 1);
+
+    m_selectRests = new QCheckBox();
+    noteFrameLayout->addWidget(m_selectRests, 5, 1);
+
     // Include Boxes
     m_notePitchIncludeComboBox = new QComboBox(noteFrame);
     m_notePitchIncludeComboBox->setEditable(false);
@@ -135,6 +141,14 @@ EventFilterDialog::initDialog()
 
     m_noteDurationIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("durationinclude", "0" ) ) );
     noteFrameLayout->addWidget(m_noteDurationIncludeComboBox, 3, 0);
+
+    QLabel* durationCheckBoxLabel = new QLabel(tr("Use notation duration"));
+    noteFrameLayout->addWidget(durationCheckBoxLabel, 4, 2);
+    m_useNotationDuration->setChecked(settings.value("usenotationduration", "0").toBool());
+
+    QLabel* useRestsLabel = new QLabel(tr("Select rests"));
+    noteFrameLayout->addWidget(useRestsLabel, 5, 2);
+    m_selectRests->setChecked(settings.value("selectrests", "0").toBool());
 
     // Pitch From
     m_pitchFromSpinBox = new QSpinBox(noteFrame);
@@ -305,6 +319,9 @@ EventFilterDialog::accept()
     settings.setValue("durationinclude", m_noteDurationIncludeComboBox->currentIndex());
     settings.setValue("durationfrom", m_noteDurationFromComboBox->currentIndex());
     settings.setValue("durationto", m_noteDurationToComboBox->currentIndex());
+
+    settings.setValue("usenotationduration", m_useNotationDuration->isChecked());
+    settings.setValue("selectrests", m_selectRests->isChecked());
 
     settings.endGroup();
 
@@ -485,7 +502,8 @@ EventFilterDialog::keepEvent(Event* const &e)
 	property = 0;
 
 	// duration
-	property = (*e).getNotationDuration();
+        property = m_useNotationDuration->isChecked() ? (*e).getNotationDuration() : (*e).getDuration(); 
+            
 	if (!EventFilterDialog::eventInRange(getDuration(), property)) {
 	    RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; duration " << property
 		     << " out of range." << endl;
@@ -494,6 +512,17 @@ EventFilterDialog::keepEvent(Event* const &e)
 	property = 0;
 	
 	return true;
+    } else if ((*e).isa(Note::EventRestType)) {
+        if (m_selectRests->isChecked()) {
+            long property = m_useNotationDuration->isChecked() ? (*e).getNotationDuration() : (*e).getDuration(); 
+                
+            if (!EventFilterDialog::eventInRange(getDuration(), property)) {
+                RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting rest; duration " << property
+                         << " out of range." << endl;
+                return false;
+            }
+            return true;
+        }
     }
     return false;
 }
