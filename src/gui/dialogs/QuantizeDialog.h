@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_QUANTIZEDIALOG_H_
-#define _RG_QUANTIZEDIALOG_H_
+#ifndef RG_QUANTIZEDIALOG_H
+#define RG_QUANTIZEDIALOG_H
 
 #include <QDialog>
 

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RECORDABLE_AUDIO_FILE_H_
-#define _RECORDABLE_AUDIO_FILE_H_
+#ifndef RG_RECORDABLE_AUDIO_FILE_H
+#define RG_RECORDABLE_AUDIO_FILE_H
 
 #include "RingBuffer.h"
 #include "AudioFile.h"

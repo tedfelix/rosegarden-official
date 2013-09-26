@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _THUMBWHEEL_H_
-#define _THUMBWHEEL_H_
+#ifndef RG_THUMBWHEEL_H
+#define RG_THUMBWHEEL_H
 
 #include <QWidget>
 #include <QImage>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_REMOVEMARKERCOMMAND_H_
-#define _RG_REMOVEMARKERCOMMAND_H_
+#ifndef RG_REMOVEMARKERCOMMAND_H
+#define RG_REMOVEMARKERCOMMAND_H
 
 #include <string>
 #include "document/Command.h"

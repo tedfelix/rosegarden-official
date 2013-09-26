@@ -14,8 +14,8 @@
 */
 
 
-#ifndef _CLEF_INDEX_H_
-#define _CLEF_INDEX_H_
+#ifndef RG_CLEF_INDEX_H
+#define RG_CLEF_INDEX_H
 
 #include "base/NotationTypes.h"
 #include <QString>
@@ -50,4 +50,4 @@ int clefNameToClefIndex(QString s);
 
 }
 
-#endif // _CLEF_INDEX_H_
+#endif // RG_CLEF_INDEX_H

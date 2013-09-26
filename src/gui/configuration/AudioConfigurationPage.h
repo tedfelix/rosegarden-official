@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOCONFIGURATIONPAGE_H_
-#define _RG_AUDIOCONFIGURATIONPAGE_H_
+#ifndef RG_AUDIOCONFIGURATIONPAGE_H
+#define RG_AUDIOCONFIGURATIONPAGE_H
 
 #include "TabbedConfigurationPage.h"
 #include "gui/widgets/LineEdit.h"

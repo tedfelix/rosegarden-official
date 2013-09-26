@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_REMOVETEMPOCHANGECOMMAND_H_
-#define _RG_REMOVETEMPOCHANGECOMMAND_H_
+#ifndef RG_REMOVETEMPOCHANGECOMMAND_H
+#define RG_REMOVETEMPOCHANGECOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

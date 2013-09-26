@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXPAINTER_H_
-#define _RG_MATRIXPAINTER_H_
+#ifndef RG_MATRIXPAINTER_H
+#define RG_MATRIXPAINTER_H
 
 #include "MatrixTool.h"
 #include <QString>

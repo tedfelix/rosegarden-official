@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIXERWINDOW_H_
-#define _RG_MIXERWINDOW_H_
+#ifndef RG_MIXERWINDOW_H
+#define RG_MIXERWINDOW_H
 
 #include "base/MidiProgram.h"
 

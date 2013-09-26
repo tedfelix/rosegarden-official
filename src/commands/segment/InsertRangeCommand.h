@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INSERTRANGECOMMAND_H_
-#define _RG_INSERTRANGECOMMAND_H_
+#ifndef RG_INSERTRANGECOMMAND_H
+#define RG_INSERTRANGECOMMAND_H
 
 #include "base/Event.h"
 #include "document/Command.h"

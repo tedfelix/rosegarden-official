@@ -12,8 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSEGARDEN_URL_HASH_H_
-#define _ROSEGARDEN_URL_HASH_H_
+#ifndef RG_URL_HASH_H
+#define RG_URL_HASH_H
 
 class QUrl;
 extern unsigned int qHash(const QUrl &u);

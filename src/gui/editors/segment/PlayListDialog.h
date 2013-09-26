@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PLAYLISTDIALOG_H_
-#define _RG_PLAYLISTDIALOG_H_
+#ifndef RG_PLAYLISTDIALOG_H
+#define RG_PLAYLISTDIALOG_H
 
 #include <QDialog>
 #include <QString>

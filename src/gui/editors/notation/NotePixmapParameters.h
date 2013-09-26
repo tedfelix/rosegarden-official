@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEPIXMAPPARAMETERS_H_
-#define _RG_NOTEPIXMAPPARAMETERS_H_
+#ifndef RG_NOTEPIXMAPPARAMETERS_H
+#define RG_NOTEPIXMAPPARAMETERS_H
 
 #include "base/NotationTypes.h"
 #include <vector>

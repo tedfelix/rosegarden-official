@@ -18,8 +18,8 @@
 // but still want to build the sequencer.
 //
 
-#ifndef _DUMMYDRIVER_H_
-#define _DUMMYDRIVER_H_
+#ifndef RG_DUMMYDRIVER_H
+#define RG_DUMMYDRIVER_H
 
 namespace Rosegarden
 {
@@ -156,5 +156,5 @@ protected:
 
 }
 
-#endif // _DUMMYDRIVER_H_
+#endif // RG_DUMMYDRIVER_H
 

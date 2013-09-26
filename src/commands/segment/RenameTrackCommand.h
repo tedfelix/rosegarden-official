@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RENAMETRACKCOMMAND_H_
-#define _RG_RENAMETRACKCOMMAND_H_
+#ifndef RG_RENAMETRACKCOMMAND_H
+#define RG_RENAMETRACKCOMMAND_H
 
 #include "base/Track.h"
 #include <string>

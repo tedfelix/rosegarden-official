@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIFADERWIDGET_H_
-#define _RG_MIDIFADERWIDGET_H_
+#ifndef RG_MIDIFADERWIDGET_H
+#define RG_MIDIFADERWIDGET_H
 
 #include <QFrame>
 #include <QString>

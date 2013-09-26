@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FLATPARAMETERPATTERN_H_
-#define _RG_FLATPARAMETERPATTERN_H_
+#ifndef RG_FLATPARAMETERPATTERN_H
+#define RG_FLATPARAMETERPATTERN_H
 
 #include "ParameterPattern.h"
 

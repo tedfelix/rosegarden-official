@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _REAL_TIME_H_
-#define _REAL_TIME_H_
+#ifndef RG_REAL_TIME_H
+#define RG_REAL_TIME_H
 
 #include <iostream>
 #include <string>

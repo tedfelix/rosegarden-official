@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_METRONOMEMAPPER_H_
-#define _RG_METRONOMEMAPPER_H_
+#ifndef RG_METRONOMEMAPPER_H
+#define RG_METRONOMEMAPPER_H
 
 #include "base/Event.h"
 #include "base/MidiProgram.h"

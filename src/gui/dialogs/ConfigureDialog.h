@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONFIGUREDIALOG_H_
-#define _RG_CONFIGUREDIALOG_H_
+#ifndef RG_CONFIGUREDIALOG_H
+#define RG_CONFIGUREDIALOG_H
 
 #include "ConfigureDialogBase.h"
 #include <QMessageBox>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _FIGCHORD_H_
-#define _FIGCHORD_H_
+#ifndef RG_FIGCHORD_H
+#define RG_FIGCHORD_H
 
 #include "base/Sets.h"
 #include "base/Segment.h"
@@ -87,4 +87,4 @@ class FindFigChords
     
 }
 
-#endif /* ifndef _FIGCHORD_H_ */
+#endif /* ifndef RG_FIGCHORD_H */

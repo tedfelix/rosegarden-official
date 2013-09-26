@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TIMESIGNATUREDIALOG_H_
-#define _RG_TIMESIGNATUREDIALOG_H_
+#ifndef RG_TIMESIGNATUREDIALOG_H
+#define RG_TIMESIGNATUREDIALOG_H
 
 #include "base/NotationTypes.h"
 #include <QDialog>

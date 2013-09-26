@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PASTESEGMENTSCOMMAND_H_
-#define _RG_PASTESEGMENTSCOMMAND_H_
+#ifndef RG_PASTESEGMENTSCOMMAND_H
+#define RG_PASTESEGMENTSCOMMAND_H
 
 #include "base/Track.h"
 #include "document/Command.h"

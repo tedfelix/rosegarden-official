@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTITEMPREVIEW_H_
-#define _RG_SEGMENTITEMPREVIEW_H_
+#ifndef RG_SEGMENTITEMPREVIEW_H
+#define RG_SEGMENTITEMPREVIEW_H
 
 #include <QRect>
 

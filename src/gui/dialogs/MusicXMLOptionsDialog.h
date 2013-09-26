@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUSICXMLOPTIONSDIALOG_H_
-#define _RG_MUSICXMLOPTIONSDIALOG_H_
+#ifndef RG_MUSICXMLOPTIONSDIALOG_H
+#define RG_MUSICXMLOPTIONSDIALOG_H
 
 #include <QDialog>
 #include <QString>

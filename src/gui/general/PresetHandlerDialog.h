@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PRESETHANDLERDIALOG_H_
-#define _RG_PRESETHANDLERDIALOG_H_
+#ifndef RG_PRESETHANDLERDIALOG_H
+#define RG_PRESETHANDLERDIALOG_H
 
 #include "CategoryElement.h"
 

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTSPLITCOMMAND_H_
-#define _RG_AUDIOSEGMENTSPLITCOMMAND_H_
+#ifndef RG_AUDIOSEGMENTSPLITCOMMAND_H
+#define RG_AUDIOSEGMENTSPLITCOMMAND_H
 
 #include <string>
 #include "document/Command.h"

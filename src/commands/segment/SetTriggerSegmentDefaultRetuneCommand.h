@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETTRIGGERSEGMENTDEFAULTRETUNECOMMAND_H_
-#define _RG_SETTRIGGERSEGMENTDEFAULTRETUNECOMMAND_H_
+#ifndef RG_SETTRIGGERSEGMENTDEFAULTRETUNECOMMAND_H
+#define RG_SETTRIGGERSEGMENTDEFAULTRETUNECOMMAND_H
 
 #include "base/TriggerSegment.h"
 #include "document/Command.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H_
-#define _RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H_
+#ifndef RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H
+#define RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "base/Event.h"

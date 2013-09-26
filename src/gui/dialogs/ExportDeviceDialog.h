@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EXPORTDEVICEDIALOG_H_
-#define _RG_EXPORTDEVICEDIALOG_H_
+#ifndef RG_EXPORTDEVICEDIALOG_H
+#define RG_EXPORTDEVICEDIALOG_H
 
 #include <QDialog>
 #include <QString>

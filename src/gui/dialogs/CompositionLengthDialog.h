@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONLENGTHDIALOG_H_
-#define _RG_COMPOSITIONLENGTHDIALOG_H_
+#ifndef RG_COMPOSITIONLENGTHDIALOG_H
+#define RG_COMPOSITIONLENGTHDIALOG_H
 
 #include <QDialog>
 #include "base/Event.h"

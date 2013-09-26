@@ -32,8 +32,8 @@
 //
 
 
-#ifndef _STUDIO_H_
-#define _STUDIO_H_
+#ifndef RG_STUDIO_H
+#define RG_STUDIO_H
 
 namespace Rosegarden
 {
@@ -213,4 +213,4 @@ private:
 
 }
 
-#endif // _STUDIO_H_
+#endif // RG_STUDIO_H

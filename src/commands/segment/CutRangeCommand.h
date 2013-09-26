@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CUTRANGECOMMAND_H_
-#define _RG_CUTRANGECOMMAND_H_
+#ifndef RG_CUTRANGECOMMAND_H
+#define RG_CUTRANGECOMMAND_H
 
 #include "base/Event.h"
 #include "document/Command.h"

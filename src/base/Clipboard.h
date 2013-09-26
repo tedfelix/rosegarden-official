@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CLIPBOARD_H_
-#define _CLIPBOARD_H_
+#ifndef RG_CLIPBOARD_H
+#define RG_CLIPBOARD_H
 
 #include <set>
 #include "base/Segment.h"

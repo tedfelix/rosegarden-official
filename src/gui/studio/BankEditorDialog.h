@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BANKEDITORDIALOG_H_
-#define _RG_BANKEDITORDIALOG_H_
+#ifndef RG_BANKEDITORDIALOG_H
+#define RG_BANKEDITORDIALOG_H
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"

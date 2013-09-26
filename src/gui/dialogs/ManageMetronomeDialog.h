@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MANAGEMETRONOMEDIALOG_H_
-#define _RG_MANAGEMETRONOMEDIALOG_H_
+#ifndef RG_MANAGEMETRONOMEDIALOG_H
+#define RG_MANAGEMETRONOMEDIALOG_H
 
 #include "base/MidiMetronome.h"
 #include <QDialog>

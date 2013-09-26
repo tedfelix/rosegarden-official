@@ -12,8 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSEGARDEN_SQUEEZED_LABEL_H_
-#define _ROSEGARDEN_SQUEEZED_LABEL_H_
+#ifndef RG_SQUEEZED_LABEL_H
+#define RG_SQUEEZED_LABEL_H
 
 #include <QLabel>
 

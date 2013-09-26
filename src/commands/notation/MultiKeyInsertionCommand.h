@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MULTIKEYINSERTIONCOMMAND_H_
-#define _RG_MULTIKEYINSERTIONCOMMAND_H_
+#ifndef RG_MULTIKEYINSERTIONCOMMAND_H
+#define RG_MULTIKEYINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
 #include <QString>

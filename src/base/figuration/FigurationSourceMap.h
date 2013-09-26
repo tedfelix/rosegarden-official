@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _FIGURATIONSOURCEMAP_H_
-#define _FIGURATIONSOURCEMAP_H_
+#ifndef RG_FIGURATIONSOURCEMAP_H
+#define RG_FIGURATIONSOURCEMAP_H
 
 #include <vector>
 #include <map>
@@ -93,4 +93,4 @@ public:
 typedef FigurationSourceMap::value_type SourcedFiguration;
 }
 
-#endif /* ifndef _FIGURATIONSOURCEMAP_H_ */
+#endif /* ifndef RG_FIGURATIONSOURCEMAP_H */

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETWAITCURSOR_H_
-#define _RG_SETWAITCURSOR_H_
+#ifndef RG_SETWAITCURSOR_H
+#define RG_SETWAITCURSOR_H
 
 #include <QCursor>
 

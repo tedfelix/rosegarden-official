@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PLAYLISTVIEW_H_
-#define _RG_PLAYLISTVIEW_H_
+#ifndef RG_PLAYLISTVIEW_H
+#define RG_PLAYLISTVIEW_H
 
 #include <QTreeWidget>
 #include <QDropEvent>

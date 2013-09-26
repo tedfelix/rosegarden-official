@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLLEREVENTERASECOMMAND_H_
-#define _RG_CONTROLLEREVENTERASECOMMAND_H_
+#ifndef RG_CONTROLLEREVENTERASECOMMAND_H
+#define RG_CONTROLLEREVENTERASECOMMAND_H
 
 #include "base/Event.h"
 #include "document/BasicCommand.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRIGGERSEGMENTDIALOG_H_
-#define _RG_TRIGGERSEGMENTDIALOG_H_
+#ifndef RG_TRIGGERSEGMENTDIALOG_H
+#define RG_TRIGGERSEGMENTDIALOG_H
 
 #include "base/TriggerSegment.h"
 #include <string>

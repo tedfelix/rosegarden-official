@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MARKER_H_
-#define _MARKER_H_
+#ifndef RG_MARKER_H
+#define RG_MARKER_H
 
 #include <string>
 
@@ -75,4 +75,4 @@ private:
 
 }
 
-#endif // _CONTROLPARAMETER_H_
+#endif // RG_MARKER_H

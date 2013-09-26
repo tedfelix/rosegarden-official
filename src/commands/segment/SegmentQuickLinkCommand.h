@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTQUICKLINKCOMMAND_H
-#define _RG_SEGMENTQUICKLINKCOMMAND_H
+#ifndef RG_SEGMENTQUICKLINKCOMMAND_H
+#define RG_SEGMENTQUICKLINKCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>
@@ -52,4 +52,4 @@ private:
 
 }
 
-#endif // _RG_SEGMENTQUICKLINKCOMMAND_H
+#endif // RG_SEGMENTQUICKLINKCOMMAND_H

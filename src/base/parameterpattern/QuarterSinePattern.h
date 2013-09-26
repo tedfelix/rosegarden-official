@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _QUARTERSINEPATTERN_H_
-#define _QUARTERSINEPATTERN_H_
+#ifndef RG_QUARTERSINEPATTERN_H
+#define RG_QUARTERSINEPATTERN_H
 
 #include "ParameterPattern.h"
 #include "LinearParameterPattern.h"
@@ -41,4 +41,4 @@ public:
 };
 }
 
-#endif /* ifndef _QUARTERSINEPATTERN_H_ */
+#endif /* ifndef RG_QUARTERSINEPATTERN_H */

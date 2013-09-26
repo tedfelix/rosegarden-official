@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MARKEREDITORVIEWITEM_H_
-#define _RG_MARKEREDITORVIEWITEM_H_
+#ifndef RG_MARKEREDITORVIEWITEM_H
+#define RG_MARKEREDITORVIEWITEM_H
 
 #include "base/Event.h"
 

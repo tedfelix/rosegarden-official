@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENPITCHCHOOSER_H_
-#define _RG_ROSEGARDENPITCHCHOOSER_H_
+#ifndef RG_PITCHCHOOSER_H
+#define RG_PITCHCHOOSER_H
 
 #include <QGroupBox>
 

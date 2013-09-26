@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEXTCHANGECOMMAND_H_
-#define _RG_TEXTCHANGECOMMAND_H_
+#ifndef RG_TEXTCHANGECOMMAND_H
+#define RG_TEXTCHANGECOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"

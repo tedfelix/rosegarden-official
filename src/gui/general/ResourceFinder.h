@@ -12,8 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RESOURCE_FINDER_H_
-#define _RG_RESOURCE_FINDER_H_
+#ifndef RG_RESOURCE_FINDER_H
+#define RG_RESOURCE_FINDER_H
 
 #include <QString>
 

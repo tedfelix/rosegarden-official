@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTLINKTOCOPYCOMMAND_H
-#define _RG_SEGMENTLINKTOCOPYCOMMAND_H
+#ifndef RG_SEGMENTLINKTOCOPYCOMMAND_H
+#define RG_SEGMENTLINKTOCOPYCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>
@@ -50,4 +50,4 @@ private:
 
 }
 
-#endif // _RG_SEGMENTLINKTOCOPYCOMMAND_H
+#endif // RG_SEGMENTLINKTOCOPYCOMMAND_H

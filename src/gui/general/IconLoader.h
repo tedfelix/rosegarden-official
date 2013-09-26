@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ICON_LOADER_H_
-#define _RG_ICON_LOADER_H_
+#ifndef RG_ICON_LOADER_H
+#define RG_ICON_LOADER_H
 
 #include <QIcon>
 #include <QPixmap>

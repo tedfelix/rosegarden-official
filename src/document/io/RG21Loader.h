@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RG21LOADER_H_
-#define _RG_RG21LOADER_H_
+#ifndef RG_RG21LOADER_H
+#define RG_RG21LOADER_H
 
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"

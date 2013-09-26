@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENQUANTIZEPARAMETERS_H_
-#define _RG_ROSEGARDENQUANTIZEPARAMETERS_H_
+#ifndef RG_QUANTIZEPARAMETERS_H
+#define RG_QUANTIZEPARAMETERS_H
 
 #include <QFrame>
 #include <QString>

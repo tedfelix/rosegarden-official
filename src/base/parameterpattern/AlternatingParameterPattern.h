@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ALTERNATINGPARAMETERPATTERN_H_
-#define _RG_ALTERNATINGPARAMETERPATTERN_H_
+#ifndef RG_ALTERNATINGPARAMETERPATTERN_H
+#define RG_ALTERNATINGPARAMETERPATTERN_H
 
 #include "ParameterPattern.h"
 

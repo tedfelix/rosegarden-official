@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONSELECTOR_H_
-#define _RG_NOTATIONSELECTOR_H_
+#ifndef RG_NOTATIONSELECTOR_H
+#define RG_NOTATIONSELECTOR_H
 
 #include "NotationTool.h"
 

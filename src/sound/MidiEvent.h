@@ -12,8 +12,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_MIDI_EVENT_H_
-#define _ROSEGARDEN_MIDI_EVENT_H_
+#ifndef RG_MIDI_EVENT_H
+#define RG_MIDI_EVENT_H
 
 #include "Midi.h"
 #include "base/Event.h"
@@ -131,4 +131,4 @@ struct MidiEventCmp
 
 }
 
-#endif // _ROSEGARDEN_MIDI_EVENT_H_
+#endif // RG_MIDI_EVENT_H

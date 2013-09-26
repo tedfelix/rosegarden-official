@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_UNUSEDAUDIOSELECTIONDIALOG_H_
-#define _RG_UNUSEDAUDIOSELECTIONDIALOG_H_
+#ifndef RG_UNUSEDAUDIOSELECTIONDIALOG_H
+#define RG_UNUSEDAUDIOSELECTIONDIALOG_H
 
 #include <QDialog>
 #include <QString>

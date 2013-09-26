@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCHANGETIEPOSITIONCOMMAND_H_
-#define _RG_ADJUSTMENUCHANGETIEPOSITIONCOMMAND_H_
+#ifndef RG_ADJUSTMENUCHANGETIEPOSITIONCOMMAND_H
+#define RG_ADJUSTMENUCHANGETIEPOSITIONCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _INTERNALPREVIEWER_H_
-#define _INTERNALPREVIEWER_H_
+#ifndef RG_INTERNALPREVIEWER_H
+#define RG_INTERNALPREVIEWER_H
 
 #include "gui/seqmanager/ChannelManager.h"
 
@@ -43,4 +43,4 @@ class ImmediateNote
  
 }
 
-#endif /* ifndef _INTERNALPREVIEWER_H_ */
+#endif /* ifndef RG_INTERNALPREVIEWER_H */

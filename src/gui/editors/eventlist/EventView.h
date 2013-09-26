@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EVENTVIEW_H_
-#define _RG_EVENTVIEW_H_
+#ifndef RG_EVENTVIEW_H
+#define RG_EVENTVIEW_H
 
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"

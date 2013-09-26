@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MODIFYCONTROLPARAMETERCOMMAND_H_
-#define _RG_MODIFYCONTROLPARAMETERCOMMAND_H_
+#ifndef RG_MODIFYCONTROLPARAMETERCOMMAND_H
+#define RG_MODIFYCONTROLPARAMETERCOMMAND_H
 
 #include "base/ControlParameter.h"
 #include "base/Device.h"

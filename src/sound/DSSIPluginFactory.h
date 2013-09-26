@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _DSSI_PLUGIN_FACTORY_H_
-#define _DSSI_PLUGIN_FACTORY_H_
+#ifndef RG_DSSI_PLUGIN_FACTORY_H
+#define RG_DSSI_PLUGIN_FACTORY_H
 
 #include "LADSPAPluginFactory.h"
 #include <dssi.h>

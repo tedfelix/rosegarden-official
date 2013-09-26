@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENT_PERFORMANCE_HELPER_H_
-#define _SEGMENT_PERFORMANCE_HELPER_H_
+#ifndef RG_SEGMENT_PERFORMANCE_HELPER_H
+#define RG_SEGMENT_PERFORMANCE_HELPER_H
 
 #include "base/Segment.h"
 #include "Composition.h" // for RealTime

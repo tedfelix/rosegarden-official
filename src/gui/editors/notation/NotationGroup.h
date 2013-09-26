@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONGROUP_H_
-#define _RG_NOTATIONGROUP_H_
+#ifndef RG_NOTATIONGROUP_H
+#define RG_NOTATIONGROUP_H
 
 #include "base/Sets.h"
 #include <utility>

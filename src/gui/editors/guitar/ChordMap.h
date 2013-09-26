@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHORDMAP_H_
-#define _RG_CHORDMAP_H_
+#ifndef RG_CHORDMAP_H
+#define RG_CHORDMAP_H
 
 #include "Chord.h"
 
@@ -77,4 +77,4 @@ protected:
 
 }
 
-#endif /*_RG_CHORDMAP2_H_*/
+#endif /*RG_CHORDMAP_H*/

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIX_WIDGET_H_
-#define _RG_MATRIX_WIDGET_H_
+#ifndef RG_MATRIX_WIDGET_H
+#define RG_MATRIX_WIDGET_H
 
 #include <QWidget>
 #include <QPushButton>

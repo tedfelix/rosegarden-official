@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_STUDIOCONTROL_H_
-#define _RG_STUDIOCONTROL_H_
+#ifndef RG_STUDIOCONTROL_H
+#define RG_STUDIOCONTROL_H
 
 #include "base/MidiProgram.h"
 #include "sound/MappedCommon.h"

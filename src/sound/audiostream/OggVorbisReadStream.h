@@ -15,8 +15,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_OGG_VORBIS_READ_STREAM_H_
-#define _ROSEGARDEN_OGG_VORBIS_READ_STREAM_H_
+#ifndef RG_OGG_VORBIS_READ_STREAM_H
+#define RG_OGG_VORBIS_READ_STREAM_H
 
 #include "AudioReadStream.h"
 

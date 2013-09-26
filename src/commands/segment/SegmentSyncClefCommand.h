@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSYNCCLEFCOMMAND_H_
-#define _RG_SEGMENTSYNCCLEFCOMMAND_H_
+#ifndef RG_SEGMENTSYNCCLEFCOMMAND_H
+#define RG_SEGMENTSYNCCLEFCOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _GENERATEDREGION_H_
-#define _GENERATEDREGION_H_
+#ifndef RG_GENERATEDREGION_H
+#define RG_GENERATEDREGION_H
 
 #include "base/Event.h"
 
@@ -56,4 +56,4 @@ private:
 
 }
 
-#endif /* ifndef _GENERATEDREGION_H_ */
+#endif /* ifndef RG_GENERATEDREGION_H */

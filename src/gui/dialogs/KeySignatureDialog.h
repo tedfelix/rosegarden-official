@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_KEYSIGNATUREDIALOG_H_
-#define _RG_KEYSIGNATUREDIALOG_H_
+#ifndef RG_KEYSIGNATUREDIALOG_H
+#define RG_KEYSIGNATUREDIALOG_H
 
 #include "base/NotationTypes.h"
 #include <string>

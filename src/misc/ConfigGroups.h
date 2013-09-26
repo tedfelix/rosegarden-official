@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONFIG_GROUPS_H_
-#define _CONFIG_GROUPS_H_
+#ifndef RG_CONFIG_GROUPS_H
+#define RG_CONFIG_GROUPS_H
 
 namespace Rosegarden 
 {

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PITCHRULER_H_
-#define _RG_PITCHRULER_H_
+#ifndef RG_PITCHRULER_H
+#define RG_PITCHRULER_H
 
 #include <QSize>
 #include <QWidget>

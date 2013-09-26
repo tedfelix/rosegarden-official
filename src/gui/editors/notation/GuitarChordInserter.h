@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_GUITAR_CHORD_INSERTER_H_
-#define _RG_GUITAR_CHORD_INSERTER_H_
+#ifndef RG_GUITAR_CHORD_INSERTER_H
+#define RG_GUITAR_CHORD_INSERTER_H
 
 #include "NotationTool.h"
 #include "base/Event.h"

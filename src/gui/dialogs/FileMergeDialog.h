@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FILEMERGEDIALOG_H_
-#define _RG_FILEMERGEDIALOG_H_
+#ifndef RG_FILEMERGEDIALOG_H
+#define RG_FILEMERGEDIALOG_H
 
 #include <QDialog>
 #include <QString>

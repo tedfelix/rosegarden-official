@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTREPEATTOCOPYCOMMAND_H_
-#define _RG_SEGMENTREPEATTOCOPYCOMMAND_H_
+#ifndef RG_SEGMENTREPEATTOCOPYCOMMAND_H
+#define RG_SEGMENTREPEATTOCOPYCOMMAND_H
 
 #include "document/Command.h"
 #include <vector>

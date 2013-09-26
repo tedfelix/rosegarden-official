@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDICONFIGURATIONPAGE_H_
-#define _RG_MIDICONFIGURATIONPAGE_H_
+#ifndef RG_MIDICONFIGURATIONPAGE_H
+#define RG_MIDICONFIGURATIONPAGE_H
 
 #include "TabbedConfigurationPage.h"
 #include "gui/widgets/LineEdit.h"

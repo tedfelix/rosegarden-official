@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSE_VERSION_H_
-#define _ROSE_VERSION_H_
+#ifndef RG_VERSION_H
+#define RG_VERSION_H
 
 #include <QString>
 

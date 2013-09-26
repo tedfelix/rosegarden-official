@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESTYLEFILEREADER_H_
-#define _RG_NOTESTYLEFILEREADER_H_
+#ifndef RG_NOTESTYLEFILEREADER_H
+#define RG_NOTESTYLEFILEREADER_H
 
 #include <qxml.h>
 

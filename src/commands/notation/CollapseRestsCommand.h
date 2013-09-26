@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COLLAPSERESTSCOMMAND_H_
-#define _RG_COLLAPSERESTSCOMMAND_H_
+#ifndef RG_COLLAPSERESTSCOMMAND_H
+#define RG_COLLAPSERESTSCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

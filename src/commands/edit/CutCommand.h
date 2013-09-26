@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CUTCOMMAND_H_
-#define _RG_CUTCOMMAND_H_
+#ifndef RG_CUTCOMMAND_H
+#define RG_CUTCOMMAND_H
 
 #include <QString>
 #include <QCoreApplication>

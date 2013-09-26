@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _FAST_VECTOR_H_
-#define _FAST_VECTOR_H_
+#ifndef RG_FAST_VECTOR_H
+#define RG_FAST_VECTOR_H
 
 #include <iterator>
 #include <cstdlib> /* for malloc, realloc, free */

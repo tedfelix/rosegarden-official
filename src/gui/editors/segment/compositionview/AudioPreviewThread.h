@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPREVIEWTHREAD_H_
-#define _RG_AUDIOPREVIEWTHREAD_H_
+#ifndef RG_AUDIOPREVIEWTHREAD_H
+#define RG_AUDIOPREVIEWTHREAD_H
 
 #include "base/RealTime.h"
 #include <map>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRIGGERSEGMENTMANAGER_H_
-#define _RG_TRIGGERSEGMENTMANAGER_H_
+#ifndef RG_TRIGGERSEGMENTMANAGER_H
+#define RG_TRIGGERSEGMENTMANAGER_H
 
 #include "base/Event.h"
 #include "gui/general/ActionFileClient.h"

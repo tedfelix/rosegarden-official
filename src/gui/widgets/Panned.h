@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PANNED_H_
-#define _RG_PANNED_H_
+#ifndef RG_PANNED_H
+#define RG_PANNED_H
 
 #include <QGraphicsView>
 

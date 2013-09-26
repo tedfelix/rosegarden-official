@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RESTINSERTIONCOMMAND_H_
-#define _RG_RESTINSERTIONCOMMAND_H_
+#ifndef RG_RESTINSERTIONCOMMAND_H
+#define RG_RESTINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "NoteInsertionCommand.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIDEVICELISTVIEWITEM_H_
-#define _RG_MIDIDEVICELISTVIEWITEM_H_
+#ifndef RG_MIDIDEVICELISTVIEWITEM_H
+#define RG_MIDIDEVICELISTVIEWITEM_H
 
 #include "base/Device.h"
 

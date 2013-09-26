@@ -16,8 +16,8 @@
 #include "base/Instrument.h"
 #include "MappedCommon.h"
 
-#ifndef _ALSAPORT_H_
-#define _ALSAPORT_H_
+#ifndef RG_ALSAPORT_H
+#define RG_ALSAPORT_H
 
 #ifdef HAVE_ALSA
 #include <alsa/asoundlib.h> // ALSA
@@ -75,5 +75,5 @@ struct AlsaPortCmp
 
 #endif // HAVE_ALSA
 
-#endif // _RG_ALSA_PORT_H_
+#endif // RG_ALSAPORT_H
 

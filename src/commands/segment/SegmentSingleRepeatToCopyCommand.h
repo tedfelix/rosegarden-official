@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H_
-#define _RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H_
+#ifndef RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H
+#define RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

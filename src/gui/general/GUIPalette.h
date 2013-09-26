@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_GUIPALETTE_H_
-#define _RG_GUIPALETTE_H_
+#ifndef RG_GUIPALETTE_H
+#define RG_GUIPALETTE_H
 
 #include "base/Colour.h"
 

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESTYLE_H_
-#define _RG_NOTESTYLE_H_
+#ifndef RG_NOTESTYLE_H
+#define RG_NOTESTYLE_H
 
 #include "base/NotationTypes.h"
 #include <map>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIMIXERVUMETER_H_
-#define _RG_MIDIMIXERVUMETER_H_
+#ifndef RG_MIDIMIXERVUMETER_H
+#define RG_MIDIMIXERVUMETER_H
 
 #include "gui/widgets/VUMeter.h"
 

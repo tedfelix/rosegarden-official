@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRIGGERMANAGERITEM_H_
-#define _RG_TRIGGERMANAGERITEM_H_
+#ifndef RG_TRIGGERMANAGERITEM_H
+#define RG_TRIGGERMANAGERITEM_H
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

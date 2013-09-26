@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SCAVENGER_H_
-#define _SCAVENGER_H_
+#ifndef RG_SCAVENGER_H
+#define RG_SCAVENGER_H
 
 #include <vector>
 #include <list>

@@ -16,8 +16,8 @@
 */
 
 
-#ifndef _RG_CLEF_KEY_CONTEXT_H_
-#define _RG_CLEF_KEY_CONTEXT_H_
+#ifndef RG_CLEF_KEY_CONTEXT_H
+#define RG_CLEF_KEY_CONTEXT_H
 
 /*
  * ClefKeyContext.h
@@ -122,4 +122,4 @@ private :
 
 }
 
-#endif // _RG_CLEF_KEY_CONTEXT_H_
+#endif // RG_CLEF_KEY_CONTEXT_H

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _XMLEXPORTABLE_H_
-#define _XMLEXPORTABLE_H_
+#ifndef RG_XMLEXPORTABLE_H
+#define RG_XMLEXPORTABLE_H
 
 #include <string>
 
@@ -45,5 +45,5 @@ public:
 
 }
 
-#endif // _XMLEXPORTABLE_H_
+#endif // RG_XMLEXPORTABLE_H
 

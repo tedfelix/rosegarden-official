@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RAWNOTERULER_H_
-#define _RG_RAWNOTERULER_H_
+#ifndef RG_RAWNOTERULER_H
+#define RG_RAWNOTERULER_H
 
 #include "base/Segment.h"
 #include <QSize>

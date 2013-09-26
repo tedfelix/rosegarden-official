@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PLACECONTROLLERSCOMMAND_H_
-#define _PLACECONTROLLERSCOMMAND_H_
+#ifndef RG_PLACECONTROLLERSCOMMAND_H
+#define RG_PLACECONTROLLERSCOMMAND_H
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
@@ -56,4 +56,4 @@ class PlaceControllersCommand  : public BasicSelectionCommand
 
 }
 
-#endif /* ifndef _PLACECONTROLLERSCOMMAND_H_ */
+#endif /* ifndef RG_PLACECONTROLLERSCOMMAND_H */

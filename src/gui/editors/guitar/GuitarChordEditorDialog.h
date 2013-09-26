@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_GUITARCHORDEDITOR2_H_
-#define _RG_GUITARCHORDEDITOR2_H_
+#ifndef RG_GUITARCHORDEDITORDIALOG_H
+#define RG_GUITARCHORDEDITORDIALOG_H
 
 #include <QDialog>
 
@@ -57,4 +57,4 @@ protected:
 
 }
 
-#endif /*_RG_GUITARCHORDEDITOR2_H_*/
+#endif /*RG_GUITARCHORDEDITORDIALOG_H*/

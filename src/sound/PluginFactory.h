@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PLUGIN_FACTORY_H_
-#define _PLUGIN_FACTORY_H_
+#ifndef RG_PLUGIN_FACTORY_H
+#define RG_PLUGIN_FACTORY_H
 
 #include <QString>
 #include <vector>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTPARAMETERBOX_H_
-#define _RG_SEGMENTPARAMETERBOX_H_
+#ifndef RG_SEGMENTPARAMETERBOX_H
+#define RG_SEGMENTPARAMETERBOX_H
 
 #include "base/Composition.h"
 #include "base/MidiProgram.h"

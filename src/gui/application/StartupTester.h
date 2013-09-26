@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_STARTUPTESTER_H_
-#define _RG_STARTUPTESTER_H_
+#ifndef RG_STARTUPTESTER_H
+#define RG_STARTUPTESTER_H
 
 #include <QMutex>
 #include <QThread>

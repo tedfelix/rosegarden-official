@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXPERCUSSIONINSERTIONCOMMAND_H_
-#define _RG_MATRIXPERCUSSIONINSERTIONCOMMAND_H_
+#ifndef RG_MATRIXPERCUSSIONINSERTIONCOMMAND_H
+#define RG_MATRIXPERCUSSIONINSERTIONCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include "base/Event.h"

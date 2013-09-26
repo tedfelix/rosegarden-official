@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPLAYINGDIALOG_H_
-#define _RG_AUDIOPLAYINGDIALOG_H_
+#ifndef RG_AUDIOPLAYINGDIALOG_H
+#define RG_AUDIOPLAYINGDIALOG_H
 
 #include <QDialog>
 

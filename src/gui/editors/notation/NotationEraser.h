@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONERASER_H_
-#define _RG_NOTATIONERASER_H_
+#ifndef RG_NOTATIONERASER_H
+#define RG_NOTATIONERASER_H
 
 #include "NotationTool.h"
 #include "base/Event.h"

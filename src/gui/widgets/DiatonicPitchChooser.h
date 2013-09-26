@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENDIATONICPITCHCHOOSER_H_
-#define _RG_ROSEGARDENDIATONICPITCHCHOOSER_H_
+#ifndef RG_DIATONICPITCHCHOOSER_H
+#define RG_DIATONICPITCHCHOOSER_H
 
 #include <QGroupBox>
 

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DELETETRACKSCOMMAND_H_
-#define _RG_DELETETRACKSCOMMAND_H_
+#ifndef RG_DELETETRACKSCOMMAND_H
+#define RG_DELETETRACKSCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

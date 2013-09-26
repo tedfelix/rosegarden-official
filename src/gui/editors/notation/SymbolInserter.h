@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYMBOLINSERTER_H_
-#define _RG_SYMBOLINSERTER_H_
+#ifndef RG_SYMBOLINSERTER_H
+#define RG_SYMBOLINSERTER_H
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"

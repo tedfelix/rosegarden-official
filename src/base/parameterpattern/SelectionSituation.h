@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SELECTIONSITUATION_H_
-#define _SELECTIONSITUATION_H_
+#ifndef RG_SELECTIONSITUATION_H
+#define RG_SELECTIONSITUATION_H
 
 #include "base/PropertyName.h"
 #include "base/Selection.h"
@@ -74,4 +74,4 @@ class SelectionSituation
 
 }
 
-#endif /* ifndef _SELECTIONSITUATION_H_ */
+#endif /* ifndef RG_SELECTIONSITUATION_H */

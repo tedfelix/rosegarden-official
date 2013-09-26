@@ -22,8 +22,8 @@
 /// replaces a series of such events in the a given segment.  It now
 /// supplies the functionality for several menu items.
 
-#ifndef _RG_PITCHBENDSEQUENCEDIALOG_H_
-#define _RG_PITCHBENDSEQUENCEDIALOG_H_
+#ifndef RG_PITCHBENDSEQUENCEDIALOG_H
+#define RG_PITCHBENDSEQUENCEDIALOG_H
 
 #include <QDialog>
 

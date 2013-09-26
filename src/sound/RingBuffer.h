@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RINGBUFFER_H_
-#define _RINGBUFFER_H_
+#ifndef RG_RINGBUFFER_H
+#define RG_RINGBUFFER_H
 
 #include <sys/types.h>
 #include <sys/mman.h>
@@ -616,4 +616,4 @@ RingBuffer<T, N>::zero(size_t n)
 
 }
 
-#endif // _RINGBUFFER_H_
+#endif // RG_RINGBUFFER_H

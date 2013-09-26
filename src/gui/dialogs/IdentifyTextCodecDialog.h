@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_IDENTIFYTEXTCODECDIALOG_H_
-#define _RG_IDENTIFYTEXTCODECDIALOG_H_
+#ifndef RG_IDENTIFYTEXTCODECDIALOG_H
+#define RG_IDENTIFYTEXTCODECDIALOG_H
 
 #include <string>
 #include <QDialog>

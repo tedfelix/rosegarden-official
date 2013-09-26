@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H_
-#define _RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H_
+#ifndef RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H
+#define RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

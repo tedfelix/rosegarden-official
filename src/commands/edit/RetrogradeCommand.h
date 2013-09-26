@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RETROGRADECOMMAND_H_
-#define _RG_RETROGRADECOMMAND_H_
+#ifndef RG_RETROGRADECOMMAND_H
+#define RG_RETROGRADECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

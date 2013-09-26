@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _DSSIPLUGININSTANCE_H_
-#define _DSSIPLUGININSTANCE_H_
+#ifndef RG_DSSIPLUGININSTANCE_H
+#define RG_DSSIPLUGININSTANCE_H
 
 #include <vector>
 #include <set>
@@ -179,5 +179,5 @@ protected:
 
 };
 
-#endif // _DSSIPLUGININSTANCE_H_
+#endif // RG_DSSIPLUGININSTANCE_H
 

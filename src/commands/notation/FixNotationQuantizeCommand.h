@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FIXNOTATIONQUANTIZECOMMAND_H_
-#define _RG_FIXNOTATIONQUANTIZECOMMAND_H_
+#ifndef RG_FIXNOTATIONQUANTIZECOMMAND_H
+#define RG_FIXNOTATIONQUANTIZECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

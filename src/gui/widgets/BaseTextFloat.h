@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENBASETEXTFLOAT_H_
-#define _RG_ROSEGARDENBASETEXTFLOAT_H_
+#ifndef RG_BASETEXTFLOAT_H
+#define RG_BASETEXTFLOAT_H
 
 #include <QString>
 #include <QWidget>

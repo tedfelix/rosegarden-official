@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SPECIALSEGMENTMAPPER_H_
-#define _RG_SPECIALSEGMENTMAPPER_H_
+#ifndef RG_SPECIALSEGMENTMAPPER_H
+#define RG_SPECIALSEGMENTMAPPER_H
 
 #include "SegmentMapper.h"
 #include <QString>

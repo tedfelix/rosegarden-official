@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDTIMESIGNATURECOMMAND_H_
-#define _RG_ADDTIMESIGNATURECOMMAND_H_
+#ifndef RG_ADDTIMESIGNATURECOMMAND_H
+#define RG_ADDTIMESIGNATURECOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/Command.h"

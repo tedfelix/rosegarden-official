@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PRESETGROUP_H_
-#define _RG_PRESETGROUP_H_
+#ifndef RG_PRESETGROUP_H
+#define RG_PRESETGROUP_H
 
 #include "base/Exception.h"
 #include "CategoryElement.h"

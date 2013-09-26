@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIO_CACHE_H_
-#define _AUDIO_CACHE_H_
+#ifndef RG_AUDIO_CACHE_H
+#define RG_AUDIO_CACHE_H
 
 #include <map>
 #include <stddef.h>

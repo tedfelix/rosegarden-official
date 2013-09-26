@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EDITVIEWBASE_H_
-#define _RG_EDITVIEWBASE_H_
+#ifndef RG_EDITVIEWBASE_H
+#define RG_EDITVIEWBASE_H
 
 #include <set>
 #include <string>

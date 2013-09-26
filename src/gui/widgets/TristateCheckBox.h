@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENTRISTATECHECKBOX_H_
-#define _RG_ROSEGARDENTRISTATECHECKBOX_H_
+#ifndef RG_TRISTATECHECKBOX_H
+#define RG_TRISTATECHECKBOX_H
 
 #include <QCheckBox>
 

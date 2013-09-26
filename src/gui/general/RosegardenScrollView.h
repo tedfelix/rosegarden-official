@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENSCROLLVIEW_H_
-#define _RG_ROSEGARDENSCROLLVIEW_H_
+#ifndef RG_ROSEGARDENSCROLLVIEW_H
+#define RG_ROSEGARDENSCROLLVIEW_H
 
 #include <QPoint>
 #include <QAbstractScrollArea>

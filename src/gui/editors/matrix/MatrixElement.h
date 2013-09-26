@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXELEMENT_H_
-#define _RG_MATRIXELEMENT_H_
+#ifndef RG_MATRIXELEMENT_H
+#define RG_MATRIXELEMENT_H
 
 #include "base/ViewElement.h"
 

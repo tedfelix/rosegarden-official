@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CONTROLITEM_H
-#define _CONTROLITEM_H
+#ifndef RG_CONTROLITEM_H
+#define RG_CONTROLITEM_H
 
 #include <QPolygonF>
 #include <QColor>

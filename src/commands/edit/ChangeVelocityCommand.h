@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHANGEVELOCITYCOMMAND_H_
-#define _RG_CHANGEVELOCITYCOMMAND_H_
+#ifndef RG_CHANGEVELOCITYCOMMAND_H
+#define RG_CHANGEVELOCITYCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

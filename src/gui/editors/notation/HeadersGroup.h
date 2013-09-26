@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_HEADERSGROUP_H_
-#define _RG_HEADERSGROUP_H_
+#ifndef RG_HEADERSGROUP_H
+#define RG_HEADERSGROUP_H
 
 #include "base/NotationTypes.h"
 #include "base/Track.h"

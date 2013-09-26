@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIINSTRUMENTPARAMETERPANEL_H_
-#define _RG_MIDIINSTRUMENTPARAMETERPANEL_H_
+#ifndef RG_MIDIINSTRUMENTPARAMETERPANEL_H
+#define RG_MIDIINSTRUMENTPARAMETERPANEL_H
 
 #include "base/ChannelInterval.h"
 #include "base/MidiProgram.h"

@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_STAFFHEADER_H_
-#define _RG_STAFFHEADER_H_
+#ifndef RG_STAFFHEADER_H
+#define RG_STAFFHEADER_H
 
 #include "base/NotationTypes.h"
 #include "base/Track.h"

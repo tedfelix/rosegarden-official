@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUSICXMLLOADER_H_
-#define _RG_MUSICXMLLOADER_H_
+#ifndef RG_MUSICXMLLOADER_H
+#define RG_MUSICXMLLOADER_H
 
 #include "base/PropertyName.h"
 #include "gui/general/ProgressReporter.h"

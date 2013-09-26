@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTTOOLBOX_H_
-#define _RG_SEGMENTTOOLBOX_H_
+#ifndef RG_SEGMENTTOOLBOX_H
+#define RG_SEGMENTTOOLBOX_H
 
 #include "gui/general/BaseToolBox.h"
 #include "SegmentTool.h"

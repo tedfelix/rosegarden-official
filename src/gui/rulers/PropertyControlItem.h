@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROPERTYCONTROLITEM_H
-#define _PROPERTYCONTROLITEM_H
+#ifndef RG_PROPERTYCONTROLITEM_H
+#define RG_PROPERTYCONTROLITEM_H
 
 #include "base/ViewElement.h"
 #include "gui/rulers/ControlItem.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTRECORDCOMMAND_H_
-#define _RG_SEGMENTRECORDCOMMAND_H_
+#ifndef RG_SEGMENTRECORDCOMMAND_H
+#define RG_SEGMENTRECORDCOMMAND_H
 
 #include "document/Command.h"
 

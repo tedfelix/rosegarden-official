@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LADSPA_PLUGIN_FACTORY_H_
-#define _LADSPA_PLUGIN_FACTORY_H_
+#ifndef RG_LADSPA_PLUGIN_FACTORY_H
+#define RG_LADSPA_PLUGIN_FACTORY_H
 
 #include "PluginFactory.h"
 #include <ladspa.h>

@@ -13,8 +13,8 @@
 */
 
 
-#ifndef _MAPPED_EVENT_LIST_H_
-#define _MAPPED_EVENT_LIST_H_
+#ifndef RG_MAPPED_EVENT_LIST_H
+#define RG_MAPPED_EVENT_LIST_H
 
 
 #include "base/Composition.h"

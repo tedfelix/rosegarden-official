@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDINDICATIONCOMMAND_H_
-#define _RG_ADDINDICATIONCOMMAND_H_
+#ifndef RG_ADDINDICATIONCOMMAND_H
+#define RG_ADDINDICATIONCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <string>

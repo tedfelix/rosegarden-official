@@ -16,8 +16,8 @@
 */
 
 
-#ifndef _ICONSTACKEDWIDGET_H_
-#define _ICONSTACKEDWIDGET_H_
+#ifndef RG_ICONSTACKEDWIDGET_H
+#define RG_ICONSTACKEDWIDGET_H
 
 #include "IconButton.h"
 

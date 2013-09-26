@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _EXPANDFIGURATIONCOMMAND_H_
-#define _EXPANDFIGURATIONCOMMAND_H_
+#ifndef RG_EXPANDFIGURATIONCOMMAND_H
+#define RG_EXPANDFIGURATIONCOMMAND_H
 
 #include "base/Segment.h"
 #include "document/Command.h"

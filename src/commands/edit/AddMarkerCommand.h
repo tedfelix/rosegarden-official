@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDMARKERCOMMAND_H_
-#define _RG_ADDMARKERCOMMAND_H_
+#ifndef RG_ADDMARKERCOMMAND_H
+#define RG_ADDMARKERCOMMAND_H
 
 #include <string>
 #include "document/Command.h"

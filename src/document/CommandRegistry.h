@@ -22,8 +22,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMMANDREGISTRY_H_
-#define _RG_COMMANDREGISTRY_H_
+#ifndef RG_COMMANDREGISTRY_H
+#define RG_COMMANDREGISTRY_H
 
 #include <QObject>
 #include <QString>

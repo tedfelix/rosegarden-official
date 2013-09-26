@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONSTRINGS_H_
-#define _RG_NOTATIONSTRINGS_H_
+#ifndef RG_NOTATIONSTRINGS_H
+#define RG_NOTATIONSTRINGS_H
 
 #include "base/Exception.h"
 #include "base/NotationTypes.h"

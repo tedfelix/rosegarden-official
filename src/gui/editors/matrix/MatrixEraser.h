@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXERASER_H_
-#define _RG_MATRIXERASER_H_
+#ifndef RG_MATRIXERASER_H
+#define RG_MATRIXERASER_H
 
 #include "MatrixTool.h"
 

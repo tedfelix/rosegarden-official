@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSYNCCOMMAND_H_
-#define _RG_SEGMENTSYNCCOMMAND_H_
+#ifndef RG_SEGMENTSYNCCOMMAND_H
+#define RG_SEGMENTSYNCCOMMAND_H
 
 #include "document/Command.h"
 #include "base/Composition.h"

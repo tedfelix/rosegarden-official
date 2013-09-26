@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TABBEDCONFIGURATIONPAGE_H_
-#define _RG_TABBEDCONFIGURATIONPAGE_H_
+#ifndef RG_TABBEDCONFIGURATIONPAGE_H
+#define RG_TABBEDCONFIGURATIONPAGE_H
 
 #include "ConfigurationPage.h"
 #include <QString>

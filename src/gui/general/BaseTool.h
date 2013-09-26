@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BASETOOL_H_
-#define _RG_BASETOOL_H_
+#ifndef RG_BASETOOL_H
+#define RG_BASETOOL_H
 
 #include <QObject>
 #include <QString>

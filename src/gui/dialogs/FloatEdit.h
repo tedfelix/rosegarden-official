@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENFLOATEDIT_H_
-#define _RG_ROSEGARDENFLOATEDIT_H_
+#ifndef RG_FLOATEDIT_H
+#define RG_FLOATEDIT_H
 
 #include <QDialog>
 

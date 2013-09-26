@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EVENTINSERTIONCOMMAND_H_
-#define _RG_EVENTINSERTIONCOMMAND_H_
+#ifndef RG_EVENTINSERTIONCOMMAND_H
+#define RG_EVENTINSERTIONCOMMAND_H
 
 #include "document/BasicCommand.h"
 

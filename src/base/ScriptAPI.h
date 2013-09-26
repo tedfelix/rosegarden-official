@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SCRIPT_API_H_
-#define _SCRIPT_API_H_
+#ifndef RG_SCRIPT_API_H
+#define RG_SCRIPT_API_H
 
 #include "base/Segment.h"
 

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHANGESTYLECOMMAND_H_
-#define _RG_CHANGESTYLECOMMAND_H_
+#ifndef RG_CHANGESTYLECOMMAND_H
+#define RG_CHANGESTYLECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NoteStyle.h"

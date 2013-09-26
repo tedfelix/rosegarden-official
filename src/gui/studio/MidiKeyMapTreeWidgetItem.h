@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIKEYMAPLISTVIEWITEM_H_
-#define _RG_MIDIKEYMAPLISTVIEWITEM_H_
+#ifndef RG_MIDIKEYMAPLISTVIEWITEM_H
+#define RG_MIDIKEYMAPLISTVIEWITEM_H
 
 #include "base/Device.h"
 #include "MidiDeviceTreeWidgetItem.h"

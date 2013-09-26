@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SOFT_SYNTH_DEVICE_H_
-#define _SOFT_SYNTH_DEVICE_H_
+#ifndef RG_SOFT_SYNTH_DEVICE_H
+#define RG_SOFT_SYNTH_DEVICE_H
 
 #include <string>
 

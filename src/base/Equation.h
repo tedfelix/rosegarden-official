@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _EQUATION_H_
-#define _EQUATION_H_
+#ifndef RG_EQUATION_H
+#define RG_EQUATION_H
 
 namespace Rosegarden {
 

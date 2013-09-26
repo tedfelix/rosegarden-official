@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PERCUSSIONPITCHRULER_H_
-#define _RG_PERCUSSIONPITCHRULER_H_
+#ifndef RG_PERCUSSIONPITCHRULER_H
+#define RG_PERCUSSIONPITCHRULER_H
 
 #include "PitchRuler.h"
 #include <QSize>

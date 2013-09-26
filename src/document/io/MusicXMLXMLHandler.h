@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUSICXMLXMLHANDLER_H_
-#define _RG_MUSICXMLXMLHANDLER_H_
+#ifndef RG_MUSICXMLXMLHANDLER_H
+#define RG_MUSICXMLXMLHANDLER_H
 
 #include "MusicXMLImportHelper.h"
 #include "MusicXMLLoader.h"

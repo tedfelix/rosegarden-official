@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOMIXERWINDOW_H_
-#define _RG_AUDIOMIXERWINDOW_H_
+#ifndef RG_AUDIOMIXERWINDOW_H
+#define RG_AUDIOMIXERWINDOW_H
 
 #include "base/MidiProgram.h"
 #include "MixerWindow.h"

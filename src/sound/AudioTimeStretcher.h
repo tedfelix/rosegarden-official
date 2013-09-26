@@ -30,8 +30,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIO_TIME_STRETCHER_H_
-#define _AUDIO_TIME_STRETCHER_H_
+#ifndef RG_AUDIO_TIME_STRETCHER_H
+#define RG_AUDIO_TIME_STRETCHER_H
 
 #include "SampleWindow.h"
 #include "RingBuffer.h"

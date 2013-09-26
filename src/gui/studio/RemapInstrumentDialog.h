@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_REMAPINSTRUMENTDIALOG_H_
-#define _RG_REMAPINSTRUMENTDIALOG_H_
+#ifndef RG_REMAPINSTRUMENTDIALOG_H
+#define RG_REMAPINSTRUMENTDIALOG_H
 
 #include "base/Studio.h"
 #include <QDialog>

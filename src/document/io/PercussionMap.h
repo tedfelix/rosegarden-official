@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PERCUSSIONMAP_H_
-#define _RG_PERCUSSIONMAP_H_
+#ifndef RG_PERCUSSIONMAP_H
+#define RG_PERCUSSIONMAP_H
 
 #include "base/BaseProperties.h"
 #include "gui/general/ResourceFinder.h"

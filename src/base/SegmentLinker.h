@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENTLINKER_H
-#define _SEGMENTLINKER_H
+#ifndef RG_SEGMENTLINKER_H
+#define RG_SEGMENTLINKER_H
 
 #include "Segment.h"
 #include <QObject>
@@ -95,4 +95,4 @@ private:
     
 }
 
-#endif // _SEGMENTLINKER_H
+#endif // RG_SEGMENTLINKER_H

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PROPERTYADJUSTER_H_
-#define _RG_PROPERTYADJUSTER_H_
+#ifndef RG_PROPERTYADJUSTER_H
+#define RG_PROPERTYADJUSTER_H
 
 #include "ControlTool.h"
 //#include <QString>

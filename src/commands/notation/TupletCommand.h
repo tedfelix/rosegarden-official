@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TUPLETCOMMAND_H_
-#define _RG_TUPLETCOMMAND_H_
+#ifndef RG_TUPLETCOMMAND_H
+#define RG_TUPLETCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONFIGURATIONPAGE_H_
-#define _RG_CONFIGURATIONPAGE_H_
+#ifndef RG_CONFIGURATIONPAGE_H
+#define RG_CONFIGURATIONPAGE_H
 
 #include <QWidget>
 

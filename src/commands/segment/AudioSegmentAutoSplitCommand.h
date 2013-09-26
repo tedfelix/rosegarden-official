@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H_
-#define _RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H_
+#ifndef RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H
+#define RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

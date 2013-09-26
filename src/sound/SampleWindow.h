@@ -30,8 +30,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SAMPLE_WINDOW_H_
-#define _SAMPLE_WINDOW_H_
+#ifndef RG_SAMPLE_WINDOW_H
+#define RG_SAMPLE_WINDOW_H
 
 #include <cmath>
 #include <cstdlib>

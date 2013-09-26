@@ -12,8 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIOFILE_H_
-#define _AUDIOFILE_H_
+#ifndef RG_AUDIOFILE_H
+#define RG_AUDIOFILE_H
 
 #include <string>
 #include <vector>
@@ -212,4 +212,4 @@ protected:
 }
 
 
-#endif /// _AUDIOFILE_H_
+#endif /// RG_AUDIOFILE_H

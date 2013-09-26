@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CONTROLLERCONTEXT_H_
-#define _CONTROLLERCONTEXT_H_
+#ifndef RG_CONTROLLERCONTEXT_H
+#define RG_CONTROLLERCONTEXT_H
 
 #include <base/Event.h>
 #include <map>
@@ -159,4 +159,4 @@ private:
 };
 }
 
-#endif /* ifndef _CONTROLLERCONTEXT_H_ */
+#endif /* ifndef RG_CONTROLLERCONTEXT_H */

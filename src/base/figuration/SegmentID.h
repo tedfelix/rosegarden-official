@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENTID_H_
-#define _SEGMENTID_H_
+#ifndef RG_SEGMENTID_H
+#define RG_SEGMENTID_H
 
 #include "base/Event.h"
 
@@ -59,4 +59,4 @@ class SegmentID
 
 }
 
-#endif /* ifndef _SEGMENTID_H_ */
+#endif /* ifndef RG_SEGMENTID_H */

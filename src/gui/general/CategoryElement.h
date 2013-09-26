@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CATEGORYELEMENT_H_
-#define _RG_CATEGORYELEMENT_H_
+#ifndef RG_CATEGORYELEMENT_H
+#define RG_CATEGORYELEMENT_H
 
 #include "PresetElement.h"
 

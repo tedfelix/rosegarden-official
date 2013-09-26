@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENPARAMETERBOX_H_
-#define _RG_ROSEGARDENPARAMETERBOX_H_
+#ifndef RG_ROSEGARDENPARAMETERBOX_H
+#define RG_ROSEGARDENPARAMETERBOX_H
 
 #include "RosegardenParameterArea.h"
 #include <QFont>

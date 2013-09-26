@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_HZOOMABLE_H_
-#define _RG_HZOOMABLE_H_
+#ifndef RG_HZOOMABLE_H
+#define RG_HZOOMABLE_H
 
 
 

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTCOMMANDREPEAT_H_
-#define _RG_SEGMENTCOMMANDREPEAT_H_
+#ifndef RG_SEGMENTCOMMANDREPEAT_H
+#define RG_SEGMENTCOMMANDREPEAT_H
 
 #include "SegmentCommand.h"
 #include <vector>

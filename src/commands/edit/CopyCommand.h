@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COPYCOMMAND_H_
-#define _RG_COPYCOMMAND_H_
+#ifndef RG_COPYCOMMAND_H
+#define RG_COPYCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

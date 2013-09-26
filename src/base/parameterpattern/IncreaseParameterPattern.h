@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INCREASEPARAMETERPATTERN_H_
-#define _RG_INCREASEPARAMETERPATTERN_H_
+#ifndef RG_INCREASEPARAMETERPATTERN_H
+#define RG_INCREASEPARAMETERPATTERN_H
 
 #include "ParameterPattern.h"
 

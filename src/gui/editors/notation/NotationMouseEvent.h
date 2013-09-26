@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _NOTATION_MOUSE_EVENT_H_
-#define _NOTATION_MOUSE_EVENT_H_
+#ifndef RG_NOTATION_MOUSE_EVENT_H
+#define RG_NOTATION_MOUSE_EVENT_H
 
 #include "base/NotationTypes.h"
 #include "base/Event.h"

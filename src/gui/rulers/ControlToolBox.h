@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLTOOLBOX_H_
-#define _RG_CONTROLTOOLBOX_H_
+#ifndef RG_CONTROLTOOLBOX_H
+#define RG_CONTROLTOOLBOX_H
 
 #include "gui/general/BaseToolBox.h"
 

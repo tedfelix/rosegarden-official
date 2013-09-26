@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROFILER_H_
-#define _PROFILER_H_
+#ifndef RG_PROFILER_H
+#define RG_PROFILER_H
 
 #include <ctime>
 #include <sys/time.h>

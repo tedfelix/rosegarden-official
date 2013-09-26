@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_VIEW_SEGMENT_H_
-#define _RG_VIEW_SEGMENT_H_
+#ifndef RG_VIEW_SEGMENT_H
+#define RG_VIEW_SEGMENT_H
 
 #include "ViewElement.h"
 #include "base/Segment.h"

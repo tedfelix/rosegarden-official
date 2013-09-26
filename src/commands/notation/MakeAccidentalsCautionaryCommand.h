@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H_
-#define _RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H_
+#ifndef RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H
+#define RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

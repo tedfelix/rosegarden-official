@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUPEXPORTER_H_
-#define _RG_MUPEXPORTER_H_
+#ifndef RG_MUPEXPORTER_H
+#define RG_MUPEXPORTER_H
 
 #include "base/Track.h"
 #include "gui/general/ProgressReporter.h"

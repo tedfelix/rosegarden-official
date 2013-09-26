@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SPLITBYRECORDINGSRCDIALOG_H_
-#define _RG_SPLITBYRECORDINGSRCDIALOG_H_
+#ifndef RG_SPLITBYRECORDINGSRCDIALOG_H
+#define RG_SPLITBYRECORDINGSRCDIALOG_H
 
 #include <QDialog>
 #include <vector>

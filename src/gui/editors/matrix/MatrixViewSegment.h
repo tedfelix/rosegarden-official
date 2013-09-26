@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXVIEWSEGMENT_H_
-#define _RG_MATRIXVIEWSEGMENT_H_
+#ifndef RG_MATRIXVIEWSEGMENT_H
+#define RG_MATRIXVIEWSEGMENT_H
 
 #include "base/ViewSegment.h"
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DECOYACTION_H_
-#define _RG_DECOYACTION_H_
+#ifndef RG_DECOYACTION_H
+#define RG_DECOYACTION_H
 
 #include <QAction>
 

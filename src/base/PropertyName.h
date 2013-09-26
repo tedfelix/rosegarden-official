@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROPERTY_NAME_H_
-#define _PROPERTY_NAME_H_
+#ifndef RG_PROPERTY_NAME_H
+#define RG_PROPERTY_NAME_H
 
 #include <string>
 #include <map>

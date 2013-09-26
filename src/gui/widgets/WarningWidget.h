@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _WARNING_WIDGET_H_
-#define _WARNING_WIDGET_H_
+#ifndef RG_WARNING_WIDGET_H
+#define RG_WARNING_WIDGET_H
 
 #include "WarningDialog.h"
 

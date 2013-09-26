@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ELEMENTADAPTER_H_
-#define _RG_ELEMENTADAPTER_H_
+#ifndef RG_ELEMENTADAPTER_H
+#define RG_ELEMENTADAPTER_H
 
 #include "base/Event.h"
 

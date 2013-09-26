@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NAMESETEDITOR_H_
-#define _RG_NAMESETEDITOR_H_
+#ifndef RG_NAMESETEDITOR_H
+#define RG_NAMESETEDITOR_H
 
 #include "gui/widgets/LineEdit.h"
 

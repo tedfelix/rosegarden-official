@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTCOLOURMAPCOMMAND_H_
-#define _RG_SEGMENTCOLOURMAPCOMMAND_H_
+#ifndef RG_SEGMENTCOLOURMAPCOMMAND_H
+#define RG_SEGMENTCOLOURMAPCOMMAND_H
 
 #include "base/ColourMap.h"
 #include "base/Segment.h"

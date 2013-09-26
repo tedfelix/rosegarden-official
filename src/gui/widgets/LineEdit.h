@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LINE_EDIT_H_
-#define _LINE_EDIT_H_
+#ifndef RG_LINE_EDIT_H
+#define RG_LINE_EDIT_H
 
 #include <QLineEdit>
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FONTREQUESTER_H_
-#define _RG_FONTREQUESTER_H_
+#ifndef RG_FONTREQUESTER_H
+#define RG_FONTREQUESTER_H
 
 #include <QWidget>
 #include <QFont>

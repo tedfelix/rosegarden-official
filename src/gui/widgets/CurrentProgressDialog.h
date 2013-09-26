@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CURRENTPROGRESSDIALOG_H_
-#define _RG_CURRENTPROGRESSDIALOG_H_
+#ifndef RG_CURRENTPROGRESSDIALOG_H
+#define RG_CURRENTPROGRESSDIALOG_H
 
 #include <QObject>
 

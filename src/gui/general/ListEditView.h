@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LIST_EDIT_VIEW_H_
-#define _RG_LIST_EDIT_VIEW_H_
+#ifndef RG_LIST_EDIT_VIEW_H
+#define RG_LIST_EDIT_VIEW_H
 
 #include "EditViewBase.h"
 #include "document/CommandRegistry.h"

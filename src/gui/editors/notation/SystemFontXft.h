@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYSTEMFONTXFT_H_
-#define _RG_SYSTEMFONTXFT_H_
+#ifndef RG_SYSTEMFONTXFT_H
+#define RG_SYSTEMFONTXFT_H
 
 #ifdef HAVE_XFT
 

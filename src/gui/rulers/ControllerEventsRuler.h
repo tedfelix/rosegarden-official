@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLLEREVENTSRULER_H_
-#define _RG_CONTROLLEREVENTSRULER_H_
+#ifndef RG_CONTROLLEREVENTSRULER_H
+#define RG_CONTROLLEREVENTSRULER_H
 
 #include "ControlRuler.h"
 #include "base/Event.h"

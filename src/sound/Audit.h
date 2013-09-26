@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIT_H_
-#define _AUDIT_H_
+#ifndef RG_AUDIT_H
+#define RG_AUDIT_H
 
 #include <string>
 #include <iostream>

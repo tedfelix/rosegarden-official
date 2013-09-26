@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTLINKTRANSPOSECOMMAND_H_
-#define _RG_SEGMENTLINKTRANSPOSECOMMAND_H_
+#ifndef RG_SEGMENTLINKTRANSPOSECOMMAND_H
+#define RG_SEGMENTLINKTRANSPOSECOMMAND_H
 
 #include "document/Command.h"
 #include "document/BasicCommand.h"

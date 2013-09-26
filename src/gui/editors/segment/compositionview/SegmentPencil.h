@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTPENCIL_H_
-#define _RG_SEGMENTPENCIL_H_
+#ifndef RG_SEGMENTPENCIL_H
+#define RG_SEGMENTPENCIL_H
 
 #include "base/Track.h"
 #include "SegmentTool.h"

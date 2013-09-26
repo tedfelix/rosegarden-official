@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _NOTATION_SCENE_H_
-#define _NOTATION_SCENE_H_
+#ifndef RG_NOTATION_SCENE_H
+#define RG_NOTATION_SCENE_H
 
 #include <QGraphicsScene>
 

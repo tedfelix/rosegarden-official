@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _GENERATEDREGIONINSERTIONCOMMAND_H_
-#define _GENERATEDREGIONINSERTIONCOMMAND_H_
+#ifndef RG_GENERATEDREGIONINSERTIONCOMMAND_H
+#define RG_GENERATEDREGIONINSERTIONCOMMAND_H
 
 #include "base/figuration/GeneratedRegion.h"
 #include "document/BasicCommand.h"
@@ -55,4 +55,4 @@ protected:
 
 }
 
-#endif /* ifndef _GENERATEDREGIONINSERTIONCOMMAND_H_ */
+#endif /* ifndef RG_GENERATEDREGIONINSERTIONCOMMAND_H */

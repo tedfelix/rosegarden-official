@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DECOUNTERPOINTCOMMAND_H_
-#define _RG_DECOUNTERPOINTCOMMAND_H_
+#ifndef RG_DECOUNTERPOINTCOMMAND_H
+#define RG_DECOUNTERPOINTCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

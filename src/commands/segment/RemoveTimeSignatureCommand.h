@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_REMOVETIMESIGNATURECOMMAND_H_
-#define _RG_REMOVETIMESIGNATURECOMMAND_H_
+#ifndef RG_REMOVETIMESIGNATURECOMMAND_H
+#define RG_REMOVETIMESIGNATURECOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/Command.h"

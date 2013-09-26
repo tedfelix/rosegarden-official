@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDTRACKSCOMMAND_H_
-#define _RG_ADDTRACKSCOMMAND_H_
+#ifndef RG_ADDTRACKSCOMMAND_H
+#define RG_ADDTRACKSCOMMAND_H
 
 #include "base/MidiProgram.h"
 #include "base/Composition.h"

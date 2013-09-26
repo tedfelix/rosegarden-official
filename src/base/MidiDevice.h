@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MIDIDEVICE_H_
-#define _MIDIDEVICE_H_
+#ifndef RG_MIDIDEVICE_H
+#define RG_MIDIDEVICE_H
 
 #include <string>
 #include <vector>
@@ -244,4 +244,4 @@ protected:
 
 }
 
-#endif // _MIDIDEVICE_H_
+#endif // RG_MIDIDEVICE_H

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYSTEMFONT_H_
-#define _RG_SYSTEMFONT_H_
+#ifndef RG_SYSTEMFONT_H
+#define RG_SYSTEMFONT_H
 
 #include <QPixmap>
 #include "gui/editors/notation/NoteCharacterNames.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDDOTCOMMAND_H_
-#define _RG_ADDDOTCOMMAND_H_
+#ifndef RG_ADDDOTCOMMAND_H
+#define RG_ADDDOTCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXTOOLBOX_H_
-#define _RG_MATRIXTOOLBOX_H_
+#ifndef RG_MATRIXTOOLBOX_H
+#define RG_MATRIXTOOLBOX_H
 
 #include "gui/general/BaseToolBox.h"
 

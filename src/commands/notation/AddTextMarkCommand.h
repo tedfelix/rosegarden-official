@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDTEXTMARKCOMMAND_H_
-#define _RG_ADDTEXTMARKCOMMAND_H_
+#ifndef RG_ADDTEXTMARKCOMMAND_H
+#define RG_ADDTEXTMARKCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <string>

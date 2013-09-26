@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROJECT_PACKAGER_H_
-#define _PROJECT_PACKAGER_H_
+#ifndef RG_PROJECT_PACKAGER_H
+#define RG_PROJECT_PACKAGER_H
 
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/ProgressBar.h"

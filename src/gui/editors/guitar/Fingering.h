@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FINGERING_H_
-#define _RG_FINGERING_H_
+#ifndef RG_FINGERING_H
+#define RG_FINGERING_H
 
 #include <vector>
 #include <QString>
@@ -89,4 +89,4 @@ bool operator<(const Fingering&, const Fingering&);
 
 }
 
-#endif /*_RG_FINGERING2_H_*/
+#endif /*RG_FINGERING_H*/

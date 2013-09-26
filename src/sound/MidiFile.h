@@ -12,8 +12,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_MIDI_FILE_H_
-#define _ROSEGARDEN_MIDI_FILE_H_
+#ifndef RG_MIDI_FILE_H
+#define RG_MIDI_FILE_H
 
 #include <QObject>
 
@@ -170,4 +170,4 @@ private:
 
 }
 
-#endif // _ROSEGARDEN_MIDI_FILE_H_
+#endif // RG_MIDI_FILE_H

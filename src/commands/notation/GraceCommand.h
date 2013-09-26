@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_GRACECOMMAND_H_
-#define _RG_GRACECOMMAND_H_
+#ifndef RG_GRACECOMMAND_H
+#define RG_GRACECOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

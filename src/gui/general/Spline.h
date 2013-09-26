@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SPLINE_H_
-#define _RG_SPLINE_H_
+#ifndef RG_SPLINE_H
+#define RG_SPLINE_H
 
 #include "base/FastVector.h"
 

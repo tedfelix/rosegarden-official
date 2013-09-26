@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CONTROLLABLE_DEVICE_H_
-#define _CONTROLLABLE_DEVICE_H_
+#ifndef RG_CONTROLLABLE_DEVICE_H
+#define RG_CONTROLLABLE_DEVICE_H
 
 #include "ControlParameter.h"
 

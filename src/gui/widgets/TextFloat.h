@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENTEXTFLOAT_H_
-#define _RG_ROSEGARDENTEXTFLOAT_H_
+#ifndef RG_TEXTFLOAT_H
+#define RG_TEXTFLOAT_H
 
 #include "BaseTextFloat.h"
 

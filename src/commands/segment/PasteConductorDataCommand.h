@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PASTECONDUCTORDATACOMMAND_H_
-#define _RG_PASTECONDUCTORDATACOMMAND_H_
+#ifndef RG_PASTECONDUCTORDATACOMMAND_H
+#define RG_PASTECONDUCTORDATACOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

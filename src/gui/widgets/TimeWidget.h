@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENTIMEWIDGET_H_
-#define _RG_ROSEGARDENTIMEWIDGET_H_
+#ifndef RG_TIMEWIDGET_H
+#define RG_TIMEWIDGET_H
 
 #include "base/RealTime.h"
 #include "base/Event.h"

@@ -13,8 +13,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_TRANSPORT_STATUS_H_
-#define _ROSEGARDEN_TRANSPORT_STATUS_H_
+#ifndef RG_TRANSPORT_STATUS_H
+#define RG_TRANSPORT_STATUS_H
 
 typedef enum
 {
@@ -28,5 +28,5 @@ typedef enum
      QUIT
 } TransportStatus;
 
-#endif // _ROSEGARDEN_TRANSPORT_STATUS_H_
+#endif // RG_TRANSPORT_STATUS_H
 

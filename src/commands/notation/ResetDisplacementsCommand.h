@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RESETDISPLACEMENTSCOMMAND_H_
-#define _RG_RESETDISPLACEMENTSCOMMAND_H_
+#ifndef RG_RESETDISPLACEMENTSCOMMAND_H
+#define RG_RESETDISPLACEMENTSCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

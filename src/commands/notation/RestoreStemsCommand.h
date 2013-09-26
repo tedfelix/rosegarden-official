@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RESTORESTEMSCOMMAND_H_
-#define _RG_RESTORESTEMSCOMMAND_H_
+#ifndef RG_RESTORESTEMSCOMMAND_H
+#define RG_RESTORESTEMSCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

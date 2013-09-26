@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MIDIBANK_H_
-#define _MIDIBANK_H_
+#ifndef RG_MIDIBANK_H
+#define RG_MIDIBANK_H
 
 #include <string>
 #include <vector>

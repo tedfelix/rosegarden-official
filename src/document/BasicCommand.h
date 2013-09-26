@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BASICCOMMAND_H_
-#define _RG_BASICCOMMAND_H_
+#ifndef RG_BASICCOMMAND_H
+#define RG_BASICCOMMAND_H
 
 #include "base/Segment.h"
 #include "document/Command.h"

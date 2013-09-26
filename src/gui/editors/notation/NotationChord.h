@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONCHORD_H_
-#define _RG_NOTATIONCHORD_H_
+#ifndef RG_NOTATIONCHORD_H
+#define RG_NOTATIONCHORD_H
 
 #include "base/NotationTypes.h"
 #include "base/Sets.h"

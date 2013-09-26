@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_HEADERSCONFIGURATIONPAGE_H_
-#define _RG_HEADERSCONFIGURATIONPAGE_H_
+#ifndef RG_HEADERSCONFIGURATIONPAGE_H
+#define RG_HEADERSCONFIGURATIONPAGE_H
 
 #include "gui/widgets/LineEdit.h"
 

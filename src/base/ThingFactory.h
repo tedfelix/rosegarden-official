@@ -13,8 +13,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_THING_FACTORY_H_
-#define _ROSEGARDEN_THING_FACTORY_H_
+#ifndef RG_THING_FACTORY_H
+#define RG_THING_FACTORY_H
 
 #include <QUrl>
 #include <QSet>

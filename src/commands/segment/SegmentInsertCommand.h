@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTINSERTCOMMAND_H_
-#define _RG_SEGMENTINSERTCOMMAND_H_
+#ifndef RG_SEGMENTINSERTCOMMAND_H
+#define RG_SEGMENTINSERTCOMMAND_H
 
 #include "base/Track.h"
 #include "document/Command.h"

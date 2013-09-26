@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DELETETRIGGERSEGMENTCOMMAND_H_
-#define _RG_DELETETRIGGERSEGMENTCOMMAND_H_
+#ifndef RG_DELETETRIGGERSEGMENTCOMMAND_H
+#define RG_DELETETRIGGERSEGMENTCOMMAND_H
 
 #include "base/TriggerSegment.h"
 #include "document/Command.h"

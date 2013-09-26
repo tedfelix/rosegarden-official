@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LIRCCOMMANDER_H_
-#define _RG_LIRCCOMMANDER_H_
+#ifndef RG_LIRCCOMMANDER_H
+#define RG_LIRCCOMMANDER_H
 
 #ifdef HAVE_LIRC
 

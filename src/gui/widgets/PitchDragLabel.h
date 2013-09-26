@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENPITCHDRAGLABEL_H_
-#define _RG_ROSEGARDENPITCHDRAGLABEL_H_
+#ifndef RG_PITCHDRAGLABEL_H
+#define RG_PITCHDRAGLABEL_H
 
 #include <QPixmap>
 #include <QSize>

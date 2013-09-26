@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENT_NOTATION_HELPER_H_
-#define _SEGMENT_NOTATION_HELPER_H_
+#ifndef RG_SEGMENT_NOTATION_HELPER_H
+#define RG_SEGMENT_NOTATION_HELPER_H
 
 #include "base/Segment.h"
 

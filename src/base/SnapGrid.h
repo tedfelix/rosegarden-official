@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SNAP_GRID_H_
-#define _SNAP_GRID_H_
+#ifndef RG_SNAP_GRID_H
+#define RG_SNAP_GRID_H
 
 #include "RulerScale.h"
 

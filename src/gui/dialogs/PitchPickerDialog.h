@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PITCHPICKERDIALOG_H_
-#define _RG_PITCHPICKERDIALOG_H_
+#ifndef RG_PITCHPICKERDIALOG_H
+#define RG_PITCHPICKERDIALOG_H
 
 #include "gui/widgets/PitchChooser.h"
 #include <QDialog>

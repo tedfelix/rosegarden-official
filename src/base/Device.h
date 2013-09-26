@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _DEVICE_H_
-#define _DEVICE_H_
+#ifndef RG_DEVICE_H
+#define RG_DEVICE_H
 
 #include "XmlExportable.h"
 #include "Instrument.h"
@@ -114,4 +114,4 @@ protected:
 
 }
 
-#endif // _DEVICE_H_
+#endif // RG_DEVICE_H

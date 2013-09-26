@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PLAYABLE_AUDIO_FILE_H_
-#define _PLAYABLE_AUDIO_FILE_H_
+#ifndef RG_PLAYABLE_AUDIO_FILE_H
+#define RG_PLAYABLE_AUDIO_FILE_H
 
 #include "base/Instrument.h"
 #include "RingBuffer.h"

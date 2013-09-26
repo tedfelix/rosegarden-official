@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RUNNABLE_PLUGIN_INSTANCE_H_
-#define _RUNNABLE_PLUGIN_INSTANCE_H_
+#ifndef RG_RUNNABLE_PLUGIN_INSTANCE_H
+#define RG_RUNNABLE_PLUGIN_INSTANCE_H
 
 #include <QString>
 #include <QStringList>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INTERVALDIALOG_H_
-#define _RG_INTERVALDIALOG_H_
+#ifndef RG_INTERVALDIALOG_H
+#define RG_INTERVALDIALOG_H
 
 #include <QDialog>
 #include <vector>

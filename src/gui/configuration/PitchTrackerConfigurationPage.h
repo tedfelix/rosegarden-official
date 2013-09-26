@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PITCHTRACKERCONFIGURATIONPAGE_H_
-#define _RG_PITCHTRACKERCONFIGURATIONPAGE_H_
+#ifndef RG_PITCHTRACKERCONFIGURATIONPAGE_H
+#define RG_PITCHTRACKERCONFIGURATIONPAGE_H
 
 #include <string>
 #include <vector>

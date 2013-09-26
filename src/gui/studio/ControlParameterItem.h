@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLPARAMETERITEM_H_
-#define _RG_CONTROLPARAMETERITEM_H_
+#ifndef RG_CONTROLPARAMETERITEM_H
+#define RG_CONTROLPARAMETERITEM_H
 
 #include <QString>
 #include <QStringList>

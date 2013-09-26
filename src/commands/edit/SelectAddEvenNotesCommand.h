@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SELECTADDEVENNOTESSCOMMAND_H_
-#define _SELECTADDEVENNOTESSCOMMAND_H_
+#ifndef RG_SELECTADDEVENNOTESSCOMMAND_H
+#define RG_SELECTADDEVENNOTESSCOMMAND_H
 
 #include "base/Event.h"
 #include "document/BasicCommand.h"
@@ -98,4 +98,4 @@ BeatEvent(Event *event, int numSkippedBeats,
 };
 }
 
-#endif /* ifndef _SELECTADDEVENNOTESSCOMMAND_H_ */
+#endif /* ifndef RG_SELECTADDEVENNOTESSCOMMAND_H */

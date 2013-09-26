@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NEW_MATRIX_VIEW_H_
-#define _RG_NEW_MATRIX_VIEW_H_
+#ifndef RG_NEW_MATRIX_VIEW_H
+#define RG_NEW_MATRIX_VIEW_H
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"

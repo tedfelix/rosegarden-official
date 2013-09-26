@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MARKERRULER_H_
-#define _RG_MARKERRULER_H_
+#ifndef RG_MARKERRULER_H
+#define RG_MARKERRULER_H
 
 #include "gui/general/HZoomable.h"
 #include "gui/general/ActionFileClient.h"

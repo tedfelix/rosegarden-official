@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_WHEELYBUTTON_H_
-#define _RG_WHEELYBUTTON_H_
+#ifndef RG_WHEELYBUTTON_H
+#define RG_WHEELYBUTTON_H
 
 #include <QPushButton>
 #include <QWheelEvent>

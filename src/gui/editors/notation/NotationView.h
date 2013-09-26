@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATION_VIEW_H_
-#define _RG_NOTATION_VIEW_H_
+#ifndef RG_NOTATION_VIEW_H
+#define RG_NOTATION_VIEW_H
 
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CREATEORDELETEDEVICECOMMAND_H_
-#define _RG_CREATEORDELETEDEVICECOMMAND_H_
+#ifndef RG_CREATEORDELETEDEVICECOMMAND_H
+#define RG_CREATEORDELETEDEVICECOMMAND_H
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"

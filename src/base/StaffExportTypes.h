@@ -17,8 +17,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _STAFF_EXPORT_H_
-#define _STAFF_EXPORT_H_
+#ifndef RG_STAFF_EXPORT_H
+#define RG_STAFF_EXPORT_H
 
 namespace Rosegarden
 {

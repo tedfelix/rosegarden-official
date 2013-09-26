@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDSLASHESCOMMAND_H_
-#define _RG_ADDSLASHESCOMMAND_H_
+#ifndef RG_ADDSLASHESCOMMAND_H
+#define RG_ADDSLASHESCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QCoreApplication>

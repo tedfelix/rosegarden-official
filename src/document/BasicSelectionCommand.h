@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BASICSELECTIONCOMMAND_H_
-#define _RG_BASICSELECTIONCOMMAND_H_
+#ifndef RG_BASICSELECTIONCOMMAND_H
+#define RG_BASICSELECTIONCOMMAND_H
 
 #include "BasicCommand.h"
 

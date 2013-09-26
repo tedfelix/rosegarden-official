@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MASKTRIGGERCOMMAND_H_
-#define _MASKTRIGGERCOMMAND_H_
+#ifndef RG_MASKTRIGGERCOMMAND_H
+#define RG_MASKTRIGGERCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 
@@ -50,4 +50,4 @@ private:
 
 }
 
-#endif /* ifndef _MASKTRIGGERCOMMAND_H_ */
+#endif /* ifndef RG_MASKTRIGGERCOMMAND_H */

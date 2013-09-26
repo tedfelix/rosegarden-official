@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TUPLETDIALOG_H_
-#define _RG_TUPLETDIALOG_H_
+#ifndef RG_TUPLETDIALOG_H
+#define RG_TUPLETDIALOG_H
 
 #include "base/NotationTypes.h"
 #include <QDialog>

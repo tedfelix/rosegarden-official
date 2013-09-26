@@ -23,8 +23,8 @@
 //
 //
 //
-#ifndef _AUDIODEVICE_H_
-#define _AUDIODEVICE_H_
+#ifndef RG_AUDIODEVICE_H
+#define RG_AUDIODEVICE_H
 
 namespace Rosegarden
 {
@@ -63,4 +63,4 @@ private:
 
 }
 
-#endif // _AUDIODEVICE_H_
+#endif // RG_AUDIODEVICE_H

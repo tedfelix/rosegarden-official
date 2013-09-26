@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_XMLSTORABLEEVENT_H_
-#define _RG_XMLSTORABLEEVENT_H_
+#ifndef RG_XMLSTORABLEEVENT_H
+#define RG_XMLSTORABLEEVENT_H
 
 #include "base/Event.h"
 #include <qxml.h>

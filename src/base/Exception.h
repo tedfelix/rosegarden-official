@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _EXCEPTION_H_
-#define _EXCEPTION_H_
+#ifndef RG_EXCEPTION_H
+#define RG_EXCEPTION_H
 
 #include <string>
 #include <QString>

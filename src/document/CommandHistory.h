@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MULTIVIEWCOMMANDHISTORY_H_
-#define _RG_MULTIVIEWCOMMANDHISTORY_H_
+#ifndef RG_MULTIVIEWCOMMANDHISTORY_H
+#define RG_MULTIVIEWCOMMANDHISTORY_H
 
 #include <QObject>
 #include <QString>

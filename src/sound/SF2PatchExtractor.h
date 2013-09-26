@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SF2_PATCH_EXTRACTOR_H_
-#define _SF2_PATCH_EXTRACTOR_H_
+#ifndef RG_SF2_PATCH_EXTRACTOR_H
+#define RG_SF2_PATCH_EXTRACTOR_H
 
 #include <string>
 #include <map>

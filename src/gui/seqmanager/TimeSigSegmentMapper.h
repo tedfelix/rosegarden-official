@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TIMESIGSEGMENTMAPPER_H_
-#define _RG_TIMESIGSEGMENTMAPPER_H_
+#ifndef RG_TIMESIGSEGMENTMAPPER_H
+#define RG_TIMESIGSEGMENTMAPPER_H
 
 #include "SpecialSegmentMapper.h"
 #include <QString>

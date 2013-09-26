@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLPAINTER_H_
-#define _RG_CONTROLPAINTER_H_
+#ifndef RG_CONTROLPAINTER_H
+#define RG_CONTROLPAINTER_H
 
 #include "ControlMover.h"
 //#include <QString>

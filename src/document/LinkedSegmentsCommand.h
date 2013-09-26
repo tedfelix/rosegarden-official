@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LINKEDSEGMENTSCOMMAND_H_
-#define _LINKEDSEGMENTSCOMMAND_H_
+#ifndef RG_LINKEDSEGMENTSCOMMAND_H
+#define RG_LINKEDSEGMENTSCOMMAND_H
 
 #include "base/Segment.h"
 #include "document/Command.h"
@@ -76,4 +76,4 @@ protected:
  
 }
 
-#endif /* ifndef _LINKEDSEGMENTSCOMMAND_H_ */
+#endif /* ifndef RG_LINKEDSEGMENTSCOMMAND_H */

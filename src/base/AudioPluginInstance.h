@@ -22,8 +22,8 @@
 // of the plugin at the sequencer.
 //
 
-#ifndef _AUDIOPLUGININSTANCE_H_
-#define _AUDIOPLUGININSTANCE_H_
+#ifndef RG_AUDIOPLUGININSTANCE_H
+#define RG_AUDIOPLUGININSTANCE_H
 
 namespace Rosegarden
 {
@@ -163,4 +163,4 @@ protected:
 
 }
 
-#endif // _AUDIOPLUGININSTANCE_H_
+#endif // RG_AUDIOPLUGININSTANCE_H

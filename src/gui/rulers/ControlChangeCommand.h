@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLCHANGECOMMAND_H_
-#define _RG_CONTROLCHANGECOMMAND_H_
+#ifndef RG_CONTROLCHANGECOMMAND_H
+#define RG_CONTROLCHANGECOMMAND_H
 
 #include "document/BasicCommand.h"
 #include "ControlItem.h"

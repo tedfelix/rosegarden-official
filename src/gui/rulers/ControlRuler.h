@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLRULER_H_
-#define _RG_CONTROLRULER_H_
+#ifndef RG_CONTROLRULER_H
+#define RG_CONTROLRULER_H
 
 #include <QWidget>
 #include "base/Segment.h"

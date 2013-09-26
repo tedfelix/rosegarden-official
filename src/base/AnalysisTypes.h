@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ANALYSISTYPES_H_
-#define _ANALYSISTYPES_H_
+#ifndef RG_ANALYSISTYPES_H
+#define RG_ANALYSISTYPES_H
 
 #include <string>
 #include <map>

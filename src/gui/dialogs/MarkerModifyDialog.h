@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MARKERMODIFYDIALOG_H_
-#define _RG_MARKERMODIFYDIALOG_H_
+#ifndef RG_MARKERMODIFYDIALOG_H
+#define RG_MARKERMODIFYDIALOG_H
 
 #include "base/Marker.h"
 #include "gui/widgets/TimeWidget.h"

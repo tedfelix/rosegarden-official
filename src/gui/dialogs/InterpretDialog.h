@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INTERPRETDIALOG_H_
-#define _RG_INTERPRETDIALOG_H_
+#ifndef RG_INTERPRETDIALOG_H
+#define RG_INTERPRETDIALOG_H
 
 #include <QDialog>
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHORD_H_
-#define _RG_CHORD_H_
+#ifndef RG_CHORD_H
+#define RG_CHORD_H
 
 #include "Fingering.h"
 #include "base/Event.h"
@@ -96,4 +96,4 @@ bool operator<(const Chord&, const Chord&);
 
 }
 
-#endif /*_RG_CHORD2_H_*/
+#endif /*RG_CHORD_H*/

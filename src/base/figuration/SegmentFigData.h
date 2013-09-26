@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENTFIGDATA_H_
-#define _SEGMENTFIGDATA_H_
+#ifndef RG_SEGMENTFIGDATA_H
+#define RG_SEGMENTFIGDATA_H
 
 #include "base/figuration/FigurationSourceMap.h"
 #include <string>
@@ -99,4 +99,4 @@ private:
 
 }
 
-#endif /* ifndef _SEGMENTFIGDATA_H_ */
+#endif /* ifndef RG_SEGMENTFIGDATA_H */

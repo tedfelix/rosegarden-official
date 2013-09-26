@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIO_FILE_TIME_STRETCHER_H_
-#define _AUDIO_FILE_TIME_STRETCHER_H_
+#ifndef RG_AUDIO_FILE_TIME_STRETCHER_H
+#define RG_AUDIO_FILE_TIME_STRETCHER_H
 
 #include <QObject>
 #include "AudioFile.h"

@@ -12,8 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _EXTERNAL_TRANSPORT_H_
-#define _EXTERNAL_TRANSPORT_H_
+#ifndef RG_EXTERNAL_TRANSPORT_H
+#define RG_EXTERNAL_TRANSPORT_H
 
 namespace Rosegarden {
 

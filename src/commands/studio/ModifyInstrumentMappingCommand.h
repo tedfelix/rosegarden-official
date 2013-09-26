@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MODIFYINSTRUMENTMAPPINGCOMMAND_H_
-#define _RG_MODIFYINSTRUMENTMAPPINGCOMMAND_H_
+#ifndef RG_MODIFYINSTRUMENTMAPPINGCOMMAND_H
+#define RG_MODIFYINSTRUMENTMAPPINGCOMMAND_H
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"

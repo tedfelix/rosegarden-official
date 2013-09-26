@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EVENTPARAMETERDIALOG_H_
-#define _RG_EVENTPARAMETERDIALOG_H_
+#ifndef RG_EVENTPARAMETERDIALOG_H
+#define RG_EVENTPARAMETERDIALOG_H
 
 #include "base/PropertyName.h"
 #include "commands/edit/SelectionPropertyCommand.h"

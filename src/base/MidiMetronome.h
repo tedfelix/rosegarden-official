@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDI_METRONOME_H_
-#define _RG_MIDI_METRONOME_H_
+#ifndef RG_MIDI_METRONOME_H
+#define RG_MIDI_METRONOME_H
 
 #include "MidiProgram.h"
 

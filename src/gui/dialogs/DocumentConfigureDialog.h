@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DOCUMENTCONFIGUREDIALOG_H_
-#define _RG_DOCUMENTCONFIGUREDIALOG_H_
+#ifndef RG_DOCUMENTCONFIGUREDIALOG_H
+#define RG_DOCUMENTCONFIGUREDIALOG_H
 
 #include "ConfigureDialogBase.h"
 #include <QString>

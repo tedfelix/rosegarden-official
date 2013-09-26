@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTMOVER_H_
-#define _RG_SEGMENTMOVER_H_
+#ifndef RG_SEGMENTMOVER_H
+#define RG_SEGMENTMOVER_H
 
 #include "SegmentTool.h"
 #include <QPoint>

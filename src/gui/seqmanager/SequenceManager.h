@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEQUENCEMANAGER_H_
-#define _RG_SEQUENCEMANAGER_H_
+#ifndef RG_SEQUENCEMANAGER_H
+#define RG_SEQUENCEMANAGER_H
 
 #include "base/Composition.h"
 #include "base/Event.h"

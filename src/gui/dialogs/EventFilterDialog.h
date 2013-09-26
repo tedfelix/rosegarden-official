@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EVENTFILTERDIALOG_H_
-#define _RG_EVENTFILTERDIALOG_H_
+#ifndef RG_EVENTFILTERDIALOG_H
+#define RG_EVENTFILTERDIALOG_H
 
 #include <QDialog>
 #include <utility>

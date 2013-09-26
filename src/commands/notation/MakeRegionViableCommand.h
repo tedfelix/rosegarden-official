@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MAKEREGIONVIABLECOMMAND_H_
-#define _RG_MAKEREGIONVIABLECOMMAND_H_
+#ifndef RG_MAKEREGIONVIABLECOMMAND_H
+#define RG_MAKEREGIONVIABLECOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

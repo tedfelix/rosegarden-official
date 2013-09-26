@@ -15,8 +15,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_WAV_FILE_WRITE_STREAM_H_
-#define _ROSEGARDEN_WAV_FILE_WRITE_STREAM_H_
+#ifndef RG_WAV_FILE_WRITE_STREAM_H
+#define RG_WAV_FILE_WRITE_STREAM_H
 
 #include "AudioWriteStream.h"
 

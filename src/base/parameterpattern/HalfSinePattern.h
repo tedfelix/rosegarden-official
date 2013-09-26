@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _HALFSINEPATTERN_H_
-#define _HALFSINEPATTERN_H_
+#ifndef RG_HALFSINEPATTERN_H
+#define RG_HALFSINEPATTERN_H
 
 #include "ParameterPattern.h"
 #include "LinearParameterPattern.h"
@@ -43,4 +43,4 @@ public:
 
 }
 
-#endif /* ifndef _HALFSINEPATTERN_H_ */
+#endif /* ifndef RG_HALFSINEPATTERN_H */

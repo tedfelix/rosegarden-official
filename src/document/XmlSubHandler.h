@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_XMLSUBHANDLER_H_
-#define _RG_XMLSUBHANDLER_H_
+#ifndef RG_XMLSUBHANDLER_H
+#define RG_XMLSUBHANDLER_H
 
 #include <QString>
 #include <qxml.h>
@@ -48,4 +48,4 @@ public:
 
 }
 
-#endif /*_RG_XMLSUBHANDLER_H_*/
+#endif /*RG_XMLSUBHANDLER_H*/

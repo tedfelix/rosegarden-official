@@ -29,8 +29,8 @@
 #include "base/Exception.h"
 #include "XmlExportable.h"
 
-#ifndef _CONFIGURATION_H_
-#define _CONFIGURATION_H_
+#ifndef RG_CONFIGURATION_H
+#define RG_CONFIGURATION_H
 
 namespace Rosegarden
 {
@@ -202,4 +202,4 @@ Configuration::get(const PropertyName &name) const
  
 }
 
-#endif // _AUDIODEVICE_H_
+#endif // RG_CONFIGURATION_H

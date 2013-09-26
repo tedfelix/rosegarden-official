@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SETS_H_
-#define _SETS_H_
+#ifndef RG_SETS_H
+#define RG_SETS_H
 
 #include <vector>
 #include <algorithm>

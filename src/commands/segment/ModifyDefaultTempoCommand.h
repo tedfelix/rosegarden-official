@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MODIFYDEFAULTTEMPOCOMMAND_H_
-#define _RG_MODIFYDEFAULTTEMPOCOMMAND_H_
+#ifndef RG_MODIFYDEFAULTTEMPOCOMMAND_H
+#define RG_MODIFYDEFAULTTEMPOCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

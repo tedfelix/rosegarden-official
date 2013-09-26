@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROPERTY_H_
-#define _PROPERTY_H_
+#ifndef RG_PROPERTY_H
+#define RG_PROPERTY_H
 
 #include <string>
 

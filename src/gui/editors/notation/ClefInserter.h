@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CLEFINSERTER_H_
-#define _RG_CLEFINSERTER_H_
+#ifndef RG_CLEFINSERTER_H
+#define RG_CLEFINSERTER_H
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"

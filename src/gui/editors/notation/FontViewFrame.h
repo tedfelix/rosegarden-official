@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FONTVIEWFRAME_H_
-#define _RG_FONTVIEWFRAME_H_
+#ifndef RG_FONTVIEWFRAME_H
+#define RG_FONTVIEWFRAME_H
 
 #include <QFrame>
 #include <QSize>

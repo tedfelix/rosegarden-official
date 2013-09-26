@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _DEFER_SCROLL_AREA_H_
-#define _DEFER_SCROLL_AREA_H_
+#ifndef RG_DEFER_SCROLL_AREA_H
+#define RG_DEFER_SCROLL_AREA_H
 
 #include <QScrollArea>
 

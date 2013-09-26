@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLMOVER_H_
-#define _RG_CONTROLMOVER_H_
+#ifndef RG_CONTROLMOVER_H
+#define RG_CONTROLMOVER_H
 
 #include "ControlTool.h"
 //#include <QString>

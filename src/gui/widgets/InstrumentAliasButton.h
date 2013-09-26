@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INSTRUMENTALIASBUTTON_H_
-#define _RG_INSTRUMENTALIASBUTTON_H_
+#ifndef RG_INSTRUMENTALIASBUTTON_H
+#define RG_INSTRUMENTALIASBUTTON_H
 
 #include <QPushButton>
 

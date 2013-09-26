@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PITCH_GRAPH_WIDGET_H
-#define _RG_PITCH_GRAPH_WIDGET_H
+#ifndef RG_PITCH_GRAPH_WIDGET_H
+#define RG_PITCH_GRAPH_WIDGET_H
 
 #include "PitchHistory.h"
 

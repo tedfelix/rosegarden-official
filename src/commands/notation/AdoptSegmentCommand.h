@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ADOPTSEGMENTCOMMAND_H_
-#define _ADOPTSEGMENTCOMMAND_H_
+#ifndef RG_ADOPTSEGMENTCOMMAND_H
+#define RG_ADOPTSEGMENTCOMMAND_H
 
 #include "document/BasicCommand.h"
 
@@ -59,4 +59,4 @@ protected slots:
  
 }
 
-#endif /* ifndef _ADOPTSEGMENTCOMMAND_H_ */
+#endif /* ifndef RG_ADOPTSEGMENTCOMMAND_H */

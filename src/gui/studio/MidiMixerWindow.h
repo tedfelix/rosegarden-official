@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIMIXERWINDOW_H_
-#define _RG_MIDIMIXERWINDOW_H_
+#ifndef RG_MIDIMIXERWINDOW_H
+#define RG_MIDIMIXERWINDOW_H
 
 #include "base/MidiDevice.h"
 #include "gui/general/ActionFileClient.h"

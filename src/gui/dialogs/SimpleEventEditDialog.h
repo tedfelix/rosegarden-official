@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SIMPLEEVENTEDITDIALOG_H_
-#define _RG_SIMPLEEVENTEDITDIALOG_H_
+#ifndef RG_SIMPLEEVENTEDITDIALOG_H
+#define RG_SIMPLEEVENTEDITDIALOG_H
 
 #include "base/Event.h"
 #include "gui/widgets/LineEdit.h"

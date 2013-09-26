@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLEDITORDIALOG_H_
-#define _RG_CONTROLEDITORDIALOG_H_
+#ifndef RG_CONTROLEDITORDIALOG_H
+#define RG_CONTROLEDITORDIALOG_H
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"

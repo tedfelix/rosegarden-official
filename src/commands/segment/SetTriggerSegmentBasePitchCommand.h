@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETTRIGGERSEGMENTBASEPITCHCOMMAND_H_
-#define _RG_SETTRIGGERSEGMENTBASEPITCHCOMMAND_H_
+#ifndef RG_SETTRIGGERSEGMENTBASEPITCHCOMMAND_H
+#define RG_SETTRIGGERSEGMENTBASEPITCHCOMMAND_H
 
 #include "base/TriggerSegment.h"
 #include "document/Command.h"

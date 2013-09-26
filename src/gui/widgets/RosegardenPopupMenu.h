@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENPOPUPMENU_H_
-#define _RG_ROSEGARDENPOPUPMENU_H_
+#ifndef RG_ROSEGARDENPOPUPMENU_H
+#define RG_ROSEGARDENPOPUPMENU_H
 
 #include <QMenu>
 

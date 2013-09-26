@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ZOOMSLIDER_H_
-#define _RG_ZOOMSLIDER_H_
+#ifndef RG_ZOOMSLIDER_H
+#define RG_ZOOMSLIDER_H
 
 #include <QSlider>
 #include <vector>

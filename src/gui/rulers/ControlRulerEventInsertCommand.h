@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLRULEREVENTINSERTCOMMAND_H_
-#define _RG_CONTROLRULEREVENTINSERTCOMMAND_H_
+#ifndef RG_CONTROLRULEREVENTINSERTCOMMAND_H
+#define RG_CONTROLRULEREVENTINSERTCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <string>

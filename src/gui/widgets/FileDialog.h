@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _FILE_DIALOG_H_
-#define _FILE_DIALOG_H_
+#ifndef RG_FILE_DIALOG_H
+#define RG_FILE_DIALOG_H
 
 #include <QFileDialog>
 

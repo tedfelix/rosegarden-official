@@ -12,8 +12,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSE_APPENDLABEL_H_
-#define _ROSE_APPENDLABEL_H_
+#ifndef RG_APPENDLABEL_H
+#define RG_APPENDLABEL_H
 
 #include <string>
 namespace Rosegarden 

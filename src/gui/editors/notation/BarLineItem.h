@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BARLINE_ITEM_H_
-#define _RG_BARLINE_ITEM_H_
+#ifndef RG_BARLINE_ITEM_H
+#define RG_BARLINE_ITEM_H
 
 #include <QGraphicsItem>
 

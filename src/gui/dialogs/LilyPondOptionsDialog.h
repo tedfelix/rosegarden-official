@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LILYPONDOPTIONSDIALOG_H_
-#define _RG_LILYPONDOPTIONSDIALOG_H_
+#ifndef RG_LILYPONDOPTIONSDIALOG_H
+#define RG_LILYPONDOPTIONSDIALOG_H
 
 #include <QDialog>
 #include <QString>

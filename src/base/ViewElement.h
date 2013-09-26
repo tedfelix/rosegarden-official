@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _VIEWELEMENT_H_
-#define _VIEWELEMENT_H_
+#ifndef RG_VIEWELEMENT_H
+#define RG_VIEWELEMENT_H
 
 
 #include "Event.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _WARNINGDIALOG_H_
-#define _WARNINGDIALOG_H_
+#ifndef RG_WARNINGDIALOG_H
+#define RG_WARNINGDIALOG_H
 
 #include <QDialog>
 #include <QTabWidget>

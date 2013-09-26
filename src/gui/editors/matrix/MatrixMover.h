@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXMOVER_H_
-#define _RG_MATRIXMOVER_H_
+#ifndef RG_MATRIXMOVER_H
+#define RG_MATRIXMOVER_H
 
 #include "MatrixTool.h"
 #include <QString>

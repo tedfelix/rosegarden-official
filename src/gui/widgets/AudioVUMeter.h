@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOVUMETER_H_
-#define _RG_AUDIOVUMETER_H_
+#ifndef RG_AUDIOVUMETER_H
+#define RG_AUDIOVUMETER_H
 
 #include <QWidget>
 #include "VUMeter.h"

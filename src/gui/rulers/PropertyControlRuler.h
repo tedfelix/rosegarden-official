@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PROPERTYCONTROLRULER_H_
-#define _RG_PROPERTYCONTROLRULER_H_
+#ifndef RG_PROPERTYCONTROLRULER_H
+#define RG_PROPERTYCONTROLRULER_H
 
 #include "base/PropertyName.h"
 #include "ControlRuler.h"

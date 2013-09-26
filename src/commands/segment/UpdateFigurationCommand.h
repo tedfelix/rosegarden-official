@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _UPDATEFIGURATIONCOMMAND_H_
-#define _UPDATEFIGURATIONCOMMAND_H_
+#ifndef RG_UPDATEFIGURATIONCOMMAND_H
+#define RG_UPDATEFIGURATIONCOMMAND_H
 
 #include "document/Command.h"
 
@@ -37,4 +37,4 @@ public:
 
 }
 
-#endif /* ifndef _UPDATEFIGURATIONCOMMAND_H_ */
+#endif /* ifndef RG_UPDATEFIGURATIONCOMMAND_H */

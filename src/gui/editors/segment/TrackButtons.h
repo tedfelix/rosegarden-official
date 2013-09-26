@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRACKBUTTONS_H_
-#define _RG_TRACKBUTTONS_H_
+#ifndef RG_TRACKBUTTONS_H
+#define RG_TRACKBUTTONS_H
 
 #include "base/Composition.h"
 #include "base/MidiProgram.h"

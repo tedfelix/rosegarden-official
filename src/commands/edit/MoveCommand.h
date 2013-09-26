@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MOVECOMMAND_H_
-#define _RG_MOVECOMMAND_H_
+#ifndef RG_MOVECOMMAND_H
+#define RG_MOVECOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

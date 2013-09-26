@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEXTRULER_H_
-#define _RG_TEXTRULER_H_
+#ifndef RG_TEXTRULER_H
+#define RG_TEXTRULER_H
 
 #include <QFont>
 #include <QFontMetrics>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRACKVUMETER_H_
-#define _RG_TRACKVUMETER_H_
+#ifndef RG_TRACKVUMETER_H
+#define RG_TRACKVUMETER_H
 
 #include "gui/widgets/VUMeter.h"
 

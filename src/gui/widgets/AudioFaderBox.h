@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOFADERBOX_H_
-#define _RG_AUDIOFADERBOX_H_
+#ifndef RG_AUDIOFADERBOX_H
+#define RG_AUDIOFADERBOX_H
 
 #include "gui/widgets/PluginPushButton.h"
 

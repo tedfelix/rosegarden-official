@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENLABEL_H_
-#define _RG_ROSEGARDENLABEL_H_
+#ifndef RG_LABEL_H
+#define RG_LABEL_H
 
 #include <QLabel>
 #include <QWheelEvent>

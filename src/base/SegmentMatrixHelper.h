@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SEGMENT_MATRIX_HELPER_H_
-#define _SEGMENT_MATRIX_HELPER_H_
+#ifndef RG_SEGMENT_MATRIX_HELPER_H
+#define RG_SEGMENT_MATRIX_HELPER_H
 
 #include "SegmentNotationHelper.h"
 

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_USEORNAMENTDIALOG_H_
-#define _RG_USEORNAMENTDIALOG_H_
+#ifndef RG_USEORNAMENTDIALOG_H
+#define RG_USEORNAMENTDIALOG_H
 
 #include "base/TriggerSegment.h"
 #include "base/NotationTypes.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INTERPRETCOMMAND_H_
-#define _RG_INTERPRETCOMMAND_H_
+#ifndef RG_INTERPRETCOMMAND_H
+#define RG_INTERPRETCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <map>

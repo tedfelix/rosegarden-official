@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MARKEREDITOR_H_
-#define _RG_MARKEREDITOR_H_
+#ifndef RG_MARKEREDITOR_H
+#define RG_MARKEREDITOR_H
 
 #include "gui/general/ActionFileClient.h"
 

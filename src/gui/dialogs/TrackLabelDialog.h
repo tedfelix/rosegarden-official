@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _TRACKLABELDIALOG_H_
-#define _TRACKLABELDIALOG_H_
+#ifndef RG_TRACKLABELDIALOG_H
+#define RG_TRACKLABELDIALOG_H
 
 #include <QDialog>
 

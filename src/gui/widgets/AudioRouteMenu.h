@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOROUTEMENU_H_
-#define _RG_AUDIOROUTEMENU_H_
+#ifndef RG_AUDIOROUTEMENU_H
+#define RG_AUDIOROUTEMENU_H
 
 #include <QObject>
 #include <QString>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SHOWSEQUENCERSTATUSDIALOG_H_
-#define _RG_SHOWSEQUENCERSTATUSDIALOG_H_
+#ifndef RG_SHOWSEQUENCERSTATUSDIALOG_H
+#define RG_SHOWSEQUENCERSTATUSDIALOG_H
 
 #include <QDialog>
 

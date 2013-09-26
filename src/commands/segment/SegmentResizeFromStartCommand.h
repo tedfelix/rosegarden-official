@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTRESIZEFROMSTARTCOMMAND_H_
-#define _RG_SEGMENTRESIZEFROMSTARTCOMMAND_H_
+#ifndef RG_SEGMENTRESIZEFROMSTARTCOMMAND_H
+#define RG_SEGMENTRESIZEFROMSTARTCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include "base/Event.h"

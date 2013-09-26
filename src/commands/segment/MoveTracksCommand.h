@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MOVETRACKSCOMMAND_H_
-#define _RG_MOVETRACKSCOMMAND_H_
+#ifndef RG_MOVETRACKSCOMMAND_H
+#define RG_MOVETRACKSCOMMAND_H
 
 #include "base/Track.h"
 #include "document/Command.h"

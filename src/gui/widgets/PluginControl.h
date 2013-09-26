@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PLUGINCONTROL_H_
-#define _RG_PLUGINCONTROL_H_
+#ifndef RG_PLUGINCONTROL_H
+#define RG_PLUGINCONTROL_H
 
 #include <QWidget>
 

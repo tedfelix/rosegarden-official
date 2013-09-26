@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIPITCHLABEL_H_
-#define _RG_MIDIPITCHLABEL_H_
+#ifndef RG_MIDIPITCHLABEL_H
+#define RG_MIDIPITCHLABEL_H
 
 #include <string>
 #include <QString>

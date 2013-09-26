@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LED_H_
-#define _LED_H_
+#ifndef RG_LED_H
+#define RG_LED_H
 
 #include <QWidget>
 

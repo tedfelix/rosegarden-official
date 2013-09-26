@@ -17,8 +17,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _BASE_COLOUR_H_
-#define _BASE_COLOUR_H_
+#ifndef RG_BASE_COLOUR_H
+#define RG_BASE_COLOUR_H
 
 #include <string>
 

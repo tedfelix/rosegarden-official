@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRACKLABEL_H_
-#define _RG_TRACKLABEL_H_
+#ifndef RG_TRACKLABEL_H
+#define RG_TRACKLABEL_H
 
 #include "base/Track.h"
 #include <QString>

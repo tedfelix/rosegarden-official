@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONVLAYOUT_H_
-#define _RG_NOTATIONVLAYOUT_H_
+#ifndef RG_NOTATIONVLAYOUT_H
+#define RG_NOTATIONVLAYOUT_H
 
 #include "base/FastVector.h"
 #include "base/LayoutEngine.h"

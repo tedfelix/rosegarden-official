@@ -26,8 +26,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LILYPONDEXPORTER_H_
-#define _RG_LILYPONDEXPORTER_H_
+#ifndef RG_LILYPONDEXPORTER_H
+#define RG_LILYPONDEXPORTER_H
 
 #include "base/Event.h"
 #include "base/PropertyName.h"

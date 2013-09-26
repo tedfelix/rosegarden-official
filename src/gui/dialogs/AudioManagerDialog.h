@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOMANAGERDIALOG_H_
-#define _RG_AUDIOMANAGERDIALOG_H_
+#ifndef RG_AUDIOMANAGERDIALOG_H
+#define RG_AUDIOMANAGERDIALOG_H
 
 #include "sound/AudioFile.h"
 #include "misc/ConfigGroups.h"

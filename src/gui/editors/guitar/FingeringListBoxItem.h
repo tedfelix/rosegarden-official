@@ -16,8 +16,8 @@
 */
 
 
-#ifndef _RG_FINGERINGLISTBOXITEM_H_
-#define _RG_FINGERINGLISTBOXITEM_H_
+#ifndef RG_FINGERINGLISTBOXITEM_H
+#define RG_FINGERINGLISTBOXITEM_H
 
 #include "Chord.h"
 
@@ -41,4 +41,4 @@ protected:
 
 }
 
-#endif /*_RG_FINGERINGLISTBOXITEM_H_*/
+#endif /*RG_FINGERINGLISTBOXITEM_H*/

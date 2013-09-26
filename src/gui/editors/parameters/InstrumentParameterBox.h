@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INSTRUMENTPARAMETERBOX_H_
-#define _RG_INSTRUMENTPARAMETERBOX_H_
+#ifndef RG_INSTRUMENTPARAMETERBOX_H
+#define RG_INSTRUMENTPARAMETERBOX_H
 
 #include "base/MidiProgram.h"
 #include "RosegardenParameterArea.h"

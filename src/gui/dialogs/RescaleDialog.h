@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RESCALEDIALOG_H_
-#define _RG_RESCALEDIALOG_H_
+#ifndef RG_RESCALEDIALOG_H
+#define RG_RESCALEDIALOG_H
 
 #include <QDialog>
 #include "base/Event.h"

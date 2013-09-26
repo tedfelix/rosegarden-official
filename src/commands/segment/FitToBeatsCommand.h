@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _FITTOBEATSCOMMAND_H_
-#define _FITTOBEATSCOMMAND_H_
+#ifndef RG_FITTOBEATSCOMMAND_H
+#define RG_FITTOBEATSCOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSE_STRINGS_H_
-#define _ROSE_STRINGS_H_
+#ifndef RG_STRINGS_H
+#define RG_STRINGS_H
 
 #include <string>
 #include <QString>

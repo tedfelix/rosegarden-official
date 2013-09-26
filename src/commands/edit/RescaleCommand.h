@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RESCALECOMMAND_H_
-#define _RG_RESCALECOMMAND_H_
+#ifndef RG_RESCALECOMMAND_H
+#define RG_RESCALECOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

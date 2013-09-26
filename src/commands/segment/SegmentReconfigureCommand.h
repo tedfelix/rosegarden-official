@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTRECONFIGURECOMMAND_H_
-#define _RG_SEGMENTRECONFIGURECOMMAND_H_
+#ifndef RG_SEGMENTRECONFIGURECOMMAND_H
+#define RG_SEGMENTRECONFIGURECOMMAND_H
 
 #include "base/Track.h"
 #include "document/Command.h"

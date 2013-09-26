@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_VELOCITYCOLOUR_H_
-#define _RG_VELOCITYCOLOUR_H_
+#ifndef RG_VELOCITYCOLOUR_H
+#define RG_VELOCITYCOLOUR_H
 
 #include <QColor>
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PITCH_HISTORY_H
-#define _RG_PITCH_HISTORY_H
+#ifndef RG_PITCH_HISTORY_H
+#define RG_PITCH_HISTORY_H
 
 #include "QList"
 

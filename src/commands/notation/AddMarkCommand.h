@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDMARKCOMMAND_H_
-#define _RG_ADDMARKCOMMAND_H_
+#ifndef RG_ADDMARKCOMMAND_H
+#define RG_ADDMARKCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPLUGIN_H_
-#define _RG_AUDIOPLUGIN_H_
+#ifndef RG_AUDIOPLUGIN_H
+#define RG_AUDIOPLUGIN_H
 
 #include "base/AudioPluginInstance.h"
 #include <QColor>

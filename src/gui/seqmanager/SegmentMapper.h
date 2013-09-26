@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTMAPPER_H_
-#define _RG_SEGMENTMAPPER_H_
+#ifndef RG_SEGMENTMAPPER_H
+#define RG_SEGMENTMAPPER_H
 
 #include <QString>
 #include "base/Event.h"

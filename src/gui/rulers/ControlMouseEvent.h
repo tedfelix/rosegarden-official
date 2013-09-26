@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CONTROL_MOUSE_EVENT_H_
-#define _CONTROL_MOUSE_EVENT_H_
+#ifndef RG_CONTROL_MOUSE_EVENT_H
+#define RG_CONTROL_MOUSE_EVENT_H
 
 #include <QPoint>
 

@@ -13,8 +13,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_RESAMPLER_H_
-#define _ROSEGARDEN_RESAMPLER_H_
+#ifndef RG_RESAMPLER_H
+#define RG_RESAMPLER_H
 
 namespace Rosegarden {
 

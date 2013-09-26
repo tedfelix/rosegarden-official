@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _EVENT_H_
-#define _EVENT_H_
+#ifndef RG_EVENT_H
+#define RG_EVENT_H
 
 #include "PropertyMap.h"
 #include "Exception.h"

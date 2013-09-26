@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYSTEMFONTQT_H_
-#define _RG_SYSTEMFONTQT_H_
+#ifndef RG_SYSTEMFONTQT_H
+#define RG_SYSTEMFONTQT_H
 
 #include "SystemFont.h"
 

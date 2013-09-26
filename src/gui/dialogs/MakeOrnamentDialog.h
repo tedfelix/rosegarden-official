@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MAKEORNAMENTDIALOG_H_
-#define _RG_MAKEORNAMENTDIALOG_H_
+#ifndef RG_MAKEORNAMENTDIALOG_H
+#define RG_MAKEORNAMENTDIALOG_H
 
 #include "gui/widgets/LineEdit.h"
 

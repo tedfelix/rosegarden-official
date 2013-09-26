@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RAMPEDINCREASE_H_
-#define _RAMPEDINCREASE_H_
+#ifndef RG_RAMPEDINCREASE_H
+#define RG_RAMPEDINCREASE_H
 
 #include "ParameterPattern.h"
 
@@ -45,4 +45,4 @@ public:
 };
 
 }
-#endif /* ifndef _RAMPEDINCREASE_H_ */
+#endif /* ifndef RG_RAMPEDINCREASE_H */

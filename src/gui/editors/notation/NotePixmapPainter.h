@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEPIXMAPPAINTER_H_
-#define _RG_NOTEPIXMAPPAINTER_H_
+#ifndef RG_NOTEPIXMAPPAINTER_H
+#define RG_NOTEPIXMAPPAINTER_H
 
 #include <QPainter>
 

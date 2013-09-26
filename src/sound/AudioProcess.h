@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIO_PROCESS_H_
-#define _AUDIO_PROCESS_H_
+#ifndef RG_AUDIO_PROCESS_H
+#define RG_AUDIO_PROCESS_H
 
 #include "SoundDriver.h"
 #include "base/Instrument.h"

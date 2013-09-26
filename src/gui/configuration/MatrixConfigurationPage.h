@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXCONFIGURATIONPAGE_H_
-#define _RG_MATRIXCONFIGURATIONPAGE_H_
+#ifndef RG_MATRIXCONFIGURATIONPAGE_H
+#define RG_MATRIXCONFIGURATIONPAGE_H
 
 #include "TabbedConfigurationPage.h"
 #include <QString>

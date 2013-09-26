@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEXTEVENTDIALOG_H_
-#define _RG_TEXTEVENTDIALOG_H_
+#ifndef RG_TEXTEVENTDIALOG_H
+#define RG_TEXTEVENTDIALOG_H
 
 #include "base/NotationTypes.h"
 #include "gui/widgets/LineEdit.h"

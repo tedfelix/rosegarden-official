@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUSICXMLIMPORTHELPER_H_
-#define _RG_MUSICXMLIMPORTHELPER_H_
+#ifndef RG_MUSICXMLIMPORTHELPER_H
+#define RG_MUSICXMLIMPORTHELPER_H
 
 #include "base/BaseProperties.h"
 #include "base/Composition.h"

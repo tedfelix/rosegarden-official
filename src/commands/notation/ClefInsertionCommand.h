@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CLEFINSERTIONCOMMAND_H_
-#define _RG_CLEFINSERTIONCOMMAND_H_
+#ifndef RG_CLEFINSERTIONCOMMAND_H
+#define RG_CLEFINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"

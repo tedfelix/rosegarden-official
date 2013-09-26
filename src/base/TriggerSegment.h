@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _TRIGGER_SEGMENT_H_
-#define _TRIGGER_SEGMENT_H_
+#ifndef RG_TRIGGER_SEGMENT_H
+#define RG_TRIGGER_SEGMENT_H
 
 #include <base/Segment.h>
 #include <set>

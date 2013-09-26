@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATION_WIDGET_H_
-#define _RG_NOTATION_WIDGET_H_
+#ifndef RG_NOTATION_WIDGET_H
+#define RG_NOTATION_WIDGET_H
 
 #include "StaffLayout.h"
 

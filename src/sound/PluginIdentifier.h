@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PLUGIN_IDENTIFIER_H_
-#define _PLUGIN_IDENTIFIER_H_
+#ifndef RG_PLUGIN_IDENTIFIER_H
+#define RG_PLUGIN_IDENTIFIER_H
 
 #include <QString>
 

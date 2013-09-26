@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _THORN_STYLE_H_
-#define _THORN_STYLE_H_
+#ifndef RG_THORN_STYLE_H
+#define RG_THORN_STYLE_H
 
 #include <QPlastiqueStyle>
 #include <QIcon>

@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _NOTATION_RULES_H_
-#define _NOTATION_RULES_H_
+#ifndef RG_NOTATION_RULES_H
+#define RG_NOTATION_RULES_H
 
 
 /**

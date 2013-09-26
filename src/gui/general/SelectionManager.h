@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SELECTION_MANAGER_H_
-#define _SELECTION_MANAGER_H_
+#ifndef RG_SELECTION_MANAGER_H
+#define RG_SELECTION_MANAGER_H
 
 namespace Rosegarden
 {

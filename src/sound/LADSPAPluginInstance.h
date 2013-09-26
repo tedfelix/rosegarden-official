@@ -18,8 +18,8 @@
 #include <QString>
 #include "base/Instrument.h"
 
-#ifndef _LADSPAPLUGININSTANCE_H_
-#define _LADSPAPLUGININSTANCE_H_
+#ifndef RG_LADSPAPLUGININSTANCE_H
+#define RG_LADSPAPLUGININSTANCE_H
 
 #include <ladspa.h>
 #include "RunnablePluginInstance.h"
@@ -123,5 +123,5 @@ protected:
 
 }
 
-#endif // _LADSPAPLUGININSTANCE_H_
+#endif // RG_LADSPAPLUGININSTANCE_H
 

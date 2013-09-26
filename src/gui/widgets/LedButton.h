@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LEDBUTTON_H_
-#define _RG_LEDBUTTON_H_
+#ifndef RG_LEDBUTTON_H
+#define RG_LEDBUTTON_H
 
 #include "Led.h"
 

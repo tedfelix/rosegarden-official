@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DEFAULTVELOCITYCOLOUR_H_
-#define _RG_DEFAULTVELOCITYCOLOUR_H_
+#ifndef RG_DEFAULTVELOCITYCOLOUR_H
+#define RG_DEFAULTVELOCITYCOLOUR_H
 
 #include "VelocityColour.h"
 

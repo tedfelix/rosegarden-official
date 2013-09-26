@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COUNTDOWNBAR_H_
-#define _RG_COUNTDOWNBAR_H_
+#ifndef RG_COUNTDOWNBAR_H
+#define RG_COUNTDOWNBAR_H
 
 #include <QFrame>
 

@@ -17,8 +17,8 @@
 */
 
 
-#ifndef _RG_SYMBOLS_H_
-#define _RG_SYMBOLS_H_
+#ifndef RG_SYMBOLS_H
+#define RG_SYMBOLS_H
 
 #include <string>
 

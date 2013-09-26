@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUSICXMLEXPORTER_H_
-#define _RG_MUSICXMLEXPORTER_H_
+#ifndef RG_MUSICXMLEXPORTER_H
+#define RG_MUSICXMLEXPORTER_H
 
 #include "MusicXmlExportHelper.h"
 

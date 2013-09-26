@@ -17,8 +17,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENPARAMETERAREA_H_
-#define _RG_ROSEGARDENPARAMETERAREA_H_
+#ifndef RG_ROSEGARDENPARAMETERAREA_H
+#define RG_ROSEGARDENPARAMETERAREA_H
 
 #include <QStackedWidget>
 #include <vector>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CUTANDCLOSECOMMAND_H_
-#define _RG_CUTANDCLOSECOMMAND_H_
+#ifndef RG_CUTANDCLOSECOMMAND_H
+#define RG_CUTANDCLOSECOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

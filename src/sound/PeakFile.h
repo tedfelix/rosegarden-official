@@ -20,8 +20,8 @@
 #include "SoundFile.h"
 #include "base/RealTime.h"
 
-#ifndef _PEAKFILE_H_
-#define _PEAKFILE_H_
+#ifndef RG_PEAKFILE_H
+#define RG_PEAKFILE_H
 
 // A PeakFile is generated to the BWF Supplement 3 Peak Envelope Chunk
 // format as defined here:
@@ -185,6 +185,6 @@ protected:
 }
 
 
-#endif // _PEAKFILE_H_
+#endif // RG_PEAKFILE_H
 
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTECHARACTER_H_
-#define _RG_NOTECHARACTER_H_
+#ifndef RG_NOTECHARACTER_H
+#define RG_NOTECHARACTER_H
 
 #include <QGraphicsPixmapItem>
 #include <QPixmap>

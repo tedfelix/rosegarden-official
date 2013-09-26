@@ -12,8 +12,8 @@
   COPYING included with this distribution for more information.
 */
 
-#ifndef _MAPPEDCOMMON_H_
-#define _MAPPEDCOMMON_H_
+#ifndef RG_MAPPEDCOMMON_H
+#define RG_MAPPEDCOMMON_H
 
 // Some Mapped types that gui and sound libraries use to communicate
 // plugin and Studio information.  Putting them here so we can change
@@ -58,4 +58,4 @@ QDataStream& operator<<(QDataStream&, const MappedObjectValueList&);
 
 }
 
-#endif // _MAPPEDCOMMON_H_
+#endif // RG_MAPPEDCOMMON_H

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSPLITTER_H_
-#define _RG_SEGMENTSPLITTER_H_
+#ifndef RG_SEGMENTSPLITTER_H
+#define RG_SEGMENTSPLITTER_H
 
 #include "SegmentTool.h"
 #include <QString>

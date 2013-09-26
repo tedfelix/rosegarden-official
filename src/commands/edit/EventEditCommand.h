@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EVENTEDITCOMMAND_H_
-#define _RG_EVENTEDITCOMMAND_H_
+#ifndef RG_EVENTEDITCOMMAND_H
+#define RG_EVENTEDITCOMMAND_H
 
 #include "base/Event.h"
 #include "document/BasicCommand.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTERASECOMMAND_H_
-#define _RG_SEGMENTERASECOMMAND_H_
+#ifndef RG_SEGMENTERASECOMMAND_H
+#define RG_SEGMENTERASECOMMAND_H
 
 #include <string>
 #include "document/Command.h"

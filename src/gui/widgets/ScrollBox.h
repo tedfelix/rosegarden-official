@@ -20,8 +20,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SCROLLBOX_H_
-#define _RG_SCROLLBOX_H_
+#ifndef RG_SCROLLBOX_H
+#define RG_SCROLLBOX_H
 
 #include <QFrame>
 #include <QPixmap>

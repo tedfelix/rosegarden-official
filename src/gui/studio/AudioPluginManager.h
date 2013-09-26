@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPLUGINMANAGER_H_
-#define _RG_AUDIOPLUGINMANAGER_H_
+#ifndef RG_AUDIOPLUGINMANAGER_H
+#define RG_AUDIOPLUGINMANAGER_H
 
 #include "AudioPluginClipboard.h"
 #include <QMutex>

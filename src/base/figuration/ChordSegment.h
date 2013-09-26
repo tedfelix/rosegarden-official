@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CHORDSEGMENT_H_
-#define _CHORDSEGMENT_H_
+#ifndef RG_CHORDSEGMENT_H
+#define RG_CHORDSEGMENT_H
 
 #include <map>
 
@@ -51,4 +51,4 @@ public:
 
 }
 
-#endif /* ifndef _CHORDSEGMENT_H_ */
+#endif /* ifndef RG_CHORDSEGMENT_H */

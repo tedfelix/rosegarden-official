@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETTRIGGERCOMMAND_H_
-#define _RG_SETTRIGGERCOMMAND_H_
+#ifndef RG_SETTRIGGERCOMMAND_H
+#define RG_SETTRIGGERCOMMAND_H
 
 #include "base/TriggerSegment.h"
 #include "document/BasicSelectionCommand.h"

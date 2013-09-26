@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _WARNING_GROUP_BOX_H_
-#define _WARNING_GROUP_BOX_H_
+#ifndef RG_WARNING_GROUP_BOX_H
+#define RG_WARNING_GROUP_BOX_H
 
 #include <QGroupBox>
 

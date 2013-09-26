@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_IMPORTDEVICEDIALOG_H_
-#define _RG_IMPORTDEVICEDIALOG_H_
+#ifndef RG_IMPORTDEVICEDIALOG_H
+#define RG_IMPORTDEVICEDIALOG_H
 
 #include "base/MidiDevice.h"
 #include <string>

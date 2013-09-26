@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RECONNECTDEVICECOMMAND_H_
-#define _RG_RECONNECTDEVICECOMMAND_H_
+#ifndef RG_RECONNECTDEVICECOMMAND_H
+#define RG_RECONNECTDEVICECOMMAND_H
 
 #include "base/Device.h"
 #include <string>

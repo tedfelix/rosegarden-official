@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RELATIVEEVENT_H_
-#define _RELATIVEEVENT_H_
+#ifndef RG_RELATIVEEVENT_H
+#define RG_RELATIVEEVENT_H
 
 namespace Rosegarden
 {
@@ -50,4 +50,4 @@ private:
 };
 }
 
-#endif /* ifndef _RELATIVEEVENT_H_ */
+#endif /* ifndef RG_RELATIVEEVENT_H */

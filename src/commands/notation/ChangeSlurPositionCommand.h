@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHANGESLURPOSITIONCOMMAND_H_
-#define _RG_CHANGESLURPOSITIONCOMMAND_H_
+#ifndef RG_CHANGESLURPOSITIONCOMMAND_H
+#define RG_CHANGESLURPOSITIONCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

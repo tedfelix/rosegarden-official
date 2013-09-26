@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MODIFYDEVICECOMMAND_H_
-#define _RG_MODIFYDEVICECOMMAND_H_
+#ifndef RG_MODIFYDEVICECOMMAND_H
+#define RG_MODIFYDEVICECOMMAND_H
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"

@@ -15,8 +15,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_AUDIO_READ_STREAM_H_
-#define _ROSEGARDEN_AUDIO_READ_STREAM_H_
+#ifndef RG_AUDIO_READ_STREAM_H
+#define RG_AUDIO_READ_STREAM_H
 
 #include "base/ThingFactory.h"
 #include "sound/RingBuffer.h"

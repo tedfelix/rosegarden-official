@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_KEYINSERTIONCOMMAND_H_
-#define _RG_KEYINSERTIONCOMMAND_H_
+#ifndef RG_KEYINSERTIONCOMMAND_H
+#define RG_KEYINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONSTAFF_H_
-#define _RG_NOTATIONSTAFF_H_
+#ifndef RG_NOTATIONSTAFF_H
+#define RG_NOTATIONSTAFF_H
 
 #include "base/ViewSegment.h"
 #include "base/ViewElement.h"

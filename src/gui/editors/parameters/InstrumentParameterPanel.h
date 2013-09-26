@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INSTRUMENTPARAMETERPANEL_H_
-#define _RG_INSTRUMENTPARAMETERPANEL_H_
+#ifndef RG_INSTRUMENTPARAMETERPANEL_H
+#define RG_INSTRUMENTPARAMETERPANEL_H
 
 #include "gui/widgets/InstrumentAliasButton.h"
 #include <QFrame>

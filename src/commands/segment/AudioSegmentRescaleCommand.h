@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTRESCALECOMMAND_H_
-#define _RG_AUDIOSEGMENTRESCALECOMMAND_H_
+#ifndef RG_AUDIOSEGMENTRESCALECOMMAND_H
+#define RG_AUDIOSEGMENTRESCALECOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

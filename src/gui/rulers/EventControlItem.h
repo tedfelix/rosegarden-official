@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _EVENTCONTROLITEM_H
-#define _EVENTCONTROLITEM_H
+#ifndef RG_EVENTCONTROLITEM_H
+#define RG_EVENTCONTROLITEM_H
 
 #include "gui/rulers/ControlItem.h"
 

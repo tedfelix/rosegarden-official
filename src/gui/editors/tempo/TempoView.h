@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEMPOVIEW_H_
-#define _RG_TEMPOVIEW_H_
+#ifndef RG_TEMPOVIEW_H
+#define RG_TEMPOVIEW_H
 
 #include "base/Composition.h"
 #include "base/NotationTypes.h"

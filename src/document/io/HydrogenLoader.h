@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_HYDROGENLOADER_H_
-#define _RG_HYDROGENLOADER_H_
+#ifndef RG_HYDROGENLOADER_H
+#define RG_HYDROGENLOADER_H
 
 #include "base/PropertyName.h"
 #include "gui/general/ProgressReporter.h"

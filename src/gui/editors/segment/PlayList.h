@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PLAYLIST_H_
-#define _RG_PLAYLIST_H_
+#ifndef RG_PLAYLIST_H
+#define RG_PLAYLIST_H
 
 #include <QWidget>
 

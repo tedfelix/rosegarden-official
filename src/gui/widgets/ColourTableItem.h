@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENCOLOURTABLEITEM_H_
-#define _RG_ROSEGARDENCOLOURTABLEITEM_H_
+#ifndef RG_COLOURTABLEITEM_H
+#define RG_COLOURTABLEITEM_H
 
 #include <QColor>
 #include <QTableWidget>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDEN_PLUGIN_PUSHBUTTON_H_
-#define _RG_ROSEGARDEN_PLUGIN_PUSHBUTTON_H_
+#ifndef RG_PLUGIN_PUSHBUTTON_H
+#define RG_PLUGIN_PUSHBUTTON_H
 
 #include <QPushButton>
 

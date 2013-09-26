@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADDTRACKSDIALOG_H_
-#define _RG_ADDTRACKSDIALOG_H_
+#ifndef RG_ADDTRACKSDIALOG_H
+#define RG_ADDTRACKSDIALOG_H
 
 #include <QDialog>
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADD_LAYER_COMMAND_H_
-#define _RG_ADD_LAYER_COMMAND_H_
+#ifndef RG_ADD_LAYER_COMMAND_H
+#define RG_ADD_LAYER_COMMAND_H
 
 #include "document/Command.h"
 

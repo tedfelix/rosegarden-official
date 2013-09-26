@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONTOOL_H_
-#define _RG_NOTATIONTOOL_H_
+#ifndef RG_NOTATIONTOOL_H
+#define RG_NOTATIONTOOL_H
 
 #include <QObject>
 #include <QString>

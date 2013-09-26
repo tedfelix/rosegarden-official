@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _NOTATION_TYPES_H_
-#define _NOTATION_TYPES_H_
+#ifndef RG_NOTATION_TYPES_H
+#define RG_NOTATION_TYPES_H
 
 #include <list>
 #include <map>

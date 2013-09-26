@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PASTENOTATIONDIALOG_H_
-#define _RG_PASTENOTATIONDIALOG_H_
+#ifndef RG_PASTENOTATIONDIALOG_H
+#define RG_PASTENOTATIONDIALOG_H
 
 #include "commands/edit/PasteEventsCommand.h"
 #include <QDialog>

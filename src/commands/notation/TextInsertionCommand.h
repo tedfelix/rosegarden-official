@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEXTINSERTIONCOMMAND_H_
-#define _RG_TEXTINSERTIONCOMMAND_H_
+#ifndef RG_TEXTINSERTIONCOMMAND_H
+#define RG_TEXTINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"

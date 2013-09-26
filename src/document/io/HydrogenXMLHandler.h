@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_HYDROGENXMLHANDLER_H_
-#define _RG_HYDROGENXMLHANDLER_H_
+#ifndef RG_HYDROGENXMLHANDLER_H
+#define RG_HYDROGENXMLHANDLER_H
 
 #include "HydrogenLoader.h"
 #include "base/MidiProgram.h"

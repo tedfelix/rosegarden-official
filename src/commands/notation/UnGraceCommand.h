@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_UNGRACECOMMAND_H_
-#define _RG_UNGRACECOMMAND_H_
+#ifndef RG_UNGRACECOMMAND_H
+#define RG_UNGRACECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

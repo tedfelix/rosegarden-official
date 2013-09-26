@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CSOUNDEXPORTER_H_
-#define _RG_CSOUNDEXPORTER_H_
+#ifndef RG_CSOUNDEXPORTER_H
+#define RG_CSOUNDEXPORTER_H
 
 #include "gui/general/ProgressReporter.h"
 #include <string>

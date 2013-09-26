@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PIANOKEYBOARD_H_
-#define _RG_PIANOKEYBOARD_H_
+#ifndef RG_PIANOKEYBOARD_H
+#define RG_PIANOKEYBOARD_H
 
 #include "gui/rulers/PitchRuler.h"
 

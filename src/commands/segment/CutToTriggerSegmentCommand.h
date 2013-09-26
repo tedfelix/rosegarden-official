@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CUTTOTRIGGERSEGMENTCOMMAND_H_
-#define _CUTTOTRIGGERSEGMENTCOMMAND_H_
+#ifndef RG_CUTTOTRIGGERSEGMENTCOMMAND_H
+#define RG_CUTTOTRIGGERSEGMENTCOMMAND_H
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "document/BasicSelectionCommand.h"
@@ -66,4 +66,4 @@ protected:
 };
 }
 
-#endif /* ifndef _CUTTOTRIGGERSEGMENTCOMMAND_H_ */
+#endif /* ifndef RG_CUTTOTRIGGERSEGMENTCOMMAND_H */

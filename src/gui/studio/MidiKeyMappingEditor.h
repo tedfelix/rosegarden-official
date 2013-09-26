@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIKEYMAPPINGEDITOR_H_
-#define _RG_MIDIKEYMAPPINGEDITOR_H_
+#ifndef RG_MIDIKEYMAPPINGEDITOR_H
+#define RG_MIDIKEYMAPPINGEDITOR_H
 
 #include "base/MidiProgram.h"
 #include "NameSetEditor.h"

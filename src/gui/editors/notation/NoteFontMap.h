@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEFONTMAP_H_
-#define _RG_NOTEFONTMAP_H_
+#ifndef RG_NOTEFONTMAP_H
+#define RG_NOTEFONTMAP_H
 
 #include "base/Exception.h"
 #include <map>

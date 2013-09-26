@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENTRANSPORTDIALOG_H_
-#define _RG_ROSEGARDENTRANSPORTDIALOG_H_
+#ifndef RG_TRANSPORTDIALOG_H
+#define RG_TRANSPORTDIALOG_H
 
 #include <QHash>
 #include <QDockWidget>

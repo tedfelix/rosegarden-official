@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLRULERWIDGET_H_
-#define _RG_CONTROLRULERWIDGET_H_
+#ifndef RG_CONTROLRULERWIDGET_H
+#define RG_CONTROLRULERWIDGET_H
 
 #include <QWidget>
 #include "base/Event.h"

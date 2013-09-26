@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIO_PLAY_QUEUE_H_
-#define _AUDIO_PLAY_QUEUE_H_
+#ifndef RG_AUDIO_PLAY_QUEUE_H
+#define RG_AUDIO_PLAY_QUEUE_H
 
 #include "base/RealTime.h"
 #include "base/Instrument.h"

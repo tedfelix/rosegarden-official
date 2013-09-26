@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENCOLOURTABLE_H_
-#define _RG_ROSEGARDENCOLOURTABLE_H_
+#ifndef RG_COLOURTABLE_H
+#define RG_COLOURTABLE_H
 
 #include <map>
 #include <QTableWidget>

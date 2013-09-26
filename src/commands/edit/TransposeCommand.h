@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRANSPOSECOMMAND_H_
-#define _RG_TRANSPOSECOMMAND_H_
+#ifndef RG_TRANSPOSECOMMAND_H
+#define RG_TRANSPOSECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

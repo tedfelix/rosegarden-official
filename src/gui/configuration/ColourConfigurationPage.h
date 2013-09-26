@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COLOURCONFIGURATIONPAGE_H_
-#define _RG_COLOURCONFIGURATIONPAGE_H_
+#ifndef RG_COLOURCONFIGURATIONPAGE_H
+#define RG_COLOURCONFIGURATIONPAGE_H
 
 #include "base/ColourMap.h"
 #include "gui/widgets/ColourTable.h"

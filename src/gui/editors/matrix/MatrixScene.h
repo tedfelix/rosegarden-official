@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXSCENE_H_
-#define _RG_MATRIXSCENE_H_
+#ifndef RG_MATRIXSCENE_H
+#define RG_MATRIXSCENE_H
 
 #include <QGraphicsScene>
 

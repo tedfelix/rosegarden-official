@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTERESTINSERTER_H_
-#define _RG_NOTERESTINSERTER_H_
+#ifndef RG_NOTERESTINSERTER_H
+#define RG_NOTERESTINSERTER_H
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"

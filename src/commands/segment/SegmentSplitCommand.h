@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSPLITCOMMAND_H_
-#define _RG_SEGMENTSPLITCOMMAND_H_
+#ifndef RG_SEGMENTSPLITCOMMAND_H
+#define RG_SEGMENTSPLITCOMMAND_H
 
 #include <string>
 #include "document/Command.h"

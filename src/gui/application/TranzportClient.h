@@ -17,8 +17,8 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-#ifndef _RG_TRANZPORTCLIENT_H_
-#define _RG_TRANZPORTCLIENT_H_
+#ifndef RG_TRANZPORTCLIENT_H
+#define RG_TRANZPORTCLIENT_H
 
 #include "base/Composition.h"
 #include "misc/Debug.h"
@@ -192,4 +192,4 @@ private:
   
 }
 
-#endif // _RG_TRANZPORTCLIENT_H_
+#endif // RG_TRANZPORTCLIENT_H

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PASTETOTRIGGERSEGMENTCOMMAND_H_
-#define _RG_PASTETOTRIGGERSEGMENTCOMMAND_H_
+#ifndef RG_PASTETOTRIGGERSEGMENTCOMMAND_H
+#define RG_PASTETOTRIGGERSEGMENTCOMMAND_H
 
 #include "base/TriggerSegment.h"
 #include "document/Command.h"

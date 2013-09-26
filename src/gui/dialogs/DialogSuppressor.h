@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DIALOG_SUPPRESSOR_H_
-#define _RG_DIALOG_SUPPRESSOR_H_
+#ifndef RG_DIALOG_SUPPRESSOR_H
+#define RG_DIALOG_SUPPRESSOR_H
 
 #include <QDialog>
 #include <QObject>

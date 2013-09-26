@@ -11,8 +11,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROPERTY_MAP_H_
-#define _PROPERTY_MAP_H_
+#ifndef RG_PROPERTY_MAP_H
+#define RG_PROPERTY_MAP_H
 
 #include "Property.h"
 #include "base/PropertyName.h"

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ERASECOMMAND_H_
-#define _RG_ERASECOMMAND_H_
+#ifndef RG_ERASECOMMAND_H
+#define RG_ERASECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETTRIGGERSEGMENTBASEVELOCITYCOMMAND_H_
-#define _RG_SETTRIGGERSEGMENTBASEVELOCITYCOMMAND_H_
+#ifndef RG_SETTRIGGERSEGMENTBASEVELOCITYCOMMAND_H
+#define RG_SETTRIGGERSEGMENTBASEVELOCITYCOMMAND_H
 
 #include "base/TriggerSegment.h"
 #include "document/Command.h"

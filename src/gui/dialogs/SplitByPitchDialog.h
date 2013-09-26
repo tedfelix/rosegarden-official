@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SPLITBYPITCHDIALOG_H_
-#define _RG_SPLITBYPITCHDIALOG_H_
+#ifndef RG_SPLITBYPITCHDIALOG_H
+#define RG_SPLITBYPITCHDIALOG_H
 
 #include <QDialog>
 

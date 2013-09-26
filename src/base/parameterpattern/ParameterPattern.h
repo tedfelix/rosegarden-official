@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PARAMETERPATTERN_H_
-#define _RG_PARAMETERPATTERN_H_
+#ifndef RG_PARAMETERPATTERN_H
+#define RG_PARAMETERPATTERN_H
 
 #include "base/PropertyName.h"
 #include "base/parameterpattern/SelectionSituation.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _AUDIOFILEMANAGER_H_
-#define _AUDIOFILEMANAGER_H_
+#ifndef RG_AUDIOFILEMANAGER_H
+#define RG_AUDIOFILEMANAGER_H
 
 #include <string>
 #include <vector>
@@ -328,4 +328,4 @@ private:
 
 }
 
-#endif // _AUDIOFILEMANAGER_H_
+#endif // RG_AUDIOFILEMANAGER_H

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENPROGRESSDIALOG_H_
-#define _RG_ROSEGARDENPROGRESSDIALOG_H_
+#ifndef RG_PROGRESSDIALOG_H
+#define RG_PROGRESSDIALOG_H
 
 #include "ProgressBar.h"
 

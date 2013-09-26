@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FILELOCATEDIALOG_H_
-#define _RG_FILELOCATEDIALOG_H_
+#ifndef RG_FILELOCATEDIALOG_H
+#define RG_FILELOCATEDIALOG_H
 
 #include <QDialog>
 #include <QString>

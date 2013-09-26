@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RINGINGPARAMETERPATTERN_H_
-#define _RG_RINGINGPARAMETERPATTERN_H_
+#ifndef RG_RINGINGPARAMETERPATTERN_H
+#define RG_RINGINGPARAMETERPATTERN_H
 
 #include "ParameterPattern.h"
 

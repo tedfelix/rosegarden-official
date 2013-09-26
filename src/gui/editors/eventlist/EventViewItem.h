@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_EVENTVIEWITEM_H_
-#define _RG_EVENTVIEWITEM_H_
+#ifndef RG_EVENTVIEWITEM_H
+#define RG_EVENTVIEWITEM_H
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLRULERTABBAR_H_
-#define _RG_CONTROLRULERTABBAR_H_
+#ifndef RG_CONTROLRULERTABBAR_H
+#define RG_CONTROLRULERTABBAR_H
 
 #include <QTabBar>
 #include <QString>

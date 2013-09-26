@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONELEMENT_H_
-#define _RG_NOTATIONELEMENT_H_
+#ifndef RG_NOTATIONELEMENT_H
+#define RG_NOTATIONELEMENT_H
 
 #include "base/Exception.h"
 #include "base/ViewElement.h"

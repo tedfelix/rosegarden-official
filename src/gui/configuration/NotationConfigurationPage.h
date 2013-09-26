@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONCONFIGURATIONPAGE_H_
-#define _RG_NOTATIONCONFIGURATIONPAGE_H_
+#ifndef RG_NOTATIONCONFIGURATIONPAGE_H
+#define RG_NOTATIONCONFIGURATIONPAGE_H
 
 #include <string>
 #include "TabbedConfigurationPage.h"

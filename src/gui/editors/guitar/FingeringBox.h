@@ -17,8 +17,8 @@
 
 
 
-#ifndef _RG_FINGERINGBOX_H_
-#define _RG_FINGERINGBOX_H_
+#ifndef RG_FINGERINGBOX_H
+#define RG_FINGERINGBOX_H
 
 #include <QFrame>
 
@@ -112,4 +112,4 @@ protected:
 
 }
 
-#endif /*_RG_FINGERINGBOX2_H_*/
+#endif /*RG_FINGERINGBOX_H*/

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXERASECOMMAND_H_
-#define _RG_MATRIXERASECOMMAND_H_
+#ifndef RG_MATRIXERASECOMMAND_H
+#define RG_MATRIXERASECOMMAND_H
 
 #include "document/BasicCommand.h"
 #include "base/Event.h"

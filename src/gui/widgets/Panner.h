@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PANNER_H_
-#define _RG_PANNER_H_
+#ifndef RG_PANNER_H
+#define RG_PANNER_H
 
 #include <QGraphicsView>
 

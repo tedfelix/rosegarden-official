@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_OPENORCLOSERANGECOMMAND_H_
-#define _RG_OPENORCLOSERANGECOMMAND_H_
+#ifndef RG_OPENORCLOSERANGECOMMAND_H
+#define RG_OPENORCLOSERANGECOMMAND_H
 
 #include "base/Selection.h"
 #include "document/Command.h"

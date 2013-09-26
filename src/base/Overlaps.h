@@ -15,8 +15,8 @@
 
 
 
-#ifndef _OVERLAPS_H_
-#define _OVERLAPS_H_
+#ifndef RG_OVERLAPS_H
+#define RG_OVERLAPS_H
 
 #include <vector>
 #include <map>
@@ -256,5 +256,5 @@ Overlaps<int>::getNextPropertyTime(Segment *, timeT time, timeT &nextTime) const
 }
 
 
-#endif // _OVERLAPS_H_
+#endif // RG_OVERLAPS_H
 

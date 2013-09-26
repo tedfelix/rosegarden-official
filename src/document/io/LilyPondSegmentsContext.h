@@ -16,8 +16,8 @@
 */
 
 
-#ifndef _LILYPOND_SEGMENTS_CONTEXT_H_
-#define _LILYPOND_SEGMENTS_CONTEXT_H_
+#ifndef RG_LILYPOND_SEGMENTS_CONTEXT_H
+#define RG_LILYPOND_SEGMENTS_CONTEXT_H
 
 /*
  * LilyPondSegmentsContext.h
@@ -307,4 +307,4 @@ private :
 
 }
 
-#endif // _LILYPOND_SEGMENTS_CONTEXT_H_
+#endif // RG_LILYPOND_SEGMENTS_CONTEXT_H

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_RULER_SCALE_H_
-#define _RG_RULER_SCALE_H_
+#ifndef RG_RULER_SCALE_H
+#define RG_RULER_SCALE_H
 
 #include "Event.h"
 #include "base/Segment.h"

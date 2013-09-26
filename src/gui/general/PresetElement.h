@@ -18,8 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PRESETELEMENT_H_
-#define _RG_PRESETELEMENT_H_
+#ifndef RG_PRESETELEMENT_H
+#define RG_PRESETELEMENT_H
 
 #include <QString>
 

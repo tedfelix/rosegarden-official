@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ACTIONCOMMANDREGISTRY_H_
-#define _RG_ACTIONCOMMANDREGISTRY_H_
+#ifndef RG_ACTIONCOMMANDREGISTRY_H
+#define RG_ACTIONCOMMANDREGISTRY_H
 
 #include <QCoreApplication>
 

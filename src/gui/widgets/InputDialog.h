@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _INPUT_DIALOG_H_
-#define _INPUT_DIALOG_H_
+#ifndef RG_INPUT_DIALOG_H
+#define RG_INPUT_DIALOG_H
 
 #include "gui/widgets/LineEdit.h"
 

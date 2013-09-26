@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _DOCUMENTGET_H_
-#define _DOCUMENTGET_H_
+#ifndef RG_DOCUMENTGET_H
+#define RG_DOCUMENTGET_H
 
 namespace Rosegarden
 {
@@ -35,4 +35,4 @@ namespace Rosegarden
   }
 }
 
-#endif /* ifndef _DOCUMENTGET_H_ */
+#endif /* ifndef RG_DOCUMENTGET_H */

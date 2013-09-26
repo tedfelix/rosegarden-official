@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_VIEWELEMENTADAPTER_H_
-#define _RG_VIEWELEMENTADAPTER_H_
+#ifndef RG_VIEWELEMENTADAPTER_H
+#define RG_VIEWELEMENTADAPTER_H
 
 #include "ElementAdapter.h"
 #include "base/ViewElement.h"

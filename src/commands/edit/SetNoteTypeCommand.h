@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETNOTETYPECOMMAND_H_
-#define _RG_SETNOTETYPECOMMAND_H_
+#ifndef RG_SETNOTETYPECOMMAND_H
+#define RG_SETNOTETYPECOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/BasicSelectionCommand.h"

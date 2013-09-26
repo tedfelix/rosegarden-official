@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CLEFDIALOG_H_
-#define _RG_CLEFDIALOG_H_
+#ifndef RG_CLEFDIALOG_H
+#define RG_CLEFDIALOG_H
 
 #include "base/NotationTypes.h"
 #include <QDialog>

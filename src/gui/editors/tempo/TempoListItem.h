@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEMPOLISTITEM_H_
-#define _RG_TEMPOLISTITEM_H_
+#ifndef RG_TEMPOLISTITEM_H
+#define RG_TEMPOLISTITEM_H
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

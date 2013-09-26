@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENURESTORETIESCOMMAND_H_
-#define _RG_ADJUSTMENURESTORETIESCOMMAND_H_
+#ifndef RG_ADJUSTMENURESTORETIESCOMMAND_H
+#define RG_ADJUSTMENURESTORETIESCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

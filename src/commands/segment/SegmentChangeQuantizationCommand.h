@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H_
-#define _RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H_
+#ifndef RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H
+#define RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

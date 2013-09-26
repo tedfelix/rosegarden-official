@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SUSTAININSERTIONCOMMAND_H_
-#define _RG_SUSTAININSERTIONCOMMAND_H_
+#ifndef RG_SUSTAININSERTIONCOMMAND_H
+#define RG_SUSTAININSERTIONCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include <QString>

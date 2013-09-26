@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MUSICXMLEXPORTHELPER_H_
-#define _RG_MUSICXMLEXPORTHELPER_H_
+#ifndef RG_MUSICXMLEXPORTHELPER_H
+#define RG_MUSICXMLEXPORTHELPER_H
 
 #include "PercussionMap.h"
 

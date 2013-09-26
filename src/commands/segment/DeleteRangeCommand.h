@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DELETERANGECOMMAND_H_
-#define _RG_DELETERANGECOMMAND_H_
+#ifndef RG_DELETERANGECOMMAND_H
+#define RG_DELETERANGECOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

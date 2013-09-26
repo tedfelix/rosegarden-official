@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONCOLOURCACHE_H_
-#define _RG_COMPOSITIONCOLOURCACHE_H_
+#ifndef RG_COMPOSITIONCOLOURCACHE_H
+#define RG_COMPOSITIONCOLOURCACHE_H
 
 #include <QColor>
 

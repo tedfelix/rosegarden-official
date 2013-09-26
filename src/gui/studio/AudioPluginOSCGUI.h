@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPLUGINOSCGUI_H_
-#define _RG_AUDIOPLUGINOSCGUI_H_
+#ifndef RG_AUDIOPLUGINOSCGUI_H
+#define RG_AUDIOPLUGINOSCGUI_H
 
 #include <lo/lo.h>
 

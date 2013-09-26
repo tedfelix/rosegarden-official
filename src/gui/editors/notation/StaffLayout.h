@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_STAFFLAYOUT_H_
-#define _RG_STAFFLAYOUT_H_
+#ifndef RG_STAFFLAYOUT_H
+#define RG_STAFFLAYOUT_H
 
 #include "base/Event.h"
 #include "base/ViewElement.h"

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENGUIVIEW_H_
-#define _RG_ROSEGARDENGUIVIEW_H_
+#ifndef RG_ROSEGARDENGUIVIEW_H
+#define RG_ROSEGARDENGUIVIEW_H
 
 #include "base/Event.h"
 #include "base/MidiProgram.h"

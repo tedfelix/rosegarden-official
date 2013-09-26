@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLPARAMETEREDITDIALOG_H_
-#define _RG_CONTROLPARAMETEREDITDIALOG_H_
+#ifndef RG_CONTROLPARAMETEREDITDIALOG_H
+#define RG_CONTROLPARAMETEREDITDIALOG_H
 
 #include "base/ControlParameter.h"
 #include "gui/widgets/LineEdit.h"

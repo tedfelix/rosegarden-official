@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXSELECTOR_H_
-#define _RG_MATRIXSELECTOR_H_
+#ifndef RG_MATRIXSELECTOR_H
+#define RG_MATRIXSELECTOR_H
 
 #include <QGraphicsRectItem>
 #include "MatrixTool.h"

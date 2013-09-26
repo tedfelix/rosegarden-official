@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BIGARROWBUTTON_H_
-#define _RG_BIGARROWBUTTON_H_
+#ifndef RG_BIGARROWBUTTON_H
+#define RG_BIGARROWBUTTON_H
 
 #include <QWidget>
 #include <QPushButton>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H_
-#define _RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H_
+#ifndef RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H
+#define RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

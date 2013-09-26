@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEMPOCOLOUR_H_
-#define _RG_TEMPOCOLOUR_H_
+#ifndef RG_TEMPOCOLOUR_H
+#define RG_TEMPOCOLOUR_H
 
 #include <QColor>
 

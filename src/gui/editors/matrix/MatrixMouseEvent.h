@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MATRIX_MOUSE_EVENT_H_
-#define _MATRIX_MOUSE_EVENT_H_
+#ifndef RG_MATRIX_MOUSE_EVENT_H
+#define RG_MATRIX_MOUSE_EVENT_H
 
 #include <QString>
 #include <QPoint>

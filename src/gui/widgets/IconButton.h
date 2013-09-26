@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ICONBUTTON_H_
-#define _ICONBUTTON_H_
+#ifndef RG_ICONBUTTON_H
+#define RG_ICONBUTTON_H
 
 #include <QAbstractButton>
 #include <QPixmap>

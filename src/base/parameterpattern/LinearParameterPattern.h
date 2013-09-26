@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LINEARPARAMETERPATTERN_H_
-#define _RG_LINEARPARAMETERPATTERN_H_
+#ifndef RG_LINEARPARAMETERPATTERN_H
+#define RG_LINEARPARAMETERPATTERN_H
 
 #include "ParameterPattern.h"
 

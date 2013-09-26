@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LILYPOND_PROCESSOR_H_
-#define _LILYPOND_PROCESSOR_H_
+#ifndef RG_LILYPOND_PROCESSOR_H
+#define RG_LILYPOND_PROCESSOR_H
 
 #include "gui/widgets/ProgressBar.h"
 

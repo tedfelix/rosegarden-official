@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIPROGRAMSEDITOR_H_
-#define _RG_MIDIPROGRAMSEDITOR_H_
+#ifndef RG_MIDIPROGRAMSEDITOR_H
+#define RG_MIDIPROGRAMSEDITOR_H
 
 #include "base/MidiProgram.h"
 #include "NameSetEditor.h"

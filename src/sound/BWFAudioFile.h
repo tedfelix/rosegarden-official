@@ -22,8 +22,8 @@
 #include "RIFFAudioFile.h"
 
 
-#ifndef _BWFAUDIOFILE_H_
-#define _BWFAUDIOFILE_H_
+#ifndef RG_BWFAUDIOFILE_H
+#define RG_BWFAUDIOFILE_H
 
 namespace Rosegarden
 {
@@ -85,4 +85,4 @@ protected:
 }
 
 
-#endif // _BWFUDIOFILE_H_
+#endif // RG_BWFAUDIOFILE_H

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXTOOL_H_
-#define _RG_MATRIXTOOL_H_
+#ifndef RG_MATRIXTOOL_H
+#define RG_MATRIXTOOL_H
 
 #include "gui/general/BaseTool.h"
 

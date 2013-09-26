@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHORDNAMERULER_H_
-#define _RG_CHORDNAMERULER_H_
+#ifndef RG_CHORDNAMERULER_H
+#define RG_CHORDNAMERULER_H
 
 #include "base/PropertyName.h"
 #include <map>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H_
-#define _RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H_
+#ifndef RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H
+#define RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H
 
 #include <map>
 #include "document/Command.h"

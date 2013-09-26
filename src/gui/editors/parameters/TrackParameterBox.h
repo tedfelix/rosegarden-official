@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRACKPARAMETERBOX_H_
-#define _RG_TRACKPARAMETERBOX_H_
+#ifndef RG_TRACKPARAMETERBOX_H
+#define RG_TRACKPARAMETERBOX_H
 
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"

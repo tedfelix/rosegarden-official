@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXRESIZER_H_
-#define _RG_MATRIXRESIZER_H_
+#ifndef RG_MATRIXRESIZER_H
+#define RG_MATRIXRESIZER_H
 
 #include "MatrixTool.h"
 #include <QString>

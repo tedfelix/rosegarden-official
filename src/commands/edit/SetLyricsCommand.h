@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SETLYRICSCOMMAND_H_
-#define _RG_SETLYRICSCOMMAND_H_
+#ifndef RG_SETLYRICSCOMMAND_H
+#define RG_SETLYRICSCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

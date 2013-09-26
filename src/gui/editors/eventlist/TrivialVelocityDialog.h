@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRIVIALVELOCITYDIALOG_H_
-#define _RG_TRIVIALVELOCITYDIALOG_H_
+#ifndef RG_TRIVIALVELOCITYDIALOG_H
+#define RG_TRIVIALVELOCITYDIALOG_H
 
 #include <QDialog>
 

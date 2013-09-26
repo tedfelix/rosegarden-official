@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHANGESTEMSCOMMAND_H_
-#define _RG_CHANGESTEMSCOMMAND_H_
+#ifndef RG_CHANGESTEMSCOMMAND_H
+#define RG_CHANGESTEMSCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

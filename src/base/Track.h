@@ -18,8 +18,8 @@
 //
 
 
-#ifndef _TRACK_H_
-#define _TRACK_H_
+#ifndef RG_TRACK_H
+#define RG_TRACK_H
 
 #include <string>
 
@@ -164,5 +164,5 @@ private:
 
 }
 
-#endif // _TRACK_H_
+#endif // RG_TRACK_H
  

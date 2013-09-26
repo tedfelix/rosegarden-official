@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TIMERCALLBACKASSISTANT_H_
-#define _RG_TIMERCALLBACKASSISTANT_H_
+#ifndef RG_TIMERCALLBACKASSISTANT_H
+#define RG_TIMERCALLBACKASSISTANT_H
 
 #include <QObject>
 

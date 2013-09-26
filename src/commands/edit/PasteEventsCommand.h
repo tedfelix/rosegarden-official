@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PASTEEVENTSCOMMAND_H_
-#define _RG_PASTEEVENTSCOMMAND_H_
+#ifndef RG_PASTEEVENTSCOMMAND_H
+#define RG_PASTEEVENTSCOMMAND_H
 
 #include "document/BasicCommand.h"
 #include "base/Selection.h"

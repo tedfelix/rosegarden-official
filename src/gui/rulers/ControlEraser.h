@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLERASER_H_
-#define _RG_CONTROLERASER_H_
+#ifndef RG_CONTROLERASER_H
+#define RG_CONTROLERASER_H
 
 #include "ControlTool.h"
 //#include <QString>

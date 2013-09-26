@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CHANGECOMPOSITIONLENGTHCOMMAND_H_
-#define _RG_CHANGECOMPOSITIONLENGTHCOMMAND_H_
+#ifndef RG_CHANGECOMPOSITIONLENGTHCOMMAND_H
+#define RG_CHANGECOMPOSITIONLENGTHCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

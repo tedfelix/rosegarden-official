@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTJOINCOMMAND_H_
-#define _RG_SEGMENTJOINCOMMAND_H_
+#ifndef RG_SEGMENTJOINCOMMAND_H
+#define RG_SEGMENTJOINCOMMAND_H
 
 #include "document/Command.h"
 #include <QString>

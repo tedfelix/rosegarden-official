@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SCROLLBOXDIALOG_H_
-#define _RG_SCROLLBOXDIALOG_H_
+#ifndef RG_SCROLLBOXDIALOG_H
+#define RG_SCROLLBOXDIALOG_H
 
 #include "ScrollBox.h"
 #include <QDialog>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _GENERATEDREGIONDIALOG_H_
-#define _GENERATEDREGIONDIALOG_H_
+#ifndef RG_GENERATEDREGIONDIALOG_H
+#define RG_GENERATEDREGIONDIALOG_H
 
 #include "base/NotationTypes.h"
 #include "base/figuration/GeneratedRegion.h"
@@ -74,4 +74,4 @@ protected:
 
 }
 
-#endif /* ifndef _GENERATEDREGIONDIALOG_H_ */
+#endif /* ifndef RG_GENERATEDREGIONDIALOG_H */

@@ -15,8 +15,8 @@
 
 
 
-#ifndef _INCONSISTENCIES_H_
-#define _INCONSISTENCIES_H_
+#ifndef RG_INCONSISTENCIES_H
+#define RG_INCONSISTENCIES_H
 
 #include <vector>
 #include <map>
@@ -132,5 +132,5 @@ Inconsistencies<int>::getTranslatedName(int transpose) const
 
 }
 
-#endif // _INCONSISTENCIES_H_
+#endif // RG_INCONSISTENCIES_H
 

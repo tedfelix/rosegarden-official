@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOPLUGINCLIPBOARD_H_
-#define _RG_AUDIOPLUGINCLIPBOARD_H_
+#ifndef RG_AUDIOPLUGINCLIPBOARD_H
+#define RG_AUDIOPLUGINCLIPBOARD_H
 
 #include <map>
 #include <string>

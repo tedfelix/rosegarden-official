@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H_
-#define _RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H_
+#ifndef RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H
+#define RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H
 
 #include "document/Command.h"
 #include <vector>

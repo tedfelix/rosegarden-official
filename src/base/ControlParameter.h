@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CONTROLPARAMETER_H_
-#define _CONTROLPARAMETER_H_
+#ifndef RG_CONTROLPARAMETER_H
+#define RG_CONTROLPARAMETER_H
 
 #include <string>
 
@@ -132,4 +132,4 @@ protected:
 
 }
 
-#endif // _CONTROLPARAMETER_H_
+#endif // RG_CONTROLPARAMETER_H

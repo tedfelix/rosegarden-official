@@ -17,8 +17,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _COMPOSITION_TIMESLICE_ADAPTER_H_
-#define _COMPOSITION_TIMESLICE_ADAPTER_H_
+#ifndef RG_COMPOSITION_TIMESLICE_ADAPTER_H
+#define RG_COMPOSITION_TIMESLICE_ADAPTER_H
 
 #include <list>
 #include <utility>

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEMPORULER_H_
-#define _RG_TEMPORULER_H_
+#ifndef RG_TEMPORULER_H
+#define RG_TEMPORULER_H
 
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/ActionFileClient.h"

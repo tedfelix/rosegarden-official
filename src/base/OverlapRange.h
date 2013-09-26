@@ -15,8 +15,8 @@
 
 
 
-#ifndef _OVERLAPS_RANGE_H_
-#define _OVERLAPS_RANGE_H_
+#ifndef RG_OVERLAP_RANGE_H
+#define RG_OVERLAP_RANGE_H
 
 #include <vector>
 #include <map>
@@ -110,5 +110,5 @@ OverlapRange<int>::getRangeProperty(Segment *segment, timeT)
 
 }
 
-#endif // _OVERLAPS_RANGE_H_
+#endif // RG_OVERLAP_RANGE_H
 

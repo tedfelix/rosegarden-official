@@ -21,8 +21,8 @@
 //
 //
 
-#ifndef _PEAKFILEMANAGER_H_
-#define _PEAKFILEMANAGER_H_
+#ifndef RG_PEAKFILEMANAGER_H
+#define RG_PEAKFILEMANAGER_H
 
 #include <string>
 #include <iostream>
@@ -152,6 +152,6 @@ protected:
 }
 
 
-#endif // _PEAKFILEMANAGER_H_
+#endif // RG_PEAKFILEMANAGER_H
 
 

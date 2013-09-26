@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIBANKLISTVIEWITEM_H_
-#define _RG_MIDIBANKLISTVIEWITEM_H_
+#ifndef RG_MIDIBANKLISTVIEWITEM_H
+#define RG_MIDIBANKLISTVIEWITEM_H
 
 #include "base/Device.h"
 #include "MidiDeviceTreeWidgetItem.h"

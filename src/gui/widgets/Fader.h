@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENFADER_H_
-#define _RG_ROSEGARDENFADER_H_
+#ifndef RG_FADER_H
+#define RG_FADER_H
 
 #include "base/AudioLevel.h"
 #include <map>

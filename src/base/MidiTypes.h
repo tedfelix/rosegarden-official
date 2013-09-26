@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MIDI_TYPES_H_
-#define _MIDI_TYPES_H_
+#ifndef RG_MIDI_TYPES_H
+#define RG_MIDI_TYPES_H
 
 #include <list>
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CLEARTRIGGERSCOMMAND_H_
-#define _RG_CLEARTRIGGERSCOMMAND_H_
+#ifndef RG_CLEARTRIGGERSCOMMAND_H
+#define RG_CLEARTRIGGERSCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

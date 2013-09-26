@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEFONTVIEWER_H_
-#define _RG_NOTEFONTVIEWER_H_
+#ifndef RG_NOTEFONTVIEWER_H
+#define RG_NOTEFONTVIEWER_H
 
 #include <QDialog>
 #include <QString>

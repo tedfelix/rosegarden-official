@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PIXMAPFUNCTIONS_H_
-#define _RG_PIXMAPFUNCTIONS_H_
+#ifndef RG_PIXMAPFUNCTIONS_H
+#define RG_PIXMAPFUNCTIONS_H
 
 #include <QBitmap>
 #include <QPixmap>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COLLAPSENOTESCOMMAND_H_
-#define _RG_COLLAPSENOTESCOMMAND_H_
+#ifndef RG_COLLAPSENOTESCOMMAND_H
+#define RG_COLLAPSENOTESCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

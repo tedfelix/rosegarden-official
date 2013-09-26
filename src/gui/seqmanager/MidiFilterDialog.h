@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIFILTERDIALOG_H_
-#define _RG_MIDIFILTERDIALOG_H_
+#ifndef RG_MIDIFILTERDIALOG_H
+#define RG_MIDIFILTERDIALOG_H
 
 #include <QDialog>
 

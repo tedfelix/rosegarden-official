@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _JACKDRIVER_H_
-#define _JACKDRIVER_H_
+#ifndef RG_JACKDRIVER_H
+#define RG_JACKDRIVER_H
 
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK

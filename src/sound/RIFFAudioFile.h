@@ -21,8 +21,8 @@
 //
 //
 
-#ifndef _RIFFAUDIOFILE_H_
-#define _RIFFAUDIOFILE_H_
+#ifndef RG_RIFFAUDIOFILE_H
+#define RG_RIFFAUDIOFILE_H
 
 #include <string>
 #include <vector>
@@ -162,4 +162,4 @@ protected:
 }
 
 
-#endif // _RIFFAUDIOFILE_H_
+#endif // RG_RIFFAUDIOFILE_H

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BASETOOLBOX_H_
-#define _RG_BASETOOLBOX_H_
+#ifndef RG_BASETOOLBOX_H
+#define RG_BASETOOLBOX_H
 
 #include <QHash>
 #include <QObject>

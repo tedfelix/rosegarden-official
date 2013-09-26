@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONPROPERTIES_H_
-#define _RG_NOTATIONPROPERTIES_H_
+#ifndef RG_NOTATIONPROPERTIES_H
+#define RG_NOTATIONPROPERTIES_H
 
 #include "base/PropertyName.h"
 #include <string>

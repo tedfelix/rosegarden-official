@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTTRANSPOSECOMMAND_H_
-#define _RG_SEGMENTTRANSPOSECOMMAND_H_
+#ifndef RG_SEGMENTTRANSPOSECOMMAND_H
+#define RG_SEGMENTTRANSPOSECOMMAND_H
 
 #include "document/Command.h"
 #include "base/Event.h"

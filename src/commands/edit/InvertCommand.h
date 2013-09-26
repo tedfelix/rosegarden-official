@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INVERTCOMMAND_H_
-#define _RG_INVERTCOMMAND_H_
+#ifndef RG_INVERTCOMMAND_H
+#define RG_INVERTCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

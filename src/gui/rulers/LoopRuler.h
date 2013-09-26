@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LOOPRULER_H_
-#define _RG_LOOPRULER_H_
+#ifndef RG_LOOPRULER_H
+#define RG_LOOPRULER_H
 
 #include "base/SnapGrid.h"
 #include "gui/general/HZoomable.h"

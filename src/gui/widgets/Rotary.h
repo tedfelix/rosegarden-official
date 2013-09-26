@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ROSEGARDENROTARY_H_
-#define _RG_ROSEGARDENROTARY_H_
+#ifndef RG_ROTARY_H
+#define RG_ROTARY_H
 
 #include <map>
 #include <QColor>

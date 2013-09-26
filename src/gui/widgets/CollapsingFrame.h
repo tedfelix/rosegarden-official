@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COLLAPSINGFRAME_H_
-#define _RG_COLLAPSINGFRAME_H_
+#ifndef RG_COLLAPSINGFRAME_H
+#define RG_COLLAPSINGFRAME_H
 
 #include <QFrame>
 #include <QString>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTINSERTCOMMAND_H_
-#define _RG_AUDIOSEGMENTINSERTCOMMAND_H_
+#ifndef RG_AUDIOSEGMENTINSERTCOMMAND_H
+#define RG_AUDIOSEGMENTINSERTCOMMAND_H
 
 #include "base/RealTime.h"
 #include "base/Track.h"

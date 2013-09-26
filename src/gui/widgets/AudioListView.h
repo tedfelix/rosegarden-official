@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOLISTVIEW_H_
-#define _RG_AUDIOLISTVIEW_H_
+#ifndef RG_AUDIOLISTVIEW_H
+#define RG_AUDIOLISTVIEW_H
 
 #include <QTreeWidget>
 

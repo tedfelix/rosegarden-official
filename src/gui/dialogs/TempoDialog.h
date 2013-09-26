@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEMPODIALOG_H_
-#define _RG_TEMPODIALOG_H_
+#ifndef RG_TEMPODIALOG_H
+#define RG_TEMPODIALOG_H
 
 #include <QDialog>
 #include "base/Event.h"

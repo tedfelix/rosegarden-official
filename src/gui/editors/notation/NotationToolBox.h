@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTATIONTOOLBOX_H_
-#define _RG_NOTATIONTOOLBOX_H_
+#ifndef RG_NOTATIONTOOLBOX_H
+#define RG_NOTATIONTOOLBOX_H
 
 #include "gui/general/BaseToolBox.h"
 

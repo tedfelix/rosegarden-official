@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TEMPOSEGMENTMAPPER_H_
-#define _RG_TEMPOSEGMENTMAPPER_H_
+#ifndef RG_TEMPOSEGMENTMAPPER_H
+#define RG_TEMPOSEGMENTMAPPER_H
 
 #include "SpecialSegmentMapper.h"
 #include "base/Composition.h"

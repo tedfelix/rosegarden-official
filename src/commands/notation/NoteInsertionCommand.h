@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEINSERTIONCOMMAND_H_
-#define _RG_NOTEINSERTIONCOMMAND_H_
+#ifndef RG_NOTEINSERTIONCOMMAND_H
+#define RG_NOTEINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _NOTE_CHAR_NAME_H_
-#define _NOTE_CHAR_NAME_H_
+#ifndef RG_NOTE_CHAR_NAME_H
+#define RG_NOTE_CHAR_NAME_H
 
 #include <QString>
 

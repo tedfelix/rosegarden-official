@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOLISTITEM_H_
-#define _RG_AUDIOLISTITEM_H_
+#ifndef RG_AUDIOLISTITEM_H
+#define RG_AUDIOLISTITEM_H
 
 #include <sound/AudioFile.h>
 #include <QTreeWidget>

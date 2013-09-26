@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SELECTIONPROPERTYCOMMAND_H_
-#define _RG_SELECTIONPROPERTYCOMMAND_H_
+#ifndef RG_SELECTIONPROPERTYCOMMAND_H
+#define RG_SELECTIONPROPERTYCOMMAND_H
 
 #include "base/PropertyName.h"
 #include "base/parameterpattern/ParameterPattern.h"

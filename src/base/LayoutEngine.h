@@ -14,8 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LAYOUT_ENGINE_2_H_
-#define _LAYOUT_ENGINE_2_H_
+#ifndef RG_LAYOUT_ENGINE_H
+#define RG_LAYOUT_ENGINE_H
 
 #include "RulerScale.h"
 

@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ABOUTDIALOG_H_
-#define _RG_ABOUTDIALOG_H_
+#ifndef RG_ABOUTDIALOG_H
+#define RG_ABOUTDIALOG_H
 
 //#include "base/NotationTypes.h"
 #include <QDialog>

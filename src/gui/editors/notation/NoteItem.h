@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTEITEM_H_
-#define _RG_NOTEITEM_H_
+#ifndef RG_NOTEITEM_H
+#define RG_NOTEITEM_H
 
 #include <QGraphicsItem>
 

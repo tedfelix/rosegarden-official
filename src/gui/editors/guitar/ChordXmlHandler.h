@@ -16,8 +16,8 @@
 */
 
 
-#ifndef _RG_CHORDXMLHANDLER_H_
-#define _RG_CHORDXMLHANDLER_H_
+#ifndef RG_CHORDXMLHANDLER_H
+#define RG_CHORDXMLHANDLER_H
 
 #include "gui/general/ProgressReporter.h"
 #include "Chord.h"
@@ -68,4 +68,4 @@ protected:
 
 }
 
-#endif /*_RG_CHORDXMLHANDLER_H_*/
+#endif /*RG_CHORDXMLHANDLER_H*/

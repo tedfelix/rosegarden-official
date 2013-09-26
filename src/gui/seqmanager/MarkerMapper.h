@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MARKERMAPPER_H_
-#define _MARKERMAPPER_H_
+#ifndef RG_MARKERMAPPER_H
+#define RG_MARKERMAPPER_H
 
 #include "SpecialSegmentMapper.h"
 
@@ -46,4 +46,4 @@ protected:
 
 }
 
-#endif /* ifndef _MARKERMAPPER_H_ */
+#endif /* ifndef RG_MARKERMAPPER_H */

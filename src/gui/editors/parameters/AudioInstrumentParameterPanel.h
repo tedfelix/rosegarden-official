@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOINSTRUMENTPARAMETERPANEL_H_
-#define _RG_AUDIOINSTRUMENTPARAMETERPANEL_H_
+#ifndef RG_AUDIOINSTRUMENTPARAMETERPANEL_H
+#define RG_AUDIOINSTRUMENTPARAMETERPANEL_H
 
 #include "base/MidiProgram.h"
 #include "InstrumentParameterPanel.h"

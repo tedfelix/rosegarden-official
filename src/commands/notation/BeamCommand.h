@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BEAMCOMMAND_H_
-#define _RG_BEAMCOMMAND_H_
+#ifndef RG_BEAMCOMMAND_H
+#define RG_BEAMCOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MAKENOTESVIABLECOMMAND_H_
-#define _RG_MAKENOTESVIABLECOMMAND_H_
+#ifndef RG_MAKENOTESVIABLECOMMAND_H
+#define RG_MAKENOTESVIABLECOMMAND_H
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>

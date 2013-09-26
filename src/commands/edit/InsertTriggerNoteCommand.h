@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_INSERTTRIGGERNOTECOMMAND_H_
-#define _RG_INSERTTRIGGERNOTECOMMAND_H_
+#ifndef RG_INSERTTRIGGERNOTECOMMAND_H
+#define RG_INSERTTRIGGERNOTECOMMAND_H
 
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"

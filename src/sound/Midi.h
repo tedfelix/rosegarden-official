@@ -13,8 +13,8 @@
 */
 
 
-#ifndef _ROSEGARDEN_MIDI_H_
-#define _ROSEGARDEN_MIDI_H_
+#ifndef RG_MIDI_H
+#define RG_MIDI_H
 
 #include "base/Instrument.h" // for MidiByte
 #include <string>
@@ -175,4 +175,4 @@ const MidiByte MIDI_PERCUSSION_CHANNEL     = 9;
 }
 
 
-#endif // _ROSEGARDEN_MIDI_H_
+#endif // RG_MIDI_H

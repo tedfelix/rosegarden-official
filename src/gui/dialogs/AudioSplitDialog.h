@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSPLITDIALOG_H_
-#define _RG_AUDIOSPLITDIALOG_H_
+#ifndef RG_AUDIOSPLITDIALOG_H
+#define RG_AUDIOSPLITDIALOG_H
 
 #include <QDialog>
 #include <vector>

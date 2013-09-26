@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MATRIXMODIFYCOMMAND_H_
-#define _RG_MATRIXMODIFYCOMMAND_H_
+#ifndef RG_MATRIXMODIFYCOMMAND_H
+#define RG_MATRIXMODIFYCOMMAND_H
 
 #include "document/BasicCommand.h"
 

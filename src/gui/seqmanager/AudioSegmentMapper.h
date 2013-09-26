@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTMAPPER_H_
-#define _RG_AUDIOSEGMENTMAPPER_H_
+#ifndef RG_AUDIOSEGMENTMAPPER_H
+#define RG_AUDIOSEGMENTMAPPER_H
 
 #include "SegmentMapper.h"
 
