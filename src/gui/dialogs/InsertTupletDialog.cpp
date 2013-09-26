@@ -81,7 +81,8 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    // No such slot
+    // connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
 }
 
 
