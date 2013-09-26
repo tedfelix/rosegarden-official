@@ -51,7 +51,7 @@ public:
     virtual bool endDocument ();
 
     /// Return the error string set during the parsing (if any)
-    QString errorString() { return m_errorString; }
+    QString errorString() const { return m_errorString; }
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
 
