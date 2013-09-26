@@ -41,7 +41,7 @@ public:
                 Event* event,
                 QPolygonF polygon);
 
-    ~ControlItem();
+    virtual ~ControlItem();
 
     virtual void setValue(float);
     float y() const { return m_y; }
