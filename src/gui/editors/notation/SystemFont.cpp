@@ -45,6 +45,9 @@
 namespace Rosegarden
 {
 
+SystemFont::~SystemFont()
+{}
+
 SystemFont *
 SystemFont::loadSystemFont(const SystemFontSpec &spec)
 {

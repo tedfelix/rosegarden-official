@@ -37,6 +37,7 @@ public:
         PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
     };
 
+    virtual ~SystemFont();
     virtual QPixmap renderChar(CharName charName,
                                int glyph, int code,
                                Strategy strategy,
