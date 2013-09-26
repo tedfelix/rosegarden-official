@@ -564,6 +564,8 @@ FileSource::ftpCommandFinished(int id, bool error)
 {
 #ifdef DEBUG_FILE_SOURCE
     std::cerr << "FileSource::ftpCommandFinished(" << id << ", " << error << ")" << std::endl;
+#else
+    (void)id;
 #endif
 
     if (!m_ftp) return;
