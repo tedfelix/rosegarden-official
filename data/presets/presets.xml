@@ -81,29 +81,35 @@
     </instrument>
   </category>
   <category name="Plucked strings">
+    <instrument name="Classical Guitar">
+      <clef type="guitar" />
+      <transpose value="0" />
+      <range class="amateur" low="40" high="83"/>
+      <range class="professional" low="40" high="83"/>
+    </instrument>
     <instrument name="Soprano guitar">
       <clef type="treble" />
       <transpose value="0" />
-      <range class="amateur" low="52" high="107"/>
-      <range class="professional" low="52" high="107"/>
+      <range class="amateur" low="52" high="95"/>
+      <range class="professional" low="52" high="95"/>
     </instrument>
     <instrument name="Alto guitar">
       <clef type="guitar" />
       <transpose value="0" />
-      <range class="amateur" low="47" high="88"/>
-      <range class="professional" low="47" high="88"/>
+      <range class="amateur" low="47" high="76"/>
+      <range class="professional" low="47" high="76"/>
     </instrument>
     <instrument name="Guitar (prim)">
       <clef type="guitar" />
       <transpose value="0" />
-      <range class="amateur" low="40" high="95"/>
-      <range class="professional" low="40" high="95"/>
+      <range class="amateur" low="40" high="83"/>
+      <range class="professional" low="40" high="83"/>
     </instrument>
     <instrument name="Contrabass guitar">
       <clef type="contrabass" />
       <transpose value="0" />
-      <range class="amateur" low="28" high="83"/>
-      <range class="professional" low="28" high="83"/>
+      <range class="amateur" low="28" high="71"/>
+      <range class="professional" low="28" high="71"/>
     </instrument>
     <instrument name="11-string alto guitar (treble)">
       <clef type="treble" />
@@ -120,8 +126,8 @@
     <instrument name="Steel string guitar">
       <clef type="guitar" />
       <transpose value="0" />
-      <range class="amateur" low="40" high="95"/>
-      <range class="professional" low="40" high="95"/>
+      <range class="amateur" low="40" high="84"/>
+      <range class="professional" low="40" high="84"/>
     </instrument>
     <instrument name="Pedal steel guitar">
       <clef type="tab" />
@@ -132,26 +138,26 @@
     <instrument name="12-string guitar">
       <clef type="guitar" />
       <transpose value="0" />
-      <range class="amateur" low="40" high="95"/>
-      <range class="professional" low="40" high="95"/>
+      <range class="amateur" low="40" high="84"/>
+      <range class="professional" low="40" high="84"/>
     </instrument>
     <instrument name="Electric guitar">
       <clef type="guitar" />
       <transpose value="0" />
-      <range class="amateur" low="40" high="95"/>
-      <range class="professional" low="40" high="95"/>
+      <range class="amateur" low="40" high="84"/>
+      <range class="professional" low="40" high="84"/>
     </instrument>
     <instrument name="Electric bass guitar (fretted)">
       <clef type="contrabass" />
       <transpose value="0" />
-      <range class="amateur" low="28" high="83"/>
-      <range class="professional" low="23" high="88"/>
+      <range class="amateur" low="28" high="71"/>
+      <range class="professional" low="23" high="76"/>
     </instrument>
     <instrument name="Electric bass guitar (fretless)">
       <clef type="contrabass" />
       <transpose value="0" />
-      <range class="amateur" low="28" high="83"/>
-      <range class="professional" low="23" high="88"/>
+      <range class="amateur" low="28" high="71"/>
+      <range class="professional" low="23" high="76"/>
     </instrument>
     <instrument name="Lute">
       <clef type="guitar" />
@@ -2007,4 +2013,4 @@
     </instrument>
   </category>
 </presets>
-<!-- IMPORTED 330 INSTRUMENTS -->
+<!-- IMPORTED 331 INSTRUMENTS -->
