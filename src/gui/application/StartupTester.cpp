@@ -53,42 +53,7 @@ StartupTester::~StartupTester()
 void
 StartupTester::run() {
     m_runningMutex.lock();
-//    m_audioFileImporterMutex.lock();
     m_ready = true;
-
-    //setup "rosegarden-audiofile-importer" process
-/*    m_proc = new QProcess();
-    QStringList procArgs;
-
-    m_stdoutBuffer = "";
-///CJ - Don't think this connection process is necessary or useful
-///CJ - Simpler to wait for the process to finish and check the stdout and stderr streams
-//    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
-//                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
-    QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
-                     this, SLOT(stdoutReceived()));
-                     
-    procArgs << "--conftest";
-//    m_proc->execute("rosegarden-audiofile-importer", procArgs);
-//    m_proc->start("rosegarden-audiofile-importer", procArgs);
-//    m_proc->waitForFinished();
-
-    // Wait for stdout to be processed by stdoutReceived
-    // Note if this isn't done, this thread will go ahead and delete m_proc before the stdoutReceived slot is called
-    while(m_proc->bytesAvailable() > 0)
-        usleep(10000);
-
-    if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
-        RG_DEBUG << "StartupTester - No audio file importer available" << endl;
-        m_haveAudioFileImporter = false;
-        parseStdoutBuffer(m_audioFileImporterMissing);
-    } else {
-        RG_DEBUG << "StartupTester - Audio file importer OK" << endl;
-        m_haveAudioFileImporter = true;
-    }
-    delete m_proc;
-    procArgs = QStringList();
-    m_audioFileImporterMutex.unlock();*/
 
     m_haveAudioFileImporter = true;
     NoteFontFactory::getFontNames(true);
