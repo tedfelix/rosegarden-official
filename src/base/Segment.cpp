@@ -1411,16 +1411,29 @@ Segment::getRepeatEndTime() const
     timeT endMarker = getEndMarkerTime();
 
     if (m_repeating && m_composition) {
-        Composition::iterator i(m_composition->findSegment(this));
-        Q_ASSERT(i != m_composition->end());
-        ++i;
-        if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
-            timeT t = (*i)->getStartTime();
-            if (t < endMarker) return endMarker;
-            else return t;
-        } else {
-            return m_composition->getEndMarker();
+        timeT endTime = m_composition->getEndMarker();
+        
+        for (Composition::iterator i(m_composition->begin());
+             i != m_composition->end(); ++i) {
+          
+            if ((*i)->getTrack() != getTrack()) continue;
+            
+            timeT t1 = (*i)->getStartTime();
+            timeT t2 = (*i)->getEndMarkerTime();
+
+            if (t2 > endMarker) {
+                if (t1 < endTime) {
+                    if (t1 < endMarker) {
+                        endTime = endMarker;
+                        break;
+                    } else {
+                        endTime = t1;
+                    }
+                }
+            }
         }
+
+        return endTime;
     }
 
     return endMarker;
