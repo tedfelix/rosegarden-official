@@ -65,6 +65,7 @@ INSTDESKTOPDIR	:= $(DESTDIR)$(PREFIX)/share/applications
 INSTICONDIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
 INSTICONDIR64	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/64x64/apps
 INSTICONDIR128	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/128x128/apps
+INSTAPPDATADIR  := $(DESTDIR)$(PREFIX)/share/appdata
 
 RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	:= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -189,6 +190,9 @@ install:
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-32x32.png $(INSTICONDIR)/rosegarden.png
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-64x64.png $(INSTICONDIR64)/rosegarden.png
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-128x128.png $(INSTICONDIR128)/rosegarden.png
+	$(MKDIR_P) -m 755 $(INSTAPPDATADIR)
+	$(INSTALL) -m 644 data/appdata/rosegarden.appdata.xml $(INSTAPPDATADIR)
+
 
 uninstall:
 	rm -f $(INSTBINDIR)/rosegarden
@@ -198,11 +202,13 @@ uninstall:
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
 	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
+	rm -f $(INSTAPPDATADIR)/rosegarden.appdata.xml
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME16DIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME32DIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIME64DIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIMEXMLDIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTICONDIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTAPPDATADIR)
 
 Makefile:	Makefile.in configure configure.ac acinclude.m4
 	@echo "*** WARNING: One or more of Makefile.in, configure, configure.ac and/or"
