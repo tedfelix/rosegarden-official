@@ -703,7 +703,17 @@ LilyPondExporter::write()
                 property == headerPiece || property == headerCopyright ||
                 property == headerTagline) {
                 std::string header = protectIllegalChars(metadata.get<String>(property));
-                if (header != "") {
+                if (property == headerCopyright) {
+                    // replace a (c) or (C) with a real Copyright symbol
+                    int posCpy = header.find("c");
+                    if (!posCpy) posCpy = header.find("C");
+                    if (posCpy) {
+                        std::string leftOfCpy = header.substr(0, posCpy - 1);
+                        std::string rightOfCpy = header.substr(posCpy + 2);
+                        str << indent(col) << property << " =  \\markup { \"" << leftOfCpy << "\""
+                            << "\\char ##x00A9" << "\"" << rightOfCpy << "\" }" << std::endl;
+                    }
+                } else if (header != "") {
                     str << indent(col) << property << " = \"" << header << "\"" << std::endl;
                     // let users override defaults, but allow for providing
                     // defaults if they don't:
