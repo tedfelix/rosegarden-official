@@ -680,29 +680,29 @@ void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
     emit needSizeUpdate();
 }
 
-void CompositionModelImpl::setSelectionRect(const QRect& r)
+void CompositionModelImpl::setSelectionRect(const QRect &rect)
 {
-    m_selectionRect = r.normalized();
-//    if (m_selectionRect.y() < 0) m_selectionRect.setTop(0);
+    m_selectionRect = rect.normalized();
 
-    RG_DEBUG << "setSelectionRect: " << r << " -> " << m_selectionRect;
+    //RG_DEBUG << "setSelectionRect: " << r << " -> " << m_selectionRect;
 
     m_previousTmpSelectedSegments = m_tmpSelectedSegments;
     m_tmpSelectedSegments.clear();
 
     const segmentcontainer& segments = m_composition.getSegments();
-    segmentcontainer::const_iterator segEnd = segments.end();
+    segmentcontainer::iterator segEnd = segments.end();
 
     QRect updateRect = m_selectionRect;
 
-    for (segmentcontainer::const_iterator i = segments.begin();
+    // For each segment in the composition
+    for (segmentcontainer::iterator i = segments.begin();
          i != segEnd; ++i) {
         
-        const Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s);
-        if (sr.intersects(m_selectionRect)) {
-            m_tmpSelectedSegments.insert(const_cast<Segment *>(s));
-            updateRect |= sr;
+        CompositionRect segmentRect = computeSegmentRect(**i);
+
+        if (segmentRect.intersects(m_selectionRect)) {
+            m_tmpSelectedSegments.insert(*i);
+            updateRect |= segmentRect;
         }
     }
 
@@ -716,26 +716,26 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
         emit needArtifactsUpdate();
     }
 
-
     m_previousSelectionUpdateRect = updateRect;
-
 }
 
 void CompositionModelImpl::finalizeSelectionRect()
 {
-    const segmentcontainer& segments = m_composition.getSegments();
+    const segmentcontainer &segments = m_composition.getSegments();
     segmentcontainer::const_iterator segEnd = segments.end();
 
+    // For each segment in the composition
     for (segmentcontainer::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
-        const Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s);
-        if (sr.intersects(m_selectionRect)) {
-            setSelected(s);
+        CompositionRect segmentRect = computeSegmentRect(**i);
+
+        if (segmentRect.intersects(m_selectionRect)) {
+            setSelected(*i);
         }
     }
 
+    // Clear the selection rect state for the next time.
     m_previousSelectionUpdateRect = m_selectionRect = QRect();
     m_tmpSelectedSegments.clear();
 }
@@ -744,12 +744,11 @@ QRect CompositionModelImpl::getSelectionContentsRect()
 {
     QRect selectionRect;
 
-    SegmentSelection sel = getSelectedSegments();
-    for (SegmentSelection::iterator i = sel.begin();
-            i != sel.end(); ++i) {
+    // For each selected segment, accumulate the selection rect
+    for (SegmentSelection::iterator i = m_selectedSegments.begin();
+            i != m_selectedSegments.end(); ++i) {
 
-        Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s);
+        CompositionRect sr = computeSegmentRect(**i);
         selectionRect |= sr;
     }
 
@@ -845,49 +844,60 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
     return res;
 }
 
-void CompositionModelImpl::setPointerPos(int xPos)
+void CompositionModelImpl::pointerPosChanged(int x)
 {
-    //RG_DEBUG << "CompositionModelImpl::setPointerPos() begin";
-    m_pointerTimePos = grid().getRulerScale()->getTimeForX(xPos);
+    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() begin";
 
+    // Update the end point for the recording segments.
+    m_pointerTimePos = m_grid.getRulerScale()->getTimeForX(x);
+
+    // For each recording segment
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i) {
+        // Ask CompositionView to update.
         emit needContentUpdate(computeSegmentRect(**i));
     }
-    //RG_DEBUG << "CompositionModelImpl::setPointerPos() end";
+
+    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
 }
 
 void CompositionModelImpl::setSelected(CompositionItemPtr item, bool selected)
 {
-    const CompositionItem* itemImpl = item;
-    if (itemImpl) {
-        Segment* segment = const_cast<Segment*>(itemImpl->getSegment());
-        setSelected(segment, selected);
+    if (item) {
+        // Delegate to the version that takes a segment
+        setSelected(item->getSegment(), selected);
     }
 }
 
-void CompositionModelImpl::setSelected(const ItemContainer& items)
+#if 0
+void CompositionModelImpl::setSelected(const ItemContainer &items)
 {
+    // For each CompositionItem
     for (ItemContainer::const_iterator i = items.begin(); i != items.end(); ++i) {
         setSelected(*i);
     }
 }
+#endif
 
-void CompositionModelImpl::setSelected(const Segment* segment, bool selected)
+void CompositionModelImpl::setSelected(Segment *segment, bool selected)
 {
-    if( ! segment ){
-        RG_DEBUG << "WARNING : CompositionModelImpl::setSelected - segment is NULL ";
+    if (!segment) {
+        RG_DEBUG << "WARNING : CompositionModelImpl::setSelected() - segment is NULL";
         return;
     }
-    RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected;
+
+    //RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected;
+
+    // Update m_selectedSegments
     if (selected) {
         if (!isSelected(segment))
-            m_selectedSegments.insert(const_cast<Segment*>(segment));
+            m_selectedSegments.insert(segment);
     } else {
-        SegmentSelection::iterator i = m_selectedSegments.find(const_cast<Segment*>(segment));
+        SegmentSelection::iterator i = m_selectedSegments.find(segment);
         if (i != m_selectedSegments.end())
             m_selectedSegments.erase(i);
     }
+
     emit needContentUpdate();
 }
 
@@ -905,30 +915,30 @@ void CompositionModelImpl::signalContentChange()
 
 void CompositionModelImpl::clearSelected()
 {
-    RG_DEBUG << "CompositionModelImpl::clearSelected";
+    //RG_DEBUG << "CompositionModelImpl::clearSelected";
+
     m_selectedSegments.clear();
     emit needContentUpdate();
 }
 
-bool CompositionModelImpl::isSelected(CompositionItemPtr ci) const
+bool CompositionModelImpl::isSelected(CompositionItemPtr item) const
 {
-    const CompositionItem* itemImpl = ci;
-    return itemImpl ? isSelected(itemImpl->getSegment()) : 0;
+    return item ? isSelected(item->getSegment()) : false;
 }
 
-bool CompositionModelImpl::isSelected(const Segment* s) const
+bool CompositionModelImpl::isSelected(const Segment *s) const
 {
-    return m_selectedSegments.find(const_cast<Segment*>(s)) != m_selectedSegments.end();
+    return m_selectedSegments.find(const_cast<Segment *>(s)) != m_selectedSegments.end();
 }
 
-bool CompositionModelImpl::isTmpSelected(const Segment* s) const
+bool CompositionModelImpl::isTmpSelected(const Segment *s) const
 {
-    return m_tmpSelectedSegments.find(const_cast<Segment*>(s)) != m_tmpSelectedSegments.end();
+    return m_tmpSelectedSegments.find(const_cast<Segment *>(s)) != m_tmpSelectedSegments.end();
 }
 
-bool CompositionModelImpl::wasTmpSelected(const Segment* s) const
+bool CompositionModelImpl::wasTmpSelected(const Segment *s) const
 {
-    return m_previousTmpSelectedSegments.find(const_cast<Segment*>(s)) != m_previousTmpSelectedSegments.end();
+    return m_previousTmpSelectedSegments.find(const_cast<Segment *>(s)) != m_previousTmpSelectedSegments.end();
 }
 
 void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType change)

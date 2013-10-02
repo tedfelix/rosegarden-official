@@ -152,27 +152,50 @@ public:
      */
     timeT getRepeatTimeAt(const QPoint &, CompositionItemPtr);
 
-    SnapGrid& grid() { return m_grid; }
+    /// Used in many places for various coordinate/time purposes.
+    SnapGrid& grid()  { return m_grid; }
 
-    void setPointerPos(int xPos);
+    // *** Selection
+
     void setSelected(CompositionItemPtr, bool selected = true);
-    bool isSelected(CompositionItemPtr) const;
-    void setSelected(const ItemContainer&);
-    void setSelected(const Segment*, bool selected = true);
-    bool isSelected(const Segment*) const;
+    void setSelected(Segment *, bool selected = true);
+    //void setSelected(const ItemContainer&);
     void clearSelected();
-    bool haveSelection() const { return !m_selectedSegments.empty(); }
-    bool haveMultipleSelection() const { return m_selectedSegments.size() > 1; }
-    void signalSelection();
-    void setSelectionRect(const QRect&);
-    void finalizeSelectionRect();
+    bool isSelected(CompositionItemPtr) const;
+    bool isSelected(const Segment *) const;
+    bool haveSelection() const  { return !m_selectedSegments.empty(); }
+    bool haveMultipleSelection() const  { return m_selectedSegments.size() > 1; }
+    /// Bounding rect of the currently selected segments.
     QRect getSelectionContentsRect();
+
+    /// Emit selectedSegments() signal
+    /**
+     * Used by SegmentSelector and others to signal a change in the selection.
+     */
+    void signalSelection();
+
+    /// Click and drag selection rect.
+    void setSelectionRect(const QRect &);
+    /// Click and drag selection complete.
+    void finalizeSelectionRect();
+
+    /// Emit needContentUpdate() signal
+    /**
+     * rename: emitRefreshView()
+     */
     void signalContentChange();
+
+    // *** Recording
+
+    /// Refresh the recording segments.
+    void pointerPosChanged(int x);
 
     void addRecordingItem(CompositionItemPtr);
     void removeRecordingItem(CompositionItemPtr);
     void clearRecordingItems();
-    bool haveRecordingItems() { return !m_recordingSegments.empty(); }
+    bool haveRecordingItems()  { return !m_recordingSegments.empty(); }
+
+    // *** Changing (moving and resizing)
 
     enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
@@ -250,7 +273,9 @@ public:
     };
 
 signals:
+    /// rename: refreshView
     void needContentUpdate();
+    /// rename: refreshView
     void needContentUpdate(const QRect&);
     void needArtifactsUpdate();
     void selectedSegments(const SegmentSelection &);

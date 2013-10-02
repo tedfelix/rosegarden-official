@@ -1725,7 +1725,7 @@ void CompositionView::setPointerPos(int pos)
     if (oldPos == pos) return;
 
     m_pointerPos = pos;
-    getModel()->setPointerPos(pos);
+    getModel()->pointerPosChanged(pos);
 
     // automagically grow contents width if pointer position goes beyond right end
     //
