@@ -59,10 +59,6 @@
 namespace Rosegarden
 {
 
-bool CompositionModelImpl::CompositionItemCompare::operator()(CompositionItemPtr c1, CompositionItemPtr c2) const
-{
-    return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
-}
 
 CompositionModelImpl::CompositionModelImpl(Composition& compo,
         Studio& studio,
@@ -993,7 +989,8 @@ int CompositionModelImpl::getLength()
 
 unsigned int CompositionModelImpl::getHeight()
 {
-    return (unsigned int)m_grid.getYBinCoordinate(getNbRows());
+    return static_cast<unsigned int>(
+            m_grid.getYBinCoordinate(m_composition.getNbTracks()));
 }
 
 timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, CompositionItemPtr cItem)
@@ -1192,11 +1189,6 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
 {
     endTime = m_segmentEndTimeMap[s];
     return m_segmentRectMap[s];
-}
-
-unsigned int CompositionModelImpl::getNbRows()
-{
-    return m_composition.getNbTracks();
 }
 
 const CompositionModelImpl::RectContainer &

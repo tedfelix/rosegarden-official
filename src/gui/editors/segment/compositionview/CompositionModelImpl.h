@@ -18,25 +18,18 @@
 #ifndef RG_COMPOSITIONMODELIMPL_H
 #define RG_COMPOSITIONMODELIMPL_H
 
-#include "base/Selection.h"
 #include "base/SnapGrid.h"
 #include "CompositionRect.h"
 #include "CompositionItem.h"
 #include "SegmentOrderer.h"
-#include "base/Event.h"
 
 #include <QColor>
 #include <QPoint>
-
 #include <QRect>
 
 #include <vector>
 #include <map>
 #include <set>
-
-class RectRanges;
-class AudioPreviewDrawData;
-class AudioPreviewData;
 
 
 namespace Rosegarden
@@ -51,15 +44,21 @@ class Composition;
 class AudioPreviewUpdater;
 class AudioPreviewThread;
 
+/// For Audio Previews
 typedef std::vector<QImage> PixmapArray;
 
-/// Composition User Interface Controller.
+/// Segment previews and selection functionality.
 /**
- * In the Entity/Boundary/Control model, this is (roughly) a control class.
- * Composition is the associated entity (problem domain object) class, while
- * CompositionView is the associated boundary (interface) class.
+ * I assume that by Model we are referring to Smalltalk's
+ * Model/View/Controller pattern.  Qt has a modified Model/View version
+ * of this.  Maybe this is in some way related?  MVC never made any
+ * sense to me.  Smalltalk doesn't make any sense to me.
  *
- * This class might be renamed CompositionUIController.
+ * A skim of this indicates that it is mostly random functionality (e.g.
+ * selection and previews) that is closely tied to CompositionView.  This
+ * could probably be combined with CompositionView into one gigantic
+ * monster-class, then big coherent pieces (like selection and previews)
+ * broken off into smaller, more sensible classes.
  *
  * This class works together with CompositionView to provide the composition
  * user interface (the segment canvas).  TrackEditor creates and owns the
@@ -69,15 +68,22 @@ class CompositionModelImpl : public QObject, public CompositionObserver, public 
 {
     Q_OBJECT
 public:
+    CompositionModelImpl(Composition& compo,
+                         Studio& studio,
+                         RulerScale *rulerScale,
+                         int vStep);
 
-    struct CompositionItemCompare {
-        bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const;
-    };
+    virtual ~CompositionModelImpl();
 
     typedef std::vector<QRect> RectList;
-    typedef std::vector<int> YCoordList;
-    typedef std::vector<CompositionRect> RectContainer;
-    typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
+
+    struct RectRange {
+        std::pair<RectList::iterator, RectList::iterator> range;
+        QPoint basePoint;
+        QColor color;
+    };
+
+    typedef std::vector<RectRange> RectRanges;
 
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
@@ -94,59 +100,56 @@ public:
 
     typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
 
-    struct RectRange {
-        std::pair<RectList::iterator, RectList::iterator> range;
-        QPoint basePoint;
-        QColor color;
-    };
+    typedef std::vector<CompositionRect> RectContainer;
 
-    typedef std::vector<RectRange> RectRanges;
-
-    /// rename: AudioPreview
-    class AudioPreviewData {
-    public:
-        AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
-        // ~AudioPreviewData();
-
-        bool showsMinima()              { return m_showMinima; }
-        void setShowMinima(bool s)      { m_showMinima = s;    }
-
-        unsigned int getChannels()       { return m_channels;   }
-        void setChannels(unsigned int c) { m_channels = c;      }
-
-        const std::vector<float> &getValues() const { return m_values;  }
-        void setValues(const std::vector<float>&v) { m_values = v; }
-
-        QRect getSegmentRect()              { return m_segmentRect; }
-        void setSegmentRect(const QRect& r) { m_segmentRect = r; }
-
-    protected:
-        std::vector<float> m_values;
-        bool               m_showMinima;
-        unsigned int       m_channels;
-        QRect              m_segmentRect;
-
-    private:
-        // no copy ctor
-        AudioPreviewData(const AudioPreviewData&);
-    };
-
-    enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
-
-    CompositionModelImpl(Composition& compo,
-                         Studio& studio,
-                         RulerScale *rulerScale,
-                         int vStep);
-
-    virtual ~CompositionModelImpl();
-
-    unsigned int getNbRows();
     /// Get the segment rectangles and segment previews
     const RectContainer& getSegmentRects(const QRect &clipRect,
                                          RectRanges *notationPreview,
                                          AudioPreviewDrawData *audioPreview);
+
+    typedef std::vector<int> YCoordList;
+
+    /// Get the Y coords of each track within clipRect.
+    /**
+     * CompositionView::drawSegments() uses this to draw the track dividers.
+     */
     YCoordList getTrackDividersIn(const QRect &clipRect);
+
+    /// Compares Segment pointers in a CompositionItem.
+    /**
+     * Is this really better than just comparing the CompositionItemPtr
+     * addresses?
+     *
+     *    // Compare the QPointer addresses
+     *    return c1.data() < c2.data();
+     *
+     * All this indexing with pointers gives me the willies.  IDs are safer.
+     */
+    struct CompositionItemCompare {
+        bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const
+        {
+            // This strikes me as odd.  I think the one below is better.
+            //return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
+
+            // operator< on Segment *'s?  I guess order isn't too important.
+            return c1->getSegment() < c2->getSegment();
+        }
+    };
+
+    typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
+
+    /// Used by CompositionView on mouse double-click.
     ItemContainer getItemsAt(const QPoint &);
+    /// Get the start time of the repeat nearest the point.
+    /**
+     * Used by CompositionView to determine the time at which to edit a repeat.
+     *
+     * Looking closely at the implementation of this, we find that this is a
+     * function that brings together CompositionItem and SnapGrid.  It mainly
+     * uses CompositionItem, so it likely belongs there.  Perhaps more as a
+     *
+     *   CompositionItem::getRepeatTimeAt(const SnapGrid &, const QPoint &)
+     */
     timeT getRepeatTimeAt(const QPoint &, CompositionItemPtr);
 
     SnapGrid& grid() { return m_grid; }
@@ -170,6 +173,8 @@ public:
     void removeRecordingItem(CompositionItemPtr);
     void clearRecordingItems();
     bool haveRecordingItems() { return !m_recordingSegments.empty(); }
+
+    enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
     void startChange(CompositionItemPtr, ChangeType change);
     void startChangeSelection(ChangeType change);
@@ -213,6 +218,36 @@ public:
     virtual void appearanceChanged(const Segment *);
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
     virtual void segmentDeleted(const Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
+
+    /// rename: AudioPreview
+    /// And pull out into a separate header.
+    class AudioPreviewData {
+    public:
+        AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
+        // ~AudioPreviewData();
+
+        bool showsMinima()              { return m_showMinima; }
+        void setShowMinima(bool s)      { m_showMinima = s;    }
+
+        unsigned int getChannels()       { return m_channels;   }
+        void setChannels(unsigned int c) { m_channels = c;      }
+
+        const std::vector<float> &getValues() const { return m_values;  }
+        void setValues(const std::vector<float>&v) { m_values = v; }
+
+        QRect getSegmentRect()              { return m_segmentRect; }
+        void setSegmentRect(const QRect& r) { m_segmentRect = r; }
+
+    protected:
+        std::vector<float> m_values;
+        bool               m_showMinima;
+        unsigned int       m_channels;
+        QRect              m_segmentRect;
+
+    private:
+        // no copy ctor
+        AudioPreviewData(const AudioPreviewData&);
+    };
 
 signals:
     void needContentUpdate();

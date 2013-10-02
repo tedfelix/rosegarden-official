@@ -216,7 +216,7 @@ void CompositionView::initStepSize()
 void CompositionView::slotUpdateSize()
 {
 //    int vStep = getModel()->grid().getYSnap();
-//    int height = std::max(getModel()->getNbRows() * vStep, (unsigned)visibleHeight());
+//    int height = std::max(getModel()->m_composition.getNbTracks() * vStep, (unsigned)visibleHeight());
     int height = std::max(getModel()->getHeight(), (unsigned) visibleHeight());
 
     const RulerScale *ruler = grid().getRulerScale();
