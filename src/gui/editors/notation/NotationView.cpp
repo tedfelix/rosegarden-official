@@ -5142,7 +5142,10 @@ NotationView::slotInterpretActivate()
     // Selections aren't undoable anywhere else, so there's no point writing a
     // new command or making a MacroCommand.  Just call the slot as if the user
     // hit Ctrl+A and go.
-    if (!selection) slotEditSelectWholeStaff();
+    if (!selection) {
+        slotEditSelectWholeStaff();
+        selection = getSelection();
+    }
 
     // Make sure it worked, just in case.
     if (!selection) return;
