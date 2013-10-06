@@ -99,6 +99,7 @@
       <Action name="show_layer_toolbar" text="Show La&amp;yer Toolbar" checked="true" append="show_merge" />
       <Action name="show_rulers_toolbar" text="Show &amp;Rulers Toolbar" checked="true" append="show_merge" />
       <Action name="show_duration_toolbar" text="Show &amp;Duration Toolbar" checked="true" append="show_merge" />
+      <Action name="show_interpret_toolbar" text="Show &amp;Interpret Toolbar" checked="true" append="show_merge" />
       <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
     </Menu>
     <Menu name="rulers" append="show_merge">
@@ -807,6 +808,16 @@
   <Action name="toggle_velocity_ruler" />
   <Action name="toggle_pitchbend_ruler" />
   <Action name="add_control_ruler" />
+</ToolBar>
+
+<ToolBar name="Interpret Toolbar">
+  <text>Interpret Toolbar</text>
+  <Action name="interpret_activate" text="&amp;Interpret Active Segment" icon="interpret-activate" tooltip="Select all events in the active segment, then apply the interpretations selected on this toolbar" />
+<Separator/>
+  <Action name="interpret_text_dynamics" text="Interpret &amp;Text Dynamics" icon="interpret-text-dynamics" checked="true" tooltip="Adjust velocity to follow text dynamics (f, p, mf...)" />
+  <Action name="interpret_hairpins" text="Interpret &amp;Hairpins" icon="interpret-hairpins" checked="true" tooltip="Adjusts velocity to follow hairpin dynamics" />
+  <Action name="interpret_slurs" text="Interpret &amp;Slurs and Marks" icon="interpret-slurs" checked="true" tooltip="Articulates slurs, staccato, tenuto, etc." />
+  <Action name="interpret_beats" text="Interpret &amp;Beats" icon="interpret-beats" checked="true" tooltip="Places accents on certain beats according to the time signature" />
 </ToolBar>
 
 <State name="note_rest_tool_current">

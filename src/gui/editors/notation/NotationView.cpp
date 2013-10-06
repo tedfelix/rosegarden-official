@@ -863,6 +863,13 @@ NotationView::setupActions()
 
     createAction("cycle_slashes", SLOT(slotCycleSlashes()));
 
+    createAction("interpret_activate", SLOT(slotInterpretActivate()));
+    // These have to connect to something, so connect to the dummy slot:
+    createAction("interpret_text_dynamics", SLOT(slotDummy1()));
+    createAction("interpret_hairpins", SLOT(slotDummy1()));
+    createAction("interpret_slurs", SLOT(slotDummy1()));
+    createAction("interpret_beats", SLOT(slotDummy1()));
+
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
@@ -919,7 +926,7 @@ NotationView::setupActions()
     createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
     createAction("show_layer_toolbar", SLOT(slotToggleLayerToolBar()));
     createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
-    createAction("show_duration_toolbar", SLOT(slotToggleDurationToolBar()));
+    createAction("show_interpret_toolbar", SLOT(slotToggleInterpretToolBar()));
 
     //"rulers" subMenu
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
@@ -1358,6 +1365,13 @@ NotationView::readOptions()
     setCheckBoxState("show_layer_toolbar", "Layer Toolbar");
     setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");
     setCheckBoxState("show_duration_toolbar", "Duration Toolbar");
+    setCheckBoxState("show_interpret_toolbar", "Interpret Toolbar");
+    // Suspected BUG.  We read the options, but when do we ever write them?  Not
+    // in slotToggleNamedToolBar() I don't imagine.  How would it translate name
+    // "Foo Toolbar" into action "show_foo_toolbar" reliably?  I bet it doesn't,
+    // but haven't looked.  I have a vague feeling all of these toggle actions
+    // have never maintained their persistence reliably, and suspect I know why.
+    // To be investigated one day...
 }
 
 void
@@ -2012,6 +2026,12 @@ void
 NotationView::slotToggleDurationToolBar()
 {
     toggleNamedToolBar("Duration Toolbar");
+}
+
+void
+NotationView::slotToggleInterpretToolBar()
+{
+    toggleNamedToolBar("Interpret Toolbar");
 }
 
 void
@@ -5107,6 +5127,38 @@ void
 NotationView::slotBarDataDump()
 {
     m_notationWidget->getScene()->dumpBarDataMap();
+}
+
+void
+NotationView::slotInterpretActivate()
+{
+    // If there is a selection, run the interpretations against it in the usual
+    // fashion.  If there is no selection, select the entire segment first.
+    // (Will this work well in practice?  The last thing the user did will
+    // probably leave a selection of one event.  Let's start here and refine as
+    // the need becomes evident through testing.)
+    EventSelection *selection = getSelection();
+
+    // Selections aren't undoable anywhere else, so there's no point writing a
+    // new command or making a MacroCommand.  Just call the slot as if the user
+    // hit Ctrl+A and go.
+    if (!selection) slotEditSelectWholeStaff();
+
+    // Make sure it worked, just in case.
+    if (!selection) return;
+
+    // xor all the options together in the same fashion as the dialog
+    int flag = 0;
+    if (findAction("interpret_text_dynamics")->isChecked()) flag |= InterpretCommand::ApplyTextDynamics;
+    if (findAction("interpret_hairpins")->isChecked()) flag |= InterpretCommand::ApplyHairpins;
+    if (findAction("interpret_slurs")->isChecked()) flag |= InterpretCommand::Articulate;
+    if (findAction("interpret_beats")->isChecked()) flag |= InterpretCommand::StressBeats; 
+
+    // go straight to the command with the flags pulled from the toolbar
+    CommandHistory::getInstance()->addCommand(new InterpretCommand
+         (*selection,
+          getDocument()->getComposition().getNotationQuantizer(),
+          flag));
 }
 
 

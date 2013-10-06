@@ -286,6 +286,7 @@ protected slots:
     void slotToggleGeneralToolBar();
     void slotToggleToolsToolBar();
     void slotToggleDurationToolBar();
+    void slotToggleInterpretToolBar();
     void slotToggleAccidentalsToolBar();
     void slotToggleClefsToolBar();
     void slotToggleMarksToolBar();
@@ -381,6 +382,10 @@ protected slots:
 
     // Update the "Show staff headers" check box in the menu
     void slotCheckShowHeadersMenu(bool checked);
+
+    /// Select everything in the active segment and run interpret according to
+    // the checked options on the toolbar
+    void slotInterpretActivate();
 
 private:
     /**
