@@ -812,12 +812,12 @@
 
 <ToolBar name="Interpret Toolbar">
   <text>Interpret Toolbar</text>
-  <Action name="interpret_activate" text="&amp;Interpret Active Segment" icon="interpret-activate" tooltip="Select all events in the active segment, then apply the interpretations selected on this toolbar" />
+  <Action name="interpret_activate" text="&amp;Interpret Active Segment" icon="interpret-activate" />
 <Separator/>
   <Action name="interpret_text_dynamics" text="Interpret &amp;Text Dynamics" icon="interpret-text-dynamics" checked="true" tooltip="Adjust velocity to follow text dynamics (f, p, mf...)" />
-  <Action name="interpret_hairpins" text="Interpret &amp;Hairpins" icon="interpret-hairpins" checked="true" tooltip="Adjusts velocity to follow hairpin dynamics" />
-  <Action name="interpret_slurs" text="Interpret &amp;Slurs and Marks" icon="interpret-slurs" checked="true" tooltip="Articulates slurs, staccato, tenuto, etc." />
-  <Action name="interpret_beats" text="Interpret &amp;Beats" icon="interpret-beats" checked="true" tooltip="Places accents on certain beats according to the time signature" />
+  <Action name="interpret_hairpins" text="Interpret &amp;Hairpins" icon="interpret-hairpins" checked="true" tooltip="Adjust velocity to follow hairpin dynamics" />
+  <Action name="interpret_slurs" text="Interpret &amp;Slurs and Marks" icon="interpret-slurs" checked="true" tooltip="Articulate slurs, staccato, tenuto, etc." />
+  <Action name="interpret_beats" text="Interpret &amp;Beats" icon="interpret-beats" checked="true" tooltip="Place accents on certain beats according to the time signature" />
 </ToolBar>
 
 <State name="note_rest_tool_current">

@@ -864,6 +864,10 @@ NotationView::setupActions()
     createAction("cycle_slashes", SLOT(slotCycleSlashes()));
 
     createAction("interpret_activate", SLOT(slotInterpretActivate()));
+    // I don't think you can use <qt> in tooltips in .rc files, and this one
+    // wants formatting, so I pulled it out here.
+    findAction("interpret_activate")->setToolTip(tr("<qt><p>Apply the interpretations selected on this toolbar to the selection.</p><p>If there is no selection, interpretations apply to the entire segment automatically.</p></qt>"));
+
     // These have to connect to something, so connect to the dummy slot:
     createAction("interpret_text_dynamics", SLOT(slotDummy1()));
     createAction("interpret_hairpins", SLOT(slotDummy1()));
@@ -5139,6 +5143,14 @@ NotationView::slotInterpretActivate()
     // the need becomes evident through testing.)
     EventSelection *selection = getSelection();
 
+    // After placing a hairpin and likely other incidental actions, you can end
+    // up with a valid selection that has a total duration of 0.  In this case,
+    // treat it like there was no selection at all by just zeroing it out and
+    // feeding it along to be replaced with a select all.
+    if (selection) {
+        if (selection->getTotalDuration() == 0) selection = 0;
+    }
+
     // Selections aren't undoable anywhere else, so there's no point writing a
     // new command or making a MacroCommand.  Just call the slot as if the user
     // hit Ctrl+A and go.
@@ -5151,17 +5163,27 @@ NotationView::slotInterpretActivate()
     if (!selection) return;
 
     // xor all the options together in the same fashion as the dialog
-    int flag = 0;
-    if (findAction("interpret_text_dynamics")->isChecked()) flag |= InterpretCommand::ApplyTextDynamics;
-    if (findAction("interpret_hairpins")->isChecked()) flag |= InterpretCommand::ApplyHairpins;
-    if (findAction("interpret_slurs")->isChecked()) flag |= InterpretCommand::Articulate;
-    if (findAction("interpret_beats")->isChecked()) flag |= InterpretCommand::StressBeats; 
+    int flags = 0;
+    if (findAction("interpret_text_dynamics")->isChecked()) flags |= InterpretCommand::ApplyTextDynamics;
+    if (findAction("interpret_hairpins")->isChecked()) flags |= InterpretCommand::ApplyHairpins;
+    if (findAction("interpret_slurs")->isChecked()) flags |= InterpretCommand::Articulate;
+    if (findAction("interpret_beats")->isChecked()) flags |= InterpretCommand::StressBeats;
 
-    // go straight to the command with the flags pulled from the toolbar
+    // Debug output just to make it possible to observe that all the checkable
+    // buttons are working correctly:
+    RG_DEBUG << "NotationView::slotInterpretActivate() using flags: "
+             << (flags & InterpretCommand::ApplyTextDynamics ? "[TEXT]" : "[    ]")
+             << (flags & InterpretCommand::ApplyHairpins ? "[HAIR]" : "[    ]")
+             << (flags & InterpretCommand::Articulate ? "[SLUR]" : "[    ]")
+             << (flags & InterpretCommand::StressBeats ? "[BEAT]" : "[    ]")
+             << endl;
+
+    // go straight to the command with the flags pulled from the toolbar as
+    // though it were the dialog
     CommandHistory::getInstance()->addCommand(new InterpretCommand
          (*selection,
           getDocument()->getComposition().getNotationQuantizer(),
-          flag));
+          flags));
 }
 
 
