@@ -48,7 +48,6 @@
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/EventEditDialog.h"
-#include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/dialogs/AboutDialog.h"
@@ -1200,43 +1199,6 @@ EventView::slotClearSelection()
 }
 
 void
-EventView::slotFilterSelection()
-{
-    m_listSelection.clear();
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
-    if (selection.count() == 0)
-        return ;
-
-    EventFilterDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted) {
-
-//         QPtrListIterator<QTreeWidgetItem> it(selection);
-        QTreeWidgetItem *listItem;
-
-//         while ((listItem = it.current()) != 0) {
-        for( int i=0; i< selection.size(); i++ ){
-            listItem = selection.at(i);
-
-//             EventViewItem * item = dynamic_cast<EventViewItem*>(*it);
-            EventViewItem * item = dynamic_cast<EventViewItem*>(listItem);
-            if (!item) {
-//                 ++it;
-                continue;
-            }
-
-            if (!dialog.keepEvent(item->getEvent())) {
-                //m_listSelection.push_back(m_eventList->itemIndex(*it));
-                m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
-                //m_eventList->setSelected(item, false);
-                m_eventList->setCurrentItem(item);
-            }
-
-//             ++it;
-        }
-    }
-}
-
-void
 EventView::setupActions()
 {
     ListEditView::setupActions("eventlist.rc");
@@ -1245,7 +1207,6 @@ EventView::setupActions()
     createAction("delete", SLOT(slotEditDelete()));
     createAction("edit_simple", SLOT(slotEditEvent()));
     createAction("edit_advanced", SLOT(slotEditEventAdvanced()));
-    createAction("filter_selection", SLOT(slotFilterSelection()));
     createAction("select_all", SLOT(slotSelectAll()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("event_help", SLOT(slotHelpRequested()));
@@ -1281,30 +1242,11 @@ EventView::initStatusBar()
 {
     QStatusBar* sb = statusBar();
 
-    /*
-    m_hoveredOverNoteName      = new QLabel(sb);
-    m_hoveredOverAbsoluteTime  = new QLabel(sb);
-
-    m_hoveredOverNoteName->setMinimumWidth(32);
-    m_hoveredOverAbsoluteTime->setMinimumWidth(160);
-
-    sb->addWidget(m_hoveredOverAbsoluteTime);
-    sb->addWidget(m_hoveredOverNoteName);
-    */
-
     // qt4 note:
     // addItem becomes addWidget (left aligned) or addPremanentWidget (right aligned)
     // or showMessage
     //    
     sb->showMessage( TmpStatusMsg::getDefaultMsg() );
-    
-//     sb->setItem(TmpStatusMsg::getDefaultMsg(),
-//                 TmpStatusMsg::getDefaultId(), 1);
-//     sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
-//                          Qt::AlignLeft | Qt::AlignVCenter);
-
-    //m_selectionCounter = new QLabel(sb);
-    //sb->addWidget(m_selectionCounter);
 }
 
 QSize

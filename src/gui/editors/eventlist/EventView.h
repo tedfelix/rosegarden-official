@@ -118,7 +118,6 @@ public slots:
     void slotEditEvent();
     void slotEditEventAdvanced();
 
-    void slotFilterSelection();
     void slotSelectAll();
     void slotClearSelection();
 

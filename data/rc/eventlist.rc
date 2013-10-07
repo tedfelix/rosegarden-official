@@ -28,7 +28,6 @@
   <Separator/>
     <Action name="select_all" text="&amp;Select All" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
-    <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   <Separator/>
     <Action name="set_segment_start" text="Set Se&amp;gment Start Time..." />
     <Action name="set_segment_duration" text="Set Seg&amp;ment Duration..." />
@@ -71,7 +70,6 @@
   <Action name="delete"/>
   <Action name="edit_simple"/>
   <Action name="edit_advanced"/>
-  <Action name="filter_selection"/>
 </ToolBar>
 
 <ToolBar name="Time Toolbar">
@@ -113,7 +111,6 @@
     <Action name="edit_simple"/>
     <Action name="edit_advanced"/>
     <Action name="clear_selection"/>
-    <Action name="filter_selection"/>
   </enable>
 </State>
 
