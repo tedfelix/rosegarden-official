@@ -1591,6 +1591,16 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     for (midiEvent = m_midiComposition[trackNumber].begin();
             midiEvent != m_midiComposition[trackNumber].end();
             ++midiEvent) {
+
+        // HACK for #1404.  I gave up trying to find where the events
+        // were originating, and decided to try just stripping them.  If
+        // you can't do it right, do it badly, and somebody will
+        // eventually freak out, then fix it the right way.
+        if ((*midiEvent)->getData1() == 121) {
+            std::cerr << "MidiFile::writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404." << std::endl;
+            continue;
+        }
+
         // Write the time to the buffer in MIDI format
         //
         //
