@@ -73,6 +73,7 @@ protected:
     QCheckBox *m_lilyRepeatMode;
     QCheckBox *m_lilyDrawBarAtVolta;
     QCheckBox *m_cancelAccidentals;
+    QCheckBox *m_fingeringsInStaff;
     HeadersConfigurationPage *m_headersPage;
 
     // Used to add the "edited segments" option when the dialog is opened

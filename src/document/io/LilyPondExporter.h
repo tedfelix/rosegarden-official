@@ -260,6 +260,7 @@ private:
 
     bool m_voltaBar;
     bool m_cancelAccidentals;
+    bool m_fingeringsInStaff;
     QString m_warningMessage;
 
     std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {

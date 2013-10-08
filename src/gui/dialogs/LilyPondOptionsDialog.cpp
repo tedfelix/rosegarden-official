@@ -304,6 +304,12 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyExportEmptyStaves, 12, 0);
     m_lilyExportEmptyStaves->setToolTip(tr("<qt>When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.</qt>"));
 
+    // as of lucky 13 here, I'm seeing we really need to tidy up the layout soon
+    m_fingeringsInStaff = new QCheckBox(tr("Allow fingerings inside staff"));
+    layoutNotation->addWidget(m_fingeringsInStaff, 13, 0);
+    m_fingeringsInStaff->setToolTip(tr("<qt>When checked, LilyPond is allowed print fingerings inside the staff.  This can improve rendering in polyphonic scores with fingerings in different voices, and is on by default.</qt>"));
+
+
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);
 
@@ -379,6 +385,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyRepeatMode->setChecked(settings.value("lilyexportrepeat", "true").toBool());
     m_lilyDrawBarAtVolta->setChecked(settings.value("lilydrawbaratvolta", "true").toBool());
     m_cancelAccidentals->setChecked(settings.value("lilycancelaccidentals", "false").toBool());
+    m_fingeringsInStaff->setChecked(settings.value("lilyfingeringsinstaff", "true").toBool());
 
     std::cerr << "QSettings for LilyPond (populateDefaultValues):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
@@ -426,6 +433,7 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportrepeat", m_lilyRepeatMode->isChecked());
     settings.setValue("lilydrawbaratvolta", m_lilyDrawBarAtVolta->isChecked());
     settings.setValue("lilycancelaccidentals", m_cancelAccidentals->isChecked());
+    settings.setValue("lilyfingeringsinstaff", m_fingeringsInStaff->isChecked());
 
     std::cerr << "QSettings for LilyPond (slotApply):" << std::endl
               << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl

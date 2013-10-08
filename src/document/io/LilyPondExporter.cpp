@@ -145,6 +145,7 @@ LilyPondExporter::readConfigVariables(void)
     m_repeatMode = settings.value("lilyexportrepeat", "true").toBool() ? REPEAT_VOLTA : REPEAT_UNFOLD;
     m_voltaBar = settings.value("lilydrawbaratvolta", "true").toBool();
     m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
+    m_fingeringsInStaff = settings.value("lilyfingeringsinstaff", "true").toBool();
     settings.endGroup();
 }
 
@@ -1164,10 +1165,16 @@ LilyPondExporter::write()
 
                     // Make chords offset colliding notes by default (only write for
                     // first track)
-                    str << indent(++col) << "% force offset of colliding notes in chords:"
+                    str << indent(++col) << "% Force offset of colliding notes in chords:"
                         << std::endl;
                     str << indent(col)   << "\\override Score.NoteColumn #\'force-hshift = #1.0"
                         << std::endl;
+                    if (m_fingeringsInStaff) {
+                        str << indent(col) << "% Allow fingerings inside the staff (configured from export options):"
+                            << std::endl;
+                        str << indent(col)   << "\\override Score.Fingering #\'staff-padding = #\'()"
+                            << std::endl;
+                    }
                 }
 
                 emit setValue(int(double(trackPos) /
