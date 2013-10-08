@@ -215,12 +215,25 @@ JackDriver::initialise(bool reinitialise)
 
     std::string jackClientName = "rosegarden";
 
+    // set up JackOpenOptions per user config
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    bool autoStartJack = settings.value("autostartjack", true).toBool();
+    settings.endGroup();
+    // default is to auto start JACK; use JackNullOption
+    jack_options_t jackOptions = JackNullOption;
+    if (!autoStartJack) jackOptions = JackNoStartServer;
+
     // attempt connection to JACK server
     //
-    if ((m_client = jack_client_open(jackClientName.c_str(), JackNullOption, 0)) == 0) {
+    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, 0)) == 0) {
         audit << "JackDriver::initialiseAudio - "
 	      << "JACK server not running"
-	      << std::endl;
+	      << std::endl
+              << "Attempt to start JACK server was "
+              << (jackOptions & JackNoStartServer ? "NOT " : "")
+              << "made per user config"
+              << std::endl;
         return ;
     }
 
@@ -312,7 +325,6 @@ JackDriver::initialise(bool reinitialise)
     }
 
     // Now set up the default connections, if configured to do so
-    QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
     bool connectDefaultOutputs = settings.value("connect_default_jack_outputs", true).toBool();
     bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();

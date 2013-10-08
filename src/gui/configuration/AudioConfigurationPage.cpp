@@ -190,6 +190,13 @@ AudioConfigurationPage::AudioConfigurationPage(
     layout->addWidget(m_connectDefaultAudioInputs, row, 1);
     settings.endGroup();
     ++row;
+
+    layout->addWidget(new QLabel(tr("Start JACK automatically"),frame), row, 0);
+    m_autoStartJackServer = new QCheckBox();
+    connect(m_autoStartJackServer, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_autoStartJackServer->setChecked(settings.value("autostartjack", "true").toBool());
+    layout->addWidget(m_autoStartJackServer, row, 1);
+    ++row;
 #endif
 
     layout->setRowStretch(row, 10);
@@ -219,6 +226,7 @@ AudioConfigurationPage::apply()
     settings.setValue("audiorecordfileformat", m_audioRecFormat->currentIndex());
     settings.setValue("connect_default_jack_outputs", m_connectDefaultAudioOutputs->isChecked());
     settings.setValue("connect_default_jack_inputs", m_connectDefaultAudioInputs->isChecked());
+    settings.setValue("autostartjack", m_autoStartJackServer->isChecked());
 #endif
 
     settings.endGroup();

@@ -85,6 +85,7 @@ protected:
     QCheckBox    *m_createSubmasterOuts;
     QCheckBox    *m_connectDefaultAudioOutputs;
     QCheckBox    *m_connectDefaultAudioInputs;
+    QCheckBox    *m_autoStartJackServer;
 
     QComboBox    *m_audioRecFormat;
 
