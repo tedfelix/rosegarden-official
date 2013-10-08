@@ -1618,6 +1618,13 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
         drawShallowLine(startX, startY, endX, endY, thickness);
     }
 
+    // fix bug #1405: the tuplet numbers never displayed correctly when selected
+    // or grayed, because this code snippet was always missing, I suspect
+    if (m_selected) m_p->painter().setPen(GUIPalette::getColour(
+                                            GUIPalette::SelectedElement));
+    else if (m_shaded) m_p->painter().setPen(QColor(Qt::gray));
+    else m_p->painter().setPen(QColor(Qt::black));
+
     m_p->painter().setFont(m_tupletCountFont);
 //    if (!m_inPrinterMethod)
 //        m_p->maskPainter().setFont(m_tupletCountFont);
