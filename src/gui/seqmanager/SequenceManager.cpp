@@ -1773,8 +1773,12 @@ void SequenceManager::processRemovedSegment(Segment* s)
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
     SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()" << endl;
+
+    // Call slotScheduledCompositionMapperReset() in .5 seconds to
+    // reset the metronome mapper based on the new composition size.
+    // See resetMetronomeMapper().
     m_compositionMapperResetTimer->setSingleShot(true);
-    m_compositionMapperResetTimer->start(500); // schedule a composition mapper reset in 0.5s
+    m_compositionMapperResetTimer->start(500);
 }
 
 void SequenceManager::timeSignatureChanged(const Composition *)
