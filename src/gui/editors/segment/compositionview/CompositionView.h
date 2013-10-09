@@ -632,7 +632,7 @@ protected:
     bool         m_fineGrain;
     bool         m_pencilOverExisting;
 
-    int          m_minWidth;
+    //int          m_minWidth;
 
     int          m_stepSize;
     QColor       m_rectFill;

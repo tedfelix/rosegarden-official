@@ -271,12 +271,14 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
     apRects->push_back(previewItem);
 }
 
+#if 0
 void CompositionModelImpl::computeRepeatMarks(CompositionItemPtr item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
     CompositionRect& sr = item->getCompRect();
     computeRepeatMarks(sr, s);
 }
+#endif
 
 void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s)
 {
@@ -326,6 +328,7 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 {
     //RG_DEBUG << "\nCompositionModelImpl::setAudioPreviewThread()";
 
+    // For each AudioPreviewUpdater
     while (!m_audioPreviewUpdaterMap.empty()) {
         // Cause any running previews to be cancelled
         delete m_audioPreviewUpdaterMap.begin()->second;
@@ -368,7 +371,7 @@ void CompositionModelImpl::clearPreviewCache()
             // This will create the audio preview updater.  The
             // preview won't be calculated and cached until the
             // updater completes and calls back.
-            updatePreviewCacheForAudioSegment((*i), 0);
+            updatePreviewCacheForAudioSegment((*i));
         }
     }
 }
@@ -440,7 +443,7 @@ void CompositionModelImpl::createEventRects(const Segment *segment, RectList *np
     }
 }
 
-void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, AudioPreviewData* apData)
+void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment)
 {
     if (m_audioPreviewThread) {
         //RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started";
@@ -448,9 +451,6 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
         CompositionRect segRect = computeSegmentRect(*segment);
         segRect.setWidth(segRect.getBaseWidth()); // don't use repeating area
         segRect.moveTopLeft(QPoint(0, 0));
-
-        if (apData)
-            apData->setSegmentRect(segRect);
 
         if (m_audioPreviewUpdaterMap.find(segment) ==
                 m_audioPreviewUpdaterMap.end()) {
@@ -483,14 +483,14 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
     QRect updateRect;
 
     if (apData) {
-        RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete(" << apu << "): apData contains " << apData->getValues().size() << " values already";
+        RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete(" << apu << "): apData contains " << apData->values.size() << " values already";
         unsigned int channels = 0;
         const std::vector<float> &values = apu->getComputedValues(channels);
         if (channels > 0) {
             RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete: set "
                 << values.size() << " samples on " << channels << " channels";
-            apData->setChannels(channels);
-            apData->setValues(values);
+            apData->channels = channels;
+            apData->values = values;  // ??? COPY performance issue?
             updateRect = postProcessAudioPreview(apData, apu->getSegment());
         }
     }
@@ -757,13 +757,15 @@ QRect CompositionModelImpl::getSelectionContentsRect()
 
 void CompositionModelImpl::addRecordingItem(CompositionItemPtr item)
 {
-    m_recordingSegments.insert(CompositionItemHelper::getSegment(item));
+    m_recordingSegments.insert(item->getSegment());
+
     emit needContentUpdate();
 
-    RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
-             << m_recordingSegments.size() << " recording items";
+    //RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
+    //         << m_recordingSegments.size() << " recording items";
 }
 
+#if 0
 void CompositionModelImpl::removeRecordingItem(CompositionItemPtr item)
 {
     Segment* s = CompositionItemHelper::getSegment(item);
@@ -776,9 +778,13 @@ void CompositionModelImpl::removeRecordingItem(CompositionItemPtr item)
     RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
              << m_recordingSegments.size() << " recording items";
 }
+#endif
 
 void CompositionModelImpl::clearRecordingItems()
 {
+    //RG_DEBUG << "CompositionModelImpl::clearRecordingItem";
+
+    // For each recording segment, remove it from the caches.
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i)
         clearInCache(*i, true);
@@ -786,7 +792,6 @@ void CompositionModelImpl::clearRecordingItems()
     m_recordingSegments.clear();
 
     emit needContentUpdate();
-    RG_DEBUG << "CompositionModelImpl::clearRecordingItem";
 }
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
@@ -945,59 +950,68 @@ void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType chang
 {
     m_changeType = change;
 
-    ItemContainer::iterator i = m_changingItems.find(item);
+    // If we already know this segment is changing
+    if (m_changingItems.find(item) != m_changingItems.end()) {
+        //RG_DEBUG << "CompositionModelImpl::startChange : item already in";
 
-    // if an "identical" composition item has already been inserted, drop this one
-    if (i != m_changingItems.end()) {
-        RG_DEBUG << "CompositionModelImpl::startChange : item already in";
+        // Put this one on the garbage collection list for later cleanup
+        // by endChange().
         m_itemGC.push_back(item);
     } else {
+        // Save the original rectangle for this segment
         item->saveRect();
+
         m_changingItems.insert(item);
     }
 }
 
 void CompositionModelImpl::startChangeSelection(ChangeType change)
 {
-    SegmentSelection::iterator i = m_selectedSegments.begin();
-    for (; i != m_selectedSegments.end(); ++i) {
-        Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s);
-        startChange(CompositionItemPtr(new CompositionItem(*s, sr)), change);
+    // For each selected segment
+    for (SegmentSelection::iterator i = m_selectedSegments.begin();
+            i != m_selectedSegments.end(); ++i) {
+        CompositionItemPtr item =
+                new CompositionItem(**i, computeSegmentRect(**i));
+        startChange(item, change);
     }
-
 }
 
 void CompositionModelImpl::endChange()
 {
-    for (ItemContainer::const_iterator i = m_changingItems.begin(); i != m_changingItems.end(); ++i) {
+    //RG_DEBUG << "CompositionModelImpl::endChange";
+
+    // For each segment that was changing
+    for (ItemContainer::const_iterator i = m_changingItems.begin();
+            i != m_changingItems.end(); ++i) {
         delete *i;
     }
 
     m_changingItems.clear();
 
-    for (ItemGC::iterator i = m_itemGC.begin(); i != m_itemGC.end(); ++i) {
+    // For each segment in the garbage collection list
+    for (ItemGC::iterator i = m_itemGC.begin();
+            i != m_itemGC.end(); ++i) {
         delete *i;
     }
+
     m_itemGC.clear();
-    RG_DEBUG << "CompositionModelImpl::endChange";
+
     emit needContentUpdate();
 }
 
-void CompositionModelImpl::setLength(int width)
+void CompositionModelImpl::setCompositionLength(int width)
 {
-    timeT endMarker = m_grid.snapX(width);
-    m_composition.setEndMarker(endMarker);
+    m_composition.setEndMarker(m_grid.snapX(width));
 }
 
-int CompositionModelImpl::getLength()
+int CompositionModelImpl::getCompositionLength()
 {
     timeT endMarker = m_composition.getEndMarker();
-    int w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(0, endMarker)));
-    return w;
+    return static_cast<int>(nearbyint(
+            m_grid.getRulerScale()->getWidthForDuration(0, endMarker)));
 }
 
-unsigned int CompositionModelImpl::getHeight()
+unsigned int CompositionModelImpl::getCompositionHeight()
 {
     return static_cast<unsigned int>(
             m_grid.getYBinCoordinate(m_composition.getNbTracks()));
@@ -1376,8 +1390,8 @@ CompositionModelImpl::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDa
 {
     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")";
 
-    AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
-    updatePreviewCacheForAudioSegment(s, apData);
+    AudioPreviewData* apData = new AudioPreviewData();
+    updatePreviewCacheForAudioSegment(s);
     m_audioPreviewDataCache[s] = apData;
     return apData;
 }

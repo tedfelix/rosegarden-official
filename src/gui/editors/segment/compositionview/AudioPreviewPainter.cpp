@@ -66,7 +66,8 @@ int AudioPreviewPainter::tileWidth()
 
 void AudioPreviewPainter::paintPreviewImage()
 {
-    const std::vector<float>& values = m_apData->getValues();
+    const CompositionModelImpl::AudioPreviewData::Values &values =
+            m_apData->values;
 
     if (values.empty())
         return;
@@ -86,8 +87,10 @@ void AudioPreviewPainter::paintPreviewImage()
         }
     }
 
-    bool showMinima = m_apData->showsMinima();
-    unsigned int channels = m_apData->getChannels();
+    // This was always false.
+    bool showMinima = false;  //m_apData->showsMinima();
+
+    unsigned int channels = m_apData->channels;
     if (channels == 0) {
         RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : problem with audio file for segment "
                  << m_segment->getLabel().c_str() << endl;

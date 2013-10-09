@@ -165,6 +165,7 @@ public:
     bool isSelected(const Segment *) const;
     bool haveSelection() const  { return !m_selectedSegments.empty(); }
     bool haveMultipleSelection() const  { return m_selectedSegments.size() > 1; }
+    SegmentSelection getSelectedSegments()  { return m_selectedSegments; }
     /// Bounding rect of the currently selected segments.
     QRect getSelectionContentsRect();
 
@@ -191,85 +192,69 @@ public:
     void pointerPosChanged(int x);
 
     void addRecordingItem(CompositionItemPtr);
-    void removeRecordingItem(CompositionItemPtr);
+    //void removeRecordingItem(CompositionItemPtr);
     void clearRecordingItems();
-    bool haveRecordingItems()  { return !m_recordingSegments.empty(); }
+    //bool haveRecordingItems()  { return !m_recordingSegments.empty(); }
 
     // *** Changing (moving and resizing)
 
     enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
+    /// Begin move/resize for a single segment.
     void startChange(CompositionItemPtr, ChangeType change);
+    /// Begin move for all selected segments.
     void startChangeSelection(ChangeType change);
-    ItemContainer& getChangingItems() { return m_changingItems; }
+    //ChangeType getChangeType() const  { return m_changeType; }
+    /// Get the segments that are moving or resizing.
+    ItemContainer &getChangingItems()  { return m_changingItems; }
+    /// Cleanup after move/resize.
     void endChange();
-    ChangeType getChangeType() { return m_changeType; }
 
-    void setLength(int width);
-    int  getLength();
+    // *** Misc
 
-    unsigned int getHeight();
+    /// In pixels
+    /**
+     * Used to expand the composition when we go past the end.
+     */
+    void setCompositionLength(int width);
+    /// In pixels
+    /**
+     * Used to expand the composition when we go past the end.
+     */
+    int getCompositionLength();
+    /// Number of pixels needed vertically to render all tracks.
+    unsigned int getCompositionHeight();
     
+    /**
+     * Used by CompositionView's ctor to connect
+     * RosegardenDocument::m_audioPreviewThread.
+     */
     void setAudioPreviewThread(AudioPreviewThread *thread);
-    AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
+    //AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 
-    void clearPreviewCache();
-    void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
+    /// See CompositionView::clearSegmentRectsCache()
+    void clearSegmentRectsCache(bool clearPreviews = false)
+            { clearInCache(0, clearPreviews); }
 
-    CompositionRect computeSegmentRect(const Segment&, bool computeZ = false);
-    QPoint          computeSegmentOrigin(const Segment&);
-    void            computeRepeatMarks(CompositionItemPtr);
+    CompositionRect computeSegmentRect(const Segment &, bool computeZ = false);
 
-    SegmentSelection getSelectedSegments() { return m_selectedSegments; }
-    Composition&     getComposition()      { return m_composition; }
-    Studio&          getStudio()           { return m_studio; }
+    //void computeRepeatMarks(CompositionItemPtr);
 
+    Composition &getComposition()  { return m_composition; }
+    Studio &getStudio()  { return m_studio; }
 
-    // CompositionObserver Interface
-    virtual void segmentAdded(const Composition *, Segment *);
-    virtual void segmentRemoved(const Composition *, Segment *);
-    virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
-    virtual void segmentStartChanged(const Composition *, Segment *, timeT);
-    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
-    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
-    virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
+    /**
+     * rename: AudioPreview
+     */
+    struct AudioPreviewData {
+        AudioPreviewData() :
+            channels(0)
+        { }
 
-    // SegmentObserver Interface
-    virtual void eventAdded(const Segment *, Event *);
-    virtual void eventRemoved(const Segment *, Event *);
-    virtual void AllEventsChanged(const Segment *s);
-    virtual void appearanceChanged(const Segment *);
-    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
-    virtual void segmentDeleted(const Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
+        unsigned int channels;
 
-    /// rename: AudioPreview
-    /// And pull out into a separate header.
-    class AudioPreviewData {
-    public:
-        AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
-        // ~AudioPreviewData();
-
-        bool showsMinima()              { return m_showMinima; }
-        void setShowMinima(bool s)      { m_showMinima = s;    }
-
-        unsigned int getChannels()       { return m_channels;   }
-        void setChannels(unsigned int c) { m_channels = c;      }
-
-        const std::vector<float> &getValues() const { return m_values;  }
-        void setValues(const std::vector<float>&v) { m_values = v; }
-
-        QRect getSegmentRect()              { return m_segmentRect; }
-        void setSegmentRect(const QRect& r) { m_segmentRect = r; }
-
-    protected:
-        std::vector<float> m_values;
-        bool               m_showMinima;
-        unsigned int       m_channels;
-        QRect              m_segmentRect;
-
-    private:
-        // no copy ctor
-        AudioPreviewData(const AudioPreviewData&);
+        typedef std::vector<float> Values;
+        Values values;
     };
 
 signals:
@@ -289,6 +274,25 @@ private slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
 private:
+    // CompositionObserver Interface
+    virtual void segmentAdded(const Composition *, Segment *);
+    virtual void segmentRemoved(const Composition *, Segment *);
+    virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
+    virtual void segmentStartChanged(const Composition *, Segment *, timeT);
+    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
+    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
+    virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
+
+    // SegmentObserver Interface
+    virtual void eventAdded(const Segment *, Event *);
+    virtual void eventRemoved(const Segment *, Event *);
+    virtual void AllEventsChanged(const Segment *s);
+    virtual void appearanceChanged(const Segment *);
+    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
+    virtual void segmentDeleted(const Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
+
+    QPoint computeSegmentOrigin(const Segment &);
+
     bool setTrackHeights(Segment *changed = 0); // true if something changed
 
     bool isTmpSelected(const Segment*) const;
@@ -329,7 +333,10 @@ private:
     /// rename: cacheAudioPreview()
     AudioPreviewData* makeAudioPreviewDataCache(const Segment *s);
     /// rename: makeAudioPreview()
-    void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData* apData);
+    void updatePreviewCacheForAudioSegment(const Segment* s);
+
+    /// Clear notation and audio preview caches.
+    void clearPreviewCache();
 
     // Segment Rects (m_segmentRectMap)
     void putInCache(const Segment*, const CompositionRect&);
@@ -342,6 +349,7 @@ private:
     Composition&     m_composition;
     Studio&          m_studio;
     SnapGrid         m_grid;
+
     SegmentSelection m_selectedSegments;
     SegmentSelection m_tmpSelectedSegments;
     SegmentSelection m_previousTmpSelectedSegments;
@@ -363,9 +371,9 @@ private:
 
     /// Used by getSegmentRects() to return a reference for speed.
     RectContainer m_segmentRects;
-    ItemContainer m_changingItems;
-    ChangeType    m_changeType;
 
+    ChangeType    m_changeType;
+    ItemContainer m_changingItems;
     typedef std::vector<CompositionItemPtr> ItemGC;
     ItemGC m_itemGC;
 

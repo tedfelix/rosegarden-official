@@ -76,7 +76,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_showSegmentLabels(true),
     m_fineGrain(false),
     m_pencilOverExisting(false),
-    m_minWidth(m_model->getLength()),
+    //m_minWidth(m_model->getCompositionLength()),
     m_stepSize(0),
     m_rectFill(0xF0, 0xF0, 0xF0),
     m_selectedRectFill(0x00, 0x00, 0xF0),
@@ -166,9 +166,8 @@ CompositionView::CompositionView(RosegardenDocument* doc,
                 getModel(), SLOT(slotAudioFileFinalized(Segment*)));
     }
     
-    CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
-    if (cmi) {
-        cmi->setAudioPreviewThread(&doc->getAudioPreviewThread());
+    if (model) {
+        model->setAudioPreviewThread(&doc->getAudioPreviewThread());
     }
 
     if (doc) {
@@ -192,9 +191,8 @@ CompositionView::CompositionView(RosegardenDocument* doc,
 
 void CompositionView::endAudioPreviewGeneration()
 {
-    CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(m_model);
-    if (cmi) {
-        cmi->setAudioPreviewThread(0);
+    if (m_model) {
+        m_model->setAudioPreviewThread(0);
     }
 }
 
@@ -217,7 +215,7 @@ void CompositionView::slotUpdateSize()
 {
 //    int vStep = getModel()->grid().getYSnap();
 //    int height = std::max(getModel()->m_composition.getNbTracks() * vStep, (unsigned)visibleHeight());
-    int height = std::max(getModel()->getHeight(), (unsigned) visibleHeight());
+    int height = std::max(getModel()->getCompositionHeight(), (unsigned) visibleHeight());
 
     const RulerScale *ruler = grid().getRulerScale();
 
@@ -293,13 +291,13 @@ void CompositionView::setDrawSelectionRect(bool d)
 
 void CompositionView::clearSegmentRectsCache(bool clearPreviews)
 {
-    dynamic_cast<CompositionModelImpl*>(getModel())->clearSegmentRectsCache(clearPreviews);
+    getModel()->clearSegmentRectsCache(clearPreviews);
 }
 
 SegmentSelection
 CompositionView::getSelectedSegments()
 {
-    return (dynamic_cast<CompositionModelImpl*>(m_model))->getSelectedSegments();
+    return m_model->getSelectedSegments();
 }
 
 void CompositionView::updateSelectionContents()
@@ -1732,8 +1730,8 @@ void CompositionView::setPointerPos(int pos)
     if (pos >= (contentsWidth() - m_stepSize)) {
         resizeContents(pos + m_stepSize, contentsHeight());
         // grow composition too, if needed (it may not be the case if
-        if (getModel()->getLength() < contentsWidth())
-            getModel()->setLength(contentsWidth());
+        if (getModel()->getCompositionLength() < contentsWidth())
+            getModel()->setCompositionLength(contentsWidth());
     }
 
 
