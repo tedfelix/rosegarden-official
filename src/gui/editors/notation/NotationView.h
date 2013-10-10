@@ -140,6 +140,7 @@ protected slots:
     void slotEditSelectFromStart();
     void slotEditSelectToEnd();
     void slotEditSelectWholeStaff();
+    void slotSearchSelect();
     void slotFilterSelection();
     void slotSelectEvenlySpacedNotes();
     void slotVelocityUp();

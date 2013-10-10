@@ -41,6 +41,7 @@
     <Action name="select_to_end" text="Select to &amp;End" />
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
+    <Action name="search_select" text="Search and Selec&amp;t" icon="search" shortcut="Ctrl+K" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
     <Action name="select_evenly_spaced_notes" text="&amp;Guess Beats" />
   <Separator/>
@@ -642,6 +643,7 @@
   <Action name="guitarchord" />
   <Separator/>
   <Action name="toggle_step_by_step" />
+  <Action name="search_select" />
   <Action name="filter_selection" />
   <Action name="quantize" />
 </ToolBar>

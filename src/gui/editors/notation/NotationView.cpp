@@ -111,6 +111,7 @@
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/GeneratedRegionDialog.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
+#include "gui/dialogs/SelectDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/PitchBendSequenceDialog.h"
@@ -505,6 +506,7 @@ NotationView::setupActions()
     createAction("select_to_end", SLOT(slotEditSelectToEnd()));
     createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
     createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("search_select", SLOT(slotSearchSelect()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
     createAction("select_evenly_spaced_notes", SLOT(slotSelectEvenlySpacedNotes()));
     createAction("expression_sequence", SLOT(slotExpressionSequence()));    
@@ -1811,6 +1813,17 @@ NotationView::slotEditSelectWholeStaff()
                                     segment->getStartTime(),
                                     segment->getEndMarkerTime()),
                  false);
+}
+
+void
+NotationView::slotSearchSelect()
+{
+    NOTATION_DEBUG << "NotationView::slotSearchSelect" << endl;
+
+    SelectDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        NOTATION_DEBUG << "slotSearchSelect- accepted" << endl;
+    }
 }
 
 void
