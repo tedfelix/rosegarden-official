@@ -169,7 +169,7 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
     if (baseSegmentItr == m_originalSegment.end()) {
         RG_DEBUG << "EventSelection::addRemoveEvent Sent event that can not be found "
                   << "in segment.  Exiting method";
-    
+        return;    
     }
 
     timeT eventDuration = e->getDuration();
