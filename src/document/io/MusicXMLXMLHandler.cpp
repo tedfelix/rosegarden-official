@@ -384,7 +384,14 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
                  << m_currentElement
                  << "\'"
                  << endl;
-        Q_ASSERT(0);
+        // I did a test in a clean bash environment (no extra environment
+        // variables)  with a clean release build, and Rosegarden crashed on
+        // this assert.  I added -DQT_NO_DEBUG_OUTPUT and -dQT_NO_WARNING_OUTPUT
+        // to configure.ac, did another clean release build, and Rosegarden
+        // continued to crash on this assert.  According to the Qt API docs that
+        // should not be, but it is.  Plainly it is not safe to use Q_ASSERT in
+        // production code.
+        //Q_ASSERT(0);
     }
     
     return ret;
