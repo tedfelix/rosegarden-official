@@ -369,6 +369,9 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // These elements get ignored
     } else if (m_currentElement == "midi-instrument") {
         ret = getAttributeString(atts, "id", m_midiInstrument);
+    } else if ((m_currentElement == "volume") ||
+              (m_currentElement == "pan")) {
+        //  Probably could be supported, but far easier to ignore
     } else if ((m_currentElement == "part-name") ||
             (m_currentElement == "midi-channel") ||
             (m_currentElement == "midi-program") ||
@@ -377,6 +380,10 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // processed via endElement().
     } else {
         // For debugging
+        RG_DEBUG << "MusicXMLXMLHandler::startPartList: cannot process element \'"
+                 << m_currentElement
+                 << "\'"
+                 << endl;
         Q_ASSERT(0);
     }
     
@@ -399,13 +406,13 @@ MusicXMLXMLHandler::endPartList(const QString& qName)
             if (m_brace == 0) {
                 m_brace = m_number;
             } else {
-                cerrWarning("Overlapping braces are not support, this brace is ignored!");
+                cerrWarning("Overlapping braces are not supported, this brace is ignored!");
             }
         } else if (m_characters.toLower() == "bracket") {
             if (m_bracket == 0) {
                 m_bracket = m_number;
             } else {
-                cerrWarning("Overlapping brackets are not support, this bracket is ignored!");
+                cerrWarning("Overlapping brackets are not supported, this bracket is ignored!");
             }
         } else {
             cerrWarning(QString("group-symbol \"%1\" not supported, ignored.").arg(m_characters));
