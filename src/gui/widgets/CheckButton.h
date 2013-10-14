@@ -15,37 +15,36 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef SELECTDIALOG_H
-#define SELECTDIALOG_H
+#ifndef RG_CHECK_BUTTON_H
+#define RG_CHECK_BUTTON_H
 
-#include <QDialog>
+#include <QToolButton>
 
 
+
+/**This provides checkable tool buttons, originally for use by SelectDialog, to
+ * set up the properties the same way on dozens of buttons.
+ *
+ * \author D. Michael McIntyre
+ */
 namespace Rosegarden
 {
 
 
-class CheckButton;
-
-class SelectDialog : public QDialog
+class CheckButton : public QToolButton
 {
     Q_OBJECT
+private:
 
 public:
-    SelectDialog(QWidget *parent = 0
-                );
-    ~SelectDialog();
+    /**Creates a checkable QToolButton, using IconLoader to load the named icon
+     * specified in the string
+     */
+    CheckButton(QString icon, QWidget *parent = 0);
 
-public slots:
-    void help();
+    ~CheckButton();
+};
 
-protected:
-    CheckButton *m_testButton;
-
-    // INSERT GENERATED HEADER CODE AFTER THIS LINE
-    // INSERT GENERATED HEADER CODE BEFORE THIS LINE
-
-};   
 
 }
 

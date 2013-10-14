@@ -23,6 +23,8 @@
 
 #include "gui/general/IconLoader.h"
 
+#include "gui/widgets/CheckButton.h"
+
 // Qt includes
 #include <QDialog>
 #include <QUrl>
@@ -30,6 +32,7 @@
 #include <QDialogButtonBox>
 #include <QTabWidget>
 #include <QVBoxLayout>
+#include <QLabel>
 
 
 namespace Rosegarden
@@ -45,6 +48,11 @@ SelectDialog::SelectDialog(QWidget *parent) :
     // master layout
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
+
+    layout->addWidget(new QLabel("Before the icon"));
+    m_testButton = new CheckButton("tuplet-hemisemidemi");
+    layout->addWidget(m_testButton);
+    layout->addWidget(new QLabel("After the icon"));
 
     // primary buttons
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
