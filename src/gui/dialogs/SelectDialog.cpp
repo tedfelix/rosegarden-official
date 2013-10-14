@@ -33,6 +33,7 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QToolButton>
 
 
 namespace Rosegarden
@@ -44,15 +45,24 @@ SelectDialog::SelectDialog(QWidget *parent) :
 {
     setModal(true);
     setWindowTitle(tr("Search and Select"));
+//    setStyleSheet("background: #FFFFFF");
 
     // master layout
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
 
-    layout->addWidget(new QLabel("Before the icon"));
-    m_testButton = new CheckButton("tuplet-hemisemidemi");
-    layout->addWidget(m_testButton);
-    layout->addWidget(new QLabel("After the icon"));
+    // button grid
+    QGridLayout *grid = new QGridLayout();
+    QWidget *box = new QWidget;
+    box->setLayout(grid);
+    layout->addWidget(box);
+
+    // INSERT GENERATED CODE AFTER THIS LINE
+ 
+
+  
+    // INSERT GENERATED CODE BEFORE THIS LINE
+
 
     // primary buttons
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);

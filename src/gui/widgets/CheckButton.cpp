@@ -17,55 +17,20 @@
 
 #include "CheckButton.h"
 #include "gui/general/IconLoader.h"
+#include "misc/Debug.h"
 
-#include <QToolButton>
+#include <QPushButton>
 
 namespace Rosegarden
 {
 
 
 CheckButton::CheckButton(QString icon, QWidget *parent) :
-    QToolButton(parent)
+    QPushButton(parent)
 {
-    // Buttons are black on black without adjusting the style, so we use a local
-    // stylesheet.  This should probably obey m_Thorn, but we have plenty of
-    // other hard coded style that doesn't, so I'm not bothering with all that.
-    QString localStyle(
-        "QToolButton,                                                                                                 "
-        "QToolButton::enabled,                                                                                        "
-        "{                                                                                                            "
-        "    color: #FFFFFF;                                                                                          "
-        "    background-color: transparent;                                                                           "
-        "    border: 1px solid transparent;                                                                           "
-        "    border-radius: 2px;                                                                                      "
-        "}                                                                                                            "
-        "                                                                                                             "
-        "QToolButton::pressed,                                                                                        "
-        "QToolButton::checked,                                                                                        "
-        "{                                                                                                            "
-        "    border: 1px solid #AAAAAA;                                                                               "
-        "    border-radius: 2px;                                                                                      "
-        "    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);   "
-        "}                                                                                                            "
-        "                                                                                                             "
-        "QToolButton::enabled:hover,                                                                                  "
-        "{                                                                                                            "
-        "    border: 1px solid #AAAAAA;                                                                               "
-        "    border-radius: 2px;                                                                                      "
-        "    background-color: #CCDFFF;                                                                               "
-        "}                                                                                                            "
-        "                                                                                                             "
-        "QToolButton::!enabled,                                                                                       "
-        "{                                                                                                            "
-        "    color: #FFFFFF;                                                                                          "
-        "    background-color: transparent;                                                                           "
-        "}                                                                                                            "
-    );
-    setStyleSheet(localStyle);
-
-    setToolButtonStyle(Qt::ToolButtonIconOnly);
+    setFixedSize(QSize(32,32));
     setCheckable(true);
-    setIcon(IconLoader().loadPixmap(icon));
+    setIcon(IconLoader().load(icon));
 
     // thinking out loud...
     //

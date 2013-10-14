@@ -18,7 +18,7 @@
 #ifndef RG_CHECK_BUTTON_H
 #define RG_CHECK_BUTTON_H
 
-#include <QToolButton>
+#include <QPushButton>
 
 
 
@@ -31,13 +31,13 @@ namespace Rosegarden
 {
 
 
-class CheckButton : public QToolButton
+class CheckButton : public QPushButton
 {
     Q_OBJECT
 private:
 
 public:
-    /**Creates a checkable QToolButton, using IconLoader to load the named icon
+    /**Creates a checkable QPushButton, using IconLoader to load the named icon
      * specified in the string
      */
     CheckButton(QString icon, QWidget *parent = 0);
