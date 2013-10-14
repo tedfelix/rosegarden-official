@@ -29,6 +29,8 @@
 // STL & other includes
 //#include <vector>
 
+class QToolButton;
+
 namespace Rosegarden
 {
 
@@ -45,7 +47,87 @@ public slots:
     void help();
 
 protected:
+/*
+    // standard durations
+    QToolButton        *m_durationBreve;
+    QToolButton        *m_durationWhole;
+    QToolButton         *m_durationHalf;
+    QToolButton      *m_durationQuarter;
+    QToolButton       *m_durationEighth;
+    QToolButton    *m_durationSixteenth;
+    QToolButton *m_durationThirtysecond;
+    QToolButton  *m_durationSixtyfourth;
 
+    // one dot durations
+    QToolButton        *m_durationBreveDot;
+    QToolButton        *m_durationWholeDot;
+    QToolButton         *m_durationHalfDot;
+    QToolButton      *m_durationQuarterDot;
+    QToolButton       *m_durationEighthDot;
+    QToolButton    *m_durationSixteenthDot;
+    QToolButton *m_durationThirtysecondDot;
+    QToolButton  *m_durationSixtyfourthDot;
+
+    // two dot durations
+    QToolButton        *m_durationBreveDotDot;
+    QToolButton        *m_durationWholeDotDot;
+    QToolButton         *m_durationHalfDotDot;
+    QToolButton      *m_durationQuarterDotDot;
+    QToolButton       *m_durationEighthDotDot;
+    QToolButton    *m_durationSixteenthDotDot;
+    QToolButton *m_durationThirtysecondDotDot;
+    QToolButton  *m_durationSixtyfourthDotDot;
+
+    // tuplet durations
+    QToolButton        *m_durationBreveTuplet;
+    QToolButton        *m_durationWholeTuplet;
+    QToolButton         *m_durationHalfTuplet;
+    QToolButton      *m_durationQuarterTuplet;
+    QToolButton       *m_durationEighthTuplet;
+    QToolButton    *m_durationSixteenthTuplet;
+    QToolButton *m_durationThirtysecondTuplet;
+    QToolButton  *m_durationSixtyfourthTuplet;
+
+    // standard durations
+    QToolButton        *m_durationBreve;
+    QToolButton        *m_durationWhole;
+    QToolButton         *m_durationHalf;
+    QToolButton      *m_durationQuarter;
+    QToolButton       *m_durationEighth;
+    QToolButton    *m_durationSixteenth;
+    QToolButton *m_durationThirtysecond;
+    QToolButton  *m_durationSixtyfourth;
+
+    // standard durations
+    QToolButton        *m_durationBreve;
+    QToolButton        *m_durationWhole;
+    QToolButton         *m_durationHalf;
+    QToolButton      *m_durationQuarter;
+    QToolButton       *m_durationEighth;
+    QToolButton    *m_durationSixteenth;
+    QToolButton *m_durationThirtysecond;
+    QToolButton  *m_durationSixtyfourth;
+
+    // standard durations
+    QToolButton        *m_durationBreve;
+    QToolButton        *m_durationWhole;
+    QToolButton         *m_durationHalf;
+    QToolButton      *m_durationQuarter;
+    QToolButton       *m_durationEighth;
+    QToolButton    *m_durationSixteenth;
+    QToolButton *m_durationThirtysecond;
+    QToolButton  *m_durationSixtyfourth;
+
+    // standard durations
+    QToolButton        *m_durationBreve;
+    QToolButton        *m_durationWhole;
+    QToolButton         *m_durationHalf;
+    QToolButton      *m_durationQuarter;
+    QToolButton       *m_durationEighth;
+    QToolButton    *m_durationSixteenth;
+    QToolButton *m_durationThirtysecond;
+    QToolButton  *m_durationSixtyfourth;
+*/
 };   
 
 }
