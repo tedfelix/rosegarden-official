@@ -51,14 +51,48 @@ SelectDialog::SelectDialog(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
 
+    // create tab widget
+    m_tabWidget = new QTabWidget();
+    layout->addWidget(m_tabWidget);
+
+    // create duration tab
+    makeDurationTab();
+    m_tabWidget->addTab(m_durationTab, tr("Duration"));
+    m_tabWidget->addTab(m_durationTab, "Twice");
+
+    // primary buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    layout->addWidget(buttonBox);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
+
+}
+
+SelectDialog::~SelectDialog()
+{
+}
+
+void
+SelectDialog::help()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-search-and-select-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+SelectDialog::makeDurationTab()
+{
     // button grid
     QGridLayout *grid = new QGridLayout();
-    QWidget *box = new QWidget;
-    box->setLayout(grid);
-    layout->addWidget(box);
-
-    // INSERT GENERATED CODE AFTER THIS LINE
-
+    m_durationTab = new QWidget();
+    m_durationTab->setLayout(grid);
 
     // breve buttons
     m_use_duration_breve = new CheckButton("breve");
@@ -320,35 +354,9 @@ SelectDialog::SelectDialog(QWidget *parent) :
     m_use_everything = new CheckButton("golden-arrow-left-up", false);
     grid->addWidget(m_use_everything, 8, 8);
 
+    // performance durations are [longer|shorter] combo &c
 
   
-    // INSERT GENERATED CODE BEFORE THIS LINE
-
-
-    // primary buttons
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    layout->addWidget(buttonBox);
-
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
-
-}
-
-SelectDialog::~SelectDialog()
-{
-}
-
-void
-SelectDialog::help()
-{
-    // TRANSLATORS: if the manual is translated into your language, you can
-    // change the two-letter language code in this URL to point to your language
-    // version, eg. "http://rosegardenmusic.com/wiki/doc:manual-es" for the
-    // Spanish version. If your language doesn't yet have a translation, feel
-    // free to create one.
-    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-search-and-select-en");
-    QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 

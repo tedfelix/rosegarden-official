@@ -21,6 +21,8 @@
 #include <QDialog>
 
 class QPushButton;
+class QTabWidget;
+class QWidget;
 
 namespace Rosegarden
 {
@@ -42,9 +44,13 @@ public slots:
 
 protected:
 
-    // Duration widgets
-    // INSERT GENERATED HEADER CODE AFTER THIS LINE
+    void makeDurationTab();
 
+    QTabWidget *m_tabWidget;
+
+    // Duration widgets
+    
+    QWidget *m_durationTab;
 
     // breve buttons
     CheckButton *m_use_duration_breve;
@@ -145,11 +151,6 @@ protected:
     CheckButton *m_use_all_rest_tuplets;
     CheckButton *m_use_everything;
 
-
-    // INSERT GENERATED HEADER CODE BEFORE THIS LINE
-// not required: the lower right button is the everything toggle
-//    QPushButton *m_selectEveryDuration;
-//    QPushButton *m_selectNoDurations;
 };   
 
 }
