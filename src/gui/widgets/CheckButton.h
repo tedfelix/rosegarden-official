@@ -36,11 +36,21 @@ class CheckButton : public QPushButton
     Q_OBJECT
 private:
 
+    QString m_iconName;
+
+    void toggle();
+
 public:
     /**Creates a checkable QPushButton, using IconLoader to load the named icon
-     * specified in the string
+     * specified in the string.  This string is also used as an identifying key
+     * in QSettings, so each time one of these buttons is created with a
+     * particular icon, it will set itself to the checked state saved from the
+     * last time one of these buttons was created with that icon.  This saves a
+     * crap ton of settings nonsense at the dialog level, but it could get
+     * confusing if something other that SelectDialog actually uses CheckButton
+     * for something at some point in the future.
      */
-    CheckButton(QString icon, QWidget *parent = 0);
+    CheckButton(QString iconName, QWidget *parent = 0);
 
     ~CheckButton();
 };

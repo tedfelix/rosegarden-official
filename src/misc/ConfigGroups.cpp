@@ -55,4 +55,5 @@ namespace Rosegarden
     const char* const RecentDirsConfigGroup = "RecentDirs";
     const char* const CollapsingFrameConfigGroup = "CollapsingFrame";
     const char* const PitchBendSequenceConfigGroup = "PitchBendSequence";
+    const char* const CheckButtonConfigGroup = "CheckButton_Memory";
 }

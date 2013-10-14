@@ -18,19 +18,28 @@
 #include "CheckButton.h"
 #include "gui/general/IconLoader.h"
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 
 #include <QPushButton>
+#include <QSettings>
 
 namespace Rosegarden
 {
 
 
-CheckButton::CheckButton(QString icon, QWidget *parent) :
-    QPushButton(parent)
+CheckButton::CheckButton(QString iconName, QWidget *parent) :
+    QPushButton(parent),
+    m_iconName(iconName)
 {
     setFixedSize(QSize(32,32));
     setCheckable(true);
-    setIcon(IconLoader().load(icon));
+    setIcon(IconLoader().load(m_iconName));
+
+    // Memory recall
+    QSettings settings;
+    settings.beginGroup(CheckButtonConfigGroup);
+    setChecked(settings.value(m_iconName, true).toBool());
+    settings.endGroup();
 
     // thinking out loud...
     //
@@ -38,10 +47,25 @@ CheckButton::CheckButton(QString icon, QWidget *parent) :
     // toggle button that keeps track of children and switches them all on or
     // off at once, else I'll have 8+ switch this when that switches slots with
     // lots of things to keep track of manually
+    //
+    // QButtonGroup looks useful
 }
 
 CheckButton::~CheckButton()
 {
+}
+
+void
+CheckButton::toggle()
+{
+    // Memory storage
+    QSettings settings;
+    settings.beginGroup(CheckButtonConfigGroup);
+    settings.setValue(m_iconName, isChecked());
+    settings.endGroup();
+
+    // Complete the toggle action
+    QPushButton::toggle();
 }
 
 
