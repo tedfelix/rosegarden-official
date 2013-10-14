@@ -55,7 +55,7 @@ protected:
     CheckButton *m_use_duration_breve_dotted_rest;
     CheckButton *m_use_duration_breve_double_dotted_rest;
     CheckButton *m_use_duration_breve_rest_tuplet;
-    CheckButton *m_use_all_breve;
+    CheckButton *m_use_all_breves;
 
     // semibreve buttons
     CheckButton *m_use_duration_semibreve;
@@ -66,7 +66,7 @@ protected:
     CheckButton *m_use_duration_semibreve_dotted_rest;
     CheckButton *m_use_duration_semibreve_double_dotted_rest;
     CheckButton *m_use_duration_semibreve_rest_tuplet;
-    CheckButton *m_use_all_semibreve;
+    CheckButton *m_use_all_semibreves;
 
     // minim buttons
     CheckButton *m_use_duration_minim;
@@ -77,7 +77,7 @@ protected:
     CheckButton *m_use_duration_minim_dotted_rest;
     CheckButton *m_use_duration_minim_double_dotted_rest;
     CheckButton *m_use_duration_minim_rest_tuplet;
-    CheckButton *m_use_all_minim;
+    CheckButton *m_use_all_minims;
 
     // crotchet buttons
     CheckButton *m_use_duration_crotchet;
@@ -88,7 +88,7 @@ protected:
     CheckButton *m_use_duration_crotchet_dotted_rest;
     CheckButton *m_use_duration_crotchet_double_dotted_rest;
     CheckButton *m_use_duration_crotchet_rest_tuplet;
-    CheckButton *m_use_all_crotchet;
+    CheckButton *m_use_all_crotchets;
 
     // quaver buttons
     CheckButton *m_use_duration_quaver;
@@ -99,7 +99,7 @@ protected:
     CheckButton *m_use_duration_quaver_dotted_rest;
     CheckButton *m_use_duration_quaver_double_dotted_rest;
     CheckButton *m_use_duration_quaver_rest_tuplet;
-    CheckButton *m_use_all_quaver;
+    CheckButton *m_use_all_quavers;
 
     // semiquaver buttons
     CheckButton *m_use_duration_semiquaver;
@@ -110,7 +110,7 @@ protected:
     CheckButton *m_use_duration_semiquaver_dotted_rest;
     CheckButton *m_use_duration_semiquaver_double_dotted_rest;
     CheckButton *m_use_duration_semiquaver_rest_tuplet;
-    CheckButton *m_use_all_semiquaver;
+    CheckButton *m_use_all_semiquavers;
 
     // demisemi buttons
     CheckButton *m_use_duration_demisemi;
@@ -121,7 +121,7 @@ protected:
     CheckButton *m_use_duration_demisemi_dotted_rest;
     CheckButton *m_use_duration_demisemi_double_dotted_rest;
     CheckButton *m_use_duration_demisemi_rest_tuplet;
-    CheckButton *m_use_all_demisemi;
+    CheckButton *m_use_all_demisemis;
 
     // hemidemisemi buttons
     CheckButton *m_use_duration_hemidemisemi;
@@ -132,12 +132,24 @@ protected:
     CheckButton *m_use_duration_hemidemisemi_dotted_rest;
     CheckButton *m_use_duration_hemidemisemi_double_dotted_rest;
     CheckButton *m_use_duration_hemidemisemi_rest_tuplet;
-    CheckButton *m_use_all_hemidemisemi;
+    CheckButton *m_use_all_hemidemisemis;
+
+    // use everything per column
+    CheckButton *m_use_all_normals;
+    CheckButton *m_use_all_dotteds;
+    CheckButton *m_use_all_double_dotteds;
+    CheckButton *m_use_all_tuplets;
+    CheckButton *m_use_all_rests;
+    CheckButton *m_use_all_dotted_rests;
+    CheckButton *m_use_all_double_dotted_rests;
+    CheckButton *m_use_all_rest_tuplets;
+    CheckButton *m_use_everything;
 
 
     // INSERT GENERATED HEADER CODE BEFORE THIS LINE
-    QPushButton *m_selectEveryDuration;
-    QPushButton *m_selectNoDurations;
+// not required: the lower right button is the everything toggle
+//    QPushButton *m_selectEveryDuration;
+//    QPushButton *m_selectNoDurations;
 };   
 
 }

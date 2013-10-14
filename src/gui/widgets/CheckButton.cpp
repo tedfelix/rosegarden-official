@@ -27,19 +27,23 @@ namespace Rosegarden
 {
 
 
-CheckButton::CheckButton(QString iconName, QWidget *parent) :
+CheckButton::CheckButton(QString iconName, bool wantMemoryFunction,  QWidget *parent) :
     QPushButton(parent),
-    m_iconName(iconName)
+    m_iconName(iconName),
+    m_wantMemoryFunction(wantMemoryFunction)
 {
     setFixedSize(QSize(32,32));
+    setIconSize(QSize(32,32));
     setCheckable(true);
     setIcon(IconLoader().load(m_iconName));
 
-    // Memory recall
-    QSettings settings;
-    settings.beginGroup(CheckButtonConfigGroup);
-    setChecked(settings.value(m_iconName, true).toBool());
-    settings.endGroup();
+    if (m_wantMemoryFunction) {
+        // Memory recall
+        QSettings settings;
+        settings.beginGroup(CheckButtonConfigGroup);
+        setChecked(settings.value(m_iconName, true).toBool());
+        settings.endGroup();
+    }
 
     // thinking out loud...
     //
@@ -58,14 +62,16 @@ CheckButton::~CheckButton()
 void
 CheckButton::toggle()
 {
-    // Memory storage
-    QSettings settings;
-    settings.beginGroup(CheckButtonConfigGroup);
-    settings.setValue(m_iconName, isChecked());
-    settings.endGroup();
+    if (m_wantMemoryFunction) {
+        // Memory storage
+        QSettings settings;
+        settings.beginGroup(CheckButtonConfigGroup);
+        settings.setValue(m_iconName, isChecked());
+        settings.endGroup();
+    }
 
-    // Complete the toggle action
-    QPushButton::toggle();
+    // Complete the toggle action?
+//    QPushButton::toggle();
 }
 
 

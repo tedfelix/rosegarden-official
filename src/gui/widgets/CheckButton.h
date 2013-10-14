@@ -37,6 +37,7 @@ class CheckButton : public QPushButton
 private:
 
     QString m_iconName;
+    bool m_wantMemoryFunction;
 
     void toggle();
 
@@ -50,7 +51,7 @@ public:
      * confusing if something other that SelectDialog actually uses CheckButton
      * for something at some point in the future.
      */
-    CheckButton(QString iconName, QWidget *parent = 0);
+    CheckButton(QString iconName, bool wantMemoryFunction = true,  QWidget *parent = 0);
 
     ~CheckButton();
 };
