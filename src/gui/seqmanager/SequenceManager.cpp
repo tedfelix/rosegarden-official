@@ -96,7 +96,7 @@ SequenceManager::SequenceManager(TransportDialog *transport) :
     m_shownOverrunWarning(false),
     m_recordTime(new QTime()),
     m_updateRequested(true),
-    m_compositionMapperResetTimer(0),
+    //m_compositionMapperResetTimer(0),
     m_reportTimer(0),
     m_canReport(true),
     m_lastLowLatencySwitchSent(false),
@@ -145,7 +145,7 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     //
     delete m_countdownDialog;
     delete m_countdownTimer;
-    delete m_compositionMapperResetTimer;
+    //delete m_compositionMapperResetTimer;
 
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                             (m_doc->parent())->parentWidget());
@@ -158,9 +158,9 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
 
-    m_compositionMapperResetTimer = new QTimer(m_doc);
-    connect(m_compositionMapperResetTimer, SIGNAL(timeout()),
-            this, SLOT(slotScheduledCompositionMapperReset()));
+    //m_compositionMapperResetTimer = new QTimer(m_doc);
+    //connect(m_compositionMapperResetTimer, SIGNAL(timeout()),
+    //        this, SLOT(slotScheduledCompositionMapperReset()));
 
     m_compositionRefreshStatusId = comp.getNewRefreshStatusId();
     comp.addObserver(this);
@@ -1774,11 +1774,29 @@ void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/
 {
     SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()" << endl;
 
-    // Call slotScheduledCompositionMapperReset() in .5 seconds to
-    // reset the metronome mapper based on the new composition size.
-    // See resetMetronomeMapper().
-    m_compositionMapperResetTimer->setSingleShot(true);
-    m_compositionMapperResetTimer->start(500);
+    if (m_transportStatus == RECORDING) {
+        // When recording, we just need to extend the metronome segment
+        // to include the new bars.
+        // ??? This is pretty extreme as it destroys and recreates the
+        //     segment.  Can't we just add events to the existing segment
+        //     instead?  Maybe always have one or two bars extra so there
+        //     is no interruption.  As it is, this will likely cause an
+        //     interruption in metronome events when the composition is
+        //     expanded.
+        resetMetronomeMapper();
+    } else {
+        // Reset the composition mapper.  The main thing this does is
+        // update the metronome segment.  There appear to be other
+        // important things that need to be done as well.
+        slotScheduledCompositionMapperReset();
+
+        // This used to be done after a .5 second delay.  Doesn't seem
+        // necessary now.
+        // Call slotScheduledCompositionMapperReset() in .5 seconds to
+        // reset the composition mapper based on the new composition size.
+        //m_compositionMapperResetTimer->setSingleShot(true);
+        //m_compositionMapperResetTimer->start(500);
+    }
 }
 
 void SequenceManager::timeSignatureChanged(const Composition *)

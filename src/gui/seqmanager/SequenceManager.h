@@ -290,7 +290,7 @@ protected:
     // composition end time marker changes this can be caused by a
     // window resize, and since the reset is potentially expensive we
     // want to collapse several following requests into one.
-    QTimer                    *m_compositionMapperResetTimer;
+    //QTimer                    *m_compositionMapperResetTimer;
 
     // Just to make sure we don't bother the user too often
     //
