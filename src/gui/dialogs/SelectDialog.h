@@ -163,7 +163,7 @@ protected:
     CheckButton *m_use_all_dotted_rests;
     CheckButton *m_use_all_double_dotted_rests;
     CheckButton *m_use_all_rest_tuplets;
-    CheckButton *m_use_everything;
+    CheckButton *m_use_all_duration;
 
     // checkboxes
     QCheckBox *m_include_shorter_performance_durations;
@@ -171,8 +171,8 @@ protected:
 
 protected slots:
 
-    void slotUseAllBreve(bool); /*
-    void slotUseAllSemibreve(bool);
+    void slotUseAllBreve(bool);
+    void slotUseAllSemiBreve(bool);
     void slotUseAllMinim(bool);
     void slotUseAllCrotchet(bool);
     void slotUseAllQuaver(bool);
@@ -190,7 +190,6 @@ protected slots:
     void slotUseAllRestTuplet(bool);
 
     void slotUseAllDuration(bool);
-    */
 
 };   
 

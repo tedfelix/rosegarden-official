@@ -59,7 +59,6 @@ SelectDialog::SelectDialog(QWidget *parent) :
     // create duration tab
     makeDurationTab();
     m_tabWidget->addTab(m_durationTab, tr("Duration"));
-    m_tabWidget->addTab(m_durationTab, "Twice");
 
     // primary buttons
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
@@ -366,8 +365,8 @@ SelectDialog::makeDurationTab()
     m_use_all_rest_tuplets = new CheckButton("golden-arrow-up", false);
     grid->addWidget(m_use_all_rest_tuplets, 8, 7);
 
-    m_use_everything = new CheckButton("golden-arrow-left-up", false);
-    grid->addWidget(m_use_everything, 8, 8);
+    m_use_all_duration = new CheckButton("golden-arrow-left-up", false);
+    grid->addWidget(m_use_all_duration, 8, 8);
 
     // performance durations are [longer|shorter] combo &c
     grid->addWidget(new QLabel(tr("Include notes with shorter performance durations")), 9, 0, 1, 7);
@@ -389,7 +388,22 @@ SelectDialog::makeDurationTab()
 
     // connect the use_all buttons
     connect(m_use_all_breves, SIGNAL(toggled(bool)), SLOT(slotUseAllBreve(bool)));
-
+    connect(m_use_all_semibreves, SIGNAL(toggled(bool)), SLOT(slotUseAllSemiBreve(bool)));
+    connect(m_use_all_minims, SIGNAL(toggled(bool)), SLOT(slotUseAllMinim(bool)));
+    connect(m_use_all_crotchets, SIGNAL(toggled(bool)), SLOT(slotUseAllCrotchet(bool)));
+    connect(m_use_all_quavers, SIGNAL(toggled(bool)), SLOT(slotUseAllQuaver(bool)));
+    connect(m_use_all_semiquavers, SIGNAL(toggled(bool)), SLOT(slotUseAllSemiQuaver(bool)));
+    connect(m_use_all_demisemis, SIGNAL(toggled(bool)), SLOT(slotUseAllDemiSemi(bool)));
+    connect(m_use_all_hemidemisemis, SIGNAL(toggled(bool)), SLOT(slotUseAllHemiDemiSemi(bool)));
+    connect(m_use_all_normals, SIGNAL(toggled(bool)), SLOT(slotUseAllNormal(bool)));
+    connect(m_use_all_dotteds, SIGNAL(toggled(bool)), SLOT(slotUseAllDotted(bool)));
+    connect(m_use_all_double_dotteds, SIGNAL(toggled(bool)), SLOT(slotUseAllDoubleDotted(bool)));
+    connect(m_use_all_tuplets, SIGNAL(toggled(bool)), SLOT(slotUseAllTuplet(bool)));
+    connect(m_use_all_rests, SIGNAL(toggled(bool)), SLOT(slotUseAllRestNormal(bool)));
+    connect(m_use_all_dotted_rests, SIGNAL(toggled(bool)), SLOT(slotUseAllRestDotted(bool)));
+    connect(m_use_all_double_dotted_rests, SIGNAL(toggled(bool)), SLOT(slotUseAllRestDoubleDotted(bool)));
+    connect(m_use_all_rest_tuplets, SIGNAL(toggled(bool)), SLOT(slotUseAllRestTuplet(bool)));
+    connect(m_use_all_duration, SIGNAL(toggled(bool)), SLOT(slotUseAllDuration(bool)));
   
 }
 
@@ -406,28 +420,228 @@ SelectDialog::slotUseAllBreve(bool state)
     m_use_duration_breve_rest_tuplet->setChecked(state);
 }
 
-/*
-    void slotUseAllBreve;
-    void slotUseAllSemibreve;
-    void slotUseAllMinim;
-    void slotUseAllCrotchet;
-    void slotUseAllQuaver;
-    void slotUseAllSemiQuaver;
-    void slotUseAllDemiSemi;
-    void slotUseAllHemiDemiSemi;
+void
+SelectDialog::slotUseAllSemiBreve(bool state)
+{
+    m_use_duration_semibreve->setChecked(state);
+    m_use_duration_semibreve_dotted->setChecked(state);
+    m_use_duration_semibreve_double_dotted->setChecked(state);
+    m_use_duration_semibreve_tuplet->setChecked(state);
+    m_use_duration_semibreve_rest->setChecked(state);
+    m_use_duration_semibreve_dotted_rest->setChecked(state);
+    m_use_duration_semibreve_double_dotted_rest->setChecked(state);
+    m_use_duration_semibreve_rest_tuplet->setChecked(state);
+}
 
-    void slotUseAllNormal;
-    void slotUseAllDotted;
-    void slotUseAllDoubleDotted;
-    void slotUseAllTuplet;
-    void slotUseAllRestNormal;
-    void slotUseAllRestDotted;
-    void slotUseAllRestDoubleDotted;
-    void slotUseAllRestTuplet;
+void
+SelectDialog::slotUseAllMinim(bool state)
+{
+    m_use_duration_minim->setChecked(state);
+    m_use_duration_minim_dotted->setChecked(state);
+    m_use_duration_minim_double_dotted->setChecked(state);
+    m_use_duration_minim_tuplet->setChecked(state);
+    m_use_duration_minim_rest->setChecked(state);
+    m_use_duration_minim_dotted_rest->setChecked(state);
+    m_use_duration_minim_double_dotted_rest->setChecked(state);
+    m_use_duration_minim_rest_tuplet->setChecked(state);
+}
 
-    void slotUseAllDuration;
-*/
+
+void
+SelectDialog::slotUseAllCrotchet(bool state)
+{
+    m_use_duration_crotchet->setChecked(state);
+    m_use_duration_crotchet_dotted->setChecked(state);
+    m_use_duration_crotchet_double_dotted->setChecked(state);
+    m_use_duration_crotchet_tuplet->setChecked(state);
+    m_use_duration_crotchet_rest->setChecked(state);
+    m_use_duration_crotchet_dotted_rest->setChecked(state);
+    m_use_duration_crotchet_double_dotted_rest->setChecked(state);
+    m_use_duration_crotchet_rest_tuplet->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllQuaver(bool state)
+{
+    m_use_duration_quaver->setChecked(state);
+    m_use_duration_quaver_dotted->setChecked(state);
+    m_use_duration_quaver_double_dotted->setChecked(state);
+    m_use_duration_quaver_tuplet->setChecked(state);
+    m_use_duration_quaver_rest->setChecked(state);
+    m_use_duration_quaver_dotted_rest->setChecked(state);
+    m_use_duration_quaver_double_dotted_rest->setChecked(state);
+    m_use_duration_quaver_rest_tuplet->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllSemiQuaver(bool state)
+{
+    m_use_duration_semiquaver->setChecked(state);
+    m_use_duration_semiquaver_dotted->setChecked(state);
+    m_use_duration_semiquaver_double_dotted->setChecked(state);
+    m_use_duration_semiquaver_tuplet->setChecked(state);
+    m_use_duration_semiquaver_rest->setChecked(state);
+    m_use_duration_semiquaver_dotted_rest->setChecked(state);
+    m_use_duration_semiquaver_double_dotted_rest->setChecked(state);
+    m_use_duration_semiquaver_rest_tuplet->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllDemiSemi(bool state)
+{
+    m_use_duration_demisemi->setChecked(state);
+    m_use_duration_demisemi_dotted->setChecked(state);
+    m_use_duration_demisemi_double_dotted->setChecked(state);
+    m_use_duration_demisemi_tuplet->setChecked(state);
+    m_use_duration_demisemi_rest->setChecked(state);
+    m_use_duration_demisemi_dotted_rest->setChecked(state);
+    m_use_duration_demisemi_double_dotted_rest->setChecked(state);
+    m_use_duration_demisemi_rest_tuplet->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllHemiDemiSemi(bool state)
+{
+    m_use_duration_hemidemisemi->setChecked(state);
+    m_use_duration_hemidemisemi_dotted->setChecked(state);
+    m_use_duration_hemidemisemi_double_dotted->setChecked(state);
+    m_use_duration_hemidemisemi_tuplet->setChecked(state);
+    m_use_duration_hemidemisemi_rest->setChecked(state);
+    m_use_duration_hemidemisemi_dotted_rest->setChecked(state);
+    m_use_duration_hemidemisemi_double_dotted_rest->setChecked(state);
+    m_use_duration_hemidemisemi_rest_tuplet->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllNormal(bool state)
+{
+    m_use_duration_breve->setChecked(state);
+    m_use_duration_semibreve->setChecked(state);
+    m_use_duration_minim->setChecked(state);
+    m_use_duration_crotchet->setChecked(state);
+    m_use_duration_quaver->setChecked(state);
+    m_use_duration_semiquaver->setChecked(state);
+    m_use_duration_demisemi->setChecked(state);
+    m_use_duration_hemidemisemi->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllDotted(bool state)
+{
+    m_use_duration_breve_dotted->setChecked(state);
+    m_use_duration_semibreve_dotted->setChecked(state);
+    m_use_duration_minim_dotted->setChecked(state);
+    m_use_duration_crotchet_dotted->setChecked(state);
+    m_use_duration_quaver_dotted->setChecked(state);
+    m_use_duration_semiquaver_dotted->setChecked(state);
+    m_use_duration_demisemi_dotted->setChecked(state);
+    m_use_duration_hemidemisemi_dotted->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllDoubleDotted(bool state)
+{
+    m_use_duration_breve_double_dotted->setChecked(state);
+    m_use_duration_semibreve_double_dotted->setChecked(state);
+    m_use_duration_minim_double_dotted->setChecked(state);
+    m_use_duration_crotchet_double_dotted->setChecked(state);
+    m_use_duration_quaver_double_dotted->setChecked(state);
+    m_use_duration_semiquaver_double_dotted->setChecked(state);
+    m_use_duration_demisemi_double_dotted->setChecked(state);
+    m_use_duration_hemidemisemi_double_dotted->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllTuplet(bool state)
+{
+    m_use_duration_breve_tuplet->setChecked(state);
+    m_use_duration_semibreve_tuplet->setChecked(state);
+    m_use_duration_minim_tuplet->setChecked(state);
+    m_use_duration_crotchet_tuplet->setChecked(state);
+    m_use_duration_quaver_tuplet->setChecked(state);
+    m_use_duration_semiquaver_tuplet->setChecked(state);
+    m_use_duration_demisemi_tuplet->setChecked(state);
+    m_use_duration_hemidemisemi_tuplet->setChecked(state);
 
 }
+
+void
+SelectDialog::slotUseAllRestNormal(bool state)
+{
+    m_use_duration_breve_rest->setChecked(state);
+    m_use_duration_semibreve_rest->setChecked(state);
+    m_use_duration_minim_rest->setChecked(state);
+    m_use_duration_crotchet_rest->setChecked(state);
+    m_use_duration_quaver_rest->setChecked(state);
+    m_use_duration_semiquaver_rest->setChecked(state);
+    m_use_duration_demisemi_rest->setChecked(state);
+    m_use_duration_hemidemisemi_rest->setChecked(state);
+
+}
+
+void
+SelectDialog::slotUseAllRestDotted(bool state)
+{
+    m_use_duration_breve_dotted_rest->setChecked(state);
+    m_use_duration_semibreve_dotted_rest->setChecked(state);
+    m_use_duration_minim_dotted_rest->setChecked(state);
+    m_use_duration_crotchet_dotted_rest->setChecked(state);
+    m_use_duration_quaver_dotted_rest->setChecked(state);
+    m_use_duration_semiquaver_dotted_rest->setChecked(state);
+    m_use_duration_demisemi_dotted_rest->setChecked(state);
+    m_use_duration_hemidemisemi_dotted_rest->setChecked(state);
+
+}
+
+void
+SelectDialog::slotUseAllRestDoubleDotted(bool state)
+{
+    m_use_duration_breve_double_dotted_rest->setChecked(state);
+    m_use_duration_semibreve_double_dotted_rest->setChecked(state);
+    m_use_duration_minim_double_dotted_rest->setChecked(state);
+    m_use_duration_crotchet_double_dotted_rest->setChecked(state);
+    m_use_duration_quaver_double_dotted_rest->setChecked(state);
+    m_use_duration_semiquaver_double_dotted_rest->setChecked(state);
+    m_use_duration_demisemi_double_dotted_rest->setChecked(state);
+    m_use_duration_hemidemisemi_double_dotted_rest->setChecked(state);
+
+}
+
+void
+SelectDialog::slotUseAllRestTuplet(bool state)
+{
+    m_use_duration_breve_rest_tuplet->setChecked(state);
+    m_use_duration_semibreve_rest_tuplet->setChecked(state);
+    m_use_duration_minim_rest_tuplet->setChecked(state);
+    m_use_duration_crotchet_rest_tuplet->setChecked(state);
+    m_use_duration_quaver_rest_tuplet->setChecked(state);
+    m_use_duration_semiquaver_rest_tuplet->setChecked(state);
+    m_use_duration_demisemi_rest_tuplet->setChecked(state);
+    m_use_duration_hemidemisemi_rest_tuplet->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllDuration(bool state)
+{
+    slotUseAllBreve(state);
+    slotUseAllSemiBreve(state);
+    slotUseAllMinim(state);
+    slotUseAllCrotchet(state);
+    slotUseAllQuaver(state);
+    slotUseAllSemiQuaver(state);
+    slotUseAllDemiSemi(state);
+    slotUseAllHemiDemiSemi(state);
+    slotUseAllNormal(state);
+    slotUseAllDotted(state);
+    slotUseAllDoubleDotted(state);
+    slotUseAllTuplet(state);
+    slotUseAllRestNormal(state);
+    slotUseAllRestDotted(state);
+    slotUseAllRestDoubleDotted(state);
+    slotUseAllRestTuplet(state);
+}
+
+
+} // namespace
 
 #include "SelectDialog.moc"
