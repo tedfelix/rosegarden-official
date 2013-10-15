@@ -189,7 +189,7 @@ protected:
     CheckButton *m_useRinforzando;    
     CheckButton *m_useTrill;          
     CheckButton *m_useLongTrill;      
-    CheckButton *m_useTrillLineMark; // the old legacy mark 
+    CheckButton *m_useTrillLineMark; // the old legacy mark; should we just skip it then? 
     CheckButton *m_useTurn;           
     CheckButton *m_usePause;          
     CheckButton *m_useUpBow;          
@@ -222,9 +222,63 @@ protected:
     CheckButton *m_useTrillLineIndication; // the improved indication       
     CheckButton *m_useFigParameterChord;
     CheckButton *m_useFiguration;            
-    CheckButton *m_useBarre;  // not implemented yet
+    CheckButton *m_useBarre;  // not implemented yet; future indication, need to plan in layout
 
-     // Symbols widgets
+    // Slashes (note property)
+    CheckButton *m_useOneSlash;
+    CheckButton *m_useTwoSlash;
+    CheckButton *m_useThreeSlash;
+    CheckButton *m_useFourSlash;
+    CheckButton *m_useFiveSlash;
+
+    // Tied-forward / Tied-back
+    // Beamed
+    //
+    // These things may be potentially useful for finding notes that have
+    // properties that are set up incorrectly, like a solitary beamed 8th note
+    // or a note that has been cut out of a tied group and still has tied
+    // properties.  Filter couldn't distinguish between good and bad properties,
+    // but what happens if you grab a group of tied notes, only some of which
+    // should be tied, collapse them, then split and tie them?  Net result
+    // probably comes out with the properties repaired, doesn't it?
+    
+    // Slur/Beam/Hairpin (to be implemented)/Phrasing Slur above/below property
+    //
+    // Any value in finding all the notes and things with up vs. down
+    // directions?  In practice, you usually use this to resolve local conflicts
+    // and/or in polyphony on one staff, and tend to apply it broadly or very
+    // narrowly.  I don't see much point in looking for stem down notes in a
+    // stem up part, although I do see a value in a new segment property "stuff
+    // goes up" "stuff goes down" that would make everything you enter in that
+    // segment take the exception automatically.
+    //
+    // Nothing to do here in the filter, I don't think.
+    
+
+    // Chord?
+    //
+    // If you could select for notes that are part of a chord, that could help
+    // resolve conflicting voices manually.  Grab all the chords, then do what
+    // with them?  Nothing pleasant.  Feature needed, and if we had the feature,
+    // it probably wouldn't need to be part of the selection process.  Just run
+    // it globally on the segment, Split Chords into Layers or something like
+    // that.  In fact, a critter like that might obviate so much of this dialog
+    // I might not want to continue the monster.  All that performance vs.
+    // display duration stuff is aimed at picking off the melody and bass notes
+    // in something like Romanza.  Right, and when I think about the split
+    // chords into layers function, I realize how hard it is to do something
+    // sensible with that, and I'm not likely to attempt it.  You have to work
+    // out what goes where, which is harder than it sounds, and you don't want
+    // to create an excessive number of layers.
+    //
+    // Even so, resolving Romanza manually, I don't think it would have been
+    // terribly useful to be able to pick out the chords.  It would be more
+    // useful to pick the 8. that were really half notes in performance
+    // duration.
+    //
+    // No handling of chords then.  Not unless there's a better argument for it.
+
+    // Symbols widgets
 
     CheckButton *m_useSegno;
     CheckButton *m_useCoda;
