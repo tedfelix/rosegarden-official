@@ -56,4 +56,5 @@ namespace Rosegarden
     const char* const CollapsingFrameConfigGroup = "CollapsingFrame";
     const char* const PitchBendSequenceConfigGroup = "PitchBendSequence";
     const char* const CheckButtonConfigGroup = "CheckButton_Memory";
+    const char* const SelectDialogConfigGroup = "SelectDialog_Memory";
 }

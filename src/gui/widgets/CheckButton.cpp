@@ -27,17 +27,17 @@ namespace Rosegarden
 {
 
 
-CheckButton::CheckButton(QString iconName, bool wantMemoryFunction,  QWidget *parent) :
+CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
     QPushButton(parent),
     m_iconName(iconName),
-    m_wantMemoryFunction(wantMemoryFunction)
+    m_wantsMemory(wantsMemory)
 {
     setFixedSize(QSize(32,32));
     setIconSize(QSize(32,32));
     setCheckable(true);
     setIcon(IconLoader().load(m_iconName));
 
-    if (m_wantMemoryFunction) { 
+    if (m_wantsMemory) { 
         RG_DEBUG << "CheckButton: recall for: " << iconName << endl;
         // Memory recall
         QSettings settings;
@@ -64,7 +64,7 @@ CheckButton::~CheckButton()
 void
 CheckButton::toggle(bool state)
 {
-    if (m_wantMemoryFunction) {
+    if (m_wantsMemory) {
         // Memory storage
         RG_DEBUG << "CheckButton, storing value of " << m_iconName << " as: " << state << endl;
         QSettings settings;

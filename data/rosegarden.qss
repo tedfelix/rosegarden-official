@@ -1373,9 +1373,9 @@ QInputDialog QPushButton:pressed,
 QPushButton::checked,
 #RosegardenParameterArea QPushButton::pressed
 {
-    border: 1px solid #E0E0E0;
-    border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
+    border: 1px solid #AAAAAA;
+    border-radius: 2px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0EA, stop:1 #BBCFFF);
 }
 
 

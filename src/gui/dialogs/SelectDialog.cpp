@@ -33,7 +33,8 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QToolButton>
+#include <QCheckBox>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -75,6 +76,18 @@ SelectDialog::~SelectDialog()
 }
 
 void
+SelectDialog::accept()
+{
+    // Memory for the widgets that don't manage their own
+    QSettings settings;
+    settings.beginGroup(SelectDialogConfigGroup);
+    settings.setValue("include_short_performance_durations", m_include_shorter_performance_durations->isChecked());
+    settings.setValue("include_long_performance_durations", m_include_longer_performance_durations->isChecked());
+    settings.endGroup();
+    QDialog::accept();
+}
+
+void
 SelectDialog::help()
 {
     // TRANSLATORS: if the manual is translated into your language, you can
@@ -92,6 +105,8 @@ SelectDialog::makeDurationTab()
     // button grid
     QGridLayout *grid = new QGridLayout();
     m_durationTab = new QWidget();
+    // pad the grid a slight amount horizontally so the labels don't get cut off
+    grid->setHorizontalSpacing(15);
     m_durationTab->setLayout(grid);
 
     // breve buttons
@@ -355,10 +370,63 @@ SelectDialog::makeDurationTab()
     grid->addWidget(m_use_everything, 8, 8);
 
     // performance durations are [longer|shorter] combo &c
+    grid->addWidget(new QLabel(tr("Include notes with shorter performance durations")), 9, 0, 1, 7);
+    m_include_shorter_performance_durations = new QCheckBox();
+    grid->addWidget(m_include_shorter_performance_durations, 9, 8);
+
+    grid->addWidget(new QLabel(tr("Include notes with longer performance durations")), 10, 0, 1, 7);
+    m_include_longer_performance_durations = new QCheckBox();
+    grid->addWidget(m_include_longer_performance_durations, 10, 8);
+
+    
+
+    // memory for the widgets who don't manage their own
+    QSettings settings;
+    settings.beginGroup(SelectDialogConfigGroup);
+    m_include_shorter_performance_durations->setChecked(settings.value("include_short_performance_durations", true).toBool());
+    m_include_longer_performance_durations->setChecked(settings.value("include_long_performance_durations", true).toBool());
+    settings.endGroup();
+
+    // connect the use_all buttons
+    connect(m_use_all_breves, SIGNAL(toggled(bool)), SLOT(slotUseAllBreve(bool)));
 
   
 }
 
+void
+SelectDialog::slotUseAllBreve(bool state)
+{
+    m_use_duration_breve->setChecked(state);
+    m_use_duration_breve_dotted->setChecked(state);
+    m_use_duration_breve_double_dotted->setChecked(state);
+    m_use_duration_breve_tuplet->setChecked(state);
+    m_use_duration_breve_rest->setChecked(state);
+    m_use_duration_breve_dotted_rest->setChecked(state);
+    m_use_duration_breve_double_dotted_rest->setChecked(state);
+    m_use_duration_breve_rest_tuplet->setChecked(state);
+}
+
+/*
+    void slotUseAllBreve;
+    void slotUseAllSemibreve;
+    void slotUseAllMinim;
+    void slotUseAllCrotchet;
+    void slotUseAllQuaver;
+    void slotUseAllSemiQuaver;
+    void slotUseAllDemiSemi;
+    void slotUseAllHemiDemiSemi;
+
+    void slotUseAllNormal;
+    void slotUseAllDotted;
+    void slotUseAllDoubleDotted;
+    void slotUseAllTuplet;
+    void slotUseAllRestNormal;
+    void slotUseAllRestDotted;
+    void slotUseAllRestDoubleDotted;
+    void slotUseAllRestTuplet;
+
+    void slotUseAllDuration;
+*/
 
 }
 
