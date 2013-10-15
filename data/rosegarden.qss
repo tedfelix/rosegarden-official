@@ -1350,7 +1350,7 @@ QGroupBox QPushButton:hover,
     border: 1px solid #AAAAAA;
     border-radius: 3px;
 /*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
-    background-color: #CCDFFF;
+    background-color: #DDEFFF;
     color: #000000;
 /*    min-width: 60px;*/
 }

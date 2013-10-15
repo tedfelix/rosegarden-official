@@ -39,11 +39,14 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
 
     if (m_wantsMemory) { 
         RG_DEBUG << "CheckButton: recall for: " << iconName << endl;
-        // Memory recall
+        // memory recall
         QSettings settings;
         settings.beginGroup(CheckButtonConfigGroup);
         setChecked(settings.value(m_iconName, true).toBool());
         settings.endGroup();
+    } else {
+        // buttons without memory default to checked
+        setChecked(true);
     }
 
     connect(this, SIGNAL(toggled(bool)), this, SLOT(toggle(bool)));

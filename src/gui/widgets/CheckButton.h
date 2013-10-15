@@ -49,6 +49,9 @@ public:
      * its last state automatically.  Created for SelectDialog, be aware that if
      * you use CheckButton in some other context, and happen to use the same
      * icon as was used there, then terrible confusion could result.
+     *
+     * Buttons that don't take the memory effect are always created in a checked
+     * state initially.
      */
     CheckButton(QString iconName, bool wantsMemory = true,  QWidget *parent = 0);
 
