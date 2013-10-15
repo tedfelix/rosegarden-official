@@ -39,7 +39,8 @@ private:
     QString m_iconName;
     bool m_wantMemoryFunction;
 
-    void toggle();
+protected slots:
+    void toggle(bool state);
 
 public:
     /**Creates a checkable QPushButton, using IconLoader to load the named icon

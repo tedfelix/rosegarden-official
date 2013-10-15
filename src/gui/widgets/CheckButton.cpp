@@ -37,7 +37,8 @@ CheckButton::CheckButton(QString iconName, bool wantMemoryFunction,  QWidget *pa
     setCheckable(true);
     setIcon(IconLoader().load(m_iconName));
 
-    if (m_wantMemoryFunction) {
+    if (m_wantMemoryFunction) { 
+        RG_DEBUG << "CheckButton: recall for: " << iconName << endl;
         // Memory recall
         QSettings settings;
         settings.beginGroup(CheckButtonConfigGroup);
@@ -45,8 +46,9 @@ CheckButton::CheckButton(QString iconName, bool wantMemoryFunction,  QWidget *pa
         settings.endGroup();
     }
 
+    connect(this, SIGNAL(toggled(bool)), this, SLOT(toggle(bool)));
+
     // thinking out loud...
-    //
     // since I'm subclassing anyway, I might add the ability to make a master
     // toggle button that keeps track of children and switches them all on or
     // off at once, else I'll have 8+ switch this when that switches slots with
@@ -60,18 +62,16 @@ CheckButton::~CheckButton()
 }
 
 void
-CheckButton::toggle()
+CheckButton::toggle(bool state)
 {
     if (m_wantMemoryFunction) {
         // Memory storage
+        RG_DEBUG << "CheckButton, storing value of " << m_iconName << " as: " << state << endl;
         QSettings settings;
         settings.beginGroup(CheckButtonConfigGroup);
-        settings.setValue(m_iconName, isChecked());
+        settings.setValue(m_iconName, state);
         settings.endGroup();
     }
-
-    // Complete the toggle action?
-//    QPushButton::toggle();
 }
 
 
