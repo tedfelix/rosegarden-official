@@ -47,6 +47,16 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
     } else {
         // buttons without memory default to checked
         setChecked(true);
+
+        // and do not display themselves any differently when they're checked,
+        // since it's just the colored bit being in a strange state that
+        // disconcerts the eye, and the functionality is actually pretty
+        // reasonable (compared to the one row of buttons I actually hooked up
+        // to some convoluted state monitoring gobbledegook, which I
+        // subsequently dumped, because it was massively complicated without
+        // really improving the user experience any)
+        QString localStyle("border: 1px solid #AAAAAA; border-radius: 3px; background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD); color: #000000; padding: 0 5px 0 5px;");
+        setStyleSheet(localStyle);
     }
 
     connect(this, SIGNAL(toggled(bool)), this, SLOT(toggle(bool)));
@@ -55,9 +65,7 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
     // since I'm subclassing anyway, I might add the ability to make a master
     // toggle button that keeps track of children and switches them all on or
     // off at once, else I'll have 8+ switch this when that switches slots with
-    // lots of things to keep track of manually
-    //
-    // QButtonGroup looks useful
+    // lots of things to keep track of manually  <-- did that...  it sucked
 }
 
 CheckButton::~CheckButton()
