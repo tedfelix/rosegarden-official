@@ -169,6 +169,191 @@ protected:
     QCheckBox *m_include_shorter_performance_durations;
     QCheckBox *m_include_longer_performance_durations;
 
+
+    // marks etc. probably want to be the very back tab, of least importance,
+    // but I'm getting into them next because they're most similar to the
+    // durations I just did
+    //
+    // Marks widgets
+
+    CheckButton *m_useAccent;         
+    CheckButton *m_useTenuto;         
+    CheckButton *m_useStaccato;       
+    CheckButton *m_useStaccatissimo;  
+    CheckButton *m_useMarcato;        
+    CheckButton *m_useOpen;           
+    CheckButton *m_useStopped;        
+    CheckButton *m_useHarmonic;       
+
+    CheckButton *m_useSforzando;      
+    CheckButton *m_useRinforzando;    
+    CheckButton *m_useTrill;          
+    CheckButton *m_useLongTrill;      
+    CheckButton *m_useTrillLineMark; // the old legacy mark 
+    CheckButton *m_useTurn;           
+    CheckButton *m_usePause;          
+    CheckButton *m_useUpBow;          
+
+    CheckButton *m_useDownBow;        
+    CheckButton *m_useMordent;
+    CheckButton *m_useMordentInverted;
+    CheckButton *m_useMordentLong;
+    CheckButton *m_useMordentLongInverted;
+    CheckButton *m_useFingering;
+    CheckButton *m_useString; // not implemented yet
+    CheckButton *m_useTextMark;
+
+    // need some controls to specify what text to look for on
+    // text/strings/fingerings so we want to break up the layout here I think
+
+
+    // then put indications/symbols/oddballs in one final group
+    // Indications widgets
+    
+    CheckButton *m_useSlur;
+    CheckButton *m_usePhrasingSlur;
+    CheckButton *m_useCrescendo;
+    CheckButton *m_useDecrescendo;
+    CheckButton *m_useQuindicesimaUp;
+    CheckButton *m_useOttavaUp;
+    CheckButton *m_useOttavaDown;
+    CheckButton *m_useQuindicesimaDown;
+                        
+    CheckButton *m_useTrillLineIndication; // the improved indication       
+    CheckButton *m_useFigParameterChord;
+    CheckButton *m_useFiguration;            
+    CheckButton *m_useBarre;  // not implemented yet
+
+     // Symbols widgets
+
+    CheckButton *m_useSegno;
+    CheckButton *m_useCoda;
+    CheckButton *m_useBreath;
+
+    // Not in NotationTypes?  why?
+    CheckButton *m_useGuitarChord;
+
+    // The only notation-selectable controller events I know of; but these are
+    // particularly useful to be able to filter for, and definitely want
+    // including
+    CheckButton *m_usePedalDown;
+    CheckButton *m_usePedalUp;
+
+    // Oddballs
+    CheckButton *m_useChordNotation; // still in branch, not in NotationTypes in branch
+    CheckButton *m_useGlissando; // indication type never implemented, and likely won't be, but it's in NotationTypes
+    CheckButton *m_useQuarterFlat;
+    CheckButton *m_useThreeQuarterFlat; 
+    CheckButton *m_useQuarterSharp; 
+    CheckButton *m_useThreeQuarterSharp; 
+
+    // Accidentals; semantically this will select notes that have this showing
+    // explicitly, and not when it's merely coming from the key; possible uses,
+    // find all the Db to respell as C#
+    CheckButton *m_useSharp;
+    CheckButton *m_useFlat;
+    CheckButton *m_useNatural;
+    CheckButton *m_useDoubleSharp;
+    CheckButton *m_useDoubleFlat;
+
+
+    // Keys
+    //
+    // Lots of work to draw icons for every major and every minor key, and make
+    // it possible to tell one from the other.  Use wise, [x] Include key
+    // signatures is probably adequate.  You could wind up with them selected,
+    // so the filter could potentially do the equivalent of Select All if you
+    // have every single thing checked, but you wouldn't be able to find all the
+    // Am and convert them to C maj.  I don't think there is an automatic
+    // conversion that would work on multiple keys at multiple times anyway, so
+    // let's just go with the check box and tack it in the layout somewhere.
+    QCheckBox *m_include_key_signatures;
+
+    // Clefs
+    //
+    // We have icons for the major clef variants.  Many minor variants are
+    // specified through the presets database, like the treble 8vb guitar clef,
+    // and doing this properly would require making icons for every variant we
+    // can draw.  How often do people wish they could find all of a certain kind
+    // of clef and change it to something else?  Rarely, if ever, and this would
+    // be comparatively easy to do by hand.  Let's just go with a checkbox to
+    // [x] Include clefs and leave it at that.
+    QCheckBox *m_include_clefs;
+
+
+    // Pitch widgets
+    //
+    // How are we going to handle picking pitch?  The standard pitch picker is
+    // hard to use if you're trying to pick off all the unplayable low notes for
+    // a guitar, for example, because it shows concert pitch in a variety of
+    // clefs that change to keep the display compact.
+    //
+    // We want some controls to automatically grab notes outside the playable
+    // range, and it needs to handle the high end and low end as separate use
+    // cases.  I can't play below low F# on trumpet to save my life, but maybe I
+    // can squeak out da dubba high C and maybe I can't.
+    //
+    // [x] Include notes above playable range
+    // [x] Include notes within playable range
+    // [x] Include notes below playable range
+    // [x] Use specified pitch only
+    //
+    // Hmmmm....  The duration picker lets you pick a range here and a range
+    // there and a range somewhere else.  It would be nice to dream up a way to
+    // do the equivalent here.
+    //
+    // Also, find an absolute letter note in every octave, ie. the find all Db
+    // and respell as C# use case
+    //
+    // I really need to go to the drawing board on this.
+    //
+    // Other than the high/low range stuff, picking ranges of pitches is best
+    // done in the matrix, with the bigass piano keyboard.
+   
+
+    // Text widgets
+    //
+    // We have all those performance directions, LilyPond Directives and other
+    // such.  Those need to be includable, and potentially searchable.
+    //
+    // I have given no thought to this yet.  In practice, works out similar to
+    // text marks.  In practice, you will only be able to look for one text per
+    // run of the filter, I think, and additive selections are necessary for
+    // this overall function.  Down in the master control area somewhere:
+    //
+    // [ ] replace existing selection
+    // [*] add to existing selection 
+   
+
+    // Velocity
+    //
+    // You could have crazy control over velocity using an 8x16 grid of check
+    // buttons, each with a number.  Get 0-8, 10-15, 42, 96, 100-123 and 127,
+    // excluding everything else.  Who the hell would ever use that, and is it
+    // worth adding 153 new widgets (including the arrow buttons makes it a 9x17
+    // grid) and oceans upon oceans of code?
+    //
+    // I think not.  In practice, when I work with hand edited notation, I use
+    // the interpret function on it constantly anyway.  The new toolbar makes
+    // this even easier, and the practice is to be encouraged.  There are
+    // functions to draw velocity in different patterns.  In practice, I just
+    // don't think searching for or filtering for velocity has ever been very
+    // useful, and I think I will leave it out of this design, and see if users
+    // ever come up with use cases that convince me of the need.  In that event,
+    // I should tailor the feature to those use cases, once I have them.
+    
+
+    // Other
+    //
+    // What OTHER crap wants to be in here?  Are there enough kitchen sinks
+    // already?  I think fine duration control, fine mark/indication/symbol/etc.
+    // control, include keys, include clefs...  I think that's just about enough
+    // kitchen sinks, isn't it?
+    //
+    // I think probably so.  Put the remaining effort into designing a good way
+    // to pick pitch, and a good way of having high flexibility in looking for
+    // text bits and bobs.
+
 protected slots:
 
     void slotUseAllBreve(bool);
