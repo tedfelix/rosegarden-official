@@ -24,6 +24,7 @@ class QPushButton;
 class QTabWidget;
 class QWidget;
 class QCheckBox;
+class QRadioButton;
 
 namespace Rosegarden
 {
@@ -58,12 +59,27 @@ public slots:
 
 protected:
 
-    void makeDurationTab();
-
-    QTabWidget *m_tabWidget;
-
-    // Duration widgets
+    // Top Level Layout Widgets  ///////////////////////////////
     
+    QTabWidget *m_tabWidget;
+    
+    QRadioButton *m_replaceExistingSelection;
+    QRadioButton *m_addToExistingSelection;
+
+    // QDialogButtonBox and various QLabel and minor widgets created in ctor.
+    //
+    // global select all/none buttons would be useful, to set the check
+    // everything per tab, but can you call something on a tab that's hidden?
+
+    void makeDurationTab();
+    void makePitchTab();
+    void makeSpecialTab();
+    void makeAdvancedTab();
+
+
+    // Duration Widgets ////////////////////////////////////////////////
+
+    // a widget for the tab page
     QWidget *m_durationTab;
 
     // breve buttons
@@ -170,172 +186,10 @@ protected:
     QCheckBox *m_include_longer_performance_durations;
 
 
-    // marks etc. probably want to be the very back tab, of least importance,
-    // but I'm getting into them next because they're most similar to the
-    // durations I just did
+    // Pitch Widgets ///////////////////////////////////////////////////
     //
-    // Marks widgets
-
-    CheckButton *m_useAccent;         
-    CheckButton *m_useTenuto;         
-    CheckButton *m_useStaccato;       
-    CheckButton *m_useStaccatissimo;  
-    CheckButton *m_useMarcato;        
-    CheckButton *m_useOpen;           
-    CheckButton *m_useStopped;        
-    CheckButton *m_useHarmonic;       
-
-    CheckButton *m_useSforzando;      
-    CheckButton *m_useRinforzando;    
-    CheckButton *m_useTrill;          
-    CheckButton *m_useLongTrill;      
-    CheckButton *m_useTrillLineMark; // the old legacy mark; should we just skip it then? 
-    CheckButton *m_useTurn;           
-    CheckButton *m_usePause;          
-    CheckButton *m_useUpBow;          
-
-    CheckButton *m_useDownBow;        
-    CheckButton *m_useMordent;
-    CheckButton *m_useMordentInverted;
-    CheckButton *m_useMordentLong;
-    CheckButton *m_useMordentLongInverted;
-    CheckButton *m_useFingering;
-    CheckButton *m_useString; // not implemented yet
-    CheckButton *m_useTextMark;
-
-    // need some controls to specify what text to look for on
-    // text/strings/fingerings so we want to break up the layout here I think
-
-
-    // then put indications/symbols/oddballs in one final group
-    // Indications widgets
-    
-    CheckButton *m_useSlur;
-    CheckButton *m_usePhrasingSlur;
-    CheckButton *m_useCrescendo;
-    CheckButton *m_useDecrescendo;
-    CheckButton *m_useQuindicesimaUp;
-    CheckButton *m_useOttavaUp;
-    CheckButton *m_useOttavaDown;
-    CheckButton *m_useQuindicesimaDown;
-                        
-    CheckButton *m_useTrillLineIndication; // the improved indication       
-    CheckButton *m_useFigParameterChord;
-    CheckButton *m_useFiguration;            
-    CheckButton *m_useBarre;  // not implemented yet; future indication, need to plan in layout
-
-    // Slashes (note property)
-    CheckButton *m_useOneSlash;
-    CheckButton *m_useTwoSlash;
-    CheckButton *m_useThreeSlash;
-    CheckButton *m_useFourSlash;
-    CheckButton *m_useFiveSlash;
-
-    // Tied-forward / Tied-back
-    // Beamed
     //
-    // These things may be potentially useful for finding notes that have
-    // properties that are set up incorrectly, like a solitary beamed 8th note
-    // or a note that has been cut out of a tied group and still has tied
-    // properties.  Filter couldn't distinguish between good and bad properties,
-    // but what happens if you grab a group of tied notes, only some of which
-    // should be tied, collapse them, then split and tie them?  Net result
-    // probably comes out with the properties repaired, doesn't it?
-    
-    // Slur/Beam/Hairpin (to be implemented)/Phrasing Slur above/below property
-    //
-    // Any value in finding all the notes and things with up vs. down
-    // directions?  In practice, you usually use this to resolve local conflicts
-    // and/or in polyphony on one staff, and tend to apply it broadly or very
-    // narrowly.  I don't see much point in looking for stem down notes in a
-    // stem up part, although I do see a value in a new segment property "stuff
-    // goes up" "stuff goes down" that would make everything you enter in that
-    // segment take the exception automatically.
-    //
-    // Nothing to do here in the filter, I don't think.
-    
-
-    // Chord?
-    //
-    // If you could select for notes that are part of a chord, that could help
-    // resolve conflicting voices manually.  Grab all the chords, then do what
-    // with them?  Nothing pleasant.  Feature needed, and if we had the feature,
-    // it probably wouldn't need to be part of the selection process.  Just run
-    // it globally on the segment, Split Chords into Layers or something like
-    // that.  In fact, a critter like that might obviate so much of this dialog
-    // I might not want to continue the monster.  All that performance vs.
-    // display duration stuff is aimed at picking off the melody and bass notes
-    // in something like Romanza.  Right, and when I think about the split
-    // chords into layers function, I realize how hard it is to do something
-    // sensible with that, and I'm not likely to attempt it.  You have to work
-    // out what goes where, which is harder than it sounds, and you don't want
-    // to create an excessive number of layers.
-    //
-    // Even so, resolving Romanza manually, I don't think it would have been
-    // terribly useful to be able to pick out the chords.  It would be more
-    // useful to pick the 8. that were really half notes in performance
-    // duration.
-    //
-    // No handling of chords then.  Not unless there's a better argument for it.
-
-    // Symbols widgets
-
-    CheckButton *m_useSegno;
-    CheckButton *m_useCoda;
-    CheckButton *m_useBreath;
-
-    // Not in NotationTypes?  why?
-    CheckButton *m_useGuitarChord;
-
-    // The only notation-selectable controller events I know of; but these are
-    // particularly useful to be able to filter for, and definitely want
-    // including
-    CheckButton *m_usePedalDown;
-    CheckButton *m_usePedalUp;
-
-    // Oddballs
-    CheckButton *m_useChordNotation; // still in branch, not in NotationTypes in branch
-    CheckButton *m_useGlissando; // indication type never implemented, and likely won't be, but it's in NotationTypes
-    CheckButton *m_useQuarterFlat;
-    CheckButton *m_useThreeQuarterFlat; 
-    CheckButton *m_useQuarterSharp; 
-    CheckButton *m_useThreeQuarterSharp; 
-
-    // Accidentals; semantically this will select notes that have this showing
-    // explicitly, and not when it's merely coming from the key; possible uses,
-    // find all the Db to respell as C#
-    CheckButton *m_useSharp;
-    CheckButton *m_useFlat;
-    CheckButton *m_useNatural;
-    CheckButton *m_useDoubleSharp;
-    CheckButton *m_useDoubleFlat;
-
-
-    // Keys
-    //
-    // Lots of work to draw icons for every major and every minor key, and make
-    // it possible to tell one from the other.  Use wise, [x] Include key
-    // signatures is probably adequate.  You could wind up with them selected,
-    // so the filter could potentially do the equivalent of Select All if you
-    // have every single thing checked, but you wouldn't be able to find all the
-    // Am and convert them to C maj.  I don't think there is an automatic
-    // conversion that would work on multiple keys at multiple times anyway, so
-    // let's just go with the check box and tack it in the layout somewhere.
-    QCheckBox *m_include_key_signatures;
-
-    // Clefs
-    //
-    // We have icons for the major clef variants.  Many minor variants are
-    // specified through the presets database, like the treble 8vb guitar clef,
-    // and doing this properly would require making icons for every variant we
-    // can draw.  How often do people wish they could find all of a certain kind
-    // of clef and change it to something else?  Rarely, if ever, and this would
-    // be comparatively easy to do by hand.  Let's just go with a checkbox to
-    // [x] Include clefs and leave it at that.
-    QCheckBox *m_include_clefs;
-
-
-    // Pitch widgets
+    // Pitch stuff goes in here.  I haven't got a plan for this yet.
     //
     // How are we going to handle picking pitch?  The standard pitch picker is
     // hard to use if you're trying to pick off all the unplayable low notes for
@@ -363,50 +217,204 @@ protected:
     //
     // Other than the high/low range stuff, picking ranges of pitches is best
     // done in the matrix, with the bigass piano keyboard.
-   
+    //
+    ///////////////////////////////////////////////////////////////////
 
-    // Text widgets
-    //
-    // We have all those performance directions, LilyPond Directives and other
-    // such.  Those need to be includable, and potentially searchable.
-    //
-    // I have given no thought to this yet.  In practice, works out similar to
-    // text marks.  In practice, you will only be able to look for one text per
-    // run of the filter, I think, and additive selections are necessary for
-    // this overall function.  Down in the master control area somewhere:
-    //
-    // [ ] replace existing selection
-    // [*] add to existing selection 
-   
+    // a widget for the tab page
+    QWidget *m_pitchTab;
 
-    // Velocity
+
+
+    // Special Widgets /////////////////////////////////////////////////
     //
-    // You could have crazy control over velocity using an 8x16 grid of check
-    // buttons, each with a number.  Get 0-8, 10-15, 42, 96, 100-123 and 127,
-    // excluding everything else.  Who the hell would ever use that, and is it
-    // worth adding 153 new widgets (including the arrow buttons makes it a 9x17
-    // grid) and oceans upon oceans of code?
+    // This page lumps together everything that can't be selected by a pitch or
+    // a duration, including note properties and all manner of special kinds of
+    // events that aren't notes at all (guitar chords, indications, symbols,
+    // etc.)
+
+    // a widget for the tab page
+    QWidget *m_specialTab;
+
+    //** == NEEDS ICON
+
+    // row 1
+    CheckButton *m_useAccent;         
+    CheckButton *m_useTenuto;         
+    CheckButton *m_useStaccato;       
+    CheckButton *m_useStaccatissimo;  
+    CheckButton *m_useMarcato;        
+    CheckButton *m_useOpen;           
+    CheckButton *m_useStopped;        
+    CheckButton *m_useHarmonic;
+    CheckButton *m_useRow1; // left arrow button
+
+
+    // row 2
+    CheckButton *m_useUpBow;          
+    CheckButton *m_useDownBow;        
+    CheckButton *m_useOneSlash;
+    CheckButton *m_useTwoSlash;
+    CheckButton *m_useThreeSlash;
+    CheckButton *m_useFourSlash;
+    CheckButton *m_useFiveSlash;
+    CheckButton *m_useSforzando;      
+    CheckButton *m_useRinforzando;    
+    CheckButton *m_useRow2; // left arrow button
+
+
+    // row 3
+    CheckButton *m_useTrill;          
+    CheckButton *m_useTrillLineIndication; // the improved indication       
+    CheckButton *m_useTurn;           
+    CheckButton *m_useMordent;
+    CheckButton *m_useMordentInverted;
+    CheckButton *m_useMordentLong;
+    CheckButton *m_useMordentLongInverted;
+    CheckButton *m_useCrescendo;
+    CheckButton *m_useDecrescendo;
+    CheckButton *m_useRow3; // left arrow button
+
+
+    // row 4
+    CheckButton *m_useSlur;
+    CheckButton *m_usePhrasingSlur;     //**
+    CheckButton *m_useQuindicesimaUp;   //**
+    CheckButton *m_useOttavaUp;
+    CheckButton *m_useOttavaDown;       //**
+    CheckButton *m_useQuindicesimaDown; //**
+    CheckButton *m_useSegno;
+    CheckButton *m_useCoda;
+    CheckButton *m_useBreath;
+    CheckButton *m_useRow4; // left arrow button
+
+
+    // row 5
+    CheckButton *m_usePedalDown;
+    CheckButton *m_usePedalUp;
+    CheckButton *m_useNoAccidental;
+    CheckButton *m_useNatural;
+    CheckButton *m_useSharp;
+    CheckButton *m_useDoubleSharp;
+    CheckButton *m_useFlat;
+    CheckButton *m_useDoubleFlat;
+    CheckButton *m_usePause;          
+    CheckButton *m_useRow5; // left arrow button
+
+
+    // row 6
+    CheckButton *m_useGuitarChord;
+    CheckButton *m_useTextEvents;
+    CheckButton *m_useFingering;        //**
+    CheckButton *m_useTextMark;
+    // ChordEvent  *
+    // Barre        *____ all sort of semantically related; close enough
+    // String       *
+    // PIMA        *
+    CheckButton *m_useRow6; // left arrow button
+
+    // row 7
+    // semantics for lower row up arrow buttons don't make sense, except this:
+    CheckButton *m_useAllSpecial; // up arrow button (row 7 col 9)
+
+
+    // Advanced Widgets ////////////////////////////////////////////////
     //
-    // I think not.  In practice, when I work with hand edited notation, I use
-    // the interpret function on it constantly anyway.  The new toolbar makes
-    // this even easier, and the practice is to be encouraged.  There are
-    // functions to draw velocity in different patterns.  In practice, I just
-    // don't think searching for or filtering for velocity has ever been very
-    // useful, and I think I will leave it out of this design, and see if users
-    // ever come up with use cases that convince me of the need.  In that event,
-    // I should tailor the feature to those use cases, once I have them.
+    // This page is a big collection of check boxes for special properties, text
+    // types, and so forth, that can't realistically be represented by icon
+    // buttons, but are worth being able to dial in.  Potential uses consist of
+    // an abundance of wild but credible edge cases.
     
+    // a widget for the tab page
+    QWidget *m_advancedTab;
+    
+    QCheckBox *m_include_key_signatures;
+    QCheckBox *m_include_clefs;
+    QCheckBox *m_include_tied_forward;
+    QCheckBox *m_include_tied_back;
+    QCheckBox *m_include_is_beamed;
+    QCheckBox *m_include_is_grace; //!! pay some special attention to grace notes
+    QCheckBox *m_text_is_UnspecifiedType;
+    QCheckBox *m_text_is_StaffName;
+    QCheckBox *m_text_is_ChordName;
+    QCheckBox *m_text_is_KeyName;
+    QCheckBox *m_text_is_Lyric;
+    QCheckBox *m_text_is_Chord;
+    QCheckBox *m_text_is_Dynamic;
+    QCheckBox *m_text_is_Direction;
+    QCheckBox *m_text_is_LocalDirection;
+    QCheckBox *m_text_is_Tempo;
+    QCheckBox *m_text_is_LocalTempo;
+    QCheckBox *m_text_is_Annotation;
+    QCheckBox *m_text_is_LilyPondDirective;
 
-    // Other
+    //TODO - this definitely needs a master toggle switch for everything on the
+    // page; probably a QCheckButton down in the lower right corner or
+    // something, but let's get it farther along before figuring that out
+
+
+    // The Island of Misfit Toys ///////////////////////////////////////
     //
-    // What OTHER crap wants to be in here?  Are there enough kitchen sinks
-    // already?  I think fine duration control, fine mark/indication/symbol/etc.
-    // control, include keys, include clefs...  I think that's just about enough
-    // kitchen sinks, isn't it?
+    // ChordEvent is coming in from Niek's branch eventually, and will
+    // definitely be supported.
     //
-    // I think probably so.  Put the remaining effort into designing a good way
-    // to pick pitch, and a good way of having high flexibility in looking for
-    // text bits and bobs.
+    // I plan to add a new barré indication, string [ (1) (2) ... ] marks, and
+    // picking marks [ p i m a x ] in the near future, and they will be worked
+    // in.
+    //
+    // ParameterChord and Figuration represent something Tom Breton said only
+    // 2-3 people use, something obscure and impossible to figure out by
+    // accident, and something available for selection through the EventList
+    // event filter.  I think we'll skip those.
+    //
+    // Glissando exists in NotationTypes for some reason, but probably never
+    // will exist.  If it ever does, it should be included.
+    //
+    // Quartertone accidentals?  Meh.
+    //
+//    CheckButton *m_useFigParameterChord;
+//    CheckButton *m_useFiguration;            
+//    CheckButton *m_useBarre;  // not implemented yet; future indication, need to plan in layout
+//    CheckButton *m_useTrillLineMark; // the old legacy mark; should we just skip it then? 
+//    CheckButton *m_useString; // not implemented yet
+//    CheckButton *m_useChordNotation; // still in branch, not in NotationTypes in branch
+//    CheckButton *m_useGlissando; // indication type never implemented, and likely won't be, but it's in NotationTypes
+//    CheckButton *m_useQuarterFlat; // how do you even use these quarter tone accidentals?
+//    CheckButton *m_useThreeQuarterFlat; 
+//    CheckButton *m_useQuarterSharp; 
+//    CheckButton *m_useThreeQuarterSharp;
+//    CheckButton *m_useLongTrill;  // not in GUI, totally obsolete I think
+//
+//    Notes in Chords
+//    We could check to see if notes are part of a chord and let you pick notes
+//    that are or are not inside a chord.  This doesn't sound so useful, so I'm
+//    tossing the idea down here.
+//
+//    Velocity
+//    The original idea came from Cakewalk's event filter.  I don't think it's
+//    very useful in practice, and I'm not implementing it at this time.
+//
+//    Grace Notes
+//    I haven't really thought about them in this.  I'm pretty much about going
+//    to have to build this entire thing and play with it to see how they
+//    behave, and what it needs from there.  A special case to consider for a
+//    future revision.
+//
+
+
+    // Implementation notes:
+    //
+    // Accidentals; semantically this will select notes that have this showing
+    // explicitly, and not when it's merely coming from the key; possible uses,
+    // find all the Db to respell as C#
+    //
+    // Link useTextEvents to the check boxes offering up text types.  If the T
+    // icon is checked, the text types are available for checking.  This is
+    // problematic now that the check boxes are going on a different page.
+    //
+    // I'm thinking about semantics for the accidentals buttons.  You have 4.
+    // checked, it's going to select a note of 4. duration when it finds one.
+    // If you have n # x b bb checked
+
 
 protected slots:
 

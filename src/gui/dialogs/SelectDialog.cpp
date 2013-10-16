@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QSettings>
+#include <QRadioButton>
 
 
 namespace Rosegarden
@@ -60,9 +61,32 @@ SelectDialog::SelectDialog(QWidget *parent) :
     makeDurationTab();
     m_tabWidget->addTab(m_durationTab, tr("Duration"));
 
+    // create pitch tab
+    makePitchTab();
+    m_tabWidget->addTab(m_pitchTab, tr("Pitch"));
+
+    // create special tab
+    makeSpecialTab();
+    m_tabWidget->addTab(m_specialTab, tr("Special"));
+
+    // create advanced tab
+    makeAdvancedTab();
+    m_tabWidget->addTab(m_advancedTab, tr("Advanced"));
+
     // primary buttons
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     layout->addWidget(buttonBox);
+
+    // if there WAS an existing selection
+    //
+    // need memory in QSettings
+    //
+    // need proper layout
+    m_replaceExistingSelection = new QRadioButton(tr("Replace existing selection"));
+    m_addToExistingSelection = new QRadioButton(tr("Extend existing selection"));
+    layout->addWidget(m_replaceExistingSelection);
+    layout->addWidget(m_addToExistingSelection);
+
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -98,6 +122,7 @@ SelectDialog::help()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 
+// Duration Tab /////////////////////////////////////////////////////////////////
 void
 SelectDialog::makeDurationTab()
 {
@@ -368,7 +393,6 @@ SelectDialog::makeDurationTab()
     m_use_all_duration = new CheckButton("golden-arrow-left-up", false);
     grid->addWidget(m_use_all_duration, 8, 8);
 
-    // performance durations are [longer|shorter] combo &c
     grid->addWidget(new QLabel(tr("Include notes with shorter performance durations")), 9, 0, 1, 7);
     m_include_shorter_performance_durations = new QCheckBox();
     grid->addWidget(m_include_shorter_performance_durations, 9, 8);
@@ -641,6 +665,48 @@ SelectDialog::slotUseAllDuration(bool state)
     slotUseAllRestTuplet(state);
 }
 
+
+// Pitch Tab ////////////////////////////////////////////////////////////////////
+void
+SelectDialog::makePitchTab()
+{
+    // button grid
+    QGridLayout *grid = new QGridLayout();
+    m_pitchTab = new QWidget();
+    // pad the grid a slight amount horizontally so the labels don't get cut off
+    grid->setHorizontalSpacing(15);
+    m_pitchTab->setLayout(grid);
+
+    grid->addWidget(new QLabel("My creator has so little clue what form I shall take that he isn't sure whether I'll even have a grid layout yet.  Joy joy."), 1, 1);
+}
+
+// Special Tab //////////////////////////////////////////////////////////////////
+void
+SelectDialog::makeSpecialTab()
+{
+    // button grid
+    QGridLayout *grid = new QGridLayout();
+    m_specialTab = new QWidget();
+    // pad the grid a slight amount horizontally so the labels don't get cut off
+    grid->setHorizontalSpacing(15);
+    m_specialTab->setLayout(grid);
+
+    grid->addWidget(new QLabel("I'm the future Special tab!  I will have lots of widgets!"), 1, 1);
+}
+
+// Advanced Tab /////////////////////////////////////////////////////////////////
+void
+SelectDialog::makeAdvancedTab()
+{
+    // button grid
+    QGridLayout *grid = new QGridLayout();
+    m_advancedTab = new QWidget();
+    // pad the grid a slight amount horizontally so the labels don't get cut off
+    grid->setHorizontalSpacing(15);
+    m_advancedTab->setLayout(grid);
+
+    grid->addWidget(new QLabel("I'm the future Advanced tab!  Look at me!"), 1, 1);
+}
 
 } // namespace
 
