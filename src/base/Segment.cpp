@@ -843,6 +843,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     timeT segmentEndTime = m_endTime;
 
+    // Begin iterator.
     iterator ia = findNearestTime(startTime);
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
@@ -863,6 +864,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
         }
     }
 
+    // End iterator.
     iterator ib = findTime(endTime);
     while (ib != end()) {
         if ((*ib)->isa(Note::EventType) ||
@@ -908,6 +910,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
         }
     }
 
+    // For each event within the adjusted range, erase each rest.
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
         ++j;
         if ((*i)->isa(Note::EventRestType) &&
@@ -935,8 +938,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     // the one ending sooner.  Each time an event ends, we start
     // a candidate gap.
 
-    std::vector<std::pair<timeT, timeT> > gaps;
-
     timeT lastNoteStarts = startTime;
     timeT lastNoteEnds = startTime;
 
@@ -957,9 +958,10 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
         lastNoteEnds = lastNoteStarts;
     }
 
-    iterator i = ia;
+    std::vector<std::pair<timeT, timeT> > gaps;
 
-    for (; i != ib && i != end(); ++i) {
+    // For each event, add any gaps to the gaps vector.
+    for (iterator i = ia; i != ib && i != end(); ++i) {
 
         // Boundary events for sets of rests may be notes (obviously),
         // text events (because they need to be "attached" to
@@ -1019,6 +1021,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     timeT duration;
 
+    // For each gap, fill it in with rests.
     for (size_t gi = 0; gi < gaps.size(); ++gi) {
 
 #ifdef DEBUG_NORMALIZE_RESTS
