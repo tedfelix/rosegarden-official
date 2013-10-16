@@ -165,12 +165,13 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
 {
     const Segment::const_iterator baseSegmentItr = m_originalSegment.find(e);
     
-    // Sanity Check
-    if (baseSegmentItr == m_originalSegment.end()) {
-        RG_DEBUG << "EventSelection::addRemoveEvent Sent event that can not be found "
-                  << "in segment.  Exiting method";
-        return;    
-    }
+    //if (baseSegmentItr == m_originalSegment.end()) {
+    //    RG_DEBUG << "EventSelection::addRemoveEvent(): "
+    //             << "Sent event that can not be found in original segment.";
+        // Note: This is perfectly ok.  The rest of the code checks
+        //       baseSegmentIter to make sure it is valid before using
+        //       it.
+    //}
 
     timeT eventDuration = e->getDuration();
     if (eventDuration == 0) eventDuration = 1;
@@ -451,6 +452,18 @@ EventSelection::segmentDeleted(const Segment *)
               */
 }
 
+void
+EventSelection::dump() const
+{
+    RG_DEBUG << "EventSelection::dump()";
+    RG_DEBUG << "  m_beginTime: " << m_beginTime;
+    RG_DEBUG << "  m_endTime: " << m_endTime;
+    RG_DEBUG << "  m_haveRealStartTime: " << m_haveRealStartTime;
+}
+
+
+/** SegmentSelection **/
+
 bool SegmentSelection::hasNonAudioSegment() const
 {
     for (const_iterator i = begin(); i != end(); ++i) {
@@ -459,6 +472,7 @@ bool SegmentSelection::hasNonAudioSegment() const
     }
     return false;
 }
+
 
 /** Templates that define methods of TimewiseSelection **/
 
@@ -541,6 +555,7 @@ TimeSignatureSelection::AddToComposition(Composition *composition)
     }    
 }
 
+
 /** Methods of TempoSelection **/
 
 TempoSelection::TempoSelection() { }
@@ -612,6 +627,7 @@ TempoSelection::AddToComposition(Composition *composition)
     }
 }
 
+
 /** Methods of template helper MarkerElementInfo **/
 
 void
@@ -633,6 +649,7 @@ AddToComposition(Composition *composition,
 // Explicit template instantiation, so other cpp files don't need to
 // see the method definitions.
 template class TimewiseSelection<MarkerElementInfo>;
+
 
 /** Methods of MarkerSelection **/
 

@@ -4756,6 +4756,7 @@ NotationView::slotTransformsNormalizeRests()
 
     if (!selection)
         return ;
+
     TmpStatusMsg msg(tr("Normalizing rests..."), this);
 
     CommandHistory::getInstance()->

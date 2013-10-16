@@ -165,6 +165,9 @@ public:
     virtual void endMarkerTimeChanged(const Segment *, bool) { }
     virtual void segmentDeleted(const Segment *);
     
+    // Debug
+    void dump() const;
+
 private:
     EventSelection &operator=(const EventSelection &);
   
