@@ -283,7 +283,12 @@ PasteEventsCommand::modifySegment()
             m_pastedEvents.push_back(e);
         }
 
-        destination->normalizeRests(pasteTime, pasteTime + duration);
+//        destination->normalizeRests(pasteTime, pasteTime + duration);
+ 
+        // We ran the normalizeRests() calls like this as far back as I can go
+        // in history, and since normalizeRests() has been implicated in a
+        // string of recent paste bugs, we're going with the historical version: 
+        destination->normalizeRests(source->getStartTime(), source->getEndTime());
 
         return ;
     }
@@ -301,7 +306,13 @@ PasteEventsCommand::modifySegment()
         m_pastedEvents.push_back(e);
     }
 
-    destination->normalizeRests(pasteTime, pasteTime + duration);
+//    destination->normalizeRests(pasteTime, pasteTime + duration);
+
+
+    // We ran the normalizeRests() calls like this as far back as I can go
+    // in history, and since normalizeRests() has been implicated in a
+    // string of recent paste bugs, we're going with the historical version: 
+    destination->normalizeRests(source->getStartTime(), source->getEndTime());
 }
 
 EventSelection *
