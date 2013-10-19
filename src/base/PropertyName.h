@@ -43,13 +43,13 @@ namespace Rosegarden
     };
 
     struct PropertyNameHash {
-      static std::hash<const char *> _H;
+      static std::hash<const char *> hash;
       size_t operator() (const PropertyName &s) const {
-          return _H(s.c_str());
+          return hash(s.c_str());
       }
     };
 
-    std::hash<const char *> PropertyNameHash::_H;
+    std::hash<const char *> PropertyNameHash::hash;
 
   but our implementation is faster in practice: while it behaves
   outwardly like a string, for the Event that makes use of it,

@@ -844,7 +844,7 @@ Composition::getBarRange(int n) const
 }
 
 
-#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+#ifdef RWSTD_NO_CLASS_PARTIAL_SPEC
   template <class itr> inline int distance(itr first, itr last)
   {
     int n = 0;

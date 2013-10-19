@@ -42,7 +42,7 @@ using std::string;
 
 //#define DEBUG_NORMALIZE_RESTS 1
 
-static int _runtimeSegmentId = 0;
+static int g_runtimeSegmentId = 0;
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
     EventContainer(),
@@ -71,7 +71,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_notifyResizeLocked(false),
     m_memoStart(0),
     m_memoEndMarkerTime(0),
-    m_runtimeSegmentId(_runtimeSegmentId++),
+    m_runtimeSegmentId(g_runtimeSegmentId++),
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(false),
@@ -116,7 +116,7 @@ Segment::Segment(const Segment &segment):
     m_notifyResizeLocked(false),  // To copy a segment while notifications
     m_memoStart(0),               // are locked doesn't sound as a good
     m_memoEndMarkerTime(0),       // idea.
-    m_runtimeSegmentId(_runtimeSegmentId++),
+    m_runtimeSegmentId(g_runtimeSegmentId++),
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(segment.isAutoFading()),

@@ -25,8 +25,8 @@ const float AudioLevel::DB_FLOOR = -1000.0;
 
 struct FaderDescription
 {
-    FaderDescription(float _minDb, float _maxDb, float _zeroPoint) :
-	minDb(_minDb), maxDb(_maxDb), zeroPoint(_zeroPoint) { }
+    FaderDescription(float i_minDb, float i_maxDb, float i_zeroPoint) :
+	minDb(i_minDb), maxDb(i_maxDb), zeroPoint(i_zeroPoint) { }
 
     float minDb;
     float maxDb;
