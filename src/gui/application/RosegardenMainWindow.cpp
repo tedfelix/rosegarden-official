@@ -1731,7 +1731,7 @@ RosegardenMainWindow::readOptions()
     opt = qStrToBool(settings.value("transport_flap_extended", "true")) ;
 
 #ifdef SETTING_LOG_DEBUG
-    _settingLog(QString("SETTING 3 : transport flap extended = %1").arg(opt));
+    RG_DEBUG << "SETTING 3 : transport flap extended = " << opt;
 #endif
 
     if (opt)
@@ -1742,7 +1742,7 @@ RosegardenMainWindow::readOptions()
     opt = qStrToBool(settings.value("show_tracklabels", "true")) ;
 
 #ifdef SETTING_LOG_DEBUG
-    _settingLog(QString("SETTING 3 : show track labels = %1").arg(opt));
+    RG_DEBUG << "SETTING 3 : show track labels = " << opt;
 #endif
 
     findAction("show_tracklabels")->setChecked(opt);
@@ -1859,10 +1859,10 @@ bool
 RosegardenMainWindow::queryClose()
 {
     RG_DEBUG << "RosegardenMainWindow::queryClose" << endl;
-#ifdef SETTING_LOG_DEBUG
 
-    _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(getTransport()->isExpanded()));
-    _settingLog(QString("SETTING 1 : show track labels = %1").arg(findAction("show_tracklabels")->isChecked()));
+#ifdef SETTING_LOG_DEBUG
+    RG_DEBUG << "SETTING 1 : transport flap extended = " << getTransport()->isExpanded();
+    RG_DEBUG << "SETTING 1 : show track labels = " << findAction("show_tracklabels")->isChecked();
 #endif
 
     QString errMsg;
@@ -3519,14 +3519,14 @@ RosegardenMainWindow::slotToggleTrackLabels()
 {
     if (findAction("show_tracklabels")->isChecked()) {
 #ifdef SETTING_LOG_DEBUG
-        _settingLog("toggle track labels on");
+        RG_DEBUG << "toggle track labels on";
 #endif
 
         m_view->getTrackEditor()->getTrackButtons()->
                 changeLabelDisplayMode(TrackLabel::ShowTrack);
     } else {
 #ifdef SETTING_LOG_DEBUG
-        _settingLog("toggle track labels off");
+        RG_DEBUG << "toggle track labels off";
 #endif
 
         m_view->getTrackEditor()->getTrackButtons()->

@@ -329,7 +329,7 @@ static QString description =
 #include <X11/Xatom.h>
 #include <X11/SM/SMlib.h>
 
-static int _x_errhandler(Display *dpy, XErrorEvent *err)
+static int xErrorHandler(Display *dpy, XErrorEvent *err)
 {
     char errstr[256];
     XGetErrorText(dpy, err->error_code, errstr, 256);
@@ -747,7 +747,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_WS_X11
-    XSetErrorHandler(_x_errhandler);
+    XSetErrorHandler(xErrorHandler);
 #endif
 
     if (startLogo) {

@@ -221,7 +221,7 @@ public:
     /**
      * sets the filename of the document
      */
-    void setTitle(const QString &_t);
+    void setTitle(const QString &title);
 
     /**
      * returns the title of the document

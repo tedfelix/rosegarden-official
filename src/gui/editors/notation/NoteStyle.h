@@ -107,12 +107,12 @@ protected:
             filled(true), stem(true), flags(0), slashes(0),
             hfix(Normal), vfix(Middle) { }
 
-        NoteDescription(NoteHeadShape _shape, CharName _charName,
-                        bool _filled, bool _stem, int _flags, int _slashes,
-                        HFixPoint _hfix, VFixPoint _vfix) :
-            shape(_shape), charName(_charName),
-            filled(_filled), stem(_stem), flags(_flags), slashes(_slashes),
-            hfix(_hfix), vfix(_vfix) { }
+        NoteDescription(NoteHeadShape i_shape, CharName i_charName,
+                        bool i_filled, bool i_stem, int i_flags, int i_slashes,
+                        HFixPoint i_hfix, VFixPoint i_vfix) :
+            shape(i_shape), charName(i_charName),
+            filled(i_filled), stem(i_stem), flags(i_flags), slashes(i_slashes),
+            hfix(i_hfix), vfix(i_vfix) { }
     };
 
     typedef std::map<Note::Type, NoteDescription> NoteDescriptionMap;

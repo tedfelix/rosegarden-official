@@ -209,9 +209,9 @@ void RosegardenDocument::setAbsFilePath(const QString &filename)
     m_absFilePath = filename;
 }
 
-void RosegardenDocument::setTitle(const QString &_t)
+void RosegardenDocument::setTitle(const QString &title)
 {
-    m_title = _t;
+    m_title = title;
 }
 
 const QString &RosegardenDocument::getAbsFilePath() const
