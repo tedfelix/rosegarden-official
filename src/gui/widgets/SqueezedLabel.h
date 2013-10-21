@@ -112,8 +112,8 @@ protected:
     */
     void squeezeTextToLabel();
 
-    private:
-    Q_PRIVATE_SLOT(d, void _k_copyFullText())
+private:
+    Q_PRIVATE_SLOT(d, void k_copyFullText())
     SqueezedLabelPrivate * const d;
 };
 

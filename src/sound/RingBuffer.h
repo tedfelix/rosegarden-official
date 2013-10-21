@@ -31,7 +31,7 @@
 
 #ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
 #include <iostream>
-static int __extant_ringbuffers = 0;
+static int extant_ringbuffers = 0;
 #endif
 
 #ifdef sun
@@ -206,7 +206,7 @@ RingBuffer<T, N>::RingBuffer(size_t n) :
     m_mlocked(false)
 {
 #ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
-    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::RingBuffer(" << n << ") [now have " << (++__extant_ringbuffers) << "]" << std::endl;
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::RingBuffer(" << n << ") [now have " << (++extant_ringbuffers) << "]" << std::endl;
 #endif
 
     for (int i = 0; i < N; ++i) m_readers[i] = 0;
@@ -218,7 +218,7 @@ template <typename T, int N>
 RingBuffer<T, N>::~RingBuffer()
 {
 #ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
-    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::~RingBuffer [now have " << (--__extant_ringbuffers) << "]" << std::endl;
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::~RingBuffer [now have " << (--extant_ringbuffers) << "]" << std::endl;
 #endif
 
     if (m_mlocked) {

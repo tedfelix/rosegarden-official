@@ -36,8 +36,8 @@
 namespace Rosegarden
 {
 
-const unsigned int _smallWhiteKeyHeight = 14;
-const unsigned int _whiteKeyHeight = 18;
+const unsigned int smallWhiteKeyHeight = 14;
+const unsigned int whiteKeyHeight = 18;
     
 PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         : PitchRuler(parent),
@@ -84,7 +84,7 @@ void PianoKeyboard::computeKeyPos()
     int y = -4;
 
     unsigned int posInOctave = 0,
-                               keyHeight = _smallWhiteKeyHeight;
+                               keyHeight = smallWhiteKeyHeight;
 
     for (unsigned int i = 0; i < m_nbKeys; ++i) {
         posInOctave = (i + 5) % 7;
@@ -103,7 +103,7 @@ void PianoKeyboard::computeKeyPos()
                 posInOctave == 3) { // draw shorter white key
 
 
-            keyHeight = _smallWhiteKeyHeight;
+            keyHeight = smallWhiteKeyHeight;
 
             if (posInOctave == 2 ||
                     posInOctave == 6)
@@ -111,7 +111,7 @@ void PianoKeyboard::computeKeyPos()
 
         } else {
 
-            keyHeight = _whiteKeyHeight;
+            keyHeight = whiteKeyHeight;
         }
 
         if (posInOctave != 2 && posInOctave != 6) { // draw black key
@@ -218,7 +218,7 @@ void PianoKeyboard::drawHoverNote(int evPitch)
 
                             if (++tIt != m_whiteKeyPos.end()) {
                                 //MATRIX_DEBUG << "WHITE KEY HEIGHT = " << *tIt - *wIt << endl;
-                                if (*tIt - *wIt == _whiteKeyHeight) {
+                                if (*tIt - *wIt == whiteKeyHeight) {
                                     yPos += 2;
                                 }
 

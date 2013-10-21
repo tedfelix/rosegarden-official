@@ -28,28 +28,28 @@ namespace Rosegarden
 
 int PluginFactory::m_sampleRate = 48000;
 
-static LADSPAPluginFactory *_ladspaInstance = 0;
-static LADSPAPluginFactory *_dssiInstance = 0;
+static LADSPAPluginFactory *ladspaInstance = 0;
+static LADSPAPluginFactory *dssiInstance = 0;
 
 PluginFactory *
 PluginFactory::instance(QString pluginType)
 {
     if (pluginType == "ladspa") {
-        if (!_ladspaInstance) {
+        if (!ladspaInstance) {
             std::cerr << "PluginFactory::instance(" << pluginType
             << "): creating new LADSPAPluginFactory" << std::endl;
-            _ladspaInstance = new LADSPAPluginFactory();
-            _ladspaInstance->discoverPlugins();
+            ladspaInstance = new LADSPAPluginFactory();
+            ladspaInstance->discoverPlugins();
         }
-        return _ladspaInstance;
+        return ladspaInstance;
     } else if (pluginType == "dssi") {
-        if (!_dssiInstance) {
+        if (!dssiInstance) {
             std::cerr << "PluginFactory::instance(" << pluginType
             << "): creating new DSSIPluginFactory" << std::endl;
-            _dssiInstance = new DSSIPluginFactory();
-            _dssiInstance->discoverPlugins();
+            dssiInstance = new DSSIPluginFactory();
+            dssiInstance->discoverPlugins();
         }
-        return _dssiInstance;
+        return dssiInstance;
     } else {
         return 0;
     }

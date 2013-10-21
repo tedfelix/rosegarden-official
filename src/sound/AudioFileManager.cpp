@@ -53,7 +53,7 @@
 namespace Rosegarden
 {
 
-static pthread_mutex_t _audioFileManagerLock;
+static pthread_mutex_t audioFileManagerLock;
 
 class MutexLock
 {
@@ -89,7 +89,7 @@ AudioFileManager::AudioFileManager() :
 #endif
 #endif
 
-    pthread_mutex_init(&_audioFileManagerLock, &attr);
+    pthread_mutex_init(&audioFileManagerLock, &attr);
 
     // Set this through the set method so that the tilde gets
     // shaken out.
@@ -112,7 +112,7 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const QString &filePath)
 {
-    MutexLock lock (&_audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock);
 
     QString ext;
 
@@ -222,7 +222,7 @@ AudioFileId
 AudioFileManager::insertFile(const std::string &name,
                              const QString &fileName)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     // first try to expand any beginning tilde
@@ -276,7 +276,7 @@ AudioFileManager::insertFile(const std::string &name,
 bool
 AudioFileManager::removeFile(AudioFileId id)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::vector<AudioFile*>::iterator it;
@@ -316,7 +316,7 @@ AudioFileManager::insertFile(const std::string &name,
                              const QString &fileName,
                              AudioFileId id)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     // first try to expany any beginning tilde
@@ -372,7 +372,7 @@ AudioFileManager::insertFile(const std::string &name,
 void
 AudioFileManager::setAudioPath(const QString &path)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     if (path.size()!=0) {
@@ -418,7 +418,7 @@ AudioFileManager::testAudioPath() throw (BadAudioPathException)
 QString
 AudioFileManager::getFileInPath(const QString &file)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     QFileInfo info(file);
@@ -447,7 +447,7 @@ AudioFileManager::getFileInPath(const QString &file)
 int
 AudioFileManager::fileExists(const QString &path)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::vector<AudioFile*>::iterator it;
@@ -468,7 +468,7 @@ AudioFileManager::fileExists(const QString &path)
 bool
 AudioFileManager::fileExists(AudioFileId id)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::vector<AudioFile*>::iterator it;
@@ -487,7 +487,7 @@ AudioFileManager::fileExists(AudioFileId id)
 void
 AudioFileManager::clear()
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::vector<AudioFile*>::iterator it;
@@ -510,7 +510,7 @@ AudioFileManager::clear()
 AudioFile *
 AudioFileManager::createRecordingAudioFile(QString projectName, QString instrumentAlias)
 {
-    MutexLock lock (&_audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock);
 
 std::cerr << "XXX createRecordingAudioFile: " << projectName << std::endl;
 
@@ -599,7 +599,7 @@ AudioFile *
 AudioFileManager::createDerivedAudioFile(AudioFileId source,
 					 const char *prefix)
 {
-    MutexLock lock (&_audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock);
 
     AudioFile *sourceFile = getAudioFile(source);
     if (!sourceFile) return 0;
@@ -669,7 +669,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     AudioFileId newId = 0;
 
     {
-        MutexLock lock (&_audioFileManagerLock);
+        MutexLock lock (&audioFileManagerLock);
 
         newId = getUniqueAudioFileID();
 
@@ -704,7 +704,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     }
 
     {
-        MutexLock lock (&_audioFileManagerLock);
+        MutexLock lock (&audioFileManagerLock);
 
         // insert file into vector
         WAVAudioFile *aF = 0;
@@ -778,7 +778,7 @@ AudioFileManager::slotStopImport()
 AudioFile*
 AudioFileManager::getLastAudioFile()
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::vector<AudioFile*>::iterator it = m_audioFiles.begin();
@@ -835,7 +835,7 @@ AudioFileManager::substituteTildeForHome(const QString &path)
 std::string
 AudioFileManager::toXmlString()
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::stringstream audioFiles;
@@ -894,7 +894,7 @@ AudioFileManager::toXmlString()
 void
 AudioFileManager::generatePreviews()
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
 #ifdef DEBUG_AUDIOFILEMANAGER
@@ -924,7 +924,7 @@ AudioFileManager::generatePreviews()
 void
 AudioFileManager::slotStopPreview()
 {
-    MutexLock lock (&_audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock);
     m_peakManager.stopPreview();
 }
 
@@ -937,7 +937,7 @@ AudioFileManager::slotStopPreview()
 bool
 AudioFileManager::generatePreview(AudioFileId id)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     AudioFile *audioFile = getAudioFile(id);
@@ -954,7 +954,7 @@ AudioFileManager::generatePreview(AudioFileId id)
 AudioFile*
 AudioFileManager::getAudioFile(AudioFileId id)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     std::vector<AudioFile*>::iterator it;
@@ -975,7 +975,7 @@ AudioFileManager::getPreview(AudioFileId id,
                              int width,
                              bool withMinima)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     AudioFile *audioFile = getAudioFile(id);
@@ -1003,7 +1003,7 @@ AudioFileManager::drawPreview(AudioFileId id,
                               const RealTime &endTime,
                               QPixmap *pixmap)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     AudioFile *audioFile = getAudioFile(id);
@@ -1079,7 +1079,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         const RealTime &highlightEnd,
         QPixmap *pixmap)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     AudioFile *audioFile = getAudioFile(id);
@@ -1147,7 +1147,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 void
 AudioFileManager::print()
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
 #ifdef DEBUG_AUDIOFILEMANAGER
@@ -1176,7 +1176,7 @@ AudioFileManager::getSplitPoints(AudioFileId id,
                                  int threshold,
                                  const RealTime &minTime)
 {
-    MutexLock lock (&_audioFileManagerLock)
+    MutexLock lock (&audioFileManagerLock)
         ;
 
     AudioFile *audioFile = getAudioFile(id);

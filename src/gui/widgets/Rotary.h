@@ -125,8 +125,8 @@ protected:
 
     struct CacheIndex {
 
-        CacheIndex(int _s, int _c, int _a, int _n, int _ct) :
-            size(_s), colour(_c), angle(_a), numTicks(_n), centred(_ct) { }
+        CacheIndex(int s, int c, int a, int n, int ct) :
+            size(s), colour(c), angle(a), numTicks(n), centred(ct) { }
 
         bool operator<(const CacheIndex &i) const {
             // woo!

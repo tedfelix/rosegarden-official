@@ -50,9 +50,9 @@ RosegardenSequencer::m_instance = 0;
 QMutex
 RosegardenSequencer::m_instanceMutex;
 
-//#define LOCKED QMutexLocker _locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
+//#define LOCKED QMutexLocker rgseq_locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
 
-#define LOCKED QMutexLocker _locker(&m_mutex)
+#define LOCKED QMutexLocker rgseq_locker(&m_mutex)
 
 // The default latency and read-ahead values are actually sent
 // down from the GUI every time playback or recording starts

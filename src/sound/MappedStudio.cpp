@@ -30,29 +30,29 @@
 namespace Rosegarden
 {
 
-static pthread_mutex_t _mappedObjectContainerLock;
+static pthread_mutex_t mappedObjectContainerLock;
 
 #ifdef DEBUG_MAPPEDSTUDIO
-static int _approxLockCount = 0;
+static int approxLockCount = 0;
 #endif
 
 static inline void getLock(const char *file, int line)
 {
 #ifdef DEBUG_MAPPEDSTUDIO
-    std::cerr << "Acquiring MappedStudio container lock at " << file << ":" << line << ": count " << _approxLockCount++ << std::endl;
+    std::cerr << "Acquiring MappedStudio container lock at " << file << ":" << line << ": count " << approxLockCount++ << std::endl;
 #else
     (void)file; (void)line;
 #endif
 
-    pthread_mutex_lock(&_mappedObjectContainerLock);
+    pthread_mutex_lock(&mappedObjectContainerLock);
 }
 
 static inline void releaseLock(const char *file, int line)
 {
-    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    pthread_mutex_unlock(&mappedObjectContainerLock);
 #ifdef DEBUG_MAPPEDSTUDIO
 
-    std::cerr << "Released container lock at " << file << ":" << line << ": count " << --_approxLockCount << std::endl;
+    std::cerr << "Released container lock at " << file << ":" << line << ": count " << --approxLockCount << std::endl;
 #else
     (void)file; (void)line;
 #endif
@@ -311,7 +311,7 @@ MappedStudio::MappedStudio() :
 #endif
 #endif
 
-    pthread_mutex_init(&_mappedObjectContainerLock, &attr);
+    pthread_mutex_init(&mappedObjectContainerLock, &attr);
 }
 
 MappedStudio::~MappedStudio()
