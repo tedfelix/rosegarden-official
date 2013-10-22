@@ -73,10 +73,6 @@ SelectDialog::SelectDialog(QWidget *parent) :
     makeAdvancedTab();
     m_tabWidget->addTab(m_advancedTab, tr("Advanced"));
 
-    // primary buttons
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    layout->addWidget(buttonBox);
-
     // if there WAS an existing selection
     //
     // need memory in QSettings
@@ -87,6 +83,9 @@ SelectDialog::SelectDialog(QWidget *parent) :
     layout->addWidget(m_replaceExistingSelection);
     layout->addWidget(m_addToExistingSelection);
 
+    // primary buttons
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    layout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -690,8 +689,186 @@ SelectDialog::makeSpecialTab()
     // pad the grid a slight amount horizontally so the labels don't get cut off
     grid->setHorizontalSpacing(15);
     m_specialTab->setLayout(grid);
+    
+    // row 1 buttons
+    m_useTenuto = new CheckButton("tenuto");
+    grid->addWidget(m_useTenuto, 1, 1);
 
-    grid->addWidget(new QLabel("I'm the future Special tab!  I will have lots of widgets!"), 1, 1);
+    m_useStaccato = new CheckButton("staccato");
+    grid->addWidget(m_useStaccato, 1, 2);
+
+    m_useStaccatissimo = new CheckButton("staccatissimo");
+    grid->addWidget(m_useStaccatissimo, 1, 3);
+
+    m_useMarcato = new CheckButton("marcato");
+    grid->addWidget(m_useMarcato, 1, 4);
+
+    m_useOpen = new CheckButton("open");
+    grid->addWidget(m_useOpen, 1, 5);
+
+    m_useStopped = new CheckButton("stopped");
+    grid->addWidget(m_useStopped, 1, 6);
+
+    m_useHarmonic = new CheckButton("harmonic");
+    grid->addWidget(m_useHarmonic, 1, 7);
+
+    m_useRow1 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow1, 1, 8);
+
+
+    // row 2 buttons
+    m_useUpBow = new CheckButton("up-bow");
+    grid->addWidget(m_useUpBow, 2, 1);
+
+    m_useDownBow = new CheckButton("down-bow");
+    grid->addWidget(m_useDownBow, 2, 2);
+
+    m_useOneSlash = new CheckButton("slash1");
+    grid->addWidget(m_useOneSlash, 2, 3);
+
+    m_useTwoSlash = new CheckButton("slash2");
+    grid->addWidget(m_useTwoSlash, 2, 4);
+
+    m_useThreeSlash = new CheckButton("slash3");
+    grid->addWidget(m_useThreeSlash, 2, 5);
+
+    m_useFourSlash = new CheckButton("slash4");
+    grid->addWidget(m_useFourSlash, 2, 6);
+
+    m_useFiveSlash = new CheckButton("slash5");
+    grid->addWidget(m_useFiveSlash, 2, 7);
+
+    m_useRow2 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow2, 2, 8);
+
+
+    // row 3 buttons
+    m_useSforzando = new CheckButton("sf");
+    grid->addWidget(m_useSforzando, 3, 1);
+
+    m_useRinforzando = new CheckButton("rf");
+    grid->addWidget(m_useRinforzando, 3, 2);
+
+    m_useTrill = new CheckButton("trill");
+    grid->addWidget(m_useTrill, 3, 3);
+
+    m_useTrillLineIndication = new CheckButton("trill-line");
+    grid->addWidget(m_useTrillLineIndication, 3, 4);
+
+    m_useTurn = new CheckButton("turn");
+    grid->addWidget(m_useTurn, 3, 5);
+
+    m_useMordent = new CheckButton("mordent");
+    grid->addWidget(m_useMordent, 3, 6);
+
+    m_useMordentInverted = new CheckButton("inverted-mordent");
+    grid->addWidget(m_useMordentInverted, 3, 7);
+
+    m_useRow3 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow3, 3, 8);
+
+
+    // row 4 buttons
+    m_useMordentLong = new CheckButton("long-mordent");
+    grid->addWidget(m_useMordentLong, 4, 1);
+
+    m_useMordentLongInverted = new CheckButton("long-inverted-mordent");
+    grid->addWidget(m_useMordentLongInverted, 4, 2);
+
+    m_useCrescendo = new CheckButton("group-crescendo");
+    grid->addWidget(m_useCrescendo, 4, 3);
+
+    m_useDecrescendo = new CheckButton("group-decrescendo");
+    grid->addWidget(m_useDecrescendo, 4, 4);
+
+    m_useSlur = new CheckButton("group-slur");
+    grid->addWidget(m_useSlur, 4, 5);
+
+    m_usePhrasingSlur = new CheckButton("phrasing-slur");
+    grid->addWidget(m_usePhrasingSlur, 4, 6);
+
+    m_usePause = new CheckButton("pause");
+    grid->addWidget(m_usePause, 4, 7);
+
+    m_useRow4 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow4, 4, 8);
+
+
+    // row 5 buttons
+    m_useQuindicesimaUp = new CheckButton("15ma-up");
+    grid->addWidget(m_useQuindicesimaUp, 5, 1);
+
+    m_useOttavaUp = new CheckButton("8va-up");
+    grid->addWidget(m_useOttavaUp, 5, 2);
+
+    m_useOttavaDown = new CheckButton("8va-down");
+    grid->addWidget(m_useOttavaDown, 5, 3);
+
+    m_useQuindicesimaDown = new CheckButton("15ma-down");
+    grid->addWidget(m_useQuindicesimaDown, 5, 4);
+
+    m_useSegno = new CheckButton("segno");
+    grid->addWidget(m_useSegno, 5, 5);
+
+    m_useCoda = new CheckButton("coda");
+    grid->addWidget(m_useCoda, 5, 6);
+
+    m_useBreath = new CheckButton("breath");
+    grid->addWidget(m_useBreath, 5, 7);
+
+    m_useRow5 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow5, 5, 8);
+
+
+    // row 6 buttons
+    m_usePedalDown = new CheckButton("notation-pedal-down");
+    grid->addWidget(m_usePedalDown, 6, 1);
+
+    m_usePedalUp = new CheckButton("notation-pedal-up");
+    grid->addWidget(m_usePedalUp, 6, 2);
+
+    m_useNatural = new CheckButton("accidental-natural");
+    grid->addWidget(m_useNatural, 6, 3);
+
+    m_useSharp = new CheckButton("accidental-sharp");
+    grid->addWidget(m_useSharp, 6, 4);
+
+    m_useDoubleSharp = new CheckButton("accidental-double-sharp");
+    grid->addWidget(m_useDoubleSharp, 6, 5);
+
+    m_useFlat = new CheckButton("accidental-flat");
+    grid->addWidget(m_useFlat, 6, 6);
+
+    m_useDoubleFlat = new CheckButton("accidental-double-flat");
+    grid->addWidget(m_useDoubleFlat, 6, 7);
+
+    m_useRow6 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow6, 6, 8);
+
+
+    // row 7 buttons
+    m_useNoAccidental = new CheckButton("accidental-none");
+    grid->addWidget(m_useNoAccidental, 7, 1);
+
+    m_useTextEvents = new CheckButton("text");
+    grid->addWidget(m_useTextEvents, 7, 2);
+
+    m_useFingering = new CheckButton("fingering");
+    grid->addWidget(m_useFingering, 7, 3);
+
+    m_useTextMark = new CheckButton("text-mark");
+    grid->addWidget(m_useTextMark, 7, 4);
+
+    m_useGuitarChord = new CheckButton("guitarchord");
+    grid->addWidget(m_useGuitarChord, 7, 5);
+
+    m_useRow7 = new CheckButton("golden-arrow-left");
+    grid->addWidget(m_useRow7, 7, 8);
+
+    // row 8 buttons
+    m_useAllSpecial = new CheckButton("golden-arrow-up");
+    grid->addWidget(m_useAllSpecial, 8, 8);
+
 }
 
 // Advanced Tab /////////////////////////////////////////////////////////////////

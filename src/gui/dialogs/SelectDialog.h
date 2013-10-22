@@ -309,6 +309,7 @@ protected:
     // String       *
     // PIMA        *
     CheckButton *m_useRow6; // left arrow button
+    CheckButton *m_useRow7;
 
     // row 7
     // semantics for lower row up arrow buttons don't make sense, except this:
