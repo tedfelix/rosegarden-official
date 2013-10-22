@@ -3,7 +3,7 @@
  <id type="desktop">rosegarden.desktop</id>
  <licence>CC0</licence>
  <name>Rosegarden</name>
- <summary>Music composition and editing environment for MIDI, audio and notation</summary>
+ <summary>Music composition and editing environment for MIDI and notation, with basic audio support</summary>
  <description>
   <p>
    Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, DAWs, and score editors.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
