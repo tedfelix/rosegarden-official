@@ -235,8 +235,6 @@ protected:
     // a widget for the tab page
     QWidget *m_specialTab;
 
-    //** == NEEDS ICON
-
     // row 1
     CheckButton *m_useAccent;         
     CheckButton *m_useTenuto;         
@@ -277,11 +275,11 @@ protected:
 
     // row 4
     CheckButton *m_useSlur;
-    CheckButton *m_usePhrasingSlur;     //**
-    CheckButton *m_useQuindicesimaUp;   //**
+    CheckButton *m_usePhrasingSlur;
+    CheckButton *m_useQuindicesimaUp;
     CheckButton *m_useOttavaUp;
-    CheckButton *m_useOttavaDown;       //**
-    CheckButton *m_useQuindicesimaDown; //**
+    CheckButton *m_useOttavaDown;
+    CheckButton *m_useQuindicesimaDown;
     CheckButton *m_useSegno;
     CheckButton *m_useCoda;
     CheckButton *m_useBreath;
@@ -304,7 +302,7 @@ protected:
     // row 6
     CheckButton *m_useGuitarChord;
     CheckButton *m_useTextEvents;
-    CheckButton *m_useFingering;        //**
+    CheckButton *m_useFingering;
     CheckButton *m_useTextMark;
     // ChordEvent  *
     // Barre        *____ all sort of semantically related; close enough
