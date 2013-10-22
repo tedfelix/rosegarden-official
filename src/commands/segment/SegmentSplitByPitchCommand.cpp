@@ -195,13 +195,12 @@ SegmentSplitByPitchCommand::getNewRangingSplitPitch(Segment::iterator prevNote,
     typedef std::set<int> Pitches;
     typedef std::set<int>::iterator PitchItr;
 
-    const Quantizer *quantizer
-    (m_segment->getComposition()->getNotationQuantizer());
+    const Quantizer *quantizer(m_segment->getComposition()->getNotationQuantizer());
 
     int myHighest, myLowest;
     int prevHighest = 0, prevLowest = 0;
     bool havePrev = false;
-    std::set<int> pitches;
+    Pitches pitches;
     pitches.insert(c0p.begin(), c0p.end());
 
     myLowest = c0p[0];
@@ -281,8 +280,7 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i)
     // when this algorithm appears to be working ok, we should be
     // able to make it much quicker
 
-    const Quantizer *quantizer
-    (m_segment->getComposition()->getNotationQuantizer());
+    const Quantizer *quantizer(m_segment->getComposition()->getNotationQuantizer());
 
     Chord c0(*m_segment, i, quantizer);
     // Pitches in the chord.
