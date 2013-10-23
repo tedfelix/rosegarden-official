@@ -173,19 +173,19 @@ update(ChordSegmentMap& chordSources,
           
         int figurationSourceIndex =
             generatedRegion.getFigurationSourceID();
-        FigurationSourceMap::iterator _figuration =
+        FigurationSourceMap::iterator figurationIter =
             figurationSources.find(figurationSourceIndex);
-        if (_figuration == figurationSources.end())
+        if (figurationIter == figurationSources.end())
             { continue; }
-        SourcedFiguration& figuration = *_figuration;
+        SourcedFiguration& figuration = *figurationIter;
 
         int chordSourceIndex =
             generatedRegion.getChordSourceID();
-        ChordSegmentMap::iterator _chordSource =
+        ChordSegmentMap::iterator chordSourceIter =
             chordSources.find(chordSourceIndex);
-        if (_chordSource == chordSources.end())
+        if (chordSourceIter == chordSources.end())
             { continue; }
-        ChordSegment& chordSource = _chordSource->second;
+        ChordSegment& chordSource = chordSourceIter->second;
         
         // Find it by time.
         timeT startRegion = e->getAbsoluteTime();
