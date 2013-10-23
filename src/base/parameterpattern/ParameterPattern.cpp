@@ -77,7 +77,7 @@ ParameterPattern::FlatPattern = &FlatParameterPattern::single;
     ParameterPattern::NAME(SOURCE, ENDOFARRAY(SOURCE))
 
 // Internal
-ParameterPattern * _VelocityPatterns[] = {
+ParameterPattern * velocityPatternsArray[] = {
     &FlatParameterPattern::single,
     &AlternatingParameterPattern::single,
     &LinearParameterPattern::crescendo,
@@ -93,13 +93,13 @@ ParameterPattern * _VelocityPatterns[] = {
 };
 
 // Internal
-ParameterPattern ** _EndVelocityPatterns = ENDOFARRAY(_VelocityPatterns);
+ParameterPattern ** endVelocityPatterns = ENDOFARRAY(velocityPatternsArray);
 
 // A vector of all the patterns that are useful for setting velocity.
 ParameterPattern::ParameterPatternVec
-ParameterPattern::VelocityPatterns(_VelocityPatterns, _EndVelocityPatterns);
+ParameterPattern::VelocityPatterns(velocityPatternsArray, endVelocityPatterns);
 
-ParameterPattern * _ControllerPatterns[] = {
+ParameterPattern * controllerPatternsArray[] = {
     &LinearParameterPattern::crescendo,
     &LinearParameterPattern::diminuendo,
     &IncreaseParameterPattern::decrease,
@@ -111,7 +111,7 @@ ParameterPattern * _ControllerPatterns[] = {
     &RelativeRamp::single,
 };
 
-DEFINE_PPVEC_FROM_ARRAY(ControllerPatterns, _ControllerPatterns);
+DEFINE_PPVEC_FROM_ARRAY(ControllerPatterns, controllerPatternsArray);
 
 /* ***** Helper functions ***** */
    
