@@ -47,7 +47,6 @@ SelectDialog::SelectDialog(QWidget *parent) :
 {
     setModal(true);
     setWindowTitle(tr("Search and Select"));
-//    setStyleSheet("background: #FFFFFF");
 
     // master layout
     QVBoxLayout *layout = new QVBoxLayout();
@@ -712,7 +711,7 @@ SelectDialog::makeSpecialTab()
     m_useHarmonic = new CheckButton("harmonic");
     grid->addWidget(m_useHarmonic, 1, 7);
 
-    m_useRow1 = new CheckButton("golden-arrow-left");
+    m_useRow1 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow1, 1, 8);
 
 
@@ -738,7 +737,7 @@ SelectDialog::makeSpecialTab()
     m_useFiveSlash = new CheckButton("slash5");
     grid->addWidget(m_useFiveSlash, 2, 7);
 
-    m_useRow2 = new CheckButton("golden-arrow-left");
+    m_useRow2 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow2, 2, 8);
 
 
@@ -764,7 +763,7 @@ SelectDialog::makeSpecialTab()
     m_useMordentInverted = new CheckButton("inverted-mordent");
     grid->addWidget(m_useMordentInverted, 3, 7);
 
-    m_useRow3 = new CheckButton("golden-arrow-left");
+    m_useRow3 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow3, 3, 8);
 
 
@@ -790,7 +789,7 @@ SelectDialog::makeSpecialTab()
     m_usePause = new CheckButton("pause");
     grid->addWidget(m_usePause, 4, 7);
 
-    m_useRow4 = new CheckButton("golden-arrow-left");
+    m_useRow4 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow4, 4, 8);
 
 
@@ -816,7 +815,7 @@ SelectDialog::makeSpecialTab()
     m_useBreath = new CheckButton("breath");
     grid->addWidget(m_useBreath, 5, 7);
 
-    m_useRow5 = new CheckButton("golden-arrow-left");
+    m_useRow5 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow5, 5, 8);
 
 
@@ -842,7 +841,7 @@ SelectDialog::makeSpecialTab()
     m_useDoubleFlat = new CheckButton("accidental-double-flat");
     grid->addWidget(m_useDoubleFlat, 6, 7);
 
-    m_useRow6 = new CheckButton("golden-arrow-left");
+    m_useRow6 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow6, 6, 8);
 
 
@@ -862,14 +861,118 @@ SelectDialog::makeSpecialTab()
     m_useGuitarChord = new CheckButton("guitarchord");
     grid->addWidget(m_useGuitarChord, 7, 5);
 
-    m_useRow7 = new CheckButton("golden-arrow-left");
+    m_useRow7 = new CheckButton("golden-arrow-left", false);
     grid->addWidget(m_useRow7, 7, 8);
 
     // row 8 buttons
-    m_useAllSpecial = new CheckButton("golden-arrow-up");
+    m_useAllSpecial = new CheckButton("golden-arrow-up", false);
     grid->addWidget(m_useAllSpecial, 8, 8);
 
+    connect(m_useRow1, SIGNAL(toggled(bool)), SLOT(slotUseRow1(bool)));
+    connect(m_useRow2, SIGNAL(toggled(bool)), SLOT(slotUseRow2(bool)));
+    connect(m_useRow3, SIGNAL(toggled(bool)), SLOT(slotUseRow3(bool)));
+    connect(m_useRow4, SIGNAL(toggled(bool)), SLOT(slotUseRow4(bool)));
+    connect(m_useRow5, SIGNAL(toggled(bool)), SLOT(slotUseRow5(bool)));
+    connect(m_useRow6, SIGNAL(toggled(bool)), SLOT(slotUseRow6(bool)));
+    connect(m_useRow7, SIGNAL(toggled(bool)), SLOT(slotUseRow7(bool)));
+    connect(m_useAllSpecial, SIGNAL(toggled(bool)), SLOT(slotUseAllSpecial(bool)));
 }
+
+void
+SelectDialog::slotUseRow1(bool state)
+{
+    m_useTenuto->setChecked(state);       
+    m_useStaccato->setChecked(state);     
+    m_useStaccatissimo->setChecked(state);
+    m_useMarcato->setChecked(state);      
+    m_useOpen->setChecked(state);         
+    m_useStopped->setChecked(state);      
+    m_useHarmonic->setChecked(state);     
+}
+
+
+void
+SelectDialog::slotUseRow2(bool state)
+{
+    m_useUpBow->setChecked(state);
+    m_useDownBow->setChecked(state);
+    m_useOneSlash->setChecked(state);
+    m_useTwoSlash->setChecked(state);
+    m_useThreeSlash->setChecked(state);
+    m_useFourSlash->setChecked(state);
+    m_useFiveSlash->setChecked(state);
+ }
+
+void
+SelectDialog::slotUseRow3(bool state)
+{
+    m_useSforzando->setChecked(state);
+    m_useRinforzando->setChecked(state);
+    m_useTrill->setChecked(state);
+    m_useTrillLineIndication->setChecked(state);
+    m_useTurn->setChecked(state);
+    m_useMordent->setChecked(state);
+    m_useMordentInverted->setChecked(state);
+}
+
+void
+SelectDialog::slotUseRow4(bool state)
+{
+    m_useMordentLong->setChecked(state);
+    m_useMordentLongInverted->setChecked(state);
+    m_useCrescendo->setChecked(state);
+    m_useDecrescendo->setChecked(state);
+    m_useSlur->setChecked(state);
+    m_usePhrasingSlur->setChecked(state);
+    m_usePause->setChecked(state);
+}
+
+void
+SelectDialog::slotUseRow5(bool state)
+{
+    m_useQuindicesimaUp->setChecked(state);
+    m_useOttavaUp->setChecked(state);
+    m_useOttavaDown->setChecked(state);
+    m_useQuindicesimaDown->setChecked(state);
+    m_useSegno->setChecked(state);
+    m_useCoda->setChecked(state);
+    m_useBreath->setChecked(state);
+}
+
+void
+SelectDialog::slotUseRow6(bool state)
+{
+    m_usePedalDown->setChecked(state);
+    m_usePedalUp->setChecked(state);
+    m_useNatural->setChecked(state);
+    m_useSharp->setChecked(state);
+    m_useDoubleSharp->setChecked(state);
+    m_useFlat->setChecked(state);
+    m_useDoubleFlat->setChecked(state);
+}
+
+void
+SelectDialog::slotUseRow7(bool state)
+{
+    m_useNoAccidental->setChecked(state);
+    m_useTextEvents->setChecked(state);
+    m_useFingering->setChecked(state);
+    m_useTextMark->setChecked(state);
+    m_useGuitarChord->setChecked(state);
+}
+
+void
+SelectDialog::slotUseAllSpecial(bool state)
+{
+    m_useRow1->setChecked(state);
+    m_useRow2->setChecked(state);
+    m_useRow3->setChecked(state);
+    m_useRow4->setChecked(state);
+    m_useRow5->setChecked(state);
+    m_useRow6->setChecked(state);
+    m_useRow7->setChecked(state);
+}
+
 
 // Advanced Tab /////////////////////////////////////////////////////////////////
 void

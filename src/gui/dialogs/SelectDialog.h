@@ -244,7 +244,7 @@ protected:
     CheckButton *m_useOpen;           
     CheckButton *m_useStopped;        
     CheckButton *m_useHarmonic;
-    CheckButton *m_useRow1; // left arrow button
+    CheckButton *m_useRow1;
 
 
     // row 2
@@ -255,27 +255,29 @@ protected:
     CheckButton *m_useThreeSlash;
     CheckButton *m_useFourSlash;
     CheckButton *m_useFiveSlash;
+    CheckButton *m_useRow2;
+    
+    // row 3
     CheckButton *m_useSforzando;      
     CheckButton *m_useRinforzando;    
-    CheckButton *m_useRow2; // left arrow button
-
-
-    // row 3
     CheckButton *m_useTrill;          
-    CheckButton *m_useTrillLineIndication; // the improved indication       
+    CheckButton *m_useTrillLineIndication;
     CheckButton *m_useTurn;           
     CheckButton *m_useMordent;
     CheckButton *m_useMordentInverted;
+    CheckButton *m_useRow3;
+
+    // row 4
     CheckButton *m_useMordentLong;
     CheckButton *m_useMordentLongInverted;
     CheckButton *m_useCrescendo;
     CheckButton *m_useDecrescendo;
-    CheckButton *m_useRow3; // left arrow button
-
-
-    // row 4
     CheckButton *m_useSlur;
     CheckButton *m_usePhrasingSlur;
+    CheckButton *m_usePause;          
+    CheckButton *m_useRow4;
+
+    // row 5
     CheckButton *m_useQuindicesimaUp;
     CheckButton *m_useOttavaUp;
     CheckButton *m_useOttavaDown;
@@ -283,37 +285,33 @@ protected:
     CheckButton *m_useSegno;
     CheckButton *m_useCoda;
     CheckButton *m_useBreath;
-    CheckButton *m_useRow4; // left arrow button
+    CheckButton *m_useRow5;
 
-
-    // row 5
+    // row 6
     CheckButton *m_usePedalDown;
     CheckButton *m_usePedalUp;
-    CheckButton *m_useNoAccidental;
     CheckButton *m_useNatural;
     CheckButton *m_useSharp;
     CheckButton *m_useDoubleSharp;
     CheckButton *m_useFlat;
     CheckButton *m_useDoubleFlat;
-    CheckButton *m_usePause;          
-    CheckButton *m_useRow5; // left arrow button
+    CheckButton *m_useRow6;
 
-
-    // row 6
-    CheckButton *m_useGuitarChord;
+    // row 7
+    CheckButton *m_useNoAccidental;
     CheckButton *m_useTextEvents;
     CheckButton *m_useFingering;
     CheckButton *m_useTextMark;
+    CheckButton *m_useGuitarChord;
     // ChordEvent  *
     // Barre        *____ all sort of semantically related; close enough
     // String       *
     // PIMA        *
-    CheckButton *m_useRow6; // left arrow button
     CheckButton *m_useRow7;
 
-    // row 7
+    // row 8
     // semantics for lower row up arrow buttons don't make sense, except this:
-    CheckButton *m_useAllSpecial; // up arrow button (row 7 col 9)
+    CheckButton *m_useAllSpecial;
 
 
     // Advanced Widgets ////////////////////////////////////////////////
@@ -436,6 +434,15 @@ protected slots:
     void slotUseAllRestTuplet(bool);
 
     void slotUseAllDuration(bool);
+
+    void slotUseRow1(bool);
+    void slotUseRow2(bool);
+    void slotUseRow3(bool);
+    void slotUseRow4(bool);
+    void slotUseRow5(bool);
+    void slotUseRow6(bool);
+    void slotUseRow7(bool);
+    void slotUseAllSpecial(bool);
 
 };   
 
