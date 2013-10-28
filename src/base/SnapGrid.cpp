@@ -41,10 +41,10 @@ void
 SnapGrid::setSnapTime(timeT snap)
 {
     Q_ASSERT(snap > 0 ||
-	   snap == NoSnap ||
-	   snap == SnapToBar ||
-	   snap == SnapToBeat ||
-	   snap == SnapToUnit);
+             snap == NoSnap ||
+             snap == SnapToBar ||
+             snap == SnapToBeat ||
+             snap == SnapToUnit);
     m_snapTime = snap;
 }
 
@@ -73,11 +73,11 @@ SnapGrid::getSnapTime(timeT time) const
     timeT snapTime = barRange.second - barRange.first;
 
     if (m_snapTime == SnapToBeat) {
-	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+        snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
     } else if (m_snapTime == SnapToUnit) {
-	snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
+        snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
     } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
-	snapTime = m_snapTime;
+        snapTime = m_snapTime;
     }
 
     return snapTime;
@@ -101,11 +101,11 @@ SnapGrid::snapTime(timeT time, SnapDirection direction) const
     timeT snapTime = barRange.second - barRange.first;
 
     if (m_snapTime == SnapToBeat) {
-	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+        snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
     } else if (m_snapTime == SnapToUnit) {
-	snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
+        snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
     } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
-	snapTime = m_snapTime;
+        snapTime = m_snapTime;
     }
 
     timeT offset = (time - barRange.first);
@@ -134,21 +134,21 @@ SnapGrid::getYBin(int y) const
 
     for (int b = 0; ; ++b) {
 
-	if (nextbin == b) {
+        if (nextbin == b) {
 
-	    cy += i->second * m_ysnap;
-	    ++i;
-	    if (i == m_ymultiple.end()) nextbin = -1;
-	    else nextbin = i->first;
+            cy += i->second * m_ysnap;
+            ++i;
+            if (i == m_ymultiple.end()) nextbin = -1;
+            else nextbin = i->first;
 
-	} else {
-	    
-	    cy += m_ysnap;
-	}
+        } else {
 
-	if (cy > y) {
-	    return b;
-	}
+            cy += m_ysnap;
+        }
+
+        if (cy > y) {
+            return b;
+        }
     }
 }
 
@@ -166,17 +166,17 @@ SnapGrid::getYBinCoordinate(int bin) const
 
     for (int b = 0; b < bin; ++b) {
 
-	if (nextbin == b) {
+        if (nextbin == b) {
 
-	    y += i->second * m_ysnap;
-	    ++i;
-	    if (i == m_ymultiple.end()) nextbin = -1;
-	    else nextbin = i->first;
+            y += i->second * m_ysnap;
+            ++i;
+            if (i == m_ymultiple.end()) nextbin = -1;
+            else nextbin = i->first;
 
-	} else {
-	    
-	    y += m_ysnap;
-	}
+        } else {
+
+            y += m_ysnap;
+        }
     }
 
     return y;
