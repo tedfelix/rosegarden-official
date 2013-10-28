@@ -57,15 +57,15 @@ const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
 
 bool
 Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
-						  const Event &e2) const
+                                                  const Event &e2) const
 {
     if (e1.has(NoAbsoluteTimeProperty) ||
-	e2.has(NoAbsoluteTimeProperty)) {
-	RealTime r1 = getTempoTimestamp(&e1);
-	RealTime r2 = getTempoTimestamp(&e2);
-	return r1 < r2;
+        e2.has(NoAbsoluteTimeProperty)) {
+        RealTime r1 = getTempoTimestamp(&e1);
+        RealTime r2 = getTempoTimestamp(&e2);
+        return r1 < r2;
     } else {
-	return e1 < e2;
+        return e1 < e2;
     }
 }
 
@@ -101,28 +101,28 @@ Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::find(Event *e)
 {
     return std::lower_bound
-	(begin(), end(), e, ReferenceSegmentEventCmp());
+        (begin(), end(), e, ReferenceSegmentEventCmp());
 }
 
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::insertEvent(Event *e)
 {
     if (!e->isa(m_eventType)) {
-	throw Event::BadType(std::string("event in ReferenceSegment"),
-			     m_eventType, e->getType(), __FILE__, __LINE__);
+        throw Event::BadType(std::string("event in ReferenceSegment"),
+                             m_eventType, e->getType(), __FILE__, __LINE__);
     }
 
     iterator i = find(e);
 
     if (i != end() && (*i)->getAbsoluteTime() == e->getAbsoluteTime()) {
 
-	Event *old = (*i);
-	(*i) = e;
-	delete old;
-	return i;
+        Event *old = (*i);
+        (*i) = e;
+        delete old;
+        return i;
 
     } else {
-	return Impl::insert(i, e);
+        return Impl::insert(i, e);
     }
 }
 
@@ -154,8 +154,8 @@ Composition::ReferenceSegment::findNearestTime(timeT t)
 {
     iterator i = findTime(t);
     if (i == end() || (*i)->getAbsoluteTime() > t) {
-	if (i == begin()) return end();
-	else --i;
+        if (i == begin()) return end();
+        else --i;
     }
     return i;
 }
@@ -165,8 +165,8 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 {
     iterator i = findRealTime(t);
     if (i == end() || (getTempoTimestamp(*i) > t)) {
-	if (i == begin()) return end();
-	else --i;
+        if (i == begin()) return end();
+        else --i;
     }
     return i;
 }
@@ -202,15 +202,15 @@ Composition::Composition() :
 Composition::~Composition()
 {
     if (!m_observers.empty()) {
-	cerr << "Warning: Composition::~Composition() with " << m_observers.size()
-	     << " observers still extant" << endl;
-	cerr << "Observers are:";
-	for (ObserverSet::const_iterator i = m_observers.begin();
-	     i != m_observers.end(); ++i) {
-	    cerr << " " << (void *)(*i);
-	    cerr << " [" << typeid(**i).name() << "]";
-	}
-	cerr << endl;
+        cerr << "Warning: Composition::~Composition() with " << m_observers.size()
+             << " observers still extant" << endl;
+        cerr << "Observers are:";
+        for (ObserverSet::const_iterator i = m_observers.begin();
+             i != m_observers.end(); ++i) {
+            cerr << " " << (void *)(*i);
+            cerr << " [" << typeid(**i).name() << "]";
+        }
+        cerr << endl;
     }
 
     notifySourceDeletion();
@@ -227,7 +227,7 @@ Composition::addSegment(Segment *segment)
     if (res != end()) {
         updateRefreshStatuses();
         distributeVerses();
-	notifySegmentAdded(segment);
+        notifySegmentAdded(segment);
     }
     
     return res;
@@ -352,9 +352,9 @@ Composition::findSegment(const Segment *s)
     iterator i = m_segments.lower_bound(const_cast<Segment*>(s));
 
     while (i != end()) {
-	if (*i == s) break;
-	if ((*i)->getStartTime() > s->getStartTime()) return end();
-	++i;
+        if (*i == s) break;
+        if ((*i)->getStartTime() > s->getStartTime()) return end();
+        ++i;
     }
 
     return i;
@@ -520,9 +520,9 @@ void
 Composition::clearTriggerSegments()
 {
     for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
-	 i != m_triggerSegments.end(); ++i) {
-	delete (*i)->getSegment();
-	delete *i;
+         i != m_triggerSegments.end(); ++i) {
+        delete (*i)->getSegment();
+        delete *i;
     }
     m_triggerSegments.clear();
 }
@@ -531,8 +531,8 @@ int
 Composition::getTriggerSegmentId(Segment *s)
 {
     for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
-	 i != m_triggerSegments.end(); ++i) {
-	if ((*i)->getSegment() == s) return (*i)->getId();
+         i != m_triggerSegments.end(); ++i) {
+        if ((*i)->getSegment() == s) return (*i)->getId();
     }
     return -1;
 }
@@ -582,20 +582,20 @@ Composition::updateTriggerSegmentReferences()
     std::map<TriggerSegmentId, TriggerSegmentRec::SegmentRuntimeIdSet> refs;
 
     for (iterator i = begin(); i != end(); ++i) {
-	for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
-	    if ((*j)->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
-		TriggerSegmentId id =
-		    (*j)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
-		refs[id].insert((*i)->getRuntimeId());
-	    }
-	}
+        for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+            if ((*j)->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+                TriggerSegmentId id =
+                    (*j)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
+                refs[id].insert((*i)->getRuntimeId());
+            }
+        }
     }
     
     for (std::map<TriggerSegmentId,
-	          TriggerSegmentRec::SegmentRuntimeIdSet>::iterator i = refs.begin();
-	 i != refs.end(); ++i) {
-	TriggerSegmentRec *rec = getTriggerSegmentRec(i->first);
-	if (rec) rec->setReferences(i->second);
+                  TriggerSegmentRec::SegmentRuntimeIdSet>::iterator i = refs.begin();
+         i != refs.end(); ++i) {
+        TriggerSegmentRec *rec = getTriggerSegmentRec(i->first);
+        if (rec) rec->setReferences(i->second);
     }
 }
 
@@ -608,7 +608,7 @@ Composition::getDuration() const
     for (segmentcontainer::const_iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
-	timeT segmentTotal = (*i)->getEndTime();
+        timeT segmentTotal = (*i)->getEndTime();
 
         if (segmentTotal > maxDuration) {
             maxDuration = segmentTotal;
@@ -639,7 +639,7 @@ void
 Composition::clear()
 {
     while (m_segments.size() > 0) {
-	deleteSegment(begin());
+        deleteSegment(begin());
     }
 
     clearTracks();
@@ -678,41 +678,41 @@ Composition::calculateBarPositions() const
     timeT barDuration = TimeSignature().getBarDuration();
 
     if (getStartMarker() < 0) {
-	if (!t.empty() && (*t.begin())->getAbsoluteTime() <= 0) {
-	    barDuration = TimeSignature(**t.begin()).getBarDuration();
-	}
-	lastBarNo = getStartMarker() / barDuration;
-	lastSigTime = getStartMarker();
+        if (!t.empty() && (*t.begin())->getAbsoluteTime() <= 0) {
+            barDuration = TimeSignature(**t.begin()).getBarDuration();
+        }
+        lastBarNo = getStartMarker() / barDuration;
+        lastSigTime = getStartMarker();
 #ifdef DEBUG_BAR_STUFF
-	cerr << "Composition::calculateBarPositions: start marker = " << getStartMarker() << ", so initial bar number = " << lastBarNo << endl;
+        cerr << "Composition::calculateBarPositions: start marker = " << getStartMarker() << ", so initial bar number = " << lastBarNo << endl;
 #endif
     }
 
     for (i = t.begin(); i != t.end(); ++i) {
 
-	timeT myTime = (*i)->getAbsoluteTime();
-	int n = (myTime - lastSigTime) / barDuration;
+        timeT myTime = (*i)->getAbsoluteTime();
+        int n = (myTime - lastSigTime) / barDuration;
 
-	// should only happen for first time sig, when it's at time < 0:
-	if (myTime < lastSigTime) --n;
+        // should only happen for first time sig, when it's at time < 0:
+        if (myTime < lastSigTime) --n;
 
-	// would there be a new bar here anyway?
-	if (barDuration * n + lastSigTime == myTime) { // yes
-	    n += lastBarNo;
-	} else { // no
-	    n += lastBarNo + 1;
-	}
+        // would there be a new bar here anyway?
+        if (barDuration * n + lastSigTime == myTime) { // yes
+            n += lastBarNo;
+        } else { // no
+            n += lastBarNo + 1;
+        }
 
 #ifdef DEBUG_BAR_STUFF
-	cerr << "Composition::calculateBarPositions: bar " << n
-		  << " at " << myTime << endl;
+        cerr << "Composition::calculateBarPositions: bar " << n
+             << " at " << myTime << endl;
 #endif
 
-	(*i)->set<Int>(BarNumberProperty, n);
+        (*i)->set<Int>(BarNumberProperty, n);
 
-	lastBarNo = n;
-	lastSigTime = myTime;
-	barDuration = TimeSignature(**i).getBarDuration();
+        lastBarNo = n;
+        lastSigTime = myTime;
+        barDuration = TimeSignature(**i).getBarDuration();
     }
 
     m_barPositionsNeedCalculating = false;
@@ -739,31 +739,31 @@ Composition::getBarNumber(timeT t) const
     calculateBarPositions();
     ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
     int n;
-    
-    if (i == m_timeSigSegment.end()) { // precedes any time signatures
-	
-	timeT bd = TimeSignature().getBarDuration();
-	if (t < 0) { // see comment in getTimeSignatureAtAux
-	    i = m_timeSigSegment.begin();
-	    if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() <= 0) {
-		bd = TimeSignature(**i).getBarDuration();
-	    }
-	}
 
-	n = t / bd;
-	if (t < 0) {
-	    // negative bars should be rounded down, except where
-	    // the time is on a barline in which case we already
-	    // have the right value (i.e. time -1920 is bar -1,
-	    // but time -3840 is also bar -1, in 4/4)
-	    if (n * bd != t) --n;
-	}
+    if (i == m_timeSigSegment.end()) { // precedes any time signatures
+
+        timeT bd = TimeSignature().getBarDuration();
+        if (t < 0) { // see comment in getTimeSignatureAtAux
+            i = m_timeSigSegment.begin();
+            if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() <= 0) {
+                bd = TimeSignature(**i).getBarDuration();
+            }
+        }
+
+        n = t / bd;
+        if (t < 0) {
+            // negative bars should be rounded down, except where
+            // the time is on a barline in which case we already
+            // have the right value (i.e. time -1920 is bar -1,
+            // but time -3840 is also bar -1, in 4/4)
+            if (n * bd != t) --n;
+        }
 
     } else {
-	
-	n = (*i)->get<Int>(BarNumberProperty);
-	timeT offset = t - (*i)->getAbsoluteTime();
-	n += offset / TimeSignature(**i).getBarDuration();
+
+        n = (*i)->get<Int>(BarNumberProperty);
+        timeT offset = t - (*i)->getAbsoluteTime();
+        n += offset / TimeSignature(**i).getBarDuration();
     }
 
 #ifdef DEBUG_BAR_STUFF
@@ -778,7 +778,7 @@ Composition::getBarRangeForTime(timeT t) const
 {
     return getBarRange(getBarNumber(t));
 }
- 
+
 
 std::pair<timeT, timeT>
 Composition::getBarRange(int n) const
@@ -789,54 +789,54 @@ Composition::getBarRange(int n) const
     dummy.set<Int>(BarNumberProperty, n);
 
     ReferenceSegment::iterator j = std::lower_bound
-	(m_timeSigSegment.begin(), m_timeSigSegment.end(),
-	 &dummy, BarNumberComparator());
+        (m_timeSigSegment.begin(), m_timeSigSegment.end(),
+         &dummy, BarNumberComparator());
     ReferenceSegment::iterator i = j;
 
     if (i == m_timeSigSegment.end() || (*i)->get<Int>(BarNumberProperty) > n) {
-	if (i == m_timeSigSegment.begin()) i = m_timeSigSegment.end();
-	else --i;
+        if (i == m_timeSigSegment.begin()) i = m_timeSigSegment.end();
+        else --i;
     } else ++j; // j needs to point to following barline
 
     timeT start, finish;
 
     if (i == m_timeSigSegment.end()) { // precedes any time sig changes
 
-	timeT barDuration = TimeSignature().getBarDuration();
-	if (n < 0) { // see comment in getTimeSignatureAtAux
-	    i = m_timeSigSegment.begin();
-	    if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() <= 0) {
-		barDuration = TimeSignature(**i).getBarDuration();
-	    }
-	}
+        timeT barDuration = TimeSignature().getBarDuration();
+        if (n < 0) { // see comment in getTimeSignatureAtAux
+            i = m_timeSigSegment.begin();
+            if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() <= 0) {
+                barDuration = TimeSignature(**i).getBarDuration();
+            }
+        }
 
-	start = n * barDuration;
-	finish = start + barDuration;
+        start = n * barDuration;
+        finish = start + barDuration;
 
 #ifdef DEBUG_BAR_STUFF
     cerr << "Composition::getBarRange[1]: bar " << n << ": (" << start
-	      << " -> " << finish << ")" << endl;
+         << " -> " << finish << ")" << endl;
 #endif
 
     } else {
-	
-	timeT barDuration = TimeSignature(**i).getBarDuration();
-	start = (*i)->getAbsoluteTime() +
-	    (n - (*i)->get<Int>(BarNumberProperty)) * barDuration;
-	finish = start + barDuration;
+
+        timeT barDuration = TimeSignature(**i).getBarDuration();
+        start = (*i)->getAbsoluteTime() +
+            (n - (*i)->get<Int>(BarNumberProperty)) * barDuration;
+        finish = start + barDuration;
 
 #ifdef DEBUG_BAR_STUFF
     cerr << "Composition::getBarRange[2]: bar " << n << ": (" << start
-	      << " -> " << finish << ")" << endl;
+         << " -> " << finish << ")" << endl;
 #endif
     } 
 
     // partial bar
     if (j != m_timeSigSegment.end() && finish > (*j)->getAbsoluteTime()) {
-	finish = (*j)->getAbsoluteTime();
+        finish = (*j)->getAbsoluteTime();
 #ifdef DEBUG_BAR_STUFF
     cerr << "Composition::getBarRange[3]: bar " << n << ": (" << start
-	      << " -> " << finish << ")" << endl;
+         << " -> " << finish << ")" << endl;
 #endif
     }
 
@@ -864,7 +864,7 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 #endif
 
     ReferenceSegment::iterator i =
-	m_timeSigSegment.insertEvent(timeSig.getAsEvent(t));
+        m_timeSigSegment.insertEvent(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
 
     updateRefreshStatuses();
@@ -887,11 +887,11 @@ Composition::getTimeSignatureAt(timeT t, TimeSignature &timeSig) const
     ReferenceSegment::iterator i = getTimeSignatureAtAux(t);
 
     if (i == m_timeSigSegment.end()) {
-	timeSig = TimeSignature();
-	return 0;
+        timeSig = TimeSignature();
+        return 0;
     } else {
-	timeSig = TimeSignature(**i);
-	return (*i)->getAbsoluteTime();
+        timeSig = TimeSignature(**i);
+        return (*i)->getAbsoluteTime();
     }
 }
 
@@ -922,10 +922,10 @@ Composition::getTimeSignatureAtAux(timeT t) const
     // bar zero.
 
     if (t < 0 && i == m_timeSigSegment.end()) {
-	i = m_timeSigSegment.begin();
-	if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() > 0) {
-	    i  = m_timeSigSegment.end();
-	}
+        i = m_timeSigSegment.begin();
+        if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() > 0) {
+            i  = m_timeSigSegment.end();
+        }
     }
     
     return i;
@@ -949,8 +949,8 @@ std::pair<timeT, TimeSignature>
 Composition::getTimeSignatureChange(int n) const
 {
     return std::pair<timeT, TimeSignature>
-	(m_timeSigSegment[n]->getAbsoluteTime(),
-	 TimeSignature(*m_timeSigSegment[n]));
+        (m_timeSigSegment[n]->getAbsoluteTime(),
+         TimeSignature(*m_timeSigSegment[n]));
 }
 
 void
@@ -976,48 +976,48 @@ Composition::getTempoAtTime(timeT t) const
     // getTimeSignatureAt
 
     if (i == m_tempoSegment.end()) {
-	if (t < 0) {
+        if (t < 0) {
 #ifdef DEBUG_TEMPO_STUFF
-	    cerr << "Composition: Negative time " << t << " for tempo, using 0" << endl;
+            cerr << "Composition: Negative time " << t << " for tempo, using 0" << endl;
 #endif
-	    return getTempoAtTime(0);
-	}
-	else return m_defaultTempo;
+            return getTempoAtTime(0);
+        }
+        else return m_defaultTempo;
     }
     
     tempoT tempo = (tempoT)((*i)->get<Int>(TempoProperty));
 
     if ((*i)->has(TargetTempoProperty)) {
 
-	tempoT target = (tempoT)((*i)->get<Int>(TargetTempoProperty));
-	ReferenceSegment::iterator j = i;
-	++j;
+        tempoT target = (tempoT)((*i)->get<Int>(TargetTempoProperty));
+        ReferenceSegment::iterator j = i;
+        ++j;
 
-	if (target > 0 || (target == 0 && j != m_tempoSegment.end())) {
+        if (target > 0 || (target == 0 && j != m_tempoSegment.end())) {
 
-	    timeT t0 = (*i)->getAbsoluteTime();
-	    timeT t1 = (j != m_tempoSegment.end() ?
-			(*j)->getAbsoluteTime() : getEndMarker());
+            timeT t0 = (*i)->getAbsoluteTime();
+            timeT t1 = (j != m_tempoSegment.end() ?
+                        (*j)->getAbsoluteTime() : getEndMarker());
 
-	    if (t1 < t0) return tempo;
-	    
-	    if (target == 0) {
-		target = (tempoT)((*j)->get<Int>(TempoProperty));
-	    }
+            if (t1 < t0) return tempo;
 
-	    // tempo ramps are linear in 1/tempo
-	    double s0 = 1.0 / double(tempo);
-	    double s1 = 1.0 / double(target);
-	    double s = s0 + (t - t0) * ((s1 - s0) / (t1 - t0));
-	    
-	    tempoT result = tempoT((1.0 / s) + 0.01);
+            if (target == 0) {
+                target = (tempoT)((*j)->get<Int>(TempoProperty));
+            }
+
+            // tempo ramps are linear in 1/tempo
+            double s0 = 1.0 / double(tempo);
+            double s1 = 1.0 / double(target);
+            double s = s0 + (t - t0) * ((s1 - s0) / (t1 - t0));
+
+            tempoT result = tempoT((1.0 / s) + 0.01);
 
 #ifdef DEBUG_TEMPO_STUFF
-	    cerr << "Composition: Calculated tempo " << result << " at " << t << endl;
+            cerr << "Composition: Calculated tempo " << result << " at " << t << endl;
 #endif
 
-	    return result;
-	}
+            return result;
+        }
     }
 
 #ifdef DEBUG_TEMPO_STUFF
@@ -1037,40 +1037,40 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 
     int n = getTempoChangeNumberAt(time);
     if (n >= 0) {
-	std::pair<timeT, tempoT> tc = getTempoChange(n);
-	if (tc.first == time) {
-	    if (tc.second == m_minTempo || tc.second == m_maxTempo) {
-		fullTempoUpdate = true;
-	    } else {
-		std::pair<bool, tempoT> tr = getTempoRamping(n);
-		if (tr.first &&
-		    (tr.second == m_minTempo || tr.second == m_maxTempo)) {
-		    fullTempoUpdate = true;
-		}
-	    }
-	}
+        std::pair<timeT, tempoT> tc = getTempoChange(n);
+        if (tc.first == time) {
+            if (tc.second == m_minTempo || tc.second == m_maxTempo) {
+                fullTempoUpdate = true;
+            } else {
+                std::pair<bool, tempoT> tr = getTempoRamping(n);
+                if (tr.first &&
+                    (tr.second == m_minTempo || tr.second == m_maxTempo)) {
+                    fullTempoUpdate = true;
+                }
+            }
+        }
     }
 
     Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, tempo);
 
     if (targetTempo >= 0) {
-	tempoEvent->set<Int>(TargetTempoProperty, targetTempo);
+        tempoEvent->set<Int>(TargetTempoProperty, targetTempo);
     }
 
     ReferenceSegment::iterator i = m_tempoSegment.insertEvent(tempoEvent);
 
     if (fullTempoUpdate) {
-	
-	updateExtremeTempos();
+
+        updateExtremeTempos();
 
     } else {
 
-	if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
-	if (targetTempo > 0 && targetTempo < m_minTempo) m_minTempo = targetTempo;
+        if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+        if (targetTempo > 0 && targetTempo < m_minTempo) m_minTempo = targetTempo;
 
-	if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
-	if (targetTempo > 0 && targetTempo > m_maxTempo) m_maxTempo = targetTempo;
+        if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+        if (targetTempo > 0 && targetTempo > m_maxTempo) m_maxTempo = targetTempo;
     }
 
     m_tempoTimestampsNeedCalculating = true;
@@ -1102,8 +1102,8 @@ std::pair<timeT, tempoT>
 Composition::getTempoChange(int n) const
 {
     return std::pair<timeT, tempoT>
-	(m_tempoSegment[n]->getAbsoluteTime(),
-	 tempoT(m_tempoSegment[n]->get<Int>(TempoProperty)));
+        (m_tempoSegment[n]->getAbsoluteTime(),
+         tempoT(m_tempoSegment[n]->get<Int>(TempoProperty)));
 }
 
 std::pair<bool, tempoT>
@@ -1111,18 +1111,18 @@ Composition::getTempoRamping(int n, bool calculate) const
 {
     tempoT target = -1;
     if (m_tempoSegment[n]->has(TargetTempoProperty)) {
-	target = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
+        target = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
     }
     bool ramped = (target >= 0);
     if (target == 0) {
-	if (calculate) {
-	    if (int(m_tempoSegment.size()) > n+1) {
-		target = m_tempoSegment[n+1]->get<Int>(TempoProperty);
-	    }
-	}
+        if (calculate) {
+            if (int(m_tempoSegment.size()) > n+1) {
+                target = m_tempoSegment[n+1]->get<Int>(TempoProperty);
+            }
+        }
     }
     if (target < 0 || (calculate && (target == 0))) {
-	target = m_tempoSegment[n]->get<Int>(TempoProperty);
+        target = m_tempoSegment[n]->get<Int>(TempoProperty);
     }
     return std::pair<bool, tempoT>(ramped, target);
 }
@@ -1134,17 +1134,17 @@ Composition::removeTempoChange(int n)
     tempoT oldTarget = -1;
 
     if (m_tempoSegment[n]->has(TargetTempoProperty)) {
-	oldTarget = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
+        oldTarget = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
     }
 
     m_tempoSegment.eraseEvent(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
 
     if (oldTempo == m_minTempo ||
-	oldTempo == m_maxTempo ||
-	(oldTarget > 0 && oldTarget == m_minTempo) ||
-	(oldTarget > 0 && oldTarget == m_maxTempo)) {
-	updateExtremeTempos();
+        oldTempo == m_maxTempo ||
+        (oldTarget > 0 && oldTarget == m_minTempo) ||
+        (oldTarget > 0 && oldTarget == m_maxTempo)) {
+        updateExtremeTempos();
     }
 
     updateRefreshStatuses();
@@ -1157,20 +1157,20 @@ Composition::updateExtremeTempos()
     m_minTempo = 0;
     m_maxTempo = 0;
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
-	 i != m_tempoSegment.end(); ++i) {
-	tempoT tempo = (*i)->get<Int>(TempoProperty);
-	tempoT target = -1;
-	if ((*i)->has(TargetTempoProperty)) {
-	    target = (*i)->get<Int>(TargetTempoProperty);
-	}
-	if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
-	if (target > 0 && target < m_minTempo) m_minTempo = target;
-	if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
-	if (target > 0 && target > m_maxTempo) m_maxTempo = target;
+         i != m_tempoSegment.end(); ++i) {
+        tempoT tempo = (*i)->get<Int>(TempoProperty);
+        tempoT target = -1;
+        if ((*i)->has(TargetTempoProperty)) {
+            target = (*i)->get<Int>(TargetTempoProperty);
+        }
+        if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+        if (target > 0 && target < m_minTempo) m_minTempo = target;
+        if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+        if (target > 0 && target > m_maxTempo) m_maxTempo = target;
     }
     if (m_minTempo == 0) {
-	m_minTempo = m_defaultTempo;
-	m_maxTempo = m_defaultTempo;
+        m_minTempo = m_defaultTempo;
+        m_maxTempo = m_defaultTempo;
     }
 }
 
@@ -1181,11 +1181,11 @@ Composition::getElapsedRealTime(timeT t) const
 
     ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
     if (i == m_tempoSegment.end()) {
-	i = m_tempoSegment.begin();
-	if (t >= 0 ||
-	    (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
-	    return time2RealTime(t, m_defaultTempo);
-	}
+        i = m_tempoSegment.begin();
+        if (t >= 0 ||
+            (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
+            return time2RealTime(t, m_defaultTempo);
+        }
     }
 
     RealTime elapsed;
@@ -1196,20 +1196,20 @@ Composition::getElapsedRealTime(timeT t) const
     if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
 
     if (target > 0) {
-	elapsed = getTempoTimestamp(*i) +
-	    time2RealTime(t - (*i)->getAbsoluteTime(),
-			  tempoT((*i)->get<Int>(TempoProperty)),
-			  nextTempoTime - (*i)->getAbsoluteTime(),
-			  target);
+        elapsed = getTempoTimestamp(*i) +
+            time2RealTime(t - (*i)->getAbsoluteTime(),
+                          tempoT((*i)->get<Int>(TempoProperty)),
+                          nextTempoTime - (*i)->getAbsoluteTime(),
+                          target);
     } else {
-	elapsed = getTempoTimestamp(*i) +
-	    time2RealTime(t - (*i)->getAbsoluteTime(),
-			  tempoT((*i)->get<Int>(TempoProperty)));
+        elapsed = getTempoTimestamp(*i) +
+            time2RealTime(t - (*i)->getAbsoluteTime(),
+                          tempoT((*i)->get<Int>(TempoProperty)));
     }
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition::getElapsedRealTime: " << t << " -> "
-	 << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")" << endl;
+         << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")" << endl;
 #endif
 
     return elapsed;
@@ -1222,11 +1222,11 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 
     ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
     if (i == m_tempoSegment.end()) {
-	i = m_tempoSegment.begin();
-	if (t >= RealTime::zeroTime ||
-	    (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
-	    return realTime2Time(t, m_defaultTempo);
-	}
+        i = m_tempoSegment.begin();
+        if (t >= RealTime::zeroTime ||
+            (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
+            return realTime2Time(t, m_defaultTempo);
+        }
     }
 
     timeT elapsed;
@@ -1236,29 +1236,29 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
 
     if (target > 0) {
-	elapsed = (*i)->getAbsoluteTime() +
-	    realTime2Time(t - getTempoTimestamp(*i),
-			  (tempoT)((*i)->get<Int>(TempoProperty)),
-			  nextTempoTime - (*i)->getAbsoluteTime(),
-			  target);
+        elapsed = (*i)->getAbsoluteTime() +
+            realTime2Time(t - getTempoTimestamp(*i),
+                          (tempoT)((*i)->get<Int>(TempoProperty)),
+                          nextTempoTime - (*i)->getAbsoluteTime(),
+                          target);
     } else {
-	elapsed = (*i)->getAbsoluteTime() +
-	    realTime2Time(t - getTempoTimestamp(*i),
-			  (tempoT)((*i)->get<Int>(TempoProperty)));
+        elapsed = (*i)->getAbsoluteTime() +
+            realTime2Time(t - getTempoTimestamp(*i),
+                          (tempoT)((*i)->get<Int>(TempoProperty)));
     }
 
 #ifdef DEBUG_TEMPO_STUFF
     static int doError = true;
     if (doError) {
-	doError = false;
-	RealTime cfReal = getElapsedRealTime(elapsed);
-	timeT cfTimeT = getElapsedTimeForRealTime(cfReal);
-	doError = true;
-	cerr << "getElapsedTimeForRealTime: " << t << " -> "
-	     << elapsed << " (error " << (cfReal - t)
-	     << " or " << (cfTimeT - elapsed) << ", tempo "
-	     << (*i)->getAbsoluteTime() << ":"
-	     << (tempoT)((*i)->get<Int>(TempoProperty)) << ")" << endl;
+        doError = false;
+        RealTime cfReal = getElapsedRealTime(elapsed);
+        timeT cfTimeT = getElapsedTimeForRealTime(cfReal);
+        doError = true;
+        cerr << "getElapsedTimeForRealTime: " << t << " -> "
+             << elapsed << " (error " << (cfReal - t)
+             << " or " << (cfTimeT - elapsed) << ", tempo "
+             << (*i)->getAbsoluteTime() << ":"
+             << (tempoT)((*i)->get<Int>(TempoProperty)) << ")" << endl;
     }
 #endif
     return elapsed;
@@ -1280,36 +1280,36 @@ Composition::calculateTempoTimestamps() const
 #endif
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
-	 i != m_tempoSegment.end(); ++i) {
+         i != m_tempoSegment.end(); ++i) {
 
-	RealTime myTime;
+        RealTime myTime;
 
-	if (target > 0) {
-	    myTime = lastRealTime +
-		time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo,
-			      (*i)->getAbsoluteTime() - lastTimeT, target);
-	} else {
-	    myTime = lastRealTime +
-		time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo);
-	}
+        if (target > 0) {
+            myTime = lastRealTime +
+                time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo,
+                              (*i)->getAbsoluteTime() - lastTimeT, target);
+        } else {
+            myTime = lastRealTime +
+                time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo);
+        }
 
-	setTempoTimestamp(*i, myTime);
+        setTempoTimestamp(*i, myTime);
 
 #ifdef DEBUG_TEMPO_STUFF
-	(*i)->dump(cerr);
+        (*i)->dump(cerr);
 #endif
 
-	lastRealTime = myTime;
-	lastTimeT = (*i)->getAbsoluteTime();
-	tempo = tempoT((*i)->get<Int>(TempoProperty));
+        lastRealTime = myTime;
+        lastTimeT = (*i)->getAbsoluteTime();
+        tempo = tempoT((*i)->get<Int>(TempoProperty));
 
-	target = -1;
-	timeT nextTempoTime = 0;
-	if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
+        target = -1;
+        timeT nextTempoTime = 0;
+        if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
     }
 
     m_tempoTimestampsNeedCalculating = false;
-}	
+}
 
 #ifdef DEBUG_TEMPO_STUFF
 static int DEBUG_silence_recursive_tempo_printout = 0;
@@ -1329,15 +1329,15 @@ Composition::time2RealTime(timeT t, tempoT tempo) const
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {
-	cerr << "Composition::time2RealTime: t " << t << ", sec " << sec << ", nsec "
-	     << nsec << ", tempo " << tempo
-	     << ", cdur " << cdur << ", dt " << dt << ", rt " << rt << endl;
-	DEBUG_silence_recursive_tempo_printout = 1;
-	timeT ct = realTime2Time(rt, tempo);
-	timeT et = t - ct;
-	RealTime ert = time2RealTime(et, tempo);
-	cerr << "cf. realTime2Time(" << rt << ") -> " << ct << " [err " << et << " (" << ert << "?)]" << endl;
-	DEBUG_silence_recursive_tempo_printout=0;
+        cerr << "Composition::time2RealTime: t " << t << ", sec " << sec << ", nsec "
+             << nsec << ", tempo " << tempo
+             << ", cdur " << cdur << ", dt " << dt << ", rt " << rt << endl;
+        DEBUG_silence_recursive_tempo_printout = 1;
+        timeT ct = realTime2Time(rt, tempo);
+        timeT et = t - ct;
+        RealTime ert = time2RealTime(et, tempo);
+        cerr << "cf. realTime2Time(" << rt << ") -> " << ct << " [err " << et << " (" << ert << "?)]" << endl;
+        DEBUG_silence_recursive_tempo_printout=0;
     }
 #endif
 
@@ -1346,7 +1346,7 @@ Composition::time2RealTime(timeT t, tempoT tempo) const
 
 RealTime
 Composition::time2RealTime(timeT time, tempoT tempo,
-			   timeT targetTime, tempoT targetTempo) const
+                           timeT targetTime, tempoT targetTempo) const
 {
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
@@ -1365,7 +1365,7 @@ Composition::time2RealTime(timeT time, tempoT tempo,
     // n is targetTime in ticks
 
     if (targetTime == 0 || targetTempo == tempo) {
-	return time2RealTime(time, targetTempo);
+        return time2RealTime(time, targetTempo);
     }
 
     double a = (100000 * 60) / (double(tempo) * cdur);
@@ -1381,14 +1381,14 @@ Composition::time2RealTime(timeT time, tempoT tempo,
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {
-	cerr << "Composition::time2RealTime[2]: time " << time << ", tempo "
-	     << tempo << ", targetTime " << targetTime << ", targetTempo "
-	     << targetTempo << ": rt " << rt << endl;
-	DEBUG_silence_recursive_tempo_printout = 1;
-//	RealTime nextRt = time2RealTime(targetTime, tempo, targetTime, targetTempo);
-	timeT ct = realTime2Time(rt, tempo, targetTime, targetTempo);
-	cerr << "cf. realTime2Time: rt " << rt << " -> " << ct << endl;
-	DEBUG_silence_recursive_tempo_printout=0;
+        cerr << "Composition::time2RealTime[2]: time " << time << ", tempo "
+             << tempo << ", targetTime " << targetTime << ", targetTempo "
+             << targetTempo << ": rt " << rt << endl;
+        DEBUG_silence_recursive_tempo_printout = 1;
+//        RealTime nextRt = time2RealTime(targetTime, tempo, targetTime, targetTempo);
+        timeT ct = realTime2Time(rt, tempo, targetTime, targetTempo);
+        cerr << "cf. realTime2Time: rt " << rt << " -> " << ct << endl;
+        DEBUG_silence_recursive_tempo_printout=0;
     }
 #endif
 
@@ -1408,15 +1408,15 @@ Composition::realTime2Time(RealTime rt, tempoT tempo) const
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {
-	cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
-	     << rt.nsec << ", tempo " << tempo
-	     << ", cdur " << cdur << ", tsec " << tsec << ", tnsec " << tnsec << ", dt " << dt << ", t " << t << endl;
-	DEBUG_silence_recursive_tempo_printout = 1;
-	RealTime crt = time2RealTime(t, tempo);
-	RealTime ert = rt - crt;
-	timeT et = realTime2Time(ert, tempo);
-	cerr << "cf. time2RealTime(" << t << ") -> " << crt << " [err " << ert << " (" << et << "?)]" << endl;
-	DEBUG_silence_recursive_tempo_printout = 0;
+        cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
+             << rt.nsec << ", tempo " << tempo
+             << ", cdur " << cdur << ", tsec " << tsec << ", tnsec " << tnsec << ", dt " << dt << ", t " << t << endl;
+        DEBUG_silence_recursive_tempo_printout = 1;
+        RealTime crt = time2RealTime(t, tempo);
+        RealTime ert = rt - crt;
+        timeT et = realTime2Time(ert, tempo);
+        cerr << "cf. time2RealTime(" << t << ") -> " << crt << " [err " << ert << " (" << et << "?)]" << endl;
+        DEBUG_silence_recursive_tempo_printout = 0;
     }
 #endif
 
@@ -1425,7 +1425,7 @@ Composition::realTime2Time(RealTime rt, tempoT tempo) const
 
 timeT
 Composition::realTime2Time(RealTime rt, tempoT tempo,
-			   timeT targetTime, tempoT targetTempo) const
+                           timeT targetTime, tempoT targetTempo) const
 {
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
@@ -1455,19 +1455,19 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
     double term2 = (2.0 * n * a) * (2.0 * n * a) + 8 * (b - a) * t * n;
 
     if (term2 < 0) { 
-	// We're screwed, but at least let's not crash
-	std::cerr << "ERROR: Composition::realTime2Time: term2 < 0 (it's " << term2 << ")" << std::endl;
+        // We're screwed, but at least let's not crash
+        std::cerr << "ERROR: Composition::realTime2Time: term2 < 0 (it's " << term2 << ")" << std::endl;
 #ifdef DEBUG_TEMPO_STUFF
-	std::cerr << "rt = " << rt << ", tempo = " << tempo << ", targetTime = " << targetTime << ", targetTempo = " << targetTempo << std::endl;
-	std::cerr << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t <<std::endl;
-	std::cerr << "that's sqrt( (" << ((2.0*n*a*2.0*n*a)) << ") + "
-		  << (8*(b-a)*t*n) << " )" << endl;
+        std::cerr << "rt = " << rt << ", tempo = " << tempo << ", targetTime = " << targetTime << ", targetTempo = " << targetTempo << std::endl;
+        std::cerr << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t <<std::endl;
+        std::cerr << "that's sqrt( (" << ((2.0*n*a*2.0*n*a)) << ") + "
+                  << (8*(b-a)*t*n) << " )" << endl;
 
-	std::cerr << "so our original expression was " << rt << " = "
-		  << a << "t + (t^2 * (" << b << " - " << a << ")) / " << 2*n << std::endl;
+        std::cerr << "so our original expression was " << rt << " = "
+                  << a << "t + (t^2 * (" << b << " - " << a << ")) / " << 2*n << std::endl;
 #endif
 
-	return realTime2Time(rt, tempo);
+        return realTime2Time(rt, tempo);
     }
 
     double term3 = sqrt(term2);
@@ -1506,28 +1506,28 @@ Composition::timeRatioToTempo(RealTime &realTime,
 
 bool
 Composition::getTempoTarget(ReferenceSegment::const_iterator i,
-			    tempoT &target,
-			    timeT &targetTime) const
+                            tempoT &target,
+                            timeT &targetTime) const
 {
     target = -1;
     targetTime = 0;
     bool have = false;
 
     if ((*i)->has(TargetTempoProperty)) {
-	target = (*i)->get<Int>(TargetTempoProperty);
-	if (target >= 0) {
-	    ReferenceSegment::const_iterator j(i);
-	    if (++j != m_tempoSegment.end()) {
-		if (target == 0) target = (*j)->get<Int>(TempoProperty);
-		targetTime = (*j)->getAbsoluteTime();
-	    } else {
-		targetTime = getEndMarker();
-		if (targetTime < (*i)->getAbsoluteTime()) {
-		    target = -1;
-		}
-	    }
-	    if (target > 0) have = true;
-	}
+        target = (*i)->get<Int>(TargetTempoProperty);
+        if (target >= 0) {
+            ReferenceSegment::const_iterator j(i);
+            if (++j != m_tempoSegment.end()) {
+                if (target == 0) target = (*j)->get<Int>(TempoProperty);
+                targetTime = (*j)->getAbsoluteTime();
+            } else {
+                targetTime = getEndMarker();
+                if (targetTime < (*i)->getAbsoluteTime()) {
+                    target = -1;
+                }
+            }
+            if (target > 0) have = true;
+        }
     }
 
     return have;
@@ -1549,8 +1549,8 @@ Composition::setTempoTimestamp(Event *e, RealTime t)
 
 void
 Composition::getMusicalTimeForAbsoluteTime(timeT absTime,
-					   int &bar, int &beat,
-					   int &fraction, int &remainder)
+                                           int &bar, int &beat,
+                                           int &fraction, int &remainder)
 {
     bar = getBarNumber(absTime);
 
@@ -1567,8 +1567,8 @@ Composition::getMusicalTimeForAbsoluteTime(timeT absTime,
 
 void
 Composition::getMusicalTimeForDuration(timeT absTime, timeT duration,
-				       int &bars, int &beats,
-				       int &fractions, int &remainder)
+                                       int &bars, int &beats,
+                                       int &fractions, int &remainder)
 {
     TimeSignature timeSig = getTimeSignatureAt(absTime);
     timeT barDuration = timeSig.getBarDuration();
@@ -1584,7 +1584,7 @@ Composition::getMusicalTimeForDuration(timeT absTime, timeT duration,
 
 timeT
 Composition::getAbsoluteTimeForMusicalTime(int bar, int beat,
-					   int fraction, int remainder)
+                                           int fraction, int remainder)
 {
     timeT t = getBarStart(bar - 1);
     TimeSignature timesig = getTimeSignatureAt(t);
@@ -1596,14 +1596,14 @@ Composition::getAbsoluteTimeForMusicalTime(int bar, int beat,
 
 timeT
 Composition::getDurationForMusicalTime(timeT absTime,
-				       int bars, int beats,
-				       int fractions, int remainder)
+                                       int bars, int beats,
+                                       int fractions, int remainder)
 {
     TimeSignature timeSig = getTimeSignatureAt(absTime);
     timeT barDuration = timeSig.getBarDuration();
     timeT beatDuration = timeSig.getBeatDuration();
     timeT t = bars * barDuration + beats * beatDuration + fractions *
-	Note(Note::Shortest).getDuration() + remainder;
+        Note(Note::Shortest).getDuration() + remainder;
     return t;
 }
 
@@ -1648,11 +1648,11 @@ Track* Composition::getTrackById(TrackId track) const
         return (*i).second;
 
     std::cerr << "Composition::getTrackById("
-	      << track << ") - WARNING - track id not found, this is probably a BUG "
-	      << __FILE__ << ":" << __LINE__ << std::endl;
+              << track << ") - WARNING - track id not found, this is probably a BUG "
+              << __FILE__ << ":" << __LINE__ << std::endl;
     std::cerr << "Available track ids are: " << std::endl;
     for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-	std::cerr << (int)(*i).second->getId() << std::endl;
+        std::cerr << (int)(*i).second->getId() << std::endl;
     }
 
     return 0;
@@ -1697,7 +1697,7 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 
         checkSelectedAndRecordTracks();
         updateRefreshStatuses();
-	notifyTrackChanged(getTrackById(newId));
+        notifyTrackChanged(getTrackById(newId));
     }
     else
         std::cerr << "Composition::resetTrackIdAndPosition - "
@@ -1756,7 +1756,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
         m_tracks.erase(titerator);
         checkSelectedAndRecordTracks();
         updateRefreshStatuses();
-	notifyTrackDeleted(track);
+        notifyTrackDeleted(track);
     }
     
 }
@@ -1814,15 +1814,15 @@ Composition::getClosestValidTrackId(TrackId id) const
     TrackId closestValidTrackId = 0;
 
     for (trackcontainer::const_iterator i = getTracks().begin();
-	 i != getTracks().end(); ++i) {
+         i != getTracks().end(); ++i) {
 
         long cdiff = labs(i->second->getId() - id);
 
-	if (cdiff < diff) {
+        if (cdiff < diff) {
             diff = cdiff;
-	    closestValidTrackId = i->second->getId();
+            closestValidTrackId = i->second->getId();
 
-	} else break; // std::map is sorted, so if the diff increases, we're passed closest valid id
+        } else break; // std::map is sorted, so if the diff increases, we're passed closest valid id
 
     }
 
@@ -1883,17 +1883,17 @@ std::string Composition::toXmlString()
 
     composition << "<composition recordtracks=\"";
     for (recordtrackiterator i = m_recordTracks.begin();
-	 i != m_recordTracks.end(); ) {
-	composition << *i;
-	if (++i != m_recordTracks.end()) {
-	    composition << ",";
-	}
+         i != m_recordTracks.end(); ) {
+        composition << *i;
+        if (++i != m_recordTracks.end()) {
+            composition << ",";
+        }
     }
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
                 << std::setprecision(4)
-		<< getTempoQpm(m_defaultTempo);
+                << getTempoQpm(m_defaultTempo);
     composition << "\" compositionDefaultTempo=\"";
     composition << m_defaultTempo;
 
@@ -1934,58 +1934,58 @@ std::string Composition::toXmlString()
     composition << endl;
 
     for (ReferenceSegment::iterator i = m_timeSigSegment.begin();
-	 i != m_timeSigSegment.end(); ++i) {
+         i != m_timeSigSegment.end(); ++i) {
 
-	// Might be nice just to stream the events, but that's
-	// normally done by XmlStorableEvent in gui/ at the
-	// moment.  Still, this isn't too much of a hardship
+        // Might be nice just to stream the events, but that's
+        // normally done by XmlStorableEvent in gui/ at the
+        // moment.  Still, this isn't too much of a hardship
 
-	composition << "  <timesignature time=\"" << (*i)->getAbsoluteTime()
-		    << "\" numerator=\""
-		    << (*i)->get<Int>(TimeSignature::NumeratorPropertyName)
-		    << "\" denominator=\""
-		    << (*i)->get<Int>(TimeSignature::DenominatorPropertyName)
-		    << "\"";
+        composition << "  <timesignature time=\"" << (*i)->getAbsoluteTime()
+                    << "\" numerator=\""
+                    << (*i)->get<Int>(TimeSignature::NumeratorPropertyName)
+                    << "\" denominator=\""
+                    << (*i)->get<Int>(TimeSignature::DenominatorPropertyName)
+                    << "\"";
 
-	bool common = false;
-	(*i)->get<Bool>(TimeSignature::ShowAsCommonTimePropertyName, common);
-	if (common) composition << " common=\"true\"";
+        bool common = false;
+        (*i)->get<Bool>(TimeSignature::ShowAsCommonTimePropertyName, common);
+        if (common) composition << " common=\"true\"";
 
-	bool hidden = false;
-	(*i)->get<Bool>(TimeSignature::IsHiddenPropertyName, hidden);
-	if (hidden) composition << " hidden=\"true\"";
+        bool hidden = false;
+        (*i)->get<Bool>(TimeSignature::IsHiddenPropertyName, hidden);
+        if (hidden) composition << " hidden=\"true\"";
 
-	bool hiddenBars = false;
-	(*i)->get<Bool>(TimeSignature::HasHiddenBarsPropertyName, hiddenBars);
-	if (hiddenBars) composition << " hiddenbars=\"true\"";
+        bool hiddenBars = false;
+        (*i)->get<Bool>(TimeSignature::HasHiddenBarsPropertyName, hiddenBars);
+        if (hiddenBars) composition << " hiddenbars=\"true\"";
 
-	composition << "/>" << endl;
+        composition << "/>" << endl;
     }
 
     composition << endl;
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
-	 i != m_tempoSegment.end(); ++i) {
+         i != m_tempoSegment.end(); ++i) {
 
-	tempoT tempo = tempoT((*i)->get<Int>(TempoProperty));
-	tempoT target = -1;
-	if ((*i)->has(TargetTempoProperty)) {
-	    target = tempoT((*i)->get<Int>(TargetTempoProperty));
-	}
-	composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
-		    << "\" bph=\"" << ((tempo * 6) / 10000)
-		    << "\" tempo=\"" << tempo;
-	if (target >= 0) {
-	    composition << "\" target=\"" << target;
-	}
-	composition << "\"/>" << endl;
+        tempoT tempo = tempoT((*i)->get<Int>(TempoProperty));
+        tempoT target = -1;
+        if ((*i)->has(TargetTempoProperty)) {
+            target = tempoT((*i)->get<Int>(TargetTempoProperty));
+        }
+        composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
+                    << "\" bph=\"" << ((tempo * 6) / 10000)
+                    << "\" tempo=\"" << tempo;
+        if (target >= 0) {
+            composition << "\" target=\"" << target;
+        }
+        composition << "\"/>" << endl;
     }
 
     composition << endl;
 
     composition << "<metadata>" << endl
-		<< m_metadata.toXmlString() << endl
-		<< "</metadata>" << endl << endl;
+                << m_metadata.toXmlString() << endl
+                << "</metadata>" << endl << endl;
 
     composition << "<markers>" << endl;
     for (markerconstiterator mIt = m_markers.begin();
@@ -2115,17 +2115,17 @@ Composition::notifySegmentAdded(Segment *s) const
 
     for (const_iterator i = begin(); i != end(); ++i) {
 
-	if (((*i)->getTrack() == s->getTrack())
-	    && ((*i)->isRepeating())
-	    && ((*i)->getStartTime() < s->getStartTime())) {
+        if (((*i)->getTrack() == s->getTrack())
+            && ((*i)->isRepeating())
+            && ((*i)->getStartTime() < s->getStartTime())) {
 
-	    notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
-	}
+            notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+        }
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentAdded(this, s);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentAdded(this, s);
     }
 }
 
@@ -2138,17 +2138,17 @@ Composition::notifySegmentRemoved(Segment *s) const
 
     for (const_iterator i = begin(); i != end(); ++i) {
 
-	if (((*i)->getTrack() == s->getTrack())
-	    && ((*i)->isRepeating())
-	    && ((*i)->getStartTime() < s->getStartTime())) {
+        if (((*i)->getTrack() == s->getTrack())
+            && ((*i)->isRepeating())
+            && ((*i)->getStartTime() < s->getStartTime())) {
 
-	    notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
-	}
+            notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+        }
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentRemoved(this, s);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentRemoved(this, s);
     }
 }
 
@@ -2156,8 +2156,8 @@ void
 Composition::notifySegmentRepeatChanged(Segment *s, bool repeat) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentRepeatChanged(this, s, repeat);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentRepeatChanged(this, s, repeat);
     }
 }
 
@@ -2165,8 +2165,8 @@ void
 Composition::notifySegmentRepeatEndChanged(Segment *s, timeT t) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentRepeatEndChanged(this, s, t);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentRepeatEndChanged(this, s, t);
     }
 }
 
@@ -2174,8 +2174,8 @@ void
 Composition::notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentEventsTimingChanged(this, s, delay, rtDelay);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentEventsTimingChanged(this, s, delay, rtDelay);
     }
 }
 
@@ -2183,8 +2183,8 @@ void
 Composition::notifySegmentTransposeChanged(Segment *s, int transpose) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentTransposeChanged(this, s, transpose);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentTransposeChanged(this, s, transpose);
     }
 }
 
@@ -2197,17 +2197,17 @@ Composition::notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId)
 
     for (const_iterator i = begin(); i != end(); ++i) {
 
-	if (((*i)->getTrack() == oldId || (*i)->getTrack() == newId) 
-	    && ((*i)->isRepeating())
-	    && ((*i)->getStartTime() < s->getStartTime())) {
+        if (((*i)->getTrack() == oldId || (*i)->getTrack() == newId)
+            && ((*i)->isRepeating())
+            && ((*i)->getStartTime() < s->getStartTime())) {
 
-	    notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
-	}
+            notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+        }
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentTrackChanged(this, s, newId);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentTrackChanged(this, s, newId);
     }
 }
 
@@ -2231,8 +2231,8 @@ Composition::notifySegmentStartChanged(Segment *s, timeT t)
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentStartChanged(this, s, t);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentStartChanged(this, s, t);
     }
 }    
 
@@ -2243,8 +2243,8 @@ Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten)
     clearVoiceCaches();
     updateRefreshStatuses();
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->segmentEndMarkerChanged(this, s, shorten);
+         i != m_observers.end(); ++i) {
+        (*i)->segmentEndMarkerChanged(this, s, shorten);
     }
 }    
 
@@ -2252,8 +2252,8 @@ void
 Composition::notifyEndMarkerChange(bool shorten) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->endMarkerTimeChanged(this, shorten);
+         i != m_observers.end(); ++i) {
+        (*i)->endMarkerTimeChanged(this, shorten);
     }
 }
 
@@ -2303,8 +2303,8 @@ void
 Composition::notifyMetronomeChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->metronomeChanged(this);
+         i != m_observers.end(); ++i) {
+        (*i)->metronomeChanged(this);
     }
 }
 
@@ -2312,8 +2312,8 @@ void
 Composition::notifyTimeSignatureChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->timeSignatureChanged(this);
+         i != m_observers.end(); ++i) {
+        (*i)->timeSignatureChanged(this);
     }
 }
 
@@ -2321,8 +2321,8 @@ void
 Composition::notifySoloChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->soloChanged(this, isSolo(), getSelectedTrack());
+         i != m_observers.end(); ++i) {
+        (*i)->soloChanged(this, isSolo(), getSelectedTrack());
     }
 }
 
@@ -2330,8 +2330,8 @@ void
 Composition::notifyTempoChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->tempoChanged(this);
+         i != m_observers.end(); ++i) {
+        (*i)->tempoChanged(this);
     }
 }
 
@@ -2340,8 +2340,8 @@ void
 Composition::notifySourceDeletion() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->compositionDeleted(this);
+         i != m_observers.end(); ++i) {
+        (*i)->compositionDeleted(this);
     }
 }
 
