@@ -112,9 +112,11 @@ public:
 
     timeT getStartMarker() const { return m_startMarker; }
     timeT getEndMarker() const { return m_endMarker; }
+    bool autoExpandEnabled() { return m_autoExpand; }
 
     void setStartMarker(const timeT &sM);
     void setEndMarker(const timeT &eM);
+    void setAutoExpand(bool autoExpand) { m_autoExpand = autoExpand; }
 
 
     //////
@@ -1075,6 +1077,7 @@ protected:
     //
     timeT                             m_startMarker;
     timeT                             m_endMarker;
+    bool                              m_autoExpand;
 
     static int                        m_defaultNbBars;
 

@@ -152,13 +152,13 @@ PasteSegmentsCommand::execute()
 //                               + m_pasteTime
 //                               - earliestStartTime);
 
-#if 0
-// Composition auto-expansion.  Works.
-    timeT pasteEndTime = m_pasteTime + latestEndTime - earliestStartTime;
-    if (pasteEndTime > m_composition->getEndMarker())
-        m_composition->setEndMarker(
-                m_composition->getBarEndForTime(pasteEndTime));
-#endif
+    if (m_composition->autoExpandEnabled()) {
+        timeT pasteEndTime = m_pasteTime + latestEndTime - earliestStartTime;
+        // If the composition needs expanding, do so...
+        if (pasteEndTime > m_composition->getEndMarker())
+            m_composition->setEndMarker(
+                    m_composition->getBarEndForTime(pasteEndTime));
+    }
 
     m_detached = false;
 }

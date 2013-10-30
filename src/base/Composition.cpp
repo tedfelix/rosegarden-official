@@ -190,6 +190,7 @@ Composition::Composition() :
     m_maxTempo(0),
     m_startMarker(0),
     m_endMarker(getBarRange(m_defaultNbBars).first),
+    m_autoExpand(false),
     m_loopStart(0),
     m_loopEnd(0),
     m_playMetronome(false),
