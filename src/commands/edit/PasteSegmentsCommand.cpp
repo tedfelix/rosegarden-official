@@ -42,7 +42,8 @@ PasteSegmentsCommand::PasteSegmentsCommand(Composition *composition,
         m_pasteTime(pasteTime),
         m_baseTrack(baseTrack),
         m_exactTracks(useExactTracks),
-        m_detached(false)
+        m_detached(false),
+        m_oldEndTime(m_composition->getEndMarker())
 {
     // nothing else
 }
@@ -81,6 +82,8 @@ PasteSegmentsCommand::execute()
     timeT latestEndTime = 0;
     int lowestTrackPos = -1;
 
+    // For each segment in the clipboard, compute the lowest track
+    // position and the latest end time.
     for (Clipboard::iterator i = m_clipboard->begin();
             i != m_clipboard->end(); ++i) {
 
@@ -103,6 +106,7 @@ PasteSegmentsCommand::execute()
     int baseTrackPos = m_composition->getTrackPositionById(m_baseTrack);
     int trackOffset = baseTrackPos - lowestTrackPos;
 
+    // For each segment in the clipboard, paste it into the composition
     for (Clipboard::iterator i = m_clipboard->begin();
             i != m_clipboard->end(); ++i) {
  
@@ -141,11 +145,20 @@ PasteSegmentsCommand::execute()
     // User preference? Update song pointer position on paste
     // ??? This needs to refresh the display so the user can see the change.
     //   RosegardenDocument::pointerPositionChanged() appears to be the
-    //   signal to send, but we have no visibility to RosegardenDocument.
+    //   signal to send.  Use RosegardenMainWindow::self()->getDocument()
+    //   to get to the document.
     //   Removing this for now as it is confusing.
 //    m_composition->setPosition(latestEndTime
 //                               + m_pasteTime
 //                               - earliestStartTime);
+
+#if 0
+// Composition auto-expansion.  Works.
+    timeT pasteEndTime = m_pasteTime + latestEndTime - earliestStartTime;
+    if (pasteEndTime > m_composition->getEndMarker())
+        m_composition->setEndMarker(
+                m_composition->getBarEndForTime(pasteEndTime));
+#endif
 
     m_detached = false;
 }
@@ -157,6 +170,9 @@ PasteSegmentsCommand::unexecute()
         m_composition->detachSegment(m_addedSegments[i]);
     }
     m_detached = true;
+
+    // Restore the original composition end in case it was changed
+    m_composition->setEndMarker(m_oldEndTime);
 }
 
 }

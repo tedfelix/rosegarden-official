@@ -65,6 +65,7 @@ protected:
     bool m_exactTracks;
     std::vector<Segment *> m_addedSegments;
     bool m_detached;
+    timeT m_oldEndTime;
 };
 
 
