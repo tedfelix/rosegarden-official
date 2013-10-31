@@ -1152,11 +1152,19 @@ RosegardenDocument::getSequenceManager()
 
 // FILE FORMAT VERSION NUMBERS
 //
-// These should be updated when the file format changes.
+// These should be updated when the file format changes.  The
+// intent is to warn the user that they are loading a file that
+// was saved with a newer version of Rosegarden, and data might
+// be lost as a result.  See RoseXmlHandler::startElement().
 //
 // Increment the major version number only for updates so
 // substantial that we shouldn't bother even trying to read a file
-// saved with a newer major version number than our own.
+// saved with a newer major version number than our own.  Older
+// versions of Rosegarden *will not* try to load files with
+// newer major version numbers.  Basically, this should be done
+// only as a last resort to lock out all older versions of
+// Rosegarden from reading in and completely mangling the contents
+// of a file.
 //
 // Increment the minor version number for updates that may break
 // compatibility such that we should warn when reading a file
