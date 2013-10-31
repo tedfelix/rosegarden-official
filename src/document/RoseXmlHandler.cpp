@@ -704,6 +704,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             getComposition().setEndMarker(endMarkerStr.toInt());
         }
 
+        QString autoExpand = atts.value("autoExpand");
+        if (!autoExpand.isEmpty()) {
+            if (autoExpand.toInt() == 1)
+                getComposition().setAutoExpand(true);
+            else
+                getComposition().setAutoExpand(false);
+        }
+
         QString panLawStr = atts.value("panlaw");
         if (!panLawStr.isEmpty()) {
             int panLaw = panLawStr.toInt();

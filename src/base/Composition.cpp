@@ -1907,6 +1907,9 @@ std::string Composition::toXmlString()
     composition << "\" startMarker=\"" << m_startMarker;
     composition << "\" endMarker=\"" << m_endMarker;
 
+    if (m_autoExpand)
+        composition << "\" autoExpand=\"" << m_autoExpand;
+
     // Add the Solo if set
     //
     if (m_solo)
