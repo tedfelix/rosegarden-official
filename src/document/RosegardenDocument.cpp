@@ -804,7 +804,8 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
         command->addCommand(new ChangeCompositionLengthCommand
                             (&getComposition(),
                              getComposition().getStartMarker(),
-                             lastSegmentEndTime));
+                             lastSegmentEndTime,
+                             getComposition().autoExpandEnabled()));
     }
 
     CommandHistory::getInstance()->addCommand(command);

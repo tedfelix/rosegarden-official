@@ -41,7 +41,8 @@ class ChangeCompositionLengthCommand : public NamedCommand
 public:
     ChangeCompositionLengthCommand(Composition *composition,
                                    timeT startTime,
-                                   timeT endTime);
+                                   timeT endTime,
+                                   bool autoExpand);
     virtual ~ChangeCompositionLengthCommand();
 
     static QString getGlobalName()
@@ -52,10 +53,14 @@ public:
 
 protected:
     Composition *m_composition;
+
     timeT        m_startTime;
     timeT        m_endTime;
+    bool         m_autoExpand;
+
     timeT        m_oldStartTime;
     timeT        m_oldEndTime;
+    bool         m_oldAutoExpand;
 
 };
 

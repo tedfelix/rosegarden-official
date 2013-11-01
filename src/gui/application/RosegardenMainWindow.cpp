@@ -3105,7 +3105,8 @@ RosegardenMainWindow::slotCreateAnacrusis()
 
         ChangeCompositionLengthCommand *changeLengthCommand =
             new ChangeCompositionLengthCommand(&comp,
-                                              newCompStart, compositionEnd);
+                                              newCompStart, compositionEnd,
+                                              comp.autoExpandEnabled());
         
         bool plural = (selection.size() > 1);
         SegmentReconfigureCommand *reconfigureCommand =
@@ -7136,7 +7137,8 @@ RosegardenMainWindow::slotChangeCompositionLength()
         = new ChangeCompositionLengthCommand(
               &m_doc->getComposition(),
               dialog.getStartMarker(),
-              dialog.getEndMarker());
+              dialog.getEndMarker(),
+              m_doc->getComposition().autoExpandEnabled());
 
         m_view->getTrackEditor()->getCompositionView()->clearSegmentRectsCache(true);
         CommandHistory::getInstance()->addCommand(command);

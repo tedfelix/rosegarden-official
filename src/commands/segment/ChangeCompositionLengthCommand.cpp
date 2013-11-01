@@ -28,13 +28,16 @@ namespace Rosegarden
 ChangeCompositionLengthCommand::ChangeCompositionLengthCommand(
     Composition *composition,
     timeT startTime,
-    timeT endTime):
+    timeT endTime,
+    bool autoExpand):
         NamedCommand(getGlobalName()),
         m_composition(composition),
         m_startTime(startTime),
         m_endTime(endTime),
+        m_autoExpand(autoExpand),
         m_oldStartTime(m_composition->getStartMarker()),
-        m_oldEndTime(m_composition->getEndMarker())
+        m_oldEndTime(m_composition->getEndMarker()),
+        m_oldAutoExpand(m_composition->autoExpandEnabled())
 {}
 
 ChangeCompositionLengthCommand::~ChangeCompositionLengthCommand()
@@ -45,6 +48,7 @@ ChangeCompositionLengthCommand::execute()
 {
     m_composition->setStartMarker(m_startTime);
     m_composition->setEndMarker(m_endTime);
+    m_composition->setAutoExpand(m_autoExpand);
 }
 
 void
@@ -52,6 +56,7 @@ ChangeCompositionLengthCommand::unexecute()
 {
     m_composition->setStartMarker(m_oldStartTime);
     m_composition->setEndMarker(m_oldEndTime);
+    m_composition->setAutoExpand(m_oldAutoExpand);
 }
 
 }
