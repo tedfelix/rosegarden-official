@@ -237,7 +237,7 @@ signals:
      *
      * \a noteName contains the MIDI name of the corresponding note
      */
-//!!!    void hoveredOverNoteChanged(const QString &noteName);
+    void hoveredOverNoteChanged(const QString &noteName);
 
     /**
      * Emitted when the mouse cursor moves to a note which is at a
@@ -246,7 +246,7 @@ signals:
      * \a time is set to the absolute time of the note the cursor is
      * hovering on
      */
-//!!!    void hoveredOverAbsoluteTimeChanged(unsigned int time);
+    void hoveredOverAbsoluteTimeChanged(unsigned int time);
 
 protected slots:
     void slotCommandExecuted();

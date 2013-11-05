@@ -952,10 +952,13 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
     }
 
     if (e->staff) {
-	QString s = e->staff->getNoteNameAtSceneCoords(e->sceneX, e->sceneY);
+        QString s = e->staff->getNoteNameAtSceneCoords(e->sceneX, e->sceneY);
         emit hoveredOverNoteChanged(s);
     }
 
+    // NOTE: when you click the ruler and try to drag the loop/range selection
+    // thing in notation and matrix, it stops at the right edge and won't go.  I
+    // think the following blurb may be what made that work:
     /*!!!
 if (getCanvasView()->isTimeForSmoothScroll()) {
 
