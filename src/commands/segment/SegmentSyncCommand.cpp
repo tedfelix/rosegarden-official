@@ -74,8 +74,16 @@ SegmentSyncCommand::processSegment(Segment &segment, int newTranspose, int lowRa
     
     // Say the old transpose was -2 and the new is 0, this corresponds to
     // Bb and C. The height of the old transpose is 1 below the height of the new.
-    int oldHeight = Pitch(segment.getTranspose()).getHeightOnStaff(Clef::Treble, Key("C major"));
-    int newHeight = Pitch(newTranspose).getHeightOnStaff(Clef::Treble, Key("C major"));
+    //
+    // "Both segment.getTranspose() and newTranspose might be less then zero
+    // yielding an invalid pitch. Simple solution, use an offset for both, like
+    // 60. Since we are interested in the difference, this common offset won't harm
+    // but is make sure the pitch will be positive (unless we have to transpose over 5 
+    // octaves which is very unlikely :-))." --Niek van den Berg
+    //
+    // And that's why we use 60 here:
+    int oldHeight = Pitch(60 + segment.getTranspose()).getHeightOnStaff(Clef::Treble, Key("C major"));
+    int newHeight = Pitch(60 + newTranspose).getHeightOnStaff(Clef::Treble, Key("C major"));
     int steps = oldHeight - newHeight;
 
     SegmentTransposeCommand* command = new SegmentTransposeCommand(segment, true, steps, semitones, true);
