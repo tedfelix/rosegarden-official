@@ -25,6 +25,7 @@
 
 class QWidget;
 class QSpinBox;
+class QCheckBox;
 
 
 namespace Rosegarden
@@ -42,11 +43,13 @@ public:
 
     timeT getStartMarker();
     timeT getEndMarker();
+    bool autoExpandEnabled();
 
 protected:
 
     QSpinBox                *m_startMarkerSpinBox;
     QSpinBox                *m_endMarkerSpinBox;
+    QCheckBox               *m_autoExpandCheckBox;
     Composition *m_composition;
 };
 

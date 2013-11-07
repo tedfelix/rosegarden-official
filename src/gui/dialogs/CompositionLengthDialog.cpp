@@ -24,6 +24,7 @@
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -64,6 +65,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     QVBoxLayout *gboxLayout = new QVBoxLayout;
     gbox->setLayout(gboxLayout);
 
+    // First, a widget/hbox for the "Start Bar" controls.
     // Since we want to stack two hbox layouts in a vbox layout (inside a group
     // box inside another vbox layout), we do have to create a QWidget here.
     // This is the widget/hbox combo for the top set of controls:
@@ -81,7 +83,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     m_startMarkerSpinBox->setValue(m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
     startBoxLayout->addWidget(m_startMarkerSpinBox);
 
-    // Now we need another widget/hbox for the bottom set of controls (or I
+    // Now we need another widget/hbox for the "End Bar" controls (or I
     // guess we could have laid everything out on a grid layout inside the combo
     // box, in retrospect, but whatever.  This works.  This is the bottom set of
     // controls:
@@ -98,6 +100,19 @@ CompositionLengthDialog::CompositionLengthDialog(
     m_endMarkerSpinBox->setMaximum(10000);
     m_endMarkerSpinBox->setValue(m_composition->getBarNumber(m_composition->getEndMarker()));
     endBoxLayout->addWidget(m_endMarkerSpinBox);
+
+    // Now a widget/hbox for the Auto-Expand controls.
+    QWidget *autoExpandBox = new QWidget(gbox);
+    QHBoxLayout *autoExpandBoxLayout = new QHBoxLayout;
+    autoExpandBox->setLayout(autoExpandBoxLayout);
+
+    gboxLayout->addWidget(autoExpandBox);
+
+    autoExpandBoxLayout->addWidget(new QLabel(tr("Auto-Expand when Editing")), Qt::AlignLeft);
+
+    m_autoExpandCheckBox = new QCheckBox(autoExpandBox);
+    m_autoExpandCheckBox->setChecked(m_composition->autoExpandEnabled());
+    autoExpandBoxLayout->addWidget(m_autoExpandCheckBox);
 
     // Now the button box on the bottom, outside the group box and any of the
     // previous layouts, just gets added to the vbox under the QDialog widget
@@ -119,6 +134,12 @@ timeT
 CompositionLengthDialog::getEndMarker()
 {
     return m_composition->getBarStart(m_endMarkerSpinBox->value());
+}
+
+bool
+CompositionLengthDialog::autoExpandEnabled()
+{
+    return m_autoExpandCheckBox->isChecked();
 }
 
 }

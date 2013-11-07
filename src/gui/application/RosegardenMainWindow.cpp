@@ -7138,7 +7138,7 @@ RosegardenMainWindow::slotChangeCompositionLength()
               &m_doc->getComposition(),
               dialog.getStartMarker(),
               dialog.getEndMarker(),
-              m_doc->getComposition().autoExpandEnabled());
+              dialog.autoExpandEnabled());
 
         m_view->getTrackEditor()->getCompositionView()->clearSegmentRectsCache(true);
         CommandHistory::getInstance()->addCommand(command);
