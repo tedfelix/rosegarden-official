@@ -59,60 +59,44 @@ CompositionLengthDialog::CompositionLengthDialog(
 
     vboxLayout->addWidget(new QLabel(tr("Change the start and end markers for the composition:")));
 
+    // GROUP BOX BEGIN
+
     QGroupBox *gbox = new QGroupBox(this);
     vboxLayout->addWidget(gbox);
 
-    QVBoxLayout *gboxLayout = new QVBoxLayout;
+    QGridLayout *gboxLayout = new QGridLayout;
+    gboxLayout->setVerticalSpacing(10);
     gbox->setLayout(gboxLayout);
 
-    // First, a widget/hbox for the "Start Bar" controls.
-    // Since we want to stack two hbox layouts in a vbox layout (inside a group
-    // box inside another vbox layout), we do have to create a QWidget here.
-    // This is the widget/hbox combo for the top set of controls:
-    QWidget *startBox = new QWidget(gbox);
-    QHBoxLayout *startBoxLayout = new QHBoxLayout;
-    startBox->setLayout(startBoxLayout);
+    // ROW 0, Start Bar
 
-    gboxLayout->addWidget(startBox);
-    
-    startBoxLayout->addWidget(new QLabel(tr("Start Bar")), Qt::AlignLeft);
+    gboxLayout->addWidget(new QLabel(tr("Start Bar")), 0, 0);
 
-    m_startMarkerSpinBox = new QSpinBox(startBox);
+    m_startMarkerSpinBox = new QSpinBox(gbox);
     m_startMarkerSpinBox->setMinimum( -10);
     m_startMarkerSpinBox->setMaximum(10000);
     m_startMarkerSpinBox->setValue(m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
-    startBoxLayout->addWidget(m_startMarkerSpinBox);
+    gboxLayout->addWidget(m_startMarkerSpinBox, 0, 1);
 
-    // Now we need another widget/hbox for the "End Bar" controls (or I
-    // guess we could have laid everything out on a grid layout inside the combo
-    // box, in retrospect, but whatever.  This works.  This is the bottom set of
-    // controls:
-    QWidget *endBox = new QWidget(gbox);
-    QHBoxLayout *endBoxLayout = new QHBoxLayout;
-    endBox->setLayout(endBoxLayout);
+    // ROW 1, End Bar
 
-    gboxLayout->addWidget(endBox);
+    gboxLayout->addWidget(new QLabel(tr("End Bar")), 1, 0);
 
-    endBoxLayout->addWidget(new QLabel(tr("End Bar")), Qt::AlignLeft);
-
-    m_endMarkerSpinBox = new QSpinBox(endBox);
+    m_endMarkerSpinBox = new QSpinBox(gbox);
     m_endMarkerSpinBox->setMinimum( -10);
     m_endMarkerSpinBox->setMaximum(10000);
     m_endMarkerSpinBox->setValue(m_composition->getBarNumber(m_composition->getEndMarker()));
-    endBoxLayout->addWidget(m_endMarkerSpinBox);
+    gboxLayout->addWidget(m_endMarkerSpinBox, 1, 1);
 
-    // Now a widget/hbox for the Auto-Expand controls.
-    QWidget *autoExpandBox = new QWidget(gbox);
-    QHBoxLayout *autoExpandBoxLayout = new QHBoxLayout;
-    autoExpandBox->setLayout(autoExpandBoxLayout);
+    // ROW 2, Auto-Expand when Editing
 
-    gboxLayout->addWidget(autoExpandBox);
+    gboxLayout->addWidget(new QLabel(tr("Auto-Expand when Editing")), 2, 0);
 
-    autoExpandBoxLayout->addWidget(new QLabel(tr("Auto-Expand when Editing")), Qt::AlignLeft);
-
-    m_autoExpandCheckBox = new QCheckBox(autoExpandBox);
+    m_autoExpandCheckBox = new QCheckBox(gbox);
     m_autoExpandCheckBox->setChecked(m_composition->autoExpandEnabled());
-    autoExpandBoxLayout->addWidget(m_autoExpandCheckBox);
+    gboxLayout->addWidget(m_autoExpandCheckBox, 2, 1);
+    
+    // GROUP BOX END
 
     // Now the button box on the bottom, outside the group box and any of the
     // previous layouts, just gets added to the vbox under the QDialog widget
