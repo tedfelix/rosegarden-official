@@ -1624,6 +1624,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
                                            getMetaMessage().length());
 
             trackBuffer += (*midiEvent)->getMetaMessage();
+            eventCode = 0;
         } else {
             // Send the normal event code (with encoded channel information)
             //
