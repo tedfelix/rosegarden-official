@@ -19,54 +19,56 @@
 #ifndef RG_SEGMENTRECONFIGURECOMMAND_H
 #define RG_SEGMENTRECONFIGURECOMMAND_H
 
-#include "base/Track.h"
 #include "document/Command.h"
-#include <QString>
-#include <vector>
+#include "base/Track.h"
 #include "base/Event.h"
 
-
-
+#include <QString>
+#include <vector>
 
 namespace Rosegarden
 {
 
+
 class Segment;
 
-
-/**
- * SegmentReconfigureCommand is a general-purpose command for
- * moving, resizing or changing the track of one or more segments
- */
+/// Move or resize segments, or change their tracks.
 class SegmentReconfigureCommand : public NamedCommand
 {
 public:
     SegmentReconfigureCommand(QString name);
     virtual ~SegmentReconfigureCommand();
 
-    struct SegmentRec {
-        Segment *segment;
-        timeT startTime;
-        timeT endMarkerTime;
-        TrackId track;
-    };
-    typedef std::vector<SegmentRec> SegmentRecSet;
-
+    // rename: addChange()
     void addSegment(Segment *segment,
-                    timeT startTime,
-                    timeT endMarkerTime,
-                    TrackId track);
+                    timeT newStartTime,
+                    timeT newEndMarkerTime,
+                    TrackId newTrack);
 
-    void addSegments(const SegmentRecSet &records);
+private:
+    struct Change {
+        Segment *segment;
+        timeT newStartTime;
+        timeT newEndMarkerTime;
+        TrackId newTrack;
+    };
+    typedef std::vector<Change> ChangeSet;
 
+    // Before execute(), this contains the changes to be made.  After
+    // execute(), this contains the original values for unexecute().
+    ChangeSet m_changeSet;
+
+    // Does the actual work of swapping the changes into the segments.
+    void swap();
+    
+    // Command overrides
     void execute();
     void unexecute();
 
-private:
-    void swap();
-    
-    SegmentRecSet m_records; 
+    // unused
+//    void addSegments(const ChangeSet &changes);
 };
+
 
 }
 

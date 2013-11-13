@@ -21,11 +21,12 @@
 #include "base/Segment.h"
 #include "base/Composition.h"
 #include "base/Track.h"
-#include <QString>
 
+#include <QString>
 
 namespace Rosegarden
 {
+
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
         NamedCommand(name)
@@ -38,25 +39,28 @@ SegmentReconfigureCommand::~SegmentReconfigureCommand()
 
 void
 SegmentReconfigureCommand::addSegment(Segment *segment,
-                                      timeT startTime,
-                                      timeT endMarkerTime,
-                                      TrackId track)
+                                      timeT newStartTime,
+                                      timeT newEndMarkerTime,
+                                      TrackId newTrack)
 {
-    SegmentRec record;
-    record.segment = segment;
-    record.startTime = startTime;
-    record.endMarkerTime = endMarkerTime;
-    record.track = track;
-    m_records.push_back(record);
+    Change change;
+    change.segment = segment;
+    change.newStartTime = newStartTime;
+    change.newEndMarkerTime = newEndMarkerTime;
+    change.newTrack = newTrack;
+    m_changeSet.push_back(change);
 }
 
+#if 0
+// unused
 void
-SegmentReconfigureCommand::addSegments(const SegmentRecSet &records)
+SegmentReconfigureCommand::addSegments(const ChangeSet &changes)
 {
-    for (SegmentRecSet::const_iterator i = records.begin(); i != records.end(); ++i) {
-        m_records.push_back(*i);
+    for (ChangeSet::const_iterator i = changes.begin(); i != changes.end(); ++i) {
+        m_changeSet.push_back(*i);
     }
 }
+#endif
 
 void
 SegmentReconfigureCommand::execute()
@@ -74,11 +78,11 @@ void
 SegmentReconfigureCommand::swap()
 {
     
-    for (SegmentRecSet::iterator i = m_records.begin();
-            i != m_records.end(); ++i) {
+    for (ChangeSet::iterator i = m_changeSet.begin();
+            i != m_changeSet.end(); ++i) {
 
-        // set the segment's values from the record, but set the
-        // previous values back in to the record for use in the
+        // set the segment's new values from the change set, but save the
+        // previous values in the change set for use in the
         // next iteration of the execute/unexecute cycle.
 
         // #1083496: look up both of the "old" values before we set
@@ -88,22 +92,22 @@ SegmentReconfigureCommand::swap()
         timeT prevStartTime = i->segment->getStartTime();
         timeT prevEndMarkerTime = i->segment->getEndMarkerTime(FALSE);
 
-        if (i->segment->getStartTime() != i->startTime) {
-            i->segment->setStartTime(i->startTime);
+        if (i->segment->getStartTime() != i->newStartTime) {
+            i->segment->setStartTime(i->newStartTime);
         }
 
-        if (i->segment->getEndMarkerTime() != i->endMarkerTime) {
-            i->segment->setEndMarkerTime(i->endMarkerTime);
+        if (i->segment->getEndMarkerTime() != i->newEndMarkerTime) {
+            i->segment->setEndMarkerTime(i->newEndMarkerTime);
         }
 
-        i->startTime = prevStartTime;
-        i->endMarkerTime = prevEndMarkerTime;
+        i->newStartTime = prevStartTime;
+        i->newEndMarkerTime = prevEndMarkerTime;
 
         TrackId currentTrack = i->segment->getTrack();
 
-        if (currentTrack != i->track) {
-            i->segment->setTrack(i->track);
-            i->track = currentTrack;
+        if (currentTrack != i->newTrack) {
+            i->segment->setTrack(i->newTrack);
+            i->newTrack = currentTrack;
         }
 
         // If segment left from the current segment is repeating then we need to reconfigure
@@ -115,6 +119,9 @@ SegmentReconfigureCommand::swap()
         // Check that we don't have most upper left segment in the composition
         // AND
         // composition has more than one segment
+        // ??? Check for more than 1 segment is not needed.  If there is only
+        //     one segment, we'll be on begin() and the first condition will
+        //     be false.
         if ( segment_iterator != composition->begin() &&
              segment_iterator != composition->end() &&
              composition->getNbSegments() > 1 ) {
@@ -124,12 +131,14 @@ SegmentReconfigureCommand::swap()
 
             // Segments need to be on the same track
             if (curr_segment->getTrack() == prevSegment->getTrack()) {
-                if (prevSegment->isRepeating() == true)                    
+                if (prevSegment->isRepeating() == true)
+                    // Trigger update notifications by setting to true again.
                     prevSegment->setRepeating(true);
             }
         }
 
     }   
 }
+
 
 }
