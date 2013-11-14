@@ -244,7 +244,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (tr("Move Segment(s)", "", m_selectedItems.size()));
+                (tr("Move Segment(s)", "", m_selectedItems.size()), &comp);
 
             for (it = changingItems.begin();
                     it != changingItems.end();

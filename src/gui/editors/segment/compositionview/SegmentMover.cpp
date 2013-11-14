@@ -156,7 +156,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (changingItems.size() == 1 ? tr("Move Segment") : tr("Move Segments"));
+                (changingItems.size() == 1 ? tr("Move Segment") : tr("Move Segments"), &comp);
 
 
             CompositionModelImpl::ItemContainer::iterator it;

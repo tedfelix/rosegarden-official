@@ -298,7 +298,8 @@ EditViewBase::slotSetSegmentStartTime()
     if (dialog.exec() == QDialog::Accepted) {
 
         SegmentReconfigureCommand *command =
-            new SegmentReconfigureCommand(tr("Set Segment Start Time"));
+            new SegmentReconfigureCommand(tr("Set Segment Start Time"),
+                    &getDocument()->getComposition());
 
         command->addSegment
         (s, dialog.getTime(),
@@ -325,7 +326,8 @@ EditViewBase::slotSetSegmentDuration()
     if (dialog.exec() == QDialog::Accepted) {
 
         SegmentReconfigureCommand *command =
-            new SegmentReconfigureCommand(tr("Set Segment Duration"));
+            new SegmentReconfigureCommand(tr("Set Segment Duration"),
+                    &getDocument()->getComposition());
 
         command->addSegment
         (s, s->getStartTime(),

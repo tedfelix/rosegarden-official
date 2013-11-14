@@ -228,13 +228,14 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
 
                 } else {
 
+                    Composition &comp = m_doc->getComposition();
+
                     SegmentReconfigureCommand *command =
-                        new SegmentReconfigureCommand("Resize Segment");
+                        new SegmentReconfigureCommand(tr("Resize Segment"), &comp);
 
                     int trackPos = CompositionItemHelper::getTrackPos
                         (m_currentIndex, m_canvas->grid());
 
-                    Composition &comp = m_doc->getComposition();
                     Track *track = comp.getTrackByPosition(trackPos);
 
                     command->addSegment(segment,
@@ -277,7 +278,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
         if (!m_canvas->isFineGrain()) {
             setContextHelp(tr("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
         } else {
-            setContextHelp("Hold Ctrl to rescale contents");
+            setContextHelp(tr("Hold Ctrl to rescale contents"));
         }
     }
 

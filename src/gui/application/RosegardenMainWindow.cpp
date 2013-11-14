@@ -2868,7 +2868,9 @@ RosegardenMainWindow::jogSelection(timeT amount)
 
     SegmentSelection selection = m_view->getSelection();
 
-    SegmentReconfigureCommand *command = new SegmentReconfigureCommand(tr("Jog Selection"));
+    SegmentReconfigureCommand *command =
+            new SegmentReconfigureCommand(tr("Jog Selection"),
+                                          &m_doc->getComposition());
 
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
@@ -3111,8 +3113,9 @@ RosegardenMainWindow::slotCreateAnacrusis()
         bool plural = (selection.size() > 1);
         SegmentReconfigureCommand *reconfigureCommand =
             new SegmentReconfigureCommand(plural ?
-                                          tr("Set Segment Start Times") :
-                                          tr("Set Segment Start Time"));
+                                              tr("Set Segment Start Times") :
+                                              tr("Set Segment Start Time"),
+                                          &m_doc->getComposition());
 
         for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
 
@@ -3173,8 +3176,9 @@ RosegardenMainWindow::slotSetSegmentStartTimes()
 
         SegmentReconfigureCommand *command =
             new SegmentReconfigureCommand(plural ?
-                                          tr("Set Segment Start Times") :
-                                          tr("Set Segment Start Time"));
+                                              tr("Set Segment Start Times") :
+                                              tr("Set Segment Start Time"),
+                                          &m_doc->getComposition());
 
         for (SegmentSelection::iterator i = selection.begin();
                 i != selection.end(); ++i) {
@@ -3219,8 +3223,9 @@ RosegardenMainWindow::slotSetSegmentDurations()
 
         SegmentReconfigureCommand *command =
             new SegmentReconfigureCommand(plural ?
-                                          tr("Set Segment Durations") :
-                                          tr("Set Segment Duration"));
+                                              tr("Set Segment Durations") :
+                                              tr("Set Segment Duration"),
+                                          &m_doc->getComposition());
 
         for (SegmentSelection::iterator i = selection.begin();
                 i != selection.end(); ++i) {

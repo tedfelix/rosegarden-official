@@ -30,13 +30,14 @@ namespace Rosegarden
 {
 
 
+class Composition;
 class Segment;
 
 /// Move or resize segments, or change their tracks.
 class SegmentReconfigureCommand : public NamedCommand
 {
 public:
-    SegmentReconfigureCommand(QString name);
+    SegmentReconfigureCommand(QString name, Composition *composition);
     virtual ~SegmentReconfigureCommand();
 
     // rename: addChange()
@@ -46,6 +47,9 @@ public:
                     TrackId newTrack);
 
 private:
+    Composition *m_composition;
+    timeT m_oldEndTime;
+
     struct Change {
         Segment *segment;
         timeT newStartTime;
@@ -59,7 +63,7 @@ private:
     ChangeSet m_changeSet;
 
     // Does the actual work of swapping the changes into the segments.
-    void swap();
+    timeT swap();
     
     // Command overrides
     void execute();

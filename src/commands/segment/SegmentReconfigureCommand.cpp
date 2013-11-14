@@ -28,8 +28,12 @@ namespace Rosegarden
 {
 
 
-SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-        NamedCommand(name)
+SegmentReconfigureCommand::SegmentReconfigureCommand(
+        QString name,
+        Composition *composition) :
+    NamedCommand(name),
+    m_composition(composition),
+    m_oldEndTime(m_composition->getEndMarker())
 {
     setUpdateLinks(false);
 }
@@ -65,18 +69,32 @@ SegmentReconfigureCommand::addSegments(const ChangeSet &changes)
 void
 SegmentReconfigureCommand::execute()
 {
-    swap();
+    timeT latestEndTime = swap();
+
+    if (m_composition->autoExpandEnabled()) {
+        // If the composition needs expanding, do so...
+        if (latestEndTime > m_composition->getEndMarker())
+            m_composition->setEndMarker(
+                    m_composition->getBarEndForTime(latestEndTime));
+    }
 }
 
 void
 SegmentReconfigureCommand::unexecute()
 {
     swap();
+
+    // Restore the original composition end in case it was changed
+    m_composition->setEndMarker(m_oldEndTime);
 }
 
-void
+timeT
 SegmentReconfigureCommand::swap()
 {
+    if (!m_composition)
+        return 0;
+
+    timeT latestEndTime = 0;
     
     for (ChangeSet::iterator i = m_changeSet.begin();
             i != m_changeSet.end(); ++i) {
@@ -100,6 +118,11 @@ SegmentReconfigureCommand::swap()
             i->segment->setEndMarkerTime(i->newEndMarkerTime);
         }
 
+        // Keep track of the latest end time.
+        if (i->newEndMarkerTime > latestEndTime) {
+            latestEndTime = i->newEndMarkerTime;
+        }
+
         i->newStartTime = prevStartTime;
         i->newEndMarkerTime = prevEndMarkerTime;
 
@@ -113,8 +136,7 @@ SegmentReconfigureCommand::swap()
         // If segment left from the current segment is repeating then we need to reconfigure
         // it
         Segment* curr_segment = i->segment;
-        Composition* composition = curr_segment->getComposition();
-        Composition::iterator segment_iterator = composition->findSegment(curr_segment);
+        Composition::iterator segment_iterator = m_composition->findSegment(curr_segment);
 
         // Check that we don't have most upper left segment in the composition
         // AND
@@ -122,9 +144,9 @@ SegmentReconfigureCommand::swap()
         // ??? Check for more than 1 segment is not needed.  If there is only
         //     one segment, we'll be on begin() and the first condition will
         //     be false.
-        if ( segment_iterator != composition->begin() &&
-             segment_iterator != composition->end() &&
-             composition->getNbSegments() > 1 ) {
+        if ( segment_iterator != m_composition->begin() &&
+             segment_iterator != m_composition->end() &&
+             m_composition->getNbSegments() > 1 ) {
             // move to previous segment
             --segment_iterator;
             Segment* prevSegment = *segment_iterator;
@@ -137,7 +159,9 @@ SegmentReconfigureCommand::swap()
             }
         }
 
-    }   
+    }
+
+    return latestEndTime;
 }
 
 
