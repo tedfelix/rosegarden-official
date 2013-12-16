@@ -31,11 +31,11 @@ namespace Rosegarden
 {
 
 const PitchDetector::Method PitchDetector::PARTIAL =
-    QObject::tr("Partial", "Frequency Component (DSP)");
+        QObject::tr("Partial", "Frequency Component (DSP)");
 const PitchDetector::Method PitchDetector::AUTOCORRELATION =
-    QObject::tr("Autocorrelation", "DSP operation");
+        QObject::tr("Autocorrelation", "DSP operation");
 const PitchDetector::Method PitchDetector::HPS =
-    QObject::tr("Harmonic Product Spectrum", "Pitch determination (DSP)");
+        QObject::tr("Harmonic Product Spectrum", "Pitch determination (DSP)");
 const double PitchDetector::NOSIGNAL = -1;
 const double PitchDetector::NONE = -2;
 const int PitchDetector::defaultFrameSize = 1024;
@@ -221,7 +221,6 @@ double PitchDetector::autocorrelation() {
 //    double fpb = (double)m_sampleRate/(double)m_frameSize;  // no used?
 
 
-    int fBin=0;
     std::complex<double> cValue = 0;
     double fMag = 0;
 
@@ -229,8 +228,7 @@ double PitchDetector::autocorrelation() {
     //find localised partial
     for ( int c=FTbin-2; c<FTbin+2 && c<m_frameSize/2; c++ ) {
         cValue = std::complex<double>(m_ft1[c][0], m_ft1[c][1]);
-        if ( fMag < abs(cValue ) ) {
-            fBin = c;
+        if (fMag < abs(cValue)) {
             fMag = abs(cValue);
         }
     }
@@ -329,18 +327,18 @@ double PitchDetector::unwrapPhase( int fBin ) {
 */
 
 double PitchDetector::partial() {
-    int oldBin=0, fBin=0;
+    int fBin = 0;
     std::complex<double> value = 0;
-    double fMag = 0;
+    double fMag;
     double fPhase = 0;
     double oldPhase = 0;
 
     fMag = 0;
     // find maximum input for first fft (in range)
-    for ( int c=4; c<200; c++ ) {
+    // for ( int c=4; c<200; c++ ) { // Why 200?? Why not m_frameSize/2??
+    for (int c = 4 ; c < m_frameSize/2 ; c++ ) {
         value = std::complex<double>(m_ft1[c][0], m_ft1[c][1]);
-        if ( fMag < abs(value ) ) {
-            oldBin = c;
+        if (fMag < abs(value)) {
             fMag = abs(value);
             oldPhase = arg(value);
         }
@@ -348,17 +346,15 @@ double PitchDetector::partial() {
     }
 
     fMag = 0;
-
-    for ( int c=4; c<m_frameSize/2; c++ ) {
+    for (int c = 4 ; c < m_frameSize/2 ; c++) {
         value = std::complex<double>(m_ft2[c][0], m_ft2[c][1]);
-        if ( fMag < abs(value) ) {
-            fBin = c;
+        if (fMag < abs(value)) {
             fMag = abs(value);
             fPhase = arg(value);
         }
     }
     // If magnitude below threshold return -1
-    if ( fMag < MIN_THRESHOLD )
+    if (fMag < MIN_THRESHOLD)
         return NOSIGNAL;
 
     double freqPerBin = (double)m_sampleRate/(double)m_frameSize;
@@ -370,9 +366,9 @@ double PitchDetector::partial() {
     phaseDiff -= floor(phaseDiff);
 
     if ( (phaseDiff -= floor(phaseDiff)) > 0.5 )
-        phaseDiff -= 1;
+        phaseDiff -= 1.0;
 
-    phaseDiff *= 2*M_PI;
+    phaseDiff *= 2.0*M_PI;
 
     double freqDiff = phaseDiff*freqPerBin*((double)m_frameSize/(double)m_stepSize)/(2.0*M_PI);
 
@@ -395,14 +391,15 @@ double PitchDetector::partial() {
 int PitchDetector::getFrameSize() const {
     return m_frameSize;
 }
-void PitchDetector::setFrameSize( int nextFrameSize ) {
+
+void PitchDetector::setFrameSize(int nextFrameSize) {
     m_frameSize = nextFrameSize;
 }
 
 int PitchDetector::getStepSize() const {
     return m_stepSize;
 }
-void PitchDetector::setStepSize( int nextStepSize ) {
+void PitchDetector::setStepSize(int nextStepSize) {
     m_stepSize = nextStepSize;
 }
 

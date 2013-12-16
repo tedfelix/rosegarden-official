@@ -22,6 +22,7 @@
 
 #include "gui/editors/notation/NotationView.h"
 #include "base/ViewSegment.h"
+#include <lo/lo_osc_types.h>
 
 namespace Rosegarden {
 
@@ -39,8 +40,8 @@ namespace Accidentals { class Tuning; }
  * \@{
  * \brief Monophonic pitch tracker window (subclass of NotationView)
  *
- * This is part of the Glasgow Center for Music Technology's
- * "Rosegarden Codicil" project.
+ * This is part of the network for Interdisciplinary research in
+ * Science and Music's "Rosegarden Codicil" project.
  * http://www.n-ism.org/Projects/microtonalism.php
  *
  * \author Graham Percival
@@ -72,6 +73,9 @@ protected slots:
     void slotStopTracker();
     /** Ensure correct graphing state if user moves cursor during playback */
     void slotPlaybackJump();
+    /** Set the current tuning and detection method from a menu action */
+    void slotNewTuningFromAction(QAction *);
+    void slotNewPitchEstimationMethod(QAction *);
 
 protected:
     /** Record new note (history maintenance utility) */
@@ -99,6 +103,12 @@ protected:
     ViewElementList            *m_notes;
     ViewElementList::iterator   m_notes_itr;
     
+    // Choice of defined tunings
+    QVector<Accidentals::Tuning*> m_availableTunings;
+    QActionGroup               *m_tuningsActionGroup;
+    // ...and of DSP method
+    QActionGroup               *m_methodsActionGroup;
+    
     // Tuning standard in use by this View
     Accidentals::Tuning        *m_tuning;
     
@@ -109,6 +119,12 @@ private:
     // Lists of detected and target frequencies 
     // These lists are maintained here and used by the Widget
     PitchHistory                m_history;
+    
+    // Override setupActions in NotationView so we can have
+    // additional menu entries and so on.
+    // Mark the initial tuning and method menu selections.
+    void                        setupActions(int initialTuning,
+                                             int initialMethod);
 };
 
 }

@@ -48,8 +48,9 @@ namespace Accidentals {
  * \@{
  * \brief Read the Codicil's tunings file and create a tunings database
  *
- * This is part of the Glasgow Center for Music Technology's
- * "Rosegarden Codicil" project.
+ * This is part of the network for Interdisciplinary research in
+ * Science and Music's "Rosegarden Codicil" project.
+ *
  * http://www.n-ism.org/Projects/microtonalism.php
  *
  * \author Dougie McGilvray, Nick Bailey

@@ -25,8 +25,8 @@
  * \@{
  * \brief Structure of vectors representing the performance's pitch history
  *
- * This is part of the Glasgow Center for Music Technology's
- * "Rosegarden Codicil" project.
+ * This is part of the network for Interdisciplinary research in
+ * Science and Music's "Rosegarden Codicil" project.
  * http://www.n-ism.org/Projects/microtonalism.php
  *
  * The History structure will be created and maintained by

@@ -1047,7 +1047,7 @@ NotationView::setupActions()
         a->setCheckable(true);
         a->setChecked(*i == m_fontName);
 
-        fontActionMenu->addAction(a);        
+        fontActionMenu->addAction(a);    
     }
 
     QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);

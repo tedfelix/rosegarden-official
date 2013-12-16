@@ -45,12 +45,12 @@ namespace Rosegarden
 
 
 /**
-* \addtogroup Codicil
-* \@{
-* \brief Stores audio data from jack into a ring buffer
+ * \addtogroup Codicil
+ * \@{
+ * \brief Stores audio data from jack into a ring buffer
  *
- * This is part of the Glasgow Center for Music Technology's
- * "Rosegarden Codicil" project.
+ * This is part of the network for Interdisciplinary research in
+ * Science and Music's "Rosegarden Codicil" project.
  * http://www.n-ism.org/Projects/microtonalism.php
  *
  * The most recent audio samples are read into a buffer. Unlike most audio

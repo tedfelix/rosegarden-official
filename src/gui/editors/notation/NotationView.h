@@ -484,6 +484,7 @@ protected:
     // !!! Duplicates m_doc in base class
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
+    
 private:
     CommandRegistry *m_commandRegistry;
     DurationMonobarModeType m_durationMode;  // Stores morph state.
