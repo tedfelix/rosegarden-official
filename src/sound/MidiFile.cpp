@@ -511,7 +511,11 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 
     std::cerr << "Parse track: last track number is " << lastTrackNum << std::endl;
 
-    while (!midiFile->eof() && ( m_trackByteCount > 0 ) ) {
+    // Since no event and its associated delta time can fit in just one
+    // byte, a single remaining byte in the track has to be padding.
+    // This obscure and non-standard, but such files do exist; ordinarily
+    // there should be no bytes in the track after the last event.
+    while (!midiFile->eof() && ( m_trackByteCount > 1 ) ) {
         if (eventCode < 0x80) {
 #ifdef MIDI_DEBUG
             cerr << "WARNING: Invalid event code " << eventCode
@@ -708,6 +712,13 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 break;
             }
         }
+    }
+
+    // If the track has a padding byte, read and discard it to make sure that
+    // the stream is positioned at the beginning of the following
+    // track (if there is one.)
+    if (m_trackByteCount == 1) {
+        midiFile->ignore();
     }
 
     return (true);
