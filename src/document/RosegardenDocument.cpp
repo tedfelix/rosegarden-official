@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2013 the Rosegarden development team.
+    Copyright 2000-2014 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -594,7 +594,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
         return false;
     }
 
-    //cc 20130508: avoid dereferencing self-deleted progress dialog
+    //cc 20140508: avoid dereferencing self-deleted progress dialog
     //after user has closed it, by using a QPointer
     QPointer<ProgressDialog> progressDlg = 0;
    
