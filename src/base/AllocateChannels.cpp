@@ -65,9 +65,9 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
              ++i) {
 
             const ChannelInterval &cs = (*i);
-            RG_DEBUG << "Considering free interval" << cs.m_start
-                     << "to" << cs.m_end
-                     << "on channel" << cs.getChannelId();
+            RG_DEBUG << "Considering" << cs;
+            cs.assertSane();
+
             // Consider each end of the proposed interval.  An end
             // fits if either:
             //
@@ -106,7 +106,6 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
                  ((cs.m_end - cs.m_marginAfter) < endTime)))
                 { continue; }
 
-            Q_ASSERT(cs.m_end > cs.m_start);
             // We found an candidate, but is it the best so far?  Only
             // if it wastes less space than all others we've seen,
             // which is true if it's smaller than them.
@@ -159,10 +158,11 @@ FreeChannels::
 freeChannelInterval(ChannelInterval &old)
 {
     if (!old.validChannel()) { return; }
-    RG_DEBUG
-        << "Freeing channel interval on"
-        << old.getChannelId()
-        << endl;
+    RG_DEBUG << "Freeing" << old;
+    // We are sometimes asked to free a zero-length interval.  If so,
+    // do nothing.
+    if (old.m_start == old.m_end) { return; }
+    old.assertSane();
 
     // The first element which is not considered to go before val
     // (i.e., either it is equivalent or goes after).
@@ -205,6 +205,8 @@ freeChannelInterval(ChannelInterval &old)
     // with.
     if (prevIterator != end()) { erase(prevIterator); }
     if (nextIterator != end()) { erase(nextIterator); }
+
+    newChannelInterval.assertSane();
 
     // Add a channelsegment incorporating the whole contiguous time.
     insert(newChannelInterval);

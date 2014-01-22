@@ -18,8 +18,10 @@
 #ifndef RG_CHANNELINTERVAL_H
 #define RG_CHANNELINTERVAL_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/RealTime.h"
+
+class QDebug;
 
 namespace Rosegarden
 {
@@ -55,6 +57,7 @@ class ChannelInterval
     friend class ChannelManager;
 
     friend bool operator<(const ChannelInterval &lhs, const ChannelInterval &rhs);
+    friend QDebug &operator<<(QDebug &, const ChannelInterval &);
 
 public:
 
@@ -116,6 +119,12 @@ public:
         { m_channel = -1; }
     bool validChannel(void) const
         { return m_channel >= 0; }
+
+#if defined NDEBUG
+    void assertSane() const {}
+#else
+    void assertSane() const;
+#endif
 
 private:
     void setChannelId(ChannelId channel)

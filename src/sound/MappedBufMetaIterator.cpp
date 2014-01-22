@@ -24,8 +24,9 @@
 #include "sound/ControlBlock.h"
 
 #include <queue>
+#include <functional>
 
-// #define DEBUG_META_ITERATOR 1
+//#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
 
 namespace Rosegarden
@@ -150,13 +151,7 @@ MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
     return res;
 }
 
-// Support for the start-time priority queue
-struct reverseCmpRealTime
-{ bool operator()(RealTime &a, RealTime &b) { return a > b; } };
-typedef std::priority_queue<RealTime,
-                            std::vector<RealTime>,
-                            reverseCmpRealTime>
-    LowfirstRealTimeQueue;
+
 
 
 void
@@ -179,7 +174,10 @@ fetchEvents(MappedInserterBase &inserter,
     // suffices.
 
     // Make a queue of all segment starts that occur during the slice.
-    LowfirstRealTimeQueue segStarts;
+    std::priority_queue<RealTime,
+                        std::vector<RealTime>,
+                        std::greater<RealTime> >
+        segStarts;
 
     for (segmentiterators::iterator i = m_iterators.begin();
          i != m_iterators.end();
@@ -195,9 +193,15 @@ fetchEvents(MappedInserterBase &inserter,
 
     // For each distinct gap, do a slice.
     while (!segStarts.empty()) {
+        // We're at innerStart.  Get a mapper that didn't start yet.
         RealTime innerEnd = segStarts.top();
+        // Remove it from the queue.
         segStarts.pop();
+        // If it starts exactly at innerStart, it doesn't need its own
+        // slice.
         if (innerEnd == innerStart) { continue; }
+        // Get a slice from the previous end-time (or startTime) to
+        // this new start-time.
         fetchEventsNoncompeting(inserter, innerStart, innerEnd);
         innerStart = innerEnd;
     }

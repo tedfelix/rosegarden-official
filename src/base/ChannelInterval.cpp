@@ -17,6 +17,7 @@
 
 #include "ChannelInterval.h"
 
+#include "misc/Debug.h"
 #include <limits>
 
 namespace Rosegarden
@@ -33,6 +34,33 @@ const RealTime ChannelInterval::m_beforeEarliestTime(std::numeric_limits<int>::m
 const RealTime ChannelInterval::m_earliestTime(std::numeric_limits<int>::min()+1,0);
 const RealTime ChannelInterval::m_latestTime(std::numeric_limits<int>::max(),0);
 const RealTime ChannelInterval::m_afterLatestTime(std::numeric_limits<int>::max(),999999999);
+
+#if !defined NDEBUG
+void
+ChannelInterval::
+assertSane() const
+{
+    Q_ASSERT(m_end > m_start);
+    Q_ASSERT(m_marginBefore >= RealTime::zeroTime);
+    Q_ASSERT(m_marginAfter >= RealTime::zeroTime);
+}
+#endif
+
+#if defined NDEBUG
+DEFINE_DUMMY_PRINTER(ChannelInterval);
+
+#else
+
+QDebug &operator<<(QDebug &dbg, const ChannelInterval &channelInterval) {
+    dbg
+        << "interval" << channelInterval.m_start.toString()
+        << "to" << channelInterval.m_end.toString()
+        << "on channel" << channelInterval.getChannelId();
+    dbg.nospace() << ".";
+    dbg.space();
+    return dbg;
+}
+#endif
 
 }
 
