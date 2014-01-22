@@ -103,6 +103,16 @@ RosegardenApplication* RosegardenApplication::ApplicationObject()
     return dynamic_cast<RosegardenApplication*>(qApp);
 }
 
+bool
+RosegardenApplication::notify(QObject * receiver, QEvent * event) 
+{
+    try { return QApplication::notify(receiver, event); } 
+    catch(std::exception& e) {
+        RG_DEBUG << "Exception thrown:" << e.what();
+        return false;
+    }
+}
+
 QByteArray RosegardenApplication::Empty;
 
 }

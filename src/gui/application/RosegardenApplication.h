@@ -75,6 +75,9 @@ public slots:
     void slotSetStatusMessage(QString txt);
 
 protected:
+
+    virtual bool notify(QObject * receiver, QEvent * event);
+    
     //--------------- Data members ---------------------------------
     
     bool m_noSequencerMode;
