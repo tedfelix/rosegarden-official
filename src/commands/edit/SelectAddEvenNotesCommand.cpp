@@ -314,7 +314,7 @@ SelectAddEvenNotesCommand(BeatEventVector beatEventVector, Segment *segment) :
     BasicCommand(getGlobalName(),
                  *segment,
                  getStartTime(beatEventVector),
-                 getEndTime(beatEventVector)),
+                 getEndTime(beatEventVector), true),
     m_beatEventVector(beatEventVector)
 {
 }

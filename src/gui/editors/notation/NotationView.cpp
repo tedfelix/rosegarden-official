@@ -1868,6 +1868,7 @@ NotationView::slotSelectEvenlySpacedNotes()
     if (!getSelection()) { return; }
 
     EventSelection *eventSelection = getSelection();
+    if (eventSelection->getSegmentEvents().size() < 2) { return; }
     BasicCommand *command = new
         SelectAddEvenNotesCommand(SelectAddEvenNotesCommand::findBeatEvents(eventSelection),
                            &eventSelection->getSegment());
