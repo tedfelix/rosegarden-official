@@ -71,6 +71,9 @@ public:
 
 #endif
 
+#define DEFINE_DUMMY_PRINTER(TYPE)                              \
+QDebug &operator<<(QDebug &dbg, const TYPE &) { return dbg; }
+
 }
 
 #endif
