@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef TEMPLATE_H
-#define TEMPLATE_H
+#ifndef RG_TEMPLATE_H
+#define RG_TEMPLATE_H
 
 // local includes
 #include <local/LocalInclude.h>
@@ -32,4 +32,4 @@ namespace Rosegarden
 
 }
 
-#endif
+#endif // #ifndef RG_TEMPLATE_H

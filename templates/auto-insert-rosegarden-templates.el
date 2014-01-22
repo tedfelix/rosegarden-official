@@ -82,7 +82,8 @@
 		(base-file-name
 		   (file-name-sans-extension rel-file-name))
 		(guard-str
-		   (rel-file-name->guard rel-file-name))
+		   (rel-file-name->guard 
+		      (concat "RG_" rel-file-name)))
 
 		(comment-start (car (split-string comment-start nil t)) )
 		(short-desc (read-string "Short description: ")))
