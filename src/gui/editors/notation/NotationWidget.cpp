@@ -16,6 +16,7 @@
 */
 
 #include "NotationWidget.h"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "NotationScene.h"
 #include "NotationToolBox.h"
@@ -871,7 +872,7 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
     QObject *s = sender();
     bool fromDocument = (s == m_document);
 
-    NOTATION_DEBUG << "NotationWidget::slotPointerPositionChanged to " << t << endl;
+    RG_DEBUG << "slotPointerPositionChanged to " << t << endl;
 
     if (!m_scene) return;
 
@@ -884,7 +885,7 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
         rolling = true;
     }
 
-    NOTATION_DEBUG << "NotationWidget::slotPointerPositionChanged(" << t << "): rolling = " << rolling << endl;
+    RG_DEBUG << "slotPointerPositionChanged(" << t << "): rolling = " << rolling << endl;
 
     QLineF p = cc.currentStaff;
     if (rolling) p = cc.allStaffs;

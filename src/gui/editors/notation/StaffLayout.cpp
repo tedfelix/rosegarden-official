@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[StaffLayout]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "StaffLayout.h"
 
@@ -321,7 +322,7 @@ StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
 {
     int y;
 
-    //    NOTATION_DEBUG << "StaffLayout::getSceneYForHeight(" << h << "," << baseY
+    //    RG_DEBUG << "getSceneYForHeight(" << h << "," << baseY
     //		   << ")" << endl;
 
     if (baseX < 0)
@@ -351,7 +352,7 @@ StaffLayout::getLayoutYForHeight(int h) const
 int
 StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
 {
-    NOTATION_DEBUG << "StaffLayout::getWeightedHeightAtSceneCoords: originalHeight: "
+    RG_DEBUG << "getWeightedHeightAtSceneCoords: originalHeight: "
                    << originalHeight << " non-weighted height: "
                    << getHeightAtSceneCoords(x, y)
                    << endl;
@@ -367,7 +368,7 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
     int approximateHeight = (y - getSceneYForTopLine(row)) * getHeightPerLine() / getLineSpacing();
     approximateHeight = getTopLineHeight() - approximateHeight;
 
-    NOTATION_DEBUG << "approximateHeight: " << approximateHeight
+    RG_DEBUG << "approximateHeight: " << approximateHeight
                    << " originalHeight: " << originalHeight;
 
     int difference = approximateHeight - originalHeight;
@@ -442,7 +443,7 @@ StaffLayout::getBarExtents(double x, int y) const
 {
     int row = getRowForSceneCoords(x, y);
 
-    NOTATION_DEBUG << "StaffLayout::getBarExtents(" << x << "," << y << "), row " << row << ", have " << m_barLines.size() << " bar records" << endl;
+    RG_DEBUG << "getBarExtents(" << x << "," << y << "), row " << row << ", have " << m_barLines.size() << " bar records" << endl;
 
     for (BarLineList::const_iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
@@ -452,7 +453,7 @@ StaffLayout::getBarExtents(double x, int y) const
         double layoutX = line->getLayoutX();
         int barRow = getRowForLayoutX(layoutX);
 
-        NOTATION_DEBUG << "bar layoutX " << layoutX << ", row " << barRow << ", page mode " << m_pageMode << ", x " << line->x() << endl;
+        RG_DEBUG << "bar layoutX " << layoutX << ", row " << barRow << ", page mode " << m_pageMode << ", x " << line->x() << endl;
 
         if (m_pageMode != LinearMode && (barRow < row)) continue;
 
@@ -467,7 +468,7 @@ StaffLayout::getBarExtents(double x, int y) const
                         getSceneYForTopOfStaff(barRow),
                         int(line->x() - prevline->x()),
                         getHeightOfRow());
-        NOTATION_DEBUG << "Returning rect " << r << endl;
+        RG_DEBUG << "Returning rect " << r << endl;
         return r;
     }
 
@@ -679,7 +680,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                       const TimeSignature &timeSig,
                       int barNo, bool showBarNo)
 {
-//    NOTATION_DEBUG << "insertBar: " << layoutX << ", " << width
+//    RG_DEBUG << "insertBar: " << layoutX << ", " << width
 //                   << ", " << isCorrect << endl;
 
     int barThickness = m_lineThickness * 5 / 4;

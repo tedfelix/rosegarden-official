@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[Panner]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "Panner.h"
 
