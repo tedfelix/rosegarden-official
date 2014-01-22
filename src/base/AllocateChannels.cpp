@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AllocateChannels]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "AllocateChannels.h"
 #include "Instrument.h"
 #include "MidiDevice.h"
@@ -22,8 +25,6 @@
 #include "sound/ControlBlock.h"
 
 #include <algorithm>
-
-#define DEBUG_CHANNEL_ALLOCATOR 1
 
 namespace Rosegarden
 {
@@ -39,29 +40,34 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
                         RealTime marginBefore,
                         RealTime marginAfter)
 {
+    RG_DEBUG << "allocateChannelInterval";
     iterator bestMatch = end();
-    // Scoring just tracks wasted space.  Init it to worse than any
-    // stored interval can be.
-    RealTime leastWastedSpace = ChannelInterval::m_afterLatestTime;
+    // Scoring just minimizes wasted space by choosing the smallest
+    // piece that fits.
+
+    // Initialize (leastOverflow, leastDuration) to longer than any
+    // interval can be.
+    RealTime leastDuration = ChannelInterval::m_afterLatestTime;
+    // leastDuration's overflow bit.  See comments on thisOverflow and
+    // thisDuration.
+    bool leastOverflow = true;
     
     // Scan segments backwards from the last one beginning at time
     // `startTime'
     if (!empty()) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-                    SEQUENCER_DEBUG
+                    RG_DEBUG
                         << "Scanning for existing ChannelInterval"
                         << endl;
-#endif
 
         ChannelInterval dummy(startTime);
         for (reverse_iterator i(upper_bound(dummy));
              i != rend();
              ++i) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-                    SEQUENCER_DEBUG
-                        << "Scanning";
-#endif
+
             const ChannelInterval &cs = (*i);
+            RG_DEBUG << "Considering free interval" << cs.m_start
+                     << "to" << cs.m_end
+                     << "on channel" << cs.getChannelId();
             // Consider each end of the proposed interval.  An end
             // fits if either:
             //
@@ -73,15 +79,11 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
 
             // Reject complete non-fits early.
             if (cs.m_start > startTime) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-                SEQUENCER_DEBUG << "  Rejecting due to free channel's available start time (" << cs.m_start << ") after needed start (" << startTime << ")";
-#endif
+                RG_DEBUG << "  Rejecting due to free channel's available start time (" << cs.m_start << ") after needed start (" << startTime << ")";
                 continue;
             }
             if (cs.m_end < endTime) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-                SEQUENCER_DEBUG << "  Rejecting due to free channel's available end time (" << cs.m_end << ") before needed end (" << endTime << ")";
-#endif
+                RG_DEBUG << "  Rejecting due to free channel's available end time (" << cs.m_end << ") before needed end (" << endTime << ")";
                 continue;
             }
 
@@ -104,30 +106,46 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
                  ((cs.m_end - cs.m_marginAfter) < endTime)))
                 { continue; }
 
+            Q_ASSERT(cs.m_end > cs.m_start);
             // We found an candidate, but is it the best so far?  Only
-            // if it wastes less space than all others we've seen.
-            RealTime wastedSpace =
-                (cs.m_end - cs.m_start) - (endTime - startTime);
-            if (wastedSpace < leastWastedSpace) {
+            // if it wastes less space than all others we've seen,
+            // which is true if it's smaller than them.
+
+            // Be careful of overflow.  This calculation ranges from 0
+            // to twice the maximum RealTime can hold.  Overflow can
+            // cause us to see huge waste as negative waste, which
+            // results in very inefficient allocation.  To avoid this,
+            // we keep an overflow bit (thisOverflow and
+            // leastOverflow) and treat it as the most significant
+            // bit.
+            RealTime thisDuration = cs.m_end - cs.m_start;
+            bool thisOverflow = (thisDuration < RealTime::zeroTime);
+
+            RG_DEBUG << "Found a candidate that takes"
+                     << (thisOverflow ? "the maximum plus" : "only")
+                     << thisDuration;
+
+            if ((thisOverflow < leastOverflow) ||
+                ((thisOverflow == leastOverflow) &&
+                 (thisDuration < leastDuration))) {
+
+                RG_DEBUG << "Best candidate so far";
                 // Decrement so forward iterator refers to the same
                 // element we examined.
                 bestMatch = --(i.base());
-                leastWastedSpace = wastedSpace;
+                leastDuration = thisDuration;
+                leastOverflow = thisOverflow;
             }
         }
     }
     if (bestMatch != end()) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-        SEQUENCER_DEBUG << "  FreeChannels::allocateChannelInterval() SUCCESS!!!!";
-#endif
+        RG_DEBUG << "  FreeChannels::allocateChannelInterval() SUCCESS!!!!";
         return allocateChannelIntervalFrom(bestMatch,
                                            startTime, endTime,
                                            instrument,
                                            marginBefore, marginAfter);
     } else {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-        SEQUENCER_DEBUG << "  FreeChannels::allocateChannelInterval() giving up.  FAIL";
-#endif
+        RG_DEBUG << "  FreeChannels::allocateChannelInterval() giving up.  FAIL";
         // If we found nothing usable, return an unplayable dummy
         // channel
         return ChannelInterval(); 
@@ -141,12 +159,10 @@ FreeChannels::
 freeChannelInterval(ChannelInterval &old)
 {
     if (!old.validChannel()) { return; }
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << "Freeing channel interval on"
         << old.getChannelId()
         << endl;
-#endif
 
     // The first element which is not considered to go before val
     // (i.e., either it is equivalent or goes after).
@@ -298,11 +314,11 @@ reallocateToFit(ChannelInterval &ci, RealTime start, RealTime end,
 void
 FreeChannels::dump()
 {
-    SEQUENCER_DEBUG << "FreeChannels::Dump()";
+    RG_DEBUG << "FreeChannels::Dump()";
     for (iterator I = begin(); I != end(); ++I) {
-        SEQUENCER_DEBUG << "  Channel:" << I->getChannelId();
-        SEQUENCER_DEBUG << "    Start:" << I->m_start;
-        SEQUENCER_DEBUG << "    End:" << I->m_end;
+        RG_DEBUG << "  Channel:" << I->getChannelId();
+        RG_DEBUG << "    Start:" << I->m_start;
+        RG_DEBUG << "    End:" << I->m_end;
     }
 }
 
@@ -350,11 +366,9 @@ AllocateChannels(ChannelSetup /*unused*/) :
 AllocateChannels::
 ~AllocateChannels(void)
 {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << "~AllocateChannels"
         << endl;
-#endif    
 }
 
 // Re-allocate a ChannelInterval to encompass start and end,
@@ -367,8 +381,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
                 RealTime marginBefore, RealTime marginAfter,
                 bool changedInstrument)
 {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << "reallocateToFit: Reallocating"
         << (instrument.isPercussion() ? "percussion" : "non-percussion")
         << instrument.getName() << instrument.getId()
@@ -377,7 +390,6 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         << "channel "
         << ci.getChannelId()
         << endl;
-#endif
     // If we already have a channel but it's the wrong type or it
     // changed instrument, always free it.
     if (ci.validChannel() &&
@@ -396,12 +408,10 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
                                        marginBefore, marginAfter);
     }
     
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << "Now channel "
         << ci.getChannelId()
         << endl;
-#endif
 }
 
 // Free the given channel interval appropriately.
@@ -509,12 +519,10 @@ releaseReservedChannel(ChannelId channel, FixedChannelSet& channelSet)
     FixedChannelSet::iterator i = channelSet.find(channel);
 
     if (i == channelSet.end()) { return; }
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << "AllocateChannels: releaseFixedChannel releasing"
         << (int) channel
         << endl;
-#endif
     
     // Remove from reserved channels.
     channelSet.erase(i);
@@ -534,12 +542,10 @@ reserveChannel(ChannelId channel, FixedChannelSet& channelSet)
     // Remove channel from FreeChannels (if not percussion) so we
     // don't give anything an interval on this channel.
     if (!isPercussion(channel)) {
-#ifdef DEBUG_CHANNEL_ALLOCATOR
-        SEQUENCER_DEBUG
+        RG_DEBUG
             << "AllocateChannels: reserveFixedChannel reserving"
             << (int) channel
             << endl;
-#endif
         m_freeChannels.removeChannel(channel);
     }
     // Record that this channel is reserved.  
