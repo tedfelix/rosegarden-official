@@ -33,6 +33,7 @@ class MappedEvent;
 class MappedInserterBase;
 class Segment;
 class RosegardenDocument;
+typedef unsigned int TrackId;
 
 /// Set of controllers and pitchbends
 /**
@@ -100,22 +101,11 @@ public:
     /**
      * Base class to provide covariance with MIDI-type mappers.
      *
-     * InternalSegmentMapper and MetronomeMapper(?) subclass this, add a
-     * pointer member to themselves, and pass that as a callback argument.
-     *
-     * Assuming this class will not grow to offer more callback interfaces,
-     * a better name might be ControllerAndPitchbendCB.  Since there is
-     * only a single CB interface (getControllers()) this could be renamed
-     * to be operator()() making this class into a functor.
-     *
-     * If this class is going to grow, then this is an interface class
-     * used to decouple Instrument and InternalSegmentMapper from
-     * ChannelManager.  In that case a name like ChannelMgrCBInterfaces
-     * or IChannelMgrCallbacks might be more descriptive.
+     * InternalSegmentMapper and SimpleCallbacks subclass this.
      *
      * @author Tom Breton (Tehom)
      */
-    class MapperFunctionality
+    class Callbacks
     {
     public:
         virtual ControllerAndPBList getControllers(
@@ -125,12 +115,11 @@ public:
     /// %Controller and pitchbend callback that obtains info from the Instrument.
     /**
      * This is a simple implementation of the controller and pitchbend
-     * callback functor (MapperFunctionality) that gets controller and
+     * callback functor (Callbacks) that gets controller and
      * pitchbend info from the Instrument object.
      *
-     * rename: CPBFromInstrument (assuming MapperFunctionality won't grow)
      */
-    class MapperFunctionalitySimple : public MapperFunctionality
+    class SimpleCallbacks : public Callbacks
     {
     public:
         virtual ControllerAndPBList getControllers(
@@ -168,8 +157,8 @@ public:
      * Inserts the following via the inserter:
      *
      *   - All controllers off
-     *   - Controllers obtained via MapperFunctionality callback
-     *   - Pitchbend from MapperFunctionality callback
+     *   - Controllers obtained via callbacks
+     *   - Pitchbend from callbacks
      *
      * Adapted from SequenceManager
      */
@@ -179,7 +168,7 @@ public:
         MappedInserterBase &inserter,
         RealTime reftime, 
         RealTime insertTime,
-        MapperFunctionality *functionality, 
+        Callbacks *callbacks, 
         int trackId);
 
     static void insertController(
@@ -228,8 +217,12 @@ public:
     /// Insert event via inserter, pre-inserting appropriate channel setup.
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                 RealTime reftime,
-                MapperFunctionality *functionality,
-                bool firstOutput, int trackId);
+                Callbacks *callbacks,
+                bool firstOutput, TrackId trackId);
+
+    bool makeReady(MappedInserterBase &inserter, RealTime time,
+                   Callbacks *callbacks, TrackId trackId);
+
 
     /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);
@@ -301,7 +294,7 @@ protected:
     /// Insert appropriate MIDI channel-setup.
     void insertChannelSetup(MappedInserterBase &inserter,
                             RealTime reftime, RealTime insertTime,
-                            MapperFunctionality *functionality, int trackId);
+                            Callbacks *callbacks, int trackId);
 
     /********************/
     /*** Data members ***/

@@ -49,6 +49,9 @@ class MetronomeMapper : public MappedEventBuffer
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                          RealTime start, bool firstOutput);
 
+    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
+
+    
     // Return whether the event should be played.
     virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
  protected:

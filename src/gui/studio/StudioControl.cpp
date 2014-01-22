@@ -217,7 +217,7 @@ playPreviewNote(Instrument *instrument, int pitch,
     sendMappedEventList(mC);
 }
 
-// Set up a channel for output.  This is used for fix channel
+// Set up a channel for output.  This is used for fixed channel
 // instruments and also to set up MIDI thru channels.
 void
 StudioControl::
@@ -225,7 +225,7 @@ sendChannelSetup(Instrument *instrument, int channel)
 {
     MappedEventList mC;
     MappedEventInserter inserter(mC);
-    ChannelManager::MapperFunctionalitySimple functionality;
+    ChannelManager::SimpleCallbacks callbacks;
             
     // Acquire it from ChannelManager.  Passing -1 for trackId which
     // is unused here.
@@ -235,7 +235,7 @@ sendChannelSetup(Instrument *instrument, int channel)
     ChannelManager::setControllers(channel, instrument,
                                    inserter, RealTime::zeroTime,
                                    RealTime::zeroTime, 
-                                   &functionality, -1);
+                                   &callbacks, -1);
 
     sendMappedEventList(mC);
 }

@@ -256,9 +256,19 @@ void
 MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                          RealTime start, bool firstOutput)
 {
-    ChannelManager::MapperFunctionalitySimple callback;
-    m_channelManager.doInsert(inserter, evt, start, &callback,
+    ChannelManager::SimpleCallbacks callbacks;
+    m_channelManager.doInsert(inserter, evt, start, &callbacks,
                               firstOutput, NO_TRACK);
+}
+
+void
+MetronomeMapper::
+makeReady(MappedInserterBase &inserter, RealTime time)
+{
+    ChannelManager::SimpleCallbacks callbacks;
+    // m_channelManager.setInstrument(m_doc->getStudio().getInstrumentById(getMetronomeInstrument()));
+    m_channelManager.makeReady(inserter, time, &callbacks,
+                               NO_TRACK);
 }
 
 bool

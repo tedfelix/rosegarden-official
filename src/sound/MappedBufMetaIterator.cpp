@@ -295,6 +295,14 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
             // lest we loop forever waiting for a valid event.
             if (!cur || !cur->isValid()) { continue; }
 
+            // If we got this far, make the mapper ready.  Do this
+            // even if the note won't play during this slice, because
+            // sometimes/always we prepare channels slightly ahead of
+            // their first notes, to fix bug #1378
+            if (!iter->isReady()) {
+                iter->makeReady(inserter, startTime);
+            }
+            
             if (cur->getEventTime() < endTime) {
                 // Increment the iterator, since we're taking this
                 // event.  NB, in the other branch it is not yet used

@@ -179,7 +179,20 @@ public:
      * logic differs across derived classes.
      */
     virtual bool shouldPlay(MappedEvent *evt, RealTime startTime)=0;
-    
+
+    // Make the channel, if any, ready to be played on.
+    /**
+     * InternalSegmentMapper and MetronomeMapper override this to bring
+     * ChannelManager into the picture.
+     *
+     * @param time is the reference time in case we need to calculate
+     * something time-dependent, which can happen if we jump into the
+     * middle of playing.
+     *
+     * @see isReady
+     */
+    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
+
     /// Record one more owner of this mapper.
     /**
      * This increases the reference count to prevent deletion of a mapper
@@ -346,7 +359,7 @@ public:
          * MappedBufMetaIterator::moveIteratorToTime() and
          * MappedBufMetaIterator::resetIteratorForSegment().
          *
-         * @see getReady()
+         * @see isReady()
          */
         void setReady(bool value)  { m_ready = value; };
 
@@ -356,7 +369,7 @@ public:
          *
          * @see m_ready
          */
-        bool getReady() const  { return m_ready; }
+        bool isReady() const  { return m_ready; }
 
         /**
          * Delegates to MappedEventBuffer::doInsert().
@@ -367,6 +380,11 @@ public:
          */
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
+        void makeReady(MappedInserterBase &inserter, RealTime time) {
+            m_s->makeReady(inserter, time);
+            setReady(true);
+        }
+        
         // Return whether the event should be played at all
         /**
          * For instance, it might be on a muted track and shouldn't

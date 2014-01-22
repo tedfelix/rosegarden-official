@@ -92,11 +92,12 @@ fillWithNote(MappedEventList &mC, Instrument *instrument,
   m_channelManager.reallocateEternalChannel();
 
   // Set up channel.
-  ChannelManager::MapperFunctionalitySimple callback;
+  ChannelManager::SimpleCallbacks callbacks;
   MappedEventInserter inserter(mC);
+
   // Insert the event.
   m_channelManager.doInsert(inserter, mE, RealTime::zeroTime,
-                            &callback, true, NO_TRACK);
+                            &callbacks, true, NO_TRACK);
 }
 
 

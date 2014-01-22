@@ -289,6 +289,13 @@ void InternalSegmentMapper::fillBuffer()
     if (anything) {
         minRealTime = getBuffer()[0].getEventTime();
         maxRealTime = getBuffer()[size() - 1].getEventTime();
+
+        // Fix for bug #1378.  Start slightly before the first note so
+        // that program etc is sent then.  We'll allow it to be before
+        // zeroTime, since MappedBufMetaIterator can handle early
+        // start-times.
+        static const RealTime preparationTime = RealTime::fromSeconds(0.5);
+        minRealTime = minRealTime - preparationTime;
     } else {
         minRealTime = maxRealTime = RealTime::zeroTime;
     }
@@ -386,6 +393,17 @@ InternalSegmentMapper::calculateSize()
     return addSize(0, m_segment);
 }
 
+// Make the channel ready to be played on.  
+void
+InternalSegmentMapper::
+makeReady(MappedInserterBase &inserter, RealTime time)
+{
+    Callbacks callbacks(this);
+    m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
+    m_channelManager.makeReady(inserter, time, &callbacks,
+                               m_segment->getTrack());
+}
+
 void
 InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                                RealTime start, bool dirtyIter)
@@ -393,8 +411,8 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     if (dirtyIter) {
         m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
     }
-    Callback functionality(this);
-    m_channelManager.doInsert(inserter, evt, start, &functionality,
+    Callbacks callbacks(this);
+    m_channelManager.doInsert(inserter, evt, start, &callbacks,
                               dirtyIter, m_segment->getTrack());
 }
 
@@ -429,13 +447,13 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     return !evt->EndedBefore(sliceStart);
 }
 
-/***  InternalSegmentMapper::Callback ***/
+/***  InternalSegmentMapper::Callbacks ***/
 
 ControllerAndPBList
-InternalSegmentMapper::Callback::
+InternalSegmentMapper::Callbacks::
 getControllers(Instrument *instrument, RealTime start)
 {
-    Profiler profiler("InternalSegmentMapper::Callback::getControllers", false);
+    Profiler profiler("InternalSegmentMapper::Callbacks::getControllers", false);
     timeT startTime =
         m_mapper->m_doc->getComposition().getElapsedTimeForRealTime(start);
 

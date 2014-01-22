@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ChannelManager]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "ChannelManager.h"
 #include "base/AllocateChannels.h"
 #include "base/Instrument.h"
@@ -23,10 +26,6 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/Midi.h"
-
-#include <cassert>
-
-// #define DEBUG_CHANNEL_MANAGER 1
 
 namespace Rosegarden
 {
@@ -98,7 +97,7 @@ ChannelManager::
 setControllers(ChannelId channel, Instrument *instrument,
                MappedInserterBase &inserter,
                RealTime reftime, RealTime insertTime,
-               MapperFunctionality *functionality, int trackId)
+               Callbacks *callbacks, int trackId)
 {
 #if 0
     // This was the old logic, but it's not clear that it is still
@@ -129,14 +128,14 @@ setControllers(ChannelId channel, Instrument *instrument,
     // Get the appropriate controllers from the callback our mapper
     // gave us.
     ControllerAndPBList CAndPBlist =
-        functionality->getControllers(instrument, reftime);
+        callbacks->getControllers(instrument, reftime);
     StaticControllers& list = CAndPBlist.m_controllers;
     for (StaticControllerConstIterator cIt = list.begin();
          cIt != list.end(); ++cIt) {
         MidiByte controlId    = cIt->first;
         MidiByte controlValue = cIt->second;
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQMAN_DEBUG << "ChannelManager::setControllers() : sending controller "
+
+    RG_DEBUG << "setControllers() : sending controller "
                  << (int)controlId
                  << "value"
                  << (int)controlValue
@@ -145,7 +144,7 @@ setControllers(ChannelId channel, Instrument *instrument,
                  << "for time"
                  << reftime
                  << endl;
-#endif
+
         try {
             insertController
                 (channel, instrument, inserter, insertTime, trackId,
@@ -180,13 +179,13 @@ sendProgramForInstrument(ChannelId channel, Instrument *instrument,
                          MappedInserterBase &inserter,
                          RealTime insertTime, int trackId) 
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQMAN_DEBUG << "ChannelManager::sendProgramForInstrument() : sending prg change for "
-                 << instrument->getPresentationName().c_str()
-                 << "on channel"
-                 << (int)channel
-                 << endl;
-#endif
+
+    RG_DEBUG << "sendProgramForInstrument() : sending prg change for "
+             << instrument->getPresentationName().c_str()
+             << "on channel"
+             << (int)channel
+             << endl;
+
 
     // Send bank select before program change unless we have a fixed
     // channel and no sendsBankSelect.
@@ -234,14 +233,13 @@ sendProgramForInstrument(ChannelId channel, Instrument *instrument,
 // @author Tom Breton (Tehom) 
 void
 ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt, 
-                         RealTime reftime,
-                         MapperFunctionality *functionality,
-                         bool firstOutput, int trackId)
+                         RealTime reftime/**/,
+                         Callbacks *callbacks,
+                         bool firstOutput/**/, TrackId trackId)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG
-        << "ChannelManager::doInsert"
-        << "playing on"
+
+    RG_DEBUG
+        << "doInsert playing on"
         << (m_instrument ?
             m_instrument->getPresentationName().c_str() :
             "nothing")
@@ -251,28 +249,61 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
             ? "needs init"
             : "doesn't need init")
         << endl;
-#endif
-    if (!m_channel.validChannel()) {
-        // We already tried to init it and failed; don't keep trying.
-        if (m_triedToGetChannel) { return; }
-        // Try to get a channel.  This sets m_triedToGetChannel.
-        reallocate(false);
-        // If we still don't have one, give up.
-        if (!m_channel.validChannel()) { return; }
-        }
-    RealTime insertTime = evt.getEventTime();
-        // !!! Should probably just abort if there's no instrument.
-    if (m_instrument) {
-        if (firstOutput || needsInit()) {
-            insertChannelSetup(inserter, reftime, insertTime,
-                               functionality, trackId);
-            setInitted(true);
-        }
-        evt.setInstrument(m_instrument->getId());
-        evt.setRecordedChannel(m_channel.getChannelId());
+
+    // We got here without being initted.  This might happen briefly
+    // if a track becomes unmuted, until the meta-iterator gets around
+    // to initting.
+    if (needsInit()) {
+        makeReady(inserter, reftime, callbacks, trackId);
+        // If we're still not initted, we can't do much.
+        if (needsInit()) { return; }
     }
+    // !!! These checks may not be needed now, could become assertions.
+    if (!m_instrument) { return; }
+    if (!m_channel.validChannel()) { return; }
+
+    evt.setInstrument(m_instrument->getId());
+    evt.setRecordedChannel(m_channel.getChannelId());
     evt.setTrackId(trackId);
     inserter.insertCopy(evt);
+}
+
+// Make the channel ready by inserting events to configure the
+// channel.
+// @author Tom Breton (Tehom) 
+bool
+ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
+                          Callbacks *callbacks, TrackId trackId)
+{
+    RG_DEBUG
+        << "makeReady for"
+        << (m_instrument ?
+            m_instrument->getPresentationName().c_str() :
+            "nothing")
+        << "at"
+        << time
+        << endl;
+
+    // We don't even have an instrument to play on.
+    if (!m_instrument) { return false; }
+
+    // Try to get a valid channel if we lack one.
+    if (!m_channel.validChannel()) {
+        // We already tried to get one and failed; don't keep trying.
+        if (m_triedToGetChannel) { return false; }
+        
+        // Try to get a channel.  This sets m_triedToGetChannel.
+        reallocate(false);
+        
+        // If we still don't have one, give up.
+        if (!m_channel.validChannel()) { return false; }
+    }
+    
+    
+    insertChannelSetup(inserter, time, time,
+                       callbacks, trackId);
+    setInitted(true);
+    return true;
 }
 
 // Insert appropriate MIDI channel-setup
@@ -280,21 +311,19 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
 void
 ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
                                    RealTime reftime, RealTime insertTime,
-                                   MapperFunctionality *functionality,
+                                   Callbacks *callbacks,
                                    int trackId)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << (m_instrument
             ? "Got instrument"
             : "No instrument")
         << endl;
     if (m_instrument) {
-        SEQUENCER_DEBUG << "Instrument type is "
-                        << (int)m_instrument->getType()
-                        << endl;
+        RG_DEBUG << "Instrument type is "
+                 << (int)m_instrument->getType()
+                 << endl;
     }
-#endif
 
     if (!m_channel.validChannel()) { return; }
     // We don't do this for SoftSynth instruments.
@@ -302,9 +331,9 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
         (m_instrument->getType() == Instrument::Midi)) {
         ChannelId channel = m_channel.getChannelId();
         sendProgramForInstrument(channel, m_instrument, inserter,
-                                 insertTime, trackId );
+                                 insertTime, trackId);
         setControllers(channel, m_instrument, inserter, reftime,
-                       insertTime, functionality, trackId);
+                       insertTime, callbacks, trackId);
     }
 }
 
@@ -314,7 +343,7 @@ void
 ChannelManager::
 setChannelIdDirectly(void)
 {
-    assert(!m_usingAllocator);
+    Q_ASSERT(!m_usingAllocator);
     ChannelId channel = m_instrument->getNaturalChannel();
     if (m_instrument->getType() == Instrument::Midi) {
         // !!! Stopgap measure.  If we ever share allocators between
@@ -331,7 +360,7 @@ AllocateChannels *
 ChannelManager::
 getAllocator(void)
 {
-    assert(m_usingAllocator);
+    Q_ASSERT(m_usingAllocator);
     if (!m_instrument) { return 0; }
     Device *device = m_instrument->getDevice();
     return device->getAllocator();
@@ -343,7 +372,7 @@ void
 ChannelManager::
 connectAllocator(void)
 {
-    assert(m_usingAllocator);
+    Q_ASSERT(m_usingAllocator);
     if (!m_channel.validChannel()) { return; }
     connect(getAllocator(), SIGNAL(sigVacateChannel(ChannelId)),
             this, SLOT(slotVacateChannel(ChannelId)),
@@ -382,11 +411,9 @@ setAllocationMode(Instrument *instrument)
                 break;
             case Instrument::Audio:
             default:
-#ifdef DEBUG_CHANNEL_MANAGER
-                SEQMAN_DEBUG << "ChannelManager::connectInstrument() : Got an "
+                RG_DEBUG << "setAllocationMode() : Got an "
                     "audio or unrecognizable instrument type."
-                             << endl;
-#endif
+                         << endl;
                 break;
             }
 
@@ -402,18 +429,16 @@ setAllocationMode(Instrument *instrument)
 void
 ChannelManager::reallocate(bool changedInstrument)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG << "ChannelManager::reallocate "
-                    << (m_usingAllocator ? "using allocator" :
-                        "not using allocator")
-                    << "for"
-                    << (void *)m_instrument
-                    << endl;
-#endif
+    RG_DEBUG << "reallocate "
+             << (m_usingAllocator ? "using allocator" :
+                 "not using allocator")
+             << "for"
+             << (void *)m_instrument
+             << endl;
     if (m_instrument) {
         if (m_usingAllocator) {
             // Only Midi instruments should have m_usingAllocator set.
-            assert(m_instrument->getType() == Instrument::Midi);
+            Q_ASSERT(m_instrument->getType() == Instrument::Midi);
             getAllocator()->
                 reallocateToFit(*m_instrument, m_channel,
                                 m_start, m_end,
@@ -425,13 +450,11 @@ ChannelManager::reallocate(bool changedInstrument)
         }
     }
 
-#ifdef DEBUG_CHANNEL_MANAGER
     if (m_channel.validChannel()) {
-        SEQUENCER_DEBUG << "  Channel is valid";
+        RG_DEBUG << "  Channel is valid";
     } else {
-        SEQUENCER_DEBUG << "  ??? Channel is invalid!  (end of reallocate())";
+        RG_DEBUG << "  ??? Channel is invalid!  (end of reallocate())";
     }
-#endif
 
     m_triedToGetChannel = true;
 }
@@ -457,13 +480,12 @@ void
 ChannelManager::
 setInstrument(Instrument *instrument)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG << "ChannelManager::setInstrument: Setting instrument to" 
-                    << (void *)instrument
-                    << "It was"
-                    << (void *)m_instrument
-                    << endl;
-#endif
+    RG_DEBUG << "setInstrument: Setting instrument to" 
+             << (void *)instrument
+             << "It was"
+             << (void *)m_instrument
+             << endl;
+
     if (instrument != m_instrument) {
         if (m_instrument) {
             Device *oldDevice = m_instrument->getDevice();
@@ -487,13 +509,11 @@ void
 ChannelManager::
 debugPrintStatus(void)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG
+    RG_DEBUG
         << "ChannelManager "
         << (m_inittedForOutput ? "doesn't need" : "needs")
         << "initting"
         << endl;
-#endif    
 }
 
 // Something is kicking everything off "channel" in our device.  It is
@@ -539,14 +559,13 @@ void
 ChannelManager::
 slotChannelBecomesFixed(void)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG << "ChannelManager::slotChannelBecomesFixed" 
-                    << (m_usingAllocator ? "using allocator" :
-                        "not using allocator")
-                    << "for"
-                    << (void *)m_instrument
-                    << endl;
-#endif
+    RG_DEBUG << "slotChannelBecomesFixed" 
+             << (m_usingAllocator ? "using allocator" :
+                 "not using allocator")
+             << "for"
+             << (void *)m_instrument
+             << endl;
+
     ChannelId channel = m_instrument->getNaturalChannel();
     if (!m_usingAllocator && (channel == m_channel.getChannelId()))
         { return; }
@@ -566,14 +585,12 @@ void
 ChannelManager::
 slotChannelBecomesUnfixed(void)
 {
-#ifdef DEBUG_CHANNEL_MANAGER
-    SEQUENCER_DEBUG << "ChannelManager::slotChannelBecomesUnfixed" 
-                    << (m_usingAllocator ? "using allocator" :
-                        "not using allocator")
-                    << "for"
-                    << (void *)m_instrument
-                    << endl;
-#endif
+    RG_DEBUG << "slotChannelBecomesUnfixed" 
+             << (m_usingAllocator ? "using allocator" :
+                 "not using allocator")
+             << "for"
+             << (void *)m_instrument
+             << endl;
     // If we were already unfixed, do nothing.
     if (m_usingAllocator) { return; }
 
@@ -605,10 +622,10 @@ slotInstrumentChanged(void)
     setDirty();
 }
 
-/***  MetronomeMapper::Callback ***/
+/*** ChannelManager::SimpleCallbacks ***/
 
 ControllerAndPBList
-ChannelManager::MapperFunctionalitySimple::
+ChannelManager::SimpleCallbacks::
 getControllers(Instrument *instrument, RealTime /*start*/)
 {
     return ControllerAndPBList(instrument->getStaticControllers());

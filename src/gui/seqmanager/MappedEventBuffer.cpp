@@ -162,6 +162,11 @@ doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     inserter.insertCopy(evt);
 }
 
+// The default doesn't have to do anything to get ready.
+void
+MappedEventBuffer::
+makeReady(MappedInserterBase &/*inserter*/, RealTime /*time*/) {}
+
 void
 MappedEventBuffer::
 addOwner(void)
@@ -341,7 +346,7 @@ doInsert(MappedInserterBase &inserter, MappedEvent &evt)
         m_currentTime = evt.getEventTime();
 
     // Mapper does the actual insertion.
-    getSegment()->doInsert(inserter, evt, m_currentTime, !getReady());
+    getSegment()->doInsert(inserter, evt, m_currentTime, !isReady());
     setReady(true);
 }
 

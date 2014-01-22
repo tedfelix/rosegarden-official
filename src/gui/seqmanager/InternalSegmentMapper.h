@@ -61,18 +61,18 @@ class InternalSegmentMapper : public SegmentMapper
     friend class ControllerSearch;
     friend class ControllerContextMap;
 
-    class Callback : public ChannelManager::MapperFunctionality
+    class Callbacks : public ChannelManager::Callbacks
         {
         public:
     
-        Callback(InternalSegmentMapper *mapper) :
+        Callbacks(InternalSegmentMapper *mapper) :
             m_mapper(mapper) {}
         private:
             virtual ControllerAndPBList
                 getControllers(Instrument *instrument, RealTime start);
             InternalSegmentMapper *m_mapper;
         };
-    friend class Callback;
+    friend class Callbacks;
 
     typedef std::pair<timeT, int> Noteoff;
     struct NoteoffCmp
@@ -94,6 +94,9 @@ class InternalSegmentMapper : public SegmentMapper
     ~InternalSegmentMapper(void);
 
     // Do channel-setup
+    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
+
+    // Insert the event "evt"
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                          RealTime start, bool firstOutput);
 
