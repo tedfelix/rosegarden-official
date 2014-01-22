@@ -186,7 +186,7 @@ fetchEvents(MappedInserterBase &inserter,
          ++i) {
         RealTime start, end;
         (*i)->getSegment()->getStartEnd(start, end); 
-        if ((start > startTime) && (start < endTime))
+        if ((start >= startTime) && (start < endTime))
             { segStarts.push(start); }
     }
 
