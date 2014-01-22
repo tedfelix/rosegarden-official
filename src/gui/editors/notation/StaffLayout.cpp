@@ -19,16 +19,17 @@
 
 #include "StaffLayout.h"
 
-#include "misc/Debug.h"
 #include "base/Event.h"
 #include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
-#include "base/ViewSegment.h"
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
+#include "base/ViewSegment.h"
+#include "gui/editors/notation/BarLineItem.h"
 #include "gui/general/GUIPalette.h"
-#include "BarLineItem.h"
+#include "misc/Debug.h"
+
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>

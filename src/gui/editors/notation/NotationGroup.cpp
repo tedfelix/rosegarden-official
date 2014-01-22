@@ -15,22 +15,22 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationGroup]"
 
 #include "NotationGroup.h"
-#include "misc/Debug.h"
 
 #include "base/Equation.h"
 #include "base/Event.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
-#include "NotationChord.h"
-#include "NotationElement.h"
-#include "NotationProperties.h"
-#include "NotationStaff.h"
-#include "NoteStyleFactory.h"
-#include "NotePixmapFactory.h"
-
+#include "gui/editors/notation/NotationChord.h"
+#include "gui/editors/notation/NotationElement.h"
+#include "gui/editors/notation/NotationProperties.h"
+#include "gui/editors/notation/NotationStaff.h"
+#include "gui/editors/notation/NoteStyleFactory.h"
+#include "gui/editors/notation/NotePixmapFactory.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {

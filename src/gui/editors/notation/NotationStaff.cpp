@@ -15,13 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationStaff]"
 
 #include "NotationStaff.h"
-#include "misc/Debug.h"
-#include <QApplication>
 
-#include "misc/Strings.h"
-#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Event.h"
@@ -39,22 +36,27 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
-#include "base/figuration/SegmentID.h"
 #include "base/figuration/GeneratedRegion.h"
+#include "base/figuration/SegmentID.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
+#include "gui/editors/notation/NotationChord.h"
+#include "gui/editors/notation/NotationElement.h"
+#include "gui/editors/notation/NotationHLayout.h"
+#include "gui/editors/notation/NotationProperties.h"
+#include "gui/editors/notation/NotationScene.h"
+#include "gui/editors/notation/NoteFontFactory.h"
+#include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/editors/notation/NotePixmapParameters.h"
+#include "gui/editors/notation/NoteStyleFactory.h"
+#include "gui/editors/notation/StaffLayout.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/ProgressReporter.h"
-#include "NotationChord.h"
-#include "NotationElement.h"
-#include "NotationProperties.h"
-#include "NotationHLayout.h"
-#include "NotationScene.h"
-#include "NoteFontFactory.h"
-#include "NotePixmapFactory.h"
-#include "NotePixmapParameters.h"
-#include "NoteStyleFactory.h"
-#include "StaffLayout.h"
+#include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
+#include "misc/Strings.h"
+
+#include <QApplication>
 #include <QSettings>
 #include <QMessageBox>
 #include <QGraphicsItem>

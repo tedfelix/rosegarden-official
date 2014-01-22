@@ -15,37 +15,40 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationHLayout]"
 
 #include "NotationHLayout.h"
-#include "misc/Strings.h"
-#include "misc/Debug.h"
-#include "misc/ConfigGroups.h"
-#include <QApplication>
 
 #include "base/Composition.h"
 #include "base/LayoutEngine.h"
+#include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
-#include "base/NotationQuantizer.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
-#include "base/ViewSegment.h"
 #include "base/ViewElement.h"
+#include "base/ViewSegment.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
+#include "gui/editors/notation/ClefKeyContext.h"
+#include "gui/editors/notation/NotationChord.h"
+#include "gui/editors/notation/NotationElement.h"
+#include "gui/editors/notation/NotationGroup.h"
+#include "gui/editors/notation/NotationProperties.h"
+#include "gui/editors/notation/NotationScene.h"
+#include "gui/editors/notation/NotationStaff.h"
+#include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "NotationChord.h"
-#include "NotationElement.h"
-#include "ClefKeyContext.h"
-#include "NotationGroup.h"
-#include "NotationProperties.h"
-#include "NotationScene.h"
-#include "NotationStaff.h"
-#include "NotePixmapFactory.h"
+#include "misc/Strings.h"
+#include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
+
+#include <QApplication>
 #include <QSettings>
 #include <QObject>
+
 #include <cmath>
 #include <limits>
 
