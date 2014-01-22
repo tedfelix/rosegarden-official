@@ -30,7 +30,7 @@ namespace Rosegarden
 // We can't assume all events are > ZeroTime, there are rare
 // exceptions.  These used to correspond to constants in RealTime.cpp.
 const RealTime ChannelInterval::m_beforeEarliestTime(std::numeric_limits<int>::min(),0);
-const RealTime ChannelInterval::m_earliestTime(std::numeric_limits<int>::min()-1,0);
+const RealTime ChannelInterval::m_earliestTime(std::numeric_limits<int>::min()+1,0);
 const RealTime ChannelInterval::m_latestTime(std::numeric_limits<int>::max(),0);
 const RealTime ChannelInterval::m_afterLatestTime(std::numeric_limits<int>::max(),999999999);
 
