@@ -213,8 +213,8 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
     int endBarNo = getComposition()->getBarNumber(endTime);
     /*
         if (endBarNo > startBarNo &&
-    	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
-    	--endBarNo;
+        getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
+        --endBarNo;
         }
     */
     TrackId trackId = segment.getTrack();
@@ -384,7 +384,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                 clef = Clef(*el->event());
                 accTable.newClef(clef);
             } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
-	        oldKey = key;
+                oldKey = key;
                 key = ::Rosegarden::Key(*el->event());
                 accTable = AccidentalTable
                            (key, clef, octaveType, barResetType);
@@ -416,13 +416,13 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
             if (el->event()->isa(Clef::EventType)) {
 
-                //		RG_DEBUG << "Found clef" << endl;
+                //              RG_DEBUG << "Found clef" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, npf, key)));
 
             } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
-                //		RG_DEBUG << "Found key" << endl;
+                //              RG_DEBUG << "Found key" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, npf, oldKey)));
 
@@ -464,7 +464,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
             } else if (el->event()->isa(Indication::EventType)) {
 
-                //		RG_DEBUG << "Found indication" << endl;
+                //              RG_DEBUG << "Found indication" << endl;
 
                 chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
@@ -513,8 +513,8 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
     /*
         BarDataList::iterator ei(barList.end());
         while (ei != barList.begin() && (--ei)->first > endBarNo) {
-    	barList.erase(ei);
-    	ei = barList.end();
+        barList.erase(ei);
+        ei = barList.end();
         }
     */
 }
@@ -613,9 +613,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     /*
         for (NotationElementList::iterator i = chord.getInitialElement();
-    	 i != notes->end(); ++i) {
-    	(*i)->event()->dump(std::cerr);
-    	if (i == chord.getFinalElement()) break;
+         i != notes->end(); ++i) {
+        (*i)->event()->dump(std::cerr);
+        if (i == chord.getFinalElement()) break;
         }
     */
     // We don't need to get the chord's notes in pitch order here,
@@ -1184,23 +1184,23 @@ NotationHLayout::reconcileBarsPage()
             // any more but we can declare we don't want it any
             // narrower than e.g. 90% or something based on the spacing
             /*!!!
-            	    if (!tooFar && (nextStretchFactor < 1.0)) {
+                    if (!tooFar && (nextStretchFactor < 1.0)) {
 
-            		for (BarDataMap::iterator i = m_barData.begin();
-            		     i != m_barData.end(); ++i) {
+                        for (BarDataMap::iterator i = m_barData.begin();
+                             i != m_barData.end(); ++i) {
 
-            		    BarDataList &list = i->second;
-            		    BarDataList::iterator bdli = list.find(barNo);
-            		    if (bdli != list.end()) {
-            			BarData::SizeData &bd(bdli->second.sizeData);
-            			if ((nextStretchFactor * bd.idealWidth) <
-            			    (double)(bd.fixedWidth + bd.baseWidth)) {
-            			    tooFar = true;
-            			    break;
-            			}
-            		    }
-            		}
-            	    }
+                            BarDataList &list = i->second;
+                            BarDataList::iterator bdli = list.find(barNo);
+                            if (bdli != list.end()) {
+                                BarData::SizeData &bd(bdli->second.sizeData);
+                                if ((nextStretchFactor * bd.idealWidth) <
+                                    (double)(bd.fixedWidth + bd.baseWidth)) {
+                                    tooFar = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
             */
         }
 
@@ -1448,7 +1448,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
         }
 
         bdi->second.layoutData.x = barX;
-        //	x = barX + getPostBarMargin();
+        //      x = barX + getPostBarMargin();
 
         bool timeSigToPlace = false;
         if (bdi->second.basicData.newTimeSig) {
@@ -1983,8 +1983,8 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
             w = 0;
 
         } else {
-            //	    RG_DEBUG << "getLayoutWidth(): no case for event type " << e.event()->getType() << endl;
-            //	    w += 24;
+            //      RG_DEBUG << "getLayoutWidth(): no case for event type " << e.event()->getType() << endl;
+            //      w += 24;
             w = 0;
         }
 

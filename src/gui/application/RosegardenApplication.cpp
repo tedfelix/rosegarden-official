@@ -57,15 +57,15 @@ int RosegardenApplication::newInstance()
 */
 void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
-	if (proc->exitStatus() != QProcess::NormalExit ) {
-            QSettings settings;
-            settings.beginGroup( SequencerOptionsConfigGroup );
+    if (proc->exitStatus() != QProcess::NormalExit ) {
+        QSettings settings;
+        settings.beginGroup( SequencerOptionsConfigGroup );
 
-            QString soundFontPath = settings.value("soundfontpath", "").toString() ;
-            settings.endGroup();		// corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
-            //### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
-            QMessageBox::critical( topLevelWidgets()[0], "",
-                    tr("Failed to load soundfont %1").arg(soundFontPath ));
+        QString soundFontPath = settings.value("soundfontpath", "").toString() ;
+        settings.endGroup();                // corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
+        //### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
+        QMessageBox::critical( topLevelWidgets()[0], "",
+                               tr("Failed to load soundfont %1").arg(soundFontPath ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }
@@ -87,7 +87,7 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
 void
 RosegardenApplication::refreshGUI(int /* maxTime */)
 {
-//    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |			//&&& eventLoop()->processEvents()
+//    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |                 //&&& eventLoop()->processEvents()
 //                               QEventLoop::ExcludeSocketNotifiers,
    //                            maxTime);
 }

@@ -31,7 +31,7 @@
 
 namespace Rosegarden
 {
-	
+
 class PannerScene : public QGraphicsScene
 {
 public:

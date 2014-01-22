@@ -27,7 +27,7 @@ namespace Rosegarden {
     class RealTime;
     class Colour;
     namespace Guitar {
-	class Chord;
+        class Chord;
     }
 
 #if !defined NDEBUG && !defined RG_NO_DEBUG_PRINT

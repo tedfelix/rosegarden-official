@@ -412,7 +412,7 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
             }
 
             if (ControlBlock::getInstance()->isSolo() == true &&
-		evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
+                evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MBMI::getAudioEvents - "
                           << "track " << evt.getTrackId() << " is not solo track" << std::endl;
@@ -464,7 +464,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
             }
 
             if (ControlBlock::getInstance()->isSolo() == true &&
-		evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
+                evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MBMI::getPlayingAudioFiles - "
                 << "track " << evt.getTrackId() << " is not solo track" << std::endl;

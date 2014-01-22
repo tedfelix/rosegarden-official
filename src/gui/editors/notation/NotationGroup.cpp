@@ -281,14 +281,14 @@ NotationGroup::applyStemProperties()
 
     /*!!!
         if ((*initialNote)->event()->has(STEM_UP) &&
-    	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
-    	aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
+        (*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+        aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
         }
      
         if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
-    	(*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
-    	aboveNotes = (*initialNote)->event()->get<Bool>
-    	    (NotationProperties::BEAM_ABOVE);
+        (*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
+        aboveNotes = (*initialNote)->event()->get<Bool>
+            (NotationProperties::BEAM_ABOVE);
         }
     */
     for (NELIterator i = initialNote; i != getContainer().end(); ++i) {
@@ -304,7 +304,7 @@ NotationGroup::applyStemProperties()
             el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
 
             el->event()->setMaybe<Bool>(NotationProperties::BEAMED, true);
-            //	    el->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
+            //      el->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
 
         } else if (el->isNote()) {
 
@@ -559,7 +559,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         if (c1 - ml > midY) ml = c1 - midY;
         if (c2 - el > midY) el = c2 - midY;
         if (extremeDX > 1.0 || extremeDX < -1.0) {
-            //	    beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
+            //      beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
         }
         beam.startY = min(min(c0 - sl, c1 - ml), c2 - el);
     } else {
@@ -567,18 +567,18 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         if (c1 + ml < midY) ml = midY - c1;
         if (c2 + el < midY) el = midY - c2;
         if (extremeDX > 1.0 || extremeDX < -1.0) {
-            //	    beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
+            //      beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
         }
         beam.startY = max(max(c0 + sl, c1 + ml), c2 + el);
     }
     /*
         RG_DEBUG << "calculateBeam: beam data:" << endl
-    		   << "gradient: " << beam.gradient << endl
-    		   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")" << endl
-    		   << "startY: " << beam.startY << endl
-    		   << "aboveNotes: " << beam.aboveNotes << endl
-    		   << "shortestNoteType: " << shortestNoteType << endl
-    		   << "necessary: " << beam.necessary << endl;
+                   << "gradient: " << beam.gradient << endl
+                   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")" << endl
+                   << "startY: " << beam.startY << endl
+                   << "aboveNotes: " << beam.aboveNotes << endl
+                   << "shortestNoteType: " << shortestNoteType << endl
+                   << "necessary: " << beam.necessary << endl;
     */ 
     return beam;
 }
@@ -593,24 +593,24 @@ NotationGroup::applyBeam(NotationStaff &staff)
         RG_DEBUG << "Coverage:" << endl;
         int i = 0;
         for (NELIterator i = getInitialElement(); i != getContainer().end(); ++i) {
-    	(*i)->event()->dump(cerr);
-    	if (i == getFinalElement()) break;
+        (*i)->event()->dump(cerr);
+        if (i == getFinalElement()) break;
         }
         {
-    	NELIterator i(getInitialNote());
-    	RG_DEBUG << "Initial note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        NELIterator i(getInitialNote());
+        RG_DEBUG << "Initial note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
         }
         {
-    	NELIterator i(getFinalNote());
-    	RG_DEBUG << "Final note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        NELIterator i(getFinalNote());
+        RG_DEBUG << "Final note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
         }
         {
-    	NELIterator i(getHighestNote());
-    	RG_DEBUG << "Highest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        NELIterator i(getHighestNote());
+        RG_DEBUG << "Highest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
         }
         {
-    	NELIterator i(getLowestNote());
-    	RG_DEBUG << "Lowest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        NELIterator i(getLowestNote());
+        RG_DEBUG << "Lowest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
         }
     */
     Beam beam(calculateBeam(staff));
@@ -767,7 +767,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
                 NotationElement *prevEl = static_cast<NotationElement*>(*prev);
                 int secWidth = x - (int)prevEl->getLayoutX();
 
-                //		prevEl->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
+                //              prevEl->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
 
                 prevEl->event()->setMaybe<Int>
                     (m_properties.BEAM_SECTION_WIDTH, secWidth);
@@ -810,7 +810,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
             el->event()->setMaybe<Int>(m_properties.BEAM_GRADIENT, beam.gradient);
 
             // until they're set next time around the loop, as (*prev)->...
-            //	    el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_Y, myY);
+            //      el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_Y, myY);
             el->event()->setMaybe<Int>(m_properties.BEAM_SECTION_WIDTH, 0);
             el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_BEAM_COUNT, 1);
 
@@ -824,11 +824,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
             //!!! should we really be setting these here as well as in
             // applyStemProperties?
             /*
-            	    if (i == initialNote || i == finalNote) {
-            		(*i)->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP,  beam.aboveNotes);
-            	    } else {
-            		(*i)->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, !beam.aboveNotes);
-            	    }
+                    if (i == initialNote || i == finalNote) {
+                        (*i)->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP,  beam.aboveNotes);
+                    } else {
+                        (*i)->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, !beam.aboveNotes);
+                    }
             */
         }
 
@@ -914,7 +914,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         int endY = startY + (int)((finalX - initialX) *
                                   ((double)beam.gradient / 100.0));
 
-        //	RG_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient << endl;
+        //      RG_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient << endl;
 
         int nh = staff.getNotePixmapFactory(isGrace).getNoteBodyHeight();
 

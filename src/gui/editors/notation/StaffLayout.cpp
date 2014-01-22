@@ -323,7 +323,7 @@ StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
     int y;
 
     //    RG_DEBUG << "getSceneYForHeight(" << h << "," << baseY
-    //		   << ")" << endl;
+    //             << ")" << endl;
 
     if (baseX < 0)
         baseX = getX() + getMargin();
@@ -984,8 +984,8 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
     Profiler profiler("StaffLayout::resizeStaffLineRow");
 
     //    RG_DEBUG << "StaffLayout::resizeStaffLineRow: row "
-    //	     << row << ", x " << x << ", length "
-    //	     << length << endl;
+    //       << row << ", x " << x << ", length "
+    //       << length << endl;
 
 
     // If the resolution is 8 or less, we want to reduce the blackness

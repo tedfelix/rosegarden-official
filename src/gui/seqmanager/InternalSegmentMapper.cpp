@@ -43,7 +43,7 @@ namespace Rosegarden
 {
 
 InternalSegmentMapper::InternalSegmentMapper(RosegardenDocument *doc,
-					     Segment *segment)
+                                             Segment *segment)
     : SegmentMapper(doc, segment),
       m_channelManager(doc->getInstrument(segment)),
       m_triggeredEvents(new Segment)

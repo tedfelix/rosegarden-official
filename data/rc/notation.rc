@@ -29,13 +29,13 @@
     <Action name="delete" text="De&amp;lete" shortcut="Delete" />
   <Separator/>
     <Action name="move_events_up_staff" 
-	    text="&amp;Move to Staff Above" />
+            text="&amp;Move to Staff Above" />
     <Action name="general_move_events_up_staff" 
-	    text="&amp;Move to Staff Above..." />
+            text="&amp;Move to Staff Above..." />
     <Action name="move_events_down_staff" 
-	    text="Move to Staff &amp;Below" />
+            text="Move to Staff &amp;Below" />
     <Action name="general_move_events_down_staff" 
-	    text="Move to Staff &amp;Below..." />
+            text="Move to Staff &amp;Below..." />
   <Separator/>
     <Action name="select_from_start" text="Select from Sta&amp;rt" />
     <Action name="select_to_end" text="Select to &amp;End" />
@@ -487,7 +487,7 @@
   <Separator/>
     <Menu noMerge="1" name="DurationTools">
       <text>&amp;Durations</text>
-	    <!-- Reference names, but with _ instead of - -->
+            <!-- Reference names, but with _ instead of - -->
       <Action name="duration_breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" checked="false" group="duration_shortcut" />
       <Action name="duration_semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" checked="false" group="duration_shortcut" />
       <Action name="duration_minim" text="&amp;Half Note" icon="minim" shortcut="2" checked="false" group="duration_shortcut" />

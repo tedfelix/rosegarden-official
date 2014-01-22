@@ -523,8 +523,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         }
 
         bool selected = isSelected(it);
-        //	RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
-        //			     << " (selected = " << selected << ")" << endl;
+        //      RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
+        //                           << " (selected = " << selected << ")" << endl;
 
         renderSingleElement(it, currentClef, currentKey, selected);
 
@@ -537,7 +537,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     }
 
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements: "
-    //			 << elementCount << " elements rendered" << endl;
+    //                   << elementCount << " elements rendered" << endl;
 }
 
 void
@@ -576,8 +576,8 @@ NotationStaff::renderPrintable(timeT from, timeT to)
         }
 
         bool selected = isSelected(it);
-        //	RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
-        //			     << " (selected = " << selected << ")" << endl;
+        //      RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
+        //                           << " (selected = " << selected << ")" << endl;
 
         renderSingleElement(it, currentClef, currentKey, selected);
 
@@ -590,7 +590,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     }
 
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements: "
-    //			 << elementCount << " elements rendered" << endl;
+    //                   << elementCount << " elements rendered" << endl;
 }
 
 const NotationProperties &
@@ -780,10 +780,10 @@ NotationStaff::positionElements(timeT from, timeT to)
     }
 
     RG_DEBUG << "NotationStaff " << this << "::positionElements "
-    		   << from << " -> " << to << ": "
-    		   << elementsPositioned << " elements positioned, "
-    		   << elementsRendered << " re-rendered"
-    		   << endl;
+             << from << " -> " << to << ": "
+             << elementsPositioned << " elements positioned, "
+             << elementsRendered << " re-rendered"
+             << endl;
 
     NotePixmapFactory::dumpStats(std::cerr);
 }
@@ -819,10 +819,10 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
     bool ok = (int)(elt->getSceneY()) == (int)(coords.second);
 
     if (!ok) {
-     	RG_DEBUG
-     	    << "elementNotMovedInY: elt at " << elt->getViewAbsoluteTime()
+        RG_DEBUG
+            << "elementNotMovedInY: elt at " << elt->getViewAbsoluteTime()
             << ", ok is " << ok << endl;
-     	RG_DEBUG << "(cf " << (int)(elt->getSceneY()) << " vs "
+        RG_DEBUG << "(cf " << (int)(elt->getSceneY()) << " vs "
                        << (int)(coords.second) << ")" << endl;
     }
     return ok;
@@ -1314,25 +1314,25 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 Guitar::Chord chord (*elt->event());
 
                 /* UNUSED - for printing, just use a large pixmap as below
-                		    if (m_printPainter) {
+                                    if (m_printPainter) {
 
-                			int length = m_notePixmapFactory->getTextWidth(text);
-                			for (double w = -1, inc = 0; w != 0; inc += w) {
-                			    w = setPainterClipping(m_printPainter,
-                						   elt->getLayoutX(),
-                						   int(elt->getLayoutY()),
-                						   int(inc), length, coords,
-                						   policy);
-                			    m_notePixmapFactory->drawText
-                				(text, *m_printPainter, int(coords.first), coords.second);
-                			    m_printPainter->restore();
-                			}
-                		    } else {
-                			*/
+                                        int length = m_notePixmapFactory->getTextWidth(text);
+                                        for (double w = -1, inc = 0; w != 0; inc += w) {
+                                            w = setPainterClipping(m_printPainter,
+                                                                   elt->getLayoutX(),
+                                                                   int(elt->getLayoutY()),
+                                                                   int(inc), length, coords,
+                                                                   policy);
+                                            m_notePixmapFactory->drawText
+                                                (text, *m_printPainter, int(coords.first), coords.second);
+                                            m_printPainter->restore();
+                                        }
+                                    } else {
+                                        */
 
                 item = m_notePixmapFactory->makeGuitarChord
                     (chord.getFingering(), int(coords.first), coords.second);
-                //		    }
+                //                  }
             } catch (Exception e) { // GuitarChord ctor failed
                 RG_DEBUG << "Bad guitar chord event" << endl;
             }
@@ -1641,7 +1641,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
             params.setMarks(chord.getMarksForChord());
         }
 
-        //	    params.setMarks(Marks::getMarks(*elt->event()));
+        //          params.setMarks(Marks::getMarks(*elt->event()));
 
         if (up && note < Note::Semibreve) {
             safeVertDistance = m_notePixmapFactory->getStemLength();
@@ -1906,15 +1906,15 @@ NotationStaff::wrapEvent(Event *e)
     /*!!! always wrap unknowns, just don't necessarily render them?
 
         if (!m_showUnknowns) {
-    	std::string etype = e->getType();
-    	if (etype != Note::EventType &&
-    	    etype != Note::EventRestType &&
-    	    etype != Clef::EventType &&
-    	    etype != Key::EventType &&
-    	    etype != Indication::EventType &&
-    	    etype != Text::EventType) {
-    	    wrap = false;
-    	}
+        std::string etype = e->getType();
+        if (etype != Note::EventType &&
+            etype != Note::EventRestType &&
+            etype != Clef::EventType &&
+            etype != Key::EventType &&
+            etype != Indication::EventType &&
+            etype != Text::EventType) {
+            wrap = false;
+        }
         }
     */
 
