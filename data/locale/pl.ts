@@ -11,2832 +11,6 @@
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+109"/>
         <source></source>
-        <comment>&quot;long&quot; is a C++ data type</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source></source>
-        <comment>&quot;int&quot; is a C++ data type</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+6801"/>
-        <source></source>
-        <comment>you may change &quot;doc:audio-filename-en&quot; to a page in your</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="+35"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+34"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+28"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+65"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+43"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source></source>
-        <comment>this is a tooltip. If it contains a string in () this string is a keyboard shortcut * and this shortcut SHOULD be translated to your target language, because Qt will not translate * these strings for you. You will need to sync these manually.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
-        <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source></source>
         <comment>this is a keyboard shortcut for an English QWERTY keyboard. If you adjust this to suit your language * DO NOT translate English names for special keys like Ctrl Shift Alt Up Down and so on, because this will break the * translation. You should only translate single keys, like switching the meaning of Z and Y to fit better on a QWERTZ * keyboard. Treat ASCII characters as single keys. ; : &lt; &gt; [ ] - = ( ) and so on, even if they require Shift or some * special combination on your keyboard.</comment>
         <translation></translation>
     </message>
@@ -2845,7 +19,7 @@
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+474"/>
         <source>Manage MIDI Devices</source>
         <translation>Zarządzaj urządzeniami MIDI</translation>
     </message>
@@ -3163,23 +337,23 @@
         <translation>Nie można otworzyć pliku mapowania czcionki %1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-4651"/>
-        <location line="+124"/>
-        <location line="+58"/>
+        <location filename="../QMenuStrings.cpp" line="+30"/>
+        <location line="+33"/>
+        <location line="+61"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+140"/>
-        <location line="+81"/>
-        <location line="+242"/>
-        <location line="+36"/>
-        <location line="+106"/>
-        <location line="+711"/>
-        <location line="+54"/>
+        <location line="+143"/>
+        <location line="+157"/>
+        <location line="+1180"/>
+        <location line="+48"/>
+        <location line="+73"/>
+        <location line="+1933"/>
+        <location line="+860"/>
+        <location line="+115"/>
         <source>&amp;File</source>
         <translation>Plik</translation>
     </message>
     <message>
-        <location line="-906"/>
+        <location line="-4651"/>
         <source>&amp;Add Audio File...</source>
         <translation>Dodaj plik dźwiękowy...</translation>
     </message>
@@ -3189,54 +363,54 @@
         <translation>Eksportuj plik dźwiękowy...</translation>
     </message>
     <message>
-        <location line="-1763"/>
-        <location line="+115"/>
-        <location line="+67"/>
+        <location line="+1"/>
+        <location line="+31"/>
+        <location line="+70"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+131"/>
-        <location line="+90"/>
-        <location line="+235"/>
-        <location line="+43"/>
-        <location line="+159"/>
-        <location line="+649"/>
-        <location line="+65"/>
+        <location line="+134"/>
+        <location line="+166"/>
+        <location line="+1180"/>
+        <location line="+48"/>
+        <location line="+75"/>
+        <location line="+1984"/>
+        <location line="+807"/>
+        <location line="+106"/>
         <source>&amp;Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location line="-2673"/>
-        <location line="+115"/>
-        <location line="+67"/>
+        <location line="-4643"/>
+        <location line="+31"/>
+        <location line="+70"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+131"/>
-        <location line="+90"/>
-        <location line="+235"/>
-        <location line="+43"/>
-        <location line="+159"/>
-        <location line="+649"/>
-        <location line="+65"/>
+        <location line="+134"/>
+        <location line="+166"/>
+        <location line="+1180"/>
+        <location line="+48"/>
+        <location line="+75"/>
+        <location line="+1984"/>
+        <location line="+807"/>
+        <location line="+106"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location line="-2678"/>
-        <location line="+115"/>
-        <location line="+67"/>
+        <location line="-4648"/>
+        <location line="+31"/>
+        <location line="+70"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+131"/>
-        <location line="+325"/>
-        <location line="+211"/>
-        <location line="+640"/>
-        <location line="+65"/>
+        <location line="+134"/>
+        <location line="+166"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+798"/>
+        <location line="+106"/>
         <source>&amp;Edit</source>
         <translation>Edytuj</translation>
     </message>
     <message>
-        <location line="-915"/>
+        <location line="-4649"/>
         <source>&amp;Unload Audio File</source>
         <translation>Wyładuj plik dźwiękowy</translation>
     </message>
@@ -3261,42 +435,42 @@
         <translation>Podgląd odtwarzania</translation>
     </message>
     <message>
-        <location line="-1690"/>
+        <location line="+3"/>
+        <location line="+59"/>
         <location line="+1"/>
-        <location line="+71"/>
+        <location line="+51"/>
         <location line="+1"/>
-        <location line="+48"/>
+        <location line="+134"/>
         <location line="+1"/>
-        <location line="+1053"/>
-        <location line="+158"/>
+        <location line="+51"/>
         <location line="+1"/>
-        <location line="+48"/>
+        <location line="+1166"/>
+        <location line="+173"/>
         <location line="+1"/>
-        <location line="+83"/>
+        <location line="+69"/>
         <location line="+1"/>
-        <location line="+226"/>
-        <location line="+73"/>
+        <location line="+1684"/>
+        <location line="+880"/>
+        <location line="+342"/>
         <location line="+1"/>
-        <location line="+664"/>
-        <location line="+136"/>
+        <location line="+57"/>
         <location line="+1"/>
-        <location line="+1672"/>
         <source>&amp;Help</source>
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location line="-4232"/>
-        <location line="+72"/>
-        <location line="+49"/>
-        <location line="+1054"/>
-        <location line="+158"/>
-        <location line="+49"/>
-        <location line="+84"/>
-        <location line="+227"/>
-        <location line="+73"/>
-        <location line="+665"/>
-        <location line="+136"/>
-        <location line="+1673"/>
+        <location line="-4666"/>
+        <location line="+59"/>
+        <location line="+52"/>
+        <location line="+135"/>
+        <location line="+52"/>
+        <location line="+1167"/>
+        <location line="+173"/>
+        <location line="+70"/>
+        <location line="+1685"/>
+        <location line="+880"/>
+        <location line="+342"/>
+        <location line="+58"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation>F1</translation>
@@ -3306,305 +480,305 @@
         <translation type="obsolete">Samouczek Rosegarden</translation>
     </message>
     <message>
-        <location line="-3062"/>
-        <location line="+1256"/>
-        <location line="+1809"/>
+        <location line="-3205"/>
+        <location line="+1928"/>
+        <location line="+880"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>Wskazówki zgłaszania błędów</translation>
     </message>
     <message>
-        <location line="-4241"/>
-        <location line="+72"/>
-        <location line="+49"/>
-        <location line="+1056"/>
-        <location line="+156"/>
-        <location line="+49"/>
-        <location line="+84"/>
-        <location line="+227"/>
-        <location line="+73"/>
-        <location line="+667"/>
-        <location line="+134"/>
-        <location line="+1675"/>
+        <location line="-4274"/>
+        <location line="+59"/>
+        <location line="+52"/>
+        <location line="+135"/>
+        <location line="+52"/>
+        <location line="+1169"/>
+        <location line="+171"/>
+        <location line="+70"/>
+        <location line="+1687"/>
+        <location line="+880"/>
+        <location line="+340"/>
+        <location line="+58"/>
         <source>&amp;About Rosegarden</source>
         <translation>O Rosegarden</translation>
     </message>
     <message>
-        <location line="-3062"/>
-        <location line="+514"/>
-        <location line="+2551"/>
+        <location line="-4672"/>
+        <location line="+1469"/>
+        <location line="+1928"/>
         <source>General Toolbar</source>
         <translation>Podstawowy pasek narzędziowy</translation>
     </message>
     <message>
-        <location line="-4334"/>
-        <location line="+115"/>
-        <location line="+67"/>
-        <location line="+1126"/>
-        <location line="+131"/>
-        <location line="+1176"/>
+        <location line="-3385"/>
+        <location line="+70"/>
+        <location line="+49"/>
+        <location line="+134"/>
+        <location line="+4260"/>
+        <location line="+106"/>
         <source>&amp;Nothing to undo</source>
         <translation>Nic do cofnięcia</translation>
     </message>
     <message>
-        <location line="-2608"/>
-        <location line="+115"/>
-        <location line="+67"/>
+        <location line="-4612"/>
+        <location line="+70"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+131"/>
-        <location line="+172"/>
-        <location line="+364"/>
-        <location line="+640"/>
-        <location line="+65"/>
+        <location line="+134"/>
+        <location line="+166"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
+        <location line="+168"/>
+        <location line="+106"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-2678"/>
-        <location line="+115"/>
-        <location line="+67"/>
-        <location line="+1126"/>
-        <location line="+131"/>
-        <location line="+1176"/>
+        <location line="-4617"/>
+        <location line="+70"/>
+        <location line="+49"/>
+        <location line="+134"/>
+        <location line="+4260"/>
+        <location line="+106"/>
         <source>N&amp;othing to redo</source>
         <translation>Nic do ponowienia</translation>
     </message>
     <message>
-        <location line="-2608"/>
-        <location line="+115"/>
-        <location line="+67"/>
+        <location line="-4612"/>
+        <location line="+70"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+131"/>
-        <location line="+172"/>
-        <location line="+364"/>
-        <location line="+640"/>
-        <location line="+65"/>
+        <location line="+134"/>
+        <location line="+166"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
+        <location line="+168"/>
+        <location line="+106"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-2563"/>
-        <location line="+125"/>
-        <location line="+1105"/>
-        <location line="+275"/>
-        <location line="+364"/>
-        <location line="+705"/>
+        <location line="-4617"/>
+        <location line="+156"/>
+        <location line="+272"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
         <source>&amp;Copy</source>
         <translation>Kopiuj</translation>
     </message>
     <message>
-        <location line="-2567"/>
-        <location line="+125"/>
-        <location line="+1105"/>
-        <location line="+275"/>
-        <location line="+364"/>
-        <location line="+705"/>
+        <location line="-4347"/>
+        <location line="+156"/>
+        <location line="+272"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-2572"/>
-        <location line="+125"/>
-        <location line="+1105"/>
-        <location line="+275"/>
-        <location line="+364"/>
-        <location line="+705"/>
+        <location line="-4352"/>
+        <location line="+156"/>
+        <location line="+272"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
         <source>&amp;Paste</source>
         <translation>Wklej</translation>
     </message>
     <message>
-        <location line="-2567"/>
-        <location line="+125"/>
-        <location line="+1105"/>
-        <location line="+275"/>
-        <location line="+364"/>
-        <location line="+705"/>
+        <location line="-4347"/>
+        <location line="+156"/>
+        <location line="+272"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-2782"/>
-        <location line="+3"/>
-        <location line="+1330"/>
-        <location line="+474"/>
+        <location line="-4341"/>
+        <location line="+192"/>
+        <location line="+52"/>
         <location line="+36"/>
-        <location line="+73"/>
-        <location line="+694"/>
-        <location line="+2009"/>
-        <location line="+3"/>
-        <location line="+3"/>
         <location line="+36"/>
+        <location line="+1099"/>
+        <location line="+72"/>
+        <location line="+163"/>
+        <location line="+1922"/>
+        <location line="+863"/>
+        <location line="+123"/>
         <source>Switch to Select Tool</source>
         <translation>Przejdź do narzędzia zaznaczania</translation>
     </message>
     <message>
-        <location line="-4660"/>
-        <location line="+1843"/>
-        <location line="+2776"/>
-        <location line="+3"/>
+        <location line="-4557"/>
+        <location line="+192"/>
+        <location line="+4243"/>
+        <location line="+123"/>
         <source>Switch to Inserting Notes</source>
         <translation>Przejdź do wpisywania nut</translation>
     </message>
     <message>
-        <location line="-4621"/>
-        <location line="+19"/>
-        <location line="+131"/>
-        <location line="+1182"/>
-        <location line="+216"/>
-        <location line="+295"/>
-        <location line="+89"/>
-        <location line="+694"/>
-        <location line="+1993"/>
-        <location line="+3"/>
-        <location line="+28"/>
+        <location line="-4557"/>
+        <location line="+192"/>
+        <location line="+104"/>
+        <location line="+36"/>
+        <location line="+1108"/>
+        <location line="+27"/>
+        <location line="+36"/>
+        <location line="+2056"/>
+        <location line="+12"/>
+        <location line="+864"/>
+        <location line="+123"/>
         <source>Switch to Erase Tool</source>
         <translation>Przejdź do narzędzia wymazywania</translation>
     </message>
     <message>
-        <location line="-4612"/>
-        <location line="+182"/>
+        <location line="-4556"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+221"/>
-        <location line="+278"/>
-        <location line="+144"/>
-        <location line="+727"/>
+        <location line="+300"/>
+        <location line="+1180"/>
+        <location line="+48"/>
+        <location line="+73"/>
+        <location line="+1971"/>
+        <location line="+822"/>
         <source>&amp;Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location line="-2671"/>
-        <location line="+182"/>
+        <location line="-4436"/>
         <location line="+49"/>
-        <location line="+1077"/>
-        <location line="+221"/>
-        <location line="+278"/>
-        <location line="+144"/>
-        <location line="+727"/>
+        <location line="+300"/>
+        <location line="+1180"/>
+        <location line="+48"/>
+        <location line="+73"/>
+        <location line="+1971"/>
+        <location line="+822"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location line="-1340"/>
+        <location line="-4364"/>
         <source>&amp;Insert Event</source>
         <translation>Wstaw przypadek</translation>
     </message>
     <message>
-        <location line="-1301"/>
-        <location line="+1036"/>
-        <location line="+272"/>
-        <location line="+276"/>
-        <location line="+623"/>
-        <location line="+1866"/>
+        <location line="+7"/>
+        <location line="+1105"/>
+        <location line="+1900"/>
+        <location line="+823"/>
+        <location line="+371"/>
+        <location line="+195"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
         <translation>I</translation>
     </message>
     <message>
-        <location line="-2763"/>
+        <location line="-4392"/>
         <source>&amp;Delete Event</source>
         <translation>Usuń przypadek</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+321"/>
-        <location line="+373"/>
-        <location line="+714"/>
+        <location line="+1639"/>
+        <location line="+1984"/>
+        <location line="+621"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location line="-1406"/>
+        <location line="-4242"/>
         <source>&amp;Edit Event</source>
         <translation>Edytuj przypadek</translation>
     </message>
     <message>
-        <location line="-1292"/>
-        <location line="+946"/>
-        <location line="+353"/>
-        <location line="+249"/>
-        <location line="+623"/>
-        <location line="+1812"/>
+        <location line="+7"/>
+        <location line="+1024"/>
+        <location line="+1900"/>
+        <location line="+877"/>
+        <location line="+371"/>
+        <location line="+231"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location line="-2682"/>
+        <location line="-4401"/>
         <source>&amp;Advanced Event Editor</source>
         <translation>Zaawansowany edytor przypadków</translation>
     </message>
     <message>
-        <location line="-1104"/>
-        <location line="+1105"/>
-        <location line="+275"/>
-        <location line="+364"/>
-        <location line="+705"/>
+        <location line="+1"/>
+        <location line="+272"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
         <source>Cu&amp;t</source>
         <translation>Wytnij</translation>
     </message>
     <message>
-        <location line="-2442"/>
-        <location line="+1105"/>
-        <location line="+275"/>
-        <location line="+364"/>
-        <location line="+705"/>
+        <location line="-4191"/>
+        <location line="+272"/>
+        <location line="+1303"/>
+        <location line="+1993"/>
+        <location line="+630"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-1324"/>
+        <location line="-4178"/>
         <source>&amp;Select All</source>
         <translation>Zaznacz wszystko</translation>
     </message>
     <message>
-        <location line="-1320"/>
-        <location line="+231"/>
-        <location line="+1096"/>
-        <location line="+695"/>
-        <location line="+682"/>
+        <location line="+7"/>
+        <location line="+281"/>
+        <location line="+1327"/>
+        <location line="+2016"/>
+        <location line="+751"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location line="-2471"/>
-        <location line="+1096"/>
+        <location line="-4373"/>
+        <location line="+281"/>
         <source>C&amp;lear Selection</source>
         <translation>Wyczyść zaznaczone</translation>
     </message>
     <message>
-        <location line="-1320"/>
-        <location line="+231"/>
-        <location line="+1096"/>
-        <location line="+1377"/>
+        <location line="-274"/>
+        <location line="+281"/>
+        <location line="+1327"/>
+        <location line="+2767"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation>Escape</translation>
     </message>
     <message>
-        <location line="-2471"/>
-        <location line="+2482"/>
+        <location line="-4092"/>
+        <location line="+1336"/>
         <source>&amp;Filter Selection</source>
         <translation>Ustawianie filtra</translation>
     </message>
     <message>
-        <location line="-2475"/>
-        <location line="+2482"/>
+        <location line="-1329"/>
+        <location line="+1336"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location line="-1393"/>
+        <location line="-1624"/>
         <source>Set Se&amp;gment Start Time...</source>
         <translation>Ustaw współrzędne początkowe dla segmentu...</translation>
     </message>
@@ -3614,82 +788,82 @@
         <translation>Ustaw czas trwania segmentu...</translation>
     </message>
     <message>
-        <location line="-1327"/>
-        <location line="+240"/>
-        <location line="+1089"/>
-        <location line="+55"/>
-        <location line="+629"/>
-        <location line="+556"/>
-        <location line="+154"/>
+        <location line="+2"/>
+        <location line="+58"/>
+        <location line="+230"/>
+        <location line="+1337"/>
+        <location line="+1988"/>
+        <location line="+760"/>
+        <location line="+60"/>
         <source>&amp;View</source>
         <translation>Widok</translation>
     </message>
     <message>
-        <location line="-2722"/>
-        <location line="+1329"/>
-        <location line="+55"/>
-        <location line="+1185"/>
+        <location line="-4432"/>
+        <location line="+58"/>
+        <location line="+4315"/>
+        <location line="+60"/>
         <source>&amp;Musical Times</source>
         <translation>Współrzędne muzyczne</translation>
     </message>
     <message>
-        <location line="-2568"/>
-        <location line="+1329"/>
-        <location line="+55"/>
-        <location line="+1185"/>
+        <location line="-4432"/>
+        <location line="+58"/>
+        <location line="+4315"/>
+        <location line="+60"/>
         <source>&amp;Real Times</source>
         <translation>Współrzędne rzeczywiste</translation>
     </message>
     <message>
-        <location line="-2568"/>
-        <location line="+1329"/>
-        <location line="+55"/>
-        <location line="+1185"/>
+        <location line="-4432"/>
+        <location line="+58"/>
+        <location line="+4315"/>
+        <location line="+60"/>
         <source>Ra&amp;w Times</source>
         <translation>Współrzędne surowe</translation>
     </message>
     <message>
-        <location line="-2236"/>
-        <location line="+999"/>
-        <location line="+761"/>
-        <location line="+666"/>
+        <location line="-4430"/>
+        <location line="+378"/>
+        <location line="+1280"/>
+        <location line="+2032"/>
         <source>Se&amp;gment</source>
         <translation>Segment</translation>
     </message>
     <message>
-        <location line="-2425"/>
-        <location line="+999"/>
-        <location line="+770"/>
-        <location line="+657"/>
+        <location line="-3689"/>
+        <location line="+378"/>
+        <location line="+1280"/>
+        <location line="+2041"/>
         <source>Edit &amp;With</source>
         <translation>Edytuj w</translation>
     </message>
     <message>
-        <location line="-2423"/>
-        <location line="+997"/>
-        <location line="+156"/>
-        <location line="+623"/>
-        <location line="+649"/>
+        <location line="-3698"/>
+        <location line="+380"/>
+        <location line="+1279"/>
+        <location line="+2049"/>
+        <location line="+371"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>Otwórz w edytorze pianolowym</translation>
     </message>
     <message>
-        <location line="-2426"/>
-        <location line="+999"/>
-        <location line="+173"/>
-        <location line="+623"/>
+        <location line="-4078"/>
+        <location line="+378"/>
+        <location line="+3347"/>
+        <location line="+371"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>Otwórz w edytorze nutowym</translation>
     </message>
     <message>
-        <location line="-940"/>
-        <location line="+1256"/>
-        <location line="+1809"/>
+        <location line="-2863"/>
+        <location line="+1928"/>
+        <location line="+880"/>
         <source>About &amp;Qt</source>
         <translation>O Qt</translation>
     </message>
     <message>
-        <location line="-649"/>
+        <location line="-1529"/>
         <source>Add &amp;Segno</source>
         <translation>Dodaj segno</translation>
     </message>
@@ -3704,7 +878,7 @@
         <translation>Dodaj symbol oddechu</translation>
     </message>
     <message>
-        <location line="-818"/>
+        <location line="-827"/>
         <source>Add &amp;Open</source>
         <translation>Dodaj otwarty</translation>
     </message>
@@ -3714,12 +888,12 @@
         <translation>Dodaj zamknięty</translation>
     </message>
     <message>
-        <location line="+910"/>
+        <location line="+919"/>
         <source>Dotted Ha&amp;lf Note</source>
         <translation>Półnuta z kropką</translation>
     </message>
     <message>
-        <location line="-2502"/>
+        <location line="+792"/>
         <source>Switch To &amp;Notes</source>
         <translation>Przełącz do nut</translation>
     </message>
@@ -3739,12 +913,12 @@
         <translation>Wyłącz kropkę</translation>
     </message>
     <message>
-        <location line="+1533"/>
+        <location line="-1770"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>Pokaż pasek narzędziowy symboli</translation>
     </message>
     <message>
-        <location line="+1525"/>
+        <location line="+1534"/>
         <source>Duration Toolbar</source>
         <translation>Pasek narzędziowy czasu trwania</translation>
     </message>
@@ -3759,7 +933,7 @@
         <translation type="obsolete">Enter, Odtwarzaj media, Ctrl+Return</translation>
     </message>
     <message>
-        <location line="-2066"/>
+        <location line="+623"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
         <translation>Insert, Zatrzymaj media</translation>
@@ -3801,7 +975,7 @@
         <translation>End</translation>
     </message>
     <message>
-        <location line="-2471"/>
+        <location line="+302"/>
         <source>Show &amp;Toolbar</source>
         <translation>Pokaż pasek narzędziowy</translation>
     </message>
@@ -3811,39 +985,39 @@
         <translation>Ukryj pasek stanu</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <location line="+1182"/>
-        <location line="+151"/>
+        <location line="-4357"/>
         <location line="+3"/>
+        <location line="+1223"/>
+        <location line="+3143"/>
         <source>Actions Toolbar</source>
         <translation>Pasek narzędziowy akcji</translation>
     </message>
     <message>
-        <location line="-1335"/>
-        <location line="+1333"/>
-        <location line="+48"/>
-        <location line="+1185"/>
+        <location line="-4368"/>
+        <location line="+51"/>
+        <location line="+4318"/>
+        <location line="+57"/>
         <source>Time Toolbar</source>
         <translation>Pasek narzędziowy czasu</translation>
     </message>
     <message>
-        <location line="-1386"/>
-        <location line="+154"/>
-        <location line="+131"/>
-        <location line="+300"/>
-        <location line="+675"/>
-        <location line="+1805"/>
+        <location line="-4425"/>
+        <location line="+1223"/>
+        <location line="+167"/>
+        <location line="+70"/>
+        <location line="+1691"/>
+        <location line="+884"/>
         <source>Transport Toolbar</source>
         <translation>Pasek transportu</translation>
     </message>
     <message>
-        <location line="-2909"/>
-        <location line="+1123"/>
+        <location line="-4033"/>
+        <location line="+4052"/>
         <source>Zoom Toolbar</source>
         <translation>Pasek narzędziowy powiększania</translation>
     </message>
     <message>
-        <location line="+1976"/>
+        <location line="-713"/>
         <source>Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3893,7 +1067,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-3318"/>
         <source>Insert Marker</source>
         <translation>Wstaw znacznik</translation>
     </message>
@@ -3908,96 +1082,96 @@
         <translation>Edytuj znacznik</translation>
     </message>
     <message>
-        <location line="-4608"/>
-        <location line="+775"/>
-        <location line="+975"/>
-        <location line="+163"/>
-        <location line="+526"/>
-        <location line="+168"/>
-        <location line="+1090"/>
-        <location line="+925"/>
+        <location line="+8"/>
         <location line="+36"/>
+        <location line="+36"/>
+        <location line="+544"/>
+        <location line="+555"/>
+        <location line="+72"/>
+        <location line="+1158"/>
+        <location line="+1431"/>
+        <location line="+305"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation>F2</translation>
     </message>
     <message>
-        <location line="-3127"/>
-        <location line="+384"/>
-        <location line="+712"/>
-        <location line="+1997"/>
+        <location line="-4135"/>
+        <location line="+72"/>
+        <location line="+1099"/>
         <location line="+36"/>
+        <location line="+54"/>
         <source>Switch to Move Tool</source>
         <translation>Przejdź do narzędzia przesuwania</translation>
     </message>
     <message>
-        <location line="-3858"/>
-        <location line="+736"/>
-        <location line="+221"/>
-        <location line="+163"/>
-        <location line="+544"/>
-        <location line="+168"/>
-        <location line="+1997"/>
+        <location line="-1254"/>
+        <location line="+72"/>
+        <location line="+562"/>
+        <location line="+537"/>
         <location line="+36"/>
+        <location line="+54"/>
+        <location line="+2589"/>
+        <location line="+287"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation>F5</translation>
     </message>
     <message>
-        <location line="-4665"/>
-        <location line="+1520"/>
-        <location line="+1087"/>
-        <location line="+2024"/>
-        <location line="+36"/>
+        <location line="-4135"/>
+        <location line="+27"/>
+        <location line="+1144"/>
+        <location line="+18"/>
+        <location line="+45"/>
         <source>Switch to Draw Tool</source>
         <translation>Przejdź do narzędzia rysowania</translation>
     </message>
     <message>
-        <location line="-4660"/>
-        <location line="+775"/>
-        <location line="+745"/>
-        <location line="+239"/>
-        <location line="+680"/>
-        <location line="+168"/>
-        <location line="+1091"/>
-        <location line="+933"/>
-        <location line="+36"/>
+        <location line="-1227"/>
+        <location line="+27"/>
+        <location line="+580"/>
+        <location line="+564"/>
+        <location line="+18"/>
+        <location line="+45"/>
+        <location line="+1159"/>
+        <location line="+1430"/>
+        <location line="+314"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation>F3</translation>
     </message>
     <message>
-        <location line="-4656"/>
-        <location line="+1529"/>
-        <location line="+384"/>
-        <location line="+703"/>
-        <location line="+2042"/>
+        <location line="-4135"/>
+        <location line="+36"/>
+        <location line="+36"/>
+        <location line="+1135"/>
+        <location line="+45"/>
         <source>Switch to Resize Tool</source>
         <translation>Przejdź do narzędzia zmiany rozmiaru</translation>
     </message>
     <message>
-        <location line="-4651"/>
-        <location line="+784"/>
-        <location line="+745"/>
-        <location line="+230"/>
-        <location line="+154"/>
-        <location line="+535"/>
-        <location line="+168"/>
-        <location line="+2042"/>
+        <location line="-1245"/>
+        <location line="+36"/>
+        <location line="+36"/>
+        <location line="+553"/>
+        <location line="+582"/>
+        <location line="+45"/>
+        <location line="+2589"/>
+        <location line="+305"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation>F6</translation>
     </message>
     <message>
-        <location line="-4667"/>
-        <location line="+775"/>
-        <location line="+754"/>
-        <location line="+230"/>
-        <location line="+154"/>
-        <location line="+526"/>
-        <location line="+168"/>
-        <location line="+1091"/>
-        <location line="+933"/>
+        <location line="-4119"/>
+        <location line="+36"/>
+        <location line="+544"/>
+        <location line="+564"/>
+        <location line="+27"/>
+        <location line="+36"/>
+        <location line="+1159"/>
+        <location line="+1430"/>
+        <location line="+314"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
@@ -4011,28 +1185,28 @@
         <translation type="obsolete">Nic do ponowienia</translation>
     </message>
     <message>
-        <location line="-4564"/>
-        <location line="+240"/>
-        <location line="+1380"/>
-        <location line="+373"/>
+        <location line="-3998"/>
+        <location line="+3305"/>
+        <location line="+621"/>
+        <location line="+159"/>
         <source>&amp;Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location line="-1986"/>
-        <location line="+240"/>
+        <location line="-4078"/>
+        <location line="+4085"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Usuń, Ctrl+D</translation>
     </message>
     <message>
-        <location line="+289"/>
-        <location line="+2862"/>
+        <location line="-3796"/>
+        <location line="+1716"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>Wstaw sekwencję odchylenia stroju...</translation>
     </message>
     <message>
-        <location line="-3120"/>
+        <location line="-1974"/>
         <source>&amp;Grid</source>
         <translation>Siatka</translation>
     </message>
@@ -4048,13 +1222,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3452"/>
+        <location line="+2315"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation>0</translation>
     </message>
     <message>
-        <location line="-3450"/>
+        <location line="-2313"/>
         <source>Snap to &amp;1/48</source>
         <translation>Przeciągnij do 1/48</translation>
     </message>
@@ -4065,13 +1239,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3433"/>
+        <location line="+2296"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation>3</translation>
     </message>
     <message>
-        <location line="-3431"/>
+        <location line="-2294"/>
         <source>Snap to 1/&amp;24</source>
         <translation>Przeciągnij do 1/24</translation>
     </message>
@@ -4082,13 +1256,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3414"/>
+        <location line="+2277"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation>6</translation>
     </message>
     <message>
-        <location line="-3412"/>
+        <location line="-2275"/>
         <source>Snap t&amp;o 1/12</source>
         <translation>Przeciągnij do 1/12</translation>
     </message>
@@ -4099,13 +1273,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3395"/>
+        <location line="+2258"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation>8</translation>
     </message>
     <message>
-        <location line="-3393"/>
+        <location line="-2256"/>
         <source>Snap to &amp;3/16</source>
         <translation>Przeciągnij do 3/16</translation>
     </message>
@@ -4116,13 +1290,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3376"/>
+        <location line="+2239"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation>4</translation>
     </message>
     <message>
-        <location line="-3374"/>
+        <location line="-2237"/>
         <source>Snap to 3/8</source>
         <translation>Przeciągnij do 3/8</translation>
     </message>
@@ -4133,37 +1307,37 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3357"/>
+        <location line="+2220"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation>2</translation>
     </message>
     <message>
-        <location line="-3355"/>
+        <location line="-2218"/>
         <source>Snap to Bea&amp;t</source>
         <translation>Przyciągaj do akordu</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3339"/>
+        <location line="+2202"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation>1</translation>
     </message>
     <message>
-        <location line="-3337"/>
+        <location line="-2200"/>
         <source>Snap to &amp;Bar</source>
         <translation>Przyciągaj do taktu</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+3321"/>
+        <location line="+2184"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
     </message>
     <message>
-        <location line="-3315"/>
+        <location line="-2178"/>
         <source>Show A&amp;ctions Toolbar</source>
         <translation>Pokaż pasek narzędziowy akcji</translation>
     </message>
@@ -4174,35 +1348,35 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+2421"/>
+        <location line="+1275"/>
         <source>Add &amp;Control Ruler</source>
         <translation>Dodaj wykres kontrolny</translation>
     </message>
     <message>
-        <location line="-2420"/>
-        <location line="+1715"/>
-        <location line="+711"/>
+        <location line="-1274"/>
+        <location line="+1280"/>
+        <location line="+1987"/>
         <source>&amp;Composition</source>
         <translation>Utwór</translation>
     </message>
     <message>
-        <location line="-2814"/>
-        <location line="+389"/>
-        <location line="+1715"/>
-        <location line="+711"/>
+        <location line="-3266"/>
+        <location line="+1280"/>
+        <location line="+1987"/>
+        <location line="+669"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Dodaj zmianę tempa...</translation>
     </message>
     <message>
-        <location line="-2806"/>
-        <location line="+381"/>
-        <location line="+1715"/>
-        <location line="+711"/>
+        <location line="-3935"/>
+        <location line="+1280"/>
+        <location line="+1987"/>
+        <location line="+677"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Dodaj zmianę oznaczenia metrycznego...</translation>
     </message>
     <message>
-        <location line="-2603"/>
+        <location line="-4121"/>
         <source>Nothing to &amp;Undo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4213,113 +1387,113 @@
     </message>
     <message>
         <location line="+171"/>
-        <location line="+1182"/>
-        <location line="+623"/>
-        <location line="+621"/>
+        <location line="+1280"/>
+        <location line="+2077"/>
+        <location line="+371"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Otwórz w edytorze listy przypadku</translation>
     </message>
     <message>
-        <location line="-2410"/>
-        <location line="+1254"/>
-        <location line="+561"/>
-        <location line="+1070"/>
+        <location line="-3712"/>
+        <location line="+1739"/>
+        <location line="+1628"/>
+        <location line="+433"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation>=</translation>
     </message>
     <message>
-        <location line="-2876"/>
-        <location line="+1254"/>
-        <location line="+561"/>
+        <location line="-3791"/>
+        <location line="+3367"/>
+        <location line="+433"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation>+</translation>
     </message>
     <message>
-        <location line="-1806"/>
+        <location line="-3791"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation>-</translation>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1811"/>
-        <location line="+1148"/>
+        <location line="+1813"/>
+        <location line="+1550"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Lewo</translation>
     </message>
     <message>
-        <location line="-2950"/>
-        <location line="+1811"/>
-        <location line="+1148"/>
+        <location line="-3354"/>
+        <location line="+1813"/>
+        <location line="+1550"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Prawo</translation>
     </message>
     <message>
-        <location line="-2950"/>
-        <location line="+1867"/>
-        <location line="+1048"/>
+        <location line="-3354"/>
+        <location line="+1769"/>
+        <location line="+1650"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Góra</translation>
     </message>
     <message>
-        <location line="-2906"/>
-        <location line="+1849"/>
-        <location line="+1066"/>
+        <location line="-3410"/>
+        <location line="+1769"/>
+        <location line="+1632"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Dół</translation>
     </message>
     <message>
-        <location line="-2903"/>
-        <location line="+2831"/>
+        <location line="-3389"/>
+        <location line="+1685"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
-        <location line="-2820"/>
-        <location line="+1844"/>
-        <location line="+987"/>
+        <location line="-1674"/>
+        <location line="+1685"/>
+        <location line="+1711"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Góra</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+1826"/>
-        <location line="+1005"/>
+        <location line="-3387"/>
+        <location line="+1685"/>
+        <location line="+1693"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Dół</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-3369"/>
+        <location line="+1685"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Góra</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Dół</translation>
     </message>
     <message>
-        <location line="-2819"/>
+        <location line="-1673"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Alt+I</translation>
@@ -4332,732 +1506,732 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+2861"/>
+        <location line="+1715"/>
         <source>Co&amp;ntrollers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2860"/>
-        <location line="+2861"/>
+        <location line="-1714"/>
+        <location line="+1715"/>
         <source>Cut Controller Events (&amp;X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2860"/>
-        <location line="+2861"/>
+        <location line="-1714"/>
+        <location line="+1715"/>
         <source>&amp;Copy Controller Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2860"/>
-        <location line="+2861"/>
+        <location line="-1714"/>
+        <location line="+1715"/>
         <source>&amp;Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2860"/>
-        <location line="+2861"/>
+        <location line="-1714"/>
+        <location line="+1715"/>
         <source>&amp;Place a Controller for Each Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2859"/>
-        <location line="+2862"/>
+        <location line="-1713"/>
+        <location line="+1716"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2862"/>
+        <location line="-1707"/>
+        <location line="+1716"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Lewo</translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2862"/>
+        <location line="-1707"/>
+        <location line="+1716"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Prawo</translation>
     </message>
     <message>
-        <location line="-2860"/>
-        <location line="+2862"/>
+        <location line="-1714"/>
+        <location line="+1716"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>Kursor do tyłu i zaznacz</translation>
     </message>
     <message>
-        <location line="-2855"/>
-        <location line="+2862"/>
+        <location line="-1709"/>
+        <location line="+1716"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Lewo</translation>
     </message>
     <message>
-        <location line="-2860"/>
-        <location line="+2862"/>
+        <location line="-1714"/>
+        <location line="+1716"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>Kursor do przodu i zaznacz</translation>
     </message>
     <message>
-        <location line="-2855"/>
-        <location line="+2862"/>
+        <location line="-1709"/>
+        <location line="+1716"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Prawo</translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2862"/>
+        <location line="-1707"/>
+        <location line="+1716"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+;</translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2862"/>
+        <location line="-1707"/>
+        <location line="+1716"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+:</translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2880"/>
+        <location line="-1707"/>
+        <location line="+1734"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgUp</translation>
     </message>
     <message>
-        <location line="-2871"/>
-        <location line="+2880"/>
+        <location line="-1725"/>
+        <location line="+1734"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgDown</translation>
     </message>
     <message>
-        <location line="-2869"/>
-        <location line="+2892"/>
+        <location line="-1723"/>
+        <location line="+1746"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Lewo</translation>
     </message>
     <message>
-        <location line="-2877"/>
-        <location line="+2892"/>
+        <location line="-1731"/>
+        <location line="+1746"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Prawo</translation>
     </message>
     <message>
-        <location line="-2877"/>
-        <location line="+2892"/>
+        <location line="-1731"/>
+        <location line="+1746"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Lewo</translation>
     </message>
     <message>
-        <location line="-2883"/>
-        <location line="+2892"/>
+        <location line="-1737"/>
+        <location line="+1746"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Prawo</translation>
     </message>
     <message>
-        <location line="-2880"/>
-        <location line="+1792"/>
-        <location line="+1118"/>
+        <location line="-1734"/>
+        <location line="+1773"/>
+        <location line="+1571"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation>Pause</translation>
     </message>
     <message>
-        <location line="-2901"/>
-        <location line="+827"/>
-        <location line="+278"/>
-        <location line="+687"/>
-        <location line="+1124"/>
+        <location line="-3335"/>
+        <location line="+709"/>
+        <location line="+48"/>
+        <location line="+1022"/>
+        <location line="+1565"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
-        <location line="-2861"/>
+        <location line="-3289"/>
         <location line="+9"/>
-        <location line="+966"/>
-        <location line="+689"/>
+        <location line="+3207"/>
+        <location line="+305"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
         <translation>F7</translation>
     </message>
     <message>
-        <location line="-1652"/>
+        <location line="-3509"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do</source>
         <translation>I/do</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do sharp</source>
         <translation>I/do krzyżyk</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+A</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re flat</source>
         <translation>II/re bemol</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+1140"/>
-        <location line="+1897"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
+        <location line="+792"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-2690"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re</source>
         <translation>II/re</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
         <translation>S</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re sharp</source>
         <translation>II/re krzyżyk</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+S</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi flat</source>
         <translation>III/mi bemol</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi</source>
         <translation>III/mi</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+738"/>
-        <location line="+623"/>
-        <location line="+1676"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
+        <location line="+1013"/>
+        <location line="+371"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-3282"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa</source>
         <translation>IV/fa</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa sharp</source>
         <translation>IV/fa krzyżyk</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+F</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol flat</source>
         <translation>V/sol bemol</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol</source>
         <translation>V/sol</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
         <translation>J</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol sharp</source>
         <translation>V/sol krzyżyk</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+J</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la flat</source>
         <translation>VI/la bemol</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la</source>
         <translation>VI/la</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
         <translation>K</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la sharp</source>
         <translation>VI/la krzyżyk</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+K</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti flat</source>
         <translation>VII/si bemol</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-1898"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+2729"/>
+        <location line="+1592"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti</source>
         <translation>VII/si</translation>
     </message>
     <message>
-        <location line="-3338"/>
-        <location line="+3037"/>
+        <location line="-2201"/>
+        <location line="+1900"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
         <translation>L</translation>
     </message>
     <message>
-        <location line="-3027"/>
-        <location line="+3037"/>
+        <location line="-1890"/>
+        <location line="+1900"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Q</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Q</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
         <translation>W</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+W</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
-        <location line="-3019"/>
-        <location line="+1369"/>
-        <location line="+1668"/>
+        <location line="-1882"/>
+        <location line="+1900"/>
+        <location line="+1021"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation>R</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-2912"/>
+        <location line="+1900"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+R</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+1333"/>
-        <location line="+1704"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
+        <location line="+985"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation>U</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-2876"/>
+        <location line="+1900"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+U</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location line="-3019"/>
-        <location line="+3037"/>
+        <location line="-1882"/>
+        <location line="+1900"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+I</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
         <translation>O</translation>
     </message>
     <message>
-        <location line="-3027"/>
-        <location line="+3037"/>
+        <location line="-1890"/>
+        <location line="+1900"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Z</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Z</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+929"/>
-        <location line="+2108"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
+        <location line="+581"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-2472"/>
+        <location line="+1900"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
         <translation>X</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+X</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+911"/>
-        <location line="+2126"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
+        <location line="+563"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-2454"/>
+        <location line="+1900"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
         <translation>V</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+V</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+B</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+376"/>
-        <location line="+623"/>
-        <location line="+2038"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
+        <location line="+651"/>
+        <location line="+371"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation>N</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3037"/>
+        <location line="-2913"/>
+        <location line="+1900"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+N</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+913"/>
-        <location line="+2124"/>
+        <location line="-1891"/>
+        <location line="+1900"/>
+        <location line="+565"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+331"/>
-        <location line="+623"/>
-        <location line="+2083"/>
+        <location line="-2456"/>
+        <location line="+1900"/>
+        <location line="+606"/>
+        <location line="+371"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation>M</translation>
     </message>
     <message>
-        <location line="-3028"/>
-        <location line="+3046"/>
+        <location line="-2868"/>
+        <location line="+1909"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
         <translation>H</translation>
     </message>
     <message>
-        <location line="-3033"/>
-        <location line="+3065"/>
+        <location line="-1896"/>
+        <location line="+1928"/>
         <source>&amp;Rosegarden Tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2772"/>
-        <location line="+623"/>
+        <location line="+540"/>
+        <location line="+371"/>
         <source>Open in &amp;Default Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-578"/>
-        <location line="+623"/>
-        <location line="+615"/>
+        <location line="-2409"/>
+        <location line="+2083"/>
+        <location line="+371"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1229"/>
-        <location line="+364"/>
+        <location line="-2614"/>
+        <location line="+1993"/>
         <location line="+551"/>
-        <location line="+154"/>
+        <location line="+79"/>
         <source>&amp;Nothing to Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1060"/>
-        <location line="+364"/>
+        <location line="-2614"/>
+        <location line="+1993"/>
         <location line="+543"/>
-        <location line="+162"/>
+        <location line="+87"/>
         <source>N&amp;othing to Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-854"/>
+        <location line="-2679"/>
         <source>Panning &amp;Law</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5082,7 +2256,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+1965"/>
         <source>Import Rosegarden &amp;Project File...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5204,7 +2378,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+287"/>
+        <location line="-2411"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Shift+X</translation>
@@ -5525,14 +2699,14 @@
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location line="-729"/>
-        <location line="+738"/>
+        <location line="+9"/>
+        <location line="+1960"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-1951"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+R</translation>
@@ -5568,27 +2742,27 @@
         <translation>&amp;gt;</translation>
     </message>
     <message>
-        <location line="-2688"/>
-        <location line="+2700"/>
+        <location line="-1542"/>
+        <location line="+1554"/>
         <source>Ad&amp;just</source>
         <translation>Dopasuj</translation>
     </message>
     <message>
-        <location line="-2699"/>
-        <location line="+2885"/>
+        <location line="-1553"/>
+        <location line="+1739"/>
         <source>&amp;Quantize</source>
         <translation>Kwantyzuj</translation>
     </message>
     <message>
-        <location line="-2884"/>
-        <location line="+1254"/>
-        <location line="+561"/>
-        <location line="+1070"/>
+        <location line="-1738"/>
+        <location line="+1739"/>
+        <location line="+1628"/>
+        <location line="+433"/>
         <source>&amp;Quantize...</source>
         <translation>Kwantyzuj...</translation>
     </message>
     <message>
-        <location line="-2876"/>
+        <location line="-3791"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>Przywróć ostatnią kwantyzację</translation>
     </message>
@@ -5599,36 +2773,36 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+2684"/>
+        <location line="+1538"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>Scal legowane nuty o tej same wysokości</translation>
     </message>
     <message>
-        <location line="-2683"/>
-        <location line="+1811"/>
-        <location line="+1148"/>
+        <location line="-1537"/>
+        <location line="+1813"/>
+        <location line="+1550"/>
         <source>Jog &amp;Left</source>
         <translation>Popchnij w lewo</translation>
     </message>
     <message>
-        <location line="-2950"/>
+        <location line="-3354"/>
         <source>&amp;Jog Right</source>
         <translation>Popchnij w prawo</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+2915"/>
+        <location line="+1769"/>
         <source>&amp;Increase Velocity</source>
         <translation>Zwiększ głośność</translation>
     </message>
     <message>
-        <location line="-2906"/>
-        <location line="+2915"/>
+        <location line="-1760"/>
+        <location line="+1769"/>
         <source>&amp;Reduce Velocity</source>
         <translation>Zmniejsz głośność</translation>
     </message>
     <message>
-        <location line="-2906"/>
+        <location line="-1760"/>
         <source>&amp;Set to Current Velocity</source>
         <translation>Ustaw na bieżącą głośność</translation>
     </message>
@@ -5644,301 +2818,301 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+2831"/>
+        <location line="+1685"/>
         <source>&amp;Halve Durations</source>
         <translation>Czas trwania</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>&amp;Double Durations</source>
         <translation>Podwójny czas trwania</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>Skurcz lub zagęść...</translation>
     </message>
     <message>
-        <location line="-2830"/>
-        <location line="+2831"/>
+        <location line="-1684"/>
+        <location line="+1685"/>
         <source>Trans&amp;pose</source>
         <translation>Transponuj</translation>
     </message>
     <message>
-        <location line="-2830"/>
-        <location line="+2831"/>
+        <location line="-1684"/>
+        <location line="+1685"/>
         <source>&amp;Up a Semitone</source>
         <translation>O półton w górę</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>&amp;Down a Semitone</source>
         <translation>O półton w dół</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>Up an &amp;Octave</source>
         <translation>O oktawę w górę</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2831"/>
+        <location line="-1676"/>
+        <location line="+1685"/>
         <source>Down an Octa&amp;ve</source>
         <translation>O oktawę w dół</translation>
     </message>
     <message>
-        <location line="-2821"/>
-        <location line="+1149"/>
-        <location line="+560"/>
-        <location line="+595"/>
+        <location line="-1675"/>
+        <location line="+1158"/>
         <location line="+527"/>
+        <location line="+1576"/>
+        <location line="+434"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>Transponuj przez interwał...</translation>
     </message>
     <message>
-        <location line="-2830"/>
+        <location line="-3694"/>
         <source>&amp;Convert</source>
         <translation>Przekształć</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+2831"/>
+        <location line="+1685"/>
         <source>&amp;Invert</source>
         <translation>Odwróć</translation>
     </message>
     <message>
-        <location line="-2822"/>
-        <location line="+2823"/>
+        <location line="-1676"/>
+        <location line="+1677"/>
         <source>&amp;Retrograde</source>
         <translation>Wsteczny</translation>
     </message>
     <message>
-        <location line="-2814"/>
-        <location line="+2815"/>
+        <location line="-1668"/>
+        <location line="+1669"/>
         <source>Re&amp;trograde Invert</source>
         <translation>Odwróć wsteczny</translation>
     </message>
     <message>
-        <location line="-2814"/>
+        <location line="-1668"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>Wyzwól segment...</translation>
     </message>
     <message>
         <location line="+153"/>
-        <location line="+1664"/>
-        <location line="+1258"/>
+        <location line="+1785"/>
+        <location line="+1431"/>
         <source>&amp;Tools</source>
         <translation>Narzędzia</translation>
     </message>
     <message>
-        <location line="-2921"/>
-        <location line="+975"/>
-        <location line="+689"/>
-        <location line="+1258"/>
+        <location line="-3215"/>
+        <location line="+1785"/>
+        <location line="+1431"/>
+        <location line="+305"/>
         <source>&amp;Select and Edit</source>
         <translation>Zaznacz i edytuj</translation>
     </message>
     <message>
-        <location line="-2913"/>
-        <location line="+984"/>
-        <location line="+680"/>
+        <location line="-3512"/>
+        <location line="+3216"/>
+        <location line="+314"/>
         <source>&amp;Draw</source>
         <translation>Rysuj</translation>
     </message>
     <message>
-        <location line="-1818"/>
+        <location line="-3684"/>
         <location line="+172"/>
-        <location line="+957"/>
-        <location line="+707"/>
-        <location line="+1026"/>
+        <location line="+1544"/>
+        <location line="+1672"/>
+        <location line="+287"/>
         <source>&amp;Move</source>
         <translation>Przesuń</translation>
     </message>
     <message>
-        <location line="-2681"/>
+        <location line="-3494"/>
         <source>Resi&amp;ze</source>
         <translation>Zmień rozmiar</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+975"/>
-        <location line="+689"/>
+        <location line="+3216"/>
+        <location line="+305"/>
         <source>S&amp;plit</source>
         <translation>Podziel</translation>
     </message>
     <message>
-        <location line="-1655"/>
+        <location line="-3512"/>
         <source>&amp;Velocity</source>
         <translation>Głośność</translation>
     </message>
     <message>
-        <location line="+2664"/>
+        <location line="+1518"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>Kursor do tyłu i zaznacz</translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2862"/>
+        <location line="-1707"/>
+        <location line="+1716"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>Kursor do przodu i zaznacz</translation>
     </message>
     <message>
-        <location line="-2835"/>
-        <location line="+2862"/>
+        <location line="-1689"/>
+        <location line="+1716"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>Ustaw pętlę na zaznaczeniu</translation>
     </message>
     <message>
-        <location line="-2853"/>
-        <location line="+2862"/>
+        <location line="-1707"/>
+        <location line="+1716"/>
         <source>Clear L&amp;oop</source>
         <translation>Wyłącz pętlę</translation>
     </message>
     <message>
-        <location line="-1954"/>
-        <location line="+278"/>
-        <location line="+631"/>
+        <location line="-926"/>
+        <location line="+48"/>
+        <location line="+2531"/>
         <source>T&amp;ransport</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location line="-1790"/>
-        <location line="+882"/>
-        <location line="+278"/>
-        <location line="+631"/>
-        <location line="+1089"/>
+        <location line="-3342"/>
+        <location line="+764"/>
+        <location line="+48"/>
+        <location line="+922"/>
+        <location line="+1609"/>
         <source>&amp;Play</source>
         <translation>Odtwarzaj</translation>
     </message>
     <message>
-        <location line="-2879"/>
-        <location line="+882"/>
-        <location line="+278"/>
-        <location line="+639"/>
-        <location line="+1087"/>
+        <location line="-3342"/>
+        <location line="+764"/>
+        <location line="+48"/>
+        <location line="+928"/>
+        <location line="+1611"/>
         <source>&amp;Stop</source>
         <translation>Zatrzymaj</translation>
     </message>
     <message>
-        <location line="-2855"/>
-        <location line="+852"/>
-        <location line="+278"/>
-        <location line="+647"/>
-        <location line="+1115"/>
+        <location line="-3320"/>
+        <location line="+734"/>
+        <location line="+48"/>
+        <location line="+964"/>
+        <location line="+1583"/>
         <source>Re&amp;wind</source>
         <translation>Przewiń</translation>
     </message>
     <message>
-        <location line="-2883"/>
-        <location line="+844"/>
-        <location line="+278"/>
-        <location line="+655"/>
-        <location line="+1115"/>
+        <location line="-3320"/>
+        <location line="+726"/>
+        <location line="+48"/>
+        <location line="+972"/>
+        <location line="+1583"/>
         <source>&amp;Fast Forward</source>
         <translation>Szybko do przodu</translation>
     </message>
     <message>
-        <location line="-2883"/>
-        <location line="+836"/>
-        <location line="+278"/>
-        <location line="+1778"/>
+        <location line="-3320"/>
+        <location line="+718"/>
+        <location line="+48"/>
+        <location line="+980"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>Przewiń na początek</translation>
     </message>
     <message>
-        <location line="-2891"/>
-        <location line="+836"/>
-        <location line="+278"/>
-        <location line="+1784"/>
+        <location line="-1745"/>
+        <location line="+718"/>
+        <location line="+48"/>
+        <location line="+986"/>
         <source>Fast Forward to &amp;End</source>
         <translation>Szybko przewiń do końca</translation>
     </message>
     <message>
-        <location line="-2897"/>
-        <location line="+2904"/>
+        <location line="-1751"/>
+        <location line="+1767"/>
         <source>S&amp;olo</source>
         <translation>Solo</translation>
     </message>
     <message>
-        <location line="-2903"/>
-        <location line="+1792"/>
-        <location line="+1118"/>
+        <location line="-1766"/>
+        <location line="+1773"/>
+        <location line="+1571"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>Podążaj za kursorem odtwarzania</translation>
     </message>
     <message>
-        <location line="-2901"/>
-        <location line="+827"/>
-        <location line="+278"/>
-        <location line="+687"/>
-        <location line="+1124"/>
+        <location line="-3335"/>
+        <location line="+709"/>
+        <location line="+48"/>
+        <location line="+1022"/>
+        <location line="+1565"/>
         <source>P&amp;anic</source>
         <translation>Panika</translation>
     </message>
     <message>
-        <location line="-2689"/>
-        <location line="+3037"/>
+        <location line="-3117"/>
+        <location line="+1900"/>
         <source>&amp;Upper Octave</source>
         <translation>Górna oktawa</translation>
     </message>
     <message>
-        <location line="-2729"/>
-        <location line="+3046"/>
+        <location line="-1592"/>
+        <location line="+1909"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>Tryb wpisywania akordów</translation>
     </message>
     <message>
-        <location line="-3037"/>
-        <location line="+3065"/>
+        <location line="-1900"/>
+        <location line="+1928"/>
         <source>Ste&amp;p Recording</source>
         <translation>Nagrywanie krok po kroku</translation>
     </message>
     <message>
-        <location line="-3925"/>
-        <location line="+1695"/>
-        <location line="+717"/>
+        <location line="-2788"/>
+        <location line="+1266"/>
+        <location line="+1981"/>
         <source>&amp;Toolbars</source>
         <translation>Paski narzędziowe</translation>
     </message>
     <message>
-        <location line="-2405"/>
-        <location line="+1695"/>
-        <location line="+725"/>
+        <location line="-3240"/>
+        <location line="+1274"/>
+        <location line="+1973"/>
         <source>&amp;Rulers</source>
         <translation>Wykresy</translation>
     </message>
     <message>
-        <location line="-2419"/>
-        <location line="+2420"/>
+        <location line="-3246"/>
+        <location line="+1274"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>Pokaż wykres nazw akordów</translation>
     </message>
     <message>
-        <location line="-2419"/>
-        <location line="+2421"/>
+        <location line="-1273"/>
+        <location line="+1275"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation>Pokaż wykres zmian tempa</translation>
     </message>
     <message>
-        <location line="-1553"/>
-        <location line="+1258"/>
-        <location line="+1807"/>
+        <location line="-407"/>
+        <location line="+1928"/>
+        <location line="+882"/>
         <source>Tools Toolbar</source>
         <translation>Narzędzia pasków narzędziowych</translation>
     </message>
     <message>
-        <location line="-2800"/>
-        <location line="+278"/>
-        <location line="+661"/>
+        <location line="-2663"/>
+        <location line="+48"/>
+        <location line="+2561"/>
         <source>&amp;Record</source>
         <translation>Nagraj</translation>
     </message>
     <message>
-        <location line="-651"/>
+        <location line="-2551"/>
         <source>&amp;Settings</source>
         <translation>Ustawienia</translation>
     </message>
@@ -6023,7 +3197,7 @@
         <translation>Pokaż nieprzyporządkowane fadery</translation>
     </message>
     <message>
-        <location line="-95"/>
+        <location line="+14"/>
         <source>Switch to Inserting Tool</source>
         <translation>Przełącz na narzędzie wpisywania</translation>
     </message>
@@ -6033,23 +3207,23 @@
         <translation>Scal pauzy po wymazaniu</translation>
     </message>
     <message>
-        <location line="+203"/>
-        <location line="+716"/>
+        <location line="+12"/>
+        <location line="+1982"/>
         <source>&amp;Print...</source>
         <translation>Drukuj...</translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="-1983"/>
         <source>P&amp;rint Preview...</source>
         <translation>Podgląd wydruku...</translation>
     </message>
     <message>
-        <location line="-2272"/>
+        <location line="-1126"/>
         <source>Show T&amp;ransport Toolbar</source>
         <translation>Pokaż pasek transportu</translation>
     </message>
     <message>
-        <location line="+1374"/>
+        <location line="-609"/>
         <source>Insert into Selected Audio Track</source>
         <translation>Wstaw do zaznaczonej ścieżki dźwiękowej</translation>
     </message>
@@ -6064,25 +3238,25 @@
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location line="-518"/>
-        <location line="+1256"/>
-        <location line="+1809"/>
+        <location line="+1465"/>
+        <location line="+1928"/>
+        <location line="+880"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>Podręcznik Rosegarden</translation>
     </message>
     <message>
-        <location line="-4008"/>
-        <location line="+1089"/>
+        <location line="-4039"/>
+        <location line="+288"/>
         <source>Preferences...</source>
         <translation>Właściwości...</translation>
     </message>
     <message>
-        <location line="-826"/>
+        <location line="+263"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Kursor do tyłu i zaznacz</translation>
     </message>
     <message>
-        <location line="+2150"/>
+        <location line="+1004"/>
         <source>C&amp;ut and Close</source>
         <translation>Wytnij i zamknij</translation>
     </message>
@@ -6127,13 +3301,13 @@
         <translation>Wyczyść zaznaczenie</translation>
     </message>
     <message>
-        <location line="-682"/>
-        <location line="+710"/>
+        <location line="+28"/>
+        <location line="+1988"/>
         <source>&amp;Preferences...</source>
         <translation>Właściwości...</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-1986"/>
         <source>Note &amp;Font</source>
         <translation>Czcionka nutowa</translation>
     </message>
@@ -6178,21 +3352,21 @@
         <translation>Pokaż wykres surowych nut</translation>
     </message>
     <message>
-        <location line="-2408"/>
-        <location line="+1161"/>
-        <location line="+623"/>
-        <location line="+641"/>
+        <location line="-1262"/>
+        <location line="+1279"/>
+        <location line="+2057"/>
+        <location line="+371"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>Otwórz w edytorze perkusyjnym</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-2426"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>Dodaj zmianę klucza...</translation>
     </message>
     <message>
-        <location line="-2426"/>
-        <location line="+2428"/>
+        <location line="-1280"/>
+        <location line="+1282"/>
         <source>Add &amp;Key Change...</source>
         <translation>Dodaj zmianę oznaczenia tonacji...</translation>
     </message>
@@ -6428,12 +3602,12 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+691"/>
+        <location line="+700"/>
         <source>&amp;Accidentals</source>
         <translation>Znaki chromatyczne</translation>
     </message>
     <message>
-        <location line="-690"/>
+        <location line="-699"/>
         <source>&amp;Restore Accidentals</source>
         <translation>Przywróć znaki chromatyczne</translation>
     </message>
@@ -6806,13 +3980,13 @@
         <translation>Precyzyjne przesuwanie w czasie</translation>
     </message>
     <message>
-        <location line="-1138"/>
-        <location line="+1148"/>
+        <location line="+10"/>
+        <location line="+1550"/>
         <source>Jog &amp;Right</source>
         <translation>Popchnij w prawo</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-1541"/>
         <source>&amp;Visibility</source>
         <translation>Widoczne</translation>
     </message>
@@ -6827,8 +4001,8 @@
         <translation>Zrób widoczne</translation>
     </message>
     <message>
-        <location line="-2765"/>
-        <location line="+2892"/>
+        <location line="-1619"/>
+        <location line="+1746"/>
         <source>Step Back (Left)</source>
         <translation>Krok do tyłu (lewo)</translation>
     </message>
@@ -6838,20 +4012,20 @@
         <translation>Odtwarzaj</translation>
     </message>
     <message>
-        <location line="-2855"/>
-        <location line="+2892"/>
+        <location line="-1709"/>
+        <location line="+1746"/>
         <source>Step Forward (Right)</source>
         <translation>Krok do przodu (prawo)</translation>
     </message>
     <message>
-        <location line="-1668"/>
-        <location line="+1226"/>
+        <location line="-442"/>
+        <location line="+1472"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="-1461"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+=</translation>
@@ -6874,7 +4048,7 @@
         <translation>Zatrzymaj</translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+78"/>
         <source>Solo the Active Track</source>
         <translation>Solo aktywna ścieżka</translation>
     </message>
@@ -6915,26 +4089,26 @@
         <translation>.</translation>
     </message>
     <message>
-        <location line="-1702"/>
-        <location line="+2173"/>
+        <location line="+471"/>
+        <location line="+516"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
         <translation>P</translation>
     </message>
     <message>
-        <location line="-4254"/>
-        <location line="+4272"/>
+        <location line="-498"/>
+        <location line="+1190"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location line="-873"/>
+        <location line="-2072"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+226"/>
         <source>Select but Don&apos;t Follow Ties</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7119,7 +4293,7 @@
         <translation>Symbole</translation>
     </message>
     <message>
-        <location line="-191"/>
+        <location line="-200"/>
         <source>Next Staff &amp;Up</source>
         <translation>Następna pięciolinia w górę</translation>
     </message>
@@ -7129,31 +4303,31 @@
         <translation>Następna pięciolinia w dół</translation>
     </message>
     <message>
-        <location line="-2871"/>
-        <location line="+2880"/>
+        <location line="-1725"/>
+        <location line="+1734"/>
         <source>Pre&amp;vious Segment</source>
         <translation>Poprzedni segment</translation>
     </message>
     <message>
-        <location line="-2871"/>
-        <location line="+2880"/>
+        <location line="-1725"/>
+        <location line="+1734"/>
         <source>Ne&amp;xt Segment</source>
         <translation>Następny segment</translation>
     </message>
     <message>
-        <location line="-2869"/>
-        <location line="+2892"/>
+        <location line="-1723"/>
+        <location line="+1746"/>
         <source>Step &amp;Back</source>
         <translation>Krok do tyłu</translation>
     </message>
     <message>
-        <location line="-2877"/>
-        <location line="+2892"/>
+        <location line="-1731"/>
+        <location line="+1746"/>
         <source>Step &amp;Forward</source>
         <translation>Krok do przodu</translation>
     </message>
     <message>
-        <location line="+148"/>
+        <location line="+157"/>
         <source>&amp;Durations</source>
         <translation>Czasy trwania</translation>
     </message>
@@ -7288,14 +4462,14 @@
         <translation>Edytor akordów gitarowych</translation>
     </message>
     <message>
-        <location line="-2913"/>
-        <location line="+3037"/>
+        <location line="-1776"/>
+        <location line="+1900"/>
         <source>&amp;Insert Note</source>
         <translation>Wpisz nutę</translation>
     </message>
     <message>
-        <location line="-2729"/>
-        <location line="+3037"/>
+        <location line="-1592"/>
+        <location line="+1900"/>
         <source>&amp;Lower Octave</source>
         <translation>Niższa oktawa</translation>
     </message>
@@ -7315,13 +4489,13 @@
         <translation>Tryb wpisywania przednutki</translation>
     </message>
     <message>
-        <location line="-2227"/>
-        <location line="+717"/>
+        <location line="-1519"/>
+        <location line="+1981"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>Pokaż narzędzia paska narzędziowego</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-1980"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>Pokaż pasek narzędziowy znaków chromatycznych</translation>
     </message>
@@ -7341,23 +4515,23 @@
         <translation>Pokaż pasek narzędziowy grupy</translation>
     </message>
     <message>
-        <location line="-718"/>
-        <location line="+720"/>
+        <location line="+2"/>
+        <location line="+1978"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>Pokaż pasek transportu</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-1977"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>Pokaż pasek narzędziowy widoku</translation>
     </message>
     <message>
-        <location line="-717"/>
+        <location line="+1981"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation>Pokaż wykres nazw akordów</translation>
     </message>
     <message>
-        <location line="+731"/>
+        <location line="-1967"/>
         <source>Show &amp;Annotations</source>
         <translation>Pokaż adnotacje</translation>
     </message>
@@ -7367,7 +4541,7 @@
         <translation>Pokaż dyrektywy Lilypond</translation>
     </message>
     <message>
-        <location line="+1689"/>
+        <location line="+1698"/>
         <source>Clefs Toolbar</source>
         <translation>Pasek narzędziowy kluczy</translation>
     </message>
@@ -7387,7 +4561,7 @@
         <translation>Pasek narzędziowy znaczników</translation>
     </message>
     <message>
-        <location line="-4236"/>
+        <location line="-3099"/>
         <source>Select &amp;All Events</source>
         <translation>Zaznacz wszystkie przypadki</translation>
     </message>
@@ -7403,34 +4577,34 @@
     </message>
     <message>
         <location line="-163"/>
-        <location line="+2421"/>
+        <location line="+1275"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>Pokaż wykres zmian głośności</translation>
     </message>
     <message>
-        <location line="-1056"/>
+        <location line="-1893"/>
         <source>&amp;Action</source>
         <translation>Akcja</translation>
     </message>
     <message>
-        <location line="-1364"/>
-        <location line="+2421"/>
+        <location line="+619"/>
+        <location line="+1275"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Pokaż wykres odchylenia stroju</translation>
     </message>
     <message>
-        <location line="-1552"/>
-        <location line="+3252"/>
+        <location line="-406"/>
+        <location line="+2115"/>
         <source>Rulers Toolbar</source>
         <translation>Pasek narzędziowy wykresów</translation>
     </message>
     <message>
-        <location line="-1709"/>
+        <location line="-1718"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Pokaż pasek narzędziowy wykresów</translation>
     </message>
     <message>
-        <location line="+1492"/>
+        <location line="+1501"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation>Tryb wpisywania grupy niemiarowej</translation>
     </message>
@@ -7451,7 +4625,7 @@
         <translation>Pasek narzędziowy warstwy</translation>
     </message>
     <message>
-        <location line="-4432"/>
+        <location line="+32"/>
         <source>Switch to Insert Tool</source>
         <translation>Przełącz na narzędzie wpisywania</translation>
     </message>
@@ -7501,7 +4675,7 @@
         <translation>Zrób widoczne</translation>
     </message>
     <message>
-        <location line="+1177"/>
+        <location line="+7"/>
         <source>Auto-Beam when appropriate</source>
         <translation>Autobelkowanie gdzie pasuje</translation>
     </message>
@@ -7541,7 +4715,7 @@
         <translation>Podwójny bemol</translation>
     </message>
     <message>
-        <location line="+607"/>
+        <location line="+2"/>
         <source>&amp;New</source>
         <translation>Nowy</translation>
     </message>
@@ -7761,44 +4935,44 @@
         <translation type="obsolete">Otwórz w domyślnym edytorze</translation>
     </message>
     <message>
-        <location line="-478"/>
-        <location line="+542"/>
+        <location line="+64"/>
+        <location line="+452"/>
         <source>R&amp;elabel...</source>
         <translation>Przemianuj...</translation>
     </message>
     <message>
-        <location line="-551"/>
-        <location line="+561"/>
+        <location line="-442"/>
+        <location line="+433"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>Przywróć ostatnią kwantyzację</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="-422"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>Skurcz lub zagęść...</translation>
     </message>
     <message>
-        <location line="-1839"/>
-        <location line="+1841"/>
-        <location line="+589"/>
+        <location line="-3391"/>
+        <location line="+1284"/>
+        <location line="+2109"/>
         <source>Set Start &amp;Time...</source>
         <translation>Ustaw współrzędne początkowe...</translation>
     </message>
     <message>
-        <location line="-2429"/>
-        <location line="+1841"/>
-        <location line="+589"/>
+        <location line="-3392"/>
+        <location line="+1284"/>
+        <location line="+2109"/>
         <source>Set &amp;Duration...</source>
         <translation>Ustaw czas trwania...</translation>
     </message>
     <message>
-        <location line="-1182"/>
-        <location line="+612"/>
+        <location line="+19"/>
+        <location line="+382"/>
         <source>Join</source>
         <translation>Połącz</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-373"/>
         <source>&amp;Split</source>
         <translation>Podziel</translation>
     </message>
@@ -7898,26 +5072,26 @@
         <translation>Zmień przyporządkowanie instrumentów...</translation>
     </message>
     <message>
-        <location line="-651"/>
-        <location line="+689"/>
+        <location line="+38"/>
+        <location line="+305"/>
         <source>&amp;Resize</source>
         <translation>Zmień rozmiar</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="-241"/>
         <source>P&amp;unch in Record</source>
         <translation>Wcinaj się z nagraniem</translation>
     </message>
     <message>
-        <location line="-2089"/>
-        <location line="+1012"/>
-        <location line="+683"/>
-        <location line="+717"/>
+        <location line="-4006"/>
+        <location line="+365"/>
+        <location line="+1266"/>
+        <location line="+1981"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>Pokaż główny pasek narzędziowy</translation>
     </message>
     <message>
-        <location line="-715"/>
+        <location line="+2"/>
         <source>Show Trac&amp;ks Toolbar</source>
         <translation>Pokaż pasek narzędziowy ścieżek</translation>
     </message>
@@ -7932,15 +5106,15 @@
         <translation>Pokaż pasek narzędziowy powiększania</translation>
     </message>
     <message>
-        <location line="-1695"/>
-        <location line="+1008"/>
-        <location line="+713"/>
-        <location line="+699"/>
+        <location line="-3616"/>
+        <location line="+369"/>
+        <location line="+1274"/>
+        <location line="+1999"/>
         <source>Show St&amp;atusbar</source>
         <translation>Pokaż pasek stanu</translation>
     </message>
     <message>
-        <location line="-723"/>
+        <location line="-24"/>
         <source>Show Playback Position R&amp;uler</source>
         <translation>Pokaż oś czasu odtwarzania</translation>
     </message>
@@ -8002,31 +5176,31 @@
         <translation>Pasek narzędziowy edytorów</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+1062"/>
+        <location line="-1634"/>
+        <location line="+1636"/>
         <source>Rewind to Beginning</source>
         <translation>Przewiń na początek</translation>
     </message>
     <message>
-        <location line="-1053"/>
-        <location line="+1060"/>
+        <location line="-1629"/>
+        <location line="+1638"/>
         <source>Fast Forward to End</source>
         <translation>Szybko przewiń do końca</translation>
     </message>
     <message>
-        <location line="-2333"/>
-        <location line="+1256"/>
-        <location line="+1809"/>
+        <location line="-2825"/>
+        <location line="+1928"/>
+        <location line="+880"/>
         <source>&amp;Support Rosegarden</source>
         <translation>Wsparcie Rosegarden</translation>
     </message>
     <message>
-        <location line="-1813"/>
+        <location line="-4"/>
         <source>&amp;Rosegarden Tutorials</source>
         <translation>Samouczki Rosegarden</translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+225"/>
         <source>Insert Tempo Change</source>
         <translation>Wstaw zmianę tempa</translation>
     </message>
@@ -8066,7 +5240,7 @@
         <translation>Otwórz edytor tempa i oznaczenia metrycznego</translation>
     </message>
     <message>
-        <location line="-2558"/>
+        <location line="+66"/>
         <source>&amp;Edit Item</source>
         <translation>Edytuj wpis</translation>
     </message>
@@ -8086,31 +5260,31 @@
         <translation>Właściwości</translation>
     </message>
     <message>
-        <location line="+2561"/>
+        <location line="+52"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>Wklej jako nowy wyzwolony segment</translation>
     </message>
     <message>
-        <location line="+1925"/>
+        <location line="-4348"/>
         <source>Delete Marker</source>
         <translation>Usuń znacznik</translation>
     </message>
     <message>
-        <location line="-4015"/>
-        <location line="+2831"/>
+        <location line="+442"/>
+        <location line="+1685"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>Transponuj o półtony...</translation>
     </message>
     <message>
-        <location line="-2637"/>
-        <location line="+984"/>
-        <location line="+680"/>
-        <location line="+1259"/>
+        <location line="-1491"/>
+        <location line="+1786"/>
+        <location line="+1430"/>
+        <location line="+314"/>
         <source>&amp;Erase</source>
         <translation>Wymaż</translation>
     </message>
     <message>
-        <location line="-833"/>
+        <location line="-2586"/>
         <source>Show &amp;Track Headers</source>
         <translation>Pokaż nagłówki ścieżki</translation>
     </message>
@@ -8125,17 +5299,17 @@
         <translation>Przywróć pozycje łuku</translation>
     </message>
     <message>
-        <location line="+605"/>
+        <location line="+614"/>
         <source>&amp;Treble Clef</source>
         <translation>Klucz wiolinowy</translation>
     </message>
     <message>
-        <location line="-3583"/>
+        <location line="+881"/>
         <source>Respell as Flat</source>
         <translation>Zamień na dźwięk enharmoniczny równoważny z bemolem</translation>
     </message>
     <message>
-        <location line="+1812"/>
+        <location line="+37"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Importuj plik Hydrogen...</translation>
     </message>
@@ -8153,13 +5327,13 @@
     </message>
     <message>
         <location line="+91"/>
-        <location line="+577"/>
+        <location line="+841"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location line="-568"/>
+        <location line="-832"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Ins</translation>
@@ -8171,14 +5345,15 @@
         <translation>T</translation>
     </message>
     <message>
-        <location line="+30"/>
-        <location line="+647"/>
+        <location line="-2021"/>
+        <location line="+2051"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+K</translation>
     </message>
     <message>
-        <location line="-628"/>
+        <location line="-1224"/>
+        <location line="+1243"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+M</translation>
@@ -8195,21 +5370,21 @@
         <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
-        <location line="-613"/>
-        <location line="+623"/>
+        <location line="+10"/>
+        <location line="+371"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Return</translation>
     </message>
     <message>
-        <location line="-515"/>
-        <location line="+612"/>
+        <location line="-274"/>
+        <location line="+382"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="-353"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+T</translation>
@@ -8236,18 +5411,19 @@
         <translation>Edytuj znaczniki...</translation>
     </message>
     <message>
-        <location line="+125"/>
-        <location line="+595"/>
+        <location line="-1978"/>
+        <location line="+2103"/>
         <source>&amp;Convert Notation for...</source>
         <translation>Konwertuj notację do...</translation>
     </message>
     <message>
-        <location line="-710"/>
+        <location line="-115"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
         <translation>Ustaw szybki znacznik na pozycji odtwarzania</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-1234"/>
+        <location line="+1243"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation>Skocz do szybkiego znacznika</translation>
     </message>
@@ -9553,7 +6729,7 @@
         <translation>Chiński talerz</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="+829"/>
+        <location filename="../QMenuStrings.cpp" line="-1869"/>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>Triangle</source>
         <translation>Trójkąt</translation>
@@ -11237,16 +8413,16 @@
         <translation>&amp;lt;żaden&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+526"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
         <translation>Wtyczka syntezatora</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location filename="../../src/base/Studio.cpp" line="-3"/>
+        <location line="-3"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Dźwięk</translation>
@@ -13398,9 +10574,9 @@
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+458"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+643"/>
         <location line="+7"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+458"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -13415,10 +10591,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+904"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1650"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1012"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+464"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1012"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+904"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1651"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroler %2 %3</translation>
     </message>
@@ -13546,7 +10722,7 @@
         <translation>&lt;qt&gt;&lt;p&gt;Nie można uruchomić nagrywania dźwięku.&lt;/p&gt;&lt;p&gt;Ustaw poprawną ścieżkę do nagrywania w &lt;b&gt;Utwór -&gt; Edytuj właściwości dokumentu... -&gt; Dźwięk&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="-22"/>
+        <location filename="../../src/sound/MidiFile.cpp" line="+1"/>
         <source>Wrong length for long data in MIDI stream</source>
         <translation>Nieprawidłowa długość dla długich danych w strumieniu MIDI</translation>
     </message>
@@ -20948,7 +18124,7 @@ Kliknij podwójnie myszką, aby otworzyć edytor znaczników.</translation>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+470"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+473"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
@@ -21248,7 +18424,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <translation>Odstępy:</translation>
     </message>
     <message>
-        <location line="+2537"/>
+        <location line="+2538"/>
         <source>Chord</source>
         <translation>Akord</translation>
     </message>
@@ -21258,7 +18434,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <translation>Przednutka</translation>
     </message>
     <message>
-        <location line="-2237"/>
+        <location line="-2238"/>
         <source>Unknown spacing action %1</source>
         <translation>Nieznana akcja odległości %1</translation>
     </message>
@@ -21305,7 +18481,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <location line="+25"/>
         <location line="+103"/>
         <location line="+56"/>
-        <location line="+897"/>
+        <location line="+898"/>
         <location line="+729"/>
         <location line="+830"/>
         <location line="+269"/>
@@ -21313,7 +18489,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3034"/>
+        <location line="-3035"/>
         <source>Printing with LilyPond...</source>
         <translation>Drukowanie z LilyPond...</translation>
     </message>
@@ -21359,7 +18535,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <translation>Brak zaznaczenia</translation>
     </message>
     <message>
-        <location line="+717"/>
+        <location line="+718"/>
         <source>Raising velocities...</source>
         <translation>Zwiększanie głośności...</translation>
     </message>
@@ -23442,7 +20618,7 @@ Zobacz Edytuj -&gt; Właściwości -&gt; Dźwięk.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="-6469"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+332"/>
         <source>Initializing plugin manager...</source>
         <translation>Inicjalizacja menadżera wtyczek...</translation>
     </message>
@@ -27822,7 +24998,7 @@ Transponuj o półtony...</translation>
     <name>RosegardenTransport</name>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1047"/>
         <source>Rosegarden Transport</source>
         <translation>Pasek transportu Rosegarden</translation>
     </message>
@@ -28066,204 +25242,6 @@ Transponuj o półtony...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="+98"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/SelectDialog.cpp" line="-284"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="+88"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+362"/>
-        <source></source>
-        <comment>The arg value will be either a controller name or</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+303"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="-13"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+842"/>
-        <source></source>
-        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+5436"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="-635"/>
-        <source></source>
-        <comment>the pixmap in this error string contains no English</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+237"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="-5"/>
-        <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="-187"/>
         <source></source>
         <comment>if the manual is translated into your language, you can</comment>
         <translation></translation>
