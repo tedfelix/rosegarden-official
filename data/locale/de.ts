@@ -7643,7 +7643,7 @@
     <message>
         <location line="+1"/>
         <source>Lead 7 (fifths)</source>
-        <translation>Hauptstimme 7 (fünftel)</translation>
+        <translation>Hauptstimme 7 (Quinten)</translation>
     </message>
     <message>
         <location line="+1"/>
