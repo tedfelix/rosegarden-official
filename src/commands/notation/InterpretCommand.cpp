@@ -186,7 +186,57 @@ InterpretCommand::getVelocityForDynamic(std::string text)
         velocity = 120;
     else if (text == "fffff")
         velocity = 125;
-
+    else if (text == "d5")
+        velocity = 5;
+    else if (text == "d10")
+        velocity = 10;
+    else if (text == "d15")
+        velocity = 15;
+    else if (text == "d20")
+        velocity = 20;
+    else if (text == "d25")
+        velocity = 25;
+    else if (text == "d30")
+        velocity = 30;
+    else if (text == "d35")
+        velocity = 35;
+    else if (text == "d40")
+        velocity = 40;
+    else if (text == "d45")
+        velocity = 45;
+    else if (text == "d50")
+        velocity = 50;
+    else if (text == "d55")
+        velocity = 55;
+    else if (text == "d60")
+        velocity = 60;
+    else if (text == "d65")
+        velocity = 65;
+    else if (text == "d70")
+        velocity = 70;
+    else if (text == "d75")
+        velocity = 75;
+    else if (text == "d80")
+        velocity = 80;
+    else if (text == "d85")
+        velocity = 85;
+    else if (text == "d90")
+        velocity = 90;
+    else if (text == "d95")
+        velocity = 95;
+    else if (text == "d100")
+        velocity = 100;
+    else if (text == "d105")
+        velocity = 105;
+    else if (text == "d110")
+        velocity = 110;
+    else if (text == "d115")
+        velocity = 115;
+    else if (text == "d120")
+        velocity = 120;
+    else if (text == "d125")
+        velocity = 125;
+    
     NOTATION_DEBUG << "InterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text << endl;
 
     return velocity;
