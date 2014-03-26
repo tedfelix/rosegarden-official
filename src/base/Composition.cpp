@@ -1800,10 +1800,17 @@ void Composition::checkSelectedAndRecordTracks()
         
     }
 
+    // For each record track
     for (recordtrackcontainer::iterator i = m_recordTracks.begin();
-         i != m_recordTracks.end(); ++i) {
-        if (m_tracks.find(*i) == m_tracks.end()) {
-            m_recordTracks.erase(i);
+         i != m_recordTracks.end(); ) {
+        // Increment before use.  This way deleting the element does not
+        // invalidate the iterator.
+        recordtrackcontainer::iterator j = i++;
+
+        // If the track is no longer in the composition
+        if (m_tracks.find(*j) == m_tracks.end()) {
+            // Remove it from the list of record tracks.
+            m_recordTracks.erase(j);
         }
     }
 }
