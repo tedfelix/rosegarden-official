@@ -1186,7 +1186,7 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
         tmpNote << "        <time-modification>\n";
         tmpNote << "          <actual-notes>" << m_actualNotes << "</actual-notes>\n";
         tmpNote << "          <normal-notes>" << m_normalNotes << "</normal-notes>\n";
-        long base;
+        long base = 0;
         if (event.has(BEAMED_GROUP_TUPLET_BASE)) {
             event.get<Int>(BEAMED_GROUP_TUPLET_BASE, base);
             if (base != noteDuration) {
