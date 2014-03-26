@@ -155,16 +155,19 @@ MidiKeyMapping::getMapForKeyName(MidiByte pitch) const
     }
 }
 
+#if 0
+// unused
 int
 MidiKeyMapping::getOffset(MidiByte pitch) const
 {
-    int c;
+    int c = 0;
     for (KeyNameMap::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
-	if (i->first == pitch) return c;
-	++c;
+        if (i->first == pitch) return c;
+        ++c;
     }
     return -1;
 }
+#endif
 
 int
 MidiKeyMapping::getPitchForOffset(int offset) const

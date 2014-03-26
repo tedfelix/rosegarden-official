@@ -101,7 +101,7 @@ public:
      * mapping, 1 if it is the second-lowest, etc.  Return -1 if it
      * is not in the mapping at all.  Not instant.
      */
-    int                  getOffset(MidiByte pitch) const;
+//    int                  getOffset(MidiByte pitch) const;
 
     /**
      * Return the offset'th pitch in the mapping.  Return -1 if there
