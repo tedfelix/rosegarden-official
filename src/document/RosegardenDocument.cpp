@@ -2262,6 +2262,12 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
 
         Event *oldEvent = *(i->m_segmentIterator);
 
+        timeT newDuration = endTime - oldEvent->getAbsoluteTime();
+
+        // Don't allow zero duration events.
+        if (newDuration == 0)
+            newDuration = 1;
+
         // Make a new copy of the event in the segment and modify the
         // duration as needed.
         // ??? Can't we modify the Event in place in the Segment?
@@ -2269,7 +2275,7 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
         Event *newEvent = new Event(
                 *oldEvent,  // reference Event object
                 oldEvent->getAbsoluteTime(),  // absoluteTime (preserved)
-                endTime - oldEvent->getAbsoluteTime()  // duration (adjusted)
+                newDuration  // duration (adjusted)
                 );
 
         // Remove the old event from the segment
