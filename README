@@ -77,7 +77,7 @@ Rosegarden requires the following external applications.
 
   - General MIDI soft synth (TiMidity + Freepats or better)
   - LilyPond
-  - Okular, Evince, or Acroread
+  - Okular, Evince, Acroread, MuPDF, or ePDFView
   - lpr or lp
   - QjackCtl (JACK Audio Connection Kit - Qt GUI Interface)
   - FLAC

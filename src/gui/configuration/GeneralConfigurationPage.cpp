@@ -343,9 +343,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_pdfViewer = new QComboBox(frame);
     connect(m_pdfViewer, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"), 0);
-    m_pdfViewer->addItem(tr("Evince (GNOME)"), 1);
-    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"),2);
+    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"));
+    m_pdfViewer->addItem(tr("Evince (GNOME)"));
+    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
+    m_pdfViewer->addItem(tr("MuPDF"));
+    m_pdfViewer->addItem(tr("ePDFView"));
     m_pdfViewer->setToolTip(tr("Used to preview generated LilyPond output"));
 
     layout->addWidget(m_pdfViewer, row, 1, 1, 3);

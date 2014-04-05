@@ -232,7 +232,8 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         case 0: pdfViewer = "okular";   break;
         case 1: pdfViewer = "evince";   break;
         case 2: pdfViewer = "acroread"; break;
-        case 3: pdfViewer = "kpdf"; 
+        case 3: pdfViewer = "mupdf";    break;
+        case 4: pdfViewer = "epdfview"; break;
         default: pdfViewer = "kpdf"; // just because I'm still currently on KDE3
     }
 

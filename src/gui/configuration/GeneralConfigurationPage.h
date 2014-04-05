@@ -64,7 +64,9 @@ public:
         Okular,
         Evince,
         Acroread,
-        KPDF
+        MuPDF,
+        ePDFView,
+        KPDF  // not officially supported
     };
 
     enum FilePrinter
