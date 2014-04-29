@@ -349,6 +349,8 @@
   <text>Zoom Toolbar</text>
 </ToolBar>
 
+<!-- This state is entered, but never left. -->
+<!-- Removing as unused.
 <State name="new_file">
   <disable>
     <Action name="file_revert"/>
@@ -357,17 +359,24 @@
     <Action name="file_close"/>
   </enable>
 </State>
+-->
 
+<!-- Unused
 <State name="new_file_modified">
   <enable>
   </enable>
 </State>
+-->
 
+<!-- Unused
+     We really need a "can_revert" state for this.
+     Enter it when we have a modified file that has a valid filename.
 <State name="saved_file_modified">
   <enable>
     <Action name="file_revert"/>
   </enable>
 </State>
+-->
 
 <State name="have_segments">
   <enable>
@@ -472,6 +481,7 @@
   </enable>
 </State>
 
+<!-- Unused
 <State name="sequencer_running">
   <enable>
     <Action name="rewindtobeginning" />
@@ -484,12 +494,38 @@
     <Action name="recordtoggle" />
   </enable>
 </State>
+-->
 
 <State name="not_playing">
   <enable>
+    <!-- Only enable these destructive actions when the 
+         sequencer is stopped. -->
+    <Action name="file_new" />
+    <Action name="file_open" />
+    <Action name="file_import_project" />
+    <Action name="file_import_midi" />
+    <Action name="file_import_rg21" />
+    <Action name="file_import_musicxml" />
+    <Action name="file_merge" />
+    <Action name="file_merge_midi" />
+    <Action name="file_merge_rg21" />
+    <Action name="file_merge_musicxml" />
+    <Action name="file_close" />
+    <Action name="file_quit" />
+    <Action name="delete_track" />
+    <!-- There are probably others, like split and resize. -->
+
+    <!-- These would be nice, however they conflict with have_selection
+         and have_range which also enable them. -->
+    <!-- All the entries in Open Recent -->
+    <!-- <Action name="delete" /> -->
+    <!-- <Action name="edit_cut" /> -->
+    <!-- <Action name="cut_range" /> -->
   </enable>
 </State>
 
+<!-- ??? These items are enabled at rg start even though there is no
+         range selected. -->
 <State name="have_range">
   <enable>
     <Action name="cut_range"/>
