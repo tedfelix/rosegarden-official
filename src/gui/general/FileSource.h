@@ -22,13 +22,11 @@
 #include <QMutex>
 #include <QString>
 #include <QTimer>
+#include <QNetworkReply>
 
 #include <map>
 
-class QFtp;
-class QHttp;
 class QFile;
-class QHttpResponseHeader;
 
 namespace Rosegarden {
 
@@ -76,7 +74,9 @@ public:
      * emitted regularly during retrieval, even if no progress is
      * supplied here.  Caller retains ownership of the progress object.
      */
-    FileSource(QString fileOrUrl, ProgressDialog *progress = 0);
+    FileSource(QString fileOrUrl,
+               ProgressDialog *progress = 0,
+               QString preferredContentType = "");
 
     /**
      * Construct a FileSource using the given remote URL.
@@ -126,6 +126,11 @@ public:
     bool isDone() const;
 
     /**
+     * Return true if this FileSource is referring to a QRC resource.
+     */
+    bool isResource() const;
+
+    /**
      * Return true if this FileSource is referring to a remote URL.
      */
     bool isRemote() const;
@@ -145,6 +150,12 @@ public:
      * FileSource.
      */
     QString getLocalFilename() const;
+
+    /**
+     * Return the base name, i.e. the final path element (including
+     * extension, if any) of the location.
+     */
+    QString getBasename() const;
 
     /**
      * Return the MIME content type of this file, if known.
@@ -201,25 +212,27 @@ signals:
     void ready();
 
 protected slots:
-    void dataReadProgress(int done, int total);
-    void httpResponseHeaderReceived(const QHttpResponseHeader &resp);
-    void ftpCommandFinished(int, bool);
-    void dataTransferProgress(qint64 done, qint64 total);
-    void done(bool error);
+    void metaDataChanged();
+    void readyRead();
+    void replyFailed(QNetworkReply::NetworkError);
+    void replyFinished();
+    void downloadProgress(qint64 done, qint64 total);
     void cancelled();
 
 protected:
     FileSource &operator=(const FileSource &); // not provided
 
+    QString m_rawFileOrUrl;
     QUrl m_url;
-    QFtp *m_ftp;
-    QHttp *m_http;
     QFile *m_localFile;
+    QNetworkReply *m_reply;
     QString m_localFilename;
     QString m_errorString;
     QString m_contentType;
+    QString m_preferredContentType;
     bool m_ok;
     int m_lastStatus;
+    bool m_resource;
     bool m_remote;
     bool m_done;
     bool m_leaveLocalFile;
@@ -233,8 +246,7 @@ protected:
     bool m_refCounted;
 
     void init();
-    void initHttp();
-    void initFtp();
+    void initRemote();
 
     void cleanup();
 
