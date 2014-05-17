@@ -488,7 +488,12 @@ FileSource::cleanup()
     if (m_reply) {
         QNetworkReply *r = m_reply;
         m_reply = 0;
-        r->abort();
+
+        // Can only call abort() when there are no errors.
+        if (r->error() == QNetworkReply::NoError) {
+            r->abort();
+        }
+
         r->deleteLater();
     }
     if (m_localFile) {
@@ -688,7 +693,7 @@ FileSource::metaDataChanged()
 #endif
     } else {
 #ifdef DEBUG_FILE_SOURCE
-        std::cerr << "FileSource::metaDataChanged: "
+        std::cerr << "FileSource::metaDataChanged: status: "
                   << m_lastStatus << std::endl;
 #endif
         m_contentType =
@@ -754,8 +759,14 @@ FileSource::replyFinished()
 }
 
 void
-FileSource::replyFailed(QNetworkReply::NetworkError)
+FileSource::replyFailed(QNetworkReply::NetworkError networkError)
 {
+#ifdef DEBUG_FILE_SOURCE
+    std::cerr << "FileSource::replyFailed(" << networkError << ")" << std::endl;
+#else
+    (void)networkError;  // Suppress compiler warning
+#endif
+
     emit progress(100);
     if (!m_reply) {
         std::cerr << "WARNING: FileSource::replyFailed() called without a reply object being known to us" << std::endl;
