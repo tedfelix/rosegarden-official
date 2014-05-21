@@ -1344,7 +1344,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     }
 
     // Paint using the small coordinates...
-    QRect intersection = rect.intersect(clipRect);
+    QRect intersection = rect.intersected(clipRect);
 
     if (clipRect.contains(rect)) {
         //RG_DEBUG << "note: drawing whole rect" << endl;
@@ -1419,7 +1419,7 @@ void CompositionView::drawIntersections(const CompositionModelImpl::RectContaine
             break;
 
         for (; i != rects.end(); ++i) {
-            CompositionRect ri = testRect.intersect(*i);
+            CompositionRect ri = testRect.intersected(*i);
             if (!ri.isEmpty()) {
                 CompositionModelImpl::RectContainer::iterator t = std::find(intersections.begin(),
                                                                         intersections.end(), ri);
@@ -1466,7 +1466,7 @@ void CompositionView::drawIntersections(const CompositionModelImpl::RectContaine
                 break;
 
             for (; i != intersections.end(); ++i) {
-                CompositionRect ri = testRect.intersect(*i);
+                CompositionRect ri = testRect.intersected(*i);
                 if (!ri.isEmpty() && ri != *i) {
                     CompositionModelImpl::RectContainer::iterator t = std::find(intersections2.begin(),
                                                                             intersections2.end(), ri);
