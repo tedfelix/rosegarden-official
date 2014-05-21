@@ -263,10 +263,10 @@ public:
      * The return value will not necessarily be that last set
      * with setEndMarkerTime, as if there is a Composition its
      * end marker will also be used for clipping.
-     * comp = TRUE truncates endmarker time based on composition
-     * end.  comp = FALSE disregards composition end.
+     * comp = true truncates endmarker time based on composition
+     * end.  comp = false disregards composition end.
      */
-    timeT getEndMarkerTime(bool comp = TRUE) const;
+    timeT getEndMarkerTime(bool comp = true) const;
 
     /**
      * Return the time of the end of the last event stored in the

@@ -251,7 +251,7 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     QFont localFont(m_transport->OutDisplay->font() );
     localFont.setFamily( "lucida" );
-    localFont.setBold( TRUE );
+    localFont.setBold( true );
 
     m_transport->TempoDisplay->setFont( localFont );
     m_transport->TimeSigDisplay->setFont( localFont );

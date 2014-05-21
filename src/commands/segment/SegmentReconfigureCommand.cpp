@@ -108,7 +108,7 @@ SegmentReconfigureCommand::swap()
         // end marker time.
 
         timeT prevStartTime = i->segment->getStartTime();
-        timeT prevEndMarkerTime = i->segment->getEndMarkerTime(FALSE);
+        timeT prevEndMarkerTime = i->segment->getEndMarkerTime(false);
 
         if (i->segment->getStartTime() != i->newStartTime) {
             i->segment->setStartTime(i->newStartTime);

@@ -2877,7 +2877,7 @@ RosegardenMainWindow::jogSelection(timeT amount)
 
         command->addSegment((*i),
                             (*i)->getStartTime() + amount,
-                            (*i)->getEndMarkerTime(FALSE) + amount,
+                            (*i)->getEndMarkerTime(false) + amount,
                             (*i)->getTrack());
     }
 
@@ -3123,7 +3123,7 @@ RosegardenMainWindow::slotCreateAnacrusis()
             timeT newStartTime = (*i)->getStartTime() - anacrusisAmount;
             reconfigureCommand->addSegment(*i,
                                           newStartTime,
-                                          (*i)->getEndMarkerTime(FALSE) - (*i)->getStartTime() + newStartTime,
+                                          (*i)->getEndMarkerTime(false) - (*i)->getStartTime() + newStartTime,
                                           (*i)->getTrack()
                                           );
         }
@@ -3185,7 +3185,7 @@ RosegardenMainWindow::slotSetSegmentStartTimes()
 
             command->addSegment
             (*i, dialog.getTime(),
-             (*i)->getEndMarkerTime(FALSE) - (*i)->getStartTime() + dialog.getTime(),
+             (*i)->getEndMarkerTime(false) - (*i)->getStartTime() + dialog.getTime(),
              (*i)->getTrack());
         }
 
@@ -4097,7 +4097,7 @@ RosegardenMainWindow::guessTextCodec(std::string text)
             CurrentProgressDialog::thaw();
 
             if (codecName != "") {
-                codec = QTextCodec::codecForName(codecName.toAscii());
+                codec = QTextCodec::codecForName(codecName.toLatin1());
             }
             break;
         }

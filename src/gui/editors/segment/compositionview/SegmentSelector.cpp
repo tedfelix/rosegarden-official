@@ -274,7 +274,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                 // We absolutely don't want to snap the end time to
                 // the grid.  We want it to remain exactly the same as
                 // it was, but relative to the new start time.
-                timeT itemEndTime = itemStartTime + segment->getEndMarkerTime(FALSE)
+                timeT itemEndTime = itemStartTime + segment->getEndMarkerTime(false)
                                     - segment->getStartTime();
 
 //                std::cerr << "releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId << std::endl;
