@@ -3717,7 +3717,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 snd_seq_ev_set_noteoff(&event,
                                        channel,
                                        (*i)->getPitch(),
-                                       (*i)->getVelocity());
+                                       127);
             }
 
             break;
