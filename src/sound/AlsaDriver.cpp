@@ -60,6 +60,11 @@ using std::endl;
 #define AUTO_TIMER_NAME "(auto)"
 #define LOCKED QMutexLocker rg_alsa_locker(&m_mutex)
 
+// Rosegarden does not handle note-off velocity.  The MIDI spec recommends
+// using 64 in that case.  One user has reported problems with 0 which
+// was being used previously.  See Bug #1426.
+#define NOTE_OFF_VELOCITY 64
+
 namespace Rosegarden
 {
 
@@ -2191,7 +2196,7 @@ AlsaDriver::allNotesOff()
         snd_seq_ev_set_noteoff(&event,
                                (*it)->getChannel(),
                                (*it)->getPitch(),
-                               127);
+                               NOTE_OFF_VELOCITY);
 
         //snd_seq_event_output(m_midiHandle, &event);
         int error = snd_seq_event_output_direct(m_midiHandle, &event);
@@ -2267,7 +2272,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         snd_seq_ev_set_noteoff(&event,
                                ev->getChannel(),
                                ev->getPitch(),
-                               127);
+                               NOTE_OFF_VELOCITY);
 
         if (!isSoftSynth) {
 
@@ -3717,7 +3722,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 snd_seq_ev_set_noteoff(&event,
                                        channel,
                                        (*i)->getPitch(),
-                                       127);
+                                       NOTE_OFF_VELOCITY);
             }
 
             break;
