@@ -461,6 +461,13 @@ FileSource::initRemote()
         req.setRawHeader
             ("Accept",
              QString("%1, */*").arg(m_preferredContentType).toLatin1());
+    } else {
+        // This is actually the default, however, this call appears to
+        // prevent decompression of .rg files by Qt with some servers that
+        // notice that an .rg file is really a .gz file and respond with
+        // "Content-Encoding: gzip".  See the devel mailing list post by Tim
+        // Munro 5/17/2014.
+        req.setRawHeader("Accept-Encoding", "gzip, deflate");
     }
 
     m_reply = nms.localData()->get(req);
