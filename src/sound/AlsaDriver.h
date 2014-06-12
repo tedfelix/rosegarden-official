@@ -57,7 +57,6 @@ public:
     virtual void punchOut();
     virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position);
     virtual void allNotesOff();
-    virtual void processNotesOff(const RealTime &time, bool now, bool everything = false);
 
     virtual RealTime getSequencerTime();
 
@@ -560,6 +559,16 @@ private:
     };
     std::vector<AlsaTimerInfo> m_timers;
     std::string m_currentTimer;
+
+    /// Send out the note-off events in m_noteOffQueue
+    /**
+     * Only send out the note-offs up to "time".  Note-offs in the future
+     * are scheduled to happen at the proper times.
+     * If "now" is true, the events are sent immediately, even if they would
+     * be in the future.  If "everything" is true, "time" is ignored and all
+     * note-off events in the queue are sent.  This is used for shutdown.
+     */
+    void processNotesOff(const RealTime &time, bool now, bool everything = false);
 
     // This auxiliary queue is here as a hack, to avoid stuck notes if
     // resetting playback while a note-off is currently in the ALSA
