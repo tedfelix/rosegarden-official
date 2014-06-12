@@ -2230,13 +2230,13 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         return;
     }
 
-    snd_seq_event_t event;
+    snd_seq_event_t alsaEvent;
 
     ClientPortPair outputDevice;
     RealTime offTime;
 
     // prepare the event
-    snd_seq_ev_clear(&event);
+    snd_seq_ev_clear(&alsaEvent);
 
     RealTime alsaTime = getAlsaTime();
 
@@ -2269,14 +2269,14 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         snd_seq_real_time_t alsaOffTime = { (unsigned int)offTime.sec,
                                             (unsigned int)offTime.nsec };
 
-        snd_seq_ev_set_noteoff(&event,
+        snd_seq_ev_set_noteoff(&alsaEvent,
                                ev->getChannel(),
                                ev->getPitch(),
                                NOTE_OFF_VELOCITY);
 
         if (!isSoftSynth) {
 
-            snd_seq_ev_set_subs(&event);
+            snd_seq_ev_set_subs(&alsaEvent);
 
             // Set source according to instrument
             //
@@ -2288,23 +2288,23 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
                 continue;
             }
 
-            snd_seq_ev_set_source(&event, src);
+            snd_seq_ev_set_source(&alsaEvent, src);
 
-            snd_seq_ev_set_subs(&event);
+            snd_seq_ev_set_subs(&alsaEvent);
 
-            snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
+            snd_seq_ev_schedule_real(&alsaEvent, m_queue, 0, &alsaOffTime);
 
             if (scheduled) {
-                snd_seq_event_output(m_midiHandle, &event);
+                snd_seq_event_output(m_midiHandle, &alsaEvent);
             } else {
-                snd_seq_event_output_direct(m_midiHandle, &event);
+                snd_seq_event_output_direct(m_midiHandle, &alsaEvent);
             }
 
         } else {
 
-            event.time.time = alsaOffTime;
+            alsaEvent.time.time = alsaOffTime;
 
-            processSoftSynthEventOut(ev->getInstrument(), &event, now);
+            processSoftSynthEventOut(ev->getInstrument(), &alsaEvent, now);
         }
 
         if (!now) {
