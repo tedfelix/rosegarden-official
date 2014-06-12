@@ -2246,22 +2246,22 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
     while (m_noteOffQueue.begin() != m_noteOffQueue.end()) {
 
-        NoteOffEvent *ev = *m_noteOffQueue.begin();
+        NoteOffEvent *noteOff = *m_noteOffQueue.begin();
 
-        if (ev->getRealTime() > time) {
+        if (noteOff->getRealTime() > time) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cerr << "Note off time " << ev->getRealTime() << " is beyond current time " << time << std::endl;
+            std::cerr << "Note off time " << noteOff->getRealTime() << " is beyond current time " << time << std::endl;
 #endif
             if (!everything) break;
         }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << ev->getRealTime() << ", instr " << ev->getInstrument() << ", channel " << int(ev->getChannel()) << ", pitch " << int(ev->getPitch()) << std::endl;
+        std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << noteOff->getRealTime() << ", instr " << noteOff->getInstrument() << ", channel " << int(noteOff->getChannel()) << ", pitch " << int(noteOff->getPitch()) << std::endl;
 #endif
 
-        bool isSoftSynth = (ev->getInstrument() >= SoftSynthInstrumentBase);
+        bool isSoftSynth = (noteOff->getInstrument() >= SoftSynthInstrumentBase);
 
-        offTime = ev->getRealTime();
+        offTime = noteOff->getRealTime();
         if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
         bool scheduled = (offTime > alsaTime) && !now;
         if (!scheduled) offTime = RealTime::zeroTime;
@@ -2270,8 +2270,8 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
                                             (unsigned int)offTime.nsec };
 
         snd_seq_ev_set_noteoff(&alsaEvent,
-                               ev->getChannel(),
-                               ev->getPitch(),
+                               noteOff->getChannel(),
+                               noteOff->getPitch(),
                                NOTE_OFF_VELOCITY);
 
         if (!isSoftSynth) {
@@ -2280,10 +2280,10 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
             // Set source according to instrument
             //
-            int src = getOutputPortForMappedInstrument(ev->getInstrument());
+            int src = getOutputPortForMappedInstrument(noteOff->getInstrument());
             if (src < 0) {
-                std::cerr << "note off has no output port (instr = " << ev->getInstrument() << ")" << std::endl;
-                delete ev;
+                std::cerr << "note off has no output port (instr = " << noteOff->getInstrument() << ")" << std::endl;
+                delete noteOff;
                 m_noteOffQueue.erase(m_noteOffQueue.begin());
                 continue;
             }
@@ -2304,13 +2304,13 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
             alsaEvent.time.time = alsaOffTime;
 
-            processSoftSynthEventOut(ev->getInstrument(), &alsaEvent, now);
+            processSoftSynthEventOut(noteOff->getInstrument(), &alsaEvent, now);
         }
 
         if (!now) {
-            m_recentNoteOffs.insert(ev);
+            m_recentNoteOffs.insert(noteOff);
         } else {
-            delete ev;
+            delete noteOff;
         }
         m_noteOffQueue.erase(m_noteOffQueue.begin());
     }
