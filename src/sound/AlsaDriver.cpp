@@ -2232,9 +2232,6 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
     snd_seq_event_t alsaEvent;
 
-    ClientPortPair outputDevice;
-    RealTime offTime;
-
     // prepare the event
     snd_seq_ev_clear(&alsaEvent);
 
@@ -2244,6 +2241,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
     std::cerr << "AlsaDriver::processNotesOff(" << time << "): alsaTime = " << alsaTime << ", now = " << now << std::endl;
 #endif
 
+    // For each note-off event in the note-off queue
     while (m_noteOffQueue.begin() != m_noteOffQueue.end()) {
 
         NoteOffEvent *noteOff = *m_noteOffQueue.begin();
@@ -2259,9 +2257,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << noteOff->getRealTime() << ", instr " << noteOff->getInstrument() << ", channel " << int(noteOff->getChannel()) << ", pitch " << int(noteOff->getPitch()) << std::endl;
 #endif
 
-        bool isSoftSynth = (noteOff->getInstrument() >= SoftSynthInstrumentBase);
-
-        offTime = noteOff->getRealTime();
+        RealTime offTime = noteOff->getRealTime();
         if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
         bool scheduled = (offTime > alsaTime) && !now;
         if (!scheduled) offTime = RealTime::zeroTime;
@@ -2273,6 +2269,8 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
                                noteOff->getChannel(),
                                noteOff->getPitch(),
                                NOTE_OFF_VELOCITY);
+
+        bool isSoftSynth = (noteOff->getInstrument() >= SoftSynthInstrumentBase);
 
         if (!isSoftSynth) {
 
