@@ -218,6 +218,30 @@ protected:
     // Other than the high/low range stuff, picking ranges of pitches is best
     // done in the matrix, with the bigass piano keyboard.
     //
+    // Octave -2 to +8
+    //    -2 -1 0 1 2 3 4 5 6 7 8
+    // Ab
+    // A 
+    // A#
+    // Bb
+    // B
+    // B#
+    // Cb
+    // C
+    // C#
+    // Db
+    // D
+    // D#
+    // Eb
+    // E
+    // E#
+    // Fb
+    // F
+    // F#
+    // Gb
+    // G
+    // G#
+    //
     ///////////////////////////////////////////////////////////////////
 
     // a widget for the tab page
