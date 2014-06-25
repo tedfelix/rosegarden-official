@@ -68,7 +68,6 @@ VUMeter::VUMeter(QWidget *parent,
     m_stereo(stereo),
     m_hasRecord(hasRecord)
 {
-    setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_OpaquePaintEvent);
 
     // Work out if we need peak hold first
