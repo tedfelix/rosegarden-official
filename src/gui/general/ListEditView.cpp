@@ -323,7 +323,7 @@ void ListEditView::toggleWidget(QWidget* widget,
         return ;
     }
 
-    widget->setShown(toggleAction->isChecked());
+    widget->setVisible(toggleAction->isChecked());
 }
 
 }
