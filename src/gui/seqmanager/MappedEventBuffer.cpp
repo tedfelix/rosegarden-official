@@ -111,7 +111,7 @@ MappedEventBuffer::reserve(int newSize)
     MappedEvent *newBuffer = new MappedEvent[newSize];
 
     if (oldBuffer) {
-        for (int i = 0; i < m_size; ++i) {
+        for (int i = 0; i < m_size.fetchAndAddRelaxed(0); ++i) {
             newBuffer[i] = m_buffer[i];
         }
     }
