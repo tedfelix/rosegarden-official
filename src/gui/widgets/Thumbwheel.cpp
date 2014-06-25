@@ -272,6 +272,8 @@ Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
     
     if (ok) {
         setValue(newValue);
+        // Let everyone know.
+        emit valueChanged(getValue());
     }
 }
 
