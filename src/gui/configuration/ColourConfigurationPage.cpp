@@ -101,7 +101,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc, QWidge
 void
 ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
 {
-    m_map.modifyNameByIndex(m_listmap[index], std::string(string.toAscii()));
+    m_map.modifyNameByIndex(m_listmap[index], std::string(string.toLatin1()));
     m_colourtable->populate_table(m_map, m_listmap);
 }
 
