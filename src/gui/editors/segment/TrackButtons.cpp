@@ -724,6 +724,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             // Create a submenu for this device
             QMenu *subMenu = new QMenu(instrumentPopup);
+            subMenu->setMouseTracking(true);
             subMenu->setIcon(icon);
             // Not needed so long as AA_DontShowIconsInMenus is false.
             //subMenu->menuAction()->setIconVisibleInMenu(true);
