@@ -1283,12 +1283,12 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
     // controllers visible, and just always show them all
     showThem = true;
 
-    m_instrumentLabel->setShown(showThem);
+    m_instrumentLabel->setVisible(showThem);
     int index = 0;
     for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        it->second.first->parentWidget()->setShown(showThem);
-        //it->second.first->setShown(showThem || (index < 8));
-        //it->second.second->setShown(showThem || (index < 8));
+        it->second.first->parentWidget()->setVisible(showThem);
+        //it->second.first->setVisible(showThem || (index < 8));
+        //it->second.second->setVisible(showThem || (index < 8));
         index++;
     }
 }
