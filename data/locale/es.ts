@@ -8457,7 +8457,7 @@
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+670"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+526"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
@@ -14443,44 +14443,40 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+72"/>
-        <location line="+64"/>
-        <location line="+27"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
+        <location line="+81"/>
+        <location line="+32"/>
         <source>Unsupported scheme in URL</source>
         <translation>Esquema no soportada en URL</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+220"/>
         <source>Downloading %1...</source>
         <translation>Descargando %1...</translation>
     </message>
     <message>
-        <location line="+280"/>
         <source>Failed to connect to FTP server</source>
-        <translation>Fallo al conectar al servidor de FTP</translation>
+        <translation type="obsolete">Fallo al conectar al servidor de FTP</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Login failed</source>
-        <translation>Fallo de autenticación</translation>
+        <translation type="obsolete">Fallo de autenticación</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Failed to change to correct directory</source>
-        <translation>Fallo al cambiar al directorio correcto</translation>
+        <translation type="obsolete">Fallo al cambiar al directorio correcto</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation>Descarga FTP abortada</translation>
+        <translation type="obsolete">Descarga FTP abortada</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Descarga abortada</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+27"/>
         <source>Failed to create local file %1</source>
         <translation>Fallo al crear archivo local %1</translation>
     </message>
@@ -14555,7 +14551,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
         <source>General</source>
         <translation>General</translation>
     </message>
@@ -14685,7 +14681,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation>&lt;qt&gt;Si marcado, Rosegarden se aparecerá en el estilo de «Thorn», si no, en el estilo del sistema.  Esta preferencia tardará hasta que Rosegarden se reincie &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+87"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
@@ -14695,7 +14701,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Es necesario reiniciar Rosegarden para realizar el cambio de presentación.</translation>
     </message>
     <message>
-        <location line="-292"/>
+        <location line="-294"/>
         <source>Note name style</source>
         <translation>Estilo de nombres de notas</translation>
     </message>
@@ -14775,7 +14781,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Adobe Acrobat Reader (no libre)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Se utiliza para previsualización con LilyPond</translation>
     </message>
@@ -16272,12 +16278,12 @@ en su lugar? </translation>
         <translation>&lt;b&gt;lilypond&lt;/b&gt; se empezó...</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+118"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPond ha procesado el archivo con éxito, sin embargo ¡&lt;b&gt;%1&lt;/b&gt; no se ejecutó!&lt;/p&gt;&lt;p&gt;Configúres un %2 válido bajo &lt;b&gt;Editar -&gt; Preferencias -&gt; General -&gt; Aplicaciones externas&lt;/b&gt; e intente de nuevo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-147"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Fallo al ejecutar &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Instale LilyPond y asegúrese de que las órdenes «convert-ly» y «lilypond» están disponibles en su ruta.  Si hace &lt;b&gt;Ejecutar orden&lt;/b&gt; (típicamente &lt;b&gt;Alt+F2&lt;/b&gt;) y escribe «convert-ly» en la caja, no debería encontrar un error de «orden no encontrada».  Si pueda hacerlo sin error, pero todavía encuentre este mensaje, véase &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; para más ayudo.&lt;/p&gt;&lt;p&gt;Procesamiento terminó debido a errores fatales.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -16312,7 +16318,7 @@ en su lugar? </translation>
         <translation>&lt;qt&gt;&lt;p&gt;El procesamiento terminó debido a errores fatales.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+57"/>
         <source>Printing %1...</source>
         <translation>Imprimiendo %1...</translation>
     </message>
@@ -20304,12 +20310,12 @@ Pueden haber incompatibilidades con el formato del archivo.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1014"/>
+        <location line="+1020"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2479"/>
+        <location line="-2485"/>
         <source>Could not save document at %1</source>
         <translation>Rosegarden no logró guardar el documento en %1</translation>
     </message>
@@ -20462,7 +20468,7 @@ Rosegarden. Se recomienda guardar este archivo con la versión actual de
 Rosegarden para garantizar que podrá ser reconocida por futuras versiones.</translation>
     </message>
     <message>
-        <location line="+1214"/>
+        <location line="+1220"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
@@ -23917,7 +23923,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
 ¿Quiere configurarlo ahora?</translation>
     </message>
     <message>
-        <location line="+815"/>
+        <location line="+816"/>
         <source>Mute track</source>
         <translation>Silenciar pista</translation>
     </message>

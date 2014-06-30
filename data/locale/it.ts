@@ -8887,7 +8887,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+670"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+526"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
@@ -15133,44 +15133,40 @@ Vuoi provare a cercarlo o saltarlo?</translation>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+72"/>
-        <location line="+64"/>
-        <location line="+27"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
+        <location line="+81"/>
+        <location line="+32"/>
         <source>Unsupported scheme in URL</source>
         <translation>Schema non supportato nell&apos;URL</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+220"/>
         <source>Downloading %1...</source>
         <translation>Scaricando %1...</translation>
     </message>
     <message>
-        <location line="+280"/>
         <source>Failed to connect to FTP server</source>
-        <translation>Connessione al server FTP non riuscita</translation>
+        <translation type="obsolete">Connessione al server FTP non riuscita</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Login failed</source>
-        <translation>Autenticazione non riuscita</translation>
+        <translation type="obsolete">Autenticazione non riuscita</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Failed to change to correct directory</source>
-        <translation>Non riesco ad accedere alle directory corretta</translation>
+        <translation type="obsolete">Non riesco ad accedere alle directory corretta</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation>Scaricamento FTP interrotto</translation>
+        <translation type="obsolete">Scaricamento FTP interrotto</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Scaricamento cancellato</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+27"/>
         <source>Failed to create local file %1</source>
         <translation>Non riesco a creare il file locale %1</translation>
     </message>
@@ -15246,7 +15242,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
         <source>General</source>
         <translation>Generale</translation>
     </message>
@@ -15381,7 +15377,17 @@ Vuoi provare a cercarlo o saltarlo?</translation>
         <translation>Mostra il percorso completo nei titoli delle finestre</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+43"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
@@ -15403,7 +15409,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
         <translation>Si deve riavviare Rosegarden affinché la presentazione abbia effetto.</translation>
     </message>
     <message>
-        <location line="-292"/>
+        <location line="-294"/>
         <source>Note name style</source>
         <translation>Stile del nome delle note</translation>
     </message>
@@ -15494,7 +15500,7 @@ Vuoi provare a cercarlo o saltarlo?</translation>
         <translation type="obsolete">KPDF (KDE 3.x)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Usato per l&apos;anteprima con LilyPond</translation>
     </message>
@@ -17049,12 +17055,12 @@ Vuoi usare
         <translation>Avviato &lt;b&gt;lilypond&lt;/b&gt; ...</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+118"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPond ha elaborato il file con successo, ma &lt;b&gt;%1&lt;/b&gt; non funziona!&lt;/p&gt;&lt;p&gt;Si prega di configurare %2 in &lt;b&gt;Modifica -&gt; Preferenze -&gt; Generale -&gt; Applicazioni Esterne&lt;/b&gt; e provare di nuovo.&lt;/p&gt;&lt;p&gt;Elaborazione interrotta per errori fatali.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-147"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Non riesco a eseguire &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Si prega di installare LilyPond e verificare che i comandi &quot;convert-ly&quot; e &quot;lilypond&quot; siano utilizzabili dal prorpio percorso.  Se lanciate &lt;b&gt;Esegui applicazione&lt;/b&gt; (tipicamente &lt;b&gt;Alt+F2&lt;/b&gt;) e scrivete &quot;convert-ly&quot; nel riquadro, non dovreste trovare un errore &quot;file non trovato&quot;.  Se il comando non produce errori ma compare ancora questo messaggio, rivolgetevi a &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; per ottenere aiuto.&lt;/p&gt;&lt;p&gt;Elaborazione interrotta per errori fatali.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -17089,7 +17095,7 @@ Vuoi usare
         <translation>&lt;qt&gt;&lt;p&gt;Elaborazione interrotta per errori fatali.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+57"/>
         <source>Printing %1...</source>
         <translation>Stampa in corso %1...</translation>
     </message>
@@ -21717,12 +21723,12 @@ Vuoi salvarlo?</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1014"/>
+        <location line="+1020"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2479"/>
+        <location line="-2485"/>
         <source>Could not save document at %1</source>
         <translation>Non riesco a salvare il documento in %1</translation>
     </message>
@@ -21819,7 +21825,7 @@ Scegli quelli che vuoi cancellare definitivamente dal disco fisso.
         <translation>Non riesco a rinominare il file temporaneo di uscita &apos;%1&apos; nel file desiderato &apos;%2&apos;</translation>
     </message>
     <message>
-        <location line="+1812"/>
+        <location line="+1818"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
@@ -21837,7 +21843,7 @@ Vuoi impostarlo adesso?</translation>
         <translation type="obsolete">Salvataggio file in corso...</translation>
     </message>
     <message>
-        <location line="-1626"/>
+        <location line="-1632"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Errore durante la scrittura su &apos;%1&apos;</translation>
     </message>
@@ -21901,7 +21907,7 @@ affinché sia ancora leggibile nelle prossime versioni.</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;I canali sono stati rimappati&lt;/h2&gt;&lt;p&gt;A partire dalla versione 10.02 Rosegarden non offre più i controlli per cambiare il canale associato ad ogni strumento Midi.&lt;/p&gt;&lt;p&gt;Il file che hai appena aperto contiene strumenti i cui canali differiscono dai numeri di strumento.  Questi canali sono stati riassegnati in modo che il primo strumento userà sempre il primo canale, senza tener conto del canale che utilizzava precedentemente.  Nella maggior parte dei casi, non avvertirai differenza, ma potresti dover effettuare alcuni piccoli cambiamenti affinché esso suoni come previsto.  Suggeriamo di salvarlo per evitare di ricevere nuovamente questo avviso.&lt;/p&gt;&lt;p&gt;Ci scusiamo per eventuali inconvenienti.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+644"/>
+        <location line="+650"/>
         <source>Insert Recorded MIDI</source>
         <translation>Inserisci un file MIDI registrato</translation>
     </message>
@@ -25502,7 +25508,7 @@ Proprietà del documento prima di cominciare a registrare l&apos;audio.
 Vuoi impostarlo adesso?</translation>
     </message>
     <message>
-        <location line="+815"/>
+        <location line="+816"/>
         <source>Mute track</source>
         <translation>Zittisci la traccia</translation>
     </message>

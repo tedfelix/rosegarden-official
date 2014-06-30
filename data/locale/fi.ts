@@ -8578,7 +8578,7 @@
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+670"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+526"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
@@ -14621,44 +14621,40 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+72"/>
-        <location line="+64"/>
-        <location line="+27"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
+        <location line="+81"/>
+        <location line="+32"/>
         <source>Unsupported scheme in URL</source>
         <translation>Ei-tuettu URL muoto</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+220"/>
         <source>Downloading %1...</source>
         <translation>Ladataan %1...</translation>
     </message>
     <message>
-        <location line="+280"/>
         <source>Failed to connect to FTP server</source>
-        <translation>Yhteydenotto FTP-palvelimelle ei onnistunut</translation>
+        <translation type="obsolete">Yhteydenotto FTP-palvelimelle ei onnistunut</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Login failed</source>
-        <translation>Kirjautuminen epäonnistui</translation>
+        <translation type="obsolete">Kirjautuminen epäonnistui</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Failed to change to correct directory</source>
-        <translation>Vaihto oikeaan hakemistoon epäonnistui</translation>
+        <translation type="obsolete">Vaihto oikeaan hakemistoon epäonnistui</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation>FTP-lataus keskeytettiin</translation>
+        <translation type="obsolete">FTP-lataus keskeytettiin</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Lataus peruutettiin</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+27"/>
         <source>Failed to create local file %1</source>
         <translation>Paikallisen tiedoston %1 luominen epäonnistui</translation>
     </message>
@@ -14733,7 +14729,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
         <source>General</source>
         <translation>Yleinen</translation>
     </message>
@@ -14863,7 +14859,17 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <translation>&lt;qt&gt;Jos valittu, Rosegarden käyttää Thorn-teemaa, muutoin järjestelmän oletuksia käytetään seuraavan kerran kun Rosegarden käynnistyy.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+87"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>HPLIP (Qt 4)</source>
         <translation></translation>
     </message>
@@ -14873,7 +14879,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-292"/>
+        <location line="-294"/>
         <source>Note name style</source>
         <translation>Nuottinimen tyyli</translation>
     </message>
@@ -14961,7 +14967,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <translation type="obsolete">KPDF (KDE 3.x)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Käytetään tuotetun LilyPond-tuotoksen esikatseluun</translation>
     </message>
@@ -16479,12 +16485,12 @@ sen sijaan?</translation>
         <translation>&lt;b&gt;lilypond&lt;/b&gt; aloitettiin...</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+118"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPond prosessoi tiedoston onnistuneesti, mutta &lt;b&gt;%1&lt;/b&gt; ei käynnistynyt!&lt;p&gt;&lt;p&gt;Ole hyvä ja määritä kelvollinen %2 kohdasta &lt;b&gt;Muokkaa -&gt; Asetukset... -&gt; Yleinen -&gt; Ulkoiset ohjelmat&lt;/b&gt; ja yritä uudelleen.&lt;p&gt;&lt;p&gt;Prosessointi päättyi vakaviin virheisiin.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-147"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ei voitu suorittaa komentoa &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond ja varmista että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla komentopolussa.  Jos suoritat &lt;b&gt;Suorita sovellus&lt;/b&gt; -toiminnon (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat laatikkoon &quot;convert-ly&quot;, ei pitäisi tulla virheilmoitusta.  Jos voit tehdä edellisen ilman virheilmoitusta, mutta näet silti tämän virheilmoituksen, ota yhteyttä &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; saadaksesi apua.&lt;/p&gt;&lt;p&gt;Käsittely keskeytetty vakavan virheen vuoksi&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -16519,7 +16525,7 @@ sen sijaan?</translation>
         <translation>&lt;qt&gt;&lt;p&gt;Käsittely keskeytetty vakavien virheiden vuoksi.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+57"/>
         <source>Printing %1...</source>
         <translation>Tulostetaan %1...</translation>
     </message>
@@ -20567,12 +20573,12 @@ Tiedostomuodossa voi olla joitain yhteensopimattomuuksia.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1014"/>
+        <location line="+1020"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2479"/>
+        <location line="-2485"/>
         <source>Could not save document at %1</source>
         <translation>Dokumenttia %1 ei voitu tallentaa</translation>
     </message>
@@ -20665,7 +20671,7 @@ Ole hyvä ja valitse haluamasi tiedostot poistaaksesi ne pysyvästi kovalevyltä
         <translation>Väliaikaisen tiedoston &apos;%1&apos; uudelleen nimeäminen halutuksi ulostulotiedostoksi &apos;%2&apos; epäonnistui</translation>
     </message>
     <message>
-        <location line="+1812"/>
+        <location line="+1818"/>
         <source>Warning</source>
         <translation type="unfinished">Varoitus</translation>
     </message>
@@ -20681,7 +20687,7 @@ Would you like to set it now?</source>
         <translation type="obsolete">Tiedoston tallennus...</translation>
     </message>
     <message>
-        <location line="-1626"/>
+        <location line="-1632"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Virhe kirjoitettaessa paikkaan &apos;%1&apos;</translation>
     </message>
@@ -20744,7 +20750,7 @@ Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla var
         <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Kanavat järjesteltiin uudestaan&lt;/h2&gt;&lt;p&gt;Versiosta 10.02 alkaen Rosegardenissa ei ole mahdollista määritellä kunkin MIDI-instrumentin kanavaa.  Sitävastoin jokainen instrumentti käyttää instumenttinumeron mukaista kanavaa.  Esimerkiksi &quot;MIDI-järjestelmälaite #12&quot; käyttää aina kanavaa 12.&lt;/p&gt;&lt;p&gt;Juuri lataamasi tiedosto sisälsi instrumentteja joiden kanava poikkesi instrumenttinumerosta.  Nämä kanavat on määritelty uudelleen siten että instrumentti #1 käyttää aina kanavaa 1 riippumatta siitä mitä kanavaa se käytti aikaisemmin.  Useimmissa tapauksissa et havaitse eroa, mutta saatat joutua tekemään pieniä muutoksia tähän tiedostoon jotta se soi aiotulla tavalla.  Suosittelemme että tallennat tämän tiedoston välttääksesi näkemästä tätä varoitusta tulevaisuudessa.&lt;/p&gt;&lt;p&gt;Olemme pahoillamme mahdollisesta vaivasta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+644"/>
+        <location line="+650"/>
         <source>Insert Recorded MIDI</source>
         <translation>Lisää nauhoitettu MIDI</translation>
     </message>
@@ -24218,7 +24224,7 @@ Ole hyvä ja aseta tiedostopoluksi kelvollinen hakemisto Asiakirjan ominaisuuksi
 Haluatko asettaa sen nyt?</translation>
     </message>
     <message>
-        <location line="+815"/>
+        <location line="+816"/>
         <source>Mute track</source>
         <translation>Vaienna raita</translation>
     </message>

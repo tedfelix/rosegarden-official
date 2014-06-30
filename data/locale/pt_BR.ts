@@ -380,7 +380,7 @@
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+58"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+702"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+707"/>
         <location filename="../AutoloadStrings.cpp" line="+39"/>
         <source>Audio</source>
         <translation>áudio</translation>
@@ -14589,44 +14589,40 @@ Gostaria de tentar localizar este arquivo ou ignorá-lo?</translation>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+72"/>
-        <location line="+64"/>
-        <location line="+27"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
+        <location line="+81"/>
+        <location line="+32"/>
         <source>Unsupported scheme in URL</source>
         <translation>Esquema não suportado na URL</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+220"/>
         <source>Downloading %1...</source>
         <translation>Descarregando %1...</translation>
     </message>
     <message>
-        <location line="+280"/>
         <source>Failed to connect to FTP server</source>
-        <translation>Falha na conexão com o servidor FTP</translation>
+        <translation type="obsolete">Falha na conexão com o servidor FTP</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Login failed</source>
-        <translation>Falha no login</translation>
+        <translation type="obsolete">Falha no login</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Failed to change to correct directory</source>
-        <translation>Falha ao mudar para o diretório correto</translation>
+        <translation type="obsolete">Falha ao mudar para o diretório correto</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation>Download FTP abortado</translation>
+        <translation type="obsolete">Download FTP abortado</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Download cancelado</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+27"/>
         <source>Failed to create local file %1</source>
         <translation>Falha ao criar arquivo local %1</translation>
     </message>
@@ -14701,7 +14697,7 @@ Gostaria de tentar localizar este arquivo ou ignorá-lo?</translation>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
         <source>General</source>
         <translation>Geral</translation>
     </message>
@@ -14909,6 +14905,16 @@ Gostaria de tentar localizar este arquivo ou ignorá-lo?</translation>
         <location line="+1"/>
         <source>Adobe Acrobat Reader (non-free)</source>
         <translation>Adobe Acrobat Reader (não-livre)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -16449,7 +16455,7 @@ Você gostaria de usar
         <translation>&lt;qt&gt;&lt;p&gt;Processamento encerrado devido a erros fatais.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+57"/>
         <source>Printing %1...</source>
         <translation>Imprimindo %1...</translation>
     </message>
@@ -20442,12 +20448,12 @@ Pode haver algumas incompatibilidades com o formato do arquivo.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1014"/>
+        <location line="+1020"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2481"/>
+        <location line="-2487"/>
         <source>Could not save document at %1
 (%2)</source>
         <translation>Não foi possível salvar o documento em %1
@@ -20606,7 +20612,7 @@ Suporte para esses elementos podem desaparecer em versões futuras do Rosegarden
 Nós recomendamos que você salve novamente o arquivo a partir desta versão do Rosegarden para garantir que ele ainda pode ser re-carregado em futuras versões.</translation>
     </message>
     <message>
-        <location line="+1214"/>
+        <location line="+1220"/>
         <source>Warning</source>
         <translation type="unfinished">Aviso</translation>
     </message>
@@ -24060,7 +24066,7 @@ Por favor, defina o caminho do arquivo de áudio para um diretório válido em P
 Gostaria de configurá-lo agora?</translation>
     </message>
     <message>
-        <location line="+815"/>
+        <location line="+816"/>
         <source>Mute track</source>
         <translation>Silenciar faixa</translation>
     </message>

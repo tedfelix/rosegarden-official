@@ -4495,7 +4495,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+58"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+702"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+707"/>
         <location filename="../AutoloadStrings.cpp" line="-700"/>
         <source>Audio</source>
         <translation>Звук</translation>
@@ -14453,44 +14453,40 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+72"/>
-        <location line="+64"/>
-        <location line="+27"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
+        <location line="+81"/>
+        <location line="+32"/>
         <source>Unsupported scheme in URL</source>
         <translation>Неподдерживаемая схема в URL</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+220"/>
         <source>Downloading %1...</source>
         <translation>Скачивается %1...</translation>
     </message>
     <message>
-        <location line="+280"/>
         <source>Failed to connect to FTP server</source>
-        <translation>Не удалось соединиться с сервером FTP</translation>
+        <translation type="obsolete">Не удалось соединиться с сервером FTP</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Login failed</source>
-        <translation>Не удалось авторизоваться</translation>
+        <translation type="obsolete">Не удалось авторизоваться</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Failed to change to correct directory</source>
-        <translation>Не удалось сменить каталог</translation>
+        <translation type="obsolete">Не удалось сменить каталог</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation>Скачивание с FTP прервано</translation>
+        <translation type="obsolete">Скачивание с FTP прервано</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Скачивание отменено</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+27"/>
         <source>Failed to create local file %1</source>
         <translation>Не удалось создать локальный файл %1</translation>
     </message>
@@ -14566,7 +14562,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
@@ -14741,7 +14737,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Показывать расположение файла в заголовке окна</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+43"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
@@ -14763,7 +14769,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-266"/>
+        <location line="-268"/>
         <source>Notation</source>
         <translation>Партитура</translation>
     </message>
@@ -14802,7 +14808,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="obsolete">KPDF (KDE 3.x)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Used to preview generated LilyPond output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16295,12 +16301,12 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+118"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-147"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16335,7 +16341,7 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+57"/>
         <source>Printing %1...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20356,12 +20362,12 @@ There may be some incompatibilities with the file format.</source>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1014"/>
+        <location line="+1020"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2479"/>
+        <location line="-2485"/>
         <source>Could not save document at %1</source>
         <translation>Не удалось сохранить документ в %1</translation>
     </message>
@@ -20456,7 +20462,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1812"/>
+        <location line="+1818"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
@@ -20474,7 +20480,7 @@ Would you like to set it now?</source>
         <translation type="obsolete">Сохраняется файл...</translation>
     </message>
     <message>
-        <location line="-1626"/>
+        <location line="-1632"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Ошибка при записи &quot;%1&quot;</translation>
     </message>
@@ -20535,7 +20541,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 программы.</translation>
     </message>
     <message>
-        <location line="+644"/>
+        <location line="+650"/>
         <source>Insert Recorded MIDI</source>
         <translation type="unfinished">Вставить записанное MIDI</translation>
     </message>
@@ -23976,7 +23982,7 @@ Would you like to set it now?</source>
 Хотите сделать это прямо сейчас?</translation>
     </message>
     <message>
-        <location line="+815"/>
+        <location line="+816"/>
         <source>Mute track</source>
         <translation>Приглушить дорожку</translation>
     </message>

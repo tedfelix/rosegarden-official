@@ -8426,7 +8426,7 @@
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+665"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+670"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+526"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
@@ -14479,44 +14479,40 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+72"/>
-        <location line="+64"/>
-        <location line="+27"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
+        <location line="+81"/>
+        <location line="+32"/>
         <source>Unsupported scheme in URL</source>
         <translation>Metod som inte stöds i webbadress</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+220"/>
         <source>Downloading %1...</source>
         <translation>Laddar ner %1...</translation>
     </message>
     <message>
-        <location line="+280"/>
         <source>Failed to connect to FTP server</source>
-        <translation>Misslyckades ansluta till FTP-server</translation>
+        <translation type="obsolete">Misslyckades ansluta till FTP-server</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Login failed</source>
-        <translation>Inloggning misslyckades</translation>
+        <translation type="obsolete">Inloggning misslyckades</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Failed to change to correct directory</source>
-        <translation>Misslyckades byta till rätt katalog</translation>
+        <translation type="obsolete">Misslyckades byta till rätt katalog</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>FTP download aborted</source>
-        <translation>Nerladdning med FTP avbruten</translation>
+        <translation type="obsolete">Nerladdning med FTP avbruten</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Nerladdning avbruten</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+27"/>
         <source>Failed to create local file %1</source>
         <translation>Misslyckades skapa lokal fil %1</translation>
     </message>
@@ -14591,7 +14587,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
         <source>General</source>
         <translation>Allmänt</translation>
     </message>
@@ -14726,7 +14722,17 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Visa fullständig sökväg i namnlister</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+43"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
@@ -14748,7 +14754,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Du måste starta om Rosegarden för att ändringen av utseendet ska få effekt.</translation>
     </message>
     <message>
-        <location line="-292"/>
+        <location line="-294"/>
         <source>Note name style</source>
         <translation>Stil för notnamn</translation>
     </message>
@@ -14827,7 +14833,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation type="obsolete">KPDF (KDE 3.x)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Används för att förhandsgranska utdata skapad av Lilypond</translation>
     </message>
@@ -16319,12 +16325,12 @@ Vill du använda
         <translation>&lt;b&gt;lilypond&lt;/b&gt; startat...</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+118"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Lilypond behandlade filen med lyckat resultat, men &lt;b&gt;%1&lt;/b&gt; kördes inte.&lt;/p&gt;&lt;p&gt;Ställ in giltig %2 med &lt;b&gt;Redigera -&gt; Inställningar -&gt; Allmänt -&gt; Externa program&lt;/b&gt; och försök igen.&lt;/p&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-147"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Kunde inte köra &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Installera Lilypond och försäkra dig om att kommandona &quot;convert-ly&quot; och &quot;lilypond&quot; är tillgängliga i sökvägen. Om du startar &lt;b&gt;Kör kommando&lt;/b&gt; (normalt &lt;b&gt;Alt+F2&lt;/b&gt;) och skriver in &quot;convert-ly&quot; i rutan, ska du inte få felet &quot;kommandot hittades inte&quot;. Om du kan göra det utan att få ett fel, men ändå får detta felmeddelande, kontakta &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; för ytterligare hjälp.&lt;/p&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -16359,7 +16365,7 @@ Vill du använda
         <translation>&lt;qt&gt;&lt;p&gt;Behandling avslutad på grund av allvarliga fel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+57"/>
         <source>Printing %1...</source>
         <translation>Skriver ut %1...</translation>
     </message>
@@ -20391,12 +20397,12 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1014"/>
+        <location line="+1020"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2479"/>
+        <location line="-2485"/>
         <source>Could not save document at %1</source>
         <translation>Kunde inte spara dokument i %1</translation>
     </message>
@@ -20489,7 +20495,7 @@ Välj alla du vill ta bort permanent från hårddisken.
         <translation>Misslyckades byta namn på tillfällig utdatafil &apos;%1&apos; till den önskade utdatafilen &apos;%2&apos;</translation>
     </message>
     <message>
-        <location line="+1812"/>
+        <location line="+1818"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -20507,7 +20513,7 @@ Vill du ställa in den nu?</translation>
         <translation type="obsolete">Sparar fil...</translation>
     </message>
     <message>
-        <location line="-1626"/>
+        <location line="-1632"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fel vid skrivning till &apos;%1&apos;</translation>
     </message>
@@ -20571,7 +20577,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Kanalernas avbildning har ändrats&lt;/h2&gt;&lt;p&gt;Från och med version 10.02 tillhandahåller inte Rosegarden längre kontroller för att ändra kanalen som hör ihop med varje MIDI-instrument. Istället använder varje instrument samma kanal som sitt instrumentnummer. Exempelvis använder alltid &quot;MIDI-systemingångsenhet 12&quot; kanal 12.&lt;/p&gt;&lt;p&gt;Filen du just har läst in innehåller instrument vars kanaler skiljer sig från instrumentnumren. Tilldelningen av dessa kanaler har ändrats så att instrument 1 alltid använder kanal 1, oberoende av vilken kanal det tidigare kan ha använt. I de flesta fall kommer du inte att märka någon skillnad, men du kanske måste göra några små ändringar av filen för att den ska spelas upp som avsett. Vi rekommenderar att du sparar filen för att undvika den här varningen i fortsättningen.&lt;/p&gt;&lt;p&gt;Vi ber om ursäkt för alla eventuella olägenheter.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+644"/>
+        <location line="+650"/>
         <source>Insert Recorded MIDI</source>
         <translation>Infoga inspelad MIDI</translation>
     </message>
@@ -24022,7 +24028,7 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <location line="+815"/>
+        <location line="+816"/>
         <source>Mute track</source>
         <translation>Gör spår stumt</translation>
     </message>

@@ -359,14 +359,14 @@
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="58"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="702"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="707"/>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="61"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="665"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="670"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="526"/>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>Synth plugin</source>
@@ -14292,49 +14292,29 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="72"/>
-        <location filename="../../src/gui/general/FileSource.cpp" line="136"/>
-        <location filename="../../src/gui/general/FileSource.cpp" line="163"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="107"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="188"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="220"/>
         <source>Unsupported scheme in URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="304"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="440"/>
         <source>Downloading %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="584"/>
-        <source>Failed to connect to FTP server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="586"/>
-        <source>Login failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="588"/>
-        <source>Failed to change to correct directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="590"/>
-        <source>FTP download aborted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="610"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="732"/>
         <source>Download cancelled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="641"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="759"/>
         <source>Failed to create local file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="644"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="762"/>
         <source>File contains no data!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14404,12 +14384,12 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="90"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="92"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="91"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="93"/>
         <source>General Configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14615,63 +14595,73 @@ Would you like to try and locate this file or skip it?</source>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="349"/>
+        <source>MuPDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="350"/>
+        <source>ePDFView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="351"/>
         <source>Used to preview generated LilyPond output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="354"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="356"/>
         <source>Command-line file printing utility</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="359"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="361"/>
         <source>Gtk-LP (GNOME)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="360"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
         <source>lpr (no GUI)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="361"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="363"/>
         <source>lp (no GUI)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="364"/>
         <source>HPLIP (Qt 4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="363"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="365"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="382"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="384"/>
         <source>External Applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="550"/>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="554"/>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="558"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="552"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="556"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="560"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="550"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="552"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="554"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="556"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="558"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="560"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16137,32 +16127,32 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="257"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="258"/>
         <source>Printing %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="266"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="267"/>
         <source>Previewing %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="273"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="274"/>
         <source>&lt;b&gt;%1&lt;/b&gt; started...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
         <source>file printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
         <source>PDF viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20068,7 +20058,7 @@ There may be some incompatibilities with the file format.</source>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1791"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1820"/>
         <location filename="../../src/document/RosegardenDocument.cpp" line="1833"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2847"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2853"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20221,30 +20211,30 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="3042"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="3048"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="3043"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="3049"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2472"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2478"/>
         <source>Insert Recorded MIDI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2599"/>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2683"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2605"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2689"/>
         <source>(recorded)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="2832"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="2838"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23611,12 +23601,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1009"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1010"/>
         <source>Mute track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1027"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1028"/>
         <source>Record on this track</source>
         <translation type="unfinished"></translation>
     </message>
