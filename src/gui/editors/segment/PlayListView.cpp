@@ -91,7 +91,7 @@ void PlayListView::mousePressEvent ( QMouseEvent * event ){
 */
 void PlayListView::dragEnterEvent ( QDragEnterEvent * e ){
     
-    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+    if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
 
         if (e->proposedAction() & Qt::CopyAction) {
             e->acceptProposedAction();
@@ -148,10 +148,11 @@ QStringList PlayListView::mimeTypes() const{
 
 void PlayListView::dropEvent(QDropEvent* e)
 {
+    QList<QUrl> uList;
     QStringList uriList;
     QString text;
 
-    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+    if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
         
         // if (drag-source == this)  (or a child item) disallow drop
         if( e->source() && ((e->source() == this) || (e->source()->parent() && (e->source()->parent() == this )))){
@@ -167,12 +168,15 @@ void PlayListView::dropEvent(QDropEvent* e)
             e->accept();
         }
 
-        if (e->provides("text/uri-list")) {
-            uriList = QString::fromLocal8Bit(
-                        e->encodedData("text/uri-list").data()
-                    ).split( QRegExp("[\\r\\n]+"), QString::SkipEmptyParts );
+        if (e->mimeData()->hasUrls()) {
+            uList = e->mimeData()->urls();
+            if (!uList.isEmpty()) {
+                for (int i = 0; i < uList.size(); ++i)  {
+                    uriList.append(QString::fromLocal8Bit(uList.value(i).toEncoded().data()));
+               }
+            }
         } else {
-            text = QString::fromLocal8Bit(e->encodedData("text/plain").data());
+            text = e->mimeData()->text();
         }
     } else {
         e->ignore();
