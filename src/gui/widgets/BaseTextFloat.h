@@ -117,6 +117,10 @@ protected :
     // Position of top left corner of the parent widget relative to the
     // top left corner of either top level or dialog window. 
     QPoint   m_totalPos;
+
+    // Width and height of text-bounding rectangle.
+    int m_width;
+    int m_height;
 };
 
 }

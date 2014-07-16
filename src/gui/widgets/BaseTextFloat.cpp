@@ -42,7 +42,9 @@ BaseTextFloat::BaseTextFloat(QWidget *parent) :
     m_text(""),
     m_timer(0),
     m_widget(parent),
-    m_totalPos(QPoint(0, 0))
+    m_totalPos(QPoint(0, 0)),
+    m_width(20),
+    m_height(20)
 {
     if (parent) reparent(parent);
     resize(20, 20);
@@ -96,35 +98,31 @@ BaseTextFloat::paintEvent(QPaintEvent *e)
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalized());
 
-//    paint.setPen(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
-    paint.setPen(Qt::black);
-
     paint.setPen(GUIPalette::getColour(GUIPalette::RotaryFloatForeground));
     paint.setBrush(GUIPalette::getColour(GUIPalette::RotaryFloatBackground));
 
-    QFontMetrics metrics(paint.fontMetrics());
-
-    QRect r = metrics.boundingRect(0, 0, 400, 400, Qt::AlignLeft, m_text);
-    resize(r.width() + 7, r.height() + 7);
-    paint.drawRect(0, 0, r.width() + 6, r.height() + 6);
+    paint.drawRect(0, 0, m_width + 6, m_height + 6);
     paint.setPen(QColor(Qt::black));
-    paint.drawText(QRect(3, 3, r.width(), r.height()), Qt::AlignLeft, m_text);
-
-    /*
-        QRect textBound = metrics.boundingRect(m_text);
-
-        resize(textBound.width() + 7, textBound.height() + 7);
-        paint.drawRect(0, 0, textBound.width() + 6, textBound.height() + 6);
-
-        paint.setPen(QColor(Qt::black));
-        paint.drawText(3, textBound.height() + 3, m_text);
-    */
+    paint.drawText(QRect(3, 3, m_width, m_height), Qt::AlignLeft, m_text);
 }
 
 void
 BaseTextFloat::setText(const QString &text)
 {
+    if (QString::compare(text, m_text) == 0) return;
+
     m_text = text;
+
+    // Get the dimensions of the text-bounding rectangle and resize the widget.
+    // With Qt5, attempting to resize within the paintEvent function causes a crash.
+    QFont font(this->font());
+    QFontMetrics metrics(font);
+    QRect r = metrics.boundingRect(0, 0, 400, 400, Qt::AlignLeft, m_text);
+    m_width = r.width();
+    m_height = r.height();
+
+    resize(m_width + 7, m_height + 7);
+
     update();
 }
 
