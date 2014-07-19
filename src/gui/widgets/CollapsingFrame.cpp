@@ -116,7 +116,7 @@ CollapsingFrame::toggle()
 
     m_collapsed = !m_collapsed;
 
-    m_widget->setShown(!m_collapsed);
+    m_widget->setVisible(!m_collapsed);
 
     QPixmap pixmap;
 
