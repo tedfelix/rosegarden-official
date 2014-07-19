@@ -130,7 +130,7 @@ FileDialog::getOpenFileName(QWidget *parent,
 
     if (dialog.exec() == QDialog::Accepted) {
         if (selectedFilter)
-            *selectedFilter = dialog.selectedFilter();
+            *selectedFilter = dialog.selectedNameFilter();
         return dialog.selectedFiles().value(0);
     }
 
@@ -169,7 +169,7 @@ FileDialog::getOpenFileNames(QWidget *parent,
 
     if (dialog.exec() == QDialog::Accepted) {
         if (selectedFilter)
-            *selectedFilter = dialog.selectedFilter();
+            *selectedFilter = dialog.selectedNameFilter();
         return dialog.selectedFiles();
     }
 
@@ -212,7 +212,7 @@ FileDialog::getSaveFileName(QWidget *parent,
 
     if (dialog.exec() == QDialog::Accepted) {
         if (selectedFilter)
-            *selectedFilter = dialog.selectedFilter();
+            *selectedFilter = dialog.selectedNameFilter();
         return dialog.selectedFiles().value(0);
     }
 
