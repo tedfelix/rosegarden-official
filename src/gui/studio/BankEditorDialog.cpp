@@ -67,6 +67,9 @@
 #include <QHBoxLayout>
 #include <QShortcut>
 #include <QDesktopServices>
+#if QT_VERSION >= 0x050000
+#include <QStandardPaths>
+#endif
 #include <QDialogButtonBox>
 #include <QSettings>
 
@@ -1554,7 +1557,11 @@ BankEditorDialog::addCommandToHistory(Command *command)
 void
 BankEditorDialog::slotImport()
 {
+#if QT_VERSION >= 0x050000
+    QString home = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).path();
+#else
     QString home = QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).path();
+#endif
     QString deviceDir = home + "/.local/share/rosegarden/library";
 
     QString url_str = FileDialog::getOpenFileName(this, tr("Import Banks from Device in File"), deviceDir,
