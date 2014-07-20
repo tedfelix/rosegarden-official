@@ -35,10 +35,10 @@ namespace Rosegarden
 {
 
 StartupTester::StartupTester() :
-    m_proc(NULL),
+//    m_proc(NULL),
     m_ready(false),
-    m_haveAudioFileImporter(false),
-    m_versionHttpFailed(false)
+    m_haveAudioFileImporter(false)
+//    m_versionHttpFailed(false)
 {
     QUrl url;
     url.setScheme("http");
@@ -82,6 +82,7 @@ StartupTester::isReady()
     return true;
 }
 
+#if 0
 void
 StartupTester::stdoutReceived()
 {
@@ -96,6 +97,7 @@ StartupTester::parseStdoutBuffer(QStringList &target)
         target = re.cap(1).split(", ");
     }
 }
+#endif
 
 bool
 StartupTester::haveAudioFileImporter(QStringList *missing)
@@ -139,7 +141,7 @@ StartupTester::slotNetworkFinished(QNetworkReply *reply)
     network->deleteLater();
 
     if (reply->error() != QNetworkReply::NoError) {
-        m_versionHttpFailed = true;
+//        m_versionHttpFailed = true;
         std::cerr << "StartupTester::slotNetworkFinished(): Connection failed: " << reply->errorString() << std::endl;
         return;
     }

@@ -51,20 +51,20 @@ signals:
     void newerVersionAvailable(QString);
 
 protected slots:
-    void stdoutReceived();
+//    void stdoutReceived();
     void slotNetworkFinished(QNetworkReply*);
 
 protected:
-    QProcess* m_proc;
+//    QProcess* m_proc;
     bool m_ready;
     QMutex m_audioFileImporterMutex;
     bool m_haveAudioFileImporter;
     QStringList m_audioFileImporterMissing;
     QMutex m_runningMutex;
     QNetworkAccessManager *network;
-    QByteArray m_stdoutBuffer;
-    bool m_versionHttpFailed;
-    void parseStdoutBuffer(QStringList &target);
+//    QByteArray m_stdoutBuffer;
+//    bool m_versionHttpFailed;
+//    void parseStdoutBuffer(QStringList &target);
     bool isVersionNewerThan(QString, QString);
 };
 
