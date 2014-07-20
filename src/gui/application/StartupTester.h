@@ -23,8 +23,9 @@
 #include <QThread>
 #include <QStringList>
 #include <QObject>
-#include <QHttp>
 
+class QNetworkReply;
+class QNetworkAccessManager;
 class QProcess;
 
 namespace Rosegarden
@@ -37,11 +38,11 @@ class StartupTester : public QThread
 public:
     StartupTester();
     virtual ~StartupTester();
-    
+
     virtual void run();
 
     bool isReady();
-    
+
     // If you call one of these methods before the startup test has
     // completed in the background, then it will block.
     bool haveAudioFileImporter(QStringList *missingApplications);
@@ -51,9 +52,7 @@ signals:
 
 protected slots:
     void stdoutReceived();
-
-    void slotHttpResponseHeaderReceived(const QHttpResponseHeader &);
-    void slotHttpDone(bool);
+    void slotNetworkFinished(QNetworkReply*);
 
 protected:
     QProcess* m_proc;
@@ -62,6 +61,7 @@ protected:
     bool m_haveAudioFileImporter;
     QStringList m_audioFileImporterMissing;
     QMutex m_runningMutex;
+    QNetworkAccessManager *network;
     QByteArray m_stdoutBuffer;
     bool m_versionHttpFailed;
     void parseStdoutBuffer(QStringList &target);

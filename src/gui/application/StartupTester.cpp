@@ -23,6 +23,8 @@
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/editors/notation/NoteFontFactory.h"
 
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QProcess>
 #include <QMutex>
 #include <QThread>
@@ -33,17 +35,22 @@ namespace Rosegarden
 {
 
 StartupTester::StartupTester() :
+    m_proc(NULL),
     m_ready(false),
-    m_haveAudioFileImporter(false)
+    m_haveAudioFileImporter(false),
+    m_versionHttpFailed(false)
 {
-    QHttp *http = new QHttp();
-    connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-            this, SLOT(slotHttpResponseHeaderReceived(const QHttpResponseHeader &)));
-    connect(http, SIGNAL(done(bool)),
-            this, SLOT(slotHttpDone(bool)));
-    m_versionHttpFailed = false;
-    http->setHost("www.rosegardenmusic.com");
-    http->get("/latest-version.txt");
+    QUrl url;
+    url.setScheme("http");
+    url.setHost("www.rosegardenmusic.com");
+    url.setPath("/latest-version.txt");
+
+    network = new QNetworkAccessManager(this);
+    network->get(QNetworkRequest(url));
+    std::cerr << "StartupTester::StartupTester(): URL: " << url.toString() << std::endl;
+
+    connect(network, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotNetworkFinished(QNetworkReply*)));
 }
 
 StartupTester::~StartupTester()
@@ -126,26 +133,24 @@ StartupTester::isVersionNewerThan(QString a, QString b)
 }
 
 void
-StartupTester::slotHttpResponseHeaderReceived(const QHttpResponseHeader &h)
+StartupTester::slotNetworkFinished(QNetworkReply *reply)
 {
-    if (h.statusCode() / 100 != 2) m_versionHttpFailed = true;
-}
+    reply->deleteLater();
+    network->deleteLater();
 
-void
-StartupTester::slotHttpDone(bool error)
-{
-    QHttp *http = const_cast<QHttp *>(dynamic_cast<const QHttp *>(sender()));
-    if (!http) return;
-    http->deleteLater();
-    if (error) return;
+    if (reply->error() != QNetworkReply::NoError) {
+        m_versionHttpFailed = true;
+        std::cerr << "StartupTester::slotNetworkFinished(): Connection failed: " << reply->errorString() << std::endl;
+        return;
+    }
 
-    QByteArray responseData = http->readAll();
+    QByteArray responseData = reply->readAll();
     QString str = QString::fromUtf8(responseData.data());
     QStringList lines = str.split('\n', QString::SkipEmptyParts);
     if (lines.empty()) return;
 
     QString latestVersion = lines[0];
-    std::cerr << "Comparing current version \"" << VERSION
+    std::cerr << "StartupTester::slotNetworkFinished(): Comparing current version \"" << VERSION
               << "\" with latest version \"" << latestVersion << "\""
               << std::endl;
     if (isVersionNewerThan(latestVersion, VERSION)) {
