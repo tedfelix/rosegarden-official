@@ -783,7 +783,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
         if (m_accidental != Accidentals::NoAccidental)
             m_event->set<String>(ACCIDENTAL, m_accidental);
     } else if (m_currentElement == "step") {
-        m_step = m_characters.toUpper().at(0).toAscii();
+        m_step = m_characters.toUpper().at(0).toLatin1();
     } else if (m_currentElement == "alter") {
         // Although a floating point value is acceptable, the only
         // valid non-integer values are -1.5, -0.5, 0.5, 1.5.  So some
