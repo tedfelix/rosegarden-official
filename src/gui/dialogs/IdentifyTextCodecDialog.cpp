@@ -146,9 +146,9 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
 //        std::cerr << "codec " << codec->name().data() << " mib " << mib << " preserves " << preserves << std::endl;
 
         QStringList names;
-        names.push_back(QString::fromAscii(codec->name()));
+        names.push_back(QString::fromLatin1(codec->name()));
         foreach (QByteArray ba, codec->aliases()) {
-            names.push_back(QString::fromAscii(ba));
+            names.push_back(QString::fromLatin1(ba));
         }
 
         QString goodName;
@@ -187,7 +187,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         }
 
         if (goodName == "") {
-            goodName = QString::fromAscii(codec->name());
+            goodName = QString::fromLatin1(codec->name());
         }
 
         if (description != "") {
@@ -231,7 +231,7 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
 QString
 IdentifyTextCodecDialog::getExampleText()
 {
-    QTextCodec *codec = QTextCodec::codecForName(m_codec.toAscii());
+    QTextCodec *codec = QTextCodec::codecForName(m_codec.toLatin1());
     if (!codec) return "";
 //    std::cerr << "codec->name() returns " << codec->name().data() << std::endl;
 
