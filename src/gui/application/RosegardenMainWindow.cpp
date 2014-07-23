@@ -1865,7 +1865,9 @@ RosegardenMainWindow::queryClose()
     RG_DEBUG << "SETTING 1 : show track labels = " << findAction("show_tracklabels")->isChecked();
 #endif
 
-    QString errMsg;
+    // If we are recording, don't let the user close.
+    if (m_seqManager->getTransportStatus() == RECORDING)
+        return false;
 
     bool canClose = m_doc->saveIfModified();
 
