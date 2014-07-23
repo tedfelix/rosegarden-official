@@ -188,7 +188,6 @@ AudioConfigurationPage::AudioConfigurationPage(
     connect(m_connectDefaultAudioInputs, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_connectDefaultAudioInputs->setChecked(qStrToBool(settings.value("connect_default_jack_inputs", "true")));
     layout->addWidget(m_connectDefaultAudioInputs, row, 1);
-    settings.endGroup();
     ++row;
 
     layout->addWidget(new QLabel(tr("Start JACK automatically"),frame), row, 0);
@@ -197,6 +196,8 @@ AudioConfigurationPage::AudioConfigurationPage(
     m_autoStartJackServer->setChecked(settings.value("autostartjack", "true").toBool());
     layout->addWidget(m_autoStartJackServer, row, 1);
     ++row;
+
+    settings.endGroup();
 #endif
 
     layout->setRowStretch(row, 10);
