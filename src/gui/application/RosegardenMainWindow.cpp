@@ -1858,34 +1858,12 @@ RosegardenMainWindow::showEvent(QShowEvent*)
 bool
 RosegardenMainWindow::queryClose()
 {
-    RG_DEBUG << "RosegardenMainWindow::queryClose" << endl;
-
-#ifdef SETTING_LOG_DEBUG
-    RG_DEBUG << "SETTING 1 : transport flap extended = " << getTransport()->isExpanded();
-    RG_DEBUG << "SETTING 1 : show track labels = " << findAction("show_tracklabels")->isChecked();
-#endif
-
     // If we are recording, don't let the user close.
     if (m_seqManager->getTransportStatus() == RECORDING)
         return false;
 
-    bool canClose = m_doc->saveIfModified();
-
-    /*
-    if (canClose && m_transport) {
-
-        // or else the closing of the transport will toggle off the 
-        // 'view transport' action, and its state will be saved as 
-        // 'off'
-        //
-
-        disconnect(m_transport, SIGNAL(closed()),
-                   this, SLOT(slotCloseTransport()));
-    }
-    */
-
-    return canClose;
-
+    // Let the user save any unsaved changes.
+    return m_doc->saveIfModified();
 }
 
 void
