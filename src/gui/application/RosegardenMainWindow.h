@@ -1510,8 +1510,8 @@ public slots:
     void slotAudioManagerClosed();
 
     /**
-     * Update the monitor levels from the sequencer mmapped file when not playing
-     * (slotUpdatePlaybackPosition does this among other things when playing)
+     * Update the monitor levels from the sequencer mmapped file when not
+     * playing.  Called by slotUpdateUI().
      */
     void slotUpdateMonitoring();
 
@@ -1716,16 +1716,6 @@ private:
 
     static std::map<QProcess *, QTemporaryFile *> m_lilyTempFileMap;
 
-    // Used to fetch the current sequencer position from the mmapped sequencer
-    // information file.
-    // Runs when playing or recording.  Drives slotUpdatePlaybackPosition()
-    // and slotCheckTransportStatus().
-//    QTimer *m_playTimer;
-
-    // Runs when the sequence is stopped.  Drives slotUpdateMonitoring() and
-    // slotCheckTransportStatus().
-//    QTimer *m_stopTimer;
-
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
 
@@ -1760,13 +1750,6 @@ private:
 
 private slots:
     void signalAction(int);
-
-    /**
-     * Update the pointer position from the sequencer mmapped file when playing
-     */
-//    void slotUpdatePlaybackPosition();
-
-//    void slotCheckTransportStatus();
 
     // New routines to handle inputs and UI updates
     void slotHandleInputs();
