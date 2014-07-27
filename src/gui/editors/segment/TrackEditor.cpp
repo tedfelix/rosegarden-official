@@ -499,10 +499,33 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
 
 void TrackEditor::slotDeleteTracks(std::vector<TrackId> tracks)
 {
-    Composition &comp = m_doc->getComposition();
+    MacroCommand *macro = new MacroCommand(tr("Delete Tracks"));
 
-    DeleteTracksCommand* command = new DeleteTracksCommand(&comp, tracks);
-    addCommandToHistory(command);
+    Composition &comp = m_doc->getComposition();
+    const segmentcontainer &segments = comp.getSegments();
+
+    // Delete the segments.
+
+    // for each track we are deleting
+    for (size_t i = 0; i < tracks.size(); ++i) {
+        TrackId trackId = tracks[i];
+
+        // for each segment in the composition
+        for (segmentcontainer::const_iterator j = segments.begin();
+             j != segments.end();
+             ++j) {
+            // if this segment is in the track
+            if ((*j)->getTrack() == trackId) {
+                macro->addCommand(new SegmentEraseCommand(
+                        *j, &m_doc->getAudioFileManager()));
+            }
+        }
+    }
+
+    // Delete the tracks.
+    macro->addCommand(new DeleteTracksCommand(&comp, tracks));
+
+    addCommandToHistory(macro);
 }
 
 void TrackEditor::addSegment(int track, int time, unsigned int duration)
@@ -683,7 +706,7 @@ TrackEditor::slotScrollToTrack(int track)
 void
 TrackEditor::slotDeleteSelectedSegments()
 {
-    MacroCommand *macro = new MacroCommand("Delete Segments");
+    MacroCommand *macro = new MacroCommand(tr("Delete Segments"));
 
     SegmentSelection segments =
         m_compositionView->getSelectedSegments();

@@ -3753,34 +3753,12 @@ RosegardenMainWindow::slotDeleteTrack()
     TrackId trackId = comp.getSelectedTrack();
     Track *track = comp.getTrackById(trackId);
 
-    //RG_DEBUG << "RosegardenMainWindow::slotDeleteTrack() : about to delete track id " << trackId;
-
     if (track == 0)
         return ;
 
-    // Always have at least one track in a composition
-    //
+    // Don't let the user delete the last track.
     if (comp.getNbTracks() == 1)
         return ;
-
-    // Delete the segments on the selected tracks.
-    // VLADA
-    if (m_view->haveSelection()) {
-
-        // ??? If this will work fine when there is no selection, we
-        //     can get rid of the if and the else and just do these
-        //     four lines.  Try it sometime and see if it works.
-        SegmentSelection selection = m_view->getSelection();
-        m_view->slotSelectTrackSegments(trackId);
-        m_view->getTrackEditor()->slotDeleteSelectedSegments();
-        m_view->slotPropagateSegmentSelection(selection);
-
-    } else {
-
-        m_view->slotSelectTrackSegments(trackId);
-        m_view->getTrackEditor()->slotDeleteSelectedSegments();
-    }
-    //VLADA
 
     int position = track->getPosition();
 

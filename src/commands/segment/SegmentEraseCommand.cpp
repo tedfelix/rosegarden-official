@@ -98,6 +98,7 @@ SegmentEraseCommand::unexecute()
         // by the user.  Re-add it.
         // (When some parts of a system use the command history and others
         // don't (AudioFileManager), expect evil kludges such as this.)
+        // In my testing, the audio file no longer plays after this.
         if (id == -1)
             id = (int)m_mgr->addFile(m_audioFileName);
 

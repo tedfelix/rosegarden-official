@@ -67,6 +67,15 @@ void DeleteTracksCommand::execute()
         Track *track = m_composition->getTrackById(trackId);
 
         if (track) {
+            // ??? The following segment removal code will never find any
+            //     segments to remove.  All clients of this class make sure
+            //     the segments are removed before the tracks are removed.
+            //     This code should be removed and replaced with a check to
+            //     make sure that the segments have been removed before
+            //     removing the tracks.  Segment removal is a bit tricky
+            //     for audio segments.  We should limit the kludge to
+            //     SegmentEraseCommand.
+
             // For each segment in the composition.
             for (segmentcontainer::const_iterator j = segments.begin();
                  j != segments.end();
@@ -138,10 +147,6 @@ void DeleteTracksCommand::unexecute()
         // From the back we shift the track positions in the composition
         // to allow the new (old) track some space to come back in.
 
-        // ??? There's no need to do this in reverse.  Doing this forward will
-        //     work just as well.  We are visiting every single track in the
-        //     Composition either way.
-
         Composition::trackiterator compTrackIter = tracks.end();
         while (true) {
             --compTrackIter;
@@ -165,6 +170,8 @@ void DeleteTracksCommand::unexecute()
     }
 
     // Add the old segments back in.
+    // ??? This is not good enough for audio segments.  See
+    //     SegmentEraseCommand::unexecute().
     for (size_t i = 0; i < m_oldSegments.size(); ++i)
         m_composition->addSegment(m_oldSegments[i]);
 
