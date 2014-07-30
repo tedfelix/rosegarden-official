@@ -19,7 +19,6 @@
 
 #include "InstrumentParameterBox.h"
 
-
 #include "misc/Debug.h"
 #include "AudioInstrumentParameterPanel.h"
 #include "base/Instrument.h"
@@ -29,18 +28,17 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 
-#include <QTabWidget>
-#include <QFont>
 #include <QFrame>
-#include <QScrollArea>
 #include <QString>
-#include <QWidget>
 #include <QStackedWidget>
 #include <QLayout>
 
 
 namespace Rosegarden
 {
+
+
+InstrumentParameterBox::IPBVector InstrumentParameterBox::m_instrumentParamBoxes;
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
@@ -64,15 +62,14 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
 
     bool contains = false;
 
-    std::vector<InstrumentParameterBox*>::iterator it =
-        instrumentParamBoxes.begin();
+    IPBVector::iterator it = m_instrumentParamBoxes.begin();
 
-    for (; it != instrumentParamBoxes.end(); ++it)
+    for (; it != m_instrumentParamBoxes.end(); ++it)
         if ((*it) == this)
             contains = true;
 
     if (!contains)
-        instrumentParamBoxes.push_back(this);
+        m_instrumentParamBoxes.push_back(this);
 
     m_widgetStack->addWidget(m_midiInstrumentParameters);
     m_widgetStack->addWidget(m_audioInstrumentParameters);
@@ -114,7 +111,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
 
     // Layout the groups left to right.
 
-    QBoxLayout* layout = new QVBoxLayout(this);
+    QBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
     layout->setMargin(0);
     layout->addWidget(m_widgetStack);
@@ -124,12 +121,11 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
 InstrumentParameterBox::~InstrumentParameterBox()
 {
     // deregister this parameter box
-    std::vector<InstrumentParameterBox*>::iterator it =
-        instrumentParamBoxes.begin();
+    IPBVector::iterator it = m_instrumentParamBoxes.begin();
 
-    for (; it != instrumentParamBoxes.end(); ++it) {
+    for (; it != m_instrumentParamBoxes.end(); ++it) {
         if ((*it) == this) {
-            instrumentParamBoxes.erase(it);
+            m_instrumentParamBoxes.erase(it);
             break;
         }
     }
@@ -165,7 +161,7 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 }
 
 void
-InstrumentParameterBox::setDocument(RosegardenDocument* doc)
+InstrumentParameterBox::setDocument(RosegardenDocument *doc)
 {
     m_doc = doc;
     m_midiInstrumentParameters->setDocument(m_doc);
@@ -227,12 +223,11 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 {
     emit instrumentPercussionSetChanged(getSelectedInstrument());
 
-    std::vector<InstrumentParameterBox*>::iterator it =
-        instrumentParamBoxes.begin();
+    IPBVector::iterator it = m_instrumentParamBoxes.begin();
 
     // To update all open IPBs
     //
-    for (; it != instrumentParamBoxes.end(); ++it) {
+    for (; it != m_instrumentParamBoxes.end(); ++it) {
         if ((*it) != this && getSelectedInstrument() &&
             (*it)->getSelectedInstrument() == getSelectedInstrument())
             (*it)->useInstrument(getSelectedInstrument());
@@ -242,12 +237,11 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 void
 InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 {
-    std::vector<InstrumentParameterBox*>::iterator it =
-        instrumentParamBoxes.begin();
+    IPBVector::iterator it = m_instrumentParamBoxes.begin();
 
     blockSignals(true);
 
-    for (; it != instrumentParamBoxes.end(); ++it) {
+    for (; it != m_instrumentParamBoxes.end(); ++it) {
         if ((*it)->getSelectedInstrument()) {
             if ((*it)->getSelectedInstrument()->getId() == id) {
                 (*it)->useInstrument((*it)->getSelectedInstrument()); // refresh
@@ -265,5 +259,7 @@ InstrumentParameterBox::showAdditionalControls(bool showThem)
     m_lastShowAdditionalControlsArg = showThem;
 }
 
+
 }
+
 #include "InstrumentParameterBox.moc"

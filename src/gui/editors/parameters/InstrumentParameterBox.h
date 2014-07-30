@@ -20,15 +20,12 @@
 #define RG_INSTRUMENTPARAMETERBOX_H
 
 #include "base/MidiProgram.h"
-#include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
+
 #include <QString>
 #include <vector>
 
-#include <QStackedWidget>
-
-
-//class QWidgetStack;
+class QStackedWidget;
 class QWidget;
 class QFrame;
 
@@ -42,9 +39,7 @@ class Instrument;
 class AudioInstrumentParameterPanel;
 
 
-/**
- * Display and allow modification of Instrument parameters
- */
+/// Display and allow modification of Instrument parameters
 class InstrumentParameterBox : public RosegardenParameterBox
 {
 Q_OBJECT
@@ -56,19 +51,19 @@ public:
 
     void useInstrument(Instrument *instrument);
 
-    Instrument* getSelectedInstrument();
+    Instrument *getSelectedInstrument();
 
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
 
-    void setDocument(RosegardenDocument* doc);
-    
-    MIDIInstrumentParameterPanel * getMIDIInstrumentParameterPanel();
-    
+    void setDocument(RosegardenDocument *doc);
+
+    MIDIInstrumentParameterPanel *getMIDIInstrumentParameterPanel();
+
     virtual void showAdditionalControls(bool showThem);
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
-    
+
 
 public slots:
 
@@ -91,13 +86,13 @@ signals:
 
     void changeInstrumentLabel(InstrumentId id, QString label);
 
-    void selectPlugin(QWidget*, InstrumentId id, int index);
+    void selectPlugin(QWidget *, InstrumentId id, int index);
     void showPluginGUI(InstrumentId id, int index);
 
     void instrumentParametersChanged(InstrumentId);
     void instrumentPercussionSetChanged(Instrument *);
 
-protected:
+private:
 
     //--------------- Data members ---------------------------------
     QStackedWidget                  *m_widgetStack;
@@ -110,13 +105,21 @@ protected:
 
     // So we can setModified()
     //
-    RosegardenDocument                *m_doc;
-    bool                            m_lastShowAdditionalControlsArg;
-};
+    RosegardenDocument              *m_doc;
+    bool                             m_lastShowAdditionalControlsArg;
 
-// Global references
-//
-static std::vector<InstrumentParameterBox*> instrumentParamBoxes;
+    // Global references
+    //
+    // There appear to be, at most, two of these: one at
+    // RosegardenMainWindow::m_instrumentParameterBox and the other at
+    // ManageMetronomeDialog::m_instrumentParameterBox.  They are kept
+    // here so that updates can be distributed to all.  However, the
+    // one in ManageMetronomeDialog is never created or used as it is
+    // overkill.  Recommend cleaning it up and reducing this to a single
+    // pointer.
+    typedef std::vector<InstrumentParameterBox *> IPBVector;
+    static IPBVector m_instrumentParamBoxes;
+};
 
 
 }
