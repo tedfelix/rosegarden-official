@@ -34,7 +34,6 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class PitchChooser;
-class InstrumentParameterBox;
 class Device;
 
 
@@ -53,7 +52,6 @@ public slots:
     void slotSetModified();
     void slotResolutionChanged(int);
     void slotPreviewPitch(int);
-    void slotInstrumentChanged(int);
     void slotPitchSelectorChanged(int);
     void slotPitchChanged(int);
     void populate(int dev);
@@ -73,7 +71,6 @@ protected:
     QSpinBox               *m_metronomeBarVely;
     QSpinBox               *m_metronomeBeatVely;
     QSpinBox               *m_metronomeSubBeatVely;
-    InstrumentParameterBox *m_instrumentParameterBox;
     QCheckBox              *m_playEnabled;
     QCheckBox              *m_recordEnabled;
 

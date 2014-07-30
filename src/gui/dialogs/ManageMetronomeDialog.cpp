@@ -29,7 +29,6 @@
 #include "base/RealTime.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PitchChooser.h"
@@ -73,11 +72,6 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setMargin(0);
     metagrid->addWidget(hbox, 0, 0);
-
-
-    // I think having this as well probably just overcomplicates things
-    m_instrumentParameterBox = 0;
-    //    m_instrumentParameterBox = new InstrumentParameterBox(doc, hbox);
 
     QWidget *vbox = new QWidget(hbox);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
@@ -127,7 +121,6 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomeInstrument = new QComboBox(deviceBox);
     m_metronomeInstrument->setToolTip(tr("<qt>Choose the instrument you want to use to play the metronome (typically #10)</qt>"));
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
-    connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotInstrumentChanged(int)));
     deviceBoxLayout->addWidget(m_metronomeInstrument, 1, 1);
     deviceBox->setLayout(deviceBoxLayout);
 
@@ -253,8 +246,6 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
     // sanity
     if (count < 0 || dev == 0 || !isSuitable(dev)) {
-        if (m_instrumentParameterBox)
-            m_instrumentParameterBox->useInstrument(0);
         return ;
     }
 
@@ -337,7 +328,6 @@ ManageMetronomeDialog::populate(int deviceIndex)
             count++;
         }
         m_metronomeInstrument->setCurrentIndex(position);
-        slotInstrumentChanged(position);
 
         m_barPitch = metronome->getBarPitch();
         m_beatPitch = metronome->getBeatPitch();
@@ -351,43 +341,6 @@ ManageMetronomeDialog::populate(int deviceIndex)
         m_recordEnabled->setChecked(m_doc->getComposition().useRecordMetronome());
         slotResolutionChanged(metronome->getDepth());
     }
-}
-
-void
-ManageMetronomeDialog::slotInstrumentChanged(int i)
-{
-    if (!m_instrumentParameterBox)
-        return ;
-
-    int deviceIndex = m_metronomeDevice->currentIndex();
-
-    DeviceList *devices = m_doc->getStudio().getDevices();
-    DeviceListConstIterator it;
-    int count = 0;
-    Device *dev = 0;
-
-    for (it = devices->begin(); it != devices->end(); it++) {
-
-        dev = *it;
-        if (!isSuitable(dev)) continue;
-
-        if (count == deviceIndex) break;
-        count++;
-    }
-
-    // sanity
-    if (count < 0 || dev == 0 || !isSuitable(dev)) {
-        m_instrumentParameterBox->useInstrument(0);
-        return ;
-    }
-
-    // populate instrument list
-    InstrumentList list = dev->getPresentationInstruments();
-
-    if (i < 0 || i >= (int)list.size())
-        return ;
-
-    m_instrumentParameterBox->useInstrument(list[i]);
 }
 
 void
