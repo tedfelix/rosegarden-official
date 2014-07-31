@@ -19,9 +19,8 @@
 #include "InstrumentParameterPanel.h"
 
 #include "base/Instrument.h"
-#include "document/RosegardenDocument.h"
 #include "gui/widgets/SqueezedLabel.h"
-#include <QFontMetrics>
+
 #include <QFrame>
 #include <QLabel>
 #include <QWidget>
@@ -31,22 +30,21 @@ namespace Rosegarden
 {
 
 InstrumentParameterPanel::InstrumentParameterPanel(RosegardenDocument *doc,
-                                                   QWidget* parent) :
+                                                   QWidget *parent) :
     QFrame(parent),
-    m_instrumentLabel(new SqueezedLabel(this)),
+    m_doc(doc),
     m_selectedInstrument(0),
-    m_doc(doc)
+    m_instrumentLabel(new SqueezedLabel(this))
 {
 }
 
 void
-InstrumentParameterPanel::setDocument(RosegardenDocument* doc)
+InstrumentParameterPanel::setDocument(RosegardenDocument *doc)
 {
     m_doc = doc;
     m_selectedInstrument = 0;
 }
 
-// Make instrument our selected instrument.
 void
 InstrumentParameterPanel::
 setSelectedInstrument(Instrument *instrument, QString label)
@@ -60,7 +58,6 @@ setSelectedInstrument(Instrument *instrument, QString label)
     m_instrumentLabel->setText(label);
 }
 
-        /// Instrument is being destroyed
 void
 InstrumentParameterPanel::
 slotInstrumentGone(void)

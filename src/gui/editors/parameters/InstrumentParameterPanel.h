@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,7 +19,9 @@
 #define RG_INSTRUMENTPARAMETERPANEL_H
 
 #include "gui/widgets/InstrumentAliasButton.h"
+
 #include <QFrame>
+
 #include <vector>
 #include <utility>
 
@@ -35,42 +36,48 @@ class RosegardenDocument;
 class Instrument;
 class Rotary;
 
+// A struct would be easier to understand than nested std::pair's.
+// struct RotaryInfo
+// {
+//     Rotary *rotary;  // "second.first" becomes "rotary"
+//     QLabel *label;   // "second.second" becomes "label"
+//     int controller;  // "first" becomes "controller"
+// };
+// typedef std::vector<RotaryInfo> RotaryInfoVector;
 typedef std::pair<Rotary *, QLabel *> RotaryPair;
-typedef std::vector<std::pair<int, RotaryPair> > RotaryMap;
+typedef std::vector<std::pair<int /* controller */, RotaryPair> > RotaryMap;
 
 
 ////////////////////////////////////////////////////////////////////////
 
+/// Code shared by the MIDI and Audio Instrument Parameter Panels
 class InstrumentParameterPanel : public QFrame
 {
     Q_OBJECT
 public:
-    InstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent);
+    InstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
+    virtual ~InstrumentParameterPanel() {}
 
-    virtual ~InstrumentParameterPanel() {};
+    void setDocument(RosegardenDocument *doc);
 
-    virtual void setupForInstrument(Instrument*) = 0;
-
-    void setDocument(RosegardenDocument* doc);
-
-    void showAdditionalControls(bool showThem);
-
- protected:
-    void setSelectedInstrument(Instrument *instrument, QString label);
- public:
 signals:
+    // Connected to InstrumentParameterBox::slotUpdateAllBoxes().
     void updateAllBoxes();
 
-private slots:
-    /// Instrument is being destroyed
-    void slotInstrumentGone(void);
-        
 protected:
-    //--------------- Data members ---------------------------------
-    QLabel                          *m_instrumentLabel;
-    Instrument                      *m_selectedInstrument;
-    RosegardenDocument              *m_doc;
-    InstrumentAliasButton           *m_aliasButton;
+    RosegardenDocument *m_doc;
+
+    Instrument *m_selectedInstrument;
+    QLabel     *m_instrumentLabel;
+    /// Make instrument our selected instrument.
+    void setSelectedInstrument(Instrument *instrument, QString label);
+
+    // Only used by the Audio panel.  Move it down there.
+    InstrumentAliasButton *m_aliasButton;
+
+private slots:
+    /// m_selectedInstrument is being destroyed
+    void slotInstrumentGone(void);
 };
 
 
