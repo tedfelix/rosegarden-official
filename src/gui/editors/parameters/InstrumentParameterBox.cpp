@@ -183,8 +183,6 @@ InstrumentParameterBox::slotPluginBypassed(InstrumentId id, int index, bool bypa
 void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
-    RG_DEBUG << "useInstrument() - populate Instrument\n";
-
     if (instrument == 0) {
         m_widgetStack->setCurrentWidget(m_noInstrumentParameters);	// was raiseWidget
         emit instrumentPercussionSetChanged(instrument);
@@ -221,33 +219,62 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
 {
+    // This causes the MatrixWidget to redraw the pitch ruler.
+    // ??? Instead of monitoring the UI, the MatrixWidget should monitor
+    //     changes to the Instrument and update itself based
+    //     on that.  See if that is possible and give it a shot.
     emit instrumentPercussionSetChanged(getSelectedInstrument());
 
-    IPBVector::iterator it = m_instrumentParamBoxes.begin();
-
-    // To update all open IPBs
-    //
-    for (; it != m_instrumentParamBoxes.end(); ++it) {
+#if 0
+// Now that there is only one of these, the rest of this can be
+// removed.
+    // For each IPB
+    for (IPBVector::iterator it = m_instrumentParamBoxes.begin();
+         it != m_instrumentParamBoxes.end();
+         ++it) {
         if ((*it) != this && getSelectedInstrument() &&
-            (*it)->getSelectedInstrument() == getSelectedInstrument())
+            (*it)->getSelectedInstrument() == getSelectedInstrument()) {
+            // Update this IPB to show the currently selected instrument.
             (*it)->useInstrument(getSelectedInstrument());
+        }
     }
+#endif
 }
 
 void
 InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 {
-    IPBVector::iterator it = m_instrumentParamBoxes.begin();
-
+    // ??? Why?  There seems to be a lot of this around here.  Perhaps this
+    //     is to break up endless update loops.  Maybe that's another side-
+    //     effect of UI-to-UI notifications.
     blockSignals(true);
 
-    for (; it != m_instrumentParamBoxes.end(); ++it) {
+#if 0
+    // For each IPB
+    for (IPBVector::iterator it = m_instrumentParamBoxes.begin();
+         it != m_instrumentParamBoxes.end();
+         ++it) {
         if ((*it)->getSelectedInstrument()) {
+            // If this IPB happens to be displaying the instrument whose
+            // parameters are changing (id)
             if ((*it)->getSelectedInstrument()->getId() == id) {
-                (*it)->useInstrument((*it)->getSelectedInstrument()); // refresh
+                // Update this IPB to show the current parameters.
+                (*it)->useInstrument((*it)->getSelectedInstrument());
             }
         }
     }
+#else
+// Since there is only one IPB, the above reduces to this.
+    Instrument *instrument = getSelectedInstrument();
+    if (instrument) {
+        // If this IPB happens to be displaying the instrument whose
+        // parameters are changing (id)
+        if (instrument->getId() == id) {
+            // Update this IPB to show the current parameters.
+            useInstrument(instrument);
+        }
+    }
+#endif
 
     blockSignals(false);
 }
