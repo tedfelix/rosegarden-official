@@ -39,7 +39,21 @@ class Instrument;
 class AudioInstrumentParameterPanel;
 
 
-/// Display and allow modification of Instrument parameters
+/// Display and allow modification of Instrument parameters for a Track
+/**
+ * InstrumentParameterBox is the box in the lower left of the main window
+ * with the title "Instrument Parameters".  Within this box is a stack
+ * of three widgets.  One for MIDI parameters (MIDIInstrumentParameterPanel),
+ * one for Audio parameters (AudioInstrumentParameterPanel), and an empty
+ * QFrame for no parameters (a track without an instrument).
+ *
+ * Future Direction
+ * The current design has each part of the UI connected to every other part
+ * of the UI.  This results in a combinatorial explosion of connections.
+ * A simpler design would move all notification mechanisms (Observer) out
+ * of the UI and into the data objects.  This way the various parts of the
+ * UI need only know about the data.  See CompositionObserver.
+ */
 class InstrumentParameterBox : public RosegardenParameterBox
 {
 Q_OBJECT
@@ -72,9 +86,16 @@ public slots:
     //
     void slotUpdateAllBoxes();
 
-    // Update InstrumentParameterBoxes that are showing a given instrument.
-    // Called from the Outside.
-    //
+    /// Update InstrumentParameterBoxes that are showing a given instrument.
+    /**
+     * Called from the Outside.
+     * Translated from RosegardenMainWindow::instrumentParametersChanged().
+     * instrumentParametersChanged() signals from various objects are
+     * funneled into here.
+     *
+     * ??? Is this a case where monitoring the Instrument might
+     *     be a better idea?  Is there support for that?
+     */
     void slotInstrumentParametersChanged(InstrumentId id);
 
     // From Plugin dialog
@@ -90,6 +111,8 @@ signals:
     void showPluginGUI(InstrumentId id, int index);
 
     void instrumentParametersChanged(InstrumentId);
+
+    // This causes the MatrixWidget to redraw the pitch ruler.
     void instrumentPercussionSetChanged(Instrument *);
 
 private:
@@ -110,13 +133,10 @@ private:
 
     // Global references
     //
-    // There appear to be, at most, two of these: one at
-    // RosegardenMainWindow::m_instrumentParameterBox and the other at
-    // ManageMetronomeDialog::m_instrumentParameterBox.  They are kept
-    // here so that updates can be distributed to all.  However, the
-    // one in ManageMetronomeDialog is never created or used as it is
-    // overkill.  Recommend cleaning it up and reducing this to a single
-    // pointer.
+    // Since there is only one instance of InstrumentParameterBox
+    // ever created, this is probably unnecessary.  Consider getting
+    // rid of it altogether.
+    // Used by: slotUpdateAllBoxes() and slotInstrumentParametersChanged().
     typedef std::vector<InstrumentParameterBox *> IPBVector;
     static IPBVector m_instrumentParamBoxes;
 };
