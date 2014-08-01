@@ -352,17 +352,17 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Set all the positions by controller number
     //
-    for (RotaryMap::iterator it = m_rotaries.begin() ;
+    for (RotaryInfoVector::iterator it = m_rotaries.begin() ;
             it != m_rotaries.end(); ++it) {
         MidiByte value = 0;
 
         try {
             value = instrument->getControllerValue(
-                        MidiByte(it->first));
+                        MidiByte(it->controller));
         } catch (...) {
             continue;
         }
-        setRotaryToValue(it->first, int(value));
+        setRotaryToValue(it->controller, int(value));
     }
 
 }
@@ -397,7 +397,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
               ControlParameter::ControlPositionCmp());
 
     int count = 0;
-    RotaryMap::iterator rmi = m_rotaries.begin();
+    RotaryInfoVector::iterator rmi = m_rotaries.begin();
 
     for (ControlList::iterator it = list.begin();
             it != list.end(); ++it) {
@@ -421,11 +421,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // Update the controller number that is associated with the
             // existing rotary widget.
 
-            rmi->first = it->getControllerValue();
+            rmi->controller = it->getControllerValue();
 
             // Update the properties of the existing rotary widget.
 
-            rotary = rmi->second.first;
+            rotary = rmi->rotary;
             int redraw = 0; // 1 -> position, 2 -> all
 
             if (rotary->getMinValue() != it->getMin()) {
@@ -458,7 +458,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // Update the controller name that is associated with
             // with the existing rotary widget.
 
-            QLabel *label = rmi->second.second;
+            QLabel *label = rmi->label;
             label->setText(QObject::tr(it->getName().c_str()));
 
             ++rmi;
@@ -508,9 +508,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add to list
             //
-            m_rotaries.push_back(std::pair<int, RotaryPair>
-                                 (it->getControllerValue(),
-                                  RotaryPair(rotary, label)));
+            RotaryInfo ri;
+            ri.rotary = rotary;
+            ri.label = label;
+            ri.controller = it->getControllerValue();
+            m_rotaries.push_back(ri);
 
             // Connect
             //
@@ -529,12 +531,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     }
 
     if (rmi != m_rotaries.end()) {
-        for (RotaryMap::iterator rmj = rmi; rmj != m_rotaries.end(); ++rmj) {
-            delete rmj->second.first;
-            delete rmj->second.second;
+        for (RotaryInfoVector::iterator rmj = rmi; rmj != m_rotaries.end(); ++rmj) {
+            delete rmj->rotary;
+            delete rmj->label;
         }
-        m_rotaries = std::vector<std::pair<int, RotaryPair> >
-                     (m_rotaries.begin(), rmi);
+        m_rotaries = RotaryInfoVector(m_rotaries.begin(), rmi);
     }
 
 //    m_rotaryFrame->show();
@@ -549,9 +550,9 @@ MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
              << ", value = " << value << std::endl;
              */
 
-    for (RotaryMap::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it) {
-        if (it->first == controller) {
-            it->second.first->setPosition(float(value));
+    for (RotaryInfoVector::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it) {
+        if (it->controller == controller) {
+            it->rotary->setPosition(float(value));
             return ;
         }
     }
@@ -1266,9 +1267,9 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 int
 MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
 {
-    for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        if (it->first == rotary)
-            return int(it->second.first->getPosition());
+    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
+        if (it->controller == rotary)
+            return int(it->rotary->getPosition());
     }
 
     return -1;
@@ -1285,10 +1286,10 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
 
     m_instrumentLabel->setVisible(showThem);
     //int index = 0;
-    for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        it->second.first->parentWidget()->setVisible(showThem);
-        //it->second.first->setVisible(showThem || (index < 8));
-        //it->second.second->setVisible(showThem || (index < 8));
+    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
+        it->rotary->parentWidget()->setVisible(showThem);
+        //it->rotary->setVisible(showThem || (index < 8));
+        //it->label->setVisible(showThem || (index < 8));
         //index++;
     }
 }

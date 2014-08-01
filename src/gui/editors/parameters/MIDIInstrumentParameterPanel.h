@@ -125,18 +125,15 @@ protected:
     QFrame             *m_rotaryFrame;
     QGridLayout        *m_rotaryGrid;
 
-    // A struct would be easier to understand than nested std::pair's.
-    // struct RotaryInfo
-    // {
-    //     Rotary *rotary;  // "second.first" becomes "rotary"
-    //     QLabel *label;   // "second.second" becomes "label"
-    //     int controller;  // "first" becomes "controller"
-    // };
-    // typedef std::vector<RotaryInfo> RotaryInfoVector;
-    typedef std::pair<Rotary *, QLabel *> RotaryPair;
-    typedef std::vector<std::pair<int /* controller */, RotaryPair> > RotaryMap;
+    struct RotaryInfo
+    {
+        Rotary *rotary;
+        QLabel *label;
+        int controller;
+    };
+    typedef std::vector<RotaryInfo> RotaryInfoVector;
+    RotaryInfoVector    m_rotaries;
 
-    RotaryMap           m_rotaries;
     QSignalMapper      *m_rotaryMapper;
 
     BankList       m_banks;
