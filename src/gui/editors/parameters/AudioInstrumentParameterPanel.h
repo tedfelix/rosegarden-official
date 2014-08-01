@@ -89,6 +89,10 @@ protected:
 
 private:
 
+    // This is the tiny button in the upper left that allows the user
+    // to change the name of the audio instrument.
+    InstrumentAliasButton *m_aliasButton;
+
     QPixmap                                      m_monoPixmap;
     QPixmap                                      m_stereoPixmap;
 

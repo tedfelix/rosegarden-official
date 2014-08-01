@@ -58,7 +58,8 @@ namespace Rosegarden
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument* doc, QWidget* parent)
         : InstrumentParameterPanel(doc, parent),
-        m_audioFader(new AudioFaderBox(this))
+        m_audioFader(new AudioFaderBox(this)),
+        m_aliasButton(NULL)
 {
     setObjectName("Audio Instrument Parameter Panel");
 

@@ -72,9 +72,6 @@ protected:
     /// Make instrument our selected instrument.
     void setSelectedInstrument(Instrument *instrument, QString label);
 
-    // Only used by the Audio panel.  Move it down there.
-    InstrumentAliasButton *m_aliasButton;
-
 private slots:
     /// m_selectedInstrument is being destroyed
     void slotInstrumentGone(void);
