@@ -19,41 +19,36 @@
 
 #include "MIDIInstrumentParameterPanel.h"
 
+#include "InstrumentParameterPanel.h"
+#include "document/RosegardenDocument.h"
 #include "gui/widgets/SqueezedLabel.h"
-#include "sound/Midi.h"
+#include "gui/widgets/Rotary.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
-#include "base/AllocateChannels.h"
 #include "base/Colour.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
-#include "document/RosegardenDocument.h"
-#include "gui/studio/StudioControl.h"
-#include "gui/widgets/Rotary.h"
-#include "InstrumentParameterPanel.h"
-#include "sequencer/RosegardenSequencer.h"
-
-#include <algorithm>
 
 #include <QComboBox>
 #include <QCheckBox>
 #include <QColor>
+#include <QFont>
 #include <QFontMetrics>
 #include <QFrame>
-#include <QGroupBox>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QKeySequence>
 #include <QLabel>
 #include <QRegExp>
 #include <QSignalMapper>
-#include <QSpinBox>
 #include <QString>
-#include <QVariant>
 #include <QWidget>
-#include <QLayout>
-#include <QHBoxLayout>
-#include <QToolTip>
+
+#include <algorithm>  // std::sort
+#include <string>
 
 
 namespace Rosegarden

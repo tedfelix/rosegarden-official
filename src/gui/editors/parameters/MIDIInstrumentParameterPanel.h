@@ -18,10 +18,11 @@
 #ifndef RG_MIDIINSTRUMENTPARAMETERPANEL_H
 #define RG_MIDIINSTRUMENTPARAMETERPANEL_H
 
-#include "base/ChannelInterval.h"
-#include "base/MidiProgram.h"
-#include "base/MidiDevice.h"
+#include "base/MidiProgram.h"  // InstrumentId
+#include "base/MidiDevice.h"  // MidiByteList
+
 #include "InstrumentParameterPanel.h"
+
 #include <QString>
 
 
@@ -32,8 +33,6 @@ class QGridLayout;
 class QFrame;
 class QCheckBox;
 class QComboBox;
-class QGroupBox;
-class QSpinBox;
 
 namespace Rosegarden
 {
@@ -53,7 +52,7 @@ public:
 
     void setupControllers(MidiDevice *); // setup ControlParameters on box
 
-    virtual void setupForInstrument(Instrument*);
+    virtual void setupForInstrument(Instrument *);
 
     void showAdditionalControls(bool showThem);
     
