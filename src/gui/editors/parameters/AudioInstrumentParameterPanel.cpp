@@ -37,6 +37,7 @@
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
 #include "gui/widgets/PluginPushButton.h"
+#include "gui/widgets/InstrumentAliasButton.h"
 
 #include <QColor>
 #include <QFrame>

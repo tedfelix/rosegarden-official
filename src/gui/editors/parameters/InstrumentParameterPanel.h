@@ -18,8 +18,6 @@
 #ifndef RG_INSTRUMENTPARAMETERPANEL_H
 #define RG_INSTRUMENTPARAMETERPANEL_H
 
-#include "gui/widgets/InstrumentAliasButton.h"
-
 #include <QFrame>
 
 #include <vector>

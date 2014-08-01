@@ -21,6 +21,7 @@
 
 #include "base/MidiProgram.h"
 #include "InstrumentParameterPanel.h"
+
 #include <QPixmap>
 #include <QString>
 
@@ -34,6 +35,7 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class Instrument;
+class InstrumentAliasButton;
 class AudioFaderBox;
 
 
