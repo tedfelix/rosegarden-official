@@ -34,18 +34,6 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class Instrument;
-class Rotary;
-
-// A struct would be easier to understand than nested std::pair's.
-// struct RotaryInfo
-// {
-//     Rotary *rotary;  // "second.first" becomes "rotary"
-//     QLabel *label;   // "second.second" becomes "label"
-//     int controller;  // "first" becomes "controller"
-// };
-// typedef std::vector<RotaryInfo> RotaryInfoVector;
-typedef std::pair<Rotary *, QLabel *> RotaryPair;
-typedef std::vector<std::pair<int /* controller */, RotaryPair> > RotaryMap;
 
 
 ////////////////////////////////////////////////////////////////////////

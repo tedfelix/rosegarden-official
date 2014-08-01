@@ -41,6 +41,7 @@ namespace Rosegarden
 class RosegardenDocument;
 class MidiDevice;
 class Instrument;
+class Rotary;
 
 
 class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
@@ -120,8 +121,21 @@ protected:
     QLabel             *m_channelDisplay;
 
     QGridLayout        *m_mainGrid;
+
     QFrame             *m_rotaryFrame;
     QGridLayout        *m_rotaryGrid;
+
+    // A struct would be easier to understand than nested std::pair's.
+    // struct RotaryInfo
+    // {
+    //     Rotary *rotary;  // "second.first" becomes "rotary"
+    //     QLabel *label;   // "second.second" becomes "label"
+    //     int controller;  // "first" becomes "controller"
+    // };
+    // typedef std::vector<RotaryInfo> RotaryInfoVector;
+    typedef std::pair<Rotary *, QLabel *> RotaryPair;
+    typedef std::vector<std::pair<int /* controller */, RotaryPair> > RotaryMap;
+
     RotaryMap           m_rotaries;
     QSignalMapper      *m_rotaryMapper;
 
