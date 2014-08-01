@@ -50,34 +50,50 @@ public:
 
     MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent);
 
-    void setupControllers(MidiDevice *); // setup ControlParameters on box
+    /// Change the Instrument that is being displayed.
+    /**
+     * Called each time the selected track changes.
+     */
+    void setupForInstrument(Instrument *);
 
-    virtual void setupForInstrument(Instrument *);
-
+    /// Does nothing.
+    /**
+     * This appears to have provided a way to reduce the number of rotaries
+     * displayed on the panel.  However, it now just makes all of them
+     * visible.  Recommend removing this routine.  Verify that all rotaries
+     * are shown at start.
+     */
     void showAdditionalControls(bool showThem);
-    
-    //void slotToggleChangeListOnProgChange(bool val);
 
 signals:
     void changeInstrumentLabel(InstrumentId id, QString label);
     void instrumentParametersChanged(InstrumentId);
 
 public slots:
+    // From SequenceManager::signalSelectProgramNoSend()
     void slotSelectProgramNoSend(int prog, int bank_lsb, int bank_msb);
-    void slotSelectProgram(int index);
-    void slotSelectBank(int index);
-    void slotSelectVariation(int index);
 
-    void slotControllerChanged(int index);
+    // Called externally by
+    // RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().  Need
+    // to provide a proper external interface separate from this.
+    // Called internally by the "Receive External" checkbox.
+    void slotToggleChangeListOnProgChange(bool val);
+
+private slots:
+    void slotTogglePercussion(bool value);
+    void slotSelectBank(int index);
+    void slotToggleBank(bool value);
+    void slotSelectProgram(int index);
+    void slotToggleProgramChange(bool value);
+    // Channel: auto/fixed
     void slotSetUseChannel(int index);
 
-    void slotTogglePercussion(bool value);
-    void slotToggleProgramChange(bool value);
-    void slotToggleBank(bool value);
+    void slotSelectVariation(int index);
     void slotToggleVariation(bool value);
-    void slotToggleChangeListOnProgChange(bool val);
-    
-protected:
+
+    void slotControllerChanged(int index);
+
+private:
 
     // fill (or hide) bank combo based on whether the instrument is percussion
     void populateBankList();
@@ -90,6 +106,9 @@ protected:
 
     // Fill the fixed channel list controls
     void populateChannelList();
+
+    /// Create or update the rotary controls for each controller.
+    void setupControllers(MidiDevice *);
 
     // get value of a specific rotary (keyed by controller value)
     int getValueFromRotary(int rotary);
@@ -109,14 +128,17 @@ protected:
     QCheckBox          *m_bankCheckBox;
     QCheckBox          *m_variationCheckBox;
     QCheckBox          *m_programCheckBox;
-    QCheckBox          *m_evalMidiPrgChgCheckBox;
 
     QComboBox          *m_channelUsed;
 
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
     QLabel             *m_programLabel;
+
+    // Receive External
     QLabel             *m_evalMidiPrgChgLabel;
+    QCheckBox          *m_evalMidiPrgChgCheckBox;
+
     QLabel             *m_channelDisplay;
 
     QGridLayout        *m_mainGrid;
