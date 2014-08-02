@@ -86,11 +86,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
-    m_channelUsed = new QComboBox(this);
+    m_channelValue = new QComboBox(this);
 
     // Everything else sets up elsewhere, but these don't vary per instrument:
-    m_channelUsed->addItem(tr("auto"));
-    m_channelUsed->addItem(tr("fixed"));
+    m_channelValue->addItem(tr("auto"));
+    m_channelValue->addItem(tr("fixed"));
 
     m_connectionLabel->setFont(f);
     m_bankValue->setFont(f);
@@ -100,18 +100,18 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox->setFont(f);
     m_variationCheckBox->setFont(f);
     m_percussionCheckBox->setFont(f);
-    m_channelUsed->setFont(f);
+    m_channelValue->setFont(f);
 
     m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_variationValue->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    m_channelUsed->setToolTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
+    m_channelValue->setToolTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
 
     m_bankValue->setMaxVisibleItems(20);
     m_programValue->setMaxVisibleItems(20);
     m_variationValue->setMaxVisibleItems(20);
-    m_channelUsed->setMaxVisibleItems(2);
+    m_channelValue->setMaxVisibleItems(2);
     
     m_bankLabel = new QLabel(tr("Bank"), this);
     m_variationLabel = new QLabel(tr("Variation"), this);
@@ -137,7 +137,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_bankValue->setMinimumContentsLength(width22);
     m_programValue->setMinimumContentsLength(width22);
     m_variationValue->setMinimumContentsLength(width22);
-    m_channelUsed->setMinimumContentsLength(width22);
+    m_channelValue->setMinimumContentsLength(width22);
 
     // we still have to use the QFontMetrics here, or a SqueezedLabel will
     // squeeze itself down to 0.
@@ -147,16 +147,16 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     
     
     QString programTip = tr("<qt>Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
-    m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
-    m_evalMidiPrgChgCheckBox->setFont(f);
-    m_evalMidiPrgChgLabel = new QLabel(tr("Receive external"), this);
-    m_evalMidiPrgChgLabel->setFont(f);
-    m_evalMidiPrgChgLabel->setToolTip(programTip);
+    m_receiveExternalCheckBox = new QCheckBox(this);
+    m_receiveExternalCheckBox->setFont(f);
+    m_receiveExternalLabel = new QLabel(tr("Receive external"), this);
+    m_receiveExternalLabel->setFont(f);
+    m_receiveExternalLabel->setToolTip(programTip);
     
-    m_evalMidiPrgChgCheckBox->setDisabled(false);
-    m_evalMidiPrgChgCheckBox->setChecked(false);
-    m_evalMidiPrgChgCheckBox->setToolTip(programTip);
-    m_evalMidiPrgChgCheckBox->setShortcut((QKeySequence)"Shift+P");
+    m_receiveExternalCheckBox->setDisabled(false);
+    m_receiveExternalCheckBox->setChecked(false);
+    m_receiveExternalCheckBox->setToolTip(programTip);
+    m_receiveExternalCheckBox->setShortcut((QKeySequence)"Shift+P");
 
 
 
@@ -181,10 +181,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_mainGrid->addWidget(m_variationValue, 6, 2, 1, 2, Qt::AlignRight);
       
     m_mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_channelUsed, 7, 2, 1, 2, Qt::AlignRight);
+    m_mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
 
-    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 8, 0, 1, 3, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 8, 3, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
 
     // Disable these by default - they are activated by their checkboxes
     //
@@ -229,18 +229,18 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programValue->setCurrentIndex( -1);
     m_bankValue->setCurrentIndex( -1);
     m_variationValue->setCurrentIndex( -1);
-    m_channelUsed->setCurrentIndex(-1);
+    m_channelValue->setCurrentIndex(-1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
-    connect(m_channelUsed, SIGNAL(activated(int)),
+    connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSetUseChannel(int)));
 }
 
 void
 MIDIInstrumentParameterPanel::clearReceiveExternal()
 {
-    m_evalMidiPrgChgCheckBox->setChecked(false);
+    m_receiveExternalCheckBox->setChecked(false);
 }
 
 void
@@ -708,15 +708,15 @@ MIDIInstrumentParameterPanel::populateProgramList()
             m_programLabel->show();
             m_programCheckBox->show();
             m_programValue->show();
-            m_evalMidiPrgChgCheckBox->show();
-            m_evalMidiPrgChgLabel->show();
+            m_receiveExternalCheckBox->show();
+            m_receiveExternalLabel->show();
         }
     } else {
         m_programLabel->hide();
         m_programCheckBox->hide();
         m_programValue->hide();
-        m_evalMidiPrgChgCheckBox->hide();
-        m_evalMidiPrgChgLabel->hide();
+        m_receiveExternalCheckBox->hide();
+        m_receiveExternalLabel->hide();
     }
 
     for (unsigned int i = 0; i < programs.size(); ++i) {
@@ -907,15 +907,15 @@ MIDIInstrumentParameterPanel::
 populateChannelList(void)
 {
     // Block signals
-    m_channelUsed-> blockSignals(true);
+    m_channelValue-> blockSignals(true);
 
     const Instrument * instrument = m_selectedInstrument;
     bool hasFixedChannel = instrument->hasFixedChannel();
     int index = hasFixedChannel ? 1 : 0;
-    m_channelUsed->setCurrentIndex(index);
+    m_channelValue->setCurrentIndex(index);
 
     // Unblock signals
-    m_channelUsed-> blockSignals(false);
+    m_channelValue-> blockSignals(false);
 }
 
 void
@@ -1074,10 +1074,10 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 }
 
 void
-MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bankLSB, int bankMSB )
+MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, int bankMSB )
 {
     // If we aren't set to "Receive External", bail.
-    if (!m_evalMidiPrgChgCheckBox->isChecked())
+    if (!m_receiveExternalCheckBox->isChecked())
         return;
 
     if (!m_selectedInstrument)
@@ -1087,7 +1087,7 @@ MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bankLSB, int
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
 
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectProgramNoSend(): No MidiDevice for Instrument "
+        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotExternalProgramChange(): No MidiDevice for Instrument "
                  << m_selectedInstrument->getId() << endl;
         return ;
     }

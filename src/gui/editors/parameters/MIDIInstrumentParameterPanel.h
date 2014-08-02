@@ -94,23 +94,27 @@ public slots:
     /**
      * When a MIDI Bank Select or Program Change comes in from an external
      * MIDI device, this function updates the bank and program in the
-     * instrument and then displays the new values.
+     * instrument and then displays the new values.  The "Receive External"
+     * checkbox must be checked for this to work.
      *
      * This slot is connected in RosegardenMainWindow's ctor to
      * SequenceManager::signalSelectProgramNoSend().
      *
-     * rename: slotExternalProgramChange()?
      * Note: This function's parameters are in reverse order.  They should be:
      *       slotExternalProgramChange(bankMSB, bankLSB, programChange)
+     *       This would require changing
+     *       SequenceManager::signalSelectProgramNoSend() as well.
      *
      * parameters:
-     * prog : the program to select (triggered by Program Change message)
+     * programChange : the program to select (triggered by Program
+     *                 Change message)
      * bankLSB : the bank to select (-1 if no LSB Bank Select occurred)
      *           (triggered by LSB Bank Select message)
      * bankMSB : the bank to select (-1 if no MSB Bank Select occurred)
      *           (triggered by MSB Bank Select message)
      */
-    void slotSelectProgramNoSend(int prog, int bankLSB, int bankMSB);
+    void slotExternalProgramChange(
+            int programChange, int bankLSB, int bankMSB);
 
 private slots:
     void slotTogglePercussion(bool value);
@@ -151,30 +155,34 @@ private:
 
     //--------------- Data members ---------------------------------
 
+    QGridLayout        *m_mainGrid;
+
+    // m_instrumentLabel is inherited from InstrumentParameterPanel.
+
     QLabel             *m_connectionLabel;
 
-    QComboBox          *m_bankValue;
-    QComboBox          *m_variationValue;
-    QComboBox          *m_programValue;
-
     QCheckBox          *m_percussionCheckBox;
-    QCheckBox          *m_bankCheckBox;
-    QCheckBox          *m_variationCheckBox;
-    QCheckBox          *m_programCheckBox;
-
-    QComboBox          *m_channelUsed;
 
     QLabel             *m_bankLabel;
-    QLabel             *m_variationLabel;
+    QCheckBox          *m_bankCheckBox;
+    QComboBox          *m_bankValue;
+    BankList            m_banks;
+
     QLabel             *m_programLabel;
+    QCheckBox          *m_programCheckBox;
+    QComboBox          *m_programValue;
+    ProgramList         m_programs;
 
-    // Receive External
-    QLabel             *m_evalMidiPrgChgLabel;
-    QCheckBox          *m_evalMidiPrgChgCheckBox;
+    QLabel             *m_variationLabel;
+    QCheckBox          *m_variationCheckBox;
+    QComboBox          *m_variationValue;
+    MidiByteList        m_variations;
 
-    QLabel             *m_channelDisplay;
+    // Channel: auto/fixed
+    QComboBox          *m_channelValue;
 
-    QGridLayout        *m_mainGrid;
+    QLabel             *m_receiveExternalLabel;
+    QCheckBox          *m_receiveExternalCheckBox;
 
     QFrame             *m_rotaryFrame;
     QGridLayout        *m_rotaryGrid;
@@ -189,10 +197,6 @@ private:
     RotaryInfoVector    m_rotaries;
 
     QSignalMapper      *m_rotaryMapper;
-
-    BankList       m_banks;
-    ProgramList    m_programs;
-    MidiByteList   m_variations;
 };
 
 
