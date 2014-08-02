@@ -1233,25 +1233,6 @@ MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
 }
 
 void
-MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
-{
-    // Now that the MIDI IPB can scroll, and since nobody seems to have
-    // implemented/repaired the tab layout mode (probably by design, and a
-    // good design) we'll do away with putting a limit on the number of
-    // controllers visible, and just always show them all
-    showThem = true;
-
-    m_instrumentLabel->setVisible(showThem);
-    //int index = 0;
-    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        it->rotary->parentWidget()->setVisible(showThem);
-        //it->rotary->setVisible(showThem || (index < 8));
-        //it->label->setVisible(showThem || (index < 8));
-        //index++;
-    }
-}
-
-void
 MIDIInstrumentParameterPanel::
 slotSelectChannel(int index)
 {

@@ -50,8 +50,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(-1),
-      m_doc(doc),
-      m_lastShowAdditionalControlsArg(false)
+      m_doc(doc)
 {
     setObjectName("Instrument Parameter Box");
 
@@ -208,7 +207,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     } else { // Midi
 
         m_midiInstrumentParameters->setupForInstrument(getSelectedInstrument());
-        m_midiInstrumentParameters->showAdditionalControls(m_lastShowAdditionalControlsArg);
 		m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
         emit instrumentPercussionSetChanged(instrument);
 
@@ -277,13 +275,6 @@ InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 #endif
 
     blockSignals(false);
-}
-
-void
-InstrumentParameterBox::showAdditionalControls(bool showThem)
-{
-    m_midiInstrumentParameters->showAdditionalControls(showThem);
-    m_lastShowAdditionalControlsArg = showThem;
 }
 
 

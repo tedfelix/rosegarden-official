@@ -64,15 +64,6 @@ public:
      */
     void clearReceiveExternal();
 
-    /// Does nothing.
-    /**
-     * This appears to have provided a way to reduce the number of rotaries
-     * displayed on the panel.  However, it now just makes all of them
-     * visible.  Recommend removing this routine.  Verify that all rotaries
-     * are shown at start.
-     */
-    void showAdditionalControls(bool showThem);
-
 signals:
     /// Emitted for almost any parameter change.
     /**
@@ -143,13 +134,13 @@ private slots:
 
 private:
 
-    // fill (or hide) bank combo based on whether the instrument is percussion
+    // fill (or hide) m_bankValue based on whether the instrument is percussion
     void populateBankList();
 
-    // fill program combo based on current bank
+    // fill m_programValue based on current bank
     void populateProgramList();
 
-    // fill (or hide) variation combo based on current bank and program
+    // fill (or hide) m_variationValue based on current bank and program
     void populateVariationList();
 
     /// Create or update the rotary controls for each controller.

@@ -74,7 +74,7 @@ public:
 
     MIDIInstrumentParameterPanel *getMIDIInstrumentParameterPanel();
 
-    virtual void showAdditionalControls(bool showThem);
+    virtual void showAdditionalControls(bool)  { }
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 
@@ -129,7 +129,6 @@ private:
     // So we can setModified()
     //
     RosegardenDocument              *m_doc;
-    bool                             m_lastShowAdditionalControlsArg;
 
     // Global references
     //
