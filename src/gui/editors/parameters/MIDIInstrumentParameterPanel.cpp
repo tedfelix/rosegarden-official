@@ -213,9 +213,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     connect(m_variationCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleVariation(bool)));
     
-    connect(m_evalMidiPrgChgCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleChangeListOnProgChange(bool)) );
-    
     
     // Connect activations
     //
@@ -240,13 +237,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
             this, SLOT(slotSetUseChannel(int)));
 }
 
-
-void MIDIInstrumentParameterPanel::slotToggleChangeListOnProgChange(bool val){
-    // used to disable prog-change select-box 
-    // (in MIDIInstrumentParameterPanel), if TrackChanged 
-    this->m_evalMidiPrgChgCheckBox->setChecked(val);
+void
+MIDIInstrumentParameterPanel::clearReceiveExternal()
+{
+    m_evalMidiPrgChgCheckBox->setChecked(false);
 }
-
 
 void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
@@ -1078,87 +1073,69 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
-
-
-
-
-void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bank_lsb, int bank_msb )
+void
+MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bankLSB, int bankMSB )
 {
-    /*
-     * This function changes the program-list entry, if
-     * a midi program change message occured.
-     * 
-     * (the slot is being connected in RosegardenMainWindow.cpp,
-     *  and called (signaled) by SequenceManger.cpp)
-     * 
-     * parameters:
-     * prog : the program to select (triggered by program change message)
-     * bank_lsb : the bank to select (if no bank-select occured, this is -1)
-     *                (triggered by bank-select message (fine,lsb value))
-     * bank_msb : coarse/msb value  (-1 if not specified)
-     */
-    if( ! this->m_evalMidiPrgChgCheckBox->isChecked() ){
+    // If we aren't set to "Receive External", bail.
+    if (!m_evalMidiPrgChgCheckBox->isChecked())
         return;
-    }
-    
-    
-    
-    
-    if (m_selectedInstrument == 0)
+
+    if (!m_selectedInstrument)
         return ;
 
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-            (m_selectedInstrument->getDevice());
-    
+    MidiDevice *md =
+            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-                << m_selectedInstrument->getId() << endl;
+        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectProgramNoSend(): No MidiDevice for Instrument "
+                 << m_selectedInstrument->getId() << endl;
         return ;
     }
-    
-    bool changed_bank = false;
-    // bank msb value (MSB, coarse)
-    if ((bank_msb >= 0) ){ // and md->getVariationType() != MidiDevice::VariationFromMSB ) {
-        if (m_selectedInstrument->getMSB() != bank_msb ) {
-            m_selectedInstrument->setMSB( bank_msb );
-            changed_bank = true;
-        }
-    }    
-    // selection of bank (LSB, fine)
-    if ((bank_lsb >= 0) ){ //and md->getVariationType() != MidiDevice::VariationFromLSB) {
-        if (m_selectedInstrument->getLSB() != bank_lsb ) {
-            m_selectedInstrument->setLSB( bank_lsb );
-            changed_bank = true;
+
+    bool changedBank = false;
+
+    // MSB Bank Select
+    if (bankMSB >= 0) {  // &&  md->getVariationType() != MidiDevice::VariationFromMSB ) {
+        // If the MSB is changing
+        if (m_selectedInstrument->getMSB() != bankMSB) {
+            m_selectedInstrument->setMSB(bankMSB);
+            changedBank = true;
         }
     }
-    
+
+    // LSB Bank Select
+    if (bankLSB >= 0) { // &&  md->getVariationType() != MidiDevice::VariationFromLSB) {
+        // If the LSB is changing
+        if (m_selectedInstrument->getLSB() != bankLSB) {
+            m_selectedInstrument->setLSB(bankLSB);
+            changedBank = true;
+        }
+    }
+
     bool change = false;
-    if (m_selectedInstrument->getProgramChange() != (MidiByte)prog) {
-        m_selectedInstrument->setProgramChange( (MidiByte)prog );
+
+    // ??? Can prog be -1?
+
+    // If the Program Change is changing
+    if (m_selectedInstrument->getProgramChange() !=
+                static_cast<MidiByte>(prog)) {
+        m_selectedInstrument->setProgramChange(static_cast<MidiByte>(prog));
         change = true;
     }
-    
+
     //populateVariationList();
-    
-    if (change or changed_bank) {
-        //emit changeInstrumentLabel( m_selectedInstrument->getId(),
-        //            strtoqstr(m_selectedInstrument->getProgramName()) );
+
+    // If anything changed, update the UI.
+    if (change  ||  changedBank) {
+        //emit changeInstrumentLabel(m_selectedInstrument->getId(),
+        //                           m_selectedInstrument->
+        //                                     getProgramName().c_str());
+
         emit updateAllBoxes();
         
         emit instrumentParametersChanged(m_selectedInstrument->getId());
     }
-    
 }
-
-
-
-
-
-
-
-
-
-
 
 void
 MIDIInstrumentParameterPanel::slotSelectProgram(int index)

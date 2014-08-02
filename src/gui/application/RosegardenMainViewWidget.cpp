@@ -1310,7 +1310,7 @@ void RosegardenMainViewWidget::slotUpdateInstrumentParameterBox(int id)
     // set prog-change select-box unchecked (if selected TrackChanged)
     MIDIInstrumentParameterPanel *mipp;
     mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
-    mipp->slotToggleChangeListOnProgChange(false);
+    mipp->clearReceiveExternal();
     
     // Then do this instrument/track fiddling
     //
