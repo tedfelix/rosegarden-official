@@ -234,7 +234,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
     connect(m_channelValue, SIGNAL(activated(int)),
-            this, SLOT(slotSetUseChannel(int)));
+            this, SLOT(slotSelectChannel(int)));
 }
 
 void
@@ -311,18 +311,22 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_programCheckBox->    blockSignals(true);
     m_bankCheckBox->       blockSignals(true);
     m_variationCheckBox->  blockSignals(true);
+    m_channelValue->       blockSignals(true);
     
     // Change state
     m_percussionCheckBox->setChecked(instrument->isPercussion());
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
+    m_channelValue->setCurrentIndex(
+            m_selectedInstrument->hasFixedChannel() ? 1 : 0);
 
     // Unblock signals
     m_percussionCheckBox-> blockSignals(false);
     m_programCheckBox->    blockSignals(false);
     m_bankCheckBox->       blockSignals(false);
     m_variationCheckBox->  blockSignals(false);
+    m_channelValue->       blockSignals(false);
 
     // Basic parameters
     //
@@ -332,7 +336,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateBankList();
     populateProgramList();
     populateVariationList();
-    populateChannelList();
     
     // Setup the ControlParameters
     //
@@ -900,24 +903,6 @@ MIDIInstrumentParameterPanel::populateVariationList()
     }    
 }
 
-// Fill the fixed channel list controls
-// @author Tom Breton (Tehom)
-void
-MIDIInstrumentParameterPanel::
-populateChannelList(void)
-{
-    // Block signals
-    m_channelValue-> blockSignals(true);
-
-    const Instrument * instrument = m_selectedInstrument;
-    bool hasFixedChannel = instrument->hasFixedChannel();
-    int index = hasFixedChannel ? 1 : 0;
-    m_channelValue->setCurrentIndex(index);
-
-    // Unblock signals
-    m_channelValue-> blockSignals(false);
-}
-
 void
 MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
 {
@@ -1237,10 +1222,10 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 }
 
 int
-MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
+MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
 {
     for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        if (it->controller == rotary)
+        if (it->controller == controller)
             return int(it->rotary->getPosition());
     }
 
@@ -1268,7 +1253,7 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
 
 void
 MIDIInstrumentParameterPanel::
-slotSetUseChannel(int index)
+slotSelectChannel(int index)
 {
     if (m_selectedInstrument == 0)
         { return; }

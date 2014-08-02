@@ -117,17 +117,28 @@ public slots:
             int programChange, int bankLSB, int bankMSB);
 
 private slots:
+    /// Handle m_percussionCheckBox::toggled()
     void slotTogglePercussion(bool value);
-    void slotSelectBank(int index);
+
+    /// Handle m_bankCheckBox::toggled()
     void slotToggleBank(bool value);
-    void slotSelectProgram(int index);
+    /// Handle m_bankValue::activated()
+    void slotSelectBank(int index);
+
+    /// Handle m_programCheckBox::toggled()
     void slotToggleProgramChange(bool value);
-    // Channel: auto/fixed
-    void slotSetUseChannel(int index);
+    /// Handle m_programValue::activated()
+    void slotSelectProgram(int index);
 
-    void slotSelectVariation(int index);
+    /// Handle m_variationCheckBox::toggled()
     void slotToggleVariation(bool value);
+    /// Handle m_variationValue::activated()
+    void slotSelectVariation(int index);
 
+    /// Handle m_channelValue::activated()
+    void slotSelectChannel(int index);
+
+    /// Handle a rotary change (m_rotaryMapper::mapped())
     void slotControllerChanged(int index);
 
 private:
@@ -141,16 +152,10 @@ private:
     // fill (or hide) variation combo based on current bank and program
     void populateVariationList();
 
-    // Fill the fixed channel list controls
-    void populateChannelList();
-
     /// Create or update the rotary controls for each controller.
     void setupControllers(MidiDevice *);
 
-    // get value of a specific rotary (keyed by controller value)
-    int getValueFromRotary(int rotary);
-
-    // set rotary to value
+    int getValueFromRotary(int controller);
     void setRotaryToValue(int controller, int value);
 
     //--------------- Data members ---------------------------------
