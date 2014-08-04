@@ -79,9 +79,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     setLayout(m_mainGrid);
 
     m_connectionLabel = new SqueezedLabel(this);
-    m_bankValue = new QComboBox(this);
-    m_programValue = new QComboBox(this);
-    m_variationValue = new QComboBox(this);
+    m_bankComboBox = new QComboBox(this);
+    m_programComboBox = new QComboBox(this);
+    m_variationComboBox = new QComboBox(this);
     m_bankCheckBox = new QCheckBox(this);
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
@@ -93,24 +93,24 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_channelValue->addItem(tr("fixed"));
 
     m_connectionLabel->setFont(f);
-    m_bankValue->setFont(f);
-    m_programValue->setFont(f);
-    m_variationValue->setFont(f);
+    m_bankComboBox->setFont(f);
+    m_programComboBox->setFont(f);
+    m_variationComboBox->setFont(f);
     m_bankCheckBox->setFont(f);
     m_programCheckBox->setFont(f);
     m_variationCheckBox->setFont(f);
     m_percussionCheckBox->setFont(f);
     m_channelValue->setFont(f);
 
-    m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
-    m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
-    m_variationValue->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
+    m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
+    m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
+    m_variationComboBox->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
     m_channelValue->setToolTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
 
-    m_bankValue->setMaxVisibleItems(20);
-    m_programValue->setMaxVisibleItems(20);
-    m_variationValue->setMaxVisibleItems(20);
+    m_bankComboBox->setMaxVisibleItems(20);
+    m_programComboBox->setMaxVisibleItems(20);
+    m_variationComboBox->setMaxVisibleItems(20);
     m_channelValue->setMaxVisibleItems(2);
     
     m_bankLabel = new QLabel(tr("Bank"), this);
@@ -134,9 +134,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     QString metric("Acoustic Grand Piano #42B");
     int width22 = metric.size();
     
-    m_bankValue->setMinimumContentsLength(width22);
-    m_programValue->setMinimumContentsLength(width22);
-    m_variationValue->setMinimumContentsLength(width22);
+    m_bankComboBox->setMinimumContentsLength(width22);
+    m_programComboBox->setMinimumContentsLength(width22);
+    m_variationComboBox->setMinimumContentsLength(width22);
     m_channelValue->setMinimumContentsLength(width22);
 
     // we still have to use the QFontMetrics here, or a SqueezedLabel will
@@ -170,15 +170,15 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
 
     m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
-    m_mainGrid->addWidget(m_bankValue, 4, 2, 1, 2, Qt::AlignRight);
+    m_mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
 
     m_mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
     m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
-    m_mainGrid->addWidget(m_programValue, 5, 2, 1, 2, Qt::AlignRight);
+    m_mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
 
     m_mainGrid->addWidget(m_variationLabel, 6, 0);
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
-    m_mainGrid->addWidget(m_variationValue, 6, 2, 1, 2, Qt::AlignRight);
+    m_mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
       
     m_mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
     m_mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
@@ -188,9 +188,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
 
     // Disable these by default - they are activated by their checkboxes
     //
-    m_programValue->setDisabled(true);
-    m_bankValue->setDisabled(true);
-    m_variationValue->setDisabled(true);
+    m_programComboBox->setDisabled(true);
+    m_bankComboBox->setDisabled(true);
+    m_variationComboBox->setDisabled(true);
 
     // Only active if we have an Instrument selected
     //
@@ -216,19 +216,19 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     
     // Connect activations
     //
-    connect(m_bankValue, SIGNAL(activated(int)),
+    connect(m_bankComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSelectBank(int)));
 
-    connect(m_variationValue, SIGNAL(activated(int)),
+    connect(m_variationComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSelectVariation(int)));
 
-    connect(m_programValue, SIGNAL(activated(int)),
+    connect(m_programComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSelectProgram(int)));
     
     // don't select any of the options in any dropdown
-    m_programValue->setCurrentIndex( -1);
-    m_bankValue->setCurrentIndex( -1);
-    m_variationValue->setCurrentIndex( -1);
+    m_programComboBox->setCurrentIndex( -1);
+    m_bankComboBox->setCurrentIndex( -1);
+    m_variationComboBox->setCurrentIndex( -1);
     m_channelValue->setCurrentIndex(-1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
@@ -250,6 +250,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // In some cases setupForInstrument gets called several times.
     // This shortcuts this activity since only one setup is needed.
+    // ??? Problem is that this prevents legitimate changes to the
+    //     instrument from getting to the UI.
     if (m_selectedInstrument == instrument) {
         RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument "
                  << "-- early exit.  instrument didn't change." << endl;
@@ -333,9 +335,9 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //
     // Check for program change
     //
-    populateBankList();
-    populateProgramList();
-    populateVariationList();
+    updateBankComboBox();
+    updateProgramComboBox();
+    updateVariationComboBox();
     
     // Setup the ControlParameters
     //
@@ -552,17 +554,17 @@ MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
 }
 
 void
-MIDIInstrumentParameterPanel::populateBankList()
+MIDIInstrumentParameterPanel::updateBankComboBox()
 {
     if (m_selectedInstrument == 0) return;
 
-    m_bankValue->clear();
+    m_bankComboBox->clear();
     m_banks.clear();
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateBankList:"
+        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox:"
         << " No MidiDevice for Instrument "
         << m_selectedInstrument->getId() << endl;
         return ;
@@ -572,7 +574,7 @@ MIDIInstrumentParameterPanel::populateBankList()
     BankList banks;
 
     /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: "
+    RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox: "
              << "variation type is " << md->getVariationType() << endl;
              */
 
@@ -584,12 +586,12 @@ MIDIInstrumentParameterPanel::populateBankList()
             if (m_bankLabel->isHidden()) {
                 m_bankLabel->show();
                 m_bankCheckBox->show();
-                m_bankValue->show();
+                m_bankComboBox->show();
             }
         } else {
             m_bankLabel->hide();
             m_bankCheckBox->hide();
-            m_bankValue->hide();
+            m_bankComboBox->hide();
         }
 
         for (unsigned int i = 0; i < banks.size(); ++i) {
@@ -613,13 +615,13 @@ MIDIInstrumentParameterPanel::populateBankList()
             if (!m_bankLabel->isHidden()) {
                 m_bankLabel->hide();
                 m_bankCheckBox->hide();
-                m_bankValue->hide();
+                m_bankComboBox->hide();
             }
         } else {
             if (m_bankLabel->isHidden()) {
                 m_bankLabel->show();
                 m_bankCheckBox->show();
-                m_bankValue->show();
+                m_bankComboBox->show();
             }
         }
 
@@ -627,7 +629,7 @@ MIDIInstrumentParameterPanel::populateBankList()
             for (unsigned int i = 0; i < bytes.size(); ++i) {
                 BankList bl = md->getBanksByMSB
                               (m_selectedInstrument->isPercussion(), bytes[i]);
-                RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for msb " << bytes[i] << endl;
+                RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox: have " << bl.size() << " variations for msb " << bytes[i] << endl;
 
                 if (bl.size() == 0)
                     continue;
@@ -640,7 +642,7 @@ MIDIInstrumentParameterPanel::populateBankList()
             for (unsigned int i = 0; i < bytes.size(); ++i) {
                 BankList bl = md->getBanksByLSB
                               (m_selectedInstrument->isPercussion(), bytes[i]);
-                RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for lsb " << bytes[i] << endl;
+                RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox: have " << bl.size() << " variations for lsb " << bytes[i] << endl;
                 if (bl.size() == 0)
                     continue;
                 if (m_selectedInstrument->getLSB() == bytes[i]) {
@@ -654,43 +656,43 @@ MIDIInstrumentParameterPanel::populateBankList()
     for (BankList::const_iterator i = banks.begin();
             i != banks.end(); ++i) {
         m_banks.push_back(*i);
-        m_bankValue->addItem(QObject::tr(i->getName().c_str()));
+        m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
     }
 
     // Keep bank value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_bankValue->setDisabled(false);
+        m_bankComboBox->setDisabled(false);
     } else {
-        m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+        m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
     }    
 
     if (currentBank < 0 && !banks.empty()) {
-        m_bankValue->setCurrentIndex(0);
+        m_bankComboBox->setCurrentIndex(0);
         slotSelectBank(0);
     } else {
-        m_bankValue->setCurrentIndex(currentBank);
+        m_bankComboBox->setCurrentIndex(currentBank);
     }
 }
 
 void
-MIDIInstrumentParameterPanel::populateProgramList()
+MIDIInstrumentParameterPanel::updateProgramComboBox()
 {
     if (m_selectedInstrument == 0)
         return ;
 
-    m_programValue->clear();
+    m_programComboBox->clear();
     m_programs.clear();
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
+        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox: No MidiDevice for Instrument "
         << m_selectedInstrument->getId() << endl;
         return ;
     }
 
     /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateProgramList:"
+    RG_DEBUG << "MIDIInstrumentParameterPanel::updateProgramComboBox:"
              << " variation type is " << md->getVariationType() << endl;
     */
 
@@ -710,14 +712,14 @@ MIDIInstrumentParameterPanel::populateProgramList()
         if (m_programLabel->isHidden()) {
             m_programLabel->show();
             m_programCheckBox->show();
-            m_programValue->show();
+            m_programComboBox->show();
             m_receiveExternalCheckBox->show();
             m_receiveExternalLabel->show();
         }
     } else {
         m_programLabel->hide();
         m_programCheckBox->hide();
-        m_programValue->hide();
+        m_programComboBox->hide();
         m_receiveExternalCheckBox->hide();
         m_receiveExternalLabel->hide();
     }
@@ -725,7 +727,7 @@ MIDIInstrumentParameterPanel::populateProgramList()
     for (unsigned int i = 0; i < programs.size(); ++i) {
         std::string programName = programs[i].getName();
         if (programName != "") {
-            m_programValue->addItem(QObject::tr("%1. %2")
+            m_programComboBox->addItem(QObject::tr("%1. %2")
                                        .arg(programs[i].getProgram() + 1)
                                        .arg(QObject::tr(programName.c_str())));
             if (m_selectedInstrument->getProgram() == programs[i]) {
@@ -737,46 +739,46 @@ MIDIInstrumentParameterPanel::populateProgramList()
 
     // Keep program value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_programValue->setDisabled(false);
+        m_programComboBox->setDisabled(false);
     } else {
-        m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
+        m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
     }    
 
     if (currentProgram < 0 && !m_programs.empty()) {
-        m_programValue->setCurrentIndex(0);
+        m_programComboBox->setCurrentIndex(0);
         slotSelectProgram(0);
     } else {
-        m_programValue->setCurrentIndex(currentProgram);
+        m_programComboBox->setCurrentIndex(currentProgram);
 
         // Ensure that stored program change value is same as the one
         // we're now showing (BUG 937371)
         //
         if (!m_programs.empty()) {
             m_selectedInstrument->setProgramChange
-            ((m_programs[m_programValue->currentIndex()]).getProgram());
+            ((m_programs[m_programComboBox->currentIndex()]).getProgram());
         }
     }
 }
 
 void
-MIDIInstrumentParameterPanel::populateVariationList()
+MIDIInstrumentParameterPanel::updateVariationComboBox()
 {
     if (m_selectedInstrument == 0)
         return ;
 
-    m_variationValue->clear();
+    m_variationComboBox->clear();
     m_variations.clear();
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
+        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox: No MidiDevice for Instrument "
         << m_selectedInstrument->getId() << endl;
         return ;
     }
 
     /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList:"
+    RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox:"
              << " variation type is " << md->getVariationType() << endl;
     */
 
@@ -784,7 +786,7 @@ MIDIInstrumentParameterPanel::populateVariationList()
         if (!m_variationLabel->isHidden()) {
             m_variationLabel->hide();
             m_variationCheckBox->hide();
-            m_variationValue->hide();
+            m_variationComboBox->hide();
         }
         return ;
     }
@@ -796,16 +798,16 @@ MIDIInstrumentParameterPanel::populateVariationList()
         MidiByte lsb = m_selectedInstrument->getLSB();
         variations = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
                                          lsb);
-        RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for lsb " << lsb << endl;
+        RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox: have " << variations.size() << " variations for lsb " << lsb << endl;
 
     } else {
         MidiByte msb = m_selectedInstrument->getMSB();
         variations = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
                                          msb);
-        RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for msb " << msb << endl;
+        RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox: have " << variations.size() << " variations for msb " << msb << endl;
     }
 
-    m_variationValue->setCurrentIndex( -1);
+    m_variationComboBox->setCurrentIndex( -1);
 
     MidiProgram defaultProgram;
 
@@ -848,11 +850,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
 
         if (programName != "") { // yes, that is how you know whether it exists
             /*
-                    m_variationValue->addItem(programName == defaultProgramName ?
+                    m_variationComboBox->addItem(programName == defaultProgramName ?
                                  tr("(default)") :
                                  strtoqstr(programName));
             */
-            m_variationValue->addItem(QObject::tr("%1. %2")
+            m_variationComboBox->addItem(QObject::tr("%1. %2")
                                          .arg(variations[i] + 1)
                                          .arg(QObject::tr(programName.c_str())));
             if (m_selectedInstrument->getProgram() == program) {
@@ -863,17 +865,17 @@ MIDIInstrumentParameterPanel::populateVariationList()
     }
 
     if (currentVariation < 0 && !m_variations.empty()) {
-        m_variationValue->setCurrentIndex(0);
+        m_variationComboBox->setCurrentIndex(0);
         slotSelectVariation(0);
     } else {
-        m_variationValue->setCurrentIndex(currentVariation);
+        m_variationComboBox->setCurrentIndex(currentVariation);
     }
 
     if (m_variations.size() < 2) {
         if (!m_variationLabel->isHidden()) {
             m_variationLabel->hide();
             m_variationCheckBox->hide();
-            m_variationValue->hide();
+            m_variationComboBox->hide();
         }
 
     } else {
@@ -885,21 +887,21 @@ MIDIInstrumentParameterPanel::populateVariationList()
         if (m_variationLabel->isHidden()) {
             m_variationLabel->show();
             m_variationCheckBox->show();
-            m_variationValue->show();
+            m_variationComboBox->show();
         }
 
-        if (m_programValue->width() > m_variationValue->width()) {
-            m_variationValue->setMinimumWidth(m_programValue->width());
+        if (m_programComboBox->width() > m_variationComboBox->width()) {
+            m_variationComboBox->setMinimumWidth(m_programComboBox->width());
         } else {
-            m_programValue->setMinimumWidth(m_variationValue->width());
+            m_programComboBox->setMinimumWidth(m_variationComboBox->width());
         }
     }
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_variationValue->setDisabled(false);
+        m_variationComboBox->setDisabled(false);
     } else {
-        m_variationValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+        m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
     }    
 }
 
@@ -914,9 +916,9 @@ MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
 
     m_selectedInstrument->setPercussion(value);
 
-    populateBankList();
-    populateProgramList();
-    populateVariationList();
+    updateBankComboBox();
+    updateProgramComboBox();
+    updateVariationComboBox();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
@@ -940,14 +942,14 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
 
     // Keep bank value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_bankValue->setDisabled(false);
+        m_bankComboBox->setDisabled(false);
     } else {
-        m_bankValue->setDisabled(!value);
+        m_bankComboBox->setDisabled(!value);
     }
 
-    populateBankList();
-    populateProgramList();
-    populateVariationList();
+    updateBankComboBox();
+    updateProgramComboBox();
+    updateVariationComboBox();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
@@ -970,13 +972,13 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
 
     // Keep program value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_bankValue->setDisabled(false);
+        m_bankComboBox->setDisabled(false);
     } else {
-        m_programValue->setDisabled(!value);
+        m_programComboBox->setDisabled(!value);
     }
 
-    populateProgramList();
-    populateVariationList();
+    updateProgramComboBox();
+    updateVariationComboBox();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
@@ -1000,12 +1002,12 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_bankValue->setDisabled(false);
+        m_bankComboBox->setDisabled(false);
     } else {
-        m_variationValue->setDisabled(!value);
+        m_variationComboBox->setDisabled(!value);
     }
 
-    populateVariationList();
+    updateVariationComboBox();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
                                m_selectedInstrument->
@@ -1046,7 +1048,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         }
     }
 
-    populateProgramList();
+    updateProgramComboBox();
 
     if (change) {
         emit updateAllBoxes();
@@ -1108,7 +1110,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, i
         change = true;
     }
 
-    //populateVariationList();
+    //updateVariationComboBox();
 
     // If anything changed, update the UI.
     if (change  ||  changedBank) {
@@ -1137,7 +1139,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         change = true;
     }
 
-    populateVariationList();
+    updateVariationComboBox();
 
     if (change) {
         emit changeInstrumentLabel(m_selectedInstrument->getId(),

@@ -48,7 +48,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
     Q_OBJECT
 public:
 
-    MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent);
+    MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
 
     /// Change the Instrument that is being displayed.
     /**
@@ -83,10 +83,12 @@ signals:
 public slots:
     /// Handle external Bank Selects and Program Changes.
     /**
-     * When a MIDI Bank Select or Program Change comes in from an external
-     * MIDI device, this function updates the bank and program in the
-     * instrument and then displays the new values.  The "Receive External"
-     * checkbox must be checked for this to work.
+     * When the "Receive External" checkbox is checked, this routine takes
+     * incoming Bank Select and Program Changes, and updates the instrument's
+     * bank and program based on those.  This allows the user to quickly set
+     * the bank/program from a MIDI device instead of sifting through the
+     * typically very arbitrarily ordered bank and program changes in
+     * the comboboxes.
      *
      * This slot is connected in RosegardenMainWindow's ctor to
      * SequenceManager::signalSelectProgramNoSend().
@@ -113,17 +115,17 @@ private slots:
 
     /// Handle m_bankCheckBox::toggled()
     void slotToggleBank(bool value);
-    /// Handle m_bankValue::activated()
+    /// Handle m_bankComboBox::activated()
     void slotSelectBank(int index);
 
     /// Handle m_programCheckBox::toggled()
     void slotToggleProgramChange(bool value);
-    /// Handle m_programValue::activated()
+    /// Handle m_programComboBox::activated()
     void slotSelectProgram(int index);
 
     /// Handle m_variationCheckBox::toggled()
     void slotToggleVariation(bool value);
-    /// Handle m_variationValue::activated()
+    /// Handle m_variationComboBox::activated()
     void slotSelectVariation(int index);
 
     /// Handle m_channelValue::activated()
@@ -134,23 +136,6 @@ private slots:
 
 private:
 
-    // fill (or hide) m_bankValue based on whether the instrument is percussion
-    void populateBankList();
-
-    // fill m_programValue based on current bank
-    void populateProgramList();
-
-    // fill (or hide) m_variationValue based on current bank and program
-    void populateVariationList();
-
-    /// Create or update the rotary controls for each controller.
-    void setupControllers(MidiDevice *);
-
-    int getValueFromRotary(int controller);
-    void setRotaryToValue(int controller, int value);
-
-    //--------------- Data members ---------------------------------
-
     QGridLayout        *m_mainGrid;
 
     // m_instrumentLabel is inherited from InstrumentParameterPanel.
@@ -159,26 +144,37 @@ private:
 
     QCheckBox          *m_percussionCheckBox;
 
+    // Bank
     QLabel             *m_bankLabel;
     QCheckBox          *m_bankCheckBox;
-    QComboBox          *m_bankValue;
+    QComboBox          *m_bankComboBox;
     BankList            m_banks;
+    /// From the selected instrument.
+    void updateBankComboBox();
 
+    // Program
     QLabel             *m_programLabel;
     QCheckBox          *m_programCheckBox;
-    QComboBox          *m_programValue;
+    QComboBox          *m_programComboBox;
     ProgramList         m_programs;
+    /// From the selected instrument.
+    void updateProgramComboBox();
 
+    // Variation
     QLabel             *m_variationLabel;
     QCheckBox          *m_variationCheckBox;
-    QComboBox          *m_variationValue;
+    QComboBox          *m_variationComboBox;
     MidiByteList        m_variations;
+    /// From the selected instrument.
+    void updateVariationComboBox();
 
     // Channel: auto/fixed
     QComboBox          *m_channelValue;
 
     QLabel             *m_receiveExternalLabel;
     QCheckBox          *m_receiveExternalCheckBox;
+
+    // Rotaries
 
     QFrame             *m_rotaryFrame;
     QGridLayout        *m_rotaryGrid;
@@ -189,10 +185,18 @@ private:
         QLabel *label;
         int controller;
     };
+    // ??? getValueFromRotary() and setRotaryToValue() would benefit
+    //     from this being a std::map indexed by controller.
     typedef std::vector<RotaryInfo> RotaryInfoVector;
     RotaryInfoVector    m_rotaries;
 
     QSignalMapper      *m_rotaryMapper;
+
+    /// Create or update the rotary controls for each controller.
+    void setupControllers(MidiDevice *);
+
+    int getValueFromRotary(int controller);
+    void setRotaryToValue(int controller, int value);
 };
 
 
