@@ -54,187 +54,187 @@
 namespace Rosegarden
 {
 
-MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent):
-        InstrumentParameterPanel(doc, parent),
-        m_rotaryFrame(0),
-        m_rotaryMapper(new QSignalMapper(this))
+MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
+        RosegardenDocument *doc, QWidget *parent) :
+    InstrumentParameterPanel(doc, parent),
+    m_rotaryFrame(0),
+    m_rotaryMapper(new QSignalMapper(this))
 {
     setObjectName("MIDI Instrument Parameter Panel");
 
-    QFont f;
-    f.setPointSize(f.pointSize() * 90 / 100);
-    f.setBold(false);
-
-    QFontMetrics metrics(f);
-    int width25 = metrics.width("1234567890123456789012345");
-
-    m_instrumentLabel->setFont(f);
-    m_instrumentLabel->setFixedWidth(width25);
-    m_instrumentLabel->setAlignment(Qt::AlignCenter);
-
+    // Grid
     setContentsMargins(2, 2, 2, 2);
     m_mainGrid = new QGridLayout(this);
     m_mainGrid->setMargin(0);
     m_mainGrid->setSpacing(1);
+    m_mainGrid->setColumnStretch(2, 1);
     setLayout(m_mainGrid);
 
+    // Font
+    QFont f;
+    f.setPointSize(f.pointSize() * 90 / 100);
+    f.setBold(false);
+    QFontMetrics metrics(f);
+
+    // Instrument Label
+    m_instrumentLabel->setFont(f);
+    const int width25 = metrics.width("1234567890123456789012345");
+    m_instrumentLabel->setFixedWidth(width25);
+    m_instrumentLabel->setAlignment(Qt::AlignCenter);
+    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
+
+    // Connection Label
     m_connectionLabel = new SqueezedLabel(this);
-    m_bankComboBox = new QComboBox(this);
-    m_programComboBox = new QComboBox(this);
-    m_variationComboBox = new QComboBox(this);
-    m_bankCheckBox = new QCheckBox(this);
-    m_programCheckBox = new QCheckBox(this);
-    m_variationCheckBox = new QCheckBox(this);
-    m_percussionCheckBox = new QCheckBox(this);
-    m_channelValue = new QComboBox(this);
-
-    // Everything else sets up elsewhere, but these don't vary per instrument:
-    m_channelValue->addItem(tr("auto"));
-    m_channelValue->addItem(tr("fixed"));
-
     m_connectionLabel->setFont(f);
-    m_bankComboBox->setFont(f);
-    m_programComboBox->setFont(f);
-    m_variationComboBox->setFont(f);
-    m_bankCheckBox->setFont(f);
-    m_programCheckBox->setFont(f);
-    m_variationCheckBox->setFont(f);
-    m_percussionCheckBox->setFont(f);
-    m_channelValue->setFont(f);
+    // we still have to use the QFontMetrics here, or a SqueezedLabel will
+    // squeeze itself down to 0.
+    const int width30 = metrics.width("123456789012345678901234567890");
+    m_connectionLabel->setFixedWidth(width30);
+    m_connectionLabel->setAlignment(Qt::AlignCenter);
+    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
 
-    m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
-    m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
-    m_variationComboBox->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
-    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    m_channelValue->setToolTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
-
-    m_bankComboBox->setMaxVisibleItems(20);
-    m_programComboBox->setMaxVisibleItems(20);
-    m_variationComboBox->setMaxVisibleItems(20);
-    m_channelValue->setMaxVisibleItems(2);
-    
-    m_bankLabel = new QLabel(tr("Bank"), this);
-    m_variationLabel = new QLabel(tr("Variation"), this);
-    m_programLabel = new QLabel(tr("Program"), this);
+    // Percussion Label
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
-    QLabel *channelLabel = new QLabel(tr("Channel"), this);
-    
-    m_bankLabel->setFont(f);
-    m_variationLabel->setFont(f);
-    m_programLabel->setFont(f);
     percussionLabel->setFont(f);
-    channelLabel->setFont(f);
-    
-    // Ensure a reasonable amount of space in the program dropdowns even
-    // if no instrument initially selected
+    m_mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
 
+    // Percussion CheckBox
+    m_percussionCheckBox = new QCheckBox(this);
+    m_percussionCheckBox->setFont(f);
+    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
+    //m_percussionCheckBox->setDisabled(true);
+    connect(m_percussionCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotTogglePercussion(bool)));
+    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
+
+    // Bank Label
+    m_bankLabel = new QLabel(tr("Bank"), this);
+    m_bankLabel->setFont(f);
+    m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
+
+    // Bank CheckBox
+    m_bankCheckBox = new QCheckBox(this);
+    m_bankCheckBox->setFont(f);
+    m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
+    //m_bankCheckBox->setDisabled(true);
+    connect(m_bankCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleBank(bool)));
+    m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
+
+    // Ensure a reasonable amount of space in the dropdowns even
+    // if no instrument initially selected.
     // setMinimumWidth() using QFontMetrics wasn't cutting it at all, so let's
     // try what I used in the plugin manager dialog, with
     // setMinimumContentsLength() instead:
-    QString metric("Acoustic Grand Piano #42B");
-    int width22 = metric.size();
-    
-    m_bankComboBox->setMinimumContentsLength(width22);
-    m_programComboBox->setMinimumContentsLength(width22);
-    m_variationComboBox->setMinimumContentsLength(width22);
-    m_channelValue->setMinimumContentsLength(width22);
+    const int comboWidth = 25;
 
-    // we still have to use the QFontMetrics here, or a SqueezedLabel will
-    // squeeze itself down to 0.
-    int width30 = metrics.width("123456789012345678901234567890");
-    m_connectionLabel->setFixedWidth(width30);
-    m_connectionLabel->setAlignment(Qt::AlignCenter);
-    
-    
-    QString programTip = tr("<qt>Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
-    m_receiveExternalCheckBox = new QCheckBox(this);
-    m_receiveExternalCheckBox->setFont(f);
-    m_receiveExternalLabel = new QLabel(tr("Receive external"), this);
-    m_receiveExternalLabel->setFont(f);
-    m_receiveExternalLabel->setToolTip(programTip);
-    
-    m_receiveExternalCheckBox->setDisabled(false);
-    m_receiveExternalCheckBox->setChecked(false);
-    m_receiveExternalCheckBox->setToolTip(programTip);
-    m_receiveExternalCheckBox->setShortcut((QKeySequence)"Shift+P");
-
-
-
-    m_mainGrid->setColumnStretch(2, 1);
-
-    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
-    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
-
-    m_mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
-
-    m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
-    m_mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
-
-    m_mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
-    m_mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
-
-    m_mainGrid->addWidget(m_variationLabel, 6, 0);
-    m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
-    m_mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
-      
-    m_mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
-
-    m_mainGrid->addWidget(m_receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
-    m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
-
-    // Disable these by default - they are activated by their checkboxes
-    //
-    m_programComboBox->setDisabled(true);
-    m_bankComboBox->setDisabled(true);
-    m_variationComboBox->setDisabled(true);
-
-    // Only active if we have an Instrument selected
-    //
-    m_percussionCheckBox->setDisabled(true);
-    m_programCheckBox->setDisabled(true);
-    m_bankCheckBox->setDisabled(true);
-    m_variationCheckBox->setDisabled(true);
-
-    // Connect up the toggle boxes
-    //
-    connect(m_percussionCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotTogglePercussion(bool)));
-
-    connect(m_programCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleProgramChange(bool)));
-
-    connect(m_bankCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleBank(bool)));
-
-    connect(m_variationCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleVariation(bool)));
-    
-    
-    // Connect activations
-    //
+    // Bank ComboBox
+    m_bankComboBox = new QComboBox(this);
+    m_bankComboBox->setFont(f);
+    m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
+    m_bankComboBox->setMaxVisibleItems(20);
+    m_bankComboBox->setMinimumContentsLength(comboWidth);
+    // Activated by m_bankCheckBox
+    //m_bankComboBox->setDisabled(true);
     connect(m_bankComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSelectBank(int)));
+    //m_bankComboBox->setCurrentIndex(-1);
+    m_mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
 
-    connect(m_variationComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotSelectVariation(int)));
+    // Program Label
+    m_programLabel = new QLabel(tr("Program"), this);
+    m_programLabel->setFont(f);
+    m_mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
 
+    // Program CheckBox
+    m_programCheckBox = new QCheckBox(this);
+    m_programCheckBox->setFont(f);
+    m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
+    //m_programCheckBox->setDisabled(true);
+    connect(m_programCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleProgramChange(bool)));
+    m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
+
+    // Program ComboBox
+    m_programComboBox = new QComboBox(this);
+    m_programComboBox->setFont(f);
+    m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
+    m_programComboBox->setMaxVisibleItems(20);
+    m_programComboBox->setMinimumContentsLength(comboWidth);
+    // Activated by m_programCheckBox
+    //m_programComboBox->setDisabled(true);
     connect(m_programComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSelectProgram(int)));
-    
-    // don't select any of the options in any dropdown
-    m_programComboBox->setCurrentIndex( -1);
-    m_bankComboBox->setCurrentIndex( -1);
-    m_variationComboBox->setCurrentIndex( -1);
-    m_channelValue->setCurrentIndex(-1);
+    //m_programComboBox->setCurrentIndex(-1);
+    m_mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
 
-    connect(m_rotaryMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotControllerChanged(int)));
+    // Variation Label
+    m_variationLabel = new QLabel(tr("Variation"), this);
+    m_variationLabel->setFont(f);
+    m_mainGrid->addWidget(m_variationLabel, 6, 0);
+
+    // Variation CheckBox
+    m_variationCheckBox = new QCheckBox(this);
+    m_variationCheckBox->setFont(f);
+    m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
+    //m_variationCheckBox->setDisabled(true);
+    connect(m_variationCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleVariation(bool)));
+    m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
+
+    // Variation ComboBox
+    m_variationComboBox = new QComboBox(this);
+    m_variationComboBox->setFont(f);
+    m_variationComboBox->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
+    m_variationComboBox->setMaxVisibleItems(20);
+    m_variationComboBox->setMinimumContentsLength(comboWidth);
+    // Activated by m_variationCheckBox
+    //m_variationComboBox->setDisabled(true);
+    connect(m_variationComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotSelectVariation(int)));
+    //m_variationComboBox->setCurrentIndex(-1);
+    m_mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
+
+    // Channel Label
+    QLabel *channelLabel = new QLabel(tr("Channel"), this);
+    channelLabel->setFont(f);
+    QString channelTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
+    channelLabel->setToolTip(channelTip);
+    m_mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
+
+    // Channel ComboBox
+    m_channelValue = new QComboBox(this);
+    m_channelValue->setFont(f);
+    m_channelValue->setToolTip(channelTip);
+    m_channelValue->setMaxVisibleItems(2);
+    // Everything else sets up elsewhere, but these don't vary per instrument:
+    m_channelValue->addItem(tr("Auto"));
+    m_channelValue->addItem(tr("Fixed"));
+    m_channelValue->setMinimumContentsLength(comboWidth);
     connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectChannel(int)));
+    //m_channelValue->setCurrentIndex(-1);
+    m_mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
+
+    // Receive External Label
+    m_receiveExternalLabel = new QLabel(tr("Receive external"), this);
+    m_receiveExternalLabel->setFont(f);
+    QString receiveExternalTip = tr("<qt>Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
+    m_receiveExternalLabel->setToolTip(receiveExternalTip);
+    m_mainGrid->addWidget(m_receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
+    
+    // Receive External CheckBox
+    m_receiveExternalCheckBox = new QCheckBox(this);
+    m_receiveExternalCheckBox->setFont(f);
+    m_receiveExternalCheckBox->setToolTip(receiveExternalTip);
+    m_receiveExternalCheckBox->setShortcut((QKeySequence)"Shift+P");
+    //m_receiveExternalCheckBox->setDisabled(false);
+    m_receiveExternalCheckBox->setChecked(false);
+    m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
+
+    // Rotary Mapper
+    connect(m_rotaryMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotControllerChanged(int)));
 }
 
 void
