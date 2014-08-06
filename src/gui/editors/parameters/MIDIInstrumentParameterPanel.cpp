@@ -17,6 +17,11 @@
 
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
 
+// Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
+// Downside to this is that we also lose all the errors/warnings.
+// We need an RG_ERROR.  Instead, I've gone with std::cerr for the errors.
+#define RG_NO_DEBUG_PRINT
+
 #include "MIDIInstrumentParameterPanel.h"
 
 #include "InstrumentParameterPanel.h"
@@ -49,7 +54,7 @@
 
 #include <algorithm>  // std::sort
 #include <string>
-
+#include <iostream>
 
 namespace Rosegarden
 {
@@ -60,6 +65,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_rotaryFrame(0),
     m_rotaryMapper(new QSignalMapper(this))
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel ctor";
+
     setObjectName("MIDI Instrument Parameter Panel");
 
     // Grid
@@ -102,7 +109,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_percussionCheckBox = new QCheckBox(this);
     m_percussionCheckBox->setFont(f);
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    //m_percussionCheckBox->setDisabled(true);
     connect(m_percussionCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotTogglePercussion(bool)));
     m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
@@ -116,7 +122,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_bankCheckBox = new QCheckBox(this);
     m_bankCheckBox->setFont(f);
     m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
-    //m_bankCheckBox->setDisabled(true);
     connect(m_bankCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleBank(bool)));
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
@@ -150,7 +155,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_programCheckBox = new QCheckBox(this);
     m_programCheckBox->setFont(f);
     m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
-    //m_programCheckBox->setDisabled(true);
     connect(m_programCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleProgramChange(bool)));
     m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
@@ -177,7 +181,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_variationCheckBox = new QCheckBox(this);
     m_variationCheckBox->setFont(f);
     m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
-    //m_variationCheckBox->setDisabled(true);
     connect(m_variationCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleVariation(bool)));
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
@@ -228,7 +231,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_receiveExternalCheckBox->setFont(f);
     m_receiveExternalCheckBox->setToolTip(receiveExternalTip);
     m_receiveExternalCheckBox->setShortcut((QKeySequence)"Shift+P");
-    //m_receiveExternalCheckBox->setDisabled(false);
     m_receiveExternalCheckBox->setChecked(false);
     m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
 
@@ -240,30 +242,39 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
 void
 MIDIInstrumentParameterPanel::clearReceiveExternal()
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::clearReceiveExternal()";
+
     m_receiveExternalCheckBox->setChecked(false);
 }
 
 void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument" << endl;
+    RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument() begin";
 
     // In some cases setupForInstrument gets called several times.
     // This shortcuts this activity since only one setup is needed.
     // ??? Problem is that this prevents legitimate changes to the
-    //     instrument from getting to the UI.
+    //     instrument from getting to the UI.  Removing this fixes an
+    //     update bug when importing a device file.  I think it also
+    //     fixes an update bug related to "Receive external".
+    // ??? However, this might be preventing endless recursion as this routine
+    //     might indirectly fire off calls to itself.  Initial digging seems
+    //     to indicate that this routine will not fire off signals.  It tries
+    //     hard not to, anyway.
+#if 1
     if (m_selectedInstrument == instrument) {
-        RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument "
-                 << "-- early exit.  instrument didn't change." << endl;
+        RG_DEBUG << "setupForInstrument(): Early exit.  Instrument didn't change.";
+        RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument() end";
         return;
     }
+#endif
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (instrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument:"
-        << " No MidiDevice for Instrument "
-        << instrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument(): No MidiDevice for Instrument " << instrument->getId() << '\n';
+        RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument() end";
         return ;
     }
 
@@ -298,52 +309,50 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         m_connectionLabel->setText(QObject::tr(text.toStdString().c_str()));
     }
 
-    // Enable all check boxes
-    //
-    m_percussionCheckBox->setDisabled(false);
-    m_programCheckBox->setDisabled(false);
-    m_bankCheckBox->setDisabled(false);
-    m_variationCheckBox->setDisabled(false);
-
-    // Activate all checkboxes
-    //
+    // Update all checkboxes
     
-    // Block signals
+    // Block the signals.
+    // QAbstractButton::setChecked() will fire off both a toggled() and
+    // a stateChanged() signal, so we must block signals to avoid
+    // doing unnecessary work.
+    // ??? See if QAbstractButton::clicked() would be a better signal
+    //     to use.  Would that avoid the need to do this?
     m_percussionCheckBox-> blockSignals(true);
     m_programCheckBox->    blockSignals(true);
     m_bankCheckBox->       blockSignals(true);
     m_variationCheckBox->  blockSignals(true);
-    m_channelValue->       blockSignals(true);
-    
-    // Change state
+
+    // Update the checkboxes
     m_percussionCheckBox->setChecked(instrument->isPercussion());
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
-    m_channelValue->setCurrentIndex(
-            m_selectedInstrument->hasFixedChannel() ? 1 : 0);
 
     // Unblock signals
     m_percussionCheckBox-> blockSignals(false);
     m_programCheckBox->    blockSignals(false);
     m_bankCheckBox->       blockSignals(false);
     m_variationCheckBox->  blockSignals(false);
-    m_channelValue->       blockSignals(false);
 
-    // Basic parameters
-    //
-    //
-    // Check for program change
-    //
+    // Update ComboBoxes
+
+    m_channelValue->setCurrentIndex(
+            m_selectedInstrument->hasFixedChannel() ? 1 : 0);
+
+    // ??? Do these fire off the combobox handlers?  Maybe.  Although each of
+    //     these culminates in a setCurrentIndex() which we've verified does
+    //     not fire an activated(int), some of these do directly call the
+    //     handlers which in turn will fire multiple signals.  This needs
+    //     to be investigated.
     updateBankComboBox();
     updateProgramComboBox();
     updateVariationComboBox();
-    
-    // Setup the ControlParameters
-    //
-    setupControllers(md);
 
-    m_mainGrid->setRowStretch(9, 20);
+    // Update Rotary Widgets
+
+    // Setup the Rotaries
+    // ??? Does this fire off the rotary handlers?  Probably not.
+    setupControllers(md);
 
     // Set all the positions by controller number
     //
@@ -357,19 +366,25 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         } catch (...) {
             continue;
         }
+        // ??? Does this fire off the rotary handlers?  Testing indicates no.
         setRotaryToValue(it->controller, int(value));
     }
 
+    RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument() end";
 }
 
 void
 MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::setupControllers()";
+
     QFont f(font());
 
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
         m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 3, Qt::AlignHCenter);
+        // Put some space between the rotaries and the widgets above.
+        m_mainGrid->setRowStretch(9, 20);
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
         m_rotaryGrid->setSpacing(1);
@@ -494,7 +509,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             label->setFont(f);
             hboxLayout->addWidget(label);
 
-            RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;
+            RG_DEBUG << "setupControllers(): Adding new widget at " << (count / 2) << "," << (count % 2);
 
             // Add the compound widget
             //
@@ -539,11 +554,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 void
 MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
 {
-    /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::setRotaryToValue - "
-             << "controller = " << controller
-             << ", value = " << value << std::endl;
-             */
+    RG_DEBUG << "MIDIInstrumentParameterPanel::setRotaryToValue(controller => " << controller << ", value => " << value << ")";
 
     for (RotaryInfoVector::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it) {
         if (it->controller == controller) {
@@ -556,6 +567,8 @@ MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
 void
 MIDIInstrumentParameterPanel::updateBankComboBox()
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox()";
+
     if (m_selectedInstrument == 0) return;
 
     m_bankComboBox->clear();
@@ -564,19 +577,14 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox:"
-        << " No MidiDevice for Instrument "
-        << m_selectedInstrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
     int currentBank = -1;
     BankList banks;
 
-    /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox: "
-             << "variation type is " << md->getVariationType() << endl;
-             */
+    RG_DEBUG << "updateBankComboBox(): Variation type is " << md->getVariationType();
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
 
@@ -629,7 +637,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
             for (unsigned int i = 0; i < bytes.size(); ++i) {
                 BankList bl = md->getBanksByMSB
                               (m_selectedInstrument->isPercussion(), bytes[i]);
-                RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox: have " << bl.size() << " variations for msb " << bytes[i] << endl;
+                RG_DEBUG << "updateBankComboBox(): Have " << bl.size() << " variations for MSB " << bytes[i];
 
                 if (bl.size() == 0)
                     continue;
@@ -642,7 +650,9 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
             for (unsigned int i = 0; i < bytes.size(); ++i) {
                 BankList bl = md->getBanksByLSB
                               (m_selectedInstrument->isPercussion(), bytes[i]);
-                RG_DEBUG << "MIDIInstrumentParameterPanel::updateBankComboBox: have " << bl.size() << " variations for lsb " << bytes[i] << endl;
+
+                RG_DEBUG << "updateBankComboBox(): Have " << bl.size() << " variations for LSB " << bytes[i];
+
                 if (bl.size() == 0)
                     continue;
                 if (m_selectedInstrument->getLSB() == bytes[i]) {
@@ -677,6 +687,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 void
 MIDIInstrumentParameterPanel::updateProgramComboBox()
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::updateProgramComboBox()";
+
     if (m_selectedInstrument == 0)
         return ;
 
@@ -686,15 +698,11 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox: No MidiDevice for Instrument "
-        << m_selectedInstrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
-    /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::updateProgramComboBox:"
-             << " variation type is " << md->getVariationType() << endl;
-    */
+    RG_DEBUG << "updateProgramComboBox(): variation type is " << md->getVariationType();
 
     MidiBank bank( m_selectedInstrument->isPercussion(),
                    m_selectedInstrument->getMSB(),
@@ -763,6 +771,8 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 void
 MIDIInstrumentParameterPanel::updateVariationComboBox()
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox()";
+
     if (m_selectedInstrument == 0)
         return ;
 
@@ -772,15 +782,11 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox: No MidiDevice for Instrument "
-        << m_selectedInstrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
-    /*
-    RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox:"
-             << " variation type is " << md->getVariationType() << endl;
-    */
+    RG_DEBUG << "updateVariationComboBox(): Variation type is " << md->getVariationType();
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
         if (!m_variationLabel->isHidden()) {
@@ -798,13 +804,14 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         MidiByte lsb = m_selectedInstrument->getLSB();
         variations = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
                                          lsb);
-        RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox: have " << variations.size() << " variations for lsb " << lsb << endl;
+        RG_DEBUG << "updateVariationComboBox(): Have " << variations.size() << " variations for LSB " << lsb;
 
     } else {
         MidiByte msb = m_selectedInstrument->getMSB();
         variations = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
                                          msb);
-        RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox: have " << variations.size() << " variations for msb " << msb << endl;
+
+        RG_DEBUG << "updateVariationComboBox(): Have " << variations.size() << " variations for MSB " << msb;
     }
 
     m_variationComboBox->setCurrentIndex( -1);
@@ -908,6 +915,8 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 void
 MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotTogglePercussion()";
+
     if (m_selectedInstrument == 0) {
         m_percussionCheckBox->setChecked(false);
         emit updateAllBoxes();
@@ -931,6 +940,8 @@ MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
 void
 MIDIInstrumentParameterPanel::slotToggleBank(bool value)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotToggleBank()";
+
     if (m_selectedInstrument == 0) {
         m_bankCheckBox->setChecked(false);
         emit updateAllBoxes();
@@ -962,6 +973,8 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
 void
 MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotToggleProgramChange()";
+
     if (m_selectedInstrument == 0) {
         m_programCheckBox->setChecked(false);
         emit updateAllBoxes();
@@ -991,6 +1004,8 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
 void
 MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotToggleVariation()";
+
     if (m_selectedInstrument == 0) {
         m_variationCheckBox->setChecked(false);
         emit updateAllBoxes();
@@ -1020,14 +1035,15 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
 void
 MIDIInstrumentParameterPanel::slotSelectBank(int index)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotSelectBank()";
+
     if (m_selectedInstrument == 0)
         return ;
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-        << m_selectedInstrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
@@ -1063,6 +1079,8 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 void
 MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, int bankMSB )
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotExternalProgramChange()";
+
     // If we aren't set to "Receive External", bail.
     if (!m_receiveExternalCheckBox->isChecked())
         return;
@@ -1074,8 +1092,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, i
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
 
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotExternalProgramChange(): No MidiDevice for Instrument "
-                 << m_selectedInstrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotExternalProgramChange(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
@@ -1127,9 +1144,11 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, i
 void
 MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotSelectProgram()";
+
     const MidiProgram *prg = &m_programs[index];
     if (prg == 0) {
-        RG_DEBUG << "program change not found in bank" << endl;
+        std::cerr << "MIDIInstrumentParameterPanel::slotSelectProgram(): Program change not found in bank.\n";
         return ;
     }
 
@@ -1154,16 +1173,17 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 void
 MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotSelectVariation()";
+
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
     if (!md) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: No MidiDevice for Instrument "
-        << m_selectedInstrument->getId() << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
     if (index < 0 || index > int(m_variations.size())) {
-        RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: index " << index << " out of range" << endl;
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): index " << index << " out of range\n";
         return ;
     }
 
@@ -1188,10 +1208,7 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 void
 MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 {
-
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged - "
-    << "controller = " << controllerNumber << "\n";
-
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged(" << controllerNumber << ")";
 
     if (m_selectedInstrument == 0)
         return ;
@@ -1209,9 +1226,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     int value = getValueFromRotary(controllerNumber);
 
     if (value == -1) {
-        RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged - "
-        << "couldn't get value of rotary for controller "
-        << controllerNumber << endl;
+        std::cerr << "MIDIInstrumentParameterPanel::slotControllerChanged(): Couldn't get value of rotary for controller " << controllerNumber << '\n';
         return ;
     }
 
@@ -1226,6 +1241,8 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 int
 MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::getValueFromRotary(" << controller << ")";
+
     for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
         if (it->controller == controller)
             return int(it->rotary->getPosition());
@@ -1238,6 +1255,8 @@ void
 MIDIInstrumentParameterPanel::
 slotSelectChannel(int index)
 {
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotSelectChannel(" << index << ")";
+
     if (m_selectedInstrument == 0)
         { return; }
     if (index == 1) {

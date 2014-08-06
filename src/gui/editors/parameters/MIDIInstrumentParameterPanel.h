@@ -50,7 +50,7 @@ public:
 
     MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
 
-    /// Change the Instrument that is being displayed.
+    /// Update all widgets from the Instrument.
     /**
      * Called each time the selected track changes.
      */
