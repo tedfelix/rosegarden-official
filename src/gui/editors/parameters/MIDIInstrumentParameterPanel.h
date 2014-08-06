@@ -110,8 +110,8 @@ public slots:
             int programChange, int bankLSB, int bankMSB);
 
 private slots:
-    /// Handle m_percussionCheckBox::toggled()
-    void slotTogglePercussion(bool value);
+    /// Handle m_percussionCheckBox clicked()
+    void slotPercussionClicked(bool checked);
 
     /// Handle m_bankCheckBox::toggled()
     void slotToggleBank(bool value);

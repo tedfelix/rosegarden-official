@@ -109,8 +109,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_percussionCheckBox = new QCheckBox(this);
     m_percussionCheckBox->setFont(f);
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    connect(m_percussionCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotTogglePercussion(bool)));
+    connect(m_percussionCheckBox, SIGNAL(clicked(bool)),
+            this, SLOT(slotPercussionClicked(bool)));
     m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
 
     // Bank Label
@@ -316,8 +316,9 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     // a stateChanged() signal, so we must block signals to avoid
     // doing unnecessary work.
     // ??? See if QAbstractButton::clicked() would be a better signal
-    //     to use.  Would that avoid the need to do this?
-    m_percussionCheckBox-> blockSignals(true);
+    //     to use.  Would that avoid the need to do this?  Yes.  Go
+    //     ahead and switch all checkbox toggled handlers to clicked
+    //     handlers.  Then get rid of all calls to blockSignals().
     m_programCheckBox->    blockSignals(true);
     m_bankCheckBox->       blockSignals(true);
     m_variationCheckBox->  blockSignals(true);
@@ -329,7 +330,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
 
     // Unblock signals
-    m_percussionCheckBox-> blockSignals(false);
     m_programCheckBox->    blockSignals(false);
     m_bankCheckBox->       blockSignals(false);
     m_variationCheckBox->  blockSignals(false);
@@ -913,9 +913,9 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 }
 
 void
-MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
+MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotTogglePercussion()";
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotPercussionClicked(" << checked << ")";
 
     if (m_selectedInstrument == 0) {
         m_percussionCheckBox->setChecked(false);
@@ -923,7 +923,7 @@ MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
         return ;
     }
 
-    m_selectedInstrument->setPercussion(value);
+    m_selectedInstrument->setPercussion(checked);
 
     updateBankComboBox();
     updateProgramComboBox();
