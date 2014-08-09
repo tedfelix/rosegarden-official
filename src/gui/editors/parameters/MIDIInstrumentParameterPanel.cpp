@@ -18,8 +18,8 @@
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
 
 // Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
-// Downside to this is that we also lose all the errors/warnings.
-// We need an RG_ERROR.  Instead, I've gone with std::cerr for the errors.
+// Downside to this is that we also lose all the warnings.
+// We need an RG_WARNING.  Instead, I've gone with std::cerr.
 #define RG_NO_DEBUG_PRINT
 
 #include "MIDIInstrumentParameterPanel.h"
@@ -122,8 +122,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_bankCheckBox = new QCheckBox(this);
     m_bankCheckBox->setFont(f);
     m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
-    connect(m_bankCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleBank(bool)));
+    connect(m_bankCheckBox, SIGNAL(clicked(bool)),
+            this, SLOT(slotBankClicked(bool)));
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
 
     // Ensure a reasonable amount of space in the dropdowns even
@@ -155,8 +155,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_programCheckBox = new QCheckBox(this);
     m_programCheckBox->setFont(f);
     m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
-    connect(m_programCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleProgramChange(bool)));
+    connect(m_programCheckBox, SIGNAL(clicked(bool)),
+            this, SLOT(slotProgramClicked(bool)));
     m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
 
     // Program ComboBox
@@ -181,8 +181,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_variationCheckBox = new QCheckBox(this);
     m_variationCheckBox->setFont(f);
     m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
-    connect(m_variationCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleVariation(bool)));
+    connect(m_variationCheckBox, SIGNAL(clicked(bool)),
+            this, SLOT(slotVariationClicked(bool)));
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
 
     // Variation ComboBox
@@ -309,30 +309,12 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         m_connectionLabel->setText(QObject::tr(text.toStdString().c_str()));
     }
 
-    // Update all checkboxes
+    // Update CheckBoxes
     
-    // Block the signals.
-    // QAbstractButton::setChecked() will fire off both a toggled() and
-    // a stateChanged() signal, so we must block signals to avoid
-    // doing unnecessary work.
-    // ??? See if QAbstractButton::clicked() would be a better signal
-    //     to use.  Would that avoid the need to do this?  Yes.  Go
-    //     ahead and switch all checkbox toggled handlers to clicked
-    //     handlers.  Then get rid of all calls to blockSignals().
-    m_programCheckBox->    blockSignals(true);
-    m_bankCheckBox->       blockSignals(true);
-    m_variationCheckBox->  blockSignals(true);
-
-    // Update the checkboxes
     m_percussionCheckBox->setChecked(instrument->isPercussion());
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
-
-    // Unblock signals
-    m_programCheckBox->    blockSignals(false);
-    m_bankCheckBox->       blockSignals(false);
-    m_variationCheckBox->  blockSignals(false);
 
     // Update ComboBoxes
 
@@ -938,9 +920,9 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 }
 
 void
-MIDIInstrumentParameterPanel::slotToggleBank(bool value)
+MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotToggleBank()";
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotBankClicked()";
 
     if (m_selectedInstrument == 0) {
         m_bankCheckBox->setChecked(false);
@@ -948,14 +930,14 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
         return ;
     }
 
-    m_variationCheckBox->setChecked(value);
-    m_selectedInstrument->setSendBankSelect(value);
+    m_variationCheckBox->setChecked(checked);
+    m_selectedInstrument->setSendBankSelect(checked);
 
     // Keep bank value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
         m_bankComboBox->setDisabled(false);
     } else {
-        m_bankComboBox->setDisabled(!value);
+        m_bankComboBox->setDisabled(!checked);
     }
 
     updateBankComboBox();
@@ -971,9 +953,9 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
 }
 
 void
-MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
+MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotToggleProgramChange()";
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotProgramClicked()";
 
     if (m_selectedInstrument == 0) {
         m_programCheckBox->setChecked(false);
@@ -981,13 +963,13 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
         return ;
     }
 
-    m_selectedInstrument->setSendProgramChange(value);
+    m_selectedInstrument->setSendProgramChange(checked);
 
     // Keep program value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
         m_bankComboBox->setDisabled(false);
     } else {
-        m_programComboBox->setDisabled(!value);
+        m_programComboBox->setDisabled(!checked);
     }
 
     updateProgramComboBox();
@@ -1002,9 +984,9 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
 }
 
 void
-MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
+MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotToggleVariation()";
+    RG_DEBUG << "MIDIInstrumentParameterPanel::slotVariationClicked()";
 
     if (m_selectedInstrument == 0) {
         m_variationCheckBox->setChecked(false);
@@ -1012,14 +994,14 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
         return ;
     }
 
-    m_bankCheckBox->setChecked(value);
-    m_selectedInstrument->setSendBankSelect(value);
+    m_bankCheckBox->setChecked(checked);
+    m_selectedInstrument->setSendBankSelect(checked);
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
         m_bankComboBox->setDisabled(false);
     } else {
-        m_variationComboBox->setDisabled(!value);
+        m_variationComboBox->setDisabled(!checked);
     }
 
     updateVariationComboBox();

@@ -113,25 +113,25 @@ private slots:
     /// Handle m_percussionCheckBox clicked()
     void slotPercussionClicked(bool checked);
 
-    /// Handle m_bankCheckBox::toggled()
-    void slotToggleBank(bool value);
-    /// Handle m_bankComboBox::activated()
+    /// Handle m_bankCheckBox clicked()
+    void slotBankClicked(bool checked);
+    /// Handle m_bankComboBox activated()
     void slotSelectBank(int index);
 
-    /// Handle m_programCheckBox::toggled()
-    void slotToggleProgramChange(bool value);
-    /// Handle m_programComboBox::activated()
+    /// Handle m_programCheckBox clicked()
+    void slotProgramClicked(bool checked);
+    /// Handle m_programComboBox activated()
     void slotSelectProgram(int index);
 
-    /// Handle m_variationCheckBox::toggled()
-    void slotToggleVariation(bool value);
-    /// Handle m_variationComboBox::activated()
+    /// Handle m_variationCheckBox clicked()
+    void slotVariationClicked(bool checked);
+    /// Handle m_variationComboBox activated()
     void slotSelectVariation(int index);
 
-    /// Handle m_channelValue::activated()
+    /// Handle m_channelValue activated()
     void slotSelectChannel(int index);
 
-    /// Handle a rotary change (m_rotaryMapper::mapped())
+    /// Handle a rotary change (m_rotaryMapper mapped())
     void slotControllerChanged(int index);
 
 private:
