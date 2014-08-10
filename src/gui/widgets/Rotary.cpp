@@ -108,7 +108,15 @@ void
 Rotary::setKnobColour(const QColor &colour)
 {
     m_knobColour = colour;
-    repaint();
+
+    // ??? Some setters call update(), others don't.  If they all did, then
+    //     client code wouldn't have to worry about partial updates and
+    //     flicker.  (update() goes through the message loop, so it happens
+    //     after a client makes all needed changes.  No flicker.)  This can
+    //     be taken one step further by detecting changes in the setters.
+    //     Then the client can call with impunity and updates will only occur
+    //     when there are actual changes.  No flicker.
+    update();
 }
 
 void
