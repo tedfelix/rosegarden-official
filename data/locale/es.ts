@@ -308,12 +308,12 @@
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
         <source>Half-wave crescendo - set %1 rising from min to max in a half sine wave contour</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescendo de media onda - establecer %1creciendo desde el mínimo al máximo en contorno de onda media sinusoidal</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation>Diminuendo de media onda - establecer %1cayendo desde el  máximo al mínimo en contorno de onda media sinusoidal</translation>
+        <translation>Diminuendo de cuarta onda - establecer %1cayendo desde el  mínimo al máximo en contorno de onda media sinusoidal</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+29"/>
@@ -1087,22 +1087,22 @@
     <message>
         <location line="-713"/>
         <source>Interpret Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra de herramientas de Interpretaciones</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Interpret Active Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Interpretar Segmento Activo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Interpret &amp;Text Dynamics</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpretar matizaciones &amp;textuales</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Adjust velocity to follow text dynamics (f, p, mf...)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ajustar velocidades para seguir din</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -11474,7 +11474,7 @@
     <message>
         <location line="+7"/>
         <source>Start JACK automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Poner JACK en marcha automáticamente</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -13002,7 +13002,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+10"/>
         <source>Auto-Expand when Editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Expansionar automáticamente</translation>
     </message>
 </context>
 <context>
@@ -13969,12 +13969,12 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location line="+5"/>
         <source>Use notation duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar duración de partitura</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Select rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar silencios</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -14683,12 +14683,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+87"/>
         <source>MuPDF</source>
-        <translation type="unfinished"></translation>
+        <translation>MuPDF</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ePDFView</source>
-        <translation type="unfinished"></translation>
+        <translation>ePDFView</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -15896,7 +15896,7 @@ en su lugar? </translation>
     <message>
         <location line="+1"/>
         <source>2.14</source>
-        <translation type="unfinished">2.14</translation>
+        <translation>2.14</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16011,7 +16011,7 @@ en su lugar? </translation>
     <message>
         <location line="+3"/>
         <source>Allow fingerings inside staff</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Permitir digi</translation>
     </message>
     <message>
         <location line="+2"/>
