@@ -360,8 +360,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel::setupControllers()";
 
-    QFont f(font());
-
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
         m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 3, Qt::AlignHCenter);
@@ -400,14 +398,13 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         // black instead of the default color from the map!  it was here the
         // whole time, this simple!)
         //
-        QColor knobColour = it->getColourIndex();
-        Colour c =
-            comp.getGeneralColourMap().getColourByIndex
-            (it->getColourIndex());
-        knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
+        const Colour c = comp.getGeneralColourMap().getColourByIndex(
+                it->getColourIndex());
+        const QColor knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
 
         Rotary *rotary = 0;
 
+        // If the Rotary widgets have already been created, update them.
         if (rmi != m_rotaries.end()) {
 
             // Update the controller number that is associated with the
@@ -418,44 +415,47 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // Update the properties of the existing rotary widget.
 
             rotary = rmi->rotary;
-            int redraw = 0; // 1 -> position, 2 -> all
 
             if (rotary->getMinValue() != it->getMin()) {
                 rotary->setMinimum(it->getMin());
-                redraw = 1;
+                // Update the next time through the message loop.
+                // ??? setMinimum() should do this for us.
+                rotary->update();
             }
             if (rotary->getMaxValue() != it->getMax()) {
                 rotary->setMaximum(it->getMax());
-                redraw = 1;
+                // Update the next time through the message loop.
+                // ??? setMaximum() should do this for us.
+                rotary->update();
             }
             
-            bool isCentered = it->getDefault() == 64;
+            const bool isCentered = (it->getDefault() == 64);
             if (rotary->getCentered() != isCentered) {
                 rotary->setCentered(isCentered);
-                redraw = 1;
+                // Update the next time through the message loop.
+                // ??? setCentered() should do this for us.
+                rotary->update();
             }
+
+            // If we aren't in the default position
+            if (rotary->getPosition() != it->getDefault()) {
+                rotary->setPosition(it->getDefault());
+                // No need to call update() as setPosition() does it for us.
+            }
+
             if (rotary->getKnobColour() != knobColour) {
                 rotary->setKnobColour(knobColour);
-                redraw = 2;
-            }
-            if (redraw == 1 || rotary->getPosition() != it->getDefault()) {
-                rotary->setPosition(it->getDefault());
-                if (redraw == 1)
-                    redraw = 0;
-            }
-            if (redraw == 2) {
-                rotary->repaint();
+                // No need to call update() as setKnobColour() does it for us.
             }
 
-            // Update the controller name that is associated with
-            // with the existing rotary widget.
-
+            // Update the controller name.
             QLabel *label = rmi->label;
             label->setText(QObject::tr(it->getName().c_str()));
 
+            // Next Rotary widget
             ++rmi;
 
-        } else {
+        } else {  // Need to create the Rotary widget.
 
             QWidget *hbox = new QWidget(m_rotaryFrame);
             QHBoxLayout *hboxLayout = new QHBoxLayout;
@@ -488,7 +488,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add a label
             QLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
-            label->setFont(f);
+            label->setFont(font());
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "setupControllers(): Adding new widget at " << (count / 2) << "," << (count % 2);
@@ -519,9 +519,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         m_rotaryMapper->setMapping(rotary,
                                    int(it->getControllerValue()));
 
-        count++;
+        ++count;
     }
 
+    // If there are more rotary widgets than this instrument needs,
+    // delete them.
     if (rmi != m_rotaries.end()) {
         for (RotaryInfoVector::iterator rmj = rmi; rmj != m_rotaries.end(); ++rmj) {
             delete rmj->rotary;
