@@ -105,17 +105,62 @@ Rotary::~Rotary()
 }
 
 void
+Rotary::setMinimum(float min)
+{
+    if (m_minimum == min)
+        return;
+
+    m_minimum = min;
+    update();
+}
+
+void
+Rotary::setMaximum(float max)
+{
+    if (m_maximum == max)
+        return;
+
+    m_maximum = max;
+    update();
+}
+
+void
+Rotary::setStep(float step)
+{
+    if (m_step == step)
+        return;
+
+    m_step = step;
+    update();
+}
+
+void
+Rotary::setPageStep(float step)
+{
+    if (m_pageStep == step)
+        return;
+
+    m_pageStep = step;
+    update();
+}
+
+void
 Rotary::setKnobColour(const QColor &colour)
 {
-    m_knobColour = colour;
+    if (m_knobColour == colour)
+        return;
 
-    // ??? Some setters call update(), others don't.  If they all did, then
-    //     client code wouldn't have to worry about partial updates and
-    //     flicker.  (update() goes through the message loop, so it happens
-    //     after a client makes all needed changes.  No flicker.)  This can
-    //     be taken one step further by detecting changes in the setters.
-    //     Then the client can call with impunity and updates will only occur
-    //     when there are actual changes.  No flicker.
+    m_knobColour = colour;
+    update();
+}
+
+void
+Rotary::setCentered(bool centred)
+{
+    if (m_centred == centred)
+        return;
+
+    m_centred = centred;
     update();
 }
 
@@ -597,8 +642,10 @@ Rotary::enterEvent(QEvent *)
 void
 Rotary::setPosition(float position)
 {
-    m_position = position;
+    if (m_position == position)
+        return;
 
+    m_position = position;
     snapPosition();
     update();
 }

@@ -59,16 +59,16 @@ public:
            bool logarithmic = false); // extents are logs, exp for display
     ~Rotary();
 
-    void setMinimum(float min) { m_minimum = min; }
+    void setMinimum(float min);
     float getMinValue() const { return m_minimum; }
 
-    void setMaximum(float max) { m_maximum = max; }
+    void setMaximum(float max);
     float getMaxValue() const { return m_maximum; }
 
-    void setStep(float step) { m_step = step; }
+    void setStep(float step);
     float getStep() const { return m_step; }
 
-    void setPageStep(float step) { m_pageStep = step; }
+    void setPageStep(float step);
     float getPageStep() const { return m_pageStep; }
 
     int getSize() const { return m_size; }
@@ -86,7 +86,7 @@ public:
     // Centered status
     //
     bool getCentered() const { return m_centred; }
-    void setCentered(bool centred) { m_centred = centred; }
+    void setCentered(bool centred);
 
 signals:
     void valueChanged(float);

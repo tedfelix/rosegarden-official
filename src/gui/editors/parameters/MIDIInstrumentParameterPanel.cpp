@@ -416,37 +416,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             rotary = rmi->rotary;
 
-            if (rotary->getMinValue() != it->getMin()) {
-                rotary->setMinimum(it->getMin());
-                // Update the next time through the message loop.
-                // ??? setMinimum() should do this for us.
-                rotary->update();
-            }
-            if (rotary->getMaxValue() != it->getMax()) {
-                rotary->setMaximum(it->getMax());
-                // Update the next time through the message loop.
-                // ??? setMaximum() should do this for us.
-                rotary->update();
-            }
-            
-            const bool isCentered = (it->getDefault() == 64);
-            if (rotary->getCentered() != isCentered) {
-                rotary->setCentered(isCentered);
-                // Update the next time through the message loop.
-                // ??? setCentered() should do this for us.
-                rotary->update();
-            }
-
-            // If we aren't in the default position
-            if (rotary->getPosition() != it->getDefault()) {
-                rotary->setPosition(it->getDefault());
-                // No need to call update() as setPosition() does it for us.
-            }
-
-            if (rotary->getKnobColour() != knobColour) {
-                rotary->setKnobColour(knobColour);
-                // No need to call update() as setKnobColour() does it for us.
-            }
+            rotary->setMinimum(it->getMin());
+            rotary->setMaximum(it->getMax());
+            rotary->setCentered((it->getDefault() == 64));
+            rotary->setPosition(it->getDefault());
+            rotary->setKnobColour(knobColour);
 
             // Update the controller name.
             QLabel *label = rmi->label;
