@@ -2731,8 +2731,9 @@ RosegardenMainWindow::slotRescaleSelection()
 
             connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
                     progressDlg, SLOT(setValue(int)));
-            connect(progressDlg, SIGNAL(cancelClicked()),
-                    &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+            // Removed since ProgressDialog::cancelClicked() does not exist.
+            //connect(progressDlg, SIGNAL(cancelClicked()),
+            //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
         }
 
         for (size_t i = 0; i < asrcs.size(); ++i) {

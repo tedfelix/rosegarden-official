@@ -184,8 +184,9 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
 
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
                             progressDlg, SLOT(setValue(int)));
-                    connect(progressDlg, SIGNAL(cancelClicked()),
-                            &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+                    // Removed since ProgressDialog::cancelClicked() does not exist.
+                    //connect(progressDlg, SIGNAL(cancelClicked()),
+                    //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
                     int fid = command->getNewAudioFileId();
                     if (fid >= 0) {
