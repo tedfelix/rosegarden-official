@@ -423,9 +423,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
-            SqueezedLabel *label = dynamic_cast<SqueezedLabel *>(rmi->label);
-            if (label)
-                label->setText(QObject::tr(it->getName().c_str()));
+            rmi->label->setText(QObject::tr(it->getName().c_str()));
 
             // Next Rotary widget
             ++rmi;
@@ -462,7 +460,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Add a label
-            QLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
+            SqueezedLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
             label->setFont(font());
             hboxLayout->addWidget(label);
 

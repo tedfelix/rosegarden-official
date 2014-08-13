@@ -20,6 +20,7 @@
 
 #include "base/MidiProgram.h"  // InstrumentId
 #include "base/MidiDevice.h"  // MidiByteList
+#include "gui/widgets/SqueezedLabel.h"
 
 #include "InstrumentParameterPanel.h"
 
@@ -182,7 +183,7 @@ private:
     struct RotaryInfo
     {
         Rotary *rotary;
-        QLabel *label;
+        SqueezedLabel *label;
         int controller;
     };
     // ??? getValueFromRotary() and setRotaryToValue() would benefit
