@@ -423,8 +423,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
-            QLabel *label = rmi->label;
-            label->setText(QObject::tr(it->getName().c_str()));
+            SqueezedLabel *label = dynamic_cast<SqueezedLabel *>(rmi->label);
+            if (label)
+                label->setText(QObject::tr(it->getName().c_str()));
 
             // Next Rotary widget
             ++rmi;
