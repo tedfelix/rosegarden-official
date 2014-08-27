@@ -430,57 +430,54 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
         } else {  // Need to create the Rotary widget.
 
+            // Create a horizontal box for the Rotary/Label pair.
             QWidget *hbox = new QWidget(m_rotaryFrame);
             QHBoxLayout *hboxLayout = new QHBoxLayout;
             hboxLayout->setSpacing(8);
             hboxLayout->setMargin(0);
-
-            float smallStep = 1.0;
-
-            float bigStep = 5.0;
-            if (it->getMax() - it->getMin() < 10)
-                bigStep = 1.0;
-            else if (it->getMax() - it->getMin() < 20)
-                bigStep = 2.0;
-
-            rotary = new Rotary(hbox,
-                                it->getMin(),
-                                it->getMax(),
-                                smallStep,
-                                bigStep,
-                                it->getDefault(),
-                                20,
-                                Rotary::NoTicks,
-                                false,
-                                it->getDefault() == 64); //!!! hacky
-
-            hboxLayout->addWidget(rotary);
             hbox->setLayout(hboxLayout);
 
+            // Add a Rotary
+
+            float pageStep = 5.0;
+            if (it->getMax() - it->getMin() < 10)
+                pageStep = 1.0;
+            else if (it->getMax() - it->getMin() < 20)
+                pageStep = 2.0;
+
+            rotary = new Rotary(hbox,          // parent
+                                it->getMin(),  // minimum
+                                it->getMax(),  // maximum
+                                1.0,           // step
+                                pageStep,      // pageStep
+                                it->getDefault(),  // initialPosition
+                                20,                // size
+                                Rotary::NoTicks,   // ticks
+                                false,             // snapToTicks
+                                (it->getDefault() == 64));  // centred
             rotary->setKnobColour(knobColour);
+            hboxLayout->addWidget(rotary);
 
             // Add a label
+
             SqueezedLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
             label->setFont(font());
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "setupControllers(): Adding new widget at " << (count / 2) << "," << (count % 2);
 
-            // Add the compound widget
-            //
+            // Add the compound (Rotary and Label) widget to the grid.
             m_rotaryGrid->addWidget(hbox, count / 2, (count % 2) * 2, Qt::AlignLeft);
             hbox->show();
 
-            // Add to list
-            //
+            // Add to the Rotary info list
             RotaryInfo ri;
             ri.rotary = rotary;
             ri.label = label;
             ri.controller = it->getControllerValue();
             m_rotaries.push_back(ri);
 
-            // Connect
-            //
+            // Connect for changes to the Rotary by the user.
             connect(rotary, SIGNAL(valueChanged(float)),
                     m_rotaryMapper, SLOT(map()));
 
@@ -504,8 +501,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         }
         m_rotaries = RotaryInfoVector(m_rotaries.begin(), rmi);
     }
-
-//    m_rotaryFrame->show();
 }
 
 void
@@ -513,12 +508,25 @@ MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel::setRotaryToValue(controller => " << controller << ", value => " << value << ")";
 
-    for (RotaryInfoVector::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it) {
+    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
         if (it->controller == controller) {
             it->rotary->setPosition(float(value));
             return ;
         }
     }
+}
+
+int
+MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
+{
+    RG_DEBUG << "MIDIInstrumentParameterPanel::getValueFromRotary(" << controller << ")";
+
+    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
+        if (it->controller == controller)
+            return int(it->rotary->getPosition());
+    }
+
+    return -1;
 }
 
 void
@@ -1193,19 +1201,6 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     emit updateAllBoxes();
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 
-}
-
-int
-MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
-{
-    RG_DEBUG << "MIDIInstrumentParameterPanel::getValueFromRotary(" << controller << ")";
-
-    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        if (it->controller == controller)
-            return int(it->rotary->getPosition());
-    }
-
-    return -1;
 }
 
 void
