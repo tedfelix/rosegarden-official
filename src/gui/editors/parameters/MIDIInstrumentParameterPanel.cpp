@@ -261,7 +261,17 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     // ??? However, this might be preventing endless recursion as this routine
     //     might indirectly fire off calls to itself.  Initial digging seems
     //     to indicate that this routine will not fire off signals.  It tries
-    //     hard not to, anyway.
+    //     hard not to, anyway.  If we can simplify and centralize the update
+    //     notifications, we should be able to safely eliminate this check
+    //     and the update bugs will be fixed.
+    // ??? Another possibility is that this was put here to prevent reloading
+    //     the comboboxes (updateBankComboBox(), etc...).  Without this
+    //     check, every change by the user will trigger a reloading of the
+    //     comboboxes.  Since the combobox values are cached (e.g. m_banks),
+    //     it's easy to detect changes without help from the client and avoid
+    //     unnecessary updates.  I will add that check as I review the
+    //     combobox update routines.  Then this will no longer be a
+    //     possibility.
 #if 1
     if (m_selectedInstrument == instrument) {
         RG_DEBUG << "setupForInstrument(): Early exit.  Instrument didn't change.";
@@ -536,11 +546,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
     if (m_selectedInstrument == 0) return;
 
-    m_bankComboBox->clear();
-    m_banks.clear();
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
+    MidiDevice *md =
+            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
@@ -555,6 +562,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
         banks = md->getBanks(m_selectedInstrument->isPercussion());
 
+        // If there are banks to display, show the bank widgets
         if (!banks.empty()) {
             if (m_bankLabel->isHidden()) {
                 m_bankLabel->show();
@@ -567,16 +575,25 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
             m_bankComboBox->hide();
         }
 
+        // Find the selected bank in the MIDI Device's bank list.
         for (unsigned int i = 0; i < banks.size(); ++i) {
             if (m_selectedInstrument->getProgram().getBank() == banks[i]) {
                 currentBank = i;
+                break;
             }
         }
 
     } else {
 
-        MidiByteList bytes;
+        // Usually in variation mode, the bank widgets will be hidden.
+        // However, if there happen to be a number of banks, we'll
+        // display them.
+
+        // If the variations are in the LSB, then the banks are in the MSB
+        // and vice versa.
         bool useMSB = (md->getVariationType() == MidiDevice::VariationFromLSB);
+
+        MidiByteList bytes;
 
         if (useMSB) {
             bytes = md->getDistinctMSBs(m_selectedInstrument->isPercussion());
@@ -584,6 +601,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
             bytes = md->getDistinctLSBs(m_selectedInstrument->isPercussion());
         }
 
+        // If only one bank value is found, hide the bank widgets.
         if (bytes.size() < 2) {
             if (!m_bankLabel->isHidden()) {
                 m_bankLabel->hide();
@@ -597,6 +615,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
                 m_bankComboBox->show();
             }
         }
+
+        // Load "banks" with the banks and figure out currentBank.
 
         if (useMSB) {
             for (unsigned int i = 0; i < bytes.size(); ++i) {
@@ -628,21 +648,48 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         }
     }
 
-    for (BankList::const_iterator i = banks.begin();
-            i != banks.end(); ++i) {
-        m_banks.push_back(*i);
-        m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
+    // Populate the combobox with bank names.
+
+    // If we need to repopulate m_bankComboBox
+    if (banks != m_banks)
+    {
+        m_bankComboBox->clear();
+        m_banks.clear();
+
+        // Copy from banks to m_banks and m_bankComboBox.
+        for (BankList::const_iterator i = banks.begin();
+                i != banks.end(); ++i) {
+            m_banks.push_back(*i);
+            m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
+        }
     }
 
     // Keep bank value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_bankComboBox->setDisabled(false);
+        m_bankComboBox->setEnabled(true);
     } else {
         m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
-    }    
+    }
 
-    if (currentBank < 0 && !banks.empty()) {
+    // Display the current bank.
+
+    // If nothing is selected, go with the first.
+    if (currentBank < 0  &&  !banks.empty()) {
+        // ??? Suggestion for simplification...
+        //     ISTM that in the test cases that exercise this, e.g.
+        //     deleting the selected bank, the UI should be getting
+        //     updated via a notification from the instrument.  The
+        //     instrument should notice that the bank has been deleted,
+        //     check to see that the selected bank still makes sense,
+        //     correct it if needed, then fire off a "hasChanged()"
+        //     notification so the UI can sync up.  Then this "nothing
+        //     selected" situation would never happen.  It could be an
+        //     assertion instead.
+        //Q_ASSERT_X(currentBank >= 0  ||  banks.empty(),
+        //           "MIDIInstrumentParameterPanel::updateBankComboBox()",
+        //           "No bank selected.");
         m_bankComboBox->setCurrentIndex(0);
+        // Make sure the other widgets are in sync.
         slotSelectBank(0);
     } else {
         m_bankComboBox->setCurrentIndex(currentBank);
@@ -712,12 +759,13 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     // Keep program value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_programComboBox->setDisabled(false);
+        m_programComboBox->setEnabled(true);
     } else {
         m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
     }    
 
     if (currentProgram < 0 && !m_programs.empty()) {
+        // ??? See the comments at the end of updateBankComboBox().
         m_programComboBox->setCurrentIndex(0);
         slotSelectProgram(0);
     } else {
@@ -837,6 +885,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     }
 
     if (currentVariation < 0 && !m_variations.empty()) {
+        // ??? See the comments at the end of updateBankComboBox().
         m_variationComboBox->setCurrentIndex(0);
         slotSelectVariation(0);
     } else {
@@ -871,7 +920,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
-        m_variationComboBox->setDisabled(false);
+        m_variationComboBox->setEnabled(true);
     } else {
         m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
     }    
@@ -950,6 +999,7 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
 
     // Keep program value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
+        // ??? m_bankComboBox?  Is this a typo?
         m_bankComboBox->setDisabled(false);
     } else {
         m_programComboBox->setDisabled(!checked);
@@ -982,6 +1032,7 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
+        // ??? m_bankComboBox?  Is this a typo?
         m_bankComboBox->setDisabled(false);
     } else {
         m_variationComboBox->setDisabled(!checked);
