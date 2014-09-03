@@ -653,13 +653,13 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     // If we need to repopulate m_bankComboBox
     if (banks != m_banks)
     {
-        m_bankComboBox->clear();
-        m_banks.clear();
+        // Update the cache.
+        m_banks = banks;
 
-        // Copy from banks to m_banks and m_bankComboBox.
-        for (BankList::const_iterator i = banks.begin();
-                i != banks.end(); ++i) {
-            m_banks.push_back(*i);
+        // Copy from m_banks to m_bankComboBox.
+        m_bankComboBox->clear();
+        for (BankList::const_iterator i = m_banks.begin();
+                i != m_banks.end(); ++i) {
             m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
         }
     }
