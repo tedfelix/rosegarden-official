@@ -716,13 +716,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     RG_DEBUG << "updateProgramComboBox(): variation type is " << md->getVariationType();
 
-    MidiBank bank( m_selectedInstrument->isPercussion(),
-                   m_selectedInstrument->getMSB(),
-                   m_selectedInstrument->getLSB());
-
-    if (m_selectedInstrument->sendsBankSelect()) {
-        bank = m_selectedInstrument->getProgram().getBank();
-    }
+    MidiBank bank = m_selectedInstrument->getProgram().getBank();
 
     int currentProgram = -1;
 
