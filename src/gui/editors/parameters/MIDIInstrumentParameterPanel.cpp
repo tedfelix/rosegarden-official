@@ -720,7 +720,15 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     int currentProgram = -1;
 
-    ProgramList programs = md->getPrograms(bank);
+    ProgramList programsAll = md->getPrograms(bank);
+
+    // Filter out the programs that have no name.
+    ProgramList programs;
+    for (unsigned i = 0; i < programsAll.size(); ++i) {
+        if (programsAll[i].getName() != "") {
+            programs.push_back(programsAll[i]);
+        }
+    }
 
     if (!programs.empty()) {
         if (m_programLabel->isHidden()) {
@@ -740,15 +748,13 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     for (unsigned int i = 0; i < programs.size(); ++i) {
         std::string programName = programs[i].getName();
-        if (programName != "") {
-            m_programComboBox->addItem(QObject::tr("%1. %2")
-                                       .arg(programs[i].getProgram() + 1)
-                                       .arg(QObject::tr(programName.c_str())));
-            if (m_selectedInstrument->getProgram() == programs[i]) {
-                currentProgram = m_programs.size();
-            }
-            m_programs.push_back(programs[i]);
+        m_programComboBox->addItem(QObject::tr("%1. %2")
+                                   .arg(programs[i].getProgram() + 1)
+                                   .arg(QObject::tr(programName.c_str())));
+        if (m_selectedInstrument->getProgram() == programs[i]) {
+            currentProgram = m_programs.size();
         }
+        m_programs.push_back(programs[i]);
     }
 
     // Keep program value enabled if percussion map is in use
