@@ -56,6 +56,7 @@ TrackLabelDialog::TrackLabelDialog(QWidget *parent,
     QLabel *primary = new QLabel(primaryLabel);
     m_primaryText = new LineEdit(primaryContents);
     m_primaryText->setToolTip(primaryTooltip);
+    m_primaryText->selectAll();
 
     QLabel *secondary = new QLabel(secondaryLabel);
     m_secondaryText = new LineEdit(secondaryContents);
