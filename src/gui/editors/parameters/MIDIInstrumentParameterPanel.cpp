@@ -704,11 +704,8 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     if (m_selectedInstrument == 0)
         return ;
 
-    m_programComboBox->clear();
-    m_programs.clear();
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
+    MidiDevice *md =
+            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
@@ -717,8 +714,6 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     RG_DEBUG << "updateProgramComboBox(): variation type is " << md->getVariationType();
 
     MidiBank bank = m_selectedInstrument->getProgram().getBank();
-
-    int currentProgram = -1;
 
     ProgramList programsAll = md->getPrograms(bank);
 
@@ -746,15 +741,29 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         m_receiveExternalLabel->hide();
     }
 
-    for (unsigned int i = 0; i < programs.size(); ++i) {
-        std::string programName = programs[i].getName();
-        m_programComboBox->addItem(QObject::tr("%1. %2")
-                                   .arg(programs[i].getProgram() + 1)
-                                   .arg(QObject::tr(programName.c_str())));
+    int currentProgram = -1;
+
+    // Compute the current program.
+    for (unsigned i = 0; i < programs.size(); ++i) {
         if (m_selectedInstrument->getProgram() == programs[i]) {
-            currentProgram = m_programs.size();
+            currentProgram = i;
+            break;
         }
-        m_programs.push_back(programs[i]);
+    }
+
+    // If the programs have changed, we need to repopulate the combobox.
+    if (programs != m_programs)
+    {
+        // Update the cache.
+        m_programs = programs;
+
+        // Copy from m_programs to m_programComboBox.
+        m_programComboBox->clear();
+        for (unsigned i = 0; i < m_programs.size(); ++i) {
+            m_programComboBox->addItem(QObject::tr("%1. %2")
+                                       .arg(m_programs[i].getProgram() + 1)
+                                       .arg(QObject::tr(m_programs[i].getName().c_str())));
+        }
     }
 
     // Keep program value enabled if percussion map is in use
