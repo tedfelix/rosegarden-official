@@ -289,7 +289,7 @@
     </Menu>
   <Separator/>
     <Action name="tie_notes" text="T&amp;ie" icon="transforms-tie" shortcut="~" />
-    <Action name="untie_notes" text="&amp;Untie" />
+    <Action name="untie_notes" text="&amp;Untie" shortcut="`"/>
     <Menu name="Ties">
       <text>Tie &amp;Position</text>
       <Action name="restore_ties" text="&amp;Restore Tie Position" />

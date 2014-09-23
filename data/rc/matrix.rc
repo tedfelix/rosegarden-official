@@ -77,6 +77,12 @@
       </Menu>  
   </Menu> <!-- end of menu View -->
 
+  <Menu name="Phrase">
+      <text>&amp;Phrase</text>
+      <Action name="tie_notes" text="T&amp;ie" icon="transforms-tie" shortcut="~" />
+      <Action name="untie_notes" text="&amp;Untie" shortcut="`"/>
+  </Menu> <!-- end of menu Phrase -->
+
   <Menu name="document">
     <text>&amp;Composition</text>
     <Action name="add_tempo_change" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
@@ -397,6 +403,8 @@
     <Action name="filter_selection"/>
     <Action name="pitch_bend_sequence"/>
     <Action name="place_controllers"/>
+    <Action name="tie_notes"/>
+    <Action name="untie_notes"/>
   </enable>
 </State>
 
