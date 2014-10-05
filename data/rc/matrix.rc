@@ -118,7 +118,7 @@
       <Action name="repeat_quantize" text="&amp;Repeat Last Quantize" shortcut="+" />
       <Action name="legatoize" text="&amp;Legato" shortcut="-" />
     </Menu>
-    <Action name="collapse_notes" text="Collapse &amp;Equal-Pitch Notes" shoprtcut="Ctrl+=" />
+    <Action name="collapse_notes" text="Collapse &amp;Equal-Pitch Notes" shortcut="Ctrl+=" />
   <Separator/>
     <Action name="jog_left" text="Jog &amp;Left" shortcut="Alt+Left" />
     <Action name="jog_right" text="&amp;Jog Right" shortcut="Alt+Right" />

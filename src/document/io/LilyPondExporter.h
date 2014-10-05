@@ -47,6 +47,16 @@ class QString;
 
 namespace Rosegarden
 {
+  
+// This is now in the Rosegarden namespace so it can be used 
+// in LilyPondOptionsDialog with the LilyVersionAwareCheckBox.
+enum {
+  LILYPOND_VERSION_2_6,
+  LILYPOND_VERSION_2_8,
+  LILYPOND_VERSION_2_10,
+  LILYPOND_VERSION_2_12,
+  LILYPOND_VERSION_2_14
+};
 
 class TimeSignature;
 class Studio;
@@ -243,13 +253,14 @@ private:
     unsigned int m_exportNoteLanguage;
 
     int m_languageLevel;
-    enum {
-        LILYPOND_VERSION_2_6,
-        LILYPOND_VERSION_2_8,
-        LILYPOND_VERSION_2_10,
-        LILYPOND_VERSION_2_12,
-        LILYPOND_VERSION_2_14
-    };
+//  There is now an enum global within the Rosegarden namespace (declared
+//  at the beggining of this file) that contains values such as:
+//     enum {
+//         LILYPOND_VERSION_2_6,
+//         LILYPOND_VERSION_2_8,
+//         ...
+//     };
+// These are the values used with m_languageLevel.
 
     int m_repeatMode;
     enum {

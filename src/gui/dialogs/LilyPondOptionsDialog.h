@@ -22,6 +22,7 @@
 #include <QString>
 
 #include "gui/configuration/HeadersConfigurationPage.h"
+#include "gui/widgets/LilyVersionAwareCheckBox.h"
 
 class QWidget;
 class QCheckBox;
@@ -29,6 +30,7 @@ class QComboBox;
 
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class HeadersConfigurationPage;
@@ -39,7 +41,7 @@ class LilyPondOptionsDialog : public QDialog
 
 public:
     LilyPondOptionsDialog(QWidget *parent,
-			  RosegardenDocument *doc,
+                          RosegardenDocument *doc,
                           QString windowCaption = "",
                           QString heading = "",
                           bool createdFromNotationEditor = false
@@ -63,7 +65,7 @@ protected:
     QComboBox *m_lilyExportLyrics;
     QCheckBox *m_lilyPaperLandscape;
     QCheckBox *m_lilyRaggedBottom;
-    QCheckBox *m_useShortNames;
+    LilyVersionAwareCheckBox *m_useShortNames;
     QCheckBox *m_lilyExportEmptyStaves;
     QCheckBox *m_lilyChordNamesMode;
     QCheckBox *m_lilyExportBeams;
@@ -88,7 +90,6 @@ protected:
     static const unsigned int MAX_POINTS = 67;             // max. 72 pt. font
 
 };
-
 
 
 }

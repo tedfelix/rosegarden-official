@@ -15,14 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
+#include "LilyPondOptionsDialog.h"
 
 #include "misc/ConfigGroups.h"
 #include "document/io/LilyPondExporter.h"
 #include "document/RosegardenDocument.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
-#include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "gui/widgets/LilyVersionAwareCheckBox.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -51,13 +52,13 @@ namespace Rosegarden
 {
 
 LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
-	RosegardenDocument *doc,
+    RosegardenDocument *doc,
         QString windowCaption,
         QString /* heading */,
         bool createdFromNotationEditor):
         QDialog(parent),
-	m_doc(doc),
-	m_createdFromNotationEditor(createdFromNotationEditor)
+    m_doc(doc),
+    m_createdFromNotationEditor(createdFromNotationEditor)
 {
     setModal(true);
     setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
@@ -86,8 +87,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     tabWidget->addTab(m_headersPage, tr("Headers"));
 //     m_headersPage->setSpacing(5);
 //     m_headersPage->setMargin(5);
-	
-	
+    
+    
     //
     // LilyPond export: Basic options
     //
@@ -201,12 +202,12 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyTempoMarks->addItem(tr("All"));
 
     layoutNotation->addWidget(new QLabel(
-			 tr("Export tempo marks "), frameNotation), 0, 0);
+             tr("Export tempo marks "), frameNotation), 0, 0);
     layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
     m_lilyTempoMarks->setToolTip(tr("<qt>Choose how often to show tempo marks in your score</qt>"));
 
     layoutNotation->addWidget(new QLabel(
-			 tr("Export lyrics"), frameNotation), 1, 0);
+             tr("Export lyrics"), frameNotation), 1, 0);
     m_lilyExportLyrics = new QComboBox(frameNotation);
     m_lilyExportLyrics->addItem(tr("None"));
     m_lilyExportLyrics->addItem(tr("Left"));
@@ -228,9 +229,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 1, 2);
     m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
 
-    m_useShortNames = new QCheckBox(
-                          tr("Print short staff names"), frameNotation);
-    m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages</qt>"));
+    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_2_10);
+    m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher</qt>"));
     layoutNotation->addWidget(m_useShortNames, 4, 0, 1, 2);
 
     layoutGrid->setRowStretch(4, 10);
@@ -326,12 +326,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     setLayout(metaGridLayout);
 
-
+    connect(m_lilyLanguage, SIGNAL(activated(int)), m_useShortNames, SLOT(slotCheckVersion(int)));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
 
     populateDefaultValues();
+    
+    // Initally enable or disable m_useShortNames according to inital setting of m_lilyLanguage
+    m_useShortNames->checkVersion(m_lilyLanguage->currentIndex());
 
     resize(minimumSizeHint());
 }
