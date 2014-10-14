@@ -1661,7 +1661,9 @@ void
 BankEditorDialog::slotEdit(QTreeWidgetItem * item, int)
 {
     std::cout << "BankEditorDialog::slotEdit()" << std::endl;
-    m_treeWidget->editItem(item);
+
+    if (item->flags() & Qt::ItemIsEditable)
+        m_treeWidget->editItem(item);
 }
 
 void
