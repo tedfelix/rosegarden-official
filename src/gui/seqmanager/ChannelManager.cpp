@@ -608,6 +608,8 @@ void
 ChannelManager::
 slotInstrumentChanged(void)
 {
+    m_triedToGetChannel = false;
+
     // Reset to the fixedness of the instrument.  This is safe even
     // when fixedness hasn't really changed.
     if(m_instrument) {
