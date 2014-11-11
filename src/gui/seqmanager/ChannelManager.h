@@ -92,10 +92,6 @@ class ChannelManager : public QObject
 {
     Q_OBJECT
 
-    friend class InternalSegmentMapper;
-    friend class MetronomeMapper;
-    friend class ImmediateNote;
-
 public:
     /// %Controller and pitchbend info callback interface.
     /**
@@ -226,6 +222,10 @@ public:
 
     /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);
+
+    /// Get the instrument we are playing on.  Can return NULL.
+    Instrument *getInstrument(void) const
+    { return m_instrument; }
 
     void setDirty(void)  { m_inittedForOutput = false; }
 

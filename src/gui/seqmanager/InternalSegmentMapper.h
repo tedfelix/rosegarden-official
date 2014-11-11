@@ -110,8 +110,8 @@ class InternalSegmentMapper : public SegmentMapper
     /// dump all segment data in the file
     virtual void fillBuffer();
 
-    Instrument *getInstrument(void)
-    { return m_channelManager.m_instrument; }
+    Instrument *getInstrument(void) const
+    { return m_channelManager.getInstrument(); }
 
     void popInsertNoteoff(int trackid, Composition &comp);
     void enqueueNoteoff(timeT time, int pitch);

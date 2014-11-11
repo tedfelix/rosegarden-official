@@ -69,8 +69,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     {
         // As we promised, set instrument
         InstrumentId id = m_metronome->getInstrument();
-        m_channelManager.m_instrument =
-            doc->getStudio().getInstrumentById(id);
+        m_channelManager.setInstrument(doc->getStudio().getInstrumentById(id));
     }
         
     Composition& c = m_doc->getComposition();
