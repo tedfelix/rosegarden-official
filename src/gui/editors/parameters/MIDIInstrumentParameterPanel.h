@@ -163,6 +163,8 @@ private:
 
     // Variation
     QLabel             *m_variationLabel;
+    // ??? See comments in slotVariationClicked() related to getting
+    //     rid of this checkbox.
     QCheckBox          *m_variationCheckBox;
     QComboBox          *m_variationComboBox;
     MidiByteList        m_variations;

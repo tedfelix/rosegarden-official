@@ -255,15 +255,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     // In some cases setupForInstrument gets called several times.
     // This shortcuts this activity since only one setup is needed.
     // ??? Problem is that this prevents legitimate changes to the
-    //     instrument from getting to the UI.  Removing this fixes an
-    //     update bug when importing a device file.  I think it also
-    //     fixes an update bug related to "Receive external".
-    // ??? However, this might be preventing endless recursion as this routine
-    //     might indirectly fire off calls to itself.  Initial digging seems
-    //     to indicate that this routine will not fire off signals.  It tries
-    //     hard not to, anyway.  If we can simplify and centralize the update
-    //     notifications, we should be able to safely eliminate this check
-    //     and the update bugs will be fixed.
+    //     instrument from getting to the UI.  Removing this fixes
+    //     numerous update bugs related to making changes in the
+    //     Manage MIDI Devices window.
+    // ??? This might be preventing endless recursion as this routine
+    //     might indirectly fire off calls to itself.  This seems unlikely
+    //     as testing with the following check removed has revealed no
+    //     endless loops or crashes.
     // ??? Another possibility is that this was put here to prevent reloading
     //     the comboboxes (updateBankComboBox(), etc...).  Without this
     //     check, every change by the user will trigger a reloading of the
@@ -272,7 +270,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //     unnecessary updates.  I will add that check as I review the
     //     combobox update routines.  Then this will no longer be a
     //     possibility.
-#if 1
+#if 0
     if (m_selectedInstrument == instrument) {
         RG_DEBUG << "setupForInstrument(): Early exit.  Instrument didn't change.";
         RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument() end";
@@ -1076,6 +1074,13 @@ void
 MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel::slotVariationClicked()";
+
+    // ??? Disabling the sending of Bank Selects in Variations mode seems
+    //     very strange.  Variations mode is all about selecting a
+    //     variation through different bank selects.  Without the bank
+    //     selects, there are no variations.  It's likely that we can get
+    //     rid of this checkbox (and always send banks selects) and no one
+    //     will notice.
 
     if (m_selectedInstrument == 0) {
         m_variationCheckBox->setChecked(false);
