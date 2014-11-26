@@ -42,6 +42,7 @@ namespace Rosegarden
 
 class Command;
 class TristateCheckBox;
+class Label;
 class SegmentSelection;
 class Segment;
 class RosegardenDocument;
@@ -122,7 +123,7 @@ protected:
     void populateBoxFromSegments();
     void updateHighLow();
 
-    QLabel                     *m_label;
+    Label                      *m_label;
 //    QLabel                     *m_rangeLabel;
     QPushButton                *m_labelButton;
 //    QPushButton                *m_highButton;
