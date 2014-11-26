@@ -807,6 +807,12 @@ DeviceManagerDialog::slotAddPlaybackDevice()
 
     //     updatePlaybackDevicesList();
     slotRefreshOutputPorts();
+
+    // Try to find the new one and select it.
+    QList<QTreeWidgetItem *> newDeviceItems =
+            m_treeWidget_playbackDevices->findItems(tr("New Device"), Qt::MatchExactly);
+    if (newDeviceItems.size() == 1)
+        m_treeWidget_playbackDevices->setCurrentItem(newDeviceItems.first());
 }
 
 void
