@@ -844,7 +844,7 @@ int main(int argc, char *argv[])
 
     // Announce end of run so that we can tell if we have crashed on
     // the way down.
-    RG_DEBUG << "Rosegarden main() exiting with rc:" << returnCode;
+    RG_INFO << "Rosegarden main() exiting with rc:" << returnCode;
 
     return returnCode;
 }
