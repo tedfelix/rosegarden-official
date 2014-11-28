@@ -538,7 +538,7 @@ int main(int argc, char *argv[])
         std::cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << std::endl;
         QFile file(stylepath);
         if (!file.open(QFile::ReadOnly)) {
-            std::cerr << "(Failed to open file)" << std::endl;
+            std::cerr << "Failed to open stylesheet" << std::endl;
         } else {
             if (Thorn) {
                 QString styleSheet = QLatin1String(file.readAll());
@@ -584,6 +584,7 @@ int main(int argc, char *argv[])
 
     }
 
+    RG_INFO << "Unbundling examples...";
     
     // unbundle examples
     QStringList exampleFiles;
@@ -600,6 +601,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    RG_INFO << "Unbundling templates...";
+
     // unbundle templates
     QStringList templateFiles;
     templateFiles << ResourceFinder().getResourceFiles("templates", "rgt");
@@ -614,6 +617,8 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    RG_INFO << "Unbundling libraries (device files)...";
 
     // unbundle libraries
     QStringList libraryFiles;
@@ -673,6 +678,8 @@ int main(int argc, char *argv[])
 #else
     theApp.setNoSequencerMode(true);
 #endif // NO_SOUND
+
+    RG_INFO << "Creating RosegardenMainWindow instance...";
 
     rosegardengui = new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
 
@@ -822,6 +829,8 @@ int main(int argc, char *argv[])
     }
     settings.endGroup();
 
+    RG_INFO << "Launching the sequencer...";
+
     try {
         rosegardengui->launchSequencer();
     } catch (std::string e) {
@@ -839,6 +848,8 @@ int main(int argc, char *argv[])
     QMessageBox::question(0, "Rosegarden", "Question?", QMessageBox::Ok, QMessageBox::Ok);
     QMessageBox::warning(0, "Rosegarden", "Warning!", QMessageBox::Ok, QMessageBox::Ok);
 #endif
+
+    RG_INFO << "Starting the app...";
 
     int returnCode = theApp.exec();
 
