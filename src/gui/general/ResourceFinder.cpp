@@ -138,6 +138,8 @@ ResourceFinder::getResourcePath(QString resourceCat, QString fileName)
         }
     }
 
+    std::cerr << "getResourcePath(): Resource file \"" << fileName << "\" for category \"" << resourceCat << "\" not found.\n";
+
     return "";
 }
 
