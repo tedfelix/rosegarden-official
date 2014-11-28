@@ -18,8 +18,8 @@
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
 
 // Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
-// Downside to this is that we also lose all the warnings.
-// We need an RG_WARNING.  Instead, I've gone with std::cerr.
+// Warnings are currently done with std::cerr to make sure they appear
+// even in a release build.
 #define RG_NO_DEBUG_PRINT
 
 #include "MIDIInstrumentParameterPanel.h"

@@ -67,10 +67,24 @@ QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
 // For a normal run, there should be no RG_WARNING output.
 #define RG_WARNING QDebug(QtDebugMsg) << RG_MODULE_STRING
 
-// Given these two, we can define RG_NO_DEBUG_PRINT for a translation
-// unit and it will silence the RG_DEBUG output but not the info
-// and warnings.  This can be used to reduce the noise in the
-// debug output.
+/*
+
+Given RG_INFO and RG_WARNING, we can define RG_NO_DEBUG_PRINT for a
+translation unit and it will silence the RG_DEBUG output but not the info
+and warnings.  This can be used to reduce the noise in the debug output.
+
+There's a lot of std::cerr throughout the system.  While it would be nice
+to replace it all with either RG_INFO or RG_WARNING, we can't.  The problem
+is that RG_INFO and RG_WARNING don't do anything in a release build.  So,
+my current thought is that we should upgrade RG_INFO and RG_WARNING to
+respond to a "-v" option at the command line.  This will give the users the
+ability to turn on some debug output even in a release build.  Maybe -v
+would turn on RG_INFO and RG_WARNING, while -vv would also turn on RG_DEBUG.
+This would give users complete control over the output.  Without a -v, we
+should shoot for complete silence unless we are crashing and have something
+to say about it.  RG_FATAL?
+
+*/
 
 #else
 
