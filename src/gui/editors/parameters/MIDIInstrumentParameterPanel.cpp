@@ -905,21 +905,21 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     if (m_variations != variations) {
         RG_DEBUG << "updateVariationComboBox(): Repopulating the combobox";
 
-        m_variationComboBox->clear();
-        m_variations.clear();
+        // Update the cache.
+        m_variations = variations;
 
-        // For each variation
-        for (size_t i = 0; i < variations.size(); ++i) {
-            std::string programName = md->getProgramName(variations[i]);
+        // Copy from m_variations to m_variationComboBox.
+        m_variationComboBox->clear();
+        for (size_t i = 0; i < m_variations.size(); ++i) {
+            std::string programName = md->getProgramName(m_variations[i]);
 
             // Pick the correct bank number.
-            MidiBank bank = variations[i].getBank();
+            MidiBank bank = m_variations[i].getBank();
             MidiByte variationBank = useMSB ? bank.getMSB() : bank.getLSB();
 
             m_variationComboBox->addItem(QObject::tr("%1. %2")
                                          .arg(variationBank)
                                          .arg(QObject::tr(programName.c_str())));
-            m_variations.push_back(variations[i]);
         }
     }
 
