@@ -73,7 +73,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     setContentsMargins(2, 2, 2, 2);
     m_mainGrid = new QGridLayout(this);
     m_mainGrid->setMargin(0);
-    m_mainGrid->setSpacing(1);
+    m_mainGrid->setSpacing(3);
     m_mainGrid->setColumnStretch(2, 1);
     setLayout(m_mainGrid);
 
@@ -370,15 +370,19 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
-        m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 3, Qt::AlignHCenter);
-        // Put some space between the rotaries and the widgets above.
-        m_mainGrid->setRowStretch(9, 20);
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
         m_rotaryGrid->setSpacing(1);
         m_rotaryGrid->setMargin(0);
         m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
         m_rotaryFrame->setLayout(m_rotaryGrid);
+
+        // Add the rotary frame to the main grid layout.
+        m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
+        // Add a spacer to take up the rest of the space.  This keeps
+        // the widgets above compact vertically.
+        m_mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
+        m_mainGrid->setRowStretch(11, 1);
     }
 
     // To cut down on flicker, we avoid destroying and recreating
@@ -584,8 +588,10 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     } else {
 
         // Usually in variation mode, the bank widgets will be hidden.
-        // However, if there happen to be a number of banks, we'll
-        // display them.
+        // E.g. in GM2, the MSB for all banks is 121 with the variations
+        // in the LSB numbered 0-9.  If, however, there were another
+        // MSB, say 122, with some variations in the LSB, this code would
+        // display the Bank combobox to allow selection of the MSB.
 
         // If the variations are in the LSB, then the banks are in the MSB
         // and vice versa.
@@ -939,11 +945,6 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         }
 
     } else {
-        //!!! seem to have problems here -- the grid layout doesn't
-        //like us adding stuff in the middle so if we go from 1
-        //visible row (say program) to 2 (program + variation) the
-        //second one overlaps the control knobs
-
         if (m_variationLabel->isHidden()) {
             m_variationLabel->show();
             m_variationCheckBox->show();
