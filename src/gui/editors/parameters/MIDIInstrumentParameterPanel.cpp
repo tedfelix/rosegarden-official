@@ -716,6 +716,11 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     ProgramList programsAll = md->getPrograms(bank);
 
     // Filter out the programs that have no name.
+    // ??? We should probably do this in place with erase().  Although
+    //     ProgramList is a vector, it's very unlikely that we will ever
+    //     find anything to erase(), so performance isn't an issue.  We
+    //     would just need to be careful to avoid using an invalidated
+    //     iterator.  Should be able to avoid that by sticking to indexes.
     ProgramList programs;
     for (unsigned i = 0; i < programsAll.size(); ++i) {
         if (programsAll[i].getName() != "") {
@@ -816,7 +821,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 void
 MIDIInstrumentParameterPanel::updateVariationComboBox()
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::updateVariationComboBox()";
+    RG_DEBUG << "updateVariationComboBox() begin...";
 
     if (m_selectedInstrument == 0)
         return ;
@@ -842,98 +847,78 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     // Get the variations.
 
     bool useMSB = (md->getVariationType() == MidiDevice::VariationFromMSB);
-    MidiByteList variations;
+    MidiByteList variationBanks;
 
     if (useMSB) {
         MidiByte lsb = m_selectedInstrument->getLSB();
-        variations = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
+        variationBanks = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
                                          lsb);
-        RG_DEBUG << "updateVariationComboBox(): Have " << variations.size() << " variations for LSB " << lsb;
+        RG_DEBUG << "updateVariationComboBox(): Have " << variationBanks.size() << " variations for LSB " << lsb;
 
     } else {
         MidiByte msb = m_selectedInstrument->getMSB();
-        variations = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
+        variationBanks = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
                                          msb);
 
-        RG_DEBUG << "updateVariationComboBox(): Have " << variations.size() << " variations for MSB " << msb;
+        RG_DEBUG << "updateVariationComboBox(): Have " << variationBanks.size() << " variations for MSB " << msb;
     }
 
-#if 0
-// ??? defaultProgramName is never used.  It was used to display "default"
-//     in the combobox for the zeroth "variation".  However, this feature
-//     has been disabled for over eight years.  I think it can probably
-//     just go.
+    // Convert variationBanks to a ProgramList.
 
-    // Figure out the "default" program name.  The zeroth variation.
+    ProgramList variations;
 
-    // There appears to be a bug in this unused code.  The "0" should
-    // probably be variation[0].  And what if it doesn't exist?
+    // For each variation
+    for (size_t i = 0; i < variationBanks.size(); ++i) {
+        // Assemble the program for the variation.
+        MidiBank bank;
+        if (useMSB) {
+            bank = MidiBank(m_selectedInstrument->isPercussion(),
+                            variationBanks[i],
+                            m_selectedInstrument->getLSB());
+        } else {
+            bank = MidiBank(m_selectedInstrument->isPercussion(),
+                            m_selectedInstrument->getMSB(),
+                            variationBanks[i]);
+        }
+        MidiProgram program(bank, m_selectedInstrument->getProgramChange());
 
-    MidiProgram defaultProgram;
+        // Skip any programs without names.
+        if (md->getProgramName(program) == "")
+            continue;
 
-    if (useMSB) {
-        defaultProgram = MidiProgram
-                         (MidiBank(m_selectedInstrument->isPercussion(),
-                                   0,  // ??? variation[0]?
-                                   m_selectedInstrument->getLSB()),
-                          m_selectedInstrument->getProgramChange());
-    } else {
-        defaultProgram = MidiProgram
-                         (MidiBank(m_selectedInstrument->isPercussion(),
-                                   m_selectedInstrument->getMSB(),
-                                   0),  // ??? variation[0]?
-                          m_selectedInstrument->getProgramChange());
+        variations.push_back(program);
     }
-    std::string defaultProgramName = md->getProgramName(defaultProgram);
-#endif
 
-    // Load up the ComboBox and find the currentVariation.
-
-    m_variationComboBox->clear();
-    //m_variationComboBox->setCurrentIndex(-1);
-    m_variations.clear();
+    // Compute the current variation.
 
     int currentVariation = -1;
 
-    RG_DEBUG << "updateVariationComboBox(): Going through the variations...";
-
-    for (unsigned int i = 0; i < variations.size(); ++i) {
-
-        MidiProgram program;
-
-        if (useMSB) {
-            program = MidiProgram
-                      (MidiBank(m_selectedInstrument->isPercussion(),
-                                variations[i],
-                                m_selectedInstrument->getLSB()),
-                       m_selectedInstrument->getProgramChange());
-        } else {
-            program = MidiProgram
-                      (MidiBank(m_selectedInstrument->isPercussion(),
-                                m_selectedInstrument->getMSB(),
-                                variations[i]),
-                       m_selectedInstrument->getProgramChange());
+    // For each variation
+    for (size_t i = 0; i < variations.size(); ++i) {
+        if (m_selectedInstrument->getProgram() == variations[i]) {
+            currentVariation = i;
+            break;
         }
+    }
 
-        std::string programName = md->getProgramName(program);
+    // If the variations have changed, repopulate the combobox.
+    if (m_variations != variations) {
+        RG_DEBUG << "updateVariationComboBox(): Repopulating the combobox";
 
-        RG_DEBUG << "updateVariationComboBox(): variation " << i << " '" << programName << "'";
+        m_variationComboBox->clear();
+        m_variations.clear();
 
-        // If this variation is valid
-        if (programName != "") {
-/*
-            // Add the program name to the combobox.  For the default
-            // variation, add "default".
-            m_variationComboBox->addItem(programName == defaultProgramName ?
-                                         tr("(default)") :
-                                         strtoqstr(programName));
-*/
+        // For each variation
+        for (size_t i = 0; i < variations.size(); ++i) {
+            std::string programName = md->getProgramName(variations[i]);
+
+            // Pick the correct bank number.
+            MidiBank bank = variations[i].getBank();
+            MidiByte variationBank = useMSB ? bank.getMSB() : bank.getLSB();
+
             m_variationComboBox->addItem(QObject::tr("%1. %2")
-                                         .arg(variations[i] + 1)
+                                         .arg(variationBank)
                                          .arg(QObject::tr(programName.c_str())));
-            if (m_selectedInstrument->getProgram() == program) {
-                currentVariation = m_variations.size();
-            }
             m_variations.push_back(variations[i]);
         }
     }
@@ -1264,17 +1249,13 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
         return ;
     }
 
-    MidiByte v = m_variations[index];
+    MidiBank newBank = m_variations[index].getBank();
 
-    if (md->getVariationType() == MidiDevice::VariationFromLSB) {
-        if (m_selectedInstrument->getLSB() != v) {
-            m_selectedInstrument->setLSB(v);
-        }
-    } else if (md->getVariationType() == MidiDevice::VariationFromMSB) {
-        if (m_selectedInstrument->getMSB() != v) {
-            m_selectedInstrument->setMSB(v);
-        }
-    }
+    // Update bank MSB/LSB as needed.
+    if (m_selectedInstrument->getMSB() != newBank.getMSB())
+        m_selectedInstrument->setMSB(newBank.getMSB());
+    if (m_selectedInstrument->getLSB() != newBank.getLSB())
+        m_selectedInstrument->setLSB(newBank.getLSB());
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }

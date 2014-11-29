@@ -167,7 +167,7 @@ private:
     //     rid of this checkbox.
     QCheckBox          *m_variationCheckBox;
     QComboBox          *m_variationComboBox;
-    MidiByteList        m_variations;
+    ProgramList         m_variations;
     /// From the selected instrument.
     void updateVariationComboBox();
 
