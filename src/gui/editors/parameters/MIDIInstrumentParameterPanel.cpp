@@ -977,17 +977,14 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
         return ;
     }
 
+    // Update the Instrument.
     m_selectedInstrument->setPercussion(checked);
 
-    updateBankComboBox();
-    updateProgramComboBox();
-    updateVariationComboBox();
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               m_selectedInstrument->
-                                         getProgramName().c_str());
-    emit updateAllBoxes();
-
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
@@ -1002,25 +999,14 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
         return ;
     }
 
-    m_variationCheckBox->setChecked(checked);
+    // Update the Instrument.
     m_selectedInstrument->setSendBankSelect(checked);
 
-    // Keep bank value enabled if percussion map is in use
-    if  (m_percussionCheckBox->isChecked()) {
-        m_bankComboBox->setDisabled(false);
-    } else {
-        m_bankComboBox->setDisabled(!checked);
-    }
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
-    updateBankComboBox();
-    updateProgramComboBox();
-    updateVariationComboBox();
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               m_selectedInstrument->
-                                         getProgramName().c_str());
-    emit updateAllBoxes();
-
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
@@ -1035,24 +1021,14 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
         return ;
     }
 
+    // Update the Instrument.
     m_selectedInstrument->setSendProgramChange(checked);
 
-    // Keep program value enabled if percussion map is in use
-    if  (m_percussionCheckBox->isChecked()) {
-        // ??? m_bankComboBox?  Is this a typo?
-        m_bankComboBox->setDisabled(false);
-    } else {
-        m_programComboBox->setDisabled(!checked);
-    }
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
-    updateProgramComboBox();
-    updateVariationComboBox();
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               m_selectedInstrument->
-                                         getProgramName().c_str());
-    emit updateAllBoxes();
-
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
@@ -1074,24 +1050,14 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
         return ;
     }
 
-    m_bankCheckBox->setChecked(checked);
+    // Update the Instrument.
     m_selectedInstrument->setSendBankSelect(checked);
 
-    // Keep variation value enabled if percussion map is in use
-    if  (m_percussionCheckBox->isChecked()) {
-        // ??? m_bankComboBox?  Is this a typo?
-        m_bankComboBox->setDisabled(false);
-    } else {
-        m_variationComboBox->setDisabled(!checked);
-    }
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
-    updateVariationComboBox();
-
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                               m_selectedInstrument->
-                                         getProgramName().c_str());
-    emit updateAllBoxes();
-
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
