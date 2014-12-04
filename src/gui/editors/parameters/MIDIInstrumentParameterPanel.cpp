@@ -360,6 +360,16 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         setRotaryToValue(it->controller, int(value));
     }
 
+    // Make sure MatrixWidget's pitch ruler shows notes or percussion map
+    // as appropriate.
+    emit updateAllBoxes();
+
+    // Make sure other parts of the system are in sync with the program
+    // name.  Most notably the TrackButton for the current track.
+    emit changeInstrumentLabel(
+            m_selectedInstrument->getId(),
+            m_selectedInstrument->getProgramName().c_str());
+
     RG_DEBUG << "MIDIInstrumentParameterPanel::setupForInstrument() end";
 }
 
