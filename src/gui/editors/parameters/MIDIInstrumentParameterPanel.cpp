@@ -252,6 +252,9 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 {
     RG_DEBUG << "setupForInstrument() begin";
 
+    if (!instrument)
+        return;
+
     // In some cases setupForInstrument gets called several times.
     // This shortcuts this activity since only one setup is needed.
     // ??? Problem is that this prevents legitimate changes to the
@@ -377,6 +380,9 @@ void
 MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
     RG_DEBUG << "setupControllers()";
+
+    if (!md)
+        return;
 
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
@@ -556,7 +562,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 {
     RG_DEBUG << "updateBankComboBox()";
 
-    if (m_selectedInstrument == 0) return;
+    if (!m_selectedInstrument)
+        return;
 
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
@@ -715,8 +722,8 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 {
     RG_DEBUG << "updateProgramComboBox()";
 
-    if (m_selectedInstrument == 0)
-        return ;
+    if (!m_selectedInstrument)
+        return;
 
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
@@ -839,8 +846,8 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 {
     RG_DEBUG << "updateVariationComboBox() begin...";
 
-    if (m_selectedInstrument == 0)
-        return ;
+    if (!m_selectedInstrument)
+        return;
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
@@ -981,11 +988,8 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 {
     RG_DEBUG << "slotPercussionClicked(" << checked << ")";
 
-    if (m_selectedInstrument == 0) {
-        m_percussionCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return ;
-    }
+    if (!m_selectedInstrument)
+        return;
 
     // Update the Instrument.
     m_selectedInstrument->setPercussion(checked);
@@ -1003,11 +1007,8 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
 {
     RG_DEBUG << "slotBankClicked()";
 
-    if (m_selectedInstrument == 0) {
-        m_bankCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return ;
-    }
+    if (!m_selectedInstrument)
+        return;
 
     // Update the Instrument.
     m_selectedInstrument->setSendBankSelect(checked);
@@ -1025,11 +1026,8 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
 {
     RG_DEBUG << "slotProgramClicked()";
 
-    if (m_selectedInstrument == 0) {
-        m_programCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return ;
-    }
+    if (!m_selectedInstrument)
+        return;
 
     // Update the Instrument.
     m_selectedInstrument->setSendProgramChange(checked);
@@ -1054,11 +1052,8 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
     //     rid of this checkbox (and always send banks selects) and no one
     //     will notice.
 
-    if (m_selectedInstrument == 0) {
-        m_variationCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return ;
-    }
+    if (!m_selectedInstrument)
+        return;
 
     // Update the Instrument.
     m_selectedInstrument->setSendBankSelect(checked);
@@ -1076,8 +1071,8 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 {
     RG_DEBUG << "slotSelectBank() begin...";
 
-    if (m_selectedInstrument == 0)
-        return ;
+    if (!m_selectedInstrument)
+        return;
 
     MidiDevice *md = dynamic_cast<MidiDevice*>
                      (m_selectedInstrument->getDevice());
@@ -1125,8 +1120,9 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
         return;
 
     if (!m_selectedInstrument)
-        return ;
+        return;
 
+#if 0
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
 
@@ -1134,6 +1130,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotExternalProgramChange(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
+#endif
 
     bool bankChanged = false;
 
@@ -1183,6 +1180,9 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 {
     RG_DEBUG << "slotSelectProgram()";
 
+    if (!m_selectedInstrument)
+        return;
+
     const MidiProgram *prg = &m_programs[index];
     if (prg == 0) {
         std::cerr << "MIDIInstrumentParameterPanel::slotSelectProgram(): Program change not found in bank.\n";
@@ -1208,11 +1208,8 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 {
     RG_DEBUG << "slotSelectVariation()";
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
-    if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
+    if (!m_selectedInstrument)
         return;
-    }
 
     if (index < 0  ||  index > static_cast<int>(m_variations.size())) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): index " << index << " out of range\n";
@@ -1252,32 +1249,31 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 {
     RG_DEBUG << "slotControllerChanged(" << controllerNumber << ")";
 
-    if (m_selectedInstrument == 0)
-        return ;
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
-    if (!md)
-        return ;
-
-    /*
-    ControlParameter *controller = 
-    md->getControlParameter(MidiByte(controllerNumber));
-        */
+    if (!m_selectedInstrument)
+        return;
 
     int value = getValueFromRotary(controllerNumber);
 
     if (value == -1) {
         std::cerr << "MIDIInstrumentParameterPanel::slotControllerChanged(): Couldn't get value of rotary for controller " << controllerNumber << '\n';
-        return ;
+        return;
     }
 
-    m_selectedInstrument->setControllerValue(MidiByte(controllerNumber),
-            MidiByte(value));
+    m_selectedInstrument->setControllerValue(
+            MidiByte(controllerNumber), MidiByte(value));
 
-    emit updateAllBoxes();
+    // Make sure other widgets are in sync.
+    // For this particular change, this is probably pretty pointless.  But
+    // since I'm heading toward having a single notification mechanism
+    // (something like Instrument::hasChanged()), this is a good test to make
+    // sure there aren't any hidden issues.
+    // Rotary is smart enough to ignore this update since there will appear
+    // to be no change from its perspective.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
+
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
-
 }
 
 void
@@ -1286,13 +1282,14 @@ slotSelectChannel(int index)
 {
     RG_DEBUG << "slotSelectChannel(" << index << ")";
 
-    if (m_selectedInstrument == 0)
-        { return; }
-    if (index == 1) {
+    if (!m_selectedInstrument)
+        return;
+
+    // Fixed
+    if (index == 1)
         m_selectedInstrument->setFixedChannel();
-    } else {
+    else  // Auto
         m_selectedInstrument->releaseFixedChannel();
-    }
 }
 
 }
