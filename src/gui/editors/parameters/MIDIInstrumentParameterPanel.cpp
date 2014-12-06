@@ -1206,28 +1206,41 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 void
 MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotSelectVariation()";
+    RG_DEBUG << "slotSelectVariation()";
 
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return ;
+        return;
     }
 
-    if (index < 0 || index > int(m_variations.size())) {
+    if (index < 0  ||  index > static_cast<int>(m_variations.size())) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): index " << index << " out of range\n";
-        return ;
+        return;
     }
 
     MidiBank newBank = m_variations[index].getBank();
 
-    // Update bank MSB/LSB as needed.
-    if (m_selectedInstrument->getMSB() != newBank.getMSB())
-        m_selectedInstrument->setMSB(newBank.getMSB());
-    if (m_selectedInstrument->getLSB() != newBank.getLSB())
-        m_selectedInstrument->setLSB(newBank.getLSB());
+    bool changed = false;
 
+    // Update bank MSB/LSB as needed.
+    if (m_selectedInstrument->getMSB() != newBank.getMSB()) {
+        m_selectedInstrument->setMSB(newBank.getMSB());
+        changed = true;
+    }
+    if (m_selectedInstrument->getLSB() != newBank.getLSB()) {
+        m_selectedInstrument->setLSB(newBank.getLSB());
+        changed = true;
+    }
+
+    if (!changed)
+        return;
+
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
+
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
