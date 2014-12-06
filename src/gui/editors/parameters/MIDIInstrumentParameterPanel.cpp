@@ -1074,7 +1074,7 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
 void
 MIDIInstrumentParameterPanel::slotSelectBank(int index)
 {
-    RG_DEBUG << "MIDIInstrumentParameterPanel::slotSelectBank()";
+    RG_DEBUG << "slotSelectBank() begin...";
 
     if (m_selectedInstrument == 0)
         return ;
@@ -1103,20 +1103,20 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         }
     }
 
-    updateProgramComboBox();
+    // If no change, bail.
+    if (!change)
+        return;
 
-    if (change) {
-        emit updateAllBoxes();
-    }
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-            m_selectedInstrument->getProgramName().c_str());
-
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
-MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, int bankMSB )
+MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int bankLSB, int bankMSB )
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel::slotExternalProgramChange()";
 
@@ -1135,14 +1135,14 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, i
         return ;
     }
 
-    bool changedBank = false;
+    bool bankChanged = false;
 
     // MSB Bank Select
     if (bankMSB >= 0) {  // &&  md->getVariationType() != MidiDevice::VariationFromMSB ) {
         // If the MSB is changing
         if (m_selectedInstrument->getMSB() != bankMSB) {
             m_selectedInstrument->setMSB(bankMSB);
-            changedBank = true;
+            bankChanged = true;
         }
     }
 
@@ -1151,33 +1151,31 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int prog, int bankLSB, i
         // If the LSB is changing
         if (m_selectedInstrument->getLSB() != bankLSB) {
             m_selectedInstrument->setLSB(bankLSB);
-            changedBank = true;
+            bankChanged = true;
         }
     }
 
-    bool change = false;
+    bool pcChanged = false;
 
-    // ??? Can prog be -1?
+    // ??? Can programChange be -1?
 
     // If the Program Change is changing
     if (m_selectedInstrument->getProgramChange() !=
-                static_cast<MidiByte>(prog)) {
-        m_selectedInstrument->setProgramChange(static_cast<MidiByte>(prog));
-        change = true;
+                static_cast<MidiByte>(programChange)) {
+        m_selectedInstrument->setProgramChange(static_cast<MidiByte>(programChange));
+        pcChanged = true;
     }
 
-    //updateVariationComboBox();
+    // If nothing changed, bail.
+    if (!pcChanged  &&  !bankChanged)
+        return;
 
-    // If anything changed, update the UI.
-    if (change  ||  changedBank) {
-        //emit changeInstrumentLabel(m_selectedInstrument->getId(),
-        //                           m_selectedInstrument->
-        //                                     getProgramName().c_str());
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
-        emit updateAllBoxes();
-        
-        emit instrumentParametersChanged(m_selectedInstrument->getId());
-    }
+    // Instrument::hasChanged()?
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -1191,21 +1189,17 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         return ;
     }
 
-    bool change = false;
-    if (m_selectedInstrument->getProgramChange() != prg->getProgram()) {
-        m_selectedInstrument->setProgramChange(prg->getProgram());
-        change = true;
-    }
+    // If there has been no change, bail.
+    if (m_selectedInstrument->getProgramChange() == prg->getProgram())
+        return;
 
-    updateVariationComboBox();
+    m_selectedInstrument->setProgramChange(prg->getProgram());
 
-    if (change) {
-        emit changeInstrumentLabel(m_selectedInstrument->getId(),
-                                   m_selectedInstrument->
-                                             getProgramName().c_str());
-        emit updateAllBoxes();
-    }
+    // Make sure other widgets are in sync.
+    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    setupForInstrument(m_selectedInstrument);
 
+    // Instrument::hasChanged()?
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
