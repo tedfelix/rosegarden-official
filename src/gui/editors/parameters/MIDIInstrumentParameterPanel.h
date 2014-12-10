@@ -150,6 +150,7 @@ private:
     QCheckBox          *m_bankCheckBox;
     QComboBox          *m_bankComboBox;
     BankList            m_banks;
+    void showBank(bool show);
     /// From the selected instrument.
     void updateBankComboBox();
 
@@ -168,6 +169,7 @@ private:
     QCheckBox          *m_variationCheckBox;
     QComboBox          *m_variationComboBox;
     ProgramList         m_variations;
+    void showVariation(bool show);
     /// From the selected instrument.
     void updateVariationComboBox();
 

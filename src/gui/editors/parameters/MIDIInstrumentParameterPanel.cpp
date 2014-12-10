@@ -558,6 +558,15 @@ MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
 }
 
 void
+MIDIInstrumentParameterPanel::showBank(bool show)
+{
+    // Show/hide all bank-related widgets.
+    m_bankLabel->setVisible(show);
+    m_bankCheckBox->setVisible(show);
+    m_bankComboBox->setVisible(show);
+}
+
+void
 MIDIInstrumentParameterPanel::updateBankComboBox()
 {
     RG_DEBUG << "updateBankComboBox()";
@@ -581,18 +590,12 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
         banks = md->getBanks(m_selectedInstrument->isPercussion());
 
-        // If there are banks to display, show the bank widgets
-        if (!banks.empty()) {
-            if (m_bankLabel->isHidden()) {
-                m_bankLabel->show();
-                m_bankCheckBox->show();
-                m_bankComboBox->show();
-            }
-        } else {
-            m_bankLabel->hide();
-            m_bankCheckBox->hide();
-            m_bankComboBox->hide();
-        }
+        // If there are banks to display, show the bank widgets.
+        // Why not showBank(banks.size()>1)?  Because that would hide the
+        // bank checkbox which would take away the user's ability to
+        // enable/disable bank selects.  If we do away with the checkbox
+        // in the future, we should re-evaluate this decision.
+        showBank(!banks.empty());
 
         // Find the selected bank in the MIDI Device's bank list.
         for (unsigned int i = 0; i < banks.size(); ++i) {
@@ -622,20 +625,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
             bytes = md->getDistinctLSBs(m_selectedInstrument->isPercussion());
         }
 
-        // If only one bank value is found, hide the bank widgets.
-        if (bytes.size() < 2) {
-            if (!m_bankLabel->isHidden()) {
-                m_bankLabel->hide();
-                m_bankCheckBox->hide();
-                m_bankComboBox->hide();
-            }
-        } else {
-            if (m_bankLabel->isHidden()) {
-                m_bankLabel->show();
-                m_bankCheckBox->show();
-                m_bankComboBox->show();
-            }
-        }
+        // If more than one bank value is found, show the bank widgets.
+        showBank(bytes.size() > 1);
 
         // Load "banks" with the banks and figure out currentBank.
 
@@ -751,21 +742,16 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         }
     }
 
-    if (!programs.empty()) {
-        if (m_programLabel->isHidden()) {
-            m_programLabel->show();
-            m_programCheckBox->show();
-            m_programComboBox->show();
-            m_receiveExternalCheckBox->show();
-            m_receiveExternalLabel->show();
-        }
-    } else {
-        m_programLabel->hide();
-        m_programCheckBox->hide();
-        m_programComboBox->hide();
-        m_receiveExternalCheckBox->hide();
-        m_receiveExternalLabel->hide();
-    }
+    // Why not "show = (programs.size()>1)"?  Because that would hide the
+    // program checkbox which would take away the user's ability to
+    // enable/disable program changes.  If we do away with the checkbox
+    // in the future, we should re-evaluate this decision.
+    bool show = !programs.empty();
+    m_programLabel->setVisible(show);
+    m_programCheckBox->setVisible(show);
+    m_programComboBox->setVisible(show);
+    m_receiveExternalCheckBox->setVisible(show);
+    m_receiveExternalLabel->setVisible(show);
 
     int currentProgram = -1;
 
@@ -842,6 +828,15 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 }
 
 void
+MIDIInstrumentParameterPanel::showVariation(bool show)
+{
+    // Show/hide all variation-related widgets.
+    m_variationLabel->setVisible(show);
+    m_variationCheckBox->setVisible(show);
+    m_variationComboBox->setVisible(show);
+}
+
+void
 MIDIInstrumentParameterPanel::updateVariationComboBox()
 {
     RG_DEBUG << "updateVariationComboBox() begin...";
@@ -859,12 +854,8 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     RG_DEBUG << "updateVariationComboBox(): Variation type is " << md->getVariationType();
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
-        if (!m_variationLabel->isHidden()) {
-            m_variationLabel->hide();
-            m_variationCheckBox->hide();
-            m_variationComboBox->hide();
-        }
-        return ;
+        showVariation(false);
+        return;
     }
 
     // Get the variations.
@@ -954,26 +945,8 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         m_variationComboBox->setCurrentIndex(currentVariation);
     }
 
-    if (m_variations.size() < 2) {
-        if (!m_variationLabel->isHidden()) {
-            m_variationLabel->hide();
-            m_variationCheckBox->hide();
-            m_variationComboBox->hide();
-        }
-
-    } else {
-        if (m_variationLabel->isHidden()) {
-            m_variationLabel->show();
-            m_variationCheckBox->show();
-            m_variationComboBox->show();
-        }
-
-        if (m_programComboBox->width() > m_variationComboBox->width()) {
-            m_variationComboBox->setMinimumWidth(m_programComboBox->width());
-        } else {
-            m_programComboBox->setMinimumWidth(m_variationComboBox->width());
-        }
-    }
+    // If more than one variation is found, show the variation widgets.
+    showVariation(m_variations.size() > 1);
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
@@ -1291,6 +1264,7 @@ slotSelectChannel(int index)
     else  // Auto
         m_selectedInstrument->releaseFixedChannel();
 }
+
 
 }
 #include "MIDIInstrumentParameterPanel.moc"
