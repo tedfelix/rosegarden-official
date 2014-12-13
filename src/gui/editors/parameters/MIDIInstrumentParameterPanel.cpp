@@ -789,39 +789,6 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     // Display the current program.
     m_programComboBox->setCurrentIndex(currentProgram);
-
-#if 1
-// ??? This appears to be unnecessary.  Need to do a little more
-//     investigation, then remove.
-    // Ensure that stored program change value is same as the one
-    // we're now showing
-    // (Old bug #937371, new bug #401: "problem when changing a bank also
-    // changes the program".)
-    //
-    if (!m_programs.empty()) {
-
-        // ??? Need to find the test case that exercises this.  Is it
-        //     even possible?  It doesn't appear to be.
-        //Q_ASSERT_X(m_selectedInstrument->getProgramChange() ==
-        //    m_programs[m_programComboBox->currentIndex()].getProgram(),
-        //    "MIDIInstrumentParameterPanel::updateProgramComboBox()",
-        //    "Instrument PC doesn't match ComboBox PC");
-
-        // ??? This does not appear to send a bank/program change.
-        //     Removing it and running the test case in bug #401 does
-        //     not change the bank/PCs that are sent out.
-        // ??? This appears to be unnecessary.  When I comment it out
-        //     and retry the test case in bug #401, the bank and
-        //     program change are properly sent.  Was this
-        //     issue re-fixed later in some other part of the system?
-        // ??? When you think about it, all this is doing is putting
-        //     the number we already pulled out of the Instrument
-        //     right back in.  When would these ever be different?
-        //     See Q_ASSERT_X() above.
-        m_selectedInstrument->setProgramChange(
-                m_programs[m_programComboBox->currentIndex()].getProgram());
-    }
-#endif
 }
 
 void
