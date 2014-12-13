@@ -683,29 +683,19 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
     }
 
-    // Display the current bank.
-
-    // If nothing is selected, go with the first.
+    // If the current bank was not found...
     if (currentBank < 0  &&  !banks.empty()) {
-        // ??? Suggestion for simplification...
-        //     ISTM that in the test cases that exercise this, e.g.
-        //     deleting the selected bank, the UI should be getting
-        //     updated via a notification from the instrument.  The
-        //     instrument should notice that the bank has been deleted,
-        //     check to see that the selected bank still makes sense,
-        //     correct it if needed, then fire off a "hasChanged()"
-        //     notification so the UI can sync up.  Then this "nothing
-        //     selected" situation would never happen.  It could be an
-        //     assertion instead.
-        //Q_ASSERT_X(currentBank >= 0  ||  banks.empty(),
-        //           "MIDIInstrumentParameterPanel::updateBankComboBox()",
-        //           "No bank selected.");
+        RG_DEBUG << "updateBankComboBox(): Current bank not found.";
+        // Go with the first one.
+        // ??? Side-effect.  Need to rethink this.
         m_bankComboBox->setCurrentIndex(0);
-        // Make sure the other widgets are in sync.
         slotSelectBank(0);
-    } else {
-        m_bankComboBox->setCurrentIndex(currentBank);
+
+        return;
     }
+
+    // Display the current bank.
+    m_bankComboBox->setCurrentIndex(currentBank);
 }
 
 void
@@ -742,6 +732,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         }
     }
 
+    // If we've got programs, show the Program and "Receive external" widgets.
     // Why not "show = (programs.size()>1)"?  Because that would hide the
     // program checkbox which would take away the user's ability to
     // enable/disable program changes.  If we do away with the checkbox
@@ -785,46 +776,52 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
     }    
 
-    if (currentProgram < 0 && !m_programs.empty()) {
-        // ??? See the comments at the end of updateBankComboBox().
+    // If the current program was not found...
+    if (currentProgram < 0  &&  !m_programs.empty()) {
+        RG_DEBUG << "updateProgramComboBox(): Current program not found.";
+        // Go with the first one.
+        // ??? Side-effect.  Need to rethink this.
         m_programComboBox->setCurrentIndex(0);
         slotSelectProgram(0);
-    } else {
-        m_programComboBox->setCurrentIndex(currentProgram);
+
+        return;
+    }
+
+    // Display the current program.
+    m_programComboBox->setCurrentIndex(currentProgram);
 
 #if 1
 // ??? This appears to be unnecessary.  Need to do a little more
 //     investigation, then remove.
-        // Ensure that stored program change value is same as the one
-        // we're now showing
-        // (Old bug #937371, new bug #401: "problem when changing a bank also
-        // changes the program".)
-        //
-        if (!m_programs.empty()) {
+    // Ensure that stored program change value is same as the one
+    // we're now showing
+    // (Old bug #937371, new bug #401: "problem when changing a bank also
+    // changes the program".)
+    //
+    if (!m_programs.empty()) {
 
-            // ??? Need to find the test case that exercises this.  Is it
-            //     even possible?  It doesn't appear to be.
-            //Q_ASSERT_X(m_selectedInstrument->getProgramChange() ==
-            //    m_programs[m_programComboBox->currentIndex()].getProgram(),
-            //    "MIDIInstrumentParameterPanel::updateProgramComboBox()",
-            //    "Instrument PC doesn't match ComboBox PC");
+        // ??? Need to find the test case that exercises this.  Is it
+        //     even possible?  It doesn't appear to be.
+        //Q_ASSERT_X(m_selectedInstrument->getProgramChange() ==
+        //    m_programs[m_programComboBox->currentIndex()].getProgram(),
+        //    "MIDIInstrumentParameterPanel::updateProgramComboBox()",
+        //    "Instrument PC doesn't match ComboBox PC");
 
-            // ??? This does not appear to send a bank/program change.
-            //     Removing it and running the test case in bug #401 does
-            //     not change the bank/PCs that are sent out.
-            // ??? This appears to be unnecessary.  When I comment it out
-            //     and retry the test case in bug #401, the bank and
-            //     program change are properly sent.  Was this
-            //     issue re-fixed later in some other part of the system?
-            // ??? When you think about it, all this is doing is putting
-            //     the number we already pulled out of the Instrument
-            //     right back in.  When would these ever be different?
-            //     See Q_ASSERT_X() above.
-            m_selectedInstrument->setProgramChange(
-                    m_programs[m_programComboBox->currentIndex()].getProgram());
-#endif
-        }
+        // ??? This does not appear to send a bank/program change.
+        //     Removing it and running the test case in bug #401 does
+        //     not change the bank/PCs that are sent out.
+        // ??? This appears to be unnecessary.  When I comment it out
+        //     and retry the test case in bug #401, the bank and
+        //     program change are properly sent.  Was this
+        //     issue re-fixed later in some other part of the system?
+        // ??? When you think about it, all this is doing is putting
+        //     the number we already pulled out of the Instrument
+        //     right back in.  When would these ever be different?
+        //     See Q_ASSERT_X() above.
+        m_selectedInstrument->setProgramChange(
+                m_programs[m_programComboBox->currentIndex()].getProgram());
     }
+#endif
 }
 
 void
@@ -937,13 +934,27 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         }
     }
 
-    if (currentVariation < 0 && !m_variations.empty()) {
-        // ??? See the comments at the end of updateBankComboBox().
+    // If the current program was not found...
+    if (currentVariation < 0  &&  !m_variations.empty()) {
+        RG_DEBUG << "updateVariationComboBox(): Current variation not found.";
+
+        // ??? There's actually no way to exercise this because
+        //     updateBankComboBox() always beats this routine to noticing
+        //     something is amiss.
+
+        // Go with the first one.
+        // ??? Side-effect.  Need to rethink this.
         m_variationComboBox->setCurrentIndex(0);
         slotSelectVariation(0);
-    } else {
-        m_variationComboBox->setCurrentIndex(currentVariation);
+
+        // Via recursion (slotSelectVariation(0)), we've already done the
+        // rest of this routine.  (Recursion!?  We *really* need to rethink
+        // this.)
+        return;
     }
+
+    // Display the current variation.
+    m_variationComboBox->setCurrentIndex(currentVariation);
 
     // If more than one variation is found, show the variation widgets.
     showVariation(m_variations.size() > 1);
