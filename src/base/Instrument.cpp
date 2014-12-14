@@ -119,9 +119,9 @@ const unsigned int Instrument::SYNTH_PLUGIN_POSITION = 999;
 
 
 Instrument::Instrument(InstrumentId id,
-		       InstrumentType it,
+                       InstrumentType it,
                        const std::string &name,
-                       Device *device):
+                       Device *device) :
     PluginContainer(it == Audio || it == SoftSynth),
     m_id(id),
     m_name(name),
@@ -161,7 +161,7 @@ Instrument::Instrument(InstrumentId id,
     }
 
     if (it == SoftSynth) {
-	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
+        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
 }
 
@@ -216,21 +216,21 @@ Instrument::Instrument(InstrumentId id,
  * very well, and it's fiddly trying to sort the overall behavior into something
  * less quirky (dmm)
  *
-	// Also defined in Midi.h but we don't use that - not here
-	// in the clean inner sanctum.
-	//
-	const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
-	const MidiByte MIDI_EXTENDED_PERCUSSION_CHANNEL = 10;
+        // Also defined in Midi.h but we don't use that - not here
+        // in the clean inner sanctum.
+        //
+        const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
+        const MidiByte MIDI_EXTENDED_PERCUSSION_CHANNEL = 10;
 
-	if (m_channel == MIDI_PERCUSSION_CHANNEL ||
-	    m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
-	    setPercussion(true);
-	}
+        if (m_channel == MIDI_PERCUSSION_CHANNEL ||
+            m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
+            setPercussion(true);
+        }
 */
     }
 
     if (it == SoftSynth) {
-	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
+        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
 }
 
@@ -271,7 +271,7 @@ Instrument::Instrument(const Instrument &ins):
     }
 
     if (ins.getType() == SoftSynth) {
-	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
+        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
     
     StaticControllerConstIterator cIt = ins.m_staticControllers.begin();
@@ -378,8 +378,9 @@ setProgram(const MidiProgram &program)
     m_program = program;
     emit changedChannelSetup();
     ControlBlock::getInstance()->instrumentChangedProgram(getId());
-    if (hasFixedChannel())
-        { StudioControl::sendChannelSetup(this, m_channel); }
+    if (hasFixedChannel()) {
+        StudioControl::sendChannelSetup(this, m_channel);
+    }
 }
 
 void
@@ -459,11 +460,11 @@ Instrument::getAudioInput(bool &isBuss, int &channel) const
     channel = m_audioInputChannel;
 
     if (m_audioInput >= 1000) {
-	isBuss = false;
-	return m_audioInput - 1000;
+        isBuss = false;
+        return m_audioInput - 1000;
     } else {
-	isBuss = true;
-	return m_audioInput;
+        isBuss = true;
+        return m_audioInput;
     }
 }
 
@@ -499,7 +500,7 @@ Instrument::toXmlString()
         instrument << "            <bank send=\""
                    << (m_sendBankSelect ? "true" : "false") << "\" percussion=\""
                    << (isPercussion() ? "true" : "false") << "\" msb=\""
-		   << (int)getMSB()
+                   << (int)getMSB()
                    << "\" lsb=\"" << (int)getLSB() << "\"/>" << std::endl;
 
         instrument << "            <program id=\""
@@ -524,11 +525,11 @@ Instrument::toXmlString()
     else // Audio or SoftSynth
     {
 
-	if (m_type == Audio) {
-	    instrument << "audio\">" << std::endl;
-	} else {
-	    instrument << "softsynth\">" << std::endl;
-	}
+        if (m_type == Audio) {
+            instrument << "audio\">" << std::endl;
+        } else {
+            instrument << "softsynth\">" << std::endl;
+        }
 
         instrument << "            <pan value=\""
                    << (int)m_pan << "\"/>" << std::endl;
@@ -539,15 +540,15 @@ Instrument::toXmlString()
         instrument << "            <recordLevel value=\""
                    << m_recordLevel << "\"/>" << std::endl;
 
-	bool aibuss;
-	int channel;
-	int ai = getAudioInput(aibuss, channel);
+        bool aibuss;
+        int channel;
+        int ai = getAudioInput(aibuss, channel);
 
         instrument << "            <audioInput value=\""
                    << ai << "\" type=\""
-		   << (aibuss ? "buss" : "record")
-		   << "\" channel=\"" << channel
-		   << "\"/>" << std::endl;
+                   << (aibuss ? "buss" : "record")
+                   << "\" channel=\"" << channel
+                   << "\"/>" << std::endl;
 
         instrument << "            <audioOutput value=\""
                    << m_audioOutput << "\"/>" << std::endl;
@@ -582,7 +583,7 @@ Instrument::getProgramName() const
     MidiProgram program(m_program);
 
     if (!m_sendBankSelect)
-	program = MidiProgram(MidiBank(isPercussion(), 0, 0), program.getProgram());
+        program = MidiProgram(MidiBank(isPercussion(), 0, 0), program.getProgram());
 
     return ((dynamic_cast<MidiDevice*>(m_device))->getProgramName(program));
 }
@@ -607,7 +608,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
             if (hasFixedChannel()) {
                 StudioControl::sendController(this, m_channel,
                                               controller, value);
-                }
+            }
             return;
         }
     }
@@ -654,10 +655,10 @@ Instrument::getKeyMapping() const
     if (mkm) return mkm;
 
     if (isPercussion()) { // if any key mapping is available, use it
-	const KeyMappingList &kml = md->getKeyMappings();
-	if (kml.begin() != kml.end()) {
-	    return &(*kml.begin());
-	}
+        const KeyMappingList &kml = md->getKeyMappings();
+        if (kml.begin() != kml.end()) {
+            return &(*kml.begin());
+        }
     }
 
     return 0;
@@ -726,7 +727,7 @@ Buss::toXmlString()
 
     PluginInstanceIterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); ++it) {
-	buss << (*it)->toXmlString();
+        buss << (*it)->toXmlString();
     }
 
     buss << "    </buss>" << std::endl;
