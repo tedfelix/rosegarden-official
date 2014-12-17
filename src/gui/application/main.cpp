@@ -367,11 +367,6 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifdef DEBUG
-    // Force all Qt warnings to crash the system.
-    setenv("QT_FATAL_WARNINGS", "1", 1);
-#endif
-
     QPixmapCache::setCacheLimit(8192); // KB
 
     setsid(); // acquire shiny new process group
