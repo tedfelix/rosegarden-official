@@ -21,43 +21,43 @@
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="18"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>Manage MIDI Devices</source>
         <translation>Správa zařízení MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="475"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
         <source>MIDI Playback</source>
         <translation>Přehrávání MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="101"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="477"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Sends its data through</source>
         <translation>Posílá svá data skrz</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="96"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="478"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="477"/>
         <source>Rosegarden playback device</source>
         <translation>Zařízení pro přehrávání v Rosegardenu</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="62"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="487"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vytvořit nové zařízení pro přehrávání zde. Dvakrát klepněte na název zařízení pro jeho změnu. Vyberte zařízení a spojte je s výstupní přípojkou MIDI poklepáním na přípojku napravo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="349"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="514"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
         <translation>Vnitřní syntetizátor</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="106"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="483"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
         <translation>Výchozí zařízení pro přehrávání</translation>
     </message>
@@ -67,84 +67,84 @@
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="150"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="490"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vymezením banky lze Rosegardenu říct o programech a záplatách dostupných k použití ve vybavení (technické nebo programové syntetizátory) připojenému k tomuto zařízení.&lt;/p&gt;&lt;p&gt;Protože Rosegarden skrývá všechny banky a programy, které nejsou určeny, musí být něco určeno pro každý program nebo každou banku, kterou si přejete přenášet.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="153"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="492"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Banky...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="172"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="494"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Upravte ovladače spojené s tímto zařízením.&lt;/p&gt;&lt;p&gt;Zde musíte určit ovladače, abyste je mohl použít kdekoli v Rosegardenu, jako například na ovládacích pravítkách nebo v políčku &lt;b&gt;Parametry nástrojů&lt;/b&gt; Které ovladače jsou zobrazovány, můžete změnit v políčku&lt;b&gt;Parametry nástrojů&lt;/b&gt;, a přeuspořádat jejich rozvržení&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="175"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="496"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
         <translation>Ovládací prvky...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="218"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="498"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vytvořit nové zařízení pro přehrávání&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="221"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="471"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="500"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="528"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="243"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="502"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Smazat vybrané zařízení pro přehrávání.  Všechny stopy, které toto zařízení používají, budou muset být znovu přiřazeny. Mimoto jsou všechny změny programů a bank u těchto stop trvale ztraceny.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="246"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="265"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="505"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
         <translation>Výstupy MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="334"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="507"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
         <translation>Dostupné výstupy</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="339"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="683"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="512"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="553"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="552"/>
         <source>No port</source>
         <translation>Žádná přípojka</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="289"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="518"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Dostupné výstupy MIDI (technické nebo programové)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="633"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="556"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Dostupné vstupy MIDI (od technických po programové)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -155,71 +155,71 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="389"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="729"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="521"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="559"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Poklepejte pro obnovení seznamu přípojek po připojení nového kusu vybavení nabo po spuštění nového softwarového syntetizátoru.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="392"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="732"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="561"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="429"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="524"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
         <translation>Nahrávání MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="468"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="526"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vytvořit nové nahrávací zařízení&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="493"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="530"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Smazat vybrané nahrávací zařízení&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="496"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="532"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="578"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
         <translation>Přijímá svá data z</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="573"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="535"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
         <translation>Zařízení pro nahrávání v Rosegardenu</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="583"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
         <source>Default record device</source>
         <translation>Výchozí zařízení pro nahrávání</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="609"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="546"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
         <source>MIDI inputs</source>
         <translation>Vstupy MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="678"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="548"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="547"/>
         <source>Available inputs</source>
         <translation>Dostupné vstupy</translation>
     </message>
@@ -361,12 +361,12 @@
         <location filename="../QMenuStrings.cpp" line="173"/>
         <location filename="../QMenuStrings.cpp" line="316"/>
         <location filename="../QMenuStrings.cpp" line="473"/>
-        <location filename="../QMenuStrings.cpp" line="1653"/>
-        <location filename="../QMenuStrings.cpp" line="1701"/>
-        <location filename="../QMenuStrings.cpp" line="1774"/>
-        <location filename="../QMenuStrings.cpp" line="3707"/>
-        <location filename="../QMenuStrings.cpp" line="4567"/>
-        <location filename="../QMenuStrings.cpp" line="4682"/>
+        <location filename="../QMenuStrings.cpp" line="1680"/>
+        <location filename="../QMenuStrings.cpp" line="1728"/>
+        <location filename="../QMenuStrings.cpp" line="1801"/>
+        <location filename="../QMenuStrings.cpp" line="3742"/>
+        <location filename="../QMenuStrings.cpp" line="4602"/>
+        <location filename="../QMenuStrings.cpp" line="4717"/>
         <source>&amp;File</source>
         <translation>&amp;Soubor</translation>
     </message>
@@ -387,12 +387,12 @@
         <location filename="../QMenuStrings.cpp" line="183"/>
         <location filename="../QMenuStrings.cpp" line="317"/>
         <location filename="../QMenuStrings.cpp" line="483"/>
-        <location filename="../QMenuStrings.cpp" line="1663"/>
-        <location filename="../QMenuStrings.cpp" line="1711"/>
-        <location filename="../QMenuStrings.cpp" line="1786"/>
-        <location filename="../QMenuStrings.cpp" line="3770"/>
-        <location filename="../QMenuStrings.cpp" line="4577"/>
-        <location filename="../QMenuStrings.cpp" line="4683"/>
+        <location filename="../QMenuStrings.cpp" line="1690"/>
+        <location filename="../QMenuStrings.cpp" line="1738"/>
+        <location filename="../QMenuStrings.cpp" line="1813"/>
+        <location filename="../QMenuStrings.cpp" line="3805"/>
+        <location filename="../QMenuStrings.cpp" line="4612"/>
+        <location filename="../QMenuStrings.cpp" line="4718"/>
         <source>&amp;Close</source>
         <translation>&amp;Zavřít</translation>
     </message>
@@ -403,10 +403,10 @@
         <location filename="../QMenuStrings.cpp" line="192"/>
         <location filename="../QMenuStrings.cpp" line="326"/>
         <location filename="../QMenuStrings.cpp" line="492"/>
-        <location filename="../QMenuStrings.cpp" line="1795"/>
-        <location filename="../QMenuStrings.cpp" line="3788"/>
-        <location filename="../QMenuStrings.cpp" line="4586"/>
-        <location filename="../QMenuStrings.cpp" line="4692"/>
+        <location filename="../QMenuStrings.cpp" line="1822"/>
+        <location filename="../QMenuStrings.cpp" line="3823"/>
+        <location filename="../QMenuStrings.cpp" line="4621"/>
+        <location filename="../QMenuStrings.cpp" line="4727"/>
         <source>&amp;Edit</source>
         <translation>&amp;Úpravy</translation>
     </message>
@@ -449,17 +449,17 @@
         <location filename="../QMenuStrings.cpp" line="298"/>
         <location filename="../QMenuStrings.cpp" line="349"/>
         <location filename="../QMenuStrings.cpp" line="350"/>
-        <location filename="../QMenuStrings.cpp" line="1516"/>
-        <location filename="../QMenuStrings.cpp" line="1689"/>
-        <location filename="../QMenuStrings.cpp" line="1690"/>
-        <location filename="../QMenuStrings.cpp" line="1759"/>
-        <location filename="../QMenuStrings.cpp" line="1760"/>
-        <location filename="../QMenuStrings.cpp" line="3444"/>
-        <location filename="../QMenuStrings.cpp" line="4324"/>
-        <location filename="../QMenuStrings.cpp" line="4666"/>
-        <location filename="../QMenuStrings.cpp" line="4667"/>
-        <location filename="../QMenuStrings.cpp" line="4724"/>
-        <location filename="../QMenuStrings.cpp" line="4725"/>
+        <location filename="../QMenuStrings.cpp" line="1543"/>
+        <location filename="../QMenuStrings.cpp" line="1716"/>
+        <location filename="../QMenuStrings.cpp" line="1717"/>
+        <location filename="../QMenuStrings.cpp" line="1786"/>
+        <location filename="../QMenuStrings.cpp" line="1787"/>
+        <location filename="../QMenuStrings.cpp" line="3479"/>
+        <location filename="../QMenuStrings.cpp" line="4359"/>
+        <location filename="../QMenuStrings.cpp" line="4701"/>
+        <location filename="../QMenuStrings.cpp" line="4702"/>
+        <location filename="../QMenuStrings.cpp" line="4759"/>
+        <location filename="../QMenuStrings.cpp" line="4760"/>
         <source>&amp;Help</source>
         <translation>&amp;Nápověda</translation>
     </message>
@@ -468,9 +468,9 @@
         <translation type="obsolete">&amp;Výukový materiál pro Rosegarden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1527"/>
-        <location filename="../QMenuStrings.cpp" line="3455"/>
-        <location filename="../QMenuStrings.cpp" line="4335"/>
+        <location filename="../QMenuStrings.cpp" line="1554"/>
+        <location filename="../QMenuStrings.cpp" line="3490"/>
+        <location filename="../QMenuStrings.cpp" line="4370"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>Pravidla a návody pro hlášení chy&amp;b</translation>
     </message>
@@ -480,20 +480,20 @@
         <location filename="../QMenuStrings.cpp" line="172"/>
         <location filename="../QMenuStrings.cpp" line="307"/>
         <location filename="../QMenuStrings.cpp" line="359"/>
-        <location filename="../QMenuStrings.cpp" line="1528"/>
-        <location filename="../QMenuStrings.cpp" line="1699"/>
-        <location filename="../QMenuStrings.cpp" line="1769"/>
-        <location filename="../QMenuStrings.cpp" line="3456"/>
-        <location filename="../QMenuStrings.cpp" line="4336"/>
-        <location filename="../QMenuStrings.cpp" line="4676"/>
-        <location filename="../QMenuStrings.cpp" line="4734"/>
+        <location filename="../QMenuStrings.cpp" line="1555"/>
+        <location filename="../QMenuStrings.cpp" line="1726"/>
+        <location filename="../QMenuStrings.cpp" line="1796"/>
+        <location filename="../QMenuStrings.cpp" line="3491"/>
+        <location filename="../QMenuStrings.cpp" line="4371"/>
+        <location filename="../QMenuStrings.cpp" line="4711"/>
+        <location filename="../QMenuStrings.cpp" line="4769"/>
         <source>&amp;About Rosegarden</source>
         <translation>&amp;O programu Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="62"/>
-        <location filename="../QMenuStrings.cpp" line="1531"/>
-        <location filename="../QMenuStrings.cpp" line="3459"/>
+        <location filename="../QMenuStrings.cpp" line="1558"/>
+        <location filename="../QMenuStrings.cpp" line="3494"/>
         <source>General Toolbar</source>
         <translation>Obecný nástrojový pruh</translation>
     </message>
@@ -502,8 +502,8 @@
         <location filename="../QMenuStrings.cpp" line="144"/>
         <location filename="../QMenuStrings.cpp" line="193"/>
         <location filename="../QMenuStrings.cpp" line="327"/>
-        <location filename="../QMenuStrings.cpp" line="4587"/>
-        <location filename="../QMenuStrings.cpp" line="4693"/>
+        <location filename="../QMenuStrings.cpp" line="4622"/>
+        <location filename="../QMenuStrings.cpp" line="4728"/>
         <source>&amp;Nothing to undo</source>
         <translation>&amp;Nic pro vzetí zpět</translation>
     </message>
@@ -516,8 +516,8 @@
         <location filename="../QMenuStrings.cpp" line="153"/>
         <location filename="../QMenuStrings.cpp" line="202"/>
         <location filename="../QMenuStrings.cpp" line="336"/>
-        <location filename="../QMenuStrings.cpp" line="4596"/>
-        <location filename="../QMenuStrings.cpp" line="4702"/>
+        <location filename="../QMenuStrings.cpp" line="4631"/>
+        <location filename="../QMenuStrings.cpp" line="4737"/>
         <source>N&amp;othing to redo</source>
         <translation>&amp;Nic pro provedení znovu</translation>
     </message>
@@ -529,9 +529,9 @@
         <location filename="../QMenuStrings.cpp" line="92"/>
         <location filename="../QMenuStrings.cpp" line="248"/>
         <location filename="../QMenuStrings.cpp" line="520"/>
-        <location filename="../QMenuStrings.cpp" line="1823"/>
-        <location filename="../QMenuStrings.cpp" line="3816"/>
-        <location filename="../QMenuStrings.cpp" line="4446"/>
+        <location filename="../QMenuStrings.cpp" line="1850"/>
+        <location filename="../QMenuStrings.cpp" line="3851"/>
+        <location filename="../QMenuStrings.cpp" line="4481"/>
         <source>&amp;Copy</source>
         <translation>&amp;Kopírovat</translation>
     </message>
@@ -539,9 +539,9 @@
         <location filename="../QMenuStrings.cpp" line="101"/>
         <location filename="../QMenuStrings.cpp" line="257"/>
         <location filename="../QMenuStrings.cpp" line="529"/>
-        <location filename="../QMenuStrings.cpp" line="1832"/>
-        <location filename="../QMenuStrings.cpp" line="3825"/>
-        <location filename="../QMenuStrings.cpp" line="4455"/>
+        <location filename="../QMenuStrings.cpp" line="1859"/>
+        <location filename="../QMenuStrings.cpp" line="3860"/>
+        <location filename="../QMenuStrings.cpp" line="4490"/>
         <source>&amp;Paste</source>
         <translation>&amp;Vložit</translation>
     </message>
@@ -551,20 +551,20 @@
         <location filename="../QMenuStrings.cpp" line="365"/>
         <location filename="../QMenuStrings.cpp" line="401"/>
         <location filename="../QMenuStrings.cpp" line="437"/>
-        <location filename="../QMenuStrings.cpp" line="1536"/>
-        <location filename="../QMenuStrings.cpp" line="1608"/>
-        <location filename="../QMenuStrings.cpp" line="1771"/>
-        <location filename="../QMenuStrings.cpp" line="3693"/>
-        <location filename="../QMenuStrings.cpp" line="4556"/>
-        <location filename="../QMenuStrings.cpp" line="4679"/>
+        <location filename="../QMenuStrings.cpp" line="1563"/>
+        <location filename="../QMenuStrings.cpp" line="1635"/>
+        <location filename="../QMenuStrings.cpp" line="1798"/>
+        <location filename="../QMenuStrings.cpp" line="3728"/>
+        <location filename="../QMenuStrings.cpp" line="4591"/>
+        <location filename="../QMenuStrings.cpp" line="4714"/>
         <source>Switch to Select Tool</source>
         <translation>Přepnout na nástroj pro výběr</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="122"/>
         <location filename="../QMenuStrings.cpp" line="314"/>
-        <location filename="../QMenuStrings.cpp" line="4557"/>
-        <location filename="../QMenuStrings.cpp" line="4680"/>
+        <location filename="../QMenuStrings.cpp" line="4592"/>
+        <location filename="../QMenuStrings.cpp" line="4715"/>
         <source>Switch to Inserting Notes</source>
         <translation>Přepnout na vkládání not</translation>
     </message>
@@ -573,13 +573,13 @@
         <location filename="../QMenuStrings.cpp" line="315"/>
         <location filename="../QMenuStrings.cpp" line="419"/>
         <location filename="../QMenuStrings.cpp" line="455"/>
-        <location filename="../QMenuStrings.cpp" line="1563"/>
         <location filename="../QMenuStrings.cpp" line="1590"/>
-        <location filename="../QMenuStrings.cpp" line="1626"/>
-        <location filename="../QMenuStrings.cpp" line="3682"/>
-        <location filename="../QMenuStrings.cpp" line="3694"/>
-        <location filename="../QMenuStrings.cpp" line="4558"/>
-        <location filename="../QMenuStrings.cpp" line="4681"/>
+        <location filename="../QMenuStrings.cpp" line="1617"/>
+        <location filename="../QMenuStrings.cpp" line="1653"/>
+        <location filename="../QMenuStrings.cpp" line="3717"/>
+        <location filename="../QMenuStrings.cpp" line="3729"/>
+        <location filename="../QMenuStrings.cpp" line="4593"/>
+        <location filename="../QMenuStrings.cpp" line="4716"/>
         <source>Switch to Erase Tool</source>
         <translation>Přepnout na nástroj pro mazání</translation>
     </message>
@@ -587,11 +587,11 @@
         <location filename="../QMenuStrings.cpp" line="125"/>
         <location filename="../QMenuStrings.cpp" line="174"/>
         <location filename="../QMenuStrings.cpp" line="474"/>
-        <location filename="../QMenuStrings.cpp" line="1654"/>
-        <location filename="../QMenuStrings.cpp" line="1702"/>
-        <location filename="../QMenuStrings.cpp" line="1775"/>
-        <location filename="../QMenuStrings.cpp" line="3746"/>
-        <location filename="../QMenuStrings.cpp" line="4568"/>
+        <location filename="../QMenuStrings.cpp" line="1681"/>
+        <location filename="../QMenuStrings.cpp" line="1729"/>
+        <location filename="../QMenuStrings.cpp" line="1802"/>
+        <location filename="../QMenuStrings.cpp" line="3781"/>
+        <location filename="../QMenuStrings.cpp" line="4603"/>
         <source>&amp;Save</source>
         <translation>&amp;Uložit</translation>
     </message>
@@ -626,9 +626,9 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="239"/>
         <location filename="../QMenuStrings.cpp" line="511"/>
-        <location filename="../QMenuStrings.cpp" line="1814"/>
-        <location filename="../QMenuStrings.cpp" line="3807"/>
-        <location filename="../QMenuStrings.cpp" line="4437"/>
+        <location filename="../QMenuStrings.cpp" line="1841"/>
+        <location filename="../QMenuStrings.cpp" line="3842"/>
+        <location filename="../QMenuStrings.cpp" line="4472"/>
         <source>Cu&amp;t</source>
         <translation>Vyjmou&amp;t</translation>
     </message>
@@ -645,7 +645,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="565"/>
-        <location filename="../QMenuStrings.cpp" line="1901"/>
+        <location filename="../QMenuStrings.cpp" line="1928"/>
         <source>&amp;Filter Selection</source>
         <translation>&amp;Filtrovat výběr</translation>
     </message>
@@ -663,67 +663,67 @@
         <location filename="../QMenuStrings.cpp" line="287"/>
         <location filename="../QMenuStrings.cpp" line="345"/>
         <location filename="../QMenuStrings.cpp" line="575"/>
-        <location filename="../QMenuStrings.cpp" line="1912"/>
-        <location filename="../QMenuStrings.cpp" line="3900"/>
-        <location filename="../QMenuStrings.cpp" line="4660"/>
-        <location filename="../QMenuStrings.cpp" line="4720"/>
+        <location filename="../QMenuStrings.cpp" line="1939"/>
+        <location filename="../QMenuStrings.cpp" line="3935"/>
+        <location filename="../QMenuStrings.cpp" line="4695"/>
+        <location filename="../QMenuStrings.cpp" line="4755"/>
         <source>&amp;View</source>
         <translation>&amp;Pohled</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="288"/>
         <location filename="../QMenuStrings.cpp" line="346"/>
-        <location filename="../QMenuStrings.cpp" line="4661"/>
-        <location filename="../QMenuStrings.cpp" line="4721"/>
+        <location filename="../QMenuStrings.cpp" line="4696"/>
+        <location filename="../QMenuStrings.cpp" line="4756"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Hudební čas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="289"/>
         <location filename="../QMenuStrings.cpp" line="347"/>
-        <location filename="../QMenuStrings.cpp" line="4662"/>
-        <location filename="../QMenuStrings.cpp" line="4722"/>
+        <location filename="../QMenuStrings.cpp" line="4697"/>
+        <location filename="../QMenuStrings.cpp" line="4757"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Skutečný čas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="290"/>
         <location filename="../QMenuStrings.cpp" line="348"/>
-        <location filename="../QMenuStrings.cpp" line="4663"/>
-        <location filename="../QMenuStrings.cpp" line="4723"/>
+        <location filename="../QMenuStrings.cpp" line="4698"/>
+        <location filename="../QMenuStrings.cpp" line="4758"/>
         <source>Ra&amp;w Times</source>
         <translation>H&amp;rubý čas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
-        <location filename="../QMenuStrings.cpp" line="671"/>
-        <location filename="../QMenuStrings.cpp" line="1951"/>
-        <location filename="../QMenuStrings.cpp" line="3983"/>
+        <location filename="../QMenuStrings.cpp" line="690"/>
+        <location filename="../QMenuStrings.cpp" line="1978"/>
+        <location filename="../QMenuStrings.cpp" line="4018"/>
         <source>Se&amp;gment</source>
         <translation>Čá&amp;st</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="294"/>
-        <location filename="../QMenuStrings.cpp" line="672"/>
-        <location filename="../QMenuStrings.cpp" line="1952"/>
-        <location filename="../QMenuStrings.cpp" line="3993"/>
+        <location filename="../QMenuStrings.cpp" line="691"/>
+        <location filename="../QMenuStrings.cpp" line="1979"/>
+        <location filename="../QMenuStrings.cpp" line="4028"/>
         <source>Edit &amp;With</source>
         <translation>Upravit &amp;pomocí</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="295"/>
-        <location filename="../QMenuStrings.cpp" line="675"/>
-        <location filename="../QMenuStrings.cpp" line="1954"/>
-        <location filename="../QMenuStrings.cpp" line="4003"/>
-        <location filename="../QMenuStrings.cpp" line="4374"/>
+        <location filename="../QMenuStrings.cpp" line="694"/>
+        <location filename="../QMenuStrings.cpp" line="1981"/>
+        <location filename="../QMenuStrings.cpp" line="4038"/>
+        <location filename="../QMenuStrings.cpp" line="4409"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>Otevřít v &amp;tabulkovém editoru</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
-        <location filename="../QMenuStrings.cpp" line="674"/>
-        <location filename="../QMenuStrings.cpp" line="4021"/>
-        <location filename="../QMenuStrings.cpp" line="4392"/>
+        <location filename="../QMenuStrings.cpp" line="693"/>
+        <location filename="../QMenuStrings.cpp" line="4056"/>
+        <location filename="../QMenuStrings.cpp" line="4427"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>Otevřít v editoru &amp;notového zápisu</translation>
     </message>
@@ -732,128 +732,128 @@
         <translation type="obsolete">&amp;Příručka k programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1529"/>
-        <location filename="../QMenuStrings.cpp" line="3457"/>
-        <location filename="../QMenuStrings.cpp" line="4337"/>
+        <location filename="../QMenuStrings.cpp" line="1556"/>
+        <location filename="../QMenuStrings.cpp" line="3492"/>
+        <location filename="../QMenuStrings.cpp" line="4372"/>
         <source>About &amp;Qt</source>
         <translation>O &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2808"/>
+        <location filename="../QMenuStrings.cpp" line="2843"/>
         <source>Add &amp;Segno</source>
         <translation>Přidat &amp;segno</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2809"/>
+        <location filename="../QMenuStrings.cpp" line="2844"/>
         <source>Add &amp;Coda</source>
         <translation>Přidat &amp;codu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2810"/>
+        <location filename="../QMenuStrings.cpp" line="2845"/>
         <source>Add &amp;Breath mark</source>
         <translation>Přidat značku pro &amp;nádech</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1983"/>
+        <location filename="../QMenuStrings.cpp" line="2010"/>
         <source>Add &amp;Open</source>
         <translation>Přidat &amp;otevřeno</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1984"/>
+        <location filename="../QMenuStrings.cpp" line="2011"/>
         <source>Add &amp;Stopped</source>
         <translation>Přidat &amp;zastaveno</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2903"/>
+        <location filename="../QMenuStrings.cpp" line="2938"/>
         <source>Dotted Ha&amp;lf Note</source>
         <translation>Tečkovaná &amp;půlová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3695"/>
+        <location filename="../QMenuStrings.cpp" line="3730"/>
         <source>Switch To &amp;Notes</source>
         <translation>Přepnout na &amp;noty</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3696"/>
+        <location filename="../QMenuStrings.cpp" line="3731"/>
         <source>Switch To &amp;Rests</source>
         <translation>Přepnout na &amp;pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3697"/>
+        <location filename="../QMenuStrings.cpp" line="3732"/>
         <source>To&amp;ggle Dot On</source>
         <translation>&amp;Zapnout tečky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3698"/>
+        <location filename="../QMenuStrings.cpp" line="3733"/>
         <source>To&amp;ggle Dot Off</source>
         <translation>&amp;Vypnout tečky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1928"/>
+        <location filename="../QMenuStrings.cpp" line="1955"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>Ukázat nástrojový pruh se &amp;symboly</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3462"/>
+        <location filename="../QMenuStrings.cpp" line="3497"/>
         <source>Duration Toolbar</source>
         <translation>Nástrojový pruh s dobami trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3645"/>
+        <location filename="../QMenuStrings.cpp" line="3680"/>
         <source>Symbols Toolbar</source>
         <translation>Nástrojový pruh se symboly</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4353"/>
+        <location filename="../QMenuStrings.cpp" line="4388"/>
         <source>Home</source>
         <comment>keyboard shortcut</comment>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4362"/>
+        <location filename="../QMenuStrings.cpp" line="4397"/>
         <source>End</source>
         <comment>keyboard shortcut</comment>
         <translation>End</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4664"/>
+        <location filename="../QMenuStrings.cpp" line="4699"/>
         <source>Show &amp;Toolbar</source>
         <translation>Ukázat ná&amp;strojový pruh</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4665"/>
+        <location filename="../QMenuStrings.cpp" line="4700"/>
         <source>Hide St&amp;atusbar</source>
         <translation>Skrýt stavo&amp;vý řádek</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="308"/>
         <location filename="../QMenuStrings.cpp" line="311"/>
-        <location filename="../QMenuStrings.cpp" line="1534"/>
-        <location filename="../QMenuStrings.cpp" line="4677"/>
+        <location filename="../QMenuStrings.cpp" line="1561"/>
+        <location filename="../QMenuStrings.cpp" line="4712"/>
         <source>Actions Toolbar</source>
         <translation>Nástrojový pruh pro činnosti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="309"/>
         <location filename="../QMenuStrings.cpp" line="360"/>
-        <location filename="../QMenuStrings.cpp" line="4678"/>
-        <location filename="../QMenuStrings.cpp" line="4735"/>
+        <location filename="../QMenuStrings.cpp" line="4713"/>
+        <location filename="../QMenuStrings.cpp" line="4770"/>
         <source>Time Toolbar</source>
         <translation>Nástrojový pruh pro čas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="310"/>
-        <location filename="../QMenuStrings.cpp" line="1533"/>
-        <location filename="../QMenuStrings.cpp" line="1700"/>
-        <location filename="../QMenuStrings.cpp" line="1770"/>
-        <location filename="../QMenuStrings.cpp" line="3461"/>
-        <location filename="../QMenuStrings.cpp" line="4345"/>
+        <location filename="../QMenuStrings.cpp" line="1560"/>
+        <location filename="../QMenuStrings.cpp" line="1727"/>
+        <location filename="../QMenuStrings.cpp" line="1797"/>
+        <location filename="../QMenuStrings.cpp" line="3496"/>
+        <location filename="../QMenuStrings.cpp" line="4380"/>
         <source>Transport Toolbar</source>
         <translation>Nástrojový pruh pro přesun</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="312"/>
-        <location filename="../QMenuStrings.cpp" line="4364"/>
+        <location filename="../QMenuStrings.cpp" line="4399"/>
         <source>Zoom Toolbar</source>
         <translation>Nástrojový pruh pro přiblížení</translation>
     </message>
@@ -880,18 +880,18 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="374"/>
         <location filename="../QMenuStrings.cpp" line="446"/>
-        <location filename="../QMenuStrings.cpp" line="1545"/>
-        <location filename="../QMenuStrings.cpp" line="1581"/>
-        <location filename="../QMenuStrings.cpp" line="1635"/>
+        <location filename="../QMenuStrings.cpp" line="1572"/>
+        <location filename="../QMenuStrings.cpp" line="1608"/>
+        <location filename="../QMenuStrings.cpp" line="1662"/>
         <source>Switch to Move Tool</source>
         <translation>Přepnout na nástroj pro přesun</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="383"/>
         <location filename="../QMenuStrings.cpp" line="410"/>
-        <location filename="../QMenuStrings.cpp" line="1554"/>
-        <location filename="../QMenuStrings.cpp" line="1572"/>
-        <location filename="../QMenuStrings.cpp" line="1617"/>
+        <location filename="../QMenuStrings.cpp" line="1581"/>
+        <location filename="../QMenuStrings.cpp" line="1599"/>
+        <location filename="../QMenuStrings.cpp" line="1644"/>
         <source>Switch to Draw Tool</source>
         <translation>Přepnout na nástroj pro kreslení</translation>
     </message>
@@ -899,8 +899,8 @@
         <location filename="../QMenuStrings.cpp" line="392"/>
         <location filename="../QMenuStrings.cpp" line="428"/>
         <location filename="../QMenuStrings.cpp" line="464"/>
-        <location filename="../QMenuStrings.cpp" line="1599"/>
-        <location filename="../QMenuStrings.cpp" line="1644"/>
+        <location filename="../QMenuStrings.cpp" line="1626"/>
+        <location filename="../QMenuStrings.cpp" line="1671"/>
         <source>Switch to Resize Tool</source>
         <translation>Přepnout na nástroj pro změnu velikosti</translation>
     </message>
@@ -918,9 +918,9 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="538"/>
-        <location filename="../QMenuStrings.cpp" line="3843"/>
-        <location filename="../QMenuStrings.cpp" line="4464"/>
-        <location filename="../QMenuStrings.cpp" line="4623"/>
+        <location filename="../QMenuStrings.cpp" line="3878"/>
+        <location filename="../QMenuStrings.cpp" line="4499"/>
+        <location filename="../QMenuStrings.cpp" line="4658"/>
         <source>&amp;Delete</source>
         <translation>&amp;Smazat</translation>
     </message>
@@ -1028,25 +1028,25 @@
         <translation type="obsolete">5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="668"/>
-        <location filename="../QMenuStrings.cpp" line="1948"/>
-        <location filename="../QMenuStrings.cpp" line="3935"/>
+        <location filename="../QMenuStrings.cpp" line="687"/>
+        <location filename="../QMenuStrings.cpp" line="1975"/>
+        <location filename="../QMenuStrings.cpp" line="3970"/>
         <source>&amp;Composition</source>
         <translation>&amp;Skladba</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="669"/>
-        <location filename="../QMenuStrings.cpp" line="1949"/>
-        <location filename="../QMenuStrings.cpp" line="3936"/>
-        <location filename="../QMenuStrings.cpp" line="4605"/>
+        <location filename="../QMenuStrings.cpp" line="688"/>
+        <location filename="../QMenuStrings.cpp" line="1976"/>
+        <location filename="../QMenuStrings.cpp" line="3971"/>
+        <location filename="../QMenuStrings.cpp" line="4640"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Přidat změnu te&amp;mpa...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="670"/>
-        <location filename="../QMenuStrings.cpp" line="1950"/>
-        <location filename="../QMenuStrings.cpp" line="3937"/>
-        <location filename="../QMenuStrings.cpp" line="4614"/>
+        <location filename="../QMenuStrings.cpp" line="689"/>
+        <location filename="../QMenuStrings.cpp" line="1977"/>
+        <location filename="../QMenuStrings.cpp" line="3972"/>
+        <location filename="../QMenuStrings.cpp" line="4649"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Přidat změnu &amp;taktového označení...</translation>
     </message>
@@ -1055,10 +1055,10 @@
         <translation type="obsolete">&amp;Část</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="673"/>
-        <location filename="../QMenuStrings.cpp" line="1953"/>
-        <location filename="../QMenuStrings.cpp" line="4030"/>
-        <location filename="../QMenuStrings.cpp" line="4401"/>
+        <location filename="../QMenuStrings.cpp" line="692"/>
+        <location filename="../QMenuStrings.cpp" line="1980"/>
+        <location filename="../QMenuStrings.cpp" line="4065"/>
+        <location filename="../QMenuStrings.cpp" line="4436"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Otevřít v editoru seznamu &amp;událostí</translation>
     </message>
@@ -1075,8 +1075,8 @@
         <translation type="obsolete">Vlevo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="924"/>
-        <location filename="../QMenuStrings.cpp" line="2670"/>
+        <location filename="../QMenuStrings.cpp" line="951"/>
+        <location filename="../QMenuStrings.cpp" line="2705"/>
         <source>Step Back (Left)</source>
         <translation>Krok zpět (vlevo)</translation>
     </message>
@@ -1085,8 +1085,8 @@
         <translation type="obsolete">Vpravo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="939"/>
-        <location filename="../QMenuStrings.cpp" line="2685"/>
+        <location filename="../QMenuStrings.cpp" line="966"/>
+        <location filename="../QMenuStrings.cpp" line="2720"/>
         <source>Step Forward (Right)</source>
         <translation>Krok vpřed (vpravo)</translation>
     </message>
@@ -1095,14 +1095,14 @@
         <translation type="obsolete">Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="680"/>
-        <location filename="../QMenuStrings.cpp" line="2234"/>
+        <location filename="../QMenuStrings.cpp" line="699"/>
+        <location filename="../QMenuStrings.cpp" line="2269"/>
         <source>Ad&amp;just</source>
         <translation>&amp;Přizpůsobení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="681"/>
-        <location filename="../QMenuStrings.cpp" line="2420"/>
+        <location filename="../QMenuStrings.cpp" line="700"/>
+        <location filename="../QMenuStrings.cpp" line="2455"/>
         <source>&amp;Quantize</source>
         <translation>&amp;Kvantizovat</translation>
     </message>
@@ -1113,12 +1113,12 @@
         <location filename="../QMenuStrings.cpp" line="190"/>
         <location filename="../QMenuStrings.cpp" line="324"/>
         <location filename="../QMenuStrings.cpp" line="490"/>
-        <location filename="../QMenuStrings.cpp" line="1670"/>
-        <location filename="../QMenuStrings.cpp" line="1718"/>
-        <location filename="../QMenuStrings.cpp" line="1793"/>
-        <location filename="../QMenuStrings.cpp" line="3777"/>
-        <location filename="../QMenuStrings.cpp" line="4584"/>
-        <location filename="../QMenuStrings.cpp" line="4690"/>
+        <location filename="../QMenuStrings.cpp" line="1697"/>
+        <location filename="../QMenuStrings.cpp" line="1745"/>
+        <location filename="../QMenuStrings.cpp" line="1820"/>
+        <location filename="../QMenuStrings.cpp" line="3812"/>
+        <location filename="../QMenuStrings.cpp" line="4619"/>
+        <location filename="../QMenuStrings.cpp" line="4725"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1144,13 +1144,13 @@
         <location filename="../QMenuStrings.cpp" line="170"/>
         <location filename="../QMenuStrings.cpp" line="305"/>
         <location filename="../QMenuStrings.cpp" line="357"/>
-        <location filename="../QMenuStrings.cpp" line="1524"/>
-        <location filename="../QMenuStrings.cpp" line="1697"/>
-        <location filename="../QMenuStrings.cpp" line="1767"/>
-        <location filename="../QMenuStrings.cpp" line="3452"/>
-        <location filename="../QMenuStrings.cpp" line="4332"/>
-        <location filename="../QMenuStrings.cpp" line="4674"/>
-        <location filename="../QMenuStrings.cpp" line="4732"/>
+        <location filename="../QMenuStrings.cpp" line="1551"/>
+        <location filename="../QMenuStrings.cpp" line="1724"/>
+        <location filename="../QMenuStrings.cpp" line="1794"/>
+        <location filename="../QMenuStrings.cpp" line="3487"/>
+        <location filename="../QMenuStrings.cpp" line="4367"/>
+        <location filename="../QMenuStrings.cpp" line="4709"/>
+        <location filename="../QMenuStrings.cpp" line="4767"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1161,11 +1161,11 @@
         <location filename="../QMenuStrings.cpp" line="200"/>
         <location filename="../QMenuStrings.cpp" line="334"/>
         <location filename="../QMenuStrings.cpp" line="500"/>
-        <location filename="../QMenuStrings.cpp" line="1803"/>
-        <location filename="../QMenuStrings.cpp" line="3796"/>
-        <location filename="../QMenuStrings.cpp" line="4426"/>
-        <location filename="../QMenuStrings.cpp" line="4594"/>
-        <location filename="../QMenuStrings.cpp" line="4700"/>
+        <location filename="../QMenuStrings.cpp" line="1830"/>
+        <location filename="../QMenuStrings.cpp" line="3831"/>
+        <location filename="../QMenuStrings.cpp" line="4461"/>
+        <location filename="../QMenuStrings.cpp" line="4629"/>
+        <location filename="../QMenuStrings.cpp" line="4735"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Z</translation>
@@ -1176,11 +1176,11 @@
         <location filename="../QMenuStrings.cpp" line="209"/>
         <location filename="../QMenuStrings.cpp" line="343"/>
         <location filename="../QMenuStrings.cpp" line="509"/>
-        <location filename="../QMenuStrings.cpp" line="1812"/>
-        <location filename="../QMenuStrings.cpp" line="3805"/>
-        <location filename="../QMenuStrings.cpp" line="4435"/>
-        <location filename="../QMenuStrings.cpp" line="4603"/>
-        <location filename="../QMenuStrings.cpp" line="4709"/>
+        <location filename="../QMenuStrings.cpp" line="1839"/>
+        <location filename="../QMenuStrings.cpp" line="3840"/>
+        <location filename="../QMenuStrings.cpp" line="4470"/>
+        <location filename="../QMenuStrings.cpp" line="4638"/>
+        <location filename="../QMenuStrings.cpp" line="4744"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Z</translation>
@@ -1189,9 +1189,9 @@
         <location filename="../QMenuStrings.cpp" line="99"/>
         <location filename="../QMenuStrings.cpp" line="255"/>
         <location filename="../QMenuStrings.cpp" line="527"/>
-        <location filename="../QMenuStrings.cpp" line="1830"/>
-        <location filename="../QMenuStrings.cpp" line="3823"/>
-        <location filename="../QMenuStrings.cpp" line="4453"/>
+        <location filename="../QMenuStrings.cpp" line="1857"/>
+        <location filename="../QMenuStrings.cpp" line="3858"/>
+        <location filename="../QMenuStrings.cpp" line="4488"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1200,9 +1200,9 @@
         <location filename="../QMenuStrings.cpp" line="108"/>
         <location filename="../QMenuStrings.cpp" line="264"/>
         <location filename="../QMenuStrings.cpp" line="536"/>
-        <location filename="../QMenuStrings.cpp" line="1839"/>
-        <location filename="../QMenuStrings.cpp" line="3832"/>
-        <location filename="../QMenuStrings.cpp" line="4462"/>
+        <location filename="../QMenuStrings.cpp" line="1866"/>
+        <location filename="../QMenuStrings.cpp" line="3867"/>
+        <location filename="../QMenuStrings.cpp" line="4497"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1211,42 +1211,42 @@
         <location filename="../QMenuStrings.cpp" line="132"/>
         <location filename="../QMenuStrings.cpp" line="181"/>
         <location filename="../QMenuStrings.cpp" line="481"/>
-        <location filename="../QMenuStrings.cpp" line="1661"/>
-        <location filename="../QMenuStrings.cpp" line="1709"/>
-        <location filename="../QMenuStrings.cpp" line="1782"/>
-        <location filename="../QMenuStrings.cpp" line="3753"/>
-        <location filename="../QMenuStrings.cpp" line="4575"/>
+        <location filename="../QMenuStrings.cpp" line="1688"/>
+        <location filename="../QMenuStrings.cpp" line="1736"/>
+        <location filename="../QMenuStrings.cpp" line="1809"/>
+        <location filename="../QMenuStrings.cpp" line="3788"/>
+        <location filename="../QMenuStrings.cpp" line="4610"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="218"/>
-        <location filename="../QMenuStrings.cpp" line="1323"/>
-        <location filename="../QMenuStrings.cpp" line="3223"/>
-        <location filename="../QMenuStrings.cpp" line="4046"/>
-        <location filename="../QMenuStrings.cpp" line="4417"/>
-        <location filename="../QMenuStrings.cpp" line="4612"/>
+        <location filename="../QMenuStrings.cpp" line="1350"/>
+        <location filename="../QMenuStrings.cpp" line="3258"/>
+        <location filename="../QMenuStrings.cpp" line="4081"/>
+        <location filename="../QMenuStrings.cpp" line="4452"/>
+        <location filename="../QMenuStrings.cpp" line="4647"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
         <translation>I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="227"/>
-        <location filename="../QMenuStrings.cpp" line="1866"/>
-        <location filename="../QMenuStrings.cpp" line="3850"/>
-        <location filename="../QMenuStrings.cpp" line="4471"/>
+        <location filename="../QMenuStrings.cpp" line="1893"/>
+        <location filename="../QMenuStrings.cpp" line="3885"/>
+        <location filename="../QMenuStrings.cpp" line="4506"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="236"/>
-        <location filename="../QMenuStrings.cpp" line="1260"/>
-        <location filename="../QMenuStrings.cpp" line="3160"/>
-        <location filename="../QMenuStrings.cpp" line="4037"/>
-        <location filename="../QMenuStrings.cpp" line="4408"/>
-        <location filename="../QMenuStrings.cpp" line="4639"/>
+        <location filename="../QMenuStrings.cpp" line="1287"/>
+        <location filename="../QMenuStrings.cpp" line="3195"/>
+        <location filename="../QMenuStrings.cpp" line="4072"/>
+        <location filename="../QMenuStrings.cpp" line="4443"/>
+        <location filename="../QMenuStrings.cpp" line="4674"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
         <translation>E</translation>
@@ -1254,9 +1254,9 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="246"/>
         <location filename="../QMenuStrings.cpp" line="518"/>
-        <location filename="../QMenuStrings.cpp" line="1821"/>
-        <location filename="../QMenuStrings.cpp" line="3814"/>
-        <location filename="../QMenuStrings.cpp" line="4444"/>
+        <location filename="../QMenuStrings.cpp" line="1848"/>
+        <location filename="../QMenuStrings.cpp" line="3849"/>
+        <location filename="../QMenuStrings.cpp" line="4479"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+X, F20, Shift+Del</translation>
@@ -1264,9 +1264,9 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="273"/>
         <location filename="../QMenuStrings.cpp" line="554"/>
-        <location filename="../QMenuStrings.cpp" line="1881"/>
-        <location filename="../QMenuStrings.cpp" line="3897"/>
-        <location filename="../QMenuStrings.cpp" line="4648"/>
+        <location filename="../QMenuStrings.cpp" line="1908"/>
+        <location filename="../QMenuStrings.cpp" line="3932"/>
+        <location filename="../QMenuStrings.cpp" line="4683"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1274,15 +1274,15 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="282"/>
         <location filename="../QMenuStrings.cpp" line="563"/>
-        <location filename="../QMenuStrings.cpp" line="1890"/>
-        <location filename="../QMenuStrings.cpp" line="4657"/>
+        <location filename="../QMenuStrings.cpp" line="1917"/>
+        <location filename="../QMenuStrings.cpp" line="4692"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="572"/>
-        <location filename="../QMenuStrings.cpp" line="1908"/>
+        <location filename="../QMenuStrings.cpp" line="1935"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1291,12 +1291,12 @@
         <location filename="../QMenuStrings.cpp" line="372"/>
         <location filename="../QMenuStrings.cpp" line="408"/>
         <location filename="../QMenuStrings.cpp" line="444"/>
-        <location filename="../QMenuStrings.cpp" line="988"/>
-        <location filename="../QMenuStrings.cpp" line="1543"/>
-        <location filename="../QMenuStrings.cpp" line="1615"/>
-        <location filename="../QMenuStrings.cpp" line="2773"/>
-        <location filename="../QMenuStrings.cpp" line="4204"/>
-        <location filename="../QMenuStrings.cpp" line="4509"/>
+        <location filename="../QMenuStrings.cpp" line="1015"/>
+        <location filename="../QMenuStrings.cpp" line="1570"/>
+        <location filename="../QMenuStrings.cpp" line="1642"/>
+        <location filename="../QMenuStrings.cpp" line="2808"/>
+        <location filename="../QMenuStrings.cpp" line="4239"/>
+        <location filename="../QMenuStrings.cpp" line="4544"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1304,12 +1304,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="381"/>
         <location filename="../QMenuStrings.cpp" line="453"/>
-        <location filename="../QMenuStrings.cpp" line="1015"/>
-        <location filename="../QMenuStrings.cpp" line="1552"/>
-        <location filename="../QMenuStrings.cpp" line="1588"/>
-        <location filename="../QMenuStrings.cpp" line="1642"/>
-        <location filename="../QMenuStrings.cpp" line="4231"/>
-        <location filename="../QMenuStrings.cpp" line="4518"/>
+        <location filename="../QMenuStrings.cpp" line="1042"/>
+        <location filename="../QMenuStrings.cpp" line="1579"/>
+        <location filename="../QMenuStrings.cpp" line="1615"/>
+        <location filename="../QMenuStrings.cpp" line="1669"/>
+        <location filename="../QMenuStrings.cpp" line="4266"/>
+        <location filename="../QMenuStrings.cpp" line="4553"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1317,13 +1317,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="390"/>
         <location filename="../QMenuStrings.cpp" line="417"/>
-        <location filename="../QMenuStrings.cpp" line="997"/>
-        <location filename="../QMenuStrings.cpp" line="1561"/>
-        <location filename="../QMenuStrings.cpp" line="1579"/>
-        <location filename="../QMenuStrings.cpp" line="1624"/>
-        <location filename="../QMenuStrings.cpp" line="2783"/>
-        <location filename="../QMenuStrings.cpp" line="4213"/>
-        <location filename="../QMenuStrings.cpp" line="4527"/>
+        <location filename="../QMenuStrings.cpp" line="1024"/>
+        <location filename="../QMenuStrings.cpp" line="1588"/>
+        <location filename="../QMenuStrings.cpp" line="1606"/>
+        <location filename="../QMenuStrings.cpp" line="1651"/>
+        <location filename="../QMenuStrings.cpp" line="2818"/>
+        <location filename="../QMenuStrings.cpp" line="4248"/>
+        <location filename="../QMenuStrings.cpp" line="4562"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1332,11 +1332,11 @@
         <location filename="../QMenuStrings.cpp" line="399"/>
         <location filename="../QMenuStrings.cpp" line="435"/>
         <location filename="../QMenuStrings.cpp" line="471"/>
-        <location filename="../QMenuStrings.cpp" line="1024"/>
-        <location filename="../QMenuStrings.cpp" line="1606"/>
-        <location filename="../QMenuStrings.cpp" line="1651"/>
-        <location filename="../QMenuStrings.cpp" line="4240"/>
-        <location filename="../QMenuStrings.cpp" line="4545"/>
+        <location filename="../QMenuStrings.cpp" line="1051"/>
+        <location filename="../QMenuStrings.cpp" line="1633"/>
+        <location filename="../QMenuStrings.cpp" line="1678"/>
+        <location filename="../QMenuStrings.cpp" line="4275"/>
+        <location filename="../QMenuStrings.cpp" line="4580"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1344,13 +1344,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="426"/>
         <location filename="../QMenuStrings.cpp" line="462"/>
-        <location filename="../QMenuStrings.cpp" line="1006"/>
-        <location filename="../QMenuStrings.cpp" line="1570"/>
+        <location filename="../QMenuStrings.cpp" line="1033"/>
         <location filename="../QMenuStrings.cpp" line="1597"/>
-        <location filename="../QMenuStrings.cpp" line="1633"/>
-        <location filename="../QMenuStrings.cpp" line="2792"/>
-        <location filename="../QMenuStrings.cpp" line="4222"/>
-        <location filename="../QMenuStrings.cpp" line="4536"/>
+        <location filename="../QMenuStrings.cpp" line="1624"/>
+        <location filename="../QMenuStrings.cpp" line="1660"/>
+        <location filename="../QMenuStrings.cpp" line="2827"/>
+        <location filename="../QMenuStrings.cpp" line="4257"/>
+        <location filename="../QMenuStrings.cpp" line="4571"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1367,341 +1367,341 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="545"/>
-        <location filename="../QMenuStrings.cpp" line="4630"/>
+        <location filename="../QMenuStrings.cpp" line="4665"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="585"/>
-        <location filename="../QMenuStrings.cpp" line="2900"/>
+        <location filename="../QMenuStrings.cpp" line="2935"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="595"/>
-        <location filename="../QMenuStrings.cpp" line="2891"/>
+        <location filename="../QMenuStrings.cpp" line="2926"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="605"/>
-        <location filename="../QMenuStrings.cpp" line="2882"/>
+        <location filename="../QMenuStrings.cpp" line="2917"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="615"/>
-        <location filename="../QMenuStrings.cpp" line="2873"/>
+        <location filename="../QMenuStrings.cpp" line="2908"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="625"/>
-        <location filename="../QMenuStrings.cpp" line="2864"/>
+        <location filename="../QMenuStrings.cpp" line="2899"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="635"/>
-        <location filename="../QMenuStrings.cpp" line="2855"/>
+        <location filename="../QMenuStrings.cpp" line="2890"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="644"/>
-        <location filename="../QMenuStrings.cpp" line="2846"/>
+        <location filename="../QMenuStrings.cpp" line="2881"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="653"/>
-        <location filename="../QMenuStrings.cpp" line="2837"/>
+        <location filename="../QMenuStrings.cpp" line="2872"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="682"/>
-        <location filename="../QMenuStrings.cpp" line="2421"/>
-        <location filename="../QMenuStrings.cpp" line="4049"/>
-        <location filename="../QMenuStrings.cpp" line="4482"/>
+        <location filename="../QMenuStrings.cpp" line="701"/>
+        <location filename="../QMenuStrings.cpp" line="2456"/>
+        <location filename="../QMenuStrings.cpp" line="4084"/>
+        <location filename="../QMenuStrings.cpp" line="4517"/>
         <source>&amp;Quantize...</source>
         <translation>&amp;Kvantizovat...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="689"/>
-        <location filename="../QMenuStrings.cpp" line="2428"/>
-        <location filename="../QMenuStrings.cpp" line="4056"/>
-        <location filename="../QMenuStrings.cpp" line="4489"/>
+        <location filename="../QMenuStrings.cpp" line="708"/>
+        <location filename="../QMenuStrings.cpp" line="2463"/>
+        <location filename="../QMenuStrings.cpp" line="4091"/>
+        <location filename="../QMenuStrings.cpp" line="4524"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="691"/>
+        <location filename="../QMenuStrings.cpp" line="710"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>&amp;Opakovat poslední kvantizaci</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="698"/>
-        <location filename="../QMenuStrings.cpp" line="4065"/>
-        <location filename="../QMenuStrings.cpp" line="4498"/>
+        <location filename="../QMenuStrings.cpp" line="717"/>
+        <location filename="../QMenuStrings.cpp" line="4100"/>
+        <location filename="../QMenuStrings.cpp" line="4533"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="700"/>
+        <location filename="../QMenuStrings.cpp" line="719"/>
         <source>&amp;Legato</source>
         <translation>&amp;Legato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="707"/>
+        <location filename="../QMenuStrings.cpp" line="726"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="709"/>
-        <location filename="../QMenuStrings.cpp" line="2247"/>
+        <location filename="../QMenuStrings.cpp" line="728"/>
+        <location filename="../QMenuStrings.cpp" line="2282"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>Sjednotit noty st&amp;ejné tónové výšky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="710"/>
-        <location filename="../QMenuStrings.cpp" line="2523"/>
-        <location filename="../QMenuStrings.cpp" line="4073"/>
+        <location filename="../QMenuStrings.cpp" line="737"/>
+        <location filename="../QMenuStrings.cpp" line="2558"/>
+        <location filename="../QMenuStrings.cpp" line="4108"/>
         <source>Jog &amp;Left</source>
         <translation>Postrčit v&amp;levo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="717"/>
-        <location filename="../QMenuStrings.cpp" line="2530"/>
-        <location filename="../QMenuStrings.cpp" line="4080"/>
+        <location filename="../QMenuStrings.cpp" line="744"/>
+        <location filename="../QMenuStrings.cpp" line="2565"/>
+        <location filename="../QMenuStrings.cpp" line="4115"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="719"/>
+        <location filename="../QMenuStrings.cpp" line="746"/>
         <source>&amp;Jog Right</source>
         <translation>Postrčit v&amp;pravo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="726"/>
-        <location filename="../QMenuStrings.cpp" line="2539"/>
-        <location filename="../QMenuStrings.cpp" line="4089"/>
+        <location filename="../QMenuStrings.cpp" line="753"/>
+        <location filename="../QMenuStrings.cpp" line="2574"/>
+        <location filename="../QMenuStrings.cpp" line="4124"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="728"/>
-        <location filename="../QMenuStrings.cpp" line="2497"/>
+        <location filename="../QMenuStrings.cpp" line="755"/>
+        <location filename="../QMenuStrings.cpp" line="2532"/>
         <source>&amp;Increase Velocity</source>
         <translation>Z&amp;výšit sílu tónu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="735"/>
-        <location filename="../QMenuStrings.cpp" line="2504"/>
-        <location filename="../QMenuStrings.cpp" line="4154"/>
+        <location filename="../QMenuStrings.cpp" line="762"/>
+        <location filename="../QMenuStrings.cpp" line="2539"/>
+        <location filename="../QMenuStrings.cpp" line="4189"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="737"/>
-        <location filename="../QMenuStrings.cpp" line="2506"/>
+        <location filename="../QMenuStrings.cpp" line="764"/>
+        <location filename="../QMenuStrings.cpp" line="2541"/>
         <source>&amp;Reduce Velocity</source>
         <translation>S&amp;nížit sílu tónu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="744"/>
-        <location filename="../QMenuStrings.cpp" line="2513"/>
-        <location filename="../QMenuStrings.cpp" line="4145"/>
+        <location filename="../QMenuStrings.cpp" line="771"/>
+        <location filename="../QMenuStrings.cpp" line="2548"/>
+        <location filename="../QMenuStrings.cpp" line="4180"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="746"/>
+        <location filename="../QMenuStrings.cpp" line="773"/>
         <source>&amp;Set to Current Velocity</source>
         <translation>&amp;Nastavit na současnou sílu tónu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="747"/>
+        <location filename="../QMenuStrings.cpp" line="774"/>
         <source>Set Event &amp;Velocities...</source>
         <translation>Nastavit &amp;rychlosti událostí...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="748"/>
+        <location filename="../QMenuStrings.cpp" line="775"/>
         <source>Resc&amp;ale</source>
         <translation>Změnit &amp;měřítko</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="749"/>
-        <location filename="../QMenuStrings.cpp" line="2434"/>
+        <location filename="../QMenuStrings.cpp" line="776"/>
+        <location filename="../QMenuStrings.cpp" line="2469"/>
         <source>&amp;Halve Durations</source>
         <translation>&amp;Poloviční doby trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="756"/>
-        <location filename="../QMenuStrings.cpp" line="2441"/>
+        <location filename="../QMenuStrings.cpp" line="783"/>
+        <location filename="../QMenuStrings.cpp" line="2476"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="758"/>
-        <location filename="../QMenuStrings.cpp" line="2443"/>
+        <location filename="../QMenuStrings.cpp" line="785"/>
+        <location filename="../QMenuStrings.cpp" line="2478"/>
         <source>&amp;Double Durations</source>
         <translation>&amp;Dvojité doby trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="765"/>
-        <location filename="../QMenuStrings.cpp" line="2450"/>
+        <location filename="../QMenuStrings.cpp" line="792"/>
+        <location filename="../QMenuStrings.cpp" line="2485"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="767"/>
-        <location filename="../QMenuStrings.cpp" line="2452"/>
+        <location filename="../QMenuStrings.cpp" line="794"/>
+        <location filename="../QMenuStrings.cpp" line="2487"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>Prodloužit nebo &amp;zkrátit...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="768"/>
-        <location filename="../QMenuStrings.cpp" line="2453"/>
+        <location filename="../QMenuStrings.cpp" line="795"/>
+        <location filename="../QMenuStrings.cpp" line="2488"/>
         <source>Trans&amp;pose</source>
         <translation>&amp;Transponovat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="769"/>
-        <location filename="../QMenuStrings.cpp" line="2454"/>
+        <location filename="../QMenuStrings.cpp" line="796"/>
+        <location filename="../QMenuStrings.cpp" line="2489"/>
         <source>&amp;Up a Semitone</source>
         <translation>O půl tónu &amp;výš</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="776"/>
-        <location filename="../QMenuStrings.cpp" line="2461"/>
-        <location filename="../QMenuStrings.cpp" line="4172"/>
+        <location filename="../QMenuStrings.cpp" line="803"/>
+        <location filename="../QMenuStrings.cpp" line="2496"/>
+        <location filename="../QMenuStrings.cpp" line="4207"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="778"/>
-        <location filename="../QMenuStrings.cpp" line="2463"/>
+        <location filename="../QMenuStrings.cpp" line="805"/>
+        <location filename="../QMenuStrings.cpp" line="2498"/>
         <source>&amp;Down a Semitone</source>
         <translation>O půl tónu &amp;níž</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="785"/>
-        <location filename="../QMenuStrings.cpp" line="2470"/>
-        <location filename="../QMenuStrings.cpp" line="4163"/>
+        <location filename="../QMenuStrings.cpp" line="812"/>
+        <location filename="../QMenuStrings.cpp" line="2505"/>
+        <location filename="../QMenuStrings.cpp" line="4198"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="787"/>
-        <location filename="../QMenuStrings.cpp" line="2472"/>
+        <location filename="../QMenuStrings.cpp" line="814"/>
+        <location filename="../QMenuStrings.cpp" line="2507"/>
         <source>Up an &amp;Octave</source>
         <translation>O &amp;oktávu výš</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="794"/>
-        <location filename="../QMenuStrings.cpp" line="2479"/>
+        <location filename="../QMenuStrings.cpp" line="821"/>
+        <location filename="../QMenuStrings.cpp" line="2514"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="796"/>
-        <location filename="../QMenuStrings.cpp" line="2481"/>
+        <location filename="../QMenuStrings.cpp" line="823"/>
+        <location filename="../QMenuStrings.cpp" line="2516"/>
         <source>Down an Octa&amp;ve</source>
         <translation>O o&amp;ktávu níž</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="803"/>
-        <location filename="../QMenuStrings.cpp" line="2488"/>
+        <location filename="../QMenuStrings.cpp" line="830"/>
+        <location filename="../QMenuStrings.cpp" line="2523"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="805"/>
-        <location filename="../QMenuStrings.cpp" line="2490"/>
+        <location filename="../QMenuStrings.cpp" line="832"/>
+        <location filename="../QMenuStrings.cpp" line="2525"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>Transponovat o &amp;půltóny...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="806"/>
-        <location filename="../QMenuStrings.cpp" line="1964"/>
-        <location filename="../QMenuStrings.cpp" line="2491"/>
-        <location filename="../QMenuStrings.cpp" line="4067"/>
-        <location filename="../QMenuStrings.cpp" line="4501"/>
+        <location filename="../QMenuStrings.cpp" line="833"/>
+        <location filename="../QMenuStrings.cpp" line="1991"/>
+        <location filename="../QMenuStrings.cpp" line="2526"/>
+        <location filename="../QMenuStrings.cpp" line="4102"/>
+        <location filename="../QMenuStrings.cpp" line="4536"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>Převést o &amp;interval...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="807"/>
+        <location filename="../QMenuStrings.cpp" line="834"/>
         <source>&amp;Convert</source>
         <translation>&amp;Převést</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="808"/>
-        <location filename="../QMenuStrings.cpp" line="2493"/>
+        <location filename="../QMenuStrings.cpp" line="835"/>
+        <location filename="../QMenuStrings.cpp" line="2528"/>
         <source>&amp;Invert</source>
         <translation>&amp;Obrátit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="815"/>
+        <location filename="../QMenuStrings.cpp" line="842"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="817"/>
-        <location filename="../QMenuStrings.cpp" line="2494"/>
+        <location filename="../QMenuStrings.cpp" line="844"/>
+        <location filename="../QMenuStrings.cpp" line="2529"/>
         <source>&amp;Retrograde</source>
         <translation>&amp;Zrcadlový</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="824"/>
+        <location filename="../QMenuStrings.cpp" line="851"/>
         <source>Shift+Alt+R</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="826"/>
-        <location filename="../QMenuStrings.cpp" line="2495"/>
+        <location filename="../QMenuStrings.cpp" line="853"/>
+        <location filename="../QMenuStrings.cpp" line="2530"/>
         <source>Re&amp;trograde Invert</source>
         <translation>Obrá&amp;tit zrcadlový</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="827"/>
+        <location filename="../QMenuStrings.cpp" line="854"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>&amp;Spustit část...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="830"/>
-        <location filename="../QMenuStrings.cpp" line="2545"/>
+        <location filename="../QMenuStrings.cpp" line="857"/>
+        <location filename="../QMenuStrings.cpp" line="2580"/>
         <source>Cut Controller Events (&amp;X)</source>
         <translation>Vyjmout události ovládacího prvku (&amp;X)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="831"/>
-        <location filename="../QMenuStrings.cpp" line="2546"/>
+        <location filename="../QMenuStrings.cpp" line="858"/>
+        <location filename="../QMenuStrings.cpp" line="2581"/>
         <source>&amp;Copy Controller Events</source>
         <translation>&amp;Kopírovat události ovládacího prvku</translation>
     </message>
@@ -1710,152 +1710,152 @@
         <translation type="obsolete">Vložit události (&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="833"/>
-        <location filename="../QMenuStrings.cpp" line="2548"/>
+        <location filename="../QMenuStrings.cpp" line="860"/>
+        <location filename="../QMenuStrings.cpp" line="2583"/>
         <source>&amp;Place a Controller for Each Note</source>
         <translation>&amp;Umístit ovládací prvek pro každou notu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="844"/>
-        <location filename="../QMenuStrings.cpp" line="2560"/>
+        <location filename="../QMenuStrings.cpp" line="871"/>
+        <location filename="../QMenuStrings.cpp" line="2595"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="853"/>
-        <location filename="../QMenuStrings.cpp" line="2569"/>
+        <location filename="../QMenuStrings.cpp" line="880"/>
+        <location filename="../QMenuStrings.cpp" line="2604"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="880"/>
-        <location filename="../QMenuStrings.cpp" line="2596"/>
+        <location filename="../QMenuStrings.cpp" line="907"/>
+        <location filename="../QMenuStrings.cpp" line="2631"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="889"/>
-        <location filename="../QMenuStrings.cpp" line="2605"/>
+        <location filename="../QMenuStrings.cpp" line="916"/>
+        <location filename="../QMenuStrings.cpp" line="2640"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="898"/>
-        <location filename="../QMenuStrings.cpp" line="2632"/>
+        <location filename="../QMenuStrings.cpp" line="925"/>
+        <location filename="../QMenuStrings.cpp" line="2667"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="907"/>
-        <location filename="../QMenuStrings.cpp" line="2641"/>
+        <location filename="../QMenuStrings.cpp" line="934"/>
+        <location filename="../QMenuStrings.cpp" line="2676"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="918"/>
-        <location filename="../QMenuStrings.cpp" line="2664"/>
+        <location filename="../QMenuStrings.cpp" line="945"/>
+        <location filename="../QMenuStrings.cpp" line="2699"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Vlevo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="933"/>
-        <location filename="../QMenuStrings.cpp" line="2679"/>
+        <location filename="../QMenuStrings.cpp" line="960"/>
+        <location filename="../QMenuStrings.cpp" line="2714"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="948"/>
-        <location filename="../QMenuStrings.cpp" line="2694"/>
+        <location filename="../QMenuStrings.cpp" line="975"/>
+        <location filename="../QMenuStrings.cpp" line="2729"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="957"/>
-        <location filename="../QMenuStrings.cpp" line="2703"/>
+        <location filename="../QMenuStrings.cpp" line="984"/>
+        <location filename="../QMenuStrings.cpp" line="2738"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="969"/>
-        <location filename="../QMenuStrings.cpp" line="2742"/>
-        <location filename="../QMenuStrings.cpp" line="4313"/>
+        <location filename="../QMenuStrings.cpp" line="996"/>
+        <location filename="../QMenuStrings.cpp" line="2777"/>
+        <location filename="../QMenuStrings.cpp" line="4348"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="978"/>
-        <location filename="../QMenuStrings.cpp" line="1687"/>
-        <location filename="../QMenuStrings.cpp" line="1735"/>
-        <location filename="../QMenuStrings.cpp" line="2757"/>
-        <location filename="../QMenuStrings.cpp" line="4322"/>
+        <location filename="../QMenuStrings.cpp" line="1005"/>
+        <location filename="../QMenuStrings.cpp" line="1714"/>
+        <location filename="../QMenuStrings.cpp" line="1762"/>
+        <location filename="../QMenuStrings.cpp" line="2792"/>
+        <location filename="../QMenuStrings.cpp" line="4357"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="980"/>
-        <location filename="../QMenuStrings.cpp" line="2765"/>
-        <location filename="../QMenuStrings.cpp" line="4196"/>
+        <location filename="../QMenuStrings.cpp" line="1007"/>
+        <location filename="../QMenuStrings.cpp" line="2800"/>
+        <location filename="../QMenuStrings.cpp" line="4231"/>
         <source>&amp;Tools</source>
         <translation>&amp;Nástroje</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="981"/>
-        <location filename="../QMenuStrings.cpp" line="2766"/>
-        <location filename="../QMenuStrings.cpp" line="4197"/>
-        <location filename="../QMenuStrings.cpp" line="4502"/>
+        <location filename="../QMenuStrings.cpp" line="1008"/>
+        <location filename="../QMenuStrings.cpp" line="2801"/>
+        <location filename="../QMenuStrings.cpp" line="4232"/>
+        <location filename="../QMenuStrings.cpp" line="4537"/>
         <source>&amp;Select and Edit</source>
         <translation>&amp;Vybrat a upravit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="990"/>
-        <location filename="../QMenuStrings.cpp" line="4206"/>
-        <location filename="../QMenuStrings.cpp" line="4520"/>
+        <location filename="../QMenuStrings.cpp" line="1017"/>
+        <location filename="../QMenuStrings.cpp" line="4241"/>
+        <location filename="../QMenuStrings.cpp" line="4555"/>
         <source>&amp;Draw</source>
         <translation>&amp;Kreslit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="999"/>
-        <location filename="../QMenuStrings.cpp" line="2785"/>
-        <location filename="../QMenuStrings.cpp" line="4215"/>
-        <location filename="../QMenuStrings.cpp" line="4529"/>
+        <location filename="../QMenuStrings.cpp" line="1026"/>
+        <location filename="../QMenuStrings.cpp" line="2820"/>
+        <location filename="../QMenuStrings.cpp" line="4250"/>
+        <location filename="../QMenuStrings.cpp" line="4564"/>
         <source>&amp;Erase</source>
         <translation>&amp;Vymazat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="836"/>
-        <location filename="../QMenuStrings.cpp" line="1008"/>
-        <location filename="../QMenuStrings.cpp" line="2552"/>
-        <location filename="../QMenuStrings.cpp" line="4224"/>
-        <location filename="../QMenuStrings.cpp" line="4511"/>
+        <location filename="../QMenuStrings.cpp" line="863"/>
+        <location filename="../QMenuStrings.cpp" line="1035"/>
+        <location filename="../QMenuStrings.cpp" line="2587"/>
+        <location filename="../QMenuStrings.cpp" line="4259"/>
+        <location filename="../QMenuStrings.cpp" line="4546"/>
         <source>&amp;Move</source>
         <translation>&amp;Přesun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1017"/>
+        <location filename="../QMenuStrings.cpp" line="1044"/>
         <source>Resi&amp;ze</source>
         <translation>&amp;Změnit velikost</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1026"/>
-        <location filename="../QMenuStrings.cpp" line="4242"/>
-        <location filename="../QMenuStrings.cpp" line="4547"/>
+        <location filename="../QMenuStrings.cpp" line="1053"/>
+        <location filename="../QMenuStrings.cpp" line="4277"/>
+        <location filename="../QMenuStrings.cpp" line="4582"/>
         <source>S&amp;plit</source>
         <translation>Rozdě&amp;lit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1035"/>
+        <location filename="../QMenuStrings.cpp" line="1062"/>
         <source>&amp;Velocity</source>
         <translation>&amp;Rychlost</translation>
     </message>
@@ -1888,106 +1888,106 @@
         <translation type="obsolete">Běžec na &amp;konec</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2553"/>
+        <location filename="../QMenuStrings.cpp" line="2588"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>Běžec zpět a &amp;vybrat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="846"/>
-        <location filename="../QMenuStrings.cpp" line="2562"/>
+        <location filename="../QMenuStrings.cpp" line="873"/>
+        <location filename="../QMenuStrings.cpp" line="2597"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>Běžec vpřed a v&amp;ybrat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="873"/>
-        <location filename="../QMenuStrings.cpp" line="2589"/>
+        <location filename="../QMenuStrings.cpp" line="900"/>
+        <location filename="../QMenuStrings.cpp" line="2624"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>Nastavit opakování &amp;pro výběr</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="882"/>
-        <location filename="../QMenuStrings.cpp" line="2598"/>
+        <location filename="../QMenuStrings.cpp" line="909"/>
+        <location filename="../QMenuStrings.cpp" line="2633"/>
         <source>Clear L&amp;oop</source>
         <translation>Vymazat &amp;opakování</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1672"/>
-        <location filename="../QMenuStrings.cpp" line="1720"/>
-        <location filename="../QMenuStrings.cpp" line="4251"/>
+        <location filename="../QMenuStrings.cpp" line="1699"/>
+        <location filename="../QMenuStrings.cpp" line="1747"/>
+        <location filename="../QMenuStrings.cpp" line="4286"/>
         <source>T&amp;ransport</source>
         <translation>Pře&amp;sun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="909"/>
-        <location filename="../QMenuStrings.cpp" line="1673"/>
-        <location filename="../QMenuStrings.cpp" line="1721"/>
-        <location filename="../QMenuStrings.cpp" line="2643"/>
-        <location filename="../QMenuStrings.cpp" line="4252"/>
+        <location filename="../QMenuStrings.cpp" line="936"/>
+        <location filename="../QMenuStrings.cpp" line="1700"/>
+        <location filename="../QMenuStrings.cpp" line="1748"/>
+        <location filename="../QMenuStrings.cpp" line="2678"/>
+        <location filename="../QMenuStrings.cpp" line="4287"/>
         <source>&amp;Play</source>
         <translation>&amp;Přehrát</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="910"/>
-        <location filename="../QMenuStrings.cpp" line="1674"/>
-        <location filename="../QMenuStrings.cpp" line="1722"/>
-        <location filename="../QMenuStrings.cpp" line="2650"/>
-        <location filename="../QMenuStrings.cpp" line="4261"/>
+        <location filename="../QMenuStrings.cpp" line="937"/>
+        <location filename="../QMenuStrings.cpp" line="1701"/>
+        <location filename="../QMenuStrings.cpp" line="1749"/>
+        <location filename="../QMenuStrings.cpp" line="2685"/>
+        <location filename="../QMenuStrings.cpp" line="4296"/>
         <source>&amp;Stop</source>
         <translation>&amp;Zastavit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="941"/>
-        <location filename="../QMenuStrings.cpp" line="1675"/>
-        <location filename="../QMenuStrings.cpp" line="1723"/>
-        <location filename="../QMenuStrings.cpp" line="2687"/>
-        <location filename="../QMenuStrings.cpp" line="4270"/>
+        <location filename="../QMenuStrings.cpp" line="968"/>
+        <location filename="../QMenuStrings.cpp" line="1702"/>
+        <location filename="../QMenuStrings.cpp" line="1750"/>
+        <location filename="../QMenuStrings.cpp" line="2722"/>
+        <location filename="../QMenuStrings.cpp" line="4305"/>
         <source>Re&amp;wind</source>
         <translation>Ukazatel přehrávání o takt &amp;zpět</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="950"/>
-        <location filename="../QMenuStrings.cpp" line="1676"/>
-        <location filename="../QMenuStrings.cpp" line="1724"/>
-        <location filename="../QMenuStrings.cpp" line="2696"/>
-        <location filename="../QMenuStrings.cpp" line="4279"/>
+        <location filename="../QMenuStrings.cpp" line="977"/>
+        <location filename="../QMenuStrings.cpp" line="1703"/>
+        <location filename="../QMenuStrings.cpp" line="1751"/>
+        <location filename="../QMenuStrings.cpp" line="2731"/>
+        <location filename="../QMenuStrings.cpp" line="4314"/>
         <source>&amp;Fast Forward</source>
         <translation>Ukazatel přehrávání o takt &amp;dopředu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="959"/>
-        <location filename="../QMenuStrings.cpp" line="1677"/>
-        <location filename="../QMenuStrings.cpp" line="1725"/>
-        <location filename="../QMenuStrings.cpp" line="2705"/>
+        <location filename="../QMenuStrings.cpp" line="986"/>
+        <location filename="../QMenuStrings.cpp" line="1704"/>
+        <location filename="../QMenuStrings.cpp" line="1752"/>
+        <location filename="../QMenuStrings.cpp" line="2740"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>Ukazatel přehrávání na z&amp;ačátek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="960"/>
-        <location filename="../QMenuStrings.cpp" line="1678"/>
-        <location filename="../QMenuStrings.cpp" line="1726"/>
-        <location filename="../QMenuStrings.cpp" line="2712"/>
+        <location filename="../QMenuStrings.cpp" line="987"/>
+        <location filename="../QMenuStrings.cpp" line="1705"/>
+        <location filename="../QMenuStrings.cpp" line="1753"/>
+        <location filename="../QMenuStrings.cpp" line="2747"/>
         <source>Fast Forward to &amp;End</source>
         <translation>Ukazatel přehrávání na &amp;konec</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="961"/>
-        <location filename="../QMenuStrings.cpp" line="2728"/>
+        <location filename="../QMenuStrings.cpp" line="988"/>
+        <location filename="../QMenuStrings.cpp" line="2763"/>
         <source>S&amp;olo</source>
         <translation>Sól&amp;o</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="962"/>
-        <location filename="../QMenuStrings.cpp" line="2735"/>
-        <location filename="../QMenuStrings.cpp" line="4306"/>
+        <location filename="../QMenuStrings.cpp" line="989"/>
+        <location filename="../QMenuStrings.cpp" line="2770"/>
+        <location filename="../QMenuStrings.cpp" line="4341"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>P&amp;rojíždět podle polohy přehrávání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="971"/>
-        <location filename="../QMenuStrings.cpp" line="1680"/>
-        <location filename="../QMenuStrings.cpp" line="1728"/>
-        <location filename="../QMenuStrings.cpp" line="2750"/>
-        <location filename="../QMenuStrings.cpp" line="4315"/>
+        <location filename="../QMenuStrings.cpp" line="998"/>
+        <location filename="../QMenuStrings.cpp" line="1707"/>
+        <location filename="../QMenuStrings.cpp" line="1755"/>
+        <location filename="../QMenuStrings.cpp" line="2785"/>
+        <location filename="../QMenuStrings.cpp" line="4350"/>
         <source>P&amp;anic</source>
         <translation>&amp;Nouzové zastavení</translation>
     </message>
@@ -2064,27 +2064,27 @@
         <translation type="obsolete">VII</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1198"/>
-        <location filename="../QMenuStrings.cpp" line="3098"/>
+        <location filename="../QMenuStrings.cpp" line="1225"/>
+        <location filename="../QMenuStrings.cpp" line="3133"/>
         <source>&amp;Upper Octave</source>
         <translation>&amp;Vyšší oktáva</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1506"/>
-        <location filename="../QMenuStrings.cpp" line="3415"/>
+        <location filename="../QMenuStrings.cpp" line="1533"/>
+        <location filename="../QMenuStrings.cpp" line="3450"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>Režim vkládání &amp;akordů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1515"/>
-        <location filename="../QMenuStrings.cpp" line="3443"/>
+        <location filename="../QMenuStrings.cpp" line="1542"/>
+        <location filename="../QMenuStrings.cpp" line="3478"/>
         <source>Ste&amp;p Recording</source>
         <translation>&amp;Krokové nahrávání</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="655"/>
-        <location filename="../QMenuStrings.cpp" line="1921"/>
-        <location filename="../QMenuStrings.cpp" line="3902"/>
+        <location filename="../QMenuStrings.cpp" line="1948"/>
+        <location filename="../QMenuStrings.cpp" line="3937"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Nástrojové pruhy</translation>
     </message>
@@ -2094,8 +2094,8 @@
         <translation>&amp;Činnost</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="834"/>
-        <location filename="../QMenuStrings.cpp" line="2550"/>
+        <location filename="../QMenuStrings.cpp" line="861"/>
+        <location filename="../QMenuStrings.cpp" line="2585"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>Vložit pořadí &amp;změn výšek tónů...</translation>
     </message>
@@ -2111,32 +2111,32 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="662"/>
-        <location filename="../QMenuStrings.cpp" line="1936"/>
-        <location filename="../QMenuStrings.cpp" line="3909"/>
+        <location filename="../QMenuStrings.cpp" line="1963"/>
+        <location filename="../QMenuStrings.cpp" line="3944"/>
         <source>&amp;Rulers</source>
         <translation>&amp;Pravítka</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="663"/>
-        <location filename="../QMenuStrings.cpp" line="1937"/>
+        <location filename="../QMenuStrings.cpp" line="1964"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation>Ukázat pravítko s názvy &amp;akordů</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="664"/>
-        <location filename="../QMenuStrings.cpp" line="1939"/>
+        <location filename="../QMenuStrings.cpp" line="1966"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation>Ukázat pravítko s &amp;tempem</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="667"/>
-        <location filename="../QMenuStrings.cpp" line="1942"/>
+        <location filename="../QMenuStrings.cpp" line="1969"/>
         <source>Add &amp;Control Ruler</source>
         <translation>Přidat &amp;ovládací pravítko</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="829"/>
-        <location filename="../QMenuStrings.cpp" line="2544"/>
+        <location filename="../QMenuStrings.cpp" line="856"/>
+        <location filename="../QMenuStrings.cpp" line="2579"/>
         <source>Co&amp;ntrollers</source>
         <translation>&amp;Ovladače</translation>
     </message>
@@ -2153,8 +2153,8 @@
         <translation type="obsolete">Vložit události (&amp;V)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="832"/>
-        <location filename="../QMenuStrings.cpp" line="2547"/>
+        <location filename="../QMenuStrings.cpp" line="859"/>
+        <location filename="../QMenuStrings.cpp" line="2582"/>
         <source>&amp;Set Controller Values</source>
         <translation>&amp;Nastavit hodnoty ovládacího prvku</translation>
     </message>
@@ -2163,96 +2163,43 @@
         <translation type="obsolete">&amp;Umístit ovládací prvek pro každou notu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="835"/>
-        <location filename="../QMenuStrings.cpp" line="2551"/>
+        <location filename="../QMenuStrings.cpp" line="862"/>
+        <location filename="../QMenuStrings.cpp" line="2586"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
         <translation>Vložit pořadí &amp;ovládacího prvku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="855"/>
-        <location filename="../QMenuStrings.cpp" line="2571"/>
+        <location filename="../QMenuStrings.cpp" line="882"/>
+        <location filename="../QMenuStrings.cpp" line="2606"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>Ukazatel o &amp;takt zpět a vybrat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="862"/>
-        <location filename="../QMenuStrings.cpp" line="2578"/>
+        <location filename="../QMenuStrings.cpp" line="889"/>
+        <location filename="../QMenuStrings.cpp" line="2613"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Šipka vlevo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="864"/>
-        <location filename="../QMenuStrings.cpp" line="2580"/>
+        <location filename="../QMenuStrings.cpp" line="891"/>
+        <location filename="../QMenuStrings.cpp" line="2615"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>Ukazatel o &amp;takt vpřed a vybrat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="871"/>
-        <location filename="../QMenuStrings.cpp" line="2587"/>
+        <location filename="../QMenuStrings.cpp" line="898"/>
+        <location filename="../QMenuStrings.cpp" line="2622"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Šipka vpravo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1033"/>
-        <location filename="../QMenuStrings.cpp" line="1042"/>
-        <location filename="../QMenuStrings.cpp" line="4249"/>
-        <location filename="../QMenuStrings.cpp" line="4554"/>
+        <location filename="../QMenuStrings.cpp" line="1060"/>
+        <location filename="../QMenuStrings.cpp" line="1069"/>
+        <location filename="../QMenuStrings.cpp" line="4284"/>
+        <location filename="../QMenuStrings.cpp" line="4589"/>
         <source>F7</source>
-        <comment>keyboard shortcut</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1045"/>
-        <location filename="../QMenuStrings.cpp" line="1199"/>
-        <location filename="../QMenuStrings.cpp" line="1353"/>
-        <location filename="../QMenuStrings.cpp" line="2945"/>
-        <location filename="../QMenuStrings.cpp" line="3099"/>
-        <location filename="../QMenuStrings.cpp" line="3253"/>
-        <source>I/do</source>
-        <translatorcomment>You translated both &quot;sharp&quot; and &quot;flat&quot; as &quot;snížený o půltón&quot; which I am guessing (I don&apos;t remotely speak Czech) means &quot;sharp or flat&quot;.  Having two translations for &quot;V sharp or flat&quot; probably makes little sense to users, and I question this, but what do I know about Czech?  (Almost nothing.)  I just thought I&apos;d mention it.  I&apos;ve done the re-translation in the same pattern as your original, in an attempt to make your life a little easier. I hope it helped. -dmm</translatorcomment>
-        <translation>I</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1052"/>
-        <location filename="../QMenuStrings.cpp" line="2952"/>
-        <source>A</source>
-        <comment>keyboard shortcut</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1054"/>
-        <location filename="../QMenuStrings.cpp" line="1208"/>
-        <location filename="../QMenuStrings.cpp" line="1362"/>
-        <location filename="../QMenuStrings.cpp" line="2954"/>
-        <location filename="../QMenuStrings.cpp" line="3108"/>
-        <location filename="../QMenuStrings.cpp" line="3262"/>
-        <source>I/do sharp</source>
-        <translation>II zvýšený o půltón</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1061"/>
-        <location filename="../QMenuStrings.cpp" line="2961"/>
-        <source>Shift+A</source>
-        <comment>keyboard shortcut</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1063"/>
-        <location filename="../QMenuStrings.cpp" line="1217"/>
-        <location filename="../QMenuStrings.cpp" line="1371"/>
-        <location filename="../QMenuStrings.cpp" line="2963"/>
-        <location filename="../QMenuStrings.cpp" line="3117"/>
-        <location filename="../QMenuStrings.cpp" line="3271"/>
-        <source>II/re flat</source>
-        <translation>III snížený o půltón</translation>
-    </message>
-    <message>
-        <location filename="../QMenuStrings.cpp" line="1070"/>
-        <location filename="../QMenuStrings.cpp" line="2970"/>
-        <location filename="../QMenuStrings.cpp" line="3762"/>
-        <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2260,16 +2207,17 @@
         <location filename="../QMenuStrings.cpp" line="1072"/>
         <location filename="../QMenuStrings.cpp" line="1226"/>
         <location filename="../QMenuStrings.cpp" line="1380"/>
-        <location filename="../QMenuStrings.cpp" line="2972"/>
-        <location filename="../QMenuStrings.cpp" line="3126"/>
-        <location filename="../QMenuStrings.cpp" line="3280"/>
-        <source>II/re</source>
-        <translation>II</translation>
+        <location filename="../QMenuStrings.cpp" line="2980"/>
+        <location filename="../QMenuStrings.cpp" line="3134"/>
+        <location filename="../QMenuStrings.cpp" line="3288"/>
+        <source>I/do</source>
+        <translatorcomment>You translated both &quot;sharp&quot; and &quot;flat&quot; as &quot;snížený o půltón&quot; which I am guessing (I don&apos;t remotely speak Czech) means &quot;sharp or flat&quot;.  Having two translations for &quot;V sharp or flat&quot; probably makes little sense to users, and I question this, but what do I know about Czech?  (Almost nothing.)  I just thought I&apos;d mention it.  I&apos;ve done the re-translation in the same pattern as your original, in an attempt to make your life a little easier. I hope it helped. -dmm</translatorcomment>
+        <translation>I</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1079"/>
-        <location filename="../QMenuStrings.cpp" line="2979"/>
-        <source>S</source>
+        <location filename="../QMenuStrings.cpp" line="2987"/>
+        <source>A</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2277,16 +2225,16 @@
         <location filename="../QMenuStrings.cpp" line="1081"/>
         <location filename="../QMenuStrings.cpp" line="1235"/>
         <location filename="../QMenuStrings.cpp" line="1389"/>
-        <location filename="../QMenuStrings.cpp" line="2981"/>
-        <location filename="../QMenuStrings.cpp" line="3135"/>
-        <location filename="../QMenuStrings.cpp" line="3289"/>
-        <source>II/re sharp</source>
+        <location filename="../QMenuStrings.cpp" line="2989"/>
+        <location filename="../QMenuStrings.cpp" line="3143"/>
+        <location filename="../QMenuStrings.cpp" line="3297"/>
+        <source>I/do sharp</source>
         <translation>II zvýšený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1088"/>
-        <location filename="../QMenuStrings.cpp" line="2988"/>
-        <source>Shift+S</source>
+        <location filename="../QMenuStrings.cpp" line="2996"/>
+        <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2294,16 +2242,17 @@
         <location filename="../QMenuStrings.cpp" line="1090"/>
         <location filename="../QMenuStrings.cpp" line="1244"/>
         <location filename="../QMenuStrings.cpp" line="1398"/>
-        <location filename="../QMenuStrings.cpp" line="2990"/>
-        <location filename="../QMenuStrings.cpp" line="3144"/>
-        <location filename="../QMenuStrings.cpp" line="3298"/>
-        <source>III/mi flat</source>
+        <location filename="../QMenuStrings.cpp" line="2998"/>
+        <location filename="../QMenuStrings.cpp" line="3152"/>
+        <location filename="../QMenuStrings.cpp" line="3306"/>
+        <source>II/re flat</source>
         <translation>III snížený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1097"/>
-        <location filename="../QMenuStrings.cpp" line="2997"/>
-        <source>Ctrl+Shift+D</source>
+        <location filename="../QMenuStrings.cpp" line="3005"/>
+        <location filename="../QMenuStrings.cpp" line="3797"/>
+        <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2311,18 +2260,16 @@
         <location filename="../QMenuStrings.cpp" line="1099"/>
         <location filename="../QMenuStrings.cpp" line="1253"/>
         <location filename="../QMenuStrings.cpp" line="1407"/>
-        <location filename="../QMenuStrings.cpp" line="2999"/>
-        <location filename="../QMenuStrings.cpp" line="3153"/>
-        <location filename="../QMenuStrings.cpp" line="3307"/>
-        <source>III/mi</source>
-        <translation>III snížený o půltón</translation>
+        <location filename="../QMenuStrings.cpp" line="3007"/>
+        <location filename="../QMenuStrings.cpp" line="3161"/>
+        <location filename="../QMenuStrings.cpp" line="3315"/>
+        <source>II/re</source>
+        <translation>II</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1106"/>
-        <location filename="../QMenuStrings.cpp" line="3006"/>
-        <location filename="../QMenuStrings.cpp" line="4019"/>
-        <location filename="../QMenuStrings.cpp" line="4390"/>
-        <source>D</source>
+        <location filename="../QMenuStrings.cpp" line="3014"/>
+        <source>S</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2330,16 +2277,16 @@
         <location filename="../QMenuStrings.cpp" line="1108"/>
         <location filename="../QMenuStrings.cpp" line="1262"/>
         <location filename="../QMenuStrings.cpp" line="1416"/>
-        <location filename="../QMenuStrings.cpp" line="3008"/>
-        <location filename="../QMenuStrings.cpp" line="3162"/>
-        <location filename="../QMenuStrings.cpp" line="3316"/>
-        <source>IV/fa</source>
-        <translation>IV</translation>
+        <location filename="../QMenuStrings.cpp" line="3016"/>
+        <location filename="../QMenuStrings.cpp" line="3170"/>
+        <location filename="../QMenuStrings.cpp" line="3324"/>
+        <source>II/re sharp</source>
+        <translation>II zvýšený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1115"/>
-        <location filename="../QMenuStrings.cpp" line="3015"/>
-        <source>F</source>
+        <location filename="../QMenuStrings.cpp" line="3023"/>
+        <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2347,16 +2294,16 @@
         <location filename="../QMenuStrings.cpp" line="1117"/>
         <location filename="../QMenuStrings.cpp" line="1271"/>
         <location filename="../QMenuStrings.cpp" line="1425"/>
-        <location filename="../QMenuStrings.cpp" line="3017"/>
-        <location filename="../QMenuStrings.cpp" line="3171"/>
-        <location filename="../QMenuStrings.cpp" line="3325"/>
-        <source>IV/fa sharp</source>
-        <translation>IV zvýšený o půltón</translation>
+        <location filename="../QMenuStrings.cpp" line="3025"/>
+        <location filename="../QMenuStrings.cpp" line="3179"/>
+        <location filename="../QMenuStrings.cpp" line="3333"/>
+        <source>III/mi flat</source>
+        <translation>III snížený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1124"/>
-        <location filename="../QMenuStrings.cpp" line="3024"/>
-        <source>Shift+F</source>
+        <location filename="../QMenuStrings.cpp" line="3032"/>
+        <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2364,16 +2311,18 @@
         <location filename="../QMenuStrings.cpp" line="1126"/>
         <location filename="../QMenuStrings.cpp" line="1280"/>
         <location filename="../QMenuStrings.cpp" line="1434"/>
-        <location filename="../QMenuStrings.cpp" line="3026"/>
-        <location filename="../QMenuStrings.cpp" line="3180"/>
-        <location filename="../QMenuStrings.cpp" line="3334"/>
-        <source>V/sol flat</source>
-        <translation>V snížený o půltón</translation>
+        <location filename="../QMenuStrings.cpp" line="3034"/>
+        <location filename="../QMenuStrings.cpp" line="3188"/>
+        <location filename="../QMenuStrings.cpp" line="3342"/>
+        <source>III/mi</source>
+        <translation>III snížený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1133"/>
-        <location filename="../QMenuStrings.cpp" line="3033"/>
-        <source>Ctrl+Shift+J</source>
+        <location filename="../QMenuStrings.cpp" line="3041"/>
+        <location filename="../QMenuStrings.cpp" line="4054"/>
+        <location filename="../QMenuStrings.cpp" line="4425"/>
+        <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2381,16 +2330,16 @@
         <location filename="../QMenuStrings.cpp" line="1135"/>
         <location filename="../QMenuStrings.cpp" line="1289"/>
         <location filename="../QMenuStrings.cpp" line="1443"/>
-        <location filename="../QMenuStrings.cpp" line="3035"/>
-        <location filename="../QMenuStrings.cpp" line="3189"/>
-        <location filename="../QMenuStrings.cpp" line="3343"/>
-        <source>V/sol</source>
-        <translation>V</translation>
+        <location filename="../QMenuStrings.cpp" line="3043"/>
+        <location filename="../QMenuStrings.cpp" line="3197"/>
+        <location filename="../QMenuStrings.cpp" line="3351"/>
+        <source>IV/fa</source>
+        <translation>IV</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1142"/>
-        <location filename="../QMenuStrings.cpp" line="3042"/>
-        <source>J</source>
+        <location filename="../QMenuStrings.cpp" line="3050"/>
+        <source>F</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2398,16 +2347,16 @@
         <location filename="../QMenuStrings.cpp" line="1144"/>
         <location filename="../QMenuStrings.cpp" line="1298"/>
         <location filename="../QMenuStrings.cpp" line="1452"/>
-        <location filename="../QMenuStrings.cpp" line="3044"/>
-        <location filename="../QMenuStrings.cpp" line="3198"/>
-        <location filename="../QMenuStrings.cpp" line="3352"/>
-        <source>V/sol sharp</source>
-        <translation>VI zvýšený o půltón</translation>
+        <location filename="../QMenuStrings.cpp" line="3052"/>
+        <location filename="../QMenuStrings.cpp" line="3206"/>
+        <location filename="../QMenuStrings.cpp" line="3360"/>
+        <source>IV/fa sharp</source>
+        <translation>IV zvýšený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1151"/>
-        <location filename="../QMenuStrings.cpp" line="3051"/>
-        <source>Shift+J</source>
+        <location filename="../QMenuStrings.cpp" line="3059"/>
+        <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2415,16 +2364,16 @@
         <location filename="../QMenuStrings.cpp" line="1153"/>
         <location filename="../QMenuStrings.cpp" line="1307"/>
         <location filename="../QMenuStrings.cpp" line="1461"/>
-        <location filename="../QMenuStrings.cpp" line="3053"/>
-        <location filename="../QMenuStrings.cpp" line="3207"/>
-        <location filename="../QMenuStrings.cpp" line="3361"/>
-        <source>VI/la flat</source>
-        <translation>VII snížený o půltón</translation>
+        <location filename="../QMenuStrings.cpp" line="3061"/>
+        <location filename="../QMenuStrings.cpp" line="3215"/>
+        <location filename="../QMenuStrings.cpp" line="3369"/>
+        <source>V/sol flat</source>
+        <translation>V snížený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1160"/>
-        <location filename="../QMenuStrings.cpp" line="3060"/>
-        <source>Ctrl+Shift+K</source>
+        <location filename="../QMenuStrings.cpp" line="3068"/>
+        <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2432,16 +2381,16 @@
         <location filename="../QMenuStrings.cpp" line="1162"/>
         <location filename="../QMenuStrings.cpp" line="1316"/>
         <location filename="../QMenuStrings.cpp" line="1470"/>
-        <location filename="../QMenuStrings.cpp" line="3062"/>
-        <location filename="../QMenuStrings.cpp" line="3216"/>
-        <location filename="../QMenuStrings.cpp" line="3370"/>
-        <source>VI/la</source>
-        <translation>VI</translation>
+        <location filename="../QMenuStrings.cpp" line="3070"/>
+        <location filename="../QMenuStrings.cpp" line="3224"/>
+        <location filename="../QMenuStrings.cpp" line="3378"/>
+        <source>V/sol</source>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1169"/>
-        <location filename="../QMenuStrings.cpp" line="3069"/>
-        <source>K</source>
+        <location filename="../QMenuStrings.cpp" line="3077"/>
+        <source>J</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2449,16 +2398,16 @@
         <location filename="../QMenuStrings.cpp" line="1171"/>
         <location filename="../QMenuStrings.cpp" line="1325"/>
         <location filename="../QMenuStrings.cpp" line="1479"/>
-        <location filename="../QMenuStrings.cpp" line="3071"/>
-        <location filename="../QMenuStrings.cpp" line="3225"/>
-        <location filename="../QMenuStrings.cpp" line="3379"/>
-        <source>VI/la sharp</source>
+        <location filename="../QMenuStrings.cpp" line="3079"/>
+        <location filename="../QMenuStrings.cpp" line="3233"/>
+        <location filename="../QMenuStrings.cpp" line="3387"/>
+        <source>V/sol sharp</source>
         <translation>VI zvýšený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1178"/>
-        <location filename="../QMenuStrings.cpp" line="3078"/>
-        <source>Shift+K</source>
+        <location filename="../QMenuStrings.cpp" line="3086"/>
+        <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2466,16 +2415,16 @@
         <location filename="../QMenuStrings.cpp" line="1180"/>
         <location filename="../QMenuStrings.cpp" line="1334"/>
         <location filename="../QMenuStrings.cpp" line="1488"/>
-        <location filename="../QMenuStrings.cpp" line="3080"/>
-        <location filename="../QMenuStrings.cpp" line="3234"/>
-        <location filename="../QMenuStrings.cpp" line="3388"/>
-        <source>VII/ti flat</source>
+        <location filename="../QMenuStrings.cpp" line="3088"/>
+        <location filename="../QMenuStrings.cpp" line="3242"/>
+        <location filename="../QMenuStrings.cpp" line="3396"/>
+        <source>VI/la flat</source>
         <translation>VII snížený o půltón</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1187"/>
-        <location filename="../QMenuStrings.cpp" line="3087"/>
-        <source>Ctrl+Shift+L</source>
+        <location filename="../QMenuStrings.cpp" line="3095"/>
+        <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
@@ -2483,407 +2432,458 @@
         <location filename="../QMenuStrings.cpp" line="1189"/>
         <location filename="../QMenuStrings.cpp" line="1343"/>
         <location filename="../QMenuStrings.cpp" line="1497"/>
-        <location filename="../QMenuStrings.cpp" line="3089"/>
-        <location filename="../QMenuStrings.cpp" line="3243"/>
-        <location filename="../QMenuStrings.cpp" line="3397"/>
+        <location filename="../QMenuStrings.cpp" line="3097"/>
+        <location filename="../QMenuStrings.cpp" line="3251"/>
+        <location filename="../QMenuStrings.cpp" line="3405"/>
+        <source>VI/la</source>
+        <translation>VI</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1196"/>
+        <location filename="../QMenuStrings.cpp" line="3104"/>
+        <source>K</source>
+        <comment>keyboard shortcut</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1198"/>
+        <location filename="../QMenuStrings.cpp" line="1352"/>
+        <location filename="../QMenuStrings.cpp" line="1506"/>
+        <location filename="../QMenuStrings.cpp" line="3106"/>
+        <location filename="../QMenuStrings.cpp" line="3260"/>
+        <location filename="../QMenuStrings.cpp" line="3414"/>
+        <source>VI/la sharp</source>
+        <translation>VI zvýšený o půltón</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1205"/>
+        <location filename="../QMenuStrings.cpp" line="3113"/>
+        <source>Shift+K</source>
+        <comment>keyboard shortcut</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1207"/>
+        <location filename="../QMenuStrings.cpp" line="1361"/>
+        <location filename="../QMenuStrings.cpp" line="1515"/>
+        <location filename="../QMenuStrings.cpp" line="3115"/>
+        <location filename="../QMenuStrings.cpp" line="3269"/>
+        <location filename="../QMenuStrings.cpp" line="3423"/>
+        <source>VII/ti flat</source>
+        <translation>VII snížený o půltón</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1214"/>
+        <location filename="../QMenuStrings.cpp" line="3122"/>
+        <source>Ctrl+Shift+L</source>
+        <comment>keyboard shortcut</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="1216"/>
+        <location filename="../QMenuStrings.cpp" line="1370"/>
+        <location filename="../QMenuStrings.cpp" line="1524"/>
+        <location filename="../QMenuStrings.cpp" line="3124"/>
+        <location filename="../QMenuStrings.cpp" line="3278"/>
+        <location filename="../QMenuStrings.cpp" line="3432"/>
         <source>VII/ti</source>
         <translation>VII</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1196"/>
-        <location filename="../QMenuStrings.cpp" line="3096"/>
+        <location filename="../QMenuStrings.cpp" line="1223"/>
+        <location filename="../QMenuStrings.cpp" line="3131"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1206"/>
-        <location filename="../QMenuStrings.cpp" line="3106"/>
+        <location filename="../QMenuStrings.cpp" line="1233"/>
+        <location filename="../QMenuStrings.cpp" line="3141"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1215"/>
-        <location filename="../QMenuStrings.cpp" line="3115"/>
+        <location filename="../QMenuStrings.cpp" line="1242"/>
+        <location filename="../QMenuStrings.cpp" line="3150"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1224"/>
-        <location filename="../QMenuStrings.cpp" line="3124"/>
+        <location filename="../QMenuStrings.cpp" line="1251"/>
+        <location filename="../QMenuStrings.cpp" line="3159"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1233"/>
-        <location filename="../QMenuStrings.cpp" line="3133"/>
+        <location filename="../QMenuStrings.cpp" line="1260"/>
+        <location filename="../QMenuStrings.cpp" line="3168"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1242"/>
-        <location filename="../QMenuStrings.cpp" line="3142"/>
+        <location filename="../QMenuStrings.cpp" line="1269"/>
+        <location filename="../QMenuStrings.cpp" line="3177"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1251"/>
-        <location filename="../QMenuStrings.cpp" line="3151"/>
+        <location filename="../QMenuStrings.cpp" line="1278"/>
+        <location filename="../QMenuStrings.cpp" line="3186"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1269"/>
-        <location filename="../QMenuStrings.cpp" line="3169"/>
-        <location filename="../QMenuStrings.cpp" line="4190"/>
+        <location filename="../QMenuStrings.cpp" line="1296"/>
+        <location filename="../QMenuStrings.cpp" line="3204"/>
+        <location filename="../QMenuStrings.cpp" line="4225"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1278"/>
-        <location filename="../QMenuStrings.cpp" line="3178"/>
+        <location filename="../QMenuStrings.cpp" line="1305"/>
+        <location filename="../QMenuStrings.cpp" line="3213"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1287"/>
-        <location filename="../QMenuStrings.cpp" line="3187"/>
+        <location filename="../QMenuStrings.cpp" line="1314"/>
+        <location filename="../QMenuStrings.cpp" line="3222"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1296"/>
-        <location filename="../QMenuStrings.cpp" line="3196"/>
-        <location filename="../QMenuStrings.cpp" line="4181"/>
+        <location filename="../QMenuStrings.cpp" line="1323"/>
+        <location filename="../QMenuStrings.cpp" line="3231"/>
+        <location filename="../QMenuStrings.cpp" line="4216"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1305"/>
-        <location filename="../QMenuStrings.cpp" line="3205"/>
+        <location filename="../QMenuStrings.cpp" line="1332"/>
+        <location filename="../QMenuStrings.cpp" line="3240"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1314"/>
-        <location filename="../QMenuStrings.cpp" line="3214"/>
+        <location filename="../QMenuStrings.cpp" line="1341"/>
+        <location filename="../QMenuStrings.cpp" line="3249"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1332"/>
-        <location filename="../QMenuStrings.cpp" line="3232"/>
+        <location filename="../QMenuStrings.cpp" line="1359"/>
+        <location filename="../QMenuStrings.cpp" line="3267"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1341"/>
-        <location filename="../QMenuStrings.cpp" line="3241"/>
+        <location filename="../QMenuStrings.cpp" line="1368"/>
+        <location filename="../QMenuStrings.cpp" line="3276"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1350"/>
-        <location filename="../QMenuStrings.cpp" line="3250"/>
+        <location filename="../QMenuStrings.cpp" line="1377"/>
+        <location filename="../QMenuStrings.cpp" line="3285"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1360"/>
-        <location filename="../QMenuStrings.cpp" line="3260"/>
+        <location filename="../QMenuStrings.cpp" line="1387"/>
+        <location filename="../QMenuStrings.cpp" line="3295"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1369"/>
-        <location filename="../QMenuStrings.cpp" line="3269"/>
+        <location filename="../QMenuStrings.cpp" line="1396"/>
+        <location filename="../QMenuStrings.cpp" line="3304"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1378"/>
-        <location filename="../QMenuStrings.cpp" line="3278"/>
-        <location filename="../QMenuStrings.cpp" line="3859"/>
+        <location filename="../QMenuStrings.cpp" line="1405"/>
+        <location filename="../QMenuStrings.cpp" line="3313"/>
+        <location filename="../QMenuStrings.cpp" line="3894"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1387"/>
-        <location filename="../QMenuStrings.cpp" line="3287"/>
+        <location filename="../QMenuStrings.cpp" line="1414"/>
+        <location filename="../QMenuStrings.cpp" line="3322"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1396"/>
-        <location filename="../QMenuStrings.cpp" line="3296"/>
+        <location filename="../QMenuStrings.cpp" line="1423"/>
+        <location filename="../QMenuStrings.cpp" line="3331"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1405"/>
-        <location filename="../QMenuStrings.cpp" line="3305"/>
-        <location filename="../QMenuStrings.cpp" line="3868"/>
+        <location filename="../QMenuStrings.cpp" line="1432"/>
+        <location filename="../QMenuStrings.cpp" line="3340"/>
+        <location filename="../QMenuStrings.cpp" line="3903"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1414"/>
-        <location filename="../QMenuStrings.cpp" line="3314"/>
+        <location filename="../QMenuStrings.cpp" line="1441"/>
+        <location filename="../QMenuStrings.cpp" line="3349"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1423"/>
-        <location filename="../QMenuStrings.cpp" line="3323"/>
+        <location filename="../QMenuStrings.cpp" line="1450"/>
+        <location filename="../QMenuStrings.cpp" line="3358"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1432"/>
-        <location filename="../QMenuStrings.cpp" line="3332"/>
+        <location filename="../QMenuStrings.cpp" line="1459"/>
+        <location filename="../QMenuStrings.cpp" line="3367"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1441"/>
-        <location filename="../QMenuStrings.cpp" line="3341"/>
+        <location filename="../QMenuStrings.cpp" line="1468"/>
+        <location filename="../QMenuStrings.cpp" line="3376"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1450"/>
-        <location filename="../QMenuStrings.cpp" line="3350"/>
+        <location filename="../QMenuStrings.cpp" line="1477"/>
+        <location filename="../QMenuStrings.cpp" line="3385"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1459"/>
-        <location filename="../QMenuStrings.cpp" line="3359"/>
+        <location filename="../QMenuStrings.cpp" line="1486"/>
+        <location filename="../QMenuStrings.cpp" line="3394"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1468"/>
-        <location filename="../QMenuStrings.cpp" line="3368"/>
+        <location filename="../QMenuStrings.cpp" line="1495"/>
+        <location filename="../QMenuStrings.cpp" line="3403"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1477"/>
-        <location filename="../QMenuStrings.cpp" line="3377"/>
-        <location filename="../QMenuStrings.cpp" line="4028"/>
-        <location filename="../QMenuStrings.cpp" line="4399"/>
+        <location filename="../QMenuStrings.cpp" line="1504"/>
+        <location filename="../QMenuStrings.cpp" line="3412"/>
+        <location filename="../QMenuStrings.cpp" line="4063"/>
+        <location filename="../QMenuStrings.cpp" line="4434"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1486"/>
-        <location filename="../QMenuStrings.cpp" line="3386"/>
+        <location filename="../QMenuStrings.cpp" line="1513"/>
+        <location filename="../QMenuStrings.cpp" line="3421"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1495"/>
-        <location filename="../QMenuStrings.cpp" line="3395"/>
-        <location filename="../QMenuStrings.cpp" line="3960"/>
+        <location filename="../QMenuStrings.cpp" line="1522"/>
+        <location filename="../QMenuStrings.cpp" line="3430"/>
+        <location filename="../QMenuStrings.cpp" line="3995"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1504"/>
-        <location filename="../QMenuStrings.cpp" line="3404"/>
-        <location filename="../QMenuStrings.cpp" line="4010"/>
-        <location filename="../QMenuStrings.cpp" line="4381"/>
+        <location filename="../QMenuStrings.cpp" line="1531"/>
+        <location filename="../QMenuStrings.cpp" line="3439"/>
+        <location filename="../QMenuStrings.cpp" line="4045"/>
+        <location filename="../QMenuStrings.cpp" line="4416"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1513"/>
-        <location filename="../QMenuStrings.cpp" line="3422"/>
+        <location filename="../QMenuStrings.cpp" line="1540"/>
+        <location filename="../QMenuStrings.cpp" line="3457"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1526"/>
-        <location filename="../QMenuStrings.cpp" line="3454"/>
+        <location filename="../QMenuStrings.cpp" line="1553"/>
+        <location filename="../QMenuStrings.cpp" line="3489"/>
         <source>&amp;Rosegarden Tutorial</source>
         <translation>&amp;Výukový materiál pro Rosegarden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1532"/>
-        <location filename="../QMenuStrings.cpp" line="3460"/>
-        <location filename="../QMenuStrings.cpp" line="4342"/>
+        <location filename="../QMenuStrings.cpp" line="1559"/>
+        <location filename="../QMenuStrings.cpp" line="3495"/>
+        <location filename="../QMenuStrings.cpp" line="4377"/>
         <source>Tools Toolbar</source>
         <translation>Nástrojový pruh s ovládacími nástroji</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1679"/>
-        <location filename="../QMenuStrings.cpp" line="1727"/>
-        <location filename="../QMenuStrings.cpp" line="4288"/>
+        <location filename="../QMenuStrings.cpp" line="1706"/>
+        <location filename="../QMenuStrings.cpp" line="1754"/>
+        <location filename="../QMenuStrings.cpp" line="4323"/>
         <source>&amp;Record</source>
         <translation>&amp;Nahrát</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1737"/>
+        <location filename="../QMenuStrings.cpp" line="1764"/>
         <source>&amp;Settings</source>
         <translation>&amp;Nastavení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1738"/>
+        <location filename="../QMenuStrings.cpp" line="1765"/>
         <source>Number of Stereo &amp;Inputs</source>
         <translation>Počet stereo v&amp;stupů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1739"/>
+        <location filename="../QMenuStrings.cpp" line="1766"/>
         <source>&amp;1 Input</source>
         <translation>&amp;1 vstup</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1740"/>
+        <location filename="../QMenuStrings.cpp" line="1767"/>
         <source>&amp;2 Inputs</source>
         <translation>&amp;2 vstupy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1741"/>
+        <location filename="../QMenuStrings.cpp" line="1768"/>
         <source>&amp;4 Inputs</source>
         <translation>&amp;4 vstupy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1742"/>
+        <location filename="../QMenuStrings.cpp" line="1769"/>
         <source>&amp;8 Inputs</source>
         <translation>&amp;8 vstupů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1743"/>
+        <location filename="../QMenuStrings.cpp" line="1770"/>
         <source>1&amp;6 Inputs</source>
         <translation>1&amp;6 vstupů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1744"/>
+        <location filename="../QMenuStrings.cpp" line="1771"/>
         <source>&amp;Number of Submasters</source>
         <translation>&amp;Počet řízených sekvencerů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1745"/>
+        <location filename="../QMenuStrings.cpp" line="1772"/>
         <source>No Submasters</source>
         <translation>Žádné řízené sekvencery</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1746"/>
+        <location filename="../QMenuStrings.cpp" line="1773"/>
         <source>&amp;2 Submasters</source>
         <translation>&amp;2 řízené sekvencery</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1747"/>
+        <location filename="../QMenuStrings.cpp" line="1774"/>
         <source>&amp;4 Submasters</source>
         <translation>&amp;4 řízené sekvencery</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1748"/>
+        <location filename="../QMenuStrings.cpp" line="1775"/>
         <source>&amp;8 Submasters</source>
         <translation>&amp;8 řízených sekvencerů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1749"/>
+        <location filename="../QMenuStrings.cpp" line="1776"/>
         <source>Panning &amp;Law</source>
         <translation>Stereo režim vyvážení (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1750"/>
+        <location filename="../QMenuStrings.cpp" line="1777"/>
         <source>&amp;0dB Law (Basic Balance Control)</source>
         <translation>Pravidlo &amp;0dB (jednoduché ovládání vyvážení)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1751"/>
+        <location filename="../QMenuStrings.cpp" line="1778"/>
         <source>-&amp;3dB Law (Constant Power)</source>
         <translation>Pravidlo -&amp;3dB (stálá hlasitost)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1752"/>
+        <location filename="../QMenuStrings.cpp" line="1779"/>
         <source>-&amp;6dB Law (Reduced Center)</source>
         <translation>Pravidlo -&amp;6dB (snížený střed)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1753"/>
+        <location filename="../QMenuStrings.cpp" line="1780"/>
         <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
         <translation>&amp;Náhradní pravidlo -3dB (stálá hlasitost, střed 0dB)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1754"/>
+        <location filename="../QMenuStrings.cpp" line="1781"/>
         <source>Show &amp;Audio Faders</source>
         <translation>Ukázat &amp;zvukové zeslabovače</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1755"/>
+        <location filename="../QMenuStrings.cpp" line="1782"/>
         <source>Show &amp;Synth Faders</source>
         <translation>Ukázat &amp;syntezátorové zeslabovače</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1756"/>
+        <location filename="../QMenuStrings.cpp" line="1783"/>
         <source>Show Audio Su&amp;bmasters</source>
         <translation>Ukázat zvukové říze&amp;né sekvencery</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1757"/>
+        <location filename="../QMenuStrings.cpp" line="1784"/>
         <source>Show &amp;Plugin Buttons</source>
         <translation>Ukázat tlačítka přídavných &amp;modulů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1758"/>
+        <location filename="../QMenuStrings.cpp" line="1785"/>
         <source>Show &amp;Unassigned Faders</source>
         <translation>Zobrazit &amp;nepřiřazené zeslabovače</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1772"/>
+        <location filename="../QMenuStrings.cpp" line="1799"/>
         <source>Switch to Inserting Tool</source>
         <translation>Přepnout na nástroj pro vkládání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1773"/>
+        <location filename="../QMenuStrings.cpp" line="1800"/>
         <source>Collapse Rests After Erase</source>
         <translation>Po vymazání sjednotit pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1784"/>
+        <location filename="../QMenuStrings.cpp" line="1811"/>
         <source>P&amp;rint Preview...</source>
         <translation>Náhled t&amp;isku...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1785"/>
-        <location filename="../QMenuStrings.cpp" line="3767"/>
+        <location filename="../QMenuStrings.cpp" line="1812"/>
+        <location filename="../QMenuStrings.cpp" line="3802"/>
         <source>&amp;Print...</source>
         <translation>&amp;Tisk...</translation>
     </message>
@@ -2892,62 +2892,62 @@
         <translation type="obsolete">Náhled &amp;tisku...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1841"/>
+        <location filename="../QMenuStrings.cpp" line="1868"/>
         <source>C&amp;ut and Close</source>
         <translation>Vyjmout a &amp;zavřít</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1850"/>
+        <location filename="../QMenuStrings.cpp" line="1877"/>
         <source>Pa&amp;ste...</source>
         <translation>&amp;Vložit...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1859"/>
+        <location filename="../QMenuStrings.cpp" line="1886"/>
         <source>De&amp;lete</source>
         <translation>&amp;Smazat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1868"/>
+        <location filename="../QMenuStrings.cpp" line="1895"/>
         <source>&amp;Move to Staff Above</source>
         <translation>&amp;Přesunout na osnovu výše</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1870"/>
+        <location filename="../QMenuStrings.cpp" line="1897"/>
         <source>Move to Staff &amp;Below</source>
         <translation>Přesunout na osnovu &amp;níže</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1872"/>
+        <location filename="../QMenuStrings.cpp" line="1899"/>
         <source>Select from Sta&amp;rt</source>
         <translation>Vybrat od &amp;začátku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1873"/>
+        <location filename="../QMenuStrings.cpp" line="1900"/>
         <source>Select to &amp;End</source>
         <translation>Vybrat do &amp;konce</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1874"/>
+        <location filename="../QMenuStrings.cpp" line="1901"/>
         <source>Select Whole St&amp;aff</source>
         <translation>Vybrat celou &amp;osnovu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1883"/>
+        <location filename="../QMenuStrings.cpp" line="1910"/>
         <source>Clear Select&amp;ion</source>
         <translation>Smazat &amp;výběr</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1913"/>
+        <location filename="../QMenuStrings.cpp" line="1940"/>
         <source>Note &amp;Font</source>
         <translation>Notové &amp;písmo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1914"/>
+        <location filename="../QMenuStrings.cpp" line="1941"/>
         <source>Si&amp;ze</source>
         <translation>V&amp;elikost</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1915"/>
+        <location filename="../QMenuStrings.cpp" line="1942"/>
         <source>S&amp;pacing</source>
         <translation>&amp;Rozestupy</translation>
     </message>
@@ -2956,27 +2956,27 @@
         <translation type="obsolete">Faktor doby &amp;trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1916"/>
+        <location filename="../QMenuStrings.cpp" line="1943"/>
         <source>&amp;Layout Mode</source>
         <translation>Režim &amp;rozvržení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1917"/>
+        <location filename="../QMenuStrings.cpp" line="1944"/>
         <source>&amp;Linear Layout</source>
         <translation>Čá&amp;rové rozvržení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1918"/>
+        <location filename="../QMenuStrings.cpp" line="1945"/>
         <source>&amp;Continuous Page Layout</source>
         <translation>&amp;Rozvržení na jednu nepřetržitou stranu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1919"/>
+        <location filename="../QMenuStrings.cpp" line="1946"/>
         <source>&amp;Multiple Page Layout</source>
         <translation>&amp;Rozvržení na více stran</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1920"/>
+        <location filename="../QMenuStrings.cpp" line="1947"/>
         <source>Open L&amp;yric Editor</source>
         <translation>Otevřít editor se &amp;slovy písně</translation>
     </message>
@@ -2985,36 +2985,36 @@
         <translation type="obsolete">Přidat pravítko událostí</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1943"/>
+        <location filename="../QMenuStrings.cpp" line="1970"/>
         <source>Show &amp;Track Headers</source>
         <translation>Ukázat hlavičky s&amp;top</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="676"/>
-        <location filename="../QMenuStrings.cpp" line="1955"/>
-        <location filename="../QMenuStrings.cpp" line="4012"/>
-        <location filename="../QMenuStrings.cpp" line="4383"/>
+        <location filename="../QMenuStrings.cpp" line="695"/>
+        <location filename="../QMenuStrings.cpp" line="1982"/>
+        <location filename="../QMenuStrings.cpp" line="4047"/>
+        <location filename="../QMenuStrings.cpp" line="4418"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>Otevřít v tabulkovém editoru &amp;bicích</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1957"/>
+        <location filename="../QMenuStrings.cpp" line="1984"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>Přidat změnu &amp;klíče...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="677"/>
-        <location filename="../QMenuStrings.cpp" line="1959"/>
+        <location filename="../QMenuStrings.cpp" line="696"/>
+        <location filename="../QMenuStrings.cpp" line="1986"/>
         <source>Add &amp;Key Change...</source>
         <translation>Přidat změnu &amp;tóniny...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1960"/>
+        <location filename="../QMenuStrings.cpp" line="1987"/>
         <source>Add Pedal &amp;Press</source>
         <translation>Přidat &amp;sešlápnutí pedálu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1961"/>
+        <location filename="../QMenuStrings.cpp" line="1988"/>
         <source>Add Pedal &amp;Release</source>
         <translation>Přidat &amp;uvolnění pedálu</translation>
     </message>
@@ -3027,348 +3027,348 @@
         <translation type="obsolete">Přemístit o &amp;interval...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1965"/>
-        <location filename="../QMenuStrings.cpp" line="4068"/>
+        <location filename="../QMenuStrings.cpp" line="1992"/>
+        <location filename="../QMenuStrings.cpp" line="4103"/>
         <source>&amp;Convert Notation for...</source>
         <translation>&amp;Převést notový zápis pro...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1966"/>
+        <location filename="../QMenuStrings.cpp" line="1993"/>
         <source>Add &amp;Layer</source>
         <translation>Přidat &amp;vrstvu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2364"/>
+        <location filename="../QMenuStrings.cpp" line="2399"/>
         <source>Ctrl+Alt+1</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1976"/>
+        <location filename="../QMenuStrings.cpp" line="2003"/>
         <source>N&amp;ote</source>
         <translation>N&amp;ota(y)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1796"/>
-        <location filename="../QMenuStrings.cpp" line="3789"/>
-        <location filename="../QMenuStrings.cpp" line="4340"/>
-        <location filename="../QMenuStrings.cpp" line="4419"/>
+        <location filename="../QMenuStrings.cpp" line="1823"/>
+        <location filename="../QMenuStrings.cpp" line="3824"/>
+        <location filename="../QMenuStrings.cpp" line="4375"/>
+        <location filename="../QMenuStrings.cpp" line="4454"/>
         <source>&amp;Nothing to Undo</source>
         <translation>&amp;Nic pro vzetí zpět</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1805"/>
-        <location filename="../QMenuStrings.cpp" line="3798"/>
-        <location filename="../QMenuStrings.cpp" line="4341"/>
-        <location filename="../QMenuStrings.cpp" line="4428"/>
+        <location filename="../QMenuStrings.cpp" line="1832"/>
+        <location filename="../QMenuStrings.cpp" line="3833"/>
+        <location filename="../QMenuStrings.cpp" line="4376"/>
+        <location filename="../QMenuStrings.cpp" line="4463"/>
         <source>N&amp;othing to Redo</source>
         <translation>N&amp;ic pro provedení znovu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1892"/>
+        <location filename="../QMenuStrings.cpp" line="1919"/>
         <source>Search and Selec&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1910"/>
+        <location filename="../QMenuStrings.cpp" line="1937"/>
         <source>&amp;Guess Beats</source>
         <translation>&amp;Hádat doby</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1934"/>
+        <location filename="../QMenuStrings.cpp" line="1961"/>
         <source>Show &amp;Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1958"/>
+        <location filename="../QMenuStrings.cpp" line="1985"/>
         <source>Add Clef Change in This Link Only...</source>
         <translation>Přidat změnu klíče pouze v tomto odkazu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1975"/>
+        <location filename="../QMenuStrings.cpp" line="2002"/>
         <source>Unadopt an Adopted Segment</source>
         <translation>Zrušit přijetí přijmuté části</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1977"/>
+        <location filename="../QMenuStrings.cpp" line="2004"/>
         <source>Mar&amp;ks</source>
         <translation>Znač&amp;ky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1978"/>
+        <location filename="../QMenuStrings.cpp" line="2005"/>
         <source>Add &amp;Accent</source>
         <translation>Přidat &amp;přízvuk</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1979"/>
+        <location filename="../QMenuStrings.cpp" line="2006"/>
         <source>Add T&amp;enuto</source>
         <translation>Přidat t&amp;enuto</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1980"/>
+        <location filename="../QMenuStrings.cpp" line="2007"/>
         <source>Add Sta&amp;ccato</source>
         <translation>Přidat sta&amp;ccato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1981"/>
+        <location filename="../QMenuStrings.cpp" line="2008"/>
         <source>Add &amp;Staccatissimo</source>
         <translation>Přidat &amp;staccatissimo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1982"/>
+        <location filename="../QMenuStrings.cpp" line="2009"/>
         <source>Add &amp;Marcato</source>
         <translation>Přidat &amp;marcato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1985"/>
+        <location filename="../QMenuStrings.cpp" line="2012"/>
         <source>Add S&amp;forzando</source>
         <translation>Přidat s&amp;forzando</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1986"/>
+        <location filename="../QMenuStrings.cpp" line="2013"/>
         <source>Add R&amp;inforzando</source>
         <translation>Přidat r&amp;inforzando</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1987"/>
+        <location filename="../QMenuStrings.cpp" line="2014"/>
         <source>Add Tri&amp;ll</source>
         <translation>Přidat try&amp;lek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1988"/>
+        <location filename="../QMenuStrings.cpp" line="2015"/>
         <source>Add &amp;Turn</source>
         <translation>Přidat &amp;obal</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1989"/>
+        <location filename="../QMenuStrings.cpp" line="2016"/>
         <source>Add M&amp;ordent</source>
         <translation>Přidat m&amp;ordent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1990"/>
+        <location filename="../QMenuStrings.cpp" line="2017"/>
         <source>Add I&amp;nverted Mordent</source>
         <translation>Přidat o&amp;brácený mordent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1991"/>
+        <location filename="../QMenuStrings.cpp" line="2018"/>
         <source>Add Long Mordent</source>
         <translation>Přidat dlouhý mordent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1992"/>
+        <location filename="../QMenuStrings.cpp" line="2019"/>
         <source>Add Lon&amp;g Inverted Mordent</source>
         <translation>Přidat dlo&amp;hý obrácený mordent</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1993"/>
+        <location filename="../QMenuStrings.cpp" line="2020"/>
         <source>Add &amp;Up-Bow</source>
         <translation>Přidat &amp;smyk nahoru/od špičky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1994"/>
+        <location filename="../QMenuStrings.cpp" line="2021"/>
         <source>Add &amp;Down-Bow</source>
         <translation>Přidat &amp;smyk/tah dolů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1995"/>
+        <location filename="../QMenuStrings.cpp" line="2022"/>
         <source>Add &amp;Harmonic</source>
         <translation>Přidat &amp;alikvotní/částkový tón</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1996"/>
+        <location filename="../QMenuStrings.cpp" line="2023"/>
         <source>Add &amp;Pause</source>
         <translation>Přidat &amp;pomlku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1997"/>
+        <location filename="../QMenuStrings.cpp" line="2024"/>
         <source>Add Te&amp;xt Mark...</source>
         <translation>Přidat te&amp;xtovou značku...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1998"/>
+        <location filename="../QMenuStrings.cpp" line="2025"/>
         <source>&amp;Remove All Marks</source>
         <translation>&amp;Odstranit všechny značky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1999"/>
+        <location filename="../QMenuStrings.cpp" line="2026"/>
         <source>&amp;Ornaments</source>
         <translation>Melodické &amp;ozdoby</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2000"/>
+        <location filename="../QMenuStrings.cpp" line="2027"/>
         <source>Trigger &amp;Ornament...</source>
         <translation>Spouštěcí melodická &amp;ozdoba...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2001"/>
+        <location filename="../QMenuStrings.cpp" line="2028"/>
         <source>&amp;Remove Ornament...</source>
         <translation>&amp;Odstranit melodické ozdoby...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2002"/>
+        <location filename="../QMenuStrings.cpp" line="2029"/>
         <source>Ma&amp;ke Ornament...</source>
         <translation>&amp;Vytvořit melodickou ozdobu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2003"/>
+        <location filename="../QMenuStrings.cpp" line="2030"/>
         <source>&amp;Edit Ornament as Notation</source>
         <translation>&amp;Upravit ozdobu jako notový zápis</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2004"/>
+        <location filename="../QMenuStrings.cpp" line="2031"/>
         <source>&amp;Show Expansion of Ornament</source>
         <translation>&amp;Ukázat rozklad ozdoby</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2005"/>
+        <location filename="../QMenuStrings.cpp" line="2032"/>
         <source>Skip This Part of Ornament (&amp;Mask Tied Note)</source>
         <translation>Přeskočit tuto část ozdoby (&amp;zakrýt svázanou notu)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2006"/>
+        <location filename="../QMenuStrings.cpp" line="2033"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
         <translation>Nepřeskakovat tuto část ozdoby (&amp;zrušit zakrytí svázané noty)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2007"/>
+        <location filename="../QMenuStrings.cpp" line="2034"/>
         <source>&amp;Fingerings</source>
         <translation>P&amp;rstoklady</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2008"/>
+        <location filename="../QMenuStrings.cpp" line="2035"/>
         <source>&amp;Remove Fingerings</source>
         <translation>&amp;Odstranit prstoklady</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2009"/>
+        <location filename="../QMenuStrings.cpp" line="2036"/>
         <source>Add Fingering &amp;0 (Thumb)</source>
         <translation>Přidat prstoklad &amp;0 (palec)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2016"/>
+        <location filename="../QMenuStrings.cpp" line="2043"/>
         <source>Alt+0</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2018"/>
+        <location filename="../QMenuStrings.cpp" line="2045"/>
         <source>Add Fingering &amp;1</source>
         <translation>Přidat prstoklad &amp;1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2025"/>
+        <location filename="../QMenuStrings.cpp" line="2052"/>
         <source>Alt+1</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2027"/>
+        <location filename="../QMenuStrings.cpp" line="2054"/>
         <source>Add Fingering &amp;2</source>
         <translation>Přidat prstoklad &amp;2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2034"/>
+        <location filename="../QMenuStrings.cpp" line="2061"/>
         <source>Alt+2</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2036"/>
+        <location filename="../QMenuStrings.cpp" line="2063"/>
         <source>Add Fingering &amp;3</source>
         <translation>Přidat prstoklad &amp;3</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2043"/>
+        <location filename="../QMenuStrings.cpp" line="2070"/>
         <source>Alt+3</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2045"/>
+        <location filename="../QMenuStrings.cpp" line="2072"/>
         <source>Add Fingering &amp;4</source>
         <translation>Přidat prstoklad &amp;4</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2052"/>
+        <location filename="../QMenuStrings.cpp" line="2079"/>
         <source>Alt+4</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2054"/>
+        <location filename="../QMenuStrings.cpp" line="2081"/>
         <source>Add Fingering &amp;5</source>
         <translation>Přidat prstoklad &amp;5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2061"/>
+        <location filename="../QMenuStrings.cpp" line="2088"/>
         <source>Alt+5</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2063"/>
+        <location filename="../QMenuStrings.cpp" line="2090"/>
         <source>&amp;Add Fingering +</source>
         <translation>Přidat prsto&amp;klad +</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2070"/>
+        <location filename="../QMenuStrings.cpp" line="2097"/>
         <source>Alt+9</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2072"/>
+        <location filename="../QMenuStrings.cpp" line="2099"/>
         <source>Add Other &amp;Fingering...</source>
         <translation>Přidat další &amp;prstoklad...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2073"/>
+        <location filename="../QMenuStrings.cpp" line="2100"/>
         <source>S&amp;lashes</source>
         <translation>Šik&amp;mé čáry</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2074"/>
+        <location filename="../QMenuStrings.cpp" line="2101"/>
         <source>&amp;None</source>
         <translation>Žá&amp;dná</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2075"/>
+        <location filename="../QMenuStrings.cpp" line="2102"/>
         <source>&amp;1</source>
         <translation>&amp;1</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2076"/>
+        <location filename="../QMenuStrings.cpp" line="2103"/>
         <source>&amp;2</source>
         <translation>&amp;2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2077"/>
+        <location filename="../QMenuStrings.cpp" line="2104"/>
         <source>&amp;3</source>
         <translation>&amp;3</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2078"/>
+        <location filename="../QMenuStrings.cpp" line="2105"/>
         <source>&amp;4</source>
         <translation>&amp;4</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2079"/>
+        <location filename="../QMenuStrings.cpp" line="2106"/>
         <source>&amp;5</source>
         <translation>&amp;5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2080"/>
+        <location filename="../QMenuStrings.cpp" line="2107"/>
         <source>&amp;Cycle Slashes</source>
         <translation>&amp;Točit šikmé čáry</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2087"/>
+        <location filename="../QMenuStrings.cpp" line="2114"/>
         <source>/</source>
         <comment>keyboard shortcut</comment>
         <translation>/</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2089"/>
+        <location filename="../QMenuStrings.cpp" line="2116"/>
         <source>Note &amp;Style</source>
         <translation>&amp;Styl not</translation>
     </message>
@@ -3389,863 +3389,875 @@
         <translation type="obsolete">&amp;Trojúhelník</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2094"/>
-        <location filename="../QMenuStrings.cpp" line="2794"/>
+        <location filename="../QMenuStrings.cpp" line="2121"/>
+        <location filename="../QMenuStrings.cpp" line="2829"/>
         <source>&amp;Accidentals</source>
         <translation>&amp;Posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2095"/>
+        <location filename="../QMenuStrings.cpp" line="2122"/>
         <source>&amp;Restore Accidentals</source>
         <translation>&amp;Obnovit posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2096"/>
+        <location filename="../QMenuStrings.cpp" line="2123"/>
         <source>Respell with Dou&amp;ble Flat</source>
         <translation>Přepsat s dvojitým &amp;b</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2097"/>
+        <location filename="../QMenuStrings.cpp" line="2124"/>
         <source>Respell with &amp;Flat</source>
         <translation>Přepsat s &amp;b</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2098"/>
+        <location filename="../QMenuStrings.cpp" line="2125"/>
         <source>Respell with &amp;Natural</source>
         <translation>Přepsat bez &amp;předznamenání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2099"/>
+        <location filename="../QMenuStrings.cpp" line="2126"/>
         <source>Respell with &amp;Sharp</source>
         <translation>Přepsat s &amp;křížkem</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2100"/>
+        <location filename="../QMenuStrings.cpp" line="2127"/>
         <source>Respell with Do&amp;uble Sharp</source>
         <translation>Přepsat s &amp;dvojitým křížkem</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2101"/>
+        <location filename="../QMenuStrings.cpp" line="2128"/>
         <source>Use &amp;Cautionary Accidentals</source>
         <translation>Použít &amp;varovné posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2102"/>
+        <location filename="../QMenuStrings.cpp" line="2129"/>
         <source>Cancel C&amp;autionary Accidentals</source>
         <translation>Zrušit v&amp;arovné posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2103"/>
+        <location filename="../QMenuStrings.cpp" line="2130"/>
         <source>Stem &amp;Up</source>
         <translation>Nožičku noty na&amp;horu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2110"/>
+        <location filename="../QMenuStrings.cpp" line="2137"/>
         <source>Ctrl+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2112"/>
+        <location filename="../QMenuStrings.cpp" line="2139"/>
         <source>Stem &amp;Down</source>
         <translation>Nožičku noty do&amp;lů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2119"/>
+        <location filename="../QMenuStrings.cpp" line="2146"/>
         <source>Ctrl+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2121"/>
+        <location filename="../QMenuStrings.cpp" line="2148"/>
         <source>&amp;Restore Stems</source>
         <translation>&amp;Obnovit nožičky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2122"/>
+        <location filename="../QMenuStrings.cpp" line="668"/>
+        <location filename="../QMenuStrings.cpp" line="2149"/>
         <source>&amp;Phrase</source>
         <translation>&amp;Fráze</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2123"/>
+        <location filename="../QMenuStrings.cpp" line="2150"/>
         <source>&amp;Make Chord</source>
         <translation>&amp;Vytvořit akord</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2124"/>
+        <location filename="../QMenuStrings.cpp" line="2151"/>
         <source>&amp;Beam Group</source>
         <translation>Skupina s &amp;trámcem</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2131"/>
+        <location filename="../QMenuStrings.cpp" line="2158"/>
         <source>Ctrl+B</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2133"/>
+        <location filename="../QMenuStrings.cpp" line="2160"/>
         <source>&amp;Auto-Beam</source>
         <translation>&amp;Automatické trámce</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2140"/>
+        <location filename="../QMenuStrings.cpp" line="2167"/>
         <source>Ctrl+Alt+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+B</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2142"/>
+        <location filename="../QMenuStrings.cpp" line="2169"/>
         <source>&amp;Unbeam</source>
         <translation>&amp;Odstranit trámce</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2149"/>
+        <location filename="../QMenuStrings.cpp" line="2176"/>
         <source>Ctrl+U</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2151"/>
+        <location filename="../QMenuStrings.cpp" line="2178"/>
         <source>Tupl&amp;et...</source>
         <translation>Tupl&amp;et...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2158"/>
-        <location filename="../QMenuStrings.cpp" line="4118"/>
+        <location filename="../QMenuStrings.cpp" line="2185"/>
+        <location filename="../QMenuStrings.cpp" line="4153"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2160"/>
+        <location filename="../QMenuStrings.cpp" line="2187"/>
         <source>&amp;Triplet</source>
         <translation>&amp;Triola</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2167"/>
+        <location filename="../QMenuStrings.cpp" line="2194"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2169"/>
+        <location filename="../QMenuStrings.cpp" line="2196"/>
         <source>U&amp;ntuplet</source>
         <translation>Odstra&amp;nit tuplet</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2170"/>
+        <location filename="../QMenuStrings.cpp" line="2197"/>
         <source>Add S&amp;lur</source>
         <translation>Přidat &amp;legato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2177"/>
+        <location filename="../QMenuStrings.cpp" line="2204"/>
         <source>)</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2179"/>
+        <location filename="../QMenuStrings.cpp" line="2206"/>
         <source>Add P&amp;hrasing Slur</source>
         <translation>Přidat frá&amp;zovací legato</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2186"/>
+        <location filename="../QMenuStrings.cpp" line="2213"/>
         <source>Ctrl+)</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2188"/>
+        <location filename="../QMenuStrings.cpp" line="2215"/>
         <source>Slur &amp;Position</source>
         <translation>&amp;Poloha legata</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2189"/>
+        <location filename="../QMenuStrings.cpp" line="2216"/>
         <source>&amp;Restore Slur Positions</source>
         <translation>&amp;Obnovit polohy legata</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2190"/>
+        <location filename="../QMenuStrings.cpp" line="2217"/>
         <source>Slur &amp;Above</source>
         <translation>Legato &amp;nad</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2191"/>
+        <location filename="../QMenuStrings.cpp" line="2218"/>
         <source>Slur &amp;Below</source>
         <translation>Legato &amp;pod</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2192"/>
+        <location filename="../QMenuStrings.cpp" line="669"/>
+        <location filename="../QMenuStrings.cpp" line="2219"/>
         <source>T&amp;ie</source>
         <translation>&amp;Svázat tóny ligaturou</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2199"/>
+        <location filename="../QMenuStrings.cpp" line="676"/>
+        <location filename="../QMenuStrings.cpp" line="2226"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2201"/>
+        <location filename="../QMenuStrings.cpp" line="678"/>
+        <location filename="../QMenuStrings.cpp" line="2228"/>
         <source>&amp;Untie</source>
         <translation>&amp;Zrušit ligaturu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2202"/>
+        <location filename="../QMenuStrings.cpp" line="685"/>
+        <location filename="../QMenuStrings.cpp" line="2235"/>
+        <source>`</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="2237"/>
         <source>Tie &amp;Position</source>
         <translation>&amp;Poloha ligatury</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2203"/>
+        <location filename="../QMenuStrings.cpp" line="2238"/>
         <source>&amp;Restore Tie Position</source>
         <translation>&amp;Obnovit polohu ligatury</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2204"/>
+        <location filename="../QMenuStrings.cpp" line="2239"/>
         <source>Tie &amp;Above</source>
         <translation>Ligatura &amp;nad</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2205"/>
+        <location filename="../QMenuStrings.cpp" line="2240"/>
         <source>Tie &amp;Below</source>
         <translation>Ligatura &amp;pod</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2206"/>
+        <location filename="../QMenuStrings.cpp" line="2241"/>
         <source>Add &amp;Crescendo</source>
         <translation>Přidat &amp;crescendo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2213"/>
+        <location filename="../QMenuStrings.cpp" line="2248"/>
         <source>&amp;lt;</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2215"/>
+        <location filename="../QMenuStrings.cpp" line="2250"/>
         <source>Add &amp;Decescendo</source>
         <translation>Přidat &amp;decrescendo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2222"/>
+        <location filename="../QMenuStrings.cpp" line="2257"/>
         <source>&amp;gt;</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2224"/>
+        <location filename="../QMenuStrings.cpp" line="2259"/>
         <source>Add Trill With &amp;Line</source>
         <translation>Přidat try&amp;lek s linkou</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2225"/>
+        <location filename="../QMenuStrings.cpp" line="2260"/>
         <source>&amp;Octaves</source>
         <translation>&amp;Oktávy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2226"/>
+        <location filename="../QMenuStrings.cpp" line="2261"/>
         <source>&amp;Add Double-Octave Up</source>
         <translation>Přidat dvojitou ok&amp;távu nahoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2227"/>
+        <location filename="../QMenuStrings.cpp" line="2262"/>
         <source>Add Octave &amp;Up</source>
         <translation>Přidat oktávu &amp;nahoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2228"/>
+        <location filename="../QMenuStrings.cpp" line="2263"/>
         <source>Add Octave &amp;Down</source>
         <translation>Přidat oktávu &amp;dolů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2229"/>
+        <location filename="../QMenuStrings.cpp" line="2264"/>
         <source>Add Double &amp;Octave Down</source>
         <translation>Přidat dvojitou &amp;oktávu dolů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2230"/>
+        <location filename="../QMenuStrings.cpp" line="2265"/>
         <source>&amp;Figuration</source>
         <translation>&amp;Figurace</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2231"/>
+        <location filename="../QMenuStrings.cpp" line="2266"/>
         <source>Make &amp;Parameter Chord</source>
         <translation>Udělat akord &amp;parametru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2232"/>
+        <location filename="../QMenuStrings.cpp" line="2267"/>
         <source>Mark Selection as &amp;Figuration</source>
         <translation>Označit výběr jako &amp;figuraci</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2235"/>
+        <location filename="../QMenuStrings.cpp" line="2270"/>
         <source>R&amp;ests</source>
         <translation>P&amp;omlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2236"/>
+        <location filename="../QMenuStrings.cpp" line="2271"/>
         <source>&amp;Normalize Rests</source>
         <translation>&amp;Normalizovat pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2245"/>
+        <location filename="../QMenuStrings.cpp" line="2280"/>
         <source>&amp;Collapse Rests</source>
         <translation>&amp;Sjednotit pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2246"/>
+        <location filename="../QMenuStrings.cpp" line="2281"/>
         <source>&amp;Notes</source>
         <translation>&amp;Noty</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2256"/>
+        <location filename="../QMenuStrings.cpp" line="2291"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translation>Svázat noty ligaturou na &amp;taktových čárách</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2257"/>
+        <location filename="../QMenuStrings.cpp" line="2292"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
         <translation>Rozdělit a svázat ligaturou překrývající se &amp;akordy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2258"/>
+        <location filename="../QMenuStrings.cpp" line="2293"/>
         <source>Cycle &amp;Dots</source>
         <translation>Točit &amp;tečky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2265"/>
+        <location filename="../QMenuStrings.cpp" line="2300"/>
         <source>Ctrl+.</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+.</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2267"/>
+        <location filename="../QMenuStrings.cpp" line="2302"/>
         <source>Cycle Dots With&amp;out Duration Change</source>
         <translation>Točit tečky be&amp;ze změny doby trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2274"/>
+        <location filename="../QMenuStrings.cpp" line="2309"/>
         <source>Ctrl+Alt+.</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+.</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2276"/>
+        <location filename="../QMenuStrings.cpp" line="2311"/>
         <source>Double Whole Note</source>
         <translation>Dvoucelá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2283"/>
+        <location filename="../QMenuStrings.cpp" line="2318"/>
         <source>Ctrl+5</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2285"/>
+        <location filename="../QMenuStrings.cpp" line="2320"/>
         <source>Whole Note</source>
         <translation>Celá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2292"/>
+        <location filename="../QMenuStrings.cpp" line="2327"/>
         <source>Ctrl+1</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2294"/>
+        <location filename="../QMenuStrings.cpp" line="2329"/>
         <source>Half Note</source>
         <translation>Půlová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2301"/>
+        <location filename="../QMenuStrings.cpp" line="2336"/>
         <source>Ctrl+2</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2303"/>
+        <location filename="../QMenuStrings.cpp" line="2338"/>
         <source>Quarter Note</source>
         <translation>Čtvrťová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2310"/>
+        <location filename="../QMenuStrings.cpp" line="2345"/>
         <source>Ctrl+4</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2312"/>
+        <location filename="../QMenuStrings.cpp" line="2347"/>
         <source>Eighth Note</source>
         <translation>Osminová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2319"/>
+        <location filename="../QMenuStrings.cpp" line="2354"/>
         <source>Ctrl+8</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2321"/>
+        <location filename="../QMenuStrings.cpp" line="2356"/>
         <source>Sixteenth Note</source>
         <translation>Šestnáctinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2328"/>
+        <location filename="../QMenuStrings.cpp" line="2363"/>
         <source>Ctrl+6</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2330"/>
+        <location filename="../QMenuStrings.cpp" line="2365"/>
         <source>Thirty-Second Note</source>
         <translation>Dvaatřicetinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2337"/>
+        <location filename="../QMenuStrings.cpp" line="2372"/>
         <source>Ctrl+3</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2339"/>
+        <location filename="../QMenuStrings.cpp" line="2374"/>
         <source>Sixty-Fourth Note</source>
         <translation>Čtyřiašedesátinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2346"/>
+        <location filename="../QMenuStrings.cpp" line="2381"/>
         <source>Ctrl+0</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2348"/>
+        <location filename="../QMenuStrings.cpp" line="2383"/>
         <source>Double Whole Note (Without Duration Change)</source>
         <translation>Dvoucelá nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2355"/>
+        <location filename="../QMenuStrings.cpp" line="2390"/>
         <source>Ctrl+Alt+5</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+5</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2357"/>
+        <location filename="../QMenuStrings.cpp" line="2392"/>
         <source>Whole Note (Without Duration Change)</source>
         <translation>Celá nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2366"/>
+        <location filename="../QMenuStrings.cpp" line="2401"/>
         <source>Half Note (Without Duration Change)</source>
         <translation>Půlová nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2373"/>
+        <location filename="../QMenuStrings.cpp" line="2408"/>
         <source>Ctrl+Alt+2</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2375"/>
+        <location filename="../QMenuStrings.cpp" line="2410"/>
         <source>Quarter Note (Without Duration Change)</source>
         <translation>Čtvrťová nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2382"/>
+        <location filename="../QMenuStrings.cpp" line="2417"/>
         <source>Ctrl+Alt+4</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+4</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2384"/>
+        <location filename="../QMenuStrings.cpp" line="2419"/>
         <source>Eighth Note (Without Duration Change)</source>
         <translation>Osminová nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2391"/>
+        <location filename="../QMenuStrings.cpp" line="2426"/>
         <source>Ctrl+Alt+8</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+8</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2393"/>
+        <location filename="../QMenuStrings.cpp" line="2428"/>
         <source>Sixteenth Note (Without Duration Change)</source>
         <translation>Šestnáctinová nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2400"/>
+        <location filename="../QMenuStrings.cpp" line="2435"/>
         <source>Ctrl+Alt+6</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+6</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2402"/>
+        <location filename="../QMenuStrings.cpp" line="2437"/>
         <source>Thirty-Second Note (Without Duration Change)</source>
         <translation>Dvaatřicetinová nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2409"/>
+        <location filename="../QMenuStrings.cpp" line="2444"/>
         <source>Ctrl+Alt+3</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+3</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2411"/>
+        <location filename="../QMenuStrings.cpp" line="2446"/>
         <source>Sixty-Fourth Note (Without Duration Change)</source>
         <translation>Čtyřiašedesátinová nota (beze změny doby trvání)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2418"/>
+        <location filename="../QMenuStrings.cpp" line="2453"/>
         <source>Ctrl+Alt+0</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+0</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2430"/>
+        <location filename="../QMenuStrings.cpp" line="2465"/>
         <source>Fi&amp;x Notation Quantization</source>
         <translation>O&amp;pravit kvantizaci notace</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2431"/>
+        <location filename="../QMenuStrings.cpp" line="2466"/>
         <source>Remo&amp;ve Notation Quantization</source>
         <translation>&amp;Odstranit kvantizaci notace</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2432"/>
+        <location filename="../QMenuStrings.cpp" line="2467"/>
         <source>&amp;Interpret...</source>
         <translation>&amp;Vykládat...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2433"/>
+        <location filename="../QMenuStrings.cpp" line="2468"/>
         <source>Rescale</source>
         <translation>Změnit délku (rychleji/pomaleji)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2492"/>
+        <location filename="../QMenuStrings.cpp" line="2527"/>
         <source>Convert</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2496"/>
+        <location filename="../QMenuStrings.cpp" line="2531"/>
         <source>Ve&amp;locities</source>
         <translation>Rych&amp;losti</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2515"/>
+        <location filename="../QMenuStrings.cpp" line="2550"/>
         <source>Set Event &amp;Velocities</source>
         <translation>Nastavit &amp;rychlosti událostí</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2516"/>
+        <location filename="../QMenuStrings.cpp" line="2551"/>
         <source>&amp;Fine Positioning</source>
         <translation>&amp;Jemné doladění polohy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2517"/>
+        <location filename="../QMenuStrings.cpp" line="2552"/>
         <source>&amp;Restore Positions</source>
         <translation>&amp;Obnovit polohy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2518"/>
+        <location filename="../QMenuStrings.cpp" line="2553"/>
         <source>Push &amp;Left</source>
         <translation>Odsunout v&amp;levo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2519"/>
+        <location filename="../QMenuStrings.cpp" line="2554"/>
         <source>&amp;Push Right</source>
         <translation>Odsunout vp&amp;ravo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2520"/>
+        <location filename="../QMenuStrings.cpp" line="2555"/>
         <source>Push &amp;Up</source>
         <translation>Odsunout &amp;nahoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2521"/>
+        <location filename="../QMenuStrings.cpp" line="2556"/>
         <source>Push &amp;Down</source>
         <translation>Odsunout &amp;dolů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2522"/>
+        <location filename="../QMenuStrings.cpp" line="2557"/>
         <source>Fine Ti&amp;ming</source>
         <translation>Je&amp;mné časování</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2532"/>
-        <location filename="../QMenuStrings.cpp" line="4082"/>
+        <location filename="../QMenuStrings.cpp" line="2567"/>
+        <location filename="../QMenuStrings.cpp" line="4117"/>
         <source>Jog &amp;Right</source>
         <translation>Krokový posun v&amp;pravo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2541"/>
+        <location filename="../QMenuStrings.cpp" line="2576"/>
         <source>&amp;Visibility</source>
         <translation>&amp;Viditelnost</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2542"/>
+        <location filename="../QMenuStrings.cpp" line="2577"/>
         <source>Make &amp;Invisible</source>
         <translation>Z&amp;neviditelnit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2543"/>
+        <location filename="../QMenuStrings.cpp" line="2578"/>
         <source>Make &amp;Visible</source>
         <translation>Z&amp;viditelnit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2648"/>
+        <location filename="../QMenuStrings.cpp" line="2683"/>
         <source>Play</source>
         <translation>Přehrát</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2655"/>
+        <location filename="../QMenuStrings.cpp" line="2690"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2733"/>
+        <location filename="../QMenuStrings.cpp" line="2768"/>
         <source>Solo the Active Track</source>
         <translatorcomment>Přehrávat činnou stopu jako sólo</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2748"/>
+        <location filename="../QMenuStrings.cpp" line="2783"/>
         <source>Scroll to Follow Playback</source>
         <translation>Pohled sleduje polohu přehrávání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2763"/>
+        <location filename="../QMenuStrings.cpp" line="2798"/>
         <source>Panic! (Ctrl+Alt+P)</source>
         <translation>Nouzové zastavení! (Ctrl+Alt+P)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2776"/>
+        <location filename="../QMenuStrings.cpp" line="2811"/>
         <source>Draw &amp;Notes and Rests</source>
         <translation>Kreslit &amp;noty a pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2807"/>
+        <location filename="../QMenuStrings.cpp" line="2842"/>
         <source>S&amp;ymbols</source>
         <translation>S&amp;ymboly</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2607"/>
+        <location filename="../QMenuStrings.cpp" line="2642"/>
         <source>Next Staff &amp;Up</source>
         <translation>Další osnovu na&amp;horu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2616"/>
+        <location filename="../QMenuStrings.cpp" line="2651"/>
         <source>Next Staff &amp;Down</source>
         <translation>Další osnovu do&amp;lů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="891"/>
-        <location filename="../QMenuStrings.cpp" line="2625"/>
+        <location filename="../QMenuStrings.cpp" line="918"/>
+        <location filename="../QMenuStrings.cpp" line="2660"/>
         <source>Pre&amp;vious Segment</source>
         <translation>&amp;Předchozí část</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="900"/>
-        <location filename="../QMenuStrings.cpp" line="2634"/>
+        <location filename="../QMenuStrings.cpp" line="927"/>
+        <location filename="../QMenuStrings.cpp" line="2669"/>
         <source>Ne&amp;xt Segment</source>
         <translation>D&amp;alší část</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="911"/>
-        <location filename="../QMenuStrings.cpp" line="2657"/>
+        <location filename="../QMenuStrings.cpp" line="938"/>
+        <location filename="../QMenuStrings.cpp" line="2692"/>
         <source>Step &amp;Back</source>
         <translation>Krok &amp;zpět</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="926"/>
-        <location filename="../QMenuStrings.cpp" line="2672"/>
+        <location filename="../QMenuStrings.cpp" line="953"/>
+        <location filename="../QMenuStrings.cpp" line="2707"/>
         <source>Step &amp;Forward</source>
         <translation>Krok &amp;vpřed</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1848"/>
+        <location filename="../QMenuStrings.cpp" line="1875"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1857"/>
+        <location filename="../QMenuStrings.cpp" line="1884"/>
         <source>Alt+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2243"/>
-        <location filename="../QMenuStrings.cpp" line="3715"/>
+        <location filename="../QMenuStrings.cpp" line="2278"/>
+        <location filename="../QMenuStrings.cpp" line="3750"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2254"/>
+        <location filename="../QMenuStrings.cpp" line="735"/>
+        <location filename="../QMenuStrings.cpp" line="2289"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2614"/>
+        <location filename="../QMenuStrings.cpp" line="2649"/>
         <source>Alt+Up</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2623"/>
+        <location filename="../QMenuStrings.cpp" line="2658"/>
         <source>Alt+Down</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2818"/>
+        <location filename="../QMenuStrings.cpp" line="2853"/>
         <source>F8</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2827"/>
+        <location filename="../QMenuStrings.cpp" line="2862"/>
         <source>F9</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2829"/>
+        <location filename="../QMenuStrings.cpp" line="2864"/>
         <source>&amp;Durations</source>
         <translation>&amp;Doby trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2830"/>
+        <location filename="../QMenuStrings.cpp" line="2865"/>
         <source>&amp;Double Whole Note</source>
         <translation>&amp;Dvoucelá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2839"/>
+        <location filename="../QMenuStrings.cpp" line="2874"/>
         <source>&amp;Whole Note</source>
         <translation>&amp;Celá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2848"/>
+        <location filename="../QMenuStrings.cpp" line="2883"/>
         <source>&amp;Half Note</source>
         <translation>&amp;Půlová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2857"/>
+        <location filename="../QMenuStrings.cpp" line="2892"/>
         <source>&amp;Quarter Note</source>
         <translation>Č&amp;tvrťová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2866"/>
+        <location filename="../QMenuStrings.cpp" line="2901"/>
         <source>&amp;Eighth Note</source>
         <translation>&amp;Osminová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2875"/>
+        <location filename="../QMenuStrings.cpp" line="2910"/>
         <source>&amp;Sixteenth note</source>
         <translation>Š&amp;estnáctinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2884"/>
+        <location filename="../QMenuStrings.cpp" line="2919"/>
         <source>&amp;Thirty-Second Note</source>
         <translation>&amp;Dvaatřicetinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2893"/>
+        <location filename="../QMenuStrings.cpp" line="2928"/>
         <source>Sixty-&amp;Fourth Note</source>
         <translation>Čtyřiašede&amp;sátinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2902"/>
+        <location filename="../QMenuStrings.cpp" line="2937"/>
         <source>D&amp;otted Whole Note</source>
         <translation>Tečkovaná &amp;celá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2904"/>
+        <location filename="../QMenuStrings.cpp" line="2939"/>
         <source>Dotted Q&amp;uarter Note</source>
         <translation>Tečkovaná čt&amp;vrťová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2905"/>
+        <location filename="../QMenuStrings.cpp" line="2940"/>
         <source>Dotted E&amp;ighth Note</source>
         <translation>Tečkovaná osmi&amp;nová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2906"/>
+        <location filename="../QMenuStrings.cpp" line="2941"/>
         <source>Dotted Si&amp;xteenth Note</source>
         <translation>Tečkovaná šestná&amp;ctinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2907"/>
+        <location filename="../QMenuStrings.cpp" line="2942"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
         <translation>Tečkovaná dvaatřiceti&amp;nová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2795"/>
+        <location filename="../QMenuStrings.cpp" line="2830"/>
         <source>&amp;No Accidental</source>
         <translation>Bez &amp;posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2796"/>
+        <location filename="../QMenuStrings.cpp" line="2831"/>
         <source>&amp;Follow Previous Accidental</source>
         <translation>&amp;Následovat předchozí posuvku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2797"/>
+        <location filename="../QMenuStrings.cpp" line="2832"/>
         <source>&amp;Sharp</source>
         <translation>&amp;Křížek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2798"/>
+        <location filename="../QMenuStrings.cpp" line="2833"/>
         <source>F&amp;lat</source>
         <translation>&amp;Béčko</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2799"/>
+        <location filename="../QMenuStrings.cpp" line="2834"/>
         <source>N&amp;atural</source>
         <translation>Be&amp;z předznamenání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2800"/>
+        <location filename="../QMenuStrings.cpp" line="2835"/>
         <source>&amp;Double Sharp</source>
         <translation>&amp;Dvojitý křížek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2801"/>
+        <location filename="../QMenuStrings.cpp" line="2836"/>
         <source>D&amp;ouble Flat</source>
         <translation>&amp;Dvojité bé</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2802"/>
+        <location filename="../QMenuStrings.cpp" line="2837"/>
         <source>&amp;Clefs</source>
         <translation>Notové &amp;klíče</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2803"/>
+        <location filename="../QMenuStrings.cpp" line="2838"/>
         <source>&amp;Treble Clef</source>
         <translation>&amp;Houslový klíč</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2804"/>
+        <location filename="../QMenuStrings.cpp" line="2839"/>
         <source>&amp;Alto Clef</source>
         <translation>&amp;Violový klíč</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2805"/>
+        <location filename="../QMenuStrings.cpp" line="2840"/>
         <source>Te&amp;nor Clef</source>
         <translation>&amp;Tenorový klíč</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2806"/>
+        <location filename="../QMenuStrings.cpp" line="2841"/>
         <source>&amp;Bass Clef</source>
         <translation>&amp;Basový klíč</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2811"/>
+        <location filename="../QMenuStrings.cpp" line="2846"/>
         <source>&amp;Text</source>
         <translation>&amp;Text</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2820"/>
+        <location filename="../QMenuStrings.cpp" line="2855"/>
         <source>&amp;Guitar Chord</source>
         <translation>&amp;Kytarový akord</translation>
     </message>
@@ -4266,106 +4278,106 @@
         <translation type="obsolete">Kurzor na &amp;následující segment</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1044"/>
-        <location filename="../QMenuStrings.cpp" line="2944"/>
+        <location filename="../QMenuStrings.cpp" line="1071"/>
+        <location filename="../QMenuStrings.cpp" line="2979"/>
         <source>&amp;Insert Note</source>
         <translation>&amp;Vložit notu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1352"/>
-        <location filename="../QMenuStrings.cpp" line="3252"/>
+        <location filename="../QMenuStrings.cpp" line="1379"/>
+        <location filename="../QMenuStrings.cpp" line="3287"/>
         <source>&amp;Lower Octave</source>
         <translation>&amp;Nižší oktáva</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3406"/>
+        <location filename="../QMenuStrings.cpp" line="3441"/>
         <source>Insert Rest</source>
         <translation>Vložit pomlku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3424"/>
+        <location filename="../QMenuStrings.cpp" line="3459"/>
         <source>Triplet Insert Mo&amp;de</source>
         <translation>Zadávací r&amp;ežim pro trioly</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3442"/>
+        <location filename="../QMenuStrings.cpp" line="3477"/>
         <source>Grace Insert &amp;Mode</source>
         <translation>Zadávací reži&amp;m pro ozdoby</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1923"/>
-        <location filename="../QMenuStrings.cpp" line="3904"/>
+        <location filename="../QMenuStrings.cpp" line="1950"/>
+        <location filename="../QMenuStrings.cpp" line="3939"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>Ukázat nástrojový pruh s ovládacími &amp;nástroji</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1924"/>
+        <location filename="../QMenuStrings.cpp" line="1951"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1925"/>
+        <location filename="../QMenuStrings.cpp" line="1952"/>
         <source>Show Cle&amp;fs Toolbar</source>
         <translation>Ukázat nástrojový pruh pro notové &amp;klíče</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1926"/>
+        <location filename="../QMenuStrings.cpp" line="1953"/>
         <source>Show &amp;Marks Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;značky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1927"/>
+        <location filename="../QMenuStrings.cpp" line="1954"/>
         <source>Show &amp;Group Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;skupiny</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1929"/>
-        <location filename="../QMenuStrings.cpp" line="3907"/>
+        <location filename="../QMenuStrings.cpp" line="1956"/>
+        <location filename="../QMenuStrings.cpp" line="3942"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>Ukázat nástrojový pruh pro pře&amp;sun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1930"/>
+        <location filename="../QMenuStrings.cpp" line="1957"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;rozvržení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3911"/>
+        <location filename="../QMenuStrings.cpp" line="3946"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation>Ukázat pravítko s názvy &amp;akordů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1938"/>
+        <location filename="../QMenuStrings.cpp" line="1965"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation>Ukázat pravítko z&amp;drojových not</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1944"/>
+        <location filename="../QMenuStrings.cpp" line="1971"/>
         <source>Show &amp;Annotations</source>
         <translation>Ukázat &amp;vysvětlivky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1945"/>
+        <location filename="../QMenuStrings.cpp" line="1972"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation>Ukázat pokyny Lily&amp;Pond</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3643"/>
+        <location filename="../QMenuStrings.cpp" line="3678"/>
         <source>Clefs Toolbar</source>
         <translation>Nástrojový pruh pro notové klíče</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3644"/>
+        <location filename="../QMenuStrings.cpp" line="3679"/>
         <source>Accidentals Toolbar</source>
         <translation>Nástrojový pruh pro posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3647"/>
+        <location filename="../QMenuStrings.cpp" line="3682"/>
         <source>Group Toolbar</source>
         <translation>Nástrojový pruh pro skupinu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3646"/>
+        <location filename="../QMenuStrings.cpp" line="3681"/>
         <source>Marks Toolbar</source>
         <translation>Nástrojový pruh pro značky přednesu</translation>
     </message>
@@ -4384,7 +4396,7 @@
         <translation type="obsolete">&amp;Události</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="828"/>
+        <location filename="../QMenuStrings.cpp" line="855"/>
         <source>Remove &amp;Triggers</source>
         <translation>Odstranit sp&amp;ouštěče</translation>
     </message>
@@ -4398,9 +4410,9 @@
         <translation>Ukázat nástrojový pruh s o&amp;bslužným polem pro přesun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1517"/>
-        <location filename="../QMenuStrings.cpp" line="3445"/>
-        <location filename="../QMenuStrings.cpp" line="4325"/>
+        <location filename="../QMenuStrings.cpp" line="1544"/>
+        <location filename="../QMenuStrings.cpp" line="3480"/>
+        <location filename="../QMenuStrings.cpp" line="4360"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>&amp;Příručka k programu Rosegarden</translation>
     </message>
@@ -4416,13 +4428,13 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="665"/>
-        <location filename="../QMenuStrings.cpp" line="1940"/>
+        <location filename="../QMenuStrings.cpp" line="1967"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>Ukázat pruh se změnami v &amp;síle tónu</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="666"/>
-        <location filename="../QMenuStrings.cpp" line="1941"/>
+        <location filename="../QMenuStrings.cpp" line="1968"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Ukázat pravítko se &amp;změnami výšek tónů</translation>
     </message>
@@ -4431,61 +4443,61 @@
         <translation type="obsolete">Přidat &amp;ovládací pravítko...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="837"/>
+        <location filename="../QMenuStrings.cpp" line="864"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Ukazovátko zpět a vy&amp;brat</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1535"/>
-        <location filename="../QMenuStrings.cpp" line="3650"/>
+        <location filename="../QMenuStrings.cpp" line="1562"/>
+        <location filename="../QMenuStrings.cpp" line="3685"/>
         <source>Rulers Toolbar</source>
         <translation>Nástrojový pruh s pravítky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1869"/>
+        <location filename="../QMenuStrings.cpp" line="1896"/>
         <source>&amp;Move to Staff Above...</source>
         <translation>&amp;Přesunout na osnovu výše...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1871"/>
+        <location filename="../QMenuStrings.cpp" line="1898"/>
         <source>Move to Staff &amp;Below...</source>
         <translation>Přesunout na osnovu &amp;níže...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1911"/>
-        <location filename="../QMenuStrings.cpp" line="3899"/>
+        <location filename="../QMenuStrings.cpp" line="1938"/>
+        <location filename="../QMenuStrings.cpp" line="3934"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Volby...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1931"/>
+        <location filename="../QMenuStrings.cpp" line="1958"/>
         <source>Show La&amp;yer Toolbar</source>
         <translation>Ukázat nástrojový pruh s v&amp;rstvami</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1932"/>
+        <location filename="../QMenuStrings.cpp" line="1959"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation>Ukázat nástrojový pruh s &amp;pravítky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1933"/>
+        <location filename="../QMenuStrings.cpp" line="1960"/>
         <source>Show &amp;Duration Toolbar</source>
         <translation>Ukázat nástrojový pruh s &amp;dobami trvání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1946"/>
+        <location filename="../QMenuStrings.cpp" line="1973"/>
         <source>Dump staves (debug)</source>
         <translation>Vypsat osnovy (ladění)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1947"/>
+        <location filename="../QMenuStrings.cpp" line="1974"/>
         <source>Dump BarDataMap (debug)</source>
         <translation>Vypsat mapu s daty o taktech (ladění)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1956"/>
-        <location filename="../QMenuStrings.cpp" line="4039"/>
-        <location filename="../QMenuStrings.cpp" line="4410"/>
+        <location filename="../QMenuStrings.cpp" line="1983"/>
+        <location filename="../QMenuStrings.cpp" line="4074"/>
+        <location filename="../QMenuStrings.cpp" line="4445"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation>Otevřít sledování &amp;výšky tónu</translation>
     </message>
@@ -4494,384 +4506,384 @@
         <translation type="obsolete">Přidat změnu klíče pouze v tomto odkazu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1973"/>
+        <location filename="../QMenuStrings.cpp" line="2000"/>
         <source>Ctrl+Alt++</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2090"/>
+        <location filename="../QMenuStrings.cpp" line="2117"/>
         <source>Classical</source>
         <translation>Klasický</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2091"/>
+        <location filename="../QMenuStrings.cpp" line="2118"/>
         <source>Cross</source>
         <translation>Kříž</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2092"/>
+        <location filename="../QMenuStrings.cpp" line="2119"/>
         <source>Mensural</source>
         <translation>Menzurální</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2233"/>
+        <location filename="../QMenuStrings.cpp" line="2268"/>
         <source>Mark Selection as Auto-Generated</source>
         <translation>Označit výběr jako automaticky vytvořený</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2549"/>
+        <location filename="../QMenuStrings.cpp" line="2584"/>
         <source>Insert &amp;Expression Controller Sequence...</source>
         <translation>Vložit pořadí ovládacího prvku &amp;výrazu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2775"/>
+        <location filename="../QMenuStrings.cpp" line="2810"/>
         <source>Select but Don&apos;t Follow Ties</source>
         <translation>Vybrat ale nesledovat ligatury</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2908"/>
+        <location filename="../QMenuStrings.cpp" line="2943"/>
         <source>Switch to &amp;Notes</source>
         <translation>Přepnout na &amp;noty</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2917"/>
+        <location filename="../QMenuStrings.cpp" line="2952"/>
         <source>Switch to &amp;Rests</source>
         <translation>Přepnout na &amp;pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2926"/>
+        <location filename="../QMenuStrings.cpp" line="2961"/>
         <source>To&amp;ggle Dot on</source>
         <translation>&amp;Zapnout tečky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2935"/>
+        <location filename="../QMenuStrings.cpp" line="2970"/>
         <source>To&amp;ggle Dot off</source>
         <translation>&amp;Vypnout tečky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3433"/>
+        <location filename="../QMenuStrings.cpp" line="3468"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation>R&amp;ežim vkládání rytmických notových skupin</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3440"/>
+        <location filename="../QMenuStrings.cpp" line="3475"/>
         <source>;</source>
         <comment>keyboard shortcut</comment>
         <translation>;</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3467"/>
+        <location filename="../QMenuStrings.cpp" line="3502"/>
         <source>Double Whole Note (5)</source>
         <translation>Dvoucelá nota (5)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3473"/>
+        <location filename="../QMenuStrings.cpp" line="3508"/>
         <source>Whole Note (1)</source>
         <translation>Celá nota (1)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3479"/>
+        <location filename="../QMenuStrings.cpp" line="3514"/>
         <source>Half Note (2)</source>
         <translation>Půlová nota (2)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3485"/>
+        <location filename="../QMenuStrings.cpp" line="3520"/>
         <source>Quarter Note (4)</source>
         <translation>Čtvrťová nota (4)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3491"/>
+        <location filename="../QMenuStrings.cpp" line="3526"/>
         <source>Eighth Note (8)</source>
         <translation>Osminová nota (8)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3497"/>
+        <location filename="../QMenuStrings.cpp" line="3532"/>
         <source>Sixteenth Note (6)</source>
         <translation>Šestnáctinová nota (6)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3503"/>
+        <location filename="../QMenuStrings.cpp" line="3538"/>
         <source>Thirty-Second Note (3)</source>
         <translation>Dvaatřicetinová nota (3)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3509"/>
+        <location filename="../QMenuStrings.cpp" line="3544"/>
         <source>Sixty-Fourth Note (0)</source>
         <translation>Čtyřiašedesátinová nota (0)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3515"/>
+        <location filename="../QMenuStrings.cpp" line="3550"/>
         <source>Dotted Double Whole Note</source>
         <translation>Tečkovaná dvoucelá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3521"/>
+        <location filename="../QMenuStrings.cpp" line="3556"/>
         <source>Dotted Whole Note</source>
         <translation>Tečkovaná celá nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3527"/>
+        <location filename="../QMenuStrings.cpp" line="3562"/>
         <source>Dotted Half Note</source>
         <translation>Tečkovaná půlová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3533"/>
+        <location filename="../QMenuStrings.cpp" line="3568"/>
         <source>Dotted Quarter Note</source>
         <translation>Tečkovaná čtvrťová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3539"/>
+        <location filename="../QMenuStrings.cpp" line="3574"/>
         <source>Dotted Eighth Note</source>
         <translation>Tečkovaná osminová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3545"/>
+        <location filename="../QMenuStrings.cpp" line="3580"/>
         <source>Dotted Sixteenth Note</source>
         <translation>Tečkovaná šestnáctinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3551"/>
+        <location filename="../QMenuStrings.cpp" line="3586"/>
         <source>Dotted Thirty-Second Note</source>
         <translation>Tečkovaná dvaatřicetinová nota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3557"/>
+        <location filename="../QMenuStrings.cpp" line="3592"/>
         <source>Double Whole Rest (5)</source>
         <translation>Dvojitá celá pomlka (5)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3563"/>
+        <location filename="../QMenuStrings.cpp" line="3598"/>
         <source>Whole Rest (1)</source>
         <translation>Celá pomlka (1)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3569"/>
+        <location filename="../QMenuStrings.cpp" line="3604"/>
         <source>Half Rest (2)</source>
         <translation>Půlová pomlka (2)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3575"/>
+        <location filename="../QMenuStrings.cpp" line="3610"/>
         <source>Quarter Rest (4)</source>
         <translation>Čtvrťová pomlka (4)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3581"/>
+        <location filename="../QMenuStrings.cpp" line="3616"/>
         <source>Eighth Rest (8)</source>
         <translation>Osminová pomlka (8)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3587"/>
+        <location filename="../QMenuStrings.cpp" line="3622"/>
         <source>Sixteenth Rest (6)</source>
         <translation>Šestnáctinová pomlka (6)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3593"/>
+        <location filename="../QMenuStrings.cpp" line="3628"/>
         <source>Thirty-Second Rest (3)</source>
         <translation>Dvaatřicetinová pomlka (3)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3599"/>
+        <location filename="../QMenuStrings.cpp" line="3634"/>
         <source>Sixty-Fourth Rest (0)</source>
         <translation>Čtyřiašedesátinová pomlka (0)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3605"/>
+        <location filename="../QMenuStrings.cpp" line="3640"/>
         <source>Dotted Double Whole Rest</source>
         <translation>Tečkovaná dvojitá celá pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3611"/>
+        <location filename="../QMenuStrings.cpp" line="3646"/>
         <source>Dotted Whole Rest</source>
         <translation>Tečkovaná celá pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3617"/>
+        <location filename="../QMenuStrings.cpp" line="3652"/>
         <source>Dotted Half Rest</source>
         <translation>Tečkovaná půlová pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3623"/>
+        <location filename="../QMenuStrings.cpp" line="3658"/>
         <source>Dotted Quarter Rest</source>
         <translation>Tečkovaná čtvrťová pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3629"/>
+        <location filename="../QMenuStrings.cpp" line="3664"/>
         <source>Dotted Eighth Rest</source>
         <translation>Tečkovaná osminová pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3635"/>
+        <location filename="../QMenuStrings.cpp" line="3670"/>
         <source>Dotted Sixteenth Rest</source>
         <translation>Tečkovaná šestnáctinová pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3641"/>
+        <location filename="../QMenuStrings.cpp" line="3676"/>
         <source>Dotted Thirty-Second Rest</source>
         <translation>Tečkovaná dvaatřicetinová pomlka</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3648"/>
+        <location filename="../QMenuStrings.cpp" line="3683"/>
         <source>Layout Toolbar</source>
         <translation>Nástrojový pruh pro uspořádání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3649"/>
+        <location filename="../QMenuStrings.cpp" line="3684"/>
         <source>Layer Toolbar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3651"/>
+        <location filename="../QMenuStrings.cpp" line="3686"/>
         <source>Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3652"/>
+        <location filename="../QMenuStrings.cpp" line="3687"/>
         <source>&amp;Interpret Active Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3653"/>
+        <location filename="../QMenuStrings.cpp" line="3688"/>
         <source>Interpret &amp;Text Dynamics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3658"/>
+        <location filename="../QMenuStrings.cpp" line="3693"/>
         <source>Adjust velocity to follow text dynamics (f, p, mf...)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3660"/>
+        <location filename="../QMenuStrings.cpp" line="3695"/>
         <source>Interpret &amp;Hairpins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3665"/>
+        <location filename="../QMenuStrings.cpp" line="3700"/>
         <source>Adjust velocity to follow hairpin dynamics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3667"/>
+        <location filename="../QMenuStrings.cpp" line="3702"/>
         <source>Interpret &amp;Slurs and Marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3672"/>
+        <location filename="../QMenuStrings.cpp" line="3707"/>
         <source>Articulate slurs, staccato, tenuto, etc.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3674"/>
+        <location filename="../QMenuStrings.cpp" line="3709"/>
         <source>Interpret &amp;Beats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3679"/>
+        <location filename="../QMenuStrings.cpp" line="3714"/>
         <source>Place accents on certain beats according to the time signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3681"/>
+        <location filename="../QMenuStrings.cpp" line="3716"/>
         <source>Switch to Insert Tool</source>
         <translation>Přepnout na nástroj pro vkládání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3683"/>
+        <location filename="../QMenuStrings.cpp" line="3718"/>
         <source>Collapse Rests</source>
         <translation>Sjednotit pomlky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3684"/>
+        <location filename="../QMenuStrings.cpp" line="3719"/>
         <source>Respell as Flat</source>
         <translation>Provést enharmonickou záměnu s béčkem</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3685"/>
+        <location filename="../QMenuStrings.cpp" line="3720"/>
         <source>Respell as Sharp</source>
         <translation>Provést enharmonickou záměnu s křížkem</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3686"/>
+        <location filename="../QMenuStrings.cpp" line="3721"/>
         <source>Respell as Natural</source>
         <translation>Provést enharmonickou záměnu bez předznamenání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3687"/>
+        <location filename="../QMenuStrings.cpp" line="3722"/>
         <source>Collapse Notes</source>
         <translation>Sjednotit noty</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3688"/>
+        <location filename="../QMenuStrings.cpp" line="3723"/>
         <source>Interpret</source>
         <translation>Ztvárnit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3689"/>
+        <location filename="../QMenuStrings.cpp" line="3724"/>
         <source>Move to Staff Above</source>
         <translation>Přesunout na osnovu výše</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3690"/>
+        <location filename="../QMenuStrings.cpp" line="3725"/>
         <source>Move to Staff Below</source>
         <translation>Přesunout na osnovu níže</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3691"/>
+        <location filename="../QMenuStrings.cpp" line="3726"/>
         <source>Make Invisible</source>
         <translation>Zneviditelnit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3692"/>
+        <location filename="../QMenuStrings.cpp" line="3727"/>
         <source>Make Visible</source>
         <translation>Zviditelnit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3699"/>
+        <location filename="../QMenuStrings.cpp" line="3734"/>
         <source>Auto-Beam when appropriate</source>
         <translation>Automatické trámce tam, kde je to vhodné</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3700"/>
+        <location filename="../QMenuStrings.cpp" line="3735"/>
         <source>No Accidental</source>
         <translation>Bez posuvky</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3701"/>
+        <location filename="../QMenuStrings.cpp" line="3736"/>
         <source>Follow Previous Accidental</source>
         <translation>Následovat předchozí posuvku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3702"/>
+        <location filename="../QMenuStrings.cpp" line="3737"/>
         <source>Sharp</source>
         <translation>Křížek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3703"/>
+        <location filename="../QMenuStrings.cpp" line="3738"/>
         <source>Flat</source>
         <translation>Béčko</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3704"/>
+        <location filename="../QMenuStrings.cpp" line="3739"/>
         <source>Natural</source>
         <translation>Bez předznamenání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3705"/>
+        <location filename="../QMenuStrings.cpp" line="3740"/>
         <source>Double Sharp</source>
         <translation>Dvojitý křížek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3706"/>
+        <location filename="../QMenuStrings.cpp" line="3741"/>
         <source>Double Flat</source>
         <translation>Dvojité bé</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3708"/>
+        <location filename="../QMenuStrings.cpp" line="3743"/>
         <source>&amp;New</source>
         <translation>&amp;Nový</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3717"/>
+        <location filename="../QMenuStrings.cpp" line="3752"/>
         <source>&amp;Import</source>
         <translation>&amp;Zavést</translation>
     </message>
@@ -4884,7 +4896,7 @@
         <translation type="obsolete">Zavést soubor &amp;MIDI...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3721"/>
+        <location filename="../QMenuStrings.cpp" line="3756"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Zavést soubor &amp;Hydrogen...</translation>
     </message>
@@ -4893,12 +4905,12 @@
         <translation type="obsolete">Zavést soubor MusicXM&amp;L...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3723"/>
+        <location filename="../QMenuStrings.cpp" line="3758"/>
         <source>&amp;Merge</source>
         <translation>&amp;Připojit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3724"/>
+        <location filename="../QMenuStrings.cpp" line="3759"/>
         <source>Merge &amp;File...</source>
         <translation>Připojit &amp;soubor...</translation>
     </message>
@@ -4907,7 +4919,7 @@
         <translation type="obsolete">Připojit soubor &amp;MIDI...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3727"/>
+        <location filename="../QMenuStrings.cpp" line="3762"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Připojit soubor &amp;Hydrogen...</translation>
     </message>
@@ -4916,7 +4928,7 @@
         <translation type="obsolete">Připojit soubor MusicXM&amp;L...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3729"/>
+        <location filename="../QMenuStrings.cpp" line="3764"/>
         <source>&amp;Export</source>
         <translation>&amp;Vyvést</translation>
     </message>
@@ -4945,12 +4957,12 @@
         <translation type="obsolete">Vyvést jako hudební soubor XML (Music&amp;XML)...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3736"/>
+        <location filename="../QMenuStrings.cpp" line="3771"/>
         <source>&amp;Open...</source>
         <translation>&amp;Otevřít...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3745"/>
+        <location filename="../QMenuStrings.cpp" line="3780"/>
         <source>Open &amp;Recent</source>
         <translation>Otevřít &amp;nedávný</translation>
     </message>
@@ -4959,12 +4971,12 @@
         <translation type="obsolete">Uložit &amp;jako...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3764"/>
+        <location filename="../QMenuStrings.cpp" line="3799"/>
         <source>Save as &amp;Template...</source>
         <translation>Uložit jako před&amp;lohu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3765"/>
+        <location filename="../QMenuStrings.cpp" line="3800"/>
         <source>Re&amp;vert</source>
         <translation>&amp;Vrátit</translation>
     </message>
@@ -4973,143 +4985,143 @@
         <translation type="obsolete">Náhled t&amp;isku...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3768"/>
+        <location filename="../QMenuStrings.cpp" line="3803"/>
         <source>Manage A&amp;udio Files</source>
         <translation>Správa zv&amp;ukových souborů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3769"/>
+        <location filename="../QMenuStrings.cpp" line="3804"/>
         <source>Play&amp;list</source>
         <translation>Seznam &amp;skladeb</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3779"/>
+        <location filename="../QMenuStrings.cpp" line="3814"/>
         <source>&amp;Quit</source>
         <translation>&amp;Ukončit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3852"/>
+        <location filename="../QMenuStrings.cpp" line="3887"/>
         <source>Cut &amp;Range</source>
         <translation>Vyjmout &amp;oblast</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3861"/>
+        <location filename="../QMenuStrings.cpp" line="3896"/>
         <source>Cop&amp;y Range</source>
         <translation>Ko&amp;pírovat oblast</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3870"/>
+        <location filename="../QMenuStrings.cpp" line="3905"/>
         <source>Pa&amp;ste Range</source>
         <translation>V&amp;ložit oblast</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3879"/>
+        <location filename="../QMenuStrings.cpp" line="3914"/>
         <source>&amp;Insert Range...</source>
         <translation>&amp;Vložit oblast...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3890"/>
+        <location filename="../QMenuStrings.cpp" line="3925"/>
         <source>Select &amp;All Segments</source>
         <translation>Vybrat &amp;všechny části</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3901"/>
+        <location filename="../QMenuStrings.cpp" line="3936"/>
         <source>Document P&amp;roperties...</source>
         <translation>&amp;Vlastnosti dokumentu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3938"/>
+        <location filename="../QMenuStrings.cpp" line="3973"/>
         <source>&amp;Open Tempo and Time Signature Editor</source>
         <translation>Otevřít editor pro temp&amp;o a taktové označení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3939"/>
+        <location filename="../QMenuStrings.cpp" line="3974"/>
         <source>Set &amp;Tempo to Audio Segment Duration</source>
         <translation>Nastavit &amp;tempo na dobu trvání zvukové části</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3940"/>
+        <location filename="../QMenuStrings.cpp" line="3975"/>
         <source>Set Tempos from &amp;Beat Segment</source>
         <translation>Nastavit tempa z části &amp;doby</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3942"/>
+        <location filename="../QMenuStrings.cpp" line="3977"/>
         <source>Change &amp;Composition Start and End...</source>
         <translation>Změnit začátek a konec &amp;skladby...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3943"/>
+        <location filename="../QMenuStrings.cpp" line="3978"/>
         <source>Edit Mar&amp;kers...</source>
         <translation>Upravit zn&amp;ačky...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3952"/>
+        <location filename="../QMenuStrings.cpp" line="3987"/>
         <source>Edit Document P&amp;roperties...</source>
         <translation>Upravit vlas&amp;tnosti dokumentu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3953"/>
+        <location filename="../QMenuStrings.cpp" line="3988"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
         <translation>&amp;Umístit rychlou značku v poloze přehrávání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2719"/>
-        <location filename="../QMenuStrings.cpp" line="3962"/>
+        <location filename="../QMenuStrings.cpp" line="2754"/>
+        <location filename="../QMenuStrings.cpp" line="3997"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation>&amp;Skočit k rychlé značce</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3971"/>
+        <location filename="../QMenuStrings.cpp" line="4006"/>
         <source>&amp;Studio</source>
         <translation>&amp;Studio</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3972"/>
+        <location filename="../QMenuStrings.cpp" line="4007"/>
         <source>&amp;Audio Mixer</source>
         <translation>Zv&amp;ukový směšovač</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3974"/>
+        <location filename="../QMenuStrings.cpp" line="4009"/>
         <source>Manage MIDI &amp;Devices</source>
         <translation>Správa zařízení MI&amp;DI</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3975"/>
+        <location filename="../QMenuStrings.cpp" line="4010"/>
         <source>Manage S&amp;ynth Plugins</source>
         <translation>Správa přídavných modulů s&amp;yntetizéru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3976"/>
+        <location filename="../QMenuStrings.cpp" line="4011"/>
         <source>Manage &amp;Metronome</source>
         <translation>Správa &amp;metronomu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3977"/>
+        <location filename="../QMenuStrings.cpp" line="4012"/>
         <source>Modify MIDI &amp;Filters</source>
         <translation>Upravit &amp;filtry MIDI</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3978"/>
+        <location filename="../QMenuStrings.cpp" line="4013"/>
         <source>MIDI &amp;Thru Routing</source>
         <translation>Vedení MIDI &amp;přes</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3979"/>
+        <location filename="../QMenuStrings.cpp" line="4014"/>
         <source>&amp;Reset MIDI Network</source>
         <translation>Provést &amp;přenastavení sítě MIDI</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3980"/>
+        <location filename="../QMenuStrings.cpp" line="4015"/>
         <source>Im&amp;port Studio from File...</source>
         <translation>Za&amp;vést studio ze souboru...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3981"/>
+        <location filename="../QMenuStrings.cpp" line="4016"/>
         <source>&amp;Import Default Studio</source>
         <translation>&amp;Zavést výchozí studio</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3982"/>
+        <location filename="../QMenuStrings.cpp" line="4017"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation>&amp;Uložit současný dokument jako výchozí studio</translation>
     </message>
@@ -5118,7 +5130,7 @@
         <translation type="obsolete">Čás&amp;ti</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3984"/>
+        <location filename="../QMenuStrings.cpp" line="4019"/>
         <source>Toggle Repeat</source>
         <translation>Zapnout/Vypnout opakování</translation>
     </message>
@@ -5127,277 +5139,277 @@
         <translation type="obsolete">Otevřít ve &amp;výchozím editoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4048"/>
-        <location filename="../QMenuStrings.cpp" line="4500"/>
+        <location filename="../QMenuStrings.cpp" line="4083"/>
+        <location filename="../QMenuStrings.cpp" line="4535"/>
         <source>R&amp;elabel...</source>
         <translation>&amp;Znovu označit...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4058"/>
-        <location filename="../QMenuStrings.cpp" line="4491"/>
+        <location filename="../QMenuStrings.cpp" line="4093"/>
+        <location filename="../QMenuStrings.cpp" line="4526"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>Opakovat poslední kv&amp;antizaci</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4069"/>
+        <location filename="../QMenuStrings.cpp" line="4104"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>Prodloužit &amp;nebo zkrátit...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="678"/>
-        <location filename="../QMenuStrings.cpp" line="1962"/>
-        <location filename="../QMenuStrings.cpp" line="4071"/>
+        <location filename="../QMenuStrings.cpp" line="697"/>
+        <location filename="../QMenuStrings.cpp" line="1989"/>
+        <location filename="../QMenuStrings.cpp" line="4106"/>
         <source>Set Start &amp;Time...</source>
         <translation>Nastavit počáteční č&amp;as...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="679"/>
-        <location filename="../QMenuStrings.cpp" line="1963"/>
-        <location filename="../QMenuStrings.cpp" line="4072"/>
+        <location filename="../QMenuStrings.cpp" line="698"/>
+        <location filename="../QMenuStrings.cpp" line="1990"/>
+        <location filename="../QMenuStrings.cpp" line="4107"/>
         <source>Set &amp;Duration...</source>
         <translation>Nastavit &amp;dobu trvání...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3718"/>
+        <location filename="../QMenuStrings.cpp" line="3753"/>
         <source>Import Rosegarden &amp;Project File...</source>
         <translation>Zavést soubor s &amp;projektem Rosegarden...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3719"/>
+        <location filename="../QMenuStrings.cpp" line="3754"/>
         <source>Import &amp;MIDI File...</source>
         <translation>Zavést soubor &amp;MIDI...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3720"/>
+        <location filename="../QMenuStrings.cpp" line="3755"/>
         <source>Import &amp;X11 Rosegarden File...</source>
         <translation>Zavést soubor &amp;Rosegarden X11...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3722"/>
+        <location filename="../QMenuStrings.cpp" line="3757"/>
         <source>Import MusicXM&amp;L File...</source>
         <translation>Zavést soubor MusicXM&amp;L...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3725"/>
+        <location filename="../QMenuStrings.cpp" line="3760"/>
         <source>Merge &amp;MIDI File...</source>
         <translation>Připojit soubor &amp;MIDI...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3726"/>
+        <location filename="../QMenuStrings.cpp" line="3761"/>
         <source>Merge &amp;X11 Rosegarden File...</source>
         <translation>Připojit soubor &amp;Rosegarden X11...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3728"/>
+        <location filename="../QMenuStrings.cpp" line="3763"/>
         <source>Merge MusicXM&amp;L File...</source>
         <translation>Připojit soubor MusicXM&amp;L...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3730"/>
+        <location filename="../QMenuStrings.cpp" line="3765"/>
         <source>Export Rosegarden &amp;Project File...</source>
         <translation>Vyvést jako soubor s &amp;projektem Rosegarden...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3731"/>
+        <location filename="../QMenuStrings.cpp" line="3766"/>
         <source>Export &amp;LilyPond File...</source>
         <translation>Vyvést jako soubor ve formátu &amp;LilyPond...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3732"/>
+        <location filename="../QMenuStrings.cpp" line="3767"/>
         <source>Export &amp;MIDI File...</source>
         <translation>Vyvést jako soubor &amp;MIDI...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3733"/>
+        <location filename="../QMenuStrings.cpp" line="3768"/>
         <source>Export &amp;Csound Score File...</source>
         <translation>Vyvést jako soubor s notovým zápisem pro &amp;Csound...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3734"/>
+        <location filename="../QMenuStrings.cpp" line="3769"/>
         <source>Export M&amp;up File...</source>
         <translation>Vyvést jako soubor M&amp;up...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3735"/>
+        <location filename="../QMenuStrings.cpp" line="3770"/>
         <source>Export Music&amp;XML File...</source>
         <translation>Vyvést jako soubor Music&amp;XML...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3755"/>
+        <location filename="../QMenuStrings.cpp" line="3790"/>
         <source>Save &amp;as...</source>
         <translation>Uložit &amp;jako...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3941"/>
+        <location filename="../QMenuStrings.cpp" line="3976"/>
         <source>Fit Existing Beats to Beat Segment</source>
         <translation>Umístit stávající doby do části s dobami</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3994"/>
-        <location filename="../QMenuStrings.cpp" line="4365"/>
+        <location filename="../QMenuStrings.cpp" line="4029"/>
+        <location filename="../QMenuStrings.cpp" line="4400"/>
         <source>Open in &amp;Default Editor</source>
         <translation>Otevřít ve &amp;výchozím editoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4091"/>
-        <location filename="../QMenuStrings.cpp" line="4473"/>
+        <location filename="../QMenuStrings.cpp" line="4126"/>
+        <location filename="../QMenuStrings.cpp" line="4508"/>
         <source>Join</source>
         <translation>Spojit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4100"/>
+        <location filename="../QMenuStrings.cpp" line="4135"/>
         <source>&amp;Split</source>
         <translation>&amp;Rozdělit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4101"/>
+        <location filename="../QMenuStrings.cpp" line="4136"/>
         <source>&amp;Split on Silence</source>
         <translation>&amp;Rozdělit při odmlčení se</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4102"/>
+        <location filename="../QMenuStrings.cpp" line="4137"/>
         <source>Split by &amp;Pitch...</source>
         <translation>Rozdělit podle &amp;výšky tónu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4103"/>
+        <location filename="../QMenuStrings.cpp" line="4138"/>
         <source>Split by &amp;Recording Source...</source>
         <translation>Rozdělit podle nahrávacího zd&amp;roje...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4104"/>
+        <location filename="../QMenuStrings.cpp" line="4139"/>
         <source> Split &amp;at Time...</source>
         <translation>Rozdělit &amp;v čase...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4105"/>
+        <location filename="../QMenuStrings.cpp" line="4140"/>
         <source>Turn Re&amp;peats into Copies</source>
         <translation>Převést o&amp;pakování na kopie</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4108"/>
+        <location filename="../QMenuStrings.cpp" line="4143"/>
         <source>&amp;Update all Figurations</source>
         <translation>&amp;Aktualizovat všechny figurace</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4109"/>
+        <location filename="../QMenuStrings.cpp" line="4144"/>
         <source>Manage Tri&amp;ggered Segments</source>
         <translation>Správa spouštěných čás&amp;tí</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4110"/>
+        <location filename="../QMenuStrings.cpp" line="4145"/>
         <source>Trac&amp;ks</source>
         <translation>S&amp;topy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4111"/>
+        <location filename="../QMenuStrings.cpp" line="4146"/>
         <source>Add &amp;Track</source>
         <translation>Přidat s&amp;topu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4120"/>
+        <location filename="../QMenuStrings.cpp" line="4155"/>
         <source>&amp;Add Tracks...</source>
         <translation>&amp;Přidat stopy...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4129"/>
+        <location filename="../QMenuStrings.cpp" line="4164"/>
         <source>D&amp;elete Track</source>
         <translation>&amp;Odstranit stopu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4138"/>
+        <location filename="../QMenuStrings.cpp" line="4173"/>
         <source>Move Track &amp;Down</source>
         <translation>Přesunout stopu &amp;dolů</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4147"/>
+        <location filename="../QMenuStrings.cpp" line="4182"/>
         <source>Mo&amp;ve Track Up</source>
         <translation>Přesunout stopu &amp;nahoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4156"/>
+        <location filename="../QMenuStrings.cpp" line="4191"/>
         <source>Select &amp;Next Track</source>
         <translation>Vybrat &amp;další stopu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4165"/>
+        <location filename="../QMenuStrings.cpp" line="4200"/>
         <source>Select &amp;Previous Track</source>
         <translation>Vybrat &amp;předchozí stopu</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4174"/>
+        <location filename="../QMenuStrings.cpp" line="4209"/>
         <source>Mute or Unmute Tra&amp;ck</source>
         <translation>Ztlumit nebo zrušit ztlumení s&amp;topy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4183"/>
+        <location filename="../QMenuStrings.cpp" line="4218"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
         <translation>Určit stopu pro nahrávání neb&amp;o zrušit toto určení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4192"/>
+        <location filename="../QMenuStrings.cpp" line="4227"/>
         <source>&amp;Unmute all Tracks</source>
         <translation>&amp;Zrušit ztlumení pro všechny stopy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4193"/>
+        <location filename="../QMenuStrings.cpp" line="4228"/>
         <source>&amp;Mute all Tracks</source>
         <translation>Ztlu&amp;mit všechny stopy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4194"/>
+        <location filename="../QMenuStrings.cpp" line="4229"/>
         <source>Set &amp;Instrument</source>
         <translation>Nastavit &amp;nástroj</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4195"/>
+        <location filename="../QMenuStrings.cpp" line="4230"/>
         <source>&amp;Remap Instruments...</source>
         <translation>Znovu &amp;přiřadit nástroje...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4233"/>
-        <location filename="../QMenuStrings.cpp" line="4538"/>
+        <location filename="../QMenuStrings.cpp" line="4268"/>
+        <location filename="../QMenuStrings.cpp" line="4573"/>
         <source>&amp;Resize</source>
         <translation>&amp;Změnit velikost</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4297"/>
+        <location filename="../QMenuStrings.cpp" line="4332"/>
         <source>P&amp;unch in Record</source>
         <translation>&amp;Přerušení nahrávání</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="291"/>
         <location filename="../QMenuStrings.cpp" line="656"/>
-        <location filename="../QMenuStrings.cpp" line="1922"/>
-        <location filename="../QMenuStrings.cpp" line="3903"/>
+        <location filename="../QMenuStrings.cpp" line="1949"/>
+        <location filename="../QMenuStrings.cpp" line="3938"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>Ukázat &amp;hlavní nástrojový pruh</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3905"/>
+        <location filename="../QMenuStrings.cpp" line="3940"/>
         <source>Show Trac&amp;ks Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;stopy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3906"/>
+        <location filename="../QMenuStrings.cpp" line="3941"/>
         <source>Show &amp;Editors Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;editory</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3908"/>
+        <location filename="../QMenuStrings.cpp" line="3943"/>
         <source>Show &amp;Zoom Toolbar</source>
         <translation>Ukázat nástrojový pruh pro &amp;změnu přiblížení</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="292"/>
         <location filename="../QMenuStrings.cpp" line="661"/>
-        <location filename="../QMenuStrings.cpp" line="1935"/>
-        <location filename="../QMenuStrings.cpp" line="3934"/>
+        <location filename="../QMenuStrings.cpp" line="1962"/>
+        <location filename="../QMenuStrings.cpp" line="3969"/>
         <source>Show St&amp;atusbar</source>
         <translation>Ukázat stavo&amp;vý řádek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3910"/>
+        <location filename="../QMenuStrings.cpp" line="3945"/>
         <source>Show Playback Position R&amp;uler</source>
         <translation>Ukázat pravítko vyjadřující polohu &amp;přehrávání</translation>
     </message>
@@ -5410,122 +5422,122 @@
         <translation type="obsolete">Připojit soubor &amp;Rosegarden X11...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3973"/>
+        <location filename="../QMenuStrings.cpp" line="4008"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>Směšo&amp;vač MIDI</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3912"/>
+        <location filename="../QMenuStrings.cpp" line="3947"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation>Ukázat pravítko s &amp;tempem</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2915"/>
-        <location filename="../QMenuStrings.cpp" line="2924"/>
+        <location filename="../QMenuStrings.cpp" line="2950"/>
+        <location filename="../QMenuStrings.cpp" line="2959"/>
         <source>Y</source>
         <comment>keyboard shortcut</comment>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2933"/>
-        <location filename="../QMenuStrings.cpp" line="2942"/>
+        <location filename="../QMenuStrings.cpp" line="2968"/>
+        <location filename="../QMenuStrings.cpp" line="2977"/>
         <source>.</source>
         <comment>keyboard shortcut</comment>
         <translation>.</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3413"/>
-        <location filename="../QMenuStrings.cpp" line="3929"/>
+        <location filename="../QMenuStrings.cpp" line="3448"/>
+        <location filename="../QMenuStrings.cpp" line="3964"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3431"/>
-        <location filename="../QMenuStrings.cpp" line="4621"/>
+        <location filename="../QMenuStrings.cpp" line="3466"/>
+        <location filename="../QMenuStrings.cpp" line="4656"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3743"/>
+        <location filename="../QMenuStrings.cpp" line="3778"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3766"/>
+        <location filename="../QMenuStrings.cpp" line="3801"/>
         <source>Prin&amp;t Preview...</source>
         <translation>Náhled t&amp;isku...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3786"/>
+        <location filename="../QMenuStrings.cpp" line="3821"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3834"/>
+        <location filename="../QMenuStrings.cpp" line="3869"/>
         <source>Paste as &amp;Links</source>
         <translation>Vložit jako &amp;odkazy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3841"/>
+        <location filename="../QMenuStrings.cpp" line="3876"/>
         <source>Ctrl+Alt+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Alt+V</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3877"/>
-        <location filename="../QMenuStrings.cpp" line="4718"/>
+        <location filename="../QMenuStrings.cpp" line="3912"/>
+        <location filename="../QMenuStrings.cpp" line="4753"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3886"/>
+        <location filename="../QMenuStrings.cpp" line="3921"/>
         <source>Ctrl+Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Ins</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3888"/>
+        <location filename="../QMenuStrings.cpp" line="3923"/>
         <source>Paste Tempos and Time Signatures</source>
         <translation>Vložit tempa a taktová označení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3889"/>
+        <location filename="../QMenuStrings.cpp" line="3924"/>
         <source>Clear Range of Tempos</source>
         <translation>Smazat rozsah temp</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3913"/>
+        <location filename="../QMenuStrings.cpp" line="3948"/>
         <source>Show Tra&amp;nsport</source>
         <translation>Ukázat o&amp;bslužné pole</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3920"/>
+        <location filename="../QMenuStrings.cpp" line="3955"/>
         <source>T</source>
         <comment>keyboard shortcut</comment>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3922"/>
+        <location filename="../QMenuStrings.cpp" line="3957"/>
         <source>Show Special &amp;Parameters</source>
         <translation>Ukázat zvláštní &amp;parametry</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3931"/>
+        <location filename="../QMenuStrings.cpp" line="3966"/>
         <source>Show Segment Pre&amp;views</source>
         <translation>Ukázat &amp;náhledy na části</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3932"/>
+        <location filename="../QMenuStrings.cpp" line="3967"/>
         <source>Sh&amp;ow Segment Labels</source>
         <translation>Ukázat &amp;označení částí</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3933"/>
+        <location filename="../QMenuStrings.cpp" line="3968"/>
         <source>Show Track &amp;Labels</source>
         <translation>Ukázat &amp;označení stop</translation>
     </message>
@@ -5534,62 +5546,62 @@
         <translation type="obsolete">Umístit stávající doby do části s dobami</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1899"/>
-        <location filename="../QMenuStrings.cpp" line="3950"/>
+        <location filename="../QMenuStrings.cpp" line="1926"/>
+        <location filename="../QMenuStrings.cpp" line="3985"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+K</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2726"/>
-        <location filename="../QMenuStrings.cpp" line="3969"/>
+        <location filename="../QMenuStrings.cpp" line="2761"/>
+        <location filename="../QMenuStrings.cpp" line="4004"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="3991"/>
+        <location filename="../QMenuStrings.cpp" line="4026"/>
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4001"/>
-        <location filename="../QMenuStrings.cpp" line="4372"/>
+        <location filename="../QMenuStrings.cpp" line="4036"/>
+        <location filename="../QMenuStrings.cpp" line="4407"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4070"/>
+        <location filename="../QMenuStrings.cpp" line="4105"/>
         <source>Create &amp;Anacrusis...</source>
         <translation>Vytvořit &amp;předtaktí...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4098"/>
-        <location filename="../QMenuStrings.cpp" line="4480"/>
+        <location filename="../QMenuStrings.cpp" line="4133"/>
+        <location filename="../QMenuStrings.cpp" line="4515"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4106"/>
+        <location filename="../QMenuStrings.cpp" line="4141"/>
         <source>Turn Li&amp;nks into Copies</source>
         <translation>Převést &amp;propojení do kopií</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4107"/>
+        <location filename="../QMenuStrings.cpp" line="4142"/>
         <source>E&amp;xpand Block Chord Segments by Figuration</source>
         <translation>Ro&amp;zbalit části s blokovými akordy podle figurace</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4127"/>
+        <location filename="../QMenuStrings.cpp" line="4162"/>
         <source>Ctrl+Shift+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4136"/>
+        <location filename="../QMenuStrings.cpp" line="4171"/>
         <source>Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+D</translation>
@@ -5600,64 +5612,64 @@
         <translation type="obsolete">Enter, Media Play (Přehrát), Ctrl+Return</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4268"/>
+        <location filename="../QMenuStrings.cpp" line="4303"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
         <translation>Insert, Media Stop (Zastavit)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4277"/>
+        <location filename="../QMenuStrings.cpp" line="4312"/>
         <source>PgUp, Media Previous</source>
         <comment>keyboard shortcut</comment>
         <translation>PgUp, Media Previous (Předchozí)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4286"/>
+        <location filename="../QMenuStrings.cpp" line="4321"/>
         <source>PgDown, Media Next</source>
         <comment>keyboard shortcut</comment>
         <translation>PgDown, Media Next (Další)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4295"/>
+        <location filename="../QMenuStrings.cpp" line="4330"/>
         <source>Media Record</source>
         <comment>keyboard shortcut</comment>
         <translation>Media Record (Nahrávat)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4304"/>
+        <location filename="../QMenuStrings.cpp" line="4339"/>
         <source>Space</source>
         <comment>keyboard shortcut</comment>
         <translation>Space (Mezerník)</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4334"/>
+        <location filename="../QMenuStrings.cpp" line="4369"/>
         <source>&amp;Rosegarden Tutorials</source>
         <translation>Návody pro &amp;Rosegarden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4339"/>
+        <location filename="../QMenuStrings.cpp" line="4374"/>
         <source>Main Toolbar</source>
         <translation>Hlavní nástrojový pruh</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4343"/>
+        <location filename="../QMenuStrings.cpp" line="4378"/>
         <source>Tracks Toolbar</source>
         <translation>Nástrojový pruh pro stopy</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4344"/>
+        <location filename="../QMenuStrings.cpp" line="4379"/>
         <source>Editors Toolbar</source>
         <translation>Nástrojový pruh pro editory</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2710"/>
-        <location filename="../QMenuStrings.cpp" line="4346"/>
+        <location filename="../QMenuStrings.cpp" line="2745"/>
+        <location filename="../QMenuStrings.cpp" line="4381"/>
         <source>Rewind to Beginning</source>
         <translation>Přetočit na začátek</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2717"/>
-        <location filename="../QMenuStrings.cpp" line="4355"/>
+        <location filename="../QMenuStrings.cpp" line="2752"/>
+        <location filename="../QMenuStrings.cpp" line="4390"/>
         <source>Fast Forward to End</source>
         <translation>Přetáčet rychle na konec</translation>
     </message>
@@ -5666,80 +5678,80 @@
         <translation type="obsolete">Vyvést jako soubor ve formátu &amp;LilyPond...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1530"/>
-        <location filename="../QMenuStrings.cpp" line="3458"/>
-        <location filename="../QMenuStrings.cpp" line="4338"/>
+        <location filename="../QMenuStrings.cpp" line="1557"/>
+        <location filename="../QMenuStrings.cpp" line="3493"/>
+        <location filename="../QMenuStrings.cpp" line="4373"/>
         <source>&amp;Support Rosegarden</source>
         <translation>&amp;Podpora programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4259"/>
+        <location filename="../QMenuStrings.cpp" line="4294"/>
         <source>Ctrl+Enter, Enter, Media Play, Ctrl+Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Enter, Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4559"/>
+        <location filename="../QMenuStrings.cpp" line="4594"/>
         <source>Insert Tempo Change</source>
         <translation>Vložit změnu tempa</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4560"/>
+        <location filename="../QMenuStrings.cpp" line="4595"/>
         <source>Insert Tempo Change at Playback Position</source>
         <translation>Vložit změnu tempa v poloze přehrávání</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4561"/>
+        <location filename="../QMenuStrings.cpp" line="4596"/>
         <source>Delete Tempo Change</source>
         <translation>Odstranit změnu tempa</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4562"/>
+        <location filename="../QMenuStrings.cpp" line="4597"/>
         <source>Ramp Tempo to Next Tempo</source>
         <translation>Rovnoměrný přechod z dosavadního na následující tempo</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4563"/>
+        <location filename="../QMenuStrings.cpp" line="4598"/>
         <source>Un-Ramp Tempo</source>
         <translation>Zrušit změnu tempa</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4564"/>
+        <location filename="../QMenuStrings.cpp" line="4599"/>
         <source>Edit Tempo...</source>
         <translation>Upravit tempo...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4565"/>
+        <location filename="../QMenuStrings.cpp" line="4600"/>
         <source>Edit Time Signature...</source>
         <translation>Upravit taktové označení...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4566"/>
+        <location filename="../QMenuStrings.cpp" line="4601"/>
         <source>Open Tempo and Time Signature Editor</source>
         <translation>Otevřít editor tempa a taktového označení</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4632"/>
+        <location filename="../QMenuStrings.cpp" line="4667"/>
         <source>&amp;Edit Item</source>
         <translation>&amp;Upravit položku</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4641"/>
+        <location filename="../QMenuStrings.cpp" line="4676"/>
         <source>Select &amp;All</source>
         <translation>Vybrat &amp;vše</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4650"/>
+        <location filename="../QMenuStrings.cpp" line="4685"/>
         <source>&amp;Clear Selection</source>
         <translation>&amp;Smazat výběr</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4659"/>
+        <location filename="../QMenuStrings.cpp" line="4694"/>
         <source>&amp;Preferences</source>
         <translation>&amp;Volby</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4711"/>
+        <location filename="../QMenuStrings.cpp" line="4746"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>&amp;Vložit jako novou spouštěnou část</translation>
     </message>
@@ -5772,7 +5784,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>Basový</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="2093"/>
+        <location filename="../QMenuStrings.cpp" line="2120"/>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Triangle</source>
         <translation>Trojúhelníkový</translation>
@@ -10972,13 +10984,13 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>Neznámá</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="292"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="306"/>
         <source>[ %1 ]</source>
         <translation>[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="734"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="861"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="766"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="898"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -11000,7 +11012,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="464"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="468"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1012"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="904"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1651"/>
@@ -11013,22 +11025,22 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>Program Rosegarden - sekvencer a editor notového zápisu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="469"/>
+        <location filename="../../src/gui/application/main.cpp" line="464"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="789"/>
+        <location filename="../../src/gui/application/main.cpp" line="791"/>
         <source>Welcome!</source>
         <translation>Vítejte!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="805"/>
+        <location filename="../../src/gui/application/main.cpp" line="807"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="806"/>
+        <location filename="../../src/gui/application/main.cpp" line="808"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Vítejte v Rosegardenu!&lt;/h2&gt;&lt;p&gt;Vítejte ve zvukovém a MIDI sekvenceru a hudebním editoru notového zápisu Rosegarden.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Pokud jste tak ještě neučinil, budete jistě chtít nainstalovat nějaké syntetizátorové přídavné moduly DSSI, nebo samostatný syntetizátorový program, například QSynth. Rosegarden sám o sobě nesyntetizuje zvuky z MIDI, takže bez uvedených programů neuslyšíte zhola nic.&lt;/li&gt;&lt;li&gt;Rosegarden používá pro nahrávání a přehrávání zvuku zvukový server JACK, a pro přehrávání z DSSI syntetizátorové přídavné moduly. Tyto funkce budou dostupné jen tehdy, když server JACK bude běžet.&lt;/li&gt;&lt;li&gt;Rosegarden má úplnou dokumentaci: podívejte se na &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;stránky programu Rosegarden&lt;/a&gt; na &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;příručku&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;návody&lt;/a&gt; a další informace!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden vám přináší družstvo dobrovolníků z celého světa. Abyste se dozvěděl víc, jděte na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;stránky programu Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
@@ -11277,7 +11289,7 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>dur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="298"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="289"/>
         <source>Synth plugin </source>
         <translation>Přídavný modul syntetizátoru</translation>
     </message>
@@ -11845,27 +11857,27 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
         <translation>zvukové vstupy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="194"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="193"/>
         <source>Start JACK automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="204"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="205"/>
         <source>General</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="210"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="211"/>
         <source>External audio editor path</source>
         <translation>Cesta k vnějšímu editoru zvuku</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="247"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="248"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
         <translation>Vnější zvukový editor &quot;%1&quot; nebyl nalezen nebo jej nelze spustit</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="247"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="248"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -11977,24 +11989,24 @@ Chcete-li i přesto provést vložení, zvažte použití jednoho z dalších ty
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="81"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="83"/>
         <source>Click to rename this instrument</source>
         <translation>Klepněte kvůli přejmenování tohoto nástroje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="94"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="96"/>
         <source>Click the button above to rename this instrument</source>
         <translation>Klepněte na tlačítko výše kvůli přejmenování tohoto nástroje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="198"/>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="376"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="200"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="378"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;žádný syntetizátor&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="201"/>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="380"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="203"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="382"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;žádný přídavný modul&gt;</translation>
     </message>
@@ -12699,7 +12711,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
         <translation>Prodloužit nebo &amp;zkrátit...</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentRescaleCommand.cpp" line="122"/>
+        <location filename="../../src/commands/segment/AudioSegmentRescaleCommand.cpp" line="124"/>
         <source>(rescaled)</source>
         <translation>(změněna délka)</translation>
     </message>
@@ -12769,7 +12781,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="97"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="100"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>Správa bank a programů MIDI</translation>
     </message>
@@ -12778,215 +12790,215 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
         <translation type="obsolete">Reset</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="120"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="123"/>
         <source>Device and Banks</source>
         <translation>Zařízení a banky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="121"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="124"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="122"/>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="236"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="125"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="239"/>
         <source>MSB</source>
         <translation>MSB</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="123"/>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="235"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="126"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="238"/>
         <source>LSB</source>
         <translation>LSB</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="143"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="146"/>
         <source>Add Bank</source>
         <translation>Přidat banku</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="144"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="147"/>
         <source>Add Key Mapping</source>
         <translation>Přidat tabulku přiřazení kláves v tónině</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="145"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="148"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="146"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="149"/>
         <source>Delete All</source>
         <translation>Smazat vše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="154"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="157"/>
         <source>Add a Bank to the current device</source>
         <translation>Přidat banku k současnému zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="156"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="159"/>
         <source>Add a Percussion Key Mapping to the current device</source>
         <translation>Přidat tabulku přiřazení kláves tóniny bicích k současnému zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="158"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="161"/>
         <source>Delete the current Bank or Key Mapping</source>
         <translation>Odstranit současnou banku nebo tabulku přiřazení kláves tóniny</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="160"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="163"/>
         <source>Delete all Banks and Key Mappings from the current Device</source>
         <translation>Odstranit všechny banky a tabulky přiřazení kláves tóniny ze současného zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="162"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="165"/>
         <source>Import...</source>
         <translation>Zavést...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="163"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="166"/>
         <source>Export...</source>
         <translation>Vyvést...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="169"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="172"/>
         <source>Import Bank and Program data from a Rosegarden file to the current Device</source>
         <translation>Zavést data banky a programů ze souboru programu Rosegarden do současného zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="170"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="173"/>
         <source>Export all Device and Bank information to a Rosegarden format  interchange file</source>
         <translation>Vyvést všechny informace o zařízení a bance ve formátu pro výměnu dat do souboru programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="172"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="175"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="173"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="176"/>
         <source>Paste</source>
         <translation>Vložit</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="181"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="184"/>
         <source>Copy all Program names from current Bank to clipboard</source>
         <translation>Kopírovat všechny názvy programů ze současné banky do schránky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="183"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="186"/>
         <source>Paste Program names from clipboard to current Bank</source>
         <translation>Vložit názvy programů ze schránky do současné banky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="220"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="223"/>
         <source>Options</source>
         <translation>Volby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="230"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="233"/>
         <source>Show Variation list based on </source>
         <translation>Ukázat seznam rozdílů podle </translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1087"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1090"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;nová banka&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1089"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1092"/>
         <source>&lt;new bank %1&gt;</source>
         <translation>&lt;nová banka %1&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1130"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1133"/>
         <source>&lt;new mapping&gt;</source>
         <translation>&lt;nová tabulka přiřazení kláves&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1132"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1135"/>
         <source>&lt;new mapping %1&gt;</source>
         <translation>&lt;nová tabulka přiřazení kláves %1&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1176"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1179"/>
         <source>Really delete this bank?</source>
         <translation>Skutečně chcete odstranit tuto banku?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1229"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1232"/>
         <source>Really delete this key mapping?</source>
         <translation>Skutečně chcete odstranit tuto tabulku přiřazení kláves k tónině?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1281"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1284"/>
         <source>Really delete all banks for </source>
         <translation>Skutečně chcete odstranit všechny banky pro </translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1560"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1567"/>
         <source>Import Banks from Device in File</source>
         <translation>Zavést banky ze zařízení v souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1561"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1568"/>
         <source>Rosegarden Device files</source>
         <translation>Soubory zařízení programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1562"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1569"/>
         <source>Rosegarden files</source>
         <translation>Soubory programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1563"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1570"/>
         <source>Sound fonts</source>
         <translation>Zvuková písma</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1564"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1571"/>
         <source>LinuxSampler configuration files</source>
         <translation>Soubory s nastavením programu LinuxSampler</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1565"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1572"/>
         <source>All files</source>
         <translation>Všechny soubory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1583"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1590"/>
         <source>Some internal error: cannot locate selected device</source>
         <translation>Vnitřní chyba: Vybrané zařízení nelze najít</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1593"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1600"/>
         <source>Some internal error: no device selected</source>
         <translation>Vnitřní chyba: Nevybráno žádné zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1753"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1762"/>
         <source>Export Device as...</source>
         <translation>Vyvést zařízení jako...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1775"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1784"/>
         <source>You have specified a directory</source>
         <translation>Zadali jste adresář</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1785"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1794"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Zadaný soubor již existuje. Chcete jej přepsat?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1814"/>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1818"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1823"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1827"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1855"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1864"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</translation>
     </message>
@@ -13866,12 +13878,13 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="802"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="823"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="813"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="829"/>
         <source>New Device</source>
         <translation>Nové zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="920"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="926"/>
         <source>http://rosegardenmusic.com/wiki/doc:device-manager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
@@ -15365,24 +15378,29 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="364"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="351"/>
+        <source>xdg-open (recommended)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="365"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="552"/>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="556"/>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="560"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="553"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="557"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="561"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="556"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="557"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
         <translation>Aby se změna zobrazovacího systému projevila, musíte Rosegarden spustit znovu.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="560"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="561"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
         <translation>Aby se změna vzhledu projevila, musíte Rosegarden spustit znovu.</translation>
     </message>
@@ -15459,12 +15477,12 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
         <translation type="obsolete">KPDF (KDE 3.x)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="351"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="352"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Používá se pro náhled vytvořeného výstupu programu LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="356"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="357"/>
         <source>Command-line file printing utility</source>
         <translation>Pomocný program pro tisk z příkazové řádky</translation>
     </message>
@@ -15473,17 +15491,17 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
         <translation type="obsolete">KPrinter (KDE 3)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="361"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
         <source>Gtk-LP (GNOME)</source>
         <translation>Gtk-LP (GNOME)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="363"/>
         <source>lpr (no GUI)</source>
         <translation>lpr (bez uživatelského rozhraní)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="363"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="364"/>
         <source>lp (no GUI)</source>
         <translation>lp (bez uživatelského rozhraní)</translation>
     </message>
@@ -15492,17 +15510,17 @@ Chcete se pokusit nalézt soubor ručně nebo se má přeskočit?</translation>
         <translation type="obsolete">HPLIP (QT4)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="365"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="366"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation>Používá se pro tisk vytvořeného výstupu programu LilyPond, aniž by se provedl jeho náhled</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="384"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="385"/>
         <source>External Applications</source>
         <translation>Vnější programy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="552"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="553"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Změny provedené v textuře pozadí hlavního okna se neprojeví, dokud program Rosegarden nespustíte znovu.</translation>
     </message>
@@ -16073,17 +16091,17 @@ Vzor textu ze souboru:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="47"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="45"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="48"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="46"/>
         <source>Instrument Parameters</source>
         <translation>Parametry nástroje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="158"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="153"/>
         <source>Track</source>
         <translation>Stopa</translation>
     </message>
@@ -16091,7 +16109,7 @@ Vzor textu ze souboru:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="69"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="66"/>
         <source>none</source>
         <translation>Žádný</translation>
     </message>
@@ -16578,22 +16596,22 @@ Chcete použít
 <context>
     <name>Rosegarden::LilyPondOptionsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="63"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="64"/>
         <source>LilyPond Export/Preview</source>
         <translation>Vyvedení do/Náhled programu LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="79"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="80"/>
         <source>Layout</source>
         <translation>Uspořádání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="86"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="87"/>
         <source>Headers</source>
         <translation>Hlavičky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="95"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="96"/>
         <source>Basic options</source>
         <translation>Základní možnosti</translation>
     </message>
@@ -16606,7 +16624,7 @@ Chcete použít
         <translation type="obsolete">Vybrané stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="126"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="127"/>
         <source>Compatibility level</source>
         <translation>Úroveň slučitelnosti</translation>
     </message>
@@ -16615,36 +16633,36 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;Nastavte verzi programu LilyPond, kterou jste nainstaloval. Rosegarden se dá používat pouze se stabilními verzemi LilyPondu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="131"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
         <source>LilyPond %1</source>
         <translation>LilyPond %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="131"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
         <source>2.6</source>
         <translation>2.6</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <source>2.8</source>
         <translation>2.8</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
         <source>2.10</source>
         <translation>2.10</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
         <source>2.12</source>
         <translation>2.12</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="139"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="140"/>
         <source>Paper size</source>
         <translation>Velikost papíru</translation>
     </message>
@@ -16653,47 +16671,47 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;Nastavit velikost papíru.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="145"/>
         <source>A3</source>
         <translation>A3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="145"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="146"/>
         <source>A4</source>
         <translation>A4</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="146"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="147"/>
         <source>A5</source>
         <translation>A5</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="147"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="148"/>
         <source>A6</source>
         <translation>A6</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="148"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="149"/>
         <source>Legal</source>
         <translation>Legal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="149"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="150"/>
         <source>US Letter</source>
         <translation>Americký dopis</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="150"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="151"/>
         <source>Tabloid</source>
         <translation>Tabloid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="151"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
         <source>do not specify</source>
         <translation>nestanoveno</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="153"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="154"/>
         <source>Landscape</source>
         <translation>na šířku</translation>
     </message>
@@ -16710,108 +16728,108 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;Nastavit různé volby pro značky v notovém zápisus.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="347"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="350"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="107"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
         <source>Export content</source>
         <translation>Vyvést obsah</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
         <source>All tracks</source>
         <translation>Všechny stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
         <source>Non-muted tracks</source>
         <translation>Neztlumené stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="114"/>
         <source>Selected track</source>
         <translation>Vybraná stopa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="114"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="115"/>
         <source>Selected segments</source>
         <translation>Vybrané části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="118"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="119"/>
         <source>Edited segments</source>
         <translation>Upravené části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="129"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
         <source>&lt;qt&gt;Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavte verzi programu LilyPond, kterou jste nainstaloval. Pokud máte novější verzi programu LilyPond, vyberte nejvyšší verzi, kterou Rosegarden podporuje.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
         <source>2.14</source>
         <translation type="unfinished">2.14</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
         <source>&lt;qt&gt;Set the paper size&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit velikost papíru.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="154"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
         <source>&lt;qt&gt;If checked, your score will print in landscape orientation instead of the default portrait orientation&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Je-li vybrána tato volba, bude váš notový zápis tisknut natočený na šířku namísto výchozího natočení na výšku&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="162"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="163"/>
         <source>Staff size</source>
         <translation>Velikost osnovy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="165"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="166"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vyberte velikost osnovy pro notový zápis.  LilyPond bude měnit velikost obsahu osnovy poměrně k této velikost.&lt;/p&gt;&lt;p&gt;Velikosti označené * mohou poskytnout nejlepší kvalitu při vykreslování.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="179"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="180"/>
         <source>%1 pt %2</source>
         <translation>%1 pt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="179"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="180"/>
         <source> *</source>
         <translation> *</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="188"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
         <source>Advanced options</source>
         <translation>Rozšířené volby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="211"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="200"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="200"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="201"/>
         <source>First</source>
         <translation>První</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="201"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
         <source>All</source>
         <translation>Vše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="204"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="205"/>
         <source>Export tempo marks </source>
         <translation>Vyvést značky tempa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="229"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="230"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Závorky pro notové osnovy stop lze nalézt v &lt;b&gt;Parametry stopy&lt;/b&gt; a lze jich použít k seskupování notových osnov různými způsoby&lt;/qt&gt;</translation>
     </message>
@@ -16821,9 +16839,8 @@ Chcete použít
         <translation>Tisknout krátké názvy osnov</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="233"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Užitečné pro rozsáhlé, složité notové zápisy. Vytiskne krátký název pokaždé, když je v notovém zápisu zalomení řádku, čímž je  snadnější sledovat, který řádek patří na stranách ke kterému nástroji.&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;Užitečné pro rozsáhlé, složité notové zápisy. Vytiskne krátký název pokaždé, když je v notovém zápisu zalomení řádku, čímž je  snadnější sledovat, který řádek patří na stranách ke kterému nástroji.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="246"/>
@@ -16900,7 +16917,7 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;Vybrat počet značek s tempem v notovém zápisu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="209"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
         <source>Export lyrics</source>
         <translation>Vyvést text písně</translation>
     </message>
@@ -16909,7 +16926,7 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;Nastavit polohu &lt;b&gt;textu písně/slov&lt;/b&gt; ve vztahu k notám.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="220"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="221"/>
         <source>Export beamings</source>
         <translation>Vyvést trámce</translation>
     </message>
@@ -16918,44 +16935,49 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;Zaškrtněte, aby Rosegarden vyvedl trámce do vašeho notového zápisu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="227"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="228"/>
         <source>Export track staff brackets</source>
         <translation>Vyvést závorky osnovy této stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="213"/>
         <source>Left</source>
         <translation>Vlevo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="110"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Vybrat stopy nebo části, které se mají vyvést.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="206"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="207"/>
         <source>&lt;qt&gt;Choose how often to show tempo marks in your score&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Vybrat, jak často ukazovat značkyk s tempem v notovém zápisu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="213"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="214"/>
         <source>Center</source>
         <translation>Umístit do středu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="214"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="215"/>
         <source>Right</source>
         <translation>Vpravo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="216"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
         <source>&lt;qt&gt;Set the position of the &lt;b&gt;lyrics&lt;/b&gt; in relation to the notes&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit polohu &lt;b&gt;textu písně/slov&lt;/b&gt; ve vztahu k notám.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="222"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="223"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Je-li vybrána tato volba, budou vyvedeny trámce Rosegardenu.  Jinak spočítá LilyPond trámce automaticky.&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="233"/>
+        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="244"/>
@@ -17064,7 +17086,7 @@ Chcete použít
         <translation>&lt;b&gt;lilypond&lt;/b&gt; spuštěn...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="276"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPond provedl zpracování souboru úspěšně, ale &lt;b&gt;%1&lt;/b&gt; neběžel!&lt;/p&gt;&lt;p&gt;Nastavte, prosím, platný %2 pod &lt;b&gt;Úpravy -&gt; Nastavení -&gt; Obecné -&gt; Vnější programy&lt;/b&gt; a zkuste to znovu.&lt;/p&gt;&lt;p&gt;Provedení ukončeno kvůli nepříjemným chybám.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -17104,17 +17126,17 @@ Chcete použít
         <translation>&lt;qt&gt;&lt;p&gt;Provedení ukončeno kvůli nepříjemným chybám.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="258"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="259"/>
         <source>Printing %1...</source>
         <translation>Probíhá tisk %1...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="267"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="268"/>
         <source>Previewing %1...</source>
         <translation>Náhled %1...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="274"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="275"/>
         <source>&lt;b&gt;%1&lt;/b&gt; started...</source>
         <translation>&lt;b&gt;%1&lt;/b&gt; spuštěn...</translation>
     </message>
@@ -17123,12 +17145,12 @@ Chcete použít
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;LilyPond provedl zpracování souboru úspěšně, ale &lt;b&gt;%1&lt;/b&gt; neběžel!&lt;/p&gt;&lt;p&gt;Nastavte, prosím, platný %2 pod &lt;b&gt;Nastavení -&gt; Nastavit Rosegarden -&gt; Obecné -&gt; Vnější programy&lt;/b&gt; a zkuste to znovu.&lt;/p&gt;&lt;p&gt;Provedení ukončeno kvůli nepříjemným chybám.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
         <source>file printer</source>
         <translation>Tisk do souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="277"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="278"/>
         <source>PDF viewer</source>
         <translation>Prohlížeč PDF</translation>
     </message>
@@ -17348,7 +17370,7 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
         <translation type="obsolete">&lt;qt&gt;Nastavit program MIDI nebo &amp;quot;cestu&amp;quot;&lt;/p&gt;&lt;p&gt;Toto bude změněno při nahrání nového souboru a (v případě, že by tak byl Rosegarden nastaven) při spuštění přehrávání&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="112"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="191"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit obměny programu výše, pokud jsou dostupné ve studiu.&lt;/qt&gt;</translation>
     </message>
@@ -17361,47 +17383,45 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Zapněte tuto volbu, abyste tím pověděl Rosegardenu, že toto je nástroj bicích. Toto vám umožní přístup k jakémukoli přiřazení kláves bicích a/nebo bicím ve stylu Roland, které by vámi byly nastaveny ve studiu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="97"/>
         <source>auto</source>
-        <translation>Automaticky</translation>
+        <translation type="obsolete">Automaticky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="98"/>
         <source>fixed</source>
-        <translation>Pevný</translation>
+        <translation type="obsolete">Pevný</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="110"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="139"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Stanovit banku MIDI, ze které se mají vybírat programy&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="111"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="165"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Stanovit program MIDI nebo &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="111"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zapněte tuto volbu, abyste tím pověděl Rosegardenu, že toto je nástroj bicích. Toto vám umožní přístup k jakémukoli přiřazení kláves bicích a bicím, které by vámi byly nastaveny ve studiu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="114"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="204"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Automaticky&lt;/i&gt;, přidělit kanál automaticky; &lt;i&gt;Pevný&lt;/i&gt;, připevnit kanál k číslu nástroje&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="121"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="117"/>
         <source>Bank</source>
         <translation>Banka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="122"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="176"/>
         <source>Variation</source>
         <translation>Rozdíl</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="123"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="150"/>
         <source>Program</source>
         <translation>Program</translation>
     </message>
@@ -17410,32 +17430,57 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
         <translation type="obsolete">Výstupní kanál</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="124"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="104"/>
         <source>Percussion</source>
         <translation>Bicí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="125"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="124"/>
+        <source>&lt;qt&gt;Send bank select&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="157"/>
+        <source>&lt;qt&gt;Send program change&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="183"/>
+        <source>&lt;qt&gt;Send bank select for variation&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="202"/>
         <source>Channel</source>
         <translation>Kanál</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="154"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="214"/>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="215"/>
+        <source>Fixed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="225"/>
         <source>&lt;qt&gt;Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Použít změny programu z vnějšího zdroje kvůli změně tohoto ovládacího prvku (platí pouze pro současně činnou stopu) [Shift + P]&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="157"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="223"/>
         <source>Receive external</source>
         <translation>Příjem od vnějšího</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="286"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="300"/>
         <source>[ %1 ]</source>
         <translation>[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="286"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="300"/>
         <source>No connection</source>
         <translation>Není připojení</translation>
     </message>
@@ -17508,67 +17553,67 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
 <context>
     <name>Rosegarden::ManageMetronomeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="68"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="67"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="87"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="81"/>
         <source>Metronome Instrument</source>
         <translation>Nástroj metronomu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="93"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="87"/>
         <source>Device</source>
         <translation>Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="116"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="110"/>
         <source>%1 - %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="118"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="112"/>
         <source>%1 - No connection</source>
         <translation>%1 - Není připojení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="126"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="120"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="134"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="127"/>
         <source>Beats</source>
         <translation>Doby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="133"/>
         <source>Resolution</source>
         <translation>Rozlišení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="142"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="135"/>
         <source>&lt;qt&gt;The metronome can sound bars only, bars and beats, or bars, beats and sub-beats.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Metronome může vydávat zvuk pouze na taktech, taktech a dobách, nebo taktech, dobách a vedlejších dobách.  Posledně jmenovaný režim může být obzvláště užitečný při hraní ve složených taktových označeních jako například 12/8.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="143"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="136"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="144"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="137"/>
         <source>Bars only</source>
         <translation>Pouze takty</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="145"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="138"/>
         <source>Bars and beats</source>
         <translation>Takty a doby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="146"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="139"/>
         <source>Bars, beats, and sub-beats</source>
         <translation>Takty, doby a vedlejší doby</translation>
     </message>
@@ -17577,82 +17622,82 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
         <translation type="obsolete">Taktové čáry, doby a figurace</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="150"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="143"/>
         <source>Bar velocity</source>
         <translation>Síla tónu taktu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="158"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="151"/>
         <source>Beat velocity</source>
         <translation>Síla tónu doby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="159"/>
         <source>Sub-beat velocity</source>
         <translation>Síla tónu vedlejší doby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="183"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="176"/>
         <source>Pitch</source>
         <translation>Výška tónu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="95"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="89"/>
         <source>&lt;qt&gt;Choose the device you want to use to play the metronome&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Vybrat zařízení, na kterém má hrát metronom&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="128"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="122"/>
         <source>&lt;qt&gt;Choose the instrument you want to use to play the metronome (typically #10)&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Vybrat nástroj, se kterým má hrát metronom (typicky #10)&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="152"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="145"/>
         <source>&lt;qt&gt;Controls how forcefully the bar division notes will be struck.  (These are typically the loudest of all.)&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ovládací prvky pro to, jak silně budou udeřeny tóny na taktech.  (Typicky jsou nejhlasitější ze všech.)&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="160"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="153"/>
         <source>&lt;qt&gt;Controls how forcefully the beat division notes will be struck.  (These are typically more quiet than beat division notes.)&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ovládací prvky pro to, jak silně budou udeřeny tóny na dobách.  (Typicky jsou tišší než ty na taktech.)&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="168"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="161"/>
         <source>&lt;qt&gt;Controls how forcefully the sub-beat division notes will be struck.  (These are typically the most quiet of all, and are not heard unless you are working in compound time.)&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ovládací prvky pro to, jak silně budou udeřeny tóny na vedlejších dobách.  (Typicky jsou nejtišejší ze všech, a nejsou slyšet, pokud nepracujete ve složených taktových označeních.)&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="184"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="177"/>
         <source>&lt;qt&gt;It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Obvykle se jako metronom používá nástroj bicích, takže výška tónu stanovuje, který druh bubnu zazní při každém úderu. Pro každé ťuknutí/úhoz na takt, dobu a vedlejší dobu lze nastavit rozdílné výšky tónů.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="190"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="183"/>
         <source>for Bar</source>
         <translation>na taktovou čáru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="191"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="184"/>
         <source>for Beat</source>
         <translation>na dobu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="192"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="185"/>
         <source>for Sub-beat</source>
         <translation>na vedlejší dobu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="196"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="189"/>
         <source>Metronome Activated</source>
         <translation>Metronom je zapnut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="199"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="192"/>
         <source>Playing</source>
         <translation>Probíhá přehrávání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="201"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="194"/>
         <source>Recording</source>
         <translation>Probíhá záznam</translation>
     </message>
@@ -17661,7 +17706,7 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
         <translation type="obsolete">Přídavné moduly syntetizátorů</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="327"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="318"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -18109,7 +18154,7 @@ Poklepáním otevřete editor značek.</translation>
         <translation type="obsolete">Probíhá odstranění výběru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1825"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1829"/>
         <source>Unknown note insert action %1</source>
         <translation>Krok vložení neznámé noty %1</translation>
     </message>
@@ -18122,22 +18167,22 @@ Poklepáním otevřete editor značek.</translation>
         <translation type="obsolete">Probíhá rušení kvantizace...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="322"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="326"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="328"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="332"/>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
         <translation>%1%2 - Část%3Stopa%4#%5 - %6</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="338"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="342"/>
         <source>%1%2 - All Segments - %3</source>
         <translation>%1%2 - Všechny části - %3</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="345"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="349"/>
         <source>%1%2 - %n Segment(s) - %3</source>
         <translation>
             <numerusform>%1%2 - Část - %3</numerusform>
@@ -18158,69 +18203,69 @@ Poklepáním otevřete editor značek.</translation>
         <translation type="obsolete">Nepodporovaný typ události</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="599"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="603"/>
         <source> Grid: </source>
         <translation> Mřížka: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="615"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="619"/>
         <source>None</source>
         <translation>Žádná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="617"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="621"/>
         <source>Unit</source>
         <translation>Jednotka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="619"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="623"/>
         <source>Beat</source>
         <translation>Doba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="621"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="625"/>
         <source>Bar</source>
         <translation>Takt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="641"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="645"/>
         <source> Velocity: </source>
         <translation> Rychlost:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="659"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="663"/>
         <source> Quantize: </source>
         <translation> Kvantizovat: </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="677"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="681"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1548"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1552"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1555"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1559"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1562"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1566"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1575"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1730"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1825"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1579"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1734"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1829"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2207"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="2211"/>
         <source>Estimated key signature shown</source>
         <translation>Ukazuje se zjištěné předznamenání</translation>
     </message>
@@ -18233,17 +18278,17 @@ Poklepáním otevřete editor značek.</translation>
         <translation type="obsolete">%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1343"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1347"/>
         <source>Estimated time signature shown</source>
         <translation>Ukazuje se odhadované označení taktu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1431"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1435"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1432"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1436"/>
         <source>By number of semitones: </source>
         <translation>Zadejte počet půltónů, o které se má převádět:</translation>
     </message>
@@ -18264,17 +18309,17 @@ Poklepáním otevřete editor značek.</translation>
         <translation type="obsolete">Probíhá nastavování rychlostí...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1112"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1116"/>
         <source>Trigger Segment</source>
         <translation>Spustit část</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1122"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1126"/>
         <source>Remove Triggers</source>
         <translation>Odebrat spouštěcí značky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="298"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="302"/>
         <source>Matrix</source>
         <translation>Tabulka</translation>
     </message>
@@ -18291,7 +18336,7 @@ Poklepáním otevřete editor značek.</translation>
         <translation type="obsolete">%1 - Všechny segmenty - %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1730"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1734"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
         <translation>Nelze vložit notu: nebyla vybrána doba trvání v mřížce</translation>
     </message>
@@ -22087,37 +22132,37 @@ Podívejte se na Úpravy -&gt; Nastavení -&gt; Zvuk.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="332"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="322"/>
         <source>Initializing plugin manager...</source>
         <translation>Probíhá inicializace správce přídavných modulů...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="375"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="365"/>
         <source>Initializing view...</source>
         <translation>Probíhá inicializace zobrazení...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="344"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="334"/>
         <source>Special Parameters</source>
         <translation>Zvláštní parametry</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="426"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="416"/>
         <source>Starting sequence manager...</source>
         <translation>Probíhá spuštění správce pořadí...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="469"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="459"/>
         <source>Clearing studio data...</source>
         <translation>Probíhá mazání dat studia...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="489"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="479"/>
         <source>Starting...</source>
         <translation>Spouští se...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1034"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1018"/>
         <source>  Zoom:  </source>
         <translation>  Zvětšení:  </translation>
     </message>
@@ -22126,153 +22171,153 @@ Podívejte se na Úpravy -&gt; Nastavení -&gt; Zvuk.</translation>
         <translation type="obsolete">stav</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1177"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1351"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1844"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2335"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1161"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1335"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1826"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2297"/>
         <source>%1 - %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1541"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1523"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Soubor &quot;%1&quot; neexistuje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1546"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1528"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation>Soubor &quot;%1&quot; je vlastně adresář</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1554"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1536"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation>Nemáte oprávnění ke čtení pro &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1644"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1626"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>Pro tento dokument byl nalezen automaticky uložený soubor
 Chcete jej otevřít?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1791"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6798"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1773"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6588"/>
         <source>Untitled</source>
         <translation>Bez názvu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1804"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2158"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2324"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1786"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2120"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2286"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation>Nepodařilo se uložit dokument v %1
 Chyba byla: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1806"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2161"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2327"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1788"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2123"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2289"/>
         <source>Could not save document at %1</source>
         <translation>Nepodařilo se uložit dokument v %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1892"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1854"/>
         <source>Opening a new application window...</source>
         <translation>Otevírá se nové aplikační okno...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1903"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1865"/>
         <source>Creating new document...</source>
         <translation>Vytváří se nový dokument...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1969"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1931"/>
         <source>Malformed URL
 %1</source>
         <translation>Chybně formulovaná adresa URL
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2018"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2124"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1980"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2086"/>
         <source>Opening file...</source>
         <translation>Otevírá se soubor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2045"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8487"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2007"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8277"/>
         <source>All supported files</source>
         <translation>Všechny podporované soubory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2046"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2080"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2295"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2008"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2042"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2257"/>
         <source>Rosegarden files</source>
         <translation>Soubory programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2047"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4017"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4053"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2009"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3958"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3994"/>
         <source>MIDI files</source>
         <translation>Soubory MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2048"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2081"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2301"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3966"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4018"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4054"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4322"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4358"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4565"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4601"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5368"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5407"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2010"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2043"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2263"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3907"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3959"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3995"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4263"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4299"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4506"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4542"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5187"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5226"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5265"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5299"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5333"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5446"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5480"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5514"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5627"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8488"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8278"/>
         <source>All files</source>
         <translation>Všechny soubory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2044"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2079"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2041"/>
         <source>Open File</source>
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="961"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="945"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1933"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1895"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1989"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2099"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3983"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4035"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4071"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4339"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4375"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4582"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4618"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8501"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1951"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2061"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3924"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3976"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4012"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4280"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4316"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4523"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4559"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8291"/>
         <source>Cannot open file %1</source>
         <translation>Nelze otevřít soubor %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2141"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2103"/>
         <source>Saving file...</source>
         <translation>Ukládá se soubor...</translation>
     </message>
@@ -22281,17 +22326,17 @@ Chyba byla: %2</translation>
         <translation type="obsolete">Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2252"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2214"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Promiňte.&lt;br&gt;&quot;%1&quot; není platným souborovým názvem.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2260"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2222"/>
         <source>You have specified a folder/directory.</source>
         <translation>Zadal jste složku/adresář.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2268"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2230"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Zadaný soubor již existuje. Chcete jej přepsat?</translation>
     </message>
@@ -22300,22 +22345,22 @@ Chyba byla: %2</translation>
         <translation type="obsolete">Probíhá ukládání souboru %1 pod novým názvem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2295"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2257"/>
         <source>Rosegarden templates</source>
         <translation>Předlohy programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2297"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2259"/>
         <source>Save as template...</source>
         <translation>Uložit jako předlohu...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2297"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2259"/>
         <source>Save as...</source>
         <translation>Uložit jako...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2351"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2313"/>
         <source>Closing file...</source>
         <translation>Zavírá se soubor...</translation>
     </message>
@@ -22328,69 +22373,69 @@ Chyba byla: %2</translation>
         <translation type="obsolete">Náhled...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2364"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2326"/>
         <source>Exiting...</source>
         <translation>Probíhá ukončení...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2376"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2338"/>
         <source>Cutting selection...</source>
         <translation>Probíhá vyjmutí výběru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2388"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2350"/>
         <source>Copying selection to clipboard...</source>
         <translation>Probíhá kopírování výběru do schránky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2399"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2361"/>
         <source>Clipboard is empty</source>
         <translation>Schránka je prázdná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2402"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2364"/>
         <source>Inserting clipboard contents...</source>
         <translation>Probíhá vkládání obsahu schránky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2501"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2463"/>
         <source>Duration of empty range to insert</source>
         <translation>Doba trvání prázdného úseku k vložení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2605"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2622"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2567"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2584"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation>Tato funkce nevyžaduje výběr více než jedné části.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2646"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2608"/>
         <source>Can&apos;t join Audio segments</source>
         <translation>Nelze spojit zvukové části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2732"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2694"/>
         <source>rescaling an audio file</source>
         <translation>probíhá změna délky zvukového souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2750"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2712"/>
         <source>Rescaling audio file...</source>
         <translation>Probíhá změna délky zvukového souboru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2768"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2730"/>
         <source>Generating audio preview...</source>
         <translation>Probíhá vytváření náhledu na zvuk...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2800"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5783"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2763"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5602"/>
         <source>Warning</source>
         <translation>Upozornění</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2801"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2764"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -22399,13 +22444,13 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2872"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2835"/>
         <source>Jog Selection</source>
         <translation>Krokový posun výběru</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3016"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3050"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2979"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3013"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
             <numerusform>Rozdělit část v čase</numerusform>
@@ -22414,86 +22459,86 @@ Chcete cestu nastavit nyní?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3169"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3132"/>
         <source>Segment Start Time</source>
         <translation>Počáteční čas části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3116"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3179"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3079"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3142"/>
         <source>Set Segment Start Times</source>
         <translation>Nastavit počáteční časy částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3117"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3180"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3080"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3143"/>
         <source>Set Segment Start Time</source>
         <translation>Nastavit počáteční čas části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3213"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3176"/>
         <source>Segment Duration</source>
         <translation>Doba trvání části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3226"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3189"/>
         <source>Set Segment Durations</source>
         <translation>Nastavit doby trvání částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3227"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3190"/>
         <source>Set Segment Duration</source>
         <translation>Nastavit dobu trvání části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3338"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6453"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3301"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6243"/>
         <source>Set Global Tempo</source>
         <translation>Nastavit celkové tempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3411"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3374"/>
         <source>Toggle the toolbar...</source>
         <translation>Přepnout nástrojový pruh...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3422"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3385"/>
         <source>Toggle the tools toolbar...</source>
         <translation>Přepnout nástrojový pruh ovládacích nástrojů...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3433"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3396"/>
         <source>Toggle the tracks toolbar...</source>
         <translation>Přepnout nástrojový pruh pro stopy...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3444"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3407"/>
         <source>Toggle the editor toolbar...</source>
         <translation>Přepnout nástrojový pruh pro editor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3455"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3418"/>
         <source>Toggle the transport toolbar...</source>
         <translation>Přepnout nástrojový pruh pro přesun...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3466"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3429"/>
         <source>Toggle the zoom toolbar...</source>
         <translation>Přepnout nástrojový pruh pro zvětšení...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3477"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3496"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3440"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3459"/>
         <source>Toggle the Transport</source>
         <translation>Přepnout přesun</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3611"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3574"/>
         <source>Toggle the statusbar...</source>
         <translation>Přepnout stavový řádek...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3679"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3642"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -22504,164 +22549,164 @@ Chcete cestu nastavit nyní?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3682"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3645"/>
         <source>Join tool not yet implemented</source>
         <translation>Nástroj pro spojování nebyl dosud proveden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3945"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3886"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>Chcete vrátit upravené dokumenty do stavu předešlých uložených verzí?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3964"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3905"/>
         <source>Import Rosegarden Project File</source>
         <translation>Zavést soubor projektu programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3965"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5367"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3906"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5186"/>
         <source>Rosegarden Project files</source>
         <translation>Soubory s projekty programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6804"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6594"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Předtím, než začnete s nahráváním zvuku, musíte pro tuto skladbu vybrat souborový název.&lt;/p&gt;&lt;p&gt;Zvukové soubory budou ukládány do &lt;b&gt;%1&lt;/b&gt; jako &lt;b&gt;rg-[&lt;i&gt;název souboru&lt;/i&gt;]-[&lt;i&gt;nástroj&lt;/i&gt;]-&lt;i&gt;datum&lt;/i&gt;_&lt;i&gt;čas&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;. Před začátkem nahrávání můžete stejně tak přejmenovat zvukové nástroje. Podívejte se, prosím, kvůli více informacím na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7109"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6899"/>
         <source>Input</source>
         <translation>Vstup</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8242"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8032"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1242"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1556"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1643"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1804"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1806"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1971"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1989"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2099"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2158"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2161"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2251"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2259"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2267"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2324"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2327"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2605"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2622"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2646"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2671"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3055"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3081"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3944"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3983"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4035"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4071"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4193"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4339"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4375"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4410"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4582"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4618"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4653"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5092"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5348"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5352"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5388"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5434"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5468"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5502"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5568"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5610"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5658"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5775"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5797"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5827"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5840"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5862"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5936"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5940"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5976"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6800"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6896"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7018"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7031"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8269"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8428"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8446"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8449"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8459"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8501"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1226"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1538"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1625"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1786"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1788"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1933"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1951"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2061"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2120"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2123"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2213"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2221"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2229"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2286"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2289"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2567"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2584"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2608"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2633"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3018"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3044"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3885"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3924"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3976"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4012"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4134"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4280"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4316"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4351"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4523"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4559"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4594"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4911"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5167"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5171"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5207"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5253"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5287"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5321"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5387"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5429"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5477"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5594"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5616"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5641"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5654"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5676"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5734"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5736"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5770"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6590"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6686"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6808"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6821"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8059"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8218"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8236"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8239"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8249"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8291"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8249"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8039"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8753"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8543"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8754"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8544"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Používáte verzi %1.  Verze %2 je nyní dostupná.&lt;/p&gt;&lt;p&gt;Poraďte se, prosím, s &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;stránkami programu Rosegarden &lt;/a&gt; kvůli dalším informacím.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4016"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3957"/>
         <source>Open MIDI File</source>
         <translation>Otevřít soubor MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4052"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3993"/>
         <source>Merge MIDI File</source>
         <translation>Připojit soubor MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4179"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4120"/>
         <source>Importing MIDI file...</source>
         <translation>Probíhá zavedení souboru MIDI...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4218"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4159"/>
         <source>Calculating notation...</source>
         <translation>Probíhá výpočet notového zápisu...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4271"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4212"/>
         <source>Calculate Notation</source>
         <translation>Vypočítat notový zápis</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4320"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4356"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4261"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4297"/>
         <source>Open X11 Rosegarden File</source>
         <translation>Otevřít soubor programu Rosegarden X 11</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4321"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4357"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4262"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4298"/>
         <source>X11 Rosegarden files</source>
         <translation>Soubory programu Rosegarden X11</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4390"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4331"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>Zavádí se soubor Rosegarden X11...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4411"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4352"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation>Nelze nahrát soubor programu Rosegarden X 11. Vypadá to, že je poškozen.</translation>
     </message>
@@ -22734,202 +22779,202 @@ Chcete cestu nastavit nyní?</translation>
         <translation type="obsolete">Programy pomocníků nebyly nalezeny</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5568"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5387"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nepodařilo se otevřít dočasný soubor pro vyvedení z LilyPondu.&lt;/p&gt;&lt;p&gt;Pravděpodobně to znamená, že ukládací prostor na disku &lt;pre&gt;%1&lt;/pre&gt;je zcela zaplněn.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5348"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5167"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Proces sekvenceru programu Rosegarden byl nečekaně ukončen.  Zvuk a záznam nebude pro toto sezení dostupný.
 Chcete-li obnovit funkci zvuku, ukončete a znovu spusťte program Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="326"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="316"/>
         <source>Starting sequencer...</source>
         <translation>Spouští se sekvencer...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2291"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2253"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Probíhá ukládání souboru %1 pod novým názvem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2293"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2255"/>
         <source> as a template </source>
         <translation> jako předloha </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2672"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2634"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
         <translation>Nelze rozbalit části se zvukem s figurací</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3056"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3019"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation>Čas rozdělení není uvnitř vybrané části.
 Nebude rozdělena žádná část.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3082"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3045"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Pro vytvoření předtaktí misí alespoň jedna část ve vašem výběru začínat na začátku skladby.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3091"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3054"/>
         <source>Anacrusis Amount</source>
         <translation>Množství předtaktí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3106"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3069"/>
         <source>Create Anacrusis</source>
         <translation>Vytvořit předtaktí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3136"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3099"/>
         <source>Insert Corrected Tempo and Time Signature</source>
         <translation>Vložit opravené tempo a taktové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3147"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3110"/>
         <source>Remove Original Tempo and Time Signature</source>
         <translation>Odstranit původní tempo a taktové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4563"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4599"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4504"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4540"/>
         <source>Open MusicXML File</source>
         <translation>Otevřít soubor MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4633"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4574"/>
         <source>Importing MusicXML file...</source>
         <translation>Zavádí se soubor MusicXML...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4654"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4595"/>
         <source>Can&apos;t load MusicXML file:
 </source>
         <translation>Nelze zavést soubor MusicXML:
 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5352"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5171"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Sekvencer programu Rosegarden nebylo možné spustit. Zvuk a záznam tedy nebude pro toto sezení dostupný.
 Informace o správném nastavení zvuku a MIDI naleznete na adrese http://rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5364"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5183"/>
         <source>Exporting Rosegarden Project file...</source>
         <translation>Vyvádí se soubor s projektem programu Rosegarden...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5369"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5408"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5188"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5227"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5266"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5300"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5334"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5447"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5481"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5515"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5628"/>
         <source>Export as...</source>
         <translation>Vyvést jako...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5388"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5207"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Ukládání souboru programu Rosegarden do balíku selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5403"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5419"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5222"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5238"/>
         <source>Exporting MIDI file...</source>
         <translation>Probíhá vyvedení souboru MIDI...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5406"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5225"/>
         <source>Standard MIDI files</source>
         <translation>Běžné soubory MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5434"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5468"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5502"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5658"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5253"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5287"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5321"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5477"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Vyvedení se nepodařilo.  Soubor nebylo možné otevřít pro zápis.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5442"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5458"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5261"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5277"/>
         <source>Exporting Csound score file...</source>
         <translation>Probíhá vyvedení souboru s notovým zápisem pro Csound...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5445"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5264"/>
         <source>Csound files</source>
         <translation>Soubory Csound</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5476"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5491"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5295"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5310"/>
         <source>Exporting Mup file...</source>
         <translation>Probíhá vyvedení souboru Mup...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5479"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5298"/>
         <source>Mup files</source>
         <translation>Soubory Mup</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5510"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5595"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5329"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5414"/>
         <source>Exporting LilyPond file...</source>
         <translation>Probíhá vyvedení souboru programu LilyPond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5513"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5332"/>
         <source>LilyPond files</source>
         <translation>Soubory programu LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5527"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5346"/>
         <source>Printing with LilyPond...</source>
         <translation>Probíhá tisk s LilyPondem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5543"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5362"/>
         <source>Previewing LilyPond file...</source>
         <translation>Zobrazuje se náhled na soubor programu LilyPond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5586"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5405"/>
         <source>LilyPond Preview Options</source>
         <translation>Možnosti zobrazení náhledu pro program LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5587"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5406"/>
         <source>LilyPond preview options</source>
         <translation>Možnosti zobrazení náhledu pro program LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5623"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5644"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5442"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5463"/>
         <source>Exporting MusicXML file...</source>
         <translation>Probíhá vyvedení souboru MusicXML...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4564"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4600"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5626"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4505"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4541"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5445"/>
         <source>XML files</source>
         <translation>Soubory XML</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5784"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5603"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -22938,12 +22983,12 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5830"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5644"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5831"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5645"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
@@ -22952,72 +22997,72 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6357"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6147"/>
         <source>Move playback pointer to time</source>
         <translation>Přesunout ukazatel přehrávání na dobu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6371"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6161"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6439"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6229"/>
         <source>Replace Tempo Change at %1</source>
         <translation>Nahradit změnu tempa na místě %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6469"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6259"/>
         <source>Set Global and Default Tempo</source>
         <translation>Nastavit celkové a výchozí tempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6492"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6282"/>
         <source>Move Tempo Change</source>
         <translation>Přesunout změnu tempa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6527"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6317"/>
         <source>new marker</source>
         <translation>nová značka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6528"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6318"/>
         <source>no description</source>
         <translation>bez popisu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7018"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6808"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation>Sekvenceru se nepodařilo přidat zvukový soubor %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7031"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6821"/>
         <source>Sequencer failed to remove audio file id %1</source>
         <translation>Sekvenceru se nepodařilo odebrat id zvukového souboru %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7092"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6882"/>
         <source>Modify Segment label</source>
         <translation>Upravit označení části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7094"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6884"/>
         <source>Modify Segments label</source>
         <translation>Upravit označení částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7096"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6886"/>
         <source>Relabelling selection...</source>
         <translation>Probíhá změna označení výběru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7109"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6899"/>
         <source>Enter new label</source>
         <translation>Zadat nové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8205"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7995"/>
         <source>Play List</source>
         <translation>Seznam přehrávání</translation>
     </message>
@@ -23026,79 +23071,79 @@ Chcete cestu nastavit nyní?</translation>
         <translation type="obsolete">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8256"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8046"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8374"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8164"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Probíhá řazení nouzových událostí MIDI do řady pro přenos...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8428"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8218"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Skutečně chcete toto uložit jako svoje výchozí studio?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8434"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8224"/>
         <source>Saving current document as default studio...</source>
         <translation>Probíhá ukládání současného dokumentu jako výchozího studia...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8446"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8236"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Nepodařilo se automaticky uložit dokument v %1
 Chyba byla: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8449"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8239"/>
         <source>Could not auto-save document at %1</source>
         <translation>Nepodařilo se automaticky uložit dokument pod %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8459"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8249"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Skutečně chcete zavést svoje výchozí studio a ztratit to nynější?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8486"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8276"/>
         <source>Import Studio from File</source>
         <translation>Zavést studio ze souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8535"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8325"/>
         <source>Import Studio</source>
         <translation>Zavést studio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8864"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8654"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Neplatná cesta ke zvuku&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8865"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8655"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Nebudete moci nahrávat zvuk nebo táhnout a upouštět zvukové soubory na Rosegarden, dokud to neopravíte v &lt;b&gt;Pohled -&gt; Vlastnosti dokumentu -&gt; Zvuk&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8869"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8659"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Vytvořena cesta ke zvuku&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8870"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8660"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden vytvořil cestu ke zvuku &quot;%1&quot; k použití pro nahrávání zvuku, a pro přijímání upuštěných zvukových souborů.&lt;/p&gt;&lt;p&gt;Pokud byste si přál používat jinou cestu, změnu proveďte v &lt;b&gt;Pohled -&gt; Vlastnosti dokumentu -&gt; Zvuk&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8876"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8666"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cesta ke zvuku &quot;%1&quot; neexistovala, a nepodařilo se ji vytvořit.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8881"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8671"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cesta ke zvuku &quot;%1&quot; existuje, ale není zapisovatelná.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
@@ -23111,12 +23156,12 @@ Chyba byla: %2</translation>
         <translation>&lt;qt&gt;&lt;p&gt;Klepněte a táhněte nahoru, dolů, doleva nebo doprava kvůli změně hodnoty.&lt;/p&gt;&lt;p&gt;Dvojité klepnutí pro přímé zadání hodnoty.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="453"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="506"/>
         <source>Select a new value</source>
         <translation>Vybrat novou hodnotu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="454"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="507"/>
         <source>Enter a new value</source>
         <translation>Zadat novou hodnotu</translation>
     </message>
@@ -23307,12 +23352,12 @@ Chyba byla: %2</translation>
 <context>
     <name>Rosegarden::SegmentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="89"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="90"/>
         <source>Segment</source>
         <translation>Část</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="90"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="91"/>
         <source>Segment Parameters</source>
         <translation>Parametry části</translation>
     </message>
@@ -23333,7 +23378,7 @@ Chyba byla: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="142"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="281"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="288"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
@@ -23348,12 +23393,17 @@ Chyba byla: %2</translation>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="159"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="158"/>
+        <source>&lt;qt&gt;Click to edit the segment label for any selected segments&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="166"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="161"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="168"/>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Upravit označení části pro jakoukoli vybranou část&lt;/qt&gt;</translation>
     </message>
@@ -23362,131 +23412,131 @@ Chyba byla: %2</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Když je zapnuto, budou se všechny vybrané části opakovat do té doby, než začne další část, nebo dokud skladba neskončí.&lt;/p&gt;&lt;p&gt;Při prohlížení v editoru notového zápisu nebo při tisku prostřednictvím programu LilyPond, budou tyto části označeny opakovacími závorkami.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;Tyto lze používat ve spojení se zvláštními směrnicemi programu LilyPond pro vyvedení pro vytvoření opakování s prvními a druhými náhradními zakončeními. Prohlédněte si návod na rosegardenmusic.com. [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="169"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="176"/>
         <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Když je zapnuto, budou se všechny vybrané části opakovat do té doby, než začne další část, nebo dokud skladba neskončí.&lt;/p&gt;&lt;p&gt;Při prohlížení v editoru notového zápisu nebo při tisku prostřednictvím programu LilyPond, budou tyto části označeny opakovacími závorkami.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;Tyto lze používat ve spojení se zvláštními směrnicemi programu LilyPond pro vyvedení pro vytvoření opakování s prvními a druhými náhradními zakončeními. Prohlédněte si návod na rosegardenmusic.com. [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="200"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="207"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zvýšit nebo snížit přehrávání všech vybraných částí o tento počet půltónů&lt;/p&gt;&lt;p&gt;&lt;i&gt;POZNÁMKA: Tento ovládací prvek mění části, které již existují.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Použijte ovládací prvek pro převedení v &lt;b&gt;Parametry stopy&lt;/b&gt; pod &lt;b&gt;Vytvořit části&lt;/b&gt; kvůli výběru této hodnoty jako přednastavení pro nově skládané nebo nově nahrávané části.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="217"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="224"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zpozdit přehrávání všech částí o tento počet milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;POZNÁMKA: Rosegarden nepodporuje záporné zpoždění. Pokud potřebujete účinek záporného zpoždění, nastavte začátek skladby před takt 1, a posuňte části doleva. Zatímco to budete provádět, můžete kvůli jemnému ovládání podržet &lt;b&gt;shift&lt;/b&gt;. Setkáte se ovšem se zvláštními účinky tohoto kroku na znázornění not v editoru notového zápisu .&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="240"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="247"/>
         <source>&lt;qt&gt;&lt;p&gt;Change the color of any selected segments&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Změnit barvu každé vybrané části&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="261"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="268"/>
         <source>Linked segment parameters</source>
         <translation>Parametry propojené části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="286"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="293"/>
         <source>Change</source>
         <translation>Změnit</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="288"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="295"/>
         <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Upravit vztažné převedení na propojené části&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="296"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="303"/>
         <source>Reset</source>
         <translation>Nastavit znovu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="298"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="305"/>
         <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit vztažné převedení na propojené části znovu na nulu&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="354"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="361"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="392"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="744"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="399"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="751"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="459"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="466"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="475"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="482"/>
         <source>Add New Color</source>
         <translation>Přidat novou barvu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="881"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="927"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="888"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="934"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="882"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="889"/>
         <source>Existing transpositions on selected linked segments must be removed
 before new transposition can be applied.</source>
         <translation>Stávající převedení na vybraných propojených částech musí být odstraněna,
 dříve než lze použít nové převedení.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="928"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="935"/>
         <source>Remove transposition on selected linked segments?</source>
         <translation>Odstranit převedení na vybraných propojených částech?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1021"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1028"/>
         <source>New Color Name</source>
         <translation>Název nové barvy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1022"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1029"/>
         <source>Enter new name</source>
         <translation>Zadat nový název</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1024"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1031"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1061"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1068"/>
         <source>Highest playable note</source>
         <translation>Nejvyšší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1081"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1088"/>
         <source>Lowest playable note</source>
         <translation>Nejnižší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1112"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1119"/>
         <source>Modify Segment label</source>
         <translation>Upravit označení části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1113"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1120"/>
         <source>Modify Segments label</source>
         <translation>Upravit označení částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1125"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1132"/>
         <source>Enter new label:</source>
         <translation>Zadat nové označení:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1191"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1198"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
@@ -23599,32 +23649,32 @@ Chcete cestu nastavit nyní?</translation>
         <translation>Probíhá vytváření náhledu na zvuk...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="234"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="235"/>
         <source>Resize Segment</source>
         <translation type="unfinished">Změnit velikost části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="273"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="274"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Podržte tlačítko Shift, abyste se vyhnuli přichytávání na mřížku dob</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="279"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="280"/>
         <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
         <translation>Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na mřížku dob; podržíte-li tlačítko Ctrl, můžete také měnit délku obsahu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="281"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="282"/>
         <source>Hold Ctrl to rescale contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="395"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="396"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
         <translation>Klepnutím a tažením změníte velikost části; podržíte-li tlačítko Ctrl, změníte také délku jeho obsahu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="397"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="398"/>
         <source>Click and drag to rescale segment</source>
         <translation>Klepnutím a tažením změníte délku části</translation>
     </message>
@@ -25605,8 +25655,18 @@ Chcete cestu nastavit nyní?</translation>
         <source>Turn Repeating Segments into Real Copies</source>
         <translation type="obsolete">Převést opakující se části na skutečné kopie</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="502"/>
+        <source>Delete Tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="709"/>
+        <source>Delete Segments</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="722"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="746"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
         <translation>
             <numerusform>Převést %n opakující se část na skutečné kopie</numerusform>
@@ -25615,7 +25675,7 @@ Chcete cestu nastavit nyní?</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="747"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="771"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
         <translation>
             <numerusform>Převést %n propojenou část na skutečné kopie</numerusform>
@@ -25624,12 +25684,12 @@ Chcete cestu nastavit nyní?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="977"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="1002"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="978"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="1003"/>
         <source>Rosegarden cannot accept dropped files of this type.</source>
         <translation>Rosegarden nemůže přijmout upuštěné soubory tohoto typu.</translation>
     </message>
@@ -26664,237 +26724,237 @@ Chcete cestu nastavit nyní?</translation>
     <name>RosegardenTransport</name>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="25"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1047"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1046"/>
         <source>Rosegarden Transport</source>
         <translation>Obsluha programu Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="59"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1049"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1048"/>
         <source>Hide additional controls</source>
         <translation>Skrýt dodatečné ovládací prvky</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="95"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1053"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1052"/>
         <source>Panic Button</source>
         <translation>Tlačítko nouzového zastavení v případě zaseknutí nástroje</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="98"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1056"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1055"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation>Nastaví znovu všechna zařízení MIDI, pokud došlo k zaseknutí not</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="133"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1060"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1059"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="136"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1063"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1062"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>Poskytuje tikot metronomu pro hraní s metronomem</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="601"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1067"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1066"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Ukazuje vstupní a výstupní činnosti MIDI pro program Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1070"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1068"/>
         <source>IN</source>
         <translation>VSTUP</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1534"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>OUT</source>
         <translation>VÝSTUP</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1999"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2464"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1072"/>
         <source>NO EVENTS</source>
         <translation>BEZ UDÁLOSTÍ</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2487"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1074"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1073"/>
         <source>Record</source>
         <translation>Nahrát</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2490"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1077"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1076"/>
         <source>Record either MIDI or audio</source>
         <translation>Záznam buď MIDI nebo zvuku</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2531"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1081"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1080"/>
         <source>Loop</source>
         <translation>Opakování</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2534"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1084"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1083"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>Zapínání a vypínání značek pro opakování (jsou-li nastaveny)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2575"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1088"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1087"/>
         <source>Solo</source>
         <translation>Sólo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2578"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1091"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1090"/>
         <source>Mutes all but the currently selected track</source>
         <translation>Ztlumení všech stop kromě v současnosti vybrané</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2601"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1095"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1094"/>
         <source>Start loop or range here</source>
         <translation>Zde začít s opakováním nebo rozsahem</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2621"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1099"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1098"/>
         <source>End loop or range here</source>
         <translation>Zde ukončit opakování nebo rozsah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="3658"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1101"/>
         <source>SIG</source>
         <translation>SIG</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="4122"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>DIV</source>
         <translation>DIV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="4587"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5054"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>TEMPO</source>
         <translation>TEMPO</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5528"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>END</source>
         <translation>KONEC</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5995"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1107"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>BAR</source>
         <translation>TAKT</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6146"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1109"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1108"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>Přepínání mezi skutečným časem, hudebním časem a odpočtem snímků</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6179"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1113"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1112"/>
         <source>Show additional controls</source>
         <translation>Ukázat dodatečné ovládací prvky</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6215"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1117"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1116"/>
         <source>Rewind</source>
         <translation>Ukazatel přehrávání o takt zpět</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6218"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1120"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1119"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>Posune současnou polohu ukazatele o jednu taktovou čáru zpět.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6247"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1124"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1123"/>
         <source>Rewind to beginning</source>
         <translation>Ukazatel přehrávání na začátek</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6250"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1127"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1126"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>Posune polohu ukazatele na začátek skladby. (To může znamenat i posun směrem vpřed, pokud se ukazatel nachází před začátkem skladby.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6276"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1131"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1130"/>
         <source>Play/Pause</source>
         <translation>Přehrát/Pozastavit</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6279"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1134"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1133"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>Přehrává od současné polohy ukazatele nebo pozastaví přehrávání, pokud již probíhá.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6317"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1138"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1137"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6320"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1141"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1140"/>
         <source>Stops playback or recording.</source>
         <translation>Zastaví přehrávání nebo záznam.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6352"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1145"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1144"/>
         <source>Fast forward</source>
         <translation>Ukazatel přehrávání o takt dopředu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6355"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1148"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1147"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>Posune současnou polohu ukazatele o jednu taktovou čáru dopředu.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6384"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1152"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1151"/>
         <source>Fast forward to end</source>
         <translation>Ukazatel přehrávání na konec</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6387"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1155"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1154"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>Posune polohu ukazatele na konec skladby. (To může znamenat i posun směrem vzad, pokud se ukazatel nachází za koncem skladby.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6414"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1158"/>
         <source>Display time to end</source>
         <translation>Zobrazit čas zbývající do konce</translation>
     </message>
