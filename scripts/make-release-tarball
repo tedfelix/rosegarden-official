@@ -51,7 +51,7 @@ puke() {
 
 VERSION=$(grep AC_INIT configure.ac|cut -d \, -f 2|sed 's/ //g')
 
-URL=$(svn info | grep 'URL' | awk '{print $NF}')
+URL=$(svn info | grep '^URL' | awk '{print $NF}')
 
 # insert $TARGET for alpha, beta, pre, etc. releases, otherwise use $VERSION
 # straight up
@@ -62,7 +62,7 @@ outDir="rosegarden-$NEW_VERSION"
 [ -d "$outDir" ] && puke "$outDir already exists!  Aborting!"
 
 echo "Checking out a clean copy of $URL (this will take some time)..."
-svn co $URL $outDir > /dev/null || puke "Unable to check out $URL!"
+svn co $URL/rosegarden $outDir > /dev/null || puke "Unable to check out $URL!"
 cd $outDir || puke "Unable to change to $outDir!"
 
 echo "Rewriting version from $VERSION to $NEW_VERSION in configure.ac..."
