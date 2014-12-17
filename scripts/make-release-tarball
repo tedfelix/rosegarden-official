@@ -51,7 +51,7 @@ puke() {
 
 VERSION=$(grep AC_INIT configure.ac|cut -d \, -f 2|sed 's/ //g')
 
-URL=$(svn info | grep 'Repository Root' | awk '{print $NF}')
+URL=$(svn info | grep 'URL' | awk '{print $NF}')
 
 # insert $TARGET for alpha, beta, pre, etc. releases, otherwise use $VERSION
 # straight up
