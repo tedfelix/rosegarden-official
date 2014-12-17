@@ -77,7 +77,8 @@ Rosegarden requires the following external applications.
 
   - General MIDI soft synth (TiMidity + Freepats or better)
   - LilyPond
-  - Okular, Evince, Acroread, MuPDF, or ePDFView
+  - Okular, Evince, Acroread, MuPDF, ePDFView, or other PDF viewer reachable
+    through xdg-open
   - lpr or lp
   - QjackCtl (JACK Audio Connection Kit - Qt GUI Interface)
   - FLAC
@@ -113,7 +114,7 @@ michael.mcintyre@rosegardenmusic.com directly.  Thanks!
 Authors and copyright
 ---------------------
 
-Rosegarden is Copyright 2000-2013 The Rosegarden Development Team
+Rosegarden is Copyright 2000-2014 The Rosegarden Development Team
 
 See http://rosegardenmusic.com/resources/authors/ for a complete list of
 developers past and present, and to learn something about the history of our

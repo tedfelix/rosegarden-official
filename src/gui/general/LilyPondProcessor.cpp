@@ -234,7 +234,8 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         case 2: pdfViewer = "acroread"; break;
         case 3: pdfViewer = "mupdf";    break;
         case 4: pdfViewer = "epdfview"; break;
-        default: pdfViewer = "kpdf"; // just because I'm still currently on KDE3
+        case 5: pdfViewer = "xdg-open"; break;
+        default: pdfViewer = "xdg-open";
     }
 
     switch (filePrinterIndex) {

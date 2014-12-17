@@ -348,6 +348,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
     m_pdfViewer->addItem(tr("MuPDF"));
     m_pdfViewer->addItem(tr("ePDFView"));
+    m_pdfViewer->addItem(tr("xdg-open (recommended)"));
     m_pdfViewer->setToolTip(tr("Used to preview generated LilyPond output"));
 
     layout->addWidget(m_pdfViewer, row, 1, 1, 3);
@@ -368,7 +369,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     ++row;
 
     settings.beginGroup(ExternalApplicationsConfigGroup);
-    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", Okular).toUInt());
+    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", xdgOpen).toUInt());
 
     // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
     // to Lpr instead.

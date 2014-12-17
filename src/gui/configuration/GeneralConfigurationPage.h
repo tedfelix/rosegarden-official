@@ -66,7 +66,7 @@ public:
         Acroread,
         MuPDF,
         ePDFView,
-        KPDF  // not officially supported
+        xdgOpen
     };
 
     enum FilePrinter
