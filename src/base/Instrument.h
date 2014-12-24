@@ -187,6 +187,8 @@ public:
 
     void setProgram(const MidiProgram &program);
     const MidiProgram &getProgram() const { return m_program; }
+    /// Checks the bank and program change against the Device.
+    bool isProgramValid() const;
 
     void setSendBankSelect(bool value) {
         m_sendBankSelect = value;

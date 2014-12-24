@@ -24,6 +24,7 @@
 
 #include <cassert>
 
+#include <algorithm>  // std::find()
 #include <sstream>
 #include <cstdio>
 #include <iostream>
@@ -381,6 +382,41 @@ setProgram(const MidiProgram &program)
     if (hasFixedChannel()) {
         StudioControl::sendChannelSetup(this, m_channel);
     }
+}
+
+bool
+Instrument::isProgramValid() const
+{
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    if (!md)
+        return false;
+
+    // Check the bank against the list of valid banks.
+
+    BankList validBanks = md->getBanks(isPercussion());
+
+    bool bankValid =
+            (std::find(validBanks.begin(),
+                       validBanks.end(),
+                       m_program.getBank()) != validBanks.end());
+
+    if (!bankValid)
+        return false;
+
+    // Check the program change against the list of program changes
+    // for this bank.
+
+    ProgramList programList = md->getPrograms(m_program.getBank());
+
+    bool programChangeValid =
+            (std::find(programList.begin(),
+                       programList.end(),
+                       m_program) != programList.end());
+
+    if (!programChangeValid)
+        return false;
+
+    return true;
 }
 
 void

@@ -685,9 +685,13 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
     // If the current bank was not found...
     if (currentBank < 0  &&  !banks.empty()) {
-        RG_DEBUG << "updateBankComboBox(): Current bank not found.";
+        RG_DEBUG << "updateBankComboBox(): *SIDE-EFFECT* Current bank not found.  Selecting 0.";
         // Go with the first one.
-        // ??? Side-effect.  Need to rethink this.
+        // ??? Side-effect.  Need to rethink this.  Recommend making sure
+        //     the Instrument always has a valid bank/pc.  Then remove this
+        //     side-effect, and instead go ahead and display "unselected" (-1)
+        //     if somehow an invalid bank sneaks in (e.g. via receive
+        //     external).  See slotSelectBank().
         m_bankComboBox->setCurrentIndex(0);
         slotSelectBank(0);
 
@@ -1032,6 +1036,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         return ;
     }
 
+    // ??? const & would be more manageable.  Less "*bank".
     const MidiBank *bank = &m_banks[index];
 
     bool change = false;
@@ -1052,6 +1057,74 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     // If no change, bail.
     if (!change)
         return;
+
+    // Make sure the Instrument is valid WRT the Device.
+
+    // ??? Start dealing with this in here, then see if it would be easier
+    //     to move some of this into Instrument so that other parts of the
+    //     system (e.g. the bank editor) can use it.  Perhaps a set of
+    //     "setSafe" functions (setSafeProgramChange(p), setSafeBank(b), and
+    //     setSafeVariation(v)) that act like setters, but ensure that the
+    //     Instrument is consistent when they are done.  The bank editor
+    //     probably wouldn't need that.  It would need more of a forceSafe()
+    //     that would just arbitrarily pick something if the current Program
+    //     ends up invalid wrt the device.  Maybe just jump to the first
+    //     bank/program if any.  Alternatively, we could just display
+    //     "unselected" in the comboboxes which would allow the system to
+    //     handle undefined banks/PCs in the instrument without making
+    //     changes on the user.  This might be useful in some situations.
+
+    // If the current bank/program is not valid for this device, fix it.
+    if (!m_selectedInstrument->isProgramValid()) {
+
+        // If we're not in variations mode...
+        if (md->getVariationType() == MidiDevice::NoVariations) {
+
+            // ...go with the first program
+            ProgramList programList = md->getPrograms(*bank);
+            if (!programList.empty()) {
+                // Switch to the first program in this bank.
+                m_selectedInstrument->setProgram(programList.front());
+            } else {
+                // No programs for this bank.  Just go with 0.
+                m_selectedInstrument->setProgramChange(0);
+            }
+
+        } else {  // We're in variations mode...
+
+            // This is the three-comboboxes (bank/program/variation) case.
+            // It's an extremely difficult case to handle, so we're just
+            // going to punt and give them the first program/variation in
+            // the bank they just selected.
+
+            // Get the variation bank list for this bank
+            BankList bankList;
+            if (md->getVariationType() == MidiDevice::VariationFromMSB) {
+                bankList = md->getBanksByLSB(
+                        m_selectedInstrument->isPercussion(), bank->getLSB());
+            } else {
+                bankList = md->getBanksByMSB(
+                        m_selectedInstrument->isPercussion(), bank->getMSB());
+            }
+            if (!bankList.empty()) {
+                // Pick the first bank
+                MidiBank firstBank = bankList.front();
+                // Get the program list
+                ProgramList programList = md->getPrograms(firstBank);
+                if (!programList.empty()) {
+                    // Pick the first program
+                    m_selectedInstrument->setProgram(programList.front());
+                }
+            }
+
+            // To make the above more complex, we could consider the
+            // case where the Program Change happens to be valid for
+            // some variation bank in the newly selected bank.  Then
+            // go with the 0th variation bank that has that program
+            // change.  But I think this is complicated enough.
+
+        }
+    }
 
     // Make sure other widgets are in sync.
     // ??? Shouldn't instrumentParametersChanged() trigger this?
@@ -1118,6 +1191,13 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     if (!pcChanged  &&  !bankChanged)
         return;
 
+    // ??? What if an unexpected bank/program change comes in?  One
+    //     that isn't in the Device.  How should we handle it?
+    //     Ignore and let the comboboxes show something informative?
+    //     Pop up an annoying message box explaining that an
+    //     unexpected bank/program came in?  Just go with the
+    //     first valid and let the user be confused?
+
     // Make sure other widgets are in sync.
     // ??? Shouldn't instrumentParametersChanged() trigger this?
     setupForInstrument(m_selectedInstrument);
@@ -1135,6 +1215,9 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         return;
 
     const MidiProgram *prg = &m_programs[index];
+    // ??? This will never be true because m_programs is a vector.  If
+    //     index isn't in it, the vector will grow to accommodate it,
+    //     and prg will point to that new element.
     if (prg == 0) {
         std::cerr << "MIDIInstrumentParameterPanel::slotSelectProgram(): Program change not found in bank.\n";
         return ;
@@ -1145,6 +1228,12 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         return;
 
     m_selectedInstrument->setProgramChange(prg->getProgram());
+
+    // ??? Is it possible to end up with an invalid program change here?
+    //     It shouldn't be.  The combobox only displays valid program
+    //     changes.  The Device and the combobox would have to be out
+    //     of sync somehow.  But I think that update bug has been
+    //     fixed.  Can we come up with a test case?
 
     // Make sure other widgets are in sync.
     // ??? Shouldn't instrumentParametersChanged() trigger this?
