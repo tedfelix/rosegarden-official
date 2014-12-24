@@ -1029,27 +1029,25 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     if (!m_selectedInstrument)
         return;
 
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
         return ;
     }
 
-    // ??? const & would be more manageable.  Less "*bank".
-    const MidiBank *bank = &m_banks[index];
+    const MidiBank &bank = m_banks[index];
 
     bool change = false;
 
     if (md->getVariationType() != MidiDevice::VariationFromLSB) {
-        if (m_selectedInstrument->getLSB() != bank->getLSB()) {
-            m_selectedInstrument->setLSB(bank->getLSB());
+        if (m_selectedInstrument->getLSB() != bank.getLSB()) {
+            m_selectedInstrument->setLSB(bank.getLSB());
             change = true;
         }
     }
     if (md->getVariationType() != MidiDevice::VariationFromMSB) {
-        if (m_selectedInstrument->getMSB() != bank->getMSB()) {
-            m_selectedInstrument->setMSB(bank->getMSB());
+        if (m_selectedInstrument->getMSB() != bank.getMSB()) {
+            m_selectedInstrument->setMSB(bank.getMSB());
             change = true;
         }
     }
@@ -1081,7 +1079,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         if (md->getVariationType() == MidiDevice::NoVariations) {
 
             // ...go with the first program
-            ProgramList programList = md->getPrograms(*bank);
+            ProgramList programList = md->getPrograms(bank);
             if (!programList.empty()) {
                 // Switch to the first program in this bank.
                 m_selectedInstrument->setProgram(programList.front());
@@ -1101,10 +1099,10 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
             BankList bankList;
             if (md->getVariationType() == MidiDevice::VariationFromMSB) {
                 bankList = md->getBanksByLSB(
-                        m_selectedInstrument->isPercussion(), bank->getLSB());
+                        m_selectedInstrument->isPercussion(), bank.getLSB());
             } else {
                 bankList = md->getBanksByMSB(
-                        m_selectedInstrument->isPercussion(), bank->getMSB());
+                        m_selectedInstrument->isPercussion(), bank.getMSB());
             }
             if (!bankList.empty()) {
                 // Pick the first bank
