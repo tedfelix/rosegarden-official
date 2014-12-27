@@ -683,20 +683,20 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
     }
 
+#if 0
+// ??? This is a pretty nifty idea, but unfortunately, it requires
+//     that we maintain a bogus combobox entry.  For now, we'll go
+//     with the simpler "unselected" approach.
+
     // If the current bank was not found...
     if (currentBank < 0  &&  !banks.empty()) {
-        RG_DEBUG << "updateBankComboBox(): *SIDE-EFFECT* Current bank not found.  Selecting 0.";
-        // Go with the first one.
-        // ??? Side-effect.  Need to rethink this.  Recommend making sure
-        //     the Instrument always has a valid bank/pc.  Then remove this
-        //     side-effect, and instead go ahead and display "unselected" (-1)
-        //     if somehow an invalid bank sneaks in (e.g. via receive
-        //     external).  See slotSelectBank().
-        m_bankComboBox->setCurrentIndex(0);
-        slotSelectBank(0);
-
-        return;
+        // Format bank MSB:LSB and add to combobox.
+        MidiBank bank = m_selectedInstrument->getProgram().getBank();
+        QString bankString = QString("%1:%2").arg(bank.getMSB()).arg(bank.getLSB());
+        m_bankComboBox->addItem(bankString);
+        currentBank = banks.size();
     }
+#endif
 
     // Display the current bank.
     m_bankComboBox->setCurrentIndex(currentBank);
