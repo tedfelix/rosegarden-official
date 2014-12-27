@@ -780,16 +780,19 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
     }    
 
+#if 0
+// ??? This is a pretty nifty idea, but unfortunately, it requires
+//     that we maintain a bogus combobox entry.  For now, we'll go
+//     with the simpler "unselected" approach.
+
     // If the current program was not found...
     if (currentProgram < 0  &&  !m_programs.empty()) {
-        RG_DEBUG << "updateProgramComboBox(): Current program not found.";
-        // Go with the first one.
-        // ??? Side-effect.  Need to rethink this.
-        m_programComboBox->setCurrentIndex(0);
-        slotSelectProgram(0);
-
-        return;
+        // Format program change and add to combobox.
+        MidiByte programChange = m_selectedInstrument->getProgram().getProgram();
+        m_programComboBox->addItem(QString::number(programChange + 1));
+        currentProgram = programs.size();
     }
+#endif
 
     // Display the current program.
     m_programComboBox->setCurrentIndex(currentProgram);
