@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2014 the Rosegarden development team.
+    Copyright 2000-2015 the Rosegarden development team.
 
     This file originally from Sonic Visualiser, copyright 2007 Queen
     Mary, University of London.
@@ -466,7 +466,7 @@ FileSource::initRemote()
         // prevent decompression of .rg files by Qt with some servers that
         // notice that an .rg file is really a .gz file and respond with
         // "Content-Encoding: gzip".  See the devel mailing list post by Tim
-        // Munro 5/17/2014.
+        // Munro 5/17/2015.
         req.setRawHeader("Accept-Encoding", "gzip, deflate");
     }
 
