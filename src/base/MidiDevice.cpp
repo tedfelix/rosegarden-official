@@ -72,7 +72,7 @@ MidiDevice::MidiDevice(DeviceId id,
 
 MidiDevice::MidiDevice(DeviceId id,
                        InstrumentId ibase,
-		       const MidiDevice &dev) :
+                       const MidiDevice &dev) :
     Device(id, dev.getName(), Device::Midi),
     m_programList(dev.m_programList),
     m_bankList(dev.m_bankList),
@@ -163,13 +163,13 @@ MidiDevice::operator=(const MidiDevice &dev)
     //
     if (dev.getMetronome())
     {
-	if (m_metronome) delete m_metronome;
-	m_metronome = new MidiMetronome(*dev.getMetronome());
+        if (m_metronome) delete m_metronome;
+        m_metronome = new MidiMetronome(*dev.getMetronome());
     }
     else
     {
-	delete m_metronome;
-	m_metronome = 0;
+        delete m_metronome;
+        m_metronome = 0;
     }
 
     if (m_allocator) { delete m_allocator; }
@@ -208,12 +208,12 @@ void
 MidiDevice::createInstruments(InstrumentId base)
 {
     for (int i = 0; i < 16; ++i) {
-	Instrument *instrument = new Instrument
-	    (base + i, Instrument::Midi, "", i, this);
+        Instrument *instrument = new Instrument
+            (base + i, Instrument::Midi, "", i, this);
         if (isPercussionNumber(i)) {
             instrument->setFixedChannel();
         }
-	addInstrument(instrument);
+        addInstrument(instrument);
     }
     renameInstruments();
 }
@@ -243,7 +243,7 @@ MidiDevice::generatePresentationList()
     {
         if ((*it)->getId() >= MidiInstrumentBase) {
             m_presentationInstrumentList.push_back(*it);
-	}
+        }
     }
 }
 
@@ -338,8 +338,8 @@ MidiDevice::addProgram(const MidiProgram &prog)
 {
     // Refuse duplicates
     for (ProgramList::const_iterator it = m_programList.begin();
-	 it != m_programList.end(); ++it) {
-	if (*it == prog) return;
+         it != m_programList.end(); ++it) {
+        if (*it == prog) return;
     }
 
     m_programList.push_back(prog);
@@ -364,8 +364,8 @@ MidiDevice::getBanks(bool percussion) const
     BankList banks;
 
     for (BankList::const_iterator it = m_bankList.begin();
-	 it != m_bankList.end(); ++it) {
-	if (it->isPercussion() == percussion) banks.push_back(*it);
+         it != m_bankList.end(); ++it) {
+        if (it->isPercussion() == percussion) banks.push_back(*it);
     }
 
     return banks;
@@ -377,9 +377,9 @@ MidiDevice::getBanksByMSB(bool percussion, MidiByte msb) const
     BankList banks;
 
     for (BankList::const_iterator it = m_bankList.begin();
-	 it != m_bankList.end(); ++it) {
-	if (it->isPercussion() == percussion && it->getMSB() == msb)
-	    banks.push_back(*it);
+         it != m_bankList.end(); ++it) {
+        if (it->isPercussion() == percussion && it->getMSB() == msb)
+            banks.push_back(*it);
     }
 
     return banks;
@@ -391,9 +391,9 @@ MidiDevice::getBanksByLSB(bool percussion, MidiByte lsb) const
     BankList banks;
 
     for (BankList::const_iterator it = m_bankList.begin();
-	 it != m_bankList.end(); ++it) {
-	if (it->isPercussion() == percussion && it->getLSB() == lsb)
-	    banks.push_back(*it);
+         it != m_bankList.end(); ++it) {
+        if (it->isPercussion() == percussion && it->getLSB() == lsb)
+            banks.push_back(*it);
     }
 
     return banks;
@@ -403,8 +403,8 @@ const MidiBank *
 MidiDevice::getBankByName(const std::string &name) const
 {
     for (BankList::const_iterator i = m_bankList.begin();
-	 i != m_bankList.end(); ++i) {
-	if (i->getName() == name) return &(*i);
+         i != m_bankList.end(); ++i) {
+        if (i->getName() == name) return &(*i);
     }
     return 0;
 }
@@ -415,14 +415,14 @@ MidiDevice::getDistinctMSBs(bool percussion, int lsb) const
     std::set<MidiByte> msbs;
 
     for (BankList::const_iterator it = m_bankList.begin();
-	 it != m_bankList.end(); ++it) {
-	if (it->isPercussion() == percussion &&
-	    (lsb == -1 || it->getLSB() == lsb)) msbs.insert(it->getMSB());
+         it != m_bankList.end(); ++it) {
+        if (it->isPercussion() == percussion &&
+            (lsb == -1 || it->getLSB() == lsb)) msbs.insert(it->getMSB());
     }
 
     MidiByteList v;
     for (std::set<MidiByte>::iterator i = msbs.begin(); i != msbs.end(); ++i) {
-	v.push_back(*i);
+        v.push_back(*i);
     }
 
     return v;
@@ -434,14 +434,14 @@ MidiDevice::getDistinctLSBs(bool percussion, int msb) const
     std::set<MidiByte> lsbs;
 
     for (BankList::const_iterator it = m_bankList.begin();
-	 it != m_bankList.end(); ++it) {
-	if (it->isPercussion() == percussion &&
-	    (msb == -1 || it->getMSB() == msb)) lsbs.insert(it->getLSB());
+         it != m_bankList.end(); ++it) {
+        if (it->isPercussion() == percussion &&
+            (msb == -1 || it->getMSB() == msb)) lsbs.insert(it->getLSB());
     }
 
     MidiByteList v;
     for (std::set<MidiByte>::iterator i = lsbs.begin(); i != lsbs.end(); ++i) {
-	v.push_back(*i);
+        v.push_back(*i);
     }
 
     return v;
@@ -453,8 +453,8 @@ MidiDevice::getPrograms(const MidiBank &bank) const
     ProgramList programs;
 
     for (ProgramList::const_iterator it = m_programList.begin();
-	 it != m_programList.end(); ++it) {
-	if (it->getBank() == bank) programs.push_back(*it);
+         it != m_programList.end(); ++it) {
+        if (it->getBank() == bank) programs.push_back(*it);
     }
 
     return programs;
@@ -465,8 +465,8 @@ std::string
 MidiDevice::getBankName(const MidiBank &bank) const
 {
     for (BankList::const_iterator it = m_bankList.begin();
-	 it != m_bankList.end(); ++it) {
-	if (*it == bank) return it->getName();
+         it != m_bankList.end(); ++it) {
+        if (*it == bank) return it->getName();
     }
     return "";
 }
@@ -482,8 +482,8 @@ const MidiKeyMapping *
 MidiDevice::getKeyMappingByName(const std::string &name) const
 {
     for (KeyMappingList::const_iterator i = m_keyMappingList.begin();
-	 i != m_keyMappingList.end(); ++i) {
-	if (i->getName() == name) return &(*i);
+         i != m_keyMappingList.end(); ++i) {
+        if (i->getName() == name) return &(*i);
     }
     return 0;
 }
@@ -494,11 +494,11 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
     ProgramList::const_iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-	if (*it == program) {
-	    std::string kmn = it->getKeyMapping();
-	    if (kmn == "") return 0;
-	    return getKeyMappingByName(kmn);
-	}
+        if (*it == program) {
+            std::string kmn = it->getKeyMapping();
+            if (kmn == "") return 0;
+            return getKeyMappingByName(kmn);
+        }
     }
 
     return 0;
@@ -506,14 +506,14 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
 
 void
 MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
-				    std::string mapping)
+                                    std::string mapping)
 {
     ProgramList::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-	if (*it == program) {
-	    it->setKeyMapping(mapping);
-	}
+        if (*it == program) {
+            it->setKeyMapping(mapping);
+        }
     }
 }
     
@@ -525,13 +525,13 @@ MidiDevice::toXmlString()
 
     midiDevice << "    <device id=\""  << m_id 
                << "\" name=\""         << m_name 
-	       << "\" direction=\""    << (m_direction == Play ?
-					   "play" : "record")
-	       << "\" variation=\""    << (m_variationType == VariationFromLSB ?
-					   "LSB" :
-					   m_variationType == VariationFromMSB ?
-					   "MSB" : "")
-	       << "\" connection=\""   << encode(m_connection)
+               << "\" direction=\""    << (m_direction == Play ?
+                                           "play" : "record")
+               << "\" variation=\""    << (m_variationType == VariationFromLSB ?
+                                           "LSB" :
+                                           m_variationType == VariationFromMSB ?
+                                           "MSB" : "")
+               << "\" connection=\""   << encode(m_connection)
                << "\" type=\"midi\">"  << std::endl << std::endl;
 
     midiDevice << "        <librarian name=\"" << encode(m_librarian.first)
@@ -566,7 +566,7 @@ MidiDevice::toXmlString()
     {
         midiDevice << "        <bank "
                    << "name=\"" << encode(it->getName()) << "\" "
-	           << "percussion=\"" << (it->isPercussion() ? "true" : "false") << "\" "
+                   << "percussion=\"" << (it->isPercussion() ? "true" : "false") << "\" "
                    << "msb=\"" << (int)it->getMSB() << "\" "
                    << "lsb=\"" << (int)it->getLSB() << "\">"
                    << std::endl;
@@ -575,7 +575,7 @@ MidiDevice::toXmlString()
         //
         for (pt = m_programList.begin(); pt != m_programList.end(); ++pt)
         {
-	    if (pt->getBank() == *it)
+            if (pt->getBank() == *it)
             {
                 midiDevice << "            <program "
                            << "id=\"" << (int)pt->getProgram() << "\" "
@@ -612,13 +612,13 @@ MidiDevice::toXmlString()
         midiDevice << "        <keymapping "
                    << "name=\"" << encode(kit->getName()) << "\">\n";
 
-	for (MidiKeyMapping::KeyNameMap::const_iterator nmi =
-		 kit->getMap().begin(); nmi != kit->getMap().end(); ++nmi) {
-	    midiDevice << "          <key number=\"" << (int)nmi->first
-		       << "\" name=\"" << encode(nmi->second) << "\"/>\n";
-	}
+        for (MidiKeyMapping::KeyNameMap::const_iterator nmi =
+                 kit->getMap().begin(); nmi != kit->getMap().end(); ++nmi) {
+            midiDevice << "          <key number=\"" << (int)nmi->first
+                       << "\" name=\"" << encode(nmi->second) << "\"/>\n";
+        }
 
-	midiDevice << "        </keymapping>\n";
+        midiDevice << "        </keymapping>\n";
     }
 
     midiDevice << "    </device>" << std::endl;
@@ -685,7 +685,7 @@ MidiDevice::getProgramName(const MidiProgram &program) const
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it)
     {
-	if (*it == program) return it->getName();
+        if (*it == program) return it->getName();
     }
 
     return std::string("");
@@ -723,7 +723,7 @@ MidiDevice::mergeBankList(const BankList &bankList)
     {
         for (oIt = m_bankList.begin(); oIt != m_bankList.end(); ++oIt)
         {
-	    if (*it == *oIt)
+            if (*it == *oIt)
             {
                 clash = true;
                 break;
@@ -749,7 +749,7 @@ MidiDevice::mergeProgramList(const ProgramList &programList)
     {
         for (oIt = m_programList.begin(); oIt != m_programList.end(); ++oIt)
         {
-	    if (*it == *oIt)
+            if (*it == *oIt)
             {
                 clash = true;
                 break;
@@ -774,7 +774,7 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
     {
         for (oIt = m_keyMappingList.begin(); oIt != m_keyMappingList.end(); ++oIt)
         {
-	    if (it->getName() == oIt->getName())
+            if (it->getName() == oIt->getName())
             {
                 clash = true;
                 break;
