@@ -460,6 +460,28 @@ MidiDevice::getPrograms(const MidiBank &bank) const
     return programs;
 }
 
+ProgramList
+MidiDevice::getPrograms0thVariation(bool percussion, const MidiBank &bank) const
+{
+    // If we aren't in variations mode, just use getPrograms().
+    if (m_variationType == NoVariations)
+        return getPrograms(bank);
+
+    // Get the variation bank list for this bank
+    BankList bankList;
+    if (m_variationType == VariationFromMSB) {
+        bankList = getBanksByLSB(percussion, bank.getLSB());
+    } else {
+        bankList = getBanksByMSB(percussion, bank.getMSB());
+    }
+
+    if (!bankList.empty()) {
+        MidiBank firstBank = bankList.front();
+        return getPrograms(firstBank);
+    }
+
+    return ProgramList();
+}
 
 std::string
 MidiDevice::getBankName(const MidiBank &bank) const

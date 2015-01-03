@@ -721,7 +721,8 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     MidiBank bank = m_selectedInstrument->getProgram().getBank();
 
-    ProgramList programsAll = md->getPrograms(bank);
+    ProgramList programsAll =
+            md->getPrograms0thVariation(m_selectedInstrument->isPercussion(), bank);
 
     // Filter out the programs that have no name.
     // ??? We should probably do this in place with erase().  Although
@@ -752,7 +753,8 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 
     // Compute the current program.
     for (unsigned i = 0; i < programs.size(); ++i) {
-        if (m_selectedInstrument->getProgram() == programs[i]) {
+        // If the program change is the same...
+        if (m_selectedInstrument->getProgram().getProgram() == programs[i].getProgram()) {
             currentProgram = i;
             break;
         }
@@ -908,13 +910,14 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         }
     }
 
-    // If the current program was not found...
+    // If the current variation was not found...
     if (currentVariation < 0  &&  !m_variations.empty()) {
-        RG_DEBUG << "updateVariationComboBox(): Current variation not found.";
+        RG_DEBUG << "updateVariationComboBox(): SIDE-EFFECT.  Current variation not found.  Modifying Instrument.";
 
-        // ??? There's actually no way to exercise this because
-        //     updateBankComboBox() always beats this routine to noticing
-        //     something is amiss.
+        // This side-effect is pretty important.  Just going with
+        // no selection (-1) will get us in trouble.  If there are
+        // no other variations for the program, then we'll lose both
+        // comboboxes and we'll be stuck.
 
         // Go with the first one.
         // ??? Side-effect.  Need to rethink this.
