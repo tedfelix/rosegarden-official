@@ -1186,8 +1186,15 @@ bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
                                     bool autosave)
 {
-    if (!QFileInfo(filename).exists()) { // safe to write directly
+    QFileInfo fileInfo(filename);
+
+    if (!fileInfo.exists()) { // safe to write directly
         return saveDocumentActual(filename, errMsg, autosave);
+    }
+
+    if (fileInfo.exists()  &&  !fileInfo.isWritable()) {
+        errMsg = tr("'%1' is read-only.  Please save to a different name.").arg(filename);
+        return false;
     }
 
     QTemporaryFile temp(filename + ".");
