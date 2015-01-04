@@ -1193,7 +1193,7 @@ bool RosegardenDocument::saveDocument(const QString& filename,
     }
 
     if (fileInfo.exists()  &&  !fileInfo.isWritable()) {
-        errMsg = tr("'%1' is read-only.  Please save to a different name.").arg(filename);
+        errMsg = tr("'%1' is read-only.  Please save to a different file.").arg(filename);
         return false;
     }
 
