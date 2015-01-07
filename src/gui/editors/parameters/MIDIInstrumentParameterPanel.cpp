@@ -698,6 +698,11 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     }
 #endif
 
+    // If the bank wasn't in the Device, show the bank widgets so
+    // the user can fix it if they want.
+    if (currentBank == -1)
+        showBank(true);
+
     // Display the current bank.
     m_bankComboBox->setCurrentIndex(currentBank);
 }
@@ -910,26 +915,6 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         }
     }
 
-    // If the current variation was not found...
-    if (currentVariation < 0  &&  !m_variations.empty()) {
-        RG_DEBUG << "updateVariationComboBox(): SIDE-EFFECT.  Current variation not found.  Modifying Instrument.";
-
-        // This side-effect is pretty important.  Just going with
-        // no selection (-1) will get us in trouble.  If there are
-        // no other variations for the program, then we'll lose both
-        // comboboxes and we'll be stuck.
-
-        // Go with the first one.
-        // ??? Side-effect.  Need to rethink this.
-        m_variationComboBox->setCurrentIndex(0);
-        slotSelectVariation(0);
-
-        // Via recursion (slotSelectVariation(0)), we've already done the
-        // rest of this routine.  (Recursion!?  We *really* need to rethink
-        // this.)
-        return;
-    }
-
     // Display the current variation.
     m_variationComboBox->setCurrentIndex(currentVariation);
 
@@ -954,6 +939,13 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 
     // Update the Instrument.
     m_selectedInstrument->setPercussion(checked);
+
+    // ??? At this point, the bank will be invalid.  Should we select
+    //     the first valid bank/program for the current mode (percussion
+    //     or not percussion)?  This seems to be the right thing to
+    //     do for the most common use case of setting up a track for
+    //     percussion on a new device.  OTOH, the Device should already
+    //     know which channels are percussion and which aren't.
 
     // Make sure other widgets are in sync.
     // ??? Shouldn't instrumentParametersChanged() trigger this?
