@@ -1214,6 +1214,10 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     if (!m_selectedInstrument)
         return;
 
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+    if (!md)
+        return;
+
     const MidiProgram *prg = &m_programs[index];
     // ??? This will never be true because m_programs is a vector.  If
     //     index isn't in it, the vector will grow to accommodate it,
@@ -1229,11 +1233,38 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 
     m_selectedInstrument->setProgramChange(prg->getProgram());
 
-    // ??? Is it possible to end up with an invalid program change here?
-    //     It shouldn't be.  The combobox only displays valid program
-    //     changes.  The Device and the combobox would have to be out
-    //     of sync somehow.  But I think that update bug has been
-    //     fixed.  Can we come up with a test case?
+    // ??? In NoVariations mode, it should be very difficult to end
+    //     up with an invalid program change here.  The combobox only
+    //     displays valid program changes.  The Device and the combobox
+    //     would have to be out of sync somehow.  Can we come up with
+    //     a test case?
+
+    // In Variations mode, it's very easy to select an "invalid"
+    // program change.  I.e. one for which the bank is not valid.  Go
+    // from one program/variation to a program that doesn't have that
+    // variation.  We need to handle that here by selecting the 0th
+    // variation.  That's what the user expects.
+
+    if (md->getVariationType() == MidiDevice::VariationFromMSB) {
+        MidiBank bank = m_selectedInstrument->getProgram().getBank();
+        // Get the list of MSB variations.
+        BankList bankList = md->getBanksByLSB(
+                m_selectedInstrument->isPercussion(), bank.getLSB());
+        if (!bankList.empty()) {
+            // Pick the first MSB variation
+            m_selectedInstrument->setMSB(bankList.front().getMSB());
+        }
+    }
+    if (md->getVariationType() == MidiDevice::VariationFromLSB) {
+        MidiBank bank = m_selectedInstrument->getProgram().getBank();
+        // Get the list of LSB variations.
+        BankList bankList = md->getBanksByMSB(
+                m_selectedInstrument->isPercussion(), bank.getMSB());
+        if (!bankList.empty()) {
+            // Pick the first LSB variation
+            m_selectedInstrument->setLSB(bankList.front().getLSB());
+        }
+    }
 
     // Make sure other widgets are in sync.
     // ??? Shouldn't instrumentParametersChanged() trigger this?
