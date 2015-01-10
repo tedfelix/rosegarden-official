@@ -918,8 +918,12 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     // Display the current variation.
     m_variationComboBox->setCurrentIndex(currentVariation);
 
-    // If more than one variation is found, show the variation widgets.
-    showVariation(m_variations.size() > 1);
+    // Show the variation widgets in either of two cases:
+    //   1. More than one variation is available for this program.
+    //   2. The variation was not in the Device and there is a variation
+    //      to choose from.
+    showVariation(m_variations.size() > 1  ||
+                  (currentVariation == -1  &&  !m_variations.empty()));
 
     // Keep variation value enabled if percussion map is in use
     if  (m_percussionCheckBox->isChecked()) {
