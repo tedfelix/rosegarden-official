@@ -700,7 +700,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
     // If the bank wasn't in the Device, show the bank widgets so
     // the user can fix it if they want.
-    if (currentBank == -1)
+    if (currentBank == -1  &&  !banks.empty())
         showBank(true);
 
     // Display the current bank.
