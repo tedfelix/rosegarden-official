@@ -210,9 +210,7 @@ MidiDevice::createInstruments(InstrumentId base)
     for (int i = 0; i < 16; ++i) {
         Instrument *instrument = new Instrument
             (base + i, Instrument::Midi, "", i, this);
-        if (isPercussionNumber(i)) {
-            instrument->setFixedChannel();
-        }
+        instrument->setFixedChannel();
         addInstrument(instrument);
     }
     renameInstruments();
