@@ -117,11 +117,9 @@ public:
                MidiByte channel,
                Device *device);
 
-
-    // Copy constructor and assignment
+    // Copy constructor
     //
     Instrument(const Instrument &);
-    Instrument &operator=(const Instrument &);
 
     ~Instrument();
 
@@ -304,6 +302,15 @@ public:
     void channelBecomesUnfixed(void);
 
 private:
+    // ??? Hiding because, fortunately, this is never used.
+    //     As it was implemented, it is not an assignment operator.  It
+    //     does not copy the m_fixed field.  As such, it should be given
+    //     a name other than "=" to differentiate its effect from that
+    //     of a proper operator=.  E.g. partialCopy().  It should then
+    //     be implemented using the default operator=() which should be
+    //     made private.  However, that can't be done until C++11.
+    Instrument &operator=(const Instrument &);
+
     InstrumentId    m_id;
     std::string     m_name;
     std::string     m_alias;

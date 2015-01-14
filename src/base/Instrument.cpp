@@ -281,6 +281,8 @@ Instrument::Instrument(const Instrument &ins):
     }
 }
 
+#if 0
+// ??? Never used.  See comments in header for more.
 Instrument &
 Instrument::operator=(const Instrument &ins)
 {
@@ -296,7 +298,7 @@ Instrument::operator=(const Instrument &ins)
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
     m_volume = ins.getVolume();
-    m_fixed  = false;
+    m_fixed  = false;  // ??? This is not an assignment operator.  It's a partialCopy().
     m_level = ins.getLevel();
     m_recordLevel = ins.getRecordLevel();
     m_device = ins.getDevice();
@@ -316,7 +318,7 @@ Instrument::operator=(const Instrument &ins)
 
     return *this;
 }
-
+#endif
 
 Instrument::~Instrument()
 {
