@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Instrument]"
+
 #include "Instrument.h"
 #include "sound/Midi.h"
 #include "MidiDevice.h"
@@ -461,6 +463,28 @@ MidiByte
 Instrument::getLSB() const
 {
     return m_program.getBank().getLSB();
+}
+
+void
+Instrument::pickFirstProgram(bool percussion)
+{
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    if (!md)
+        return;
+
+    BankList banks = md->getBanks(percussion);
+    if (banks.empty())
+        return;
+
+    // Get the programs for the first bank.
+    ProgramList programs = md->getPrograms(banks.front());
+    if (programs.empty())
+        return;
+
+    // setProgram() will notify the rest of the system of this change.
+    m_sendBankSelect = true;
+    m_sendProgramChange = true;
+    setProgram(programs.front());
 }
 
 void

@@ -229,6 +229,9 @@ public:
     void setLSB(MidiByte msb);
     MidiByte getLSB() const;
 
+    /// Pick the first valid program in the connected Device.
+    void pickFirstProgram(bool percussion);
+
     void setPercussion(bool percussion);
     bool isPercussion() const;
 

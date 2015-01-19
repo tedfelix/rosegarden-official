@@ -86,6 +86,7 @@ protected:
     ProgramList                m_oldProgramList;
     ControlList                m_oldControlList;
     KeyMappingList             m_oldKeyMappingList;
+    ProgramList                m_oldInstrumentPrograms;
 
     bool                                   m_overwrite;
     bool                                   m_rename;

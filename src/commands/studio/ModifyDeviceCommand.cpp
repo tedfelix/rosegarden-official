@@ -157,6 +157,19 @@ ModifyDeviceCommand::execute()
     if (m_changeControls) {
         midiDevice->replaceControlParameters(m_controlList);
     }
+
+    // Make sure the instruments make sense.
+
+    InstrumentList instruments = midiDevice->getAllInstruments();
+    for (size_t i = 0; i < instruments.size(); ++i) {
+        // Save for undo
+        m_oldInstrumentPrograms.push_back(instruments[i]->getProgram());
+
+        // Don't change the program if it's valid.  The user might
+        // be importing something unrelated to programs.
+        if (!instruments[i]->isProgramValid())
+            instruments[i]->pickFirstProgram(midiDevice->isPercussionNumber(i));
+    }
 }
 
 void
@@ -187,7 +200,12 @@ ModifyDeviceCommand::unexecute()
     midiDevice->replaceKeyMappingList(m_oldKeyMappingList);
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
     if (m_changeVariation)
-        midiDevice->setVariationType(m_oldVariationType);        
+        midiDevice->setVariationType(m_oldVariationType);
+
+    InstrumentList instruments = midiDevice->getAllInstruments();
+    for (size_t i = 0; i < instruments.size(); ++i) {
+        instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
+    }
 }
 
 }
