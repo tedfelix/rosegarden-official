@@ -33,7 +33,7 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     DeviceId device,
     const std::string &name,
     const std::string &librarianName,
-    const std::string &librarianEmail):
+    const std::string &librarianEmail) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
@@ -84,20 +84,15 @@ void
 ModifyDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_device);
-    MidiDevice *midiDevice =
-        dynamic_cast<MidiDevice *>(device);
+    if (!device) {
+        std::cerr << "ERROR: ModifyDeviceCommand::execute(): no such device as " << m_device << std::endl;
+        return;
+    }
 
-    if (device) {
-        if (!midiDevice) {
-            std::cerr << "ERROR: ModifyDeviceCommand::execute: device "
-            << m_device << " is not a MIDI device" << std::endl;
-            return ;
-        }
-    } else {
-        std::cerr
-        << "ERROR: ModifyDeviceCommand::execute: no such device as "
-        << m_device << std::endl;
-        return ;
+    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+    if (!midiDevice) {
+        std::cerr << "ERROR: ModifyDeviceCommand::execute(): device " << m_device << " is not a MIDI device" << std::endl;
+        return;
     }
 
     m_oldName = midiDevice->getName();
@@ -176,20 +171,15 @@ void
 ModifyDeviceCommand::unexecute()
 {
     Device *device = m_studio->getDevice(m_device);
-    MidiDevice *midiDevice =
-        dynamic_cast<MidiDevice *>(device);
+    if (!device) {
+        std::cerr << "ERROR: ModifyDeviceCommand::unexecute(): no such device as " << m_device << std::endl;
+        return;
+    }
 
-    if (device) {
-        if (!midiDevice) {
-            std::cerr << "ERROR: ModifyDeviceCommand::unexecute: device "
-            << m_device << " is not a MIDI device" << std::endl;
-            return ;
-        }
-    } else {
-        std::cerr
-        << "ERROR: ModifyDeviceCommand::unexecute: no such device as "
-        << m_device << std::endl;
-        return ;
+    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+    if (!midiDevice) {
+        std::cerr << "ERROR: ModifyDeviceCommand::unexecute(): device " << m_device << " is not a MIDI device" << std::endl;
+        return;
     }
 
     if (m_rename)
