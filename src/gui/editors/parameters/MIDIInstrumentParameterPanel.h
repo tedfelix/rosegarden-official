@@ -81,7 +81,7 @@ signals:
 
     /// Emitted for almost any parameter change.
     /**
-     * Connected to InstrumentParameterBox::instrumentParametersChanged().
+     * Connected to InstrumentParameterBox::instParamsChangedIPB().
      */
     void instParamsChangedMIPP(InstrumentId);
 

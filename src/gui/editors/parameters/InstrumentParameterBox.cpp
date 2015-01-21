@@ -80,7 +80,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
     connect(m_audioInstrumentParameters,
             SIGNAL(instrumentParametersChanged(InstrumentId)),
             this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)));
+            SIGNAL(instParamsChangedIPB(InstrumentId)));
 
     connect(m_audioInstrumentParameters,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
@@ -106,7 +106,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
     connect(m_midiInstrumentParameters,
             SIGNAL(instParamsChangedMIPP(InstrumentId)),
             this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)));
+            SIGNAL(instParamsChangedIPB(InstrumentId)));
 
     // Layout the groups left to right.
 

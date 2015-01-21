@@ -669,7 +669,7 @@ RosegardenMainWindow::connectOutsideCtorHack()
 
     // relay this through our own signal so that others can use it too
     connect(m_instrumentParameterBox,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            SIGNAL(instParamsChangedIPB(InstrumentId)),
             this,
             SIGNAL(instrumentParametersChanged(InstrumentId)));
 
