@@ -956,7 +956,7 @@ AudioMixerWindow::slotInputChanged()
             i != m_faders.end(); ++i) {
 
         if (i->second.m_input == s)
-            emit instrumentParametersChanged(i->first);
+            emit instParamsChangedAMW(i->first);
     }
 }
 
@@ -969,7 +969,7 @@ AudioMixerWindow::slotOutputChanged()
             i != m_faders.end(); ++i) {
 
         if (i->second.m_output == s)
-            emit instrumentParametersChanged(i->first);
+            emit instParamsChangedAMW(i->first);
     }
 }
 
@@ -1087,7 +1087,7 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
                 StudioControl::sendMappedEvent(mE);
             }
 
-            emit instrumentParametersChanged(i->first);
+            emit instParamsChangedAMW(i->first);
         }
 
         ++controllerChannel;
@@ -1155,7 +1155,7 @@ AudioMixerWindow::slotPanChanged(float pan)
                 StudioControl::sendMappedEvent(mE);
             }
 
-            emit instrumentParametersChanged(i->first);
+            emit instParamsChangedAMW(i->first);
         }
 
         ++controllerChannel;
@@ -1186,7 +1186,7 @@ AudioMixerWindow::slotChannelsChanged()
                 updateStereoButton(instrument->getId());
                 updateRouteButtons(instrument->getId());
 
-                emit instrumentParametersChanged(i->first);
+                emit instParamsChangedAMW(i->first);
 
                 return ;
             }
@@ -1395,7 +1395,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
         }
 
         slotUpdateInstrument(i->first);
-        emit instrumentParametersChanged(i->first);
+        emit instParamsChangedAMW(i->first);
 
         break;
     }

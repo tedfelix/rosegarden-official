@@ -76,7 +76,7 @@ signals:
     void panic();
 
     // to be redirected to the instrument parameter box if necessary
-    void instrumentParametersChanged(InstrumentId);
+    void instParamsChangedAMW(InstrumentId);
 
 protected slots:
     void slotFaderLevelChanged(float level);

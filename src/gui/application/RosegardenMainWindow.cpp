@@ -7095,7 +7095,7 @@ RosegardenMainWindow::slotOpenAudioMixer()
             this, SLOT(slotPanic()));
 
     connect(m_audioMixer,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            SIGNAL(instParamsChangedAMW(InstrumentId)),
             this,
             SIGNAL(instrumentParametersChanged(InstrumentId)));
 
