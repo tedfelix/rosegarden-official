@@ -78,7 +78,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             this, SLOT(slotUpdateAllBoxes()));
 
     connect(m_audioInstrumentParameters,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            SIGNAL(instParamsChangedAIPP(InstrumentId)),
             this,
             SIGNAL(instParamsChangedIPB(InstrumentId)));
 

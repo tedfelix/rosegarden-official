@@ -147,7 +147,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     }
 
     emit updateAllBoxes();
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedAIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -168,7 +168,7 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
          MappedObjectValue(dB));
 
         emit updateAllBoxes();
-        emit instrumentParametersChanged(m_selectedInstrument->getId());
+        emit instParamsChangedAIPP(m_selectedInstrument->getId());
     }
 }
 
@@ -325,7 +325,7 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
      MappedObjectValue(pan));
 
     m_selectedInstrument->setPan(MidiByte(pan + 100.0));
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedAIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -433,7 +433,7 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
      MappedAudioFader::Channels,
      MappedObjectValue(channels));
 
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedAIPP(m_selectedInstrument->getId());
 
 }
 
@@ -441,7 +441,7 @@ void
 AudioInstrumentParameterPanel::slotAudioRoutingChanged()
 {
     if (m_selectedInstrument) {
-        emit instrumentParametersChanged(m_selectedInstrument->getId());
+        emit instParamsChangedAIPP(m_selectedInstrument->getId());
     }
 }
 
