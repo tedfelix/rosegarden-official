@@ -7158,7 +7158,7 @@ RosegardenMainWindow::slotOpenMidiMixer()
             this, SLOT(slotPanic()));
 
     connect(m_midiMixer,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            SIGNAL(instParamsChangedMMW(InstrumentId)),
             this,
             SIGNAL(instrumentParametersChanged(InstrumentId)));
 

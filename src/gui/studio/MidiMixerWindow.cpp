@@ -332,7 +332,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 }
             }
 
-            emit instrumentParametersChanged((*it)->m_id);
+            emit instParamsChangedMMW((*it)->m_id);
             return ;
         }
     }
@@ -405,7 +405,7 @@ MidiMixerWindow::slotControllerChanged(float value)
                 }
             }
         }
-        emit instrumentParametersChanged(m_faders[i]->m_id);
+        emit instParamsChangedMMW(m_faders[i]->m_id);
     }
 }
 
@@ -585,7 +585,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
             }
 
             slotUpdateInstrument(instrument->getId());
-            emit instrumentParametersChanged(instrument->getId());
+            emit instParamsChangedMMW(instrument->getId());
         }
 
         break;
