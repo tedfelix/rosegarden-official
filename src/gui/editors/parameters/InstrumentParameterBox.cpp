@@ -104,7 +104,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             this, SIGNAL(changeInstrumentLabel(InstrumentId, QString)));
 
     connect(m_midiInstrumentParameters,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            SIGNAL(instParamsChangedMIPP(InstrumentId)),
             this,
             SIGNAL(instrumentParametersChanged(InstrumentId)));
 

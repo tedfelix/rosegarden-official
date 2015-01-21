@@ -363,9 +363,21 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         setRotaryToValue(it->controller, int(value));
     }
 
+    // ??? setupForInstrument() is more of an updateWidgets() (from
+    //     Instrument).  Having it emit change signals doesn't feel
+    //     right.
+    //     Recommend the following redesign for this:
+    //     1. Get rid of the following two signals and use
+    //        instParamsChangedMIPP() to handle both of these
+    //        cases.
+    //     2. Make sure all other parts of the system that modify the
+    //        Instrument also use instParamsChangedMIPP() so that
+    //        their changes will be reflected in the MatrixWidget and
+    //        the TrackButton.
+
     // Make sure MatrixWidget's pitch ruler shows notes or percussion map
     // as appropriate.
-    emit updateAllBoxes();
+    emit InstrumentParameterPanel::updateAllBoxes();
 
     // Make sure other parts of the system are in sync with the program
     // name.  Most notably the TrackButton for the current track.
@@ -952,11 +964,11 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
     //     know which channels are percussion and which aren't.
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -971,11 +983,11 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
     m_selectedInstrument->setSendBankSelect(checked);
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -990,11 +1002,11 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
     m_selectedInstrument->setSendProgramChange(checked);
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -1016,11 +1028,11 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
     m_selectedInstrument->setSendBankSelect(checked);
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -1127,11 +1139,11 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     }
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -1199,11 +1211,11 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     //     first valid and let the user be confused?
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -1267,11 +1279,11 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     }
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -1305,11 +1317,11 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
         return;
 
     // Make sure other widgets are in sync.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 // In place of the old sendBankAndProgram, instruments themselves now
@@ -1340,11 +1352,11 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     // sure there aren't any hidden issues.
     // Rotary is smart enough to ignore this update since there will appear
     // to be no change from its perspective.
-    // ??? Shouldn't instrumentParametersChanged() trigger this?
+    // ??? Shouldn't instParamsChangedMIPP() trigger this?
     setupForInstrument(m_selectedInstrument);
 
     // Instrument::hasChanged()?
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
+    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
