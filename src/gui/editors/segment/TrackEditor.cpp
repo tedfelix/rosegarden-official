@@ -172,8 +172,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
                          m_doc->getStudio(),
                          m_rulerScale, getTrackCellHeight());
 
-    connect(rosegardenguiview, SIGNAL(instrumentParametersChanged(InstrumentId)),
-            m_compositionModel, SLOT(slotInstrumentParametersChanged(InstrumentId)));
     connect(rosegardenguiview->parent(), SIGNAL(instrumentParametersChanged(InstrumentId)),
             m_compositionModel, SLOT(slotInstrumentParametersChanged(InstrumentId)));
 
