@@ -44,6 +44,7 @@
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
@@ -81,7 +82,7 @@ namespace Rosegarden
 {
 
 TrackEditor::TrackEditor(RosegardenDocument* doc,
-                         QWidget* rosegardenguiview,
+                         RosegardenMainViewWidget* rosegardenMainViewWidget,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
                          double initialUnitsPerPixel,
@@ -105,7 +106,7 @@ TrackEditor::TrackEditor(RosegardenDocument* doc,
     //setDragEnabled(true);
     
     
-    init(rosegardenguiview);
+    init(rosegardenMainViewWidget);
     slotReadjustCanvasSize();
 }
 
@@ -116,7 +117,7 @@ TrackEditor::~TrackEditor()
 }
 
 void
-TrackEditor::init(QWidget* rosegardenguiview)
+TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
 {
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
@@ -172,7 +173,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
                          m_doc->getStudio(),
                          m_rulerScale, getTrackCellHeight());
 
-    connect(rosegardenguiview->parent(), SIGNAL(instrumentParametersChanged(InstrumentId)),
+    connect(rosegardenMainViewWidget->parent(), SIGNAL(instrumentParametersChanged(InstrumentId)),
             m_compositionModel, SLOT(slotInstrumentParametersChanged(InstrumentId)));
 
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
@@ -247,13 +248,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //        this, SLOT(slotTrackButtonsWidthChanged()));
 
     connect(m_trackButtons, SIGNAL(trackSelected(int)),
-            rosegardenguiview, SLOT(slotSelectTrackSegments(int)));
+            rosegardenMainViewWidget, SLOT(slotSelectTrackSegments(int)));
 
     connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
-            rosegardenguiview, SLOT(slotUpdateInstrumentParameterBox(int)));
+            rosegardenMainViewWidget, SLOT(slotUpdateInstrumentParameterBox(int)));
 
     connect(this, SIGNAL(stateChange(QString, bool)),
-            rosegardenguiview, SIGNAL(stateChange(QString, bool)));
+            rosegardenMainViewWidget, SIGNAL(stateChange(QString, bool)));
 
     // No such signal.  Was there ever?
 //    connect(m_trackButtons, SIGNAL(modified()),
@@ -320,7 +321,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     connect(m_compositionView->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),
-            rosegardenguiview,
+            rosegardenMainViewWidget,
             SLOT(slotSelectedSegments(const SegmentSelection &)));
 
     connect(m_compositionView, SIGNAL(zoomIn()),

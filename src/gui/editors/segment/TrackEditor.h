@@ -69,7 +69,7 @@ public:
      * Create a new TrackEditor representing the document \a doc
      */
     TrackEditor(RosegardenDocument* doc,
-                QWidget* rosegardenguiview,
+                RosegardenMainViewWidget* rosegardenMainViewWidget,
                 RulerScale *rulerScale,
                 bool showTrackLabels,
                 double initialUnitsPerPixel = 0,
@@ -207,7 +207,7 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent *);
     virtual void paintEvent(QPaintEvent* e);
     
-    void init(QWidget *);
+    void init(RosegardenMainViewWidget *);
 
     bool isCompositionModified();
     void setCompositionModified(bool);
