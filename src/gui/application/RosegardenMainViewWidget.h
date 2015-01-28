@@ -251,12 +251,30 @@ public slots:
     void slotActiveMainWindowChanged(const QWidget *);
     void slotActiveMainWindowChanged(); // uses sender()
 
+    /// Handle "external controller" port events.
     /**
-     * An event has been received from a device connected to the
-     * external controller port.
+     * This routine handles remote control events received from a
+     * device connected to the "external controller" port.
+     *
+     * This routine handles controller 81 which opens or
+     * brings to the top various windows based on the value.
      */
     void slotControllerDeviceEventReceived(MappedEvent *);
-    void slotControllerDeviceEventReceived(MappedEvent *, const void *);
+
+    /// Handle "external controller" port events.
+    /**
+     * This routine handles remote control events received from a
+     * device connected to the "external controller" port.
+     *
+     * This routine handles various controllers and Program Changes.
+     * Controller 82 selects the current track.  Other controllers,
+     * like volume and pan, cause changes to the corresponding controller
+     * setting for the current track.  Program Changes change the program
+     * for the current track.  For audio tracks, MIDI volume and pan
+     * controllers control the track's volume and pan.
+     */
+    void slotControllerDeviceEventReceived(
+            MappedEvent *, const void *preferredCustomer);
 
 signals:
     void activateTool(QString toolName);
