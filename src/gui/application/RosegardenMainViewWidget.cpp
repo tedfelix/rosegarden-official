@@ -2189,6 +2189,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
         default:
             break;
         }
+        break;
 
     default:
         break;
