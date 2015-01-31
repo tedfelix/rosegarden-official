@@ -421,101 +421,78 @@ MidiMixerWindow::slotControllerChanged(float value)
 void
 MidiMixerWindow::slotInstrumentChanged(Instrument *instrument)
 {
-    // ??? This is pretty absurd.  Need to rewrite this routine to take
-    //     advantage of the fact that it's getting an Instrument *.
-    InstrumentId id = instrument->getId();
+    //RG_DEBUG << "slotUpdateInstrument(): Instrument ID = " << instrument->getId();
 
-    //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - id = " << id << endl;
-
-    DeviceListConstIterator it;
-    MidiDevice *dev = 0;
-    InstrumentList instruments;
-    InstrumentList::const_iterator iIt;
     int count = 0;
 
-    blockSignals(true);
+    // For each device in the Studio
+    for (DeviceListConstIterator it = m_studio->begin(); it != m_studio->end(); ++it) {
+        MidiDevice *dev = dynamic_cast<MidiDevice *>(*it);
 
-    for (it = m_studio->begin(); it != m_studio->end(); ++it) {
-        dev = dynamic_cast<MidiDevice*>(*it);
+        // If this isn't a MidiDevice, try the next.
+        if (!dev)
+            continue;
 
-        if (dev) {
-            instruments = dev->getPresentationInstruments();
-            ControlList controls = getIPBForMidiMixer(dev);
+        InstrumentList instruments = dev->getPresentationInstruments();
 
-            for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
-                // Match and set
+        // For each Instrument in the Device
+        for (InstrumentList::const_iterator iIt = instruments.begin();
+             iIt != instruments.end(); ++iIt) {
+            // Match and set
+            //
+            if ((*iIt)->getId() == instrument->getId()) {
+                // Set Volume fader
                 //
-                if ((*iIt)->getId() == id) {
-                    // Set Volume fader
-                    //
-                    m_faders[count]->m_volumeFader->blockSignals(true);
 
-                    MidiByte volumeValue;
-                    try {
-                        volumeValue = (*iIt)->
-                                getControllerValue(MIDI_CONTROLLER_VOLUME);
-                    } catch (std::string s) {
-                        // This should never get called.
-                        volumeValue = (*iIt)->getVolume();
-                    }
-                    
-                    m_faders[count]->m_volumeFader->setFader(float(volumeValue));
-                    m_faders[count]->m_volumeFader->blockSignals(false);
-
-                    /*
-                    StaticControllers &staticControls = 
-                        (*iIt)->getStaticControllers();
-                    RG_DEBUG << "STATIC CONTROLS SIZE = " 
-                             << staticControls.size() << endl;
-                    */
-
-                    // Set all controllers for this Instrument
-                    //
-                    for (size_t i = 0; i < controls.size(); ++i) {
-                        float value = 0.0;
-
-                        m_faders[count]->m_controllerRotaries[i].second->blockSignals(true);
-
-                        // The ControllerValues might not yet be set on
-                        // the actual Instrument so don't always expect
-                        // to find one.  There might be a hole here for
-                        // deleted Controllers to hang around on
-                        // Instruments..
-                        //
-                        try {
-                            value = float((*iIt)->getControllerValue
-                                          (controls[i].getControllerValue()));
-                        } catch (std::string s) {
-                            /*
-                            RG_DEBUG << 
-                            "MidiMixerWindow::slotUpdateInstrument - "
-                                     << "can't match controller " 
-                                     << int(controls[i].
-                                         getControllerValue()) << " - \""
-                                     << s << "\"" << endl;
-                                     */
-                            continue;
-                        }
-
-                        /*
-                        RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument"
-                                 << " - MATCHED "
-                                 << int(controls[i].getControllerValue())
-                                 << endl;
-                                 */
-
-                        m_faders[count]->m_controllerRotaries[i].
-                        second->setPosition(value);
-
-                        m_faders[count]->m_controllerRotaries[i].second->blockSignals(false);
-                    }
+                MidiByte volumeValue;
+                try {
+                    volumeValue = (*iIt)->
+                            getControllerValue(MIDI_CONTROLLER_VOLUME);
+                } catch (std::string s) {
+                    // This should never get called.
+                    volumeValue = (*iIt)->getVolume();
                 }
-                count++;
+
+                // setFader() emits a signal.  If we don't block it, we crash
+                // due to an endless loop.
+                // ??? Need to examine more closely and see if we can redesign
+                //     things to avoid this crash and remove the
+                //     blockSignals() calls around every call to setFader().
+                m_faders[count]->m_volumeFader->blockSignals(true);
+                m_faders[count]->m_volumeFader->setFader(float(volumeValue));
+                m_faders[count]->m_volumeFader->blockSignals(false);
+
+                //RG_DEBUG << "STATIC CONTROLS SIZE = " << (*iIt)->getStaticControllers().size();
+
+                ControlList controls = getIPBForMidiMixer(dev);
+
+                // Set all controllers for this Instrument
+                //
+                for (size_t i = 0; i < controls.size(); ++i) {
+                    float value = 0.0;
+
+                    // The ControllerValues might not yet be set on
+                    // the actual Instrument so don't always expect
+                    // to find one.  There might be a hole here for
+                    // deleted Controllers to hang around on
+                    // Instruments..
+                    //
+                    try {
+                        value = float((*iIt)->getControllerValue
+                                      (controls[i].getControllerValue()));
+                    } catch (std::string s) {
+                        //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerValue()) << " - \"" << s << "\"";
+                        continue;
+                    }
+
+                    //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerValue());
+
+                    m_faders[count]->m_controllerRotaries[i].second->setPosition(value);
+                }
             }
+            count++;
         }
     }
-
-    blockSignals(false);
 }
 
 void
