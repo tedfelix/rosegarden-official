@@ -23,6 +23,7 @@
 #include "MidiProgram.h"
 
 #include <QString>
+#include <QSharedPointer>
 #include <QCoreApplication>
 
 // An Instrument connects a Track (which itself contains
@@ -65,6 +66,8 @@ typedef unsigned int BussId;
 // Predeclare Device
 //
 class Device;
+
+class InstrumentStaticSignals;
 
 class PluginContainer
 {
@@ -287,6 +290,16 @@ public:
 
     void sendWholeDeviceDestroyed(void)
     { emit wholeDeviceDestroyed(); }
+
+    /// For connecting to Instrument's static signals.
+    /**
+     * It's a good idea to hold on to a copy of this QSharedPointer in
+     * a member variable to make sure the InstrumentStaticSignals
+     * instance is still around when your object is destroyed.
+     */
+    static QSharedPointer<InstrumentStaticSignals> getStaticSignals();
+    /// Emit InstrumentStaticSignals::changed().
+    void changed();
 
  signals:
     // Like QObject::destroyed, but implies that the whole device is

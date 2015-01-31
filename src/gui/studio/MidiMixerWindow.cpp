@@ -25,6 +25,7 @@
 #include "base/Colour.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
@@ -86,6 +87,14 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 
     createGUI("midimixer.rc");
     setRewFFwdToAutoRepeat();
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 void
@@ -257,7 +266,7 @@ MidiMixerWindow::setupTabs()
 
                 // Update all the faders and controllers
                 //
-                slotUpdateInstrument((*iIt)->getId());
+                slotInstrumentChanged(*iIt);
 
                 // Increment counters
                 //
@@ -410,8 +419,12 @@ MidiMixerWindow::slotControllerChanged(float value)
 }
 
 void
-MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
+MidiMixerWindow::slotInstrumentChanged(Instrument *instrument)
 {
+    // ??? This is pretty absurd.  Need to rewrite this routine to take
+    //     advantage of the fact that it's getting an Instrument *.
+    InstrumentId id = instrument->getId();
+
     //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - id = " << id << endl;
 
     DeviceListConstIterator it;
@@ -584,7 +597,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
                 }
             }
 
-            slotUpdateInstrument(instrument->getId());
+            slotInstrumentChanged(instrument);
             emit instParamsChangedMMW(instrument->getId());
         }
 

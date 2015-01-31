@@ -22,6 +22,7 @@
 #include "base/MidiDevice.h"
 #include "gui/general/ActionFileClient.h"
 #include "MixerWindow.h"
+#include <QSharedPointer>
 #include <vector>
 
 
@@ -39,6 +40,7 @@ class RosegardenDocument;
 class MidiMixerVUMeter;
 class MappedEvent;
 class Fader;
+class InstrumentStaticSignals;
 
 
 class MidiMixerWindow : public MixerWindow, public ActionFileClient
@@ -83,7 +85,7 @@ signals:
     void instParamsChangedMMW(InstrumentId);
 
 protected slots:
-    void slotUpdateInstrument(InstrumentId);
+    void slotInstrumentChanged(Instrument *);
 
     //void slotPanChanged(float);
     void slotFaderLevelChanged(float);
@@ -117,6 +119,7 @@ protected:
     // Grab IPB controls and remove Volume.
     ControlList getIPBForMidiMixer(MidiDevice *) const;
 
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

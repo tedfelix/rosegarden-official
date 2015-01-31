@@ -16,6 +16,7 @@
 #define RG_MODULE_STRING "[Instrument]"
 
 #include "Instrument.h"
+#include "InstrumentStaticSignals.h"
 #include "sound/Midi.h"
 #include "MidiDevice.h"
 #include "base/AllocateChannels.h"
@@ -760,6 +761,32 @@ releaseFixedChannel(void)
     m_fixed = false;
     emit channelBecomesUnfixed();
     ControlBlock::getInstance()->instrumentChangedFixity(getId());
+}
+
+QSharedPointer<InstrumentStaticSignals>
+Instrument::getStaticSignals()
+{
+    // Keep the static instance here so there is no way to get
+    // to it other than to call getStaticSignals().
+    static QSharedPointer<InstrumentStaticSignals> instrumentStaticSignals;
+
+    // Delayed creation to avoid static construction order fiasco.
+    if (!instrumentStaticSignals)
+        instrumentStaticSignals =
+                QSharedPointer<InstrumentStaticSignals>(new InstrumentStaticSignals);
+
+    // If you want to avoid the complementary static destruction order
+    // fiasco, hold on to a copy of this in a member QSharedPointer.  This
+    // is only really an issue if your object also has static lifespan.
+    // Still, it's a good habit.
+
+    return instrumentStaticSignals;
+}
+
+void
+Instrument::changed()
+{
+    emit getStaticSignals()->changed(this);
 }
 
 

@@ -667,6 +667,14 @@ RosegardenMainWindow::connectOutsideCtorHack()
             this,
             SLOT(slotShowPluginGUI(InstrumentId, int)));
 
+    // SIGNAL TRANSITION
+    // Hook up a local slot so we can connect the new signal
+    // to the old while we are transitioning to the new.
+    connect(this,
+            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            this,
+            SLOT(slotInstrumentParametersChanged(InstrumentId)));
+
     // relay this through our own signal so that others can use it too
     connect(m_instrumentParameterBox,
             SIGNAL(instParamsChangedIPB(InstrumentId)),
@@ -946,6 +954,20 @@ RosegardenMainWindow::setupRecentFilesMenu()
     }
 }
 
+// SIGNAL TRANSITION
+void
+RosegardenMainWindow::slotInstrumentParametersChanged(InstrumentId id)
+{
+    if (!m_doc)
+        return;
+
+    Instrument *instrument = m_doc->getStudio().getInstrumentById(id);
+    if (!instrument)
+        return;
+
+    // Emit the new signal.
+    instrument->changed();
+}
 
 void
 RosegardenMainWindow::setRewFFwdToAutoRepeat()
@@ -7161,11 +7183,6 @@ RosegardenMainWindow::slotOpenMidiMixer()
             SIGNAL(instParamsChangedMMW(InstrumentId)),
             this,
             SIGNAL(instrumentParametersChanged(InstrumentId)));
-
-    connect(this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
-            m_midiMixer,
-            SLOT(slotUpdateInstrument(InstrumentId)));
 
     plugShortcuts(m_midiMixer, m_midiMixer->getShortcuts());
 

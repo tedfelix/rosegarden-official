@@ -1604,6 +1604,13 @@ public slots:
 protected slots:
     void setupRecentFilesMenu();
 
+    /// SIGNAL TRANSITION
+    /**
+     * This handles the old signal and fires off the new signal to
+     * allow for a gradual transition from the old to the new.
+     */
+    void slotInstrumentParametersChanged(InstrumentId);
+
 private:
 
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
