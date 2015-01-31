@@ -667,14 +667,6 @@ RosegardenMainWindow::connectOutsideCtorHack()
             this,
             SLOT(slotShowPluginGUI(InstrumentId, int)));
 
-    // SIGNAL TRANSITION
-    // Hook up a local slot so we can connect the new signal
-    // to the old while we are transitioning to the new.
-    connect(this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
-            this,
-            SLOT(slotInstrumentParametersChanged(InstrumentId)));
-
     // relay this through our own signal so that others can use it too
     connect(m_instrumentParameterBox,
             SIGNAL(instParamsChangedIPB(InstrumentId)),
@@ -1155,6 +1147,14 @@ RosegardenMainWindow::initView()
     // and ensure we don't pass on this signal:
     //
     disconnect(this, SIGNAL(instrumentParametersChanged(InstrumentId)), 0, 0);
+
+    // SIGNAL TRANSITION
+    // Hook up a local slot so we can connect the new signal
+    // to the old while we are transitioning to the new.
+    connect(this,
+            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            this,
+            SLOT(slotInstrumentParametersChanged(InstrumentId)));
 
     RosegardenMainViewWidget *swapView = new RosegardenMainViewWidget
         (findAction("show_tracklabels")->isChecked(),
