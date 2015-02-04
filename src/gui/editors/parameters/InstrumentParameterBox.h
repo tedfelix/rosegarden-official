@@ -95,10 +95,8 @@ public slots:
      *
      * ??? Is this a case where monitoring the Instrument might
      *     be a better idea?  Is there support for that?
-     *
-     * Actually, this is unnecessary.  See comments in .cpp.
      */
-//    void slotInstrumentParametersChanged(InstrumentId id);
+    void slotInstrumentParametersChanged(InstrumentId id);
 
     // From Plugin dialog
     //

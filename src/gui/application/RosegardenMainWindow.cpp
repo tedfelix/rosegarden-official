@@ -680,6 +680,11 @@ RosegardenMainWindow::connectOutsideCtorHack()
             SIGNAL(instrumentPercussionSetChanged(Instrument *)));
 
     connect(this,
+            SIGNAL(instrumentParametersChanged(InstrumentId)),
+            m_instrumentParameterBox,
+            SLOT(slotInstrumentParametersChanged(InstrumentId)));
+
+    connect(this,
             SIGNAL(pluginSelected(InstrumentId, int, int)),
             m_instrumentParameterBox,
             SLOT(slotPluginSelected(InstrumentId, int, int)));
