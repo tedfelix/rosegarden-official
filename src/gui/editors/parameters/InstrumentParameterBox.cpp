@@ -239,6 +239,10 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 #endif
 }
 
+#if 0
+// Turns out this wasn't necessary.  Flipping of the panels is handled
+// by RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
+// Percussion keymapping updates are handled by slotUpdateAllBoxes().
 void
 InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 {
@@ -276,6 +280,7 @@ InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 
     blockSignals(false);
 }
+#endif
 
 
 }

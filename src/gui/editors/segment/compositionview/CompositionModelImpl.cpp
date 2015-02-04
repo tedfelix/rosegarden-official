@@ -523,7 +523,7 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
 
 void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 {
-    RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()";
+    RG_DEBUG << "CompositionModelImpl::slotInstrumentChanged()";
     const segmentcontainer& segments = m_composition.getSegments();
     segmentcontainer::const_iterator segEnd = segments.end();
 
