@@ -26,6 +26,7 @@
 #include <QColor>
 #include <QPoint>
 #include <QRect>
+#include <QSharedPointer>
 
 #include <vector>
 #include <map>
@@ -39,6 +40,8 @@ namespace Rosegarden
 class Studio;
 class Segment;
 class RulerScale;
+class InstrumentStaticSignals;
+class Instrument;
 class Event;
 class Composition;
 class AudioPreviewUpdater;
@@ -268,7 +271,7 @@ signals:
 
 public slots:
     void slotAudioFileFinalized(Segment*);
-    void slotInstrumentParametersChanged(InstrumentId);
+    void slotInstrumentChanged(Instrument *);
 
 private slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
@@ -391,6 +394,7 @@ private:
 
     SegmentOrderer m_segmentOrderer;
 
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

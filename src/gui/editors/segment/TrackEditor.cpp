@@ -173,9 +173,6 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
                          m_doc->getStudio(),
                          m_rulerScale, getTrackCellHeight());
 
-    connect(rosegardenMainViewWidget->parent(), SIGNAL(instrumentParametersChanged(InstrumentId)),
-            m_compositionModel, SLOT(slotInstrumentParametersChanged(InstrumentId)));
-
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
 
     IconLoader il;

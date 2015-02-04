@@ -32,6 +32,8 @@
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Event.h"
+#include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
@@ -82,6 +84,14 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
 
         (*i)->addObserver(this);
     }
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 CompositionModelImpl::~CompositionModelImpl()
@@ -511,7 +521,7 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
     return previewPainter.getSegmentRect();
 }
 
-void CompositionModelImpl::slotInstrumentParametersChanged(InstrumentId id)
+void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 {
     RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()";
     const segmentcontainer& segments = m_composition.getSegments();
@@ -530,7 +540,7 @@ void CompositionModelImpl::slotInstrumentParametersChanged(InstrumentId id)
         // because the preview style differs depending on whether the
         // segment is on a percussion instrument or not
 
-        if (track && track->getInstrument() == id) {
+        if (track && track->getInstrument() == instrument->getId()) {
             removePreviewCache(s);
             emit needContentUpdate(computeSegmentRect(*s));
         }
