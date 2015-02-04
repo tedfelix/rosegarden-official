@@ -32,6 +32,7 @@
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
@@ -195,6 +196,14 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     // returned to normal after I implemented Rosegarden::PluginPushButton.  Oh
     // well.)
     populate();
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 AudioMixerWindow::~AudioMixerWindow()
@@ -605,9 +614,14 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
 }
 
 void
-AudioMixerWindow::slotUpdateInstrument(InstrumentId id)
+AudioMixerWindow::slotInstrumentChanged(Instrument *instrument)
 {
-    RG_DEBUG << "AudioMixerWindow::slotUpdateInstrument(" << id << ")" << endl;
+    if (!instrument)
+        return;
+
+    InstrumentId id = instrument->getId();
+
+    RG_DEBUG << "AudioMixerWindow::slotInstrumentChanged(): id = " << id;
 
     blockSignals(true);
 
@@ -1394,7 +1408,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
             break;
         }
 
-        slotUpdateInstrument(i->first);
+        slotInstrumentChanged(instrument);
         emit instParamsChangedAMW(i->first);
 
         break;

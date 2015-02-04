@@ -7121,11 +7121,6 @@ RosegardenMainWindow::slotOpenAudioMixer()
             this,
             SIGNAL(instrumentParametersChanged(InstrumentId)));
 
-    connect(this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
-            m_audioMixer,
-            SLOT(slotUpdateInstrument(InstrumentId)));
-
     if (m_synthManager) {
         connect(m_synthManager,
                 SIGNAL(pluginSelected(InstrumentId, int, int)),

@@ -25,6 +25,7 @@
 #include "gui/widgets/PluginPushButton.h"
 
 #include <QPixmap>
+#include <QSharedPointer>
 
 #include <vector>
 #include <map>
@@ -46,6 +47,8 @@ class Fader;
 class AudioVUMeter;
 class AudioRouteMenu;
 class PluginPushButton;
+class Instrument;
+class InstrumentStaticSignals;
 
 
 class AudioMixerWindow : public MixerWindow, public ActionFileClient
@@ -91,7 +94,7 @@ protected slots:
     void slotRepopulate();
     
     // to be called if something changes in an instrument parameter box
-    void slotUpdateInstrument(InstrumentId);
+    void slotInstrumentChanged(Instrument *);
 
     void slotTrackAssignmentsChanged();
 
@@ -183,6 +186,8 @@ private:
     QPixmap m_stereoPixmap;
 
     void setRewFFwdToAutoRepeat();
+
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 
