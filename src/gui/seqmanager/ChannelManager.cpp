@@ -99,9 +99,7 @@ setControllers(ChannelId channel, Instrument *instrument,
                RealTime reftime, RealTime insertTime,
                Callbacks *callbacks, int trackId)
 {
-#if 0
-    // This was the old logic, but it's not clear that it is still
-    // desirable.
+    // This is still desirable for some users.
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
     bool sendControllers = qStrToBool(settings.value("alwayssendcontrollers", "false")) ;
@@ -109,7 +107,6 @@ setControllers(ChannelId channel, Instrument *instrument,
 
     if (instrument->hasFixedChannel() && 
         !sendControllers) { return; }
-#endif
 
     // In case some controllers are on that we don't know about, turn
     // all controllers off.
