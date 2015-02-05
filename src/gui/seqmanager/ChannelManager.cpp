@@ -23,9 +23,12 @@
 #include "base/Instrument.h"
 #include "base/MidiTypes.h"
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/Midi.h"
+
+#include <QSettings>
 
 namespace Rosegarden
 {
@@ -102,7 +105,7 @@ setControllers(ChannelId channel, Instrument *instrument,
     // This is still desirable for some users.
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
-    bool sendControllers = qStrToBool(settings.value("alwayssendcontrollers", "false")) ;
+    bool sendControllers = settings.value("alwayssendcontrollers", "false").toBool();
     settings.endGroup();
 
     if (instrument->hasFixedChannel() && 
