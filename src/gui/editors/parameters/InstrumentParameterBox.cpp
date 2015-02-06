@@ -242,39 +242,31 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 void
 InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
 {
-    // ??? Why?  There seems to be a lot of this around here.  Perhaps this
-    //     is to break up endless update loops.  Maybe that's another side-
-    //     effect of UI-to-UI notifications.
-    blockSignals(true);
+    // If this update isn't for the currently displayed Instrument, bail.
+    if (static_cast<int>(id) != m_selectedInstrument)
+        return;
 
-#if 0
-    // For each IPB
-    for (IPBVector::iterator it = m_instrumentParamBoxes.begin();
-         it != m_instrumentParamBoxes.end();
-         ++it) {
-        if ((*it)->getSelectedInstrument()) {
-            // If this IPB happens to be displaying the instrument whose
-            // parameters are changing (id)
-            if ((*it)->getSelectedInstrument()->getId() == id) {
-                // Update this IPB to show the current parameters.
-                (*it)->useInstrument((*it)->getSelectedInstrument());
-            }
-        }
-    }
-#else
-// Since there is only one IPB, the above reduces to this.
     Instrument *instrument = getSelectedInstrument();
-    if (instrument) {
-        // If this IPB happens to be displaying the instrument whose
-        // parameters are changing (id)
-        if (instrument->getId() == id) {
-            // Update this IPB to show the current parameters.
-            useInstrument(instrument);
-        }
-    }
-#endif
+    if (!instrument)
+        return;
 
-    blockSignals(false);
+    // Update the current panel to show the new parameter values.
+
+    // ??? This is a bit awkward.  Might we store a "current panel" pointer?
+    //     Is setupForInstrument() in a common baseclass?  Then we could just:
+    //         m_currentPanel->setupForInstrument(instrument);
+    //     However, since this routine is likely going away, we're probably
+    //     over-thinking this one.
+    if (instrument->getType() == Instrument::Audio  ||
+        instrument->getType() == Instrument::SoftSynth)
+        m_audioInstrumentParameters->setupForInstrument(instrument);
+    else
+        m_midiInstrumentParameters->setupForInstrument(instrument);
+
+    // ??? Yeah, this routine needs to go away.  AIPP and MIPP need to
+    //     connect() themselves to InstrumentStaticSignals::changed()
+    //     and handle the updates directly.  IPB shouldn't be in the
+    //     loop at all.
 }
 
 
