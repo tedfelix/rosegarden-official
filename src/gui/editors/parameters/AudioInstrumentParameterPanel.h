@@ -24,6 +24,7 @@
 
 #include <QPixmap>
 #include <QString>
+#include <QSharedPointer>
 
 
 class QWidget;
@@ -35,6 +36,7 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class Instrument;
+class InstrumentStaticSignals;
 class InstrumentAliasButton;
 class AudioFaderBox;
 
@@ -89,6 +91,11 @@ protected:
 
     AudioFaderBox   *m_audioFader;
 
+private slots:
+
+    /// Handle InstrumentStaticSignals::changed()
+    void slotInstrumentChanged(Instrument *);
+
 private:
 
     // This is the tiny button in the upper left that allows the user
@@ -98,6 +105,7 @@ private:
     QPixmap                                      m_monoPixmap;
     QPixmap                                      m_stereoPixmap;
 
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

@@ -23,6 +23,7 @@
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenDocument.h"
 #include "gui/studio/AudioPluginManager.h"
@@ -128,6 +129,14 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
 
     connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
             this, SLOT(slotSynthGUIButtonClicked()));
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 void
@@ -452,6 +461,24 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
         emit selectPlugin(0, m_selectedInstrument->getId(), index);
     }
 }
+
+void
+AudioInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
+{
+    if (!instrument)
+        return;
+
+    if (!m_selectedInstrument)
+        return;
+
+    // If this isn't a change for the Instrument we are displaying, bail.
+    if (m_selectedInstrument->getId() != instrument->getId())
+        return;
+
+    // Update the parameters on the widgets
+    setupForInstrument(instrument);
+}
+
 
 }
 #include "AudioInstrumentParameterPanel.moc"

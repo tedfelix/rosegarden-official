@@ -25,6 +25,7 @@
 #include "InstrumentParameterPanel.h"
 
 #include <QString>
+#include <QSharedPointer>
 
 
 class QWidget;
@@ -38,9 +39,11 @@ class QComboBox;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 class MidiDevice;
 class Instrument;
+class InstrumentStaticSignals;
 class Rotary;
 
 
@@ -115,6 +118,9 @@ public slots:
             int programChange, int bankLSB, int bankMSB);
 
 private slots:
+    /// Handle InstrumentStaticSignals::changed()
+    void slotInstrumentChanged(Instrument *);
+
     /// Handle m_percussionCheckBox clicked()
     void slotPercussionClicked(bool checked);
 
@@ -206,6 +212,8 @@ private:
 
     int getValueFromRotary(int controller);
     void setRotaryToValue(int controller, int value);
+
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

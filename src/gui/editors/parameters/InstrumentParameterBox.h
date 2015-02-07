@@ -86,18 +86,6 @@ public slots:
     //
     void slotUpdateAllBoxes();
 
-    /// Update InstrumentParameterBoxes that are showing a given instrument.
-    /**
-     * Called from the Outside.
-     * Translated from RosegardenMainWindow::instrumentParametersChanged().
-     * instrumentParametersChanged() signals from various objects are
-     * funneled into here.
-     *
-     * ??? Is this a case where monitoring the Instrument might
-     *     be a better idea?  Is there support for that?
-     */
-    void slotInstrumentParametersChanged(InstrumentId id);
-
     // From Plugin dialog
     //
     void slotPluginSelected(InstrumentId id, int index, int plugin);
@@ -135,7 +123,7 @@ private:
     // Since there is only one instance of InstrumentParameterBox
     // ever created, this is probably unnecessary.  Consider getting
     // rid of it altogether.
-    // Used by: slotUpdateAllBoxes() and slotInstrumentParametersChanged().
+    // Used by: nobody
     typedef std::vector<InstrumentParameterBox *> IPBVector;
     static IPBVector m_instrumentParamBoxes;
 };

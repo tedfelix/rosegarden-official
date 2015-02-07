@@ -252,36 +252,6 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 #endif
 }
 
-void
-InstrumentParameterBox::slotInstrumentParametersChanged(InstrumentId id)
-{
-    // If this update isn't for the currently displayed Instrument, bail.
-    if (static_cast<int>(id) != m_selectedInstrument)
-        return;
-
-    Instrument *instrument = getSelectedInstrument();
-    if (!instrument)
-        return;
-
-    // Update the current panel to show the new parameter values.
-
-    // ??? This is a bit awkward.  Might we store a "current panel" pointer?
-    //     Is setupForInstrument() in a common baseclass?  Then we could just:
-    //         m_currentPanel->setupForInstrument(instrument);
-    //     However, since this routine is likely going away, we're probably
-    //     over-thinking this one.
-    if (instrument->getType() == Instrument::Audio  ||
-        instrument->getType() == Instrument::SoftSynth)
-        m_audioInstrumentParameters->setupForInstrument(instrument);
-    else
-        m_midiInstrumentParameters->setupForInstrument(instrument);
-
-    // ??? Yeah, this routine needs to go away.  AIPP and MIPP need to
-    //     connect() themselves to InstrumentStaticSignals::changed()
-    //     and handle the updates directly.  IPB shouldn't be in the
-    //     loop at all.
-}
-
 
 }
 

@@ -34,6 +34,7 @@
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 
@@ -237,6 +238,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     // Rotary Mapper
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 void
@@ -943,6 +952,23 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     } else {
         m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
     }    
+}
+
+void
+MIDIInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
+{
+    if (!instrument)
+        return;
+
+    if (!m_selectedInstrument)
+        return;
+
+    // If this isn't a change for the Instrument we are displaying, bail.
+    if (m_selectedInstrument->getId() != instrument->getId())
+        return;
+
+    // Update the parameters on the widgets
+    setupForInstrument(instrument);
 }
 
 void
