@@ -134,8 +134,8 @@ InstrumentParameterBox::~InstrumentParameterBox()
 MIDIInstrumentParameterPanel * 
     InstrumentParameterBox::getMIDIInstrumentParameterPanel()
 {
-	if (!m_midiInstrumentParameters) return 0;
-	return m_midiInstrumentParameters;
+    if (!m_midiInstrumentParameters) return 0;
+    return m_midiInstrumentParameters;
 }
 
 
@@ -182,32 +182,45 @@ InstrumentParameterBox::slotPluginBypassed(InstrumentId id, int index, bool bypa
 void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
-    if (instrument == 0) {
-        m_widgetStack->setCurrentWidget(m_noInstrumentParameters);	// was raiseWidget
+    if (!instrument) {
+        // Go with a blank frame.
+        m_widgetStack->setCurrentWidget(m_noInstrumentParameters);
+
+        m_selectedInstrument = -1;
+
+        // ??? This probably isn't needed.  It causes the MatrixWidget to
+        //     redraw the pitch ruler if the Percussion checkbox has been
+        //     toggled.  This routine is called when the current track is
+        //     changed.  Changing the current track does not affect the
+        //     percussion state of a MatrixWidget's Segment's Track.
+        //     This should probably be emitted by
+        //     MIDIInstrumentParameterPanel::slotPercussionClicked().
+        //     However, it would probably be better for MatrixWidget to use
+        //     InstrumentStaticSignals::changed() like everyone else.
         emit instrumentPercussionSetChanged(instrument);
-        return ;
+
+        return;
     }
 
-    // ok
-    if (instrument) {
-        m_selectedInstrument = instrument->getId();
-    } else {
-        m_selectedInstrument = -1;
-    }
+    m_selectedInstrument = instrument->getId();
 
     // Hide or Show according to Instrument type
     //
     if (instrument->getType() == Instrument::Audio ||
         instrument->getType() == Instrument::SoftSynth) {
 
-        m_audioInstrumentParameters->setupForInstrument(getSelectedInstrument());
+        // Update the audio panel and bring it to the top.
+        m_audioInstrumentParameters->setupForInstrument(instrument);
         m_widgetStack->setCurrentWidget(m_audioInstrumentParameters);
-// 		m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi
 
-        m_midiInstrumentParameters->setupForInstrument(getSelectedInstrument());
-		m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
+        // Update the MIDI panel and bring it to the top.
+        m_midiInstrumentParameters->setupForInstrument(instrument);
+        m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
+
+        // ??? This probably isn't needed.
+        //     See comment on instrumentPercussionSetChanged() above.
         emit instrumentPercussionSetChanged(instrument);
 
     }
