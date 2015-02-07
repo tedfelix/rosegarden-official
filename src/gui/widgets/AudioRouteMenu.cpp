@@ -365,6 +365,8 @@ AudioRouteMenu::slotEntrySelected(int i)
                 m_instrument->setAudioInputToRecord(newInput, newChannel);
             }
 
+            m_instrument->changed();
+
             break;
         }
 
@@ -387,6 +389,8 @@ AudioRouteMenu::slotEntrySelected(int i)
             (m_instrument->getMappedId(), newBuss->getMappedId());
 
             m_instrument->setAudioOutput(i);
+            m_instrument->changed();
+
             break;
         }
     }
