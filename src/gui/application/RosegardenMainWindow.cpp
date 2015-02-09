@@ -7164,11 +7164,6 @@ RosegardenMainWindow::slotOpenMidiMixer()
     connect(m_midiMixer, SIGNAL(panic()),
             this, SLOT(slotPanic()));
 
-    connect(m_midiMixer,
-            SIGNAL(instParamsChangedMMW(InstrumentId)),
-            this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)));
-
     plugShortcuts(m_midiMixer, m_midiMixer->getShortcuts());
 
     m_midiMixer->show();

@@ -17,6 +17,9 @@
 
 #define RG_MODULE_STRING "[MidiMixerWindow]"
 
+// Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
+#define RG_NO_DEBUG_PRINT
+
 #include "MidiMixerWindow.h"
 
 #include "sound/Midi.h"
@@ -294,20 +297,22 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 {
     const QObject *s = sender();
 
+    // For each fader
+    // ??? Wouldn't QSignalMapper be better?
     for (FaderVector::const_iterator it = m_faders.begin();
             it != m_faders.end(); ++it) {
         if ((*it)->m_volumeFader == s) {
-            Instrument *instr = m_studio->
+            Instrument *instrument = m_studio->
                                 getInstrumentById((*it)->m_id);
 
-            if (instr) {
+            if (instrument) {
 
-                instr->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
+                instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
+                instrument->changed();
 
-                if (instr->hasFixedChannel())
+                if (instrument->hasFixedChannel())
                 {
-                    // send out to external controllers as well if the
-                    // affected instrument is on a fixed channel.
+                    // Send out the external controller port as well.
                     
                     //!!! really want some notification of whether we have any!
                     int tabIndex = m_tabWidget->currentIndex();
@@ -323,16 +328,16 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                             ++i;
                             continue;
                         }
-                        RG_DEBUG << "slotFaderLevelChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
-                        if (instr->getDevice()->getId() == (*dit)->getId()) {
-                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instr->getNaturalChannel() << endl;
+                        RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+                        if (instrument->getDevice()->getId() == (*dit)->getId()) {
+                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalChannel() << endl;
 
                             MappedEvent mE((*it)->m_id,
                                            MappedEvent::MidiController,
                                            MIDI_CONTROLLER_VOLUME,
                                            MidiByte(value));
 
-                            mE.setRecordedChannel(instr->getNaturalChannel());
+                            mE.setRecordedChannel(instrument->getNaturalChannel());
                             mE.setRecordedDevice(Device::CONTROL_DEVICE);
                             StudioControl::sendMappedEvent(mE);
                         }
@@ -341,7 +346,6 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 }
             }
 
-            emit instParamsChangedMMW((*it)->m_id);
             return ;
         }
     }
@@ -353,6 +357,8 @@ MidiMixerWindow::slotControllerChanged(float value)
     const QObject *s = sender();
     size_t i = 0, j = 0;
 
+    // For each fader
+    // ??? Wouldn't QSignalMapper be better?
     for (i = 0; i < m_faders.size(); ++i) {
         for (j = 0; j < m_faders[i]->m_controllerRotaries.size(); ++j) {
             if (m_faders[i]->m_controllerRotaries[j].second == s)
@@ -373,19 +379,23 @@ MidiMixerWindow::slotControllerChanged(float value)
     //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - found a controller"
     //<< endl;
 
-    Instrument *instr = m_studio->getInstrumentById(
+    Instrument *instrument = m_studio->getInstrumentById(
                             m_faders[i]->m_id);
 
-    if (instr) {
+    if (instrument) {
 
         //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
         //<< "got instrument to change" << endl;
 
-        instr->setControllerValue(m_faders[i]->
-                                  m_controllerRotaries[j].first,
-                                  MidiByte(value));
+        instrument->setControllerValue(
+                m_faders[i]->m_controllerRotaries[j].first,
+                MidiByte(value));
+        instrument->changed();
 
-        if (instr->hasFixedChannel()) {
+        if (instrument->hasFixedChannel()) {
+
+            // Send out the external controller port as well.
+
             int tabIndex = m_tabWidget->currentIndex();
             if (tabIndex < 0)
                 tabIndex = 0;
@@ -399,22 +409,21 @@ MidiMixerWindow::slotControllerChanged(float value)
                     ++k;
                     continue;
                 }
-                RG_DEBUG << "slotControllerChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
-                if (instr->getDevice()->getId() == (*dit)->getId()) {
-                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instr->getNaturalChannel() << endl;
+                RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+                if (instrument->getDevice()->getId() == (*dit)->getId()) {
+                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalChannel() << endl;
                     // send out to external controllers as well.
                     //!!! really want some notification of whether we have any!
                     MappedEvent mE(m_faders[i]->m_id,
                                    MappedEvent::MidiController,
                                    m_faders[i]->m_controllerRotaries[j].first,
                                    MidiByte(value));
-                    mE.setRecordedChannel(instr->getNaturalChannel());
+                    mE.setRecordedChannel(instrument->getNaturalChannel());
                     mE.setRecordedDevice(Device::CONTROL_DEVICE);
                     StudioControl::sendMappedEvent(mE);
                 }
             }
         }
-        emit instParamsChangedMMW(m_faders[i]->m_id);
     }
 }
 
@@ -525,7 +534,9 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
 {
     if (preferredCustomer != this)
         return ;
-    RG_DEBUG << "MidiMixerWindow::slotControllerDeviceEventReceived: this one's for me" << endl;
+
+    RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
+
     raise();
 
     // get channel number n from event
@@ -565,17 +576,15 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
                 continue;
 
             ControlList cl = dev->getIPBControlParameters();
-            for (ControlList::const_iterator i = cl.begin();
-                    i != cl.end(); ++i) {
-                if ((*i).getControllerValue() == controller) {
-                    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
+            for (ControlList::const_iterator controlIter = cl.begin();
+                    controlIter != cl.end(); ++controlIter) {
+                if ((*controlIter).getControllerValue() == controller) {
+                    RG_DEBUG << "slotControllerDeviceEventReceived(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
+                    instrument->changed();
                     break;
                 }
             }
-
-            slotInstrumentChanged(instrument);
-            emit instParamsChangedMMW(instrument->getId());
         }
 
         break;

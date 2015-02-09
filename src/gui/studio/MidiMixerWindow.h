@@ -81,9 +81,6 @@ signals:
     void record();
     void panic();
 
-    // to be redirected to the instrument parameter box if necessary
-    void instParamsChangedMMW(InstrumentId);
-
 protected slots:
     void slotInstrumentChanged(Instrument *);
 
