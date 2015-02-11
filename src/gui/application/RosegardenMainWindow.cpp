@@ -669,12 +669,6 @@ RosegardenMainWindow::connectOutsideCtorHack()
 
     // relay this through our own signal so that others can use it too
     connect(m_instrumentParameterBox,
-            SIGNAL(instParamsChangedIPB(InstrumentId)),
-            this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)));
-
-    // relay this through our own signal so that others can use it too
-    connect(m_instrumentParameterBox,
             SIGNAL(instrumentPercussionSetChanged(Instrument *)),
             this,
             SIGNAL(instrumentPercussionSetChanged(Instrument *)));

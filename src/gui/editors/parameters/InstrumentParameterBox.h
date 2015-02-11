@@ -98,8 +98,6 @@ signals:
     void selectPlugin(QWidget *, InstrumentId id, int index);
     void showPluginGUI(InstrumentId id, int index);
 
-    void instParamsChangedIPB(InstrumentId);
-
     // This causes the MatrixWidget to redraw the pitch ruler.
     void instrumentPercussionSetChanged(Instrument *);
 
