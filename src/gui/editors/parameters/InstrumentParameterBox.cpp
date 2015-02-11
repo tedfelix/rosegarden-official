@@ -98,11 +98,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             SIGNAL(changeInstrumentLabel(InstrumentId, QString)),
             this, SIGNAL(changeInstrumentLabel(InstrumentId, QString)));
 
-    connect(m_midiInstrumentParameters,
-            SIGNAL(instParamsChangedMIPP(InstrumentId)),
-            this,
-            SIGNAL(instParamsChangedIPB(InstrumentId)));
-
     // Layout the groups left to right.
 
     QBoxLayout *layout = new QVBoxLayout(this);

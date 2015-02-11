@@ -377,10 +377,10 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //     right.
     //     Recommend the following redesign for this:
     //     1. Get rid of the following two signals and use
-    //        instParamsChangedMIPP() to handle both of these
+    //        Instrument::changed() to handle both of these
     //        cases.
     //     2. Make sure all other parts of the system that modify the
-    //        Instrument also use instParamsChangedMIPP() so that
+    //        Instrument also use Instrument::changed() so that
     //        their changes will be reflected in the MatrixWidget and
     //        the TrackButton.
 
@@ -981,6 +981,7 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 
     // Update the Instrument.
     m_selectedInstrument->setPercussion(checked);
+    m_selectedInstrument->changed();
 
     // ??? At this point, the bank will be invalid.  Should we select
     //     the first valid bank/program for the current mode (percussion
@@ -988,13 +989,6 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
     //     do for the most common use case of setting up a track for
     //     percussion on a new device.  OTOH, the Device should already
     //     know which channels are percussion and which aren't.
-
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -1007,13 +1001,7 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
 
     // Update the Instrument.
     m_selectedInstrument->setSendBankSelect(checked);
-
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1026,13 +1014,7 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
 
     // Update the Instrument.
     m_selectedInstrument->setSendProgramChange(checked);
-
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1052,13 +1034,7 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
 
     // Update the Instrument.
     m_selectedInstrument->setSendBankSelect(checked);
-
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1164,12 +1140,16 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         }
     }
 
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    // This is why changed() isn't called within
+    // the setters.  If it were, then each of the above changes would
+    // result in a change notification going out.  Worst case, that
+    // would be three change notifications and the first two would be
+    // sent when the Instrument was in an inconsistent state.
+    // Rule: Avoid sending change notifications from setters.
+    // Why?  It reduces the number of notifications which improves
+    // performance.  It avoids sending notifications when an object's
+    // state is inconsistent.  It avoids endless loops.
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1236,12 +1216,9 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     //     unexpected bank/program came in?  Just go with the
     //     first valid and let the user be confused?
 
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    // Just one change notification for the three potential changes.
+    // See comments in slotSelectBank() for further discussion.
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1304,12 +1281,9 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         }
     }
 
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    // Just one change notification for the three potential changes.
+    // See comments in slotSelectBank() for further discussion.
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1342,12 +1316,9 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     if (!changed)
         return;
 
-    // Make sure other widgets are in sync.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    // Just one change notification for the two potential changes.
+    // See comments in slotSelectBank() for further discussion.
+    m_selectedInstrument->changed();
 }
 
 // In place of the old sendBankAndProgram, instruments themselves now
@@ -1370,19 +1341,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 
     m_selectedInstrument->setControllerValue(
             MidiByte(controllerNumber), MidiByte(value));
-
-    // Make sure other widgets are in sync.
-    // For this particular change, this is probably pretty pointless.  But
-    // since I'm heading toward having a single notification mechanism
-    // (something like Instrument::hasChanged()), this is a good test to make
-    // sure there aren't any hidden issues.
-    // Rotary is smart enough to ignore this update since there will appear
-    // to be no change from its perspective.
-    // ??? Shouldn't instParamsChangedMIPP() trigger this?
-    setupForInstrument(m_selectedInstrument);
-
-    // Instrument::hasChanged()?
-    emit instParamsChangedMIPP(m_selectedInstrument->getId());
+    m_selectedInstrument->changed();
 }
 
 void
@@ -1399,6 +1358,9 @@ slotSelectChannel(int index)
         m_selectedInstrument->setFixedChannel();
     else  // Auto
         m_selectedInstrument->releaseFixedChannel();
+
+    // A call to m_selectedInstrument->changed() is not required as the
+    // auto/fixed channel feature has its own notification mechanisms.
 }
 
 

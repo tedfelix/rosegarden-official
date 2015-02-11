@@ -78,15 +78,9 @@ signals:
      * to see this.
      *
      * Recommend getting rid of this signal and using
-     * instParamsChangedMIPP() to update the track label.
+     * Instrument::changed() to update the track label.
      */
     void changeInstrumentLabel(InstrumentId id, QString label);
-
-    /// Emitted for almost any parameter change.
-    /**
-     * Connected to InstrumentParameterBox::instParamsChangedIPB().
-     */
-    void instParamsChangedMIPP(InstrumentId);
 
 public slots:
     /// Handle external Bank Selects and Program Changes.
