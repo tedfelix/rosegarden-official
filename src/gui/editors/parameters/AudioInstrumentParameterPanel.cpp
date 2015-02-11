@@ -118,12 +118,6 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
     connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
             this, SLOT(slotSetPan(float)));
 
-    connect(m_audioFader->m_audioOutput, SIGNAL(changed()),
-            this, SLOT(slotAudioRoutingChanged()));
-
-    connect(m_audioFader->m_audioInput, SIGNAL(changed()),
-            this, SLOT(slotAudioRoutingChanged()));
-
     connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
             this, SLOT(slotSynthButtonClicked()));
 
@@ -148,6 +142,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     if (m_selectedInstrument->getType() == Instrument::Audio ||
             m_selectedInstrument->getType() == Instrument::SoftSynth) {
         m_selectedInstrument->setLevel(dB);
+        m_selectedInstrument->changed();
 
         // ??? Perhaps it would be better for StudioControl to monitor
         //     the Instrument objects (InstrumentStaticSignals::changed())
@@ -161,7 +156,6 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     }
 
     emit updateAllBoxes();
-    emit instParamsChangedAIPP(m_selectedInstrument->getId());
 }
 
 void
@@ -175,6 +169,7 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
 
     if (m_selectedInstrument->getType() == Instrument::Audio) {
         m_selectedInstrument->setRecordLevel(dB);
+        m_selectedInstrument->changed();
 
         StudioControl::setStudioObjectProperty
         (MappedObjectId(m_selectedInstrument->getMappedId()),
@@ -182,7 +177,6 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
          MappedObjectValue(dB));
 
         emit updateAllBoxes();
-        emit instParamsChangedAIPP(m_selectedInstrument->getId());
     }
 }
 
@@ -339,7 +333,7 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
      MappedObjectValue(pan));
 
     m_selectedInstrument->setPan(MidiByte(pan + 100.0));
-    emit instParamsChangedAIPP(m_selectedInstrument->getId());
+    m_selectedInstrument->changed();
 }
 
 void
@@ -441,22 +435,13 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
     << "channels = " << channels << endl;
 
     m_selectedInstrument->setAudioChannels(channels);
+    m_selectedInstrument->changed();
 
     StudioControl::setStudioObjectProperty
     (MappedObjectId(m_selectedInstrument->getMappedId()),
      MappedAudioFader::Channels,
      MappedObjectValue(channels));
 
-    emit instParamsChangedAIPP(m_selectedInstrument->getId());
-
-}
-
-void
-AudioInstrumentParameterPanel::slotAudioRoutingChanged()
-{
-    if (m_selectedInstrument) {
-        emit instParamsChangedAIPP(m_selectedInstrument->getId());
-    }
 }
 
 void

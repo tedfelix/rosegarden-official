@@ -78,11 +78,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             this, SLOT(slotUpdateAllBoxes()));
 
     connect(m_audioInstrumentParameters,
-            SIGNAL(instParamsChangedAIPP(InstrumentId)),
-            this,
-            SIGNAL(instParamsChangedIPB(InstrumentId)));
-
-    connect(m_audioInstrumentParameters,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             this,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)));

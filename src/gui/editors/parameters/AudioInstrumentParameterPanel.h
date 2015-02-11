@@ -66,7 +66,6 @@ public slots:
     void slotSelectAudioLevel(float dB);
     void slotSelectAudioRecordLevel(float dB);
     void slotAudioChannels(int channels);
-    void slotAudioRoutingChanged();
     void slotSelectPlugin(int index);
 
     // From the parameter box clicks
@@ -82,7 +81,6 @@ public slots:
 
 signals:
     void selectPlugin(QWidget *, InstrumentId, int index);
-    void instParamsChangedAIPP(InstrumentId);
     void showPluginGUI(InstrumentId, int index);
     void changeInstrumentLabel(InstrumentId id, QString label);
 
