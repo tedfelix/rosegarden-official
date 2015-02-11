@@ -74,6 +74,7 @@ Fader::Fader(AudioLevel::FaderType type,
 
     calculateGroovePixmap();
     setFader(0.0);
+    emit faderChanged(m_value);
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -106,6 +107,7 @@ Fader::Fader(int min, int max, int deflt,
 
     calculateGroovePixmap();
     setFader(deflt);
+    emit faderChanged(m_value);
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -132,6 +134,7 @@ Fader::Fader(int min, int max, int deflt,
 
     calculateGroovePixmap();
     setFader(deflt);
+    emit faderChanged(m_value);
 }
 
 Fader::~Fader()
@@ -178,8 +181,10 @@ Fader::getFaderLevel() const
 void
 Fader::setFader(float value)
 {
+    if (m_value == value)
+        return;
+
     m_value = value;
-    emit faderChanged(value);
     update();
 }
 
@@ -337,6 +342,7 @@ Fader::mousePressEvent(QMouseEvent *e)
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             setFader(0);
+            emit faderChanged(m_value);
             return ;
         }
 
@@ -375,6 +381,7 @@ Fader::mouseMoveEvent(QMouseEvent *e)
                 buttonPosition = m_sliderMax - m_sliderMin;
             }
             setFader(position_to_value(buttonPosition));
+            emit faderChanged(m_value);
             showFloatText();
         }
     }
@@ -397,6 +404,7 @@ Fader::wheelEvent(QWheelEvent *e)
     }
     RG_DEBUG << "Fader::wheelEvent - button position = " << buttonPosition << endl;
     setFader(position_to_value(buttonPosition));
+    emit faderChanged(m_value);
     RG_DEBUG << "Fader::wheelEvent - value = " << m_value << endl;
 
     showFloatText();
