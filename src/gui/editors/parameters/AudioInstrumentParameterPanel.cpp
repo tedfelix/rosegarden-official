@@ -149,6 +149,11 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
             m_selectedInstrument->getType() == Instrument::SoftSynth) {
         m_selectedInstrument->setLevel(dB);
 
+        // ??? Perhaps it would be better for StudioControl to monitor
+        //     the Instrument objects (InstrumentStaticSignals::changed())
+        //     and update the properties whenever the Instrument changes.
+        //     Then this StudioControl code which is spread all over this
+        //     class and duplicated in AudioMixerWindow would go away.
         StudioControl::setStudioObjectProperty
         (MappedObjectId(m_selectedInstrument->getMappedId()),
          MappedAudioFader::FaderLevel,
