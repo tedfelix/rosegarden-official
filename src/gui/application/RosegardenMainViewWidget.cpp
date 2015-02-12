@@ -2120,7 +2120,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             if (!instrument)
                 return ;
             instrument->setProgramChange(program);
-            emit instrumentParametersChanged(ii);
+            instrument->changed();
         }
         return ;
     }
@@ -2164,6 +2164,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                 if ((*i).getControllerValue() == controller) {
                     RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
                     instrument->setControllerValue(controller, value);
+                    instrument->changed();
                     break;
                 }
             }
@@ -2179,11 +2180,13 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
             instrument->setLevel(AudioLevel::fader_to_dB
                                  (value, 127, AudioLevel::ShortFader));
+            instrument->changed();
             break;
 
         case MIDI_CONTROLLER_PAN:
             RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte((value / 64.0) * 100.0 + 0.01));
+            instrument->changed();
             break;
 
         default:
@@ -2194,8 +2197,6 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
     default:
         break;
     }
-
-    emit instrumentParametersChanged(instrument->getId());
 
     //!!! send out updates via MIDI
 }

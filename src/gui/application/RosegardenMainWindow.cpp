@@ -935,21 +935,6 @@ RosegardenMainWindow::setupRecentFilesMenu()
     }
 }
 
-// SIGNAL TRANSITION
-void
-RosegardenMainWindow::slotInstrumentParametersChanged(InstrumentId id)
-{
-    if (!m_doc)
-        return;
-
-    Instrument *instrument = m_doc->getStudio().getInstrumentById(id);
-    if (!instrument)
-        return;
-
-    // Emit the new signal.
-    instrument->changed();
-}
-
 void
 RosegardenMainWindow::setRewFFwdToAutoRepeat()
 {
@@ -1133,18 +1118,6 @@ RosegardenMainWindow::initView()
     disconnect(m_instrumentParameterBox, 0, oldView, 0);
     disconnect(m_trackParameterBox, 0, oldView, 0);
 
-    // and ensure we don't pass on this signal:
-    //
-    disconnect(this, SIGNAL(instrumentParametersChanged(InstrumentId)), 0, 0);
-
-    // SIGNAL TRANSITION
-    // Hook up a local slot so we can connect the new signal
-    // to the old while we are transitioning to the new.
-    connect(this,
-            SIGNAL(instrumentParametersChanged(InstrumentId)),
-            this,
-            SLOT(slotInstrumentParametersChanged(InstrumentId)));
-
     RosegardenMainViewWidget *swapView = new RosegardenMainViewWidget
         (findAction("show_tracklabels")->isChecked(),
          m_segmentParameterBox,
@@ -1208,9 +1181,6 @@ RosegardenMainWindow::initView()
 
     connect(m_view, SIGNAL(stateChange(QString, bool)),
             this, SLOT (slotStateChanged(QString, bool)));
-
-    connect(m_view, SIGNAL(instrumentParametersChanged(InstrumentId)),
-            this, SIGNAL(instrumentParametersChanged(InstrumentId)));
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want

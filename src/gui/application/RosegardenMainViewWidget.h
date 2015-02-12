@@ -318,8 +318,6 @@ signals:
     void controllerDeviceEventReceived(MappedEvent *,
                                        const void *);
 
-    void instrumentParametersChanged(InstrumentId);
-
 protected:
     NotationView *createNotationView(std::vector<Segment *>);
     MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);

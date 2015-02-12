@@ -529,9 +529,6 @@ signals:
     /// emitted when the composition state (selected track, solo, etc...) changes
     void compositionStateUpdate();
 
-    /// emitted when instrument parameters change (relayed from InstrumentParameterBox)
-    void instrumentParametersChanged(InstrumentId);
-
     /// emitted when instrument percussion set changes (relayed from InstrumentParameterBox)
     void instrumentPercussionSetChanged(Instrument *);
 
@@ -1603,13 +1600,6 @@ public slots:
 
 protected slots:
     void setupRecentFilesMenu();
-
-    /// SIGNAL TRANSITION
-    /**
-     * This handles the old signal and fires off the new signal to
-     * allow for a gradual transition from the old to the new.
-     */
-    void slotInstrumentParametersChanged(InstrumentId);
 
 private:
 
