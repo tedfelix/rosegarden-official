@@ -83,21 +83,22 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     f.setPointSize(f.pointSize() * 90 / 100);
     f.setBold(false);
     QFontMetrics metrics(f);
+    // Compute a width for the labels that will prevent them from becoming
+    // so large that they make a mess out of the layout.
+    const int labelWidth = metrics.width("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
     // Instrument Label
     m_instrumentLabel->setFont(f);
-    const int width25 = metrics.width("1234567890123456789012345");
-    m_instrumentLabel->setFixedWidth(width25);
+    // Set a fixed width to prevent the label from growing too large.
+    m_instrumentLabel->setFixedWidth(labelWidth);
     m_instrumentLabel->setAlignment(Qt::AlignCenter);
     m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
 
     // Connection Label
-    m_connectionLabel = new SqueezedLabel(this);
+    m_connectionLabel = new QLabel(this);
     m_connectionLabel->setFont(f);
-    // we still have to use the QFontMetrics here, or a SqueezedLabel will
-    // squeeze itself down to 0.
-    const int width30 = metrics.width("123456789012345678901234567890");
-    m_connectionLabel->setFixedWidth(width30);
+    // Set a fixed width to prevent the label from growing too large.
+    m_connectionLabel->setFixedWidth(labelWidth);
     m_connectionLabel->setAlignment(Qt::AlignCenter);
     m_mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
 

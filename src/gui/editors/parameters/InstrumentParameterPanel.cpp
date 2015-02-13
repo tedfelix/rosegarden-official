@@ -19,7 +19,6 @@
 #include "InstrumentParameterPanel.h"
 
 #include "base/Instrument.h"
-#include "gui/widgets/SqueezedLabel.h"
 
 #include <QFrame>
 #include <QLabel>
@@ -34,7 +33,7 @@ InstrumentParameterPanel::InstrumentParameterPanel(RosegardenDocument *doc,
     QFrame(parent),
     m_doc(doc),
     m_selectedInstrument(0),
-    m_instrumentLabel(new SqueezedLabel(this))
+    m_instrumentLabel(new QLabel(this))
 {
 }
 

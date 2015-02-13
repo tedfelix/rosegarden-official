@@ -20,7 +20,6 @@
 
 #include "base/MidiProgram.h"  // InstrumentId
 #include "base/MidiDevice.h"  // MidiByteList
-#include "gui/widgets/SqueezedLabel.h"
 
 #include "InstrumentParameterPanel.h"
 
@@ -45,6 +44,7 @@ class MidiDevice;
 class Instrument;
 class InstrumentStaticSignals;
 class Rotary;
+class SqueezedLabel;
 
 
 class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
