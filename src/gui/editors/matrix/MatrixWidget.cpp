@@ -600,12 +600,22 @@ MatrixWidget::slotPercussionSetChanged(Instrument *instr)
     if (instr == m_instrument) { 
         generatePitchRuler();
     } else {
+        // m_instrument might not be pointing at the Instrument we are
+        // displaying.  This will happen if the user changes the Instrument
+        // for the Segment that we are displaying.
+
         Composition &comp = m_document->getComposition();
-        Track *track = comp.getTrackById(m_scene->getCurrentSegment()->
-                                                                getTrack());
-        Instrument *currInstr = m_document->getStudio().
-                                     getInstrumentById(track->getInstrument());
-        // ...or if the new current instrument appears to be one which changes.
+
+        // Get the Track for the segment we (MatrixScene) are displaying.
+        Track *track = comp.getTrackById(
+                m_scene->getCurrentSegment()->getTrack());
+
+        // Get the Instrument for the segment we are displaying.
+        Instrument *currInstr =
+                m_document->getStudio().getInstrumentById(track->getInstrument());
+
+        // If the Instrument that is changing is indeed the Instrument for
+        // the segment we are displaying, update the pitch ruler.
         if (currInstr == instr) {
             generatePitchRuler();
         }

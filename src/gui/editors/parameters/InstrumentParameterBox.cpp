@@ -178,15 +178,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
         m_selectedInstrument = -1;
 
-        // ??? This probably isn't needed.  It causes the MatrixWidget to
-        //     redraw the pitch ruler if the Percussion checkbox has been
-        //     toggled.  This routine is called when the current track is
-        //     changed.  Changing the current track does not affect the
-        //     percussion state of a MatrixWidget's Segment's Track.
-        //     This should probably be emitted by
-        //     MIDIInstrumentParameterPanel::slotPercussionClicked().
-        //     However, it would probably be better for MatrixWidget to use
-        //     InstrumentStaticSignals::changed() like everyone else.
+        // Update the MatrixWidget's PitchRuler.
         emit instrumentPercussionSetChanged(instrument);
 
         return;
@@ -209,8 +201,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         m_midiInstrumentParameters->setupForInstrument(instrument);
         m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
 
-        // ??? This probably isn't needed.
-        //     See comment on instrumentPercussionSetChanged() above.
+        // Update the MatrixWidget's PitchRuler.
         emit instrumentPercussionSetChanged(instrument);
 
     }
@@ -220,26 +211,8 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
 {
-    // This causes the MatrixWidget to redraw the pitch ruler.
-    // ??? Instead of monitoring the UI, the MatrixWidget should monitor
-    //     changes to the Instrument and update itself based
-    //     on that.  See if that is possible and give it a shot.
+    // Update the MatrixWidget's PitchRuler.
     emit instrumentPercussionSetChanged(getSelectedInstrument());
-
-#if 0
-// Now that there is only one of these, the rest of this can be
-// removed.
-    // For each IPB
-    for (IPBVector::iterator it = m_instrumentParamBoxes.begin();
-         it != m_instrumentParamBoxes.end();
-         ++it) {
-        if ((*it) != this && getSelectedInstrument() &&
-            (*it)->getSelectedInstrument() == getSelectedInstrument()) {
-            // Update this IPB to show the currently selected instrument.
-            (*it)->useInstrument(getSelectedInstrument());
-        }
-    }
-#endif
 }
 
 

@@ -385,6 +385,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //        their changes will be reflected in the MatrixWidget and
     //        the TrackButton.
 
+    // Update the MatrixWidget's PitchRuler.
     // Make sure MatrixWidget's pitch ruler shows notes or percussion map
     // as appropriate.
     emit InstrumentParameterPanel::updateAllBoxes();

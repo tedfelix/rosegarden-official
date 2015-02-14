@@ -155,6 +155,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
          MappedObjectValue(dB));
     }
 
+    // Update the MatrixWidget's PitchRuler.
     emit updateAllBoxes();
 }
 
@@ -176,6 +177,7 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
          MappedAudioFader::FaderRecordLevel,
          MappedObjectValue(dB));
 
+        // Update the MatrixWidget's PitchRuler.
         emit updateAllBoxes();
     }
 }

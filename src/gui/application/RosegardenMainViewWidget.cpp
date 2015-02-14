@@ -2001,6 +2001,7 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
     Track *track = comp.getTrackById(comp.getSelectedTrack());
     slotUpdateInstrumentParameterBox(track->getInstrument());
 
+    // Update the MatrixWidget's PitchRuler.
     m_instrumentParameterBox->slotUpdateAllBoxes();
 }
 

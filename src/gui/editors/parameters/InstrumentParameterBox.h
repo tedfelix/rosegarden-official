@@ -81,9 +81,7 @@ public:
 
 public slots:
 
-    // To update all InstrumentParameterBoxen for an Instrument.  Called
-    // from one of the parameter panels when something changes.
-    //
+    /// Update the MatrixWidget's PitchRuler.
     void slotUpdateAllBoxes();
 
     // From Plugin dialog
@@ -98,7 +96,7 @@ signals:
     void selectPlugin(QWidget *, InstrumentId id, int index);
     void showPluginGUI(InstrumentId id, int index);
 
-    // This causes the MatrixWidget to redraw the pitch ruler.
+    /// Update the MatrixWidget's PitchRuler.
     void instrumentPercussionSetChanged(Instrument *);
 
 private:

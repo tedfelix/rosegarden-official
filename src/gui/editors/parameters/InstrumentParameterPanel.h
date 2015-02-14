@@ -47,7 +47,7 @@ public:
     void setDocument(RosegardenDocument *doc);
 
 signals:
-    // Connected to InstrumentParameterBox::slotUpdateAllBoxes().
+    /// Update the MatrixWidget's PitchRuler.
     void updateAllBoxes();
 
 protected:
