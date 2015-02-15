@@ -145,7 +145,7 @@ private:
 
     // m_instrumentLabel is inherited from InstrumentParameterPanel.
 
-    QLabel             *m_connectionLabel;
+    SqueezedLabel      *m_connectionLabel;
 
     QCheckBox          *m_percussionCheckBox;
 

@@ -95,7 +95,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
 
     // Connection Label
-    m_connectionLabel = new QLabel(this);
+    m_connectionLabel = new SqueezedLabel(this);
     m_connectionLabel->setFont(f);
     // Set a fixed width to prevent the label from growing too large.
     m_connectionLabel->setFixedWidth(labelWidth);

@@ -32,6 +32,7 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class Instrument;
+class SqueezedLabel;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -54,7 +55,7 @@ protected:
     RosegardenDocument *m_doc;
 
     Instrument *m_selectedInstrument;
-    QLabel     *m_instrumentLabel;
+    SqueezedLabel *m_instrumentLabel;
     /// Make instrument our selected instrument.
     void setSelectedInstrument(Instrument *instrument, QString label);
 
