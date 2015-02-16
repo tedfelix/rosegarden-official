@@ -47,10 +47,6 @@ public:
 
     void setDocument(RosegardenDocument *doc);
 
-signals:
-    /// Update the MatrixWidget's PitchRuler.
-    void updateAllBoxes();
-
 protected:
     RosegardenDocument *m_doc;
 

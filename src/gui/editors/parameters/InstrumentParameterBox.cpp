@@ -74,9 +74,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
-    connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
-            this, SLOT(slotUpdateAllBoxes()));
-
     connect(m_audioInstrumentParameters,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             this,
@@ -206,7 +203,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 }
 
 void
-InstrumentParameterBox::slotUpdateAllBoxes()
+InstrumentParameterBox::emitInstrumentPercussionSetChanged()
 {
     // Update the MatrixWidget's PitchRuler.
     emit instrumentPercussionSetChanged(getSelectedInstrument());

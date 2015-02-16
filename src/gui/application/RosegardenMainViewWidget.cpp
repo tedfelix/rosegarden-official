@@ -2002,7 +2002,7 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
     slotUpdateInstrumentParameterBox(track->getInstrument());
 
     // Update the MatrixWidget's PitchRuler.
-    m_instrumentParameterBox->slotUpdateAllBoxes();
+    m_instrumentParameterBox->emitInstrumentPercussionSetChanged();
 }
 
 void

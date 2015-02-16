@@ -78,11 +78,10 @@ public:
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 
+    /// Update the MatrixWidget's PitchRuler.
+    void emitInstrumentPercussionSetChanged();
 
 public slots:
-
-    /// Update the MatrixWidget's PitchRuler.
-    void slotUpdateAllBoxes();
 
     // From Plugin dialog
     //
