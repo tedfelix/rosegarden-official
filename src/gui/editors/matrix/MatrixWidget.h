@@ -20,6 +20,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QSharedPointer>
 
 #include "base/Event.h"             // for timeT
 #include "base/MidiTypes.h"         // for MidiByte
@@ -55,6 +56,8 @@ class TempoRuler;
 class ChordNameRuler;
 class Device;
 class Instrument;
+class InstrumentStaticSignals;
+
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -199,6 +202,9 @@ protected slots:
     void slotMouseLeavesView();
 
     /// Pitch ruler may need regeneration
+    void slotInstrumentChanged(Instrument *instrument);
+
+    /// Pitch ruler may need regeneration
     void slotPercussionSetChanged(Instrument *instr);
 
     /// Instrument is being destroyed
@@ -300,6 +306,8 @@ private:
         HEADER_COL,
         MAIN_COL,
     };
+
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 
 };
 

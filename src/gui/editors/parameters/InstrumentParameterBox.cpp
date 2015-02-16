@@ -87,9 +87,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
             this,
             SIGNAL(showPluginGUI(InstrumentId, int)));
 
-    connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
-            this, SLOT(slotUpdateAllBoxes()));
-
     connect(m_midiInstrumentParameters,
             SIGNAL(changeInstrumentLabel(InstrumentId, QString)),
             this, SIGNAL(changeInstrumentLabel(InstrumentId, QString)));

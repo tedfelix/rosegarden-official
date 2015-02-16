@@ -373,25 +373,15 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         setRotaryToValue(it->controller, int(value));
     }
 
-    // ??? setupForInstrument() is more of an updateWidgets() (from
-    //     Instrument).  Having it emit change signals doesn't feel
-    //     right.
-    //     Recommend the following redesign for this:
-    //     1. Get rid of the following two signals and use
-    //        Instrument::changed() to handle both of these
-    //        cases.
-    //     2. Make sure all other parts of the system that modify the
-    //        Instrument also use Instrument::changed() so that
-    //        their changes will be reflected in the MatrixWidget and
-    //        the TrackButton.
-
-    // Update the MatrixWidget's PitchRuler.
-    // Make sure MatrixWidget's pitch ruler shows notes or percussion map
-    // as appropriate.
-    emit InstrumentParameterPanel::updateAllBoxes();
-
     // Make sure other parts of the system are in sync with the program
     // name.  Most notably the TrackButton for the current track.
+    // ??? Get this out of here.  It does not belong.  It should be
+    //     possible to use ISS::changed() instead.  TrackParameterBox
+    //     and TrackButtons should connect themselves for Instrument
+    //     change notifications and do what is needed.  This signal
+    //     should be removed everywhere.
+    //     See TrackButtons::changeInstrumentName() and
+    //     TrackParameterBox::slotInstrumentLabelChanged().
     emit changeInstrumentLabel(
             m_selectedInstrument->getId(),
             m_selectedInstrument->getProgramName().c_str());

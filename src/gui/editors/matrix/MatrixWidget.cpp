@@ -80,6 +80,7 @@
 #include "base/Controllable.h"
 #include "base/Studio.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
@@ -319,6 +320,14 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     // button isn't pressed.  This way the keys on the piano keyboard
     // to the left are always highlighted to show which note we are on.
     m_view->setMouseTracking(true);
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -589,12 +598,24 @@ MatrixWidget::generatePitchRuler()
 }
 
 void
+MatrixWidget::slotInstrumentChanged(Instrument *instrument)
+{
+    // This covers the test case when the user toggles the "Percussion"
+    // checkbox on the MIPP.
+
+    if (m_instrument->getId() == instrument->getId()) {
+
+        // ??? Can we further determine whether the Percussion state
+        //     (instrument->isPercussion()) has really changed?
+        //     We probably need to cache this in a member.
+
+        generatePitchRuler();
+    }
+}
+
+void
 MatrixWidget::slotPercussionSetChanged(Instrument *instr)
 {
-    //@@@ In spite of its name (and of the name of the signal which trigs it),
-    //    this slot is called each time some change happens in any instrument
-    //    and not only when a percussion set changes [true in rev. 11782].
-
     // Regenerate the pitchruler if the instrument which changed
     // is the current one...
     if (instr == m_instrument) { 
