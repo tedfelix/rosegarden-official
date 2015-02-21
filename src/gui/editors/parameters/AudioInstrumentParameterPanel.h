@@ -82,7 +82,6 @@ public slots:
 signals:
     void selectPlugin(QWidget *, InstrumentId, int index);
     void showPluginGUI(InstrumentId, int index);
-    void changeInstrumentLabel(InstrumentId id, QString label);
 
 protected:
     //--------------- Data members ---------------------------------

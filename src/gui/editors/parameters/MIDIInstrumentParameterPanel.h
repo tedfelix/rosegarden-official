@@ -68,20 +68,6 @@ public:
      */
     void clearReceiveExternal();
 
-signals:
-    /// Emitted for almost any parameter change.
-    /**
-     * Connected to InstrumentParameterBox::changeInstrumentLabel().
-     *
-     * This signal makes sure the track button label is in sync with
-     * the currently selected program.  Uncheck View > Show Track Labels
-     * to see this.
-     *
-     * Recommend getting rid of this signal and using
-     * Instrument::changed() to update the track label.
-     */
-    void changeInstrumentLabel(InstrumentId id, QString label);
-
 public slots:
     /// Handle external Bank Selects and Program Changes.
     /**

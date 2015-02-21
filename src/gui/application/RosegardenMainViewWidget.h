@@ -211,11 +211,6 @@ public slots:
     void slotAddCommandToHistory(Command *command);
 
     /**
-     * Change the Instrument Label
-     */
-    void slotChangeInstrumentLabel(InstrumentId id, QString label);
-
-    /**
      * Change the Track Label
      */
 //    void slotChangeTrackLabel(TrackId id, QString label);

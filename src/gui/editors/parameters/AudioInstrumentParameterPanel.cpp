@@ -236,7 +236,14 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     setButtonColour(index, bypassed, pluginBackgroundColour);
 
     if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
-        emit changeInstrumentLabel(instrumentId, button->text());
+        // A new plugin has been selected.  Let everyone know.
+        // This makes sure the TrackParameterBox and TrackButtons
+        // are updated to show the name of the plugin.
+        // ??? Yeah, but.  It would be better if the part of this that
+        //     actually changed the Instrument (AudioPluginDialog maybe?)
+        //     called changed() when it made the actual changes.  The
+        //     emitters of pluginSelected() would be a place to start.
+        m_selectedInstrument->changed();
     }
 }
 

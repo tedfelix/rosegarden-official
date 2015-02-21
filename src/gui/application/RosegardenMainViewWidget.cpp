@@ -195,16 +195,6 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             this,
             SLOT(slotDroppedNewAudio(QString)));
 
-    connect(m_instrumentParameterBox,
-            SIGNAL(changeInstrumentLabel(InstrumentId, QString)),
-            this,
-            SLOT(slotChangeInstrumentLabel(InstrumentId, QString)));
-
-    connect(m_instrumentParameterBox,
-            SIGNAL(changeInstrumentLabel(InstrumentId, QString)),
-            m_trackParameterBox,
-            SLOT(slotInstrumentLabelChanged(InstrumentId, QString)));
-
     connect(m_trackEditor->getTrackButtons(),
             SIGNAL(instrumentSelected(int)),
             m_trackParameterBox,
@@ -1606,13 +1596,6 @@ void
 RosegardenMainViewWidget::slotAddCommandToHistory(Command *command)
 {
     CommandHistory::getInstance()->addCommand(command);
-}
-
-void
-RosegardenMainViewWidget::slotChangeInstrumentLabel(InstrumentId id,
-        QString label)
-{
-    m_trackEditor->getTrackButtons()->changeInstrumentName(id, label);
 }
 
 #if 0

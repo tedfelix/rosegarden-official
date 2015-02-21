@@ -28,6 +28,7 @@
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "base/Track.h"
@@ -131,6 +132,14 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
     setMinimumHeight(overallHeight);
 
     m_doc->getComposition().addObserver(this);
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 TrackButtons::~TrackButtons() {
@@ -881,10 +890,8 @@ TrackButtons::changeLabelDisplayMode(TrackLabel::DisplayMode mode)
 }
 
 void
-TrackButtons::changeInstrumentName(InstrumentId id, QString programChangeName)
+TrackButtons::slotInstrumentChanged(Instrument *instrument)
 {
-    //RG_DEBUG << "TrackButtons::changeInstrumentName( id =" << id << ", programChangeName = " << programChangeName << ")";
-
     Composition &comp = m_doc->getComposition();
 
     // For each track, search for the one with this instrument ID.
@@ -892,10 +899,45 @@ TrackButtons::changeInstrumentName(InstrumentId id, QString programChangeName)
     for (int i = 0; i < m_tracks; i++) {
         Track *track = comp.getTrackByPosition(i);
 
-        if (track  &&  track->getInstrument() == id) {
+        if (track  &&  track->getInstrument() == instrument->getId()) {
 
             // Set the program change name and update the UI.
-            m_trackLabels[i]->setProgramChangeName(programChangeName);
+
+            // For a SoftSynth, use the plugin's name.
+            if (instrument->getType() == Instrument::SoftSynth) {
+
+                // ??? This code is in at least four places.  Twice here, once
+                //     in TrackParameterBox, once in ManageMetronomeDialog, ...
+                //     Search on "strtoqstr(plugin->getIdentifier())" to find
+                //     them.
+                //     Probably should factor out into an AudioPluginInstance
+                //     member.  getDisplayName()?
+
+                AudioPluginInstance *plugin =
+                        instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+                if (plugin) {
+                    // we don't translate any plugin program names or other texts
+                    QString pname = strtoqstr(plugin->getProgram());
+                    QString identifier = strtoqstr(plugin->getIdentifier());
+                    if (identifier != "") {
+                        QString type, soName, label;
+                        PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+                        if (pname == "") {
+                            pname = strtoqstr(plugin->getDistinctiveConfigurationText());
+                        }
+                        if (pname != "") {
+                            pname = QString("%1: %2").arg(label).arg(pname);
+                        } else {
+                            pname = label;
+                        }
+                    }
+
+                    m_trackLabels[i]->setProgramChangeName(pname);
+                }
+            } else {
+                m_trackLabels[i]->setProgramChangeName(QObject::tr(instrument->getProgramName().c_str()));
+            }
+
             m_trackLabels[i]->updateLabel();
 
         }

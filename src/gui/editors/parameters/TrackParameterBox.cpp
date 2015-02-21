@@ -35,6 +35,7 @@
 #include "base/Device.h"
 #include "base/Exception.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
@@ -465,6 +466,14 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
             this, SLOT(slotStaffBracketChanged(int)));
 
     m_doc->getComposition().addObserver(this);
+
+    // Hold on to this to make sure it stays around as long as we do.
+    m_instrumentStaticSignals = Instrument::getStaticSignals();
+
+    connect(m_instrumentStaticSignals.data(),
+            SIGNAL(changed(Instrument *)),
+            this,
+            SLOT(slotInstrumentChanged(Instrument *)));
 
     slotUpdateControls(-1);
 }
@@ -965,9 +974,9 @@ TrackParameterBox::slotRecordingChannelChanged(int index)
 }
 
 void
-TrackParameterBox::slotInstrumentLabelChanged(InstrumentId id, QString label)
+TrackParameterBox::slotInstrumentChanged(Instrument * /*instrument*/)
 {
-    RG_DEBUG << "TrackParameterBox::slotInstrumentLabelChanged(" << id << ") = " << label << "\n";
+    //RG_DEBUG << "TrackParameterBox::slotInstrumentChanged()";
     populatePlaybackDeviceList();
     slotUpdateControls(-1);
 }

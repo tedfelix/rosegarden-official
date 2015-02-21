@@ -31,6 +31,7 @@
 #include "gui/widgets/ColourTable.h"
 
 #include <QString>
+#include <QSharedPointer>
 
 #include <map>
 #include <vector>
@@ -47,6 +48,7 @@ namespace Rosegarden
 {
 
 class RosegardenDocument;
+class InstrumentStaticSignals;
 
 
 class TrackParameterBox : public RosegardenParameterBox,
@@ -81,7 +83,7 @@ public slots:
      *  the cryptic "-1".
      */
     void slotUpdateControls(int dummy);
-    void slotInstrumentLabelChanged(InstrumentId id, QString label);
+    void slotInstrumentChanged(Instrument *instrument);
 
     void slotClefChanged(int clef);
     void slotTransposeChanged(int transpose);
@@ -165,6 +167,7 @@ private:
 
     void selectedTrackNameChanged();
 
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

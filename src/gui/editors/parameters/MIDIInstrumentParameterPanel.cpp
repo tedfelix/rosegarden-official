@@ -373,19 +373,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         setRotaryToValue(it->controller, int(value));
     }
 
-    // Make sure other parts of the system are in sync with the program
-    // name.  Most notably the TrackButton for the current track.
-    // ??? Get this out of here.  It does not belong.  It should be
-    //     possible to use ISS::changed() instead.  TrackParameterBox
-    //     and TrackButtons should connect themselves for Instrument
-    //     change notifications and do what is needed.  This signal
-    //     should be removed everywhere.
-    //     See TrackButtons::changeInstrumentName() and
-    //     TrackParameterBox::slotInstrumentLabelChanged().
-    emit changeInstrumentLabel(
-            m_selectedInstrument->getId(),
-            m_selectedInstrument->getProgramName().c_str());
-
     RG_DEBUG << "setupForInstrument() end";
 }
 

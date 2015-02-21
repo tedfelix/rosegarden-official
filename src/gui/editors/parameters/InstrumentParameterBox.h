@@ -90,8 +90,6 @@ public slots:
 
 signals:
 
-    void changeInstrumentLabel(InstrumentId id, QString label);
-
     void selectPlugin(QWidget *, InstrumentId id, int index);
     void showPluginGUI(InstrumentId id, int index);
 
