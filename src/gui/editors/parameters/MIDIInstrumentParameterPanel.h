@@ -50,13 +50,18 @@ class SqueezedLabel;
 class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
+
 public:
 
     MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
 
     /// Update all widgets from the Instrument.
     /**
-     * Called each time the selected track changes.
+     * Called each time the selected track changes.  Also called whenever
+     * the selected Instrument's parameters change (see
+     * slotInstrumentChanged()).
+     *
+     * rename: updateWidgets()?
      */
     void setupForInstrument(Instrument *);
 
@@ -69,6 +74,7 @@ public:
     void clearReceiveExternal();
 
 public slots:
+
     /// Handle external Bank Selects and Program Changes.
     /**
      * When the "Receive External" checkbox is checked, this routine takes
@@ -98,6 +104,7 @@ public slots:
             int programChange, int bankLSB, int bankMSB);
 
 private slots:
+
     /// Handle InstrumentStaticSignals::changed()
     void slotInstrumentChanged(Instrument *);
 
@@ -154,8 +161,6 @@ private:
 
     // Variation
     QLabel             *m_variationLabel;
-    // ??? See comments in slotVariationClicked() related to getting
-    //     rid of this checkbox.
     QCheckBox          *m_variationCheckBox;
     QComboBox          *m_variationComboBox;
     ProgramList         m_variations;
@@ -180,7 +185,7 @@ private:
         SqueezedLabel *label;
         int controller;
     };
-    // ??? getValueFromRotary() and setRotaryToValue() would benefit
+    // ??? getValueFromRotary() would benefit
     //     from this being a std::map indexed by controller.
     typedef std::vector<RotaryInfo> RotaryInfoVector;
     RotaryInfoVector    m_rotaries;
@@ -191,11 +196,10 @@ private:
     void setupControllers(MidiDevice *);
 
     int getValueFromRotary(int controller);
-    void setRotaryToValue(int controller, int value);
+
 
     QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
-
 
 
 }

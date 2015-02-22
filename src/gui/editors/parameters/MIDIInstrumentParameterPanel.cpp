@@ -63,8 +63,8 @@ namespace Rosegarden
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
         RosegardenDocument *doc, QWidget *parent) :
     InstrumentParameterPanel(doc, parent),
-    m_rotaryFrame(0),
-    m_rotaryMapper(new QSignalMapper(this))
+    m_rotaryFrame(NULL),
+    m_rotaryGrid(NULL)
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel ctor";
 
@@ -237,6 +237,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
 
     // Rotary Mapper
+    m_rotaryMapper = new QSignalMapper(this);
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
 
@@ -265,112 +266,76 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     if (!instrument)
         return;
 
-    // In some cases setupForInstrument gets called several times.
-    // This shortcuts this activity since only one setup is needed.
-    // ??? Problem is that this prevents legitimate changes to the
-    //     instrument from getting to the UI.  Removing this fixes
-    //     numerous update bugs related to making changes in the
-    //     Manage MIDI Devices window.
-    // ??? This might be preventing endless recursion as this routine
-    //     might indirectly fire off calls to itself.  This seems unlikely
-    //     as testing with the following check removed has revealed no
-    //     endless loops or crashes.
-    // ??? Another possibility is that this was put here to prevent reloading
-    //     the comboboxes (updateBankComboBox(), etc...).  Without this
-    //     check, every change by the user will trigger a reloading of the
-    //     comboboxes.  Since the combobox values are cached (e.g. m_banks),
-    //     it's easy to detect changes without help from the client and avoid
-    //     unnecessary updates.  I will add that check as I review the
-    //     combobox update routines.  Then this will no longer be a
-    //     possibility.
-#if 0
-    if (m_selectedInstrument == instrument) {
-        RG_DEBUG << "setupForInstrument(): Early exit.  Instrument didn't change.";
-        RG_DEBUG << "setupForInstrument() end";
-        return;
-    }
-#endif
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (instrument->getDevice());
+    MidiDevice *md = dynamic_cast<MidiDevice *>(instrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument(): No MidiDevice for Instrument " << instrument->getId() << '\n';
         RG_DEBUG << "setupForInstrument() end";
-        return ;
+        return;
     }
+
+    // Instrument name
 
     setSelectedInstrument(instrument,
                           instrument->getLocalizedPresentationName());
 
-    // Set Studio Device name
-    //
+    // Studio Device (connection) name
+
     QString connection(RosegardenSequencer::getInstance()->getConnection(md->getId()));
 
     if (connection == "") {
         m_connectionLabel->setText(tr("[ %1 ]").arg(tr("No connection")));
     } else {
-
         // remove trailing "(duplex)", "(read only)", "(write only)" etc
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
 
         QString text = QObject::tr("[ %1 ]").arg(connection);
-        /*QString origText(text);
-
-        QFontMetrics metrics(m_connectionLabel->fontMetrics());
-        int maxwidth = metrics.width
-            ("Program: [X]   Acoustic Grand Piano 123");// kind of arbitrary!
-
-        int hlen = text.length() / 2;
-        while (metrics.width(text) > maxwidth && text.length() > 10) {
-            --hlen;
-            text = origText.left(hlen) + "..." + origText.right(hlen);
-        }
-
-        if (text.length() > origText.length() - 7) text = origText;*/
+        // ??? Do we really need to translate the version with square
+        //     brackets as well?  Or can we just setText(text)?
         m_connectionLabel->setText(QObject::tr(text.toStdString().c_str()));
     }
 
-    // Update CheckBoxes
-    
+    // Percussion
     m_percussionCheckBox->setChecked(instrument->isPercussion());
-    m_programCheckBox->setChecked(instrument->sendsProgramChange());
+    
+    // Bank
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
+    updateBankComboBox();
+
+    // Program
+    m_programCheckBox->setChecked(instrument->sendsProgramChange());
+    updateProgramComboBox();
+
+    // Variation
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
+    updateVariationComboBox();
 
-    // Update ComboBoxes
-
+    // Channel
     m_channelValue->setCurrentIndex(
             m_selectedInstrument->hasFixedChannel() ? 1 : 0);
 
-    // ??? Do these fire off the combobox handlers?  Maybe.  Although each of
-    //     these culminates in a setCurrentIndex() which we've verified does
-    //     not fire an activated(int), some of these do directly call the
-    //     handlers which in turn will fire multiple signals.  This needs
-    //     to be investigated.
-    updateBankComboBox();
-    updateProgramComboBox();
-    updateVariationComboBox();
-
-    // Update Rotary Widgets
+    // Controller Rotaries
 
     // Setup the Rotaries
-    // ??? Does this fire off the rotary handlers?  Probably not.
     setupControllers(md);
 
-    // Set all the positions by controller number
-    //
-    for (RotaryInfoVector::iterator it = m_rotaries.begin() ;
-            it != m_rotaries.end(); ++it) {
+    // For each rotary
+    for (RotaryInfoVector::iterator rotaryIter = m_rotaries.begin();
+            rotaryIter != m_rotaries.end(); ++rotaryIter) {
         MidiByte value = 0;
 
         try {
             value = instrument->getControllerValue(
-                        MidiByte(it->controller));
-        } catch (...) {
+                        MidiByte(rotaryIter->controller));
+        } catch (...) {  // unknown controller, try the next one
             continue;
         }
-        // ??? Does this fire off the rotary handlers?  Testing indicates no.
-        setRotaryToValue(it->controller, int(value));
+
+        rotaryIter->rotary->setPosition(static_cast<float>(value));
+
+        // ??? Should we call rotaryIter->rotary->setCentered() too???
+        //     What does it do?  This code never called that, so
+        //     apparently it does nothing.
+        //rotaryIter->rotary->setCentered((value == 64));
     }
 
     RG_DEBUG << "setupForInstrument() end";
@@ -385,6 +350,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         return;
 
     if (!m_rotaryFrame) {
+
+        // ??? Can we move all of this to the ctor?
+
         m_rotaryFrame = new QFrame(this);
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
@@ -446,8 +414,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             rotary->setMinimum(it->getMin());
             rotary->setMaximum(it->getMax());
+            // ??? This might cause unnecessary redrawing if the default
+            //     is centered, but the current position is not the center.
+            //     Note that the old code never updated this.
+            //     Is this not actually used for anything?
             rotary->setCentered((it->getDefault() == 64));
-            rotary->setPosition(it->getDefault());
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
@@ -528,19 +499,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             delete rmj->label;
         }
         m_rotaries = RotaryInfoVector(m_rotaries.begin(), rmi);
-    }
-}
-
-void
-MIDIInstrumentParameterPanel::setRotaryToValue(int controller, int value)
-{
-    RG_DEBUG << "setRotaryToValue(controller => " << controller << ", value => " << value << ")";
-
-    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        if (it->controller == controller) {
-            it->rotary->setPosition(float(value));
-            return ;
-        }
     }
 }
 
@@ -1311,6 +1269,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     if (!m_selectedInstrument)
         return;
 
+    // ??? Only one caller.  Inline this.
     int value = getValueFromRotary(controllerNumber);
 
     if (value == -1) {
