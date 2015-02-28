@@ -284,16 +284,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     QString connection(RosegardenSequencer::getInstance()->getConnection(md->getId()));
 
     if (connection == "") {
-        m_connectionLabel->setText(tr("[ %1 ]").arg(tr("No connection")));
+        connection = tr("No connection");
     } else {
         // remove trailing "(duplex)", "(read only)", "(write only)" etc
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
-
-        QString text = QObject::tr("[ %1 ]").arg(connection);
-        // ??? Do we really need to translate the version with square
-        //     brackets as well?  Or can we just setText(text)?
-        m_connectionLabel->setText(QObject::tr(text.toStdString().c_str()));
     }
+
+    m_connectionLabel->setText("[ " + connection + " ]");
 
     // Percussion
     m_percussionCheckBox->setChecked(instrument->isPercussion());
