@@ -237,6 +237,21 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_receiveExternalCheckBox->setChecked(false);
     m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
 
+    // Rotary Frame and Grid
+    m_rotaryFrame = new QFrame(this);
+    m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
+    m_rotaryGrid = new QGridLayout(m_rotaryFrame);
+    m_rotaryGrid->setSpacing(1);
+    m_rotaryGrid->setMargin(0);
+    m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
+    m_rotaryFrame->setLayout(m_rotaryGrid);
+    // Add the rotary frame to the main grid layout.
+    m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
+    // Add a spacer to take up the rest of the space.  This keeps
+    // the widgets above compact vertically.
+    m_mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
+    m_mainGrid->setRowStretch(11, 1);
+
     // Rotary Mapper
     m_rotaryMapper = new QSignalMapper(this);
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
@@ -313,7 +328,9 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Controller Rotaries
 
-    // Setup the Rotaries
+    // Make sure we have the right number of Rotary widgets and
+    // they have the proper labels.
+    // rename: setupRotaries()?
     setupControllers(md);
 
     // For each rotary
@@ -341,42 +358,23 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     if (!md)
         return;
 
-    if (!m_rotaryFrame) {
-
-        // ??? Can we move all of this to the ctor?
-
-        m_rotaryFrame = new QFrame(this);
-        m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
-        m_rotaryGrid = new QGridLayout(m_rotaryFrame);
-        m_rotaryGrid->setSpacing(1);
-        m_rotaryGrid->setMargin(0);
-        m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
-        m_rotaryFrame->setLayout(m_rotaryGrid);
-
-        // Add the rotary frame to the main grid layout.
-        m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
-        // Add a spacer to take up the rest of the space.  This keeps
-        // the widgets above compact vertically.
-        m_mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
-        m_mainGrid->setRowStretch(11, 1);
-    }
-
     // To cut down on flicker, we avoid destroying and recreating
     // widgets as far as possible here.  If a label already exists,
     // we just set its text; if a rotary exists, we only replace it
     // if we actually need a different one.
 
     Composition &comp = m_doc->getComposition();
+
     ControlList list = md->getControlParameters();
 
-    // sort by IPB position
-    //
+    // Sort by IPB position.
     std::sort(list.begin(), list.end(),
               ControlParameter::ControlPositionCmp());
 
     int count = 0;
-    RotaryInfoVector::iterator rmi = m_rotaries.begin();
+    RotaryInfoVector::iterator rotaryIter = m_rotaries.begin();
 
+    // For each controller
     for (ControlList::iterator it = list.begin();
             it != list.end(); ++it) {
         if (it->getIPBPosition() == -1)
@@ -393,16 +391,16 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         Rotary *rotary = 0;
 
         // If the Rotary widgets have already been created, update them.
-        if (rmi != m_rotaries.end()) {
+        if (rotaryIter != m_rotaries.end()) {
 
             // Update the controller number that is associated with the
             // existing rotary widget.
 
-            rmi->controller = it->getControllerValue();
+            rotaryIter->controller = it->getControllerValue();
 
             // Update the properties of the existing rotary widget.
 
-            rotary = rmi->rotary;
+            rotary = rotaryIter->rotary;
 
             rotary->setMinimum(it->getMin());
             rotary->setMaximum(it->getMax());
@@ -413,10 +411,10 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
-            rmi->label->setText(QObject::tr(it->getName().c_str()));
+            rotaryIter->label->setText(QObject::tr(it->getName().c_str()));
 
             // Next Rotary widget
-            ++rmi;
+            ++rotaryIter;
 
         } else {  // Need to create the Rotary widget.
 
@@ -444,7 +442,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                                 20,                // size
                                 Rotary::NoTicks,   // ticks
                                 false,             // snapToTicks
-                                (it->getDefault() == 64));  // centred
+                                (it->getDefault() == 64));  // centred, see setCentered() above
             rotary->setKnobColour(knobColour);
             hboxLayout->addWidget(rotary);
 
@@ -471,7 +469,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             connect(rotary, SIGNAL(valueChanged(float)),
                     m_rotaryMapper, SLOT(map()));
 
-            rmi = m_rotaries.end();
+            rotaryIter = m_rotaries.end();
         }
 
         // Add signal mapping
@@ -484,12 +482,14 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
     // If there are more rotary widgets than this instrument needs,
     // delete them.
-    if (rmi != m_rotaries.end()) {
-        for (RotaryInfoVector::iterator rmj = rmi; rmj != m_rotaries.end(); ++rmj) {
-            delete rmj->rotary;
-            delete rmj->label;
+    if (rotaryIter != m_rotaries.end()) {
+        for (RotaryInfoVector::iterator it = rotaryIter; it != m_rotaries.end(); ++it) {
+            // ??? Instead of deleting and recreating, we could hide the
+            //     extras and bring them back when needed.
+            delete it->rotary;
+            delete it->label;
         }
-        m_rotaries = RotaryInfoVector(m_rotaries.begin(), rmi);
+        m_rotaries.resize(count);
     }
 }
 
