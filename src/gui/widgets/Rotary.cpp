@@ -443,15 +443,13 @@ Rotary::mousePressEvent(QMouseEvent *e)
         m_buttonPressed = true;
         m_lastY = e->y();
         m_lastX = e->x();
-    } else if (e->button() == Qt::MidButton) // reset to default
-    {
-        m_position = m_initialPosition;
+    } else if (e->button() == Qt::MidButton) {  // reset to centre position
+        m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
-    } else if (e->button() == Qt::RightButton) // reset to centre position
-    {
-        m_position = (m_maximum + m_minimum) / 2.0;
+    } else if (e->button() == Qt::RightButton) {  // reset to default
+        m_position = m_initialPosition;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
