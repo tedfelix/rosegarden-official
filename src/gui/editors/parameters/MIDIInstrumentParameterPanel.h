@@ -183,7 +183,7 @@ private:
     {
         Rotary *rotary;
         SqueezedLabel *label;
-        int controller;
+        MidiByte controller;
     };
     // ??? getValueFromRotary() would benefit
     //     from this being a std::map indexed by controller.
@@ -195,7 +195,7 @@ private:
     /// Create or update the rotary controls for each controller.
     void setupControllers(MidiDevice *);
 
-    int getValueFromRotary(int controller);
+    int getValueFromRotary(MidiByte controller);
 
 
     QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;

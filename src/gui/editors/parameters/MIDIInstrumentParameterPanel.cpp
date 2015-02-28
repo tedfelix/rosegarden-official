@@ -56,6 +56,7 @@
 #include <algorithm>  // std::sort
 #include <string>
 #include <iostream>
+#include <cmath>
 
 namespace Rosegarden
 {
@@ -324,18 +325,12 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         MidiByte value = 0;
 
         try {
-            value = instrument->getControllerValue(
-                        MidiByte(rotaryIter->controller));
+            value = instrument->getControllerValue(rotaryIter->controller);
         } catch (...) {  // unknown controller, try the next one
             continue;
         }
 
         rotaryIter->rotary->setPosition(static_cast<float>(value));
-
-        // ??? Should we call rotaryIter->rotary->setCentered() too???
-        //     What does it do?  This code never called that, so
-        //     apparently it does nothing.
-        //rotaryIter->rotary->setCentered((value == 64));
     }
 
     RG_DEBUG << "setupForInstrument() end";
@@ -414,10 +409,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             rotary->setMinimum(it->getMin());
             rotary->setMaximum(it->getMax());
-            // ??? This might cause unnecessary redrawing if the default
-            //     is centered, but the current position is not the center.
-            //     Note that the old code never updated this.
-            //     Is this not actually used for anything?
+            // If the default is 64, then this is most likely a "centered"
+            // control which should show its distance from the 12 o'clock
+            // position around the outside.
             rotary->setCentered((it->getDefault() == 64));
             rotary->setKnobColour(knobColour);
 
@@ -503,13 +497,13 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 }
 
 int
-MIDIInstrumentParameterPanel::getValueFromRotary(int controller)
+MIDIInstrumentParameterPanel::getValueFromRotary(MidiByte controller)
 {
     RG_DEBUG << "getValueFromRotary(" << controller << ")";
 
     for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
         if (it->controller == controller)
-            return int(it->rotary->getPosition());
+            return static_cast<int>(std::floor(it->rotary->getPosition() + .5));
     }
 
     return -1;

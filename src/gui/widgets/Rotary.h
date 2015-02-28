@@ -83,10 +83,19 @@ public:
     void setKnobColour(const QColor &colour);
     QColor getKnobColour() const { return m_knobColour; }
     
-    // Centered status
-    //
-    bool getCentered() const { return m_centred; }
+    /// Set "distance from center" mode.
+    /**
+     * In centered mode, the rotary shows the distance from the
+     * center (12 o'clock) around the outside.  This is useful for
+     * pan and eq controls where the 12 o'clock position is the default.
+     *
+     * When not in centered mode, the distance from minimum is shown
+     * around the outside of the rotary.  This is appropriate for
+     * volume.
+     */
     void setCentered(bool centred);
+    /// Are we in "distance from center" mode?
+    bool getCentered() const { return m_centred; }
 
 signals:
     void valueChanged(float);
