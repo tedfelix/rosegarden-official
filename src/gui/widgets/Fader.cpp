@@ -50,6 +50,7 @@ Fader::Fader(AudioLevel::FaderType type,
         m_vertical(h > w),
         m_min(0),
         m_max(0),
+        m_default(0),
         m_type(type),
         m_clickMousePos( -1)
 {
@@ -84,6 +85,7 @@ Fader::Fader(int min, int max, int deflt,
         m_vertical(h > w),
         m_min(min),
         m_max(max),
+        m_default(deflt),
         m_clickMousePos( -1)
 {
 //    setBackgroundMode(Qt::NoBackground);
@@ -117,6 +119,7 @@ Fader::Fader(int min, int max, int deflt,
         m_vertical(vertical),
         m_min(min),
         m_max(max),
+        m_default(deflt),
         m_clickMousePos( -1)
 {
 //    setBackgroundMode(Qt::NoBackground);
@@ -357,7 +360,14 @@ Fader::mousePressEvent(QMouseEvent *e)
                 showFloatText();
             }
         }
+    } else if (e->button() == Qt::MidButton) {  // reset to centre position
+        setFader((m_max + m_min) / 2.0);
+        emit faderChanged(m_value);
+    } else if (e->button() == Qt::RightButton) {  // reset to default
+        setFader(m_default);
+        emit faderChanged(m_value);
     }
+
 }
 
 void

@@ -98,6 +98,7 @@ protected:
 
     int m_min;
     int m_max;
+    int m_default;
     AudioLevel::FaderType m_type;
 
     int m_clickMousePos;
