@@ -613,7 +613,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     }
 
     // Keep bank value enabled if percussion map is in use
-    if  (m_percussionCheckBox->isChecked()) {
+    if (m_selectedInstrument->isPercussion()) {
         m_bankComboBox->setEnabled(true);
     } else {
         m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
@@ -715,7 +715,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     }
 
     // Keep program value enabled if percussion map is in use
-    if  (m_percussionCheckBox->isChecked()) {
+    if (m_selectedInstrument->isPercussion()) {
         m_programComboBox->setEnabled(true);
     } else {
         m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
@@ -816,6 +816,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     }
 
     // Compute the current variation.
+    // ??? This might be combined into the previous for loop.
 
     int currentVariation = -1;
 
@@ -860,7 +861,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
                   (currentVariation == -1  &&  !m_variations.empty()));
 
     // Keep variation value enabled if percussion map is in use
-    if  (m_percussionCheckBox->isChecked()) {
+    if (m_selectedInstrument->isPercussion()) {
         m_variationComboBox->setEnabled(true);
     } else {
         m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
