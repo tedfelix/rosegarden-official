@@ -158,6 +158,7 @@ private:
     ProgramList         m_programs;
     /// From the selected instrument.
     void updateProgramComboBox();
+    static bool hasNoName(const MidiProgram &p);
 
     // Variation
     QLabel             *m_variationLabel;

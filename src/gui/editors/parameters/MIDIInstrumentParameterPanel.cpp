@@ -53,7 +53,7 @@
 #include <QString>
 #include <QWidget>
 
-#include <algorithm>  // std::sort
+#include <algorithm>  // std::sort(), std::remove_if()
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -514,7 +514,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return ;
+        return;
     }
 
     int currentBank = -1;
@@ -643,6 +643,12 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     m_bankComboBox->setCurrentIndex(currentBank);
 }
 
+bool
+MIDIInstrumentParameterPanel::hasNoName(const MidiProgram &p)
+{
+    return (p.getName() == "");
+}
+
 void
 MIDIInstrumentParameterPanel::updateProgramComboBox()
 {
@@ -655,28 +661,20 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
             dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return ;
+        return;
     }
 
     RG_DEBUG << "updateProgramComboBox(): variation type is " << md->getVariationType();
 
     MidiBank bank = m_selectedInstrument->getProgram().getBank();
 
-    ProgramList programsAll =
+    ProgramList programs =
             md->getPrograms0thVariation(m_selectedInstrument->isPercussion(), bank);
 
-    // Filter out the programs that have no name.
-    // ??? We should probably do this in place with erase().  Although
-    //     ProgramList is a vector, it's very unlikely that we will ever
-    //     find anything to erase(), so performance isn't an issue.  We
-    //     would just need to be careful to avoid using an invalidated
-    //     iterator.  Should be able to avoid that by sticking to indexes.
-    ProgramList programs;
-    for (unsigned i = 0; i < programsAll.size(); ++i) {
-        if (programsAll[i].getName() != "") {
-            programs.push_back(programsAll[i]);
-        }
-    }
+    // Remove the programs that have no name.
+    programs.erase(std::remove_if(programs.begin(), programs.end(),
+                                  MIDIInstrumentParameterPanel::hasNoName),
+                   programs.end());
 
     // If we've got programs, show the Program and "Receive external" widgets.
     // Why not "show = (programs.size()>1)"?  Because that would hide the
@@ -758,11 +756,11 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     if (!m_selectedInstrument)
         return;
 
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-                     (m_selectedInstrument->getDevice());
+    MidiDevice *md =
+            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return ;
+        return;
     }
 
     RG_DEBUG << "updateVariationComboBox(): Variation type is " << md->getVariationType();
@@ -960,10 +958,11 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     if (!m_selectedInstrument)
         return;
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+    MidiDevice *md =
+            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return ;
+        return;
     }
 
     const MidiBank &bank = m_banks[index];
@@ -1085,7 +1084,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
 
     if (!md) {
         std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotExternalProgramChange(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return ;
+        return;
     }
 #endif
 
@@ -1144,7 +1143,8 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     if (!m_selectedInstrument)
         return;
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+    MidiDevice *md =
+            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
     if (!md)
         return;
 
@@ -1156,7 +1156,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     //     Just range-check index.
     if (prg == 0) {
         std::cerr << "MIDIInstrumentParameterPanel::slotSelectProgram(): Program change not found in bank.\n";
-        return ;
+        return;
     }
 
     // If there has been no change, bail.
