@@ -195,9 +195,6 @@ private:
     /// Create or update the rotary controls for each controller.
     void setupControllers(MidiDevice *);
 
-    int getValueFromRotary(MidiByte controller);
-
-
     QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 

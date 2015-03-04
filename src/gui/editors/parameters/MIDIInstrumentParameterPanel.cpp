@@ -493,19 +493,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     }
 }
 
-int
-MIDIInstrumentParameterPanel::getValueFromRotary(MidiByte controller)
-{
-    RG_DEBUG << "getValueFromRotary(" << controller << ")";
-
-    for (RotaryInfoVector::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        if (it->controller == controller)
-            return static_cast<int>(std::floor(it->rotary->getPosition() + .5));
-    }
-
-    return -1;
-}
-
 void
 MIDIInstrumentParameterPanel::showBank(bool show)
 {
@@ -1162,9 +1149,11 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         return;
 
     const MidiProgram *prg = &m_programs[index];
-    // ??? This will never be true because m_programs is a vector.  If
-    //     index isn't in it, the vector will grow to accommodate it,
-    //     and prg will point to that new element.
+    // ??? This will never be true because of the way std::vector
+    //     works.  op[] will always return an element with an address
+    //     of some sort.  If index is out of bounds, then this will
+    //     point to garbage.  Need to implement better checking here.
+    //     Just range-check index.
     if (prg == 0) {
         std::cerr << "MIDIInstrumentParameterPanel::slotSelectProgram(): Program change not found in bank.\n";
         return ;
@@ -1260,8 +1249,12 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     if (!m_selectedInstrument)
         return;
 
-    // ??? Only one caller.  Inline this.
-    int value = getValueFromRotary(controllerNumber);
+    int value = -1;
+
+    // Figure out who sent this signal.
+    Rotary *rotary = dynamic_cast<Rotary *>(m_rotaryMapper->mapping(controllerNumber));
+    if (rotary)
+        value = static_cast<int>(std::floor(rotary->getPosition() + .5));
 
     if (value == -1) {
         std::cerr << "MIDIInstrumentParameterPanel::slotControllerChanged(): Couldn't get value of rotary for controller " << controllerNumber << '\n';
