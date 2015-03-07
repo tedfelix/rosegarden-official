@@ -989,20 +989,6 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
     // Make sure the Instrument is valid WRT the Device.
 
-    // ??? Start dealing with this in here, then see if it would be easier
-    //     to move some of this into Instrument so that other parts of the
-    //     system (e.g. the bank editor) can use it.  Perhaps a set of
-    //     "setSafe" functions (setSafeProgramChange(p), setSafeBank(b), and
-    //     setSafeVariation(v)) that act like setters, but ensure that the
-    //     Instrument is consistent when they are done.  The bank editor
-    //     probably wouldn't need that.  It would need more of a forceSafe()
-    //     that would just arbitrarily pick something if the current Program
-    //     ends up invalid wrt the device.  Maybe just jump to the first
-    //     bank/program if any.  Alternatively, we could just display
-    //     "unselected" in the comboboxes which would allow the system to
-    //     handle undefined banks/PCs in the instrument without making
-    //     changes on the user.  This might be useful in some situations.
-
     // If the current bank/program is not valid for this device, fix it.
     if (!m_selectedInstrument->isProgramValid()) {
 
