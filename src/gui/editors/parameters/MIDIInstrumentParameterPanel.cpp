@@ -882,12 +882,16 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
     m_selectedInstrument->setPercussion(checked);
     m_selectedInstrument->changed();
 
-    // ??? At this point, the bank will be invalid.  Should we select
-    //     the first valid bank/program for the current mode (percussion
-    //     or not percussion)?  This seems to be the right thing to
-    //     do for the most common use case of setting up a track for
-    //     percussion on a new device.  OTOH, the Device should already
-    //     know which channels are percussion and which aren't.
+    // At this point, the bank will be invalid.  We could select
+    // the first valid bank/program for the current mode (percussion
+    // or not percussion).  This seems to be the right thing to
+    // do for the most common use case of setting up a track for
+    // percussion on a new device.  OTOH, the Device should already
+    // know which channels are percussion and which aren't.  So, it
+    // seems highly unlikely that anyone will ever click the Percussion
+    // checkbox.  Probably best just to leave this simple.  The user
+    // will normally be presented with a blank bank combobox and they
+    // can fix the problem themselves.
 }
 
 void
@@ -1050,16 +1054,6 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     if (!m_selectedInstrument)
         return;
 
-#if 0
-    MidiDevice *md =
-            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
-
-    if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotExternalProgramChange(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
-        return;
-    }
-#endif
-
     bool bankChanged = false;
 
     // MSB Bank Select
@@ -1082,8 +1076,6 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
 
     bool pcChanged = false;
 
-    // ??? Can programChange be -1?
-
     // If the Program Change is changing
     if (m_selectedInstrument->getProgramChange() !=
                 static_cast<MidiByte>(programChange)) {
@@ -1095,12 +1087,11 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     if (!pcChanged  &&  !bankChanged)
         return;
 
-    // ??? What if an unexpected bank/program change comes in?  One
-    //     that isn't in the Device.  How should we handle it?
-    //     Ignore and let the comboboxes show something informative?
-    //     Pop up an annoying message box explaining that an
-    //     unexpected bank/program came in?  Just go with the
-    //     first valid and let the user be confused?
+    // ??? If an unexpected bank/program change comes in, we could
+    //     pop up a message box to let the user know the values so
+    //     they can fix their device file.  Might be pretty annoying.
+    //     Maybe with a "[X] Don't *ever* show this pop-up again"
+    //     checkbox.
 
     // Just one change notification for the three potential changes.
     // See comments in slotSelectBank() for further discussion.
@@ -1121,15 +1112,6 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         return;
 
     const MidiProgram *prg = &m_programs[index];
-    // ??? This will never be true because of the way std::vector
-    //     works.  op[] will always return an element with an address
-    //     of some sort.  If index is out of bounds, then this will
-    //     point to garbage.  Need to implement better checking here.
-    //     Just range-check index.
-    if (prg == 0) {
-        std::cerr << "MIDIInstrumentParameterPanel::slotSelectProgram(): Program change not found in bank.\n";
-        return;
-    }
 
     // If there has been no change, bail.
     if (m_selectedInstrument->getProgramChange() == prg->getProgram())
@@ -1137,11 +1119,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 
     m_selectedInstrument->setProgramChange(prg->getProgram());
 
-    // ??? In NoVariations mode, it should be very difficult to end
-    //     up with an invalid program change here.  The combobox only
-    //     displays valid program changes.  The Device and the combobox
-    //     would have to be out of sync somehow.  Can we come up with
-    //     a test case?
+    // In Variations mode, select the 0th variation.
 
     // In Variations mode, it's very easy to select an "invalid"
     // program change.  I.e. one for which the bank is not valid.  Go
@@ -1170,7 +1148,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         }
     }
 
-    // Just one change notification for the three potential changes.
+    // Just one change notification for the two potential changes.
     // See comments in slotSelectBank() for further discussion.
     m_selectedInstrument->changed();
 }
@@ -1182,11 +1160,6 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 
     if (!m_selectedInstrument)
         return;
-
-    if (index < 0  ||  index > static_cast<int>(m_variations.size())) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation(): index " << index << " out of range\n";
-        return;
-    }
 
     MidiBank newBank = m_variations[index].getBank();
 
@@ -1205,8 +1178,6 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     if (!changed)
         return;
 
-    // Just one change notification for the two potential changes.
-    // See comments in slotSelectBank() for further discussion.
     m_selectedInstrument->changed();
 }
 

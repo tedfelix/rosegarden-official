@@ -180,14 +180,15 @@ private:
     QFrame             *m_rotaryFrame;
     QGridLayout        *m_rotaryGrid;
 
+    // ??? Consider creating a RotaryWithLabel class.  Maybe derived
+    //     from QWidget?  Then much of the creation code in
+    //     setupControllers() could be moved to this new class.
     struct RotaryInfo
     {
         Rotary *rotary;
         SqueezedLabel *label;
         MidiByte controller;
     };
-    // ??? getValueFromRotary() would benefit
-    //     from this being a std::map indexed by controller.
     typedef std::vector<RotaryInfo> RotaryInfoVector;
     RotaryInfoVector    m_rotaries;
 
