@@ -612,12 +612,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         }
     }
 
-    // Keep bank value enabled if percussion map is in use
-    if (m_selectedInstrument->isPercussion()) {
-        m_bankComboBox->setEnabled(true);
-    } else {
-        m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
-    }
+    m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
 
 #if 0
 // ??? This is a pretty nifty idea, but unfortunately, it requires
@@ -714,12 +709,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         }
     }
 
-    // Keep program value enabled if percussion map is in use
-    if (m_selectedInstrument->isPercussion()) {
-        m_programComboBox->setEnabled(true);
-    } else {
-        m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
-    }    
+    m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
 
 #if 0
 // ??? This is a pretty nifty idea, but unfortunately, it requires
@@ -860,12 +850,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     showVariation(m_variations.size() > 1  ||
                   (currentVariation == -1  &&  !m_variations.empty()));
 
-    // Keep variation value enabled if percussion map is in use
-    if (m_selectedInstrument->isPercussion()) {
-        m_variationComboBox->setEnabled(true);
-    } else {
-        m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
-    }    
+    m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
 }
 
 void
