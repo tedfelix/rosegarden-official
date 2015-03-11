@@ -671,7 +671,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
                                   MIDIInstrumentParameterPanel::hasNoName),
                    programs.end());
 
-    // If we've got programs, show the Program and "Receive external" widgets.
+    // If we've got programs, show the Program widgets.
     // Why not "show = (programs.size()>1)"?  Because that would hide the
     // program checkbox which would take away the user's ability to
     // enable/disable program changes.  If we do away with the checkbox
@@ -680,8 +680,6 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     m_programLabel->setVisible(show);
     m_programCheckBox->setVisible(show);
     m_programComboBox->setVisible(show);
-    m_receiveExternalCheckBox->setVisible(show);
-    m_receiveExternalLabel->setVisible(show);
 
     int currentProgram = -1;
 
