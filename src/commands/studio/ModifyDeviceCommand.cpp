@@ -95,6 +95,9 @@ ModifyDeviceCommand::execute()
         return;
     }
 
+    // Save Original Values for Undo
+
+    // ??? Really wish we could just m_oldDevice = *(midiDevice).  See below.
     m_oldName = midiDevice->getName();
     m_oldBankList = midiDevice->getBanks();
     m_oldProgramList = midiDevice->getPrograms();
@@ -103,6 +106,20 @@ ModifyDeviceCommand::execute()
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
+    InstrumentList instruments = midiDevice->getAllInstruments();
+    for (size_t i = 0; i < instruments.size(); ++i) {
+        // ??? Preserving just the programs isn't enough.  We need
+        //     to preserve the rest of the Instrument as well.  However,
+        //     the auto/fixed channel feature has made it impossible
+        //     to safely make copies of Instrument objects.  Also, Instrument
+        //     has an ID.  How should that be handled for undo?  ISTM
+        //     that we either need to introduce some sort of copyForUndo()
+        //     hack to each object, or develop a set of standards for coding
+        //     objects that are undo-safe.  Sounds like a pretty big project.
+        m_oldInstrumentPrograms.push_back(instruments[i]->getProgram());
+    }
+
+    // Make the Changes
 
     if (m_changeVariation)
         midiDevice->setVariationType(m_variationType);
@@ -117,6 +134,13 @@ ModifyDeviceCommand::execute()
                 midiDevice->replaceBankList(m_bankList);
             if (m_changePrograms)
                 midiDevice->replaceProgramList(m_programList);
+            if (m_changeBanks || m_changePrograms) {
+                // Make sure the instruments make sense.
+                for (size_t i = 0; i < instruments.size(); ++i) {
+                    instruments[i]->pickFirstProgram(
+                            midiDevice->isPercussionNumber(i));
+                }
+            }
         }
 
         if (m_changeKeyMappings) {
@@ -151,19 +175,6 @@ ModifyDeviceCommand::execute()
     //!!! merge option?
     if (m_changeControls) {
         midiDevice->replaceControlParameters(m_controlList);
-    }
-
-    // Make sure the instruments make sense.
-
-    InstrumentList instruments = midiDevice->getAllInstruments();
-    for (size_t i = 0; i < instruments.size(); ++i) {
-        // Save for undo
-        m_oldInstrumentPrograms.push_back(instruments[i]->getProgram());
-
-        // Don't change the program if it's valid.  The user might
-        // be importing something unrelated to programs.
-        if (!instruments[i]->isProgramValid())
-            instruments[i]->pickFirstProgram(midiDevice->isPercussionNumber(i));
     }
 }
 
