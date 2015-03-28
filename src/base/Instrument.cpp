@@ -378,6 +378,18 @@ Instrument::getAlias() const
 }
 
 void
+Instrument::sendChannelSetup()
+{
+    // MIDI only
+    if (m_type != Midi)
+        return;
+
+    if (hasFixedChannel()) {
+        StudioControl::sendChannelSetup(this, m_channel);
+    }
+}
+
+void
 Instrument::
 setProgram(const MidiProgram &program)
 {

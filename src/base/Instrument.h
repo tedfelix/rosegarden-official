@@ -291,6 +291,12 @@ public:
     void sendWholeDeviceDestroyed(void)
     { emit wholeDeviceDestroyed(); }
 
+    /// Send out program changes, etc..., for fixed channels.
+    /**
+     * See StudioControl::sendChannelSetup().
+     */
+    void sendChannelSetup();
+
     /// For connecting to Instrument's static signals.
     /**
      * It's a good idea to hold on to a copy of this QSharedPointer in

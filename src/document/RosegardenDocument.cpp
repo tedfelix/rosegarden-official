@@ -885,9 +885,11 @@ void RosegardenDocument::initialiseStudio()
         recordIns[i]->setMappedId(mappedId);
     }
 
+    // For each instrument
     for (; it != list.end(); ++it) {
         if ((*it)->getType() == Instrument::Audio ||
                 (*it)->getType() == Instrument::SoftSynth) {
+
             MappedObjectId mappedId =
                 StudioControl::createStudioObject(
                     MappedObject::AudioFader);
@@ -977,16 +979,31 @@ void RosegardenDocument::initialiseStudio()
             pluginContainers.push_back(*it);
 
             audioCount++;
+
+        } else if ((*it)->getType() == Instrument::Midi) {
+            // Call Instrument::sendChannelSetup() to make sure the program
+            // change for this track has been sent out.
+            // The test case (MIPP #35) for this is a bit esoteric:
+            //   1. Load a composition and play it.
+            //   2. Load a different composition, DO NOT play it.
+            //   3. Select tracks in the new composition and play the MIDI
+            //      input keyboard.
+            //   4. Verify that you hear the programs for the new composition.
+            // Without the following, you'll hear the programs for the old
+            // composition.
+            (*it)->sendChannelSetup();
         }
     }
 
     RG_DEBUG << "RosegardenDocument::initialiseStudio: Have " << pluginContainers.size() << " plugin container(s)" << endl;
 
+    // For each plugin container
     for (std::vector<PluginContainer *>::iterator pci =
              pluginContainers.begin(); pci != pluginContainers.end(); ++pci) {
 
         // Initialise all the plugins for this Instrument or Buss
 
+        // For each plugin
         for (PluginInstanceIterator pli = (*pci)->beginPlugins();
                 pli != (*pci)->endPlugins(); ++pli) {
 
