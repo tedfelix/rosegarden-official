@@ -1385,6 +1385,22 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // start the autosave timer
     m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
 
+#if 1
+    // Moving these three lines prior to the initView() call ensures that
+    // the Instruments are properly connected to their devices prior to
+    // the MIPP attempting to display the connection field.  With this
+    // after initView(), you will see "No connection" on the MIPP until
+    // you change tracks.
+
+    connect(m_doc, SIGNAL(devicesResyncd()),
+            this, SLOT(slotDocumentDevicesResyncd()));
+
+    // Connect the devices prior to calling initView() to make sure there
+    // is connection information for the MIPP to display.
+    RosegardenSequencer::getInstance()->connectSomething();
+    newDocument->getStudio().resyncDeviceConnections();
+#endif
+
     // finally recreate the main view
     //
     initView();
@@ -1394,11 +1410,18 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
                 getView()->getTrackEditor(), SLOT(slotScrollToTrack(int)));
     }
 
+#if 0
+    // These three lines have been moved prior to the call to initView().
+    // See the comments above for discussion.
+    // ??? This was done April 2015.  If there have been no problems after
+    //     a year, it's probably safe to clean this up.
+
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
 
     RosegardenSequencer::getInstance()->connectSomething();
     newDocument->getStudio().resyncDeviceConnections();
+#endif
 
     m_doc->checkSequencerTimer();
     m_doc->clearModifiedStatus();
