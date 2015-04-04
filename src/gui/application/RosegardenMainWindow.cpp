@@ -297,7 +297,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_lircCommander(0),
 #endif
     m_tranzport(0),
-    m_deviceManager(0),
+//  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(0),
     m_cpuMeterTimer(new QTimer(static_cast<QObject *>(this)))
 {
@@ -8074,21 +8074,24 @@ RosegardenMainWindow::slotBankEditorClosed()
 void
 RosegardenMainWindow::slotDeviceManagerClosed()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()";
+    RG_DEBUG << "slotDeviceManagerClosed()";
 
-    if (m_doc->isModified()) {
-        if (m_view) {
-            // ??? Can't just remove this when the time comes.
-            // ??? I suspect this call is being made because the Track and
-            //     Instrument Parameters boxes need to be updated.  It
-            //     would be better to call
-            //     m_doc->getComposition().notifyTrackChanged() and have
-            //     the parameter boxes respond by updating.
-            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
-        }
-    }
+    // If no changes were made to the Studio, bail.
+    // Of course, this might be true simply because other changes had been
+    // made prior to launching DeviceManagerDialog.
+    if (!m_doc->isModified())
+        return;
 
-    m_deviceManager = 0;
+    if (!m_view)
+        return;
+
+    // Force an update to the MIDIInstrumentParameterPanel.
+    // ??? This is pretty hokey.  Maybe hide this in a
+    //     RosegardenMainViewWidget::updateUI()?
+    // ??? This really shouldn't be needed anyway.  DeviceManagerDialog should
+    //     invoke some sort of Studio::hasChanged() which will then notify the
+    //     various observers (the UI) and they will update as needed.
+    m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
 }
 
 void

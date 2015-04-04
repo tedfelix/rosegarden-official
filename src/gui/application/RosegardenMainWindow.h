@@ -36,6 +36,7 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QToolBar>
+#include <QPointer>
 
 #include <map>
 #include <set>
@@ -231,7 +232,7 @@ public:
     /**
      * Get a device manager object
      */
-    DeviceManagerDialog *getDeviceManager() { return m_deviceManager; }
+    QPointer<DeviceManagerDialog> getDeviceManager()  { return m_deviceManager; }
 
 
 
@@ -1729,7 +1730,7 @@ private:
 #endif     
     TranzportClient *m_tranzport;
         
-    DeviceManagerDialog *m_deviceManager;    
+    QPointer<DeviceManagerDialog> m_deviceManager;
 
     WarningWidget *m_warningWidget;
 
