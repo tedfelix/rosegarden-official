@@ -575,7 +575,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
             if (instrument->getNaturalChannel() != channel)
                 continue;
 
-            ControlList cl = dev->getIPBControlParameters();
+            ControlList cl = dev->getControlParameters();
             for (ControlList::const_iterator controlIter = cl.begin();
                     controlIter != cl.end(); ++controlIter) {
                 if ((*controlIter).getControllerValue() == controller) {

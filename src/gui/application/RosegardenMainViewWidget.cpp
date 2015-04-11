@@ -2066,6 +2066,12 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
         }
     }
 
+    // Delegate to the currently active track-related window.
+    // The idea here is that the user can remotely switch between the
+    // three track-related windows (rg main, MIDI Mixer, and Audio Mixer)
+    // via controller 81 (above).  Then they can control the tracks
+    // on that window via other controllers: 82 to select a track
+    // and others to change the selected track.
     emit controllerDeviceEventReceived(e, m_lastActiveMainWindow);
 }
 
@@ -2143,7 +2149,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                 return ;
             }
 
-            ControlList cl = md->getIPBControlParameters();
+            ControlList cl = md->getControlParameters();
             for (ControlList::const_iterator i = cl.begin(); i != cl.end(); ++i) {
                 if ((*i).getControllerValue() == controller) {
                     RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
