@@ -26,6 +26,7 @@
 #include <QDataStream>
 #include <QString>
 #include "sequencer/RosegardenSequencer.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 
 namespace Rosegarden
@@ -47,6 +48,11 @@ ReconnectDeviceCommand::execute()
                      << " reconnected device " << m_deviceId
                      << " to " << m_newConnection << std::endl;
     }
+
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 void
@@ -63,6 +69,11 @@ ReconnectDeviceCommand::unexecute()
                      << " reconnected device " << m_deviceId
                      << " to " << m_oldConnection << std::endl;
     }
+
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 }

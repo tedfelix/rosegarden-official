@@ -107,8 +107,6 @@ signals:
     void deviceNameChanged(DeviceId);
     void deviceNamesChanged();
     
-    void closing();
-    
 public slots:
     void slotOutputPortClicked(QTreeWidgetItem * item, int column);
     void slotPlaybackDeviceSelected();
@@ -137,15 +135,11 @@ public slots:
     void slotEditControllerDefinitions();
     
     void show();
-    void slotClose();
     void slotHelpRequested();
     
     void slotResyncDevicesReceived();
     
 protected:
-    virtual void closeEvent(QCloseEvent *);
-
-    //
     RosegardenDocument *m_doc;
     Studio *m_studio;
     
@@ -156,6 +150,9 @@ protected:
     int m_UserRole_DeviceId; // = Qt::UserRole + 1;
     
     QString m_noPortName;
+
+private slots:
+    void slotCloseButtonPress();
 };
 
 

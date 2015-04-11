@@ -113,7 +113,7 @@ CreateOrDeleteDeviceCommand::execute()
 
         RosegardenSequencer::getInstance()->removeDevice(m_deviceId);
 
-        SEQMAN_DEBUG << "CreateDeviceCommand::unexecute - "
+        SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
                      << " removed device " << m_deviceId << endl;
 
         m_studio->removeDevice(m_deviceId);
@@ -121,6 +121,11 @@ CreateOrDeleteDeviceCommand::execute()
         m_deviceId = Device::NO_DEVICE;
         m_deviceCreated = false;
     }
+
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 }

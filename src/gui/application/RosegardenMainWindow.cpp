@@ -6972,9 +6972,6 @@ RosegardenMainWindow::slotManageMIDIDevices()
         connect(m_deviceManager, SIGNAL(editControllers(DeviceId)),
                 this, SLOT(slotEditControlParameters(DeviceId)));
         
-        connect(m_deviceManager, SIGNAL(closing()),
-                this, SLOT(slotDeviceManagerClosed()));
-
         connect(this, SIGNAL(documentAboutToChange()),
                 m_deviceManager, SLOT(close()));
 
@@ -8072,29 +8069,6 @@ RosegardenMainWindow::slotBankEditorClosed()
 }
 
 void
-RosegardenMainWindow::slotDeviceManagerClosed()
-{
-    RG_DEBUG << "slotDeviceManagerClosed()";
-
-    // If no changes were made to the Studio, bail.
-    // Of course, this might be true simply because other changes had been
-    // made prior to launching DeviceManagerDialog.
-    if (!m_doc->isModified())
-        return;
-
-    if (!m_view)
-        return;
-
-    // Force an update to the MIDIInstrumentParameterPanel.
-    // ??? This is pretty hokey.  Maybe hide this in a
-    //     RosegardenMainViewWidget::updateUI()?
-    // ??? This really shouldn't be needed anyway.  DeviceManagerDialog should
-    //     invoke some sort of Studio::hasChanged() which will then notify the
-    //     various observers (the UI) and they will update as needed.
-    m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
-}
-
-void
 RosegardenMainWindow::slotSynthPluginManagerClosed()
 {
     RG_DEBUG << "RosegardenMainWindow::slotSynthPluginManagerClosed()\n";
@@ -8684,6 +8658,19 @@ RosegardenMainWindow::checkAudioPath()
     slotDisplayWarning(WarningWidget::Other, "Misc. warning!", "Informative misc. warning!");
     slotDisplayWarning(WarningWidget::Info, "Information", "Informative information!");
 #endif
+}
+
+
+void
+RosegardenMainWindow::uiUpdateKludge()
+{
+    // Force an update to the UI.
+    // ??? This is a kludge.  Callers to this should be using
+    //     notification mechanisms (e.g. hasChanged()) within the
+    //     objects they are modifying.  That, in turn, would cause
+    //     relevant portions of the UI (observers) to update.
+    m_view->slotSelectTrackSegments(
+            m_doc->getComposition().getSelectedTrack());
 }
 
 

@@ -350,9 +350,10 @@ public:
     bool testAudioPath(QString op); // and open the dialog to set it if unset
 
     bool haveAudioImporter() const { return m_haveAudioImporter; }
-    
-    
-    
+
+    void uiUpdateKludge();
+
+
 
 protected:
 
@@ -1465,11 +1466,6 @@ public slots:
      * called when the BankEditor is being closed
      */
     void slotBankEditorClosed();
-
-    /**
-     * called when the Device Manager is being closed
-     */
-    void slotDeviceManagerClosed();
 
     /**
      * called when the synth manager is being closed

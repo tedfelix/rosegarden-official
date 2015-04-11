@@ -23,6 +23,7 @@
 #include "base/Studio.h"
 #include <QString>
 #include "sequencer/RosegardenSequencer.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 
 namespace Rosegarden
@@ -37,6 +38,10 @@ RenameDeviceCommand::execute()
     RosegardenSequencer::getInstance()->renameDevice
         (m_deviceId, strtoqstr(m_name));
     device->setName(m_name);
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 void
@@ -47,6 +52,10 @@ RenameDeviceCommand::unexecute()
     device->setName(m_oldName);
     RosegardenSequencer::getInstance()->renameDevice
         (m_deviceId, strtoqstr(m_oldName));
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 }

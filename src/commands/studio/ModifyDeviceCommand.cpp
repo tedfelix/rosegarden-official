@@ -21,6 +21,8 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
+#include "gui/application/RosegardenMainWindow.h"
+
 #include <QString>
 #include <iostream>
 
@@ -176,6 +178,11 @@ ModifyDeviceCommand::execute()
     if (m_changeControls) {
         midiDevice->replaceControlParameters(m_controlList);
     }
+
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 void
@@ -207,6 +214,11 @@ ModifyDeviceCommand::unexecute()
     for (size_t i = 0; i < instruments.size(); ++i) {
         instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
     }
+
+    // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
+    //     which would then notify all observers (e.g. MIPP) who, in turn,
+    //     would update themselves.
+    RosegardenMainWindow::self()->uiUpdateKludge();
 }
 
 }
