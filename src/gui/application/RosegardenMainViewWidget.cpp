@@ -2070,8 +2070,12 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
     // The idea here is that the user can remotely switch between the
     // three track-related windows (rg main, MIDI Mixer, and Audio Mixer)
     // via controller 81 (above).  Then they can control the tracks
-    // on that window via other controllers: 82 to select a track
-    // and others to change the selected track.
+    // on that window via other controllers.
+
+    // The behavior is slightly different between the three windows.
+    // The main window uses controller 82 to select a track while
+    // the other two use the incoming MIDI channel to select which
+    // track will be modified.
     emit controllerDeviceEventReceived(e, m_lastActiveMainWindow);
 }
 

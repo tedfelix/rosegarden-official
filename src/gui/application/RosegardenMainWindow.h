@@ -91,12 +91,26 @@ class AudioManagerDialog;
 class SequencerThread;
 class TranzportClient;
 class WarningWidget;
-    
+
+/// The main Rosegarden application window.
 /**
-  * The base class for the main Rosegarden application window.  This
-  * sets up the main window and reads the config file as well as
-  * providing a menubar, toolbar and statusbar.  The central widget
-  * is a RosegardenMainViewWidget, connected to the window's document.
+  * This class sets up the main window and reads the config file as well as
+  * providing a menubar, toolbar and statusbar.  The main widget
+  * is a RosegardenMainViewWidget, connected to the RosegardenDocument.
+  *
+  * An instance of this class is created by main() in main.cpp.  That
+  * instance can be accessed from anywhere via RosegardenMainWindow::self().
+  *
+  * This class owns many of the key objects in the system, including:
+  *
+  *   * getDocument() returns the RosegardenDocument instance.
+  *   * m_sequencerThread is the SequencerThread.
+  *   * m_segmentParameterBox is the "Segment Parameters" box.
+  *   * m_trackParameterBox is the "Track Parameters" box.
+  *   * m_instrumentParameterBox is the "Instrument Parameters" box.
+  *   * getView() returns the RosegardenMainViewWidget instance which
+  *     contains the TrackEditor.
+  *   * getTransport() returns the TransportDialog instance.
   */
 class RosegardenMainWindow : public QMainWindow, public ActionFileClient
 {
@@ -107,7 +121,7 @@ class RosegardenMainWindow : public QMainWindow, public ActionFileClient
 public:
 
     /**
-     * construtor of RosegardenMainWindow, calls all init functions to
+     * constructor of RosegardenMainWindow, calls all init functions to
      * create the application.
      * \arg useSequencer : if true, the sequencer is launched
      * @see initMenuBar initToolBar
@@ -136,15 +150,11 @@ public:
      */
     void closeEvent(QCloseEvent *event);
 
-    /*
-     * Get the current copy of the app object
-     */
+    /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
     
-    /**
-     * Return current Main Toolbar
-     */
-    QToolBar* toolBar( const char* name="\0" );
+    /// Return current Main Toolbar
+//    QToolBar* toolBar( const char* name="\0" );
     
     /**
      * returns a pointer to the current document connected to the
@@ -1658,7 +1668,7 @@ private:
     QLabel             *m_zoomLabel;
 
     
-    QLabel* m_statusBarLabel1;
+//    QLabel* m_statusBarLabel1;
     // SequenceManager
     //
     SequenceManager *m_seqManager;

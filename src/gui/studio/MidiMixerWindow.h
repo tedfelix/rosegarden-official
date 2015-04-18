@@ -64,8 +64,13 @@ public:
 public slots:
     void slotSynchronise(); // synchronise with updated studio
 
+    /// Handle events from the external controller port.
+    /**
+     * @see RosegardenMainViewWidget::slotControllerDeviceEventReceived()
+     * @see AudioMixerWindow::slotControllerDeviceEventReceived()
+     */
     void slotControllerDeviceEventReceived(MappedEvent *,
-                                           const void *);
+                                           const void *preferredCustomer);
 
     void slotCurrentTabChanged(QWidget *);
     void slotHelpRequested();

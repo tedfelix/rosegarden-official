@@ -54,15 +54,21 @@ class EventView;
 class Composition;
 class LevelInfo;
 
+/// Parent for the TrackEditor
 /**
  * The RosegardenMainViewWidget class provides the view widget for the
  * RosegardenMainWindow instance.  The View instance inherits QWidget as a
  * base class and represents the view object of a QMainWindow. As
- * RosegardenMainViewWidget is part of the docuement-view model, it needs a
+ * RosegardenMainViewWidget is part of the document-view model, it needs a
  * reference to the document object connected with it by the
  * RosegardenMainWindow class to manipulate and display the document
  * structure provided by the RosegardenDocument class.
- *      
+ *
+ * An instance of this class is owned by RosegardenMainWindow and can be
+ * accessed via RosegardenMainWindow::getView().  This class is
+ * primarily responsible for containing the TrackEditor instance which
+ * can be accessed via getTrackEditor().
+ *
  * @author Guillaume Laurent with KDevelop 0.4
  */
 class RosegardenMainViewWidget : public QWidget
@@ -70,7 +76,7 @@ class RosegardenMainViewWidget : public QWidget
     Q_OBJECT
 public:
 
-    /**p
+    /**
      * Constructor for the main view
      */
     RosegardenMainViewWidget(bool showTrackLabels,
@@ -246,7 +252,7 @@ public slots:
     void slotActiveMainWindowChanged(const QWidget *);
     void slotActiveMainWindowChanged(); // uses sender()
 
-    /// Handle "external controller" port events.
+    /// Handle events from the external controller port.
     /**
      * This routine handles remote control events received from a
      * device connected to the "external controller" port.
@@ -256,7 +262,7 @@ public slots:
      */
     void slotControllerDeviceEventReceived(MappedEvent *);
 
-    /// Handle "external controller" port events.
+    /// Handle events from the external controller port.
     /**
      * This routine handles remote control events received from a
      * device connected to the "external controller" port.
@@ -267,6 +273,9 @@ public slots:
      * setting for the current track.  Program Changes change the program
      * for the current track.  For audio tracks, MIDI volume and pan
      * controllers control the track's volume and pan.
+     *
+     * @see MidiMixerWindow::slotControllerDeviceEventReceived()
+     * @see AudioMixerWindow::slotControllerDeviceEventReceived()
      */
     void slotControllerDeviceEventReceived(
             MappedEvent *, const void *preferredCustomer);

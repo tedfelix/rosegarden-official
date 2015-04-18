@@ -63,8 +63,13 @@ public:
     void updateMonitorMeters();
 
 public slots:
+    /// Handle events from the external controller port.
+    /**
+     * @see RosegardenMainViewWidget::slotControllerDeviceEventReceived()
+     * @see MidiMixerWindow::slotControllerDeviceEventReceived()
+     */
     void slotControllerDeviceEventReceived(MappedEvent *,
-                                           const void *);
+                                           const void *preferredCustomer);
 
 signals:
     void selectPlugin(QWidget *, InstrumentId id, int index);

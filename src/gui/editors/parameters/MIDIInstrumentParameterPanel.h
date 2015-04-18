@@ -47,6 +47,7 @@ class Rotary;
 class SqueezedLabel;
 
 
+/// "Instrument Parameters" box for MIDI Instrument's.  AKA "MIPP".
 class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
@@ -57,9 +58,12 @@ public:
 
     /// Update all widgets from the Instrument.
     /**
-     * Called each time the selected track changes.  Also called whenever
-     * the selected Instrument's parameters change (see
-     * slotInstrumentChanged()).
+     * This is called in two situations:
+     *
+     *   1. Whenever a different Instrument needs to be displayed.  E.g. when
+     *      the user selects a different track.
+     *   2. Whenever the current Instrument's parameters change (see
+     *      slotInstrumentChanged()).
      *
      * rename: updateWidgets()?
      */
