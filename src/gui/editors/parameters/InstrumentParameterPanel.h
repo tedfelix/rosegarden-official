@@ -50,14 +50,17 @@ public:
 protected:
     RosegardenDocument *m_doc;
 
-    Instrument *m_selectedInstrument;
+    void setSelectedInstrument(Instrument *);
+    Instrument *getSelectedInstrument();
+
     SqueezedLabel *m_instrumentLabel;
-    /// Make instrument our selected instrument.
-    void setSelectedInstrument(Instrument *instrument, QString label);
 
 private slots:
     /// m_selectedInstrument is being destroyed
     void slotInstrumentGone(void);
+
+private:
+    Instrument *m_selectedInstrument;
 };
 
 

@@ -32,8 +32,8 @@ InstrumentParameterPanel::InstrumentParameterPanel(RosegardenDocument *doc,
                                                    QWidget *parent) :
     QFrame(parent),
     m_doc(doc),
-    m_selectedInstrument(0),
-    m_instrumentLabel(new SqueezedLabel(this))
+    m_instrumentLabel(new SqueezedLabel(this)),
+    m_selectedInstrument(0)
 {
 }
 
@@ -45,8 +45,7 @@ InstrumentParameterPanel::setDocument(RosegardenDocument *doc)
 }
 
 void
-InstrumentParameterPanel::
-setSelectedInstrument(Instrument *instrument, QString label)
+InstrumentParameterPanel::setSelectedInstrument(Instrument *instrument)
 {
     m_selectedInstrument = instrument;
     if (instrument) {
@@ -54,7 +53,12 @@ setSelectedInstrument(Instrument *instrument, QString label)
         connect(instrument, SIGNAL(destroyed()),
                 this, SLOT(slotInstrumentGone()));
     }
-    m_instrumentLabel->setText(label);
+}
+
+Instrument *
+InstrumentParameterPanel::getSelectedInstrument()
+{
+    return m_selectedInstrument;
 }
 
 void
@@ -64,6 +68,7 @@ slotInstrumentGone(void)
     m_selectedInstrument = 0;
     m_instrumentLabel->setText(tr("none"));
 }
+
 
 }
 

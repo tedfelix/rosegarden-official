@@ -56,18 +56,12 @@ public:
 
     MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
 
-    /// Update all widgets from the Instrument.
+    /// Display a potentially different Instrument.
     /**
-     * This is called in two situations:
-     *
-     *   1. Whenever a different Instrument needs to be displayed.  E.g. when
-     *      the user selects a different track.
-     *   2. Whenever the current Instrument's parameters change (see
-     *      slotInstrumentChanged()).
-     *
-     * rename: updateWidgets()?
+     * This is called whenever a different Instrument needs to be displayed.
+     * E.g. when the user selects a different track.
      */
-    void setupForInstrument(Instrument *);
+    void displayInstrument(Instrument *);
 
     /// Uncheck the Receive External checkbox.
     /**
@@ -200,6 +194,9 @@ private:
 
     /// Create or update the rotary controls for each controller.
     void setupControllers(MidiDevice *);
+
+    /// Update all widgets from the selected Instrument.
+    void updateWidgets();
 
     QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };

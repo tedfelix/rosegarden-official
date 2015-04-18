@@ -135,13 +135,13 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
 void
 AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
 {
-    if (m_selectedInstrument == 0)
+    if (getSelectedInstrument() == 0)
         return ;
 
-    if (m_selectedInstrument->getType() == Instrument::Audio ||
-            m_selectedInstrument->getType() == Instrument::SoftSynth) {
-        m_selectedInstrument->setLevel(dB);
-        m_selectedInstrument->changed();
+    if (getSelectedInstrument()->getType() == Instrument::Audio ||
+            getSelectedInstrument()->getType() == Instrument::SoftSynth) {
+        getSelectedInstrument()->setLevel(dB);
+        getSelectedInstrument()->changed();
 
         // ??? Perhaps it would be better for StudioControl to monitor
         //     the Instrument objects (InstrumentStaticSignals::changed())
@@ -149,7 +149,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
         //     Then this StudioControl code which is spread all over this
         //     class and duplicated in AudioMixerWindow would go away.
         StudioControl::setStudioObjectProperty
-        (MappedObjectId(m_selectedInstrument->getMappedId()),
+        (MappedObjectId(getSelectedInstrument()->getMappedId()),
          MappedAudioFader::FaderLevel,
          MappedObjectValue(dB));
     }
@@ -158,18 +158,18 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
 void
 AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
 {
-    if (m_selectedInstrument == 0)
+    if (getSelectedInstrument() == 0)
         return ;
 
     //    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
     //          << dB << ")" << std::endl;
 
-    if (m_selectedInstrument->getType() == Instrument::Audio) {
-        m_selectedInstrument->setRecordLevel(dB);
-        m_selectedInstrument->changed();
+    if (getSelectedInstrument()->getType() == Instrument::Audio) {
+        getSelectedInstrument()->setRecordLevel(dB);
+        getSelectedInstrument()->changed();
 
         StudioControl::setStudioObjectProperty
-        (MappedObjectId(m_selectedInstrument->getMappedId()),
+        (MappedObjectId(getSelectedInstrument()->getMappedId()),
          MappedAudioFader::FaderRecordLevel,
          MappedObjectValue(dB));
     }
@@ -179,8 +179,8 @@ void
 AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         int index, int plugin)
 {
-    if (!m_selectedInstrument ||
-        instrumentId != m_selectedInstrument->getId()) {
+    if (!getSelectedInstrument() ||
+        instrumentId != getSelectedInstrument()->getId()) {
         return;
     }
 
@@ -196,7 +196,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     QString noneText;
 
     // updates synth gui button &c:
-    m_audioFader->slotSetInstrument(&m_doc->getStudio(), m_selectedInstrument);
+    m_audioFader->slotSetInstrument(&m_doc->getStudio(), getSelectedInstrument());
 
     if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
         button = m_audioFader->m_synthButton;
@@ -228,7 +228,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     }
 
     AudioPluginInstance *inst =
-        m_selectedInstrument->getPlugin(index);
+        getSelectedInstrument()->getPlugin(index);
 
     if (inst)
         bypassed = inst->isBypassed();
@@ -243,7 +243,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         //     actually changed the Instrument (AudioPluginDialog maybe?)
         //     called changed() when it made the actual changes.  The
         //     emitters of pluginSelected() would be a place to start.
-        m_selectedInstrument->changed();
+        getSelectedInstrument()->changed();
     }
 }
 
@@ -251,12 +251,12 @@ void
 AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
         int pluginIndex, bool bp)
 {
-    if (!m_selectedInstrument ||
-            instrumentId != m_selectedInstrument->getId())
+    if (!getSelectedInstrument() ||
+            instrumentId != getSelectedInstrument()->getId())
         return ;
 
     AudioPluginInstance *inst =
-        m_selectedInstrument->getPlugin(pluginIndex);
+        getSelectedInstrument()->getPlugin(pluginIndex);
 
     QColor backgroundColour = QColor(Qt::black); // default background colour
 
@@ -319,7 +319,7 @@ AudioInstrumentParameterPanel::slotSynthButtonClicked()
 void
 AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 {
-    emit showPluginGUI(m_selectedInstrument->getId(),
+    emit showPluginGUI(getSelectedInstrument()->getId(),
                        Instrument::SYNTH_PLUGIN_POSITION);
 }
 
@@ -330,12 +330,12 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
     << "pan = " << pan << endl;
 
     StudioControl::setStudioObjectProperty
-    (MappedObjectId(m_selectedInstrument->getMappedId()),
+    (MappedObjectId(getSelectedInstrument()->getMappedId()),
      MappedAudioFader::Pan,
      MappedObjectValue(pan));
 
-    m_selectedInstrument->setPan(MidiByte(pan + 100.0));
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->setPan(MidiByte(pan + 100.0));
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -345,7 +345,7 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright,
     //    RG_DEBUG << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
     //             << "," << dBright << ")" << endl;
 
-    if (m_selectedInstrument) {
+    if (getSelectedInstrument()) {
         // Always set stereo, because we have to reflect what's happening
         // with the pan setting even on mono tracks
         m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
@@ -363,7 +363,8 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     QString l = QString::fromStdString(instrument->getAlias());
     if (l.isEmpty()) l = instrument->getLocalizedPresentationName();
 
-    setSelectedInstrument(instrument, l);
+    setSelectedInstrument(instrument);
+    m_instrumentLabel->setText(l);
 
     m_aliasButton->setInstrument(instrument);
 
@@ -436,11 +437,11 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
     RG_DEBUG << "AudioInstrumentParameterPanel::slotAudioChannels - "
     << "channels = " << channels << endl;
 
-    m_selectedInstrument->setAudioChannels(channels);
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->setAudioChannels(channels);
+    getSelectedInstrument()->changed();
 
     StudioControl::setStudioObjectProperty
-    (MappedObjectId(m_selectedInstrument->getMappedId()),
+    (MappedObjectId(getSelectedInstrument()->getMappedId()),
      MappedAudioFader::Channels,
      MappedObjectValue(channels));
 
@@ -449,8 +450,8 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 void
 AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 {
-    if (m_selectedInstrument) {
-        emit selectPlugin(0, m_selectedInstrument->getId(), index);
+    if (getSelectedInstrument()) {
+        emit selectPlugin(0, getSelectedInstrument()->getId(), index);
     }
 }
 
@@ -460,11 +461,11 @@ AudioInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
     if (!instrument)
         return;
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // If this isn't a change for the Instrument we are displaying, bail.
-    if (m_selectedInstrument->getId() != instrument->getId())
+    if (getSelectedInstrument()->getId() != instrument->getId())
         return;
 
     // Update the parameters on the widgets

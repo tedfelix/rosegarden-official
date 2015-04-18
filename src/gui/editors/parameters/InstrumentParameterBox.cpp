@@ -184,7 +184,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     } else { // Midi
 
         // Update the MIDI panel and bring it to the top.
-        m_midiInstrumentParameters->setupForInstrument(instrument);
+        m_midiInstrumentParameters->displayInstrument(instrument);
         m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
 
         // Update the MatrixWidget's PitchRuler.

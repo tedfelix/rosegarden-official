@@ -275,24 +275,36 @@ MIDIInstrumentParameterPanel::clearReceiveExternal()
 }
 
 void
-MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
+MIDIInstrumentParameterPanel::displayInstrument(Instrument *instrument)
 {
-    RG_DEBUG << "setupForInstrument() begin";
-
     if (!instrument)
         return;
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(instrument->getDevice());
+    setSelectedInstrument(instrument);
+    m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
+
+    updateWidgets();
+}
+
+void
+MIDIInstrumentParameterPanel::updateWidgets()
+{
+    RG_DEBUG << "updateWidgets() begin";
+
+    if (!getSelectedInstrument())
+        return;
+
+    MidiDevice *md = dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument(): No MidiDevice for Instrument " << instrument->getId() << '\n';
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateWidgets(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
         RG_DEBUG << "setupForInstrument() end";
         return;
     }
 
     // Instrument name
 
-    setSelectedInstrument(instrument,
-                          instrument->getLocalizedPresentationName());
+    m_instrumentLabel->setText(
+            getSelectedInstrument()->getLocalizedPresentationName());
 
     // Studio Device (connection) name
 
@@ -308,23 +320,23 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_connectionLabel->setText("[ " + connection + " ]");
 
     // Percussion
-    m_percussionCheckBox->setChecked(instrument->isPercussion());
+    m_percussionCheckBox->setChecked(getSelectedInstrument()->isPercussion());
     
     // Bank
-    m_bankCheckBox->setChecked(instrument->sendsBankSelect());
+    m_bankCheckBox->setChecked(getSelectedInstrument()->sendsBankSelect());
     updateBankComboBox();
 
     // Program
-    m_programCheckBox->setChecked(instrument->sendsProgramChange());
+    m_programCheckBox->setChecked(getSelectedInstrument()->sendsProgramChange());
     updateProgramComboBox();
 
     // Variation
-    m_variationCheckBox->setChecked(instrument->sendsBankSelect());
+    m_variationCheckBox->setChecked(getSelectedInstrument()->sendsBankSelect());
     updateVariationComboBox();
 
     // Channel
     m_channelValue->setCurrentIndex(
-            m_selectedInstrument->hasFixedChannel() ? 1 : 0);
+            getSelectedInstrument()->hasFixedChannel() ? 1 : 0);
 
     // Controller Rotaries
 
@@ -339,7 +351,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         MidiByte value = 0;
 
         try {
-            value = instrument->getControllerValue(rotaryIter->controller);
+            value = getSelectedInstrument()->getControllerValue(rotaryIter->controller);
         } catch (...) {  // unknown controller, try the next one
             continue;
         }
@@ -347,7 +359,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         rotaryIter->rotary->setPosition(static_cast<float>(value));
     }
 
-    RG_DEBUG << "setupForInstrument() end";
+    RG_DEBUG << "updateWidgets() end";
 }
 
 void
@@ -507,13 +519,13 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 {
     RG_DEBUG << "updateBankComboBox()";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     MidiDevice *md =
-            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+            dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
         return;
     }
 
@@ -524,7 +536,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
 
-        banks = md->getBanks(m_selectedInstrument->isPercussion());
+        banks = md->getBanks(getSelectedInstrument()->isPercussion());
 
         // If there are banks to display, show the bank widgets.
         // Why not showBank(banks.size()>1)?  Because that would hide the
@@ -535,7 +547,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
         // Find the selected bank in the MIDI Device's bank list.
         for (unsigned int i = 0; i < banks.size(); ++i) {
-            if (m_selectedInstrument->getProgram().getBank() == banks[i]) {
+            if (getSelectedInstrument()->getProgram().getBank() == banks[i]) {
                 currentBank = i;
                 break;
             }
@@ -556,9 +568,9 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         MidiByteList bytes;
 
         if (useMSB) {
-            bytes = md->getDistinctMSBs(m_selectedInstrument->isPercussion());
+            bytes = md->getDistinctMSBs(getSelectedInstrument()->isPercussion());
         } else {
-            bytes = md->getDistinctLSBs(m_selectedInstrument->isPercussion());
+            bytes = md->getDistinctLSBs(getSelectedInstrument()->isPercussion());
         }
 
         // If more than one bank value is found, show the bank widgets.
@@ -569,12 +581,12 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         if (useMSB) {
             for (unsigned int i = 0; i < bytes.size(); ++i) {
                 BankList bl = md->getBanksByMSB
-                              (m_selectedInstrument->isPercussion(), bytes[i]);
+                              (getSelectedInstrument()->isPercussion(), bytes[i]);
                 RG_DEBUG << "updateBankComboBox(): Have " << bl.size() << " variations for MSB " << bytes[i];
 
                 if (bl.size() == 0)
                     continue;
-                if (m_selectedInstrument->getMSB() == bytes[i]) {
+                if (getSelectedInstrument()->getMSB() == bytes[i]) {
                     currentBank = banks.size();
                 }
                 banks.push_back(bl[0]);
@@ -582,13 +594,13 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         } else {
             for (unsigned int i = 0; i < bytes.size(); ++i) {
                 BankList bl = md->getBanksByLSB
-                              (m_selectedInstrument->isPercussion(), bytes[i]);
+                              (getSelectedInstrument()->isPercussion(), bytes[i]);
 
                 RG_DEBUG << "updateBankComboBox(): Have " << bl.size() << " variations for LSB " << bytes[i];
 
                 if (bl.size() == 0)
                     continue;
-                if (m_selectedInstrument->getLSB() == bytes[i]) {
+                if (getSelectedInstrument()->getLSB() == bytes[i]) {
                     currentBank = banks.size();
                 }
                 banks.push_back(bl[0]);
@@ -612,7 +624,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         }
     }
 
-    m_bankComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
+    m_bankComboBox->setEnabled(getSelectedInstrument()->sendsBankSelect());
 
 #if 0
 // ??? This is a pretty nifty idea, but unfortunately, it requires
@@ -622,7 +634,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     // If the current bank was not found...
     if (currentBank < 0  &&  !banks.empty()) {
         // Format bank MSB:LSB and add to combobox.
-        MidiBank bank = m_selectedInstrument->getProgram().getBank();
+        MidiBank bank = getSelectedInstrument()->getProgram().getBank();
         QString bankString = QString("%1:%2").arg(bank.getMSB()).arg(bank.getLSB());
         m_bankComboBox->addItem(bankString);
         currentBank = banks.size();
@@ -649,22 +661,22 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 {
     RG_DEBUG << "updateProgramComboBox()";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     MidiDevice *md =
-            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+            dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
         return;
     }
 
     RG_DEBUG << "updateProgramComboBox(): variation type is " << md->getVariationType();
 
-    MidiBank bank = m_selectedInstrument->getProgram().getBank();
+    MidiBank bank = getSelectedInstrument()->getProgram().getBank();
 
     ProgramList programs =
-            md->getPrograms0thVariation(m_selectedInstrument->isPercussion(), bank);
+            md->getPrograms0thVariation(getSelectedInstrument()->isPercussion(), bank);
 
     // Remove the programs that have no name.
     programs.erase(std::remove_if(programs.begin(), programs.end(),
@@ -686,7 +698,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     // Compute the current program.
     for (unsigned i = 0; i < programs.size(); ++i) {
         // If the program change is the same...
-        if (m_selectedInstrument->getProgram().getProgram() == programs[i].getProgram()) {
+        if (getSelectedInstrument()->getProgram().getProgram() == programs[i].getProgram()) {
             currentProgram = i;
             break;
         }
@@ -707,7 +719,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         }
     }
 
-    m_programComboBox->setEnabled(m_selectedInstrument->sendsProgramChange());
+    m_programComboBox->setEnabled(getSelectedInstrument()->sendsProgramChange());
 
 #if 0
 // ??? This is a pretty nifty idea, but unfortunately, it requires
@@ -717,7 +729,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     // If the current program was not found...
     if (currentProgram < 0  &&  !m_programs.empty()) {
         // Format program change and add to combobox.
-        MidiByte programChange = m_selectedInstrument->getProgram().getProgram();
+        MidiByte programChange = getSelectedInstrument()->getProgram().getProgram();
         m_programComboBox->addItem(QString::number(programChange + 1));
         currentProgram = programs.size();
     }
@@ -741,13 +753,13 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 {
     RG_DEBUG << "updateVariationComboBox() begin...";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     MidiDevice *md =
-            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+            dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
         return;
     }
 
@@ -764,14 +776,14 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     MidiByteList variationBanks;
 
     if (useMSB) {
-        MidiByte lsb = m_selectedInstrument->getLSB();
-        variationBanks = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
+        MidiByte lsb = getSelectedInstrument()->getLSB();
+        variationBanks = md->getDistinctMSBs(getSelectedInstrument()->isPercussion(),
                                          lsb);
         RG_DEBUG << "updateVariationComboBox(): Have " << variationBanks.size() << " variations for LSB " << lsb;
 
     } else {
-        MidiByte msb = m_selectedInstrument->getMSB();
-        variationBanks = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
+        MidiByte msb = getSelectedInstrument()->getMSB();
+        variationBanks = md->getDistinctLSBs(getSelectedInstrument()->isPercussion(),
                                          msb);
 
         RG_DEBUG << "updateVariationComboBox(): Have " << variationBanks.size() << " variations for MSB " << msb;
@@ -786,15 +798,15 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         // Assemble the program for the variation.
         MidiBank bank;
         if (useMSB) {
-            bank = MidiBank(m_selectedInstrument->isPercussion(),
+            bank = MidiBank(getSelectedInstrument()->isPercussion(),
                             variationBanks[i],
-                            m_selectedInstrument->getLSB());
+                            getSelectedInstrument()->getLSB());
         } else {
-            bank = MidiBank(m_selectedInstrument->isPercussion(),
-                            m_selectedInstrument->getMSB(),
+            bank = MidiBank(getSelectedInstrument()->isPercussion(),
+                            getSelectedInstrument()->getMSB(),
                             variationBanks[i]);
         }
-        MidiProgram program(bank, m_selectedInstrument->getProgramChange());
+        MidiProgram program(bank, getSelectedInstrument()->getProgramChange());
 
         // Skip any programs without names.
         if (md->getProgramName(program) == "")
@@ -810,7 +822,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 
     // For each variation
     for (size_t i = 0; i < variations.size(); ++i) {
-        if (m_selectedInstrument->getProgram() == variations[i]) {
+        if (getSelectedInstrument()->getProgram() == variations[i]) {
             currentVariation = i;
             break;
         }
@@ -848,7 +860,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     showVariation(m_variations.size() > 1  ||
                   (currentVariation == -1  &&  !m_variations.empty()));
 
-    m_variationComboBox->setEnabled(m_selectedInstrument->sendsBankSelect());
+    m_variationComboBox->setEnabled(getSelectedInstrument()->sendsBankSelect());
 }
 
 void
@@ -857,15 +869,14 @@ MIDIInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
     if (!instrument)
         return;
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // If this isn't a change for the Instrument we are displaying, bail.
-    if (m_selectedInstrument->getId() != instrument->getId())
+    if (getSelectedInstrument()->getId() != instrument->getId())
         return;
 
-    // Update the parameters on the widgets
-    setupForInstrument(instrument);
+    updateWidgets();
 }
 
 void
@@ -873,12 +884,12 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 {
     RG_DEBUG << "slotPercussionClicked(" << checked << ")";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // Update the Instrument.
-    m_selectedInstrument->setPercussion(checked);
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->setPercussion(checked);
+    getSelectedInstrument()->changed();
 
     // At this point, the bank will be invalid.  We could select
     // the first valid bank/program for the current mode (percussion
@@ -897,12 +908,12 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
 {
     RG_DEBUG << "slotBankClicked()";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // Update the Instrument.
-    m_selectedInstrument->setSendBankSelect(checked);
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->setSendBankSelect(checked);
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -910,12 +921,12 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
 {
     RG_DEBUG << "slotProgramClicked()";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // Update the Instrument.
-    m_selectedInstrument->setSendProgramChange(checked);
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->setSendProgramChange(checked);
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -930,12 +941,12 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
     //     rid of this checkbox (and always send banks selects) and no one
     //     will notice.
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // Update the Instrument.
-    m_selectedInstrument->setSendBankSelect(checked);
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->setSendBankSelect(checked);
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -943,13 +954,13 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 {
     RG_DEBUG << "slotSelectBank() begin...";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     MidiDevice *md =
-            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+            dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank(): No MidiDevice for Instrument " << m_selectedInstrument->getId() << '\n';
+        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
         return;
     }
 
@@ -958,14 +969,14 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     bool change = false;
 
     if (md->getVariationType() != MidiDevice::VariationFromLSB) {
-        if (m_selectedInstrument->getLSB() != bank.getLSB()) {
-            m_selectedInstrument->setLSB(bank.getLSB());
+        if (getSelectedInstrument()->getLSB() != bank.getLSB()) {
+            getSelectedInstrument()->setLSB(bank.getLSB());
             change = true;
         }
     }
     if (md->getVariationType() != MidiDevice::VariationFromMSB) {
-        if (m_selectedInstrument->getMSB() != bank.getMSB()) {
-            m_selectedInstrument->setMSB(bank.getMSB());
+        if (getSelectedInstrument()->getMSB() != bank.getMSB()) {
+            getSelectedInstrument()->setMSB(bank.getMSB());
             change = true;
         }
     }
@@ -977,7 +988,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     // Make sure the Instrument is valid WRT the Device.
 
     // If the current bank/program is not valid for this device, fix it.
-    if (!m_selectedInstrument->isProgramValid()) {
+    if (!getSelectedInstrument()->isProgramValid()) {
 
         // If we're not in variations mode...
         if (md->getVariationType() == MidiDevice::NoVariations) {
@@ -986,10 +997,10 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
             ProgramList programList = md->getPrograms(bank);
             if (!programList.empty()) {
                 // Switch to the first program in this bank.
-                m_selectedInstrument->setProgram(programList.front());
+                getSelectedInstrument()->setProgram(programList.front());
             } else {
                 // No programs for this bank.  Just go with 0.
-                m_selectedInstrument->setProgramChange(0);
+                getSelectedInstrument()->setProgramChange(0);
             }
 
         } else {  // We're in variations mode...
@@ -1003,10 +1014,10 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
             BankList bankList;
             if (md->getVariationType() == MidiDevice::VariationFromMSB) {
                 bankList = md->getBanksByLSB(
-                        m_selectedInstrument->isPercussion(), bank.getLSB());
+                        getSelectedInstrument()->isPercussion(), bank.getLSB());
             } else {
                 bankList = md->getBanksByMSB(
-                        m_selectedInstrument->isPercussion(), bank.getMSB());
+                        getSelectedInstrument()->isPercussion(), bank.getMSB());
             }
             if (!bankList.empty()) {
                 // Pick the first bank
@@ -1015,7 +1026,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
                 ProgramList programList = md->getPrograms(firstBank);
                 if (!programList.empty()) {
                     // Pick the first program
-                    m_selectedInstrument->setProgram(programList.front());
+                    getSelectedInstrument()->setProgram(programList.front());
                 }
             }
 
@@ -1037,7 +1048,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     // Why?  It reduces the number of notifications which improves
     // performance.  It avoids sending notifications when an object's
     // state is inconsistent.  It avoids endless loops.
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -1049,7 +1060,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     if (!m_receiveExternalCheckBox->isChecked())
         return;
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     bool bankChanged = false;
@@ -1057,8 +1068,8 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     // MSB Bank Select
     if (bankMSB >= 0) {  // &&  md->getVariationType() != MidiDevice::VariationFromMSB ) {
         // If the MSB is changing
-        if (m_selectedInstrument->getMSB() != bankMSB) {
-            m_selectedInstrument->setMSB(bankMSB);
+        if (getSelectedInstrument()->getMSB() != bankMSB) {
+            getSelectedInstrument()->setMSB(bankMSB);
             bankChanged = true;
         }
     }
@@ -1066,8 +1077,8 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     // LSB Bank Select
     if (bankLSB >= 0) { // &&  md->getVariationType() != MidiDevice::VariationFromLSB) {
         // If the LSB is changing
-        if (m_selectedInstrument->getLSB() != bankLSB) {
-            m_selectedInstrument->setLSB(bankLSB);
+        if (getSelectedInstrument()->getLSB() != bankLSB) {
+            getSelectedInstrument()->setLSB(bankLSB);
             bankChanged = true;
         }
     }
@@ -1075,9 +1086,9 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     bool pcChanged = false;
 
     // If the Program Change is changing
-    if (m_selectedInstrument->getProgramChange() !=
+    if (getSelectedInstrument()->getProgramChange() !=
                 static_cast<MidiByte>(programChange)) {
-        m_selectedInstrument->setProgramChange(static_cast<MidiByte>(programChange));
+        getSelectedInstrument()->setProgramChange(static_cast<MidiByte>(programChange));
         pcChanged = true;
     }
 
@@ -1093,7 +1104,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
 
     // Just one change notification for the three potential changes.
     // See comments in slotSelectBank() for further discussion.
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -1101,21 +1112,21 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 {
     RG_DEBUG << "slotSelectProgram()";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     MidiDevice *md =
-            dynamic_cast<MidiDevice *>(m_selectedInstrument->getDevice());
+            dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md)
         return;
 
     const MidiProgram *prg = &m_programs[index];
 
     // If there has been no change, bail.
-    if (m_selectedInstrument->getProgramChange() == prg->getProgram())
+    if (getSelectedInstrument()->getProgramChange() == prg->getProgram())
         return;
 
-    m_selectedInstrument->setProgramChange(prg->getProgram());
+    getSelectedInstrument()->setProgramChange(prg->getProgram());
 
     // In Variations mode, select the 0th variation.
 
@@ -1126,29 +1137,29 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     // variation.  That's what the user expects.
 
     if (md->getVariationType() == MidiDevice::VariationFromMSB) {
-        MidiBank bank = m_selectedInstrument->getProgram().getBank();
+        MidiBank bank = getSelectedInstrument()->getProgram().getBank();
         // Get the list of MSB variations.
         BankList bankList = md->getBanksByLSB(
-                m_selectedInstrument->isPercussion(), bank.getLSB());
+                getSelectedInstrument()->isPercussion(), bank.getLSB());
         if (!bankList.empty()) {
             // Pick the first MSB variation
-            m_selectedInstrument->setMSB(bankList.front().getMSB());
+            getSelectedInstrument()->setMSB(bankList.front().getMSB());
         }
     }
     if (md->getVariationType() == MidiDevice::VariationFromLSB) {
-        MidiBank bank = m_selectedInstrument->getProgram().getBank();
+        MidiBank bank = getSelectedInstrument()->getProgram().getBank();
         // Get the list of LSB variations.
         BankList bankList = md->getBanksByMSB(
-                m_selectedInstrument->isPercussion(), bank.getMSB());
+                getSelectedInstrument()->isPercussion(), bank.getMSB());
         if (!bankList.empty()) {
             // Pick the first LSB variation
-            m_selectedInstrument->setLSB(bankList.front().getLSB());
+            getSelectedInstrument()->setLSB(bankList.front().getLSB());
         }
     }
 
     // Just one change notification for the two potential changes.
     // See comments in slotSelectBank() for further discussion.
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -1156,7 +1167,7 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 {
     RG_DEBUG << "slotSelectVariation()";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     MidiBank newBank = m_variations[index].getBank();
@@ -1164,19 +1175,19 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     bool changed = false;
 
     // Update bank MSB/LSB as needed.
-    if (m_selectedInstrument->getMSB() != newBank.getMSB()) {
-        m_selectedInstrument->setMSB(newBank.getMSB());
+    if (getSelectedInstrument()->getMSB() != newBank.getMSB()) {
+        getSelectedInstrument()->setMSB(newBank.getMSB());
         changed = true;
     }
-    if (m_selectedInstrument->getLSB() != newBank.getLSB()) {
-        m_selectedInstrument->setLSB(newBank.getLSB());
+    if (getSelectedInstrument()->getLSB() != newBank.getLSB()) {
+        getSelectedInstrument()->setLSB(newBank.getLSB());
         changed = true;
     }
 
     if (!changed)
         return;
 
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->changed();
 }
 
 // In place of the old sendBankAndProgram, instruments themselves now
@@ -1187,7 +1198,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 {
     RG_DEBUG << "slotControllerChanged(" << controllerNumber << ")";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     int value = -1;
@@ -1202,9 +1213,9 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
         return;
     }
 
-    m_selectedInstrument->setControllerValue(
+    getSelectedInstrument()->setControllerValue(
             MidiByte(controllerNumber), MidiByte(value));
-    m_selectedInstrument->changed();
+    getSelectedInstrument()->changed();
 }
 
 void
@@ -1213,16 +1224,16 @@ slotSelectChannel(int index)
 {
     RG_DEBUG << "slotSelectChannel(" << index << ")";
 
-    if (!m_selectedInstrument)
+    if (!getSelectedInstrument())
         return;
 
     // Fixed
     if (index == 1)
-        m_selectedInstrument->setFixedChannel();
+        getSelectedInstrument()->setFixedChannel();
     else  // Auto
-        m_selectedInstrument->releaseFixedChannel();
+        getSelectedInstrument()->releaseFixedChannel();
 
-    // A call to m_selectedInstrument->changed() is not required as the
+    // A call to getSelectedInstrument()->changed() is not required as the
     // auto/fixed channel feature has its own notification mechanisms.
 }
 
