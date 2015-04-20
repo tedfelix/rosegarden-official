@@ -348,7 +348,10 @@ setChannelIdDirectly(void)
     if (m_instrument->getType() == Instrument::Midi) {
         // !!! Stopgap measure.  If we ever share allocators between
         // MIDI devices, this will have to become smarter.
-        if (m_instrument->isPercussion()) { channel = 9; }
+        if (m_instrument->isPercussion()) {
+            channel = (m_instrument->hasFixedChannel() ?
+                       m_instrument->getNaturalChannel() : 9);
+        }
     }
     m_channel.setChannelId(channel);
 }
