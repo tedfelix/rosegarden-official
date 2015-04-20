@@ -51,6 +51,14 @@ signals:
      * the object instance.  Search the codebase on
      * "Instrument::getStaticSignals()" for connect() examples.
      *
+     * Controllers can cause a very high rate of update notification when
+     * the user makes rapid changes using a knob or slider.
+     * Handlers of this signal should be prepared to deal with this.
+     * They should check for changes relevant to them, and bail if there
+     * are none.  As of this writing, only the MIPP has been rewritten
+     * to deal with this properly.  All other handlers should be reviewed
+     * and modified as needed.
+     *
      * Formerly RosegardenMainWindow::instrumentParametersChanged().
      */
     void changed(Instrument *);
