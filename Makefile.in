@@ -23,7 +23,6 @@ LRELEASE	:= @LRELEASE@
 CXXFLAGS	:= @CXXFLAGS@ \
 		   @HAVES@ \
 		   @QT_CXXFLAGS@ \
-		   @JACK_CFLAGS@ \
 		   @ALSA_CFLAGS@ \
 		   @liblo_CFLAGS@ \
 		   @lrdf_CFLAGS@ \
@@ -46,7 +45,6 @@ RCCFLAGS	:= -threshold 0 -compress 9
 MOCFLAGS	:= @HAVES@ @ENDIANNESS@
 
 LIBS		:= @QT_LIBS@ \
-		   @JACK_LIBS@ \
 		   @ALSA_LIBS@ \
 		   @liblo_LIBS@ \
 		   @lrdf_LIBS@ \

@@ -50,8 +50,11 @@ AC_CHECK_LIB([X11],[XSetErrorHandler],[LIBS="$LIBS -lX11"],[AC_MSG_ERROR(Failed 
 AC_CHECK_LIB([z],[gzopen],[LIBS="$LIBS -lz"],[AC_MSG_ERROR(Failed to find required libz library)])
 AC_CHECK_LIB([dl],[dlopen],[LIBS="$LIBS -ldl"],[AC_MSG_ERROR(Failed to find required dl library)])
 
-PKG_CHECK_MODULES([JACK],[jack >= 0.100],[HAVES="$HAVES -DHAVE_LIBJACK"],[
-AC_MSG_WARN(No JACK library found: audio will be unavailable!)])
+JACK_FOUND="0"
+AC_CHECK_LIB(
+    [jack],[jack_client_open],
+    [LIBS="$LIBS -ljack" JACK_FOUND="1"],
+    [AC_MSG_WARN(No JACK library found: audio will be unavailable!)])
 
 AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
 
@@ -143,7 +146,7 @@ fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $RG_DEFINES_BUILD"
 
-if test -z "$JACK_CFLAGS" ; then
+if test "$JACK_FOUND" = "0" ; then
    AC_MSG_WARN([Required JACK library not found, building with no audio!])
 fi
 if test -z "$ALSA_CFLAGS" ; then
