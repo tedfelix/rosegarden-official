@@ -53,7 +53,7 @@ AC_CHECK_LIB([dl],[dlopen],[LIBS="$LIBS -ldl"],[AC_MSG_ERROR(Failed to find requ
 JACK_FOUND="0"
 AC_CHECK_LIB(
     [jack],[jack_client_open],
-    [LIBS="$LIBS -ljack" JACK_FOUND="1"],
+    [LIBS="$LIBS -ljack" HAVES="$HAVES -DHAVE_LIBJACK" JACK_FOUND="1"],
     [AC_MSG_WARN(No JACK library found: audio will be unavailable!)])
 
 AC_CHECK_HEADER([ladspa.h],[],[AC_MSG_ERROR(Failed to find required LADSPA header ladspa.h)])
