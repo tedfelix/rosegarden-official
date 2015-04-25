@@ -118,9 +118,15 @@ int	RosegardenScrollView::contentsHeight()
 
 void RosegardenScrollView::resizeContents(int w, int h)	// Code lifted from Q3ScrollView
 {
+    // Hold on to the old values.
     int ow = m_vwidth;
     int oh = m_vheight;
 	
+    // We need to set these before we do the swaps, otherwise we may be
+    // storing the wrong (post-swap) values.
+    m_vwidth = w;
+    m_vheight = h;
+
 //    d->scrollbar_timer.start(0, true); // This was necessary until I fixed the resizeEvent connection
 
 //### CJ - Don't think this is necessary - slightly confused as we're resizing the content, not the widget
@@ -157,9 +163,6 @@ void RosegardenScrollView::resizeContents(int w, int h)	// Code lifted from Q3Sc
             h = visibleHeight();
         this->viewport()->update(0, contentsY()+oh, visibleWidth(), h-oh);
     }
-
-    m_vwidth = w;
-    m_vheight = h;
 }
 
 void RosegardenScrollView::updateContents(int x, int y, int w, int h) 	// Code lifted from Q3ScrollView
