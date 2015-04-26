@@ -623,6 +623,8 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {
+    RG_DEBUG << "resizeEvent()";
+
     QAbstractScrollArea::resizeEvent(e);
     updateScrollBars();
 //### What was the purpose of this?
@@ -632,6 +634,7 @@ void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 
 void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, int /* y */, int /* w */, int /* h */)
 {
+    RG_DEBUG << "setHBarGeometry()";
     ///@TODO Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
 //	hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
@@ -639,7 +642,8 @@ void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, 
 
 void RosegardenScrollView::updateBottomWidgetGeometry()
 {
-    RG_DEBUG << "RosegardenScrollView::updateBottomWidgetGeometry" << endl;
+    RG_DEBUG << "updateBottomWidgetGeometry()";
+
     if (!m_bottomWidget)
         return ;
 
@@ -661,7 +665,7 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
                                 bottomWidgetHeight);
 
     if (bottomWidgetHeight != m_currentBottomWidgetHeight) {
-        emit bottomWidgetHeightChanged(bottomWidgetHeight);
+        //emit bottomWidgetHeightChanged(bottomWidgetHeight);
         m_currentBottomWidgetHeight = bottomWidgetHeight;
     }
 

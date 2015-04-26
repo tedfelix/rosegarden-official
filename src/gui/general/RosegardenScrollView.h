@@ -34,20 +34,20 @@ namespace Rosegarden
 {
 
 
-
+/// QAbstractScrollArea with auto-scroll and bottom ruler.
 /**
- * A QScrollView with more elaborate auto-scrolling capabilities
- * and the ability to have a "fixed" (non-scrolling) widget at its bottom,
- * just above the bottom scrollbar.
+ * A QAbstractScrollArea with more elaborate auto-scrolling capabilities
+ * and the ability to have a vertically "fixed" widget (ruler) at its
+ * bottom, just above the bottom scrollbar.
  */
 class RosegardenScrollView : public QAbstractScrollArea
 {
     Q_OBJECT
 public:
-    RosegardenScrollView(QWidget* parent=0);
+    RosegardenScrollView(QWidget *parent);
 
     /**
-     * EditTool::handleMouseMove() returns a OR-ed combination of these
+     * EditTool::handleMouseMove() returns an OR-ed combination of these
      * to indicate which direction to scroll to
      */
     enum {
@@ -65,25 +65,25 @@ public:
 	// Functions that were missing from QAbstractScrollArea
 	int contentsX();	//### todo: when GUI is ready: check the following code
 	int contentsY();
-	void setContentsPos(int, int ); //### JAS todo: when GUI is ready: check the following code
+	void setContentsPos(int x, int y); //### JAS todo: when GUI is ready: check the following code
 	int visibleWidth();
 	int visibleHeight();
 	int contentsWidth();
 	int	contentsHeight();
 	
-	void resizeContents(int, int);	
-	void updateContents(int, int, int, int);
-	void updateContents(const QRect& r);
+	void resizeContents(int width, int height);
+	void updateContents(int x, int y, int width, int height);
+	void updateContents(const QRect &);
 	void updateContents();
 
-	void paintEvent( QPaintEvent* pe );
+	void paintEvent(QPaintEvent *);
 	
-	void mousePressEvent( QMouseEvent* );
-	void mouseReleaseEvent( QMouseEvent* );
-	void mouseDoubleClickEvent( QMouseEvent* );
-	void mouseMoveEvent( QMouseEvent* );
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseDoubleClickEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
 
-	QPoint viewportToContents( QPoint& );
+	QPoint viewportToContents(QPoint &);
 	
 	void setDragAutoScroll(bool);
 
@@ -91,20 +91,20 @@ public:
      * Sets the widget which will be between the scrollable part of the view
      * and the horizontal scrollbar
      */
-    void setBottomFixedWidget(QWidget*);
+    void setBottomFixedWidget(QWidget *);
 
     void updateBottomWidgetGeometry();
 
     /// Map a point with the inverse world matrix
 //     QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
 
-    void setSmoothScroll(bool s) { m_smoothScroll = s; }
+    void setSmoothScroll(bool s)  { m_smoothScroll = s; }
 
     bool isTimeForSmoothScroll();
 
-    void setScrollDirectionConstraint(int d) { m_scrollDirectionConstraint = d; }
+    void setScrollDirectionConstraint(int d)  { m_scrollDirectionConstraint = d; }
 
-    int getDeltaScroll() { return m_minDeltaScroll; }
+    int getDeltaScroll() const  { return m_minDeltaScroll; }
 
     virtual void wheelEvent(QWheelEvent *);
 
@@ -146,34 +146,34 @@ public slots:
     void stopAutoScroll();
     void doAutoScroll();
 
-    bool isAutoScrolling() const { return m_autoScrolling; }
+    bool isAutoScrolling() const  { return m_autoScrolling; }
 
     void updateScrollBars();
 
 signals:
-    void bottomWidgetHeightChanged(int);
+    //void bottomWidgetHeightChanged(int newHeight);
 
     void zoomIn();
     void zoomOut();
 
 protected:
     
-    virtual void viewportPaintEvent( QPaintEvent* );
+    virtual void viewportPaintEvent(QPaintEvent *);
 
-	virtual void contentsMousePressEvent( QMouseEvent* );
-	virtual void contentsMouseReleaseEvent( QMouseEvent* );
-	virtual void contentsMouseMoveEvent( QMouseEvent* );
-	virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
+	virtual void contentsMousePressEvent(QMouseEvent *);
+	virtual void contentsMouseReleaseEvent(QMouseEvent *);
+	virtual void contentsMouseMoveEvent(QMouseEvent *);
+	virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
 
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent *);
     virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
     
-    virtual QScrollBar* getMainHorizontalScrollBar() { return horizontalScrollBar(); }
+    virtual QScrollBar *getMainHorizontalScrollBar()  { return horizontalScrollBar(); }
 
     //--------------- Data members ---------------------------------
     enum ScrollDirection { None, Top, Bottom, Left, Right };
 
-    QWidget* m_bottomWidget;
+    QWidget *m_bottomWidget;
     int m_currentBottomWidgetHeight;
 
     bool m_smoothScroll;
@@ -192,7 +192,7 @@ protected:
     int m_scrollDirectionConstraint;
     bool m_autoScrolling;    
 
-    static const int    DefaultSmoothScrollTimeInterval;
+    static const int DefaultSmoothScrollTimeInterval;
     static const double DefaultMinDeltaScroll;
 
     static const int AutoscrollMargin;
@@ -205,11 +205,11 @@ protected:
 	int m_vheight;
 	
 private:
-	void viewportMousePressEvent( QMouseEvent* );
-	void viewportMouseReleaseEvent( QMouseEvent* );
-	void viewportMouseDoubleClickEvent( QMouseEvent* );
-	void viewportMouseMoveEvent( QMouseEvent* );
-	QPoint viewportToContents(const QPoint& vp);
+	void viewportMousePressEvent(QMouseEvent *);
+	void viewportMouseReleaseEvent(QMouseEvent *);
+	void viewportMouseDoubleClickEvent(QMouseEvent *);
+	void viewportMouseMoveEvent(QMouseEvent *);
+	QPoint viewportToContents(const QPoint &);
 };
 
 
