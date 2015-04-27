@@ -39,7 +39,9 @@ namespace Rosegarden
 // Smooth scroll checks
 //
 
-const int RosegardenScrollView::AutoscrollMargin = 16;
+const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
+const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
+//const int RosegardenScrollView::AutoscrollMargin = 16;
 const int RosegardenScrollView::InitialScrollTime = 30;
 const int RosegardenScrollView::InitialScrollShortcut = 5;
 const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
@@ -439,9 +441,6 @@ void RosegardenScrollView::doAutoScroll()
 
 }
 
-const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
-const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
-
 bool RosegardenScrollView::isTimeForSmoothScroll()
 {
     // static int desktopWidth = QApplication::desktop()->width(),
@@ -632,6 +631,7 @@ void RosegardenScrollView::resizeEvent(QResizeEvent* e)
     updateBottomWidgetGeometry();
 }
 
+#if 0
 void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, int /* y */, int /* w */, int /* h */)
 {
     RG_DEBUG << "setHBarGeometry()";
@@ -639,6 +639,7 @@ void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, 
 //	hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
 }
+#endif
 
 void RosegardenScrollView::updateBottomWidgetGeometry()
 {
