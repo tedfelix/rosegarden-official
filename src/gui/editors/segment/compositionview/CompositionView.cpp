@@ -112,7 +112,8 @@ CompositionView::CompositionView(RosegardenDocument* doc,
                 this, SLOT(slotToolHelpChanged(const QString &)));
     }
     
-    setDragAutoScroll(true);
+    // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
+    //setDragAutoScroll(true);
 
 // Causing slow refresh issues on RG Mian Window -- 10-12-2011 - JAS
 //    viewport()->setAttribute(Qt::WA_PaintOnScreen);
@@ -1676,7 +1677,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     setPencilOverExisting((e->modifiers() & Qt::AltModifier) != 0);
 
     int follow = m_tool->handleMouseMove(e);
-    setScrollDirectionConstraint(follow);
+    setFollowMode(follow);
 
     if (follow != RosegardenScrollView::NoFollow) {
         doAutoScroll();

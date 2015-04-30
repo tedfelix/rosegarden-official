@@ -47,7 +47,7 @@ const int RosegardenScrollView::InitialScrollShortcut = 5;
 const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration rate
 
-RosegardenScrollView::RosegardenScrollView(QWidget* parent)
+RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
 		
       m_bottomWidget(0),
@@ -60,11 +60,11 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent)
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
-      m_scrollDirectionConstraint(NoFollow),
+      m_followMode(NoFollow),
       m_autoScrolling(false)
 {
-
-    setDragAutoScroll(true);		//&&& could not find replacement
+    // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
+    //setDragAutoScroll(true);		//&&& could not find replacement
 	
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
@@ -323,9 +323,12 @@ void RosegardenScrollView::contentsMouseDoubleClickEvent( QMouseEvent* /* event 
 {
 }
 
+#if 0
+// Q3ScrollView
 void RosegardenScrollView::setDragAutoScroll(bool)
 {
 }
+#endif
 
 void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
 {
@@ -355,9 +358,9 @@ void RosegardenScrollView::startAutoScroll()
     m_autoScrolling = true;
 }
 
-void RosegardenScrollView::startAutoScroll(int directionConstraint)
+void RosegardenScrollView::startAutoScroll(int followMode)
 {
-    setScrollDirectionConstraint(directionConstraint);
+    setFollowMode(followMode);
     startAutoScroll();
 }
 
@@ -384,7 +387,7 @@ void RosegardenScrollView::doAutoScroll()
     ScrollDirection scrollDirection = None;
 
     int dx = 0, dy = 0;
-    if (m_scrollDirectionConstraint & FollowVertical) {
+    if (m_followMode & FollowVertical) {
         if ( p.y() < m_autoScrollYMargin ) {
             dy = -(int(m_minDeltaScroll));
             scrollDirection = Top;
@@ -394,7 +397,7 @@ void RosegardenScrollView::doAutoScroll()
         }
     }
     bool startDecelerating = false;
-    if (m_scrollDirectionConstraint & FollowHorizontal) {
+    if (m_followMode & FollowHorizontal) {
 
         //        RG_DEBUG << "p.x() : " << p.x() << " - visibleWidth : " << visibleWidth() << " - autoScrollXMargin : " << m_autoScrollXMargin << endl;
 

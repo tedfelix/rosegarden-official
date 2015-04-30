@@ -52,29 +52,6 @@ public:
 
     RosegardenScrollView(QWidget *parent);
 
-    /// Follow Mode
-    /**
-     * Derivers from SegmentTool override SegmentTool::handleMouseMove() and
-     * return an OR-ed combination of these to indicate the auto-scroll
-     * direction.
-     *
-     * See MatrixTool::FollowMode, NotationTool::FollowMode, and
-     * ControlTool::FollowMode.
-     *
-     * Would this make more sense in SegmentTool?
-     */
-    enum FollowMode {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
-
-    /**
-     * Sets the canvas width to be exactly the width needed to show
-     * all the items
-     */
-    //void fitWidthToContents();
-
     // Functions that were missing from QAbstractScrollArea
     int contentsX();  //### todo: when GUI is ready: check the following code
     int contentsY();
@@ -98,7 +75,8 @@ public:
 
     QPoint viewportToContents(QPoint &);
 
-    void setDragAutoScroll(bool);
+    // From Q3ScrollView
+    //void setDragAutoScroll(bool);
 
     /**
      * Sets the widget which will be between the scrollable part of the view
@@ -115,7 +93,25 @@ public:
 
     bool isTimeForSmoothScroll();
 
-    void setScrollDirectionConstraint(int d)  { m_scrollDirectionConstraint = d; }
+    /// Follow Mode
+    /**
+     * Derivers from SegmentTool override SegmentTool::handleMouseMove() and
+     * return an OR-ed combination of these to indicate the auto-scroll
+     * direction.
+     *
+     * See MatrixTool::FollowMode, NotationTool::FollowMode, and
+     * ControlTool::FollowMode.
+     *
+     * Would this make more sense in SegmentTool?
+     */
+    enum FollowMode {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
+    /// See enum FollowMode.
+    void setFollowMode(int followMode)  { m_followMode = followMode; }
 
     int getDeltaScroll() const  { return m_minDeltaScroll; }
 
@@ -155,8 +151,13 @@ public slots:
     void slotSetScrollPos(const QPoint &);
 
     void startAutoScroll();
-    void startAutoScroll(int directionConstraint);
+    /// See enum FollowMode for valid mask values.
+    void startAutoScroll(int followMode);
     void stopAutoScroll();
+    /// Handler for m_autoScrollTimer.
+    /**
+     * Also called by TrackEditor::handleAutoScroll().
+     */
     void doAutoScroll();
 
     bool isAutoScrolling() const  { return m_autoScrolling; }
@@ -200,6 +201,7 @@ private:
     QTime m_scrollTimer;
     QTime m_scrollShortcuterationTimer;
 
+    /// Calls doAutoScroll().
     QTimer m_autoScrollTimer;
     int m_autoScrollTime;
     int m_autoScrollShortcut;
@@ -208,7 +210,8 @@ private:
     int m_autoScrollYMargin;
     enum ScrollDirection { None, Top, Bottom, Left, Right };
     ScrollDirection m_currentScrollDirection;
-    int m_scrollDirectionConstraint;
+    /// See enum FollowMode for valid mask values.
+    int m_followMode;
     bool m_autoScrolling;    
 
     static const int DefaultSmoothScrollTimeInterval;
