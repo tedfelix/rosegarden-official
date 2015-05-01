@@ -61,7 +61,9 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
       m_followMode(NoFollow),
-      m_autoScrolling(false)
+      m_autoScrolling(false),
+      m_vwidth(0),
+      m_vheight(0)
 {
     // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
     //setDragAutoScroll(true);		//&&& could not find replacement
@@ -480,13 +482,13 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
     return true;
 }
 
-void RosegardenScrollView::slotScrollHoriz(int hpos)
+void RosegardenScrollView::scrollHoriz(int hpos)
 {
     QScrollBar* hbar = getMainHorizontalScrollBar();
     int currentContentYPos = contentsY();
 
     /* Lots of performance hitting debug
-       RG_DEBUG << "RosegardenScrollView::slotScrollHoriz: hpos is " << hpos
+       RG_DEBUG << "RosegardenScrollView::scrollHoriz: hpos is " << hpos
        << ", contentsX is " << contentsX() << ", visibleWidth is "
        << visibleWidth() << endl;
     */
@@ -526,7 +528,7 @@ void RosegardenScrollView::slotScrollHoriz(int hpos)
     }
 }
 
-void RosegardenScrollView::slotScrollHorizSmallSteps(int hpos)
+void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
 {
     QScrollBar* hbar = getMainHorizontalScrollBar();
     int currentContentYPos = contentsY();
@@ -565,11 +567,11 @@ void RosegardenScrollView::slotScrollHorizSmallSteps(int hpos)
     }
 }
 
-void RosegardenScrollView::slotScrollVertSmallSteps(int vpos)
+void RosegardenScrollView::scrollVertSmallSteps(int vpos)
 {
     QScrollBar* vbar = verticalScrollBar();
 
-    //    RG_DEBUG << "RosegardenCanvasView::slotScrollVertSmallSteps - Start: vpos is " << vpos << ", contentsY is " << contentsY() << ", visibleHeight is " << visibleHeight() << endl;
+    //    RG_DEBUG << "RosegardenScrollView::scrollVertSmallSteps - Start: vpos is " << vpos << ", contentsY is " << contentsY() << ", visibleHeight is " << visibleHeight() << endl;
 
     // As a special case (or hack), ignore any request made before we've
     // actually been rendered and sized
@@ -608,6 +610,7 @@ void RosegardenScrollView::slotScrollVertSmallSteps(int vpos)
     }
 }
 
+#if 0
 void RosegardenScrollView::slotScrollVertToTop(int vpos)
 {
     QScrollBar* vbar = verticalScrollBar();
@@ -622,6 +625,7 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
     horizontalScrollBar()->setValue(pos.x());
     verticalScrollBar()->setValue(pos.y());
 }
+#endif
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {

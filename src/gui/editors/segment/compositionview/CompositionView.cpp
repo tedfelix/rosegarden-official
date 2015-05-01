@@ -1684,7 +1684,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 
         if (follow & RosegardenScrollView::FollowHorizontal) {
             int mouseX = e->pos().x();
-            slotScrollHorizSmallSteps(mouseX);
+            scrollHorizSmallSteps(mouseX);
 
 //&& JAS - Deactivate auto expand feature when resizing / moving segments past
 //&& Compostion end.  Though current code works, this creates lots of corner
@@ -1705,7 +1705,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
         }
 
         if (follow & RosegardenScrollView::FollowVertical)
-            slotScrollVertSmallSteps(e->pos().y());
+            scrollVertSmallSteps(e->pos().y());
     }
 }
 

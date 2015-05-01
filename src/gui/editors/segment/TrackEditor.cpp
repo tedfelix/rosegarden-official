@@ -590,15 +590,15 @@ TrackEditor::slotSetPointerPosition(timeT position)
             (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
             
             if (m_playTracking) {
-                getCompositionView()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+                getCompositionView()->scrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
             }
         } else if (!getCompositionView()->isAutoScrolling()) {
             int newpos = int(double(position) / ruler->getUnitsPerPixel());
             //             RG_DEBUG << "TrackEditor::slotSetPointerPosition("
             //                      << position
-            //                      << ") : calling canvas->slotScrollHoriz() "
+            //                      << ") : calling canvas->scrollHoriz() "
             //                      << newpos << endl;
-            getCompositionView()->slotScrollHoriz(newpos);
+            getCompositionView()->scrollHoriz(newpos);
         }
 
         m_compositionView->setPointerPos(pos);
@@ -647,11 +647,11 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
                 (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
             if (m_playTracking) {
-                getCompositionView()->slotScrollHoriz(int(double(newTimePosition) / ruler->getUnitsPerPixel()));
+                getCompositionView()->scrollHoriz(int(double(newTimePosition) / ruler->getUnitsPerPixel()));
             }
         } else {
             int newpos = int(double(newTimePosition) / ruler->getUnitsPerPixel());
-            getCompositionView()->slotScrollHorizSmallSteps(newpos);
+            getCompositionView()->scrollHorizSmallSteps(newpos);
             getCompositionView()->doAutoScroll();
         }
 
@@ -693,7 +693,7 @@ TrackEditor::slotScrollToTrack(int track)
     //    slotVerticalScrollTrackButtons(newY);
 
     // This is currently a bit broke
-    m_compositionView->slotScrollVertSmallSteps(newY);
+    m_compositionView->scrollVertSmallSteps(newY);
 
     // This works but is basic McBasic
     //m_compositionView->setContentsPos(m_compositionView->contentsX(),newY);

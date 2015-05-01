@@ -964,11 +964,11 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 if (getCanvasView()->isTimeForSmoothScroll()) {
 
             if (follow & RosegardenScrollView::FollowHorizontal) {
-                getCanvasView()->slotScrollHorizSmallSteps(e->x());
+                getCanvasView()->scrollHorizSmallSteps(e->x());
             }
 
             if (follow & RosegardenScrollView::FollowVertical) {
-                getCanvasView()->slotScrollVertSmallSteps(e->y());
+                getCanvasView()->scrollVertSmallSteps(e->y());
             }
 
         }

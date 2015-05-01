@@ -1424,7 +1424,7 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 
     slotHoveredOverKeyChanged(y);
 
-//    getCanvasView()->slotScrollVertSmallSteps(y);
+//    getCanvasView()->scrollVertSmallSteps(y);
     
     int evPitch = m_scene->calculatePitchFromY(y);
 

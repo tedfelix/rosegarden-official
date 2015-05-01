@@ -42,6 +42,9 @@ namespace Rosegarden
  * and the ability to have a vertically "fixed" widget (ruler) at its
  * bottom, just above the horizontal scrollbar.
  *
+ * Some Q3ScrollView compatibility is provided to ease the transition
+ * from Q3ScrollView to QAbstractScrollArea.
+ *
  * CompositionView derives from this class.
  */
 class RosegardenScrollView : public QAbstractScrollArea
@@ -52,32 +55,52 @@ public:
 
     RosegardenScrollView(QWidget *parent);
 
-    // Q3ScrollView functions that were missing from QAbstractScrollArea
+    /// Connect the bottom ruler.
+    /**
+     * Sets the ruler widget which will be between the scrollable part of
+     * the view and the horizontal scrollbar.
+     *
+     * This is called by TrackEditor::init() to connect a StandardRuler
+     * instance.
+     */
+    void setBottomFixedWidget(QWidget *);
 
+    // Q3ScrollView functions that are missing from QAbstractScrollArea
+    // (Most of these can be moved to protected as only CompositionView
+    // uses them.)
+
+    // Q3ScrollView viewport position and size functions.
+
+    /// X coordinate of the contents that are at the left edge of the viewport.
     int contentsX();
+    /// Y coordinate of the contents that are at the top edge of the viewport.
     int contentsY();
+    /// Scrolls the content so that the point (x, y) is in the top-left corner.
     void setContentsPos(int x, int y);
+    /// Visible portion of the contents.  The viewport width.
     int visibleWidth();
+    /// Visible portion of the contents.  The viewport height.
     int visibleHeight();
+
+    // Q3ScrollView contents size and update functions.
+
+    /// Width of the contents area.
     int contentsWidth();
+    /// Height of the contents area.
     int contentsHeight();
 
+    /// Sets the size of the contents area and updates the viewport accordingly.
     void resizeContents(int width, int height);
+    /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
     void updateContents(int x, int y, int width, int height);
     void updateContents(const QRect &);
     void updateContents();
+
 
     //QPoint viewportToContents(QPoint &);
 
     // From Q3ScrollView
     //void setDragAutoScroll(bool);
-
-    /// Connect the bottom ruler.
-    /**
-     * Sets the ruler widget which will be between the scrollable part of
-     * the view and the horizontal scrollbar.
-     */
-    void setBottomFixedWidget(QWidget *);
 
     /// Map a point with the inverse world matrix
     //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
@@ -107,40 +130,41 @@ public:
 
     //int getDeltaScroll() const  { return m_minDeltaScroll; }
 
-public slots:
+    bool isAutoScrolling() const  { return m_autoScrolling; }
+
     /**
      * Scroll horizontally to make the given position visible,
      * paging so as to get some visibility of the next screenful
      * (for playback etc)
      */
-    void slotScrollHoriz(int hpos);
+    void scrollHoriz(int hpos);
 
     /**
      * Scroll horizontally to make the given position somewhat
      * nearer to visible, scrolling by only "a small distance"
      * at a time
      */
-    void slotScrollHorizSmallSteps(int hpos);
+    void scrollHorizSmallSteps(int hpos);
 
     /**
      * Scroll vertically to make the given position somewhat
      * nearer to visible, scrolling by only "a small distance"
      * at a time
      */
-    void slotScrollVertSmallSteps(int vpos);
+    void scrollVertSmallSteps(int vpos);
 
+public slots:
     /**
      * Scroll vertically so as to place the given position
      * somewhere near the top of the viewport.
      */
-    void slotScrollVertToTop(int vpos);
+    //void slotScrollVertToTop(int vpos);
 
     /**
      * Set the x and y scrollbars to a particular position
      */
-    void slotSetScrollPos(const QPoint &);
+    //void slotSetScrollPos(const QPoint &);
 
-    void startAutoScroll();
     /// See enum FollowMode for valid mask values.
     void startAutoScroll(int followMode);
     void stopAutoScroll();
@@ -150,10 +174,6 @@ public slots:
      */
     void doAutoScroll();
 
-    bool isAutoScrolling() const  { return m_autoScrolling; }
-
-    void updateScrollBars();
-
 signals:
     //void bottomWidgetHeightChanged(int newHeight);
 
@@ -161,6 +181,8 @@ signals:
     void zoomOut();
 
 protected:
+
+    void startAutoScroll();
 
     virtual void resizeEvent(QResizeEvent *);
 
@@ -217,7 +239,7 @@ private:
     ScrollDirection m_currentScrollDirection;
     /// See enum FollowMode for valid mask values.
     int m_followMode;
-    bool m_autoScrolling;    
+    bool m_autoScrolling;
 
     static const int DefaultSmoothScrollTimeInterval;
     static const double DefaultMinDeltaScroll;
@@ -228,9 +250,12 @@ private:
     static const int MaxScrollDelta;
     static const double ScrollShortcutValue;
 
+    /// Size of the contents.  m_contentsWidth?
     int m_vwidth;
+    /// Size of the contents.  m_contentsHeight?
     int m_vheight;
 
+    void updateScrollBars();
 };
 
 
