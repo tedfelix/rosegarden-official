@@ -52,10 +52,11 @@ public:
 
     RosegardenScrollView(QWidget *parent);
 
-    // Functions that were missing from QAbstractScrollArea
-    int contentsX();  //### todo: when GUI is ready: check the following code
+    // Q3ScrollView functions that were missing from QAbstractScrollArea
+
+    int contentsX();
     int contentsY();
-    void setContentsPos(int x, int y); //### JAS todo: when GUI is ready: check the following code
+    void setContentsPos(int x, int y);
     int visibleWidth();
     int visibleHeight();
     int contentsWidth();
@@ -66,31 +67,22 @@ public:
     void updateContents(const QRect &);
     void updateContents();
 
-    void paintEvent(QPaintEvent *);
-
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseDoubleClickEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-
-    QPoint viewportToContents(QPoint &);
+    //QPoint viewportToContents(QPoint &);
 
     // From Q3ScrollView
     //void setDragAutoScroll(bool);
 
+    /// Connect the bottom ruler.
     /**
-     * Sets the widget which will be between the scrollable part of the view
-     * and the horizontal scrollbar
+     * Sets the ruler widget which will be between the scrollable part of
+     * the view and the horizontal scrollbar.
      */
     void setBottomFixedWidget(QWidget *);
-
-    void updateBottomWidgetGeometry();
 
     /// Map a point with the inverse world matrix
     //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
 
-    void setSmoothScroll(bool s)  { m_smoothScroll = s; }
-
+    //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
     bool isTimeForSmoothScroll();
 
     /// Follow Mode
@@ -113,14 +105,12 @@ public:
     /// See enum FollowMode.
     void setFollowMode(int followMode)  { m_followMode = followMode; }
 
-    int getDeltaScroll() const  { return m_minDeltaScroll; }
-
-    virtual void wheelEvent(QWheelEvent *);
+    //int getDeltaScroll() const  { return m_minDeltaScroll; }
 
 public slots:
     /**
      * Scroll horizontally to make the given position visible,
-     * paging to as to get some visibility of the next screenful
+     * paging so as to get some visibility of the next screenful
      * (for playback etc)
      */
     void slotScrollHoriz(int hpos);
@@ -172,6 +162,19 @@ signals:
 
 protected:
 
+    virtual void resizeEvent(QResizeEvent *);
+
+    virtual void paintEvent(QPaintEvent *);
+
+    virtual void mousePressEvent(QMouseEvent *);
+    virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void mouseDoubleClickEvent(QMouseEvent *);
+    virtual void mouseMoveEvent(QMouseEvent *);
+
+    virtual void wheelEvent(QWheelEvent *);
+
+    // Q3ScrollView compatibility functions.
+
     virtual void viewportPaintEvent(QPaintEvent *);
 
     virtual void contentsMousePressEvent(QMouseEvent *);
@@ -179,14 +182,15 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent *);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
 
-    virtual void resizeEvent(QResizeEvent *);
-
 private:
 
+    // ??? These are called exactly once.  They can be inlined into
+    //     their callers.
     void viewportMousePressEvent(QMouseEvent *);
     void viewportMouseReleaseEvent(QMouseEvent *);
-    void viewportMouseDoubleClickEvent(QMouseEvent *);
     void viewportMouseMoveEvent(QMouseEvent *);
+    void viewportMouseDoubleClickEvent(QMouseEvent *);
+
     QPoint viewportToContents(const QPoint &);
 
     //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
@@ -194,8 +198,9 @@ private:
 
     QWidget *m_bottomWidget;
     int m_currentBottomWidgetHeight;
+    void updateBottomWidgetGeometry();
 
-    bool m_smoothScroll;
+    bool m_smoothScroll;  // always true
     int m_smoothScrollTimeInterval;
     float m_minDeltaScroll;
     QTime m_scrollTimer;
