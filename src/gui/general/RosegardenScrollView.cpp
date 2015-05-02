@@ -657,7 +657,6 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
 
     int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
 
-    setContentsMargins(0, 0, 0, bottomWidgetHeight);
     QRect r = frameRect();
     int hScrollBarHeight = 0;
     if (horizontalScrollBar()->isVisible())
