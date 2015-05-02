@@ -184,6 +184,7 @@ protected:
 
     void startAutoScroll();
 
+    /// Viewport resize.
     virtual void resizeEvent(QResizeEvent *);
 
     virtual void paintEvent(QPaintEvent *);
@@ -219,7 +220,7 @@ private:
     QScrollBar *getMainHorizontalScrollBar()  { return horizontalScrollBar(); }
 
     QWidget *m_bottomWidget;
-    int m_currentBottomWidgetHeight;
+    /// Make sure the bottom ruler stays in the proper place.
     void updateBottomWidgetGeometry();
 
     bool m_smoothScroll;  // always true
@@ -255,6 +256,7 @@ private:
     /// Size of the contents.  m_contentsHeight?
     int m_vheight;
 
+    /// Adjust the scrollbars' max and page step.
     void updateScrollBars();
 };
 
