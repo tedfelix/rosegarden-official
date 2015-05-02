@@ -49,7 +49,7 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration
 
 RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
-		
+
       m_bottomWidget(0),
       m_smoothScroll(true),
       m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
@@ -65,8 +65,8 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_vheight(0)
 {
     // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
-    //setDragAutoScroll(true);		//&&& could not find replacement
-	
+    //setDragAutoScroll(true);  //&&& could not find replacement
+
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
 }
@@ -79,7 +79,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
 // <QScrollArea*>this->horizontalScrollBar().value()
 //                  + <QScrollArea*>this->width()
 //
-int RosegardenScrollView::contentsX()	//### todo: when GUI is ready: check the following code
+int RosegardenScrollView::contentsX()  //### todo: when GUI is ready: check the following code
 {
     return this->horizontalScrollBar()->value();
 }
@@ -100,13 +100,13 @@ int RosegardenScrollView::visibleWidth()
 {
     // These were converted by someone to contentsX + this->width() - didn't look right
     return this->viewport()->width();
-//	return this->width();
+//    return this->width();
 }
 
 int RosegardenScrollView::visibleHeight()
 {
     return this->viewport()->height();
-//	return this->height();
+//    return this->height();
 }
 
 int RosegardenScrollView::contentsWidth()
@@ -114,17 +114,17 @@ int RosegardenScrollView::contentsWidth()
     return m_vwidth;
 }
 
-int	RosegardenScrollView::contentsHeight()
+int RosegardenScrollView::contentsHeight()
 {
     return m_vheight;
 }
 
-void RosegardenScrollView::resizeContents(int w, int h)	// Code lifted from Q3ScrollView
+void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3ScrollView
 {
     // Hold on to the old values.
     int ow = m_vwidth;
     int oh = m_vheight;
-	
+
     // We need to set these before we do the swaps, otherwise we may be
     // storing the wrong (post-swap) values.
     m_vwidth = w;
@@ -172,7 +172,7 @@ void RosegardenScrollView::resizeContents(int w, int h)	// Code lifted from Q3Sc
     updateScrollBars();
 }
 
-void RosegardenScrollView::updateContents(int x, int y, int w, int h) 	// Code lifted from Q3ScrollView
+void RosegardenScrollView::updateContents(int x, int y, int w, int h)  // Code lifted from Q3ScrollView
 {
     if (!isVisible() || !updatesEnabled())
         return;
@@ -433,7 +433,7 @@ void RosegardenScrollView::doAutoScroll()
 //        scroll(dx, dy);
         this->horizontalScrollBar()->setValue( this->horizontalScrollBar()->value() + dx );
         this->verticalScrollBar()->setValue( this->verticalScrollBar()->value() + dy );
-		
+
         if ( startDecelerating )
             m_minDeltaScroll /= ScrollShortcutValue;
         else
@@ -502,33 +502,33 @@ void RosegardenScrollView::scrollHoriz(int hpos)
 
         // returning to zero
         //         hbar->setValue(0);
-        setContentsPos(0, currentContentYPos);	//@@@
-		
+        setContentsPos(0, currentContentYPos);  //@@@
+
         // possible replacement: ??
         //this->widget()->move( 0, currentContentYPos )
-		
-		
+
+
     } else if (hpos > (contentsX() +
                        visibleWidth() * 1.6) ||
                hpos < (contentsX() -
                        visibleWidth() * 0.7)) {
 
         // miles off one side or the other
-        // 	hbar->setValue(hpos - int(visibleWidth() * 0.4));
+        //   hbar->setValue(hpos - int(visibleWidth() * 0.4));
         setContentsPos(hpos - int(visibleWidth() * 0.4), currentContentYPos);
 
     } else if (hpos > (contentsX() +
                        visibleWidth() * 0.9)) {
 
         // moving off the right hand side of the view
-        // 	hbar->setValue(hbar->value() + int(visibleWidth() * 0.6));
+        //   hbar->setValue(hbar->value() + int(visibleWidth() * 0.6));
         setContentsPos(hbar->value() + int(visibleWidth() * 0.6), currentContentYPos);
 
     } else if (hpos < (contentsX() +
                        visibleWidth() * 0.1)) {
 
         // moving off the left
-        // 	hbar->setValue(hbar->value() - int(visibleWidth() * 0.6));
+        //   hbar->setValue(hbar->value() - int(visibleWidth() * 0.6));
         setContentsPos(hbar->value() - int(visibleWidth() * 0.6), currentContentYPos);
     }
 }
@@ -555,7 +555,7 @@ void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
         int diff10 = std::min(diff, (int)m_minDeltaScroll);
         delta = std::max(delta, diff10);
 
-        // 	hbar->setValue(hbar->value() + delta);
+        // hbar->setValue(hbar->value() + delta);
         setContentsPos(hbar->value() + delta, currentContentYPos);
 
     } else if ((diff = int(hpos - (contentsX() +
@@ -566,7 +566,7 @@ void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
         int diff10 = std::min( -diff, (int)m_minDeltaScroll);
         delta = std::max(delta, diff10);
 
-        // 	hbar->setValue(hbar->value() - delta);
+        // hbar->setValue(hbar->value() - delta);
         setContentsPos(hbar->value() - delta, currentContentYPos);
 
     }
@@ -651,7 +651,7 @@ void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, 
 {
     RG_DEBUG << "setHBarGeometry()";
     ///@TODO Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
-//	hbar.setGeometry( x,y, w,h );
+//    hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
 }
 #endif
