@@ -61,11 +61,15 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_currentScrollDirection(None),
       m_followMode(NoFollow),
       m_autoScrolling(false),
-      m_vwidth(0),
-      m_vheight(0)
+      m_contentsWidth(0),
+      m_contentsHeight(0)
 {
     // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
     //setDragAutoScroll(true);  //&&& could not find replacement
+
+    // Turn off the frame which causes positioning issues.
+    // The rest of the code assumes there is no frame.
+    setFrameStyle(QFrame::NoFrame);
 
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
@@ -79,7 +83,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
 // <QScrollArea*>this->horizontalScrollBar().value()
 //                  + <QScrollArea*>this->width()
 //
-int RosegardenScrollView::contentsX()  //### todo: when GUI is ready: check the following code
+int RosegardenScrollView::contentsX()
 {
     return this->horizontalScrollBar()->value();
 }
@@ -111,24 +115,24 @@ int RosegardenScrollView::visibleHeight()
 
 int RosegardenScrollView::contentsWidth()
 {
-    return m_vwidth;
+    return m_contentsWidth;
 }
 
 int RosegardenScrollView::contentsHeight()
 {
-    return m_vheight;
+    return m_contentsHeight;
 }
 
 void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3ScrollView
 {
     // Hold on to the old values.
-    int ow = m_vwidth;
-    int oh = m_vheight;
+    int ow = m_contentsWidth;
+    int oh = m_contentsHeight;
 
     // We need to set these before we do the swaps, otherwise we may be
     // storing the wrong (post-swap) values.
-    m_vwidth = w;
-    m_vheight = h;
+    m_contentsWidth = w;
+    m_contentsHeight = h;
 
 //    d->scrollbar_timer.start(0, true); // This was necessary until I fixed the resizeEvent connection
 
@@ -340,9 +344,12 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
     if (m_bottomWidget) {
         m_bottomWidget->setParent(this);
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-        // ??? Why do we have to add 1 to get enough room?  Are the viewport's
-        //     limits being ignored?  Is the bottom widget expanding by 1?
-        //     Inclusive vs. exclusive math?
+        // ??? Why do we have to add 1 to get enough room?
+        //     - Are the viewport's limits being ignored?  Is someone
+        //       overdrawing the bottom by 1?
+        //     - Is the bottom widget expanding by 1?  No.  The hint is 25,
+        //       we size it to 25, and it stays at 25.
+        //     - Inclusive vs. exclusive math?  Don't think so.
         setViewportMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() + 1 );
         RG_DEBUG << "RosegardenScrollView::setBottomFixedWidget" << endl;
     }
@@ -650,7 +657,7 @@ void RosegardenScrollView::resizeEvent(QResizeEvent *e)
 void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, int /* y */, int /* w */, int /* h */)
 {
     RG_DEBUG << "setHBarGeometry()";
-    ///@TODO Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
+    // Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
 //    hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
 }
@@ -664,16 +671,16 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
         return;
 
     int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
+    // Since there's no margin (see the call to setFrameStyle() in
+    // the ctor), we can assume the viewport coords match up with
+    // the parent coords.  No need to transform.
     QRect viewportRect = viewport()->rect();
 
     // Move the bottom widget to below the viewport.
-    // ??? What's with all the tweaks?  Are these translations that
-    //     we need to do somehow?  Or are these boundaries that other
-    //     widgets ignore?
     m_bottomWidget->setGeometry(
             viewportRect.left(),
-            viewportRect.bottom() + 3,  // 3 pixel top "frame"?
-            viewportRect.width() + 2,  // No idea.
+            viewportRect.bottom() + 1,  // +1 to be just under
+            viewportRect.width(),
             bottomWidgetHeight);  // See the call to setViewportMargins().
 }
 

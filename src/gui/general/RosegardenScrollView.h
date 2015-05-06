@@ -251,10 +251,8 @@ private:
     static const int MaxScrollDelta;
     static const double ScrollShortcutValue;
 
-    /// Size of the contents.  m_contentsWidth?
-    int m_vwidth;
-    /// Size of the contents.  m_contentsHeight?
-    int m_vheight;
+    int m_contentsWidth;
+    int m_contentsHeight;
 
     /// Adjust the scrollbars' max and page step.
     void updateScrollBars();
