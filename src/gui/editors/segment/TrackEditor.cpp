@@ -160,7 +160,6 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
                                      true,
                                      this);
     m_topStandardRuler->connectRulerToDocPointer(m_doc);
-    m_topStandardRuler->setContentsMargins(2,0,0,0);
 
     grid->addWidget(m_topStandardRuler, 2, 1);
 
@@ -206,14 +205,20 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
                                         true,
                                         m_compositionView);
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
-    m_bottomStandardRuler->setContentsMargins(2,0,0,0);
 
     m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
     grid->addWidget(m_compositionView, 3, 1, 2, 1); // Multi-cell widget FromRow, FromCol, RowSpan, ColSpan
 
-    QSize hsbSize = m_compositionView->horizontalScrollBar()->sizeHint();
-    grid->setRowMinimumHeight(4,hsbSize.height() + m_bottomStandardRuler->height());
+    // Reserve space at the bottom below the TrackButtons to make sure they
+    // don't extend down too far.
+    // ??? This looks great when there is no horizontal scrollbar (zoom all
+    //     the way out).  It extends too far down when there *is* a
+    //     scrollbar.  Need to figure out a way to update this when the
+    //     scrollbar shows/hides.  Use m_compositionView->viewport()
+    //     to do the computations since it takes the scrollbar and ruler
+    //     into account.
+    grid->setRowMinimumHeight(4, m_bottomStandardRuler->sizeHint().height());
 
     grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
     // loading a file which has a low zoom factor
