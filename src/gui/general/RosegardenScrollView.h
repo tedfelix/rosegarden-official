@@ -18,18 +18,19 @@
 #ifndef RG_ROSEGARDENSCROLLVIEW_H
 #define RG_ROSEGARDENSCROLLVIEW_H
 
-#include <QPoint>
 #include <QAbstractScrollArea>
 #include <QDateTime>
+#include <QPoint>
 #include <QTimer>
 
 
-class QWidget;
-class QWheelEvent;
-class QScrollBar;
-class QResizeEvent;
-class QPaintEvent;
 class QMouseEvent;
+class QPaintEvent;
+class QRect;
+class QResizeEvent;
+class QScrollBar;
+class QWheelEvent;
+class QWidget;
 
 
 namespace Rosegarden

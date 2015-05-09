@@ -17,19 +17,19 @@
 
 #define RG_MODULE_STRING "[RosegardenScrollView]"
 
-#include <QWheelEvent>
-#include <QDesktopWidget>
 #include "RosegardenScrollView.h"
 
 #include "misc/Debug.h"
-#include <QApplication>
+
+//#include <QApplication>
 #include <QCursor>
-#include <QPoint>
+#include <QDesktopWidget>
+#include <QMouseEvent>
 #include <QRect>
 #include <QScrollBar>
-#include <QAbstractScrollArea>
 #include <QSizePolicy>
 #include <QTimer>
+#include <QWheelEvent>
 #include <QWidget>
 
 
