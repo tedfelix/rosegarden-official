@@ -720,6 +720,13 @@ JackDriver::getAudioPlayLatency() const
     if (!m_client)
         return RealTime::zeroTime;
 
+    // ??? DEPRECATED
+    //     jack_port_get_total_latency() is deprecated.  Replace with
+    //     jack_port_get_latency_range().  Something like this:
+    //
+    //     jack_latency_range_t latencyRange;
+    //     jack_port_get_latency_range(m_outputMasters[0], Playback, &latencyRange);
+    //     return RealTime::frame2RealTime(latencyRange.max, m_sampleRate);
     jack_nframes_t latency =
         jack_port_get_total_latency(m_client, m_outputMasters[0]);
 
@@ -732,6 +739,13 @@ JackDriver::getAudioRecordLatency() const
     if (!m_client)
         return RealTime::zeroTime;
 
+    // ??? DEPRECATED
+    //     jack_port_get_total_latency() is deprecated.  Replace with
+    //     jack_port_get_latency_range().  Something like this:
+    //
+    //     jack_latency_range_t latencyRange;
+    //     jack_port_get_latency_range(m_inputPorts[0], Capture, &latencyRange);
+    //     return RealTime::frame2RealTime(latencyRange.max, m_sampleRate);
     jack_nframes_t latency =
         jack_port_get_total_latency(m_client, m_inputPorts[0]);
 
