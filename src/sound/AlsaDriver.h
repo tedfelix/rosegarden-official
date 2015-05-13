@@ -628,6 +628,31 @@ private:
      */
     MappedEventList m_returnComposition;
 
+    /// Debugging mode is enabled.
+    /**
+     * Moving debug configuration to run-time to make it a little
+     * easier for users to turn on and off.  Downside is the need
+     * for "if (m_debug)" which uses CPU as opposed to #if.
+     *
+     * To enable debugging, do a debug build and set the following
+     * in the Rosegarden.conf file:
+     *
+     *   [General_Options]
+     *   debug_AlsaDriver=true
+     */
+    bool m_debug;
+
+    /// Reduce the amount of debug output.
+    /**
+     * Debugging real-time code is rather challenging.  It's easy to
+     * end up with too much output, and the behavior will change as
+     * the debugging sucks up CPU.
+     *
+     * This function is intended to reduce the amount of debug output
+     * by only allowing output at fixed intervals, and for short
+     * bursts.
+     */
+    bool throttledDebug() const;
 };
 
 }

@@ -34,14 +34,17 @@
 #include "Midi.h"
 #include "MappedStudio.h"
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 #include "MappedCommon.h"
 #include "MappedEvent.h"
 #include "Audit.h"
 #include "AudioPlayQueue.h"
 #include "ExternalTransport.h"
 
-#include <QRegExp>
 #include <QMutex>
+#include <QRegExp>
+#include <QSettings>
+#include <QTime>
 
 #include <pthread.h>
 
@@ -111,13 +114,24 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_doTimerChecks(false),
     m_firstTimerCheck(true),
     m_timerRatio(0),
-    m_timerRatioCalculated(false)
-
+    m_timerRatioCalculated(false),
+    m_debug(false)
 {
     Audit audit;
     audit << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << std::endl;
     m_pendSysExcMap = new DeviceEventMap();
     std::cerr << "AlsaDriver::AlsaDriver [begin]" << std::endl;
+
+#ifndef NDEBUG
+    // Debugging Mode
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    const QString debugAlsaDriver = "debug_AlsaDriver";
+    m_debug = settings.value(debugAlsaDriver, false).toBool();
+    // Write it to the file to make it easier to find.
+    settings.setValue(debugAlsaDriver, m_debug);
+    settings.endGroup();
+#endif
 }
 
 AlsaDriver::~AlsaDriver()
@@ -3525,6 +3539,19 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
+        bool debug = throttledDebug();
+        if (debug) {
+            RG_DEBUG << "AlsaDriver::processMidiOut() for each event...";
+            QString eventType = "unknown";
+            switch ((*i)->getType()) {
+                case MappedEvent::MidiNote: eventType = "MidiNote"; break;
+                case MappedEvent::MidiNoteOneShot: eventType = "MidiNoteOneShot"; break;
+                case MappedEvent::MidiController: eventType = "MidiController"; break;
+                default: break;
+            }
+            RG_DEBUG << "  MappedEvent Event Type: " << (*i)->getType() << " (" << eventType << ")";
+        }
+
         snd_seq_event_t event;
         snd_seq_ev_clear(&event);
     
@@ -3845,11 +3872,27 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             continue;
         }
 
+        if (debug) {
+            QString eventType = "unknown";
+            switch (event.type) {
+                case SND_SEQ_EVENT_NOTEON: eventType = "SND_SEQ_EVENT_NOTEON"; break;
+                case SND_SEQ_EVENT_NOTEOFF: eventType = "SND_SEQ_EVENT_NOTEOFF"; break;
+                case SND_SEQ_EVENT_CONTROLLER: eventType = "SND_SEQ_EVENT_CONTROLLER"; break;
+                default: break;
+            }
+            RG_DEBUG << "  ALSA event type: " << event.type << " (" << eventType << ")";
+        }
+
         if (isSoftSynth) {
+            if (debug)
+                RG_DEBUG << "  Calling processSoftSynthEventOut()...";
 
             processSoftSynthEventOut((*i)->getInstrument(), &event, now);
 
         } else {
+            if (debug)
+                RG_DEBUG << "  Calling snd_seq_event_output()...";
+
             checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
                            "processMidiOut(): output queued");
 
@@ -5372,6 +5415,40 @@ AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
     std::cerr << "AlsaDriver::versionIsAtLeast: is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no") << std::endl;
     return ok;
 }    
+
+bool
+AlsaDriver::throttledDebug() const
+{
+    if (!m_debug)
+        return false;
+
+    static bool active = true;
+    static int count = 0;
+    static QTime timeout;
+
+    // if we are active
+    if (active) {
+        ++count;
+        // if we've done too many
+        if (count > 5) {
+            active = false;
+            timeout = QTime::currentTime().addSecs(5);
+            return false;
+        }
+        return true;
+    } else {
+        // if current time > timeout
+        if (QTime::currentTime() > timeout) {
+            active = true;
+            count = 1;
+            return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+
 
 }
 
