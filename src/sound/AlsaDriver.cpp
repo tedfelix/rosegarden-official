@@ -3592,15 +3592,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         processNotesOff(outputTime, now);
 
-#ifdef HAVE_LIBJACK
+#if defined(DEBUG_PROCESS_MIDI_OUT)  &&  defined(HAVE_LIBJACK)
         if (m_jackDriver) {
             size_t frameCount = m_jackDriver->getFramesProcessed();
             size_t elapsed = frameCount - debug_jack_frame_count;
             RealTime rt = RealTime::frame2RealTime(elapsed, m_jackDriver->getSampleRate());
             rt = rt - getAlsaTime();
-#ifdef DEBUG_PROCESS_MIDI_OUT
             std::cout << "processMidiOut[" << now << "]: JACK time is " << rt << " ahead of ALSA time" << std::endl;
-#endif
         }
 #endif
 
@@ -3884,7 +3882,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
             m_noteOffQueue.insert(noteOffEvent);
         }
-    }
+    }  // for each event
 
     processNotesOff(sliceEnd - m_playStartPosition + m_alsaPlayStartTime, now);
 

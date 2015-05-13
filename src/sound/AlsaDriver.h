@@ -12,19 +12,10 @@
     COPYING included with this distribution for more information.
 */
 
-// Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
-//
-//
 #ifndef RG_ALSADRIVER_H
 #define RG_ALSADRIVER_H
 
-#include <vector>
-#include <set>
-#include <map>
-
 #ifdef HAVE_ALSA
-
-#include <alsa/asoundlib.h> // ALSA
 
 #include "SoundDriver.h"
 #include "base/Instrument.h"
@@ -37,11 +28,19 @@
 #include "JackDriver.h"
 #endif
 
+#include <alsa/asoundlib.h> // ALSA
+
 #include <QMutex>
+
+#include <vector>
+#include <set>
+#include <map>
 
 namespace Rosegarden
 {
 
+
+/// Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
 class AlsaDriver : public SoundDriver
 {
 public:
