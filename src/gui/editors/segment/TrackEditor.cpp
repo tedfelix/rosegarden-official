@@ -529,6 +529,7 @@ void TrackEditor::slotDeleteTracks(std::vector<TrackId> tracks)
     addCommandToHistory(macro);
 }
 
+#if 0
 void TrackEditor::addSegment(int track, int time, unsigned int duration)
 {
     if (!m_doc)
@@ -539,6 +540,7 @@ void TrackEditor::addSegment(int track, int time, unsigned int duration)
 
     addCommandToHistory(command);
 }
+#endif
 
 #if 0
 // Dead Code.
@@ -552,6 +554,7 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 }
 #endif
 
+#if 0
 void
 TrackEditor::slotCanvasScrolled(int x, int /*y*/)
 {
@@ -571,6 +574,7 @@ TrackEditor::slotCanvasScrolled(int x, int /*y*/)
         //     slotSetPointerPosition(t);
     }
 }
+#endif
 
 void
 TrackEditor::slotSetPointerPosition(timeT position)
