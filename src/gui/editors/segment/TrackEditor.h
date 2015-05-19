@@ -92,16 +92,25 @@ public:
     TrackButtons    *getTrackButtons()        { return m_trackButtons; }
     //RulerScale      *getRulerScale()          { return m_rulerScale; }
 
-    /**
-     * Add a new segment - DCOP interface
-     */
-    //virtual void addSegment(int track, int start, unsigned int duration);
-
     /// Calls update() on each of the rulers.
     void updateRulers();
 
     /// Are we scrolling as we play?
     bool isTracking() const { return m_playTracking; }
+    /// Toggle playback scrolling.
+    void toggleTracking();
+
+    /// Adjust the canvas size to that required for the composition
+    void updateCanvasSize();
+
+    void addTracks(unsigned int nbTracks, InstrumentId id, int position);
+    void deleteTracks(std::vector<TrackId> tracks);
+    void deleteSelectedSegments();
+    void turnRepeatingSegmentToRealCopies();
+    void turnLinkedSegmentsToRealCopies();
+
+    /// Add a new segment - DCOP interface
+    //virtual void addSegment(int track, int start, unsigned int duration);
 
 public slots:
 
@@ -112,6 +121,7 @@ public slots:
      */
     void slotScrollToTrack(int trackPosition);
 
+private slots:
     /// Set the position pointer during playback
     /**
      * init() connects this to
@@ -135,43 +145,19 @@ public slots:
      */
     void slotLoopDraggedToPosition(timeT position);
 
-    /// Act on a canvas scroll event
-    //void slotCanvasScrolled(int, int);
-
+    /// Show the given loop on the rulers
     /**
-     * Adjust the canvas size to that required for the composition
-     */
-    void slotReadjustCanvasSize();
-
-    /**
-     * Show the given loop on the ruler or wherever
+     * init() connects this to RosegardenDocument::loopChanged().
      */
     void slotSetLoop(timeT start, timeT end);
 
-    /**
-     * Add given number of tracks
-     */
-    void slotAddTracks(unsigned int nbTracks, InstrumentId id, int position);
-
-    /*
-     * Delete a given track
-     */
-    void slotDeleteTracks(std::vector<TrackId> tracks);
-
-    void slotDeleteSelectedSegments();
-    void slotTurnRepeatingSegmentToRealCopies();
-    void slotTurnLinkedSegmentsToRealCopies();
-
-    void slotToggleTracking();
-
-protected slots:
-    // Dead Code.
-//    void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
-
-    //void slotTrackButtonsWidthChanged();
-
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
+
+    /// Act on a canvas scroll event
+    //void slotCanvasScrolled(int, int);
+    //void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
+    //void slotTrackButtonsWidthChanged();
 
 signals:
     /**

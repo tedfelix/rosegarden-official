@@ -107,7 +107,7 @@ TrackEditor::TrackEditor(RosegardenDocument* doc,
     
     
     init(rosegardenMainViewWidget);
-    slotReadjustCanvasSize();
+    updateCanvasSize();
 }
 
 TrackEditor::~TrackEditor()
@@ -350,14 +350,13 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
     connect(m_bottomStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
             this, SLOT(slotLoopDraggedToPosition(timeT)));
 
-    connect(m_doc, SIGNAL(loopChanged(timeT,
-                                      timeT)),
+    connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
 
     settings.endGroup();
 }
 
-void TrackEditor::slotReadjustCanvasSize()
+void TrackEditor::updateCanvasSize()
 {
     m_compositionView->slotUpdateSize();
 }
@@ -447,7 +446,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         //     implement them in a more appropriate way.  Some are causing
         //     serious CPU issues.  None belong here.
 
-        slotReadjustCanvasSize();
+        updateCanvasSize();
 
         // ??? At one time, this was linked to excessive CPU usage while
         //     recording MIDI.  Now, it doesn't seem to make much difference.
@@ -486,19 +485,19 @@ void TrackEditor::paintEvent(QPaintEvent* e)
     QWidget::paintEvent(e);
 }
 
-void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
-                                InstrumentId id,
-                                int position)
+void TrackEditor::addTracks(unsigned int nbNewTracks,
+                            InstrumentId id,
+                            int position)
 {
     Composition &comp = m_doc->getComposition();
 
     AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id,
                                                      position);
     addCommandToHistory(command);
-    slotReadjustCanvasSize();
+    updateCanvasSize();
 }
 
-void TrackEditor::slotDeleteTracks(std::vector<TrackId> tracks)
+void TrackEditor::deleteTracks(std::vector<TrackId> tracks)
 {
     MacroCommand *macro = new MacroCommand(tr("Delete Tracks"));
 
@@ -670,7 +669,7 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
 }
 
 void
-TrackEditor::slotToggleTracking()
+TrackEditor::toggleTracking()
 {
     m_playTracking = !m_playTracking;
 }
@@ -709,7 +708,7 @@ TrackEditor::slotScrollToTrack(int track)
 }
 
 void
-TrackEditor::slotDeleteSelectedSegments()
+TrackEditor::deleteSelectedSegments()
 {
     MacroCommand *macro = new MacroCommand(tr("Delete Segments"));
 
@@ -738,9 +737,9 @@ TrackEditor::slotDeleteSelectedSegments()
 }
 
 void
-TrackEditor::slotTurnRepeatingSegmentToRealCopies()
+TrackEditor::turnRepeatingSegmentToRealCopies()
 {
-    RG_DEBUG << "TrackEditor::slotTurnRepeatingSegmentToRealCopies" << endl;
+    RG_DEBUG << "TrackEditor::turnRepeatingSegmentToRealCopies" << endl;
 
     SegmentSelection segments =
         m_compositionView->getSelectedSegments();
@@ -764,9 +763,9 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
 }
 
 void
-TrackEditor::slotTurnLinkedSegmentsToRealCopies()
+TrackEditor::turnLinkedSegmentsToRealCopies()
 {
-    RG_DEBUG << "TrackEditor::slotTurnLinkedSegmentsToRealCopies" << endl;
+    RG_DEBUG << "TrackEditor::turnLinkedSegmentsToRealCopies" << endl;
 
     SegmentSelection segments =
         m_compositionView->getSelectedSegments();

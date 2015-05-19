@@ -1245,7 +1245,7 @@ RosegardenMainWindow::initView()
     //                                (actionCollection()->action("toggle_tracking"));
     QAction *trackingAction = findAction("toggle_tracking");
     if (trackingAction && !trackingAction->isChecked()) {
-        m_view->getTrackEditor()->slotToggleTracking();
+        m_view->getTrackEditor()->toggleTracking();
     }
 
     m_view->show();
@@ -1461,7 +1461,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     // Readjust canvas size
     //
-    m_view->getTrackEditor()->slotReadjustCanvasSize();
+    m_view->getTrackEditor()->updateCanvasSize();
 }
 
 void
@@ -2505,7 +2505,7 @@ RosegardenMainWindow::slotSelectAll()
 void
 RosegardenMainWindow::slotDeleteSelectedSegments()
 {
-    m_view->getTrackEditor()->slotDeleteSelectedSegments();
+    m_view->getTrackEditor()->deleteSelectedSegments();
 }
 
 void
@@ -4899,7 +4899,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
                     timeT barDuration = timeRange.second - timeRange.first;
                     timeT newEndMarker = t + 10 * barDuration;
                     comp.setEndMarker(newEndMarker);
-                    getView()->getTrackEditor()->slotReadjustCanvasSize();
+                    getView()->getTrackEditor()->updateCanvasSize();
                     getView()->getTrackEditor()->updateRulers();
                 }
             }
@@ -5021,7 +5021,7 @@ RosegardenMainWindow::isTrackEditorPlayTracking() const
 void
 RosegardenMainWindow::slotToggleTracking()
 {
-    m_view->getTrackEditor()->slotToggleTracking();
+    m_view->getTrackEditor()->toggleTracking();
 }
 
 void
@@ -6862,13 +6862,13 @@ RosegardenMainWindow::slotDeleteAllAudioFiles()
 void
 RosegardenMainWindow::slotRepeatingSegments()
 {
-    m_view->getTrackEditor()->slotTurnRepeatingSegmentToRealCopies();
+    m_view->getTrackEditor()->turnRepeatingSegmentToRealCopies();
 }
 
 void
 RosegardenMainWindow::slotLinksToCopies()
 {
-    m_view->getTrackEditor()->slotTurnLinkedSegmentsToRealCopies();
+    m_view->getTrackEditor()->turnLinkedSegmentsToRealCopies();
 }
 
 void

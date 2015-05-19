@@ -1579,7 +1579,7 @@ void RosegardenMainViewWidget::slotAddTracks(unsigned int nbTracks,
                                       InstrumentId id, int pos)
 {
     RG_DEBUG << "RosegardenMainViewWidget::slotAddTracks(" << nbTracks << ", " << pos << ")" << endl;
-    m_trackEditor->slotAddTracks(nbTracks, id, pos);
+    m_trackEditor->addTracks(nbTracks, id, pos);
 }
 
 void RosegardenMainViewWidget::slotDeleteTracks(
@@ -1589,7 +1589,7 @@ void RosegardenMainViewWidget::slotDeleteTracks(
     << "deleting " << tracks.size() << " tracks"
     << endl;
 
-    m_trackEditor->slotDeleteTracks(tracks);
+    m_trackEditor->deleteTracks(tracks);
 }
 
 void
