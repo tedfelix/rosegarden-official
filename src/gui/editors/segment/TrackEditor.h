@@ -109,7 +109,7 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
-    /// Add a new segment - DCOP interface
+    // Add a new segment - DCOP interface
     //virtual void addSegment(int track, int start, unsigned int duration);
 
 public slots:
@@ -154,62 +154,80 @@ private slots:
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
 
-    /// Act on a canvas scroll event
+    // Act on a canvas scroll event
     //void slotCanvasScrolled(int, int);
     //void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
     //void slotTrackButtonsWidthChanged();
 
 signals:
     /**
+     * init() connects this to RosegardenMainViewWidget::stateChange().
+     *
+     * Used to modify have_segments and have_selection states.
+     */
+    void stateChange(QString name, bool state);
+
+    /// A URI to a Rosegarden document was dropped on the canvas.
+    /**
+     * RosegardenMainViewWidget's ctor connects this to
+     * RosegardenMainWindow::slotOpenDroppedURL().
+     */
+    void droppedDocument(QString uri);
+
+    /// An audio file was dropped from the audio manager dialog.
+    /**
+     * RosegardenMainViewWidget's ctor connects this to
+     * RosegardenMainViewWidget::slotDroppedAudio().
+     */
+    void droppedAudio(QString audioDesc);
+
+    /// An audio file was dropped from an external application.
+    /**
+     * Inserts the audio file into AudioManagerDialog before adding to the
+     * composition.
+     *
+     * RosegardenMainViewWidget's ctor connects this to
+     * RosegardenMainViewWidget::slotDroppedNewAudio().
+     */
+    void droppedNewAudio(QString audioDesc);
+
+    /*
      * Emitted when the represented data changed and the CompositionView
      * needs to update itself
      *
      * @see CompositionView::update()
      */
-    // Dead Code.
-//    void needUpdate();
-
-    /**
-     * sent back to RosegardenGUI
-     */
-    void stateChange(QString, bool);
-
-    /**
-     * A URI to a Rosegarden document was dropped on the canvas
-     *
-     * @see RosegardenGUI#slotOpenURL()
-     */
-    void droppedDocument(QString uri);
-
-    /**
-     * An audio file was dropped from the audio manager dialog
-     */
-    void droppedAudio(QString audioDesc);
-
-    /**
-     * An audio file was dropped from an external application and needs to be
-     * inserted into AudioManagerDialog before adding to the composition.
-     */
-    void droppedNewAudio(QString audioDesc);
+    //void needUpdate();
 
 private:
 
-    // QWidget overrides.
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent*);
-    virtual void dragMoveEvent(QDragMoveEvent *);
-    virtual void paintEvent(QPaintEvent* e);
-    
+    /// Initialization routine called by ctor.
     void init(RosegardenMainViewWidget *);
 
+    // QWidget overrides.
+    virtual void dragEnterEvent(QDragEnterEvent *);
+    virtual void dropEvent(QDropEvent *);
+    virtual void dragMoveEvent(QDragMoveEvent *);
+    virtual void paintEvent(QPaintEvent *);
+
+    /// Composition::getRefreshStatus()
     bool isCompositionModified();
+    /// Sets Composition's refresh status
     void setCompositionModified(bool);
     
-    /// return true if an actual move occurred between current and new position, newPosition contains the horiz. pos corresponding to newTimePosition
-    bool handleAutoScroll(int currentPosition, timeT newTimePosition, double& newPosition);
-    
+    /// Scroll the CompositionView as needed.
+    /**
+     * Returns true if an actual move occurred between currentPosition and
+     * newTimePosition.  Output parameter newPosition contains the horizontal
+     * position corresponding to newTimePosition.
+     */
+    bool handleAutoScroll(
+            int currentPosition, timeT newTimePosition, double &newPosition);
+
+    /// Picks a track height based on the font.
     int getTrackCellHeight() const;
 
+    /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);
 
     //--------------- Data members ---------------------------------

@@ -112,7 +112,10 @@ TrackEditor::TrackEditor(RosegardenDocument* doc,
 
 TrackEditor::~TrackEditor()
 {
-    delete m_chordNameRuler;
+    // This delete is needed as CompositionModelImpl isn't aware of its parent.
+    // ??? Since CompositionModelImpl is a QObject, we should provide it
+    //     with its parent (this) so that the parent can delete it for us.
+    //     Then this line and this dtor can go away.
     delete m_compositionModel;
 }
 
@@ -799,11 +802,9 @@ TrackEditor::slotVerticalScrollTrackButtons(int y)
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
 {
-    const QMimeData *mime;
-    mime = e->mimeData();
-    QStringList formats(mime->formats());
+    const QMimeData *mime = e->mimeData();
 
-    if (mime->hasUrls() || mime->hasText()) {
+    if (mime->hasUrls()  ||  mime->hasText()) {
 
         if (e->proposedAction() & Qt::CopyAction) {
             e->acceptProposedAction();
@@ -811,17 +812,18 @@ void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
             e->setDropAction(Qt::CopyAction);
             e->accept();
         }
-    }else{
+    } else {
+        QStringList formats(mime->formats());
         RG_DEBUG << "HINT: Unaccepted MimeFormat in TrackEditor::dragEnterEvent : " << formats << endl;
     }
 }
 
 
-
-void TrackEditor::dragMoveEvent(QDragMoveEvent *){
-    // pass
+void TrackEditor::dragMoveEvent(QDragMoveEvent *)
+{
+    // Prevent QWidget from handling this.
+    // QWidget::dragMoveEvent() does nothing, so this isn't really necessary.
 }
-
 
 
 void TrackEditor::dropEvent(QDropEvent *e)
