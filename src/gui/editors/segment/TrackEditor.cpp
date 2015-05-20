@@ -81,32 +81,33 @@
 namespace Rosegarden
 {
 
-TrackEditor::TrackEditor(RosegardenDocument* doc,
-                         RosegardenMainViewWidget* rosegardenMainViewWidget,
+TrackEditor::TrackEditor(RosegardenDocument *doc,
+                         RosegardenMainViewWidget *mainViewWidget,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
-                         double initialUnitsPerPixel,
-                         QWidget* parent) :
-    QWidget(parent),
+                         double /*initialUnitsPerPixel*/) :
+    QWidget(mainViewWidget),
     m_doc(doc),
-    m_rulerScale(rulerScale),
-    m_topStandardRuler(0),
-    m_bottomStandardRuler(0),
-    m_trackButtons(0),
+    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_compositionView(0),
+    m_compositionModel(0),
+    m_playTracking(true),
+    m_trackButtons(0),
     m_trackButtonScroll(0),
     m_showTrackLabels(showTrackLabels),
-    m_canvasWidth(0),
-    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
-    m_playTracking(true),
-    m_initialUnitsPerPixel(initialUnitsPerPixel)
+    m_rulerScale(rulerScale),
+    m_tempoRuler(0),
+    m_chordNameRuler(0),
+    m_topStandardRuler(0),
+    m_bottomStandardRuler(0)
+    //m_canvasWidth(0),
+    //m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
     // accept dnd
     setAcceptDrops(true);
     //setDragEnabled(true);
-    
-    
-    init(rosegardenMainViewWidget);
+
+    init(mainViewWidget);
     updateCanvasSize();
 }
 

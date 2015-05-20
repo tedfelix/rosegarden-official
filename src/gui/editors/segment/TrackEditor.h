@@ -70,11 +70,10 @@ class TrackEditor : public QWidget
     Q_OBJECT
 public:
     TrackEditor(RosegardenDocument *doc,
-                RosegardenMainViewWidget *rosegardenMainViewWidget,
+                RosegardenMainViewWidget *mainViewWidget,
                 RulerScale *rulerScale,
                 bool showTrackLabels,
-                double initialUnitsPerPixel,
-                QWidget *parent);
+                double initialUnitsPerPixel);  // unused, RulerScale has it
 
     ~TrackEditor();
 
@@ -121,44 +120,6 @@ public slots:
      */
     void slotScrollToTrack(int trackPosition);
 
-private slots:
-    /// Set the position pointer during playback
-    /**
-     * init() connects this to
-     * RosegardenDocument::pointerPositionChanged(timeT).
-     */
-    void slotSetPointerPosition(timeT position);
-
-    /// Update the pointer position as it is being dragged along.
-    /**
-     * Scroll to make sure the pointer is visible.
-     *
-     * init() connects this to the top and bottom rulers'
-     * dragPointerToPosition(timeT).
-     */
-    void slotPointerDraggedToPosition(timeT position);
-
-    /// Scroll to make sure the loop end is visible.
-    /**
-     * init() connects this to the top and bottom rulers'
-     * dragLoopToPosition(timeT).
-     */
-    void slotLoopDraggedToPosition(timeT position);
-
-    /// Show the given loop on the rulers
-    /**
-     * init() connects this to RosegardenDocument::loopChanged().
-     */
-    void slotSetLoop(timeT start, timeT end);
-
-    /// Scroll the track buttons along with the segment canvas
-    void slotVerticalScrollTrackButtons(int y);
-
-    // Act on a canvas scroll event
-    //void slotCanvasScrolled(int, int);
-    //void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
-    //void slotTrackButtonsWidthChanged();
-
 signals:
     /**
      * init() connects this to RosegardenMainViewWidget::stateChange().
@@ -199,6 +160,44 @@ signals:
      */
     //void needUpdate();
 
+private slots:
+    /// Set the position pointer during playback
+    /**
+     * init() connects this to
+     * RosegardenDocument::pointerPositionChanged(timeT).
+     */
+    void slotSetPointerPosition(timeT position);
+
+    /// Update the pointer position as it is being dragged along.
+    /**
+     * Scroll to make sure the pointer is visible.
+     *
+     * init() connects this to the top and bottom rulers'
+     * dragPointerToPosition(timeT).
+     */
+    void slotPointerDraggedToPosition(timeT position);
+
+    /// Scroll to make sure the loop end is visible.
+    /**
+     * init() connects this to the top and bottom rulers'
+     * dragLoopToPosition(timeT).
+     */
+    void slotLoopDraggedToPosition(timeT position);
+
+    /// Show the given loop on the rulers
+    /**
+     * init() connects this to RosegardenDocument::loopChanged().
+     */
+    void slotSetLoop(timeT start, timeT end);
+
+    /// Scroll the track buttons along with the segment canvas
+    void slotVerticalScrollTrackButtons(int y);
+
+    // Act on a canvas scroll event
+    //void slotCanvasScrolled(int, int);
+    //void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
+    //void slotTrackButtonsWidthChanged();
+
 private:
 
     /// Initialization routine called by ctor.
@@ -233,28 +232,29 @@ private:
     //--------------- Data members ---------------------------------
 
     RosegardenDocument      *m_doc;
-    
+    unsigned int             m_compositionRefreshStatusId;
+
+    // Segment Canvas
+    CompositionView         *m_compositionView;
+    CompositionModelImpl    *m_compositionModel;
+    bool                     m_playTracking;
+
+    // Track Buttons to the left of the Segment Canvas
+    TrackButtons            *m_trackButtons;
+    QScrollArea             *m_trackButtonScroll;
+    bool                     m_showTrackLabels;
+
+    // Rulers
     RulerScale              *m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;
     StandardRuler           *m_topStandardRuler;
     StandardRuler           *m_bottomStandardRuler;
-    TrackButtons            *m_trackButtons;
-    CompositionView         *m_compositionView;
-    CompositionModelImpl    *m_compositionModel;
-    QScrollArea             *m_trackButtonScroll;
 
-    bool                     m_showTrackLabels;
-    unsigned int             m_canvasWidth;
-    unsigned int             m_compositionRefreshStatusId;
-    bool                     m_playTracking;
-
-    //typedef std::map<Segment *, unsigned int>
-    //    SegmentRefreshStatusIdMap;
+    //unsigned int             m_canvasWidth;
+    //typedef std::map<Segment *, unsigned int> SegmentRefreshStatusIdMap;
     //SegmentRefreshStatusIdMap m_segmentsRefreshStatusIds;
-
-    double                   m_initialUnitsPerPixel;
-
+    //double                   m_initialUnitsPerPixel;
 };
 
 
