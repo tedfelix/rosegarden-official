@@ -48,7 +48,6 @@
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
-#include "gui/general/IconLoader.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/DeferScrollArea.h"
 #include "sound/AudioFile.h"
@@ -103,11 +102,12 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     //m_canvasWidth(0),
     //m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
-    // accept dnd
+    // Accept objects dragged and dropped onto this widget.
     setAcceptDrops(true);
-    //setDragEnabled(true);
 
+    // ??? Only called here.  Inline it here.
     init(mainViewWidget);
+
     updateCanvasSize();
 }
 
@@ -121,14 +121,17 @@ TrackEditor::~TrackEditor()
 }
 
 void
-TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
+TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 {
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
     grid->setSpacing(0);
 
-    int trackLabelWidth = 200;
-    int barButtonsHeight = 25;
+    // Height for top and bottom standard rulers.
+    // rename: standardRulerHeight
+    const int barButtonsHeight = 25;
+
+    // Top Rulers
     
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
                                           m_doc,
@@ -137,8 +140,6 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
                                           this);
     grid->addWidget(m_chordNameRuler, 0, 1);
 
-//    m_chordNameRuler->hide();
-
     m_tempoRuler = new TempoRuler(m_rulerScale,
                                   m_doc,
                                   RosegardenMainWindow::self(),
@@ -146,16 +147,9 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
                                   24,
                                   true,
                                   this);
-
+    m_tempoRuler->connectSignals();
     grid->addWidget(m_tempoRuler, 1, 1);
 
-    m_tempoRuler->connectSignals();
-
-//    m_tempoRuler->hide();
-
-    //
-    // Top Bar Buttons
-    //
     m_topStandardRuler = new StandardRuler(m_doc,
                                      m_rulerScale,
                                      0,
@@ -164,43 +158,18 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
                                      true,
                                      this);
     m_topStandardRuler->connectRulerToDocPointer(m_doc);
-
     grid->addWidget(m_topStandardRuler, 2, 1);
 
-//    m_topStandardRuler->hide();
+    // Segment Canvas (CompositionView)
 
-    //
-    // Segment Canvas
-    //
     m_compositionModel = new CompositionModelImpl(m_doc->getComposition(),
                          m_doc->getStudio(),
                          m_rulerScale, getTrackCellHeight());
 
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
 
-    IconLoader il;
-    
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    // Bottom Ruler
 
-    if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
-
-        QPixmap background = il.loadPixmap("bg-segmentcanvas");
-
-        if (!background.isNull()) {
-            m_compositionView->setBackgroundPixmap(background);
-//            m_compositionView->viewport()->setBackgroundPixmap(background);
-            QPalette palette;
-            palette.setBrush(m_compositionView->backgroundRole(), QBrush(background));
-            palette.setBrush(m_compositionView->viewport()->backgroundRole(), QBrush(background));
-            m_compositionView->setPalette(palette);
-            m_compositionView->viewport()->setPalette(palette);
-        }
-    }
-
-    //
-    // Bottom Bar Buttons
-    //
     m_bottomStandardRuler = new StandardRuler(m_doc,
                                         m_rulerScale,
                                         0,
@@ -212,7 +181,9 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
 
     m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
-    grid->addWidget(m_compositionView, 3, 1, 2, 1); // Multi-cell widget FromRow, FromCol, RowSpan, ColSpan
+    // Span 2 rows (3 and 4) so that there is an extra cell at the bottom of
+    // column 0 to take up space below the TrackButtons.
+    grid->addWidget(m_compositionView, 3, 1, 2, 1);
 
     // Reserve space at the bottom below the TrackButtons to make sure they
     // don't extend down too far.
@@ -224,19 +195,20 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
     //     into account.
     grid->setRowMinimumHeight(4, m_bottomStandardRuler->sizeHint().height());
 
-    grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
-    // loading a file which has a low zoom factor
+    // Make sure the segment canvas doesn't leave a "blank" grey space when
+    // loading a file which has a low zoom factor.
+    grid->setColumnStretch(1, 10);
 
     // Track Buttons
-    //
+
     m_trackButtonScroll = new DeferScrollArea(this);
     // Scroll bars always off
     m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
-
-    int canvasHeight = getTrackCellHeight() *
+    const int trackLabelWidth = 200;
+    const int canvasHeight = getTrackCellHeight() *
                        std::max(40u, m_doc->getComposition().getNbTracks());
 
     m_trackButtons = new TrackButtons(m_doc,
@@ -250,17 +222,19 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
 
     m_trackButtonScroll->setWidget(m_trackButtons);
 
+    // Connections
+
     //connect(m_trackButtons, SIGNAL(widthChanged()),
     //        this, SLOT(slotTrackButtonsWidthChanged()));
 
     connect(m_trackButtons, SIGNAL(trackSelected(int)),
-            rosegardenMainViewWidget, SLOT(slotSelectTrackSegments(int)));
+            mainViewWidget, SLOT(slotSelectTrackSegments(int)));
 
     connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
-            rosegardenMainViewWidget, SLOT(slotUpdateInstrumentParameterBox(int)));
+            mainViewWidget, SLOT(slotUpdateInstrumentParameterBox(int)));
 
     connect(this, SIGNAL(stateChange(QString, bool)),
-            rosegardenMainViewWidget, SIGNAL(stateChange(QString, bool)));
+            mainViewWidget, SIGNAL(stateChange(QString, bool)));
 
     // No such signal.  Was there ever?
 //    connect(m_trackButtons, SIGNAL(modified()),
@@ -285,13 +259,10 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
     //connect(m_compositionView, SIGNAL(contentsMoving(int, int)),
     //        this, SLOT(slotCanvasScrolled(int, int)));
 
-    // Synchronize bar buttons' scrollview with segment canvas' scrollbar
-    //
+    // Synchronize TrackButtons scroll area (m_trackButtonScroll) with
+    // segment canvas's vertical scrollbar.
     connect(m_compositionView->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
-//    connect(m_vertScrollBar, SIGNAL(valueChanged(int)),
-//        this, SLOT(slotVerticalScrollTrackButtons(int)));
-
     connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
@@ -299,8 +270,8 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
     connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
             m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
-    // Connect horizontal scrollbar
-    //
+    // Synchronize the rulers with the horizontal scrollbar.
+
     connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_topStandardRuler, SLOT(slotScrollHoriz(int)));
     connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
@@ -327,7 +298,7 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
 
     connect(m_compositionView->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),
-            rosegardenMainViewWidget,
+            mainViewWidget,
             SLOT(slotSelectedSegments(const SegmentSelection &)));
 
     connect(m_compositionView, SIGNAL(zoomIn()),
@@ -341,14 +312,13 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
     connect(m_doc, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotSetPointerPosition(timeT)));
 
-    //
-    // pointer and loop drag signals from top and bottom bar buttons (loop rulers actually)
-    //
+    // Top/Bottom ruler pointer drag.
     connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerDraggedToPosition(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerDraggedToPosition(timeT)));
 
+    // Top/Bottom ruler loop drag.
     connect(m_topStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
             this, SLOT(slotLoopDraggedToPosition(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
@@ -356,8 +326,6 @@ TrackEditor::init(RosegardenMainViewWidget *rosegardenMainViewWidget)
 
     connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
-
-    settings.endGroup();
 }
 
 void TrackEditor::updateCanvasSize()

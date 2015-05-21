@@ -241,6 +241,7 @@ private:
 
     // Track Buttons to the left of the Segment Canvas
     TrackButtons            *m_trackButtons;
+    // Scrollable parent for the TrackButtons.
     QScrollArea             *m_trackButtonScroll;
     bool                     m_showTrackLabels;
 

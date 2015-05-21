@@ -33,6 +33,7 @@
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/IconLoader.h"
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
@@ -188,6 +189,26 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     settings.setValue("CompositionView", m_enableDrawing ? 1 : 0);
 
     settings.endGroup();
+
+    IconLoader il;
+
+    // If background textures are enabled.
+    if (settings.value(
+            QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
+            "true").toBool()) {
+
+        QPixmap background = il.loadPixmap("bg-segmentcanvas");
+
+        if (!background.isNull()) {
+            setBackgroundPixmap(background);
+            //viewport()->setBackgroundPixmap(background);
+            QPalette palette;
+            palette.setBrush(backgroundRole(), QBrush(background));
+            palette.setBrush(viewport()->backgroundRole(), QBrush(background));
+            setPalette(palette);
+            viewport()->setPalette(palette);
+        }
+    }
 }
 
 void CompositionView::endAudioPreviewGeneration()
