@@ -544,7 +544,7 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
     if (distance >= 1.0) {
 
         if (m_doc  &&  m_doc->getSequenceManager()  &&
-            (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
+            m_doc->getSequenceManager()->getTransportStatus() != STOPPED) {
             
             if (m_playTracking) {
                 m_compositionView->scrollHoriz(newPosition);
@@ -572,11 +572,12 @@ TrackEditor::slotPointerDraggedToPosition(timeT position)
 void
 TrackEditor::slotLoopDraggedToPosition(timeT position)
 {
-    if (m_doc) {
-        int currentEndLoopPos = m_doc->getComposition().getLoopEnd();
-        double dummy;
-        handleAutoScroll(currentEndLoopPos, position, dummy);
-    }
+    if (!m_doc)
+        return;
+
+    int currentEndLoopPos = m_doc->getComposition().getLoopEnd();
+    double dummy;
+    handleAutoScroll(currentEndLoopPos, position, dummy);
 }
 
 bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, double &newPosition)
@@ -584,26 +585,21 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
     if (!m_rulerScale)
         return false;
 
-    // ??? This routine is almost identical to slotSetPointerPosition().
-    //     Sync them up, then see if one can go away.
+    newPosition = m_rulerScale->getXForTime(newTimePosition);
+    const double distance = fabs(newPosition - currentPosition);
 
-    newPosition = m_compositionView->grid().getRulerScale()->getXForTime(newTimePosition);
-
-    double distance = fabs(newPosition - currentPosition);
-
-    bool moveDetected = distance >= 1.0;
+    bool moveDetected = (distance >= 1.0);
 
     if (moveDetected) {
 
-        if (m_doc && m_doc->getSequenceManager() &&
-                (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
+        if (m_doc  &&  m_doc->getSequenceManager()  &&
+            m_doc->getSequenceManager()->getTransportStatus() != STOPPED) {
 
             if (m_playTracking) {
-                m_compositionView->scrollHoriz(int(double(newTimePosition) / m_rulerScale->getUnitsPerPixel()));
+                m_compositionView->scrollHoriz(newPosition);
             }
         } else {
-            int newpos = int(double(newTimePosition) / m_rulerScale->getUnitsPerPixel());
-            m_compositionView->scrollHorizSmallSteps(newpos);
+            m_compositionView->scrollHorizSmallSteps(newPosition);
             m_compositionView->doAutoScroll();
         }
 
@@ -634,100 +630,88 @@ TrackEditor::addCommandToHistory(Command *command)
 void
 TrackEditor::slotScrollToTrack(int track)
 {
-    ///!!! Reconfigure to use m_compositionmodel to return y value for track number
     // Find the vertical track pos
     int newY = track * m_trackCellHeight;
 
-    //RG_DEBUG << "slotScrollToTrack(" << track << ") scrolling to Y " << newY;
-
-    // Scroll the segment view; it will scroll tracks by connected signals
-    //    slotVerticalScrollTrackButtons(newY);
-
-    // This is currently a bit broke
     m_compositionView->scrollVertSmallSteps(newY);
-
-    // This works but is basic McBasic
-    //m_compositionView->setContentsPos(m_compositionView->contentsX(),newY);
 }
 
 void
 TrackEditor::deleteSelectedSegments()
 {
-    MacroCommand *macro = new MacroCommand(tr("Delete Segments"));
+    SegmentSelection segments = m_compositionView->getSelectedSegments();
 
-    SegmentSelection segments =
-        m_compositionView->getSelectedSegments();
-
-    if (segments.size() == 0)
-        return ;
-
-    SegmentSelection::iterator it;
+    if (segments.empty())
+        return;
 
     // Clear the selection before erasing the Segments
     // the selection points to
     //
     m_compositionView->getModel()->clearSelected();
 
-    // Create the compound command
-    //
-    for (it = segments.begin(); it != segments.end(); ++it) {
+    MacroCommand *macro = new MacroCommand(tr("Delete Segments"));
+
+    // For each selected segment
+    for (SegmentSelection::iterator it = segments.begin();
+         it != segments.end();
+         ++it) {
         macro->addCommand(new SegmentEraseCommand(*it,
                           &m_doc->getAudioFileManager()));
     }
 
     addCommandToHistory(macro);
-
 }
 
 void
 TrackEditor::turnRepeatingSegmentToRealCopies()
 {
-    RG_DEBUG << "TrackEditor::turnRepeatingSegmentToRealCopies" << endl;
+    RG_DEBUG << "turnRepeatingSegmentToRealCopies()";
 
-    SegmentSelection segments =
-        m_compositionView->getSelectedSegments();
+    SegmentSelection segments = m_compositionView->getSelectedSegments();
 
-    if (segments.size() == 0)
-        return ;
+    if (segments.empty())
+        return;
 
     QString text = tr("Turn %n Repeating Segment(s) into Real Copies", "", segments.size());
 
     MacroCommand *macro = new MacroCommand(text);
 
-    SegmentSelection::iterator it = segments.begin();
-    for (; it != segments.end(); ++it) {
+    // For each selected segment
+    for (SegmentSelection::iterator it = segments.begin();
+         it != segments.end();
+         ++it) {
         if ((*it)->isRepeating()) {
             macro->addCommand(new SegmentRepeatToCopyCommand(*it));
         }
     }
 
     addCommandToHistory(macro);
-
 }
 
 void
 TrackEditor::turnLinkedSegmentsToRealCopies()
 {
-    RG_DEBUG << "TrackEditor::turnLinkedSegmentsToRealCopies" << endl;
+    RG_DEBUG << "turnLinkedSegmentsToRealCopies()";
 
-    SegmentSelection segments =
-        m_compositionView->getSelectedSegments();
+    SegmentSelection segments = m_compositionView->getSelectedSegments();
 
-    if (segments.size() == 0) return ;
+    if (segments.empty())
+        return;
 
     QString text = tr("Turn %n Linked Segment(s) into Real Copies", "", segments.size());
 
     MacroCommand *macro = new MacroCommand(text);
 
-    SegmentSelection::iterator it = segments.begin();
-    for (; it != segments.end(); ++it) {
+    // For each selected segment
+    for (SegmentSelection::iterator it = segments.begin();
+         it != segments.end();
+         ++it) {
         if ((*it)->isLinked()) {
             macro->addCommand(new SegmentLinkToCopyCommand(*it));
         }
     }
 
     addCommandToHistory(macro);
-
 }
 
 void

@@ -163,6 +163,8 @@ signals:
 private slots:
     /// Set the position pointer during playback
     /**
+     * Scrolls as needed to keep the position pointer visible.
+     *
      * init() connects this to
      * RosegardenDocument::pointerPositionChanged(timeT).
      */
@@ -209,7 +211,7 @@ private:
     virtual void dragMoveEvent(QDragMoveEvent *);
     virtual void paintEvent(QPaintEvent *);
 
-    /// Scroll the CompositionView as needed.
+    /// Scroll when dragging the pointer or loop end.
     /**
      * Returns true if an actual move occurred between currentPosition and
      * newTimePosition.  Output parameter newPosition contains the horizontal

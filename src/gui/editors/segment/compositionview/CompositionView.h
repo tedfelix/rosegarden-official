@@ -672,6 +672,8 @@ protected:
      * Double-buffers are used to reduce flicker and reduce the complexity
      * of drawing code (e.g. no need to erase anything, just redraw it all).
      *
+     * ??? Qt already does double-buffering for us.  Is this still needed?
+     *
      * @see viewportPaintRect()
      */
     QPixmap      m_doubleBuffer;
