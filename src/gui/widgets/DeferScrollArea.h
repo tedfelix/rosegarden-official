@@ -23,12 +23,15 @@
 namespace Rosegarden
 {
 
+/// QScrollArea that emits a signal on wheel events.
 /**
+ * This class allows for a connection between wheel scrolling events
+ * in the TrackButtons and scrolling in the CompositionView.
+ *
  * Replaces QDeferScrollView
  *
  * \author Chris J. Fryer
  */
-
 class DeferScrollArea : public QScrollArea
 {
     Q_OBJECT

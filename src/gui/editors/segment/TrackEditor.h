@@ -209,11 +209,6 @@ private:
     virtual void dragMoveEvent(QDragMoveEvent *);
     virtual void paintEvent(QPaintEvent *);
 
-    /// Composition::getRefreshStatus()
-    bool isCompositionModified();
-    /// Sets Composition's refresh status
-    void setCompositionModified(bool);
-    
     /// Scroll the CompositionView as needed.
     /**
      * Returns true if an actual move occurred between currentPosition and
@@ -222,9 +217,6 @@ private:
      */
     bool handleAutoScroll(
             int currentPosition, timeT newTimePosition, double &newPosition);
-
-    /// Picks a track height based on the font.
-    int getTrackCellHeight() const;
 
     /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);
@@ -238,6 +230,7 @@ private:
     CompositionView         *m_compositionView;
     CompositionModelImpl    *m_compositionModel;
     bool                     m_playTracking;
+    int                      m_trackCellHeight;
 
     // Track Buttons to the left of the Segment Canvas
     TrackButtons            *m_trackButtons;

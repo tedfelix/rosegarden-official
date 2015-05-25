@@ -76,9 +76,12 @@
 #include <QDropEvent>
 #include <QMimeData>
 
+#include <vector>
+#include <algorithm>
 
 namespace Rosegarden
 {
+
 
 TrackEditor::TrackEditor(RosegardenDocument *doc,
                          RosegardenMainViewWidget *mainViewWidget,
@@ -91,6 +94,7 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     m_compositionView(0),
     m_compositionModel(0),
     m_playTracking(true),
+    m_trackCellHeight(0),
     m_trackButtons(0),
     m_trackButtonScroll(0),
     m_showTrackLabels(showTrackLabels),
@@ -123,6 +127,9 @@ TrackEditor::~TrackEditor()
 void
 TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 {
+    QFontMetrics fontMetrics(QApplication::font(this));
+    m_trackCellHeight = std::min(fontMetrics.height() + 9, 24);
+
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
     grid->setSpacing(0);
@@ -164,7 +171,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     m_compositionModel = new CompositionModelImpl(m_doc->getComposition(),
                          m_doc->getStudio(),
-                         m_rulerScale, getTrackCellHeight());
+                         m_rulerScale, m_trackCellHeight);
 
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
 
@@ -208,11 +215,11 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
     const int trackLabelWidth = 200;
-    const int canvasHeight = getTrackCellHeight() *
+    const int canvasHeight = m_trackCellHeight *
                        std::max(40u, m_doc->getComposition().getNbTracks());
 
     m_trackButtons = new TrackButtons(m_doc,
-                                      getTrackCellHeight(),
+                                      m_trackCellHeight,
                                       trackLabelWidth,
                                       m_showTrackLabels,
                                       canvasHeight,
@@ -266,7 +273,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
-    // scrolling with mouse wheel
+    // Connect scrolling with the mouse wheel in the TrackButtons to
+    // scrolling the CompositionView.
     connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
             m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
@@ -345,37 +353,6 @@ void TrackEditor::slotTrackButtonsWidthChanged()
 }
 #endif
 
-int TrackEditor::getTrackCellHeight() const
-{
-    int size;
-    static QFont defaultFont;
-
-    // do some scrabbling around for a reasonable size
-    //
-    size = defaultFont.pixelSize();
-
-    if (size < 8) {
-        if (QApplication::font(this).pixelSize() < 8)
-            size = 12;
-        else
-            size = QApplication::font(this).pixelSize();
-    }
-
-    return size + 12;
-}
-
-bool TrackEditor::isCompositionModified()
-{
-    return m_doc->getComposition().getRefreshStatus
-           (m_compositionRefreshStatusId).needsRefresh();
-}
-
-void TrackEditor::setCompositionModified(bool c)
-{
-    m_doc->getComposition().getRefreshStatus
-    (m_compositionRefreshStatusId).setNeedsRefresh(c);
-}
-
 void TrackEditor::updateRulers()
 {
     if (getTempoRuler() != 0)
@@ -405,53 +382,54 @@ void TrackEditor::paintEvent(QPaintEvent* e)
     }
 #endif
 
-    // ??? If we are asked to paint, we should paint.  It shouldn't matter
-    //   whether anything has changed.  This may be here as a way to stop the
-    //   endless loop that would otherwise be created by the
-    //   m_compositionView->updateContents() call inside this "if".
-    if (isCompositionModified()) {
+    bool compositionNeedsRefresh = m_doc->getComposition().
+            getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
 
-        //RG_DEBUG << "TrackEditor::paintEvent: Composition modified";
+    // If the composition has changed, redraw the CompositionView's
+    // contents.
+    if (compositionNeedsRefresh) {
 
         // !!! These calls from within a paintEvent look ugly
         // ??? Need to investigate each of these calls and see if we can
-        //     implement them in a more appropriate way.  Some are causing
-        //     serious CPU issues.  None belong here.
+        //     implement them in a more appropriate way.  E.g. can
+        //     CompositionView take care of itself?
+        // ??? It would be more logical if CompositionView redrew its
+        //     contents and repainted itself in response to a change
+        //     to the Composition.  The change notification would need
+        //     to be called responsibly (e.g. not for every single
+        //     modification to an event while recording!).  And observers
+        //     would need to be smart about detecting relevant changes
+        //     and avoiding work.  It's the same old story.
 
+        // In case the composition has grown.
         updateCanvasSize();
 
-        // ??? At one time, this was linked to excessive CPU usage while
-        //     recording MIDI.  Now, it doesn't seem to make much difference.
+        // In case any tracks have been added, deleted, or changed.
         m_trackButtons->slotUpdateTracks();
 
+        // Redraw the contents.
         m_compositionView->clearSegmentRectsCache(true);
-
-        // ??? This is directly contrary to the advice in the Qt docs.  This
-        //   is asking a child QWidget to paint itself.  From the Qt docs for
-        //   QWidget::paintEvent():
-        //     "Generally, you should refrain from calling update() or
-        //      repaint() inside a paintEvent(). For example, calling
-        //      update() or repaint() on children inside a paintevent()
-        //      results in undefined behavior; the child may or may not get
-        //      a paint event."
         m_compositionView->updateContents();
-
-        //m_compositionView->update();
 
         Composition &composition = m_doc->getComposition();
 
+        // ??? Why doesn't Composition take care of have_segments?
         if (composition.getNbSegments() == 0) {
-            emit stateChange("have_segments", false); // no segments : reverse state
-            emit stateChange("have_selection", false); // no segments : reverse state
+            emit stateChange("have_segments", false);
+            emit stateChange("have_selection", false);
         } else {
             emit stateChange("have_segments", true);
+            // ??? Why doesn't CompositionView take care of have_selection?
             if (m_compositionView->haveSelection())
                 emit stateChange("have_selection", true);
             else
-                emit stateChange("have_selection", false); // no selection : reverse state
+                emit stateChange("have_selection", false);
         }
 
-        setCompositionModified(false);
+        // Clear the composition refresh flag.
+        m_doc->getComposition().
+                getRefreshStatus(m_compositionRefreshStatusId).
+                setNeedsRefresh(false);
     }
 
     QWidget::paintEvent(e);
@@ -664,10 +642,9 @@ TrackEditor::slotScrollToTrack(int track)
 {
     ///!!! Reconfigure to use m_compositionmodel to return y value for track number
     // Find the vertical track pos
-    int newY = track * getTrackCellHeight();
+    int newY = track * m_trackCellHeight;
 
-    RG_DEBUG << "TrackEditor::scrollToTrack(" << track <<
-    ") scrolling to Y " << newY << endl;
+    //RG_DEBUG << "slotScrollToTrack(" << track << ") scrolling to Y " << newY;
 
     // Scroll the segment view; it will scroll tracks by connected signals
     //    slotVerticalScrollTrackButtons(newY);
@@ -762,11 +739,14 @@ TrackEditor::turnLinkedSegmentsToRealCopies()
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
-//     m_trackButtonScroll->setContentsPos(0, y);
+    //RG_DEBUG << "slotVerticalScrollTrackButtons(" << y << ")";
+
+    //m_trackButtonScroll->setContentsPos(0, y);
+
     m_trackButtonScroll->verticalScrollBar()->setValue(y);
     
-//     ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
-//    m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
+    //ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
+    //m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
