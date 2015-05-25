@@ -78,6 +78,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <math.h>
 
 namespace Rosegarden
 {
@@ -85,7 +86,7 @@ namespace Rosegarden
 
 TrackEditor::TrackEditor(RosegardenDocument *doc,
                          RosegardenMainViewWidget *mainViewWidget,
-                         RulerScale *rulerScale,
+                         SimpleRulerScale *rulerScale,
                          bool showTrackLabels,
                          double /*initialUnitsPerPixel*/) :
     QWidget(mainViewWidget),
@@ -355,14 +356,17 @@ void TrackEditor::slotTrackButtonsWidthChanged()
 
 void TrackEditor::updateRulers()
 {
-    if (getTempoRuler() != 0)
-        getTempoRuler()->update();
+    if (m_tempoRuler)
+        m_tempoRuler->update();
 
-    if (getChordNameRuler() != 0)
-        getChordNameRuler()->update();
+    if (m_chordNameRuler)
+        m_chordNameRuler->update();
 
-    getTopStandardRuler()->update();
-    getBottomStandardRuler()->update();
+    if (m_topStandardRuler)
+        m_topStandardRuler->update();
+
+    if (m_bottomStandardRuler)
+        m_bottomStandardRuler->update();
 }
 
 void TrackEditor::paintEvent(QPaintEvent* e)
@@ -441,9 +445,8 @@ void TrackEditor::addTracks(unsigned int nbNewTracks,
 {
     Composition &comp = m_doc->getComposition();
 
-    AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id,
-                                                     position);
-    addCommandToHistory(command);
+    addCommandToHistory(new AddTracksCommand(&comp, nbNewTracks, id, position));
+
     updateCanvasSize();
 }
 
@@ -464,10 +467,12 @@ void TrackEditor::deleteTracks(std::vector<TrackId> tracks)
         for (segmentcontainer::const_iterator j = segments.begin();
              j != segments.end();
              ++j) {
+            Segment *segment = *j;
+
             // if this segment is in the track
-            if ((*j)->getTrack() == trackId) {
+            if (segment->getTrack() == trackId) {
                 macro->addCommand(new SegmentEraseCommand(
-                        *j, &m_doc->getAudioFileManager()));
+                        segment, &m_doc->getAudioFileManager()));
             }
         }
     }
@@ -526,42 +531,31 @@ TrackEditor::slotCanvasScrolled(int x, int /*y*/)
 #endif
 
 void
-TrackEditor::slotSetPointerPosition(timeT position)
+TrackEditor::slotSetPointerPosition(timeT pointerTime)
 {
-    SimpleRulerScale *ruler =
-        dynamic_cast<SimpleRulerScale*>(m_rulerScale);
+    if (!m_rulerScale)
+        return;
 
-    if (!ruler)
-        return ;
+    const double newPosition = m_rulerScale->getXForTime(pointerTime);
+    const int currentPosition = m_compositionView->getPointerPos();
+    const double distance = fabs(newPosition - currentPosition);
 
-    double pos = m_compositionView->grid().getRulerScale()->getXForTime(position);
-
-    int currentPointerPos = m_compositionView->getPointerPos();
-
-    double distance = pos - currentPointerPos;
-    if (distance < 0.0)
-        distance = -distance;
-
+    // If we're moving at least one pixel
     if (distance >= 1.0) {
 
-        if (m_doc && m_doc->getSequenceManager() &&
+        if (m_doc  &&  m_doc->getSequenceManager()  &&
             (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
             
             if (m_playTracking) {
-                getCompositionView()->scrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+                m_compositionView->scrollHoriz(newPosition);
             }
-        } else if (!getCompositionView()->isAutoScrolling()) {
-            int newpos = int(double(position) / ruler->getUnitsPerPixel());
-            //             RG_DEBUG << "TrackEditor::slotSetPointerPosition("
-            //                      << position
-            //                      << ") : calling canvas->scrollHoriz() "
-            //                      << newpos << endl;
-            getCompositionView()->scrollHoriz(newpos);
+        } else if (!m_compositionView->isAutoScrolling()) {
+            m_compositionView->scrollHoriz(newPosition);
         }
 
-        m_compositionView->setPointerPos(pos);
-    }
+        m_compositionView->setPointerPos(newPosition);
 
+    }
 }
 
 void
@@ -587,11 +581,11 @@ TrackEditor::slotLoopDraggedToPosition(timeT position)
 
 bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, double &newPosition)
 {
-    SimpleRulerScale *ruler =
-        dynamic_cast<SimpleRulerScale*>(m_rulerScale);
-
-    if (!ruler)
+    if (!m_rulerScale)
         return false;
+
+    // ??? This routine is almost identical to slotSetPointerPosition().
+    //     Sync them up, then see if one can go away.
 
     newPosition = m_compositionView->grid().getRulerScale()->getXForTime(newTimePosition);
 
@@ -605,12 +599,12 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
                 (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
             if (m_playTracking) {
-                getCompositionView()->scrollHoriz(int(double(newTimePosition) / ruler->getUnitsPerPixel()));
+                m_compositionView->scrollHoriz(int(double(newTimePosition) / m_rulerScale->getUnitsPerPixel()));
             }
         } else {
-            int newpos = int(double(newTimePosition) / ruler->getUnitsPerPixel());
-            getCompositionView()->scrollHorizSmallSteps(newpos);
-            getCompositionView()->doAutoScroll();
+            int newpos = int(double(newTimePosition) / m_rulerScale->getUnitsPerPixel());
+            m_compositionView->scrollHorizSmallSteps(newpos);
+            m_compositionView->doAutoScroll();
         }
 
     }
@@ -627,8 +621,8 @@ TrackEditor::toggleTracking()
 void
 TrackEditor::slotSetLoop(timeT start, timeT end)
 {
-    getTopStandardRuler()->getLoopRuler()->slotSetLoopMarker(start, end);
-    getBottomStandardRuler()->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_topStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_bottomStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
 void

@@ -3533,7 +3533,11 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
-    // For each event
+    // For each incoming mapped event
+    // ??? "i" is a bit hard to follow in this huge 400-line loop.  How about
+    //     we dereference it at the top and never use "(*i)" again:
+    //       const MappedEvent *mappedEvent = (*i);
+    //     Might shave off a CPU cycle or two as a bonus.
     for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
         // Skip all non-MIDI events.
         if ((*i)->getType() >= MappedEvent::Audio)
@@ -3552,6 +3556,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             RG_DEBUG << "  MappedEvent Event Type: " << (*i)->getType() << " (" << eventType << ")";
         }
 
+        // ??? rename: alsaEvent
         snd_seq_event_t event;
         snd_seq_ev_clear(&event);
     
@@ -3893,8 +3898,11 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             if (debug)
                 RG_DEBUG << "  Calling snd_seq_event_output()...";
 
-            checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
-                           "processMidiOut(): output queued");
+            int rc = snd_seq_event_output(m_midiHandle, &event);
+            checkAlsaError(rc, "processMidiOut(): output queued");
+
+            if (debug)
+                RG_DEBUG << "  snd_seq_event_output() rc:" << rc;
 
             if (now) {
                 if (m_queueRunning && !m_playing) {

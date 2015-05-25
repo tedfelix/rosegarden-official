@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QScrollArea>
 
-#include <map>
+#include <vector>
 
 
 class QPaintEvent;
@@ -42,7 +42,7 @@ class Command;
 class TrackButtons;
 class TempoRuler;
 class Segment;
-class RulerScale;
+class SimpleRulerScale;
 class RosegardenDocument;
 class QDeferScrollView;
 class CompositionView;
@@ -71,7 +71,7 @@ class TrackEditor : public QWidget
 public:
     TrackEditor(RosegardenDocument *doc,
                 RosegardenMainViewWidget *mainViewWidget,
-                RulerScale *rulerScale,
+                SimpleRulerScale *rulerScale,
                 bool showTrackLabels,
                 double initialUnitsPerPixel);  // unused, RulerScale has it
 
@@ -166,7 +166,7 @@ private slots:
      * init() connects this to
      * RosegardenDocument::pointerPositionChanged(timeT).
      */
-    void slotSetPointerPosition(timeT position);
+    void slotSetPointerPosition(timeT pointerTime);
 
     /// Update the pointer position as it is being dragged along.
     /**
@@ -239,7 +239,7 @@ private:
     bool                     m_showTrackLabels;
 
     // Rulers
-    RulerScale              *m_rulerScale;
+    SimpleRulerScale        *m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;
     StandardRuler           *m_topStandardRuler;
