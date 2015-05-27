@@ -71,7 +71,8 @@ class CompositionModelImpl : public QObject, public CompositionObserver, public 
 {
     Q_OBJECT
 public:
-    CompositionModelImpl(Composition& compo,
+    CompositionModelImpl(QObject *parent,
+                         Composition& compo,
                          Studio& studio,
                          RulerScale *rulerScale,
                          int vStep);

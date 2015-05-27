@@ -62,15 +62,18 @@ namespace Rosegarden
 {
 
 
-CompositionModelImpl::CompositionModelImpl(Composition& compo,
-        Studio& studio,
+CompositionModelImpl::CompositionModelImpl(
+        QObject *parent,
+        Composition &compo,
+        Studio &studio,
         RulerScale *rulerScale,
-        int vStep)
-        : m_composition(compo),
-        m_studio(studio),
-        m_grid(rulerScale, vStep),
-        m_pointerTimePos(0),
-        m_audioPreviewThread(0)
+        int vStep) :
+    QObject(parent),
+    m_composition(compo),
+    m_studio(studio),
+    m_grid(rulerScale, vStep),
+    m_pointerTimePos(0),
+    m_audioPreviewThread(0)
 {
     m_composition.addObserver(this);
 

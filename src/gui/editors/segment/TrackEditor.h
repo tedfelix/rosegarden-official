@@ -72,10 +72,7 @@ public:
     TrackEditor(RosegardenDocument *doc,
                 RosegardenMainViewWidget *mainViewWidget,
                 SimpleRulerScale *rulerScale,
-                bool showTrackLabels,
-                double initialUnitsPerPixel);  // unused, RulerScale has it
-
-    ~TrackEditor();
+                bool showTrackLabels);
 
     // ??? These accessors are mostly for RosegardenMainViewWidget.
     //     Consider moving the code from RosegardenMainViewWidget into
@@ -250,7 +247,6 @@ private:
     //unsigned int             m_canvasWidth;
     //typedef std::map<Segment *, unsigned int> SegmentRefreshStatusIdMap;
     //SegmentRefreshStatusIdMap m_segmentsRefreshStatusIds;
-    //double                   m_initialUnitsPerPixel;
 };
 
 

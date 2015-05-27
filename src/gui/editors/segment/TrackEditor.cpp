@@ -87,8 +87,7 @@ namespace Rosegarden
 TrackEditor::TrackEditor(RosegardenDocument *doc,
                          RosegardenMainViewWidget *mainViewWidget,
                          SimpleRulerScale *rulerScale,
-                         bool showTrackLabels,
-                         double /*initialUnitsPerPixel*/) :
+                         bool showTrackLabels) :
     QWidget(mainViewWidget),
     m_doc(doc),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
@@ -104,8 +103,7 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     m_chordNameRuler(0),
     m_topStandardRuler(0),
     m_bottomStandardRuler(0)
-    //m_canvasWidth(0),
-    //m_initialUnitsPerPixel(initialUnitsPerPixel)
+    //m_canvasWidth(0)
 {
     // Accept objects dragged and dropped onto this widget.
     setAcceptDrops(true);
@@ -114,15 +112,6 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     init(mainViewWidget);
 
     updateCanvasSize();
-}
-
-TrackEditor::~TrackEditor()
-{
-    // This delete is needed as CompositionModelImpl isn't aware of its parent.
-    // ??? Since CompositionModelImpl is a QObject, we should provide it
-    //     with its parent (this) so that the parent can delete it for us.
-    //     Then this line and this dtor can go away.
-    delete m_compositionModel;
 }
 
 void
@@ -170,9 +159,11 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     // Segment Canvas (CompositionView)
 
-    m_compositionModel = new CompositionModelImpl(m_doc->getComposition(),
-                         m_doc->getStudio(),
-                         m_rulerScale, m_trackCellHeight);
+    m_compositionModel =
+            new CompositionModelImpl(this,
+                                     m_doc->getComposition(),
+                                     m_doc->getStudio(),
+                                     m_rulerScale, m_trackCellHeight);
 
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
 
@@ -461,13 +452,13 @@ void TrackEditor::deleteTracks(std::vector<TrackId> tracks)
 
     // for each track we are deleting
     for (size_t i = 0; i < tracks.size(); ++i) {
-        TrackId trackId = tracks[i];
+        const TrackId trackId = tracks[i];
 
         // for each segment in the composition
-        for (segmentcontainer::const_iterator j = segments.begin();
-             j != segments.end();
-             ++j) {
-            Segment *segment = *j;
+        for (segmentcontainer::const_iterator segmentIter = segments.begin();
+             segmentIter != segments.end();
+             ++segmentIter) {
+            Segment *segment = *segmentIter;
 
             // if this segment is in the track
             if (segment->getTrack() == trackId) {
@@ -717,14 +708,9 @@ TrackEditor::turnLinkedSegmentsToRealCopies()
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
-    //RG_DEBUG << "slotVerticalScrollTrackButtons(" << y << ")";
-
-    //m_trackButtonScroll->setContentsPos(0, y);
-
+    // Make sure the TrackButtons are scrolled the same amount as the
+    // segment canvas (CompositionView).
     m_trackButtonScroll->verticalScrollBar()->setValue(y);
-    
-    //ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
-    //m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
@@ -755,10 +741,8 @@ void TrackEditor::dragMoveEvent(QDragMoveEvent *)
 
 void TrackEditor::dropEvent(QDropEvent *e)
 {
-    QList<QUrl> uList;
     QStringList uriList;
     QString text;
-    QString audioText;
 
     if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
 
@@ -770,7 +754,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
         }
 
         if (e->mimeData()->hasUrls()) {
-            uList = e->mimeData()->urls();
+            QList<QUrl> uList = e->mimeData()->urls();
             if (!uList.isEmpty()) {
                 for (int i = 0; i < uList.size(); ++i)  {
                     uriList.append(QString::fromLocal8Bit(uList.value(i).toEncoded().data()));
@@ -808,7 +792,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
     if (!internal && !uriList.empty()) {
 
         // Update code allow multiple audio drops to TrackEditor
-        // Old behavoir of stopping if .rg or .midi file encountered still works
+        // Old behavior of stopping if .rg or .midi file encountered still works
         // We have a URI, and it didn't come from within RG
 
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :" << uriList.first() << endl;
@@ -844,15 +828,17 @@ void TrackEditor::dropEvent(QDropEvent *e)
                          << ", x = " << e->pos().x()
                          << endl;
 
-                audioText.clear();
+                QString audioText;
                 QTextStream t(&audioText, QIODevice::ReadWrite);
                 t << uri << "\n";
                 t << track->getId() << "\n";
                 t << time << "\n";
                 t.flush();
+
                 RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
-                emit droppedNewAudio(QString(audioText));
-                // connected to RosegardenMainViewWidget::droppedNewAudio()
+
+                emit droppedNewAudio(audioText);
+                // connected to RosegardenMainViewWidget::slotDroppedNewAudio()
             }
         }
 

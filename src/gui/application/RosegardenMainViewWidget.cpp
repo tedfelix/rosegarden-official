@@ -138,8 +138,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     // Construct the trackEditor first so we can then
     // query it for placement information
     //
-    m_trackEditor = new TrackEditor(doc, this,
-                                    m_rulerScale, showTrackLabels, unitsPerPixel);
+    m_trackEditor = new TrackEditor(doc, this, m_rulerScale, showTrackLabels);
 
     layout->addWidget(m_trackEditor);
     setLayout(layout);
