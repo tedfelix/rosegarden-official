@@ -50,18 +50,20 @@ class AudioPreviewThread;
 /// For Audio Previews
 typedef std::vector<QImage> PixmapArray;
 
-/// Segment previews and selection functionality.
+/// Model layer between CompositionView and Composition.
 /**
- * I assume that by Model we are referring to Smalltalk's
- * Model/View/Controller pattern.  Qt has a modified Model/View version
- * of this.  Maybe this is in some way related?  MVC never made any
- * sense to me.  Smalltalk doesn't make any sense to me.
+ * The Qt interpretation of the term "Model" is a layer of functionality
+ * that sits between the data (Composition) and the view (CompositionView).
+ * It's like Decorator Pattern.  It adds functionality to an object without
+ * modifying that object.  It maintains the focus on the object.
  *
- * A skim of this indicates that it is mostly random functionality (e.g.
- * selection and previews) that is closely tied to CompositionView.  This
- * could probably be combined with CompositionView into one gigantic
- * monster-class, then big coherent pieces (like selection and previews)
- * broken off into smaller, more sensible classes.
+ * To me, Decorator Pattern is a cop-out.  It always results in a
+ * disorganized pile of ideas dumped into a class.  Like this.
+ * A better way to organize this code would be to look for big coherent
+ * ideas (like selection and previews) and break those off into their own
+ * classes.  What remains can be moved to CompositionView.  There may be
+ * other big ideas hiding in CompositionView that are worthy of classes of
+ * their own as well.
  *
  * This class works together with CompositionView to provide the composition
  * user interface (the segment canvas).  TrackEditor creates and owns the

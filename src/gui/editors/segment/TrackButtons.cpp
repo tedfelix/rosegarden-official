@@ -310,7 +310,7 @@ TrackButtons::slotToggleMute(int pos)
 void
 TrackButtons::removeButtons(int position)
 {
-    //RG_DEBUG << "TrackButtons::removeButtons - deleting track button at position " << position;
+    //RG_DEBUG << "removeButtons() - deleting track button at position:" << position;
 
     if (position < 0  ||  position >= m_tracks) {
         RG_DEBUG << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
