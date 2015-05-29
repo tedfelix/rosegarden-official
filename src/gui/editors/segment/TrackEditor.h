@@ -44,7 +44,7 @@ class TempoRuler;
 class Segment;
 class SimpleRulerScale;
 class RosegardenDocument;
-class QDeferScrollView;
+class DeferScrollArea;
 class CompositionView;
 class CompositionModelImpl;
 class ChordNameRuler;
@@ -192,6 +192,9 @@ private slots:
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
 
+    /// Triggers a refresh if the composition has changed.
+    void slotCommandExecuted();
+
     // Act on a canvas scroll event
     //void slotCanvasScrolled(int, int);
     //void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
@@ -206,7 +209,6 @@ private:
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);
     virtual void dragMoveEvent(QDragMoveEvent *);
-    virtual void paintEvent(QPaintEvent *);
 
     /// Scroll when dragging the pointer or loop end.
     /**
@@ -234,7 +236,7 @@ private:
     // Track Buttons to the left of the Segment Canvas
     TrackButtons            *m_trackButtons;
     // Scrollable parent for the TrackButtons.
-    QScrollArea             *m_trackButtonScroll;
+    DeferScrollArea         *m_trackButtonScroll;
     bool                     m_showTrackLabels;
 
     // Rulers

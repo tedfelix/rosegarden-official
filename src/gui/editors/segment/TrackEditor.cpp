@@ -307,7 +307,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             RosegardenMainWindow::self(), SLOT(slotZoomOut()));
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(update()));
+            this, SLOT(slotCommandExecuted()));
 
     connect(m_doc, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotSetPointerPosition(timeT)));
@@ -358,76 +358,6 @@ void TrackEditor::updateRulers()
 
     if (m_bottomStandardRuler)
         m_bottomStandardRuler->update();
-}
-
-void TrackEditor::paintEvent(QPaintEvent* e)
-{
-#if 0
-    RG_DEBUG << "TrackEditor::paintEvent()";
-    static QTime t;
-    RG_DEBUG << "  elapsed: " << t.restart();
-    QRect wr = rect();
-    RG_DEBUG << "  widget rect: (" << wr.x() << "," << wr.y() << ") - (" << wr.right() << "," << wr.bottom() << ")";
-    QRect r = e->rect();
-    RG_DEBUG << "  pe rect: (" << r.x() << "," << r.y() << ") - (" << r.right() << "," << r.bottom() << ")";
-    QVector<QRect> rects = e->region().rects();
-    for (unsigned i = 0; i < (unsigned)rects.size(); ++i) {
-        QRect &s = rects[i];
-        RG_DEBUG << "  pe region rect #" << i+1 << " (" << s.x() << "," << s.y() << ") - (" << s.right() << "," << s.bottom() << ")";
-    }
-#endif
-
-    bool compositionNeedsRefresh = m_doc->getComposition().
-            getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
-
-    // If the composition has changed, redraw the CompositionView's
-    // contents.
-    if (compositionNeedsRefresh) {
-
-        // !!! These calls from within a paintEvent look ugly
-        // ??? Need to investigate each of these calls and see if we can
-        //     implement them in a more appropriate way.  E.g. can
-        //     CompositionView take care of itself?
-        // ??? It would be more logical if CompositionView redrew its
-        //     contents and repainted itself in response to a change
-        //     to the Composition.  The change notification would need
-        //     to be called responsibly (e.g. not for every single
-        //     modification to an event while recording!).  And observers
-        //     would need to be smart about detecting relevant changes
-        //     and avoiding work.  It's the same old story.
-
-        // In case the composition has grown.
-        updateCanvasSize();
-
-        // In case any tracks have been added, deleted, or changed.
-        m_trackButtons->slotUpdateTracks();
-
-        // Redraw the contents.
-        m_compositionView->clearSegmentRectsCache(true);
-        m_compositionView->updateContents();
-
-        Composition &composition = m_doc->getComposition();
-
-        // ??? Why doesn't Composition take care of have_segments?
-        if (composition.getNbSegments() == 0) {
-            emit stateChange("have_segments", false);
-            emit stateChange("have_selection", false);
-        } else {
-            emit stateChange("have_segments", true);
-            // ??? Why doesn't CompositionView take care of have_selection?
-            if (m_compositionView->haveSelection())
-                emit stateChange("have_selection", true);
-            else
-                emit stateChange("have_selection", false);
-        }
-
-        // Clear the composition refresh flag.
-        m_doc->getComposition().
-                getRefreshStatus(m_compositionRefreshStatusId).
-                setNeedsRefresh(false);
-    }
-
-    QWidget::paintEvent(e);
 }
 
 void TrackEditor::addTracks(unsigned int nbNewTracks,
@@ -711,6 +641,76 @@ TrackEditor::slotVerticalScrollTrackButtons(int y)
     // Make sure the TrackButtons are scrolled the same amount as the
     // segment canvas (CompositionView).
     m_trackButtonScroll->verticalScrollBar()->setValue(y);
+}
+
+void TrackEditor::slotCommandExecuted()
+{
+    // ??? This routine doesn't belong here.  It is doing things for other
+    //     objects.  Those objects should take care of themselves.
+
+    // ??? Is there a way to do this at a more relevant time?  Like when
+    //     the Composition changes, instead for every command that is
+    //     executed regardless of whether that command changes the
+    //     Composition?
+
+    bool compositionNeedsRefresh = m_doc->getComposition().
+            getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
+
+    // If the composition has changed, redraw the CompositionView's
+    // contents.
+    if (compositionNeedsRefresh) {
+
+        // ??? Need to investigate each of these calls and see if we can
+        //     implement them in a more appropriate way.  E.g. can
+        //     CompositionView take care of itself?
+        // ??? It would be more logical if CompositionView redrew its
+        //     contents and repainted itself in response to a change
+        //     to the Composition.  The change notification would need
+        //     to be called responsibly (e.g. not for every single
+        //     modification to an event while recording!).  And observers
+        //     would need to be smart about detecting relevant changes
+        //     and avoiding work.  It's the same old story.
+
+        // In case the composition has grown.
+        // ??? CompositionView should take care of this.
+        updateCanvasSize();
+
+        // In case any tracks have been added, deleted, or changed.
+        // ??? TrackButtons should take care of this.
+        m_trackButtons->slotUpdateTracks();
+
+        // Redraw the contents.
+        // ??? CompositionView should take care of this.
+        m_compositionView->clearSegmentRectsCache(true);
+        m_compositionView->updateContents();
+
+        Composition &composition = m_doc->getComposition();
+
+        // ??? Composition should take care of have_segments.
+        if (composition.getNbSegments() == 0) {
+            emit stateChange("have_segments", false);
+            emit stateChange("have_selection", false);
+        } else {
+            emit stateChange("have_segments", true);
+            // ??? CompositionView should take care of have_selection.
+            if (m_compositionView->haveSelection())
+                emit stateChange("have_selection", true);
+            else
+                emit stateChange("have_selection", false);
+        }
+
+        // Clear the composition refresh flag.
+        m_doc->getComposition().
+                getRefreshStatus(m_compositionRefreshStatusId).
+                setNeedsRefresh(false);
+    }
+
+    // Send a paint event to all children.
+    // ??? Painting every time a command is executed is overkill.  We should
+    //     only paint when relevant changes are made to the Composition.
+    // ??? The children should paint themselves in response to changes.
+    //     TrackEditor shouldn't care.
+    update();
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
