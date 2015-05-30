@@ -301,6 +301,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             mainViewWidget,
             SLOT(slotSelectedSegments(const SegmentSelection &)));
 
+    connect(m_compositionView, SIGNAL(viewportResize()),
+            this, SLOT(slotViewportResize()));
     connect(m_compositionView, SIGNAL(zoomIn()),
             RosegardenMainWindow::self(), SLOT(slotZoomIn()));
     connect(m_compositionView, SIGNAL(zoomOut()),
@@ -711,6 +713,23 @@ void TrackEditor::slotCommandExecuted()
     // ??? The children should paint themselves in response to changes.
     //     TrackEditor shouldn't care.
     update();
+}
+
+void TrackEditor::slotViewportResize()
+{
+    QGridLayout *grid = dynamic_cast<QGridLayout *>(layout());
+    if (!grid)
+        return;
+
+    // The height of the segment canvas.
+    int viewportHeight = m_compositionView->viewport()->height();
+
+    // Force TrackButtons to the same size as the viewport.
+    // The only way to do this with a grid is to adjust the minimum height of
+    // the row below TrackButtons to take up the appropriate amount of space.
+    // In this case, that's the height of the bottom ruler and the horizontal
+    // scrollbar, if it exists.
+    grid->setRowMinimumHeight(4, m_compositionView->height() - viewportHeight);
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)

@@ -176,10 +176,21 @@ public slots:
     void doAutoScroll();
 
 signals:
-    //void bottomWidgetHeightChanged(int newHeight);
+    /// Used by TrackEditor to keep TrackButtons the right size.
+    void viewportResize();
 
+    /// Emitted on Ctrl-Scroll Wheel Up.
+    /**
+     * TrackEditor connects this to RosegardenMainWindow::slotZoomIn().
+     */
     void zoomIn();
+    /// Emitted on Ctrl-Scroll Wheel Down.
+    /**
+     * TrackEditor connects this to RosegardenMainWindow::slotZoomOut().
+     */
     void zoomOut();
+
+    //void bottomWidgetHeightChanged(int newHeight);
 
 protected:
 

@@ -195,6 +195,12 @@ private slots:
     /// Triggers a refresh if the composition has changed.
     void slotCommandExecuted();
 
+    /// Adjust the size of the TrackButtons to match the CompositionView.
+    /**
+     * Connected to RosegardenScrollView::viewportResize().
+     */
+    void slotViewportResize();
+
     // Act on a canvas scroll event
     //void slotCanvasScrolled(int, int);
     //void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);

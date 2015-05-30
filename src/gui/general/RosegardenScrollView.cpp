@@ -632,6 +632,9 @@ void RosegardenScrollView::resizeEvent(QResizeEvent *e)
 
     // Make sure the bottom ruler is where it needs to be.
     updateBottomWidgetGeometry();
+
+    // Let TrackEditor know so it can resize the TrackButtons to match.
+    emit viewportResize();
 }
 
 #if 0
