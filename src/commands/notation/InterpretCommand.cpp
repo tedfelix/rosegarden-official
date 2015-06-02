@@ -562,9 +562,10 @@ InterpretCommand::articulate()
 
             // don't mess with the duration of a tied note
             bool tiedForward = false;
-            if (e->get
-                    <Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
+            e->get<Bool>(TIED_FORWARD, tiedForward);
+            if (tiedForward) {
                 durationChange = 0;
+                NOTATION_DEBUG << "InterpretCommand::modifySegment: Tied forward note encountered, durationChange is " << durationChange << endl;
             }
 
             timeT newDuration = duration + duration * durationChange / 100;
@@ -574,7 +575,11 @@ InterpretCommand::articulate()
             // the performance duration of a note (that's perhaps been
             // articulated wrongly) based on the notation duration:
 
-            if (e->getDuration() != newDuration) {
+            timeT eventDuration = e->getDuration();
+
+            if (eventDuration != newDuration) {
+
+                NOTATION_DEBUG << "InterpretCommand::modifySegment: durationChange is " << durationChange << "; e->getDuration() is " << eventDuration << "; newDuration is " << newDuration << endl;
 
                 if (toErase.find(e) == toErase.end()) {
 
