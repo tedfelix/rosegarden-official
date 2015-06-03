@@ -17,6 +17,7 @@
 #include "Midi.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h" // for Note::EventType
+#include "misc/TempDir.h"
 
 #include <QDir>
 #include <QFile>
@@ -240,7 +241,7 @@ protected:
 };
 
 DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
-    : m_fileName(QDir::tempPath() + QString("/rosegarden_datablock_%1").arg(id)),
+    : m_fileName(TempDir::path() + QString("/rosegarden_datablock_%1").arg(id)),
       m_file(m_fileName),
       m_cleared(false)
 {
@@ -426,7 +427,7 @@ void DataBlockRepository::clear()
 
     // Erase all 'datablock_*' files
     //
-    QString tmpPath = QDir::tempPath();
+    QString tmpPath = TempDir::path();
 
     QDir segmentsDir(tmpPath, "rosegarden_datablock_*");
 
