@@ -94,10 +94,10 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_foreGuidePos(0),
     m_drawSelectionRect(false),
     m_drawTextFloat(false),
-    m_segmentsLayer(visibleWidth(), visibleHeight()),
-    m_doubleBuffer(visibleWidth(), visibleHeight()),
-    m_segmentsRefresh(0, 0, visibleWidth(), visibleHeight()),
-    m_artifactsRefresh(0, 0, visibleWidth(), visibleHeight()),
+    m_segmentsLayer(viewport()->width(), viewport()->height()),
+    m_doubleBuffer(viewport()->width(), viewport()->height()),
+    m_segmentsRefresh(0, 0, viewport()->width(), viewport()->height()),
+    m_artifactsRefresh(0, 0, viewport()->width(), viewport()->height()),
     m_lastBufferRefreshX(0),
     m_lastBufferRefreshY(0),
     m_lastPointerRefreshX(0),
@@ -236,8 +236,8 @@ void CompositionView::initStepSize()
 void CompositionView::slotUpdateSize()
 {
 //    int vStep = getModel()->grid().getYSnap();
-//    int height = std::max(getModel()->m_composition.getNbTracks() * vStep, (unsigned)visibleHeight());
-    int height = std::max(getModel()->getCompositionHeight(), (unsigned) visibleHeight());
+//    int height = std::max(getModel()->m_composition.getNbTracks() * vStep, (unsigned)viewport()->height());
+    int height = std::max(getModel()->getCompositionHeight(), (unsigned) viewport()->height());
 
     const RulerScale *ruler = grid().getRulerScale();
 
@@ -582,8 +582,8 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     RosegardenScrollView::resizeEvent(e);
     slotUpdateSize();
 
-    int w = std::max(m_segmentsLayer.width(), visibleWidth());
-    int h = std::max(m_segmentsLayer.height(), visibleHeight());
+    int w = std::max(m_segmentsLayer.width(), viewport()->width());
+    int h = std::max(m_segmentsLayer.height(), viewport()->height());
 
     m_segmentsLayer = QPixmap(w, h);
     m_doubleBuffer = QPixmap(w, h);
@@ -687,7 +687,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     bool all = false;
     QRect refreshRect = m_segmentsRefresh;
 
-    int w = visibleWidth(), h = visibleHeight();
+    int w = viewport()->width(), h = viewport()->height();
     int cx = contentsX(), cy = contentsY();
 
     scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
@@ -1717,7 +1717,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 //            if ((horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) &&
 //               // This code minimizes the chances of auto expand when moving segments
 //               // Not a perfect fix -- but fixes several auto expand errors
-//               (mouseX > (contentsX() + visibleWidth() * 0.95))) {
+//               (mouseX > (contentsX() + viewport()->width() * 0.95))) {
 //                resizeContents(contentsWidth() + m_stepSize, contentsHeight());
 //                setContentsPos(contentsX() + m_stepSize, contentsY());
 //                getModel()->setLength(contentsWidth());

@@ -78,10 +78,6 @@ public:
     int contentsY();
     /// Scrolls the content so that the point (x, y) is in the top-left corner.
     void setContentsPos(int x, int y);
-    /// Visible portion of the contents.  The viewport width.
-    int visibleWidth();
-    /// Visible portion of the contents.  The viewport height.
-    int visibleHeight();
 
     // Q3ScrollView contents size and update functions.
 

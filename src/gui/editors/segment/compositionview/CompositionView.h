@@ -514,7 +514,7 @@ protected:
      */
     void segmentsNeedRefresh() {
         m_segmentsRefresh =
-            QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+            QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
     }
 
     /// Adds the specified rect to the segments refresh rect.
@@ -524,7 +524,7 @@ protected:
      */
     void segmentsNeedRefresh(QRect r) {
         m_segmentsRefresh |=
-            (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
+            (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
              & r);
     }
 
@@ -540,7 +540,7 @@ protected slots:
      */
     void slotArtifactsNeedRefresh() {
         m_artifactsRefresh = 
-            QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+            QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
         updateContents();
     }
 
@@ -548,7 +548,7 @@ protected:
     /// Updates the artifacts in the given rect.
     void artifactsNeedRefresh(QRect r) {
         m_artifactsRefresh |=
-            (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
+            (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
              & r);
         updateContents(r);
     }
