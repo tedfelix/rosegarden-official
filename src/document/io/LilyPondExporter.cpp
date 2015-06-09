@@ -2259,6 +2259,7 @@ LilyPondExporter::writeBar(Segment *s,
                         // only one override per chord, and that outside the <>
                         stylei = i;
                     }
+
                     writePitch(*i, key, str);
 
                     bool noteHasCautionaryAccidental = false;
@@ -2956,6 +2957,19 @@ LilyPondExporter::writePitch(const Event *note,
     std::string lilyNote;
 
     lilyNote = convertPitchToLilyNote(pitch, accidental, key);
+
+    // handle parallel color
+
+    if (note->has(BaseProperties::MEMBER_OF_PARALLEL)) {
+
+        bool memberOfParallel;
+
+        note->get<Bool>(BaseProperties::MEMBER_OF_PARALLEL, memberOfParallel);
+
+        if (memberOfParallel) {
+            str << "\\tweak color #magenta ";
+        }
+    }
 
     str << lilyNote;
 }

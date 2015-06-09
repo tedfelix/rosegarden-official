@@ -117,6 +117,9 @@ const PropertyName INVISIBLE                     = "invisible";
 const PropertyName TMP         = "temporary"; /// TODO : TMP -> REPEATING
 const PropertyName LINKED_SEGMENT_IGNORE_UPDATE  = "linkedsegmentignoreupdate";
 
+// indicates whether note is part of a parallel movement between two voices
+const PropertyName MEMBER_OF_PARALLEL       = "member_of_parallel";
+
 }
 
 }

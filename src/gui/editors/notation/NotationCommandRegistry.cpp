@@ -49,6 +49,7 @@
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/notation/UntieNotesCommand.h"
 
+
 namespace Rosegarden
 {
 

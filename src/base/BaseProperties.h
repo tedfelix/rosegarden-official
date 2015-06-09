@@ -73,6 +73,7 @@ extern const PropertyName INVISIBLE;
 extern const PropertyName TMP;         /// TODO : TMP->REPEATING
 extern const PropertyName LINKED_SEGMENT_IGNORE_UPDATE;
 
+extern const PropertyName MEMBER_OF_PARALLEL;
 }
 
 }

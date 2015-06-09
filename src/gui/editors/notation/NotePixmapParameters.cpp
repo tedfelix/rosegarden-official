@@ -61,7 +61,8 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
         m_tieLength(0),
         m_tiePositionExplicit(false),
         m_tieAbove(false),
-        m_inRange(true)
+        m_inRange(true),
+        m_memberOfParallel(false)
 {
     // nothing else
 }

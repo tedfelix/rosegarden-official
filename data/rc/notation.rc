@@ -130,6 +130,8 @@
     <text>&amp;Composition</text>
     <Action name="add_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
     <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
+    <!-- AL -->
+    <Action name="check_for_parallels" text="Check for Parallels..." />
   </Menu>
 
   <Menu name="segment">

@@ -592,6 +592,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     bool inverted = charNameRec.second;
     NoteCharacter body = getCharacter
         (charName,
+         params.m_memberOfParallel ? MemberOfParallelColour :
          params.m_highlighted ? HighlightedColour :
          params.m_quantized ? QuantizedColour :
          (params.m_trigger == NotePixmapParameters::triggerYes) ? TriggerColour :
@@ -3528,6 +3529,8 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
     QColor white = Qt::white;
     QColor red = Qt::red;
     QColor gray = Qt::gray;
+    QColor magenta = Qt::magenta;
+
     int h, s, v;
 
     // getCharacterShaded() has been removed and replaced with a call to
@@ -3592,6 +3595,14 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
 
     case ConflictColour:
         red.getHsv(&h, &s, &v);
+        return font->getCharacterColoured
+            (name,
+             h,
+             v,
+             ch, charType, inverted, s);
+
+    case MemberOfParallelColour:
+        magenta.getHsv(&h, &s, &v);
         return font->getCharacterColoured
             (name,
              h,

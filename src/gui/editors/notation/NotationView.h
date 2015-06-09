@@ -284,6 +284,8 @@ protected slots:
     void slotAddTempo();
     void slotAddTimeSignature();
 
+    void slotCheckForParallels();
+
     void slotToggleGeneralToolBar();
     void slotToggleToolsToolBar();
     void slotToggleDurationToolBar();

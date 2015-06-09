@@ -1739,6 +1739,10 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         factory = m_graceNotePixmapFactory;
     }
 
+    bool memberOfParallel = false;
+    elt->event()->get<Bool>(BaseProperties::MEMBER_OF_PARALLEL, memberOfParallel);
+    params.setMemberOfParallel(memberOfParallel);
+
     if (m_printPainter) {
 
         // Return no scene item, but instead render straight to

@@ -93,7 +93,8 @@ public:
         TriggerSkipColour,   /**< Defined in GUIPalette; used when masked-out trigger notes within ties are indicated */
         OutRangeColour,     /**< Defined in GUIPalette; used when out-of-range notes are indicated */
         PlainColourLight,   /**< The default basic Qt::white (hard coded) used when drawing on a black background */
-        ConflictColour      /**< Qt::red (hard coded) used by track headers to indicate, eg. a clef conflict */
+        ConflictColour,      /**< Qt::red (hard coded) used by track headers to indicate, eg. a clef conflict */
+        MemberOfParallelColour /**< for members of parallels */
     };
 
     /** Used to notify the drawing code that the character is selected, and
