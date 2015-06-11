@@ -56,13 +56,16 @@ public:
 
     RosegardenScrollView(QWidget *parent);
 
-    /// Connect the bottom ruler.
+    /// Connect the bottom StandardRuler.
     /**
      * Sets the ruler widget which will be between the scrollable part of
      * the view and the horizontal scrollbar.
      *
      * This is called by TrackEditor::init() to connect a StandardRuler
      * instance.
+     *
+     * ??? Make this take a StandardRuler *.
+     * rename: setBottomRuler()
      */
     void setBottomFixedWidget(QWidget *);
 
@@ -176,19 +179,36 @@ private:
     /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
     void updateContents(int x, int y, int width, int height);
 
+    /// The bottom StandardRuler.
+    /**
+     * ??? Make this a StandardRuler *.
+     * rename: m_bottomRuler (and all other BottomWidgets too)
+     */
     QWidget *m_bottomWidget;
     /// Make sure the bottom ruler stays in the proper place.
     void updateBottomWidgetGeometry();
 
-    bool m_smoothScroll;  // always true
-    int m_smoothScrollTimeInterval;
+    // ??? Make this a double.
     float m_minDeltaScroll;
-    QTime m_scrollShortcuterationTimer;
+    static const double DefaultMinDeltaScroll;
+    // ??? Make this a double.
+    static const int MaxScrollDelta;
+    static const double ScrollShortcutValue;
 
     /// Calls slotOnAutoScrollTimer().
     QTimer m_autoScrollTimer;
+    /// Interval for m_autoScrollTimer.
+    /**
+     * ??? This is never set to anything other than InitialScrollTime.
+     *     It can be replaced with InitialScrollTime.
+     */
     int m_autoScrollTime;
-    int m_autoScrollShortcut;
+    /// Auto scroll timer interval.
+    /**
+     * rename: AutoScrollTimerInterval
+     */
+    static const int InitialScrollTime;
+
     QPoint m_previousP;
     int m_autoScrollXMargin;
     int m_autoScrollYMargin;
@@ -197,15 +217,6 @@ private:
     /// See enum FollowMode for valid mask values.
     int m_followMode;
     bool m_autoScrolling;
-
-    static const int DefaultSmoothScrollTimeInterval;
-    static const double DefaultMinDeltaScroll;
-
-    //static const int AutoscrollMargin;
-    static const int InitialScrollTime;
-    static const int InitialScrollShortcut;
-    static const int MaxScrollDelta;
-    static const double ScrollShortcutValue;
 
     int m_contentsWidth;
     int m_contentsHeight;
@@ -231,8 +242,15 @@ private:
     //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
     //int getDeltaScroll() const  { return m_minDeltaScroll; }
     //QTime m_scrollTimer;
+    //bool m_smoothScroll;  // always true
+    //int m_smoothScrollTimeInterval;
+    //QTime m_scrollShortcuterationTimer;
     //bool isTimeForSmoothScroll();
     //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
+    //int m_autoScrollShortcut;
+    //static const int DefaultSmoothScrollTimeInterval;
+    //static const int AutoscrollMargin;
+    //static const int InitialScrollShortcut;
 
 };
 

@@ -42,22 +42,30 @@ namespace Rosegarden
 //
 
 const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
-const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
-//const int RosegardenScrollView::AutoscrollMargin = 16;
+
+// m_autoScrollTimer interval in msecs.
 const int RosegardenScrollView::InitialScrollTime = 30;
-const int RosegardenScrollView::InitialScrollShortcut = 5;
-const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
-const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration rate
+
+// max a.scroll speed
+const int RosegardenScrollView::MaxScrollDelta = 100;
+
+// shortcuteration rate
+const double RosegardenScrollView::ScrollShortcutValue = 1.04;
+
+//const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
+// m_autoScrollShortcut default.
+//const int RosegardenScrollView::InitialScrollShortcut = 5;
+//const int RosegardenScrollView::AutoscrollMargin = 16;
+
 
 RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
 
       m_bottomWidget(0),
-      m_smoothScroll(true),
-      m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
+      //m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
       m_minDeltaScroll(DefaultMinDeltaScroll),
       m_autoScrollTime(InitialScrollTime),
-      m_autoScrollShortcut(InitialScrollShortcut),
+      //m_autoScrollShortcut(InitialScrollShortcut),
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
@@ -240,7 +248,7 @@ void RosegardenScrollView::startAutoScroll()
 {
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
-        m_autoScrollShortcut = InitialScrollShortcut;
+        //m_autoScrollShortcut = InitialScrollShortcut;
         m_autoScrollTimer.start( m_autoScrollTime );
     }
 
