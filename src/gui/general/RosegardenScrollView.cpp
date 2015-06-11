@@ -207,18 +207,18 @@ void RosegardenScrollView::updateContents(const QRect &r)
 
 void RosegardenScrollView::updateContents()
 {
-    updateContents(contentsX(), contentsY(), viewport()->width(), viewport()->height());
+    viewport()->update();
 }
 
 void RosegardenScrollView::updateScrollBars()
 {
     horizontalScrollBar()->setMaximum(
-        std::max(contentsWidth() - viewport()->width(), 0));
+        std::max(m_contentsWidth - viewport()->width(), 0));
     horizontalScrollBar()->setPageStep(viewport()->width());
     //horizontalScrollBar()->setLineStep(viewport()->width() / 10);
 
     verticalScrollBar()->setMaximum(
-        std::max(contentsHeight() - viewport()->height(), 0));
+        std::max(m_contentsHeight - viewport()->height(), 0));
     verticalScrollBar()->setPageStep(viewport()->height());
     //verticalScrollBar()->setLineStep(viewport()->height() / 10);
 }
@@ -429,6 +429,7 @@ void RosegardenScrollView::doAutoScroll()
     }
 }
 
+#if 0
 bool RosegardenScrollView::isTimeForSmoothScroll()
 {
     // static int desktopWidth = QApplication::desktop()->width(),
@@ -464,6 +465,7 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
 
     return true;
 }
+#endif
 
 void RosegardenScrollView::scrollHoriz(int hpos)
 {

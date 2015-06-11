@@ -66,44 +66,12 @@ public:
      */
     void setBottomFixedWidget(QWidget *);
 
-    // Q3ScrollView functions that are missing from QAbstractScrollArea
-    // (Most of these can be moved to protected as only CompositionView
-    // uses them.)
-
-    // Q3ScrollView viewport position and size functions.
-
     /// X coordinate of the contents that are at the left edge of the viewport.
     int contentsX();
     /// Y coordinate of the contents that are at the top edge of the viewport.
     int contentsY();
-    /// Scrolls the content so that the point (x, y) is in the top-left corner.
-    void setContentsPos(int x, int y);
 
-    // Q3ScrollView contents size and update functions.
-
-    /// Width of the contents area.
-    int contentsWidth();
-    /// Height of the contents area.
-    int contentsHeight();
-
-    /// Sets the size of the contents area and updates the viewport accordingly.
-    void resizeContents(int width, int height);
-    /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
-    void updateContents(int x, int y, int width, int height);
-    void updateContents(const QRect &);
     void updateContents();
-
-
-    //QPoint viewportToContents(QPoint &);
-
-    // From Q3ScrollView
-    //void setDragAutoScroll(bool);
-
-    /// Map a point with the inverse world matrix
-    //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
-
-    //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
-    bool isTimeForSmoothScroll();
 
     /// Follow Mode
     /**
@@ -121,11 +89,6 @@ public:
         FollowHorizontal = 0x1,
         FollowVertical = 0x2
     };
-
-    /// See enum FollowMode.
-    void setFollowMode(int followMode)  { m_followMode = followMode; }
-
-    //int getDeltaScroll() const  { return m_minDeltaScroll; }
 
     bool isAutoScrolling() const  { return m_autoScrolling; }
 
@@ -151,23 +114,17 @@ public:
     void scrollVertSmallSteps(int vpos);
 
 public slots:
-    /**
-     * Scroll vertically so as to place the given position
-     * somewhere near the top of the viewport.
-     */
-    //void slotScrollVertToTop(int vpos);
-
-    /**
-     * Set the x and y scrollbars to a particular position
-     */
-    //void slotSetScrollPos(const QPoint &);
-
     /// See enum FollowMode for valid mask values.
+    // ??? rename: slotStartAutoScroll()
     void startAutoScroll(int followMode);
+    // ??? rename: slotStopAutoScroll()
     void stopAutoScroll();
     /// Handler for m_autoScrollTimer.
     /**
      * Also called by TrackEditor::handleAutoScroll().
+     *
+     * ??? Move this to public and create a new private slot
+     *     slotOnAutoScrollTimer() to handle the timer and call this.
      */
     void doAutoScroll();
 
@@ -186,10 +143,19 @@ signals:
      */
     void zoomOut();
 
-    //void bottomWidgetHeightChanged(int newHeight);
-
 protected:
 
+    /// Sets the size of the contents area and updates the viewport accordingly.
+    void resizeContents(int width, int height);
+    /// Width of the contents area.
+    int contentsWidth();
+    /// Height of the contents area.
+    int contentsHeight();
+
+    void updateContents(const QRect &);
+
+    /// See enum FollowMode.
+    void setFollowMode(int followMode)  { m_followMode = followMode; }
     void startAutoScroll();
 
     /// Viewport resize.
@@ -214,6 +180,11 @@ protected:
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
 
 private:
+
+    /// Scrolls the content so that the point (x, y) is in the top-left corner.
+    void setContentsPos(int x, int y);
+    /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
+    void updateContents(int x, int y, int width, int height);
 
     // ??? These are called exactly once.  They can be inlined into
     //     their callers.
@@ -264,6 +235,26 @@ private:
 
     /// Adjust the scrollbars' max and page step.
     void updateScrollBars();
+
+    // UNUSED
+
+    //void bottomWidgetHeightChanged(int newHeight);
+    /**
+     * Scroll vertically so as to place the given position
+     * somewhere near the top of the viewport.
+     */
+    //void slotScrollVertToTop(int vpos);
+    /// Set the x and y scrollbars to a particular position
+    //void slotSetScrollPos(const QPoint &);
+    //QPoint viewportToContents(QPoint &);
+    // From Q3ScrollView
+    //void setDragAutoScroll(bool);
+    /// Map a point with the inverse world matrix
+    //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
+    //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
+    //int getDeltaScroll() const  { return m_minDeltaScroll; }
+    //bool isTimeForSmoothScroll();
+
 };
 
 
