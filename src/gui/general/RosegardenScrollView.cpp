@@ -63,6 +63,8 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
 
       m_bottomRuler(0),
+      m_contentsWidth(0),
+      m_contentsHeight(0),
       //m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
       m_minDeltaScroll(DefaultMinDeltaScroll),
       //m_autoScrollShortcut(InitialScrollShortcut),
@@ -70,9 +72,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
       m_followMode(NoFollow),
-      m_autoScrolling(false),
-      m_contentsWidth(0),
-      m_contentsHeight(0)
+      m_autoScrolling(false)
 {
     // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
     //setDragAutoScroll(true);  //&&& could not find replacement
@@ -95,8 +95,10 @@ int RosegardenScrollView::contentsY()
     return verticalScrollBar()->value();
 }
 
-void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3ScrollView
+void RosegardenScrollView::resizeContents(int w, int h)
 {
+    // Code lifted from Q3ScrollView::resizeContents().
+
     // Hold on to the old values.
     int ow = m_contentsWidth;
     int oh = m_contentsHeight;
@@ -106,20 +108,22 @@ void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3S
     m_contentsWidth = w;
     m_contentsHeight = h;
 
-//    d->scrollbar_timer.start(0, true); // This was necessary until I fixed the resizeEvent connection
+    // This was necessary until I fixed the resizeEvent connection
+    //d->scrollbar_timer.start(0, true);
 
-//### CJ - Don't think this is necessary - slightly confused as we're resizing the content, not the widget
-//    if (d->children.isEmpty() && d->policy == Default)
-//        setResizePolicy(Manual);
+    //### CJ - Don't think this is necessary - slightly confused as we're
+    //         resizing the content, not the widget
+    //if (d->children.isEmpty() && d->policy == Default)
+    //    setResizePolicy(Manual);
 
     // Make sure "w" is the larger one.
-    // ??? This would be easier to read using w1 and w2 for the
+    // ??? This would be easier to read using minWidth and maxWidth for the
     //     smaller and the larger.
     if (ow > w) {
         std::swap(w, ow);
     }
 
-    // Refresh area ow..w
+    // Refresh area ow..w (minWidth..maxWidth)
     if (ow < viewport()->width()  &&  w >= 0) {
         if (ow < 0)
             ow = 0;
@@ -129,11 +133,13 @@ void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3S
     }
 
     // Make sure "h" is the larger one.
+    // ??? This would be easier to read using minHeight and maxHeight for
+    //     the smaller and the larger.
     if (oh > h) {
         std::swap(h, oh);
     }
 
-    // Refresh area oh..h
+    // Refresh area oh..h (minHeight..maxHeight)
     if (oh < viewport()->height()  &&  h >= 0) {
         if (oh < 0)
             oh = 0;
@@ -147,8 +153,10 @@ void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3S
     updateScrollBars();
 }
 
-void RosegardenScrollView::updateContents(int x, int y, int w, int h)  // Code lifted from Q3ScrollView
+void RosegardenScrollView::updateContents(int x, int y, int w, int h)
 {
+    // Code lifted from Q3ScrollView::updateContents().
+
     if (!isVisible() || !updatesEnabled())
         return;
 
@@ -184,9 +192,9 @@ void RosegardenScrollView::updateContents(int x, int y, int w, int h)  // Code l
 
     //### CJ - I don't think we used a clipped_viewport on Q3ScrollView
     //if (d->clipped_viewport) {
-    //// Translate clipper() to viewport()
-    //x -= d->clipped_viewport->x();
-    //y -= d->clipped_viewport->y();
+    //    // Translate clipper() to viewport()
+    //    x -= d->clipped_viewport->x();
+    //    y -= d->clipped_viewport->y();
     //}
 
     viewport()->update(x, y, w, h);
@@ -254,6 +262,9 @@ void RosegardenScrollView::startAutoScroll()
     QPoint autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
     m_autoScrollYMargin = autoScrollStartPoint.y() / 10;
     m_autoScrollXMargin = autoScrollStartPoint.x() / 10;
+    // ??? This would make more sense.
+    //m_autoScrollXMargin = viewport()->width() / 10;
+    //m_autoScrollYMargin = viewport()->height() / 10;
 
     m_autoScrolling = true;
 }
@@ -275,19 +286,24 @@ void RosegardenScrollView::slotStopAutoScroll()
 
 void RosegardenScrollView::doAutoScroll()
 {
-    QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
-    QPoint dp = p - m_previousP;
-    m_previousP = p;
+    const QPoint mousePos = viewport()->mapFromGlobal(QCursor::pos());
+    // ??? Only x is used.  Reduce to deltaX.
+    const QPoint dp = mousePos - m_previousP;
+    m_previousP = mousePos;
 
     m_autoScrollTimer.start(AutoScrollTimerInterval);
     ScrollDirection scrollDirection = None;
 
+    // Rename: scrollX and scrollY
     int dx = 0, dy = 0;
     if (m_followMode & FollowVertical) {
-        if ( p.y() < m_autoScrollYMargin ) {
+        // If we are inside the top auto scroll margin
+        if ( mousePos.y() < m_autoScrollYMargin ) {
             dy = -(int(m_minDeltaScroll));
             scrollDirection = Top;
-        } else if ( p.y() > viewport()->height() - m_autoScrollYMargin ) {
+        } else if ( mousePos.y() > viewport()->height() - m_autoScrollYMargin ) {
+            // We are inside the bottom auto scroll margin
+
             dy = + (int(m_minDeltaScroll));
             scrollDirection = Bottom;
         }
@@ -295,16 +311,21 @@ void RosegardenScrollView::doAutoScroll()
     bool startDecelerating = false;
     if (m_followMode & FollowHorizontal) {
 
-        //        RG_DEBUG << "p.x() : " << p.x() << " - viewport width : " << viewport()->width() << " - autoScrollXMargin : " << m_autoScrollXMargin << endl;
+        //RG_DEBUG << "p.x():" << p.x() << " viewport width:" << viewport()->width() << " autoScrollXMargin:" << m_autoScrollXMargin;
 
-        if ( p.x() < m_autoScrollXMargin ) {
+        // If the mouse is inside the left auto scroll margin
+        if ( mousePos.x() < m_autoScrollXMargin ) {
+            // If the mouse is moving right
             if ( dp.x() > 0 ) {
                 startDecelerating = true;
                 m_minDeltaScroll /= ScrollShortcutValue;
             }
             dx = -(int(m_minDeltaScroll));
             scrollDirection = Left;
-        } else if ( p.x() > viewport()->width() - m_autoScrollXMargin ) {
+        } else if ( mousePos.x() > viewport()->width() - m_autoScrollXMargin ) {
+            // The mouse is inside the right auto scroll margin
+
+            // If the mouse is moving left
             if ( dp.x() < 0 ) {
                 startDecelerating = true;
                 m_minDeltaScroll /= ScrollShortcutValue;
@@ -314,12 +335,12 @@ void RosegardenScrollView::doAutoScroll()
         }
     }
 
-    //     RG_DEBUG << "dx: " << dx << ", dy: " << dy << endl;
+    //RG_DEBUG << "dx:" << dx << " dy:" << dy;
 
     if ( (dx || dy) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
 
-//        scroll(dx, dy);
+        // Scroll by dx and dy.
         horizontalScrollBar()->setValue( horizontalScrollBar()->value() + dx );
         verticalScrollBar()->setValue( verticalScrollBar()->value() + dy );
 

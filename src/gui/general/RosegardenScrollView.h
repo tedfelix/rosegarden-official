@@ -149,6 +149,9 @@ signals:
 protected:
 
     /// Sets the size of the contents area and updates the viewport accordingly.
+    /**
+     * Q3ScrollView compatible function.
+     */
     void resizeContents(int width, int height);
     /// Width of the contents area.
     int contentsWidth()  { return m_contentsWidth; }
@@ -175,12 +178,23 @@ private slots:
 
 private:
 
-    /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
-    void updateContents(int x, int y, int width, int height);
-
     StandardRuler *m_bottomRuler;
     /// Make sure the bottom ruler stays in the proper place.
     void updateBottomRulerGeometry();
+
+    int m_contentsWidth;
+    int m_contentsHeight;
+
+    /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
+    /**
+     * Q3ScrollView compatible function.
+     */
+    void updateContents(int x, int y, int width, int height);
+
+    /// Adjust the scrollbars' max and page step.
+    void updateScrollBars();
+
+    // *** Auto Scrolling
 
     double m_minDeltaScroll;
     static const double DefaultMinDeltaScroll;
@@ -192,22 +206,21 @@ private:
     /// m_autoScrollTimer interval.
     static const int AutoScrollTimerInterval;
 
-    QPoint m_previousP;
+    // Margins around the edges of the viewport where auto scrolling
+    // will begin.
     int m_autoScrollXMargin;
     int m_autoScrollYMargin;
+
+    /// Used by doAutoScroll() to detect mouse movement.
+    QPoint m_previousP;
+
     enum ScrollDirection { None, Top, Bottom, Left, Right };
     ScrollDirection m_currentScrollDirection;
     /// See enum FollowMode for valid mask values.
     int m_followMode;
     bool m_autoScrolling;
 
-    int m_contentsWidth;
-    int m_contentsHeight;
-
-    /// Adjust the scrollbars' max and page step.
-    void updateScrollBars();
-
-    // UNUSED
+    // *** UNUSED
 
     //void bottomWidgetHeightChanged(int newHeight);
     /**
