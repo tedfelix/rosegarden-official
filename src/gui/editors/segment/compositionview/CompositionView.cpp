@@ -592,9 +592,9 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     RG_DEBUG << "CompositionView::resizeEvent() : segments layer size = " << m_segmentsLayer.size() << endl;
 }
 
-void CompositionView::viewportPaintEvent(QPaintEvent* e)
+void CompositionView::paintEvent(QPaintEvent *e)
 {
-    Profiler profiler("CompositionView::viewportPaintEvent");
+    Profiler profiler("CompositionView::paintEvent");
 
     QVector<QRect> rects = e->region().rects();
 

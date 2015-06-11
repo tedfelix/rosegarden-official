@@ -213,19 +213,10 @@ void RosegardenScrollView::updateScrollBars()
     //verticalScrollBar()->setLineStep(viewport()->height() / 10);
 }
 
-void RosegardenScrollView::paintEvent(QPaintEvent *event)
-{
-    viewportPaintEvent(event);
-}
-
 QPoint RosegardenScrollView::viewportToContents(const QPoint &vp)
 {
     return QPoint(vp.x() + contentsX(),
                   vp.y() + contentsY());
-}
-
-void RosegardenScrollView::viewportPaintEvent(QPaintEvent * /* event */)
-{
 }
 
 void RosegardenScrollView::mousePressEvent(QMouseEvent *event)

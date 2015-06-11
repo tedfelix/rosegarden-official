@@ -162,12 +162,6 @@ protected:
     /// Viewport resize.
     virtual void resizeEvent(QResizeEvent *);
 
-    // ??? This just delegates to viewportPaintEvent() which is a Q3ScrollView
-    //     compatibility function.  It is then overridden by the deriver.
-    //     Recommend doing away with viewportPaintEvent() and having
-    //     CompositionView override this instead.
-    virtual void paintEvent(QPaintEvent *);
-
     // ??? This just delegates to viewportMousePressEvent() which is private.
     //     Inline viewportMousePressEvent() in here.
     virtual void mousePressEvent(QMouseEvent *);
@@ -184,9 +178,6 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 
     // Q3ScrollView compatibility functions.
-
-    // ??? See paintEvent() comments.  CompositionView overrides this.
-    virtual void viewportPaintEvent(QPaintEvent *);
 
     // ??? Q3ScrollView.  Look into having CompositionView override
     //     mousePressEvent() instead of this.

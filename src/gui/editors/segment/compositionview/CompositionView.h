@@ -352,7 +352,7 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
 
     /// Delegates to viewportPaintRect() for each rect that needs painting.
-    virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent *);
     /// Handles resize.  Uses slotUpdateSize().
     virtual void resizeEvent(QResizeEvent*);
 
