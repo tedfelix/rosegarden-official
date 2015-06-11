@@ -349,7 +349,7 @@ protected:
     /**
      * Also handles scrolling as needed.
      */
-    virtual void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent *);
 
     /// Delegates to viewportPaintRect() for each rect that needs painting.
     virtual void paintEvent(QPaintEvent *);

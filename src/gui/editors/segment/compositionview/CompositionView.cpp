@@ -1709,22 +1709,27 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
-void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
+void CompositionView::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_tool)
         return ;
 
-    setFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
-    setPencilOverExisting((e->modifiers() & Qt::AltModifier) != 0);
+    // Transform coordinates from viewport to contents.
+    // ??? Can we push this further down into the tools?
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    int follow = m_tool->handleMouseMove(e);
+    setFineGrain((ce.modifiers() & Qt::ShiftModifier) != 0);
+    setPencilOverExisting((ce.modifiers() & Qt::AltModifier) != 0);
+
+    int follow = m_tool->handleMouseMove(&ce);
     setFollowMode(follow);
 
     if (follow != RosegardenScrollView::NoFollow) {
         doAutoScroll();
 
         if (follow & RosegardenScrollView::FollowHorizontal) {
-            int mouseX = e->pos().x();
+            int mouseX = ce.pos().x();
             scrollHorizSmallSteps(mouseX);
 
 //&& JAS - Deactivate auto expand feature when resizing / moving segments past
@@ -1746,8 +1751,12 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
         }
 
         if (follow & RosegardenScrollView::FollowVertical)
-            scrollVertSmallSteps(e->pos().y());
+            scrollVertSmallSteps(ce.pos().y());
     }
+
+    // Transfer accept state to original event.
+    if (!ce.isAccepted())
+        e->ignore();
 }
 
 #if 0

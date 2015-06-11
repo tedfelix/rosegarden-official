@@ -164,18 +164,7 @@ protected:
     /// Viewport resize.
     virtual void resizeEvent(QResizeEvent *);
 
-    // ??? This just delegates to viewportMouseMoveEvent() which is private.
-    //     Inline viewportMouseMoveEvent() in here.
-    virtual void mouseMoveEvent(QMouseEvent *);
-
     virtual void wheelEvent(QWheelEvent *);
-
-    // Q3ScrollView compatibility functions.
-
-    // ??? Q3ScrollView.  Look into having CompositionView override
-    //     mouseMoveEvent() instead of this.
-    //     CompositionView can call viewportToContents() on its own.
-    virtual void contentsMouseMoveEvent(QMouseEvent *);
 
 private slots:
 
@@ -188,10 +177,6 @@ private:
     void setContentsPos(int x, int y);
     /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
     void updateContents(int x, int y, int width, int height);
-
-    // ??? These are called exactly once.  They can be inlined into
-    //     their callers.
-    void viewportMouseMoveEvent(QMouseEvent *);
 
     //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
     QScrollBar *getMainHorizontalScrollBar()  { return horizontalScrollBar(); }
