@@ -164,9 +164,6 @@ protected:
     /// Viewport resize.
     virtual void resizeEvent(QResizeEvent *);
 
-    // ??? This just delegates to viewportMouseReleaseEvent() which is private.
-    //     Inline viewportMouseReleaseEvent() in here.
-    virtual void mouseReleaseEvent(QMouseEvent *);
     // ??? This just delegates to viewportMouseDoubleClickEvent() which is
     //     private.  Inline viewportMouseDoubleClickEvent() in here.
     virtual void mouseDoubleClickEvent(QMouseEvent *);
@@ -178,10 +175,6 @@ protected:
 
     // Q3ScrollView compatibility functions.
 
-    // ??? Q3ScrollView.  Look into having CompositionView override
-    //     mouseReleaseEvent() instead of this.
-    //     CompositionView can call viewportToContents() on its own.
-    virtual void contentsMouseReleaseEvent(QMouseEvent *);
     // ??? Q3ScrollView.  Look into having CompositionView override
     //     mouseMoveEvent() instead of this.
     //     CompositionView can call viewportToContents() on its own.
@@ -205,7 +198,6 @@ private:
 
     // ??? These are called exactly once.  They can be inlined into
     //     their callers.
-    void viewportMouseReleaseEvent(QMouseEvent *);
     void viewportMouseMoveEvent(QMouseEvent *);
     void viewportMouseDoubleClickEvent(QMouseEvent *);
 

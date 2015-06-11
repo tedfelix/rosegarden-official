@@ -342,7 +342,7 @@ protected:
     /// Passes the event on to the current tool.
     virtual void mousePressEvent(QMouseEvent *);
     /// Passes the event on to the current tool.
-    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent *);
     /// Launches a segment editor or moves the position pointer.
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
     /// Passes the event on to the current tool.

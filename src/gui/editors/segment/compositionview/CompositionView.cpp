@@ -1612,6 +1612,7 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 void CompositionView::mousePressEvent(QMouseEvent *e)
 {
     // Transform coordinates from viewport to contents.
+    // ??? Can we push this further down into the tools?
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
@@ -1651,18 +1652,27 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
         e->ignore();
 }
 
-void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
+void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "CompositionView::contentsMouseReleaseEvent()\n";
+    RG_DEBUG << "CompositionView::mouseReleaseEvent()";
 
     slotStopAutoScroll();
 
     if (!m_tool)
         return ;
 
-    if (e->button() == Qt::LeftButton ||
-        e->button() == Qt::MidButton )
-        m_tool->handleMouseButtonRelease(e);
+    // Transform coordinates from viewport to contents.
+    // ??? Can we push this further down into the tools?
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
+
+    if (ce.button() == Qt::LeftButton ||
+        ce.button() == Qt::MidButton )
+        m_tool->handleMouseButtonRelease(&ce);
+
+    // Transfer accept state to original event.
+    if (!ce.isAccepted())
+        e->ignore();
 }
 
 void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
