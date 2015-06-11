@@ -90,8 +90,13 @@ public:
         FollowVertical = 0x2
     };
 
+    /**
+     * Called by TrackEditor::handleAutoScroll().
+     */
+    void doAutoScroll();
     bool isAutoScrolling() const  { return m_autoScrolling; }
 
+    /// Playback, pointer drag, and loop drag scrolling.
     /**
      * Scroll horizontally to make the given position visible,
      * paging so as to get some visibility of the next screenful
@@ -99,6 +104,7 @@ public:
      */
     void scrollHoriz(int hpos);
 
+    /// Mouse move, pointer drag, and loop drag scrolling.
     /**
      * Scroll horizontally to make the given position somewhat
      * nearer to visible, scrolling by only "a small distance"
@@ -106,6 +112,7 @@ public:
      */
     void scrollHorizSmallSteps(int hpos);
 
+    /// Mouse move and track select scrolling.
     /**
      * Scroll vertically to make the given position somewhat
      * nearer to visible, scrolling by only "a small distance"
@@ -114,19 +121,13 @@ public:
     void scrollVertSmallSteps(int vpos);
 
 public slots:
-    /// See enum FollowMode for valid mask values.
-    // ??? rename: slotStartAutoScroll()
-    void startAutoScroll(int followMode);
-    // ??? rename: slotStopAutoScroll()
-    void stopAutoScroll();
-    /// Handler for m_autoScrollTimer.
+    /// Handle top and bottom StandardRuler::startMouseMove() signals.
     /**
-     * Also called by TrackEditor::handleAutoScroll().
-     *
-     * ??? Move this to public and create a new private slot
-     *     slotOnAutoScrollTimer() to handle the timer and call this.
+     * See enum FollowMode for valid mask values.
      */
-    void doAutoScroll();
+    void slotStartAutoScroll(int followMode);
+    /// Handle top and bottom StandardRuler::stopMouseMove() signals.
+    void slotStopAutoScroll();
 
 signals:
     /// Used by TrackEditor to keep TrackButtons the right size.
@@ -148,9 +149,9 @@ protected:
     /// Sets the size of the contents area and updates the viewport accordingly.
     void resizeContents(int width, int height);
     /// Width of the contents area.
-    int contentsWidth();
+    int contentsWidth()  { return m_contentsWidth; }
     /// Height of the contents area.
-    int contentsHeight();
+    int contentsHeight()  { return m_contentsHeight; }
 
     void updateContents(const QRect &);
 
@@ -161,23 +162,53 @@ protected:
     /// Viewport resize.
     virtual void resizeEvent(QResizeEvent *);
 
+    // ??? This just delegates to viewportPaintEvent() which is a Q3ScrollView
+    //     compatibility function.  It is then overridden by the deriver.
+    //     Recommend doing away with viewportPaintEvent() and having
+    //     CompositionView override this instead.
     virtual void paintEvent(QPaintEvent *);
 
+    // ??? This just delegates to viewportMousePressEvent() which is private.
+    //     Inline viewportMousePressEvent() in here.
     virtual void mousePressEvent(QMouseEvent *);
+    // ??? This just delegates to viewportMouseReleaseEvent() which is private.
+    //     Inline viewportMouseReleaseEvent() in here.
     virtual void mouseReleaseEvent(QMouseEvent *);
+    // ??? This just delegates to viewportMouseDoubleClickEvent() which is
+    //     private.  Inline viewportMouseDoubleClickEvent() in here.
     virtual void mouseDoubleClickEvent(QMouseEvent *);
+    // ??? This just delegates to viewportMouseMoveEvent() which is private.
+    //     Inline viewportMouseMoveEvent() in here.
     virtual void mouseMoveEvent(QMouseEvent *);
 
     virtual void wheelEvent(QWheelEvent *);
 
     // Q3ScrollView compatibility functions.
 
+    // ??? See paintEvent() comments.  CompositionView overrides this.
     virtual void viewportPaintEvent(QPaintEvent *);
 
+    // ??? Q3ScrollView.  Look into having CompositionView override
+    //     mousePressEvent() instead of this.
+    //     CompositionView can call viewportToContents() on its own.
     virtual void contentsMousePressEvent(QMouseEvent *);
+    // ??? Q3ScrollView.  Look into having CompositionView override
+    //     mouseReleaseEvent() instead of this.
+    //     CompositionView can call viewportToContents() on its own.
     virtual void contentsMouseReleaseEvent(QMouseEvent *);
+    // ??? Q3ScrollView.  Look into having CompositionView override
+    //     mouseMoveEvent() instead of this.
+    //     CompositionView can call viewportToContents() on its own.
     virtual void contentsMouseMoveEvent(QMouseEvent *);
+    // ??? Q3ScrollView.  Look into having CompositionView override
+    //     mouseDoubleClickEvent() instead of this.
+    //     CompositionView can call viewportToContents() on its own.
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
+
+private slots:
+
+    /// Handler for m_autoScrollTimer.
+    void slotOnAutoScrollTimer();
 
 private:
 
@@ -205,10 +236,10 @@ private:
     bool m_smoothScroll;  // always true
     int m_smoothScrollTimeInterval;
     float m_minDeltaScroll;
-    QTime m_scrollTimer;
+    //QTime m_scrollTimer;
     QTime m_scrollShortcuterationTimer;
 
-    /// Calls doAutoScroll().
+    /// Calls slotOnAutoScrollTimer().
     QTimer m_autoScrollTimer;
     int m_autoScrollTime;
     int m_autoScrollShortcut;

@@ -1649,7 +1649,7 @@ void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     RG_DEBUG << "CompositionView::contentsMouseReleaseEvent()\n";
 
-    stopAutoScroll();
+    slotStopAutoScroll();
 
     if (!m_tool)
         return ;

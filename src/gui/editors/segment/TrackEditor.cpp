@@ -241,13 +241,13 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     // connect loop rulers' follow-scroll signals
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_compositionView, SLOT(startAutoScroll(int)));
+            m_compositionView, SLOT(slotStartAutoScroll(int)));
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_compositionView, SLOT(stopAutoScroll()));
+            m_compositionView, SLOT(slotStopAutoScroll()));
     connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_compositionView, SLOT(startAutoScroll(int)));
+            m_compositionView, SLOT(slotStartAutoScroll(int)));
     connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_compositionView, SLOT(stopAutoScroll()));
+            m_compositionView, SLOT(slotStopAutoScroll()));
 
     //&&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
     // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable

@@ -73,8 +73,8 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     // The rest of the code assumes there is no frame.
     setFrameStyle(QFrame::NoFrame);
 
-    connect( &m_autoScrollTimer, SIGNAL( timeout() ),
-             this, SLOT( doAutoScroll() ) );
+    connect(&m_autoScrollTimer, SIGNAL(timeout()),
+            this, SLOT(slotOnAutoScrollTimer()));
 }
 
 int RosegardenScrollView::contentsX()
@@ -91,16 +91,6 @@ void RosegardenScrollView::setContentsPos(int x, int y)
 {
     horizontalScrollBar()->setValue(x);
     verticalScrollBar()->setValue(y);
-}
-
-int RosegardenScrollView::contentsWidth()
-{
-    return m_contentsWidth;
-}
-
-int RosegardenScrollView::contentsHeight()
-{
-    return m_contentsHeight;
 }
 
 void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3ScrollView
@@ -348,13 +338,13 @@ void RosegardenScrollView::startAutoScroll()
     m_autoScrolling = true;
 }
 
-void RosegardenScrollView::startAutoScroll(int followMode)
+void RosegardenScrollView::slotStartAutoScroll(int followMode)
 {
     setFollowMode(followMode);
     startAutoScroll();
 }
 
-void RosegardenScrollView::stopAutoScroll()
+void RosegardenScrollView::slotStopAutoScroll()
 {
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
@@ -422,7 +412,7 @@ void RosegardenScrollView::doAutoScroll()
         m_currentScrollDirection = scrollDirection;
 
     } else {
-        // Don't automatically stopAutoScroll() here, the mouse button
+        // Don't automatically slotStopAutoScroll() here, the mouse button
         // is presumably still pressed.
         m_minDeltaScroll = DefaultMinDeltaScroll;
         m_currentScrollDirection = None;
@@ -685,6 +675,12 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
                   e->orientation());
     QAbstractScrollArea::wheelEvent(&w);
 }
+
+void RosegardenScrollView::slotOnAutoScrollTimer()
+{
+    doAutoScroll();
+}
+
 
 }
 #include "RosegardenScrollView.moc"
