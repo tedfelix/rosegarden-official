@@ -219,24 +219,6 @@ QPoint RosegardenScrollView::viewportToContents(const QPoint &vp)
                   vp.y() + contentsY());
 }
 
-void RosegardenScrollView::mousePressEvent(QMouseEvent *event)
-{
-    viewportMousePressEvent(event);
-}
-
-void RosegardenScrollView::viewportMousePressEvent(QMouseEvent *e)
-{
-    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
-    contentsMousePressEvent(&ce);
-    if (!ce.isAccepted())
-        e->ignore();
-}
-
-void RosegardenScrollView::contentsMousePressEvent(QMouseEvent * /* event */)
-{
-}
-
 void RosegardenScrollView::mouseReleaseEvent(QMouseEvent *event)
 {
     viewportMouseReleaseEvent(event);

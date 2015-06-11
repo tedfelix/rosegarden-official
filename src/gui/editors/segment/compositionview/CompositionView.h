@@ -340,7 +340,7 @@ protected:
     virtual bool event(QEvent *);
 
     /// Passes the event on to the current tool.
-    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent *);
     /// Passes the event on to the current tool.
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     /// Launches a segment editor or moves the position pointer.
@@ -363,21 +363,21 @@ protected:
     /// Handle SHIFT key.
     /**
      * Delegates to SegmentSelector::setSegmentAdd().  Used by
-     * contentsMousePressEvent() with "value" indicating whether the user
+     * mousePressEvent() with "value" indicating whether the user
      * is holding down the SHIFT key.
      */
     void setSelectAdd(bool value);
     /// Handle CONTROL key.
     /**
      * Delegates to SegmentSelector::setSegmentCopy().  Used by
-     * contentsMousePressEvent() with "value" indicating whether the user is
+     * mousePressEvent() with "value" indicating whether the user is
      * holding down the CONTROL key.
      */
     void setSelectCopy(bool value);
     /// Handle ALT and CONTROL keys.
     /**
      * Delegates to SegmentSelector::setSegmentCopyingAsLink().
-     * Used by contentsMousePressEvent() with "value" indicating whether the
+     * Used by mousePressEvent() with "value" indicating whether the
      * user is holding down the ALT and CONTROL keys.
      */
     void setSelectCopyingAsLink(bool value);

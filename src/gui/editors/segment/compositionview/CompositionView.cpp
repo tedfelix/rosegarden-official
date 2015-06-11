@@ -1609,32 +1609,34 @@ void CompositionView::slotToolHelpChanged(const QString &text)
     if (m_contextHelpShown) emit showContextHelp(text);
 }
 
-void CompositionView::contentsMousePressEvent(QMouseEvent* e)
+void CompositionView::mousePressEvent(QMouseEvent *e)
 {
-    setSelectCopy((e->modifiers() & Qt::ControlModifier) != 0);
-    setSelectCopyingAsLink(((e->modifiers() & Qt::AltModifier) != 0) &&
-                               ((e->modifiers() & Qt::ControlModifier) != 0));
-    setSelectAdd((e->modifiers() & Qt::ShiftModifier) != 0);
-    setFineGrain((e->modifiers() & Qt::ShiftModifier) != 0);
-    setPencilOverExisting((e->modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
+    // Transform coordinates from viewport to contents.
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    switch (e->button()) {
+    setSelectCopy((ce.modifiers() & Qt::ControlModifier) != 0);
+    setSelectCopyingAsLink(((ce.modifiers() & Qt::AltModifier) != 0) &&
+                               ((ce.modifiers() & Qt::ControlModifier) != 0));
+    setSelectAdd((ce.modifiers() & Qt::ShiftModifier) != 0);
+    setFineGrain((ce.modifiers() & Qt::ShiftModifier) != 0);
+    setPencilOverExisting((ce.modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
+
+    switch (ce.button()) {
     case Qt::LeftButton:
     case Qt::MidButton:
         startAutoScroll();
 
         if (m_tool)
-            m_tool->handleMouseButtonPress(e);
+            m_tool->handleMouseButtonPress(&ce);
         else
-            RG_DEBUG << "CompositionView::contentsMousePressEvent() :"
-                     << this << " no tool\n";
+            RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
     case Qt::RightButton:
         if (m_tool)
-            m_tool->handleRightButtonPress(e);
+            m_tool->handleRightButtonPress(&ce);
         else
-            RG_DEBUG << "CompositionView::contentsMousePressEvent() :"
-                     << this << " no tool\n";
+            RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
     case Qt::MouseButtonMask:
     case Qt::NoButton:
@@ -1643,6 +1645,10 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     default:
         break;
     }
+
+    // Transfer accept state to original event.
+    if (!ce.isAccepted())
+        e->ignore();
 }
 
 void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)

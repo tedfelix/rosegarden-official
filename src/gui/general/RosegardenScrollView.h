@@ -155,6 +155,8 @@ protected:
 
     void updateContents(const QRect &);
 
+    QPoint viewportToContents(const QPoint &);
+
     /// See enum FollowMode.
     void setFollowMode(int followMode)  { m_followMode = followMode; }
     void startAutoScroll();
@@ -162,9 +164,6 @@ protected:
     /// Viewport resize.
     virtual void resizeEvent(QResizeEvent *);
 
-    // ??? This just delegates to viewportMousePressEvent() which is private.
-    //     Inline viewportMousePressEvent() in here.
-    virtual void mousePressEvent(QMouseEvent *);
     // ??? This just delegates to viewportMouseReleaseEvent() which is private.
     //     Inline viewportMouseReleaseEvent() in here.
     virtual void mouseReleaseEvent(QMouseEvent *);
@@ -179,10 +178,6 @@ protected:
 
     // Q3ScrollView compatibility functions.
 
-    // ??? Q3ScrollView.  Look into having CompositionView override
-    //     mousePressEvent() instead of this.
-    //     CompositionView can call viewportToContents() on its own.
-    virtual void contentsMousePressEvent(QMouseEvent *);
     // ??? Q3ScrollView.  Look into having CompositionView override
     //     mouseReleaseEvent() instead of this.
     //     CompositionView can call viewportToContents() on its own.
@@ -210,12 +205,9 @@ private:
 
     // ??? These are called exactly once.  They can be inlined into
     //     their callers.
-    void viewportMousePressEvent(QMouseEvent *);
     void viewportMouseReleaseEvent(QMouseEvent *);
     void viewportMouseMoveEvent(QMouseEvent *);
     void viewportMouseDoubleClickEvent(QMouseEvent *);
-
-    QPoint viewportToContents(const QPoint &);
 
     //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
     QScrollBar *getMainHorizontalScrollBar()  { return horizontalScrollBar(); }
