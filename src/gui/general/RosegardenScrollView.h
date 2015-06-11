@@ -173,13 +173,8 @@ private slots:
 
 private:
 
-    /// Scrolls the content so that the point (x, y) is in the top-left corner.
-    void setContentsPos(int x, int y);
     /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
     void updateContents(int x, int y, int width, int height);
-
-    //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
-    QScrollBar *getMainHorizontalScrollBar()  { return horizontalScrollBar(); }
 
     QWidget *m_bottomWidget;
     /// Make sure the bottom ruler stays in the proper place.
@@ -188,7 +183,6 @@ private:
     bool m_smoothScroll;  // always true
     int m_smoothScrollTimeInterval;
     float m_minDeltaScroll;
-    //QTime m_scrollTimer;
     QTime m_scrollShortcuterationTimer;
 
     /// Calls slotOnAutoScrollTimer().
@@ -236,7 +230,9 @@ private:
     //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
     //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
     //int getDeltaScroll() const  { return m_minDeltaScroll; }
+    //QTime m_scrollTimer;
     //bool isTimeForSmoothScroll();
+    //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
 
 };
 

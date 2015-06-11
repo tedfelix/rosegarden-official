@@ -87,12 +87,6 @@ int RosegardenScrollView::contentsY()
     return verticalScrollBar()->value();
 }
 
-void RosegardenScrollView::setContentsPos(int x, int y)
-{
-    horizontalScrollBar()->setValue(x);
-    verticalScrollBar()->setValue(y);
-}
-
 void RosegardenScrollView::resizeContents(int w, int h)  // Code lifted from Q3ScrollView
 {
     // Hold on to the old values.
@@ -378,24 +372,14 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
 
 void RosegardenScrollView::scrollHoriz(int hpos)
 {
-    QScrollBar *hbar = getMainHorizontalScrollBar();
-    int currentContentYPos = contentsY();
+    QScrollBar *hbar = horizontalScrollBar();
 
-    /* Lots of performance hitting debug
-       RG_DEBUG << "RosegardenScrollView::scrollHoriz: hpos is " << hpos
-       << ", contentsX is " << contentsX() << ", viewport width is "
-       << viewport()->width() << endl;
-    */
+    //RG_DEBUG << "scrollHoriz(): hpos is " << hpos << ", contentsX is " << contentsX() << ", viewport width is " << viewport()->width();
 
     if (hpos == 0) {
 
         // returning to zero
-        //         hbar->setValue(0);
-        setContentsPos(0, currentContentYPos);  //@@@
-
-        // possible replacement: ??
-        //widget()->move( 0, currentContentYPos )
-
+        hbar->setValue(0);
 
     } else if (hpos > (contentsX() +
                        viewport()->width() * 1.6) ||
@@ -403,37 +387,32 @@ void RosegardenScrollView::scrollHoriz(int hpos)
                        viewport()->width() * 0.7)) {
 
         // miles off one side or the other
-        //   hbar->setValue(hpos - int(viewport()->width() * 0.4));
-        setContentsPos(hpos - int(viewport()->width() * 0.4), currentContentYPos);
+        hbar->setValue(hpos - int(viewport()->width() * 0.4));
 
     } else if (hpos > (contentsX() +
                        viewport()->width() * 0.9)) {
 
         // moving off the right hand side of the view
-        //   hbar->setValue(hbar->value() + int(viewport()->width() * 0.6));
-        setContentsPos(hbar->value() + int(viewport()->width() * 0.6), currentContentYPos);
+        hbar->setValue(hbar->value() + int(viewport()->width() * 0.6));
 
     } else if (hpos < (contentsX() +
                        viewport()->width() * 0.1)) {
 
         // moving off the left
-        //   hbar->setValue(hbar->value() - int(viewport()->width() * 0.6));
-        setContentsPos(hbar->value() - int(viewport()->width() * 0.6), currentContentYPos);
+        hbar->setValue(hbar->value() - int(viewport()->width() * 0.6));
     }
 }
 
 void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
 {
-    QScrollBar *hbar = getMainHorizontalScrollBar();
-    int currentContentYPos = contentsY();
+    QScrollBar *hbar = horizontalScrollBar();
 
     int diff = 0;
 
     if (hpos == 0) {
 
         // returning to zero
-        //         hbar->setValue(0);
-        setContentsPos(0, currentContentYPos);
+        hbar->setValue(0);
 
     } else if ((diff = int(hpos - (contentsX() +
                                    viewport()->width() * 0.90))) > 0) {
@@ -444,8 +423,7 @@ void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
         int diff10 = std::min(diff, (int)m_minDeltaScroll);
         delta = std::max(delta, diff10);
 
-        // hbar->setValue(hbar->value() + delta);
-        setContentsPos(hbar->value() + delta, currentContentYPos);
+        hbar->setValue(hbar->value() + delta);
 
     } else if ((diff = int(hpos - (contentsX() +
                                    viewport()->width() * 0.10))) < 0) {
@@ -455,8 +433,7 @@ void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
         int diff10 = std::min( -diff, (int)m_minDeltaScroll);
         delta = std::max(delta, diff10);
 
-        // hbar->setValue(hbar->value() - delta);
-        setContentsPos(hbar->value() - delta, currentContentYPos);
+        hbar->setValue(hbar->value() - delta);
 
     }
 }
