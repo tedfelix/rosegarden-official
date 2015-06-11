@@ -44,14 +44,14 @@ namespace Rosegarden
 
 const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
 
-// m_autoScrollTimer interval in msecs.
-const int RosegardenScrollView::InitialScrollTime = 30;
-
-// max a.scroll speed
-const int RosegardenScrollView::MaxScrollDelta = 100;
+// max auto scroll speed
+const double RosegardenScrollView::MaxScrollDelta = 100;
 
 // shortcuteration rate
 const double RosegardenScrollView::ScrollShortcutValue = 1.04;
+
+// m_autoScrollTimer interval in msecs.
+const int RosegardenScrollView::AutoScrollTimerInterval = 30;
 
 //const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
 // m_autoScrollShortcut default.
@@ -65,7 +65,6 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_bottomRuler(0),
       //m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
       m_minDeltaScroll(DefaultMinDeltaScroll),
-      m_autoScrollTime(InitialScrollTime),
       //m_autoScrollShortcut(InitialScrollShortcut),
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
@@ -248,9 +247,8 @@ void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
 void RosegardenScrollView::startAutoScroll()
 {
     if ( !m_autoScrollTimer.isActive() ) {
-        m_autoScrollTime = InitialScrollTime;
         //m_autoScrollShortcut = InitialScrollShortcut;
-        m_autoScrollTimer.start( m_autoScrollTime );
+        m_autoScrollTimer.start(AutoScrollTimerInterval);
     }
 
     QPoint autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
@@ -281,7 +279,7 @@ void RosegardenScrollView::doAutoScroll()
     QPoint dp = p - m_previousP;
     m_previousP = p;
 
-    m_autoScrollTimer.start( m_autoScrollTime );
+    m_autoScrollTimer.start(AutoScrollTimerInterval);
     ScrollDirection scrollDirection = None;
 
     int dx = 0, dy = 0;

@@ -182,26 +182,15 @@ private:
     /// Make sure the bottom ruler stays in the proper place.
     void updateBottomRulerGeometry();
 
-    // ??? Make this a double.
-    float m_minDeltaScroll;
+    double m_minDeltaScroll;
     static const double DefaultMinDeltaScroll;
-    // ??? Make this a double.
-    static const int MaxScrollDelta;
+    static const double MaxScrollDelta;
     static const double ScrollShortcutValue;
 
     /// Calls slotOnAutoScrollTimer().
     QTimer m_autoScrollTimer;
-    /// Interval for m_autoScrollTimer.
-    /**
-     * ??? This is never set to anything other than InitialScrollTime.
-     *     It can be replaced with InitialScrollTime.
-     */
-    int m_autoScrollTime;
-    /// Auto scroll timer interval.
-    /**
-     * rename: AutoScrollTimerInterval
-     */
-    static const int InitialScrollTime;
+    /// m_autoScrollTimer interval.
+    static const int AutoScrollTimerInterval;
 
     QPoint m_previousP;
     int m_autoScrollXMargin;
