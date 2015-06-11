@@ -20,6 +20,7 @@
 #include "RosegardenScrollView.h"
 
 #include "misc/Debug.h"
+#include "gui/rulers/StandardRuler.h"
 
 //#include <QApplication>
 #include <QCursor>
@@ -61,7 +62,7 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;
 RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
 
-      m_bottomWidget(0),
+      m_bottomRuler(0),
       //m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
       m_minDeltaScroll(DefaultMinDeltaScroll),
       m_autoScrollTime(InitialScrollTime),
@@ -228,19 +229,19 @@ void RosegardenScrollView::setDragAutoScroll(bool)
 }
 #endif
 
-void RosegardenScrollView::setBottomFixedWidget(QWidget *w)
+void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
 {
-    m_bottomWidget = w;
-    if (m_bottomWidget) {
-        m_bottomWidget->setParent(this);
-        m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
+    m_bottomRuler = ruler;
+    if (m_bottomRuler) {
+        m_bottomRuler->setParent(this);
+        m_bottomRuler->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
         // ??? Why do we have to add 1 to get enough room?
         //     - Are the viewport's limits being ignored?  Is someone
         //       overdrawing the bottom by 1?
-        //     - Is the bottom widget expanding by 1?  No.  The hint is 25,
+        //     - Is the bottom ruler expanding by 1?  No.  The hint is 25,
         //       we size it to 25, and it stays at 25.
         //     - Inclusive vs. exclusive math?  Don't think so.
-        setViewportMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() + 1 );
+        setViewportMargins( 0, 0, 0, m_bottomRuler->sizeHint().height() + 1 );
     }
 }
 
@@ -517,7 +518,7 @@ void RosegardenScrollView::resizeEvent(QResizeEvent *e)
     updateScrollBars();
 
     // Make sure the bottom ruler is where it needs to be.
-    updateBottomWidgetGeometry();
+    updateBottomRulerGeometry();
 
     // Let TrackEditor know so it can resize the TrackButtons to match.
     emit viewportResize();
@@ -529,29 +530,29 @@ void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, 
     RG_DEBUG << "setHBarGeometry()";
     // Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
 //    hbar.setGeometry( x,y, w,h );
-    updateBottomWidgetGeometry();
+    updateBottomRulerGeometry();
 }
 #endif
 
-void RosegardenScrollView::updateBottomWidgetGeometry()
+void RosegardenScrollView::updateBottomRulerGeometry()
 {
-    RG_DEBUG << "updateBottomWidgetGeometry()";
+    RG_DEBUG << "updateBottomRulerGeometry()";
 
-    if (!m_bottomWidget)
+    if (!m_bottomRuler)
         return;
 
-    int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
+    int bottomRulerHeight = m_bottomRuler->sizeHint().height();
     // Since there's no margin (see the call to setFrameStyle() in
     // the ctor), we can assume the viewport coords match up with
     // the parent coords.  No need to transform.
     QRect viewportRect = viewport()->rect();
 
-    // Move the bottom widget to below the viewport.
-    m_bottomWidget->setGeometry(
+    // Move the bottom ruler to below the viewport.
+    m_bottomRuler->setGeometry(
             viewportRect.left(),
             viewportRect.bottom() + 1,  // +1 to be just under
             viewportRect.width(),
-            bottomWidgetHeight);  // See the call to setViewportMargins().
+            bottomRulerHeight);  // See the call to setViewportMargins().
 }
 
 void RosegardenScrollView::wheelEvent(QWheelEvent *e)

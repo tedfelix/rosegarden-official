@@ -37,10 +37,12 @@ namespace Rosegarden
 {
 
 
+class StandardRuler;
+
 /// QAbstractScrollArea with auto-scroll and bottom ruler.
 /**
  * A QAbstractScrollArea with more elaborate auto-scrolling capabilities
- * and the ability to have a vertically "fixed" widget (ruler) at its
+ * and the ability to have a vertically "fixed" StandardRuler at its
  * bottom, just above the horizontal scrollbar.
  *
  * Some Q3ScrollView compatibility is provided to ease the transition
@@ -63,11 +65,8 @@ public:
      *
      * This is called by TrackEditor::init() to connect a StandardRuler
      * instance.
-     *
-     * ??? Make this take a StandardRuler *.
-     * rename: setBottomRuler()
      */
-    void setBottomFixedWidget(QWidget *);
+    void setBottomRuler(StandardRuler *);
 
     /// X coordinate of the contents that are at the left edge of the viewport.
     int contentsX();
@@ -179,14 +178,9 @@ private:
     /// Calls update() on a rectangle defined by x, y, w, h, translated appropriately.
     void updateContents(int x, int y, int width, int height);
 
-    /// The bottom StandardRuler.
-    /**
-     * ??? Make this a StandardRuler *.
-     * rename: m_bottomRuler (and all other BottomWidgets too)
-     */
-    QWidget *m_bottomWidget;
+    StandardRuler *m_bottomRuler;
     /// Make sure the bottom ruler stays in the proper place.
-    void updateBottomWidgetGeometry();
+    void updateBottomRulerGeometry();
 
     // ??? Make this a double.
     float m_minDeltaScroll;

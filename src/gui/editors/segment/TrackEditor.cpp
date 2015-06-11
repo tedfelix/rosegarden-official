@@ -178,7 +178,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                         m_compositionView);
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
 
-    m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
+    m_compositionView->setBottomRuler(m_bottomStandardRuler);
 
     // Span 2 rows (3 and 4) so that there is an extra cell at the bottom of
     // column 0 to take up space below the TrackButtons.
