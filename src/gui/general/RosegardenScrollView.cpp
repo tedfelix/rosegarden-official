@@ -237,24 +237,6 @@ void RosegardenScrollView::contentsMouseMoveEvent(QMouseEvent * /* event */)
 {
 }
 
-void RosegardenScrollView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    viewportMouseDoubleClickEvent(event);
-}
-
-void RosegardenScrollView::viewportMouseDoubleClickEvent(QMouseEvent *e)
-{
-    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
-    contentsMouseDoubleClickEvent(&ce);
-    if (!ce.isAccepted())
-        e->ignore();
-}
-
-void RosegardenScrollView::contentsMouseDoubleClickEvent(QMouseEvent * /* event */)
-{
-}
-
 #if 0
 // Q3ScrollView
 void RosegardenScrollView::setDragAutoScroll(bool)

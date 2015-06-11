@@ -1675,25 +1675,29 @@ void CompositionView::mouseReleaseEvent(QMouseEvent *e)
         e->ignore();
 }
 
-void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
+void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_currentIndex = getFirstItemAt(e->pos());
+    QPoint contentsPos = viewportToContents(e->pos());
+
+    m_currentIndex = getFirstItemAt(contentsPos);
 
     if (!m_currentIndex) {
-        RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentIndex\n";
+        RG_DEBUG << "mouseDoubleClickEvent(): no currentIndex";
+
         const RulerScale *ruler = grid().getRulerScale();
-        if (ruler) emit setPointerPosition(ruler->getTimeForX(e->pos().x()));
+        if (ruler) emit setPointerPosition(ruler->getTimeForX(contentsPos.x()));
         return ;
     }
 
-    RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - have currentIndex\n";
+    RG_DEBUG << "mouseDoubleClickEvent(): have currentIndex";
 
     CompositionItem* itemImpl = m_currentIndex;
 
     if (m_currentIndex->isRepeating()) {
-        timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentIndex);
+        timeT time = getModel()->getRepeatTimeAt(contentsPos, m_currentIndex);
 
-        RG_DEBUG << "editRepeat at time " << time << endl;
+        RG_DEBUG << "mouseDoubleClickEvent(): editRepeat at time " << time;
+
         if (time > 0)
             emit editRepeat(itemImpl->getSegment(), time);
         else

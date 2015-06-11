@@ -310,7 +310,7 @@ signals:
     /**
      * Connected to RosegardenMainViewWidget::slotEditRepeat() which converts
      * the repeat to a segment.  This doesn't actually start the segment
-     * editor.  contentsMouseDoubleClickEvent() emits editSegment() after
+     * editor.  mouseDoubleClickEvent() emits editSegment() after
      * it emits this.
      *
      * rename: segmentRepeatDoubleClick(), repeatToSegment(), others?
@@ -344,7 +344,7 @@ protected:
     /// Passes the event on to the current tool.
     virtual void mouseReleaseEvent(QMouseEvent *);
     /// Launches a segment editor or moves the position pointer.
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+    virtual void mouseDoubleClickEvent(QMouseEvent *);
     /// Passes the event on to the current tool.
     /**
      * Also handles scrolling as needed.
