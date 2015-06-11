@@ -259,12 +259,8 @@ void RosegardenScrollView::startAutoScroll()
         m_autoScrollTimer.start(AutoScrollTimerInterval);
     }
 
-    QPoint autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
-    m_autoScrollYMargin = autoScrollStartPoint.y() / 10;
-    m_autoScrollXMargin = autoScrollStartPoint.x() / 10;
-    // ??? This would make more sense.
-    //m_autoScrollXMargin = viewport()->width() / 10;
-    //m_autoScrollYMargin = viewport()->height() / 10;
+    m_autoScrollXMargin = viewport()->width() / 10;
+    m_autoScrollYMargin = viewport()->height() / 10;
 
     m_autoScrolling = true;
 }
