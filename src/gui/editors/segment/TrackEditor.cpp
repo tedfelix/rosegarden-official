@@ -166,6 +166,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                      m_rulerScale, m_trackCellHeight);
 
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
+    m_compositionView->verticalScrollBar()->setSingleStep(m_trackCellHeight);
 
     // Bottom Ruler
 

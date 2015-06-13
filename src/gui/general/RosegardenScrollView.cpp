@@ -215,12 +215,13 @@ void RosegardenScrollView::updateScrollBars()
     horizontalScrollBar()->setMaximum(
         std::max(m_contentsWidth - viewport()->width(), 0));
     horizontalScrollBar()->setPageStep(viewport()->width());
-    //horizontalScrollBar()->setLineStep(viewport()->width() / 10);
+    horizontalScrollBar()->setSingleStep(viewport()->width() / 10);
 
     verticalScrollBar()->setMaximum(
         std::max(m_contentsHeight - viewport()->height(), 0));
     verticalScrollBar()->setPageStep(viewport()->height());
-    //verticalScrollBar()->setLineStep(viewport()->height() / 10);
+    // Note: The vertical scrollbar's single step is set to the track
+    //       height in TrackEditor::init().
 }
 
 QPoint RosegardenScrollView::viewportToContents(const QPoint &vp)
@@ -581,19 +582,7 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
         return;
     }
     
-    // For some reason that I don't understand, vertical scrolling
-    // with the wheel in the main window is extremely slow.  The
-    // factor of 10 applied here is to compensate for that.  No doubt
-    // on someone else's machine it will turn out to have been fine
-    // before this factor was applied, and unusable now...
-
-    QWheelEvent w(e->pos(),
-                  e->globalPos(),
-                  e->delta() * 10,
-                  e->buttons(),
-                  e->modifiers(),
-                  e->orientation());
-    QAbstractScrollArea::wheelEvent(&w);
+    QAbstractScrollArea::wheelEvent(e);
 }
 
 void RosegardenScrollView::slotOnAutoScrollTimer()
