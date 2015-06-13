@@ -35,23 +35,18 @@
 
 #include <algorithm>  // std::swap()
 
+#include <math.h>
+
 
 namespace Rosegarden
 {
 
-// Smooth scroll checks
-//
 
-const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
+const double RosegardenScrollView::MinScrollRate = 1.2;
+const double RosegardenScrollView::MaxScrollRate = 100;
+const double RosegardenScrollView::ScrollAccelerationFactor = 1.04;
 
-// max auto scroll speed
-const double RosegardenScrollView::MaxScrollDelta = 100;
-
-// shortcuteration rate
-const double RosegardenScrollView::ScrollShortcutValue = 1.04;
-
-// m_autoScrollTimer interval in msecs.
-const int RosegardenScrollView::AutoScrollTimerInterval = 30;
+const int RosegardenScrollView::AutoScrollTimerInterval = 30;  // msecs
 
 //const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
 // m_autoScrollShortcut default.
@@ -66,10 +61,11 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_contentsWidth(0),
       m_contentsHeight(0),
       //m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
-      m_minDeltaScroll(DefaultMinDeltaScroll),
+      m_scrollRate(MinScrollRate),
       //m_autoScrollShortcut(InitialScrollShortcut),
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
+      m_previousX(0),
       m_currentScrollDirection(None),
       m_followMode(NoFollow),
       m_autoScrolling(false)
@@ -275,7 +271,7 @@ void RosegardenScrollView::slotStartAutoScroll(int followMode)
 void RosegardenScrollView::slotStopAutoScroll()
 {
     m_autoScrollTimer.stop();
-    m_minDeltaScroll = DefaultMinDeltaScroll;
+    m_scrollRate = MinScrollRate;
     m_currentScrollDirection = None;
 
     m_autoScrolling = false;
@@ -284,75 +280,80 @@ void RosegardenScrollView::slotStopAutoScroll()
 void RosegardenScrollView::doAutoScroll()
 {
     const QPoint mousePos = viewport()->mapFromGlobal(QCursor::pos());
-    // ??? Only x is used.  Reduce to deltaX.
-    const QPoint dp = mousePos - m_previousP;
-    m_previousP = mousePos;
 
     m_autoScrollTimer.start(AutoScrollTimerInterval);
     ScrollDirection scrollDirection = None;
 
-    // Rename: scrollX and scrollY
-    int dx = 0, dy = 0;
+    int scrollY = 0;
+
     if (m_followMode & FollowVertical) {
         // If we are inside the top auto scroll margin
         if ( mousePos.y() < m_autoScrollYMargin ) {
-            dy = -(int(m_minDeltaScroll));
+            scrollY = lround(-m_scrollRate);
             scrollDirection = Top;
         } else if ( mousePos.y() > viewport()->height() - m_autoScrollYMargin ) {
             // We are inside the bottom auto scroll margin
 
-            dy = + (int(m_minDeltaScroll));
+            scrollY = lround(+m_scrollRate);
             scrollDirection = Bottom;
         }
     }
+
+    const int deltaX = mousePos.x() - m_previousX;
+    m_previousX = mousePos.x();
+
+    int scrollX = 0;
     bool startDecelerating = false;
+
     if (m_followMode & FollowHorizontal) {
 
-        //RG_DEBUG << "p.x():" << p.x() << " viewport width:" << viewport()->width() << " autoScrollXMargin:" << m_autoScrollXMargin;
+        //RG_DEBUG << "mousePos.x():" << mousePos.x() << " viewport width:" << viewport()->width() << " autoScrollXMargin:" << m_autoScrollXMargin;
 
         // If the mouse is inside the left auto scroll margin
         if ( mousePos.x() < m_autoScrollXMargin ) {
             // If the mouse is moving right
-            if ( dp.x() > 0 ) {
+            if ( deltaX > 0 ) {
                 startDecelerating = true;
-                m_minDeltaScroll /= ScrollShortcutValue;
+                m_scrollRate /= ScrollAccelerationFactor;
             }
-            dx = -(int(m_minDeltaScroll));
+            scrollX = lround(-m_scrollRate);
             scrollDirection = Left;
         } else if ( mousePos.x() > viewport()->width() - m_autoScrollXMargin ) {
             // The mouse is inside the right auto scroll margin
 
             // If the mouse is moving left
-            if ( dp.x() < 0 ) {
+            if ( deltaX < 0 ) {
                 startDecelerating = true;
-                m_minDeltaScroll /= ScrollShortcutValue;
+                m_scrollRate /= ScrollAccelerationFactor;
             }
-            dx = + (int(m_minDeltaScroll));
+            scrollX = lround(+m_scrollRate);
             scrollDirection = Right;
         }
     }
 
-    //RG_DEBUG << "dx:" << dx << " dy:" << dy;
+    //RG_DEBUG << "scrollX:" << scrollX << " scrollY:" << scrollY;
 
-    if ( (dx || dy) &&
+    if ( (scrollX || scrollY) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
 
-        // Scroll by dx and dy.
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + dx );
-        verticalScrollBar()->setValue( verticalScrollBar()->value() + dy );
+        // Scroll by scrollX and scrollY.
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + scrollX );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() + scrollY );
 
         if ( startDecelerating )
-            m_minDeltaScroll /= ScrollShortcutValue;
+            m_scrollRate /= ScrollAccelerationFactor;
         else
-            m_minDeltaScroll *= ScrollShortcutValue;
-        if (m_minDeltaScroll > MaxScrollDelta )
-            m_minDeltaScroll = MaxScrollDelta;
+            m_scrollRate *= ScrollAccelerationFactor;
+
+        if (m_scrollRate > MaxScrollRate )
+            m_scrollRate = MaxScrollRate;
+
         m_currentScrollDirection = scrollDirection;
 
     } else {
         // Don't automatically slotStopAutoScroll() here, the mouse button
         // is presumably still pressed.
-        m_minDeltaScroll = DefaultMinDeltaScroll;
+        m_scrollRate = MinScrollRate;
         m_currentScrollDirection = None;
     }
 }
@@ -367,7 +368,7 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
         int ta = m_scrollShortcuterationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
 
-        //RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
+        //RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_scrollRate << endl;
 
         if (t < m_smoothScrollTimeInterval) {
 
@@ -378,11 +379,11 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
             if (ta > 300) {
                 // reset smoothScrollTimeInterval
                 m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
-                m_minDeltaScroll = DefaultMinDeltaScroll;
+                m_scrollRate = MinScrollRate;
                 m_scrollShortcuterationTimer.restart();
             } else if (ta > 50) {
                 //                 m_smoothScrollTimeInterval /= 2;
-                m_minDeltaScroll *= 1.08;
+                m_scrollRate *= 1.08;
                 m_scrollShortcuterationTimer.restart();
             }
 
@@ -445,7 +446,7 @@ void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
         // moving off the right hand side of the view
 
         int delta = diff / 6;
-        int diff10 = std::min(diff, (int)m_minDeltaScroll);
+        int diff10 = std::min(diff, (int)m_scrollRate);
         delta = std::max(delta, diff10);
 
         hbar->setValue(hbar->value() + delta);
@@ -455,7 +456,7 @@ void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
         // moving off the left
 
         int delta = -diff / 6;
-        int diff10 = std::min( -diff, (int)m_minDeltaScroll);
+        int diff10 = std::min( -diff, (int)m_scrollRate);
         delta = std::max(delta, diff10);
 
         hbar->setValue(hbar->value() - delta);
@@ -487,7 +488,7 @@ void RosegardenScrollView::scrollVertSmallSteps(int vpos)
         // moving off up
 
         int delta = diff / 6;
-        int diff10 = std::min(diff, (int)m_minDeltaScroll);
+        int diff10 = std::min(diff, (int)m_scrollRate);
         delta = std::max(delta, diff10);
 
         vbar->setValue(vbar->value() + diff);
@@ -498,7 +499,7 @@ void RosegardenScrollView::scrollVertSmallSteps(int vpos)
         // moving off down
 
         int delta = -diff / 6;
-        int diff10 = std::min( -diff, (int)m_minDeltaScroll);
+        int diff10 = std::min( -diff, (int)m_scrollRate);
         delta = std::max(delta, diff10);
 
         vbar->setValue(vbar->value() - delta);

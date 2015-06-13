@@ -196,10 +196,11 @@ private:
 
     // *** Auto Scrolling
 
-    double m_minDeltaScroll;
-    static const double DefaultMinDeltaScroll;
-    static const double MaxScrollDelta;
-    static const double ScrollShortcutValue;
+    /// Current auto scroll rate.
+    double m_scrollRate;
+    static const double MinScrollRate;
+    static const double MaxScrollRate;
+    static const double ScrollAccelerationFactor;
 
     /// Calls slotOnAutoScrollTimer().
     QTimer m_autoScrollTimer;
@@ -212,7 +213,7 @@ private:
     int m_autoScrollYMargin;
 
     /// Used by doAutoScroll() to detect mouse movement.
-    QPoint m_previousP;
+    int m_previousX;
 
     enum ScrollDirection { None, Top, Bottom, Left, Right };
     ScrollDirection m_currentScrollDirection;
@@ -236,7 +237,7 @@ private:
     /// Map a point with the inverse world matrix
     //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
     //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
-    //int getDeltaScroll() const  { return m_minDeltaScroll; }
+    //int getDeltaScroll() const  { return m_scrollRate; }
     //QTime m_scrollTimer;
     //bool m_smoothScroll;  // always true
     //int m_smoothScrollTimeInterval;
