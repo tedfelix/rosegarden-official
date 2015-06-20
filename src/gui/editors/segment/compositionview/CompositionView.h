@@ -22,6 +22,9 @@
 #include "CompositionModelImpl.h"
 #include "CompositionItem.h"
 #include "gui/general/RosegardenScrollView.h"
+#include "base/Selection.h"  // SegmentSelection
+#include "base/TimeT.h"  // timeT
+
 #include <QBrush>
 #include <QColor>
 #include <QPen>
@@ -29,11 +32,11 @@
 #include <QPoint>
 #include <QRect>
 #include <QString>
-#include <QTimer>
 
 
 class QWidget;
 class QWheelEvent;
+class QTimer;
 class QResizeEvent;
 class QPaintEvent;
 class QPainter;
@@ -122,7 +125,7 @@ public:
     SnapGrid &grid()  { return m_model->grid(); }
 
     /// Get the topmost item (segment) at the given position on the view.
-    CompositionItemPtr getFirstItemAt(QPoint pos);
+    CompositionItemPtr getFirstItemAt(const QPoint &pos);
 
     /// Returns the segment tool box.  See setTool() and m_toolBox.
     SegmentToolBox *getToolBox()  { return m_toolBox; }
@@ -405,7 +408,7 @@ private:
      * refreshArtifacts().  Finally, the double-buffer is copied to
      * the display (QAbstractScrollArea::viewport()).
      */
-    virtual void viewportPaintRect(QRect);
+    virtual void viewportPaintRect(QRect r);
     
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
@@ -491,10 +494,9 @@ private:
     void drawTextFloat(QPainter *p, const QRect &clipRect);
 
     //void initStepSize();
-    //void releaseCurrentItem();
 
     /// Used by drawIntersections() to mix the brushes of intersecting rectangles.
-    static QColor mixBrushes(QBrush a, QBrush b);
+    static QColor mixBrushes(const QBrush &a, const QBrush &b);
 
     /// Helper function to make it easier to get the segment selector tool.
     SegmentSelector *getSegmentSelectorTool();
@@ -612,9 +614,6 @@ private:
     //--------------- Data members ---------------------------------
 
     CompositionModelImpl *m_model;
-    // ??? This is only used within mouseDoubleClickEvent().  It can probably
-    //     be made local to that function.
-    CompositionItemPtr m_currentIndex;
 
     /// Current tool.  Receives mouse events.
     // ??? rename: m_currentTool

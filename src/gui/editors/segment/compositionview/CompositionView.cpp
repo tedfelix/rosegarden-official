@@ -38,38 +38,38 @@
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
 
-#include <QMessageBox>
 #include <QBrush>
 #include <QColor>
 #include <QEvent>
 #include <QFont>
 #include <QFontMetrics>
-#include <QVector>
+#include <QMessageBox>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
 #include <QPoint>
 #include <QRect>
 //#include <QScrollBar>
+#include <QSettings>
 #include <QSize>
 #include <QString>
+#include <QTimer>
+#include <QVector>
 #include <QWidget>
-#include <QSettings>
-#include <QMouseEvent>
 
-#include <algorithm>
+#include <algorithm>  // std::min, std::max, std::find
 
 
 namespace Rosegarden
 {
 
 
-CompositionView::CompositionView(RosegardenDocument* doc,
-                                 CompositionModelImpl* model,
-                                 QWidget * parent) :
+CompositionView::CompositionView(RosegardenDocument *doc,
+                                 CompositionModelImpl *model,
+                                 QWidget *parent) :
     RosegardenScrollView(parent),
     m_model(model),
-    m_currentIndex(0),
     m_tool(0),
     m_toolBox(0),
     m_enableDrawing(true),
@@ -419,7 +419,7 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
     wheelEvent(e);
 }
 
-CompositionItemPtr CompositionView::getFirstItemAt(QPoint pos)
+CompositionItemPtr CompositionView::getFirstItemAt(const QPoint &pos)
 {
     CompositionModelImpl::ItemContainer items = getModel()->getItemsAt(pos);
 
@@ -1407,16 +1407,14 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     p->restore();
 }
 
-QColor CompositionView::mixBrushes(QBrush a, QBrush b)
+QColor CompositionView::mixBrushes(const QBrush &a, const QBrush &b)
 {
-    QColor ac = a.color(), bc = b.color();
+    const QColor &ac = a.color();
+    const QColor &bc = b.color();
 
-    int aR = ac.red(), aG = ac.green(), aB = ac.blue(),
-        bR = bc.red(), bG = bc.green(), bB = ac.blue();
-
-    ac.setRgb((aR + bR) / 2, (aG + bG) / 2, (aB + bB) / 2);
-
-    return ac;
+    return QColor((ac.red()   + bc.red())   / 2,
+                  (ac.green() + bc.green()) / 2,
+                  (ac.blue()  + bc.blue())  / 2);
 }
 
 void CompositionView::drawIntersections(const CompositionModelImpl::RectContainer& rects,
@@ -1676,35 +1674,35 @@ void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 
 void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    QPoint contentsPos = viewportToContents(e->pos());
+    const QPoint contentsPos = viewportToContents(e->pos());
 
-    m_currentIndex = getFirstItemAt(contentsPos);
+    CompositionItemPtr item = getFirstItemAt(contentsPos);
 
-    if (!m_currentIndex) {
-        RG_DEBUG << "mouseDoubleClickEvent(): no currentIndex";
+    if (!item) {
+        RG_DEBUG << "mouseDoubleClickEvent(): no item";
 
         const RulerScale *ruler = grid().getRulerScale();
-        if (ruler) emit setPointerPosition(ruler->getTimeForX(contentsPos.x()));
-        return ;
+        if (ruler)
+            emit setPointerPosition(ruler->getTimeForX(contentsPos.x()));
+
+        return;
     }
 
-    RG_DEBUG << "mouseDoubleClickEvent(): have currentIndex";
+    RG_DEBUG << "mouseDoubleClickEvent(): have item";
 
-    CompositionItem* itemImpl = m_currentIndex;
-
-    if (m_currentIndex->isRepeating()) {
-        timeT time = getModel()->getRepeatTimeAt(contentsPos, m_currentIndex);
+    if (item->isRepeating()) {
+        const timeT time = getModel()->getRepeatTimeAt(contentsPos, item);
 
         RG_DEBUG << "mouseDoubleClickEvent(): editRepeat at time " << time;
 
         if (time > 0)
-            emit editRepeat(itemImpl->getSegment(), time);
+            emit editRepeat(item->getSegment(), time);
         else
-            emit editSegment(itemImpl->getSegment());
+            emit editSegment(item->getSegment());
 
     } else {
 
-        emit editSegment(itemImpl->getSegment());
+        emit editSegment(item->getSegment());
     }
 }
 
@@ -1753,14 +1751,6 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     if (!ce.isAccepted())
         e->ignore();
 }
-
-#if 0
-// Dead Code.
-void CompositionView::releaseCurrentItem()
-{
-    m_currentIndex = CompositionItemPtr();
-}
-#endif
 
 void CompositionView::setPointerPos(int pos)
 {
