@@ -100,11 +100,11 @@ public:
 
     /// Playback scrolling.
     /**
-     * Scroll horizontally to make the given position visible,
+     * Scroll horizontally to make the given contents position visible,
      * paging so as to get some visibility of the next screenful
      * (for playback etc)
      */
-    void scrollHoriz(int hpos);
+    void scrollHoriz(int x);
 
     /// Track select scrolling.
     /**

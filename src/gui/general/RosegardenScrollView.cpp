@@ -323,36 +323,34 @@ void RosegardenScrollView::slotOnAutoScrollTimer()
     doAutoScroll();
 }
 
-void RosegardenScrollView::scrollHoriz(int hpos)
+void RosegardenScrollView::scrollHoriz(int x)
 {
     QScrollBar *hbar = horizontalScrollBar();
 
-    //RG_DEBUG << "scrollHoriz(): hpos is " << hpos << ", contentsX is " << contentsX() << ", viewport width is " << viewport()->width();
+    const int contentsX = hbar->value();
 
-    if (hpos == 0) {
+    if (x == 0) {
 
-        // returning to zero
         hbar->setValue(0);
 
-    } else if (hpos > (contentsX() +
-                       viewport()->width() * 1.6) ||
-               hpos < (contentsX() -
-                       viewport()->width() * 0.7)) {
+    } else if (x > (contentsX + viewport()->width() * 1.6)  ||
+               x < (contentsX - viewport()->width() * 0.7)) {
+        // The requested x is relatively far away.
 
-        // miles off one side or the other
-        hbar->setValue(hpos - int(viewport()->width() * 0.4));
+        // Put it slightly to the left of center.
+        hbar->setValue(x - int(viewport()->width() * 0.4));
 
-    } else if (hpos > (contentsX() +
-                       viewport()->width() * 0.9)) {
+    } else if (x > (contentsX + viewport()->width() * 0.9)) {
+        // The requested x is slightly off to the right.
 
-        // moving off the right hand side of the view
-        hbar->setValue(hbar->value() + int(viewport()->width() * 0.6));
+        // Go right a little more than half of a page.
+        hbar->setValue(contentsX + int(viewport()->width() * 0.6));
 
-    } else if (hpos < (contentsX() +
-                       viewport()->width() * 0.1)) {
+    } else if (x < (contentsX + viewport()->width() * 0.1)) {
+        // The requested x is slightly off to the left.
 
-        // moving off the left
-        hbar->setValue(hbar->value() - int(viewport()->width() * 0.6));
+        // Go left a little more than half of a page.
+        hbar->setValue(contentsX - int(viewport()->width() * 0.6));
     }
 }
 
