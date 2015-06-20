@@ -420,28 +420,6 @@ private:
     // depresses relating to selection add (usually Qt::SHIFT) and
     // selection copy (usually CONTROL)
 
-    /// Handle SHIFT key.
-    /**
-     * Delegates to SegmentSelector::setSegmentAdd().  Used by
-     * mousePressEvent() with "value" indicating whether the user
-     * is holding down the SHIFT key.
-     */
-    void setSelectAdd(bool value);
-    /// Handle CONTROL key.
-    /**
-     * Delegates to SegmentSelector::setSegmentCopy().  Used by
-     * mousePressEvent() with "value" indicating whether the user is
-     * holding down the CONTROL key.
-     */
-    void setSelectCopy(bool value);
-    /// Handle ALT and CONTROL keys.
-    /**
-     * Delegates to SegmentSelector::setSegmentCopyingAsLink().
-     * Used by mousePressEvent() with "value" indicating whether the
-     * user is holding down the ALT and CONTROL keys.
-     */
-    void setSelectCopyingAsLink(bool value);
-
     /// See isFineGrain().
     //void setFineGrain(bool value);
     /// See pencilOverExisting().
@@ -562,9 +540,6 @@ private:
 
     /// Used by drawIntersections() to mix the brushes of intersecting rectangles.
     static QColor mixBrushes(const QBrush &a, const QBrush &b);
-
-    /// Helper function to make it easier to get the segment selector tool.
-    SegmentSelector *getSegmentSelectorTool();
 
     /// Adds the entire viewport to the segments refresh rect.
     /**

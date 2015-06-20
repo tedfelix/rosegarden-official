@@ -286,42 +286,6 @@ void CompositionView::selectSegments(const SegmentSelection &segments)
     m_model->selectSegments(segments);
 }
 
-SegmentSelector*
-CompositionView::getSegmentSelectorTool()
-{
-    return dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
-}
-
-void CompositionView::setSelectAdd(bool value)
-{
-    SegmentSelector* selTool = getSegmentSelectorTool();
-
-    if (!selTool)
-        return ;
-
-    selTool->setSegmentAdd(value);
-}
-
-void CompositionView::setSelectCopy(bool value)
-{
-    SegmentSelector* selTool = getSegmentSelectorTool();
-
-    if (!selTool)
-        return ;
-
-    selTool->setSegmentCopy(value);
-}
-
-void CompositionView::setSelectCopyingAsLink(bool value)
-{
-    SegmentSelector* selTool = getSegmentSelectorTool();
-
-    if (!selTool)
-        return ;
-
-    selTool->setSegmentCopyingAsLink(value);
-}
-
 void CompositionView::showSplitLine(int x, int y)
 {
     m_splitLinePos.setX(x);
@@ -1530,14 +1494,12 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 void CompositionView::mousePressEvent(QMouseEvent *e)
 {
     // Transform coordinates from viewport to contents.
-    // ??? Can we push this further down into the tools?
+    // ??? Can we push this further down into the tools?  Make them call
+    //     viewportToContents() on their own.
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    setSelectCopy((ce.modifiers() & Qt::ControlModifier) != 0);
-    setSelectCopyingAsLink(((ce.modifiers() & Qt::AltModifier) != 0) &&
-                               ((ce.modifiers() & Qt::ControlModifier) != 0));
-    setSelectAdd((ce.modifiers() & Qt::ShiftModifier) != 0);
+    // ??? Shouldn't the tools be responsible for these?
     m_fineGrain = ((ce.modifiers() & Qt::ShiftModifier) != 0);
     m_pencilOverExisting = ((ce.modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
 
@@ -1551,13 +1513,13 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
         else
             RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
-    case Qt::RightButton:
+    case Qt::RightButton:  // ??? Why separate handling of the right button?
         if (m_currentTool)
             m_currentTool->handleRightButtonPress(&ce);
         else
             RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
-    case Qt::MouseButtonMask:
+    case Qt::MouseButtonMask:  // ??? Why drop anything?  Let the tool decide on its own.
     case Qt::NoButton:
     case Qt::XButton1:
     case Qt::XButton2:

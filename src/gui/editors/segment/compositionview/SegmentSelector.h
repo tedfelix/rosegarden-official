@@ -52,18 +52,6 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
-    // These two alter the behaviour of the selection mode
-    //
-    // - SegmentAdd (usually when Qt::SHIFT is held down) allows
-    //   multiple selections of Segments.
-    //
-    // - SegmentCopy (usually CONTROL) allows draw and drop
-    //   copying of Segments - it's a quick shortcut
-    //
-    void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
-    void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
-    void setSegmentCopyingAsLink(const bool &value) { m_segmentCopyingAsLink = value; }
-
     bool isSegmentAdding() const { return m_segmentAddMode; }
     bool isSegmentCopying() const { return m_segmentCopyMode; }
 

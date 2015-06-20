@@ -93,7 +93,17 @@ void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentSelector::handleMouseButtonPress\n";
+
     m_buttonPressed = true;
+
+    // Shift adds to the selection.
+    m_segmentAddMode = ((e->modifiers() & Qt::ShiftModifier) != 0);
+    // Ctrl is segment copy.
+    m_segmentCopyMode = ((e->modifiers() & Qt::ControlModifier) != 0);
+    // Alt+Ctrl is copy as link.
+    m_segmentCopyingAsLink = (
+            ((e->modifiers() & Qt::AltModifier) != 0) &&
+            ((e->modifiers() & Qt::ControlModifier) != 0));
 
     CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
 
