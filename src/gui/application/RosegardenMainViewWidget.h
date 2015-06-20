@@ -330,6 +330,8 @@ protected:
 
     virtual void windowActivationChange(bool);
 
+    static bool hasNonAudioSegment(const SegmentSelection &segments);
+
     //--------------- Data members ---------------------------------
 
     SimpleRulerScale  *m_rulerScale;

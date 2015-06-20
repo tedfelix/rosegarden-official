@@ -23,6 +23,7 @@
 #include "misc/ConfigGroups.h"
 #include "gui/general/ActionFileClient.h"
 #include "gui/widgets/WarningGroupBox.h"
+#include "base/Selection.h"
 
 #include <QMainWindow>
 
@@ -43,7 +44,7 @@ class QUrl;
 namespace Rosegarden
 {
 
-class SegmentSelection;
+
 class Segment;
 class RosegardenDocument;
 class RealTime;

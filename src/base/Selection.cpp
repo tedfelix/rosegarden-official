@@ -462,18 +462,6 @@ EventSelection::dump() const
 }
 
 
-/** SegmentSelection **/
-
-bool SegmentSelection::hasNonAudioSegment() const
-{
-    for (const_iterator i = begin(); i != end(); ++i) {
-        if ((*i)->getType() == Segment::Internal)
-            return true;
-    }
-    return false;
-}
-
-
 /** Templates that define methods of TimewiseSelection **/
 
 template <typename ElementInfo>

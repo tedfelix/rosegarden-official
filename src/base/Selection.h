@@ -213,18 +213,8 @@ protected:
 /**
  * SegmentSelection is much simpler than EventSelection, we don't
  * need to do much with this really
- *
- * ??? Deriving from STL container classes is discouraged.  This
- *     should be a typedef and hasNonAudioSegment() should take it
- *     as a parameter.  hasNonAudioSegment() should be a static member
- *     of its only user, RosegardenMainViewWidget.
- *         bool hasNonAudioSegment(const SegmentSelection &)
  */
-class SegmentSelection : public std::set<Segment *>
-{
-public:
-    bool hasNonAudioSegment() const;
-};
+typedef std::set<Segment *> SegmentSelection;
 
 /**
  * Template for a selection that includes only elements of type

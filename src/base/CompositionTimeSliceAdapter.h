@@ -24,12 +24,14 @@
 #include <utility>
 
 #include "base/Segment.h"
+#include "base/Selection.h"
 
 namespace Rosegarden {
 
+
 class Event;
 class Composition;
-class SegmentSelection;
+
 
 /**
  * CompositionTimeSliceAdapter provides the ability to iterate through

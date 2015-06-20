@@ -1209,7 +1209,7 @@ void RosegardenMainViewWidget::slotPropagateSegmentSelection(const SegmentSelect
 
     if (!segments.empty()) {
         emit stateChange("have_selection", true);
-        if (!segments.hasNonAudioSegment()) {
+        if (!hasNonAudioSegment(segments)) {
             emit stateChange("audio_segment_selected", true);
         }
     } else {
@@ -1272,7 +1272,7 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
 
     if (!segments.empty()) {
         emit stateChange("have_selection", true);
-        if (!segments.hasNonAudioSegment()) {
+        if (!hasNonAudioSegment(segments)) {
             emit stateChange("audio_segment_selected", true);
         }
     } else {
@@ -1523,7 +1523,7 @@ RosegardenMainViewWidget::slotSelectedSegments(const SegmentSelection &segments)
 
     if (!segments.empty()) {
         emit stateChange("have_selection", true);
-        if (!segments.hasNonAudioSegment())
+        if (!hasNonAudioSegment(segments))
             emit stateChange("audio_segment_selected", true);
     } else {
         emit stateChange("have_selection", false);
@@ -2243,6 +2243,18 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
 
     return eventView;
 }
+
+bool RosegardenMainViewWidget::hasNonAudioSegment(const SegmentSelection &segments)
+{
+    for (SegmentSelection::const_iterator i = segments.begin();
+         i != segments.end();
+         ++i) {
+        if ((*i)->getType() == Segment::Internal)
+            return true;
+    }
+    return false;
+}
+
 
 }
 #include "RosegardenMainViewWidget.moc"

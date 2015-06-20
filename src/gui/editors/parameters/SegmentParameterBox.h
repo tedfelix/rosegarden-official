@@ -21,6 +21,7 @@
 
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
+#include "base/Selection.h"
 #include "gui/widgets/ColourTable.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
@@ -43,7 +44,6 @@ namespace Rosegarden
 class Command;
 class TristateCheckBox;
 class Label;
-class SegmentSelection;
 class Segment;
 class RosegardenDocument;
 class Composition;

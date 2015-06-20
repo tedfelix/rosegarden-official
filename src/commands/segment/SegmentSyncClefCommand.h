@@ -22,6 +22,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "base/Selection.h"
 #include "document/CommandHistory.h"
 
 #include <QCoreApplication>
@@ -31,7 +32,6 @@ namespace Rosegarden
 {
 
 class Segment;
-class SegmentSelection;
 
 
 class SegmentSyncClefCommand : public MacroCommand

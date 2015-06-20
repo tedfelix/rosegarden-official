@@ -20,18 +20,15 @@
 #define RG_SEGMENTCOLOURCOMMAND_H
 
 #include "base/Segment.h"
+#include "base/Selection.h"
 #include "document/Command.h"
 #include <QString>
 #include <vector>
 #include <QCoreApplication>
 
 
-
-
 namespace Rosegarden
 {
-
-class SegmentSelection;
 
 
 class SegmentColourCommand : public NamedCommand

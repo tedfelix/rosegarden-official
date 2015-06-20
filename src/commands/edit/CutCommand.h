@@ -22,12 +22,13 @@
 #include <QString>
 #include <QCoreApplication>
 #include "document/Command.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
 {
 
-class SegmentSelection;
+
 class EventSelection;
 class Clipboard;
 

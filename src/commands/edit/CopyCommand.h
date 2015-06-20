@@ -22,6 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
+#include "base/Selection.h"
 #include <QCoreApplication>
 
 
@@ -30,7 +31,7 @@
 namespace Rosegarden
 {
 
-class SegmentSelection;
+
 class EventSelection;
 class Composition;
 class Clipboard;

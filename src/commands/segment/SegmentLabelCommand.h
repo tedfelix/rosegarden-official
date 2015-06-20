@@ -20,17 +20,15 @@
 #define RG_SEGMENTLABELCOMMAND_H
 
 #include "document/Command.h"
+#include "base/Selection.h"
 #include <QString>
 #include <vector>
 #include <QCoreApplication>
 
 
-
-
 namespace Rosegarden
 {
 
-class SegmentSelection;
 class Segment;
 
 

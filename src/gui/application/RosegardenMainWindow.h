@@ -23,6 +23,7 @@
 #include "gui/widgets/ZoomSlider.h"
 #include "gui/general/RecentFiles.h"
 #include "base/Event.h"
+#include "base/Selection.h"
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
@@ -64,7 +65,6 @@ class TempoView;
 class SynthPluginManagerDialog;
 class StartupTester;
 class SequenceManager;
-class SegmentSelection;
 class SegmentParameterBox;
 class RosegardenParameterArea;
 class RosegardenMainViewWidget;

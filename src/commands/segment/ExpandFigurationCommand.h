@@ -19,6 +19,7 @@
 #define RG_EXPANDFIGURATIONCOMMAND_H
 
 #include "base/Segment.h"
+#include "base/Selection.h"
 #include "document/Command.h"
 #include <QCoreApplication>
 #include <QString>
@@ -26,7 +27,6 @@
 namespace Rosegarden
 {
   class Composition;
-  class SegmentSelection;
   typedef long timeT;
 
  
