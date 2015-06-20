@@ -44,11 +44,6 @@ namespace Rosegarden
 
 const int RosegardenScrollView::AutoScrollTimerInterval = 30;  // msecs
 
-//const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
-// m_autoScrollShortcut default.
-//const int RosegardenScrollView::InitialScrollShortcut = 5;
-//const int RosegardenScrollView::AutoscrollMargin = 16;
-
 
 RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
@@ -59,9 +54,6 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_followMode(NoFollow),
       m_autoScrolling(false)
 {
-    // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
-    //setDragAutoScroll(true);  //&&& could not find replacement
-
     // Turn off the frame which causes positioning issues.
     // The rest of the code assumes there is no frame.
     setFrameStyle(QFrame::NoFrame);
@@ -215,13 +207,6 @@ QPoint RosegardenScrollView::viewportToContents(const QPoint &vp)
                   vp.y() + contentsY());
 }
 
-#if 0
-// Q3ScrollView
-void RosegardenScrollView::setDragAutoScroll(bool)
-{
-}
-#endif
-
 void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
 {
     m_bottomRuler = ruler;
@@ -338,44 +323,6 @@ void RosegardenScrollView::slotOnAutoScrollTimer()
     doAutoScroll();
 }
 
-#if 0
-bool RosegardenScrollView::isTimeForSmoothScroll()
-{
-    // static int desktopWidth = QApplication::desktop()->width(),
-    //    desktopHeight = QApplication::desktop()->height();
-
-    if (m_smoothScroll) {
-        int ta = m_scrollShortcuterationTimer.elapsed();
-        int t = m_scrollTimer.elapsed();
-
-        //RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_scrollRate << endl;
-
-        if (t < m_smoothScrollTimeInterval) {
-
-            return false;
-
-        } else {
-
-            if (ta > 300) {
-                // reset smoothScrollTimeInterval
-                m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
-                m_scrollRate = MinScrollRate;
-                m_scrollShortcuterationTimer.restart();
-            } else if (ta > 50) {
-                //                 m_smoothScrollTimeInterval /= 2;
-                m_scrollRate *= 1.08;
-                m_scrollShortcuterationTimer.restart();
-            }
-
-            m_scrollTimer.restart();
-            return true;
-        }
-    }
-
-    return true;
-}
-#endif
-
 void RosegardenScrollView::scrollHoriz(int hpos)
 {
     QScrollBar *hbar = horizontalScrollBar();
@@ -452,23 +399,6 @@ void RosegardenScrollView::scrollVertSmallSteps(int vpos)
     }
 }
 
-#if 0
-void RosegardenScrollView::slotScrollVertToTop(int vpos)
-{
-    QScrollBar* vbar = verticalScrollBar();
-    if (vpos < viewport()->height() / 3)
-        vbar->setValue(0);
-    else
-        vbar->setValue(vpos - viewport()->height() / 5);
-}
-
-void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
-{
-    horizontalScrollBar()->setValue(pos.x());
-    verticalScrollBar()->setValue(pos.y());
-}
-#endif
-
 void RosegardenScrollView::resizeEvent(QResizeEvent *e)
 {
     RG_DEBUG << "resizeEvent()";
@@ -485,16 +415,6 @@ void RosegardenScrollView::resizeEvent(QResizeEvent *e)
     // Let TrackEditor know so it can resize the TrackButtons to match.
     emit viewportResize();
 }
-
-#if 0
-void RosegardenScrollView::setHBarGeometry(QScrollBar &/* hbar */, int /* x */, int /* y */, int /* w */, int /* h */)
-{
-    RG_DEBUG << "setHBarGeometry()";
-    // Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
-//    hbar.setGeometry( x,y, w,h );
-    updateBottomRulerGeometry();
-}
-#endif
 
 void RosegardenScrollView::updateBottomRulerGeometry()
 {

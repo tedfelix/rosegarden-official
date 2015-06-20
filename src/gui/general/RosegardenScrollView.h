@@ -204,34 +204,6 @@ private:
     int m_followMode;
     bool m_autoScrolling;
 
-    // *** UNUSED
-
-    //void bottomWidgetHeightChanged(int newHeight);
-    /**
-     * Scroll vertically so as to place the given position
-     * somewhere near the top of the viewport.
-     */
-    //void slotScrollVertToTop(int vpos);
-    /// Set the x and y scrollbars to a particular position
-    //void slotSetScrollPos(const QPoint &);
-    //QPoint viewportToContents(QPoint &);
-    // From Q3ScrollView
-    //void setDragAutoScroll(bool);
-    /// Map a point with the inverse world matrix
-    //QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
-    //void setSmoothScroll(bool s)  { m_smoothScroll = s; }
-    //int getDeltaScroll() const  { return m_scrollRate; }
-    //QTime m_scrollTimer;
-    //bool m_smoothScroll;  // always true
-    //int m_smoothScrollTimeInterval;
-    //QTime m_scrollShortcuterationTimer;
-    //bool isTimeForSmoothScroll();
-    //void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
-    //int m_autoScrollShortcut;
-    //static const int DefaultSmoothScrollTimeInterval;
-    //static const int AutoscrollMargin;
-    //static const int InitialScrollShortcut;
-
 };
 
 
