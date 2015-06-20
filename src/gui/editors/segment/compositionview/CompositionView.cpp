@@ -110,33 +110,20 @@ CompositionView::CompositionView(RosegardenDocument *doc,
         connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
                 this, SLOT(slotToolHelpChanged(const QString &)));
     }
-    
-    // From Q3ScrollView, not in Qt4's QAbstractScrollArea.
-    //setDragAutoScroll(true);
 
-// Causing slow refresh issues on RG Mian Window -- 10-12-2011 - JAS
-//    viewport()->setAttribute(Qt::WA_PaintOnScreen);
-//    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    // Causing slow refresh issues on RG Main Window -- 10-12-2011 - JAS
+    // ??? This appears to have no effect positive or negative now (2015).
+    //viewport()->setAttribute(Qt::WA_PaintOnScreen);
+
+    // Disable background erasing.  We redraw everything.  This would
+    // just waste time.  (It's hard to measure any improvement here.)
+    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 
     QPalette pal;
     pal.setColor(viewport()->backgroundRole(), GUIPalette::getColour(GUIPalette::SegmentCanvas));
     viewport()->setPalette(pal);
 
     slotUpdateSize();
-
-    // QScrollBar* hsb = horizontalScrollBar();
-
-    // dynamically adjust content size when scrolling past current composition's end
-    //   connect(hsb, SIGNAL(nextLine()),
-    //          this, SLOT(scrollRight()));
-    //   connect(hsb, SIGNAL(prevLine()),
-    //          this, SLOT(scrollLeft()));
-
-    //    connect(this, SIGNAL(contentsMoving(int, int)),
-    //            this, SLOT(allNeedRefresh()));
-
-    //     connect(this, SIGNAL(contentsMoving(int, int)),
-    //             this, SLOT(slotContentsMoving(int, int)));
 
     connect(model, SIGNAL(needContentUpdate()),
             this, SLOT(slotUpdateAll()));
@@ -156,14 +143,14 @@ CompositionView::CompositionView(RosegardenDocument *doc,
                 this, SLOT(slotNewMIDIRecordingSegment(Segment*)));
         connect(doc, SIGNAL(newAudioRecordingSegment(Segment*)),
                 this, SLOT(slotNewAudioRecordingSegment(Segment*)));
-        //     connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
-        //             this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
         connect(doc, SIGNAL(stoppedAudioRecording()),
                 this, SLOT(slotStoppedRecording()));
         connect(doc, SIGNAL(stoppedMIDIRecording()),
                 this, SLOT(slotStoppedRecording()));
         connect(doc, SIGNAL(audioFileFinalized(Segment*)),
                 getModel(), SLOT(slotAudioFileFinalized(Segment*)));
+        //connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
+        //        this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
     }
     
     if (model) {
@@ -195,17 +182,19 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        QPixmap background = il.loadPixmap("bg-segmentcanvas");
+        m_backgroundPixmap = il.loadPixmap("bg-segmentcanvas");
 
-        if (!background.isNull()) {
-            m_backgroundPixmap = background;
-            //viewport()->setBackgroundPixmap(background);
-            QPalette palette;
-            palette.setBrush(backgroundRole(), QBrush(background));
-            palette.setBrush(viewport()->backgroundRole(), QBrush(background));
-            setPalette(palette);
-            viewport()->setPalette(palette);
-        }
+        // ??? refreshSegments() handles background drawing for us.
+        //     This is just extra work for QWidget.
+        //if (!m_backgroundPixmap.isNull()) {
+        //    QPalette palette;
+        //    // QPalette::Window role
+        //    palette.setBrush(backgroundRole(), QBrush(m_backgroundPixmap));
+        //    // QPalette::Base role
+        //    palette.setBrush(viewport()->backgroundRole(), QBrush(m_backgroundPixmap));
+        //    setPalette(palette);
+        //    viewport()->setPalette(palette);
+        //}
     }
 }
 
@@ -246,39 +235,6 @@ void CompositionView::slotUpdateSize()
         resizeContents(width, height);
     }
 }
-
-#if 0
-// Dead Code.
-void CompositionView::scrollRight()
-{
-    RG_DEBUG << "CompositionView::scrollRight()\n";
-    if (m_stepSize == 0)
-        initStepSize();
-
-    if (horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) {
-
-        resizeContents(contentsWidth() + m_stepSize, contentsHeight());
-        setContentsPos(contentsX() + m_stepSize, contentsY());
-        getModel()->setLength(contentsWidth());
-    }
-
-}
-
-void CompositionView::scrollLeft()
-{
-    RG_DEBUG << "CompositionView::scrollLeft()\n";
-    if (m_stepSize == 0)
-        initStepSize();
-
-    int cWidth = contentsWidth();
-
-    if (horizontalScrollBar()->value() < cWidth && cWidth > m_minWidth) {
-        resizeContents(cWidth - m_stepSize, contentsHeight());
-        getModel()->setLength(contentsWidth());
-    }
-
-}
-#endif
 
 void CompositionView::setSelectionRectPos(const QPoint& pos)
 {
@@ -324,13 +280,6 @@ void CompositionView::updateSelectionContents()
     updateContents(selectionRect);
 //    update(selectionRect);
 }
-
-#if 0
-void CompositionView::slotContentsMoving(int /* x */, int /* y */)
-{
-    //     qDebug("contents moving : x=%d", x);
-}
-#endif
 
 void CompositionView::setTool(const QString& toolName)
 {

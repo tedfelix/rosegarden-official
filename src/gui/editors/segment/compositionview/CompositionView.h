@@ -282,9 +282,6 @@ public slots:
      */
     void slotUpdateSize();
 
-    //void scrollRight();
-    //void scrollLeft();
-    //void slotContentsMoving(int x, int y);
     // TextFloat timer handler.
     //void slotTextFloatTimeout();
 
