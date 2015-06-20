@@ -108,15 +108,13 @@ public:
 
     /// Track select scrolling.
     /**
-     * Scroll vertically to make the given position visible.
+     * Scroll vertically to make the given contents position visible.
      *
      * The main test case for this is selecting tracks with the
      * arrow keys and making sure the view scrolls to show the
      * selected track.
-     *
-     * ??? Rename: scrollVert()
      */
-    void scrollVertSmallSteps(int vpos);
+    void scrollVert(int y);
 
 public slots:
     /// Handle top and bottom StandardRuler::startMouseMove() signals.

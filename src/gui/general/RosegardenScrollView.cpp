@@ -354,46 +354,35 @@ void RosegardenScrollView::scrollHoriz(int x)
     }
 }
 
-void RosegardenScrollView::scrollVertSmallSteps(int vpos)
+void RosegardenScrollView::scrollVert(int y)
 {
+    // Ignore any request made before we've actually been rendered and sized.
+    if (viewport()->height() <= 1)
+        return;
+
     QScrollBar *vbar = verticalScrollBar();
 
-    //    RG_DEBUG << "RosegardenScrollView::scrollVertSmallSteps - Start: vpos is " << vpos << ", contentsY is " << contentsY() << ", viewport height is " << viewport()->height() << endl;
+    // One "line" (track) from the bottom.
+    int bottomMargin = contentsY() + viewport()->height() - vbar->singleStep();
 
-    // As a special case (or hack), ignore any request made before we've
-    // actually been rendered and sized
-    if (viewport()->height() <= 1)
-        return ;
+    // If the requested y is below the bottom margin.
+    if (y > bottomMargin) {
+        int scrollY = y - bottomMargin;
 
-    int diff = 0;
+        // Scroll to make sure the requested y is visible.
+        vbar->setValue(vbar->value() + scrollY);
 
-    if (vpos == 0) {
+        return;
+    }
 
-        // returning to zero
-        vbar->setValue(0);
+    // If the requested y is above the top.
+    if (y < contentsY()) {
+        int scrollY = y - contentsY();
 
-    } else if ((diff = int(vpos - (contentsY() +
-                                   viewport()->height() * 0.90))) > 0) {
+        // Scroll to make sure the requested y is at the top.
+        vbar->setValue(vbar->value() + scrollY);
 
-        // moving off up
-
-        int delta = diff / 6;
-        int diff10 = diff;
-        delta = std::max(delta, diff10);
-
-        vbar->setValue(vbar->value() + diff);
-
-    } else if ((diff = int(vpos - (contentsY() +
-                                   viewport()->height() * 0.10))) < 0) {
-
-        // moving off down
-
-        int delta = -diff / 6;
-        int diff10 = -diff;
-        delta = std::max(delta, diff10);
-
-        vbar->setValue(vbar->value() - delta);
-
+        return;
     }
 }
 

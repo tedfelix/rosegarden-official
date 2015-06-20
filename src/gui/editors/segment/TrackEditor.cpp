@@ -556,7 +556,7 @@ TrackEditor::slotScrollToTrack(int track)
     // Find the vertical track pos
     int newY = track * m_trackCellHeight;
 
-    m_compositionView->scrollVertSmallSteps(newY);
+    m_compositionView->scrollVert(newY);
 }
 
 void
