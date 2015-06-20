@@ -70,7 +70,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
                                  QWidget *parent) :
     RosegardenScrollView(parent),
     m_model(model),
-    m_tool(0),
+    m_currentTool(0),
     m_toolBox(0),
     m_enableDrawing(true),
     m_showPreviews(false),
@@ -88,8 +88,8 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
     m_drawGuides(false),
     m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
-    m_topGuidePos(0),
-    m_foreGuidePos(0),
+    m_guideX(0),
+    m_guideY(0),
     m_drawSelectionRect(false),
     m_drawTextFloat(false),
     m_segmentsLayer(viewport()->width(), viewport()->height()),
@@ -337,15 +337,15 @@ void CompositionView::setTool(const QString& toolName)
     RG_DEBUG << "CompositionView::setTool(" << toolName << ")"
              << this << "\n";
 
-    if (m_tool)
-        m_tool->stow();
+    if (m_currentTool)
+        m_currentTool->stow();
 
     m_toolContextHelp = "";
 
-    m_tool = m_toolBox->getTool(toolName);
+    m_currentTool = m_toolBox->getTool(toolName);
 
-    if (m_tool)
-        m_tool->ready();
+    if (m_currentTool)
+        m_currentTool->ready();
     else {
         QMessageBox::critical(0, tr("Rosegarden"), QString("CompositionView::setTool() : unknown tool name %1").arg(toolName));
     }
@@ -1172,7 +1172,7 @@ void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
 void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 {
     // no need to check for clipping, these guides are meant to follow the mouse cursor
-    QPoint guideOrig(m_topGuidePos, m_foreGuidePos);
+    QPoint guideOrig(m_guideX, m_guideY);
     
     int contentsHeight = this->contentsHeight();
     int contentsWidth = this->contentsWidth();
@@ -1625,14 +1625,14 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
     case Qt::MidButton:
         startAutoScroll();
 
-        if (m_tool)
-            m_tool->handleMouseButtonPress(&ce);
+        if (m_currentTool)
+            m_currentTool->handleMouseButtonPress(&ce);
         else
             RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
     case Qt::RightButton:
-        if (m_tool)
-            m_tool->handleRightButtonPress(&ce);
+        if (m_currentTool)
+            m_currentTool->handleRightButtonPress(&ce);
         else
             RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
@@ -1655,7 +1655,7 @@ void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 
     slotStopAutoScroll();
 
-    if (!m_tool)
+    if (!m_currentTool)
         return ;
 
     // Transform coordinates from viewport to contents.
@@ -1665,7 +1665,7 @@ void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 
     if (ce.button() == Qt::LeftButton ||
         ce.button() == Qt::MidButton )
-        m_tool->handleMouseButtonRelease(&ce);
+        m_currentTool->handleMouseButtonRelease(&ce);
 
     // Transfer accept state to original event.
     if (!ce.isAccepted())
@@ -1708,7 +1708,7 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 
 void CompositionView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_tool)
+    if (!m_currentTool)
         return ;
 
     // Transform coordinates from viewport to contents.
@@ -1719,7 +1719,7 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     m_fineGrain = ((ce.modifiers() & Qt::ShiftModifier) != 0);
     m_pencilOverExisting = ((ce.modifiers() & Qt::AltModifier) != 0);
 
-    int follow = m_tool->handleMouseMove(&ce);
+    int follow = m_currentTool->handleMouseMove(&ce);
     setFollowMode(follow);
 
     if (follow != RosegardenScrollView::NoFollow) {
@@ -1806,16 +1806,16 @@ void CompositionView::setPointerPos(int pos)
 
 void CompositionView::setGuidesPos(int x, int y)
 {
-    m_topGuidePos = x;
-    m_foreGuidePos = y;
+    m_guideX = x;
+    m_guideY = y;
     slotArtifactsNeedRefresh();
 }
 
 #if 0
 void CompositionView::setGuidesPos(const QPoint& p)
 {
-    m_topGuidePos = p.x();
-    m_foreGuidePos = p.y();
+    m_guideX = p.x();
+    m_guideY = p.y();
     slotArtifactsNeedRefresh();
 }
 #endif

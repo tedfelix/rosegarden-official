@@ -611,9 +611,8 @@ private:
 
     CompositionModelImpl *m_model;
 
-    /// Current tool.  Receives mouse events.
-    // ??? rename: m_currentTool
-    SegmentTool    *m_tool;
+    /// The tool that receives mouse events.
+    SegmentTool    *m_currentTool;
     SegmentToolBox *m_toolBox;
 
     /// Performance testing.
@@ -643,8 +642,8 @@ private:
 
     bool         m_drawGuides;
     QColor       m_guideColor;
-    int          m_topGuidePos;   // ??? rename: m_guideX
-    int          m_foreGuidePos;  // ??? rename: m_guideY
+    int          m_guideX;
+    int          m_guideY;
 
     bool         m_drawSelectionRect;
     QRect        m_selectionRect;
