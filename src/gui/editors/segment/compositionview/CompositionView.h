@@ -426,13 +426,13 @@ private:
      * segments layer (m_segmentsLayer).  Used by
      * scrollSegmentsLayer().
      */
-    void refreshSegments(const QRect&);
+    void refreshSegments(const QRect &);
     /// Draw the artifacts on the double-buffer (m_doubleBuffer).
     /*
      * Calls drawArtifacts() to draw the artifacts on the double-buffer
      * (m_doubleBuffer).  Used by viewportPaintRect().
      */
-    void refreshArtifacts(const QRect&);
+    void refreshArtifacts(const QRect &clipRect);
 
     /// Draw the track dividers on the segments layer.
     void drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect);
@@ -442,35 +442,35 @@ private:
      *
      * Used by refreshSegments().
      */
-    void drawSegments(QPainter *segmentLayerPainter, const QRect& rect);
+    void drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
      * Used by drawSegments().
      */
-    void drawAudioPreviews(QPainter * p, const QRect& rect);
-    /// Draws the overlay artifacts on the double-buffer.
+    void drawAudioPreviews(QPainter *segmentLayerPainter, const QRect &clipRect);
+    /// Draw the overlay artifacts on the double-buffer.
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
      * position pointer, guides, and the "rubber band" selection.  Used by
      * refreshArtifacts().
      */
-    void drawArtifacts(QPainter * p, const QRect& rect);
+    void drawArtifacts(QPainter *doubleBufferPainter, const QRect &clipRect);
     /// Draws a rectangle on the given painter with proper clipping.
     /**
      * This is an improved QPainter::drawRect().
      *
      * @see drawCompRect()
      */
-    void drawRect(const QRect& rect, QPainter * p, const QRect& clipRect,
+    void drawRect(const QRect &rect, QPainter *p, const QRect &clipRect,
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
     /// A version of drawRect() that handles segment repeats.
-    void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
+    void drawCompRect(const CompositionRect &r, QPainter *p, const QRect &clipRect,
                       int intersectLvl = 0, bool fill = true);
     /// Used by drawSegments() to draw the segment labels.
     /**
      * @see setShowSegmentLabels()
      */
-    void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
+    void drawCompRectLabel(const CompositionRect &r, QPainter *p, const QRect &clipRect);
     /// Used by drawSegments() to draw any intersections between rectangles.
     void drawIntersections(const CompositionModelImpl::RectContainer &, QPainter *p, const QRect &clipRect);
 
@@ -478,26 +478,26 @@ private:
     /**
      * @see setPointerPos() and setPointerPosition()
      */
-    void drawPointer(QPainter * p, const QRect& clipRect);
+    void drawPointer(QPainter *p, const QRect &clipRect);
     /// Used by drawArtifacts() to draw the guides on the double-buffer.
     /**
      * @see setGuidesPos() and setDrawGuides()
      */
-    void drawGuides(QPainter * p, const QRect& clipRect);
+    void drawGuides(QPainter *p, const QRect &clipRect);
     /// Used by drawArtifacts() to draw floating text.
     /**
      * @see setTextFloat()
      */
-    void drawTextFloat(QPainter * p, const QRect& clipRect);
+    void drawTextFloat(QPainter *p, const QRect &clipRect);
 
-//    void initStepSize();
-//    void releaseCurrentItem();
+    //void initStepSize();
+    //void releaseCurrentItem();
 
     /// Used by drawIntersections() to mix the brushes of intersecting rectangles.
     static QColor mixBrushes(QBrush a, QBrush b);
 
     /// Helper function to make it easier to get the segment selector tool.
-    SegmentSelector* getSegmentSelectorTool();
+    SegmentSelector *getSegmentSelectorTool();
 
     /// Adds the entire viewport to the segments refresh rect.
     /**
@@ -516,14 +516,13 @@ private:
      * This will cause the given portion of the viewport to be refreshed
      * the next time viewportPaintRect() is called.
      */
-    void segmentsNeedRefresh(QRect r) {
+    void segmentsNeedRefresh(const QRect &r) {
         m_segmentsRefresh |=
             (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
              & r);
     }
 
-    /// Does the actual work for slotUpdateAll()
-    void updateAll(const QRect& rect);
+    void updateAll(const QRect &rect);
 
 private slots:
 
@@ -540,7 +539,7 @@ private slots:
 
 private:
     /// Updates the artifacts in the given rect.
-    void artifactsNeedRefresh(QRect r) {
+    void artifactsNeedRefresh(const QRect &r) {
         m_artifactsRefresh |=
             (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
              & r);
@@ -554,7 +553,7 @@ private:
     }
 
     /// Updates the given rect on the view.
-    void allNeedRefresh(QRect r) {
+    void allNeedRefresh(const QRect &r) {
         segmentsNeedRefresh(r);
         artifactsNeedRefresh(r);
     }
@@ -572,14 +571,14 @@ private slots:
      *
      * Suggestion: Try eliminating this middleman.
      */
-    void slotNewMIDIRecordingSegment(Segment*);
+    void slotNewMIDIRecordingSegment(Segment *);
     /**
      * Delegates to CompositionModelImpl::addRecordingItem().
      * Connected to RosegardenDocument::newAudioRecordingSegment().
      *
      * Suggestion: Try eliminating this middleman.
      */
-    void slotNewAudioRecordingSegment(Segment*);
+    void slotNewAudioRecordingSegment(Segment *);
 
     // no longer used, see RosegardenDocument::insertRecordedMidi()
     //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
@@ -612,11 +611,15 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    CompositionModelImpl* m_model;
+    CompositionModelImpl *m_model;
+    // ??? This is only used within mouseDoubleClickEvent().  It can probably
+    //     be made local to that function.
     CompositionItemPtr m_currentIndex;
 
-    SegmentTool*    m_tool;
-    SegmentToolBox* m_toolBox;
+    /// Current tool.  Receives mouse events.
+    // ??? rename: m_currentTool
+    SegmentTool    *m_tool;
+    SegmentToolBox *m_toolBox;
 
     /// Performance testing.
     bool         m_enableDrawing;
@@ -628,13 +631,13 @@ private:
 
     //int          m_minWidth;
 
+    // This is always 0.  It used to be set to the single step size
+    // of the horizontal scrollbar.  Now it's always 0.
     int          m_stepSize;
-    QColor       m_rectFill;
-    QColor       m_selectedRectFill;
+    //QColor       m_rectFill;
+    //QColor       m_selectedRectFill;
 
     int          m_pointerPos;
-    QColor       m_pointerColor;
-    int          m_pointerWidth;
     QPen         m_pointerPen;
 
     QRect        m_tmpRect;
@@ -645,8 +648,8 @@ private:
 
     bool         m_drawGuides;
     QColor       m_guideColor;
-    int          m_topGuidePos;
-    int          m_foreGuidePos;
+    int          m_topGuidePos;   // ??? rename: m_guideX
+    int          m_foreGuidePos;  // ??? rename: m_guideY
 
     bool         m_drawSelectionRect;
     QRect        m_selectionRect;

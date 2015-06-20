@@ -79,13 +79,11 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     m_pencilOverExisting(false),
     //m_minWidth(m_model->getCompositionLength()),
     m_stepSize(0),
-    m_rectFill(0xF0, 0xF0, 0xF0),
-    m_selectedRectFill(0x00, 0x00, 0xF0),
+    //m_rectFill(0xF0, 0xF0, 0xF0),
+    //m_selectedRectFill(0x00, 0x00, 0xF0),
     m_pointerPos(0),
-    m_pointerColor(GUIPalette::getColour(GUIPalette::Pointer)),
-    m_pointerWidth(4),
-    m_pointerPen(QPen(m_pointerColor, m_pointerWidth)),
-    m_tmpRect(QRect(QPoint(0, 0), QPoint( -1, -1))),
+    m_pointerPen(GUIPalette::getColour(GUIPalette::Pointer), 4),
+    m_tmpRect(QPoint(0, 0), QPoint( -1, -1)),  // invalid
     m_tmpRectFill(CompositionRect::DefaultBrushColor),
     m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
     m_drawGuides(false),
@@ -815,9 +813,12 @@ void CompositionView::refreshSegments(const QRect& rect)
     //RG_DEBUG << "CompositionView::refreshSegments() r = "
     //         << rect << endl;
 
-//### This constructor used to mean "start painting on the segments layer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
-//@@@    QPainter p(&m_segmentsLayer, viewport());
-// Let's see how we get on with:
+    // ### This constructor used to mean "start painting on the segments
+    //     layer, taking your default paint configuration from the viewport".
+    //     I don't think it's supported any more -- I had to look it up (I'd
+    //     never known it was possible to do this in the first place!)
+    // @@@ QPainter p(&m_segmentsLayer, viewport());
+    // Let's see how we get on with:
     QPainter p(&m_segmentsLayer);
 
     p.setRenderHint(QPainter::Antialiasing, false);
@@ -841,24 +842,24 @@ void CompositionView::refreshSegments(const QRect& rect)
     //    m_segmentsNeedRefresh = false;
 }
 
-void CompositionView::refreshArtifacts(const QRect& rect)
+void CompositionView::refreshArtifacts(const QRect &clipRect)
 {
     Profiler profiler("CompositionView::refreshArtifacts");
 
-    //RG_DEBUG << "CompositionView::refreshArtifacts() r = "
-    //         << rect << endl;
+    //RG_DEBUG << "refreshArtifacts() clipRect = " << clipRect;
 
-    QPainter p;
+    QPainter doubleBufferPainter;
 
-//@@@ see comment in refreshSegments    p.begin(&m_doubleBuffer, viewport());
-    p.begin(&m_doubleBuffer);
+    // @@@ see comment in refreshSegments
+    //     doubleBufferPainter.begin(&m_doubleBuffer, viewport());
+    doubleBufferPainter.begin(&m_doubleBuffer);
 
-    p.translate( -contentsX(), -contentsY());
-    //     QRect r(contentsX(), contentsY(), m_doubleBuffer.width(), m_doubleBuffer.height());
-    drawArtifacts(&p, rect);
-    p.end();
+    doubleBufferPainter.translate(-contentsX(), -contentsY());
+    //QRect r(contentsX(), contentsY(), m_doubleBuffer.width(), m_doubleBuffer.height());
+    drawArtifacts(&doubleBufferPainter, clipRect);
+    doubleBufferPainter.end();
 
-    //    m_artifactsNeedRefresh = false;
+    //m_artifactsNeedRefresh = false;
 }
 
 void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect)
@@ -1051,7 +1052,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
         }
     }
 
-    //    drawArtifacts(p, clipRect);
+    //drawArtifacts(p, clipRect);
 
 }
 
@@ -1772,6 +1773,7 @@ void CompositionView::setPointerPos(int pos)
 
     // automagically grow contents width if pointer position goes beyond right end
     //
+    // ??? m_stepSize is always 0.
     if (pos >= (contentsWidth() - m_stepSize)) {
         resizeContents(pos + m_stepSize, contentsHeight());
         // grow composition too, if needed (it may not be the case if
