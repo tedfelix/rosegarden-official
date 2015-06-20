@@ -283,16 +283,7 @@ void CompositionView::setTool(const QString &toolName)
 
 void CompositionView::selectSegments(const SegmentSelection &segments)
 {
-    static QRect dummy;
-
-    m_model->clearSelected();
-
-    for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
-        // ??? Ugly.  Can we push the ugliness down into setSelected()?
-        m_model->setSelected(CompositionItemPtr(new CompositionItem(**i, dummy)));
-    }
-
-    slotUpdateAll();
+    m_model->selectSegments(segments);
 }
 
 SegmentSelector*

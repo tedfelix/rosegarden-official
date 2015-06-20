@@ -166,6 +166,7 @@ public:
     void setSelected(CompositionItemPtr, bool selected = true);
     void setSelected(Segment *, bool selected = true);
     //void setSelected(const ItemContainer&);
+    void selectSegments(const SegmentSelection &segments);
     void clearSelected();
     bool isSelected(CompositionItemPtr) const;
     bool isSelected(const Segment *) const;

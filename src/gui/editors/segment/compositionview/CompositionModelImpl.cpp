@@ -919,6 +919,12 @@ void CompositionModelImpl::setSelected(Segment *segment, bool selected)
     emit needContentUpdate();
 }
 
+void CompositionModelImpl::selectSegments(const SegmentSelection &segments)
+{
+    m_selectedSegments = segments;
+    emit needContentUpdate();
+}
+
 void CompositionModelImpl::signalSelection()
 {
     //RG_DEBUG << "CompositionModelImpl::signalSelection()";
