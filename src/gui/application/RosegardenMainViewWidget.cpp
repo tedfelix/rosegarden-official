@@ -250,9 +250,9 @@ RosegardenMainViewWidget::getSelection()
     return m_trackEditor->getCompositionView()->getSelectedSegments();
 }
 
-void RosegardenMainViewWidget::updateSelectionContents()
+void RosegardenMainViewWidget::updateSelectedSegments()
 {
-    m_trackEditor->getCompositionView()->updateSelectionContents();
+    m_trackEditor->getCompositionView()->updateSelectedSegments();
 }
 
 /* hjj: WHAT DO DO WITH THIS ?

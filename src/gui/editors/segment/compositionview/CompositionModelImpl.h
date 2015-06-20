@@ -173,7 +173,7 @@ public:
     bool haveMultipleSelection() const  { return m_selectedSegments.size() > 1; }
     SegmentSelection getSelectedSegments()  { return m_selectedSegments; }
     /// Bounding rect of the currently selected segments.
-    QRect getSelectionContentsRect();
+    QRect getSelectedSegmentsRect();
 
     /// Emit selectedSegments() signal
     /**

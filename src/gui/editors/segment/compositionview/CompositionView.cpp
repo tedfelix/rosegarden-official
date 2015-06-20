@@ -109,9 +109,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     if (!m_model)
         return;
 
-    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
-            this, SLOT(slotToolHelpChanged(const QString &)));
-
     // Causing slow refresh issues on RG Main Window -- 10-12-2011 - JAS
     // ??? This appears to have no effect positive or negative now (2015).
     //viewport()->setAttribute(Qt::WA_PaintOnScreen);
@@ -120,11 +117,23 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     // just waste time.  (It's hard to measure any improvement here.)
     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 
-    QPalette pal;
-    pal.setColor(viewport()->backgroundRole(), GUIPalette::getColour(GUIPalette::SegmentCanvas));
-    viewport()->setPalette(pal);
+    QSettings settings;
+
+    // If background textures are enabled, load the texture pixmap.
+    if (settings.value(
+            QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
+            "true").toBool()) {
+
+        IconLoader il;
+        m_backgroundPixmap = il.loadPixmap("bg-segmentcanvas");
+    }
 
     slotUpdateSize();
+
+    // *** Connections
+
+    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+            this, SLOT(slotToolHelpChanged(const QString &)));
 
     connect(m_model, SIGNAL(needContentUpdate()),
             this, SLOT(slotUpdateAll()));
@@ -151,7 +160,8 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             m_model, SLOT(slotAudioFileFinalized(Segment*)));
     //connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
     //        this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
-    
+
+    // Audio Preview Thread
     m_model->setAudioPreviewThread(&doc->getAudioPreviewThread());
     doc->getAudioPreviewThread().setEmptyQueueListener(this);
 
@@ -159,7 +169,8 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
     m_updateTimer->start(100);
 
-    QSettings settings;
+    // *** Debugging
+
     settings.beginGroup("Performance_Testing");
 
     m_enableDrawing = (settings.value("CompositionView", 1).toInt() != 0);
@@ -168,28 +179,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     settings.setValue("CompositionView", m_enableDrawing ? 1 : 0);
 
     settings.endGroup();
-
-    IconLoader il;
-
-    // If background textures are enabled.
-    if (settings.value(
-            QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
-            "true").toBool()) {
-
-        m_backgroundPixmap = il.loadPixmap("bg-segmentcanvas");
-
-        // ??? refreshSegments() handles background drawing for us.
-        //     This is just extra work for QWidget.
-        //if (!m_backgroundPixmap.isNull()) {
-        //    QPalette palette;
-        //    // QPalette::Window role
-        //    palette.setBrush(backgroundRole(), QBrush(m_backgroundPixmap));
-        //    // QPalette::Base role
-        //    palette.setBrush(viewport()->backgroundRole(), QBrush(m_backgroundPixmap));
-        //    setPalette(palette);
-        //    viewport()->setPalette(palette);
-        //}
-    }
 }
 
 void CompositionView::endAudioPreviewGeneration()
@@ -267,19 +256,16 @@ CompositionView::getSelectedSegments()
     return m_model->getSelectedSegments();
 }
 
-void CompositionView::updateSelectionContents()
+void CompositionView::updateSelectedSegments()
 {
     if (!m_model->haveSelection())
         return;
 
-    // ??? rename: getSelectedSegmentsRect()
-    updateContents(m_model->getSelectionContentsRect());
+    updateContents(m_model->getSelectedSegmentsRect());
 }
 
 void CompositionView::setTool(const QString &toolName)
 {
-    RG_DEBUG << "setTool(" << toolName << ")";
-
     if (m_currentTool)
         m_currentTool->stow();
 
@@ -297,15 +283,15 @@ void CompositionView::setTool(const QString &toolName)
 
 void CompositionView::selectSegments(const SegmentSelection &segments)
 {
-    RG_DEBUG << "CompositionView::selectSegments\n";
-
     static QRect dummy;
 
     m_model->clearSelected();
 
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
+        // ??? Ugly.  Can we push the ugliness down into setSelected()?
         m_model->setSelected(CompositionItemPtr(new CompositionItem(**i, dummy)));
     }
+
     slotUpdateAll();
 }
 

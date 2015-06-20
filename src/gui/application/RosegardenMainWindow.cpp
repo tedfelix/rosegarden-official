@@ -2615,7 +2615,7 @@ RosegardenMainWindow::slotJoinSegments()
     }
 
     m_view->slotAddCommandToHistory(new SegmentJoinCommand(selection));
-    m_view->updateSelectionContents();
+    m_view->updateSelectedSegments();
 }
 
 void
@@ -2641,7 +2641,7 @@ RosegardenMainWindow::slotExpandFiguration()
     }
 
     m_view->slotAddCommandToHistory(new ExpandFigurationCommand(selection));
-    m_view->updateSelectionContents();
+    m_view->updateSelectedSegments();
 }
 
 void

@@ -753,7 +753,7 @@ void CompositionModelImpl::finalizeSelectionRect()
     m_tmpSelectedSegments.clear();
 }
 
-QRect CompositionModelImpl::getSelectionContentsRect()
+QRect CompositionModelImpl::getSelectedSegmentsRect()
 {
     QRect selectionRect;
 

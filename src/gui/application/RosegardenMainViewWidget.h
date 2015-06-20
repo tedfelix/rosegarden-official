@@ -128,7 +128,7 @@ public:
     
     bool haveSelection();
     SegmentSelection getSelection();
-    void updateSelectionContents();
+    void updateSelectedSegments();
 
     static bool isMainWindowLastActive(const QWidget *w) {
         return w == m_lastActiveMainWindow;

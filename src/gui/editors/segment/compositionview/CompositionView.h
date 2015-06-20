@@ -217,10 +217,8 @@ public:
      * use this.
      *
      * @see RosegardenScrollView::updateContents()
-     *
-     * ??? rename: updateSelectedSegments()
      */
-    void updateSelectionContents();
+    void updateSelectedSegments();
 
     /// Set a text float on this canvas.
     /**
