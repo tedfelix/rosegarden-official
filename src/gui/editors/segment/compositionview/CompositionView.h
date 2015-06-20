@@ -330,6 +330,67 @@ signals:
     //void editSegmentEventList(Segment*);
     //void audioSegmentAutoSplit(Segment*);
 
+private slots:
+
+    /// Updates the artifacts in the entire viewport.
+    /**
+     * In addition to being used locally several times, this is also
+     * connected to CompositionModelImpl::needArtifactsUpdate().
+     */
+    void slotArtifactsNeedRefresh() {
+        m_artifactsRefresh =
+            QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
+        updateContents();
+    }
+
+    /// Redraw everything with the new color scheme.
+    /**
+     * Connected to RosegardenDocument::docColoursChanged().
+     */
+    void slotRefreshColourCache();
+
+    /**
+     * Delegates to CompositionModelImpl::addRecordingItem().
+     * Connected to RosegardenDocument::newMIDIRecordingSegment().
+     *
+     * Suggestion: Try eliminating this middleman.
+     */
+    void slotNewMIDIRecordingSegment(Segment *);
+    /**
+     * Delegates to CompositionModelImpl::addRecordingItem().
+     * Connected to RosegardenDocument::newAudioRecordingSegment().
+     *
+     * Suggestion: Try eliminating this middleman.
+     */
+    void slotNewAudioRecordingSegment(Segment *);
+
+    // no longer used, see RosegardenDocument::insertRecordedMidi()
+    //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
+
+    /**
+     * Delegates to CompositionModelImpl::clearRecordingItems().
+     * Connected to RosegardenDocument::stoppedAudioRecording() and
+     * RosegardenDocument::stoppedMIDIRecording().
+     */
+    void slotStoppedRecording();
+
+    /// Updates the tool context help and shows it if the mouse is in the view.
+    /**
+     * The tool context help appears in the status bar at the bottom.
+     *
+     * Connected to SegmentToolBox::showContextHelp().
+     *
+     * @see showContextHelp()
+     */
+    void slotToolHelpChanged(const QString &);
+
+    /// Used to reduce the frequency of updates.
+    /**
+     * slotUpdateAll() sets the m_updateNeeded flag to
+     * tell slotUpdateTimer() that it needs to perform an update.
+     */
+    void slotUpdateTimer();
+
 private:
     /// Redraw in response to AudioPreviewThread::AudioPreviewQueueEmpty.
     virtual bool event(QEvent *);
@@ -526,20 +587,6 @@ private:
 
     void updateAll(const QRect &rect);
 
-private slots:
-
-    /// Updates the artifacts in the entire viewport.
-    /**
-     * In addition to being used locally several times, this is also
-     * connected to CompositionModelImpl::needArtifactsUpdate().
-     */
-    void slotArtifactsNeedRefresh() {
-        m_artifactsRefresh = 
-            QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
-        updateContents();
-    }
-
-private:
     /// Updates the artifacts in the given rect.
     void artifactsNeedRefresh(const QRect &r) {
         m_artifactsRefresh |=
@@ -559,57 +606,6 @@ private:
         segmentsNeedRefresh(r);
         artifactsNeedRefresh(r);
     }
-
-private slots:
-    /// Redraw everything with the new color scheme.
-    /**
-     * Connected to RosegardenDocument::docColoursChanged().
-     */
-    void slotRefreshColourCache();
-
-    /**
-     * Delegates to CompositionModelImpl::addRecordingItem().
-     * Connected to RosegardenDocument::newMIDIRecordingSegment().
-     *
-     * Suggestion: Try eliminating this middleman.
-     */
-    void slotNewMIDIRecordingSegment(Segment *);
-    /**
-     * Delegates to CompositionModelImpl::addRecordingItem().
-     * Connected to RosegardenDocument::newAudioRecordingSegment().
-     *
-     * Suggestion: Try eliminating this middleman.
-     */
-    void slotNewAudioRecordingSegment(Segment *);
-
-    // no longer used, see RosegardenDocument::insertRecordedMidi()
-    //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
-
-    /**
-     * Delegates to CompositionModelImpl::clearRecordingItems().
-     * Connected to RosegardenDocument::stoppedAudioRecording() and
-     * RosegardenDocument::stoppedMIDIRecording().
-     */
-    void slotStoppedRecording();
-
-    /// Updates the tool context help and shows it if the mouse is in the view.
-    /**
-     * The tool context help appears in the status bar at the bottom.
-     *
-     * Connected to SegmentToolBox::showContextHelp().
-     *
-     * @see showContextHelp()
-     */
-    void slotToolHelpChanged(const QString &);
-
-    /// Used to reduce the frequency of updates.
-    /**
-     * slotUpdateAll() sets the m_updateNeeded flag to
-     * tell slotUpdateTimer() that it needs to perform an update.
-     */
-    void slotUpdateTimer();
-
-private:
 
     //--------------- Data members ---------------------------------
 
