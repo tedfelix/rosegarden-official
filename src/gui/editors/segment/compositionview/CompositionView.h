@@ -114,7 +114,8 @@ public:
     void setSelectionRectSize(int w, int h);
     /// Enable/disable drawing of the selection "rubber band" rectangle.
     /**
-     * Clicking and dragging the arrow tool across the view enables this.
+     * The SegmentSelector tool (arrow) uses this to turn the selection
+     * rectangle on and off.
      *
      * @see getSelectionRect(), setSelectionRectPos(), and
      *      setSelectionRectSize()
@@ -209,7 +210,15 @@ public:
 
     /// Updates the portion of the view where the selected items are.
     /**
+     * This is only used for segment join and update figuration.  It
+     * might be useful in more situations.  However, since the
+     * CompositionView is redrawn every time a command is executed
+     * (TrackEditor::slotCommandExecuted()), there's no incentive to
+     * use this.
+     *
      * @see RosegardenScrollView::updateContents()
+     *
+     * ??? rename: updateSelectedSegments()
      */
     void updateSelectionContents();
 
@@ -276,7 +285,7 @@ public slots:
      */
     void slotUpdateAll(const QRect &rect);
 
-    /// Handles a view size change.
+    /// Resize the contents to match the Composition.
     /**
      * @see RosegardenScrollView::resizeContents().
      */

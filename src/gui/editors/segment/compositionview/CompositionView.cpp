@@ -148,7 +148,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
         connect(doc, SIGNAL(stoppedMIDIRecording()),
                 this, SLOT(slotStoppedRecording()));
         connect(doc, SIGNAL(audioFileFinalized(Segment*)),
-                getModel(), SLOT(slotAudioFileFinalized(Segment*)));
+                model, SLOT(slotAudioFileFinalized(Segment*)));
         //connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
         //        this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
     }
@@ -216,52 +216,55 @@ void CompositionView::initStepSize()
 
 void CompositionView::slotUpdateSize()
 {
-//    int vStep = getModel()->grid().getYSnap();
-//    int height = std::max(getModel()->m_composition.getNbTracks() * vStep, (unsigned)viewport()->height());
-    int height = std::max(getModel()->getCompositionHeight(), (unsigned) viewport()->height());
+    const int height = std::max((int)getModel()->getCompositionHeight(), viewport()->height());
 
-    const RulerScale *ruler = grid().getRulerScale();
+    const RulerScale *rulerScale = grid().getRulerScale();
+    const int compositionWidth = (int)ceil(rulerScale->getTotalWidth());
+    const int minWidth = sizeHint().width();
+    const int width = std::max(compositionWidth, minWidth);
 
-    int minWidth = sizeHint().width();
-    int computedWidth = int(nearbyint(ruler->getTotalWidth()));
-
-    int width = std::max(computedWidth, minWidth);
-    
-    if (contentsWidth() != width || contentsHeight() != height) {
-//        RG_DEBUG << "CompositionView::slotUpdateSize: Resizing contents from "
-//                 << contentsWidth() << "x" << contentsHeight() << " to "
-//                 << width << "x" << height << endl;
-
+    // If the width or height need to change...
+    if (contentsWidth() != width  ||  contentsHeight() != height)
         resizeContents(width, height);
-    }
 }
 
-void CompositionView::setSelectionRectPos(const QPoint& pos)
+void CompositionView::setSelectionRectPos(const QPoint &pos)
 {
-    //RG_DEBUG << "setSelectionRectPos(" << pos << ")";
+    // Update the selection rect used for drawing the rubber band.
     m_selectionRect.setRect(pos.x(), pos.y(), 0, 0);
-    getModel()->setSelectionRect(m_selectionRect);
+    // Pass on to CompositionModelImpl which will adjust the selected
+    // segments and redraw them.
+    m_model->setSelectionRect(m_selectionRect);
 }
 
 void CompositionView::setSelectionRectSize(int w, int h)
 {
-    //RG_DEBUG << "setSelectionRectSize(" << w << "," << h << ")";
+    // Update the selection rect used for drawing the rubber band.
     m_selectionRect.setSize(QSize(w, h));
-    getModel()->setSelectionRect(m_selectionRect);
+    // Pass on to CompositionModelImpl which will adjust the selected
+    // segments and redraw them.
+    m_model->setSelectionRect(m_selectionRect);
 }
 
-void CompositionView::setDrawSelectionRect(bool d)
+void CompositionView::setDrawSelectionRect(bool draw)
 {
-    if (m_drawSelectionRect != d) {
-        m_drawSelectionRect = d;
+    if (m_drawSelectionRect != draw) {
+        m_drawSelectionRect = draw;
+
+        // Redraw the selection rect.
         slotArtifactsNeedRefresh();
-        slotUpdateAll(m_selectionRect);
+
+        // Indicate that the segments in that area need updating.
+        // ??? This isn't needed since slotArtifactsNeedRefresh() calls
+        //     updateContents() which causes a repaint of everything.
+        //     Besides, on enable and disable, nothing much changes anyway.
+        //slotUpdateAll(m_selectionRect);
     }
 }
 
 void CompositionView::clearSegmentRectsCache(bool clearPreviews)
 {
-    getModel()->clearSegmentRectsCache(clearPreviews);
+    m_model->clearSegmentRectsCache(clearPreviews);
 }
 
 SegmentSelection
@@ -272,19 +275,16 @@ CompositionView::getSelectedSegments()
 
 void CompositionView::updateSelectionContents()
 {
-    if (!haveSelection())
-        return ;
+    if (!m_model->haveSelection())
+        return;
 
-
-    QRect selectionRect = getModel()->getSelectionContentsRect();
-    updateContents(selectionRect);
-//    update(selectionRect);
+    // ??? rename: getSelectedSegmentsRect()
+    updateContents(m_model->getSelectionContentsRect());
 }
 
-void CompositionView::setTool(const QString& toolName)
+void CompositionView::setTool(const QString &toolName)
 {
-    RG_DEBUG << "CompositionView::setTool(" << toolName << ")"
-             << this << "\n";
+    RG_DEBUG << "setTool(" << toolName << ")";
 
     if (m_currentTool)
         m_currentTool->stow();
@@ -293,11 +293,12 @@ void CompositionView::setTool(const QString& toolName)
 
     m_currentTool = m_toolBox->getTool(toolName);
 
-    if (m_currentTool)
-        m_currentTool->ready();
-    else {
+    if (!m_currentTool) {
         QMessageBox::critical(0, tr("Rosegarden"), QString("CompositionView::setTool() : unknown tool name %1").arg(toolName));
+        return;
     }
+
+    m_currentTool->ready();
 }
 
 void CompositionView::selectSegments(const SegmentSelection &segments)
