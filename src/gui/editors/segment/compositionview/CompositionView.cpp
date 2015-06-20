@@ -1728,16 +1728,14 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     if (follow != RosegardenScrollView::NoFollow) {
         doAutoScroll();
 
-        if (follow & RosegardenScrollView::FollowHorizontal) {
-            int mouseX = ce.pos().x();
-            scrollHorizSmallSteps(mouseX);
-
 //&& JAS - Deactivate auto expand feature when resizing / moving segments past
 //&& Compostion end.  Though current code works, this creates lots of corner
 //&& cases that are not reversible using the REDO / UNDO commands.
 //&& Additionally, this makes accidentally altering the compostion length too easy.
 //&& Currently leaving code here until a full debate is complete.
 
+//        if (follow & RosegardenScrollView::FollowHorizontal) {
+//            int mouseX = ce.pos().x();
 //            // enlarge composition if needed
 //            if ((horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) &&
 //               // This code minimizes the chances of auto expand when moving segments
@@ -1748,10 +1746,8 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
 //                getModel()->setLength(contentsWidth());
 //                slotUpdateSize();
 //            }
-        }
+//        }
 
-        if (follow & RosegardenScrollView::FollowVertical)
-            scrollVertSmallSteps(ce.pos().y());
     }
 
     // Transfer accept state to original event.

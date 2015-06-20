@@ -33,7 +33,7 @@
 #include <QWheelEvent>
 #include <QWidget>
 
-#include <algorithm>  // std::swap()
+#include <algorithm>  // std::swap(), std::min(), std::max()
 
 #include <math.h>
 
@@ -41,10 +41,6 @@
 namespace Rosegarden
 {
 
-
-const double RosegardenScrollView::MinScrollRate = 1.2;
-const double RosegardenScrollView::MaxScrollRate = 100;
-const double RosegardenScrollView::ScrollAccelerationFactor = 1.04;
 
 const int RosegardenScrollView::AutoScrollTimerInterval = 30;  // msecs
 
@@ -60,13 +56,6 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_bottomRuler(0),
       m_contentsWidth(0),
       m_contentsHeight(0),
-      //m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
-      m_scrollRate(MinScrollRate),
-      //m_autoScrollShortcut(InitialScrollShortcut),
-      m_autoScrollXMargin(0),
-      m_autoScrollYMargin(0),
-      m_previousX(0),
-      m_currentScrollDirection(None),
       m_followMode(NoFollow),
       m_autoScrolling(false)
 {
@@ -251,13 +240,9 @@ void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
 
 void RosegardenScrollView::startAutoScroll()
 {
-    if ( !m_autoScrollTimer.isActive() ) {
-        //m_autoScrollShortcut = InitialScrollShortcut;
+    if (!m_autoScrollTimer.isActive()) {
         m_autoScrollTimer.start(AutoScrollTimerInterval);
     }
-
-    m_autoScrollXMargin = viewport()->width() / 10;
-    m_autoScrollYMargin = viewport()->height() / 10;
 
     m_autoScrolling = true;
 }
@@ -271,10 +256,25 @@ void RosegardenScrollView::slotStartAutoScroll(int followMode)
 void RosegardenScrollView::slotStopAutoScroll()
 {
     m_autoScrollTimer.stop();
-    m_scrollRate = MinScrollRate;
-    m_currentScrollDirection = None;
-
     m_autoScrolling = false;
+}
+
+double RosegardenScrollView::distanceToScrollRate(int distance)
+{
+    // We'll hit MaxScrollRate at this distance outside the viewport.
+    const double maxDistance = 40;
+    const double distanceNormalized = distance / maxDistance;
+    // Apply a curve to reduce the touchiness.
+    // Simple square curve.  Something more pronounced might be better.
+    const double distanceWithCurve = distanceNormalized * distanceNormalized;
+
+    const double minScrollRate = 1.2;
+    const double maxScrollRate = 100;
+    const double scrollRateRange = (maxScrollRate - minScrollRate);
+
+    const double scrollRate = distanceWithCurve * scrollRateRange + minScrollRate;
+
+    return std::min(scrollRate, maxScrollRate);
 }
 
 void RosegardenScrollView::doAutoScroll()
@@ -282,80 +282,60 @@ void RosegardenScrollView::doAutoScroll()
     const QPoint mousePos = viewport()->mapFromGlobal(QCursor::pos());
 
     m_autoScrollTimer.start(AutoScrollTimerInterval);
-    ScrollDirection scrollDirection = None;
-
-    int scrollY = 0;
-
-    if (m_followMode & FollowVertical) {
-        // If we are inside the top auto scroll margin
-        if ( mousePos.y() < m_autoScrollYMargin ) {
-            scrollY = lround(-m_scrollRate);
-            scrollDirection = Top;
-        } else if ( mousePos.y() > viewport()->height() - m_autoScrollYMargin ) {
-            // We are inside the bottom auto scroll margin
-
-            scrollY = lround(+m_scrollRate);
-            scrollDirection = Bottom;
-        }
-    }
-
-    const int deltaX = mousePos.x() - m_previousX;
-    m_previousX = mousePos.x();
-
-    int scrollX = 0;
-    bool startDecelerating = false;
 
     if (m_followMode & FollowHorizontal) {
 
-        //RG_DEBUG << "mousePos.x():" << mousePos.x() << " viewport width:" << viewport()->width() << " autoScrollXMargin:" << m_autoScrollXMargin;
+        // The following auto scroll behavior is patterned after Chromium,
+        // Eclipse, and the GIMP.  Auto scroll will only happen if the
+        // mouse is outside the viewport.  The auto scroll rate is
+        // proportional to how far outside the viewport the mouse is.
 
-        // If the mouse is inside the left auto scroll margin
-        if ( mousePos.x() < m_autoScrollXMargin ) {
-            // If the mouse is moving right
-            if ( deltaX > 0 ) {
-                startDecelerating = true;
-                m_scrollRate /= ScrollAccelerationFactor;
-            }
-            scrollX = lround(-m_scrollRate);
-            scrollDirection = Left;
-        } else if ( mousePos.x() > viewport()->width() - m_autoScrollXMargin ) {
-            // The mouse is inside the right auto scroll margin
+        int scrollX = 0;
 
-            // If the mouse is moving left
-            if ( deltaX < 0 ) {
-                startDecelerating = true;
-                m_scrollRate /= ScrollAccelerationFactor;
-            }
-            scrollX = lround(+m_scrollRate);
-            scrollDirection = Right;
+        // If the mouse is to the left of the viewport
+        if (mousePos.x() < 0) {
+            // Set the scroll rate based on how far outside we are.
+            scrollX = lround(-distanceToScrollRate(-mousePos.x()));
         }
+
+        // If the mouse is to the right of the viewport
+        if (mousePos.x() > viewport()->width()) {
+            // Set the scroll rate based on how far outside we are.
+            scrollX = lround(distanceToScrollRate(mousePos.x() - viewport()->width()));
+        }
+
+        // Scroll if needed.
+        if (scrollX)
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + scrollX);
     }
 
-    //RG_DEBUG << "scrollX:" << scrollX << " scrollY:" << scrollY;
+    if (m_followMode & FollowVertical) {
 
-    if ( (scrollX || scrollY) &&
-         ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
+        // This vertical auto scroll behavior is patterned after
+        // Audacity.  Auto scroll will only happen if the mouse is
+        // outside the viewport.  The auto scroll rate is fixed.
 
-        // Scroll by scrollX and scrollY.
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + scrollX );
-        verticalScrollBar()->setValue( verticalScrollBar()->value() + scrollY );
+        int scrollY = 0;
 
-        if ( startDecelerating )
-            m_scrollRate /= ScrollAccelerationFactor;
-        else
-            m_scrollRate *= ScrollAccelerationFactor;
+        // If the mouse is above the viewport
+        if (mousePos.y() < 0) {
+            scrollY = -5;
+        }
 
-        if (m_scrollRate > MaxScrollRate )
-            m_scrollRate = MaxScrollRate;
+        // If the mouse is below the viewport
+        if (mousePos.y() > viewport()->height()) {
+            scrollY = +5;
+        }
 
-        m_currentScrollDirection = scrollDirection;
-
-    } else {
-        // Don't automatically slotStopAutoScroll() here, the mouse button
-        // is presumably still pressed.
-        m_scrollRate = MinScrollRate;
-        m_currentScrollDirection = None;
+        // Scroll if needed.
+        if (scrollY)
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + scrollY);
     }
+}
+
+void RosegardenScrollView::slotOnAutoScrollTimer()
+{
+    doAutoScroll();
 }
 
 #if 0
@@ -429,41 +409,6 @@ void RosegardenScrollView::scrollHoriz(int hpos)
     }
 }
 
-void RosegardenScrollView::scrollHorizSmallSteps(int hpos)
-{
-    QScrollBar *hbar = horizontalScrollBar();
-
-    int diff = 0;
-
-    if (hpos == 0) {
-
-        // returning to zero
-        hbar->setValue(0);
-
-    } else if ((diff = int(hpos - (contentsX() +
-                                   viewport()->width() * 0.90))) > 0) {
-
-        // moving off the right hand side of the view
-
-        int delta = diff / 6;
-        int diff10 = std::min(diff, (int)m_scrollRate);
-        delta = std::max(delta, diff10);
-
-        hbar->setValue(hbar->value() + delta);
-
-    } else if ((diff = int(hpos - (contentsX() +
-                                   viewport()->width() * 0.10))) < 0) {
-        // moving off the left
-
-        int delta = -diff / 6;
-        int diff10 = std::min( -diff, (int)m_scrollRate);
-        delta = std::max(delta, diff10);
-
-        hbar->setValue(hbar->value() - delta);
-
-    }
-}
-
 void RosegardenScrollView::scrollVertSmallSteps(int vpos)
 {
     QScrollBar *vbar = verticalScrollBar();
@@ -488,7 +433,7 @@ void RosegardenScrollView::scrollVertSmallSteps(int vpos)
         // moving off up
 
         int delta = diff / 6;
-        int diff10 = std::min(diff, (int)m_scrollRate);
+        int diff10 = diff;
         delta = std::max(delta, diff10);
 
         vbar->setValue(vbar->value() + diff);
@@ -499,7 +444,7 @@ void RosegardenScrollView::scrollVertSmallSteps(int vpos)
         // moving off down
 
         int delta = -diff / 6;
-        int diff10 = std::min( -diff, (int)m_scrollRate);
+        int diff10 = -diff;
         delta = std::max(delta, diff10);
 
         vbar->setValue(vbar->value() - delta);
@@ -584,11 +529,6 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
     }
     
     QAbstractScrollArea::wheelEvent(e);
-}
-
-void RosegardenScrollView::slotOnAutoScrollTimer()
-{
-    doAutoScroll();
 }
 
 

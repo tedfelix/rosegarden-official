@@ -523,7 +523,6 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
                 m_compositionView->scrollHoriz(newPosition);
             }
         } else {
-            m_compositionView->scrollHorizSmallSteps(newPosition);
             m_compositionView->doAutoScroll();
         }
 

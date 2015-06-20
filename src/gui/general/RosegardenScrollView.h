@@ -98,7 +98,7 @@ public:
     void doAutoScroll();
     bool isAutoScrolling() const  { return m_autoScrolling; }
 
-    /// Playback, pointer drag, and loop drag scrolling.
+    /// Playback scrolling.
     /**
      * Scroll horizontally to make the given position visible,
      * paging so as to get some visibility of the next screenful
@@ -106,19 +106,15 @@ public:
      */
     void scrollHoriz(int hpos);
 
-    /// Mouse move, pointer drag, and loop drag scrolling.
+    /// Track select scrolling.
     /**
-     * Scroll horizontally to make the given position somewhat
-     * nearer to visible, scrolling by only "a small distance"
-     * at a time
-     */
-    void scrollHorizSmallSteps(int hpos);
-
-    /// Mouse move and track select scrolling.
-    /**
-     * Scroll vertically to make the given position somewhat
-     * nearer to visible, scrolling by only "a small distance"
-     * at a time
+     * Scroll vertically to make the given position visible.
+     *
+     * The main test case for this is selecting tracks with the
+     * arrow keys and making sure the view scrolls to show the
+     * selected track.
+     *
+     * ??? Rename: scrollVert()
      */
     void scrollVertSmallSteps(int vpos);
 
@@ -196,27 +192,14 @@ private:
 
     // *** Auto Scrolling
 
-    /// Current auto scroll rate.
-    double m_scrollRate;
-    static const double MinScrollRate;
-    static const double MaxScrollRate;
-    static const double ScrollAccelerationFactor;
+    /// Convert a distance outside the viewport into a scroll rate.
+    double distanceToScrollRate(int distance);
 
     /// Calls slotOnAutoScrollTimer().
     QTimer m_autoScrollTimer;
     /// m_autoScrollTimer interval.
     static const int AutoScrollTimerInterval;
 
-    // Margins around the edges of the viewport where auto scrolling
-    // will begin.
-    int m_autoScrollXMargin;
-    int m_autoScrollYMargin;
-
-    /// Used by doAutoScroll() to detect mouse movement.
-    int m_previousX;
-
-    enum ScrollDirection { None, Top, Bottom, Left, Right };
-    ScrollDirection m_currentScrollDirection;
     /// See enum FollowMode for valid mask values.
     int m_followMode;
     bool m_autoScrolling;
