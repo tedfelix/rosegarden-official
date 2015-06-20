@@ -71,7 +71,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     RosegardenScrollView(parent),
     m_model(model),
     m_currentTool(0),
-    m_toolBox(0),
+    m_toolBox(new SegmentToolBox(this, doc)),
     m_enableDrawing(true),
     m_showPreviews(false),
     m_showSegmentLabels(true),
@@ -104,12 +104,13 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_updateNeeded(false)
 //  m_updateRect()
 {
-    if (doc) {
-        m_toolBox = new SegmentToolBox(this, doc);
+    if (!doc)
+        return;
+    if (!m_model)
+        return;
 
-        connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
-                this, SLOT(slotToolHelpChanged(const QString &)));
-    }
+    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+            this, SLOT(slotToolHelpChanged(const QString &)));
 
     // Causing slow refresh issues on RG Main Window -- 10-12-2011 - JAS
     // ??? This appears to have no effect positive or negative now (2015).
@@ -125,41 +126,34 @@ CompositionView::CompositionView(RosegardenDocument *doc,
 
     slotUpdateSize();
 
-    connect(model, SIGNAL(needContentUpdate()),
+    connect(m_model, SIGNAL(needContentUpdate()),
             this, SLOT(slotUpdateAll()));
-    connect(model, SIGNAL(needContentUpdate(const QRect&)),
+    connect(m_model, SIGNAL(needContentUpdate(const QRect&)),
             this, SLOT(slotUpdateAll(const QRect&)));
-    connect(model, SIGNAL(needArtifactsUpdate()),
+    connect(m_model, SIGNAL(needArtifactsUpdate()),
             this, SLOT(slotArtifactsNeedRefresh()));
-    connect(model, SIGNAL(needSizeUpdate()),
+    connect(m_model, SIGNAL(needSizeUpdate()),
             this, SLOT(slotUpdateSize()));
 
-    if (doc) {
-        connect(doc, SIGNAL(docColoursChanged()),
-                this, SLOT(slotRefreshColourCache()));
+    connect(doc, SIGNAL(docColoursChanged()),
+            this, SLOT(slotRefreshColourCache()));
 
-        // recording-related signals
-        connect(doc, SIGNAL(newMIDIRecordingSegment(Segment*)),
-                this, SLOT(slotNewMIDIRecordingSegment(Segment*)));
-        connect(doc, SIGNAL(newAudioRecordingSegment(Segment*)),
-                this, SLOT(slotNewAudioRecordingSegment(Segment*)));
-        connect(doc, SIGNAL(stoppedAudioRecording()),
-                this, SLOT(slotStoppedRecording()));
-        connect(doc, SIGNAL(stoppedMIDIRecording()),
-                this, SLOT(slotStoppedRecording()));
-        connect(doc, SIGNAL(audioFileFinalized(Segment*)),
-                model, SLOT(slotAudioFileFinalized(Segment*)));
-        //connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
-        //        this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
-    }
+    // recording-related signals
+    connect(doc, SIGNAL(newMIDIRecordingSegment(Segment*)),
+            this, SLOT(slotNewMIDIRecordingSegment(Segment*)));
+    connect(doc, SIGNAL(newAudioRecordingSegment(Segment*)),
+            this, SLOT(slotNewAudioRecordingSegment(Segment*)));
+    connect(doc, SIGNAL(stoppedAudioRecording()),
+            this, SLOT(slotStoppedRecording()));
+    connect(doc, SIGNAL(stoppedMIDIRecording()),
+            this, SLOT(slotStoppedRecording()));
+    connect(doc, SIGNAL(audioFileFinalized(Segment*)),
+            m_model, SLOT(slotAudioFileFinalized(Segment*)));
+    //connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
+    //        this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
     
-    if (model) {
-        model->setAudioPreviewThread(&doc->getAudioPreviewThread());
-    }
-
-    if (doc) {
-        doc->getAudioPreviewThread().setEmptyQueueListener(this);
-    }
+    m_model->setAudioPreviewThread(&doc->getAudioPreviewThread());
+    doc->getAudioPreviewThread().setEmptyQueueListener(this);
 
     // Update timer
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
@@ -216,7 +210,7 @@ void CompositionView::initStepSize()
 
 void CompositionView::slotUpdateSize()
 {
-    const int height = std::max((int)getModel()->getCompositionHeight(), viewport()->height());
+    const int height = std::max((int)m_model->getCompositionHeight(), viewport()->height());
 
     const RulerScale *rulerScale = grid().getRulerScale();
     const int compositionWidth = (int)ceil(rulerScale->getTotalWidth());
@@ -307,10 +301,10 @@ void CompositionView::selectSegments(const SegmentSelection &segments)
 
     static QRect dummy;
 
-    getModel()->clearSelected();
+    m_model->clearSelected();
 
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
-        getModel()->setSelected(CompositionItemPtr(new CompositionItem(**i, dummy)));
+        m_model->setSelected(CompositionItemPtr(new CompositionItem(**i, dummy)));
     }
     slotUpdateAll();
 }
@@ -371,7 +365,7 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
 
 CompositionItemPtr CompositionView::getFirstItemAt(const QPoint &pos)
 {
-    CompositionModelImpl::ItemContainer items = getModel()->getItemsAt(pos);
+    CompositionModelImpl::ItemContainer items = m_model->getItemsAt(pos);
 
     if (items.size()) {
         // find topmost item
@@ -502,17 +496,17 @@ void CompositionView::slotRefreshColourCache()
 
 void CompositionView::slotNewMIDIRecordingSegment(Segment* s)
 {
-    getModel()->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
+    m_model->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
 }
 
 void CompositionView::slotNewAudioRecordingSegment(Segment* s)
 {
-    getModel()->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
+    m_model->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
 }
 
 void CompositionView::slotStoppedRecording()
 {
-    getModel()->clearRecordingItems();
+    m_model->clearRecordingItems();
 }
 
 void CompositionView::resizeEvent(QResizeEvent* e)
@@ -821,7 +815,7 @@ void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRe
     // viewport.
     // This is not a height list.
     CompositionModelImpl::YCoordList trackYCoords =
-            getModel()->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
+            m_model->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
 
     // Nothing to do?  Bail.
     if (trackYCoords.empty())
@@ -910,7 +904,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
 
     // Fetch segment rectangles and (optionally) previews
     const CompositionModelImpl::RectContainer &segmentRects =
-        getModel()->getSegmentRects(clipRect, notationPreview, audioPreview);
+            m_model->getSegmentRects(clipRect, notationPreview, audioPreview);
 
     CompositionModelImpl::RectContainer::const_iterator end = segmentRects.end();
 
@@ -1114,7 +1108,7 @@ void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
         p->save();
         p->setPen(m_guideColor);
         p->drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
-                    m_splitLinePos.x(), m_splitLinePos.y() + getModel()->grid().getYSnap());
+                    m_splitLinePos.x(), m_splitLinePos.y() + m_model->grid().getYSnap());
         p->restore();
     }
 }
@@ -1480,11 +1474,11 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
     bound.setBottom(bound.bottom() + 2);
 
     QPoint pos(m_textFloatPos);
-    if (pos.y() < 0 && getModel()) {
+    if (pos.y() < 0 && m_model) {
         if (pos.y() + bound.height() < 0) {
-            pos.setY(pos.y() + getModel()->grid().getYSnap() * 3);
+            pos.setY(pos.y() + m_model->grid().getYSnap() * 3);
         } else {
-            pos.setY(pos.y() + getModel()->grid().getYSnap() * 2);
+            pos.setY(pos.y() + m_model->grid().getYSnap() * 2);
         }
     }
 
@@ -1641,7 +1635,7 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
     RG_DEBUG << "mouseDoubleClickEvent(): have item";
 
     if (item->isRepeating()) {
-        const timeT time = getModel()->getRepeatTimeAt(contentsPos, item);
+        const timeT time = m_model->getRepeatTimeAt(contentsPos, item);
 
         RG_DEBUG << "mouseDoubleClickEvent(): editRepeat at time " << time;
 
@@ -1690,7 +1684,7 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
 //               (mouseX > (contentsX() + viewport()->width() * 0.95))) {
 //                resizeContents(contentsWidth() + m_stepSize, contentsHeight());
 //                setContentsPos(contentsX() + m_stepSize, contentsY());
-//                getModel()->setLength(contentsWidth());
+//                m_model->setLength(contentsWidth());
 //                slotUpdateSize();
 //            }
 //        }
@@ -1709,7 +1703,7 @@ void CompositionView::setPointerPos(int pos)
     if (oldPos == pos) return;
 
     m_pointerPos = pos;
-    getModel()->pointerPosChanged(pos);
+    m_model->pointerPosChanged(pos);
 
     // automagically grow contents width if pointer position goes beyond right end
     //
@@ -1717,8 +1711,8 @@ void CompositionView::setPointerPos(int pos)
     if (pos >= (contentsWidth() - m_stepSize)) {
         resizeContents(pos + m_stepSize, contentsHeight());
         // grow composition too, if needed (it may not be the case if
-        if (getModel()->getCompositionLength() < contentsWidth())
-            getModel()->setCompositionLength(contentsWidth());
+        if (m_model->getCompositionLength() < contentsWidth())
+            m_model->setCompositionLength(contentsWidth());
     }
 
 
