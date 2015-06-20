@@ -335,7 +335,7 @@ signals:
      */
     void showContextHelp(const QString &);
 
-protected:
+private:
     /// Redraw in response to AudioPreviewThread::AudioPreviewQueueEmpty.
     virtual bool event(QEvent *);
 
@@ -442,6 +442,8 @@ protected:
      */
     void refreshArtifacts(const QRect&);
 
+    /// Draw the track dividers on the segments layer.
+    void drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect);
     /// Draws the segments on the segments layer (m_segmentsLayer).
     /**
      * Also draws the track dividers.
@@ -531,7 +533,7 @@ protected:
     /// Does the actual work for slotUpdateAll()
     void updateAll(const QRect& rect);
 
-protected slots:
+private slots:
 
     /// Updates the artifacts in the entire viewport.
     /**
@@ -544,7 +546,7 @@ protected slots:
         updateContents();
     }
 
-protected:
+private:
     /// Updates the artifacts in the given rect.
     void artifactsNeedRefresh(QRect r) {
         m_artifactsRefresh |=
@@ -565,7 +567,7 @@ protected:
         artifactsNeedRefresh(r);
     }
 
-protected slots:
+private slots:
     /// Redraw everything with the new color scheme.
     /**
      * Connected to RosegardenDocument::docColoursChanged().
@@ -614,7 +616,7 @@ protected slots:
      */
     void slotUpdateTimer();
 
-protected:
+private:
 
     //--------------- Data members ---------------------------------
 

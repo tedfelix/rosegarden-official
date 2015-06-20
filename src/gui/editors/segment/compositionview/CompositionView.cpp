@@ -867,14 +867,8 @@ void CompositionView::refreshArtifacts(const QRect& rect)
     //    m_artifactsNeedRefresh = false;
 }
 
-void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect)
+void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect)
 {
-    Profiler profiler("CompositionView::drawSegments");
-
-    //RG_DEBUG << "CompositionView::drawSegments() clipRect = " << clipRect;
-
-    // *** Track Dividers
-
     // Fetch track Y coordinates within the clip rectangle.  We expand the
     // clip rectangle slightly because we are drawing a rather wide track
     // divider, so we need enough divider coords to do the drawing even
@@ -884,62 +878,72 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
     CompositionModelImpl::YCoordList trackYCoords =
             getModel()->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
 
-    if (!trackYCoords.empty()) {
+    // Nothing to do?  Bail.
+    if (trackYCoords.empty())
+        return;
 
-        Profiler profiler("CompositionView::drawSegments: dividing lines");
+    Profiler profiler("CompositionView::drawSegments: dividing lines");
 
-        segmentLayerPainter->save();
+    segmentLayerPainter->save();
 
-        // Select the lighter (middle) divider color.
-        QColor light = m_trackDividerColor.light();
-        segmentLayerPainter->setPen(light);
+    // Select the lighter (middle) divider color.
+    QColor light = m_trackDividerColor.light();
+    segmentLayerPainter->setPen(light);
 
-        // For each track Y coordinate, draw the two light lines in the middle
-        // of the track divider.
-        for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
-             yi != trackYCoords.end(); ++yi) {
-            // Upper line.
-            int y = *yi - 1;
-            // If it's in the clipping area, draw it
-            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-                segmentLayerPainter->drawLine(
-                        clipRect.left(), y,
-                        clipRect.right(), y);
-            }
-            // Lower line.
-            ++y;
-            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-                segmentLayerPainter->drawLine(
-                        clipRect.left(), y,
-                        clipRect.right(), y);
-            }
+    // For each track Y coordinate, draw the two light lines in the middle
+    // of the track divider.
+    for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
+         yi != trackYCoords.end(); ++yi) {
+        // Upper line.
+        int y = *yi - 1;
+        // If it's in the clipping area, draw it
+        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+            segmentLayerPainter->drawLine(
+                    clipRect.left(), y,
+                    clipRect.right(), y);
         }
-
-        // Switch to the darker divider color.
-        segmentLayerPainter->setPen(m_trackDividerColor);
-
-        // For each track Y coordinate, draw the two dark lines on the outside
-        // of the track divider.
-        for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
-             yi != trackYCoords.end(); ++yi) {
-            // Upper line
-            int y = *yi - 2;
-            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-                segmentLayerPainter->drawLine(
-                        clipRect.x(), y,
-                        clipRect.x() + clipRect.width() - 1, y);
-            }
-            // Lower line
-            y += 3;
-            if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-                segmentLayerPainter->drawLine(
-                        clipRect.x(), y,
-                        clipRect.x() + clipRect.width() - 1, y);
-            }
+        // Lower line.
+        ++y;
+        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+            segmentLayerPainter->drawLine(
+                    clipRect.left(), y,
+                    clipRect.right(), y);
         }
-
-        segmentLayerPainter->restore();
     }
+
+    // Switch to the darker divider color.
+    segmentLayerPainter->setPen(m_trackDividerColor);
+
+    // For each track Y coordinate, draw the two dark lines on the outside
+    // of the track divider.
+    for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
+         yi != trackYCoords.end(); ++yi) {
+        // Upper line
+        int y = *yi - 2;
+        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+            segmentLayerPainter->drawLine(
+                    clipRect.x(), y,
+                    clipRect.x() + clipRect.width() - 1, y);
+        }
+        // Lower line
+        y += 3;
+        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
+            segmentLayerPainter->drawLine(
+                    clipRect.x(), y,
+                    clipRect.x() + clipRect.width() - 1, y);
+        }
+    }
+
+    segmentLayerPainter->restore();
+}
+
+void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect)
+{
+    Profiler profiler("CompositionView::drawSegments");
+
+    //RG_DEBUG << "CompositionView::drawSegments() clipRect = " << clipRect;
+
+    drawTrackDividers(segmentLayerPainter, clipRect);
 
     // *** Get Segment and Preview Rectangles
 
