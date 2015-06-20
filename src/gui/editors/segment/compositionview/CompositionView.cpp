@@ -200,7 +200,7 @@ CompositionView::CompositionView(RosegardenDocument* doc,
         QPixmap background = il.loadPixmap("bg-segmentcanvas");
 
         if (!background.isNull()) {
-            setBackgroundPixmap(background);
+            m_backgroundPixmap = background;
             //viewport()->setBackgroundPixmap(background);
             QPalette palette;
             palette.setBrush(backgroundRole(), QBrush(background));
@@ -216,12 +216,6 @@ void CompositionView::endAudioPreviewGeneration()
     if (m_model) {
         m_model->setAudioPreviewThread(0);
     }
-}
-
-void CompositionView::setBackgroundPixmap(const QPixmap &m)
-{
-    m_backgroundPixmap = m;
-    //     viewport()->setErasePixmap(m_backgroundPixmap);
 }
 
 #if 0
@@ -1624,8 +1618,8 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
     setSelectCopyingAsLink(((ce.modifiers() & Qt::AltModifier) != 0) &&
                                ((ce.modifiers() & Qt::ControlModifier) != 0));
     setSelectAdd((ce.modifiers() & Qt::ShiftModifier) != 0);
-    setFineGrain((ce.modifiers() & Qt::ShiftModifier) != 0);
-    setPencilOverExisting((ce.modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
+    m_fineGrain = ((ce.modifiers() & Qt::ShiftModifier) != 0);
+    m_pencilOverExisting = ((ce.modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
 
     switch (ce.button()) {
     case Qt::LeftButton:
@@ -1723,8 +1717,8 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    setFineGrain((ce.modifiers() & Qt::ShiftModifier) != 0);
-    setPencilOverExisting((ce.modifiers() & Qt::AltModifier) != 0);
+    m_fineGrain = ((ce.modifiers() & Qt::ShiftModifier) != 0);
+    m_pencilOverExisting = ((ce.modifiers() & Qt::AltModifier) != 0);
 
     int follow = m_tool->handleMouseMove(&ce);
     setFollowMode(follow);
@@ -1825,12 +1819,14 @@ void CompositionView::setGuidesPos(int x, int y)
     slotArtifactsNeedRefresh();
 }
 
+#if 0
 void CompositionView::setGuidesPos(const QPoint& p)
 {
     m_topGuidePos = p.x();
     m_foreGuidePos = p.y();
     slotArtifactsNeedRefresh();
 }
+#endif
 
 void CompositionView::setDrawGuides(bool d)
 {
@@ -1869,16 +1865,18 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     //    mainWindow->slotSetStatusMessage(text);
 }
 
+#if 0
 void CompositionView::setFineGrain(bool value)
 {
     m_fineGrain = value;
 }
-
+#endif
+#if 0
 void CompositionView::setPencilOverExisting(bool value)
 {
     m_pencilOverExisting = value;
 }
-
+#endif
 #if 0
 // Dead Code.
 void

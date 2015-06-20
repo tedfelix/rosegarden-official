@@ -67,8 +67,8 @@ class CompositionView : public RosegardenScrollView
 {
     Q_OBJECT
 public:
-    CompositionView(RosegardenDocument*, CompositionModelImpl *,
-                    QWidget * parent=0);
+    CompositionView(RosegardenDocument *, CompositionModelImpl *,
+                    QWidget *parent);
 
     /// Move the playback position pointer to a new X coordinate.
     /**
@@ -84,7 +84,7 @@ public:
     /// Sets the position of the guides.  See setDrawGuides().
     void setGuidesPos(int x, int y);
     /// Sets the position of the guides.  See setDrawGuides().
-    void setGuidesPos(const QPoint& p);
+    //void setGuidesPos(const QPoint& p);
     /// Enable/disable drawing of the guides.
     /**
      * The guides are blue crosshairs that stretch across the entire view.
@@ -103,7 +103,7 @@ public:
     /**
      * @see setDrawSelectionRect().
      */
-    void setSelectionRectPos(const QPoint& pos);
+    void setSelectionRectPos(const QPoint &pos);
     /// Set the size of the "rubber band" selection.
     /**
      * @see setDrawSelectionRect().
@@ -119,21 +119,21 @@ public:
     void setDrawSelectionRect(bool d);
 
     /// Get the snap grid from the CompositionModelImpl.
-    SnapGrid& grid() { return m_model->grid(); }
+    SnapGrid &grid()  { return m_model->grid(); }
 
     /// Get the topmost item (segment) at the given position on the view.
     CompositionItemPtr getFirstItemAt(QPoint pos);
 
     /// Returns the segment tool box.  See setTool() and m_toolBox.
-    SegmentToolBox* getToolBox() { return m_toolBox; }
+    SegmentToolBox *getToolBox()  { return m_toolBox; }
 
     /// Returns the composition model.  See m_model.
-    CompositionModelImpl* getModel() { return m_model; }
+    CompositionModelImpl *getModel()  { return m_model; }
 
     /// See getTmpRect().
-    void setTmpRect(const QRect& r);
+    void setTmpRect(const QRect &r);
     /// See getTmpRect().
-    void setTmpRect(const QRect& r, const QColor &c);
+    void setTmpRect(const QRect &r, const QColor &c);
     /// Get the temporary segment rect when drawing a new segment.
     /**
      * The "temp rect" is used by the pencil tool when first drawing
@@ -141,7 +141,7 @@ public:
      *
      * @see setTmpRect()
      */
-    const QRect& getTmpRect() const { return m_tmpRect; }
+    const QRect &getTmpRect() const  { return m_tmpRect; }
 
     /// Set the snap resolution of the grid to something suitable.
     /**
@@ -160,10 +160,8 @@ public:
      * client code will only need to query the snap grid that is
      * adjusted appropriately by the view when interactions take
      * place.
-     *
-     * @see setFineGrain()
      */
-    bool isFineGrain() const { return m_fineGrain; }
+    bool isFineGrain() const  { return m_fineGrain; }
 
     /// Is the user pressing the Ctrl key to draw over a segment?
     /**
@@ -172,22 +170,20 @@ public:
      * pencil to decide whether to abort or not if a user attempts to draw over
      * an existing segment, and this is all necessary in order to avoid breaking
      * the double-click-to-open behavior.
-     *
-     * @see setPencilOverExisting()
      */
-    bool pencilOverExisting() const { return m_pencilOverExisting; }
+    bool pencilOverExisting() const  { return m_pencilOverExisting; }
 
     /// Set whether the segment items contain previews or not.
     /**
      * @see isShowingPreviews()
      */
-    void setShowPreviews(bool previews) { m_showPreviews = previews; }
+    void setShowPreviews(bool previews)  { m_showPreviews = previews; }
 
     /// Return whether the segment items contain previews or not.
     /**
      * @see setShowPreviews()
      */
-    bool isShowingPreviews() { return m_showPreviews; }
+    //bool isShowingPreviews()  { return m_showPreviews; }
 
     /**
      * Delegates to CompositionModelImpl::clearSegmentRectsCache().
@@ -206,7 +202,7 @@ public:
     /**
      * @see getSelectedSegments()
      */
-    bool haveSelection() const { return m_model->haveSelection(); }
+    bool haveSelection() const  { return m_model->haveSelection(); }
 
     /// Updates the portion of the view where the selected items are.
     /**
@@ -228,7 +224,7 @@ public:
      */
     void setTextFloat(int x, int y, const QString &text);
     /// See setTextFloat().
-    void hideTextFloat() { m_drawTextFloat = false; }
+    void hideTextFloat()  { m_drawTextFloat = false; }
 
     /// Enables/disables display of the text labels on each segment.
     /**
@@ -236,10 +232,7 @@ public:
      *
      * @see drawCompRectLabel()
      */
-    void setShowSegmentLabels(bool b) { m_showSegmentLabels = b; }
-
-    /// Set the image that will appear behind the segments on the view.
-    void setBackgroundPixmap(const QPixmap &m);
+    void setShowSegmentLabels(bool b)  { m_showSegmentLabels = b; }
 
     /// Delegates to CompositionModelImpl::setAudioPreviewThread().
     void endAudioPreviewGeneration();
@@ -248,7 +241,7 @@ public:
     /**
      * @see getToolBox()
      */
-    void setTool(const QString& toolName);
+    void setTool(const QString &toolName);
 
     /// Selects the segments via CompositionModelImpl::setSelected().
     /**
@@ -264,18 +257,10 @@ public:
     /// See showSplitLine().
     void hideSplitLine();
 
-
 public slots:
-//    void scrollRight();
-//    void scrollLeft();
-
-    //void slotContentsMoving(int x, int y);
 
     /// Handle scroll wheel events from TrackEditor::m_trackButtonScroll.
-    void slotExternalWheelEvent(QWheelEvent*);
-
-    // TextFloat timer handler.
-//    void slotTextFloatTimeout();
+    void slotExternalWheelEvent(QWheelEvent *);
 
     /// Redraw everything.  Segments and artifacts.
     void slotUpdateAll();
@@ -294,17 +279,18 @@ public slots:
      */
     void slotUpdateSize();
 
+    //void scrollRight();
+    //void scrollLeft();
+    //void slotContentsMoving(int x, int y);
+    // TextFloat timer handler.
+    //void slotTextFloatTimeout();
+
 signals:
     /// Emitted when a segment is double-clicked to launch the default segment editor.
     /**
      * Connected to RosegardenMainViewWidget::slotEditSegment().
      */
-    void editSegment(Segment*);
-//    void editSegmentNotation(Segment*);
-//    void editSegmentMatrix(Segment*);
-//    void editSegmentAudio(Segment*);
-//    void editSegmentEventList(Segment*);
-//    void audioSegmentAutoSplit(Segment*);
+    void editSegment(Segment *);
 
     /// Emitted when a segment repeat is double-clicked.
     /**
@@ -318,7 +304,7 @@ signals:
      *         editRepeat() is misleading.  repeatToSegment() is more correct
      *         at the same level of abstraction.
      */
-    void editRepeat(Segment*, timeT);
+    void editRepeat(Segment *, timeT);
 
     /// Emitted when a double-click occurs on the ruler.
     /**
@@ -334,6 +320,12 @@ signals:
      * Connected to RosegardenMainWindow::slotShowToolHelp().
      */
     void showContextHelp(const QString &);
+
+    //void editSegmentNotation(Segment*);
+    //void editSegmentMatrix(Segment*);
+    //void editSegmentAudio(Segment*);
+    //void editSegmentEventList(Segment*);
+    //void audioSegmentAutoSplit(Segment*);
 
 private:
     /// Redraw in response to AudioPreviewThread::AudioPreviewQueueEmpty.
@@ -354,7 +346,7 @@ private:
     /// Delegates to viewportPaintRect() for each rect that needs painting.
     virtual void paintEvent(QPaintEvent *);
     /// Handles resize.  Uses slotUpdateSize().
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent *);
 
     // These are sent from the top level app when it gets key
     // depresses relating to selection add (usually Qt::SHIFT) and
@@ -383,9 +375,9 @@ private:
     void setSelectCopyingAsLink(bool value);
 
     /// See isFineGrain().
-    void setFineGrain(bool value);
+    //void setFineGrain(bool value);
     /// See pencilOverExisting().
-    void setPencilOverExisting(bool value);
+    //void setPencilOverExisting(bool value);
 
     /// Called when the mouse enters the view.
     /**
@@ -426,7 +418,7 @@ private:
      * misleading.  However, calling this refreshSegmentsLayer() confuses
      * it with refreshSegments().  Need to dig a bit more.
      */
-    bool scrollSegmentsLayer(QRect &rect, bool& scroll);
+    bool scrollSegmentsLayer(QRect &rect, bool &scroll);
 
     /// Draw the segments on the segment layer (m_segmentsLayer).
     /**
