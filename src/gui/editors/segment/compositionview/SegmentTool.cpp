@@ -89,7 +89,7 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
 
     //RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
 
-    setCurrentIndex(m_canvas->getFirstItemAt(e->pos()));
+    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(e->pos()));
 
     if (m_currentIndex) {
         if (!m_canvas->getModel()->isSelected(m_currentIndex)) {

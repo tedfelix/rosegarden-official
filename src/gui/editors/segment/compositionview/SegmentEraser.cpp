@@ -50,7 +50,7 @@ void SegmentEraser::ready()
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 {
-    setCurrentIndex(m_canvas->getFirstItemAt(e->pos()));
+    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(e->pos()));
 }
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)

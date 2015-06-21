@@ -125,9 +125,6 @@ public:
     /// Get the snap grid from the CompositionModelImpl.
     SnapGrid &grid()  { return m_model->grid(); }
 
-    /// Get the topmost item (segment) at the given position on the view.
-    CompositionItemPtr getFirstItemAt(const QPoint &pos);
-
     /// Returns the segment tool box.  See setTool() and m_toolBox.
     SegmentToolBox *getToolBox()  { return m_toolBox; }
 
@@ -269,7 +266,7 @@ public:
 
 public slots:
 
-    /// Handle scroll wheel events from TrackEditor::m_trackButtonScroll.
+    /// Handle TrackButtons scroll wheel events.  See TrackEditor::m_trackButtonScroll.
     void slotExternalWheelEvent(QWheelEvent *);
 
     /// Redraw everything.  Segments and artifacts.

@@ -144,8 +144,13 @@ public:
 
     typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
 
-    /// Used by CompositionView on mouse double-click.
-    ItemContainer getItemsAt(const QPoint &);
+    /// Get the topmost item (segment) at the given position on the view.
+    /**
+     * This routine returns a pointer to a *copy* of the CompositionItem.
+     * The caller is responsible for deleting the object that is returned.
+     */
+    CompositionItemPtr getFirstItemAt(const QPoint &pos);
+
     /// Get the start time of the repeat nearest the point.
     /**
      * Used by CompositionView to determine the time at which to edit a repeat.
@@ -351,6 +356,13 @@ private:
     bool isCachedRectCurrent(const Segment& s, const CompositionRect& r,
                              QPoint segmentOrigin, timeT segmentEndTime);
     void clearInCache(const Segment*, bool clearPreviewCache = false);
+
+    /// Used by CompositionView on mouse double-click.
+    /**
+     * The caller is responsible for deleting the CompositionItem objects
+     * that are returned.
+     */
+    ItemContainer getItemsAt(const QPoint &);
 
     //--------------- Data members ---------------------------------
     Composition&     m_composition;

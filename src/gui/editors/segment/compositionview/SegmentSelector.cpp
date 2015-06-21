@@ -105,7 +105,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             ((e->modifiers() & Qt::AltModifier) != 0) &&
             ((e->modifiers() & Qt::ControlModifier) != 0));
 
-    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
 
     // If we're in segmentAddMode or not clicking on an item then we don't
     // clear the selection vector.  If we're clicking on an item and it's
@@ -513,7 +513,7 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
     }
     settings.endGroup();
 
-    CompositionItemPtr item = m_canvas->getFirstItemAt(p);
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(p);
 
     if (!item) {
         setContextHelp(tr("Click and drag to select segments; middle-click and drag to draw an empty segment"));

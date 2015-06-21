@@ -88,7 +88,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
 
-    CompositionItemPtr item = m_canvas->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
 
     if (item) {
         RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;

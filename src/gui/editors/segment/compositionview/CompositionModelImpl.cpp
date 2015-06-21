@@ -834,6 +834,7 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
 
     const segmentcontainer& segments = m_composition.getSegments();
 
+    // For each segment in the composition
     for (segmentcontainer::const_iterator i = segments.begin();
          i != segments.end(); ++i) {
 
@@ -842,6 +843,12 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s;
+            // ??? Can we get rid of this copy to reduce the burden on
+            //     callers?  Otherwise callers must delete these objects.
+            //     It appears that some do not and memory is leaked.
+            //     CompositionItem is a pretty small object, so copying it
+            //     around should be ok.  Might be able to switch from
+            //     CompositionItemPtr to CompositionItem.
             CompositionItemPtr item(new CompositionItem(*const_cast<Segment *>(s),
                                                          sr));
             unsigned int z = computeZForSegment(s);
@@ -860,6 +867,68 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
     }
 
     return res;
+}
+
+CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
+{
+    // ??? Push this routine down into CompositionModelImpl.  It's really
+    //     just a wrapper around getItemsAt() and could probably be
+    //     combined with that routine to do just one job well.
+
+    // This returns *copies* of the CompositionItem objects that must be
+    // deleted.
+    ItemContainer items = getItemsAt(pos);
+
+    //RG_DEBUG << "getFirstItemAt() got" << items.size() << "items";
+
+    if (items.empty())
+        return 0;
+
+    if (items.size() == 1)
+        return *(items.begin());
+
+    // Find the topmost item.  I.e. the item with the greatest Z value.
+
+    // SegmentOrderer determines the Z order of a segment based on whether
+    // it was last clicked.  Last clicked segments have the highest Z order.
+
+    // ??? What's the test case here?
+    //     In order to get more than one segment in here, we
+    //     need two segments to use the same space on the display.  That
+    //     only appears to happen when recording on a track that already
+    //     has segments.  Then it becomes rather difficult to select between
+    //     the two.  Like impossible.  So, I think this needs to be
+    //     addressed although I doubt anyone cares.  I recommend opening
+    //     a new "lane" when recording on a track with existing
+    //     segments.  That seems to fit the existing behavior best.  Then
+    //     overlapping becomes impossible and all this special handling
+    //     can go.
+
+    CompositionModelImpl::ItemContainer::iterator maxZItemIter = items.begin();
+    CompositionItemPtr maxZItem = *(maxZItemIter);
+    unsigned int maxZ = maxZItem->z();
+
+    // For each item
+    for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
+         i != items.end(); ++i) {
+        CompositionItemPtr item = *i;
+        // If this one has the greatest z so far
+        if (item->z() > maxZ) {
+            maxZItem = item;
+            maxZ = item->z();
+            maxZItemIter = i;
+        }
+    }
+
+    // Remove the one we want so that it doesn't get deleted.
+    items.erase(maxZItemIter);
+
+    // Delete all the others.
+    for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
+         i != items.end(); ++i)
+        delete *i;
+
+    return maxZItem;
 }
 
 void CompositionModelImpl::pointerPosChanged(int x)

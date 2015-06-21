@@ -300,43 +300,10 @@ void CompositionView::hideSplitLine()
 
 void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
 {
-    e->accept();
+    // Pass it up to RosegardenScrollView.
     wheelEvent(e);
-}
-
-CompositionItemPtr CompositionView::getFirstItemAt(const QPoint &pos)
-{
-    CompositionModelImpl::ItemContainer items = m_model->getItemsAt(pos);
-
-    if (items.size()) {
-        // find topmost item
-        CompositionItemPtr res = *(items.begin());
-
-        unsigned int maxZ = res->z();
-
-        CompositionModelImpl::ItemContainer::iterator maxZItemPos = items.begin();
-
-        for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
-             i != items.end(); ++i) {
-            CompositionItemPtr ic = *i;
-            if (ic->z() > maxZ) {
-                res = ic;
-                maxZ = ic->z();
-                maxZItemPos = i;
-            }
-        }
-
-        // get rid of the rest;
-        items.erase(maxZItemPos);
-        for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
-             i != items.end(); ++i)
-            delete *i;
-
-        return res;
-    }
-
-
-    return CompositionItemPtr();
+    // We've got this.  No need to propagate.
+    e->accept();
 }
 
 void CompositionView::setSnapGrain(bool fine)
@@ -1559,7 +1526,7 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 {
     const QPoint contentsPos = viewportToContents(e->pos());
 
-    CompositionItemPtr item = getFirstItemAt(contentsPos);
+    CompositionItemPtr item = m_model->getFirstItemAt(contentsPos);
 
     if (!item) {
         RG_DEBUG << "mouseDoubleClickEvent(): no item";
