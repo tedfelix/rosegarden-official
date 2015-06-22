@@ -54,7 +54,7 @@ SegmentSplitter::~SegmentSplitter()
 void SegmentSplitter::ready()
 {
     m_canvas->viewport()->setCursor(Qt::SplitHCursor);
-    setBasicContextHelp();
+    setContextHelp(tr("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
 }
 
 void
@@ -77,12 +77,10 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 void
 SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
-    setBasicContextHelp();
-
     CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
 
     if (item) {
-        m_canvas->setSnapGrain(true);
+        m_canvas->setSnapTime(SnapGrid::SnapToBeat);
         Segment* segment = CompositionItemHelper::getSegment(item);
 
         if (segment->getType() == Segment::Audio) {
@@ -111,8 +109,6 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 int
 SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
-    setBasicContextHelp();
-
     CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
 
     if (item) {
@@ -130,7 +126,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
 void
 SegmentSplitter::drawSplitLine(QMouseEvent *e)
 {
-    m_canvas->setSnapGrain(true);
+    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
 
     // Turn the real X into a snapped X
     //
@@ -158,16 +154,6 @@ void
 SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 {
     // DO NOTHING
-}
-
-void
-SegmentSplitter::setBasicContextHelp()
-{
-    if (!m_canvas->isFineGrain()) {
-        setContextHelp(tr("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
-    } else {
-        setContextHelp(tr("Click on a segment to split it in two"));
-    }
 }
 
 const QString SegmentSplitter::ToolName = "segmentsplitter";

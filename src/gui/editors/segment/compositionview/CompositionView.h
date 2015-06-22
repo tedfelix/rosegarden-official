@@ -152,17 +152,7 @@ public:
      * resolution (through setFineGrain()) that will also be
      * taken into account.
      */
-    void setSnapGrain(bool fine);
-
-    /// Is the user requesting extra-fine resolution (shift key)?
-    /**
-     * Find out whether the user is requesting extra-fine resolution
-     * (e.g. by holding Shift key).  This is seldom necessary -- most
-     * client code will only need to query the snap grid that is
-     * adjusted appropriately by the view when interactions take
-     * place.
-     */
-    bool isFineGrain() const  { return m_fineGrain; }
+    void setSnapTime(timeT snap);
 
     /// Is the user pressing the Ctrl key to draw over a segment?
     /**
@@ -596,6 +586,7 @@ private:
 
     bool         m_showPreviews;
     bool         m_showSegmentLabels;
+    /// "true" when user is holding down shift.
     bool         m_fineGrain;
     bool         m_pencilOverExisting;
 

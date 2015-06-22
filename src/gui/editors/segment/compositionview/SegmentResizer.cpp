@@ -270,13 +270,15 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     }
 
     if (rescale) {
-        if (!m_canvas->isFineGrain()) {
+        // If shift isn't being held down
+        if ((e->modifiers() & Qt::ShiftModifier) == 0) {
             setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
         } else {
             clearContextHelp();
         }
     } else {
-        if (!m_canvas->isFineGrain()) {
+        // If shift isn't being held down
+        if ((e->modifiers() & Qt::ShiftModifier) == 0) {
             setContextHelp(tr("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
         } else {
             setContextHelp(tr("Hold Ctrl to rescale contents"));
@@ -299,9 +301,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     QRect oldRect = m_currentIndex->rect();
 
-    // Indicate fine-grain snap resolution.
-    // ??? rename setSnapGrain() -> setSnapFineGrain()
-    m_canvas->setSnapGrain(true);
+    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
 
     // Convert X coord to time
     timeT time = m_canvas->grid().snapX(e->pos().x());

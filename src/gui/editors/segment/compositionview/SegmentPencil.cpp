@@ -104,8 +104,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // make new item
 
-    // Switch to coarse-grain snap resolution.
-    m_canvas->setSnapGrain(false);
+    m_canvas->setSnapTime(SnapGrid::SnapToBar);
 
     SnapGrid &snapGrid = m_canvas->grid();
     
@@ -229,7 +228,8 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
         return RosegardenScrollView::NoFollow;
     }
 
-    if (!m_canvas->isFineGrain()) {
+    // If shift isn't being held down
+    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
         setContextHelp(tr("Hold Shift to avoid snapping to bar lines"));
     } else {
         clearContextHelp();
@@ -237,8 +237,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     QRect tmpRect = m_canvas->getTmpRect();
 
-    // Switch to coarse-grain snap resolution.
-    m_canvas->setSnapGrain(false);
+    m_canvas->setSnapTime(SnapGrid::SnapToBar);
 
     SnapGrid &snapGrid = m_canvas->grid();
 

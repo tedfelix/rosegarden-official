@@ -298,7 +298,7 @@ void CompositionView::hideSplitLine()
     m_splitLinePos.setY( -1);
 }
 
-void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
+void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
 {
     // Pass it up to RosegardenScrollView.
     wheelEvent(e);
@@ -306,12 +306,16 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent* e)
     e->accept();
 }
 
-void CompositionView::setSnapGrain(bool fine)
+void CompositionView::setSnapTime(timeT snap)
 {
+    // If the user is holding down shift, no snap
     if (m_fineGrain) {
-        grid().setSnapTime(SnapGrid::NoSnap);
+        m_model->grid().setSnapTime(SnapGrid::NoSnap);
     } else {
-        grid().setSnapTime(fine ? SnapGrid::SnapToBeat : SnapGrid::SnapToBar);
+        // Pick the appropriate snap based on what the tool asks for.
+        // E.g. the SegmentPencil tool snaps to the bar while the SegmentMover
+        // tool snaps to the beat.
+        m_model->grid().setSnapTime(snap);
     }
 }
 

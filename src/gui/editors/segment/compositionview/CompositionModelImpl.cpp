@@ -871,9 +871,9 @@ CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoin
 
 CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
 {
-    // ??? Push this routine down into CompositionModelImpl.  It's really
-    //     just a wrapper around getItemsAt() and could probably be
-    //     combined with that routine to do just one job well.
+    // ??? Combine this with getItemsAt() to make a single routine that
+    //     is focused on "getting the first item at".  Should be able to
+    //     do some simplification.
 
     // This returns *copies* of the CompositionItem objects that must be
     // deleted.

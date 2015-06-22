@@ -399,7 +399,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 		m_segmentQuickCopyDone = true;
     }
 
-    m_canvas->setSnapGrain(true);
+    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
 
     int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
     int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
@@ -407,7 +407,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (m_canvas->getModel()->isSelected(m_currentIndex)) {
 
-        if (!m_canvas->isFineGrain()) {
+        // If shift isn't being held down
+        if ((e->modifiers() & Qt::ShiftModifier) == 0) {
             setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
         } else {
             clearContextHelp();

@@ -148,6 +148,9 @@ public:
     /**
      * This routine returns a pointer to a *copy* of the CompositionItem.
      * The caller is responsible for deleting the object that is returned.
+     *
+     * ??? Need to audit all callers.  Many of them do not delete this
+     *     object.
      */
     CompositionItemPtr getFirstItemAt(const QPoint &pos);
 

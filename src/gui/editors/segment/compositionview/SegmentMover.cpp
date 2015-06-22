@@ -215,7 +215,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
 
 int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
-    m_canvas->setSnapGrain(true);
+    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
 
     Composition &comp = m_doc->getComposition();
 
@@ -224,7 +224,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         return RosegardenScrollView::NoFollow;
     }
 
-    if (!m_canvas->isFineGrain()) {
+    // If shift isn't being held down
+    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
