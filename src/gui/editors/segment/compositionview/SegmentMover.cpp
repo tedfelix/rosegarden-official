@@ -100,6 +100,9 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 
         setCurrentIndex(item);
         m_clickPoint = e->pos();
+
+        setSnapTime(e, SnapGrid::SnapToBeat);
+
         Segment* s = CompositionItemHelper::getSegment(m_currentIndex);
 
         int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
@@ -215,7 +218,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
 
 int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
-    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToBeat);
 
     Composition &comp = m_doc->getComposition();
 

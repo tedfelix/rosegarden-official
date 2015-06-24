@@ -104,10 +104,10 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // make new item
 
-    m_canvas->setSnapTime(SnapGrid::SnapToBar);
-
     SnapGrid &snapGrid = m_canvas->grid();
     
+    setSnapTime(e, SnapGrid::SnapToBar);
+
     int trackPosition = snapGrid.getYBin(e->pos().y());
 
     // Don't do anything if the user clicked beyond the track buttons
@@ -237,9 +237,9 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     QRect tmpRect = m_canvas->getTmpRect();
 
-    m_canvas->setSnapTime(SnapGrid::SnapToBar);
-
     SnapGrid &snapGrid = m_canvas->grid();
+
+    setSnapTime(e, SnapGrid::SnapToBar);
 
     int mouseX = e->pos().x();
     

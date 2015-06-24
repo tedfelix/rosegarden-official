@@ -80,7 +80,8 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
     CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
 
     if (item) {
-        m_canvas->setSnapTime(SnapGrid::SnapToBeat);
+        setSnapTime(e, SnapGrid::SnapToBeat);
+
         Segment* segment = CompositionItemHelper::getSegment(item);
 
         if (segment->getType() == Segment::Audio) {
@@ -126,7 +127,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
 void
 SegmentSplitter::drawSplitLine(QMouseEvent *e)
 {
-    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToBeat);
 
     // Turn the real X into a snapped X
     //

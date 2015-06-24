@@ -151,6 +151,18 @@ SegmentToolBox* SegmentTool::getToolBox()
     return m_canvas->getToolBox();
 }
 
+void SegmentTool::setSnapTime(QMouseEvent *e, timeT snapTime)
+{
+    SnapGrid &snapGrid = m_canvas->grid();
+
+    // If shift isn't being held down
+    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
+        snapGrid.setSnapTime(snapTime);
+    } else {
+        snapGrid.setSnapTime(SnapGrid::NoSnap);
+    }
+}
+
 void SegmentTool::slotEdit()
 {
     RosegardenMainWindow::self()->slotEdit();

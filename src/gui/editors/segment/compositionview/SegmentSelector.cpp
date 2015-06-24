@@ -179,12 +179,16 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
         m_canvas->setDrawGuides(true);
 
+        setSnapTime(e, SnapGrid::SnapToBeat);
+
     } else {
 
         // Add on middle button or ctrl+left - bounding box on rest
         //
         if (e->button() == Qt::MidButton ||
             ((e->button() == Qt::LeftButton) && (e->modifiers() & Qt::ControlModifier))) {
+
+            // ??? This feature isn't working.
 
             m_dispatchTool = getToolBox()->getTool(SegmentPencil::ToolName);
 
@@ -399,7 +403,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 		m_segmentQuickCopyDone = true;
     }
 
-    m_canvas->setSnapTime(SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToBeat);
 
     int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
     int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());

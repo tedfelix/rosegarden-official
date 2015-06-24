@@ -75,7 +75,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_enableDrawing(true),
     m_showPreviews(false),
     m_showSegmentLabels(true),
-    m_fineGrain(false),
     m_pencilOverExisting(false),
     //m_minWidth(m_model->getCompositionLength()),
     m_stepSize(0),
@@ -304,19 +303,6 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
     wheelEvent(e);
     // We've got this.  No need to propagate.
     e->accept();
-}
-
-void CompositionView::setSnapTime(timeT snap)
-{
-    // If the user is holding down shift, no snap
-    if (m_fineGrain) {
-        m_model->grid().setSnapTime(SnapGrid::NoSnap);
-    } else {
-        // Pick the appropriate snap based on what the tool asks for.
-        // E.g. the SegmentPencil tool snaps to the bar while the SegmentMover
-        // tool snaps to the beat.
-        m_model->grid().setSnapTime(snap);
-    }
 }
 
 void CompositionView::slotUpdateAll()
@@ -1016,6 +1002,8 @@ void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
     //
     // Split line
     //
+    // ??? This never seems to appear.  Perhaps because showSplitLine()
+    //     doesn't call refreshArtifacts()?
     if (m_splitLinePos.x() > 0 && clipRect.contains(m_splitLinePos)) {
         p->save();
         p->setPen(m_guideColor);
@@ -1470,8 +1458,7 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    // ??? Shouldn't the tools be responsible for these?
-    m_fineGrain = ((ce.modifiers() & Qt::ShiftModifier) != 0);
+    // ??? Shouldn't SegmentPencil be responsible for this?
     m_pencilOverExisting = ((ce.modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
 
     switch (ce.button()) {
@@ -1570,7 +1557,6 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    m_fineGrain = ((ce.modifiers() & Qt::ShiftModifier) != 0);
     m_pencilOverExisting = ((ce.modifiers() & Qt::AltModifier) != 0);
 
     int follow = m_currentTool->handleMouseMove(&ce);
@@ -1711,12 +1697,6 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     //    mainWindow->slotSetStatusMessage(text);
 }
 
-#if 0
-void CompositionView::setFineGrain(bool value)
-{
-    m_fineGrain = value;
-}
-#endif
 #if 0
 void CompositionView::setPencilOverExisting(bool value)
 {

@@ -144,16 +144,6 @@ public:
      */
     const QRect &getTmpRect() const  { return m_tmpRect; }
 
-    /// Set the snap resolution of the grid to something suitable.
-    /**
-     * fine indicates whether the current tool is a fine-grain sort
-     * (such as the resize or move tools) or a coarse one (such as the
-     * segment creation pencil).  If the user is requesting extra-fine
-     * resolution (through setFineGrain()) that will also be
-     * taken into account.
-     */
-    void setSnapTime(timeT snap);
-
     /// Is the user pressing the Ctrl key to draw over a segment?
     /**
      * Find out whether the user is requesting to draw over an existing segment
@@ -407,8 +397,6 @@ private:
     // depresses relating to selection add (usually Qt::SHIFT) and
     // selection copy (usually CONTROL)
 
-    /// See isFineGrain().
-    //void setFineGrain(bool value);
     /// See pencilOverExisting().
     //void setPencilOverExisting(bool value);
 
@@ -586,8 +574,6 @@ private:
 
     bool         m_showPreviews;
     bool         m_showSegmentLabels;
-    /// "true" when user is holding down shift.
-    bool         m_fineGrain;
     bool         m_pencilOverExisting;
 
     //int          m_minWidth;

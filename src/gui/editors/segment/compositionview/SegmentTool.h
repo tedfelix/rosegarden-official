@@ -22,6 +22,7 @@
 #include "gui/general/BaseTool.h"
 #include "gui/general/ActionFileClient.h"
 #include "CompositionItem.h"
+#include "base/TimeT.h"
 
 #include <QPoint>
 #include <utility>
@@ -86,6 +87,9 @@ protected:
 
     bool changeMade() { return m_changeMade; }
     void setChangeMade(bool c) { m_changeMade = c; }
+
+    /// Sets the SnapGrid snap time based on the Shift key.
+    void setSnapTime(QMouseEvent *e, timeT snapTime);
 
     //--------------- Data members ---------------------------------
 
