@@ -655,6 +655,9 @@ void TrackEditor::slotCommandExecuted()
     //     executed regardless of whether that command changes the
     //     Composition?
 
+    // ??? RosegardenMainViewWidget also connects
+    //     CompositionView::slotUpdateAll() to commandExecuted().
+
     bool compositionNeedsRefresh = m_doc->getComposition().
             getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
 

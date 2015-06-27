@@ -310,18 +310,18 @@ void CompositionView::slotUpdateAll()
     // This one doesn't get called too often while recording.
     Profiler profiler("CompositionView::slotUpdateAll()");
 
-    //RG_DEBUG << "CompositionView::slotUpdateAll()";
+    // Redraw the segments and artifacts.
     allNeedRefresh();
+    // ??? This is redundant as allNeedRefresh() calls
+    //     slotArtifactsNeedRefresh() which already calls this.
     updateContents();
-//    update();
 }
 
 void CompositionView::slotUpdateTimer()
 {
     //RG_DEBUG << "CompositionView::slotUpdateTimer()";
 
-    if (m_updateNeeded)
-    {
+    if (m_updateNeeded) {
         updateAll(m_updateRect);
 
         //m_updateRect.setRect(0,0,0,0);  // Not needed.
@@ -371,14 +371,11 @@ void CompositionView::slotUpdateAll(const QRect& rect)
     //   Testing of these situations reveals no (or minor) refresh issues.
 
     // If an update is now needed, set m_updateRect, otherwise accumulate it.
-    if (!m_updateNeeded)
-    {
+    if (!m_updateNeeded) {
         // Let slotUpdateTimer() know an update is needed next time.
         m_updateNeeded = true;
         m_updateRect = rect.normalized();
-    }
-    else
-    {
+    } else {
         // Accumulate the update rect
         m_updateRect |= rect.normalized();
     }

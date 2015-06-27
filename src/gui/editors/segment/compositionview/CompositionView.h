@@ -250,6 +250,13 @@ public slots:
     void slotExternalWheelEvent(QWheelEvent *);
 
     /// Redraw everything.  Segments and artifacts.
+    /**
+     * This is called in many places after making changes that affect the
+     * segment canvas.
+     *
+     * RosegardenMainViewWidget connects this to
+     * CommandHistory::commandExecuted().
+     */
     void slotUpdateAll();
     /// Redraw everything (segments and artifacts) within the specified rect.
     /**
@@ -426,7 +433,7 @@ private:
      * refreshArtifacts().  Finally, the double-buffer is copied to
      * the display (QAbstractScrollArea::viewport()).
      */
-    virtual void viewportPaintRect(QRect r);
+    void viewportPaintRect(QRect r);
     
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
