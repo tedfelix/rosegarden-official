@@ -258,14 +258,14 @@ public slots:
      * CommandHistory::commandExecuted().
      */
     void slotUpdateAll();
-    /// Redraw everything (segments and artifacts) within the specified rect.
+    /// Deferred update of segments and artifacts within the specified rect.
     /**
      * Because this routine is called so frequently, it doesn't actually
      * do any work.  Instead it sets a flag, m_updateNeeded, and
      * slotUpdateTimer() does the actual work by calling
-     * updateAll() on a more leisurely schedule.
+     * updateAll2(rect) on a more leisurely schedule.
      */
-    void slotUpdateAll(const QRect &rect);
+    void slotAllNeedRefresh(const QRect &rect);
 
     /// Resize the contents to match the Composition.
     /**
@@ -325,7 +325,7 @@ private slots:
      * In addition to being used locally several times, this is also
      * connected to CompositionModelImpl::needArtifactsUpdate().
      */
-    void slotArtifactsNeedRefresh() {
+    void slotUpdateArtifacts() {
         m_artifactsRefresh =
             QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
         updateContents();
@@ -374,7 +374,7 @@ private slots:
 
     /// Used to reduce the frequency of updates.
     /**
-     * slotUpdateAll() sets the m_updateNeeded flag to
+     * slotAllNeedRefresh(rect) sets the m_updateNeeded flag to
      * tell slotUpdateTimer() that it needs to perform an update.
      */
     void slotUpdateTimer();
@@ -523,7 +523,7 @@ private:
     /// Used by drawIntersections() to mix the brushes of intersecting rectangles.
     static QColor mixBrushes(const QBrush &a, const QBrush &b);
 
-    /// Adds the entire viewport to the segments refresh rect.
+    /// Deferred update of the segments within the entire viewport.
     /**
      * This will cause scrollSegmentsLayer() to refresh the entire
      * segments layer (m_segmentsLayer) the next time it is called.
@@ -535,7 +535,7 @@ private:
             QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
     }
 
-    /// Adds the specified rect to the segments refresh rect.
+    /// Deferred update of the segments within the specified rect.
     /**
      * This will cause the given portion of the viewport to be refreshed
      * the next time viewportPaintRect() is called.
@@ -546,10 +546,17 @@ private:
              & r);
     }
 
-    void updateAll(const QRect &rect);
+    /// Update segments and artifacts within rect.
+    /**
+     * ??? This one differs from updateAll(rect) in that it treats an
+     *     invalid rect as the entire viewport.  However, its only caller
+     *     never sends an invalid rect.  So, perhaps this special case
+     *     function can be removed.
+     */
+    void updateAll2(const QRect &rect);
 
     /// Updates the artifacts in the given rect.
-    void artifactsNeedRefresh(const QRect &r) {
+    void updateArtifacts(const QRect &r) {
         m_artifactsRefresh |=
             (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
              & r);
@@ -559,13 +566,13 @@ private:
     /// Updates the entire viewport.
     void allNeedRefresh() {
         segmentsNeedRefresh();
-        slotArtifactsNeedRefresh();
+        slotUpdateArtifacts();
     }
 
     /// Updates the given rect on the view.
     void allNeedRefresh(const QRect &r) {
         segmentsNeedRefresh(r);
-        artifactsNeedRefresh(r);
+        updateArtifacts(r);
     }
 
     //--------------- Data members ---------------------------------

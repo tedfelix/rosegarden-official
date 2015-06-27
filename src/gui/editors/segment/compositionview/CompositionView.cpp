@@ -137,9 +137,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     connect(m_model, SIGNAL(needContentUpdate()),
             this, SLOT(slotUpdateAll()));
     connect(m_model, SIGNAL(needContentUpdate(const QRect&)),
-            this, SLOT(slotUpdateAll(const QRect&)));
+            this, SLOT(slotAllNeedRefresh(const QRect&)));
     connect(m_model, SIGNAL(needArtifactsUpdate()),
-            this, SLOT(slotArtifactsNeedRefresh()));
+            this, SLOT(slotUpdateArtifacts()));
     connect(m_model, SIGNAL(needSizeUpdate()),
             this, SLOT(slotUpdateSize()));
 
@@ -234,13 +234,13 @@ void CompositionView::setDrawSelectionRect(bool draw)
         m_drawSelectionRect = draw;
 
         // Redraw the selection rect.
-        slotArtifactsNeedRefresh();
+        slotUpdateArtifacts();
 
         // Indicate that the segments in that area need updating.
-        // ??? This isn't needed since slotArtifactsNeedRefresh() calls
+        // ??? This isn't needed since slotUpdateArtifacts() calls
         //     updateContents() which causes a repaint of everything.
         //     Besides, on enable and disable, nothing much changes anyway.
-        //slotUpdateAll(m_selectionRect);
+        //slotAllNeedRefresh(m_selectionRect);
     }
 }
 
@@ -313,7 +313,7 @@ void CompositionView::slotUpdateAll()
     // Redraw the segments and artifacts.
     allNeedRefresh();
     // ??? This is redundant as allNeedRefresh() calls
-    //     slotArtifactsNeedRefresh() which already calls this.
+    //     slotUpdateArtifacts() which already calls this.
     updateContents();
 }
 
@@ -322,18 +322,18 @@ void CompositionView::slotUpdateTimer()
     //RG_DEBUG << "CompositionView::slotUpdateTimer()";
 
     if (m_updateNeeded) {
-        updateAll(m_updateRect);
+        updateAll2(m_updateRect);
 
         //m_updateRect.setRect(0,0,0,0);  // Not needed.
         m_updateNeeded = false;
     }
 }
 
-void CompositionView::updateAll(const QRect& rect)
+void CompositionView::updateAll2(const QRect& rect)
 {
-    Profiler profiler("CompositionView::updateAll(const QRect& rect)");
+    Profiler profiler("CompositionView::updateAll2(const QRect& rect)");
 
-    //RG_DEBUG << "CompositionView::updateAll() rect " << rect << " - valid : " << rect.isValid();
+    //RG_DEBUG << "CompositionView::updateAll2() rect " << rect << " - valid : " << rect.isValid();
 
     allNeedRefresh(rect);
 
@@ -346,24 +346,24 @@ void CompositionView::updateAll(const QRect& rect)
     }
 }
 
-void CompositionView::slotUpdateAll(const QRect& rect)
+void CompositionView::slotAllNeedRefresh(const QRect& rect)
 {
     // Bail if drawing is turned off in the settings.
     if (!m_enableDrawing)
         return;
 
     // This one gets hit pretty hard while recording.
-    Profiler profiler("CompositionView::slotUpdateAll(const QRect& rect)");
+    Profiler profiler("CompositionView::slotAllNeedRefresh(const QRect& rect)");
 
 #if 0
 // Old way.  Just do the work for every update.  Very expensive.
-    updateAll(rect);
+    updateAll2(rect);
 #else
 // Alternate approach with a timer to throttle updates
 
     // Note: This new approach normalizes the incoming rect.  This means
     //   that it will never trigger a full refresh given an invalid rect
-    //   like it used to.  See updateAll().  Some rough
+    //   like it used to.  See updateAll2(rect).  Some rough
     //   testing reveals that the following test cases trigger this
     //   invalid rect situation:
     //       1. Move a segment.
@@ -1615,7 +1615,7 @@ void CompositionView::setPointerPos(int pos)
     if (contentsX() != m_lastPointerRefreshX) {
         m_lastPointerRefreshX = contentsX();
         // We'll need to shift the whole canvas anyway, so
-        slotArtifactsNeedRefresh();
+        slotUpdateArtifacts();
         return ;
     }
 
@@ -1627,15 +1627,15 @@ void CompositionView::setPointerPos(int pos)
             (std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
              deltaW + m_pointerPen.width() * 2, contentsHeight());
 
-        artifactsNeedRefresh(updateRect);
+        updateArtifacts(updateRect);
 
     } else {
 
-        artifactsNeedRefresh
+        updateArtifacts
             (QRect(m_pointerPos - m_pointerPen.width(), 0,
                    m_pointerPen.width() * 2, contentsHeight()));
 
-        artifactsNeedRefresh
+        updateArtifacts
             (QRect(oldPos - m_pointerPen.width(), 0,
                    m_pointerPen.width() * 2, contentsHeight()));
     }
@@ -1645,7 +1645,7 @@ void CompositionView::setGuidesPos(int x, int y)
 {
     m_guideX = x;
     m_guideY = y;
-    slotArtifactsNeedRefresh();
+    slotUpdateArtifacts();
 }
 
 #if 0
@@ -1653,14 +1653,14 @@ void CompositionView::setGuidesPos(const QPoint& p)
 {
     m_guideX = p.x();
     m_guideY = p.y();
-    slotArtifactsNeedRefresh();
+    slotUpdateArtifacts();
 }
 #endif
 
 void CompositionView::setDrawGuides(bool d)
 {
     m_drawGuides = d;
-    slotArtifactsNeedRefresh();
+    slotUpdateArtifacts();
 }
 
 void CompositionView::setTmpRect(const QRect& r)
@@ -1673,7 +1673,7 @@ void CompositionView::setTmpRect(const QRect& r, const QColor &c)
     QRect pRect = m_tmpRect;
     m_tmpRect = r;
     m_tmpRectFill = c;
-    slotUpdateAll(m_tmpRect | pRect);
+    slotAllNeedRefresh(m_tmpRect | pRect);
 }
 
 void CompositionView::setTextFloat(int x, int y, const QString &text)
@@ -1682,13 +1682,13 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     m_textFloatPos.setY(y);
     m_textFloatText = text;
     m_drawTextFloat = true;
-    slotArtifactsNeedRefresh();
+    slotUpdateArtifacts();
 
     // most of the time when the floating text is drawn
     // we want to update a larger part of the view
     // so don't update here
     //     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignLeft, m_textFloatText);
-    //     slotUpdateAll(r);
+    //     slotAllNeedRefresh(r);
 
 
     //    mainWindow->slotSetStatusMessage(text);
@@ -1706,7 +1706,7 @@ void
 CompositionView::slotTextFloatTimeout()
 {
     hideTextFloat();
-    slotArtifactsNeedRefresh();
+    slotUpdateArtifacts();
     //    mainWindow->slotSetStatusMessage(QString::null);
 }
 #endif
