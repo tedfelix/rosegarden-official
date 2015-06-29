@@ -57,7 +57,7 @@ class CompositionRect;
 
 /// Draws the Composition on the display.
 /**
- * The key output routine is viewportPaintRect() which draws the segments
+ * The key output routine is drawAll() which draws the segments
  * and the artifacts (playback position pointer, guides, "rubber band"
  * selection, ...) on the viewport (the portion of the composition that
  * is currently visible).
@@ -395,7 +395,7 @@ private:
      */
     virtual void mouseMoveEvent(QMouseEvent *);
 
-    /// Delegates to viewportPaintRect() for each rect that needs painting.
+    /// Delegates to drawAll() for each rect that needs painting.
     virtual void paintEvent(QPaintEvent *);
     /// Handles resize.  Uses slotUpdateSize().
     virtual void resizeEvent(QResizeEvent *);
@@ -430,21 +430,21 @@ private:
      * First, the appropriate portion of the segments layer (m_segmentsLayer)
      * is copied to the double-buffer (m_doubleBuffer).  Then the artifacts
      * are drawn over top of the segments in the double-buffer by
-     * refreshArtifacts().  Finally, the double-buffer is copied to
+     * drawArtifacts(rect).  Finally, the double-buffer is copied to
      * the display (QAbstractScrollArea::viewport()).
      */
-    void viewportPaintRect(QRect r);
+    void drawAll(QRect r);
     
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
      * Returns enough information to determine how much additional work
      * needs to be done to update the viewport.
-     * Used by viewportPaintRect().
+     * Used by drawAll().
      *
      * This routine appears to mainly refresh the segments layer.  Scrolling
      * only happens if needed.  Having "scroll" in the name might be
      * misleading.  However, calling this refreshSegmentsLayer() confuses
-     * it with refreshSegments().  Need to dig a bit more.
+     * it with drawSegments(rect).  Need to dig a bit more.
      */
     bool scrollSegmentsLayer(QRect &rect, bool &scroll);
 
@@ -454,13 +454,13 @@ private:
      * segments layer (m_segmentsLayer).  Used by
      * scrollSegmentsLayer().
      */
-    void refreshSegments(const QRect &);
+    void drawSegments(const QRect &);
     /// Draw the artifacts on the double-buffer (m_doubleBuffer).
     /*
      * Calls drawArtifacts() to draw the artifacts on the double-buffer
-     * (m_doubleBuffer).  Used by viewportPaintRect().
+     * (m_doubleBuffer).  Used by drawAll().
      */
-    void refreshArtifacts(const QRect &clipRect);
+    void drawArtifacts(const QRect &clipRect);
 
     /// Draw the track dividers on the segments layer.
     void drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect);
@@ -468,7 +468,7 @@ private:
     /**
      * Also draws the track dividers.
      *
-     * Used by refreshSegments().
+     * Used by drawSegments(rect).
      */
     void drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
@@ -480,7 +480,7 @@ private:
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
      * position pointer, guides, and the "rubber band" selection.  Used by
-     * refreshArtifacts().
+     * drawArtifacts(rect).
      */
     void drawArtifacts(QPainter *doubleBufferPainter, const QRect &clipRect);
     /// Draws a rectangle on the given painter with proper clipping.
@@ -527,7 +527,7 @@ private:
     /**
      * This will cause scrollSegmentsLayer() to refresh the entire
      * segments layer (m_segmentsLayer) the next time it is called.
-     * This in turn will cause viewportPaintRect() to redraw the entire
+     * This in turn will cause drawAll() to redraw the entire
      * viewport the next time it is called.
      */
     void segmentsNeedRefresh() {
@@ -538,22 +538,13 @@ private:
     /// Deferred update of the segments within the specified rect.
     /**
      * This will cause the given portion of the viewport to be refreshed
-     * the next time viewportPaintRect() is called.
+     * the next time drawAll() is called.
      */
     void segmentsNeedRefresh(const QRect &r) {
         m_segmentsRefresh |=
             (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
              & r);
     }
-
-    /// Update segments and artifacts within rect.
-    /**
-     * ??? This one differs from updateAll(rect) in that it treats an
-     *     invalid rect as the entire viewport.  However, its only caller
-     *     never sends an invalid rect.  So, perhaps this special case
-     *     function can be removed.
-     */
-    void updateAll2(const QRect &rect);
 
     /// Updates the artifacts in the given rect.
     void updateArtifacts(const QRect &r) {
@@ -563,16 +554,13 @@ private:
         updateContents(r);
     }
 
-    /// Updates the entire viewport.
-    void allNeedRefresh() {
+    /// Update segments and artifacts within rect.
+    void updateAll2(const QRect &rect);
+
+    /// Update segments and artifacts within the entire viewport.
+    void updateAll() {
         segmentsNeedRefresh();
         slotUpdateArtifacts();
-    }
-
-    /// Updates the given rect on the view.
-    void allNeedRefresh(const QRect &r) {
-        segmentsNeedRefresh(r);
-        updateArtifacts(r);
     }
 
     //--------------- Data members ---------------------------------
@@ -621,7 +609,7 @@ private:
 
     /// Layer that contains the segment rectangles.
     /**
-     * @see viewportPaintRect() and drawSegments()
+     * @see drawAll() and drawSegments()
      */
     QPixmap      m_segmentsLayer;
 
@@ -632,7 +620,7 @@ private:
      *
      * ??? Qt already does double-buffering for us.  Is this still needed?
      *
-     * @see viewportPaintRect()
+     * @see drawAll()
      */
     QPixmap      m_doubleBuffer;
 
@@ -645,7 +633,7 @@ private:
 
     /// Portion of the viewport that needs artifacts refreshed.
     /**
-     * Used only by viewportPaintRect() to limit work done redrawing the
+     * Used only by drawAll() to limit work done redrawing the
      * artifacts.
      */
     QRect        m_artifactsRefresh;

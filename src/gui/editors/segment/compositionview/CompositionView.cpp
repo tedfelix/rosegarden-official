@@ -311,8 +311,8 @@ void CompositionView::slotUpdateAll()
     Profiler profiler("CompositionView::slotUpdateAll()");
 
     // Redraw the segments and artifacts.
-    allNeedRefresh();
-    // ??? This is redundant as allNeedRefresh() calls
+    updateAll();
+    // ??? This is redundant as updateAll() calls
     //     slotUpdateArtifacts() which already calls this.
     updateContents();
 }
@@ -335,14 +335,17 @@ void CompositionView::updateAll2(const QRect& rect)
 
     //RG_DEBUG << "CompositionView::updateAll2() rect " << rect << " - valid : " << rect.isValid();
 
-    allNeedRefresh(rect);
+    segmentsNeedRefresh(rect);
+    updateArtifacts(rect);
+
+    // ??? The following is probably not necessary as an invalid rect
+    //     cannot get in here.  See slotAllNeedRefresh(rect).
 
     if (rect.isValid()) {
+        // ??? This is not necessary since updateArtifacts() already did this.
         updateContents(rect);
-//        update(rect);
     } else {
         updateContents();
-//        update();
     }
 }
 
@@ -418,7 +421,7 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
     m_segmentsLayer = QPixmap(w, h);
     m_doubleBuffer = QPixmap(w, h);
-    allNeedRefresh();
+    updateAll();
 
     RG_DEBUG << "CompositionView::resizeEvent() : segments layer size = " << m_segmentsLayer.size() << endl;
 }
@@ -430,13 +433,13 @@ void CompositionView::paintEvent(QPaintEvent *e)
     QVector<QRect> rects = e->region().rects();
 
     for (int i = 0; i < rects.size(); ++i) {
-        viewportPaintRect(rects[i]);
+        drawAll(rects[i]);
     }
 }
 
-void CompositionView::viewportPaintRect(QRect r)
+void CompositionView::drawAll(QRect r)
 {
-    Profiler profiler("CompositionView::viewportPaintRect");
+    Profiler profiler("CompositionView::drawAll");
 
     QRect updateRect = r;
 
@@ -445,7 +448,7 @@ void CompositionView::viewportPaintRect(QRect r)
     // Convert from viewport coords to contents coords.
     r.translate(contentsX(), contentsY());
 
-//    std::cerr << "CompositionView::viewportPaintRect updateRect = "
+//    std::cerr << "CompositionView::drawAll updateRect = "
 //              << updateRect.x() << "," << updateRect.y()
 //              << " " << updateRect.width() << "x" << updateRect.height()
 //              << std::endl;
@@ -479,7 +482,7 @@ void CompositionView::viewportPaintRect(QRect r)
 
     if (m_artifactsRefresh.isValid()) {
         // Draw the artifacts over top of the segments on the double-buffer.
-        refreshArtifacts(m_artifactsRefresh);
+        drawArtifacts(m_artifactsRefresh);
         m_artifactsRefresh = QRect();
     }
 
@@ -628,9 +631,9 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     }
 
     if (needRefresh)
-        refreshSegments(refreshRect);
+        drawSegments(refreshRect);
 
-    // ??? Move these lines to the end of refreshSegments()?
+    // ??? Move these lines to the end of drawSegments(rect)?
     //     Or do they still need to run even when needRefresh is false?
     m_segmentsRefresh = QRect();
     m_lastBufferRefreshX = cx;
@@ -645,11 +648,11 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     return needRefresh;
 }
 
-void CompositionView::refreshSegments(const QRect& rect)
+void CompositionView::drawSegments(const QRect& rect)
 {
-    Profiler profiler("CompositionView::refreshSegments");
+    Profiler profiler("CompositionView::drawSegments");
 
-    //RG_DEBUG << "CompositionView::refreshSegments() r = "
+    //RG_DEBUG << "CompositionView::drawSegments() r = "
     //         << rect << endl;
 
     // ### This constructor used to mean "start painting on the segments
@@ -681,15 +684,15 @@ void CompositionView::refreshSegments(const QRect& rect)
     //    m_segmentsNeedRefresh = false;
 }
 
-void CompositionView::refreshArtifacts(const QRect &clipRect)
+void CompositionView::drawArtifacts(const QRect &clipRect)
 {
-    Profiler profiler("CompositionView::refreshArtifacts");
+    Profiler profiler("CompositionView::drawArtifacts(rect)");
 
-    //RG_DEBUG << "refreshArtifacts() clipRect = " << clipRect;
+    //RG_DEBUG << "drawArtifacts(rect) clipRect = " << clipRect;
 
     QPainter doubleBufferPainter;
 
-    // @@@ see comment in refreshSegments
+    // @@@ see comment in drawSegments()
     //     doubleBufferPainter.begin(&m_doubleBuffer, viewport());
     doubleBufferPainter.begin(&m_doubleBuffer);
 
@@ -1000,7 +1003,7 @@ void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
     // Split line
     //
     // ??? This never seems to appear.  Perhaps because showSplitLine()
-    //     doesn't call refreshArtifacts()?
+    //     doesn't call drawArtifacts(rect)?
     if (m_splitLinePos.x() > 0 && clipRect.contains(m_splitLinePos)) {
         p->save();
         p->setPen(m_guideColor);
