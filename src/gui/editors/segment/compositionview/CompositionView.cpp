@@ -373,12 +373,12 @@ void CompositionView::slotRefreshColourCache()
     updateAll();
 }
 
-void CompositionView::slotNewMIDIRecordingSegment(Segment* s)
+void CompositionView::slotNewMIDIRecordingSegment(Segment *s)
 {
     m_model->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
 }
 
-void CompositionView::slotNewAudioRecordingSegment(Segment* s)
+void CompositionView::slotNewAudioRecordingSegment(Segment *s)
 {
     m_model->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
 }
@@ -388,13 +388,17 @@ void CompositionView::slotStoppedRecording()
     m_model->clearRecordingItems();
 }
 
-void CompositionView::resizeEvent(QResizeEvent* e)
+void CompositionView::resizeEvent(QResizeEvent *e)
 {
-    if (e->size() == e->oldSize()) return;
+    // No change, bail.
+    if (e->size() == e->oldSize())
+        return;
 
-//    RG_DEBUG << "CompositionView::resizeEvent() : from " << e->oldSize() << " to " << e->size() << endl;
+    //RG_DEBUG << "resizeEvent() : from " << e->oldSize() << " to " << e->size();
 
     RosegardenScrollView::resizeEvent(e);
+
+    // Resize the contents if needed.
     slotUpdateSize();
 
     int w = std::max(m_segmentsLayer.width(), viewport()->width());
@@ -402,14 +406,15 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
     m_segmentsLayer = QPixmap(w, h);
     m_doubleBuffer = QPixmap(w, h);
+
     updateAll();
 
-    RG_DEBUG << "CompositionView::resizeEvent() : segments layer size = " << m_segmentsLayer.size() << endl;
+    //RG_DEBUG << "resizeEvent() : segments layer size = " << m_segmentsLayer.size();
 }
 
 void CompositionView::paintEvent(QPaintEvent *e)
 {
-    Profiler profiler("CompositionView::paintEvent");
+    Profiler profiler("CompositionView::paintEvent()");
 
     QVector<QRect> rects = e->region().rects();
 
@@ -418,47 +423,59 @@ void CompositionView::paintEvent(QPaintEvent *e)
     }
 }
 
-void CompositionView::drawAll(QRect r)
+void CompositionView::drawAll(QRect rect)
 {
-    Profiler profiler("CompositionView::drawAll");
+    Profiler profiler("CompositionView::drawAll(rect)");
 
-    QRect updateRect = r;
+    // Save the original rect in case we aren't scrolling.
+    const QRect updateRect = rect;
 
     // Limit the requested rect to the viewport.
-    r &= viewport()->rect();
+    rect &= viewport()->rect();
     // Convert from viewport coords to contents coords.
-    r.translate(contentsX(), contentsY());
-
-//    std::cerr << "CompositionView::drawAll updateRect = "
-//              << updateRect.x() << "," << updateRect.y()
-//              << " " << updateRect.width() << "x" << updateRect.height()
-//              << std::endl;
+    rect.translate(contentsX(), contentsY());
 
     bool scroll = false;
 
     // Scroll and refresh the segments layer.
-    bool changed = scrollSegmentsLayer(r, scroll);
+    bool changed = scrollSegmentsLayer(rect, scroll);
 
-    // r is now the combination of the requested refresh rect and the refresh
+    // rect is now the combination of the requested refresh rect and the refresh
     // needed by any scrolling.
 
-    if (changed || m_artifactsRefresh.isValid()) {
+    // ??? All of this selective updating is really complicated and probably
+    //     results in very little performance improvement.
+    //     Recommend considering the following simpler design:
+    //       1. Scrolling invalidates everything.  Just do a complete redraw
+    //          of the viewport.  No need to be clever.
+    //       2. If clients want a particular portion updated, try to honor
+    //          that, but don't let the code become too complicated.
+    //       3. Avoid recopying the segment layer and redrawing the artifacts
+    //          by keeping the artifacts in their own layer and combining on
+    //          the viewport.  Since Qt already double-buffers, m_doubleBuffer
+    //          can become m_artifactsLayer.
 
-        QRect copyRect(r | m_artifactsRefresh);
+    // If we need to copy the segments to the double-buffer
+    if (changed  ||  m_artifactsRefresh.isValid()) {
+        // Figure out what portion needs copying.  This is the incoming
+        // rect plus the scroll rect plus the artifacts refresh rect.
+        QRect copyRect(rect | m_artifactsRefresh);
+        // Convert contents coords to viewport coords.
         copyRect.translate(-contentsX(), -contentsY());
 
-//        std::cerr << "changed = " << changed << ", artrefresh " << m_artifactsRefresh.x() << "," << m_artifactsRefresh.y() << " " << m_artifactsRefresh.width() << "x" << m_artifactsRefresh.height() << ": copying from segment to artifacts buffer: " << copyRect.width() << "x" << copyRect.height() << std::endl;
-
         // Copy the segments to the double buffer.
-        QPainter ap;
-        ap.begin(&m_doubleBuffer);
-        ap.drawPixmap(copyRect.x(), copyRect.y(),
-                      m_segmentsLayer,
-                      copyRect.x(), copyRect.y(),
-                      copyRect.width(), copyRect.height());
-        ap.end();
+        QPainter dbPainter;
+        dbPainter.begin(&m_doubleBuffer);
+        dbPainter.drawPixmap(
+                copyRect.x(), copyRect.y(),
+                m_segmentsLayer,
+                copyRect.x(), copyRect.y(),
+                copyRect.width(), copyRect.height());
+        dbPainter.end();
 
-        m_artifactsRefresh |= r;
+        // Since we've clobbered the artifacts on the double-buffer,
+        // add the clobbered area to the artifacts rect.
+        m_artifactsRefresh |= rect;
     }
 
     if (m_artifactsRefresh.isValid()) {
@@ -467,32 +484,32 @@ void CompositionView::drawAll(QRect r)
         m_artifactsRefresh = QRect();
     }
 
-    // Display the double buffer on the viewport.
+    // Display the double-buffer on the viewport.
 
-    QPainter p;
-    p.begin(viewport());
+    QPainter viewportPainter;
+    viewportPainter.begin(viewport());
     if (scroll) {
-        // Redraw the entire double buffer.
-        p.drawPixmap(0, 0, 
-                     m_doubleBuffer,
-                     0, 0,
-                     m_doubleBuffer.width(),
-                     m_doubleBuffer.height());
+        // Redraw the entire viewport.
+        viewportPainter.drawPixmap(
+                0, 0,
+                m_doubleBuffer,
+                0, 0,
+                m_doubleBuffer.width(),
+                m_doubleBuffer.height());
     } else {
-        p.drawPixmap(updateRect.x(), updateRect.y(),
-                     m_doubleBuffer,
-                     updateRect.x(), updateRect.y(),
-                     updateRect.width(), updateRect.height());
+        // There was no scrolling.  Just update what the caller asked for.
+        // ??? Note that this ignores the fact that the artifacts may have
+        //     been updated.  m_artifactsRefresh should be added to
+        //     updateRect before it is cleared above.  Since this has never
+        //     been an issue, it is likely that m_artifactsRefresh is always
+        //     empty when this routine is called.
+        viewportPainter.drawPixmap(
+                updateRect.x(), updateRect.y(),
+                m_doubleBuffer,
+                updateRect.x(), updateRect.y(),
+                updateRect.width(), updateRect.height());
     }
-    p.end();
-
-    // DEBUG
-
-    //     QPainter pdebug(viewport());
-    //     static QPen framePen(QColor(Qt::red), 1);
-    //     pdebug.setPen(framePen);
-    //     pdebug.drawRect(updateRect);
-
+    viewportPainter.end();
 }
 
 bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)

@@ -433,7 +433,7 @@ private:
      * drawArtifacts(rect).  Finally, the double-buffer is copied to
      * the display (QAbstractScrollArea::viewport()).
      */
-    void drawAll(QRect r);
+    void drawAll(QRect rect);
     
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
