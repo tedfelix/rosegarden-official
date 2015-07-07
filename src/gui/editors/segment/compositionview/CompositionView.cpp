@@ -649,7 +649,6 @@ void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QR
     // divider, so we need enough divider coords to do the drawing even
     // though the center of the divider might be slightly outside of the
     // viewport.
-    // This is not a height list.
     CompositionModelImpl::YCoordList trackYCoords =
             m_model->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
 
@@ -659,54 +658,30 @@ void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QR
 
     Profiler profiler("CompositionView::drawSegments: dividing lines");
 
+    const int left = clipRect.left();
+    const int right = clipRect.right();
+
     segmentsLayerPainter->save();
 
-    // Select the lighter (middle) divider color.
-    QColor light = m_trackDividerColor.light();
-    segmentsLayerPainter->setPen(light);
-
-    // For each track Y coordinate, draw the two light lines in the middle
-    // of the track divider.
+    // For each track Y coordinate
     for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
          yi != trackYCoords.end(); ++yi) {
-        // Upper line.
-        int y = *yi - 1;
-        // If it's in the clipping area, draw it
-        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentsLayerPainter->drawLine(
-                    clipRect.left(), y,
-                    clipRect.right(), y);
-        }
-        // Lower line.
-        ++y;
-        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentsLayerPainter->drawLine(
-                    clipRect.left(), y,
-                    clipRect.right(), y);
-        }
-    }
 
-    // Switch to the darker divider color.
-    segmentsLayerPainter->setPen(m_trackDividerColor);
-
-    // For each track Y coordinate, draw the two dark lines on the outside
-    // of the track divider.
-    for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
-         yi != trackYCoords.end(); ++yi) {
-        // Upper line
         int y = *yi - 2;
-        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentsLayerPainter->drawLine(
-                    clipRect.x(), y,
-                    clipRect.x() + clipRect.width() - 1, y);
-        }
-        // Lower line
-        y += 3;
-        if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentsLayerPainter->drawLine(
-                    clipRect.x(), y,
-                    clipRect.x() + clipRect.width() - 1, y);
-        }
+        segmentsLayerPainter->setPen(m_trackDividerColor);
+        segmentsLayerPainter->drawLine(left, y, right, y);
+
+        ++y;
+        segmentsLayerPainter->setPen(m_trackDividerColor.light());
+        segmentsLayerPainter->drawLine(left, y, right, y);
+
+        ++y;
+        segmentsLayerPainter->setPen(m_trackDividerColor.light());
+        segmentsLayerPainter->drawLine(left, y, right, y);
+
+        ++y;
+        segmentsLayerPainter->setPen(m_trackDividerColor);
+        segmentsLayerPainter->drawLine(left, y, right, y);
     }
 
     segmentsLayerPainter->restore();
