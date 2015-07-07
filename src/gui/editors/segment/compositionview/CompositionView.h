@@ -531,8 +531,7 @@ private:
      * viewport the next time it is called.
      */
     void segmentsNeedRefresh() {
-        m_segmentsRefresh =
-            QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
+        m_segmentsRefresh.setRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
     }
 
     /// Deferred update of the segments within the specified rect.

@@ -308,70 +308,52 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
 void CompositionView::slotUpdateAll()
 {
     // This one doesn't get called too often while recording.
-    Profiler profiler("CompositionView::slotUpdateAll()");
+    //Profiler profiler("CompositionView::slotUpdateAll()");
 
     // Redraw the segments and artifacts.
     updateAll();
-    // ??? This is redundant as updateAll() calls
-    //     slotUpdateArtifacts() which already calls this.
-    updateContents();
 }
 
 void CompositionView::slotUpdateTimer()
 {
-    //RG_DEBUG << "CompositionView::slotUpdateTimer()";
-
     if (m_updateNeeded) {
         updateAll2(m_updateRect);
-
-        //m_updateRect.setRect(0,0,0,0);  // Not needed.
         m_updateNeeded = false;
     }
 }
 
-void CompositionView::updateAll2(const QRect& rect)
+void CompositionView::updateAll2(const QRect &rect)
 {
-    Profiler profiler("CompositionView::updateAll2(const QRect& rect)");
+    Profiler profiler("CompositionView::updateAll2(rect)");
 
-    //RG_DEBUG << "CompositionView::updateAll2() rect " << rect << " - valid : " << rect.isValid();
+    //RG_DEBUG << "updateAll2() rect:" << rect << ", valid:" << rect.isValid();
+
+    // If the incoming rect is invalid, just do everything.
+    // ??? This is probably not necessary as an invalid rect
+    //     cannot get in here.  See slotAllNeedRefresh(rect).
+    if (!rect.isValid()) {
+        updateAll();
+        return;
+    }
 
     segmentsNeedRefresh(rect);
     updateArtifacts(rect);
-
-    // ??? The following is probably not necessary as an invalid rect
-    //     cannot get in here.  See slotAllNeedRefresh(rect).
-
-    if (rect.isValid()) {
-        // ??? This is not necessary since updateArtifacts() already did this.
-        updateContents(rect);
-    } else {
-        updateContents();
-    }
 }
 
-void CompositionView::slotAllNeedRefresh(const QRect& rect)
+void CompositionView::slotAllNeedRefresh(const QRect &rect)
 {
     // Bail if drawing is turned off in the settings.
     if (!m_enableDrawing)
         return;
 
     // This one gets hit pretty hard while recording.
-    Profiler profiler("CompositionView::slotAllNeedRefresh(const QRect& rect)");
-
-#if 0
-// Old way.  Just do the work for every update.  Very expensive.
-    updateAll2(rect);
-#else
-// Alternate approach with a timer to throttle updates
+    Profiler profiler("CompositionView::slotAllNeedRefresh(const QRect &rect)");
 
     // Note: This new approach normalizes the incoming rect.  This means
     //   that it will never trigger a full refresh given an invalid rect
-    //   like it used to.  See updateAll2(rect).  Some rough
-    //   testing reveals that the following test cases trigger this
-    //   invalid rect situation:
-    //       1. Move a segment.
-    //       2. Click with the arrow tool where there is no segment.
-    //   Testing of these situations reveals no (or minor) refresh issues.
+    //   like it used to.  See updateAll2(rect).
+    if (!rect.isValid())
+        RG_DEBUG << "slotAllNeedRefresh(rect): Invalid rect";
 
     // If an update is now needed, set m_updateRect, otherwise accumulate it.
     if (!m_updateNeeded) {
@@ -382,14 +364,13 @@ void CompositionView::slotAllNeedRefresh(const QRect& rect)
         // Accumulate the update rect
         m_updateRect |= rect.normalized();
     }
-#endif
 }
 
 void CompositionView::slotRefreshColourCache()
 {
     CompositionColourCache::getInstance()->init();
     clearSegmentRectsCache();
-    slotUpdateAll();
+    updateAll();
 }
 
 void CompositionView::slotNewMIDIRecordingSegment(Segment* s)
@@ -1492,7 +1473,7 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
 
 void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "CompositionView::mouseReleaseEvent()";
+    //RG_DEBUG << "mouseReleaseEvent()";
 
     slotStopAutoScroll();
 
