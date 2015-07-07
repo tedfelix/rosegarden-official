@@ -426,13 +426,6 @@ private:
     virtual void leaveEvent(QEvent *);
 
     /// Draw the segments and artifacts on the viewport (screen).
-    /**
-     * First, the appropriate portion of the segments layer (m_segmentsLayer)
-     * is copied to the double-buffer (m_doubleBuffer).  Then the artifacts
-     * are drawn over top of the segments in the double-buffer by
-     * drawArtifacts(rect).  Finally, the double-buffer is copied to
-     * the display (QAbstractScrollArea::viewport()).
-     */
     void drawAll(QRect rect);
     
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
@@ -455,10 +448,10 @@ private:
      * scrollSegmentsLayer().
      */
     void drawSegments(const QRect &);
-    /// Draw the artifacts on the double-buffer (m_doubleBuffer).
+    /// Draw the artifacts on the viewport.
     /*
-     * Calls drawArtifacts() to draw the artifacts on the double-buffer
-     * (m_doubleBuffer).  Used by drawAll().
+     * Calls drawArtifacts() to draw the artifacts on the viewport.
+     * Used by drawAll().
      */
     void drawArtifacts(const QRect &clipRect);
 
@@ -476,13 +469,13 @@ private:
      * Used by drawSegments().
      */
     void drawAudioPreviews(QPainter *segmentLayerPainter, const QRect &clipRect);
-    /// Draw the overlay artifacts on the double-buffer.
+    /// Draw the overlay artifacts on the viewport.
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
      * position pointer, guides, and the "rubber band" selection.  Used by
      * drawArtifacts(rect).
      */
-    void drawArtifacts(QPainter *doubleBufferPainter, const QRect &clipRect);
+    void drawArtifacts(QPainter *viewportPainter, const QRect &clipRect);
     /// Draws a rectangle on the given painter with proper clipping.
     /**
      * This is an improved QPainter::drawRect().
@@ -507,7 +500,7 @@ private:
      * @see setPointerPos() and setPointerPosition()
      */
     void drawPointer(QPainter *p, const QRect &clipRect);
-    /// Used by drawArtifacts() to draw the guides on the double-buffer.
+    /// Used by drawArtifacts() to draw the guides on the viewport.
     /**
      * @see setGuidesPos() and setDrawGuides()
      */
@@ -611,17 +604,6 @@ private:
      * @see drawAll() and drawSegments()
      */
     QPixmap      m_segmentsLayer;
-
-    /// The display double-buffer.
-    /**
-     * Double-buffers are used to reduce flicker and reduce the complexity
-     * of drawing code (e.g. no need to erase anything, just redraw it all).
-     *
-     * ??? Qt already does double-buffering for us.  Is this still needed?
-     *
-     * @see drawAll()
-     */
-    QPixmap      m_doubleBuffer;
 
     /// Portion of the viewport that needs segments refreshed.
     /**

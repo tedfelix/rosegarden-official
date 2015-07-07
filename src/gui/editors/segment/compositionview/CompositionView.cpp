@@ -92,7 +92,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_drawSelectionRect(false),
     m_drawTextFloat(false),
     m_segmentsLayer(viewport()->width(), viewport()->height()),
-    m_doubleBuffer(viewport()->width(), viewport()->height()),
     m_segmentsRefresh(0, 0, viewport()->width(), viewport()->height()),
     m_artifactsRefresh(0, 0, viewport()->width(), viewport()->height()),
     m_lastBufferRefreshX(0),
@@ -405,7 +404,6 @@ void CompositionView::resizeEvent(QResizeEvent *e)
     int h = std::max(m_segmentsLayer.height(), viewport()->height());
 
     m_segmentsLayer = QPixmap(w, h);
-    m_doubleBuffer = QPixmap(w, h);
 
     updateAll();
 
@@ -452,10 +450,9 @@ void CompositionView::drawAll(QRect rect)
     //          that, but don't let the code become too complicated.
     //       3. Avoid recopying the segment layer and redrawing the artifacts
     //          by keeping the artifacts in their own layer and combining on
-    //          the viewport.  Since Qt already double-buffers, m_doubleBuffer
-    //          can become m_artifactsLayer.
+    //          the viewport.
 
-    // If we need to copy the segments to the double-buffer
+    // If we need to copy the segments to the viewport
     if (changed  ||  m_artifactsRefresh.isValid()) {
         // Figure out what portion needs copying.  This is the incoming
         // rect plus the scroll rect plus the artifacts refresh rect.
@@ -463,53 +460,26 @@ void CompositionView::drawAll(QRect rect)
         // Convert contents coords to viewport coords.
         copyRect.translate(-contentsX(), -contentsY());
 
-        // Copy the segments to the double buffer.
-        QPainter dbPainter;
-        dbPainter.begin(&m_doubleBuffer);
-        dbPainter.drawPixmap(
+        // Copy the segments to the viewport.
+        QPainter viewportPainter;
+        viewportPainter.begin(viewport());
+        viewportPainter.drawPixmap(
                 copyRect.x(), copyRect.y(),
                 m_segmentsLayer,
                 copyRect.x(), copyRect.y(),
                 copyRect.width(), copyRect.height());
-        dbPainter.end();
+        viewportPainter.end();
 
-        // Since we've clobbered the artifacts on the double-buffer,
+        // Since we've clobbered the artifacts on the viewport,
         // add the clobbered area to the artifacts rect.
         m_artifactsRefresh |= rect;
     }
 
     if (m_artifactsRefresh.isValid()) {
-        // Draw the artifacts over top of the segments on the double-buffer.
+        // Draw the artifacts over top of the segments on the viewport.
         drawArtifacts(m_artifactsRefresh);
         m_artifactsRefresh = QRect();
     }
-
-    // Display the double-buffer on the viewport.
-
-    QPainter viewportPainter;
-    viewportPainter.begin(viewport());
-    if (scroll) {
-        // Redraw the entire viewport.
-        viewportPainter.drawPixmap(
-                0, 0,
-                m_doubleBuffer,
-                0, 0,
-                m_doubleBuffer.width(),
-                m_doubleBuffer.height());
-    } else {
-        // There was no scrolling.  Just update what the caller asked for.
-        // ??? Note that this ignores the fact that the artifacts may have
-        //     been updated.  m_artifactsRefresh should be added to
-        //     updateRect before it is cleared above.  Since this has never
-        //     been an issue, it is likely that m_artifactsRefresh is always
-        //     empty when this routine is called.
-        viewportPainter.drawPixmap(
-                updateRect.x(), updateRect.y(),
-                m_doubleBuffer,
-                updateRect.x(), updateRect.y(),
-                updateRect.width(), updateRect.height());
-    }
-    viewportPainter.end();
 }
 
 bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
@@ -688,16 +658,13 @@ void CompositionView::drawArtifacts(const QRect &clipRect)
 
     //RG_DEBUG << "drawArtifacts(rect) clipRect = " << clipRect;
 
-    QPainter doubleBufferPainter;
+    QPainter viewportPainter;
 
-    // @@@ see comment in drawSegments()
-    //     doubleBufferPainter.begin(&m_doubleBuffer, viewport());
-    doubleBufferPainter.begin(&m_doubleBuffer);
+    viewportPainter.begin(viewport());
 
-    doubleBufferPainter.translate(-contentsX(), -contentsY());
-    //QRect r(contentsX(), contentsY(), m_doubleBuffer.width(), m_doubleBuffer.height());
-    drawArtifacts(&doubleBufferPainter, clipRect);
-    doubleBufferPainter.end();
+    viewportPainter.translate(-contentsX(), -contentsY());
+    drawArtifacts(&viewportPainter, clipRect);
+    viewportPainter.end();
 
     //m_artifactsNeedRefresh = false;
 }
@@ -988,6 +955,7 @@ void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
     //
     if (m_drawSelectionRect) {
         //RG_DEBUG << "about to draw selection rect" << endl;
+        p->setPen(CompositionColourCache::getInstance()->SegmentBorder);
         drawRect(m_selectionRect.normalized(), p, clipRect, false, 0, false);
     }
 
@@ -1386,9 +1354,9 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 
         p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
 
-        drawRect(bound, p, clipRect, false, 0, true);
-
         p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
+
+        drawRect(bound, p, clipRect, false, 0, true);
 
         p->drawText(pos.x() + 2, pos.y() + 3 + metrics.ascent(), m_textFloatText);
 
