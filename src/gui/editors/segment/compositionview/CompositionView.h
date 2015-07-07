@@ -439,7 +439,7 @@ private:
      * misleading.  However, calling this refreshSegmentsLayer() confuses
      * it with drawSegments(rect).  Need to dig a bit more.
      */
-    bool scrollSegmentsLayer(QRect &rect, bool &scroll);
+    bool scrollSegmentsLayer(QRect &rect);
 
     /// Draw the segments on the segment layer (m_segmentsLayer).
     /**

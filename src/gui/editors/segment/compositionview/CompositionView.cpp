@@ -426,15 +426,15 @@ void CompositionView::drawAll(const QRect &incomingViewportRect)
     // Convert from viewport coords to contents coords.
     incomingContentsRect.translate(contentsX(), contentsY());
 
-    bool scroll = false;
-
     // Scroll and refresh the segments layer.
-    bool changed = scrollSegmentsLayer(incomingContentsRect, scroll);
+    bool segmentsLayerChanged = scrollSegmentsLayer(incomingContentsRect);
 
     // incomingContentsRect is now a combination of the incomingViewportRect
     // and the refresh needed by any scrolling.  And maybe something else.
     // ??? The point is that it is no longer the incomingContentsRect, so it
-    //     needs a different name at this point.
+    //     needs a different name at this point.  Perhaps we should send in
+    //     the incomingContentsRect and get back a refreshContentsRect?
+    //     Two parameters instead of one for clarity.
 
     // ??? All of this selective updating is really complicated and probably
     //     results in very little performance improvement.
@@ -448,7 +448,7 @@ void CompositionView::drawAll(const QRect &incomingViewportRect)
     //          the viewport.
 
     // If we need to copy the segments to the viewport
-    if (changed  ||  m_artifactsRefresh.isValid()) {
+    if (segmentsLayerChanged  ||  m_artifactsRefresh.isValid()) {
         // Figure out what portion needs copying.  This is the incoming
         // rect plus the scroll rect plus the artifacts refresh rect.
         QRect copyRect(incomingContentsRect | m_artifactsRefresh);
@@ -472,7 +472,7 @@ void CompositionView::drawAll(const QRect &incomingViewportRect)
     }
 }
 
-bool CompositionView::scrollSegmentsLayer(QRect &rect, bool &scroll)
+bool CompositionView::scrollSegmentsLayer(QRect &rect)
 {
     Profiler profiler("CompositionView::scrollSegmentsLayer()");
 
@@ -483,10 +483,16 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool &scroll)
     const int h = viewport()->height();
     const int cx = contentsX();
     const int cy = contentsY();
+    // The entire viewport in contents coords.
+    const QRect viewportContentsRect(cx, cy, w, h);
 
-    scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
+    bool scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
 
     if (scroll) {
+
+        // ??? All this scroll optimization saves about 7% cpu on my
+        //     machine when auto-scrolling the BWV1048 example.  Doesn't
+        //     seem worth the extra code.
 
         if (refreshRect.isValid()) {
 
@@ -495,23 +501,21 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool &scroll)
             // predated or postdated the internal update of scroll
             // location.  Cut our losses and refresh everything.
 
-            refreshRect.setRect(cx, cy, w, h);
+            refreshRect = viewportContentsRect;
 
         } else {
 
             // No existing refresh rect: we only need to handle the
             // scroll.
 
-            bool all = false;
+            // Horizontal scroll distance
+            int dx = m_lastBufferRefreshX - cx;
 
-            // If we're scrolling sideways
-            if (cx != m_lastBufferRefreshX) {
-
-                // compute the delta
-                int dx = m_lastBufferRefreshX - cx;
+            // If we're scrolling horizontally
+            if (dx != 0) {
 
                 // If we're scrolling less than the entire viewport
-                if (dx > -w && dx < w) {
+                if (abs(dx) < w) {
 
                     // Scroll the segments layer sideways
                     m_segmentsLayer.scroll(dx, 0, m_segmentsLayer.rect());
@@ -526,20 +530,19 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool &scroll)
                 } else {  // We've scrolled more than the entire viewport
 
                     // Refresh everything
-                    refreshRect.setRect(cx, cy, w, h);
-                    all = true;
+                    refreshRect = viewportContentsRect;
                 }
             }
 
+            // Vertical scroll distance
+            int dy = m_lastBufferRefreshY - cy;
+
             // If we're scrolling vertically and the sideways scroll didn't
             // result in a need to refresh everything,
-            if (cy != m_lastBufferRefreshY && !all) {
-
-                // compute the delta
-                int dy = m_lastBufferRefreshY - cy;
+            if (dy != 0  &&  refreshRect != viewportContentsRect) {
 
                 // If we're scrolling less than the entire viewport
-                if (dy > -h && dy < h) {
+                if (abs(dy) < h) {
 
                     // Scroll the segments layer vertically
                     m_segmentsLayer.scroll(0, dy, m_segmentsLayer.rect());
@@ -554,33 +557,32 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool &scroll)
                 } else {  // We've scrolled more than the entire viewport
 
                     // Refresh everything
-                    refreshRect.setRect(cx, cy, w, h);
+                    refreshRect = viewportContentsRect;
                 }
             }
         }
     }
 
-    // Refresh the segments layer for the exposed portion.
-
-    bool needRefresh = false;
-
-    if (refreshRect.isValid()) {
-        drawSegments(refreshRect);
-        m_segmentsRefresh = QRect();
-
-        needRefresh = true;
-    }
-
     m_lastBufferRefreshX = cx;
     m_lastBufferRefreshY = cy;
 
-    // Compute the final rect for the caller.
+    bool segmentsLayerChanged = false;
 
+    // If we need to redraw the segments layer, do so.
+    if (refreshRect.isValid()) {
+        // Refresh the segments layer
+        drawSegments(refreshRect);
+        m_segmentsRefresh = QRect();
+
+        segmentsLayerChanged = true;
+    }
+
+    // Compute the final rect for the caller.
     rect |= refreshRect;
     if (scroll)
-        rect.setRect(cx, cy, w, h);  // everything
+        rect = viewportContentsRect;  // everything
 
-    return needRefresh;
+    return segmentsLayerChanged;
 }
 
 void CompositionView::drawSegments(const QRect &clipRect)
