@@ -389,25 +389,20 @@ void CompositionView::slotStoppedRecording()
 
 void CompositionView::resizeEvent(QResizeEvent *e)
 {
-    // No change, bail.
-    if (e->size() == e->oldSize())
-        return;
-
-    //RG_DEBUG << "resizeEvent() : from " << e->oldSize() << " to " << e->size();
-
     RosegardenScrollView::resizeEvent(e);
 
     // Resize the contents if needed.
     slotUpdateSize();
 
-    int w = std::max(m_segmentsLayer.width(), viewport()->width());
-    int h = std::max(m_segmentsLayer.height(), viewport()->height());
+    // If the viewport has grown larger than the segments layer
+    if (e->size().width() > m_segmentsLayer.width()  ||
+        e->size().height() > m_segmentsLayer.height()) {
 
-    m_segmentsLayer = QPixmap(w, h);
+        // Reallocate the segments layer
+        m_segmentsLayer = QPixmap(e->size().width(), e->size().height());
+    }
 
     updateAll();
-
-    //RG_DEBUG << "resizeEvent() : segments layer size = " << m_segmentsLayer.size();
 }
 
 void CompositionView::paintEvent(QPaintEvent *e)
@@ -424,9 +419,6 @@ void CompositionView::paintEvent(QPaintEvent *e)
 void CompositionView::drawAll(QRect rect)
 {
     Profiler profiler("CompositionView::drawAll(rect)");
-
-    // Save the original rect in case we aren't scrolling.
-    const QRect updateRect = rect;
 
     // Limit the requested rect to the viewport.
     rect &= viewport()->rect();
@@ -616,60 +608,41 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     return needRefresh;
 }
 
-void CompositionView::drawSegments(const QRect& rect)
+void CompositionView::drawSegments(const QRect &clipRect)
 {
-    Profiler profiler("CompositionView::drawSegments");
+    Profiler profiler("CompositionView::drawSegments(clipRect)");
 
-    //RG_DEBUG << "CompositionView::drawSegments() r = "
-    //         << rect << endl;
-
-    // ### This constructor used to mean "start painting on the segments
-    //     layer, taking your default paint configuration from the viewport".
-    //     I don't think it's supported any more -- I had to look it up (I'd
-    //     never known it was possible to do this in the first place!)
-    // @@@ QPainter p(&m_segmentsLayer, viewport());
-    // Let's see how we get on with:
-    QPainter p(&m_segmentsLayer);
-
-    p.setRenderHint(QPainter::Antialiasing, false);
-
-    p.translate( -contentsX(), -contentsY());
+    QPainter segmentsLayerPainter(&m_segmentsLayer);
+    // Switch to contents coords.
+    segmentsLayerPainter.translate(-contentsX(), -contentsY());
 
     if (!m_backgroundPixmap.isNull()) {
-        QPoint pp(rect.x() % m_backgroundPixmap.height(), rect.y() % m_backgroundPixmap.width());
-        p.drawTiledPixmap(rect, m_backgroundPixmap, pp);
+        QPoint offset(
+                clipRect.x() % m_backgroundPixmap.height(),
+                clipRect.y() % m_backgroundPixmap.width());
+        segmentsLayerPainter.drawTiledPixmap(
+                clipRect, m_backgroundPixmap, offset);
     } else {
-        p.eraseRect(rect);
+        segmentsLayerPainter.eraseRect(clipRect);
     }
 
-    drawSegments(&p, rect);
-
-    // DEBUG - show what's updated
-    //    QPen framePen(QColor(Qt::red), 1);
-    //    p.setPen(framePen);
-    //    p.drawRect(rect);
-
-    //    m_segmentsNeedRefresh = false;
+    // ??? Inline this.
+    drawSegments(&segmentsLayerPainter, clipRect);
 }
 
 void CompositionView::drawArtifacts(const QRect &clipRect)
 {
-    Profiler profiler("CompositionView::drawArtifacts(rect)");
+    Profiler profiler("CompositionView::drawArtifacts(clipRect)");
 
-    //RG_DEBUG << "drawArtifacts(rect) clipRect = " << clipRect;
-
-    QPainter viewportPainter;
-
-    viewportPainter.begin(viewport());
-
+    QPainter viewportPainter(viewport());
+    // Switch to contents coords.
     viewportPainter.translate(-contentsX(), -contentsY());
-    drawArtifacts(&viewportPainter, clipRect);
-    viewportPainter.end();
 
-    //m_artifactsNeedRefresh = false;
+    // ??? Inline this.
+    drawArtifacts(&viewportPainter, clipRect);
 }
 
-void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect)
+void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect)
 {
     // Fetch track Y coordinates within the clip rectangle.  We expand the
     // clip rectangle slightly because we are drawing a rather wide track
@@ -686,11 +659,11 @@ void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRe
 
     Profiler profiler("CompositionView::drawSegments: dividing lines");
 
-    segmentLayerPainter->save();
+    segmentsLayerPainter->save();
 
     // Select the lighter (middle) divider color.
     QColor light = m_trackDividerColor.light();
-    segmentLayerPainter->setPen(light);
+    segmentsLayerPainter->setPen(light);
 
     // For each track Y coordinate, draw the two light lines in the middle
     // of the track divider.
@@ -700,21 +673,21 @@ void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRe
         int y = *yi - 1;
         // If it's in the clipping area, draw it
         if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentLayerPainter->drawLine(
+            segmentsLayerPainter->drawLine(
                     clipRect.left(), y,
                     clipRect.right(), y);
         }
         // Lower line.
         ++y;
         if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentLayerPainter->drawLine(
+            segmentsLayerPainter->drawLine(
                     clipRect.left(), y,
                     clipRect.right(), y);
         }
     }
 
     // Switch to the darker divider color.
-    segmentLayerPainter->setPen(m_trackDividerColor);
+    segmentsLayerPainter->setPen(m_trackDividerColor);
 
     // For each track Y coordinate, draw the two dark lines on the outside
     // of the track divider.
@@ -723,29 +696,29 @@ void CompositionView::drawTrackDividers(QPainter *segmentLayerPainter, const QRe
         // Upper line
         int y = *yi - 2;
         if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentLayerPainter->drawLine(
+            segmentsLayerPainter->drawLine(
                     clipRect.x(), y,
                     clipRect.x() + clipRect.width() - 1, y);
         }
         // Lower line
         y += 3;
         if (y >= clipRect.top()  &&  y <= clipRect.bottom()) {
-            segmentLayerPainter->drawLine(
+            segmentsLayerPainter->drawLine(
                     clipRect.x(), y,
                     clipRect.x() + clipRect.width() - 1, y);
         }
     }
 
-    segmentLayerPainter->restore();
+    segmentsLayerPainter->restore();
 }
 
-void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect)
+void CompositionView::drawSegments(QPainter *segmentsLayerPainter, const QRect &clipRect)
 {
     Profiler profiler("CompositionView::drawSegments");
 
     //RG_DEBUG << "CompositionView::drawSegments() clipRect = " << clipRect;
 
-    drawTrackDividers(segmentLayerPainter, clipRect);
+    drawTrackDividers(segmentsLayerPainter, clipRect);
 
     // *** Get Segment and Preview Rectangles
 
@@ -776,19 +749,19 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
     {
         Profiler profiler("CompositionView::drawSegments(): segment rectangles");
 
-        segmentLayerPainter->save();
+        segmentsLayerPainter->save();
 
         // For each segment rectangle, draw it
         for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
              i != end; ++i) {
-            segmentLayerPainter->setBrush(i->getBrush());
-            segmentLayerPainter->setPen(i->getPen());
+            segmentsLayerPainter->setBrush(i->getBrush());
+            segmentsLayerPainter->setPen(i->getPen());
 
             //RG_DEBUG << "CompositionView::drawSegments : draw comp rect " << *i << endl;
-            drawCompRect(*i, segmentLayerPainter, clipRect);
+            drawCompRect(*i, segmentsLayerPainter, clipRect);
         }
 
-        segmentLayerPainter->restore();
+        segmentsLayerPainter->restore();
     }
 
     {
@@ -796,21 +769,21 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
 
         if (segmentRects.size() > 1) {
             //RG_DEBUG << "CompositionView::drawSegments : drawing intersections\n";
-            drawIntersections(segmentRects, segmentLayerPainter, clipRect);
+            drawIntersections(segmentRects, segmentsLayerPainter, clipRect);
         }
     }
 
     // *** Draw Segment Previews
 
     if (m_showPreviews) {
-        segmentLayerPainter->save();
+        segmentsLayerPainter->save();
 
         // Audio Previews
 
         {
             Profiler profiler("CompositionView::drawSegments: audio previews");
 
-            drawAudioPreviews(segmentLayerPainter, clipRect);
+            drawAudioPreviews(segmentsLayerPainter, clipRect);
         }
 
         // Notation Previews
@@ -825,8 +798,8 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
         //     able to switch from RectRanges to RectRange.
         for (; npi != npEnd; ++npi) {
             CompositionModelImpl::RectRange interval = *npi;
-            segmentLayerPainter->save();
-            segmentLayerPainter->translate(
+            segmentsLayerPainter->save();
+            segmentsLayerPainter->translate(
                     interval.basePoint.x(), interval.basePoint.y());
             //RG_DEBUG << "CompositionView::drawSegments : translating to x = " << interval.basePoint.x() << endl;
 
@@ -835,15 +808,15 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
                 const QRect &pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
-                segmentLayerPainter->setBrush(col);
-                segmentLayerPainter->setPen(QPen(col, 0));
+                segmentsLayerPainter->setBrush(col);
+                segmentsLayerPainter->setPen(QPen(col, 0));
                 //RG_DEBUG << "CompositionView::drawSegments : drawing preview rect at x = " << pr.x() << endl;
-                segmentLayerPainter->drawRect(pr);
+                segmentsLayerPainter->drawRect(pr);
             }
-            segmentLayerPainter->restore();
+            segmentsLayerPainter->restore();
         }
 
-        segmentLayerPainter->restore();
+        segmentsLayerPainter->restore();
     }
 
     // *** Draw Segment Labels
@@ -855,7 +828,7 @@ void CompositionView::drawSegments(QPainter *segmentLayerPainter, const QRect &c
         Profiler profiler("CompositionView::drawSegments: labels");
         for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
              i != end; ++i) {
-            drawCompRectLabel(*i, segmentLayerPainter, clipRect);
+            drawCompRectLabel(*i, segmentsLayerPainter, clipRect);
         }
     }
 

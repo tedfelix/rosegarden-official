@@ -456,19 +456,19 @@ private:
     void drawArtifacts(const QRect &clipRect);
 
     /// Draw the track dividers on the segments layer.
-    void drawTrackDividers(QPainter *segmentLayerPainter, const QRect &clipRect);
+    void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
     /// Draws the segments on the segments layer (m_segmentsLayer).
     /**
      * Also draws the track dividers.
      *
      * Used by drawSegments(rect).
      */
-    void drawSegments(QPainter *segmentLayerPainter, const QRect &clipRect);
+    void drawSegments(QPainter *segmentsLayerPainter, const QRect &clipRect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
      * Used by drawSegments().
      */
-    void drawAudioPreviews(QPainter *segmentLayerPainter, const QRect &clipRect);
+    void drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect);
     /// Draw the overlay artifacts on the viewport.
     /**
      * "Artifacts" include anything that isn't a segment.  E.g. The playback
