@@ -416,22 +416,25 @@ void CompositionView::paintEvent(QPaintEvent *e)
     }
 }
 
-void CompositionView::drawAll(QRect rect)
+void CompositionView::drawAll(const QRect &incomingViewportRect)
 {
-    Profiler profiler("CompositionView::drawAll(rect)");
+    Profiler profiler("CompositionView::drawAll(incomingViewportRect)");
 
-    // Limit the requested rect to the viewport.
-    rect &= viewport()->rect();
+    QRect incomingContentsRect = incomingViewportRect;
+    // Limit to the viewport.
+    incomingContentsRect &= viewport()->rect();
     // Convert from viewport coords to contents coords.
-    rect.translate(contentsX(), contentsY());
+    incomingContentsRect.translate(contentsX(), contentsY());
 
     bool scroll = false;
 
     // Scroll and refresh the segments layer.
-    bool changed = scrollSegmentsLayer(rect, scroll);
+    bool changed = scrollSegmentsLayer(incomingContentsRect, scroll);
 
-    // rect is now the combination of the requested refresh rect and the refresh
-    // needed by any scrolling.
+    // incomingContentsRect is now a combination of the incomingViewportRect
+    // and the refresh needed by any scrolling.  And maybe something else.
+    // ??? The point is that it is no longer the incomingContentsRect, so it
+    //     needs a different name at this point.
 
     // ??? All of this selective updating is really complicated and probably
     //     results in very little performance improvement.
@@ -448,23 +451,18 @@ void CompositionView::drawAll(QRect rect)
     if (changed  ||  m_artifactsRefresh.isValid()) {
         // Figure out what portion needs copying.  This is the incoming
         // rect plus the scroll rect plus the artifacts refresh rect.
-        QRect copyRect(rect | m_artifactsRefresh);
+        QRect copyRect(incomingContentsRect | m_artifactsRefresh);
         // Convert contents coords to viewport coords.
         copyRect.translate(-contentsX(), -contentsY());
 
         // Copy the segments to the viewport.
-        QPainter viewportPainter;
-        viewportPainter.begin(viewport());
-        viewportPainter.drawPixmap(
-                copyRect.x(), copyRect.y(),
-                m_segmentsLayer,
-                copyRect.x(), copyRect.y(),
-                copyRect.width(), copyRect.height());
+        QPainter viewportPainter(viewport());
+        viewportPainter.drawPixmap(copyRect, m_segmentsLayer, copyRect);
         viewportPainter.end();
 
         // Since we've clobbered the artifacts on the viewport,
         // add the clobbered area to the artifacts rect.
-        m_artifactsRefresh |= rect;
+        m_artifactsRefresh |= incomingContentsRect;
     }
 
     if (m_artifactsRefresh.isValid()) {
@@ -474,22 +472,21 @@ void CompositionView::drawAll(QRect rect)
     }
 }
 
-bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
+bool CompositionView::scrollSegmentsLayer(QRect &rect, bool &scroll)
 {
-    Profiler profiler("CompositionView::scrollSegmentsLayer");
+    Profiler profiler("CompositionView::scrollSegmentsLayer()");
 
-    bool all = false;
+    // Portion of the segments layer that needs to be redrawn.
     QRect refreshRect = m_segmentsRefresh;
 
-    int w = viewport()->width(), h = viewport()->height();
-    int cx = contentsX(), cy = contentsY();
+    const int w = viewport()->width();
+    const int h = viewport()->height();
+    const int cx = contentsX();
+    const int cy = contentsY();
 
     scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
 
     if (scroll) {
-
-        //RG_DEBUG << "scrollSegmentsLayer: scrolling by ("
-        //         << cx - m_lastBufferRefreshX << "," << cy - m_lastBufferRefreshY << ")" << endl;
 
         if (refreshRect.isValid()) {
 
@@ -503,15 +500,9 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
         } else {
 
             // No existing refresh rect: we only need to handle the
-            // scroll.  Formerly we dealt with this by copying part of
-            // the pixmap to itself, but that only worked by accident,
-            // and it fails with the raster renderer or on non-X11
-            // platforms.  Use a temporary pixmap instead
+            // scroll.
 
-            static QPixmap map;
-            if (map.size() != m_segmentsLayer.size()) {
-                map = QPixmap(m_segmentsLayer.size());
-            }
+            bool all = false;
 
             // If we're scrolling sideways
             if (cx != m_lastBufferRefreshX) {
@@ -523,13 +514,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
                 if (dx > -w && dx < w) {
 
                     // Scroll the segments layer sideways
-                    QPainter cp;
-                    cp.begin(&map);
-                    cp.drawPixmap(0, 0, m_segmentsLayer);
-                    cp.end();
-                    cp.begin(&m_segmentsLayer);
-                    cp.drawPixmap(dx, 0, map);
-                    cp.end();
+                    m_segmentsLayer.scroll(dx, 0, m_segmentsLayer.rect());
 
                     // Add the part that was exposed to the refreshRect
                     if (dx < 0) {
@@ -557,13 +542,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
                 if (dy > -h && dy < h) {
 
                     // Scroll the segments layer vertically
-                    QPainter cp;
-                    cp.begin(&map);
-                    cp.drawPixmap(0, 0, m_segmentsLayer);
-                    cp.end();
-                    cp.begin(&m_segmentsLayer);
-                    cp.drawPixmap(0, dy, map);
-                    cp.end();
+                    m_segmentsLayer.scroll(0, dy, m_segmentsLayer.rect());
 
                     // Add the part that was exposed to the refreshRect
                     if (dy < 0) {
@@ -576,7 +555,6 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
 
                     // Refresh everything
                     refreshRect.setRect(cx, cy, w, h);
-                    all = true;
                 }
             }
         }
@@ -587,15 +565,12 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect, bool& scroll)
     bool needRefresh = false;
 
     if (refreshRect.isValid()) {
+        drawSegments(refreshRect);
+        m_segmentsRefresh = QRect();
+
         needRefresh = true;
     }
 
-    if (needRefresh)
-        drawSegments(refreshRect);
-
-    // ??? Move these lines to the end of drawSegments(rect)?
-    //     Or do they still need to run even when needRefresh is false?
-    m_segmentsRefresh = QRect();
     m_lastBufferRefreshX = cx;
     m_lastBufferRefreshY = cy;
 

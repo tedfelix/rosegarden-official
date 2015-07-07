@@ -426,8 +426,8 @@ private:
     virtual void leaveEvent(QEvent *);
 
     /// Draw the segments and artifacts on the viewport (screen).
-    void drawAll(QRect rect);
-    
+    void drawAll(const QRect &incomingViewportRect);
+
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
      * Returns enough information to determine how much additional work
