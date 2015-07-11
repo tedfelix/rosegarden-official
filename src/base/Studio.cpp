@@ -586,7 +586,7 @@ Studio::unassignAllInstruments()
                     (*iit)->setSendProgramChange(false);
                     (*iit)->setNaturalChannel(channel);
                     channel = ( channel + 1 ) % 16;
-                    (*iit)->releaseFixedChannel();
+                    (*iit)->setFixedChannel();
 
                     (*iit)->setSendPan(false);
                     (*iit)->setSendVolume(false);
