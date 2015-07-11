@@ -426,20 +426,15 @@ private:
     virtual void leaveEvent(QEvent *);
 
     /// Draw the segments and artifacts on the viewport (screen).
-    void drawAll(const QRect &incomingViewportRect);
+    void drawAll(const QRect &requestedViewportRect);
 
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
      * Returns enough information to determine how much additional work
      * needs to be done to update the viewport.
      * Used by drawAll().
-     *
-     * This routine appears to mainly refresh the segments layer.  Scrolling
-     * only happens if needed.  Having "scroll" in the name might be
-     * misleading.  However, calling this refreshSegmentsLayer() confuses
-     * it with drawSegments(rect).  Need to dig a bit more.
      */
-    bool scrollSegmentsLayer(QRect &rect);
+    bool scrollSegmentsLayer(QRect &changeRect);
 
     /// Draw the segments on the segment layer (m_segmentsLayer).
     /**
@@ -619,8 +614,8 @@ private:
      */
     QRect        m_artifactsRefresh;
 
-    int          m_lastBufferRefreshX;
-    int          m_lastBufferRefreshY;
+    int          m_lastContentsX;
+    int          m_lastContentsY;
     int          m_lastPointerRefreshX;
     QPixmap      m_backgroundPixmap;
 

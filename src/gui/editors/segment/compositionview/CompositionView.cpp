@@ -94,8 +94,8 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_segmentsLayer(viewport()->width(), viewport()->height()),
     m_segmentsRefresh(0, 0, viewport()->width(), viewport()->height()),
     m_artifactsRefresh(0, 0, viewport()->width(), viewport()->height()),
-    m_lastBufferRefreshX(0),
-    m_lastBufferRefreshY(0),
+    m_lastContentsX(0),
+    m_lastContentsY(0),
     m_lastPointerRefreshX(0),
     m_contextHelpShown(false),
     m_updateTimer(new QTimer(static_cast<QObject *>(this))),
@@ -409,60 +409,61 @@ void CompositionView::paintEvent(QPaintEvent *e)
 {
     Profiler profiler("CompositionView::paintEvent()");
 
-    QVector<QRect> rects = e->region().rects();
+    // There is no need to draw based on the rects in the clipping region.
+    // For all the critical use cases, only a single clipping rect comes
+    // over anyway.
 
-    for (int i = 0; i < rects.size(); ++i) {
-        drawAll(rects[i]);
-    }
+    drawAll(e->rect());
 }
 
-void CompositionView::drawAll(const QRect &incomingViewportRect)
+void CompositionView::drawAll(const QRect &requestedViewportRect)
 {
-    Profiler profiler("CompositionView::drawAll(incomingViewportRect)");
+    Profiler profiler("CompositionView::drawAll(requestedViewportRect)");
 
-    QRect incomingContentsRect = incomingViewportRect;
+    // Unless the variable name contains "Viewport", all QRect's are
+    // in contents coords.
+
+    QRect requestedRect = requestedViewportRect;
     // Limit to the viewport.
-    incomingContentsRect &= viewport()->rect();
+    requestedRect &= viewport()->rect();
     // Convert from viewport coords to contents coords.
-    incomingContentsRect.translate(contentsX(), contentsY());
+    requestedRect.translate(contentsX(), contentsY());
+
+    QRect refreshRect;
 
     // Scroll and refresh the segments layer.
-    bool segmentsLayerChanged = scrollSegmentsLayer(incomingContentsRect);
+    bool segmentsLayerChanged = scrollSegmentsLayer(refreshRect);
 
-    // incomingContentsRect is now a combination of the incomingViewportRect
-    // and the refresh needed by any scrolling.  And maybe something else.
-    // ??? The point is that it is no longer the incomingContentsRect, so it
-    //     needs a different name at this point.  Perhaps we should send in
-    //     the incomingContentsRect and get back a refreshContentsRect?
-    //     Two parameters instead of one for clarity.
+    // Combine the portions of the segments layer that have been refreshed
+    // with the portions of the contents that have been requested by the
+    // caller.
+    refreshRect |= requestedRect;
 
-    // ??? All of this selective updating is really complicated and probably
-    //     results in very little performance improvement.
-    //     Recommend considering the following simpler design:
-    //       1. Scrolling invalidates everything.  Just do a complete redraw
-    //          of the viewport.  No need to be clever.
-    //       2. If clients want a particular portion updated, try to honor
-    //          that, but don't let the code become too complicated.
-    //       3. Avoid recopying the segment layer and redrawing the artifacts
-    //          by keeping the artifacts in their own layer and combining on
-    //          the viewport.
+    // ??? Try putting the artifacts on their own layer pixmap.  This might
+    //     simplify the code a bit.  Should also allow us to avoid
+    //     redrawing the artifacts just because the segments need to
+    //     be updated.  This might help the recording use case a little.
+    // ??? There are two key use cases that need to be optimized.
+    //     The first is recording.  This is the most important as it uses
+    //     a lot of CPU (and shouldn't).  The second is auto-scrolling.
+    //     It's not quite as important since it is relatively rare.
 
     // If we need to copy the segments to the viewport
     if (segmentsLayerChanged  ||  m_artifactsRefresh.isValid()) {
-        // Figure out what portion needs copying.  This is the incoming
-        // rect plus the scroll rect plus the artifacts refresh rect.
-        QRect copyRect(incomingContentsRect | m_artifactsRefresh);
+        // Figure out what portion needs copying.
+        QRect copyViewportRect(refreshRect | m_artifactsRefresh);
         // Convert contents coords to viewport coords.
-        copyRect.translate(-contentsX(), -contentsY());
+        copyViewportRect.translate(-contentsX(), -contentsY());
 
         // Copy the segments to the viewport.
         QPainter viewportPainter(viewport());
-        viewportPainter.drawPixmap(copyRect, m_segmentsLayer, copyRect);
+        viewportPainter.drawPixmap(
+                copyViewportRect, m_segmentsLayer, copyViewportRect);
         viewportPainter.end();
 
         // Since we've clobbered the artifacts on the viewport,
         // add the clobbered area to the artifacts rect.
-        m_artifactsRefresh |= incomingContentsRect;
+        m_artifactsRefresh |= refreshRect;
     }
 
     if (m_artifactsRefresh.isValid()) {
@@ -472,7 +473,7 @@ void CompositionView::drawAll(const QRect &incomingViewportRect)
     }
 }
 
-bool CompositionView::scrollSegmentsLayer(QRect &rect)
+bool CompositionView::scrollSegmentsLayer(QRect &changeRect)
 {
     Profiler profiler("CompositionView::scrollSegmentsLayer()");
 
@@ -486,7 +487,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect)
     // The entire viewport in contents coords.
     const QRect viewportContentsRect(cx, cy, w, h);
 
-    bool scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
+    bool scroll = (cx != m_lastContentsX || cy != m_lastContentsY);
 
     if (scroll) {
 
@@ -509,7 +510,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect)
             // scroll.
 
             // Horizontal scroll distance
-            int dx = m_lastBufferRefreshX - cx;
+            int dx = m_lastContentsX - cx;
 
             // If we're scrolling horizontally
             if (dx != 0) {
@@ -535,7 +536,7 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect)
             }
 
             // Vertical scroll distance
-            int dy = m_lastBufferRefreshY - cy;
+            int dy = m_lastContentsY - cy;
 
             // If we're scrolling vertically and the sideways scroll didn't
             // result in a need to refresh everything,
@@ -563,9 +564,11 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect)
         }
     }
 
-    m_lastBufferRefreshX = cx;
-    m_lastBufferRefreshY = cy;
+    m_lastContentsX = cx;
+    m_lastContentsY = cy;
 
+    // ??? We could get rid of this and instead use
+    //     changeRect.isValid() to indicate "changed".
     bool segmentsLayerChanged = false;
 
     // If we need to redraw the segments layer, do so.
@@ -577,10 +580,12 @@ bool CompositionView::scrollSegmentsLayer(QRect &rect)
         segmentsLayerChanged = true;
     }
 
-    // Compute the final rect for the caller.
-    rect |= refreshRect;
+    // Compute the portion of the segments layer that has been
+    // changed for the caller.
     if (scroll)
-        rect = viewportContentsRect;  // everything
+        changeRect = viewportContentsRect;
+    else
+        changeRect = refreshRect;
 
     return segmentsLayerChanged;
 }
