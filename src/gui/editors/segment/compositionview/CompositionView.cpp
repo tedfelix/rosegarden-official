@@ -442,12 +442,7 @@ void CompositionView::drawAll()
 
     // Redraw all of the artifacts on the viewport.
 
-    // The entire viewport in contents coords.
-    QRect viewportContentsRect(contentsX(), contentsY(),
-                               viewportRect.width(), viewportRect.height());
-    // ??? Since we're the only caller, get rid of the parameter and assume
-    //     the entire viewport.
-    drawArtifacts(viewportContentsRect);
+    drawArtifacts();
 }
 
 void CompositionView::scrollSegmentsLayer()
@@ -678,17 +673,66 @@ void CompositionView::drawSegments(const QRect &clipRect)
     }
 }
 
-void CompositionView::drawArtifacts(const QRect &clipRect)
+void CompositionView::drawArtifacts()
 {
-    Profiler profiler("CompositionView::drawArtifacts(clipRect)");
+    Profiler profiler("CompositionView::drawArtifacts()");
+
+    // The entire viewport in contents coords.
+    QRect viewportContentsRect(
+            contentsX(), contentsY(),
+            viewport()->rect().width(), viewport()->rect().height());
 
     QPainter viewportPainter(viewport());
     // Switch to contents coords.
     viewportPainter.translate(-contentsX(), -contentsY());
 
-    // ??? Inline this.
-    // ??? clipRect is always the entire viewport.  Get rid of it.
-    drawArtifacts(&viewportPainter, clipRect);
+    //
+    // Playback Pointer
+    //
+    drawPointer(&viewportPainter, viewportContentsRect);
+
+    //
+    // Tmp rect (rect displayed while drawing a new segment)
+    //
+    if (m_tmpRect.isValid() && m_tmpRect.intersects(viewportContentsRect)) {
+        viewportPainter.setBrush(m_tmpRectFill);
+        viewportPainter.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+        drawRect(m_tmpRect, &viewportPainter, viewportContentsRect);
+    }
+
+    //
+    // Tool guides (crosshairs)
+    //
+    if (m_drawGuides)
+        drawGuides(&viewportPainter, viewportContentsRect);
+
+    //
+    // Selection Rect
+    //
+    if (m_drawSelectionRect) {
+        //RG_DEBUG << "about to draw selection rect" << endl;
+        viewportPainter.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+        drawRect(m_selectionRect.normalized(), &viewportPainter, viewportContentsRect, false, 0, false);
+    }
+
+    //
+    // Floating Text
+    //
+    if (m_drawTextFloat)
+        drawTextFloat(&viewportPainter, viewportContentsRect);
+
+    //
+    // Split line
+    //
+    // ??? This never seems to appear.  Perhaps because showSplitLine()
+    //     doesn't call drawArtifacts()?
+    if (m_splitLinePos.x() > 0 && viewportContentsRect.contains(m_splitLinePos)) {
+        viewportPainter.save();
+        viewportPainter.setPen(m_guideColor);
+        viewportPainter.drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
+                    m_splitLinePos.x(), m_splitLinePos.y() + m_model->grid().getYSnap());
+        viewportPainter.restore();
+    }
 }
 
 void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect)
@@ -796,60 +840,6 @@ void CompositionView::drawAudioPreviews(QPainter * p, const QRect& clipRect)
             drawBasePoint.setX(drawBasePoint.x() + localRect.width());
             x += localRect.width();
         }
-    }
-}
-
-void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
-{
-    // ??? clipRect is always the entire viewport.  Get rid of it.
-    //     Simplify all code to assume the entire viewport.
-
-    //
-    // Playback Pointer
-    //
-    drawPointer(p, clipRect);
-
-    //
-    // Tmp rect (rect displayed while drawing a new segment)
-    //
-    if (m_tmpRect.isValid() && m_tmpRect.intersects(clipRect)) {
-        p->setBrush(m_tmpRectFill);
-        p->setPen(CompositionColourCache::getInstance()->SegmentBorder);
-        drawRect(m_tmpRect, p, clipRect);
-    }
-
-    //
-    // Tool guides (crosshairs)
-    //
-    if (m_drawGuides)
-        drawGuides(p, clipRect);
-
-    //
-    // Selection Rect
-    //
-    if (m_drawSelectionRect) {
-        //RG_DEBUG << "about to draw selection rect" << endl;
-        p->setPen(CompositionColourCache::getInstance()->SegmentBorder);
-        drawRect(m_selectionRect.normalized(), p, clipRect, false, 0, false);
-    }
-
-    //
-    // Floating Text
-    //
-    if (m_drawTextFloat)
-        drawTextFloat(p, clipRect);
-
-    //
-    // Split line
-    //
-    // ??? This never seems to appear.  Perhaps because showSplitLine()
-    //     doesn't call drawArtifacts(rect)?
-    if (m_splitLinePos.x() > 0 && clipRect.contains(m_splitLinePos)) {
-        p->save();
-        p->setPen(m_guideColor);
-        p->drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
-                    m_splitLinePos.x(), m_splitLinePos.y() + m_model->grid().getYSnap());
-        p->restore();
     }
 }
 

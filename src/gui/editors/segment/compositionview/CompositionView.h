@@ -441,12 +441,14 @@ private:
      * scrollSegmentsLayer().
      */
     void drawSegments(const QRect &);
+
     /// Draw the artifacts on the viewport.
-    /*
-     * Calls drawArtifacts() to draw the artifacts on the viewport.
+    /**
+     * "Artifacts" include anything that isn't a segment.  E.g. The playback
+     * position pointer, guides, and the "rubber band" selection.
      * Used by drawAll().
      */
-    void drawArtifacts(const QRect &clipRect);
+    void drawArtifacts();
 
     /// Draw the track dividers on the segments layer.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
@@ -455,13 +457,6 @@ private:
      * Used by drawSegments().
      */
     void drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect);
-    /// Draw the overlay artifacts on the viewport.
-    /**
-     * "Artifacts" include anything that isn't a segment.  E.g. The playback
-     * position pointer, guides, and the "rubber band" selection.  Used by
-     * drawArtifacts(rect).
-     */
-    void drawArtifacts(QPainter *viewportPainter, const QRect &clipRect);
     /// Draws a rectangle on the given painter with proper clipping.
     /**
      * This is an improved QPainter::drawRect().
