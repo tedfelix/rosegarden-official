@@ -75,12 +75,12 @@ public:
 
     /// Move the playback position pointer to a new X coordinate.
     /**
-     * @see getPointerPos(), setPointerPosition(), and drawPointer()
+     * @see getPointerPos(), setPointerPosition(), and drawArtifacts()
      */
     void setPointerPos(int pos);
     /// Get the X coordinate of the playback position pointer.
     /**
-     * @see setPointerPos(), setPointerPosition(), and drawPointer()
+     * @see setPointerPos() and setPointerPosition()
      */
     int getPointerPos() { return m_pointerPos; }
 
@@ -93,7 +93,7 @@ public:
      * The guides are blue crosshairs that stretch across the entire view.
      * They appear when selecting or moving a segment.
      *
-     * @see setGuidesPos() and drawGuides()
+     * @see setGuidesPos() and drawArtifacts()
      */
     void setDrawGuides(bool d);
 
@@ -302,7 +302,7 @@ signals:
      * Connected to RosegardenDocument::slotSetPointerPosition().
      * Connection is made by the RosegardenMainViewWidget ctor.
      *
-     * @see setPointerPos() and drawPointer()
+     * @see setPointerPos()
      */
     void setPointerPosition(timeT);
 
@@ -481,7 +481,7 @@ private:
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
     /// A version of drawRect() that handles segment repeats.
     void drawCompRect(const CompositionRect &r, QPainter *p, const QRect &clipRect,
-                      int intersectLvl = 0, bool fill = true);
+                      int intersectLvl = 0);
     /// Used by drawSegments() to draw the segment labels.
     /**
      * @see setShowSegmentLabels()
@@ -490,16 +490,6 @@ private:
     /// Used by drawSegments() to draw any intersections between rectangles.
     void drawIntersections(const CompositionModelImpl::RectContainer &, QPainter *p, const QRect &clipRect);
 
-    /// Used by drawArtifacts() to draw the playback position pointer.
-    /**
-     * @see setPointerPos() and setPointerPosition()
-     */
-    void drawPointer(QPainter *p, const QRect &clipRect);
-    /// Used by drawArtifacts() to draw the guides on the viewport.
-    /**
-     * @see setGuidesPos() and setDrawGuides()
-     */
-    void drawGuides(QPainter *p, const QRect &clipRect);
     /// Used by drawArtifacts() to draw floating text.
     /**
      * @see setTextFloat()
