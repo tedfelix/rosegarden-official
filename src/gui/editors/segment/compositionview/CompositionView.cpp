@@ -729,11 +729,9 @@ void CompositionView::drawArtifacts()
     // Split line
     //
     if (m_splitLinePos.x() > 0 && viewportContentsRect.contains(m_splitLinePos)) {
-        viewportPainter.save();
         viewportPainter.setPen(m_guideColor);
         viewportPainter.drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
                     m_splitLinePos.x(), m_splitLinePos.y() + m_model->grid().getYSnap());
-        viewportPainter.restore();
     }
 }
 
@@ -780,68 +778,111 @@ void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QR
     segmentsLayerPainter->restore();
 }
 
-void CompositionView::drawAudioPreviews(QPainter * p, const QRect& clipRect)
+void CompositionView::drawImage(
+        QPainter *painter,
+        QPoint dest, const PixmapArray &tileVector, QRect source)
+{
+    // ??? This is an awful lot of complexity to accommodate the tiling
+    //     of the audio previews.  Why are they tiled?  Can they be
+    //     untiled so that all of this would reduce to a single drawImage()?
+
+    // No tiles?  Bail.
+    if (tileVector.empty())
+        return;
+
+    int tileWidth = AudioPreviewPainter::tileWidth();
+
+    int firstTile = source.left() / tileWidth;
+    int firstTileStartX = source.left() % tileWidth;
+    int lastTile = source.right() / tileWidth;
+    int lastTileStopX = source.right() % tileWidth;
+
+    if (firstTile < 0  ||  lastTile < 0)
+        return;
+
+    // Most likely, the source rect needs normalizing.
+    if (lastTile < firstTile)
+        return;
+
+    // If we are starting beyond the available tiles, bail.
+    if (firstTile >= (int)tileVector.size())
+        return;
+
+    // If we are ending beyond the available tiles
+    if (lastTile >= (int)tileVector.size()) {
+        // Stop at the last.
+        lastTile = (int)tileVector.size() - 1;
+        lastTileStopX = tileWidth - 1;
+    }
+
+    // Special case: Drawing from a single tile.
+    if (firstTile == lastTile) {
+        QRect tileSource = source;  // get top, bottom, and width
+        tileSource.setLeft(source.left() - tileWidth * firstTile);
+        painter->drawImage(dest, tileVector[firstTile], tileSource);
+        return;
+    }
+
+    // *** First Tile
+
+    QRect firstTileSource = source;  // get the top and bottom
+    firstTileSource.setLeft(firstTileStartX);
+    firstTileSource.setRight(tileWidth - 1);
+    painter->drawImage(dest, tileVector[firstTile], firstTileSource);
+    dest.setX(dest.x() + firstTileSource.width());
+
+    // *** Middle Tile(s)
+
+    int firstMiddleTile = firstTile + 1;
+    int lastMiddleTile = lastTile - 1;
+
+    // An entire tile
+    QRect tileRect(source.x(), source.y(), tileWidth, source.height());
+
+    // for each middle tile
+    for (int tile = firstMiddleTile; tile <= lastMiddleTile; ++tile) {
+        // draw the middle tile entirely
+        painter->drawImage(dest, tileVector[tile], tileRect);
+        dest.setX(dest.x() + tileRect.width());
+    }
+
+    // *** Last Tile
+
+    QRect lastTileSource = source;  // get the top and bottom
+    lastTileSource.setLeft(0);
+    lastTileSource.setRight(lastTileStopX);
+    painter->drawImage(dest, tileVector[lastTile], lastTileSource);
+}
+
+void CompositionView::drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect)
 {
     Profiler profiler("CompositionView::drawAudioPreviews");
 
-    CompositionModelImpl::AudioPreviewDrawData::const_iterator api = m_audioPreview.begin();
-    CompositionModelImpl::AudioPreviewDrawData::const_iterator apEnd = m_audioPreview.end();
-    QRect rectToFill,  // rect to fill on canvas
-        localRect; // the rect of the tile to draw on the canvas
-    QPoint basePoint,  // origin of segment rect
-        drawBasePoint; // origin of rect to fill on canvas
-    QRect r;
-    for (; api != apEnd; ++api) {
-        rectToFill = api->rect;
-        basePoint = api->basePoint;
-        rectToFill.moveTopLeft(basePoint);
-        rectToFill &= clipRect;
-        r = rectToFill;
-        drawBasePoint = rectToFill.topLeft();
-        rectToFill.translate( -basePoint.x(), -basePoint.y());
-        int firstPixmapIdx = (r.x() - basePoint.x()) / AudioPreviewPainter::tileWidth();
-        if (firstPixmapIdx >= int(api->pixmap.size())) {
-            //RG_DEBUG << "CompositionView::drawAudioPreviews : WARNING - miscomputed pixmap array : r.x = "
-            //         << r.x() << " - basePoint.x = " << basePoint.x() << " - firstPixmapIdx = " << firstPixmapIdx
-            //         << endl;
+    // for each audio preview
+    for (CompositionModelImpl::AudioPreviewDrawData::const_iterator audioPreviewIter = m_audioPreview.begin();
+         audioPreviewIter != m_audioPreview.end();
+         ++audioPreviewIter) {
+
+        const CompositionModelImpl::AudioPreviewDrawDataItem &audioPreviewDrawDataItem = *audioPreviewIter;
+
+        // If this one isn't in the clip rect, try the next.
+        if (!audioPreviewDrawDataItem.rect.intersects(clipRect))
             continue;
-        }
-        int x = 0, idx = firstPixmapIdx;
-        //RG_DEBUG << "CompositionView::drawAudioPreviews : clipRect = " << clipRect
-        //         << " - firstPixmapIdx = " << firstPixmapIdx << endl;
-        while (x < clipRect.width()) {
-            int pixmapRectXOffset = idx * AudioPreviewPainter::tileWidth();
-            localRect.setRect(basePoint.x() + pixmapRectXOffset, basePoint.y(),
-                              AudioPreviewPainter::tileWidth(), api->rect.height());
-            //RG_DEBUG << "CompositionView::drawAudioPreviews : initial localRect = "
-            //         << localRect << endl;
-            localRect &= r;
-            if (idx == firstPixmapIdx && api->resizeOffset != 0) {
-                // this segment is being resized from start, clip beginning of preview
-                localRect.translate(api->resizeOffset, 0);
-            }
 
-            //RG_DEBUG << "CompositionView::drawAudioPreviews : localRect & clipRect = "
-            //         << localRect << endl;
-            if (localRect.isEmpty()) {
-                //RG_DEBUG << "CompositionView::drawAudioPreviews : localRect & clipRect is empty\n";
-                break;
-            }
-            localRect.translate( -(basePoint.x() + pixmapRectXOffset), -basePoint.y());
+        QPoint destPoint = audioPreviewDrawDataItem.rect.topLeft();
+        QRect sourceRect = audioPreviewDrawDataItem.rect;
+        // Translate contents coords to preview coords.
+        sourceRect.moveTo(0,0);
 
-            //RG_DEBUG << "CompositionView::drawAudioPreviews : drawing pixmap "
-            //         << idx << " at " << drawBasePoint << " - localRect = " << localRect
-            //         << " - preResizeOrigin : " << api->preResizeOrigin << endl;
+        // If the beginning is being resized to the right, clip the preview
+        if (audioPreviewDrawDataItem.resizeOffset > 0)
+            sourceRect.setLeft(audioPreviewDrawDataItem.resizeOffset);
 
-            p->drawImage(drawBasePoint, api->pixmap[idx], localRect,
-                         Qt::ColorOnly | Qt::ThresholdDither | Qt::AvoidDither);
-
-            ++idx;
-            if (idx >= int(api->pixmap.size()))
-                break;
-            drawBasePoint.setX(drawBasePoint.x() + localRect.width());
-            x += localRect.width();
-        }
+        // draw the preview
+        drawImage(segmentsLayerPainter,
+                  destPoint,
+                  audioPreviewDrawDataItem.pixmap,
+                  sourceRect);
     }
 }
 

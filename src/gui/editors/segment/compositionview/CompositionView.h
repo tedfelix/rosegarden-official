@@ -452,11 +452,23 @@ private:
 
     /// Draw the track dividers on the segments layer.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
+
+    /// drawImage() for tiled audio previews.
+    /**
+     * This routine hides the fact that audio previews are stored as a
+     * series of QImage tiles.  It treats them as if they were one large
+     * QImage.  This simplifies drawing audio previews.
+     */
+    void drawImage(
+            QPainter *painter,
+            QPoint dest, const PixmapArray &tileVector, QRect source);
+
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
      * Used by drawSegments().
      */
     void drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect);
+
     /// Draws a rectangle on the given painter with proper clipping.
     /**
      * This is an improved QPainter::drawRect().
