@@ -169,7 +169,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
 
             emit setValue((int)(double(midiFile->tellg()) /
                                    double(m_fileSize) * 20.0));
-			qApp->processEvents( QEventLoop::AllEvents );	// note: was qApp->processEvents(50)
+            qApp->processEvents( QEventLoop::AllEvents );  // note: was qApp->processEvents(50)
         }
 
         return (MidiByte)byte;
@@ -188,7 +188,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 {
     string stringRet;
     char fileMidiByte;
-	static int bytesGot = 0; // purely for progress reporting purposes
+    static int bytesGot = 0; // purely for progress reporting purposes
 
     if (midiFile->eof()) {
 #ifdef MIDI_DEBUG
@@ -247,7 +247,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     if (bytesGot % 2000 == 0) {
         emit setValue((int)(double(midiFile->tellg()) /
                                double(m_fileSize) * 20.0));
-		qApp->processEvents(QEventLoop::AllEvents);
+        qApp->processEvents(QEventLoop::AllEvents);
     }
 
     return stringRet;
@@ -586,8 +586,8 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 
             m_midiComposition[metaTrack].push_back(e);
 
-        } else // the rest
-        {
+        } else { // the rest
+
             runningStatus = eventCode;
 
             MidiEvent *midiEvent;
@@ -596,25 +596,25 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
             if (channelTrackMap[channel] == -1) {
                 if (!firstTrack) {
                     ++lastTrackNum;
-		} else {
+                } else {
                     firstTrack = false;
-		}
-		std::cerr << "MidiFile: new channel map entry: channel " << channel << " -> track " << lastTrackNum << std::endl;
+                }
+                std::cerr << "MidiFile: new channel map entry: channel " << channel << " -> track " << lastTrackNum << std::endl;
                 channelTrackMap[channel] = lastTrackNum;
-		m_trackChannelMap[lastTrackNum] = channel;
+                m_trackChannelMap[lastTrackNum] = channel;
             }
 
             TrackId trackNum = channelTrackMap[channel];
 
-	    {
-		static int prevTrackNum = -1, prevChannel = -1;
-		if (prevTrackNum != (int) trackNum ||
-		    prevChannel != (int) channel) {
-		    std::cerr << "MidiFile: track number for channel " << channel << " is " << trackNum << std::endl;
-		    prevTrackNum = trackNum;
-		    prevChannel = channel;
-		}
-	    }
+            {
+                static int prevTrackNum = -1, prevChannel = -1;
+                if (prevTrackNum != (int) trackNum ||
+                    prevChannel != (int) channel) {
+                    std::cerr << "MidiFile: track number for channel " << channel << " is " << trackNum << std::endl;
+                    prevTrackNum = trackNum;
+                    prevChannel = channel;
+                }
+            }
 
             // accumulatedTime is abs time of last event on any track;
             // trackTimeMap[trackNum] is that of last event on this track
@@ -655,7 +655,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
             case MIDI_PROG_CHANGE:
             case MIDI_CHNL_AFTERTOUCH:
                 // create and store our event
-		std::cerr << "Program change or channel aftertouch: time " << deltaTime << ", code " << (int)eventCode << ", data " << (int) data1  << " going to track " << trackNum << std::endl;
+                std::cerr << "Program change or channel aftertouch: time " << deltaTime << ", code " << (int)eventCode << ", data " << (int) data1  << " going to track " << trackNum << std::endl;
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1);
                 m_midiComposition[trackNum].push_back(midiEvent);
                 break;
@@ -815,7 +815,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     // Clear down the assigned Instruments we already have
     //
     if (type == CONVERT_REPLACE) {
-	m_studio->unassignAllInstruments();
+        m_studio->unassignAllInstruments();
     }
 
     std::vector<Segment *> addedSegments;
@@ -893,13 +893,13 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         // Consolidate NOTE ON and NOTE OFF events into a NOTE ON with
         // a duration.
         //
-	consolidateNoteOffEvents(i);
+        consolidateNoteOffEvents(i);
 
-	if (m_trackChannelMap.find(i) != m_trackChannelMap.end()) {
-	    compInstrument = MidiInstrumentBase + m_trackChannelMap[i];
-	} else {
-	    compInstrument = MidiInstrumentBase;
-	}
+        if (m_trackChannelMap.find(i) != m_trackChannelMap.end()) {
+            compInstrument = MidiInstrumentBase + m_trackChannelMap[i];
+        } else {
+            compInstrument = MidiInstrumentBase;
+        }
 
         rosegardenSegment = new Segment;
         rosegardenSegment->setTrack(compTrack);
@@ -911,7 +911,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                           trackName,         // name
                           false);           // muted
 
-	std::cerr << "New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument << ", name = " << trackName << std::endl;
+        std::cerr << "New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument << ", name = " << trackName << std::endl;
 
         // rest creation token needs to be reset here
         //
@@ -921,8 +921,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         Instrument *instrument = 0;
 
         for (midiEvent = m_midiComposition[i].begin();
-	     midiEvent != m_midiComposition[i].end();
-	     ++midiEvent) {
+             midiEvent != m_midiComposition[i].end();
+             ++midiEvent) {
 
             rosegardenEvent = 0;
 
@@ -1024,9 +1024,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     track->setLabel((*midiEvent)->getMetaMessage());
                     break;
 
-		case MIDI_INSTRUMENT_NAME:
-		    rosegardenSegment->setLabel((*midiEvent)->getMetaMessage());
-		    break;
+                case MIDI_INSTRUMENT_NAME:
+                    rosegardenSegment->setLabel((*midiEvent)->getMetaMessage());
+                    break;
 
                 case MIDI_END_OF_TRACK: {
                     timeT trackEndTime = rosegardenTime;
@@ -1160,43 +1160,43 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     // used to select the instrument.  If it's at time
                     // zero, it's not saved as an event.
                     //
-//		    std::cerr << "Program change found" << std::endl;
+//                    std::cerr << "Program change found" << std::endl;
 
                     if (!instrument) {
 
-			bool percussion = ((*midiEvent)->getChannelNumber() ==
+                        bool percussion = ((*midiEvent)->getChannelNumber() ==
                                            MIDI_PERCUSSION_CHANNEL);
-			int program = (*midiEvent)->getData1();
+                        int program = (*midiEvent)->getData1();
 
-			if (type == CONVERT_REPLACE) {
+                        if (type == CONVERT_REPLACE) {
 
-			    instrument = m_studio->getInstrumentById(compInstrument);
-			    if (instrument) {
-				instrument->setPercussion(percussion);
-				instrument->setSendProgramChange(true);
-				instrument->setProgramChange(program);
-				instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
-				if (instrument->sendsBankSelect()) {
-				    instrument->setMSB(msb >= 0 ? msb : 0);
-				    instrument->setLSB(lsb >= 0 ? lsb : 0);
-				}
-			    }
-			} else { // not CONVERT_REPLACE
-			    instrument =
-				m_studio->assignMidiProgramToInstrument
-				(program, msb, lsb, percussion);
-			}
-		    }
+                            instrument = m_studio->getInstrumentById(compInstrument);
+                            if (instrument) {
+                                instrument->setPercussion(percussion);
+                                instrument->setSendProgramChange(true);
+                                instrument->setProgramChange(program);
+                                instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
+                                if (instrument->sendsBankSelect()) {
+                                    instrument->setMSB(msb >= 0 ? msb : 0);
+                                    instrument->setLSB(lsb >= 0 ? lsb : 0);
+                                }
+                            }
+                        } else { // not CONVERT_REPLACE
+                            instrument =
+                                m_studio->assignMidiProgramToInstrument
+                                (program, msb, lsb, percussion);
+                        }
+                    }
 
-		    // assign it here
-		    if (instrument) {
-			track->setInstrument(instrument->getId());
-			// We used to set the segment name from the instrument
-			// here, but now we do them all at the end only if the
-			// segment has no other name set (e.g. from instrument
-			// meta event)
-			if ((*midiEvent)->getTime() == 0) break; // no insert
-		    }
+                    // assign it here
+                    if (instrument) {
+                        track->setInstrument(instrument->getId());
+                        // We used to set the segment name from the instrument
+                        // here, but now we do them all at the end only if the
+                        // segment has no other name set (e.g. from instrument
+                        // meta event)
+                        if ((*midiEvent)->getTime() == 0) break; // no insert
+                    }
 
                     // did we have a bank select? if so, insert that too
 
@@ -1316,9 +1316,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 }
 
             if (rosegardenEvent) {
-                //		if (fillFromTime < rosegardenTime) {
-                //		    rosegardenSegment->fillWithRests(fillFromTime, rosegardenTime);
-                //		}
+                //if (fillFromTime < rosegardenTime) {
+                //   rosegardenSegment->fillWithRests(fillFromTime, rosegardenTime);
+                //}
                 if (endOfLastNote < rosegardenTime) {
                     rosegardenSegment->fillWithRests(endOfLastNote, rosegardenTime);
                 }
@@ -1371,15 +1371,15 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
 #ifdef MIDI_DEBUG
             std::cerr << "MIDI import: adding segment with start time " << rosegardenSegment->getStartTime() << " and end time " << rosegardenSegment->getEndTime() << std::endl;
-	    if (rosegardenSegment->getEndTime() == 2880) {
-		std::cerr << "events:" << std::endl;
-		for (Segment::iterator i = rosegardenSegment->begin();
-		     i != rosegardenSegment->end(); ++i) {
-		    std::cerr << "type = " << (*i)->getType() << std::endl;
-		    std::cerr << "time = " << (*i)->getAbsoluteTime() << std::endl;
-		    std::cerr << "duration = " << (*i)->getDuration() << std::endl;
-		}
-	    }
+            if (rosegardenSegment->getEndTime() == 2880) {
+                std::cerr << "events:" << std::endl;
+                for (Segment::iterator i = rosegardenSegment->begin();
+                     i != rosegardenSegment->end(); ++i) {
+                    std::cerr << "type = " << (*i)->getType() << std::endl;
+                    std::cerr << "time = " << (*i)->getAbsoluteTime() << std::endl;
+                    std::cerr << "duration = " << (*i)->getDuration() << std::endl;
+                }
+            }
 #endif
 
             // add the Segment to the Composition and increment the
@@ -1408,26 +1408,26 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     }
 
     for (std::vector<Segment *>::iterator i = addedSegments.begin();
-	 i != addedSegments.end(); ++i) {
-	Segment *s = *i;
-	if (s) {
-	    timeT duration = s->getEndMarkerTime() - s->getStartTime();
+         i != addedSegments.end(); ++i) {
+        Segment *s = *i;
+        if (s) {
+            timeT duration = s->getEndMarkerTime() - s->getStartTime();
 /*
-	    std::cerr << "duration = " << duration << " (start "
-		      << s->getStartTime() << ", end " << s->getEndTime()
-		      << ", marker " << s->getEndMarkerTime() << ")" << std::endl;
+            std::cerr << "duration = " << duration << " (start "
+                      << s->getStartTime() << ", end " << s->getEndTime()
+                      << ", marker " << s->getEndMarkerTime() << ")" << std::endl;
 */
-	    if (duration == 0) {
-		s->setEndMarkerTime(s->getStartTime() +
-				    Note(Note::Crotchet).getDuration());
-	    }
-	    Instrument *instr = m_studio->getInstrumentFor(s);
-	    if (instr) {
-		if (s->getLabel() == "") {
-		    s->setLabel(m_studio->getSegmentName(instr->getId()));
-		}
-	    }
-	}
+            if (duration == 0) {
+                s->setEndMarkerTime(s->getStartTime() +
+                                    Note(Note::Crotchet).getDuration());
+            }
+            Instrument *instr = m_studio->getInstrumentFor(s);
+            if (instr) {
+                if (s->getLabel() == "") {
+                    s->setLabel(m_studio->getSegmentName(instr->getId()));
+                }
+            }
+        }
     }
 
     return true;
@@ -1596,8 +1596,8 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     //
     string trackBuffer;
 
-	long progressTotal = (long)m_midiComposition[trackNumber].size();
-	long progressCount = 0;
+    long progressTotal = (long)m_midiComposition[trackNumber].size();
+    long progressCount = 0;
 
     for (midiEvent = m_midiComposition[trackNumber].begin();
             midiEvent != m_midiComposition[trackNumber].end();
@@ -1700,13 +1700,13 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         // For the moment just keep the app updating until we work
         // out a good way of accounting for this write.
         //
-		++progressCount;
+        ++progressCount;
 
-		if (progressCount % 500 == 0) {
-			emit setValue(progressCount * 100 / progressTotal);
+        if (progressCount % 500 == 0) {
+            emit setValue(progressCount * 100 / progressTotal);
             //qApp->processEvents(500);
-			qApp->processEvents(QEventLoop::AllEvents);
-		}
+            qApp->processEvents(QEventLoop::AllEvents);
+        }
     }
 
     // Now we write the track - First the standard header..
