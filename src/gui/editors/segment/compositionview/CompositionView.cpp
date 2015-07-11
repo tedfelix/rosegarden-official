@@ -404,7 +404,7 @@ void CompositionView::resizeEvent(QResizeEvent *e)
     updateAll();
 }
 
-void CompositionView::paintEvent(QPaintEvent *e)
+void CompositionView::paintEvent(QPaintEvent *)
 {
     Profiler profiler("CompositionView::paintEvent()");
 
@@ -442,6 +442,7 @@ void CompositionView::drawAll()
 
     // Redraw all of the artifacts on the viewport.
 
+    // The entire viewport in contents coords.
     QRect viewportContentsRect(contentsX(), contentsY(),
                                viewportRect.width(), viewportRect.height());
     // ??? Since we're the only caller, get rid of the parameter and assume
@@ -559,6 +560,8 @@ void CompositionView::drawSegments(const QRect &clipRect)
     // Switch to contents coords.
     segmentsLayerPainter.translate(-contentsX(), -contentsY());
 
+    // *** Draw the background
+
     if (!m_backgroundPixmap.isNull()) {
         QPoint offset(
                 clipRect.x() % m_backgroundPixmap.height(),
@@ -569,8 +572,110 @@ void CompositionView::drawSegments(const QRect &clipRect)
         segmentsLayerPainter.eraseRect(clipRect);
     }
 
-    // ??? Inline this.
-    drawSegments(&segmentsLayerPainter, clipRect);
+    // *** Draw the track dividers
+
+    drawTrackDividers(&segmentsLayerPainter, clipRect);
+
+    // *** Get Segment and Preview Rectangles
+
+    // Assume we aren't going to show previews.
+    CompositionModelImpl::RectRanges *notationPreview = 0;
+    CompositionModelImpl::AudioPreviewDrawData *audioPreview = 0;
+
+    if (m_showPreviews) {
+        // Clear the previews.
+        // ??? Move this clearing into CompositionModelImpl::getSegmentRects()?
+        m_notationPreview.clear();
+        m_audioPreview.clear();
+
+        // Indicate that we want previews.
+        notationPreview = &m_notationPreview;
+        audioPreview = &m_audioPreview;
+    }
+
+    // Fetch segment rectangles and (optionally) previews
+    const CompositionModelImpl::RectContainer &segmentRects =
+            m_model->getSegmentRects(clipRect, notationPreview, audioPreview);
+
+    // *** Draw Segment Rectangles
+
+    // For each segment rectangle, draw it
+    for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
+         i != segmentRects.end(); ++i) {
+
+        drawCompRect(*i, &segmentsLayerPainter, clipRect);
+    }
+
+    drawIntersections(segmentRects, &segmentsLayerPainter, clipRect);
+
+    // *** Draw Segment Previews
+
+    if (m_showPreviews) {
+        // We'll be modifying the transform.  save()/restore() to be safe.
+        segmentsLayerPainter.save();
+
+        // Audio Previews
+
+        drawAudioPreviews(&segmentsLayerPainter, clipRect);
+
+        // Notation Previews
+
+        QColor defaultColor = CompositionColourCache::getInstance()->SegmentInternalPreview;
+
+        // For each preview range
+        // ??? I think there is never more than one range here.  We should be
+        //     able to switch from RectRanges to RectRange.
+        for (CompositionModelImpl::RectRanges::const_iterator notationPreviewIter =
+                 m_notationPreview.begin();
+             notationPreviewIter != m_notationPreview.end();
+             ++notationPreviewIter) {
+
+            const CompositionModelImpl::RectRange &rectRange = *notationPreviewIter;
+
+            QColor color = rectRange.color.isValid() ? rectRange.color : defaultColor;
+
+            // translate() calls are cumulative, so we need to be able to get
+            // back to where we were.  Note that resetTransform() would be
+            // too extreme as it would reverse the contents translation that
+            // is present in segmentsLayerPainter at this point in time.
+            segmentsLayerPainter.save();
+            // Coords WRT segment rect's base point.  (Upper left?)
+            segmentsLayerPainter.translate(
+                    rectRange.basePoint.x(), rectRange.basePoint.y());
+
+            // For each event rectangle, draw it.
+            for (CompositionModelImpl::RectList::const_iterator i =
+                     rectRange.range.first;
+                 i != rectRange.range.second;
+                 ++i) {
+
+                QRect eventRect = *i;
+                // Make the rect thicker vertically to match the old
+                // appearance.  Without this, the rect is thin, which gives
+                // slightly more information.
+                eventRect.adjust(0,0,0,1);
+
+                // Per the Qt docs, fillRect() should be faster than
+                // drawRect().  In practice, a small improvement was noted.
+                segmentsLayerPainter.fillRect(eventRect, color);
+            }
+            // Restore the transformation.
+            segmentsLayerPainter.restore();
+        }
+
+        segmentsLayerPainter.restore();
+    }
+
+    // *** Draw Segment Labels
+
+    if (m_showSegmentLabels) {
+        // For each segment rect, draw the label
+        for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
+             i != segmentRects.end(); ++i) {
+
+            drawCompRectLabel(*i, &segmentsLayerPainter, clipRect);
+        }
+    }
 }
 
 void CompositionView::drawArtifacts(const QRect &clipRect)
@@ -627,114 +732,6 @@ void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QR
     }
 
     segmentsLayerPainter->restore();
-}
-
-void CompositionView::drawSegments(QPainter *segmentsLayerPainter, const QRect &clipRect)
-{
-    Profiler profiler("CompositionView::drawSegments");
-
-    drawTrackDividers(segmentsLayerPainter, clipRect);
-
-    // *** Get Segment and Preview Rectangles
-
-    // Assume we aren't going to show previews.
-    CompositionModelImpl::RectRanges *notationPreview = 0;
-    CompositionModelImpl::AudioPreviewDrawData *audioPreview = 0;
-
-    if (m_showPreviews) {
-        // Clear the previews.
-        // ??? Move this clearing into CompositionModelImpl::getSegmentRects()?
-        m_notationPreview.clear();
-        m_audioPreview.clear();
-
-        // Indicate that we want previews.
-        notationPreview = &m_notationPreview;
-        audioPreview = &m_audioPreview;
-    }
-
-    // Fetch segment rectangles and (optionally) previews
-    const CompositionModelImpl::RectContainer &segmentRects =
-            m_model->getSegmentRects(clipRect, notationPreview, audioPreview);
-
-    // *** Draw Segment Rectangles
-
-    // For each segment rectangle, draw it
-    for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
-         i != segmentRects.end(); ++i) {
-
-        drawCompRect(*i, segmentsLayerPainter, clipRect);
-    }
-
-    drawIntersections(segmentRects, segmentsLayerPainter, clipRect);
-
-    // *** Draw Segment Previews
-
-    if (m_showPreviews) {
-        // We'll be modifying the transform.  save()/restore() to be safe.
-        segmentsLayerPainter->save();
-
-        // Audio Previews
-
-        drawAudioPreviews(segmentsLayerPainter, clipRect);
-
-        // Notation Previews
-
-        QColor defaultColor = CompositionColourCache::getInstance()->SegmentInternalPreview;
-
-        // For each preview range
-        // ??? I think there is never more than one range here.  We should be
-        //     able to switch from RectRanges to RectRange.
-        for (CompositionModelImpl::RectRanges::const_iterator notationPreviewIter =
-                 m_notationPreview.begin();
-             notationPreviewIter != m_notationPreview.end();
-             ++notationPreviewIter) {
-
-            const CompositionModelImpl::RectRange &rectRange = *notationPreviewIter;
-
-            QColor color = rectRange.color.isValid() ? rectRange.color : defaultColor;
-
-            // translate() calls are cumulative, so we need to be able to get
-            // back to where we were.  Note that resetTransform() would be
-            // too extreme as it would reverse the contents translation that
-            // is present in segmentsLayerPainter at this point in time.
-            segmentsLayerPainter->save();
-            // Coords WRT segment rect's base point.  (Upper left?)
-            segmentsLayerPainter->translate(
-                    rectRange.basePoint.x(), rectRange.basePoint.y());
-
-            // For each event rectangle, draw it.
-            for (CompositionModelImpl::RectList::const_iterator i =
-                     rectRange.range.first;
-                 i != rectRange.range.second;
-                 ++i) {
-
-                QRect eventRect = *i;
-                // Make the rect thicker vertically to match the old
-                // appearance.  Without this, the rect is thin, which gives
-                // slightly more information.
-                eventRect.adjust(0,0,0,1);
-
-                // Per the Qt docs, fillRect() should be faster than
-                // drawRect().  In practice, a small improvement was noted.
-                segmentsLayerPainter->fillRect(eventRect, color);
-            }
-            // Restore the transformation.
-            segmentsLayerPainter->restore();
-        }
-
-        segmentsLayerPainter->restore();
-    }
-
-    // *** Draw Segment Labels
-
-    if (m_showSegmentLabels) {
-        // For each segment rect, draw the label
-        for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
-             i != segmentRects.end(); ++i) {
-
-            drawCompRectLabel(*i, segmentsLayerPainter, clipRect);
-        }
-    }
 }
 
 void CompositionView::drawAudioPreviews(QPainter * p, const QRect& clipRect)

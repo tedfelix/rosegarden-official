@@ -450,13 +450,6 @@ private:
 
     /// Draw the track dividers on the segments layer.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
-    /// Draws the segments on the segments layer (m_segmentsLayer).
-    /**
-     * Also draws the track dividers.
-     *
-     * Used by drawSegments(rect).
-     */
-    void drawSegments(QPainter *segmentsLayerPainter, const QRect &clipRect);
     /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
     /**
      * Used by drawSegments().
