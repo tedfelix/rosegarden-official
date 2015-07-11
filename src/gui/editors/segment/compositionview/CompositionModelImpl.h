@@ -48,6 +48,7 @@ class AudioPreviewUpdater;
 class AudioPreviewThread;
 
 /// For Audio Previews
+// ??? rename: ImageVector
 typedef std::vector<QImage> PixmapArray;
 
 /// Model layer between CompositionView and Composition.
@@ -91,19 +92,29 @@ public:
 
     typedef std::vector<RectRange> RectRanges;
 
+    // ??? rename: AudioSegmentPreview?
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
             pixmap(p), basePoint(bp), rect(r), resizeOffset(0) {};
+
+        // Vector of QImage tiles containing the preview graphics.
+        // rename: tiles?  tileVector?
         PixmapArray pixmap;
+
+        // Upper left corner of the segment in contents coords.
+        // Same as rect.topLeft().  Redundant.  Can be removed.
         QPoint basePoint;
+
+        // Segment rect in contents coords.
         QRect rect;
 
-        // when showing a segment that is being resized from the
-        // beginning, this contains the offset between the current
-        // rect of the segment and the resized one
+        // While the user is resizing a segment from the beginning,
+        // this contains the offset between the current
+        // rect of the segment and the resized one.
         int resizeOffset;
     };
 
+    // ??? rename: AudioSegmentPreviews
     typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
 
     typedef std::vector<CompositionRect> RectContainer;
