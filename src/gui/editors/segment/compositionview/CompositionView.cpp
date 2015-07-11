@@ -93,7 +93,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_drawTextFloat(false),
     m_segmentsLayer(viewport()->width(), viewport()->height()),
     m_segmentsRefresh(0, 0, viewport()->width(), viewport()->height()),
-    m_artifactsRefresh(0, 0, viewport()->width(), viewport()->height()),
     m_lastContentsX(0),
     m_lastContentsY(0),
     m_lastPointerRefreshX(0),
@@ -409,35 +408,19 @@ void CompositionView::paintEvent(QPaintEvent *e)
 {
     Profiler profiler("CompositionView::paintEvent()");
 
-    // There is no need to draw based on the rects in the clipping region.
-    // For all the critical use cases, only a single clipping rect comes
-    // over anyway.
-
-    drawAll(e->rect());
+    // Just redraw the entire viewport.  Turns out that for the most
+    // critical use case, recording, this is actually slightly faster
+    // than trying to be frugal about drawing small parts of the viewport.
+    // The code is certainly easier to read.
+    drawAll();
 }
 
-void CompositionView::drawAll(const QRect &requestedViewportRect)
+void CompositionView::drawAll()
 {
-    Profiler profiler("CompositionView::drawAll(requestedViewportRect)");
-
-    // Unless the variable name contains "Viewport", all QRect's are
-    // in contents coords.
-
-    QRect requestedRect = requestedViewportRect;
-    // Limit to the viewport.
-    requestedRect &= viewport()->rect();
-    // Convert from viewport coords to contents coords.
-    requestedRect.translate(contentsX(), contentsY());
-
-    QRect refreshRect;
+    Profiler profiler("CompositionView::drawAll()");
 
     // Scroll and refresh the segments layer.
-    bool segmentsLayerChanged = scrollSegmentsLayer(refreshRect);
-
-    // Combine the portions of the segments layer that have been refreshed
-    // with the portions of the contents that have been requested by the
-    // caller.
-    refreshRect |= requestedRect;
+    scrollSegmentsLayer();
 
     // ??? Try putting the artifacts on their own layer pixmap.  This might
     //     simplify the code a bit.  Should also allow us to avoid
@@ -448,32 +431,25 @@ void CompositionView::drawAll(const QRect &requestedViewportRect)
     //     a lot of CPU (and shouldn't).  The second is auto-scrolling.
     //     It's not quite as important since it is relatively rare.
 
-    // If we need to copy the segments to the viewport
-    if (segmentsLayerChanged  ||  m_artifactsRefresh.isValid()) {
-        // Figure out what portion needs copying.
-        QRect copyViewportRect(refreshRect | m_artifactsRefresh);
-        // Convert contents coords to viewport coords.
-        copyViewportRect.translate(-contentsX(), -contentsY());
+    // Copy the entire segments layer to the viewport
 
-        // Copy the segments to the viewport.
-        QPainter viewportPainter(viewport());
-        viewportPainter.drawPixmap(
-                copyViewportRect, m_segmentsLayer, copyViewportRect);
-        viewportPainter.end();
+    QRect viewportRect = viewport()->rect();
+    // Copy the segments to the viewport.
+    QPainter viewportPainter(viewport());
+    viewportPainter.drawPixmap(
+            viewportRect, m_segmentsLayer, viewportRect);
+    viewportPainter.end();
 
-        // Since we've clobbered the artifacts on the viewport,
-        // add the clobbered area to the artifacts rect.
-        m_artifactsRefresh |= refreshRect;
-    }
+    // Redraw all of the artifacts on the viewport.
 
-    if (m_artifactsRefresh.isValid()) {
-        // Draw the artifacts over top of the segments on the viewport.
-        drawArtifacts(m_artifactsRefresh);
-        m_artifactsRefresh = QRect();
-    }
+    QRect viewportContentsRect(contentsX(), contentsY(),
+                               viewportRect.width(), viewportRect.height());
+    // ??? Since we're the only caller, get rid of the parameter and assume
+    //     the entire viewport.
+    drawArtifacts(viewportContentsRect);
 }
 
-bool CompositionView::scrollSegmentsLayer(QRect &changeRect)
+void CompositionView::scrollSegmentsLayer()
 {
     Profiler profiler("CompositionView::scrollSegmentsLayer()");
 
@@ -567,27 +543,12 @@ bool CompositionView::scrollSegmentsLayer(QRect &changeRect)
     m_lastContentsX = cx;
     m_lastContentsY = cy;
 
-    // ??? We could get rid of this and instead use
-    //     changeRect.isValid() to indicate "changed".
-    bool segmentsLayerChanged = false;
-
     // If we need to redraw the segments layer, do so.
     if (refreshRect.isValid()) {
         // Refresh the segments layer
         drawSegments(refreshRect);
         m_segmentsRefresh = QRect();
-
-        segmentsLayerChanged = true;
     }
-
-    // Compute the portion of the segments layer that has been
-    // changed for the caller.
-    if (scroll)
-        changeRect = viewportContentsRect;
-    else
-        changeRect = refreshRect;
-
-    return segmentsLayerChanged;
 }
 
 void CompositionView::drawSegments(const QRect &clipRect)
@@ -621,6 +582,7 @@ void CompositionView::drawArtifacts(const QRect &clipRect)
     viewportPainter.translate(-contentsX(), -contentsY());
 
     // ??? Inline this.
+    // ??? clipRect is always the entire viewport.  Get rid of it.
     drawArtifacts(&viewportPainter, clipRect);
 }
 
@@ -842,6 +804,9 @@ void CompositionView::drawAudioPreviews(QPainter * p, const QRect& clipRect)
 
 void CompositionView::drawArtifacts(QPainter * p, const QRect& clipRect)
 {
+    // ??? clipRect is always the entire viewport.  Get rid of it.
+    //     Simplify all code to assume the entire viewport.
+
     //
     // Playback Pointer
     //

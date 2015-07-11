@@ -326,8 +326,6 @@ private slots:
      * connected to CompositionModelImpl::needArtifactsUpdate().
      */
     void slotUpdateArtifacts() {
-        m_artifactsRefresh =
-            QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
         updateContents();
     }
 
@@ -426,7 +424,7 @@ private:
     virtual void leaveEvent(QEvent *);
 
     /// Draw the segments and artifacts on the viewport (screen).
-    void drawAll(const QRect &requestedViewportRect);
+    void drawAll();
 
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
@@ -434,7 +432,7 @@ private:
      * needs to be done to update the viewport.
      * Used by drawAll().
      */
-    bool scrollSegmentsLayer(QRect &changeRect);
+    void scrollSegmentsLayer();
 
     /// Draw the segments on the segment layer (m_segmentsLayer).
     /**
@@ -535,9 +533,6 @@ private:
 
     /// Updates the artifacts in the given rect.
     void updateArtifacts(const QRect &r) {
-        m_artifactsRefresh |=
-            (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
-             & r);
         updateContents(r);
     }
 
@@ -606,13 +601,6 @@ private:
      * the segment rectangles.
      */
     QRect        m_segmentsRefresh;
-
-    /// Portion of the viewport that needs artifacts refreshed.
-    /**
-     * Used only by drawAll() to limit work done redrawing the
-     * artifacts.
-     */
-    QRect        m_artifactsRefresh;
 
     int          m_lastContentsX;
     int          m_lastContentsY;
