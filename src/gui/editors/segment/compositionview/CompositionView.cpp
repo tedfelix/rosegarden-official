@@ -287,12 +287,14 @@ void CompositionView::showSplitLine(int x, int y)
 {
     m_splitLinePos.setX(x);
     m_splitLinePos.setY(y);
+    viewport()->update();
 }
 
 void CompositionView::hideSplitLine()
 {
     m_splitLinePos.setX( -1);
     m_splitLinePos.setY( -1);
+    viewport()->update();
 }
 
 void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
@@ -707,12 +709,14 @@ void CompositionView::drawArtifacts()
         drawGuides(&viewportPainter, viewportContentsRect);
 
     //
-    // Selection Rect
+    // Selection Rect (rubber band)
     //
     if (m_drawSelectionRect) {
-        //RG_DEBUG << "about to draw selection rect" << endl;
         viewportPainter.setPen(CompositionColourCache::getInstance()->SegmentBorder);
-        drawRect(m_selectionRect.normalized(), &viewportPainter, viewportContentsRect, false, 0, false);
+        drawRect(m_selectionRect.normalized(), &viewportPainter, viewportContentsRect,
+                 false,  // isSelected
+                 0,      // intersectLvl
+                 false); // fill
     }
 
     //
@@ -724,8 +728,6 @@ void CompositionView::drawArtifacts()
     //
     // Split line
     //
-    // ??? This never seems to appear.  Perhaps because showSplitLine()
-    //     doesn't call drawArtifacts()?
     if (m_splitLinePos.x() > 0 && viewportContentsRect.contains(m_splitLinePos)) {
         viewportPainter.save();
         viewportPainter.setPen(m_guideColor);

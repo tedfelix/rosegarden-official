@@ -141,13 +141,7 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 
     m_canvas->showSplitLine(x, y);
 
-    QRect updateRect(std::max(0, std::min(x, m_prevX) - 5), y,
-                     std::max(m_prevX, x) + 5, m_prevY + m_canvas->grid().getYSnap());
-	
-// 	m_canvas->updateContents(updateRect);
-	m_canvas->update(updateRect);
-	
-	m_prevX = x;
+    m_prevX = x;
     m_prevY = y;
 }
 

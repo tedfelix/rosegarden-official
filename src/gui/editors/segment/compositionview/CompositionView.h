@@ -461,6 +461,8 @@ private:
     /**
      * This is an improved QPainter::drawRect().
      *
+     * Parameter order should be: painter, clipRect, rect, ...
+     *
      * @see drawCompRect()
      */
     void drawRect(const QRect &rect, QPainter *p, const QRect &clipRect,
