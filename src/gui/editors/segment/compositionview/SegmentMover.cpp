@@ -78,11 +78,23 @@ void SegmentMover::slotCanvasScrolled(int newX, int newY)
     handleMouseMove(&tmpEvent);
 }
 
-void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
+void SegmentMover::mousePressEvent(QMouseEvent *e)
 {
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
-    SegmentSelector* selector = dynamic_cast<SegmentSelector*>
-                                (getToolBox()->getTool("segmentselector"));
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
+    SegmentSelector *selector =
+            dynamic_cast<SegmentSelector *>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     // #1027303: Segment move issue
     // Clear selection if we're clicking on an item that's not in it
@@ -99,7 +111,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
     if (item) {
 
         setCurrentIndex(item);
-        m_clickPoint = e->pos();
+        m_clickPoint = pos;
 
         setSnapTime(e, SnapGrid::SnapToBeat);
 
@@ -112,7 +124,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
         m_canvas->setDrawGuides(true);
 
         if (m_canvas->getModel()->haveSelection()) {
-            RG_DEBUG << "SegmentMover::handleMouseButtonPress() : haveSelection\n";
+            RG_DEBUG << "SegmentMover::mousePressEvent() : haveSelection\n";
             // startChange on all selected segments
             m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
 
@@ -122,7 +134,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
             setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
 
         } else {
-            RG_DEBUG << "SegmentMover::handleMouseButtonPress() : no selection\n";
+            RG_DEBUG << "SegmentMover::mousePressEvent() : no selection\n";
             m_canvas->getModel()->startChange(item, CompositionModelImpl::ChangeMove);
         }
 
@@ -134,13 +146,12 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
     } else {
 
         // check for addmode - clear the selection if not
-        RG_DEBUG << "SegmentMover::handleMouseButtonPress() : clear selection\n";
+        RG_DEBUG << "SegmentMover::mousePressEvent() : clear selection\n";
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->signalSelection();
 // 		m_canvas->updateContents();
 		m_canvas->update();
 	}
-
 }
 
 void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)

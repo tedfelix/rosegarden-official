@@ -44,8 +44,22 @@ SegmentJoiner::~SegmentJoiner()
 {}
 
 void
-SegmentJoiner::handleMouseButtonPress(QMouseEvent*)
-{}
+SegmentJoiner::mousePressEvent(QMouseEvent *e)
+{
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    // ??? not implemented
+}
 
 void
 SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)

@@ -48,15 +48,27 @@ void SegmentEraser::ready()
     setBasicContextHelp();
 }
 
-void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
+void SegmentEraser::mousePressEvent(QMouseEvent *e)
 {
-    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(e->pos()));
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
 }
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentIndex) {
-        // no need to test the result, we know it's good (see handleMouseButtonPress)
+        // no need to test the result, we know it's good (see mousePressEvent)
         CompositionItem* item = m_currentIndex;
 
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));

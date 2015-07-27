@@ -1254,58 +1254,24 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 
 void CompositionView::mousePressEvent(QMouseEvent *e)
 {
-    // Transform coordinates from viewport to contents.
-    // ??? Can we push this further down into the tools?  Make them call
-    //     viewportToContents() on their own.  I think this is a good idea,
-    //     although it will be quite a bit of work.
-    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
-
-    // ??? Recommend getting rid of this switch/case.  Instead, SegmentTool
-    //     derivers
-    //     should provide a mousePressEvent() and all mouse press events
-    //     should be forwarded to it.  The derivers also need to call the
-    //     baseclass version (SegmentTool::mousePressEvent()) to make sure
-    //     SegmentTool has a shot at the right mouse button.
-
-    if (e->button() == Qt::LeftButton)
+    // The left and middle buttons can be used for dragging out new
+    // segments with SegmentSelector and SegmentPencil.  We want to
+    // auto-scroll in those cases and others.
+    // ??? Would it be better to push this down into the tools?
+    if (e->button() == Qt::LeftButton  ||
+        e->button() == Qt::MidButton)
         startAutoScroll();
+
+    // Delegate to current tool
     if (m_currentTool)
         m_currentTool->mousePressEvent(e);
-
-    switch (ce.button()) {
-    case Qt::LeftButton:
-    case Qt::MidButton:
-        if (m_currentTool)
-            m_currentTool->handleMouseButtonPress(&ce);
-        else
-            RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
-        break;
-    case Qt::RightButton:
-        // ??? Why separate handling of the right button?  SegmentTool is the
-        //     only one who handles this.
-        if (m_currentTool)
-            m_currentTool->handleRightButtonPress(&ce);
-        else
-            RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
-        break;
-    case Qt::MouseButtonMask:  // ??? Why drop anything?  Let the tool decide on its own.
-    case Qt::NoButton:
-    case Qt::XButton1:
-    case Qt::XButton2:
-    default:
-        break;
-    }
-
-    // Transfer accept state to original event.
-    if (!ce.isAccepted())
-        e->ignore();
 }
 
 void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 {
     //RG_DEBUG << "mouseReleaseEvent()";
 
+    // ??? Would it be better to push this down into the tools?
     slotStopAutoScroll();
 
     if (!m_currentTool)

@@ -73,10 +73,6 @@ public:
      * context menu works.  See SegmentPencil::mousePressEvent().
      */
     virtual void mousePressEvent(QMouseEvent *);
-    // ??? deprecated
-    virtual void handleRightButtonPress(QMouseEvent*)  { }
-    // ??? deprecated
-    virtual void handleMouseButtonPress(QMouseEvent*)  { }
     virtual void handleMouseButtonRelease(QMouseEvent*)   = 0;
     virtual int  handleMouseMove(QMouseEvent*)            = 0;
 

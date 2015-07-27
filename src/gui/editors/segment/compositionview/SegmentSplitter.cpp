@@ -58,17 +58,33 @@ void SegmentSplitter::ready()
 }
 
 void
-SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
+SegmentSplitter::mousePressEvent(QMouseEvent *e)
 {
-    // Remove cursor and replace with line on a SegmentItem
-    // at where the cut will be made
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 
     if (item) {
+        // Remove cursor and replace with line on a SegmentItem
+        // at where the cut will be made
         m_canvas->viewport()->setCursor(Qt::BlankCursor);
+
         m_prevX = item->rect().x();
+        // ??? Clearly, not used.
         m_prevX = item->rect().y();
+
         drawSplitLine(e);
+
         delete item;
     }
 

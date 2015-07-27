@@ -90,9 +90,18 @@ void SegmentSelector::slotCanvasScrolled(int newX, int newY)
 }
 
 void
-SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
+SegmentSelector::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentSelector::handleMouseButtonPress\n";
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left and middle mouse buttons.
+    if (e->button() != Qt::LeftButton  &&
+        e->button() != Qt::MidButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
 
     m_buttonPressed = true;
 
@@ -105,7 +114,9 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             ((e->modifiers() & Qt::AltModifier) != 0) &&
             ((e->modifiers() & Qt::ControlModifier) != 0));
 
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 
     // If we're in segmentAddMode or not clicking on an item then we don't
     // clear the selection vector.  If we're clicking on an item and it's
@@ -117,6 +128,8 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     }
 
     if (item) {
+
+        // *** Resize Segment
 
         // Fifteen percent of the width of the SegmentItem, up to 10px
         //
@@ -135,7 +148,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         if ((!m_segmentAddMode ||
              !m_canvas->getModel()->haveSelection()) &&
             SegmentResizer::cursorIsCloseEnoughToEdge(
-                item, e->pos(), threshold, start)) {
+                item, pos, threshold, start)) {
 
             SegmentResizer* resizer = dynamic_cast<SegmentResizer*>(
                 getToolBox()->getTool(SegmentResizer::ToolName));
@@ -151,9 +164,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             m_dispatchTool = resizer;
 
             m_dispatchTool->ready(); // set mouse cursor
-            m_dispatchTool->handleMouseButtonPress(e);
+            m_dispatchTool->mousePressEvent(e);
             return;
         }
+
+        // *** Selecting and Moving
 
         bool selecting = true;
         
@@ -166,11 +181,9 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
         m_canvas->getModel()->setSelected(item, selecting);
 
-        // Moving
-        //
-        //         RG_DEBUG << "SegmentSelector::handleMouseButtonPress - m_currentIndex = " << item << endl;
+        //RG_DEBUG << "SegmentSelector::mousePressEvent - m_currentIndex = " << item << endl;
         m_currentIndex = item;
-        m_clickPoint = e->pos();
+        m_clickPoint = pos;
 
         int guideX = item->rect().x();
         int guideY = item->rect().y();
@@ -183,25 +196,26 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     } else {
 
-        // Add on middle button or ctrl+left - bounding box on rest
-        //
+        // If middle button or Ctrl+left button
         if (e->button() == Qt::MidButton ||
             ((e->button() == Qt::LeftButton) && (e->modifiers() & Qt::ControlModifier))) {
 
-            // ??? This feature isn't working.
+            // Create a new segment with the SegmentPencil tool.
 
             m_dispatchTool = getToolBox()->getTool(SegmentPencil::ToolName);
 
             if (m_dispatchTool) {
                 m_dispatchTool->ready(); // set mouse cursor
-                m_dispatchTool->handleMouseButtonPress(e);
+                m_dispatchTool->mousePressEvent(e);
             }
 
             return ;
 
         } else {
 
-            m_canvas->setSelectionRectPos(e->pos());
+            // Selection rubber band
+
+            m_canvas->setSelectionRectPos(pos);
             m_canvas->setDrawSelectionRect(true);
             if (!m_segmentAddMode)
                 m_canvas->getModel()->clearSelected();
@@ -525,7 +539,7 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 
     } else {
 
-        // Same logic as in handleMouseButtonPress to establish
+        // Same logic as in mousePressEvent to establish
         // whether we'd be moving or resizing
 
         int threshold = int(float(item->rect().width()) * 0.15);

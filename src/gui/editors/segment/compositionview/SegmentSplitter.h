@@ -47,7 +47,7 @@ public:
 
     virtual void ready();
 
-    virtual void handleMouseButtonPress(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
@@ -66,7 +66,9 @@ protected:
                       timeT &splitTime);
 
     //--------------- Data members ---------------------------------
+    // ??? unused
     int m_prevX;
+    // ??? unused
     int m_prevY;
 };
 

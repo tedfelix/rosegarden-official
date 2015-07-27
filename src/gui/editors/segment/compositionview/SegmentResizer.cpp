@@ -84,18 +84,30 @@ void SegmentResizer::slotCanvasScrolled(int newX, int newY)
     handleMouseMove(&tmpEvent);
 }
 
-void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
+void SegmentResizer::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
+    RG_DEBUG << "SegmentResizer::mousePressEvent" << endl;
 
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 
     if (item) {
-        RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
+        RG_DEBUG << "SegmentResizer::mousePressEvent - got item" << endl;
         setCurrentIndex(item);
 
         // Are we resizing from start or end?
-        if (item->rect().x() + item->rect().width() / 2 > e->pos().x()) {
+        if (item->rect().x() + item->rect().width() / 2 > pos.x()) {
             m_resizeStart = true;
         } else {
             m_resizeStart = false;

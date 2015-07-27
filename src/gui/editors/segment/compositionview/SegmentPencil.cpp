@@ -78,10 +78,19 @@ void SegmentPencil::slotCanvasScrolled(int newX, int newY)
     handleMouseMove(&tmpEvent);
 }
 
-void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
+void SegmentPencil::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton)
+    // Let the baseclass have a go.
+    SegmentTool::mousePressEvent(e);
+
+    // We only care about the left and middle mouse buttons.
+    // SegmentSelector might send us a middle press.
+    if (e->button() != Qt::LeftButton  &&
+        e->button() != Qt::MidButton)
         return;
+
+    // No need to propagate.
+    e->accept();
 
     // is user holding Ctrl+Alt? (ugly, but we are running short on available
     // modifiers; Alt is grabbed by the window manager, and right clicking, my
@@ -96,9 +105,11 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     m_newRect = false;
 
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     // Check if mouse click was on a rect
     //
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 
     // If user clicked a rect, and pencilAnyway is false, then there's nothing
     // left to do here
@@ -113,7 +124,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     
     setSnapTime(e, SnapGrid::SnapToBar);
 
-    int trackPosition = snapGrid.getYBin(e->pos().y());
+    int trackPosition = snapGrid.getYBin(pos.y());
 
     // Don't do anything if the user clicked beyond the track buttons
     //
@@ -127,7 +138,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     TrackId trackId = t->getId();
 
     // Save the mouse X as the original Press point
-    m_pressX = e->pos().x();
+    m_pressX = pos.x();
 
     m_startTime = snapGrid.snapX(m_pressX, SnapGrid::SnapLeft);
     m_endTime = snapGrid.snapX(m_pressX, SnapGrid::SnapRight);
@@ -161,8 +172,11 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
-    if (e->button() != Qt::LeftButton)
-        return ;
+    // Have to allow middle button for SegmentSelector's middle
+    // button feature to work.
+    if (e->button() != Qt::LeftButton  &&
+        e->button() != Qt::MidButton)
+        return;
 
     setContextHelpFor(e->pos());
 

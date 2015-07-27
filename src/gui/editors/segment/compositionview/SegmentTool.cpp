@@ -91,6 +91,9 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
     if (m_currentIndex) // mouse button is pressed for some tool
         return ;
 
+    // No need to propagate.
+    e->accept();
+
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
     setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
@@ -107,9 +110,6 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
     showMenu();
 
     setCurrentIndex(CompositionItemPtr());
-
-    // No need to propagate.
-    e->accept();
 }
 
 void

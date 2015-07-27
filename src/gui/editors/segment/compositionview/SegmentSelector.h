@@ -48,7 +48,7 @@ public:
     virtual void ready();
     virtual void stow();
 
-    virtual void handleMouseButtonPress(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
