@@ -51,8 +51,8 @@ public:
     virtual void stow();
 
     virtual void mousePressEvent(QMouseEvent *);
+    virtual int mouseMoveEvent(QMouseEvent *);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual int  handleMouseMove(QMouseEvent*);
 
     static bool cursorIsCloseEnoughToEdge(CompositionItemPtr, const QPoint&, int, bool &);
 
@@ -60,9 +60,6 @@ public:
     int getEdgeThreshold() { return m_edgeThreshold; }
 
     static const QString ToolName;
-
-protected slots:
-    void slotCanvasScrolled(int newX, int newY);
 
 protected:
     SegmentResizer(CompositionView*, RosegardenDocument*, int edgeThreshold = 10);

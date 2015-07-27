@@ -40,6 +40,9 @@
 namespace Rosegarden
 {
 
+
+const QString SegmentSplitter::ToolName = "segmentsplitter";
+
 SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_prevX(0),
@@ -124,9 +127,14 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 }
 
 int
-SegmentSplitter::handleMouseMove(QMouseEvent *e)
+SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
 {
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 
     if (item) {
 //        m_canvas->viewport()->setCursor(Qt::blankCursor);
@@ -145,15 +153,17 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 {
     setSnapTime(e, SnapGrid::SnapToBeat);
 
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     // Turn the real X into a snapped X
     //
-    timeT xT = m_canvas->grid().snapX(e->pos().x());
+    timeT xT = m_canvas->grid().snapX(pos.x());
     int x = (int)(m_canvas->grid().getRulerScale()->getXForTime(xT));
 
     // Need to watch y doesn't leak over the edges of the
     // current Segment.
     //
-    int y = m_canvas->grid().snapY(e->pos().y());
+    int y = m_canvas->grid().snapY(pos.y());
 
     m_canvas->showSplitLine(x, y);
 
@@ -167,7 +177,6 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
     // DO NOTHING
 }
 
-const QString SegmentSplitter::ToolName = "segmentsplitter";
 
 }
 #include "SegmentSplitter.moc"

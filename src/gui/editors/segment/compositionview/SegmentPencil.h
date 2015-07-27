@@ -50,14 +50,11 @@ public:
     virtual void stow();
 
     virtual void mousePressEvent(QMouseEvent *);
+    virtual int mouseMoveEvent(QMouseEvent *);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual int  handleMouseMove(QMouseEvent*);
 
     static const QString ToolName;
 
-protected slots:
-    void slotCanvasScrolled(int newX, int newY);
-    
 protected:
     SegmentPencil(CompositionView*, RosegardenDocument*);
     void setContextHelpFor(QPoint p);

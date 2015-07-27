@@ -48,8 +48,8 @@ public:
     virtual void ready();
 
     virtual void mousePressEvent(QMouseEvent *);
+    virtual int mouseMoveEvent(QMouseEvent *);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual int  handleMouseMove(QMouseEvent*);
 
     // don't do double clicks
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);

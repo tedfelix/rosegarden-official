@@ -1328,44 +1328,16 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 void CompositionView::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
-        return ;
+        return;
 
-    // Transform coordinates from viewport to contents.
-    // ??? Can we push this further down into the tools?
-    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
+    // Delegate to the current tool.
+    int followMode = m_currentTool->mouseMoveEvent(e);
 
-    int follow = m_currentTool->handleMouseMove(&ce);
-    setFollowMode(follow);
+    setFollowMode(followMode);
 
-    if (follow != RosegardenScrollView::NoFollow) {
+    if (followMode != RosegardenScrollView::NoFollow) {
         doAutoScroll();
-
-//&& JAS - Deactivate auto expand feature when resizing / moving segments past
-//&& Compostion end.  Though current code works, this creates lots of corner
-//&& cases that are not reversible using the REDO / UNDO commands.
-//&& Additionally, this makes accidentally altering the compostion length too easy.
-//&& Currently leaving code here until a full debate is complete.
-
-//        if (follow & RosegardenScrollView::FollowHorizontal) {
-//            int mouseX = ce.pos().x();
-//            // enlarge composition if needed
-//            if ((horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) &&
-//               // This code minimizes the chances of auto expand when moving segments
-//               // Not a perfect fix -- but fixes several auto expand errors
-//               (mouseX > (contentsX() + viewport()->width() * 0.95))) {
-//                resizeContents(contentsWidth() + m_stepSize, contentsHeight());
-//                setContentsPos(contentsX() + m_stepSize, contentsY());
-//                m_model->setLength(contentsWidth());
-//                slotUpdateSize();
-//            }
-//        }
-
     }
-
-    // Transfer accept state to original event.
-    if (!ce.isAccepted())
-        e->ignore();
 }
 
 void CompositionView::setPointerPos(int pos)

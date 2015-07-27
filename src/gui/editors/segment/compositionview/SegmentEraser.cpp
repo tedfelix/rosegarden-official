@@ -36,6 +36,9 @@
 namespace Rosegarden
 {
 
+
+const QString SegmentEraser::ToolName = "segmenteraser";
+
 SegmentEraser::SegmentEraser(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
@@ -77,9 +80,13 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
     setCurrentIndex(CompositionItemPtr());
 }
 
-int SegmentEraser::handleMouseMove(QMouseEvent*)
+int SegmentEraser::mouseMoveEvent(QMouseEvent *e)
 {
+    // No need to propagate.
+    e->accept();
+
     setBasicContextHelp();
+
     return RosegardenScrollView::NoFollow;
 }
 
@@ -88,7 +95,6 @@ void SegmentEraser::setBasicContextHelp()
     setContextHelp(tr("Click on a segment to delete it"));
 }    
 
-const QString SegmentEraser::ToolName   = "segmenteraser";
 
 }
 #include "SegmentEraser.moc"

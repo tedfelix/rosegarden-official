@@ -54,6 +54,9 @@
 namespace Rosegarden
 {
 
+
+const QString SegmentResizer::ToolName = "segmentresizer";
+
 SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d,
                                int edgeThreshold)
         : SegmentTool(c, d),
@@ -65,23 +68,11 @@ SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d,
 void SegmentResizer::ready()
 {
     m_canvas->viewport()->setCursor(Qt::SizeHorCursor);
-    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //        this, SLOT(slotCanvasScrolled(int, int)));
     setBasicContextHelp(false);
 }
 
 void SegmentResizer::stow()
 {
-    //disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //           this, SLOT(slotCanvasScrolled(int, int)));
-}
-
-void SegmentResizer::slotCanvasScrolled(int newX, int newY)
-{
-    QMouseEvent tmpEvent(QEvent::MouseMove,
-                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
-                         Qt::NoButton, Qt::NoButton, 0);
-    handleMouseMove(&tmpEvent);
 }
 
 void SegmentResizer::mousePressEvent(QMouseEvent *e)
@@ -271,9 +262,14 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
     setBasicContextHelp();
 }
 
-int SegmentResizer::handleMouseMove(QMouseEvent *e)
+int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 {
-    //     RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
+    //     RG_DEBUG << "SegmentResizer::mouseMoveEvent" << endl;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
 
     bool rescale = (e->modifiers() & Qt::ControlModifier);
 
@@ -317,12 +313,12 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     // Convert X coord to time
-    timeT time = m_canvas->grid().snapX(e->pos().x());
+    timeT time = m_canvas->grid().snapX(pos.x());
 
     // Get the "snap size" of the grid at the current X coord.  It can change
     // with certain snap modes and different time signatures.
     // ??? rename getSnapTime() -> getSnapTimeForX()
-    timeT snapSize = m_canvas->grid().getSnapTime(double(e->pos().x()));
+    timeT snapSize = m_canvas->grid().getSnapTime(double(pos.x()));
 
     // If snap to grid is off
     if (snapSize == 0) {
@@ -336,7 +332,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
         timeT duration = itemEndTime - time;
 
-        //         RG_DEBUG << "SegmentResizer::handleMouseMove() resize start : duration = "
+        //         RG_DEBUG << "SegmentResizer::mouseMoveEvent() resize start : duration = "
         //                  << duration << " - snap = " << snapSize
         //                  << " - itemEndTime : " << itemEndTime
         //                  << " - time : " << time
@@ -363,7 +359,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
         timeT newEndTime = time;
 
-        //         RG_DEBUG << "SegmentResizer::handleMouseMove() resize end : duration = "
+        //         RG_DEBUG << "SegmentResizer::mouseMoveEvent() resize end : duration = "
         //                  << duration << " - snap = " << snapSize
         //                  << " - itemStartTime : " << itemStartTime
         //                  << " - time : " << time
@@ -412,7 +408,6 @@ void SegmentResizer::setBasicContextHelp(bool ctrlPressed)
     }        
 }    
 
-const QString SegmentResizer::ToolName  = "segmentresizer";
 
 }
 #include "SegmentResizer.moc"

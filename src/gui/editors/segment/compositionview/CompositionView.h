@@ -193,9 +193,9 @@ public:
      * anything and can be left to timeout or you can hide it
      * explicitly with hideTextFloat().
      *
-     * Used by SegmentMover::handleMouseMove() to display time,
+     * Used by SegmentMover::mouseMoveEvent() to display time,
      * bar, and beat on the view while the user is moving a segment.
-     * Also used by SegmentSelector::handleMouseMove().
+     * Also used by SegmentSelector::mouseMoveEvent().
      *
      * @see slotTextFloatTimeout()
      */

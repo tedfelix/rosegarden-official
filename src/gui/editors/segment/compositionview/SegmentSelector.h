@@ -49,8 +49,8 @@ public:
     virtual void stow();
 
     virtual void mousePressEvent(QMouseEvent *);
+    virtual int mouseMoveEvent(QMouseEvent *);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual int  handleMouseMove(QMouseEvent*);
 
     bool isSegmentAdding() const { return m_segmentAddMode; }
     bool isSegmentCopying() const { return m_segmentCopyMode; }
@@ -60,9 +60,6 @@ public:
     SegmentItemList* getSegmentItemList() { return &m_selectedItems; }
 
     static const QString ToolName;
-
-protected slots:
-    void slotCanvasScrolled(int newX, int newY);
 
 protected:
     SegmentSelector(CompositionView*, RosegardenDocument*);

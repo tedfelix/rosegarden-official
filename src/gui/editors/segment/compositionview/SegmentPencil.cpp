@@ -44,6 +44,8 @@
 namespace Rosegarden
 {
 
+const QString SegmentPencil::ToolName = "segmentpencil";
+
 SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_newRect(false),
@@ -57,25 +59,11 @@ SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
 void SegmentPencil::ready()
 {
     m_canvas->viewport()->setCursor(Qt::IBeamCursor);
-    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //        this, SLOT(slotCanvasScrolled(int, int)));
     setContextHelpFor(QPoint(0, 0));
 }
 
 void SegmentPencil::stow()
 {
-    //disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //           this, SLOT(slotCanvasScrolled(int, int)));
-}
-
-void SegmentPencil::slotCanvasScrolled(int newX, int newY)
-{
-    Qt::MouseButton button = Qt::NoButton;
-    Qt::MouseButtons buttons = Qt::NoButton;
-    Qt::KeyboardModifiers modifiers = 0;
-    QMouseEvent tmpEvent(QEvent::MouseMove,
-                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY), button, buttons, modifiers);
-    handleMouseMove(&tmpEvent);
 }
 
 void SegmentPencil::mousePressEvent(QMouseEvent *e)
@@ -240,10 +228,15 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
     }
 }
 
-int SegmentPencil::handleMouseMove(QMouseEvent *e)
+int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
 {
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     if (!m_newRect) {
-        setContextHelpFor(e->pos());
+        setContextHelpFor(pos);
         return RosegardenScrollView::NoFollow;
     }
 
@@ -260,7 +253,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     setSnapTime(e, SnapGrid::SnapToBar);
 
-    int mouseX = e->pos().x();
+    int mouseX = pos.x();
     
     // if mouse X is to the right of the original Press point
     if (mouseX >= m_pressX) {
@@ -307,8 +300,6 @@ void SegmentPencil::setContextHelpFor(QPoint p)
 
     setContextHelp(tr("Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode."));
 }
-
-const QString SegmentPencil::ToolName   = "segmentpencil";
 
 }
 #include "SegmentPencil.moc"

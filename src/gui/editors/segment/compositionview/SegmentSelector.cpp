@@ -54,6 +54,9 @@
 namespace Rosegarden
 {
 
+
+const QString SegmentSelector::ToolName = "segmentselector";
+
 SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_segmentAddMode(false),
@@ -73,21 +76,11 @@ SegmentSelector::~SegmentSelector()
 void SegmentSelector::ready()
 {
     m_canvas->viewport()->setCursor(Qt::ArrowCursor);
-    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //        this, SLOT(slotCanvasScrolled(int, int)));
     setContextHelp(tr("Click and drag to select segments"));
 }
 
 void SegmentSelector::stow()
 {}
-
-void SegmentSelector::slotCanvasScrolled(int newX, int newY)
-{
-    QMouseEvent tmpEvent(QEvent::MouseMove,
-                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
-                         Qt::NoButton, Qt::NoButton, 0);
-    handleMouseMove(&tmpEvent);
-}
 
 void
 SegmentSelector::mousePressEvent(QMouseEvent *e)
@@ -336,22 +329,27 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 }
 
 int
-SegmentSelector::handleMouseMove(QMouseEvent *e)
+SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 {
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     if (!m_buttonPressed) {
-        setContextHelpFor(e->pos(), (e->modifiers() & Qt::ControlModifier));
+        setContextHelpFor(pos, (e->modifiers() & Qt::ControlModifier));
         return RosegardenScrollView::NoFollow;
     }
 
     if (m_dispatchTool) {
-        return m_dispatchTool->handleMouseMove(e);
+        return m_dispatchTool->mouseMoveEvent(e);
     }
 
     Composition &comp = m_doc->getComposition();
 
     if (!m_currentIndex) {
 
-        // 	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item\n";
+        // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: no current item\n";
 
         // do a bounding box
         QRect selectionRect = m_canvas->getSelectionRect();
@@ -359,8 +357,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         m_canvas->setDrawSelectionRect(true);
 
         // same as for notation view
-        int w = int(e->pos().x() - selectionRect.x());
-        int h = int(e->pos().y() - selectionRect.y());
+        int w = int(pos.x() - selectionRect.x());
+        int h = int(pos.y() - selectionRect.y());
         if (w > 0)
             ++w;
         else
@@ -420,7 +418,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-    int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+    int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
     if (m_canvas->getModel()->isSelected(m_currentIndex)) {
@@ -432,7 +430,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             clearContextHelp();
         }
 
-        // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
+        // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: current item is selected\n";
 
         if (!m_selectionMoveStarted) { // start move on selected items only once
             m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
@@ -450,11 +448,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 it != changingItems.end();
                 ++it) {
 
-            //             RG_DEBUG << "SegmentSelector::handleMouseMove() : movingItem at "
+            //             RG_DEBUG << "SegmentSelector::mouseMoveEvent() : movingItem at "
             //                      << (*it)->rect().x() << "," << (*it)->rect().y() << endl;
 
-            int dx = e->pos().x() - m_clickPoint.x(),
-                dy = e->pos().y() - m_clickPoint.y();
+            int dx = pos.x() - m_clickPoint.x(),
+                dy = pos.y() - m_clickPoint.y();
 
             const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
             if (!m_passedInertiaEdge &&
@@ -515,7 +513,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 		m_canvas->update();
 
     } else {
-        // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item not selected\n";
+        // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: current item not selected\n";
     }
 
     return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
@@ -574,7 +572,6 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
     }
 }
 
-const QString SegmentSelector::ToolName = "segmentselector";
 
 }
 #include "SegmentSelector.moc"

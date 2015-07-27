@@ -34,6 +34,9 @@
 namespace Rosegarden
 {
 
+
+const QString SegmentJoiner::ToolName = "segmentjoiner";
+
 SegmentJoiner::SegmentJoiner(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
@@ -66,8 +69,15 @@ SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
 {}
 
 int
-SegmentJoiner::handleMouseMove(QMouseEvent*)
+SegmentJoiner::mouseMoveEvent(QMouseEvent *e)
 {
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    // ??? not implemented
+
     return RosegardenScrollView::NoFollow;
 }
 
@@ -75,7 +85,6 @@ void
 SegmentJoiner::contentsMouseDoubleClickEvent(QMouseEvent*)
 {}
 
-const QString SegmentJoiner::ToolName   = "segmentjoiner";
 
 }
 #include "SegmentJoiner.moc"

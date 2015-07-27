@@ -47,6 +47,9 @@
 namespace Rosegarden
 {
 
+
+const QString SegmentMover::ToolName = "segmentmover";
+
 SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
@@ -56,26 +59,11 @@ SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
 void SegmentMover::ready()
 {
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
-    //connect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //        this, SLOT(slotCanvasScrolled(int, int)));
     setBasicContextHelp();
 }
 
 void SegmentMover::stow()
 {
-    //disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
-    //           this, SLOT(slotCanvasScrolled(int, int)));
-}
-
-void SegmentMover::slotCanvasScrolled(int newX, int newY)
-{
-
-    Qt::MouseButton button = Qt::NoButton;
-    Qt::MouseButtons buttons = Qt::NoButton;
-    Qt::KeyboardModifiers modifiers = 0;
-    QMouseEvent tmpEvent(QEvent::MouseMove,
-                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY), button, buttons, modifiers);
-    handleMouseMove(&tmpEvent);
 }
 
 void SegmentMover::mousePressEvent(QMouseEvent *e)
@@ -227,8 +215,13 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
     setBasicContextHelp();
 }
 
-int SegmentMover::handleMouseMove(QMouseEvent *e)
+int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 {
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     setSnapTime(e, SnapGrid::SnapToBeat);
 
     Composition &comp = m_doc->getComposition();
@@ -247,7 +240,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
     CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
 
-    //         RG_DEBUG << "SegmentMover::handleMouseMove : nb changingItems = "
+    //         RG_DEBUG << "SegmentMover::mouseMoveEvent : nb changingItems = "
     //                  << changingItems.size() << endl;
 
     CompositionModelImpl::ItemContainer::iterator it;
@@ -260,8 +253,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
          ++it) {
         //             it->second->showRepeatRect(false);
 
-        int dx = e->pos().x() - m_clickPoint.x(),
-            dy = e->pos().y() - m_clickPoint.y();
+        int dx = pos.x() - m_clickPoint.x(),
+            dy = pos.y() - m_clickPoint.y();
 
         const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
         if (!m_passedInertiaEdge &&
@@ -277,7 +270,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
 
         int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-        int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+        int currentTrackPos = m_canvas->grid().getYBin(pos.y());
         int trackDiff = currentTrackPos - startDragTrackPos;
         int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
 
@@ -300,7 +293,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         }
         int trackPos = m_canvas->grid().getYBin(newY);
 
-        //             RG_DEBUG << "SegmentMover::handleMouseMove: orig y "
+        //             RG_DEBUG << "SegmentMover::mouseMoveEvent: orig y "
         //                      << (*it)->savedRect().y()
         //                      << ", dy " << dy << ", newY " << newY
         //                      << ", track " << track << endl;
@@ -315,7 +308,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 */
         int newY = m_canvas->grid().getYBinCoordinate(trackPos);
 
-        //             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
+        //             RG_DEBUG << "SegmentMover::mouseMoveEvent: moving to "
         //                      << newX << "," << newY << endl;
 
         updateRect |= (*it)->rect();
@@ -357,7 +350,6 @@ void SegmentMover::setBasicContextHelp()
     setContextHelp(tr("Click and drag to move a segment"));
 }
 
-const QString SegmentMover::ToolName    = "segmentmover";
 
 }
 #include "SegmentMover.moc"

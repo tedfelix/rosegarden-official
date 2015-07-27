@@ -19,6 +19,7 @@
 #ifndef RG_SEGMENTTOOL_H
 #define RG_SEGMENTTOOL_H
 
+#include "gui/general/RosegardenScrollView.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/ActionFileClient.h"
 #include "CompositionItem.h"
@@ -73,8 +74,9 @@ public:
      * context menu works.  See SegmentPencil::mousePressEvent().
      */
     virtual void mousePressEvent(QMouseEvent *);
-    virtual void handleMouseButtonRelease(QMouseEvent*)   = 0;
-    virtual int  handleMouseMove(QMouseEvent*)            = 0;
+    virtual int mouseMoveEvent(QMouseEvent *)
+            { return RosegardenScrollView::NoFollow; }
+    virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
 
     void addCommandToHistory(Command *command);
 
