@@ -68,8 +68,15 @@ public:
      */
     virtual void ready();
 
-    virtual void handleRightButtonPress(QMouseEvent*);
-    virtual void handleMouseButtonPress(QMouseEvent*)     = 0;
+    /**
+     * Derivers need to call this to make sure the right-click
+     * context menu works.  See SegmentPencil::mousePressEvent().
+     */
+    virtual void mousePressEvent(QMouseEvent *);
+    // ??? deprecated
+    virtual void handleRightButtonPress(QMouseEvent*)  { }
+    // ??? deprecated
+    virtual void handleMouseButtonPress(QMouseEvent*)  { }
     virtual void handleMouseButtonRelease(QMouseEvent*)   = 0;
     virtual int  handleMouseMove(QMouseEvent*)            = 0;
 

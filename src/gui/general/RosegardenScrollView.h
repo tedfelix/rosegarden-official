@@ -73,6 +73,8 @@ public:
     /// Y coordinate of the contents that are at the top edge of the viewport.
     int contentsY();
 
+    QPoint viewportToContents(const QPoint &);
+
     void updateContents();
 
     /// Follow Mode
@@ -153,8 +155,6 @@ protected:
     int contentsHeight()  { return m_contentsHeight; }
 
     void updateContents(const QRect &);
-
-    QPoint viewportToContents(const QPoint &);
 
     /// See enum FollowMode.
     void setFollowMode(int followMode)  { m_followMode = followMode; }

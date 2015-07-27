@@ -1267,16 +1267,15 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
     //     should be forwarded to it.  The derivers also need to call the
     //     baseclass version (SegmentTool::mousePressEvent()) to make sure
     //     SegmentTool has a shot at the right mouse button.
-    //if (e.button() == Qt::LeftButton)
-    //    startAutoScroll();
-    //if (m_currentTool)
-    //    m_currentTool->mousePressEvent(e);
+
+    if (e->button() == Qt::LeftButton)
+        startAutoScroll();
+    if (m_currentTool)
+        m_currentTool->mousePressEvent(e);
+
     switch (ce.button()) {
     case Qt::LeftButton:
     case Qt::MidButton:
-        // ??? Important.  We need to keep this here.
-        startAutoScroll();
-
         if (m_currentTool)
             m_currentTool->handleMouseButtonPress(&ce);
         else

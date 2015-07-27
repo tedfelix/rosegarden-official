@@ -82,14 +82,18 @@ void SegmentTool::ready()
 }
 
 void
-SegmentTool::handleRightButtonPress(QMouseEvent *e)
+SegmentTool::mousePressEvent(QMouseEvent *e)
 {
+    // We only care about the right button.
+    if (e->button() != Qt::RightButton)
+        return;
+
     if (m_currentIndex) // mouse button is pressed for some tool
         return ;
 
-    //RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
+    QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(e->pos()));
+    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
 
     if (m_currentIndex) {
         if (!m_canvas->getModel()->isSelected(m_currentIndex)) {
@@ -101,7 +105,11 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     }
 
     showMenu();
+
     setCurrentIndex(CompositionItemPtr());
+
+    // No need to propagate.
+    e->accept();
 }
 
 void
