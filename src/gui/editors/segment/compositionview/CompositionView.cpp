@@ -600,10 +600,10 @@ void CompositionView::drawSegments(const QRect &clipRect)
     for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
          i != segmentRects.end(); ++i) {
 
-        drawCompRect(*i, &segmentsLayerPainter, clipRect);
+        drawCompRect(&segmentsLayerPainter, clipRect, *i);
     }
 
-    drawIntersections(segmentRects, &segmentsLayerPainter, clipRect);
+    drawIntersections(&segmentsLayerPainter, clipRect, segmentRects);
 
     // *** Draw Segment Previews
 
@@ -670,7 +670,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
         for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
              i != segmentRects.end(); ++i) {
 
-            drawCompRectLabel(*i, &segmentsLayerPainter, clipRect);
+            drawCompRectLabel(&segmentsLayerPainter, clipRect, *i);
         }
     }
 }
@@ -700,7 +700,7 @@ void CompositionView::drawArtifacts()
     if (m_tmpRect.isValid() && m_tmpRect.intersects(viewportContentsRect)) {
         viewportPainter.setPen(CompositionColourCache::getInstance()->SegmentBorder);
         viewportPainter.setBrush(m_tmpRectFill);
-        drawRect(m_tmpRect, &viewportPainter, viewportContentsRect);
+        drawRect(&viewportPainter, viewportContentsRect, m_tmpRect);
     }
 
     //
@@ -895,59 +895,64 @@ void CompositionView::drawAudioPreviews(QPainter *segmentsLayerPainter, const QR
 }
 
 void CompositionView::drawCompRect(
-        const CompositionRect &rect,
         QPainter *p,
         const QRect &clipRect,
+        const CompositionRect &rect,
         int intersectLvl)
 {
-    p->save();
+    // Non repeating case, just draw the segment rect.
+    if (!rect.isRepeating()) {
+        p->save();
 
-    QBrush brush = rect.getBrush();
+        p->setBrush(rect.getBrush());
+        p->setPen(rect.getPen());
+        drawRect(p, clipRect, rect, rect.isSelected(), intersectLvl);
 
-    if (rect.isRepeating()) {
-        QColor brushColor = brush.color();
-        brush.setColor(brushColor.light(150));
+        p->restore();
+
+        return;
     }
 
-    p->setBrush(brush);
+    // Repeating case.
+
+    p->save();
+
+    // *** Base Segment
+
+    QRect baseRect = rect;
+    baseRect.setWidth(rect.getBaseWidth());
+
     p->setPen(rect.getPen());
-    drawRect(rect, p, clipRect, rect.isSelected(), intersectLvl);
+    p->setBrush(rect.getBrush());
+    drawRect(p, clipRect, baseRect, rect.isSelected(), intersectLvl);
 
-    if (rect.isRepeating()) {
+    // *** Repeat Area
 
-        CompositionRect::repeatmarks repeatMarks = rect.getRepeatMarks();
+    CompositionRect::repeatmarks repeatMarksX = rect.getRepeatMarks();
+    QRect repeatRect = rect;
+    repeatRect.setLeft(repeatMarksX[0]);
 
-        // draw 'start' rectangle with original brush
-        //
-        QRect startRect = rect;
-        startRect.setWidth(repeatMarks[0] - rect.x());
-        p->setBrush(rect.getBrush());
-        drawRect(startRect, p, clipRect, rect.isSelected(), intersectLvl);
+    // The repeat area is lighter.
+    QBrush repeatBrush(rect.getBrush().color().lighter(150));
 
+    p->setBrush(repeatBrush);
+    drawRect(p, clipRect, repeatRect, rect.isSelected(), intersectLvl);
 
-        // now draw the 'repeat' marks
-        //
-        p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
-        int penWidth = int(std::max((unsigned int)rect.getPen().width(), 1u));
+    // *** Repeat Marks
 
-        for (int i = 0; i < repeatMarks.size(); ++i) {
-            int pos = repeatMarks[i];
-            if (pos > clipRect.right())
-                break;
+    p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
 
-            if (pos >= clipRect.left()) {
-                QPoint p1(pos, rect.y() + penWidth);
-                QPoint p2(pos, rect.y() + rect.height() - penWidth - 1);
-
-                p->drawLine(p1, p2);
-            }
-        }
+    // For each repeat mark, draw it.
+    for (int i = 0; i < repeatMarksX.size(); ++i) {
+        int x = repeatMarksX[i];
+        p->drawLine(x, rect.top(), x, rect.bottom());
     }
 
     p->restore();
 }
 
-void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& /* clipRect */)
+void CompositionView::drawCompRectLabel(
+        QPainter *p, const QRect& /* clipRect */, const CompositionRect& r)
 {
     // draw segment label
     //
@@ -1030,75 +1035,37 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
     }
 }
 
-void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRect,
-                               bool isSelected, int intersectLvl, bool fill)
+void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
+        const QRect &r, bool isSelected, int intersectLvl)
 {
+    // If the rect isn't in the clip rect, bail.
+    if (!r.intersects(clipRect))
+        return;
+
     p->save();
 
+    // Since we do partial updates when scrolling, make sure we don't
+    // obliterate the previews.
+    p->setClipRect(clipRect);
+
+    // For a selected segment, go with a darker fill.
+    if (isSelected) {
+        QColor fillColor = p->brush().color().darker(200);
+        p->setBrush(QBrush(fillColor));
+    }
+
+    // For intersecting segments, go with a darker fill.
+    if (intersectLvl > 0) {
+        QColor fillColor = p->brush().color().darker(intersectLvl * 105);
+        p->setBrush(QBrush(fillColor));
+    }
+
     QRect rect = r;
-    rect.setSize(rect.size() - QSize(1, 1));                                    
+    // Shrink height by 1 to accommodate the dividers.
+    // Shrink width by 1 so that adjacent segment borders don't overlap.
+    rect.adjust(0, 0, -1, -1);
 
-    if (fill) {
-        if (isSelected) {
-            QColor fillColor = p->brush().color();
-            fillColor = fillColor.dark(200);
-            QBrush b = p->brush();
-            b.setColor(fillColor);
-            p->setBrush(b);
-            //RG_DEBUG << "CompositionView::drawRect : selected color : " << fillColor << endl;
-        }
-
-        if (intersectLvl > 0) {
-            QColor fillColor = p->brush().color();
-            fillColor = fillColor.dark((intersectLvl) * 105);
-            QBrush b = p->brush();
-            b.setColor(fillColor);
-            p->setBrush(b);
-            //RG_DEBUG << "CompositionView::drawRect : intersected color : " << fillColor << " isSelected : " << isSelected << endl;
-        }
-    } else {  // Rubber-band mode.
-        p->setBrush(Qt::NoBrush);
-    }
-
-    // Paint using the small coordinates...
-    QRect intersection = rect.intersected(clipRect);
-
-    if (clipRect.contains(rect)) {
-        //RG_DEBUG << "note: drawing whole rect" << endl;
-        p->drawRect(rect);
-    } else {
-        // draw only what's necessary
-        if (!intersection.isEmpty() && fill)
-            p->fillRect(intersection, p->brush());
-
-        int rectTopY = rect.y();
-
-        if (rectTopY >= clipRect.y() &&
-            rectTopY <= (clipRect.y() + clipRect.height() - 1)) {
-            // to prevent overflow, in case the original rect is too wide
-            // the line would be drawn "backwards"
-            p->drawLine(intersection.topLeft(), intersection.topRight());
-        }
-
-        int rectBottomY = rect.y() + rect.height();
-        if (rectBottomY >= clipRect.y() &&
-            rectBottomY < (clipRect.y() + clipRect.height() - 1))
-            // to prevent overflow, in case the original rect is too wide
-            // the line would be drawn "backwards"
-            p->drawLine(intersection.bottomLeft() + QPoint(0, 1),
-                        intersection.bottomRight() + QPoint(0, 1));
-
-        int rectLeftX = rect.x();
-        if (rectLeftX >= clipRect.x() &&
-            rectLeftX <= (clipRect.x() + clipRect.width() - 1))
-            p->drawLine(rect.topLeft(), rect.bottomLeft());
-
-        int rectRightX = rect.x() + rect.width(); // make sure we don't overflow
-        if (rectRightX >= clipRect.x() &&
-            rectRightX < clipRect.x() + clipRect.width() - 1)
-            p->drawLine(rect.topRight(), rect.bottomRight());
-
-    }
+    p->drawRect(rect);
 
     p->restore();
 }
@@ -1113,8 +1080,9 @@ QColor CompositionView::mixBrushes(const QBrush &a, const QBrush &b)
                   (ac.blue()  + bc.blue())  / 2);
 }
 
-void CompositionView::drawIntersections(const CompositionModelImpl::RectContainer& rects,
-                                        QPainter * p, const QRect& clipRect)
+void CompositionView::drawIntersections(
+        QPainter * p, const QRect& clipRect,
+        const CompositionModelImpl::RectContainer& rects)
 {
     if (! (rects.size() > 1))
         return ;
@@ -1158,7 +1126,7 @@ void CompositionView::drawIntersections(const CompositionModelImpl::RectContaine
         for (CompositionModelImpl::RectContainer::iterator intIter = intersections.begin();
              intIter != intersections.end(); ++intIter) {
             CompositionRect r = *intIter;
-            drawCompRect(r, p, clipRect, intersectionLvl);
+            drawCompRect(p, clipRect, r, intersectionLvl);
         }
 
         if (intersections.size() > 10)
@@ -1227,7 +1195,7 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 
         p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
 
-        drawRect(bound, p, clipRect, false, 0, true);
+        drawRect(p, clipRect, bound, false, 0);
 
         p->drawText(pos.x() + 2, pos.y() + 3 + metrics.ascent(), m_textFloatText);
 

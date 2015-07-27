@@ -473,22 +473,22 @@ private:
     /**
      * This is an improved QPainter::drawRect().
      *
-     * Parameter order should be: painter, clipRect, rect, ...
-     *
      * @see drawCompRect()
      */
-    void drawRect(const QRect &rect, QPainter *p, const QRect &clipRect,
-                  bool isSelected = false, int intersectLvl = 0, bool fill = true);
+    void drawRect(QPainter *p, const QRect &clipRect, const QRect &rect,
+                  bool isSelected = false, int intersectLvl = 0);
     /// A version of drawRect() that handles segment repeats.
-    void drawCompRect(const CompositionRect &r, QPainter *p, const QRect &clipRect,
-                      int intersectLvl = 0);
+    void drawCompRect(QPainter *p, const QRect &clipRect,
+                      const CompositionRect &r, int intersectLvl = 0);
     /// Used by drawSegments() to draw the segment labels.
     /**
      * @see setShowSegmentLabels()
      */
-    void drawCompRectLabel(const CompositionRect &r, QPainter *p, const QRect &clipRect);
+    void drawCompRectLabel(QPainter *p, const QRect &clipRect,
+                           const CompositionRect &r);
     /// Used by drawSegments() to draw any intersections between rectangles.
-    void drawIntersections(const CompositionModelImpl::RectContainer &, QPainter *p, const QRect &clipRect);
+    void drawIntersections(QPainter *p, const QRect &clipRect,
+                           const CompositionModelImpl::RectContainer &);
 
     /// Used by drawArtifacts() to draw floating text.
     /**
