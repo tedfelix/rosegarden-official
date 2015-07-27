@@ -83,6 +83,26 @@ public:
     static const QColor DefaultPenColor;
     static const QColor DefaultBrushColor;
 
+    CompositionRect intersected(const CompositionRect &other) const
+    {
+        CompositionRect intersected = QRect::intersected(other);
+
+        // Mix m_brush colors
+        const QColor &thisColor = m_brush.color();
+        const QColor &otherColor = other.m_brush.color();
+
+        QColor color((thisColor.red()   + otherColor.red())   / 2,
+                     (thisColor.green() + otherColor.green()) / 2,
+                     (thisColor.blue()  + otherColor.blue())  / 2);
+
+        intersected.setBrush(color);
+
+        // Combine m_selected
+        intersected.setSelected((m_selected  ||  other.m_selected));
+
+        return intersected;
+    }
+
 protected:
     bool        m_resized;
     bool        m_selected;

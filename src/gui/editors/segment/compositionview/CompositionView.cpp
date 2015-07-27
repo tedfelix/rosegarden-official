@@ -1040,99 +1040,137 @@ void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
     p->restore();
 }
 
-QColor CompositionView::mixBrushes(const QBrush &a, const QBrush &b)
-{
-    const QColor &ac = a.color();
-    const QColor &bc = b.color();
-
-    return QColor((ac.red()   + bc.red())   / 2,
-                  (ac.green() + bc.green()) / 2,
-                  (ac.blue()  + bc.blue())  / 2);
-}
-
 void CompositionView::drawIntersections(
-        QPainter * p, const QRect& clipRect,
-        const CompositionModelImpl::RectContainer& rects)
+        QPainter *painter, const QRect &clipRect,
+        const CompositionModelImpl::RectContainer &rects)
 {
-    if (! (rects.size() > 1))
-        return ;
+    // Intersections are most noticeable when recording over existing
+    // segments.  They also play a part when moving a segment over top
+    // of existing segments.
+
+    // If there aren't enough rects for there to be an intersection, bail.
+    if (rects.size() <= 1)
+        return;
 
     CompositionModelImpl::RectContainer intersections;
 
-    CompositionModelImpl::RectContainer::const_iterator i = rects.begin(),
-        j = rects.begin();
+    // For each rect
+    for (CompositionModelImpl::RectContainer::const_iterator i = rects.begin();
+         i != rects.end();
+         ++i) {
 
-    for (; j != rects.end(); ++j) {
+        // For each rect after i
+        for (CompositionModelImpl::RectContainer::const_iterator j = i + 1;
+             j != rects.end();
+             ++j) {
 
-        CompositionRect testRect = *j;
-        i = j;
-        ++i; // set i to pos after j
+            CompositionRect intersectRect = i->intersected(*j);
 
-        if (i == rects.end())
-            break;
+            // If no intersection, try the next rect.
+            if (intersectRect.isEmpty())
+                continue;
 
-        for (; i != rects.end(); ++i) {
-            CompositionRect ri = testRect.intersected(*i);
-            if (!ri.isEmpty()) {
-                CompositionModelImpl::RectContainer::iterator t = std::find(intersections.begin(),
-                                                                        intersections.end(), ri);
-                if (t == intersections.end()) {
-                    ri.setBrush(mixBrushes(testRect.getBrush(), i->getBrush()));
-                    ri.setSelected(testRect.isSelected() || i->isSelected());
-                    intersections.push_back(ri);
-                }
+            // Check if we've already encountered this intersection.
+            CompositionModelImpl::RectContainer::iterator t =
+                    std::find(intersections.begin(),
+                              intersections.end(),
+                              intersectRect);
 
-            }
+            // If we've already seen this intersection, try the next rect.
+            if (t != intersections.end())
+                continue;
+
+            // Add it to the intersections vector.
+            intersections.push_back(intersectRect);
         }
     }
 
+    // For each intersection, draw the rectangle
+    for (CompositionModelImpl::RectContainer::iterator i =
+             intersections.begin();
+         i != intersections.end();
+         ++i) {
+
+        drawCompRect(painter, clipRect, *i, 1);
+    }
+
+#if 0
+// This code is from when segments could overlap each other on a track.
+// Overlapping segments are no longer allowed.  See:
+//    CompositionModelImpl::setTrackHeights()
+//    Composition::getMaxContemporaneousSegmentsOnTrack()
     //
     // draw this level of intersections then compute and draw further ones
     //
-    int intersectionLvl = 1;
+    int level = 1;
 
     while (!intersections.empty()) {
 
-        for (CompositionModelImpl::RectContainer::iterator intIter = intersections.begin();
-             intIter != intersections.end(); ++intIter) {
-            CompositionRect r = *intIter;
-            drawCompRect(p, clipRect, r, intersectionLvl);
+        // For each intersection, draw the segment rectangle
+        for (CompositionModelImpl::RectContainer::iterator intersectionIter =
+                 intersections.begin();
+             intersectionIter != intersections.end();
+             ++intersectionIter) {
+
+            drawCompRect(painter, clipRect, *intersectionIter, level);
         }
 
+        // Bail if more than 10 intersections.
+        // Original comment: "put a limit on how many intersections we can
+        //                    compute and draw - this grows exponentially"
+        // That doesn't seem right.  Each time through, the intersections
+        // will become fewer and fewer.
         if (intersections.size() > 10)
-            break; // put a limit on how many intersections we can compute and draw - this grows exponentially
+            break;
 
-        ++intersectionLvl;
+        ++level;
 
         CompositionModelImpl::RectContainer intersections2;
 
-        CompositionModelImpl::RectContainer::iterator i = intersections.begin(),
-            j = intersections.begin();
+        // For each intersection rect
+        for (CompositionModelImpl::RectContainer::iterator j =
+                 intersections.begin();
+             j != intersections.end();
+             ++j) {
 
-        for (; j != intersections.end(); ++j) {
+            const CompositionRect &testRect = *j;
 
-            CompositionRect testRect = *j;
-            i = j;
-            ++i; // set i to pos after j
+            // For each rect after j
+            for (CompositionModelImpl::RectContainer::iterator i = j + 1;
+                 i != intersections.end();
+                 ++i) {
 
-            if (i == intersections.end())
-                break;
+                CompositionRect intersectRect = testRect.intersected(*i);
 
-            for (; i != intersections.end(); ++i) {
-                CompositionRect ri = testRect.intersected(*i);
-                if (!ri.isEmpty() && ri != *i) {
-                    CompositionModelImpl::RectContainer::iterator t = std::find(intersections2.begin(),
-                                                                            intersections2.end(), ri);
-                    if (t == intersections2.end())
-                        ri.setBrush(mixBrushes(testRect.getBrush(), i->getBrush()));
-                    intersections2.push_back(ri);
+                // If we have an intersection, and it isn't simply the
+                // "i" rect.
+                // ??? Why?  If the i rect is contained within the j
+                //     rect, we ignore it?
+                if (!intersectRect.isEmpty()  &&  intersectRect != *i) {
+                    // Check to see if we've found this intersection already.
+                    CompositionModelImpl::RectContainer::iterator t =
+                            std::find(intersections2.begin(),
+                                      intersections2.end(),
+                                      intersectRect);
+
+                    // If we've not seen this intersection before
+                    if (t == intersections2.end()) {
+                        // Set the attributes.
+                        // ??? What about selected?
+                        intersectRect.setBrush(
+                                mixBrushes(testRect.getBrush(), i->getBrush()));
+                    }
+
+                    // ??? Add all intersections that we find, even if we've
+                    //     already seen them?
+                    intersections2.push_back(intersectRect);
                 }
             }
         }
 
         intersections = intersections2;
     }
-
+#endif
 }
 
 void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)

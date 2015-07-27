@@ -502,9 +502,6 @@ private:
 
     //void initStepSize();
 
-    /// Used by drawIntersections() to mix the brushes of intersecting rectangles.
-    static QColor mixBrushes(const QBrush &a, const QBrush &b);
-
     /// Deferred update of the segments within the entire viewport.
     /**
      * This will cause scrollSegmentsLayer() to refresh the entire
