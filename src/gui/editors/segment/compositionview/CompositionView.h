@@ -475,26 +475,30 @@ private:
      *
      * @see drawCompRect()
      */
-    void drawRect(QPainter *p, const QRect &clipRect, const QRect &rect,
+    void drawRect(QPainter *painter, const QRect &clipRect, const QRect &rect,
                   bool isSelected = false, int intersectLvl = 0);
     /// A version of drawRect() that handles segment repeats.
-    void drawCompRect(QPainter *p, const QRect &clipRect,
-                      const CompositionRect &r, int intersectLvl = 0);
+    void drawCompRect(QPainter *painter, const QRect &clipRect,
+                      const CompositionRect &rect, int intersectLvl = 0);
+
     /// Used by drawSegments() to draw the segment labels.
     /**
      * @see setShowSegmentLabels()
      */
-    void drawCompRectLabel(QPainter *p, const QRect &clipRect,
-                           const CompositionRect &r);
+    void drawCompRectLabel(QPainter *painter,
+                           const CompositionRect &rect);
+    /// Used by drawCompRectLabel() to draw a halo around a text label.
+    std::vector<QPoint> m_haloOffsets;
+
     /// Used by drawSegments() to draw any intersections between rectangles.
-    void drawIntersections(QPainter *p, const QRect &clipRect,
-                           const CompositionModelImpl::RectContainer &);
+    void drawIntersections(QPainter *painter, const QRect &clipRect,
+                           const CompositionModelImpl::RectContainer &rects);
 
     /// Used by drawArtifacts() to draw floating text.
     /**
      * @see setTextFloat()
      */
-    void drawTextFloat(QPainter *p, const QRect &clipRect);
+    void drawTextFloat(QPainter *painter, const QRect &clipRect);
 
     //void initStepSize();
 

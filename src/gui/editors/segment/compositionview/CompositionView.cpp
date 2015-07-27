@@ -166,6 +166,16 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
     m_updateTimer->start(100);
 
+    // Init the halo offsets table.
+    m_haloOffsets.push_back(QPoint(-1,-1));
+    m_haloOffsets.push_back(QPoint(-1, 0));
+    m_haloOffsets.push_back(QPoint(-1,+1));
+    m_haloOffsets.push_back(QPoint( 0,-1));
+    m_haloOffsets.push_back(QPoint( 0,+1));
+    m_haloOffsets.push_back(QPoint(+1,-1));
+    m_haloOffsets.push_back(QPoint(+1, 0));
+    m_haloOffsets.push_back(QPoint(+1,+1));
+
     // *** Debugging
 
     settings.beginGroup("Performance_Testing");
@@ -670,7 +680,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
         for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
              i != segmentRects.end(); ++i) {
 
-            drawCompRectLabel(&segmentsLayerPainter, clipRect, *i);
+            drawCompRectLabel(&segmentsLayerPainter, *i);
         }
     }
 }
@@ -895,36 +905,36 @@ void CompositionView::drawAudioPreviews(QPainter *segmentsLayerPainter, const QR
 }
 
 void CompositionView::drawCompRect(
-        QPainter *p,
+        QPainter *painter,
         const QRect &clipRect,
         const CompositionRect &rect,
         int intersectLvl)
 {
     // Non repeating case, just draw the segment rect.
     if (!rect.isRepeating()) {
-        p->save();
+        painter->save();
 
-        p->setBrush(rect.getBrush());
-        p->setPen(rect.getPen());
-        drawRect(p, clipRect, rect, rect.isSelected(), intersectLvl);
+        painter->setBrush(rect.getBrush());
+        painter->setPen(rect.getPen());
+        drawRect(painter, clipRect, rect, rect.isSelected(), intersectLvl);
 
-        p->restore();
+        painter->restore();
 
         return;
     }
 
     // Repeating case.
 
-    p->save();
+    painter->save();
 
     // *** Base Segment
 
     QRect baseRect = rect;
     baseRect.setWidth(rect.getBaseWidth());
 
-    p->setPen(rect.getPen());
-    p->setBrush(rect.getBrush());
-    drawRect(p, clipRect, baseRect, rect.isSelected(), intersectLvl);
+    painter->setPen(rect.getPen());
+    painter->setBrush(rect.getBrush());
+    drawRect(painter, clipRect, baseRect, rect.isSelected(), intersectLvl);
 
     // *** Repeat Area
 
@@ -935,104 +945,64 @@ void CompositionView::drawCompRect(
     // The repeat area is lighter.
     QBrush repeatBrush(rect.getBrush().color().lighter(150));
 
-    p->setBrush(repeatBrush);
-    drawRect(p, clipRect, repeatRect, rect.isSelected(), intersectLvl);
+    painter->setBrush(repeatBrush);
+    drawRect(painter, clipRect, repeatRect, rect.isSelected(), intersectLvl);
 
     // *** Repeat Marks
 
-    p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
+    painter->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
 
     // For each repeat mark, draw it.
     for (int i = 0; i < repeatMarksX.size(); ++i) {
         int x = repeatMarksX[i];
-        p->drawLine(x, rect.top(), x, rect.bottom());
+        painter->drawLine(x, rect.top(), x, rect.bottom());
     }
 
-    p->restore();
+    painter->restore();
 }
 
 void CompositionView::drawCompRectLabel(
-        QPainter *p, const QRect& /* clipRect */, const CompositionRect& r)
+        QPainter *painter, const CompositionRect &rect)
 {
-    // draw segment label
-    //
-    if (!r.getLabel().isEmpty()) {
+    // No label?  Bail.
+    if (rect.getLabel().isEmpty())
+        return;
 
-        p->save();
+    painter->save();
 
-        QFont font;
-        font.setPixelSize(r.height() / 2.2);
-        font.setWeight(QFont::Bold);
-        font.setItalic(false);
-        p->setFont(font);
+    // Pick a font that will fit nicely within a segment rect.
+    QFont font;
+    font.setPixelSize(rect.height() / 2.2);
+    font.setWeight(QFont::Bold);
+    painter->setFont(font);
 
-        QRect labelRect = QRect
-            (r.x(),
-             r.y() + ((r.height() - p->fontMetrics().height()) / 2) + 1,
-             r.width(),
-             p->fontMetrics().height());
+    QRect labelRect = rect;
+    // Add a one character left margin.  Add a one pixel top margin to
+    // make the text look a little more centered vertically.
+    labelRect.adjust(painter->fontMetrics().width('x'), 1, 0, 0);
 
-        int x = labelRect.x() + p->fontMetrics().width('x');
-        int y = labelRect.y();
+    QColor backgroundColor = rect.getBrush().color();
 
-        // get the segment color as the foundation for drawing the surrounding
-        // "halo" to ensure contrast against any preview dashes that happen to
-        // be present right under the label
-        QBrush brush = r.getBrush();
+    // *** Draw the halo
 
-        // figure out the intensity of this base color, Yves style
-        QColor surroundColor = brush.color();
-        int intensity = qGray(surroundColor.rgb());
+    painter->setPen(backgroundColor);
 
-        bool lightSurround = false;
-
-        // straight black or white as originally rewritten was too stark, so we
-        // go back to using lighter() against the base color, and this time we
-        // use darker() against the base color too
-        if (intensity < 127) {
-            surroundColor = surroundColor.darker(100);
-        } else {
-            surroundColor = surroundColor.lighter(100);
-            lightSurround = true;
-        }
-
-        // draw the "halo" effect
-        p->setPen(surroundColor);
-
-        for (int i = 0; i < 9; ++i) {
-
-            if (i == 4)
-                continue;
-
-            int wx = x, wy = y;
-
-            if (i < 3)
-                --wx;
-            if (i > 5)
-                ++wx;
-            if (i % 3 == 0)
-                --wy;
-            if (i % 3 == 2)
-                ++wy;
-
-            labelRect.setX(wx);
-            labelRect.setY(wy);
-
-            p->drawText(labelRect,
-                        Qt::AlignLeft | Qt::AlignTop,
-                        r.getLabel());
-        }
-
-        labelRect.setX(x);
-        labelRect.setY(y);
-
-        // use black on light halo, white on dark halo for the text itself
-        p->setPen((lightSurround ? Qt::black : Qt::white));
-
-        p->drawText(labelRect,
-                    Qt::AlignLeft | Qt::AlignVCenter, r.getLabel());
-        p->restore();
+    // For each halo offset, draw the text
+    for (unsigned i = 0; i < m_haloOffsets.size(); ++i) {
+        painter->drawText(labelRect.translated(m_haloOffsets[i]),
+                          Qt::AlignLeft | Qt::AlignVCenter,
+                          rect.getLabel());
     }
+
+    // *** Draw the text
+
+    const bool lightBackground = (qGray(backgroundColor.rgb()) >= 127);
+    // Based on the background, pick a contrasting pen.
+    painter->setPen(lightBackground ? Qt::black : Qt::white);
+    painter->drawText(labelRect,
+                      Qt::AlignLeft | Qt::AlignVCenter, rect.getLabel());
+
+    painter->restore();
 }
 
 void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
