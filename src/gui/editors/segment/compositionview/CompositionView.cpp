@@ -1269,26 +1269,11 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
 
 void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 {
-    //RG_DEBUG << "mouseReleaseEvent()";
-
-    // ??? Would it be better to push this down into the tools?
+    // In case there is no tool, and auto scroll is running.
     slotStopAutoScroll();
 
-    if (!m_currentTool)
-        return ;
-
-    // Transform coordinates from viewport to contents.
-    // ??? Can we push this further down into the tools?
-    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
-                   e->globalPos(), e->button(), e->buttons(), e->modifiers());
-
-    if (ce.button() == Qt::LeftButton ||
-        ce.button() == Qt::MidButton )
-        m_currentTool->handleMouseButtonRelease(&ce);
-
-    // Transfer accept state to original event.
-    if (!ce.isAccepted())
-        e->ignore();
+    if (m_currentTool)
+        m_currentTool->mouseReleaseEvent(e);;
 }
 
 void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
@@ -1332,6 +1317,8 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
 
     // Delegate to the current tool.
     int followMode = m_currentTool->mouseMoveEvent(e);
+
+    // ??? Can we push the rest of this down into the tools?
 
     setFollowMode(followMode);
 

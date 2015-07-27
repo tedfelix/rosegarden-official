@@ -76,7 +76,7 @@ public:
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *)
             { return RosegardenScrollView::NoFollow; }
-    virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
+    virtual void mouseReleaseEvent(QMouseEvent *)  { }
 
     void addCommandToHistory(Command *command);
 
@@ -86,6 +86,13 @@ protected:
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
     
+    // ??? We also need a clearCurrentIndex() as there are many calls to
+    //     this that pass CompositionItemPtr().
+    // ??? And why is this called an "Index" instead of an Item?  It's
+    //     not an Index (integer) in the usual sense, so Index is
+    //     misleading.  Rename: setCurrentItem().
+    // ??? We also need a getter and we need to make the member variable
+    //     private.  This setter is *non-trivial* as it deletes the old.
     void setCurrentIndex(CompositionItemPtr item);
 
     SegmentToolBox* getToolBox();
@@ -99,6 +106,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     CompositionView*  m_canvas;
+    // ??? Make private.
+    // ??? rename: m_currentItem
     CompositionItemPtr   m_currentIndex;
     RosegardenDocument* m_doc;
 //    QPoint            m_origPos;

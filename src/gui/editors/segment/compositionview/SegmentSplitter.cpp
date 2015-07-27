@@ -94,9 +94,18 @@ SegmentSplitter::mousePressEvent(QMouseEvent *e)
 }
 
 void
-SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
+SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
 {
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(e->pos());
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 
     if (item) {
         setSnapTime(e, SnapGrid::SnapToBeat);
@@ -105,12 +114,12 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 
         if (segment->getType() == Segment::Audio) {
             AudioSegmentSplitCommand *command =
-                new AudioSegmentSplitCommand(segment, m_canvas->grid().snapX(e->pos().x()));
+                new AudioSegmentSplitCommand(segment, m_canvas->grid().snapX(pos.x()));
             if (command->isValid())
                 addCommandToHistory(command);
         } else {
             SegmentSplitCommand *command =
-                new SegmentSplitCommand(segment, m_canvas->grid().snapX(e->pos().x()));
+                new SegmentSplitCommand(segment, m_canvas->grid().snapX(pos.x()));
             if (command->isValid())
                 addCommandToHistory(command);
         }
@@ -133,6 +142,10 @@ SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
     e->accept();
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    // ??? Minor bug: Middle button will cause the split line to
+    //     appear.  We should be able to query the QMouseEvent for the
+    //     button state and bail if left isn't currently pressed.
 
     CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
 

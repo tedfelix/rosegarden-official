@@ -142,12 +142,21 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 	}
 }
 
-void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
+void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
 {
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     Composition &comp = m_doc->getComposition();
 
     int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-    int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+    int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
     if (m_currentIndex) {

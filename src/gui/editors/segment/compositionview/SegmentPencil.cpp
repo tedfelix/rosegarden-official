@@ -158,7 +158,7 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
 	m_canvas->update(tmpRect);
 }
 
-void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
+void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
 {
     // Have to allow middle button for SegmentSelector's middle
     // button feature to work.
@@ -166,7 +166,12 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         e->button() != Qt::MidButton)
         return;
 
-    setContextHelpFor(e->pos());
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    setContextHelpFor(pos);
 
     if (m_newRect) {
 
@@ -175,11 +180,6 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         int trackPosition = m_canvas->grid().getYBin(tmpRect.y());
         Track *track = 
             m_doc->getComposition().getTrackByPosition(trackPosition);
-
-//RG_DEBUG << "SegmentPencil::handleMouseButtonRelease():";
-//RG_DEBUG << "  m_startTime = " << m_startTime;
-//RG_DEBUG << "  m_endTime = " << m_endTime;
-//RG_DEBUG << "  track id = " << track->getId();
 
         SegmentInsertCommand *command =
             new SegmentInsertCommand(m_doc, track->getId(),

@@ -112,9 +112,16 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
+void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentResizer::handleMouseButtonRelease" << endl;
+    //RG_DEBUG << "mouseReleaseEvent()";
+
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
 
     bool rescale = (e->modifiers() & Qt::ControlModifier);
 

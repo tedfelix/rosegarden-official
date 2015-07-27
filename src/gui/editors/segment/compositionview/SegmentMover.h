@@ -47,7 +47,7 @@ public:
 
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *);
-    virtual void handleMouseButtonRelease(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent *);
 
     static const QString ToolName;
 

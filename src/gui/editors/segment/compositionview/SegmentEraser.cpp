@@ -68,8 +68,15 @@ void SegmentEraser::mousePressEvent(QMouseEvent *e)
     setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
 }
 
-void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
+void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
 {
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
     if (m_currentIndex) {
         // no need to test the result, we know it's good (see mousePressEvent)
         CompositionItem* item = m_currentIndex;

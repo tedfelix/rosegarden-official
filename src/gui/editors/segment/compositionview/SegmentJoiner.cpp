@@ -59,14 +59,25 @@ SegmentJoiner::mousePressEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
-    QPoint pos = m_canvas->viewportToContents(e->pos());
+    //QPoint pos = m_canvas->viewportToContents(e->pos());
 
     // ??? not implemented
 }
 
 void
-SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
-{}
+SegmentJoiner::mouseReleaseEvent(QMouseEvent *e)
+{
+    // We only care about the left mouse button.
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    //QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    // ??? not implemented
+}
 
 int
 SegmentJoiner::mouseMoveEvent(QMouseEvent *e)
@@ -74,7 +85,7 @@ SegmentJoiner::mouseMoveEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
-    QPoint pos = m_canvas->viewportToContents(e->pos());
+    //QPoint pos = m_canvas->viewportToContents(e->pos());
 
     // ??? not implemented
 

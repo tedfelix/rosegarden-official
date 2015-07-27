@@ -225,8 +225,18 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 }
 
 void
-SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
+SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 {
+    // We only care about the left and middle mouse buttons.
+    if (e->button() != Qt::LeftButton  &&
+        e->button() != Qt::MidButton)
+        return;
+
+    // No need to propagate.
+    e->accept();
+
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
     m_buttonPressed = false;
 
     // Hide guides and stuff
@@ -235,14 +245,14 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     m_canvas->hideTextFloat();
 
     if (m_dispatchTool) {
-        m_dispatchTool->handleMouseButtonRelease(e);
+        m_dispatchTool->mouseReleaseEvent(e);
         m_dispatchTool = 0;
         m_canvas->viewport()->setCursor(Qt::ArrowCursor);
         return ;
     }
 
     int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-    int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+    int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
     if (!m_currentIndex) {
@@ -325,7 +335,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     m_currentIndex = CompositionItemPtr();
 
-    setContextHelpFor(e->pos());
+    setContextHelpFor(pos);
 }
 
 int
@@ -336,6 +346,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
+    // ??? Does QMouseEvent offer a button state we can use instead of this?
     if (!m_buttonPressed) {
         setContextHelpFor(pos, (e->modifiers() & Qt::ControlModifier));
         return RosegardenScrollView::NoFollow;
