@@ -741,12 +741,12 @@ void CompositionView::drawArtifacts()
     // Floating Text
     //
     if (m_drawTextFloat)
-        drawTextFloat(&viewportPainter, viewportContentsRect);
+        drawTextFloat(&viewportPainter);
 
     //
     // Split line
     //
-    if (m_splitLinePos.x() > 0 && viewportContentsRect.contains(m_splitLinePos)) {
+    if (m_splitLinePos.x() > 0) {
         viewportPainter.setPen(m_guideColor);
         viewportPainter.drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
                     m_splitLinePos.x(), m_splitLinePos.y() + m_model->grid().getYSnap());
@@ -1033,6 +1033,7 @@ void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
     QRect rect = r;
     // Shrink height by 1 to accommodate the dividers.
     // Shrink width by 1 so that adjacent segment borders don't overlap.
+    // ??? Why isn't the CompositionRect already adjusted like this?
     rect.adjust(0, 0, -1, -1);
 
     p->drawRect(rect);
@@ -1173,41 +1174,37 @@ void CompositionView::drawIntersections(
 #endif
 }
 
-void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
+void CompositionView::drawTextFloat(QPainter *p)
 {
-    QFontMetrics metrics(p->fontMetrics());
+    if (!m_model)
+        return;
 
-    QRect bound = p->boundingRect(0, 0, 300, metrics.height() + 6, Qt::AlignLeft, m_textFloatText);
+    // Find out how big of a rect we need for the text.
+    QRect boundingRect = p->boundingRect(
+            QRect(),  // we want the "required" rectangle
+            0,        // we want the "required" rectangle
+            m_textFloatText);
+
+    // Add some margins to give the text room to breathe.
+    boundingRect.adjust(-4,-2,+4,+2);
+
+    QPoint pos(m_textFloatPos);
+
+    // If the text float would appear above the top of the viewport
+    if (pos.y() < contentsY()) {
+        // Move it down
+        pos.setY(pos.y() + m_model->grid().getYSnap() * 2 +
+                 boundingRect.height());
+    }
+
+    boundingRect.moveTopLeft(pos);
 
     p->save();
 
-    bound.setLeft(bound.left() - 2);
-    bound.setRight(bound.right() + 2);
-    bound.setTop(bound.top() - 2);
-    bound.setBottom(bound.bottom() + 2);
-
-    QPoint pos(m_textFloatPos);
-    if (pos.y() < 0 && m_model) {
-        if (pos.y() + bound.height() < 0) {
-            pos.setY(pos.y() + m_model->grid().getYSnap() * 3);
-        } else {
-            pos.setY(pos.y() + m_model->grid().getYSnap() * 2);
-        }
-    }
-
-    bound.moveTopLeft(pos);
-
-    if (bound.intersects(clipRect)) {
-
-        p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
-
-        p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
-
-        drawRect(p, clipRect, bound, false, 0);
-
-        p->drawText(pos.x() + 2, pos.y() + 3 + metrics.ascent(), m_textFloatText);
-
-    }
+    p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
+    p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
+    p->drawRect(boundingRect);
+    p->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
 
     p->restore();
 }

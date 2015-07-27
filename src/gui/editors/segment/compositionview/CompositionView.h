@@ -498,7 +498,7 @@ private:
     /**
      * @see setTextFloat()
      */
-    void drawTextFloat(QPainter *painter, const QRect &clipRect);
+    void drawTextFloat(QPainter *painter);
 
     //void initStepSize();
 
