@@ -87,7 +87,12 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     // modifiers; Alt is grabbed by the window manager, and right clicking, my
     // (dmm) original idea, is grabbed by the context menu, so let's see how
     // this goes over
-    bool pencilAnyway = (m_canvas->pencilOverExisting());
+    // ??? Why not just set this to true?  The use case is starting a
+    //     pencil click/drag on top of an existing segment.  If the
+    //     user wants to draw a segment on top of a segment, just let
+    //     them.  Maybe this was an issue when segments could overlap?
+    bool pencilAnyway = ((e->modifiers() & Qt::AltModifier) != 0  &&
+                         (e->modifiers() & Qt::ControlModifier) != 0);
 
     m_newRect = false;
 

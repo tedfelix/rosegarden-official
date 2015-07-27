@@ -144,16 +144,6 @@ public:
      */
     const QRect &getTmpRect() const  { return m_tmpRect; }
 
-    /// Is the user pressing the Ctrl key to draw over a segment?
-    /**
-     * Find out whether the user is requesting to draw over an existing segment
-     * with the pencil, by holding the Ctrl key.  This is used by the segment
-     * pencil to decide whether to abort or not if a user attempts to draw over
-     * an existing segment, and this is all necessary in order to avoid breaking
-     * the double-click-to-open behavior.
-     */
-    bool pencilOverExisting() const  { return m_pencilOverExisting; }
-
     /// Set whether the segment items contain previews or not.
     /**
      * @see isShowingPreviews()
@@ -402,9 +392,6 @@ private:
     // depresses relating to selection add (usually Qt::SHIFT) and
     // selection copy (usually CONTROL)
 
-    /// See pencilOverExisting().
-    //void setPencilOverExisting(bool value);
-
     /// Called when the mouse enters the view.
     /**
      * Override of QWidget::enterEvent().  Shows context help (in the status
@@ -551,7 +538,6 @@ private:
 
     bool         m_showPreviews;
     bool         m_showSegmentLabels;
-    bool         m_pencilOverExisting;
 
     //int          m_minWidth;
 

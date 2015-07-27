@@ -75,7 +75,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_enableDrawing(true),
     m_showPreviews(false),
     m_showSegmentLabels(true),
-    m_pencilOverExisting(false),
     //m_minWidth(m_model->getCompositionLength()),
     m_stepSize(0),
     //m_rectFill(0xF0, 0xF0, 0xF0),
@@ -1209,71 +1208,73 @@ void CompositionView::drawTextFloat(QPainter *p)
     p->restore();
 }
 
-bool CompositionView::event(QEvent* e)
+bool CompositionView::event(QEvent *e)
 {
     if (e->type() == AudioPreviewThread::AudioPreviewQueueEmpty) {
-        RG_DEBUG << "CompositionView::event - AudioPreviewQueueEmpty\n";
+        // Audio previews have been generated, redraw the segments.
         segmentsNeedRefresh();
         viewport()->update();
+
+        // No need to propagate to parent.
+        e->accept();
+        // Event was recognized.
         return true;
     }
 
     return RosegardenScrollView::event(e);
 }
 
-void CompositionView::enterEvent(QEvent */* e */)
+void CompositionView::enterEvent(QEvent *)
 {
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
-        settings.endGroup();
-        return;
-    }
-    settings.endGroup();
-
+    // Ask RosegardenMainWindow to display the context help in the status bar.
     emit showContextHelp(m_toolContextHelp);
     m_contextHelpShown = true;
 }
 
-void CompositionView::leaveEvent(QEvent */* e */)
+void CompositionView::leaveEvent(QEvent *)
 {
+    // Ask RosegardenMainWindow to clear the context help in the status bar.
     emit showContextHelp("");
     m_contextHelpShown = false;
 }
 
 void CompositionView::slotToolHelpChanged(const QString &text)
 {
-    if (m_toolContextHelp == text) return;
+    // No change?  Bail.
+    if (m_toolContextHelp == text)
+        return;
+
     m_toolContextHelp = text;
 
-    QSettings settings;
-
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
-        settings.endGroup();
-        return;
-    }
-    settings.endGroup();
-
-    if (m_contextHelpShown) emit showContextHelp(text);
+    // If we're showing context help, ask RosegardenMainWindow to update
+    // the context help in the status bar.
+    if (m_contextHelpShown)
+        emit showContextHelp(text);
 }
 
 void CompositionView::mousePressEvent(QMouseEvent *e)
 {
     // Transform coordinates from viewport to contents.
     // ??? Can we push this further down into the tools?  Make them call
-    //     viewportToContents() on their own.
+    //     viewportToContents() on their own.  I think this is a good idea,
+    //     although it will be quite a bit of work.
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
 
-    // ??? Shouldn't SegmentPencil be responsible for this?
-    m_pencilOverExisting = ((ce.modifiers() & (Qt::AltModifier + Qt::ControlModifier)) != 0);
-
+    // ??? Recommend getting rid of this switch/case.  Instead, SegmentTool
+    //     derivers
+    //     should provide a mousePressEvent() and all mouse press events
+    //     should be forwarded to it.  The derivers also need to call the
+    //     baseclass version (SegmentTool::mousePressEvent()) to make sure
+    //     SegmentTool has a shot at the right mouse button.
+    //if (e.button() == Qt::LeftButton)
+    //    startAutoScroll();
+    //if (m_currentTool)
+    //    m_currentTool->mousePressEvent(e);
     switch (ce.button()) {
     case Qt::LeftButton:
     case Qt::MidButton:
+        // ??? Important.  We need to keep this here.
         startAutoScroll();
 
         if (m_currentTool)
@@ -1281,7 +1282,9 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
         else
             RG_DEBUG << "CompositionView::mousePressEvent() :" << this << " no tool";
         break;
-    case Qt::RightButton:  // ??? Why separate handling of the right button?
+    case Qt::RightButton:
+        // ??? Why separate handling of the right button?  SegmentTool is the
+        //     only one who handles this.
         if (m_currentTool)
             m_currentTool->handleRightButtonPress(&ce);
         else
@@ -1366,8 +1369,6 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     // ??? Can we push this further down into the tools?
     QMouseEvent ce(e->type(), viewportToContents(e->pos()),
                    e->globalPos(), e->button(), e->buttons(), e->modifiers());
-
-    m_pencilOverExisting = ((ce.modifiers() & Qt::AltModifier) != 0);
 
     int follow = m_currentTool->handleMouseMove(&ce);
     setFollowMode(follow);
@@ -1506,23 +1507,6 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
 
     //    mainWindow->slotSetStatusMessage(text);
 }
-
-#if 0
-void CompositionView::setPencilOverExisting(bool value)
-{
-    m_pencilOverExisting = value;
-}
-#endif
-#if 0
-// Dead Code.
-void
-CompositionView::slotTextFloatTimeout()
-{
-    hideTextFloat();
-    slotUpdateArtifacts();
-    //    mainWindow->slotSetStatusMessage(QString::null);
-}
-#endif
 
 }
 #include "CompositionView.moc"
