@@ -83,6 +83,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     //m_updateTimer(),
     m_updateNeeded(false),
     //m_updateRect()
+    m_drawTextFloat(false),
+    //m_textFloatText(),
+    //m_textFloatPos(),
     m_pointerPos(0),
     m_pointerPen(GUIPalette::getColour(GUIPalette::Pointer), 4),
     //m_newSegmentRect(),
@@ -92,9 +95,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
     m_guideX(0),
     m_guideY(0),
-    m_drawTextFloat(false),
-    //m_textFloatText(),
-    //m_textFloatPos(),
     m_drawSelectionRect(false),
     //m_selectionRect(),
     m_toolBox(new SegmentToolBox(this, doc)),
@@ -747,7 +747,8 @@ void CompositionView::drawArtifacts()
     }
 }
 
-void CompositionView::drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect)
+void CompositionView::drawTrackDividers(
+        QPainter *segmentsLayerPainter, const QRect &clipRect)
 {
     // Fetch track Y coordinates within the clip rectangle.  We expand the
     // clip rectangle slightly because we are drawing a rather wide track
@@ -866,7 +867,8 @@ void CompositionView::drawImage(
     painter->drawImage(dest, tileVector[lastTile], lastTileSource);
 }
 
-void CompositionView::drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect)
+void CompositionView::drawAudioPreviews(
+        QPainter *segmentsLayerPainter, const QRect &clipRect)
 {
     Profiler profiler("CompositionView::drawAudioPreviews");
 

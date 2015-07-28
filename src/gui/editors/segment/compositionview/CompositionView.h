@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -542,26 +541,30 @@ private:
      * @see setTextFloat()
      */
     void drawTextFloat(QPainter *painter);
+    bool m_drawTextFloat;
+    QString m_textFloatText;
+    QPoint m_textFloatPos;
 
-    int          m_pointerPos;
-    const QPen   m_pointerPen;
+    // Playback Position Pointer
+    int m_pointerPos;
+    const QPen m_pointerPen;
 
-    QRect        m_newSegmentRect;
-    QColor       m_newSegmentColor;
+    // New Segment
+    QRect m_newSegmentRect;
+    QColor m_newSegmentColor;
 
-    QPoint       m_splitLinePos;
+    // Split Line
+    QPoint m_splitLinePos;
 
-    bool         m_drawGuides;
+    // Guides
+    bool m_drawGuides;
     const QColor m_guideColor;
-    int          m_guideX;
-    int          m_guideY;
+    int m_guideX;
+    int m_guideY;
 
-    bool         m_drawTextFloat;
-    QString      m_textFloatText;
-    QPoint       m_textFloatPos;
-
-    bool         m_drawSelectionRect;
-    QRect        m_selectionRect;
+    // Selection Rect (rubber band)
+    bool m_drawSelectionRect;
+    QRect m_selectionRect;
 
     // --- Both Segments and Artifacts --------------------
 
@@ -583,8 +586,8 @@ private:
     /// The tool that receives mouse events.
     SegmentTool *m_currentTool;
 
-    QString      m_toolContextHelp;
-    bool         m_contextHelpShown;
+    QString m_toolContextHelp;
+    bool m_contextHelpShown;
 
     // --- DEBUG ------------------------------------------
 
