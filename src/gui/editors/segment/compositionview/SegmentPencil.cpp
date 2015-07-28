@@ -148,10 +148,10 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
     tmpRect.setY(snapGrid.getYBinCoordinate(trackPosition) + 1);
     tmpRect.setHeight(snapGrid.getYSnap() * multiple - 2);
 
-    m_canvas->setTmpRect(tmpRect,
-                         GUIPalette::convertColour
-                         (m_doc->getComposition().getSegmentColourMap().
-                          getColourByIndex(t->getColor())));
+    m_canvas->setNewSegmentColor(GUIPalette::convertColour(
+            m_doc->getComposition().getSegmentColourMap().
+            getColourByIndex(t->getColor())));
+    m_canvas->drawNewSegment(tmpRect);
 
     m_newRect = true;
 
@@ -175,7 +175,7 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
 
     if (m_newRect) {
 
-        QRect tmpRect = m_canvas->getTmpRect();
+        QRect tmpRect = m_canvas->getNewSegmentRect();
 
         int trackPosition = m_canvas->grid().getYBin(tmpRect.y());
         Track *track = 
@@ -222,7 +222,7 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
         m_canvas->getModel()->setSelected(item);
         m_canvas->getModel()->signalSelection();
 
-        m_canvas->setTmpRect(QRect());
+        m_canvas->hideNewSegment();
         m_canvas->slotUpdateAll();
 
     }
@@ -247,7 +247,7 @@ int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
         clearContextHelp();
     }
 
-    QRect tmpRect = m_canvas->getTmpRect();
+    QRect tmpRect = m_canvas->getNewSegmentRect();
 
     SnapGrid &snapGrid = m_canvas->grid();
 
@@ -279,7 +279,7 @@ int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
     tmpRect.setLeft(leftX);
     tmpRect.setRight(rightX);
 
-    m_canvas->setTmpRect(tmpRect);
+    m_canvas->drawNewSegment(tmpRect);
     return RosegardenScrollView::FollowHorizontal;
 }
 

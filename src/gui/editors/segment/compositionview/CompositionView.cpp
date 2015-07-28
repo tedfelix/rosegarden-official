@@ -75,13 +75,10 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_enableDrawing(true),
     m_showPreviews(false),
     m_showSegmentLabels(true),
-    //m_minWidth(m_model->getCompositionLength()),
-    //m_rectFill(0xF0, 0xF0, 0xF0),
-    //m_selectedRectFill(0x00, 0x00, 0xF0),
     m_pointerPos(0),
     m_pointerPen(GUIPalette::getColour(GUIPalette::Pointer), 4),
-    m_tmpRect(QPoint(0, 0), QPoint( -1, -1)),  // invalid
-    m_tmpRectFill(CompositionRect::DefaultBrushColor),
+    //m_newSegmentRect(),
+    //m_newSegmentColor(),
     m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
     m_drawGuides(false),
     m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
@@ -97,7 +94,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_contextHelpShown(false),
     m_updateTimer(new QTimer(static_cast<QObject *>(this))),
     m_updateNeeded(false)
-//  m_updateRect()
+    //m_updateRect()
 {
     if (!doc)
         return;
@@ -694,12 +691,14 @@ void CompositionView::drawArtifacts()
     viewportPainter.drawLine(m_pointerPos, 0, m_pointerPos, contentsHeight() - 1);
 
     //
-    // Tmp rect (rect displayed while drawing a new segment)
+    // New Segment (SegmentPencil)
     //
-    if (m_tmpRect.isValid() && m_tmpRect.intersects(viewportContentsRect)) {
+    if (m_newSegmentRect.isValid()  &&
+        m_newSegmentRect.intersects(viewportContentsRect)) {
+
         viewportPainter.setPen(CompositionColourCache::getInstance()->SegmentBorder);
-        viewportPainter.setBrush(m_tmpRectFill);
-        drawRect(&viewportPainter, viewportContentsRect, m_tmpRect);
+        viewportPainter.setBrush(m_newSegmentColor);
+        drawRect(&viewportPainter, viewportContentsRect, m_newSegmentRect);
     }
 
     //
@@ -1369,36 +1368,24 @@ void CompositionView::hideGuides()
     slotUpdateArtifacts();
 }
 
-void CompositionView::setTmpRect(const QRect& r)
+void CompositionView::drawNewSegment(const QRect &r)
 {
-    setTmpRect(r, m_tmpRectFill);
+    QRect previousRect = m_newSegmentRect;
+    m_newSegmentRect = r;
+
+    slotAllNeedRefresh(m_newSegmentRect | previousRect);
 }
 
-void CompositionView::setTmpRect(const QRect& r, const QColor &c)
-{
-    QRect pRect = m_tmpRect;
-    m_tmpRect = r;
-    m_tmpRectFill = c;
-    slotAllNeedRefresh(m_tmpRect | pRect);
-}
-
-void CompositionView::setTextFloat(int x, int y, const QString &text)
+void CompositionView::drawTextFloat(int x, int y, const QString &text)
 {
     m_textFloatPos.setX(x);
     m_textFloatPos.setY(y);
     m_textFloatText = text;
     m_drawTextFloat = true;
+
     slotUpdateArtifacts();
-
-    // most of the time when the floating text is drawn
-    // we want to update a larger part of the view
-    // so don't update here
-    //     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignLeft, m_textFloatText);
-    //     slotAllNeedRefresh(r);
-
-
-    //    mainWindow->slotSetStatusMessage(text);
 }
+
 
 }
 #include "CompositionView.moc"

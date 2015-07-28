@@ -129,18 +129,11 @@ public:
     /// Returns the composition model.  See m_model.
     CompositionModelImpl *getModel()  { return m_model; }
 
-    /// See getTmpRect().
-    void setTmpRect(const QRect &r);
-    /// See getTmpRect().
-    void setTmpRect(const QRect &r, const QColor &c);
-    /// Get the temporary segment rect when drawing a new segment.
-    /**
-     * The "temp rect" is used by the pencil tool when first drawing
-     * out the segment while the mouse button is being held down.
-     *
-     * @see setTmpRect()
-     */
-    const QRect &getTmpRect() const  { return m_tmpRect; }
+    void setNewSegmentColor(const QColor &color)  { m_newSegmentColor = color; }
+    /// Used by SegmentPencil to draw a new segment.
+    void drawNewSegment(const QRect &r);
+    void hideNewSegment()  { drawNewSegment(QRect()); }
+    const QRect &getNewSegmentRect() const  { return m_newSegmentRect; }
 
     /// Set whether the segment items contain previews or not.
     /**
@@ -185,20 +178,17 @@ public:
      */
     void updateSelectedSegments();
 
-    /// Set a text float on this canvas.
+    /// Draw a text float on this canvas.
     /**
-     * The floating text can contain
-     * anything and can be left to timeout or you can hide it
-     * explicitly with hideTextFloat().
-     *
      * Used by SegmentMover::mouseMoveEvent() to display time,
      * bar, and beat on the view while the user is moving a segment.
-     * Also used by SegmentSelector::mouseMoveEvent().
+     * Also used by SegmentSelector::mouseMoveEvent() for the same
+     * purpose.
      *
-     * @see slotTextFloatTimeout()
+     * @see hideTextFloat()
      */
-    void setTextFloat(int x, int y, const QString &text);
-    /// See setTextFloat().
+    void drawTextFloat(int x, int y, const QString &text);
+    /// See drawTextFloat().
     void hideTextFloat()  { m_drawTextFloat = false; }
 
     /// Enables/disables display of the text labels on each segment.
@@ -260,9 +250,6 @@ public slots:
      * @see RosegardenScrollView::resizeContents().
      */
     void slotUpdateSize();
-
-    // TextFloat timer handler.
-    //void slotTextFloatTimeout();
 
 signals:
     /// Emitted when a segment is double-clicked to launch the default segment editor.
@@ -543,8 +530,8 @@ private:
     int          m_pointerPos;
     QPen         m_pointerPen;
 
-    QRect        m_tmpRect;
-    QColor       m_tmpRectFill;
+    QRect        m_newSegmentRect;
+    QColor       m_newSegmentColor;
     QPoint       m_splitLinePos;
 
     QColor       m_trackDividerColor;

@@ -346,7 +346,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
         .arg(time.sec).arg(ms)
         .arg(bar + 1).arg(beat).arg(fraction);
 
-    m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
+    m_canvas->drawTextFloat(guideX + 10, guideY - 30, posString);
 // 	m_canvas->updateContents();
 	m_canvas->update();
 
