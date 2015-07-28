@@ -511,7 +511,7 @@ private:
      * (a RectRange) contains a pair of iterators into a vector of
      * preview QRects.
      */
-    CompositionModelImpl::RectRanges m_notationPreview;
+    CompositionModelImpl::NotationPreviewRanges m_notationPreview;
     /// Set by drawSegments(), used by drawAudioPreviews()
     CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
 

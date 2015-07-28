@@ -28,7 +28,6 @@
 #include <QRect>
 #include <QSharedPointer>
 
-#include <utility>  // std::pair
 #include <vector>
 #include <map>
 #include <set>
@@ -119,28 +118,29 @@ public:
 
     // --- Notation Previews ------------------------------
 
-    /// A vector of QRect's.  This is used to hold notation previews.
+    /// A vector of QRect's.
     /**
-     * Each QRect represents a note in the preview.
+     * Each QRect represents a note/event in the preview.
      *
      * See NotationPreviewDataCache.
      *
-     * rename: QRectVector
+     * QRectVector was also considered as a name for this, but since it
+     * is used in so many places, the more abstract name seemed more
+     * helpful to readers of the code.
      */
-    typedef std::vector<QRect> RectList;
+    typedef std::vector<QRect> NotationPreview;
 
-    /// A range of notation preview data for a segment that is visible in the viewport.
-    struct RectRange {
-        std::pair<RectList::iterator, RectList::iterator> range;
+    /// The visible range of notation preview data for a segment.
+    struct NotationPreviewRange {
+        NotationPreview::iterator begin;
+        NotationPreview::iterator end;
+
         QPoint basePoint;
         QColor color;
     };
 
-    /// Notation previews.
-    /**
-     * A vector of RectRanges, one per segment.
-     */
-    typedef std::vector<RectRange> RectRanges;
+    /// A vector of NotationPreviewRange objects, one per segment.
+    typedef std::vector<NotationPreviewRange> NotationPreviewRanges;
 
     // --- Audio Previews ---------------------------------
 
@@ -201,7 +201,7 @@ public:
     /// Get the segment rectangles and segment previews
     // ??? Audio and Notation Previews too.  Need an "ALL" category.
     const RectContainer &getSegmentRects(const QRect &clipRect,
-                                         RectRanges *notationPreview,
+                                         NotationPreviewRanges *notationPreview,
                                          AudioPreviewDrawData *audioPreview);
 
     /// Get the topmost item (segment) at the given position on the view.
@@ -393,19 +393,19 @@ private:
 
     /// rename: getNotationPreviewStatic()?
     void makeNotationPreviewRects(QPoint basePoint, const Segment *segment,
-                                  const QRect &clipRect, RectRanges *npData);
+                                  const QRect &clipRect, NotationPreviewRanges *npData);
     /// rename: getNotationPreviewMoving()?
     void makeNotationPreviewRectsMovingSegment(
             QPoint basePoint, const Segment *segment,
-            const QRect &currentSR, RectRanges *npData);
+            const QRect &currentSR, NotationPreviewRanges *npData);
     /// rename: getNotationPreview()
-    RectList *getNotationPreviewData(const Segment *);
+    NotationPreview *getNotationPreviewData(const Segment *);
     /// rename: cacheNotationPreview()
-    RectList *makeNotationPreviewDataCache(const Segment *);
+    NotationPreview *makeNotationPreviewDataCache(const Segment *);
     /// For notation preview
-    void createEventRects(const Segment *segment, RectList *);
+    void createEventRects(const Segment *segment, NotationPreview *);
 
-    typedef std::map<const Segment *, RectList *> NotationPreviewDataCache;
+    typedef std::map<const Segment *, NotationPreview *> NotationPreviewDataCache;
     NotationPreviewDataCache m_notationPreviewDataCache;
 
     // --- Audio Previews ---------------------------------

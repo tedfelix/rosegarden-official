@@ -161,29 +161,29 @@ struct RectCompare {
 };
 
 void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
-        const Segment* segment, const QRect& clipRect, RectRanges* npRects)
+        const Segment* segment, const QRect& clipRect, NotationPreviewRanges* npRects)
 {
     Profiler profiler("CompositionModelImpl::makeNotationPreviewRects");
 
-    RectList* cachedNPData = getNotationPreviewData(segment);
+    NotationPreview* cachedNPData = getNotationPreviewData(segment);
 
     if (cachedNPData->empty())
         return ;
 
-    RectList::iterator npEnd = cachedNPData->end();
+    NotationPreview::iterator npEnd = cachedNPData->end();
 
     // Find the first preview rect that *starts within* the clipRect.
     // Probably not the right thing to do as this means any event that starts
     // prior to the clipRect but stretches through the clipRect will be
     // dropped.  And this explains why long notes disappear from the segment
     // previews.
-    // Note that RectList is a std::vector, so this call will take increasing
+    // Note that NotationPreview is a std::vector, so this call will take increasing
     // amounts of time as the number of events to the left of the clipRect
     // increases.  This is probably at least a small part of the "CPU usage
     // increasing over time" issue.
     // If cachedNPData is sorted by start time, we could at least do a binary
     // search.
-    RectList::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
+    NotationPreview::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
 
     // If no preview rects were within the clipRect, bail.
     if (npi == npEnd)
@@ -202,8 +202,8 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
 
     // Compute the interval within the Notation Preview for this segment.
 
-    RectRange interval;
-    interval.range.first = npi;
+    NotationPreviewRange interval;
+    interval.begin = npi;
 
     // Compute the rightmost x coord (xLim)
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
@@ -216,7 +216,7 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
     while (npi != npEnd  &&  npi->x() < xLim)
         ++npi;
 
-    interval.range.second = npi;
+    interval.end = npi;
     interval.basePoint.setX(0);
     interval.basePoint.setY(basePoint.y());
     interval.color = segment->getPreviewColour();
@@ -226,19 +226,19 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
 }
 
 void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
-        const Segment* segment, const QRect& currentSR, RectRanges* npRects)
+        const Segment* segment, const QRect& currentSR, NotationPreviewRanges* npRects)
 {
     CompositionRect unmovedSR = computeSegmentRect(*segment);
 
-    RectList* cachedNPData = getNotationPreviewData(segment);
+    NotationPreview* cachedNPData = getNotationPreviewData(segment);
 
     if (cachedNPData->empty())
         return ;
 
-    RectList::iterator npBegin = cachedNPData->begin();
-    RectList::iterator npEnd = cachedNPData->end();
+    NotationPreview::iterator npBegin = cachedNPData->begin();
+    NotationPreview::iterator npEnd = cachedNPData->end();
 
-    RectList::iterator npi;
+    NotationPreview::iterator npi;
 
     if (m_changeType == ChangeResizeFromStart)
         npi = std::lower_bound(npBegin, npEnd, currentSR, RectCompare());
@@ -256,8 +256,8 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
 
     // Compute the interval within the Notation Preview for this segment.
 
-    RectRange interval;
-    interval.range.first = npi;
+    NotationPreviewRange interval;
+    interval.begin = npi;
 
     // Compute the rightmost x coord (xLim)
     int xLim = m_changeType == ChangeMove ? unmovedSR.right() : currentSR.right();
@@ -269,7 +269,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     while (npi != npEnd  &&  npi->x() < xLim)
         ++npi;
 
-    interval.range.second = npi;
+    interval.end = npi;
     interval.basePoint.setY(basePoint.y());
 
     if (m_changeType == ChangeMove)
@@ -408,7 +408,7 @@ void CompositionModelImpl::clearPreviewCache()
     }
 }
 
-void CompositionModelImpl::createEventRects(const Segment *segment, RectList *npData)
+void CompositionModelImpl::createEventRects(const Segment *segment, NotationPreview *npData)
 {
     npData->clear();
 
@@ -636,8 +636,8 @@ void CompositionModelImpl::makePreviewCache(const Segment *s)
 void CompositionModelImpl::removePreviewCache(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
-        RectList *rl = m_notationPreviewDataCache[s];
-        delete rl;
+        NotationPreview *notationPreview = m_notationPreviewDataCache[s];
+        delete notationPreview;
         m_notationPreviewDataCache.erase(s);
     } else {
         AudioPreviewData *apd = m_audioPreviewDataCache[s];
@@ -1326,7 +1326,7 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
 const CompositionModelImpl::RectContainer &
 CompositionModelImpl::getSegmentRects(
         const QRect &clipRect,
-        RectRanges *notationPreview,
+        NotationPreviewRanges *notationPreview,
         AudioPreviewDrawData *audioPreview)
 {
     Profiler profiler("CompositionModelImpl::getSegmentRects()");
@@ -1453,9 +1453,9 @@ CompositionModelImpl::YCoordList CompositionModelImpl::getTrackDividersIn(const 
     return list;
 }
 
-CompositionModelImpl::RectList* CompositionModelImpl::getNotationPreviewData(const Segment* s)
+CompositionModelImpl::NotationPreview* CompositionModelImpl::getNotationPreviewData(const Segment* s)
 {
-    RectList* npData = m_notationPreviewDataCache[s];
+    NotationPreview* npData = m_notationPreviewDataCache[s];
 
     if (!npData) {
         npData = makeNotationPreviewDataCache(s);
@@ -1479,9 +1479,9 @@ CompositionModelImpl::AudioPreviewData* CompositionModelImpl::getAudioPreviewDat
     return apData;
 }
 
-CompositionModelImpl::RectList* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+CompositionModelImpl::NotationPreview* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
-    RectList* npData = new RectList();
+    NotationPreview* npData = new NotationPreview();
 
     // Create the preview
     createEventRects(s, npData);

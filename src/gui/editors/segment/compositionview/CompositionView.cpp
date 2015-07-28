@@ -578,7 +578,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
     // *** Get Segment and Preview Rectangles
 
     // Assume we aren't going to show previews.
-    CompositionModelImpl::RectRanges *notationPreview = 0;
+    CompositionModelImpl::NotationPreviewRanges *notationPreview = 0;
     CompositionModelImpl::AudioPreviewDrawData *audioPreview = 0;
 
     if (m_showPreviews) {
@@ -622,14 +622,16 @@ void CompositionView::drawSegments(const QRect &clipRect)
         QColor defaultColor = CompositionColourCache::getInstance()->SegmentInternalPreview;
 
         // For each segment's preview range
-        for (CompositionModelImpl::RectRanges::const_iterator notationPreviewIter =
+        for (CompositionModelImpl::NotationPreviewRanges::const_iterator notationPreviewIter =
                  m_notationPreview.begin();
              notationPreviewIter != m_notationPreview.end();
              ++notationPreviewIter) {
 
-            const CompositionModelImpl::RectRange &rectRange = *notationPreviewIter;
+            const CompositionModelImpl::NotationPreviewRange &notationPreviewRange =
+                    *notationPreviewIter;
 
-            QColor color = rectRange.color.isValid() ? rectRange.color : defaultColor;
+            QColor color = notationPreviewRange.color.isValid() ?
+                           notationPreviewRange.color : defaultColor;
 
             // translate() calls are cumulative, so we need to be able to get
             // back to where we were.  Note that resetTransform() would be
@@ -638,12 +640,13 @@ void CompositionView::drawSegments(const QRect &clipRect)
             segmentsLayerPainter.save();
             // Coords WRT segment rect's base point.  (Upper left?)
             segmentsLayerPainter.translate(
-                    rectRange.basePoint.x(), rectRange.basePoint.y());
+                    notationPreviewRange.basePoint.x(),
+                    notationPreviewRange.basePoint.y());
 
             // For each event rectangle, draw it.
-            for (CompositionModelImpl::RectList::const_iterator i =
-                     rectRange.range.first;
-                 i != rectRange.range.second;
+            for (CompositionModelImpl::NotationPreview::const_iterator i =
+                     notationPreviewRange.begin;
+                 i != notationPreviewRange.end;
                  ++i) {
 
                 QRect eventRect = *i;
