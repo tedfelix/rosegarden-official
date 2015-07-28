@@ -267,6 +267,8 @@ public:
 
     // --- Recording --------------------------------------
 
+    // ??? This category might make more sense combined with Segments.
+
     /// Refresh the recording segments.
     void pointerPosChanged(int x);
 
@@ -276,6 +278,8 @@ public:
     //bool haveRecordingItems()  { return !m_recordingSegments.empty(); }
 
     // --- Changing (moving and resizing) -----------------
+
+    // ??? This category might make more sense combined with Segments.
 
     enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
@@ -355,7 +359,15 @@ private slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater *);
 
 private:
+    // --- Misc -------------------------------------------
+
+    Composition &m_composition;
+    Studio &m_studio;
+    SnapGrid m_grid;
+
     // CompositionObserver Interface
+    // ??? It's hard to pin these down to a category as they contribute
+    //     to multiple categories.
     virtual void segmentAdded(const Composition *, Segment *);
     virtual void segmentRemoved(const Composition *, Segment *);
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
@@ -364,7 +376,13 @@ private:
     virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
     virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
 
+    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
+
+    // --- Notation Previews ------------------------------
+
     // SegmentObserver Interface
+    // ??? These primarily affect the notation previews, however,
+    //     endMarkerTimeChanged() feels more like a Segment thing.
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
     virtual void AllEventsChanged(const Segment *);
@@ -373,26 +391,6 @@ private:
     virtual void segmentDeleted(const Segment*)
             { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ }
 
-    QPoint computeSegmentOrigin(const Segment &);
-
-    bool setTrackHeights(Segment *changed = 0); // true if something changed
-
-    bool isTmpSelected(const Segment *) const;
-    bool wasTmpSelected(const Segment *) const;
-    bool isMoving(const Segment *) const;
-    bool isRecording(const Segment *) const;
-
-    //void computeRepeatMarks(CompositionItemPtr);
-    void computeRepeatMarks(CompositionRect &sr, const Segment *s);
-    unsigned int computeZForSegment(const Segment *s);
-        
-    // Segment Previews
-    /// Make and cache notation or audio preview for segment.
-    void makePreviewCache(const Segment *s);
-    /// Remove cached notation or audio preview for segment.
-    void removePreviewCache(const Segment *s);
-
-    // Notation Previews
     /// rename: getNotationPreviewStatic()?
     void makeNotationPreviewRects(QPoint basePoint, const Segment *segment,
                                   const QRect &clipRect, RectRanges *npData);
@@ -407,7 +405,11 @@ private:
     /// For notation preview
     void createEventRects(const Segment *segment, RectList *);
 
-    // Audio Previews
+    typedef std::map<const Segment *, RectList *> NotationPreviewDataCache;
+    NotationPreviewDataCache m_notationPreviewDataCache;
+
+    // --- Audio Previews ---------------------------------
+
     void makeAudioPreviewRects(AudioPreviewDrawData *apRects, const Segment *,
                                const CompositionRect &segRect, const QRect &clipRect);
     PixmapArray getAudioPreviewPixmap(const Segment *);
@@ -418,70 +420,86 @@ private:
     /// rename: makeAudioPreview()
     void updatePreviewCacheForAudioSegment(const Segment *);
 
+    AudioPreviewThread *m_audioPreviewThread;
+    typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
+    AudioPreviewDataCache m_audioPreviewDataCache;
+    std::map<const Segment *, PixmapArray> m_audioSegmentPreviewMap;
+    typedef std::map<const Segment *, AudioPreviewUpdater *>
+            AudioPreviewUpdaterMap;
+    AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
+
+    // --- Notation and Audio Previews --------------------
+
+    // Segment Previews
+    /// Make and cache notation or audio preview for segment.
+    void makePreviewCache(const Segment *s);
+    /// Remove cached notation or audio preview for segment.
+    void removePreviewCache(const Segment *s);
+
     /// Clear notation and audio preview caches.
     void clearPreviewCache();
 
-    // Segment Rects (m_segmentRectMap)
+    // --- Segments ---------------------------------------
+
+    QPoint computeSegmentOrigin(const Segment &);
+
+    std::map<TrackId, int> m_trackHeights;
+    bool setTrackHeights(Segment *changed = 0); // true if something changed
+
+    //void computeRepeatMarks(CompositionItemPtr);
+    void computeRepeatMarks(CompositionRect &sr, const Segment *s);
+
+    SegmentOrderer m_segmentOrderer;
+    unsigned int computeZForSegment(const Segment *s);
+
+    /// Segment Cache
+    std::map<const Segment *, CompositionRect> m_segmentRectMap;
+    std::map<const Segment *, timeT> m_segmentEndTimeMap;
+
     void putInCache(const Segment *, const CompositionRect &);
     const CompositionRect &getFromCache(const Segment *, timeT &endTime);
     bool isCachedRectCurrent(const Segment &s, const CompositionRect &r,
-                             QPoint segmentOrigin, timeT segmentEndTime);
+                             QPoint cachedSegmentOrigin,
+                             timeT cachedSegmentEndTime);
     void clearInCache(const Segment *, bool clearPreviewCache = false);
 
-    /// Used by CompositionView on mouse double-click.
-    /**
-     * The caller is responsible for deleting the CompositionItem objects
-     * that are returned.
-     */
+    /// Get all the segments at a point.
     ItemContainer getItemsAt(const QPoint &);
-
-    //--------------- Data members ---------------------------------
-    Composition     &m_composition;
-    Studio          &m_studio;
-    SnapGrid         m_grid;
-
-    SegmentSelection m_selectedSegments;
-    SegmentSelection m_tmpSelectedSegments;
-    SegmentSelection m_previousTmpSelectedSegments;
-
-    timeT            m_pointerTimePos;
-
-    typedef std::set<Segment *>  RecordingSegmentSet;
-    RecordingSegmentSet          m_recordingSegments;
-
-    AudioPreviewThread          *m_audioPreviewThread;
-
-    // Notation Preview
-    typedef std::map<const Segment *, RectList *> NotationPreviewDataCache;
-    NotationPreviewDataCache     m_notationPreviewDataCache;
-
-    // Audio Preview
-    typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
-    AudioPreviewDataCache        m_audioPreviewDataCache;
 
     /// Used by getSegmentRects() to return a reference for speed.
     RectContainer m_segmentRects;
 
-    ChangeType    m_changeType;
-    ItemContainer m_changingItems;
-    typedef std::vector<CompositionItemPtr> ItemGC;
-    ItemGC m_itemGC;
+    // --- Selection --------------------------------------
+
+    SegmentSelection m_selectedSegments;
+
+    SegmentSelection m_tmpSelectedSegments;
+    bool isTmpSelected(const Segment *) const;
+
+    SegmentSelection m_previousTmpSelectedSegments;
+    bool wasTmpSelected(const Segment *) const;
 
     QRect m_selectionRect;
     QRect m_previousSelectionUpdateRect;
 
-    std::map<const Segment *, CompositionRect> m_segmentRectMap;
-    std::map<const Segment *, timeT> m_segmentEndTimeMap;
-    std::map<const Segment *, PixmapArray> m_audioSegmentPreviewMap;
-    std::map<TrackId, int> m_trackHeights;
+    // --- Recording --------------------------------------
 
-    typedef std::map<const Segment *, AudioPreviewUpdater *>
-        AudioPreviewUpdaterMap;
-    AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
+    typedef std::set<Segment *> RecordingSegmentSet;
+    RecordingSegmentSet m_recordingSegments;
+    timeT m_pointerTimePos;
 
-    SegmentOrderer m_segmentOrderer;
+    bool isRecording(const Segment *) const;
 
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
+    // --- Changing (moving and resizing) -----------------
+
+    bool isMoving(const Segment *) const;
+
+    ChangeType m_changeType;
+    ItemContainer m_changingItems;
+
+    typedef std::vector<CompositionItemPtr> ItemGC;
+    ItemGC m_itemGC;
+
 };
 
 

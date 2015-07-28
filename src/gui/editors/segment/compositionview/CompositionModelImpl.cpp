@@ -64,16 +64,35 @@ namespace Rosegarden
 
 CompositionModelImpl::CompositionModelImpl(
         QObject *parent,
-        Composition &compo,
+        Composition &composition,
         Studio &studio,
         RulerScale *rulerScale,
         int trackCellHeight) :
     QObject(parent),
-    m_composition(compo),
+    m_composition(composition),
     m_studio(studio),
     m_grid(rulerScale, trackCellHeight),
+    m_instrumentStaticSignals(),
+    m_notationPreviewDataCache(),
+    m_audioPreviewThread(0),
+    m_audioPreviewDataCache(),
+    m_audioSegmentPreviewMap(),
+    m_audioPreviewUpdaterMap(),
+    m_trackHeights(),
+    m_segmentOrderer(),
+    m_segmentRectMap(),
+    m_segmentEndTimeMap(),
+    m_segmentRects(),
+    m_selectedSegments(),
+    m_tmpSelectedSegments(),
+    m_previousTmpSelectedSegments(),
+    m_selectionRect(),
+    m_previousSelectionUpdateRect(),
+    m_recordingSegments(),
     m_pointerTimePos(0),
-    m_audioPreviewThread(0)
+    m_changeType(ChangeMove),
+    m_changingItems(),
+    m_itemGC()
 {
     m_composition.addObserver(this);
 
