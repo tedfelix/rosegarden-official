@@ -70,6 +70,77 @@ public:
     CompositionView(RosegardenDocument *, CompositionModelImpl *,
                     QWidget *parent);
 
+    // *** Miscellaneous
+
+    CompositionModelImpl *getModel()  { return m_model; }
+
+    /// CompositionModelImpl::m_grid
+    SnapGrid &grid()  { return m_model->grid(); }
+
+    /// Returns the segment tool box.  See setTool() and m_toolBox.
+    SegmentToolBox *getToolBox()  { return m_toolBox; }
+
+    /// Set the current segment editing tool.
+    /**
+     * @see getToolBox()
+     */
+    void setTool(const QString &toolName);
+
+    // *** Segments
+
+    /// Enables/disables display of the text labels on each segment.
+    /**
+     * From the menu: View > Show Segment Labels.
+     *
+     * @see drawCompRectLabel()
+     */
+    void setShowSegmentLabels(bool b)  { m_showSegmentLabels = b; }
+
+    /// Set whether the segment items contain previews or not.
+    void setShowPreviews(bool previews)  { m_showPreviews = previews; }
+
+    /// Delegates to CompositionModelImpl::clearSegmentRectsCache().
+    void clearSegmentRectsCache(bool clearPreviews = false);
+
+    /// Delegates to CompositionModelImpl::setAudioPreviewThread().
+    void endAudioPreviewGeneration();
+
+    // *** Selection
+
+    /// Selects the segments via CompositionModelImpl::setSelected().
+    /**
+     * Used by RosegardenMainViewWidget.
+     */
+    void selectSegments(const SegmentSelection &segments);
+
+    /// Return the selected Segments if we're currently using a "Selector".
+    /**
+     * Delegates to CompositionModelImpl::getSelectedSegments().
+     *
+     * @see haveSelection()
+     */
+    SegmentSelection getSelectedSegments();
+
+    /// Delegates to CompositionModelImpl::haveSelection().
+    /**
+     * @see getSelectedSegments()
+     */
+    bool haveSelection() const  { return m_model->haveSelection(); }
+
+    /// Updates the portion of the view where the selected items are.
+    /**
+     * This is only used for segment join and update figuration.  It
+     * might be useful in more situations.  However, since the
+     * CompositionView is redrawn every time a command is executed
+     * (TrackEditor::slotCommandExecuted()), there's no incentive to
+     * use this.
+     *
+     * @see RosegardenScrollView::updateContents()
+     */
+    void updateSelectedSegments();
+
+    // *** Artifacts
+
     /// Move the playback position pointer to a new X coordinate.
     /**
      * @see getPointerPos(), setPointerPosition(), and drawArtifacts()
@@ -99,63 +170,11 @@ public:
     /// Hide the "rubber band" selection rectangle.
     void hideSelectionRect();
 
-    /// Get the snap grid from the CompositionModelImpl.
-    SnapGrid &grid()  { return m_model->grid(); }
-
-    /// Returns the segment tool box.  See setTool() and m_toolBox.
-    SegmentToolBox *getToolBox()  { return m_toolBox; }
-
-    /// Returns the composition model.  See m_model.
-    CompositionModelImpl *getModel()  { return m_model; }
-
     void setNewSegmentColor(const QColor &color)  { m_newSegmentColor = color; }
     /// Used by SegmentPencil to draw a new segment.
     void drawNewSegment(const QRect &r);
-    void hideNewSegment()  { drawNewSegment(QRect()); }
     const QRect &getNewSegmentRect() const  { return m_newSegmentRect; }
-
-    /// Set whether the segment items contain previews or not.
-    /**
-     * @see isShowingPreviews()
-     */
-    void setShowPreviews(bool previews)  { m_showPreviews = previews; }
-
-    /// Return whether the segment items contain previews or not.
-    /**
-     * @see setShowPreviews()
-     */
-    //bool isShowingPreviews()  { return m_showPreviews; }
-
-    /**
-     * Delegates to CompositionModelImpl::clearSegmentRectsCache().
-     */
-    void clearSegmentRectsCache(bool clearPreviews = false);
-
-    /// Return the selected Segments if we're currently using a "Selector".
-    /**
-     * Delegates to CompositionModelImpl::getSelectedSegments().
-     *
-     * @see haveSelection()
-     */
-    SegmentSelection getSelectedSegments();
-
-    /// Delegates to CompositionModelImpl::haveSelection().
-    /**
-     * @see getSelectedSegments()
-     */
-    bool haveSelection() const  { return m_model->haveSelection(); }
-
-    /// Updates the portion of the view where the selected items are.
-    /**
-     * This is only used for segment join and update figuration.  It
-     * might be useful in more situations.  However, since the
-     * CompositionView is redrawn every time a command is executed
-     * (TrackEditor::slotCommandExecuted()), there's no incentive to
-     * use this.
-     *
-     * @see RosegardenScrollView::updateContents()
-     */
-    void updateSelectedSegments();
+    void hideNewSegment()  { drawNewSegment(QRect()); }
 
     /// Draw a text float on this canvas.
     /**
@@ -169,29 +188,6 @@ public:
     void drawTextFloat(int x, int y, const QString &text);
     /// See drawTextFloat().
     void hideTextFloat()  { m_drawTextFloat = false; }
-
-    /// Enables/disables display of the text labels on each segment.
-    /**
-     * From the menu: View > Show Segment Labels.
-     *
-     * @see drawCompRectLabel()
-     */
-    void setShowSegmentLabels(bool b)  { m_showSegmentLabels = b; }
-
-    /// Delegates to CompositionModelImpl::setAudioPreviewThread().
-    void endAudioPreviewGeneration();
-	
-    /// Set the current segment editing tool.
-    /**
-     * @see getToolBox()
-     */
-    void setTool(const QString &toolName);
-
-    /// Selects the segments via CompositionModelImpl::setSelected().
-    /**
-     * Used by RosegardenMainViewWidget.
-     */
-    void selectSegments(const SegmentSelection &segment);
 
     /// Show the splitting line on a Segment.  Used by SegmentSplitter.
     /**
