@@ -178,7 +178,7 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
     //
     int y = m_canvas->grid().snapY(pos.y());
 
-    m_canvas->showSplitLine(x, y);
+    m_canvas->drawSplitLine(x, y);
 
     m_prevX = x;
     m_prevY = y;

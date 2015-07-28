@@ -150,8 +150,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             this, SLOT(slotStoppedRecording()));
     connect(doc, SIGNAL(audioFileFinalized(Segment*)),
             m_model, SLOT(slotAudioFileFinalized(Segment*)));
-    //connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
-    //        this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
 
     // Audio Preview Thread
     m_model->setAudioPreviewThread(&doc->getAudioPreviewThread());
@@ -280,7 +278,7 @@ void CompositionView::selectSegments(const SegmentSelection &segments)
     m_model->selectSegments(segments);
 }
 
-void CompositionView::showSplitLine(int x, int y)
+void CompositionView::drawSplitLine(int x, int y)
 {
     m_splitLinePos.setX(x);
     m_splitLinePos.setY(y);
@@ -1316,7 +1314,7 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void CompositionView::setPointerPos(int pos)
+void CompositionView::drawPointer(int pos)
 {
     // If we've not moved, bail.
     if (m_pointerPos == pos)

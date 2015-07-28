@@ -145,10 +145,10 @@ public:
     /**
      * @see getPointerPos(), setPointerPosition(), and drawArtifacts()
      */
-    void setPointerPos(int pos);
+    void drawPointer(int pos);
     /// Get the X coordinate of the playback position pointer.
     /**
-     * @see setPointerPos() and setPointerPosition()
+     * @see drawPointer() and setPointerPosition()
      */
     int getPointerPos() { return m_pointerPos; }
 
@@ -193,8 +193,8 @@ public:
     /**
      * @see hideSplitLine()
      */
-    void showSplitLine(int x, int y);
-    /// See showSplitLine().
+    void drawSplitLine(int x, int y);
+    /// See drawSplitLine().
     void hideSplitLine();
 
 public slots:
@@ -252,7 +252,7 @@ signals:
      * Connected to RosegardenDocument::slotSetPointerPosition().
      * Connection is made by the RosegardenMainViewWidget ctor.
      *
-     * @see setPointerPos()
+     * @see drawPointer()
      */
     void setPointerPosition(timeT);
 
@@ -262,13 +262,9 @@ signals:
      */
     void showContextHelp(const QString &);
 
-    //void editSegmentNotation(Segment*);
-    //void editSegmentMatrix(Segment*);
-    //void editSegmentAudio(Segment*);
-    //void editSegmentEventList(Segment*);
-    //void audioSegmentAutoSplit(Segment*);
-
 private slots:
+
+    // *** Update
 
     /// Updates the artifacts in the entire viewport.
     /**
@@ -279,11 +275,30 @@ private slots:
         updateContents();
     }
 
+    /// Used to reduce the frequency of updates.
+    /**
+     * slotAllNeedRefresh(rect) sets the m_updateNeeded flag to
+     * tell slotUpdateTimer() that it needs to perform an update.
+     */
+    void slotUpdateTimer();
+
     /// Redraw everything with the new color scheme.
     /**
      * Connected to RosegardenDocument::docColoursChanged().
      */
     void slotRefreshColourCache();
+
+    /// Updates the tool context help and shows it if the mouse is in the view.
+    /**
+     * The tool context help appears in the status bar at the bottom.
+     *
+     * Connected to SegmentToolBox::showContextHelp().
+     *
+     * @see showContextHelp()
+     */
+    void slotToolHelpChanged(const QString &);
+
+    // *** Recording
 
     /**
      * Delegates to CompositionModelImpl::addRecordingItem().
@@ -300,9 +315,6 @@ private slots:
      */
     void slotNewAudioRecordingSegment(Segment *);
 
-    // no longer used, see RosegardenDocument::insertRecordedMidi()
-    //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
-
     /**
      * Delegates to CompositionModelImpl::clearRecordingItems().
      * Connected to RosegardenDocument::stoppedAudioRecording() and
@@ -310,24 +322,10 @@ private slots:
      */
     void slotStoppedRecording();
 
-    /// Updates the tool context help and shows it if the mouse is in the view.
-    /**
-     * The tool context help appears in the status bar at the bottom.
-     *
-     * Connected to SegmentToolBox::showContextHelp().
-     *
-     * @see showContextHelp()
-     */
-    void slotToolHelpChanged(const QString &);
-
-    /// Used to reduce the frequency of updates.
-    /**
-     * slotAllNeedRefresh(rect) sets the m_updateNeeded flag to
-     * tell slotUpdateTimer() that it needs to perform an update.
-     */
-    void slotUpdateTimer();
-
 private:
+
+    // *** Event Handlers
+
     /// Redraw in response to AudioPreviewThread::AudioPreviewQueueEmpty.
     virtual bool event(QEvent *);
 
@@ -370,8 +368,29 @@ private:
      */
     virtual void leaveEvent(QEvent *);
 
-    /// Draw the segments and artifacts on the viewport (screen).
-    void drawAll();
+    // *** Segments
+
+    /// Deferred update of the segments within the entire viewport.
+    /**
+     * This will cause scrollSegmentsLayer() to refresh the entire
+     * segments layer (m_segmentsLayer) the next time it is called.
+     * This in turn will cause drawAll() to redraw the entire
+     * viewport the next time it is called.
+     */
+    void segmentsNeedRefresh() {
+        m_segmentsRefresh.setRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
+    }
+
+    /// Deferred update of the segments within the specified rect.
+    /**
+     * This will cause the given portion of the viewport to be refreshed
+     * the next time drawAll() is called.
+     */
+    void segmentsNeedRefresh(const QRect &r) {
+        m_segmentsRefresh |=
+            (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
+             & r);
+    }
 
     /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
     /**
@@ -389,34 +408,10 @@ private:
      */
     void drawSegments(const QRect &);
 
-    /// Draw the artifacts on the viewport.
-    /**
-     * "Artifacts" include anything that isn't a segment.  E.g. The playback
-     * position pointer, guides, and the "rubber band" selection.
-     * Used by drawAll().
-     */
-    void drawArtifacts();
-
     /// Draw the track dividers on the segments layer.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
 
-    /// drawImage() for tiled audio previews.
-    /**
-     * This routine hides the fact that audio previews are stored as a
-     * series of QImage tiles.  It treats them as if they were one large
-     * QImage.  This simplifies drawing audio previews.
-     */
-    void drawImage(
-            QPainter *painter,
-            QPoint dest, const PixmapArray &tileVector, QRect source);
-
-    /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
-    /**
-     * Used by drawSegments().
-     */
-    void drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect);
-
-    /// Draws a rectangle on the given painter with proper clipping.
+    /// Draws a rectangle on the given painter.
     /**
      * This is an improved QPainter::drawRect().
      *
@@ -441,38 +436,44 @@ private:
     void drawIntersections(QPainter *painter, const QRect &clipRect,
                            const CompositionModelImpl::RectContainer &rects);
 
+    /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
+    /**
+     * Used by drawSegments().
+     */
+    void drawAudioPreviews(QPainter *segmentsLayerPainter, const QRect &clipRect);
+
+    /// drawImage() for tiled audio previews.
+    /**
+     * This routine hides the fact that audio previews are stored as a
+     * series of QImage tiles.  It treats them as if they were one large
+     * QImage.  This simplifies drawing audio previews.
+     */
+    void drawImage(
+            QPainter *painter,
+            QPoint dest, const PixmapArray &tileVector, QRect source);
+
+    // *** Artifacts
+
+    /// Updates the artifacts in the given rect.
+    void updateArtifacts(const QRect &r) {
+        updateContents(r);
+    }
+
+    /// Draw the artifacts on the viewport.
+    /**
+     * "Artifacts" include anything that isn't a segment.  E.g. The playback
+     * position pointer, guides, and the "rubber band" selection.
+     * Used by drawAll().
+     */
+    void drawArtifacts();
+
     /// Used by drawArtifacts() to draw floating text.
     /**
      * @see setTextFloat()
      */
     void drawTextFloat(QPainter *painter);
 
-    /// Deferred update of the segments within the entire viewport.
-    /**
-     * This will cause scrollSegmentsLayer() to refresh the entire
-     * segments layer (m_segmentsLayer) the next time it is called.
-     * This in turn will cause drawAll() to redraw the entire
-     * viewport the next time it is called.
-     */
-    void segmentsNeedRefresh() {
-        m_segmentsRefresh.setRect(contentsX(), contentsY(), viewport()->width(), viewport()->height());
-    }
-
-    /// Deferred update of the segments within the specified rect.
-    /**
-     * This will cause the given portion of the viewport to be refreshed
-     * the next time drawAll() is called.
-     */
-    void segmentsNeedRefresh(const QRect &r) {
-        m_segmentsRefresh |=
-            (QRect(contentsX(), contentsY(), viewport()->width(), viewport()->height())
-             & r);
-    }
-
-    /// Updates the artifacts in the given rect.
-    void updateArtifacts(const QRect &r) {
-        updateContents(r);
-    }
+    // *** Both Segments and Artifacts
 
     /// Update segments and artifacts within rect.
     void updateAll2(const QRect &rect);
@@ -482,6 +483,9 @@ private:
         segmentsNeedRefresh();
         slotUpdateArtifacts();
     }
+
+    /// Draw the segments and artifacts on the viewport (screen).
+    void drawAll();
 
     //--------------- Data members ---------------------------------
 

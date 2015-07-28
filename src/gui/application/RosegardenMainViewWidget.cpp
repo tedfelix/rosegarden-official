@@ -1053,7 +1053,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
     timeT pointerTime = getDocument()->getComposition().getPosition();
     double pointerXPosition = compositionView->
         grid().getRulerScale()->getXForTime(pointerTime);
-    compositionView->setPointerPos(pointerXPosition);
+    compositionView->drawPointer(pointerXPosition);
 
     compositionView->clearSegmentRectsCache(true);
     compositionView->slotUpdateSize();

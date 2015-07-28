@@ -477,7 +477,7 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
             m_compositionView->scrollHoriz(newPosition);
         }
 
-        m_compositionView->setPointerPos(newPosition);
+        m_compositionView->drawPointer(newPosition);
 
     }
 }
@@ -490,7 +490,7 @@ TrackEditor::slotPointerDraggedToPosition(timeT position)
     double newPosition;
 
     if (handleAutoScroll(currentPointerPos, position, newPosition))
-        m_compositionView->setPointerPos(int(newPosition));
+        m_compositionView->drawPointer(int(newPosition));
 }
 
 void
