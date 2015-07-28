@@ -82,14 +82,27 @@ public:
 
     virtual ~CompositionModelImpl();
 
+    /// A vector of QRect's.  This is used to hold notation previews.
+    /**
+     * Each QRect represents a note in the preview.
+     *
+     * See NotationPreviewDataCache.
+     *
+     * rename: QRectVector
+     */
     typedef std::vector<QRect> RectList;
 
+    /// A range of notation preview data for a segment that is visible in the viewport.
     struct RectRange {
         std::pair<RectList::iterator, RectList::iterator> range;
         QPoint basePoint;
         QColor color;
     };
 
+    /// Notation previews.
+    /**
+     * A vector of RectRanges, one per segment.
+     */
     typedef std::vector<RectRange> RectRanges;
 
     // ??? rename: AudioSegmentPreview?

@@ -94,15 +94,35 @@ public:
      *
      * @see drawCompRectLabel()
      */
-    void setShowSegmentLabels(bool b)  { m_showSegmentLabels = b; }
+    void setShowSegmentLabels(bool labels)  { m_showSegmentLabels = labels; }
 
     /// Set whether the segment items contain previews or not.
+    /**
+     * From the menu: View > Show Segment Previews.
+     */
     void setShowPreviews(bool previews)  { m_showPreviews = previews; }
 
     /// Delegates to CompositionModelImpl::clearSegmentRectsCache().
+    /**
+     * Redrawing previews is expensive.  This routine is primarily used
+     * to indicate that the preview cache needs to be regenerated for
+     * zoom and the commands (e.g. transpose).  Other that that, it
+     * appears to have little effect.  The segment rect cache is
+     * regenerated as needed without this routine's help.
+     *
+     * In a perfect world, the preview cache should be regenerated for
+     * the following reasons only:
+     *   1. The contents of a segment have changed.
+     *   2. Zoom.
+     *   3. More?
+     */
     void clearSegmentRectsCache(bool clearPreviews = false);
 
     /// Delegates to CompositionModelImpl::setAudioPreviewThread().
+    /**
+     * This is called when the document is being destroyed or the
+     * application is going down.
+     */
     void endAudioPreviewGeneration();
 
     // *** Selection
@@ -113,10 +133,8 @@ public:
      */
     void selectSegments(const SegmentSelection &segments);
 
-    /// Return the selected Segments if we're currently using a "Selector".
+    /// Delegates to CompositionModelImpl::getSelectedSegments().
     /**
-     * Delegates to CompositionModelImpl::getSelectedSegments().
-     *
      * @see haveSelection()
      */
     SegmentSelection getSelectedSegments();
@@ -152,7 +170,6 @@ public:
      */
     int getPointerPos() { return m_pointerPos; }
 
-    /// Draw the guides.
     /**
      * The guides are blue crosshairs that stretch across the entire view.
      * They appear when selecting or moving a segment.
@@ -160,7 +177,6 @@ public:
      * @see hideGuides() and drawArtifacts()
      */
     void drawGuides(int x, int y);
-    /// Hide the guides.
     void hideGuides();
 
     /// Set the starting position of the "rubber band" selection.
@@ -176,7 +192,6 @@ public:
     const QRect &getNewSegmentRect() const  { return m_newSegmentRect; }
     void hideNewSegment()  { drawNewSegment(QRect()); }
 
-    /// Draw a text float on this canvas.
     /**
      * Used by SegmentMover::mouseMoveEvent() to display time,
      * bar, and beat on the view while the user is moving a segment.
@@ -189,8 +204,9 @@ public:
     /// See drawTextFloat().
     void hideTextFloat()  { m_drawTextFloat = false; }
 
-    /// Show the splitting line on a Segment.  Used by SegmentSplitter.
     /**
+     * Used by SegmentSplitter.
+     *
      * @see hideSplitLine()
      */
     void drawSplitLine(int x, int y);
@@ -199,7 +215,13 @@ public:
 
 public slots:
 
-    /// Handle TrackButtons scroll wheel events.  See TrackEditor::m_trackButtonScroll.
+    /// Handle TrackButtons scroll wheel events.
+    /**
+     * Forwards the events to RosegardenScrollView to make sure we are
+     * synced up with TrackButtons.
+     *
+     * @see TrackEditor::m_trackButtonScroll
+     */
     void slotExternalWheelEvent(QWheelEvent *);
 
     /// Redraw everything.  Segments and artifacts.
@@ -211,6 +233,7 @@ public slots:
      * CommandHistory::commandExecuted().
      */
     void slotUpdateAll();
+
     /// Deferred update of segments and artifacts within the specified rect.
     /**
      * Because this routine is called so frequently, it doesn't actually
@@ -227,38 +250,48 @@ public slots:
     void slotUpdateSize();
 
 signals:
-    /// Emitted when a segment is double-clicked to launch the default segment editor.
+    /// Signal emitted when a segment is double-clicked.
     /**
+     * Causes the default editor to be launched.
+     *
      * Connected to RosegardenMainViewWidget::slotEditSegment().
+     *
+     * rename: segmentDoubleClicked()?
      */
     void editSegment(Segment *);
 
-    /// Emitted when a segment repeat is double-clicked.
+    /// Signal emitted when a segment repeat is double-clicked.
     /**
      * Connected to RosegardenMainViewWidget::slotEditRepeat() which converts
      * the repeat to a segment.  This doesn't actually start the segment
      * editor.  mouseDoubleClickEvent() emits editSegment() after
      * it emits this.
      *
-     * rename: segmentRepeatDoubleClick(), repeatToSegment(), others?
-     *         Not sure which might be most helpful to readers of the code.
-     *         editRepeat() is misleading.  repeatToSegment() is more correct
-     *         at the same level of abstraction.
+     * rename: repeatDoubleClicked()?
      */
     void editRepeat(Segment *, timeT);
 
-    /// Emitted when a double-click occurs on the ruler.
+    /// Signal emitted when a double-click occurs on the background.
     /**
+     * Causes the pointer to move to where the user double-clicked.
+     *
      * Connected to RosegardenDocument::slotSetPointerPosition().
      * Connection is made by the RosegardenMainViewWidget ctor.
      *
      * @see drawPointer()
+     *
+     * rename: backgroundDoubleClicked()?
      */
     void setPointerPosition(timeT);
 
-    /// Emitted when hovering over the CompositionView to show help text.
+    /// Signal emitted when the context help needs to change.
     /**
+     * The context help is displayed in the status bar at the bottom
+     * of the main window.
+     *
      * Connected to RosegardenMainWindow::slotShowToolHelp().
+     *
+     * rename: contextHelpChanged()
      */
     void showContextHelp(const QString &);
 
@@ -307,6 +340,7 @@ private slots:
      * Suggestion: Try eliminating this middleman.
      */
     void slotNewMIDIRecordingSegment(Segment *);
+
     /**
      * Delegates to CompositionModelImpl::addRecordingItem().
      * Connected to RosegardenDocument::newAudioRecordingSegment().
@@ -343,14 +377,10 @@ private:
      */
     virtual void mouseMoveEvent(QMouseEvent *);
 
-    /// Delegates to drawAll() for each rect that needs painting.
+    /// Delegates to drawAll().
     virtual void paintEvent(QPaintEvent *);
     /// Handles resize.  Uses slotUpdateSize().
     virtual void resizeEvent(QResizeEvent *);
-
-    // These are sent from the top level app when it gets key
-    // depresses relating to selection add (usually Qt::SHIFT) and
-    // selection copy (usually CONTROL)
 
     /// Called when the mouse enters the view.
     /**
@@ -360,6 +390,7 @@ private:
      * @see leaveEvent() and slotToolHelpChanged()
      */
     virtual void enterEvent(QEvent *);
+
     /// Called when the mouse leaves the view.
     /**
      * Override of QWidget::leaveEvent().
@@ -394,33 +425,44 @@ private:
              & r);
     }
 
-    /// Scrolls and refreshes the segment layer (m_segmentsLayer) if needed.
+    /// Scroll and refresh the segment layer (m_segmentsLayer) if needed.
     /**
-     * Returns enough information to determine how much additional work
-     * needs to be done to update the viewport.
      * Used by drawAll().
      */
     void scrollSegmentsLayer();
+    int m_lastContentsX;
+    int m_lastContentsY;
 
-    /// Draw the segments on the segment layer (m_segmentsLayer).
+    /// Portion of the viewport that needs segments refreshed.
+    /**
+     * Used only by scrollSegmentsLayer() to limit work done redrawing
+     * the segment rectangles.
+     */
+    QRect m_segmentsRefresh;
+
+    /// Draw the segments on the m_segmentsLayer.
     /**
      * Draws the background then calls drawSegments() to draw the segments on the
      * segments layer (m_segmentsLayer).  Used by
      * scrollSegmentsLayer().
      */
     void drawSegments(const QRect &);
+    QPixmap m_backgroundPixmap;
 
-    /// Draw the track dividers on the segments layer.
+    /// Draw the track dividers.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
+    const QColor m_trackDividerColor;
 
-    /// Draws a rectangle on the given painter.
+    /// Draw a rectangle on the given painter.
     /**
-     * This is an improved QPainter::drawRect().
+     * This is QPainter::drawRect() with special handling of colors.  It
+     * darkens the color of the segment based on isSelected and intersectLvl.
      *
      * @see drawCompRect()
      */
     void drawRect(QPainter *painter, const QRect &clipRect, const QRect &rect,
                   bool isSelected = false, int intersectLvl = 0);
+
     /// A version of drawRect() that handles segment repeats.
     void drawCompRect(QPainter *painter, const QRect &clipRect,
                       const CompositionRect &rect, int intersectLvl = 0);
@@ -438,7 +480,7 @@ private:
     void drawIntersections(QPainter *painter, const QRect &clipRect,
                            const CompositionModelImpl::RectContainer &rects);
 
-    /// Draw the previews for audio segments on the segments layer (m_segmentsLayer).
+    /// Draw the previews for audio segments on the m_segmentsLayer.
     /**
      * Used by drawSegments().
      */
@@ -448,38 +490,30 @@ private:
     /**
      * This routine hides the fact that audio previews are stored as a
      * series of QImage tiles.  It treats them as if they were one large
-     * QImage.  This simplifies drawing audio previews.
+     * QImage.  This simplifies drawAudioPreviews().
      */
     void drawImage(
             QPainter *painter,
             QPoint dest, const PixmapArray &tileVector, QRect source);
 
-    bool         m_showPreviews;
-    bool         m_showSegmentLabels;
-
-    const QColor m_trackDividerColor;
+    bool m_showPreviews;
+    bool m_showSegmentLabels;
 
     /// Layer that contains the segment rectangles.
     /**
      * @see drawAll() and drawSegments()
      */
-    QPixmap      m_segmentsLayer;
+    QPixmap m_segmentsLayer;
 
-    /// Portion of the viewport that needs segments refreshed.
+    /// Used by drawSegments().
     /**
-     * Used only by scrollSegmentsLayer() to limit work done redrawing
-     * the segment rectangles.
+     * This is a std::vector with one element per segment.  Each element
+     * (a RectRange) contains a pair of iterators into a vector of
+     * preview QRects.
      */
-    QRect        m_segmentsRefresh;
-
-    int          m_lastContentsX;
-    int          m_lastContentsY;
-    int          m_lastPointerRefreshX;
-
-    QPixmap      m_backgroundPixmap;
-
-    CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
     CompositionModelImpl::RectRanges m_notationPreview;
+    /// Set by drawSegments(), used by drawAudioPreviews()
+    CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
 
     /// Drives slotUpdateTimer().
     QTimer m_updateTimer;
