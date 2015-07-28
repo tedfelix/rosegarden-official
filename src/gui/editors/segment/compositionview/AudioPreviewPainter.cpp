@@ -309,7 +309,7 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     ++m_sliceNb;
 }
 
-PixmapArray AudioPreviewPainter::getPreviewImage()
+CompositionModelImpl::PixmapArray AudioPreviewPainter::getPreviewImage()
 {
     return m_previewPixmaps;
 }

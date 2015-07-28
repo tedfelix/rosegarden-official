@@ -48,10 +48,6 @@ class Composition;
 class AudioPreviewUpdater;
 class AudioPreviewThread;
 
-/// For Audio Previews
-// ??? rename: ImageVector
-typedef std::vector<QImage> PixmapArray;
-
 /// Model layer between CompositionView and Composition.
 /**
  * This class works together with CompositionView to provide the composition
@@ -147,6 +143,10 @@ public:
     typedef std::vector<RectRange> RectRanges;
 
     // --- Audio Previews ---------------------------------
+
+    /// For Audio Previews
+    // ??? rename: ImageVector
+    typedef std::vector<QImage> PixmapArray;
 
     // ??? rename: AudioSegmentPreview?
     struct AudioPreviewDrawDataItem {

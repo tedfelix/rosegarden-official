@@ -791,7 +791,8 @@ void CompositionView::drawTrackDividers(
 
 void CompositionView::drawImage(
         QPainter *painter,
-        QPoint dest, const PixmapArray &tileVector, QRect source)
+        QPoint dest, const CompositionModelImpl::PixmapArray &tileVector,
+        QRect source)
 {
     // ??? This is an awful lot of complexity to accommodate the tiling
     //     of the audio previews.  Why are they tiled?  Can they be

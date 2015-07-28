@@ -38,7 +38,7 @@ public:
 			const Segment* segment);
 
     void paintPreviewImage();
-    PixmapArray getPreviewImage();
+    CompositionModelImpl::PixmapArray getPreviewImage();
     const CompositionRect& getSegmentRect() { return m_rect; }
 
     static int tileWidth();
@@ -55,7 +55,7 @@ protected:
     CompositionRect m_rect;
 
     QImage m_image;
-    PixmapArray m_previewPixmaps;
+    CompositionModelImpl::PixmapArray m_previewPixmaps;
 
     QPainter m_p;
     QPainter m_pb;

@@ -493,7 +493,8 @@ private:
      */
     void drawImage(
             QPainter *painter,
-            QPoint dest, const PixmapArray &tileVector, QRect source);
+            QPoint dest, const CompositionModelImpl::PixmapArray &tileVector,
+            QRect source);
 
     bool m_showPreviews;
     bool m_showSegmentLabels;

@@ -575,7 +575,8 @@ void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
     removePreviewCache(s);
 }
 
-PixmapArray CompositionModelImpl::getAudioPreviewPixmap(const Segment* s)
+CompositionModelImpl::PixmapArray
+CompositionModelImpl::getAudioPreviewPixmap(const Segment* s)
 {
     getAudioPreviewData(s);
     return m_audioSegmentPreviewMap[s];
