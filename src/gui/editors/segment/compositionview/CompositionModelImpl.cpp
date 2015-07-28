@@ -1086,7 +1086,7 @@ void CompositionModelImpl::endChange()
 
     emit needContentUpdate();
 }
-
+#if 0
 void CompositionModelImpl::setCompositionLength(int width)
 {
     m_composition.setEndMarker(m_grid.snapX(width));
@@ -1098,7 +1098,7 @@ int CompositionModelImpl::getCompositionLength()
     return static_cast<int>(nearbyint(
             m_grid.getRulerScale()->getWidthForDuration(0, endMarker)));
 }
-
+#endif
 unsigned int CompositionModelImpl::getCompositionHeight()
 {
     return static_cast<unsigned int>(

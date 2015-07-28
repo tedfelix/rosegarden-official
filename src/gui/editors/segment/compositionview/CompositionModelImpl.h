@@ -28,6 +28,7 @@
 #include <QRect>
 #include <QSharedPointer>
 
+#include <utility>  // std::pair
 #include <vector>
 #include <map>
 #include <set>
@@ -116,6 +117,12 @@ public:
 
     virtual ~CompositionModelImpl();
 
+    Composition &getComposition()  { return m_composition; }
+    Studio &getStudio()  { return m_studio; }
+    SnapGrid &grid()  { return m_grid; }
+
+    // --- Notation Previews ------------------------------
+
     /// A vector of QRect's.  This is used to hold notation previews.
     /**
      * Each QRect represents a note in the preview.
@@ -138,6 +145,8 @@ public:
      * A vector of RectRanges, one per segment.
      */
     typedef std::vector<RectRange> RectRanges;
+
+    // --- Audio Previews ---------------------------------
 
     // ??? rename: AudioSegmentPreview?
     struct AudioPreviewDrawDataItem {
@@ -164,43 +173,36 @@ public:
     // ??? rename: AudioSegmentPreviews
     typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
 
+    /**
+     * Used by CompositionView's ctor to connect
+     * RosegardenDocument::m_audioPreviewThread.
+     */
+    void setAudioPreviewThread(AudioPreviewThread *thread);
+    //AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
+
+    /**
+     * rename: AudioPreview
+     */
+    struct AudioPreviewData {
+        AudioPreviewData() :
+            channels(0)
+        { }
+
+        unsigned int channels;
+
+        typedef std::vector<float> Values;
+        Values values;
+    };
+
+    // --- Segments ---------------------------------------
+
     typedef std::vector<CompositionRect> RectContainer;
 
     /// Get the segment rectangles and segment previews
+    // ??? Audio and Notation Previews too.  Need an "ALL" category.
     const RectContainer &getSegmentRects(const QRect &clipRect,
                                          RectRanges *notationPreview,
                                          AudioPreviewDrawData *audioPreview);
-
-    typedef std::vector<int> YCoordList;
-
-    /// Get the Y coords of each track within clipRect.
-    /**
-     * CompositionView::drawSegments() uses this to draw the track dividers.
-     */
-    YCoordList getTrackDividersIn(const QRect &clipRect);
-
-    /// Compares Segment pointers in a CompositionItem.
-    /**
-     * Is this really better than just comparing the CompositionItemPtr
-     * addresses?
-     *
-     *    // Compare the QPointer addresses
-     *    return c1.data() < c2.data();
-     *
-     * All this indexing with pointers gives me the willies.  IDs are safer.
-     */
-    struct CompositionItemCompare {
-        bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const
-        {
-            // This strikes me as odd.  I think the one below is better.
-            //return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
-
-            // operator< on Segment *'s?  I guess order isn't too important.
-            return c1->getSegment() < c2->getSegment();
-        }
-    };
-
-    typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
 
     /// Get the topmost item (segment) at the given position on the view.
     /**
@@ -224,10 +226,14 @@ public:
      */
     timeT getRepeatTimeAt(const QPoint &, CompositionItemPtr);
 
-    /// Used in many places for various coordinate/time purposes.
-    SnapGrid &grid()  { return m_grid; }
+    /// See CompositionView::clearSegmentRectsCache()
+    // ??? Audio and Notation Previews too.  Need an "ALL" category.
+    void clearSegmentRectsCache(bool clearPreviews = false)
+            { clearInCache(0, clearPreviews); }
 
-    // *** Selection
+    CompositionRect computeSegmentRect(const Segment &, bool computeZ = false);
+
+    // --- Selection --------------------------------------
 
     void setSelected(CompositionItemPtr, bool selected = true);
     void setSelected(Segment *, bool selected = true);
@@ -259,7 +265,7 @@ public:
      */
     void signalContentChange();
 
-    // *** Recording
+    // --- Recording --------------------------------------
 
     /// Refresh the recording segments.
     void pointerPosChanged(int x);
@@ -269,7 +275,7 @@ public:
     void clearRecordingItems();
     //bool haveRecordingItems()  { return !m_recordingSegments.empty(); }
 
-    // *** Changing (moving and resizing)
+    // --- Changing (moving and resizing) -----------------
 
     enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
@@ -277,58 +283,60 @@ public:
     void startChange(CompositionItemPtr, ChangeType change);
     /// Begin move for all selected segments.
     void startChangeSelection(ChangeType change);
+
+    /// Compares Segment pointers in a CompositionItem.
+    /**
+     * Is this really better than just comparing the CompositionItemPtr
+     * addresses?
+     *
+     *    // Compare the QPointer addresses
+     *    return c1.data() < c2.data();
+     *
+     * All this indexing with pointers gives me the willies.  IDs are safer.
+     */
+    struct CompositionItemCompare {
+        bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const
+        {
+            // This strikes me as odd.  I think the one below is better.
+            //return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
+
+            // operator< on Segment *'s?  I guess order isn't too important.
+            return c1->getSegment() < c2->getSegment();
+        }
+    };
+
+    typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
+
     //ChangeType getChangeType() const  { return m_changeType; }
+
     /// Get the segments that are moving or resizing.
     ItemContainer &getChangingItems()  { return m_changingItems; }
     /// Cleanup after move/resize.
     void endChange();
 
-    // *** Misc
+    // --- Misc -------------------------------------------
 
-    /// In pixels
+    typedef std::vector<int> YCoordList;
+
+    /// Get the Y coords of each track within clipRect.
     /**
-     * Used to expand the composition when we go past the end.
+     * CompositionView::drawSegments() uses this to draw the track dividers.
      */
-    void setCompositionLength(int width);
-    /// In pixels
-    /**
-     * Used to expand the composition when we go past the end.
-     */
-    int getCompositionLength();
+    YCoordList getTrackDividersIn(const QRect &clipRect);
+
     /// Number of pixels needed vertically to render all tracks.
     unsigned int getCompositionHeight();
-    
+
+    /// In pixels
     /**
-     * Used by CompositionView's ctor to connect
-     * RosegardenDocument::m_audioPreviewThread.
+     * Used to expand the composition when we go past the end.
      */
-    void setAudioPreviewThread(AudioPreviewThread *thread);
-    //AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
-
-    /// See CompositionView::clearSegmentRectsCache()
-    void clearSegmentRectsCache(bool clearPreviews = false)
-            { clearInCache(0, clearPreviews); }
-
-    CompositionRect computeSegmentRect(const Segment &, bool computeZ = false);
-
-    //void computeRepeatMarks(CompositionItemPtr);
-
-    Composition &getComposition()  { return m_composition; }
-    Studio &getStudio()  { return m_studio; }
-
+    //void setCompositionLength(int width);
+    /// In pixels
     /**
-     * rename: AudioPreview
+     * Used to expand the composition when we go past the end.
      */
-    struct AudioPreviewData {
-        AudioPreviewData() :
-            channels(0)
-        { }
-
-        unsigned int channels;
-
-        typedef std::vector<float> Values;
-        Values values;
-    };
+    //int getCompositionLength();
 
 signals:
     /// rename: refreshView
@@ -374,6 +382,7 @@ private:
     bool isMoving(const Segment *) const;
     bool isRecording(const Segment *) const;
 
+    //void computeRepeatMarks(CompositionItemPtr);
     void computeRepeatMarks(CompositionRect &sr, const Segment *s);
     unsigned int computeZForSegment(const Segment *s);
         
