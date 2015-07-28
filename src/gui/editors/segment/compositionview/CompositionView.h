@@ -324,7 +324,9 @@ private slots:
 
 private:
 
-    // *** Event Handlers
+    CompositionModelImpl *m_model;
+
+    // --- Event Handlers ---------------------------------
 
     /// Redraw in response to AudioPreviewThread::AudioPreviewQueueEmpty.
     virtual bool event(QEvent *);
@@ -368,7 +370,7 @@ private:
      */
     virtual void leaveEvent(QEvent *);
 
-    // *** Segments
+    // --- Segments ---------------------------------------
 
     /// Deferred update of the segments within the entire viewport.
     /**
@@ -452,7 +454,41 @@ private:
             QPainter *painter,
             QPoint dest, const PixmapArray &tileVector, QRect source);
 
-    // *** Artifacts
+    bool         m_showPreviews;
+    bool         m_showSegmentLabels;
+
+    const QColor m_trackDividerColor;
+
+    /// Layer that contains the segment rectangles.
+    /**
+     * @see drawAll() and drawSegments()
+     */
+    QPixmap      m_segmentsLayer;
+
+    /// Portion of the viewport that needs segments refreshed.
+    /**
+     * Used only by scrollSegmentsLayer() to limit work done redrawing
+     * the segment rectangles.
+     */
+    QRect        m_segmentsRefresh;
+
+    int          m_lastContentsX;
+    int          m_lastContentsY;
+    int          m_lastPointerRefreshX;
+
+    QPixmap      m_backgroundPixmap;
+
+    CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
+    CompositionModelImpl::RectRanges m_notationPreview;
+
+    /// Drives slotUpdateTimer().
+    QTimer m_updateTimer;
+    /// Lets slotUpdateTimer() know there's work to do.
+    bool m_updateNeeded;
+    /// Accumulated update rectangle.
+    QRect m_updateRect;
+
+    // --- Artifacts --------------------------------------
 
     /// Updates the artifacts in the given rect.
     void updateArtifacts(const QRect &r) {
@@ -473,7 +509,27 @@ private:
      */
     void drawTextFloat(QPainter *painter);
 
-    // *** Both Segments and Artifacts
+    int          m_pointerPos;
+    const QPen   m_pointerPen;
+
+    QRect        m_newSegmentRect;
+    QColor       m_newSegmentColor;
+
+    QPoint       m_splitLinePos;
+
+    bool         m_drawGuides;
+    const QColor m_guideColor;
+    int          m_guideX;
+    int          m_guideY;
+
+    bool         m_drawTextFloat;
+    QString      m_textFloatText;
+    QPoint       m_textFloatPos;
+
+    bool         m_drawSelectionRect;
+    QRect        m_selectionRect;
+
+    // --- Both Segments and Artifacts --------------------
 
     /// Update segments and artifacts within rect.
     void updateAll2(const QRect &rect);
@@ -487,76 +543,19 @@ private:
     /// Draw the segments and artifacts on the viewport (screen).
     void drawAll();
 
-    //--------------- Data members ---------------------------------
+    // --- Tools ------------------------------------------
 
-    CompositionModelImpl *m_model;
-
-    /// The tool that receives mouse events.
-    SegmentTool    *m_currentTool;
     SegmentToolBox *m_toolBox;
-
-    /// Performance testing.
-    bool         m_enableDrawing;
-
-    bool         m_showPreviews;
-    bool         m_showSegmentLabels;
-
-    //int          m_minWidth;
-
-    //QColor       m_rectFill;
-    //QColor       m_selectedRectFill;
-
-    int          m_pointerPos;
-    QPen         m_pointerPen;
-
-    QRect        m_newSegmentRect;
-    QColor       m_newSegmentColor;
-    QPoint       m_splitLinePos;
-
-    QColor       m_trackDividerColor;
-
-    bool         m_drawGuides;
-    const QColor m_guideColor;
-    int          m_guideX;
-    int          m_guideY;
-
-    bool         m_drawSelectionRect;
-    QRect        m_selectionRect;
-
-    bool         m_drawTextFloat;
-    QString      m_textFloatText;
-    QPoint       m_textFloatPos;
-
-    /// Layer that contains the segment rectangles.
-    /**
-     * @see drawAll() and drawSegments()
-     */
-    QPixmap      m_segmentsLayer;
-
-    /// Portion of the viewport that needs segments refreshed.
-    /**
-     * Used only by scrollSegmentsLayer() to limit work done redrawing
-     * the segment rectangles.
-     */
-    QRect        m_segmentsRefresh;
-
-    int          m_lastContentsX;
-    int          m_lastContentsY;
-    int          m_lastPointerRefreshX;
-    QPixmap      m_backgroundPixmap;
+    /// The tool that receives mouse events.
+    SegmentTool *m_currentTool;
 
     QString      m_toolContextHelp;
     bool         m_contextHelpShown;
 
-    CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
-    CompositionModelImpl::RectRanges m_notationPreview;
+    // --- DEBUG ------------------------------------------
 
-    /// Drives slotUpdateTimer().
-    QTimer m_updateTimer;
-    /// Lets slotUpdateTimer() know there's work to do.
-    bool m_updateNeeded;
-    /// Accumulated update rectangle.
-    QRect m_updateRect;
+    /// Performance testing.
+    bool m_enableDrawing;
 };
 
 
