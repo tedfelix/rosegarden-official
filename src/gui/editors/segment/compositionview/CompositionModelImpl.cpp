@@ -67,11 +67,11 @@ CompositionModelImpl::CompositionModelImpl(
         Composition &compo,
         Studio &studio,
         RulerScale *rulerScale,
-        int vStep) :
+        int trackCellHeight) :
     QObject(parent),
     m_composition(compo),
     m_studio(studio),
-    m_grid(rulerScale, vStep),
+    m_grid(rulerScale, trackCellHeight),
     m_pointerTimePos(0),
     m_audioPreviewThread(0)
 {

@@ -621,9 +621,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
 
         QColor defaultColor = CompositionColourCache::getInstance()->SegmentInternalPreview;
 
-        // For each preview range
-        // ??? I think there is never more than one range here.  We should be
-        //     able to switch from RectRanges to RectRange.
+        // For each segment's preview range
         for (CompositionModelImpl::RectRanges::const_iterator notationPreviewIter =
                  m_notationPreview.begin();
              notationPreviewIter != m_notationPreview.end();

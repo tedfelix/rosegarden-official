@@ -53,6 +53,19 @@ typedef std::vector<QImage> PixmapArray;
 
 /// Model layer between CompositionView and Composition.
 /**
+ * This class works together with CompositionView to provide the composition
+ * user interface (the segment canvas).  TrackEditor creates and owns the
+ * only instance of this class.
+ *
+ * This class is a segment rectangle and preview manager.  It augments
+ * segments and events with a sense of position on a view.  The key member
+ * objects are:
+ *
+ *   - m_segmentRectMap
+ *   - m_notationPreviewDataCache
+ *   - m_audioPreviewDataCache
+ *   - m_selectedSegments
+ *
  * The Qt interpretation of the term "Model" is a layer of functionality
  * that sits between the data (Composition) and the view (CompositionView).
  * It's like Decorator Pattern.  It adds functionality to an object without
@@ -61,24 +74,45 @@ typedef std::vector<QImage> PixmapArray;
  * To me, Decorator Pattern is a cop-out.  It always results in a
  * disorganized pile of ideas dumped into a class.  Like this.
  * A better way to organize this code would be to look for big coherent
- * ideas (like selection and previews) and break those off into their own
- * classes.  What remains can be moved to CompositionView.  There may be
- * other big ideas hiding in CompositionView that are worthy of classes of
- * their own as well.
+ * ideas.  For CompositionView and CompositionModelImpl, those would
+ * be:
  *
- * This class works together with CompositionView to provide the composition
- * user interface (the segment canvas).  TrackEditor creates and owns the
- * only instance of this class.
+ *   - Segments
+ *   - Notation Previews
+ *   - Audio Previews
+ *   - Selection
+ *   - Artifacts
+ *
+ * Now organize the code around those:
+ *
+ *   - CompositionView - thin layer over Qt to provide drawing help and
+ *                       coordinate the other objects
+ *   - SegmentRenderer - takes a Composition and draws segments on
+ *                       the CompositionView
+ *   - NotationPreviewRenderer - takes a Composition and draws previews
+ *                       on the CompositionView for the MIDI segments
+ *   - AudioPreviewRenderer - takes a Composition and draws previews on the
+ *                       CompositionView for the Audio segments
+ *   - SelectionManager - Handles the concept of selected segments.
+ *   - ArtifactState - A data-only object that holds things like
+ *                     the position of the guides and whether they are
+ *                     visible.  Modified by the tools and notifies
+ *                     ArtifactRenderer of changes.
+ *   - ArtifactRenderer - Draws the Artifacts on the CompositionView.  Uses
+ *                        the Composition and ArtifactState.
  */
-class CompositionModelImpl : public QObject, public CompositionObserver, public SegmentObserver
+class CompositionModelImpl :
+        public QObject,
+        public CompositionObserver,
+        public SegmentObserver
 {
     Q_OBJECT
 public:
     CompositionModelImpl(QObject *parent,
-                         Composition& compo,
-                         Studio& studio,
-                         RulerScale *rulerScale,
-                         int vStep);
+                         Composition &,
+                         Studio &,
+                         RulerScale *,
+                         int trackCellHeight);
 
     virtual ~CompositionModelImpl();
 
@@ -108,7 +142,7 @@ public:
     // ??? rename: AudioSegmentPreview?
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
-            pixmap(p), basePoint(bp), rect(r), resizeOffset(0) {};
+            pixmap(p), basePoint(bp), rect(r), resizeOffset(0)  { }
 
         // Vector of QImage tiles containing the preview graphics.
         // rename: tiles?  tileVector?
@@ -133,7 +167,7 @@ public:
     typedef std::vector<CompositionRect> RectContainer;
 
     /// Get the segment rectangles and segment previews
-    const RectContainer& getSegmentRects(const QRect &clipRect,
+    const RectContainer &getSegmentRects(const QRect &clipRect,
                                          RectRanges *notationPreview,
                                          AudioPreviewDrawData *audioPreview);
 
@@ -191,7 +225,7 @@ public:
     timeT getRepeatTimeAt(const QPoint &, CompositionItemPtr);
 
     /// Used in many places for various coordinate/time purposes.
-    SnapGrid& grid()  { return m_grid; }
+    SnapGrid &grid()  { return m_grid; }
 
     // *** Selection
 
@@ -300,17 +334,17 @@ signals:
     /// rename: refreshView
     void needContentUpdate();
     /// rename: refreshView
-    void needContentUpdate(const QRect&);
+    void needContentUpdate(const QRect &);
     void needArtifactsUpdate();
     void selectedSegments(const SegmentSelection &);
     void needSizeUpdate();
 
 public slots:
-    void slotAudioFileFinalized(Segment*);
+    void slotAudioFileFinalized(Segment *);
     void slotInstrumentChanged(Instrument *);
 
 private slots:
-    void slotAudioPreviewComplete(AudioPreviewUpdater*);
+    void slotAudioPreviewComplete(AudioPreviewUpdater *);
 
 private:
     // CompositionObserver Interface
@@ -325,64 +359,65 @@ private:
     // SegmentObserver Interface
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
-    virtual void AllEventsChanged(const Segment *s);
+    virtual void AllEventsChanged(const Segment *);
     virtual void appearanceChanged(const Segment *);
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
-    virtual void segmentDeleted(const Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
+    virtual void segmentDeleted(const Segment*)
+            { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ }
 
     QPoint computeSegmentOrigin(const Segment &);
 
     bool setTrackHeights(Segment *changed = 0); // true if something changed
 
-    bool isTmpSelected(const Segment*) const;
-    bool wasTmpSelected(const Segment*) const;
-    bool isMoving(const Segment*) const;
-    bool isRecording(const Segment*) const;
+    bool isTmpSelected(const Segment *) const;
+    bool wasTmpSelected(const Segment *) const;
+    bool isMoving(const Segment *) const;
+    bool isRecording(const Segment *) const;
 
-    void computeRepeatMarks(CompositionRect& sr, const Segment* s);
-    unsigned int computeZForSegment(const Segment* s);
+    void computeRepeatMarks(CompositionRect &sr, const Segment *s);
+    unsigned int computeZForSegment(const Segment *s);
         
     // Segment Previews
     /// Make and cache notation or audio preview for segment.
-    void makePreviewCache(const Segment* s);
+    void makePreviewCache(const Segment *s);
     /// Remove cached notation or audio preview for segment.
-    void removePreviewCache(const Segment* s);
+    void removePreviewCache(const Segment *s);
 
     // Notation Previews
     /// rename: getNotationPreviewStatic()?
-    void makeNotationPreviewRects(QPoint basePoint, const Segment* segment,
-                                  const QRect& clipRect, RectRanges* npData);
+    void makeNotationPreviewRects(QPoint basePoint, const Segment *segment,
+                                  const QRect &clipRect, RectRanges *npData);
     /// rename: getNotationPreviewMoving()?
     void makeNotationPreviewRectsMovingSegment(
-            QPoint basePoint, const Segment* segment,
-            const QRect& currentSR, RectRanges* npData);
+            QPoint basePoint, const Segment *segment,
+            const QRect &currentSR, RectRanges *npData);
     /// rename: getNotationPreview()
-    RectList* getNotationPreviewData(const Segment* s);
+    RectList *getNotationPreviewData(const Segment *);
     /// rename: cacheNotationPreview()
-    RectList* makeNotationPreviewDataCache(const Segment *s);
+    RectList *makeNotationPreviewDataCache(const Segment *);
     /// For notation preview
-    void createEventRects(const Segment* segment, RectList*);
+    void createEventRects(const Segment *segment, RectList *);
 
     // Audio Previews
-    void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Segment*,
-                               const CompositionRect& segRect, const QRect& clipRect);
-    PixmapArray getAudioPreviewPixmap(const Segment* s);
-    AudioPreviewData* getAudioPreviewData(const Segment* s);
-    QRect postProcessAudioPreview(AudioPreviewData* apData, const Segment*);
+    void makeAudioPreviewRects(AudioPreviewDrawData *apRects, const Segment *,
+                               const CompositionRect &segRect, const QRect &clipRect);
+    PixmapArray getAudioPreviewPixmap(const Segment *);
+    AudioPreviewData *getAudioPreviewData(const Segment *);
+    QRect postProcessAudioPreview(AudioPreviewData *apData, const Segment *);
     /// rename: cacheAudioPreview()
-    AudioPreviewData* makeAudioPreviewDataCache(const Segment *s);
+    AudioPreviewData *makeAudioPreviewDataCache(const Segment *);
     /// rename: makeAudioPreview()
-    void updatePreviewCacheForAudioSegment(const Segment* s);
+    void updatePreviewCacheForAudioSegment(const Segment *);
 
     /// Clear notation and audio preview caches.
     void clearPreviewCache();
 
     // Segment Rects (m_segmentRectMap)
-    void putInCache(const Segment*, const CompositionRect&);
-    const CompositionRect& getFromCache(const Segment*, timeT& endTime);
-    bool isCachedRectCurrent(const Segment& s, const CompositionRect& r,
+    void putInCache(const Segment *, const CompositionRect &);
+    const CompositionRect &getFromCache(const Segment *, timeT &endTime);
+    bool isCachedRectCurrent(const Segment &s, const CompositionRect &r,
                              QPoint segmentOrigin, timeT segmentEndTime);
-    void clearInCache(const Segment*, bool clearPreviewCache = false);
+    void clearInCache(const Segment *, bool clearPreviewCache = false);
 
     /// Used by CompositionView on mouse double-click.
     /**
@@ -392,8 +427,8 @@ private:
     ItemContainer getItemsAt(const QPoint &);
 
     //--------------- Data members ---------------------------------
-    Composition&     m_composition;
-    Studio&          m_studio;
+    Composition     &m_composition;
+    Studio          &m_studio;
     SnapGrid         m_grid;
 
     SegmentSelection m_selectedSegments;
@@ -405,7 +440,7 @@ private:
     typedef std::set<Segment *>  RecordingSegmentSet;
     RecordingSegmentSet          m_recordingSegments;
 
-    AudioPreviewThread*          m_audioPreviewThread;
+    AudioPreviewThread          *m_audioPreviewThread;
 
     // Notation Preview
     typedef std::map<const Segment *, RectList *> NotationPreviewDataCache;
@@ -426,12 +461,12 @@ private:
     QRect m_selectionRect;
     QRect m_previousSelectionUpdateRect;
 
-    std::map<const Segment*, CompositionRect> m_segmentRectMap;
-    std::map<const Segment*, timeT> m_segmentEndTimeMap;
-    std::map<const Segment*, PixmapArray> m_audioSegmentPreviewMap;
+    std::map<const Segment *, CompositionRect> m_segmentRectMap;
+    std::map<const Segment *, timeT> m_segmentEndTimeMap;
+    std::map<const Segment *, PixmapArray> m_audioSegmentPreviewMap;
     std::map<TrackId, int> m_trackHeights;
 
-    typedef std::map<const Segment*, AudioPreviewUpdater *>
+    typedef std::map<const Segment *, AudioPreviewUpdater *>
         AudioPreviewUpdaterMap;
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
 
