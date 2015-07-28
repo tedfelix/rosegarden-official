@@ -36,7 +36,7 @@
 namespace Rosegarden {
 
 AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
-					 CompositionModelImpl::AudioPreviewData* apData,
+					 CompositionModelImpl::AudioPeaks* apData,
 					 const Composition &composition,
 					 const Segment* segment)
     : m_model(model),
@@ -66,7 +66,7 @@ int AudioPreviewPainter::tileWidth()
 
 void AudioPreviewPainter::paintPreviewImage()
 {
-    const CompositionModelImpl::AudioPreviewData::Values &values =
+    const CompositionModelImpl::AudioPeaks::Values &values =
             m_apData->values;
 
     if (values.empty())
@@ -309,7 +309,7 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     ++m_sliceNb;
 }
 
-CompositionModelImpl::PixmapArray AudioPreviewPainter::getPreviewImage()
+CompositionModelImpl::QImageVector AudioPreviewPainter::getPreviewImage()
 {
     return m_previewPixmaps;
 }

@@ -33,12 +33,12 @@ class CompositionRect;
 class AudioPreviewPainter {
 public:
     AudioPreviewPainter(CompositionModelImpl& model,
-			CompositionModelImpl::AudioPreviewData* apData,
+			CompositionModelImpl::AudioPeaks* apData,
 			const Composition &composition,
 			const Segment* segment);
 
     void paintPreviewImage();
-    CompositionModelImpl::PixmapArray getPreviewImage();
+    CompositionModelImpl::QImageVector getPreviewImage();
     const CompositionRect& getSegmentRect() { return m_rect; }
 
     static int tileWidth();
@@ -49,13 +49,13 @@ protected:
 
     //--------------- Data members ---------------------------------
     CompositionModelImpl& m_model;
-    CompositionModelImpl::AudioPreviewData* m_apData;
+    CompositionModelImpl::AudioPeaks* m_apData;
     const Composition &m_composition;
     const Segment* m_segment;
     CompositionRect m_rect;
 
     QImage m_image;
-    CompositionModelImpl::PixmapArray m_previewPixmaps;
+    CompositionModelImpl::QImageVector m_previewPixmaps;
 
     QPainter m_p;
     QPainter m_pb;

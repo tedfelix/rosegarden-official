@@ -579,7 +579,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
 
     // Assume we aren't going to show previews.
     CompositionModelImpl::NotationPreviewRanges *notationPreview = 0;
-    CompositionModelImpl::AudioPreviewDrawData *audioPreview = 0;
+    CompositionModelImpl::AudioPreviews *audioPreview = 0;
 
     if (m_showPreviews) {
         // Clear the previews.
@@ -638,10 +638,11 @@ void CompositionView::drawSegments(const QRect &clipRect)
             // too extreme as it would reverse the contents translation that
             // is present in segmentsLayerPainter at this point in time.
             segmentsLayerPainter.save();
-            // Coords WRT segment rect's base point.  (Upper left?)
+            // Adjust the coordinate system to account for any segment
+            // move offset and the vertical position of the segment.
             segmentsLayerPainter.translate(
-                    notationPreviewRange.basePoint.x(),
-                    notationPreviewRange.basePoint.y());
+                    notationPreviewRange.moveXOffset,
+                    notationPreviewRange.segmentTop);
 
             // For each event rectangle, draw it.
             for (CompositionModelImpl::NotationPreview::const_iterator i =
@@ -794,7 +795,7 @@ void CompositionView::drawTrackDividers(
 
 void CompositionView::drawImage(
         QPainter *painter,
-        QPoint dest, const CompositionModelImpl::PixmapArray &tileVector,
+        QPoint dest, const CompositionModelImpl::QImageVector &tileVector,
         QRect source)
 {
     // ??? This is an awful lot of complexity to accommodate the tiling
@@ -875,11 +876,11 @@ void CompositionView::drawAudioPreviews(
     Profiler profiler("CompositionView::drawAudioPreviews");
 
     // for each audio preview
-    for (CompositionModelImpl::AudioPreviewDrawData::const_iterator audioPreviewIter = m_audioPreview.begin();
+    for (CompositionModelImpl::AudioPreviews::const_iterator audioPreviewIter = m_audioPreview.begin();
          audioPreviewIter != m_audioPreview.end();
          ++audioPreviewIter) {
 
-        const CompositionModelImpl::AudioPreviewDrawDataItem &audioPreviewDrawDataItem = *audioPreviewIter;
+        const CompositionModelImpl::AudioPreview &audioPreviewDrawDataItem = *audioPreviewIter;
 
         // If this one isn't in the clip rect, try the next.
         if (!audioPreviewDrawDataItem.rect.intersects(clipRect))
@@ -897,7 +898,7 @@ void CompositionView::drawAudioPreviews(
         // draw the preview
         drawImage(segmentsLayerPainter,
                   destPoint,
-                  audioPreviewDrawDataItem.pixmap,
+                  audioPreviewDrawDataItem.image,
                   sourceRect);
     }
 }

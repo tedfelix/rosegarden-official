@@ -36,6 +36,7 @@ class Composition;
 class AudioPreviewThread;
 
 
+/// Sends a request to the AudioPreviewThread to generate an audio preview (m_values).
 class AudioPreviewUpdater : public QObject
 {
     Q_OBJECT

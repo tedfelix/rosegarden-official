@@ -135,7 +135,11 @@ public:
         NotationPreview::iterator begin;
         NotationPreview::iterator end;
 
-        QPoint basePoint;
+        // y coord in contents coords
+        int segmentTop;
+        // 0 when the segment isn't moving.
+        int moveXOffset;
+
         QColor color;
     };
 
@@ -144,21 +148,18 @@ public:
 
     // --- Audio Previews ---------------------------------
 
-    /// For Audio Previews
-    // ??? rename: ImageVector
-    typedef std::vector<QImage> PixmapArray;
+    /// Audio Preview Image (tiled)
+    typedef std::vector<QImage> QImageVector;
 
-    // ??? rename: AudioSegmentPreview?
-    struct AudioPreviewDrawDataItem {
-        AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
-            pixmap(p), basePoint(bp), rect(r), resizeOffset(0)  { }
+    struct AudioPreview {
+        AudioPreview(QImageVector i, QPoint bp, QRect r) :
+            image(i), basePoint(bp), rect(r), resizeOffset(0)  { }
 
         // Vector of QImage tiles containing the preview graphics.
-        // rename: tiles?  tileVector?
-        PixmapArray pixmap;
+        QImageVector image;
 
         // Upper left corner of the segment in contents coords.
-        // Same as rect.topLeft().  Redundant.  Can be removed.
+        // ??? Same as rect.topLeft().  Redundant.  Can be removed.
         QPoint basePoint;
 
         // Segment rect in contents coords.
@@ -170,8 +171,7 @@ public:
         int resizeOffset;
     };
 
-    // ??? rename: AudioSegmentPreviews
-    typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
+    typedef std::vector<AudioPreview> AudioPreviews;
 
     /**
      * Used by CompositionView's ctor to connect
@@ -180,16 +180,14 @@ public:
     void setAudioPreviewThread(AudioPreviewThread *thread);
     //AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 
-    /**
-     * rename: AudioPreview
-     */
-    struct AudioPreviewData {
-        AudioPreviewData() :
+    struct AudioPeaks {
+        AudioPeaks() :
             channels(0)
         { }
 
         unsigned int channels;
 
+        // See AudioPreviewThread::getPreview()
         typedef std::vector<float> Values;
         Values values;
     };
@@ -201,8 +199,8 @@ public:
     /// Get the segment rectangles and segment previews
     // ??? Audio and Notation Previews too.  Need an "ALL" category.
     const RectContainer &getSegmentRects(const QRect &clipRect,
-                                         NotationPreviewRanges *notationPreview,
-                                         AudioPreviewDrawData *audioPreview);
+                                         NotationPreviewRanges *notationPreviews,
+                                         AudioPreviews *audioPreviews);
 
     /// Get the topmost item (segment) at the given position on the view.
     /**
@@ -410,23 +408,34 @@ private:
 
     // --- Audio Previews ---------------------------------
 
-    void makeAudioPreviewRects(AudioPreviewDrawData *apRects, const Segment *,
+    /// Make the preview for a segment and add to audioPreviews.
+    // ??? rename: makeAudioPreview()
+    void makeAudioPreviewRects(AudioPreviews *audioPreviews, const Segment *,
                                const CompositionRect &segRect, const QRect &clipRect);
-    PixmapArray getAudioPreviewPixmap(const Segment *);
-    AudioPreviewData *getAudioPreviewData(const Segment *);
-    QRect postProcessAudioPreview(AudioPreviewData *apData, const Segment *);
-    /// rename: cacheAudioPreview()
-    AudioPreviewData *makeAudioPreviewDataCache(const Segment *);
-    /// rename: makeAudioPreview()
+    // ??? rename: getAudioPreviewImage()
+    QImageVector getAudioPreviewPixmap(const Segment *);
+    // ??? rename: getAudioPeaks()
+    AudioPeaks *getAudioPreviewData(const Segment *);
+    /// Use an AudioPreviewPainter to convert peaks to an image.
+    QRect postProcessAudioPreview(AudioPeaks *apData, const Segment *);
+    // ??? rename: makeAudioPeaks()
+    AudioPeaks *makeAudioPreviewDataCache(const Segment *);
+    /// Use an AudioPreviewUpdater to create an audio preview.
+    // ??? rename: makeAudioPreview()
     void updatePreviewCacheForAudioSegment(const Segment *);
 
     AudioPreviewThread *m_audioPreviewThread;
-    typedef std::map<const Segment *, AudioPreviewData *> AudioPreviewDataCache;
-    AudioPreviewDataCache m_audioPreviewDataCache;
-    std::map<const Segment *, PixmapArray> m_audioSegmentPreviewMap;
+
     typedef std::map<const Segment *, AudioPreviewUpdater *>
             AudioPreviewUpdaterMap;
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
+
+    // Peaks (m_audioPeakCache?)
+    typedef std::map<const Segment *, AudioPeaks *> AudioPreviewDataCache;
+    AudioPreviewDataCache m_audioPreviewDataCache;
+
+    // Audio Preview Images (m_audioPreviewImageCache?)
+    std::map<const Segment *, QImageVector> m_audioSegmentPreviewMap;
 
     // --- Notation and Audio Previews --------------------
 

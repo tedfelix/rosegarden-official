@@ -493,7 +493,7 @@ private:
      */
     void drawImage(
             QPainter *painter,
-            QPoint dest, const CompositionModelImpl::PixmapArray &tileVector,
+            QPoint dest, const CompositionModelImpl::QImageVector &tileVector,
             QRect source);
 
     bool m_showPreviews;
@@ -513,7 +513,7 @@ private:
      */
     CompositionModelImpl::NotationPreviewRanges m_notationPreview;
     /// Set by drawSegments(), used by drawAudioPreviews()
-    CompositionModelImpl::AudioPreviewDrawData m_audioPreview;
+    CompositionModelImpl::AudioPreviews m_audioPreview;
 
     /// Drives slotUpdateTimer().
     QTimer m_updateTimer;
