@@ -76,7 +76,6 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_showPreviews(false),
     m_showSegmentLabels(true),
     //m_minWidth(m_model->getCompositionLength()),
-    m_stepSize(0),
     //m_rectFill(0xF0, 0xF0, 0xF0),
     //m_selectedRectFill(0x00, 0x00, 0xF0),
     m_pointerPos(0),
@@ -193,15 +192,6 @@ void CompositionView::endAudioPreviewGeneration()
         m_model->setAudioPreviewThread(0);
     }
 }
-
-#if 0
-// Dead Code.
-void CompositionView::initStepSize()
-{
-    QScrollBar* hsb = horizontalScrollBar();
-    m_stepSize = hsb->singleStep();
-}
-#endif
 
 void CompositionView::slotUpdateSize()
 {
@@ -1282,9 +1272,9 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 
     CompositionItemPtr item = m_model->getFirstItemAt(contentsPos);
 
+    // If the user clicked on a space where there is no segment,
+    // move the playback position pointer to that time.
     if (!item) {
-        RG_DEBUG << "mouseDoubleClickEvent(): no item";
-
         const RulerScale *ruler = grid().getRulerScale();
         if (ruler)
             emit setPointerPosition(ruler->getTimeForX(contentsPos.x()));
@@ -1292,12 +1282,11 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
         return;
     }
 
-    RG_DEBUG << "mouseDoubleClickEvent(): have item";
+    // Ask RosegardenMainViewWidget to launch the default editor for
+    // the segment under the mouse pointer.
 
     if (item->isRepeating()) {
         const timeT time = m_model->getRepeatTimeAt(contentsPos, item);
-
-        RG_DEBUG << "mouseDoubleClickEvent(): editRepeat at time " << time;
 
         if (time > 0)
             emit editRepeat(item->getSegment(), time);
@@ -1329,75 +1318,54 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
 
 void CompositionView::setPointerPos(int pos)
 {
-    //RG_DEBUG << "CompositionView::setPointerPos(" << pos << ")\n";
-    int oldPos = m_pointerPos;
-    if (oldPos == pos) return;
+    // If we've not moved, bail.
+    if (m_pointerPos == pos)
+        return;
 
+    const int oldPos = m_pointerPos;
     m_pointerPos = pos;
+
+    // This routine calls us back for each recording segment to make
+    // sure we update the display as the recording segments expand.
     m_model->pointerPosChanged(pos);
 
-    // automagically grow contents width if pointer position goes beyond right end
-    //
-    // ??? m_stepSize is always 0.
-    if (pos >= (contentsWidth() - m_stepSize)) {
-        resizeContents(pos + m_stepSize, contentsHeight());
-        // grow composition too, if needed (it may not be the case if
-        if (m_model->getCompositionLength() < contentsWidth())
-            m_model->setCompositionLength(contentsWidth());
-    }
+    int deltaPos = abs(m_pointerPos - oldPos);
 
+    // If the pointer has only moved slightly
+    if (deltaPos <= m_pointerPen.width() * 2) {
 
-    // interesting -- isAutoScrolling() never seems to return true?
-    //RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
+        // Use one update rect instead of two.
 
-    if (contentsX() != m_lastPointerRefreshX) {
-        m_lastPointerRefreshX = contentsX();
-        // We'll need to shift the whole canvas anyway, so
-        slotUpdateArtifacts();
-        return ;
-    }
-
-    int deltaW = abs(m_pointerPos - oldPos);
-
-    if (deltaW <= m_pointerPen.width() * 2) { // use one rect instead of two separate ones
-
-        QRect updateRect
-            (std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
-             deltaW + m_pointerPen.width() * 2, contentsHeight());
-
-        updateArtifacts(updateRect);
-
+        updateArtifacts(
+                QRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width()/2, 0,
+                      deltaPos + m_pointerPen.width(), contentsHeight()));
     } else {
 
-        updateArtifacts
-            (QRect(m_pointerPos - m_pointerPen.width(), 0,
-                   m_pointerPen.width() * 2, contentsHeight()));
+        // Update the new pointer position.
+        updateArtifacts(
+                QRect(m_pointerPos - m_pointerPen.width()/2, 0,
+                      m_pointerPen.width(), contentsHeight()));
 
-        updateArtifacts
-            (QRect(oldPos - m_pointerPen.width(), 0,
-                   m_pointerPen.width() * 2, contentsHeight()));
+        // Update the old pointer position.
+        updateArtifacts(
+                QRect(oldPos - m_pointerPen.width()/2, 0,
+                      m_pointerPen.width(), contentsHeight()));
     }
 }
 
-void CompositionView::setGuidesPos(int x, int y)
+void CompositionView::drawGuides(int x, int y)
 {
+    m_drawGuides = true;
     m_guideX = x;
     m_guideY = y;
+
     slotUpdateArtifacts();
 }
 
-#if 0
-void CompositionView::setGuidesPos(const QPoint& p)
+void CompositionView::hideGuides()
 {
-    m_guideX = p.x();
-    m_guideY = p.y();
-    slotUpdateArtifacts();
-}
-#endif
+    m_drawGuides = false;
 
-void CompositionView::setDrawGuides(bool d)
-{
-    m_drawGuides = d;
     slotUpdateArtifacts();
 }
 

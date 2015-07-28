@@ -108,8 +108,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
         int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
         int y = int(m_canvas->grid().getYBinCoordinate(s->getTrack()));
 
-        m_canvas->setGuidesPos(x, y);
-        m_canvas->setDrawGuides(true);
+        m_canvas->drawGuides(x, y);
 
         if (m_canvas->getModel()->haveSelection()) {
             RG_DEBUG << "SegmentMover::mousePressEvent() : haveSelection\n";
@@ -212,7 +211,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
         }
 
         m_canvas->hideTextFloat();
-        m_canvas->setDrawGuides(false);
+        m_canvas->hideGuides();
         m_canvas->getModel()->endChange();
         m_canvas->slotUpdateAll();
 
@@ -332,7 +331,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
     guideX = m_currentIndex->rect().x();
     guideY = m_currentIndex->rect().y();
 
-    m_canvas->setGuidesPos(guideX, guideY);
+    m_canvas->drawGuides(guideX, guideY);
 
     timeT currentIndexStartTime = m_canvas->grid().snapX(m_currentIndex->rect().x());
 

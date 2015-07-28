@@ -84,18 +84,16 @@ public:
      */
     int getPointerPos() { return m_pointerPos; }
 
-    /// Sets the position of the guides.  See setDrawGuides().
-    void setGuidesPos(int x, int y);
-    /// Sets the position of the guides.  See setDrawGuides().
-    //void setGuidesPos(const QPoint& p);
-    /// Enable/disable drawing of the guides.
+    /// Draw the guides.
     /**
      * The guides are blue crosshairs that stretch across the entire view.
      * They appear when selecting or moving a segment.
      *
-     * @see setGuidesPos() and drawArtifacts()
+     * @see hideGuides() and drawArtifacts()
      */
-    void setDrawGuides(bool d);
+    void drawGuides(int x, int y);
+    /// Hide the guides.
+    void hideGuides();
 
     /// Get the rect for the "rubber band" selection.
     /**
@@ -487,8 +485,6 @@ private:
      */
     void drawTextFloat(QPainter *painter);
 
-    //void initStepSize();
-
     /// Deferred update of the segments within the entire viewport.
     /**
      * This will cause scrollSegmentsLayer() to refresh the entire
@@ -541,9 +537,6 @@ private:
 
     //int          m_minWidth;
 
-    // This is always 0.  It used to be set to the single step size
-    // of the horizontal scrollbar.  Now it's always 0.
-    int          m_stepSize;
     //QColor       m_rectFill;
     //QColor       m_selectedRectFill;
 
@@ -557,7 +550,7 @@ private:
     QColor       m_trackDividerColor;
 
     bool         m_drawGuides;
-    QColor       m_guideColor;
+    const QColor m_guideColor;
     int          m_guideX;
     int          m_guideY;
 

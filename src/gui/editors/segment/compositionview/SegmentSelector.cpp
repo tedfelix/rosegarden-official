@@ -163,6 +163,9 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         // *** Selecting and Moving
 
+        // ??? Why not let SegmentMover take care of moving?  This
+        //     code is awfully similar.  Not similar enough?
+
         bool selecting = true;
         
         if (m_segmentAddMode && m_canvas->getModel()->isSelected(item)) {
@@ -181,9 +184,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
         int guideX = item->rect().x();
         int guideY = item->rect().y();
 
-        m_canvas->setGuidesPos(guideX, guideY);
-
-        m_canvas->setDrawGuides(true);
+        m_canvas->drawGuides(guideX, guideY);
 
         setSnapTime(e, SnapGrid::SnapToBeat);
 
@@ -241,7 +242,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     // Hide guides and stuff
     //
-    m_canvas->setDrawGuides(false);
+    m_canvas->hideGuides();
     m_canvas->hideTextFloat();
 
     if (m_dispatchTool) {
@@ -504,7 +505,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         guideX = m_currentIndex->rect().x();
         guideY = m_currentIndex->rect().y();
 
-        m_canvas->setGuidesPos(guideX, guideY);
+        m_canvas->drawGuides(guideX, guideY);
 
         timeT currentIndexStartTime = m_canvas->grid().snapX(m_currentIndex->rect().x());
 
