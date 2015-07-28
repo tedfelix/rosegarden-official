@@ -92,7 +92,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_lastContentsY(0),
     m_lastPointerRefreshX(0),
     m_contextHelpShown(false),
-    m_updateTimer(new QTimer(static_cast<QObject *>(this))),
+    //m_updateTimer(),
     m_updateNeeded(false)
     //m_updateRect()
 {
@@ -158,8 +158,8 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     doc->getAudioPreviewThread().setEmptyQueueListener(this);
 
     // Update timer
-    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
-    m_updateTimer->start(100);
+    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
+    m_updateTimer.start(100);
 
     // Init the halo offsets table.
     m_haloOffsets.push_back(QPoint(-1,-1));
@@ -204,8 +204,10 @@ void CompositionView::slotUpdateSize()
         resizeContents(width, height);
 }
 
-void CompositionView::setSelectionRectPos(const QPoint &pos)
+void CompositionView::drawSelectionRectPos1(const QPoint &pos)
 {
+    m_drawSelectionRect = true;
+
     // Update the selection rect used for drawing the rubber band.
     m_selectionRect.setRect(pos.x(), pos.y(), 0, 0);
     // Pass on to CompositionModelImpl which will adjust the selected
@@ -213,29 +215,28 @@ void CompositionView::setSelectionRectPos(const QPoint &pos)
     m_model->setSelectionRect(m_selectionRect);
 }
 
-void CompositionView::setSelectionRectSize(int w, int h)
+void CompositionView::drawSelectionRectPos2(const QPoint &pos)
 {
+    m_drawSelectionRect = true;
+
     // Update the selection rect used for drawing the rubber band.
-    m_selectionRect.setSize(QSize(w, h));
+    m_selectionRect.setBottomRight(pos);
+
     // Pass on to CompositionModelImpl which will adjust the selected
     // segments and redraw them.
     m_model->setSelectionRect(m_selectionRect);
 }
 
-void CompositionView::setDrawSelectionRect(bool draw)
+void CompositionView::hideSelectionRect()
 {
-    if (m_drawSelectionRect != draw) {
-        m_drawSelectionRect = draw;
+    // If it's already hidden, bail.
+    if (!m_drawSelectionRect)
+        return;
 
-        // Redraw the selection rect.
-        slotUpdateArtifacts();
+    m_drawSelectionRect = false;
 
-        // Indicate that the segments in that area need updating.
-        // ??? This isn't needed since slotUpdateArtifacts() calls
-        //     updateContents() which causes a repaint of everything.
-        //     Besides, on enable and disable, nothing much changes anyway.
-        //slotAllNeedRefresh(m_selectionRect);
-    }
+    // Redraw the selection rect.
+    slotUpdateArtifacts();
 }
 
 void CompositionView::clearSegmentRectsCache(bool clearPreviews)

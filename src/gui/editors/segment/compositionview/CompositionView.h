@@ -20,23 +20,21 @@
 #define RG_COMPOSITIONVIEW_H
 
 #include "CompositionModelImpl.h"
-#include "CompositionItem.h"
 #include "gui/general/RosegardenScrollView.h"
 #include "base/Selection.h"  // SegmentSelection
 #include "base/TimeT.h"  // timeT
 
-#include <QBrush>
 #include <QColor>
 #include <QPen>
 #include <QPixmap>
 #include <QPoint>
 #include <QRect>
 #include <QString>
+#include <QTimer>
 
 
 class QWidget;
 class QWheelEvent;
-class QTimer;
 class QResizeEvent;
 class QPaintEvent;
 class QPainter;
@@ -50,16 +48,15 @@ namespace Rosegarden
 class SnapGrid;
 class SegmentToolBox;
 class SegmentTool;
-class SegmentSelector;
 class Segment;
 class RosegardenDocument;
 class CompositionRect;
 
-/// Draws the Composition on the display.
+/// Draws the Composition on the display.  The segment canvas.
 /**
  * The key output routine is drawAll() which draws the segments
  * and the artifacts (playback position pointer, guides, "rubber band"
- * selection, ...) on the viewport (the portion of the composition that
+ * selection, ...) on the viewport (the portion of the Composition that
  * is currently visible).
  *
  * TrackEditor creates and owns the only instance of this class.  This
@@ -95,30 +92,12 @@ public:
     /// Hide the guides.
     void hideGuides();
 
-    /// Get the rect for the "rubber band" selection.
-    /**
-     * @see setDrawSelectionRect()
-     */
-    QRect getSelectionRect() const { return m_selectionRect; }
-    /// Set the position of the "rubber band" selection.
-    /**
-     * @see setDrawSelectionRect().
-     */
-    void setSelectionRectPos(const QPoint &pos);
-    /// Set the size of the "rubber band" selection.
-    /**
-     * @see setDrawSelectionRect().
-     */
-    void setSelectionRectSize(int w, int h);
-    /// Enable/disable drawing of the selection "rubber band" rectangle.
-    /**
-     * The SegmentSelector tool (arrow) uses this to turn the selection
-     * rectangle on and off.
-     *
-     * @see getSelectionRect(), setSelectionRectPos(), and
-     *      setSelectionRectSize()
-     */
-    void setDrawSelectionRect(bool d);
+    /// Set the starting position of the "rubber band" selection.
+    void drawSelectionRectPos1(const QPoint &pos);
+    /// Set the ending position of the "rubber band" selection.
+    void drawSelectionRectPos2(const QPoint &pos);
+    /// Hide the "rubber band" selection rectangle.
+    void hideSelectionRect();
 
     /// Get the snap grid from the CompositionModelImpl.
     SnapGrid &grid()  { return m_model->grid(); }
@@ -573,7 +552,7 @@ private:
     CompositionModelImpl::RectRanges m_notationPreview;
 
     /// Drives slotUpdateTimer().
-    QTimer *m_updateTimer;
+    QTimer m_updateTimer;
     /// Lets slotUpdateTimer() know there's work to do.
     bool m_updateNeeded;
     /// Accumulated update rectangle.

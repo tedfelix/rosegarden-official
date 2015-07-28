@@ -209,8 +209,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
             // Selection rubber band
 
-            m_canvas->setSelectionRectPos(pos);
-            m_canvas->setDrawSelectionRect(true);
+            m_canvas->drawSelectionRectPos1(pos);
             if (!m_segmentAddMode)
                 m_canvas->getModel()->clearSelected();
 
@@ -257,7 +256,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
     int trackDiff = currentTrackPos - startDragTrackPos;
 
     if (!m_currentIndex) {
-        m_canvas->setDrawSelectionRect(false);
+        m_canvas->hideSelectionRect();
         m_canvas->getModel()->finalizeSelectionRect();
         m_canvas->getModel()->signalSelection();
         return ;
@@ -363,26 +362,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
         // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: no current item\n";
 
-        // do a bounding box
-        QRect selectionRect = m_canvas->getSelectionRect();
-
-        m_canvas->setDrawSelectionRect(true);
-
-        // same as for notation view
-        int w = int(pos.x() - selectionRect.x());
-        int h = int(pos.y() - selectionRect.y());
-        if (w > 0)
-            ++w;
-        else
-            --w;
-        if (h > 0)
-            ++h;
-        else
-            --h;
-
-        // Translate these points
-        //
-        m_canvas->setSelectionRectSize(w, h);
+        m_canvas->drawSelectionRectPos2(pos);
 
         m_canvas->getModel()->signalSelection();
         return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
