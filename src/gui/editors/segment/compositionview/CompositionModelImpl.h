@@ -59,7 +59,7 @@ class AudioPreviewThread;
  * objects are:
  *
  *   - m_segmentRectMap
- *   - m_notationPreviewDataCache
+ *   - m_notationPreviewCache
  *   - m_audioPreviewDataCache
  *   - m_selectedSegments
  *
@@ -123,7 +123,7 @@ public:
     /**
      * Each QRect represents a note/event in the preview.
      *
-     * See NotationPreviewDataCache.
+     * See NotationPreviewCache.
      *
      * QRectVector was also considered as a name for this, but since it
      * is used in so many places, the more abstract name seemed more
@@ -364,7 +364,7 @@ private:
     virtual void segmentStartChanged(const Composition *, Segment *, timeT);
     virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
     virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
-    virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
+    virtual void endMarkerTimeChanged(const Composition *, bool shorten);
 
     QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 
@@ -377,7 +377,7 @@ private:
     virtual void eventRemoved(const Segment *, Event *);
     virtual void allEventsChanged(const Segment *);
     virtual void appearanceChanged(const Segment *);
-    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
+    virtual void endMarkerTimeChanged(const Segment *, bool shorten);
     virtual void segmentDeleted(const Segment *)
             { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ }
 
@@ -399,35 +399,23 @@ private:
      *
      * Differs from makeNotationPreviewRange() in that it takes into
      * account that the Segment is changing (moving, resizing, etc...).
+     * currentRect is the Segment's modified QRect at the moment.
      */
     void makeNotationPreviewRangeCS(
             QPoint basePoint, const Segment *segment,
             const QRect &currentRect, NotationPreviewRanges *ranges);
 
     /// Get the NotationPreview for a Segment.
-    // Keeps NotationPreview's cached since they are expensive to generate.
-    // ??? Combine this routine with the next.
     NotationPreview *getNotationPreview(const Segment *);
 
     /// Refresh the NotationPreview in the cache for a Segment.
-    // ??? Why not combine this routine and the previous?  They are
-    //     only slightly different from each other.  Callers can
-    //     easily make due with the previous routine.  I guess the issue
-    //     would be forcing the cache.  The previous routine doesn't
-    //     force the cache to be refreshed.  This one does.  But it's
-    //     never used for that.
     NotationPreview *refreshNotationPreviewCache(const Segment *);
 
     /// Create a NotationPreview from a Segment.
-    // ??? Although we might combine this with the previous, it's
-    //     probably better on its own since it is a coherent chunk
-    //     of logic.
-    // ??? rename: makeNotationPreview()
-    void createEventRects(const Segment *, NotationPreview *);
+    void makeNotationPreview(const Segment *, NotationPreview *);
 
-    // ??? rename: NotationPreviewCache and m_notationPreviewCache
-    typedef std::map<const Segment *, NotationPreview *> NotationPreviewDataCache;
-    NotationPreviewDataCache m_notationPreviewDataCache;
+    typedef std::map<const Segment *, NotationPreview *> NotationPreviewCache;
+    NotationPreviewCache m_notationPreviewCache;
 
     // --- Audio Previews ---------------------------------
 
