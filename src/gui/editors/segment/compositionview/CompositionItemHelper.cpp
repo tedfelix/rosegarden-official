@@ -124,21 +124,26 @@ CompositionItemPtr CompositionItemHelper::makeCompositionItem(Rosegarden::Segmen
     return CompositionItemPtr(new CompositionItem(*segment, QRect()));
 }
 
-CompositionItemPtr CompositionItemHelper::findSiblingCompositionItem(const CompositionModelImpl::ItemContainer& items,
-                                                                  CompositionItemPtr referenceItem)
+CompositionItemPtr CompositionItemHelper::findSiblingCompositionItem(
+        const CompositionModelImpl::ItemContainer &items,
+        CompositionItemPtr referenceItem)
 {
     CompositionModelImpl::ItemContainer::const_iterator it;
-    Rosegarden::Segment* currentSegment = CompositionItemHelper::getSegment(referenceItem);
+    Rosegarden::Segment *referenceSegment = referenceItem->getSegment();
 
+    // For each item in the incoming container
     for (it = items.begin(); it != items.end(); ++it) {
         CompositionItemPtr item = *it;
-        Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
-        if (segment == currentSegment) {
+        Rosegarden::Segment *segment = item->getSegment();
+
+        // If it has the same Segment as the reference item, return it.
+        if (segment == referenceSegment) {
             return item;
         }
     }
 
+    // Not found, just return the incoming item.
     return referenceItem;
 }
-    
+
 }

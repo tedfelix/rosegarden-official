@@ -94,7 +94,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
         !selector->isSegmentAdding()) {
 
         m_canvas->getModel()->clearSelected();
-        m_canvas->getModel()->signalSelection();
+        m_canvas->getModel()->selectionHasChanged();
 // 		m_canvas->updateContents();
 		m_canvas->update();
 	}
@@ -138,7 +138,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
         // check for addmode - clear the selection if not
         RG_DEBUG << "SegmentMover::mousePressEvent() : clear selection\n";
         m_canvas->getModel()->clearSelected();
-        m_canvas->getModel()->signalSelection();
+        m_canvas->getModel()->selectionHasChanged();
 // 		m_canvas->updateContents();
 		m_canvas->update();
 	}

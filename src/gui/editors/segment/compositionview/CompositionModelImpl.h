@@ -230,6 +230,19 @@ public:
     void setSelected(Segment *, bool selected = true);
     void selectSegments(const SegmentSelection &segments);
     void clearSelected();
+
+    /// Click and drag selection rect (rubber band).
+    void setSelectionRect(const QRect &);
+    /// Select segments based on the selection rect (rubber band).
+    void finalizeSelectionRect();
+
+    /// Emit selectedSegments() signal
+    /**
+     * Used by SegmentSelector and others to signal a change in the selection.
+     * See RosegardenMainViewWidget::slotSelectedSegments()
+     */
+    void selectionHasChanged();
+
     bool isSelected(const Segment *) const;
     bool haveSelection() const  { return !m_selectedSegments.empty(); }
     bool haveMultipleSelection() const  { return m_selectedSegments.size() > 1; }
@@ -237,34 +250,14 @@ public:
     /// Bounding rect of the currently selected segments.
     QRect getSelectedSegmentsRect();
 
-    /// Emit selectedSegments() signal
-    /**
-     * Used by SegmentSelector and others to signal a change in the selection.
-     */
-    void signalSelection();
-
-    /// Click and drag selection rect.
-    void setSelectionRect(const QRect &);
-    /// Click and drag selection complete.
-    void finalizeSelectionRect();
-
-    /// Emit needContentUpdate() signal
-    /**
-     * rename: emitRefreshView()
-     */
-    void signalContentChange();
-
     // --- Recording --------------------------------------
 
     // ??? This category might make more sense combined with Segments.
 
-    /// Refresh the recording segments.
-    void pointerPosChanged(int x);
-
     void addRecordingItem(CompositionItemPtr);
-    //void removeRecordingItem(CompositionItemPtr);
+    /// Update the recording segments on the display.
+    void pointerPosChanged(int x);
     void clearRecordingItems();
-    //bool haveRecordingItems()  { return !m_recordingSegments.empty(); }
 
     // --- Changing (moving and resizing) -----------------
 
@@ -277,8 +270,10 @@ public:
     /// Begin move for all selected segments.
     void startChangeSelection(ChangeType change);
 
-    /// Compares Segment pointers in a CompositionItem.
+    /// Compare Segment pointers in a CompositionItem.
     /**
+     * Used by ItemContainer to order the CompositionItem objects.
+     *
      * Is this really better than just comparing the CompositionItemPtr
      * addresses?
      *
@@ -298,12 +293,22 @@ public:
         }
     };
 
+    // ??? Does this really need to be a std::set?  Audit all users.
     typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
 
     //ChangeType getChangeType() const  { return m_changeType; }
 
     /// Get the segments that are moving or resizing.
     ItemContainer &getChangingItems()  { return m_changingItems; }
+
+    /// Emit needContentUpdate() signal
+    /**
+     * Used while segments are moving to update the display.
+     *
+     * rename: emitRefreshView()
+     */
+    void signalContentChange();
+
     /// Cleanup after move/resize.
     void endChange();
 
@@ -337,7 +342,11 @@ signals:
     /// rename: refreshView
     void needContentUpdate(const QRect &);
     void needArtifactsUpdate();
+
+    /// Connected to RosegardenMainViewWidget::slotSelectedSegments().
+    // ??? rename: selectionChanged()
     void selectedSegments(const SegmentSelection &);
+
     void needSizeUpdate();
 
 public slots:

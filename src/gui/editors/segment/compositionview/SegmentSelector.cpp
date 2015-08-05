@@ -223,7 +223,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
     // Tell the RosegardenMainViewWidget that we've selected some new Segments -
     // when the list is empty we're just unselecting.
     //
-    m_canvas->getModel()->signalSelection();
+    m_canvas->getModel()->selectionHasChanged();
 
     m_passedInertiaEdge = false;
 }
@@ -262,7 +262,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
     if (!m_currentIndex) {
         m_canvas->hideSelectionRect();
         m_canvas->getModel()->finalizeSelectionRect();
-        m_canvas->getModel()->signalSelection();
+        m_canvas->getModel()->selectionHasChanged();
         return ;
     }
 
@@ -368,7 +368,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
         m_canvas->drawSelectionRectPos2(pos);
 
-        m_canvas->getModel()->signalSelection();
+        m_canvas->getModel()->selectionHasChanged();
         return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
     }
 

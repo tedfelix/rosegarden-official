@@ -219,7 +219,7 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
 
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->setSelected(segment);
-        m_canvas->getModel()->signalSelection();
+        m_canvas->getModel()->selectionHasChanged();
 
         m_canvas->hideNewSegment();
         m_canvas->slotUpdateAll();

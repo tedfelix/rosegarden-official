@@ -103,7 +103,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
             m_canvas->getModel()->clearSelected();
             m_canvas->getModel()->setSelected(m_currentIndex->getSegment());
-            m_canvas->getModel()->signalSelection();
+            m_canvas->getModel()->selectionHasChanged();
         }
     }
 

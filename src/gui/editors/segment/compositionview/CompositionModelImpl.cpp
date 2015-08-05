@@ -798,21 +798,6 @@ void CompositionModelImpl::addRecordingItem(CompositionItemPtr item)
     //         << m_recordingSegments.size() << " recording items";
 }
 
-#if 0
-void CompositionModelImpl::removeRecordingItem(CompositionItemPtr item)
-{
-    Segment* s = CompositionItemHelper::getSegment(item);
-
-    m_recordingSegments.erase(s);
-    clearInCache(s, true);
-
-    emit needContentUpdate();
-
-    RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
-             << m_recordingSegments.size() << " recording items";
-}
-#endif
-
 void CompositionModelImpl::clearRecordingItems()
 {
     //RG_DEBUG << "CompositionModelImpl::clearRecordingItem";
@@ -996,9 +981,8 @@ void CompositionModelImpl::selectSegments(const SegmentSelection &segments)
     emit needContentUpdate();
 }
 
-void CompositionModelImpl::signalSelection()
+void CompositionModelImpl::selectionHasChanged()
 {
-    //RG_DEBUG << "CompositionModelImpl::signalSelection()";
     emit selectedSegments(getSelectedSegments());
 }
 
