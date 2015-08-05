@@ -36,7 +36,10 @@ class Composition;
 class AudioPreviewThread;
 
 
-/// Sends a request to the AudioPreviewThread to generate an audio preview (m_values).
+/// Sends a request to the AudioPreviewThread to generate audio peaks (m_values).
+/**
+ * ??? rename: AudioPeaksGenerator
+ */
 class AudioPreviewUpdater : public QObject
 {
     Q_OBJECT
@@ -57,6 +60,7 @@ public:
 
     const Segment *getSegment() const { return m_segment; }
 
+    // ??? rename: getPeaks()
     const std::vector<float> &getComputedValues(unsigned int &channels) const
     { channels = m_channels; return m_values; }
 
@@ -73,6 +77,7 @@ protected:
     QRect                          m_rect;
     bool                           m_showMinima;
     unsigned int                   m_channels;
+    // ??? rename: m_peaks
     std::vector<float>             m_values;
 
     intptr_t m_previewToken;

@@ -283,14 +283,16 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
     ranges->push_back(interval);
 }
 
-void CompositionModelImpl::makeAudioPreviewRects(AudioPreviews* apRects, const Segment* segment,
-        const CompositionRect& segRect, const QRect& /*clipRect*/)
+void CompositionModelImpl::makeAudioPreview(
+        AudioPreviews* apRects, const Segment* segment,
+        const CompositionRect& segRect)
 {
-    Profiler profiler("CompositionModelImpl::makeAudioPreviewRects");
+    Profiler profiler("CompositionModelImpl::makeAudioPreview");
 
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects - segRect = " << segRect;
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect;
 
-    QImageVector previewImage = getAudioPreviewPixmap(segment);
+    // ??? This is the only call to this function.  Inline it.
+    QImageVector previewImage = getAudioPreviewImage(segment);
 
     QPoint basePoint = segRect.topLeft();
 
@@ -498,8 +500,10 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
         if (m_audioPreviewUpdaterMap.find(segment) ==
                 m_audioPreviewUpdaterMap.end()) {
 
-            AudioPreviewUpdater *updater = new AudioPreviewUpdater
-                                           (*m_audioPreviewThread, m_composition, segment, segRect, this);
+            AudioPreviewUpdater *updater =
+                    new AudioPreviewUpdater(
+                            *m_audioPreviewThread, m_composition,
+                            segment, segRect, this);
 
             connect(updater, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
                     this, SLOT(slotAudioPreviewComplete(AudioPreviewUpdater*)));
@@ -522,7 +526,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 {
     RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete()";
 
-    AudioPeaks *apData = getAudioPreviewData(apu->getSegment());
+    AudioPeaks *apData = getAudioPeaks(apu->getSegment());
     QRect updateRect;
 
     if (apData) {
@@ -534,6 +538,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
                 << values.size() << " samples on " << channels << " channels";
             apData->channels = channels;
             apData->values = values;  // ??? COPY performance issue?
+            // ??? This is the only call to this function.  Inline it.
             updateRect = postProcessAudioPreview(apData, apu->getSegment());
         }
     }
@@ -587,9 +592,12 @@ void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
 }
 
 CompositionModelImpl::QImageVector
-CompositionModelImpl::getAudioPreviewPixmap(const Segment* s)
+CompositionModelImpl::getAudioPreviewImage(const Segment* s)
 {
-    getAudioPreviewData(s);
+    // If needed, begin the asynchronous process of generating an
+    // audio preview.
+    getAudioPeaks(s);
+
     return m_audioSegmentPreviewMap[s];
 }
 
@@ -1329,7 +1337,7 @@ CompositionModelImpl::getSegmentRects(
                 makeNotationPreviewRange(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
                 // Audio preview data
             } else if (audioPreview  &&  s->getType() == Segment::Audio) {
-                makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
+                makeAudioPreview(audioPreview, s, segmentRect);
             }
 
             m_segmentRects.push_back(segmentRect);
@@ -1357,7 +1365,7 @@ CompositionModelImpl::getSegmentRects(
                 makeNotationPreviewRangeCS(segmentRect.topLeft(), s, segmentRect, notationPreview);
                 // Audio preview data
             } else if (audioPreview  &&  s->getType() == Segment::Audio) {
-                makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
+                makeAudioPreview(audioPreview, s, segmentRect);
             }
 
             m_segmentRects.push_back(segmentRect);
@@ -1408,10 +1416,10 @@ CompositionModelImpl::getNotationPreview(const Segment *s)
     return notationPreview;
 }
 
-CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPreviewData(const Segment* s)
+CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segment* s)
 {
-    Profiler profiler("CompositionModelImpl::getAudioPreviewData");
-    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData";
+    Profiler profiler("CompositionModelImpl::getAudioPeaks");
+    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks";
 
     AudioPeaks* apData = m_audioPreviewDataCache[s];
 
@@ -1419,7 +1427,7 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPreviewData(cons
         apData = makeAudioPreviewDataCache(s);
     }
 
-    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData returning";
+    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks returning";
     return apData;
 }
 

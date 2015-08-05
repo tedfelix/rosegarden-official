@@ -38,6 +38,12 @@ namespace Rosegarden
 class AudioFileManager;
 
 
+/// Generate audio peaks asynchronously.
+/**
+ * While this is used for generating audio previews, it would be more
+ * accurately named "AudioPeaksThread".  "Preview" can be replaced with
+ * "Peaks" wherever it occurs in this class.
+ */
 class AudioPreviewThread : public QThread
 {
 public:
