@@ -194,13 +194,16 @@ public:
 
     // --- Segments ---------------------------------------
 
-    typedef std::vector<CompositionRect> RectContainer;
+    typedef std::vector<CompositionRect> SegmentRects;
 
     /// Get the segment rectangles and segment previews
-    // ??? Audio and Notation Previews too.  Need an "ALL" category.
-    const RectContainer &getSegmentRects(const QRect &clipRect,
-                                         NotationPreviewRanges *notationPreviews,
-                                         AudioPreviews *audioPreviews);
+    /**
+     * ??? Audio and Notation Previews too.  Need an "ALL" category.
+     */
+    const SegmentRects &getSegmentRects(
+            const QRect &clipRect,
+            NotationPreviewRanges *notationPreviews,
+            AudioPreviews *audioPreviews);
 
     /// Get the topmost item (segment) at the given position on the view.
     /**
@@ -476,7 +479,7 @@ private:
     ItemContainer getItemsAt(const QPoint &);
 
     /// Used by getSegmentRects() to return a reference for speed.
-    RectContainer m_segmentRects;
+    SegmentRects m_segmentRects;
 
     // --- Selection --------------------------------------
 

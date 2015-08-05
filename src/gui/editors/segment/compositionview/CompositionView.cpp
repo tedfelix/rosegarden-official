@@ -593,13 +593,13 @@ void CompositionView::drawSegments(const QRect &clipRect)
     }
 
     // Fetch segment rectangles and (optionally) previews
-    const CompositionModelImpl::RectContainer &segmentRects =
+    const CompositionModelImpl::SegmentRects &segmentRects =
             m_model->getSegmentRects(clipRect, notationPreview, audioPreview);
 
     // *** Draw Segment Rectangles
 
     // For each segment rectangle, draw it
-    for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
+    for (CompositionModelImpl::SegmentRects::const_iterator i = segmentRects.begin();
          i != segmentRects.end(); ++i) {
 
         drawCompRect(&segmentsLayerPainter, clipRect, *i);
@@ -671,7 +671,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
 
     if (m_showSegmentLabels) {
         // For each segment rect, draw the label
-        for (CompositionModelImpl::RectContainer::const_iterator i = segmentRects.begin();
+        for (CompositionModelImpl::SegmentRects::const_iterator i = segmentRects.begin();
              i != segmentRects.end(); ++i) {
 
             drawCompRectLabel(&segmentsLayerPainter, *i);
@@ -1042,7 +1042,7 @@ void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
 
 void CompositionView::drawIntersections(
         QPainter *painter, const QRect &clipRect,
-        const CompositionModelImpl::RectContainer &rects)
+        const CompositionModelImpl::SegmentRects &rects)
 {
     // Intersections are most noticeable when recording over existing
     // segments.  They also play a part when moving a segment over top
@@ -1052,15 +1052,15 @@ void CompositionView::drawIntersections(
     if (rects.size() <= 1)
         return;
 
-    CompositionModelImpl::RectContainer intersections;
+    CompositionModelImpl::SegmentRects intersections;
 
     // For each rect
-    for (CompositionModelImpl::RectContainer::const_iterator i = rects.begin();
+    for (CompositionModelImpl::SegmentRects::const_iterator i = rects.begin();
          i != rects.end();
          ++i) {
 
         // For each rect after i
-        for (CompositionModelImpl::RectContainer::const_iterator j = i + 1;
+        for (CompositionModelImpl::SegmentRects::const_iterator j = i + 1;
              j != rects.end();
              ++j) {
 
@@ -1071,7 +1071,7 @@ void CompositionView::drawIntersections(
                 continue;
 
             // Check if we've already encountered this intersection.
-            CompositionModelImpl::RectContainer::iterator t =
+            CompositionModelImpl::SegmentRects::iterator t =
                     std::find(intersections.begin(),
                               intersections.end(),
                               intersectRect);
@@ -1086,7 +1086,7 @@ void CompositionView::drawIntersections(
     }
 
     // For each intersection, draw the rectangle
-    for (CompositionModelImpl::RectContainer::iterator i =
+    for (CompositionModelImpl::SegmentRects::iterator i =
              intersections.begin();
          i != intersections.end();
          ++i) {
@@ -1107,7 +1107,7 @@ void CompositionView::drawIntersections(
     while (!intersections.empty()) {
 
         // For each intersection, draw the segment rectangle
-        for (CompositionModelImpl::RectContainer::iterator intersectionIter =
+        for (CompositionModelImpl::SegmentRects::iterator intersectionIter =
                  intersections.begin();
              intersectionIter != intersections.end();
              ++intersectionIter) {
@@ -1125,10 +1125,10 @@ void CompositionView::drawIntersections(
 
         ++level;
 
-        CompositionModelImpl::RectContainer intersections2;
+        CompositionModelImpl::SegmentRects intersections2;
 
         // For each intersection rect
-        for (CompositionModelImpl::RectContainer::iterator j =
+        for (CompositionModelImpl::SegmentRects::iterator j =
                  intersections.begin();
              j != intersections.end();
              ++j) {
@@ -1136,7 +1136,7 @@ void CompositionView::drawIntersections(
             const CompositionRect &testRect = *j;
 
             // For each rect after j
-            for (CompositionModelImpl::RectContainer::iterator i = j + 1;
+            for (CompositionModelImpl::SegmentRects::iterator i = j + 1;
                  i != intersections.end();
                  ++i) {
 
@@ -1148,7 +1148,7 @@ void CompositionView::drawIntersections(
                 //     rect, we ignore it?
                 if (!intersectRect.isEmpty()  &&  intersectRect != *i) {
                     // Check to see if we've found this intersection already.
-                    CompositionModelImpl::RectContainer::iterator t =
+                    CompositionModelImpl::SegmentRects::iterator t =
                             std::find(intersections2.begin(),
                                       intersections2.end(),
                                       intersectRect);

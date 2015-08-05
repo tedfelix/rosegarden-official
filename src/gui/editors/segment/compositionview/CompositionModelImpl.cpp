@@ -1323,7 +1323,7 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
     return m_segmentRectMap[s];
 }
 
-const CompositionModelImpl::RectContainer &
+const CompositionModelImpl::SegmentRects &
 CompositionModelImpl::getSegmentRects(
         const QRect &clipRect,
         NotationPreviewRanges *notationPreview,

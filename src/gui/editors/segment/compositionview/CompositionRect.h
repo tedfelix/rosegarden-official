@@ -34,6 +34,7 @@ class QPoint;
 namespace Rosegarden
 {
 
+/// A segment rectangle.  (rename: SegmentRect)
 class CompositionRect : public QRect
 {
 public:
@@ -41,19 +42,51 @@ public:
 
     friend bool operator<(const CompositionRect&, const CompositionRect&);
 
-    CompositionRect() : QRect(), m_selected(false),
-                        m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
-    CompositionRect(const QRect& r) : QRect(r), m_resized(false), m_selected(false),
-                                      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
-    CompositionRect(const QPoint & topLeft, const QPoint & bottomRight)
-        : QRect(topLeft, bottomRight), m_resized(false), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
-    CompositionRect(const QPoint & topLeft, const QSize & size)
-        : QRect(topLeft, size), m_resized(false), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
-    CompositionRect(int left, int top, int width, int height)
-        : QRect(left, top, width, height), m_resized(false), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
+    CompositionRect() :
+        QRect(),
+        m_resized(false),
+        m_selected(false),
+        m_needUpdate(false),
+        m_brush(DefaultBrushColor),
+        m_pen(DefaultPenColor),
+        m_repeatMarks(),
+        m_baseWidth(0),
+        m_label(),
+        m_z(0)
+    { }
+
+    CompositionRect(const QRect &r) :
+        QRect(r),
+        m_resized(false),
+        m_selected(false),
+        m_needUpdate(false),
+        m_brush(DefaultBrushColor),
+        m_pen(DefaultPenColor),
+        m_repeatMarks(),
+        m_baseWidth(0),
+        m_label(),
+        m_z(0)
+    { }
+
+    CompositionRect(const QPoint &topLeft, const QSize &size) :
+        QRect(topLeft, size),
+        m_resized(false),
+        m_selected(false),
+        m_needUpdate(false),
+        m_brush(DefaultBrushColor),
+        m_pen(DefaultPenColor),
+        m_repeatMarks(),
+        m_baseWidth(0),
+        m_label(),
+        m_z(0)
+    { }
+
+    //CompositionRect(const QPoint & topLeft, const QPoint & bottomRight)
+    //    : QRect(topLeft, bottomRight), m_resized(false), m_selected(false),
+    //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
+    //CompositionRect(int left, int top, int width, int height)
+    //    : QRect(left, top, width, height), m_resized(false), m_selected(false),
+    //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
 
     void setResized(bool s)       { m_resized = s; }
     bool isResized() const        { return m_resized; }

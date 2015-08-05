@@ -477,7 +477,7 @@ private:
 
     /// Used by drawSegments() to draw any intersections between rectangles.
     void drawIntersections(QPainter *painter, const QRect &clipRect,
-                           const CompositionModelImpl::RectContainer &rects);
+                           const CompositionModelImpl::SegmentRects &rects);
 
     /// Draw the previews for audio segments on the m_segmentsLayer.
     /**
