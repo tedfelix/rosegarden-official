@@ -221,7 +221,7 @@ public:
     /**
      * ??? Audio and Notation Previews too.  Need an "ALL" category.
      */
-    void clearSegmentRectsCache(bool clearPreviews = false)
+    void deleteCachedSegments(bool clearPreviews)
             { clearInCache(0, clearPreviews); }
 
     CompositionRect computeSegmentRect(const Segment &, bool computeZ = false);
@@ -407,13 +407,10 @@ private:
             QPoint basePoint, const Segment *segment,
             const QRect &currentRect, NotationPreviewRanges *ranges);
 
-    /// Get the NotationPreview for a Segment.
     NotationPreview *getNotationPreview(const Segment *);
 
-    /// Refresh the NotationPreview in the cache for a Segment.
-    NotationPreview *refreshNotationPreviewCache(const Segment *);
+    NotationPreview *updateCachedNotationPreview(const Segment *);
 
-    /// Create a NotationPreview from a Segment.
     void makeNotationPreview(const Segment *, NotationPreview *);
 
     typedef std::map<const Segment *, NotationPreview *> NotationPreviewCache;
@@ -445,20 +442,20 @@ private:
     AudioPeaks *getAudioPeaks(const Segment *);
 
     /// Also generates the preview image asynchronously.
-    AudioPeaks *refreshAudioPeaksCache(const Segment *);
+    AudioPeaks *updateCachedAudioPeaks(const Segment *);
 
     /// Create audio peaks for a segment asynchronously.
     /**
      * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
      * slotAudioPreviewComplete() is called, which in turn calls
-     * refreshPreviewImageCache().
+     * updateCachedPreviewImage().
      *
      * Also generates the preview image asynchronously.
      */
     void makeAudioPeaksAsync(const Segment *);
 
     /// Convert AudioPeaks into a QImageVector and add to m_audioPreviewImageCache.
-    QRect refreshPreviewImageCache(AudioPeaks *, const Segment *);
+    QRect updateCachedPreviewImage(AudioPeaks *, const Segment *);
 
     /// More of an AudioPeaksThread.
     AudioPreviewThread *m_audioPreviewThread;
@@ -475,21 +472,26 @@ private:
 
     // --- Notation and Audio Previews --------------------
 
-    // Segment Previews
     /// Make and cache notation or audio preview for segment.
-    void makePreviewCache(const Segment *s);
-    /// Remove cached notation or audio preview for segment.
-    void removePreviewCache(const Segment *s);
+    // ??? rename: updateCachedPreview()?
+    //void makePreviewCache(const Segment *);
 
-    /// Clear notation and audio preview caches.
-    void clearPreviewCache();
+    void deleteCachedPreview(const Segment *);
+
+    /// Delete cached notation and audio previews.
+    void deleteCachedPreviews();
 
     // --- Segments ---------------------------------------
 
-    QPoint computeSegmentOrigin(const Segment &);
+    QPoint topLeft(const Segment &);
 
-    std::map<TrackId, int> m_trackHeights;
-    bool setTrackHeights(Segment *changed = 0); // true if something changed
+    std::map<TrackId, int /* height */> m_trackHeights;
+    /// Update m_trackHeights for the given Segment.
+    /**
+     * If the Segment is NULL, all track heights are updated.
+     * Returns true if a track's height has changed.
+     */
+    bool updateTrackHeight(Segment *segment = 0);
 
     //void computeRepeatMarks(CompositionItemPtr);
     void computeRepeatMarks(CompositionRect &sr, const Segment *s);
@@ -501,11 +503,16 @@ private:
     std::map<const Segment *, CompositionRect> m_segmentRectMap;
     std::map<const Segment *, timeT> m_segmentEndTimeMap;
 
+    // ??? rename: updateCachedSegment()
     void putInCache(const Segment *, const CompositionRect &);
+    // ??? Inline this function.
     const CompositionRect &getFromCache(const Segment *, timeT &endTime);
+    // ??? Inline this function.
     bool isCachedRectCurrent(const Segment &s, const CompositionRect &r,
                              QPoint cachedSegmentOrigin,
                              timeT cachedSegmentEndTime);
+    /// If Segment is NULL, all cached segments are deleted.
+    // ??? rename: deleteCachedSegment()
     void clearInCache(const Segment *, bool clearPreviewCache = false);
 
     /// Get all the segments at a point.

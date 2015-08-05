@@ -247,7 +247,7 @@ void CompositionView::hideSelectionRect()
 
 void CompositionView::clearSegmentRectsCache(bool clearPreviews)
 {
-    m_model->clearSegmentRectsCache(clearPreviews);
+    m_model->deleteCachedSegments(clearPreviews);
 }
 
 SegmentSelection

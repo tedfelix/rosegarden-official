@@ -96,7 +96,8 @@ CompositionModelImpl::CompositionModelImpl(
 {
     m_composition.addObserver(this);
 
-    setTrackHeights();
+    // Update the track heights for all tracks.
+    updateTrackHeight();
 
     segmentcontainer& segments = m_composition.getSegments();
     segmentcontainer::iterator segEnd = segments.end();
@@ -373,9 +374,9 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
     m_audioPreviewThread = thread;
 }
 
-void CompositionModelImpl::clearPreviewCache()
+void CompositionModelImpl::deleteCachedPreviews()
 {
-    //RG_DEBUG << "CompositionModelImpl::clearPreviewCache";
+    //RG_DEBUG << "deleteCachedPreviews";
 
     for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
          i != m_notationPreviewCache.end(); ++i) {
@@ -398,6 +399,12 @@ void CompositionModelImpl::clearPreviewCache()
 
     const segmentcontainer& segments = m_composition.getSegments();
     segmentcontainer::const_iterator segEnd = segments.end();
+
+    // Regenerate all of the audio previews.
+    // ??? Why?  This routine is supposed to delete all the previews.
+    //     Why is it regenerating the audio previews?  Split this out
+    //     into an updateCachedAudioPreviews() and call it where it's
+    //     needed.  Then determine whether it is really needed.
 
     for (segmentcontainer::const_iterator i = segments.begin();
             i != segEnd; ++i) {
@@ -539,7 +546,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
             apData->channels = channels;
             apData->values = values;  // ??? COPY performance issue?
             // ??? This is the only call to this function.  Inline it.
-            updateRect = refreshPreviewImageCache(apData, apu->getSegment());
+            updateRect = updateCachedPreviewImage(apData, apu->getSegment());
         }
     }
 
@@ -547,9 +554,9 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
         emit needUpdate(updateRect);
 }
 
-QRect CompositionModelImpl::refreshPreviewImageCache(AudioPeaks* apData, const Segment* segment)
+QRect CompositionModelImpl::updateCachedPreviewImage(AudioPeaks* apData, const Segment* segment)
 {
-    //RG_DEBUG << "refreshPreviewImageCache()";
+    //RG_DEBUG << "updateCachedPreviewImage()";
 
     AudioPreviewPainter previewPainter(*this, apData, m_composition, segment);
     previewPainter.paintPreviewImage();
@@ -579,7 +586,7 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
         // segment is on a percussion instrument or not
 
         if (track && track->getInstrument() == instrument->getId()) {
-            removePreviewCache(s);
+            deleteCachedPreview(s);
             emit needUpdate(computeSegmentRect(*s));
         }
     }
@@ -588,7 +595,7 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
 {
     //RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()";
-    removePreviewCache(s);
+    deleteCachedPreview(s);
 }
 
 CompositionModelImpl::QImageVector
@@ -605,7 +612,7 @@ void CompositionModelImpl::eventAdded(const Segment *s, Event *)
 {
     //RG_DEBUG << "CompositionModelImpl::eventAdded()";
     Profiler profiler("CompositionModelImpl::eventAdded()");
-    removePreviewCache(s);
+    deleteCachedPreview(s);
     emit needUpdate(computeSegmentRect(*s));
 }
 
@@ -613,14 +620,14 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
 {
     //RG_DEBUG << "CompositionModelImpl::eventRemoved";
     Profiler profiler("CompositionModelImpl::eventRemoved()");
-    removePreviewCache(s);
+    deleteCachedPreview(s);
     emit needUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::allEventsChanged(const Segment *s)
 {
      Profiler profiler("CompositionModelImpl::allEventsChanged()");
-    removePreviewCache(s);
+     deleteCachedPreview(s);
     emit needUpdate(computeSegmentRect(*s));
 }
 
@@ -643,16 +650,18 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
     }
 }
 
+#if 0
 void CompositionModelImpl::makePreviewCache(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
-        refreshNotationPreviewCache(s);
+        updateCachedNotationPreview(s);
     } else {
-        refreshAudioPeaksCache(s);
+        updateCachedAudioPeaks(s);
     }
 }
+#endif
 
-void CompositionModelImpl::removePreviewCache(const Segment *s)
+void CompositionModelImpl::deleteCachedPreview(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
         NotationPreview *notationPreview = m_notationPreviewCache[s];
@@ -669,12 +678,12 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
-    //RG_DEBUG << "segmentAdded: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
-    setTrackHeights(s);
+    //RG_DEBUG << "segmentAdded(): segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
+    updateTrackHeight(s);
 
     // ??? Why do it now?  Why not let getNotationPreview() do it
     //     on its own when/if it is needed?
-    makePreviewCache(s);
+    //makePreviewCache(s);
 
     s->addObserver(this);
 
@@ -683,7 +692,8 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
-    setTrackHeights();
+    // Update track height for all tracks.
+    updateTrackHeight();
 
     QRect r = computeSegmentRect(*s);
 
@@ -697,12 +707,13 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, TrackId tid)
 {
-    RG_DEBUG << "CompositionModelImpl::segmentTrackChanged: segment " << s << " on track " << tid << ", calling setTrackHeights";
+    RG_DEBUG << "CompositionModelImpl::segmentTrackChanged: segment " << s << " on track " << tid << ", calling updateTrackHeight()";
 
-    // we don't call setTrackHeights(s), because some of the tracks
+    // Update the height of all tracks.
+    // we don't call updateTrackHeight(s), because some of the tracks
     // above s may have changed height as well (if s was moved off one
     // of them)
-    if (setTrackHeights()) {
+    if (updateTrackHeight()) {
         RG_DEBUG << "... changed, updating";
         emit needUpdate();
     }
@@ -710,15 +721,15 @@ void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, 
 
 void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
 {
-//    RG_DEBUG << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
-    if (setTrackHeights(s)) emit needUpdate();
+//    RG_DEBUG << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
+    if (updateTrackHeight(s)) emit needUpdate();
 }
 
 void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
 {
     Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
-//    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
-    if (setTrackHeights(s)) {
+//    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
+    if (updateTrackHeight(s)) {
 //        RG_DEBUG << "... changed, updating";
         emit needUpdate();
     }
@@ -727,7 +738,7 @@ void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
 {
     clearInCache(s);
-    setTrackHeights(s);
+    updateTrackHeight(s);
     emit needUpdate();
 }
 
@@ -1090,11 +1101,11 @@ int CompositionModelImpl::getCompositionHeight()
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
-bool CompositionModelImpl::setTrackHeights(Segment *s)
+bool CompositionModelImpl::updateTrackHeight(Segment *s)
 {
     bool heightsChanged = false;
 
-//    RG_DEBUG << "CompositionModelImpl::setTrackHeights";
+    //RG_DEBUG << "updateTrackHeight()";
 
     for (Composition::trackcontainer::const_iterator i = 
              m_composition.getTracks().begin();
@@ -1116,7 +1127,7 @@ bool CompositionModelImpl::setTrackHeights(Segment *s)
     }
 
     if (heightsChanged) {
-//        RG_DEBUG << "CompositionModelImpl::setTrackHeights: heights have changed";
+        //RG_DEBUG << "updateTrackHeight(): heights have changed";
         for (segmentcontainer::iterator i = m_composition.begin();
              i != m_composition.end(); ++i) {
             computeSegmentRect(**i);
@@ -1126,9 +1137,9 @@ bool CompositionModelImpl::setTrackHeights(Segment *s)
     return heightsChanged;
 }
 
-QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
+QPoint CompositionModelImpl::topLeft(const Segment& s)
 {
-    Profiler profiler("CompositionModelImpl::computeSegmentOrigin");
+    Profiler profiler("CompositionModelImpl::topLeft");
 
     int trackPosition = m_composition.getTrackPositionById(s.getTrack());
     timeT startTime = s.getStartTime();
@@ -1157,12 +1168,12 @@ void CompositionModelImpl::clearInCache(const Segment* s, bool clearPreview)
         m_segmentRectMap.erase(s);
         m_segmentEndTimeMap.erase(s);
         if (clearPreview)
-            removePreviewCache(s);
+            deleteCachedPreview(s);
     } else { // clear the whole cache
         m_segmentRectMap.clear();
         m_segmentEndTimeMap.clear();
         if (clearPreview)
-            clearPreviewCache();
+            deleteCachedPreviews();
     }
 }
 
@@ -1176,17 +1187,20 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
 {
     Profiler profiler("CompositionModelImpl::computeSegmentRect");
 
-    QPoint origin = computeSegmentOrigin(s);
+    QPoint origin = topLeft(s);
 
     bool isRecordingSegment = isRecording(&s);
 
     if (!isRecordingSegment) {
         timeT endTime = 0;
 
+        // ??? This is the only caller.  Inline this function.
         CompositionRect cachedCR = getFromCache(&s, endTime);
         // don't cache repeating segments - it's just hopeless, because the segment's rect may have to be recomputed
         // in other cases than just when the segment itself is moved,
         // for instance if another segment is moved over it
+        // ??? Inline isCachedRectCurrent().  This is the only caller.
+        //     Make it a bool isCachedRectCurrent.
         if (!s.isRepeating() && cachedCR.isValid() && isCachedRectCurrent(s, cachedCR, origin, endTime)) {
             //RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
             //         << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
@@ -1385,7 +1399,8 @@ CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const Q
 //              << rect.width() << "x" << rect.height() << ", top = " << top
 //              << ", bottom = " << bottom;
     
-    setTrackHeights();
+    // Update track height for all tracks.
+    updateTrackHeight();
     
     CompositionModelImpl::YCoordVector list;
 
@@ -1402,8 +1417,8 @@ CompositionModelImpl::NotationPreview *
 CompositionModelImpl::getNotationPreview(const Segment *s)
 {
     // ??? Consider combining getNotationPreview() and
-    //     refreshNotationPreviewCache().  The only caller of
-    //     refreshNotationPreviewCache() (segmentAdded()) has no need
+    //     updateCachedNotationPreview().  The only caller of
+    //     updateCachedNotationPreview() (segmentAdded()) has no need
     //     to call it at all.
 
     // Try the cache.
@@ -1411,7 +1426,7 @@ CompositionModelImpl::getNotationPreview(const Segment *s)
 
     // If there was nothing in the cache for this segment, generate it.
     if (!notationPreview)
-        notationPreview = refreshNotationPreviewCache(s);
+        notationPreview = updateCachedNotationPreview(s);
 
     return notationPreview;
 }
@@ -1423,7 +1438,7 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segm
 
     /**
      * ??? This is called recursively.  This triggers the async preview
-     *     generation process (refreshAudioPeaksCache()) and is called
+     *     generation process (updateCachedAudioPeaks()) and is called
      *     again once the process completes
      *     (by slotAudioPreviewComplete()) to get the info from the cache.
      *     This is too tangled.  Simplify.
@@ -1432,7 +1447,7 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segm
     AudioPeaks* apData = m_audioPeaksCache[s];
 
     if (!apData) {
-        apData = refreshAudioPeaksCache(s);
+        apData = updateCachedAudioPeaks(s);
     }
 
     //RG_DEBUG << "CompositionModelImpl::getAudioPeaks returning";
@@ -1440,7 +1455,7 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segm
 }
 
 CompositionModelImpl::NotationPreview *
-CompositionModelImpl::refreshNotationPreviewCache(const Segment *segment)
+CompositionModelImpl::updateCachedNotationPreview(const Segment *segment)
 {
     NotationPreview *notationPreview = new NotationPreview();
 
@@ -1459,9 +1474,9 @@ CompositionModelImpl::refreshNotationPreviewCache(const Segment *segment)
 }
 
 CompositionModelImpl::AudioPeaks *
-CompositionModelImpl::refreshAudioPeaksCache(const Segment *s)
+CompositionModelImpl::updateCachedAudioPeaks(const Segment *s)
 {
-    //RG_DEBUG << "refreshAudioPeaksCache(" << s << ")";
+    //RG_DEBUG << "updateCachedAudioPeaks(" << s << ")";
 
     // ??? makePreviewCache() calls this.  That's probably not necessary
     //     given that one way or another the preview generation will occur.
