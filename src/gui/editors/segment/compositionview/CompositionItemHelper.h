@@ -45,7 +45,7 @@ public:
 
     /// return the CompositionItemPtr in the model which references the same segment as referenceItem
     static CompositionItemPtr findSiblingCompositionItem(
-            const CompositionModelImpl::ItemContainer &items,
+            const CompositionModelImpl::ChangingSegmentSet &items,
             CompositionItemPtr referenceItem);
 
 };

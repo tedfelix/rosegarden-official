@@ -125,10 +125,10 @@ CompositionItemPtr CompositionItemHelper::makeCompositionItem(Rosegarden::Segmen
 }
 
 CompositionItemPtr CompositionItemHelper::findSiblingCompositionItem(
-        const CompositionModelImpl::ItemContainer &items,
+        const CompositionModelImpl::ChangingSegmentSet &items,
         CompositionItemPtr referenceItem)
 {
-    CompositionModelImpl::ItemContainer::const_iterator it;
+    CompositionModelImpl::ChangingSegmentSet::const_iterator it;
     Rosegarden::Segment *referenceSegment = referenceItem->getSegment();
 
     // For each item in the incoming container

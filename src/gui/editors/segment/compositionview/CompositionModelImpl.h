@@ -272,42 +272,35 @@ public:
 
     /// Compare Segment pointers in a CompositionItem.
     /**
-     * Used by ItemContainer to order the CompositionItem objects.
-     *
-     * Is this really better than just comparing the CompositionItemPtr
-     * addresses?
-     *
-     *    // Compare the QPointer addresses
-     *    return c1.data() < c2.data();
+     * Used by ChangingSegmentSet to order the CompositionItem objects.
      *
      * All this indexing with pointers gives me the willies.  IDs are safer.
      */
-    struct CompositionItemCompare {
+    struct CompositionItemPtrCompare {
         bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const
         {
-            // This strikes me as odd.  I think the one below is better.
-            //return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
-
             // operator< on Segment *'s?  I guess order isn't too important.
             return c1->getSegment() < c2->getSegment();
+
+            // ??? Is the above better than just comparing the
+            //     CompositionItemPtr addresses?
+            // Compare the QPointer addresses
+            //return c1.data() < c2.data();
         }
     };
 
-    // ??? Does this really need to be a std::set?  Audit all users.
-    typedef std::set<CompositionItemPtr, CompositionItemCompare> ItemContainer;
-
-    //ChangeType getChangeType() const  { return m_changeType; }
+    /**
+     * startChange() is the reason this is a std::set.  startChangeSelection()
+     * calls startChange() repeatedly with each selected segment.
+     * startChange() uses std::set::find() to determine whether that segment
+     * is already in m_changingSegments.  With a std::vector, this would be an
+     * exponential search.  In practice, what is the worst use-case?
+     */
+    typedef std::set<CompositionItemPtr, CompositionItemPtrCompare>
+            ChangingSegmentSet;
 
     /// Get the segments that are moving or resizing.
-    ItemContainer &getChangingItems()  { return m_changingItems; }
-
-    /// Emit needContentUpdate() signal
-    /**
-     * Used while segments are moving to update the display.
-     *
-     * rename: emitRefreshView()
-     */
-    void signalContentChange();
+    ChangingSegmentSet &getChangingSegments()  { return m_changingSegments; }
 
     /// Cleanup after move/resize.
     void endChange();
@@ -337,17 +330,18 @@ public:
     //int getCompositionLength();
 
 signals:
-    /// rename: refreshView
+    /// rename: needUpdate()
     void needContentUpdate();
-    /// rename: refreshView
+    /// rename: needUpdate()
     void needContentUpdate(const QRect &);
+
     void needArtifactsUpdate();
+
+    void needSizeUpdate();
 
     /// Connected to RosegardenMainViewWidget::slotSelectedSegments().
     // ??? rename: selectionChanged()
     void selectedSegments(const SegmentSelection &);
-
-    void needSizeUpdate();
 
 public slots:
     void slotAudioFileFinalized(Segment *);
@@ -473,7 +467,7 @@ private:
     void clearInCache(const Segment *, bool clearPreviewCache = false);
 
     /// Get all the segments at a point.
-    ItemContainer getItemsAt(const QPoint &);
+    ChangingSegmentSet getItemsAt(const QPoint &);
 
     /// Used by getSegmentRects() to return a reference for speed.
     SegmentRects m_segmentRects;
@@ -504,7 +498,7 @@ private:
     bool isMoving(const Segment *) const;
 
     ChangeType m_changeType;
-    ItemContainer m_changingItems;
+    ChangingSegmentSet m_changingSegments;
 
     typedef std::vector<CompositionItemPtr> ItemGC;
     ItemGC m_itemGC;

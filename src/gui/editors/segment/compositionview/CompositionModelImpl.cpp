@@ -91,7 +91,7 @@ CompositionModelImpl::CompositionModelImpl(
     m_recordingSegments(),
     m_pointerTimePos(0),
     m_changeType(ChangeMove),
-    m_changingItems(),
+    m_changingSegments(),
     m_itemGC()
 {
     m_composition.addObserver(this);
@@ -814,9 +814,9 @@ void CompositionModelImpl::clearRecordingItems()
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
 {
-    ItemContainer::const_iterator movEnd = m_changingItems.end();
+    ChangingSegmentSet::const_iterator movEnd = m_changingSegments.end();
 
-    for (ItemContainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
+    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
         const CompositionItem* ci = *i;
         const Segment* s = ci->getSegment();
         if (sm == s)
@@ -831,11 +831,11 @@ bool CompositionModelImpl::isRecording(const Segment* s) const
     return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
 }
 
-CompositionModelImpl::ItemContainer CompositionModelImpl::getItemsAt(const QPoint& point)
+CompositionModelImpl::ChangingSegmentSet CompositionModelImpl::getItemsAt(const QPoint& point)
 {
     //RG_DEBUG << "CompositionModelImpl::getItemsAt()";
 
-    ItemContainer res;
+    ChangingSegmentSet res;
 
     const segmentcontainer& segments = m_composition.getSegments();
 
@@ -882,7 +882,7 @@ CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
 
     // This returns *copies* of the CompositionItem objects that must be
     // deleted.
-    ItemContainer items = getItemsAt(pos);
+    ChangingSegmentSet items = getItemsAt(pos);
 
     //RG_DEBUG << "getFirstItemAt() got" << items.size() << "items";
 
@@ -909,12 +909,12 @@ CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
     //     overlapping becomes impossible and all this special handling
     //     can go.
 
-    CompositionModelImpl::ItemContainer::iterator maxZItemIter = items.begin();
+    CompositionModelImpl::ChangingSegmentSet::iterator maxZItemIter = items.begin();
     CompositionItemPtr maxZItem = *(maxZItemIter);
     unsigned int maxZ = maxZItem->z();
 
     // For each item
-    for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
+    for (CompositionModelImpl::ChangingSegmentSet::iterator i = items.begin();
          i != items.end(); ++i) {
         CompositionItemPtr item = *i;
         // If this one has the greatest z so far
@@ -929,7 +929,7 @@ CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
     items.erase(maxZItemIter);
 
     // Delete all the others.
-    for (CompositionModelImpl::ItemContainer::iterator i = items.begin();
+    for (CompositionModelImpl::ChangingSegmentSet::iterator i = items.begin();
          i != items.end(); ++i)
         delete *i;
 
@@ -986,12 +986,6 @@ void CompositionModelImpl::selectionHasChanged()
     emit selectedSegments(getSelectedSegments());
 }
 
-void CompositionModelImpl::signalContentChange()
-{
-    //RG_DEBUG << "CompositionModelImpl::signalContentChange";
-    emit needContentUpdate();
-}
-
 void CompositionModelImpl::clearSelected()
 {
     //RG_DEBUG << "CompositionModelImpl::clearSelected";
@@ -1020,7 +1014,7 @@ void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType chang
     m_changeType = change;
 
     // If we already know this segment is changing
-    if (m_changingItems.find(item) != m_changingItems.end()) {
+    if (m_changingSegments.find(item) != m_changingSegments.end()) {
         //RG_DEBUG << "CompositionModelImpl::startChange : item already in";
 
         // Put this one on the garbage collection list for later cleanup
@@ -1030,7 +1024,7 @@ void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType chang
         // Save the original rectangle for this segment
         item->saveRect();
 
-        m_changingItems.insert(item);
+        m_changingSegments.insert(item);
     }
 }
 
@@ -1050,12 +1044,12 @@ void CompositionModelImpl::endChange()
     //RG_DEBUG << "CompositionModelImpl::endChange";
 
     // For each segment that was changing
-    for (ItemContainer::const_iterator i = m_changingItems.begin();
-            i != m_changingItems.end(); ++i) {
+    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin();
+            i != m_changingSegments.end(); ++i) {
         delete *i;
     }
 
-    m_changingItems.clear();
+    m_changingSegments.clear();
 
     // For each segment in the garbage collection list
     for (ItemGC::iterator i = m_itemGC.begin();
@@ -1345,8 +1339,8 @@ CompositionModelImpl::getSegmentRects(
 
     // changing items (moving segments)
 
-    ItemContainer::iterator movEnd = m_changingItems.end();
-    for (ItemContainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
+    ChangingSegmentSet::iterator movEnd = m_changingSegments.end();
+    for (ChangingSegmentSet::iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
         CompositionRect segmentRect((*i)->rect());
         if (segmentRect.intersects(clipRect)) {
             Segment *s = CompositionItemHelper::getSegment(*i);

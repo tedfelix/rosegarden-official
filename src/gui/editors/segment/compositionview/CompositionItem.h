@@ -45,6 +45,8 @@ class SnapGrid;
  * what it is.  rect() could be a helper function, and m_savedRect could
  * be kept private since its mutator is interesting.
  * It would be a lot easier to understand.
+ *
+ * ??? rename: ChangingSegment
  */
 class CompositionItem : public QObject {
 public:

@@ -119,7 +119,8 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
             m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
 
 
-            CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
+            CompositionModelImpl::ChangingSegmentSet& changingItems =
+                    m_canvas->getModel()->getChangingSegments();
             // set m_currentIndex to its "sibling" among selected (now moving) items
             setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
 
@@ -165,14 +166,15 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
 
         if (changeMade()) {
 
-            CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
+            CompositionModelImpl::ChangingSegmentSet& changingItems =
+                    m_canvas->getModel()->getChangingSegments();
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
                 (changingItems.size() == 1 ? tr("Move Segment") : tr("Move Segments"), &comp);
 
 
-            CompositionModelImpl::ItemContainer::iterator it;
+            CompositionModelImpl::ChangingSegmentSet::iterator it;
 
             for (it = changingItems.begin();
                     it != changingItems.end();
@@ -249,12 +251,13 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
         clearContextHelp();
     }
 
-    CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
+    CompositionModelImpl::ChangingSegmentSet& changingItems =
+            m_canvas->getModel()->getChangingSegments();
 
     //         RG_DEBUG << "SegmentMover::mouseMoveEvent : nb changingItems = "
     //                  << changingItems.size() << endl;
 
-    CompositionModelImpl::ItemContainer::iterator it;
+    CompositionModelImpl::ChangingSegmentSet::iterator it;
     int guideX = 0;
     int guideY = 0;
     QRect updateRect;
@@ -328,8 +331,10 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
         setChangeMade(true);
     }
 
-    if (changeMade())
-        m_canvas->getModel()->signalContentChange();
+    if (changeMade()) {
+        // Make sure the segments are redrawn.
+        m_canvas->slotUpdateAll();
+    }
 
     guideX = m_currentIndex->rect().x();
     guideY = m_currentIndex->rect().y();

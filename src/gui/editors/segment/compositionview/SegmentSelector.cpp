@@ -272,8 +272,9 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     if (m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
 
-        CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
-        CompositionModelImpl::ItemContainer::iterator it;
+        CompositionModelImpl::ChangingSegmentSet& changingItems =
+                m_canvas->getModel()->getChangingSegments();
+        CompositionModelImpl::ChangingSegmentSet::iterator it;
 
         if (changeMade()) {
 
@@ -433,10 +434,11 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             m_selectionMoveStarted = true;
         }
 
-        CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
+        CompositionModelImpl::ChangingSegmentSet& changingItems =
+                m_canvas->getModel()->getChangingSegments();
         setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
 
-        CompositionModelImpl::ItemContainer::iterator it;
+        CompositionModelImpl::ChangingSegmentSet::iterator it;
         int guideX = 0;
         int guideY = 0;
 
@@ -483,8 +485,10 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             setChangeMade(true);
         }
 
-        if (changeMade())
-            m_canvas->getModel()->signalContentChange();
+        if (changeMade()) {
+            // Make sure the segments are redrawn.
+            m_canvas->slotUpdateAll();
+        }
 
         guideX = m_currentIndex->rect().x();
         guideY = m_currentIndex->rect().y();
