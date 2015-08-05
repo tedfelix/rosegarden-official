@@ -60,7 +60,8 @@ class AudioPreviewThread;
  *
  *   - m_segmentRectMap
  *   - m_notationPreviewCache
- *   - m_audioPreviewDataCache
+ *   - m_audioPeaksCache
+ *   - m_audioPreviewImageCache
  *   - m_selectedSegments
  *
  * The Qt interpretation of the term "Model" is a layer of functionality
@@ -420,6 +421,14 @@ private:
 
     // --- Audio Previews ---------------------------------
 
+    // AudioPreview generation happens in three steps.
+    //   1. The AudioPeaks are generated asynchronously for a segment.
+    //      See AudioPreviewUpdater.
+    //   2. The audio preview image is created from the AudioPeaks.
+    //      See AudioPreviewPainter.
+    //   3. An AudioPreview object is created using the audio preview image.
+    //      See makeAudioPreview().
+
     /// Make an AudioPreview for a Segment and add it to audioPreviews.
     void makeAudioPreview(
             AudioPreviews *audioPreviews, const Segment *,
@@ -432,51 +441,37 @@ private:
      */
     QImageVector getAudioPreviewImage(const Segment *);
 
-    /// But this is also used to generate the preview image asynchronously.
-    /**
-     * ??? This is called recursively.  This triggers the async preview
-     *     generation process and is called again once the process completes
-     *     (by slotAudioPreviewComplete()) to get the info from the cache.
-     *     This is too tangled.  Simplify.
-     */
+    /// Also generates the preview image asynchronously.
     AudioPeaks *getAudioPeaks(const Segment *);
 
-    // ??? makePreviewCache() calls this.  That's probably not necessary
-    //     given that one way or another the preview generation will occur.
-    //     If we can get rid of the call from makePreviewCache(), we can
-    //     inline this into its only remaining caller.
-    // ??? rename: refreshAudioPeaksCache()
-    AudioPeaks *makeAudioPreviewDataCache(const Segment *);
+    /// Also generates the preview image asynchronously.
+    AudioPeaks *refreshAudioPeaksCache(const Segment *);
 
     /// Create audio peaks for a segment asynchronously.
     /**
      * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
      * slotAudioPreviewComplete() is called, which in turn calls
-     * postProcessAudioPreview().
+     * refreshPreviewImageCache().
+     *
+     * Also generates the preview image asynchronously.
      */
-    // ??? rename: makeAudioPeaksAsync()?
-    void updatePreviewCacheForAudioSegment(const Segment *);
+    void makeAudioPeaksAsync(const Segment *);
 
-    /// Convert AudioPeaks into a QImageVector and add to m_audioSegmentPreviewMap.
-    // ??? rename: refreshPreviewImageCache()
-    QRect postProcessAudioPreview(AudioPeaks *apData, const Segment *);
+    /// Convert AudioPeaks into a QImageVector and add to m_audioPreviewImageCache.
+    QRect refreshPreviewImageCache(AudioPeaks *, const Segment *);
 
-    // ??? rename: AudioPeaksThread, m_audioPeaksThread
+    /// More of an AudioPeaksThread.
     AudioPreviewThread *m_audioPreviewThread;
 
-    // ??? rename: AudioPeaksGenerator*
+    /// More of an AudioPeaksGeneratorMap.
     typedef std::map<const Segment *, AudioPreviewUpdater *>
             AudioPreviewUpdaterMap;
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
 
-    // Audio Peaks
-    // ??? rename: AudioPeakCache, m_audioPeakCache
-    typedef std::map<const Segment *, AudioPeaks *> AudioPreviewDataCache;
-    AudioPreviewDataCache m_audioPreviewDataCache;
+    typedef std::map<const Segment *, AudioPeaks *> AudioPeaksCache;
+    AudioPeaksCache m_audioPeaksCache;
 
-    // Audio Preview Images
-    // ??? rename: m_audioPreviewImageCache
-    std::map<const Segment *, QImageVector> m_audioSegmentPreviewMap;
+    std::map<const Segment *, QImageVector> m_audioPreviewImageCache;
 
     // --- Notation and Audio Previews --------------------
 

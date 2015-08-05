@@ -76,8 +76,8 @@ CompositionModelImpl::CompositionModelImpl(
     m_notationPreviewCache(),
     m_audioPreviewThread(0),
     m_audioPreviewUpdaterMap(),
-    m_audioPreviewDataCache(),
-    m_audioSegmentPreviewMap(),
+    m_audioPeaksCache(),
+    m_audioPreviewImageCache(),
     m_trackHeights(),
     m_segmentOrderer(),
     m_segmentRectMap(),
@@ -148,8 +148,8 @@ CompositionModelImpl::~CompositionModelImpl()
          i != m_notationPreviewCache.end(); ++i) {
         delete i->second;
     }
-    for (AudioPreviewDataCache::iterator i = m_audioPreviewDataCache.begin();
-         i != m_audioPreviewDataCache.end(); ++i) {
+    for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
+         i != m_audioPeaksCache.end(); ++i) {
         delete i->second;
     }
 }
@@ -381,15 +381,15 @@ void CompositionModelImpl::clearPreviewCache()
          i != m_notationPreviewCache.end(); ++i) {
         delete i->second;
     }
-    for (AudioPreviewDataCache::iterator i = m_audioPreviewDataCache.begin();
-         i != m_audioPreviewDataCache.end(); ++i) {
+    for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
+         i != m_audioPeaksCache.end(); ++i) {
         delete i->second;
     }
 
     m_notationPreviewCache.clear();
-    m_audioPreviewDataCache.clear();
+    m_audioPeaksCache.clear();
 
-    m_audioSegmentPreviewMap.clear();
+    m_audioPreviewImageCache.clear();
 
     for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
          i != m_audioPreviewUpdaterMap.end(); ++i) {
@@ -406,7 +406,7 @@ void CompositionModelImpl::clearPreviewCache()
             // This will create the audio preview updater.  The
             // preview won't be calculated and cached until the
             // updater completes and calls back.
-            updatePreviewCacheForAudioSegment((*i));
+            makeAudioPeaksAsync((*i));
         }
     }
 }
@@ -488,10 +488,10 @@ void CompositionModelImpl::makeNotationPreview(
     }
 }
 
-void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment)
+void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
 {
     if (m_audioPreviewThread) {
-        //RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started";
+        //RG_DEBUG << "makeAudioPeaksAsync() - new audio preview started";
 
         CompositionRect segRect = computeSegmentRect(*segment);
         segRect.setWidth(segRect.getBaseWidth()); // don't use repeating area
@@ -518,7 +518,7 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
         m_audioPreviewUpdaterMap[segment]->update();
 
     } else {
-        RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - no audio preview thread set";
+        RG_DEBUG << "makeAudioPeaksAsync() - no audio preview thread set";
     }
 }
 
@@ -539,7 +539,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
             apData->channels = channels;
             apData->values = values;  // ??? COPY performance issue?
             // ??? This is the only call to this function.  Inline it.
-            updateRect = postProcessAudioPreview(apData, apu->getSegment());
+            updateRect = refreshPreviewImageCache(apData, apu->getSegment());
         }
     }
 
@@ -547,14 +547,14 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
         emit needUpdate(updateRect);
 }
 
-QRect CompositionModelImpl::postProcessAudioPreview(AudioPeaks* apData, const Segment* segment)
+QRect CompositionModelImpl::refreshPreviewImageCache(AudioPeaks* apData, const Segment* segment)
 {
-    //RG_DEBUG << "CompositionModelImpl::postProcessAudioPreview()";
+    //RG_DEBUG << "refreshPreviewImageCache()";
 
     AudioPreviewPainter previewPainter(*this, apData, m_composition, segment);
     previewPainter.paintPreviewImage();
 
-    m_audioSegmentPreviewMap[segment] = previewPainter.getPreviewImage();
+    m_audioPreviewImageCache[segment] = previewPainter.getPreviewImage();
 
     return previewPainter.getSegmentRect();
 }
@@ -598,7 +598,7 @@ CompositionModelImpl::getAudioPreviewImage(const Segment* s)
     // audio preview.
     getAudioPeaks(s);
 
-    return m_audioSegmentPreviewMap[s];
+    return m_audioPreviewImageCache[s];
 }
 
 void CompositionModelImpl::eventAdded(const Segment *s, Event *)
@@ -648,7 +648,7 @@ void CompositionModelImpl::makePreviewCache(const Segment *s)
     if (s->getType() == Segment::Internal) {
         refreshNotationPreviewCache(s);
     } else {
-        makeAudioPreviewDataCache(s);
+        refreshAudioPeaksCache(s);
     }
 }
 
@@ -659,10 +659,10 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
         delete notationPreview;
         m_notationPreviewCache.erase(s);
     } else {
-        AudioPeaks *apd = m_audioPreviewDataCache[s];
+        AudioPeaks *apd = m_audioPeaksCache[s];
         delete apd;
-        m_audioPreviewDataCache.erase(s);
-        m_audioSegmentPreviewMap.erase(s);
+        m_audioPeaksCache.erase(s);
+        m_audioPreviewImageCache.erase(s);
     }
 
 }
@@ -1421,10 +1421,18 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segm
     Profiler profiler("CompositionModelImpl::getAudioPeaks");
     //RG_DEBUG << "CompositionModelImpl::getAudioPeaks";
 
-    AudioPeaks* apData = m_audioPreviewDataCache[s];
+    /**
+     * ??? This is called recursively.  This triggers the async preview
+     *     generation process (refreshAudioPeaksCache()) and is called
+     *     again once the process completes
+     *     (by slotAudioPreviewComplete()) to get the info from the cache.
+     *     This is too tangled.  Simplify.
+     */
+
+    AudioPeaks* apData = m_audioPeaksCache[s];
 
     if (!apData) {
-        apData = makeAudioPreviewDataCache(s);
+        apData = refreshAudioPeaksCache(s);
     }
 
     //RG_DEBUG << "CompositionModelImpl::getAudioPeaks returning";
@@ -1450,17 +1458,23 @@ CompositionModelImpl::refreshNotationPreviewCache(const Segment *segment)
     return notationPreview;
 }
 
-CompositionModelImpl::AudioPeaks* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
+CompositionModelImpl::AudioPeaks *
+CompositionModelImpl::refreshAudioPeaksCache(const Segment *s)
 {
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")";
+    //RG_DEBUG << "refreshAudioPeaksCache(" << s << ")";
+
+    // ??? makePreviewCache() calls this.  That's probably not necessary
+    //     given that one way or another the preview generation will occur.
+    //     If we can get rid of the call from makePreviewCache(), we can
+    //     inline this into its only remaining caller, getAudioPeaks().
 
     AudioPeaks* apData = new AudioPeaks();
-    updatePreviewCacheForAudioSegment(s);
+    makeAudioPeaksAsync(s);
 
     // Avoid potential memory leaks.
-    //delete m_audioPreviewDataCache[s];
+    //delete m_audioPeaksCache[s];
 
-    m_audioPreviewDataCache[s] = apData;
+    m_audioPeaksCache[s] = apData;
 
     return apData;
 }
