@@ -217,7 +217,9 @@ public:
     CompositionItemPtr getFirstItemAt(const QPoint &pos);
 
     /// See CompositionView::clearSegmentRectsCache()
-    // ??? Audio and Notation Previews too.  Need an "ALL" category.
+    /**
+     * ??? Audio and Notation Previews too.  Need an "ALL" category.
+     */
     void clearSegmentRectsCache(bool clearPreviews = false)
             { clearInCache(0, clearPreviews); }
 
@@ -225,12 +227,9 @@ public:
 
     // --- Selection --------------------------------------
 
-    void setSelected(CompositionItemPtr, bool selected = true);
     void setSelected(Segment *, bool selected = true);
-    //void setSelected(const ItemContainer&);
     void selectSegments(const SegmentSelection &segments);
     void clearSelected();
-    bool isSelected(CompositionItemPtr) const;
     bool isSelected(const Segment *) const;
     bool haveSelection() const  { return !m_selectedSegments.empty(); }
     bool haveMultipleSelection() const  { return m_selectedSegments.size() > 1; }

@@ -99,10 +99,10 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
     setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
 
     if (m_currentIndex) {
-        if (!m_canvas->getModel()->isSelected(m_currentIndex)) {
+        if (!m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
 
             m_canvas->getModel()->clearSelected();
-            m_canvas->getModel()->setSelected(m_currentIndex);
+            m_canvas->getModel()->setSelected(m_currentIndex->getSegment());
             m_canvas->getModel()->signalSelection();
         }
     }

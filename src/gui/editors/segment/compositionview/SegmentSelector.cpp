@@ -116,7 +116,9 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
     // not in the selection - then also clear the selection.
     //
     if ((!m_segmentAddMode && !item) ||
-        (!m_segmentAddMode && !(m_canvas->getModel()->isSelected(item)))) {
+        (!m_segmentAddMode &&
+         !(m_canvas->getModel()->isSelected(item->getSegment())))) {
+
         m_canvas->getModel()->clearSelected();
     }
 
@@ -152,7 +154,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
             // at a time.
             //
             m_canvas->getModel()->clearSelected();
-            m_canvas->getModel()->setSelected(item);
+            m_canvas->getModel()->setSelected(item->getSegment());
 
             m_dispatchTool = resizer;
 
@@ -168,14 +170,16 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         bool selecting = true;
         
-        if (m_segmentAddMode && m_canvas->getModel()->isSelected(item)) {
+        if (m_segmentAddMode  &&
+            m_canvas->getModel()->isSelected(item->getSegment())) {
+
             selecting = false;
         } else {
             // put the segment in 'move' mode only if it's being selected
             m_canvas->getModel()->startChange(item, CompositionModelImpl::ChangeMove);
         }
 
-        m_canvas->getModel()->setSelected(item, selecting);
+        m_canvas->getModel()->setSelected(item->getSegment(), selecting);
 
         //RG_DEBUG << "SegmentSelector::mousePressEvent - m_currentIndex = " << item << endl;
         m_currentIndex = item;
@@ -266,7 +270,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     Composition &comp = m_doc->getComposition();
 
-    if (m_canvas->getModel()->isSelected(m_currentIndex)) {
+    if (m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
 
         CompositionModelImpl::ItemContainer& changingItems = m_canvas->getModel()->getChangingItems();
         CompositionModelImpl::ItemContainer::iterator it;
@@ -413,7 +417,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
-    if (m_canvas->getModel()->isSelected(m_currentIndex)) {
+    if (m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
 
         // If shift isn't being held down
         if ((e->modifiers() & Qt::ShiftModifier) == 0) {

@@ -88,8 +88,11 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
     // Clear selection if we're clicking on an item that's not in it
     // and we're not in add mode
 
-    if (selector && item &&
-            !m_canvas->getModel()->isSelected(item) && !selector->isSegmentAdding()) {
+    if (selector &&
+        item &&
+        !m_canvas->getModel()->isSelected(item->getSegment()) &&
+        !selector->isSegmentAdding()) {
+
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->signalSelection();
 // 		m_canvas->updateContents();

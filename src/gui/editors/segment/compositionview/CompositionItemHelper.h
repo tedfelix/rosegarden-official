@@ -37,6 +37,8 @@ public:
     static void setStartTime(CompositionItemPtr, timeT, const SnapGrid&);
     static void setEndTime(CompositionItemPtr, timeT, const SnapGrid&);
     static Segment* getSegment(CompositionItemPtr);
+    // ??? This returns an object that must be deleted by the caller.
+    //     Audit all callers to make sure they delete this object.
     static CompositionItemPtr makeCompositionItem(Segment*);
     /**
      * return the CompositionItemPtr in the model which references the same segment as referenceItem

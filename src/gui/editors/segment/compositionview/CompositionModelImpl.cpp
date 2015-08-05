@@ -968,24 +968,6 @@ void CompositionModelImpl::pointerPosChanged(int x)
     //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
 }
 
-void CompositionModelImpl::setSelected(CompositionItemPtr item, bool selected)
-{
-    if (item) {
-        // Delegate to the version that takes a segment
-        setSelected(item->getSegment(), selected);
-    }
-}
-
-#if 0
-void CompositionModelImpl::setSelected(const ItemContainer &items)
-{
-    // For each CompositionItem
-    for (ItemContainer::const_iterator i = items.begin(); i != items.end(); ++i) {
-        setSelected(*i);
-    }
-}
-#endif
-
 void CompositionModelImpl::setSelected(Segment *segment, bool selected)
 {
     if (!segment) {
@@ -1032,11 +1014,6 @@ void CompositionModelImpl::clearSelected()
 
     m_selectedSegments.clear();
     emit needContentUpdate();
-}
-
-bool CompositionModelImpl::isSelected(CompositionItemPtr item) const
-{
-    return item ? isSelected(item->getSegment()) : false;
 }
 
 bool CompositionModelImpl::isSelected(const Segment *s) const

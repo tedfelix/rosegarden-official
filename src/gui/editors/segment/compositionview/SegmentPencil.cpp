@@ -217,9 +217,8 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
             segment->setLabel( track->getPresetLabel().c_str() );
         }
 
-        CompositionItemPtr item = CompositionItemHelper::makeCompositionItem(segment);
         m_canvas->getModel()->clearSelected();
-        m_canvas->getModel()->setSelected(item);
+        m_canvas->getModel()->setSelected(segment);
         m_canvas->getModel()->signalSelection();
 
         m_canvas->hideNewSegment();
