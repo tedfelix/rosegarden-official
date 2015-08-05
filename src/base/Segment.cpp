@@ -381,7 +381,7 @@ Segment::setStartTime(timeT t)
 	   m_clefKeyList
 
       1 is done explicitly here.  3, 4, 5, and 7 are done en masse
-      below.  6 is accomplished via AllEventsChanged.  2 is no longer
+      below.  6 is accomplished via allEventsChanged.  2 is no longer
       wanted since we need to insert the same event.
      **/
 
@@ -390,7 +390,7 @@ Segment::setStartTime(timeT t)
     // whole set.
     for (iterator i = begin(); i != end(); ++i) {
         Event *e = *i;
-        // AllEventsChanged is allowed to assume the address points to
+        // allEventsChanged is allowed to assume the address points to
         // the Event it knew about, so we need the same object to be
         // removed and added, so we can't use copyMoving.
         e->unsafeChangeTime(dt);
@@ -418,7 +418,7 @@ Segment::setStartTime(timeT t)
         7. Thru notifyAdd, added clefs and keys to m_clefKeyList
 
         1 and 7 are done explicitly here.  2, 3 & 5 are done en masse.
-        6 is accomplished via AllEventsChanged.  4 works because we
+        6 is accomplished via allEventsChanged.  4 works because we
         keep the same event object.
      **/
     for (int i = 0; i < int(events.size()); ++i) {
@@ -430,7 +430,7 @@ Segment::setStartTime(timeT t)
     // Handle updates and notifications just once.
     for (ObserverSet::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
-        (*i)->AllEventsChanged(this);
+        (*i)->allEventsChanged(this);
     }
     notifyEndMarkerChange(dt < 0);
     notifyStartChanged(m_startTime);
@@ -1750,9 +1750,9 @@ Segment::dumpObservers()
 
 void
 SegmentObserver::
-AllEventsChanged(const Segment *s)
+allEventsChanged(const Segment *s)
 {
-    Profiler profiler("SegmentObserver::AllEventsChanged");
+    Profiler profiler("SegmentObserver::allEventsChanged");
     for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
         Event *e = *i;
         eventRemoved(s, e);

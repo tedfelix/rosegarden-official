@@ -375,8 +375,7 @@ private:
     //     endMarkerTimeChanged() feels more like a Segment thing.
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
-    // ??? naming standards
-    virtual void AllEventsChanged(const Segment *);
+    virtual void allEventsChanged(const Segment *);
     virtual void appearanceChanged(const Segment *);
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
     virtual void segmentDeleted(const Segment *)
@@ -384,45 +383,45 @@ private:
 
     /// Make a NotationPreviewRange for a Segment.
     /**
-     * Calls getNotationPreviewData().  Scans the data for the relevant
-     * range.  Assembles a NotationPreviewRange and adds it to ranges.
-     *
-     * ??? rename: makeNotationPreviewRange()
+     * Calls getNotationPreview() to get the preview for the segment.
+     * Scans the NotationPreview for the range within the clipRect.
+     * Assembles a NotationPreviewRange and adds it to ranges.
      */
-    void makeNotationPreviewRects(
+    void makeNotationPreviewRange(
             QPoint basePoint, const Segment *segment,
             const QRect &clipRect, NotationPreviewRanges *ranges);
 
     /// Make a NotationPreviewRange for a Changing Segment.
     /**
-     * Calls getNotationPreviewData().  Scans the data for the relevant
-     * range.  Assembles a NotationPreviewRange and adds it to ranges.
+     * Calls getNotationPreview() to get the preview for the segment.
+     * Scans the NotationPreview for the range within the clipRect.
+     * Assembles a NotationPreviewRange and adds it to ranges.
      *
-     * Differs from makeNotationPreviewRects() in that it takes into
+     * Differs from makeNotationPreviewRange() in that it takes into
      * account that the Segment is changing (moving, resizing, etc...).
-     *
-     * ??? rename: makeNotationPreviewRangeCS()
      */
-    void makeNotationPreviewRectsMovingSegment(
+    void makeNotationPreviewRangeCS(
             QPoint basePoint, const Segment *segment,
             const QRect &currentRect, NotationPreviewRanges *ranges);
 
     /// Get the NotationPreview for a Segment.
     // Keeps NotationPreview's cached since they are expensive to generate.
     // ??? Combine this routine with the next.
-    // ??? rename: getNotationPreview()
-    NotationPreview *getNotationPreviewData(const Segment *);
+    NotationPreview *getNotationPreview(const Segment *);
 
-    /// Generate the NotationPreview in the cache.
+    /// Refresh the NotationPreview in the cache for a Segment.
     // ??? Why not combine this routine and the previous?  They are
     //     only slightly different from each other.  Callers can
-    //     easily make due with the previous routine.
-    // ??? rename: cacheNotationPreview()
-    NotationPreview *makeNotationPreviewDataCache(const Segment *);
+    //     easily make due with the previous routine.  I guess the issue
+    //     would be forcing the cache.  The previous routine doesn't
+    //     force the cache to be refreshed.  This one does.  But it's
+    //     never used for that.
+    NotationPreview *refreshNotationPreviewCache(const Segment *);
 
     /// Create a NotationPreview from a Segment.
     // ??? Although we might combine this with the previous, it's
-    //     probably better on its own.
+    //     probably better on its own since it is a coherent chunk
+    //     of logic.
     // ??? rename: makeNotationPreview()
     void createEventRects(const Segment *, NotationPreview *);
 

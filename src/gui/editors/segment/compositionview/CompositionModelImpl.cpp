@@ -160,12 +160,12 @@ struct RectCompare {
     }
 };
 
-void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
+void CompositionModelImpl::makeNotationPreviewRange(QPoint basePoint,
         const Segment* segment, const QRect& clipRect, NotationPreviewRanges* npRects)
 {
-    Profiler profiler("CompositionModelImpl::makeNotationPreviewRects");
+    Profiler profiler("CompositionModelImpl::makeNotationPreviewRange");
 
-    NotationPreview* cachedNPData = getNotationPreviewData(segment);
+    NotationPreview* cachedNPData = getNotationPreview(segment);
 
     if (cachedNPData->empty())
         return ;
@@ -209,8 +209,7 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
     int xLim = std::min(clipRect.right(), segEndX);
 
-    //RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : basePoint.x : "
-    //         << basePoint.x();
+    //RG_DEBUG << "makeNotationPreviewRange : basePoint.x : " << basePoint.x();
 
     // Search sequentially for the last preview rect in the segment.
     while (npi != npEnd  &&  npi->x() < xLim)
@@ -225,12 +224,12 @@ void CompositionModelImpl::makeNotationPreviewRects(QPoint basePoint,
     npRects->push_back(interval);
 }
 
-void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoint,
+void CompositionModelImpl::makeNotationPreviewRangeCS(QPoint basePoint,
         const Segment* segment, const QRect& currentSR, NotationPreviewRanges* npRects)
 {
     CompositionRect unmovedSR = computeSegmentRect(*segment);
 
-    NotationPreview* cachedNPData = getNotationPreviewData(segment);
+    NotationPreview* cachedNPData = getNotationPreview(segment);
 
     if (cachedNPData->empty())
         return ;
@@ -262,8 +261,7 @@ void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(QPoint basePoin
     // Compute the rightmost x coord (xLim)
     int xLim = m_changeType == ChangeMove ? unmovedSR.right() : currentSR.right();
 
-    //RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRectsMovingSegment : basePoint.x : "
-    //         << basePoint.x();
+    //RG_DEBUG << "makeNotationPreviewRangeCS : basePoint.x : " << basePoint.x();
 
     // Search sequentially for the last preview rect in the segment.
     while (npi != npEnd  &&  npi->x() < xLim)
@@ -598,9 +596,9 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
     emit needUpdate(computeSegmentRect(*s));
 }
 
-void CompositionModelImpl::AllEventsChanged(const Segment *s)
+void CompositionModelImpl::allEventsChanged(const Segment *s)
 {
-     Profiler profiler("CompositionModelImpl::AllEventsChanged()");
+     Profiler profiler("CompositionModelImpl::allEventsChanged()");
     removePreviewCache(s);
     emit needUpdate(computeSegmentRect(*s));
 }
@@ -627,7 +625,7 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
 void CompositionModelImpl::makePreviewCache(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
-        makeNotationPreviewDataCache(s);
+        refreshNotationPreviewCache(s);
     } else {
         makeAudioPreviewDataCache(s);
     }
@@ -650,11 +648,15 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
-    RG_DEBUG << "CompositionModelImpl::segmentAdded: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
+    //RG_DEBUG << "segmentAdded: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
     setTrackHeights(s);
 
+    // ??? Why do it now?  Why not let getNotationPreview() do it
+    //     on its own when/if it is needed?
     makePreviewCache(s);
+
     s->addObserver(this);
+
     emit needUpdate();
 }
 
@@ -1311,7 +1313,7 @@ CompositionModelImpl::getSegmentRects(
 
             // Notation preview data
             if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRects(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
+                makeNotationPreviewRange(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
                 // Audio preview data
             } else if (audioPreview  &&  s->getType() == Segment::Audio) {
                 makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
@@ -1339,7 +1341,7 @@ CompositionModelImpl::getSegmentRects(
 
             // Notation preview data
             if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRectsMovingSegment(segmentRect.topLeft(), s, segmentRect, notationPreview);
+                makeNotationPreviewRangeCS(segmentRect.topLeft(), s, segmentRect, notationPreview);
                 // Audio preview data
             } else if (audioPreview  &&  s->getType() == Segment::Audio) {
                 makeAudioPreviewRects(audioPreview, s, segmentRect, clipRect);
@@ -1376,14 +1378,14 @@ CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const Q
 }
 
 CompositionModelImpl::NotationPreview *
-CompositionModelImpl::getNotationPreviewData(const Segment *s)
+CompositionModelImpl::getNotationPreview(const Segment *s)
 {
     // Try the cache.
     NotationPreview *notationPreview = m_notationPreviewDataCache[s];
 
     // If there was nothing in the cache for this segment, generate it.
     if (!notationPreview)
-        notationPreview = makeNotationPreviewDataCache(s);
+        notationPreview = refreshNotationPreviewCache(s);
 
     return notationPreview;
 }
@@ -1403,19 +1405,23 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPreviewData(cons
     return apData;
 }
 
-CompositionModelImpl::NotationPreview* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+CompositionModelImpl::NotationPreview *
+CompositionModelImpl::refreshNotationPreviewCache(const Segment *segment)
 {
-    NotationPreview* npData = new NotationPreview();
+    NotationPreview *notationPreview = new NotationPreview();
 
     // Create the preview
-    createEventRects(s, npData);
+    createEventRects(segment, notationPreview);
+
+    // Avoid potential memory leaks.
+    //delete m_notationPreviewDataCache[segment];
 
     // Store in the cache.
-    // Callers guarantee that m_notationPreviewDataCache[s] is not currently
-    // pointing to anything.
-    m_notationPreviewDataCache[s] = npData;
+    // Callers guarantee that m_notationPreviewDataCache[segment] is not
+    // currently pointing to anything.
+    m_notationPreviewDataCache[segment] = notationPreview;
 
-    return npData;
+    return notationPreview;
 }
 
 CompositionModelImpl::AudioPeaks* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
@@ -1424,7 +1430,12 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::makeAudioPreviewDataCach
 
     AudioPeaks* apData = new AudioPeaks();
     updatePreviewCacheForAudioSegment(s);
+
+    // Avoid potential memory leaks.
+    //delete m_audioPreviewDataCache[s];
+
     m_audioPreviewDataCache[s] = apData;
+
     return apData;
 }
 
