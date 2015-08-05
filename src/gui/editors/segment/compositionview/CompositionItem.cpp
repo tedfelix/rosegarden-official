@@ -19,8 +19,11 @@
 #include "CompositionItem.h"
 
 #include "CompositionRect.h"
+#include "base/SnapGrid.h"
 
 #include <QRect>
+
+#include <math.h>
 
 
 namespace Rosegarden
@@ -43,6 +46,22 @@ QRect CompositionItem::rect() const
     }
 
     return res;
+}
+
+timeT CompositionItem::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos)
+{
+    timeT startTime = m_segment.getStartTime();
+    timeT repeatInterval = m_segment.getEndMarkerTime() - startTime;
+
+    int repeatWidth = int(nearbyint(grid.getRulerScale()->getXForTime(repeatInterval)));
+
+    int count = (pos.x() - rect().x()) / repeatWidth;
+
+    // Let the caller know that the position was not within a repeat.
+    if (count == 0)
+        return 0;
+
+    return startTime + count * repeatInterval;
 }
 
 

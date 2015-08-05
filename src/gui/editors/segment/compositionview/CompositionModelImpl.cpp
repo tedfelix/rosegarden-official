@@ -1125,26 +1125,6 @@ unsigned int CompositionModelImpl::getCompositionHeight()
             m_grid.getYBinCoordinate(m_composition.getNbTracks()));
 }
 
-timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, CompositionItemPtr cItem)
-{
-    //     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());
-
-    CompositionItem* itemImpl = cItem;
-
-    const Segment* s = itemImpl->getSegment();
-
-    timeT startTime = s->getStartTime();
-    timeT endTime = s->getEndMarkerTime();
-    timeT repeatInterval = endTime - startTime;
-
-    int rWidth = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatInterval)));
-
-    int count = (p.x() - int(itemImpl->rect().x())) / rWidth;
-    RG_DEBUG << "CompositionModelImpl::getRepeatTimeAt() : count = " << count;
-
-    return count != 0 ? startTime + (count * (s->getEndMarkerTime() - s->getStartTime())) : 0;
-}
-
 bool CompositionModelImpl::setTrackHeights(Segment *s)
 {
     bool heightsChanged = false;

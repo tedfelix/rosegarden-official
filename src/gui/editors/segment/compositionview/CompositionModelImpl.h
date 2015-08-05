@@ -22,6 +22,7 @@
 #include "CompositionRect.h"
 #include "CompositionItem.h"
 #include "SegmentOrderer.h"
+#include "base/TimeT.h"  // timeT
 
 #include <QColor>
 #include <QPoint>
@@ -214,18 +215,6 @@ public:
      *     object.
      */
     CompositionItemPtr getFirstItemAt(const QPoint &pos);
-
-    /// Get the start time of the repeat nearest the point.
-    /**
-     * Used by CompositionView to determine the time at which to edit a repeat.
-     *
-     * Looking closely at the implementation of this, we find that this is a
-     * function that brings together CompositionItem and SnapGrid.  It mainly
-     * uses CompositionItem, so it likely belongs there.  Perhaps more as a
-     *
-     *   CompositionItem::getRepeatTimeAt(const SnapGrid &, const QPoint &)
-     */
-    timeT getRepeatTimeAt(const QPoint &, CompositionItemPtr);
 
     /// See CompositionView::clearSegmentRectsCache()
     // ??? Audio and Notation Previews too.  Need an "ALL" category.

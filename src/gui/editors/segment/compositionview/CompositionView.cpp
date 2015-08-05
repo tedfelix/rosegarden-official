@@ -1296,7 +1296,7 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
     // the segment under the mouse pointer.
 
     if (item->isRepeating()) {
-        const timeT time = m_model->getRepeatTimeAt(contentsPos, item);
+        const timeT time = item->getRepeatTimeAt(grid(), contentsPos);
 
         if (time > 0)
             emit editRepeat(item->getSegment(), time);

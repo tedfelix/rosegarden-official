@@ -20,6 +20,7 @@
 #define RG_COMPOSITIONITEM_H
 
 #include "CompositionRect.h"
+#include "base/TimeT.h"  // timeT
 
 #include <QObject>
 #include <QRect>
@@ -30,6 +31,8 @@ namespace Rosegarden
 
 
 class Segment;
+class SnapGrid;
+
 
 /// Representation of segments that are changing.
 /**
@@ -64,6 +67,12 @@ public:
     unsigned int z() const             { return m_z; }
     bool isRepeating() const           { return m_rect.isRepeating(); }
     CompositionRect& getCompRect()     { return m_rect; }
+
+    /// Get the start time of the repeat nearest the point.
+    /**
+     * Used by CompositionView to determine the time at which to edit a repeat.
+     */
+    timeT getRepeatTimeAt(const SnapGrid &, const QPoint &);
 
     // Access to the contained segment
     Segment *getSegment()              { return &m_segment; }
