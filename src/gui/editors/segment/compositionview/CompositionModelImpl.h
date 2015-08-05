@@ -236,7 +236,7 @@ public:
     /// Select segments based on the selection rect (rubber band).
     void finalizeSelectionRect();
 
-    /// Emit selectedSegments() signal
+    /// Emit selectionChanged() signal
     /**
      * Used by SegmentSelector and others to signal a change in the selection.
      * See RosegardenMainViewWidget::slotSelectedSegments()
@@ -307,47 +307,45 @@ public:
 
     // --- Misc -------------------------------------------
 
-    typedef std::vector<int> YCoordList;
+    typedef std::vector<int> YCoordVector;
 
     /// Get the Y coords of each track within clipRect.
     /**
      * CompositionView::drawSegments() uses this to draw the track dividers.
      */
-    YCoordList getTrackDividersIn(const QRect &clipRect);
+    YCoordVector getTrackYCoords(const QRect &clipRect);
 
     /// Number of pixels needed vertically to render all tracks.
-    unsigned int getCompositionHeight();
-
-    /// In pixels
-    /**
-     * Used to expand the composition when we go past the end.
-     */
-    //void setCompositionLength(int width);
-    /// In pixels
-    /**
-     * Used to expand the composition when we go past the end.
-     */
-    //int getCompositionLength();
+    int getCompositionHeight();
 
 signals:
-    /// rename: needUpdate()
-    void needContentUpdate();
-    /// rename: needUpdate()
-    void needContentUpdate(const QRect &);
+    /// Connected to CompositionView::slotUpdateAll()
+    void needUpdate();
+    /// Connected to CompositionView::slotAllNeedRefresh(rect)
+    void needUpdate(const QRect &);
 
+    /// Connected to CompositionView::slotUpdateArtifacts()
     void needArtifactsUpdate();
 
+    /// Connected to CompositionView::slotUpdateSize()
     void needSizeUpdate();
 
     /// Connected to RosegardenMainViewWidget::slotSelectedSegments().
-    // ??? rename: selectionChanged()
-    void selectedSegments(const SegmentSelection &);
+    void selectionChanged(const SegmentSelection &);
 
 public slots:
+    /// Connected to RosegardenDocument::audioFileFinalized()
+    /**
+     * Called when recording of an audio file is finished and the
+     * preview is ready to display.
+     */
     void slotAudioFileFinalized(Segment *);
+
+    /// Connected to InstrumentStaticSignals::changed()
     void slotInstrumentChanged(Instrument *);
 
 private slots:
+    /// Connected to AudioPreviewUpdater::audioPreviewComplete()
     void slotAudioPreviewComplete(AudioPreviewUpdater *);
 
 private:
@@ -377,26 +375,58 @@ private:
     //     endMarkerTimeChanged() feels more like a Segment thing.
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
+    // ??? naming standards
     virtual void AllEventsChanged(const Segment *);
     virtual void appearanceChanged(const Segment *);
     virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
-    virtual void segmentDeleted(const Segment*)
+    virtual void segmentDeleted(const Segment *)
             { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ }
 
-    /// rename: getNotationPreviewStatic()?
-    void makeNotationPreviewRects(QPoint basePoint, const Segment *segment,
-                                  const QRect &clipRect, NotationPreviewRanges *npData);
-    /// rename: getNotationPreviewMoving()?
+    /// Make a NotationPreviewRange for a Segment.
+    /**
+     * Calls getNotationPreviewData().  Scans the data for the relevant
+     * range.  Assembles a NotationPreviewRange and adds it to ranges.
+     *
+     * ??? rename: makeNotationPreviewRange()
+     */
+    void makeNotationPreviewRects(
+            QPoint basePoint, const Segment *segment,
+            const QRect &clipRect, NotationPreviewRanges *ranges);
+
+    /// Make a NotationPreviewRange for a Changing Segment.
+    /**
+     * Calls getNotationPreviewData().  Scans the data for the relevant
+     * range.  Assembles a NotationPreviewRange and adds it to ranges.
+     *
+     * Differs from makeNotationPreviewRects() in that it takes into
+     * account that the Segment is changing (moving, resizing, etc...).
+     *
+     * ??? rename: makeNotationPreviewRangeCS()
+     */
     void makeNotationPreviewRectsMovingSegment(
             QPoint basePoint, const Segment *segment,
-            const QRect &currentSR, NotationPreviewRanges *npData);
-    /// rename: getNotationPreview()
-    NotationPreview *getNotationPreviewData(const Segment *);
-    /// rename: cacheNotationPreview()
-    NotationPreview *makeNotationPreviewDataCache(const Segment *);
-    /// For notation preview
-    void createEventRects(const Segment *segment, NotationPreview *);
+            const QRect &currentRect, NotationPreviewRanges *ranges);
 
+    /// Get the NotationPreview for a Segment.
+    // Keeps NotationPreview's cached since they are expensive to generate.
+    // ??? Combine this routine with the next.
+    // ??? rename: getNotationPreview()
+    NotationPreview *getNotationPreviewData(const Segment *);
+
+    /// Generate the NotationPreview in the cache.
+    // ??? Why not combine this routine and the previous?  They are
+    //     only slightly different from each other.  Callers can
+    //     easily make due with the previous routine.
+    // ??? rename: cacheNotationPreview()
+    NotationPreview *makeNotationPreviewDataCache(const Segment *);
+
+    /// Create a NotationPreview from a Segment.
+    // ??? Although we might combine this with the previous, it's
+    //     probably better on its own.
+    // ??? rename: makeNotationPreview()
+    void createEventRects(const Segment *, NotationPreview *);
+
+    // ??? rename: NotationPreviewCache and m_notationPreviewCache
     typedef std::map<const Segment *, NotationPreview *> NotationPreviewDataCache;
     NotationPreviewDataCache m_notationPreviewDataCache;
 
@@ -500,7 +530,10 @@ private:
     ChangeType m_changeType;
     ChangingSegmentSet m_changingSegments;
 
+    // ??? rename: ChangingSegmentGC/m_changingSegmentGC
     typedef std::vector<CompositionItemPtr> ItemGC;
+    /// ChangingSegments waiting for garbage collection.
+    // ??? Use QSharedPointer and get rid of this.
     ItemGC m_itemGC;
 
 };

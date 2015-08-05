@@ -528,7 +528,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
     }
 
     if (!updateRect.isEmpty())
-        emit needContentUpdate(updateRect);
+        emit needUpdate(updateRect);
 }
 
 QRect CompositionModelImpl::postProcessAudioPreview(AudioPeaks* apData, const Segment* segment)
@@ -564,7 +564,7 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 
         if (track && track->getInstrument() == instrument->getId()) {
             removePreviewCache(s);
-            emit needContentUpdate(computeSegmentRect(*s));
+            emit needUpdate(computeSegmentRect(*s));
         }
     }
 }
@@ -587,7 +587,7 @@ void CompositionModelImpl::eventAdded(const Segment *s, Event *)
     //RG_DEBUG << "CompositionModelImpl::eventAdded()";
     Profiler profiler("CompositionModelImpl::eventAdded()");
     removePreviewCache(s);
-    emit needContentUpdate(computeSegmentRect(*s));
+    emit needUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
@@ -595,21 +595,21 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
     //RG_DEBUG << "CompositionModelImpl::eventRemoved";
     Profiler profiler("CompositionModelImpl::eventRemoved()");
     removePreviewCache(s);
-    emit needContentUpdate(computeSegmentRect(*s));
+    emit needUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::AllEventsChanged(const Segment *s)
 {
      Profiler profiler("CompositionModelImpl::AllEventsChanged()");
     removePreviewCache(s);
-    emit needContentUpdate(computeSegmentRect(*s));
+    emit needUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::appearanceChanged(const Segment *s)
 {
     //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
     clearInCache(s, true);
-    emit needContentUpdate(computeSegmentRect(*s));
+    emit needUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
@@ -618,9 +618,9 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
     //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
     clearInCache(s, true);
     if (shorten) {
-        emit needContentUpdate(); // no longer know former segment dimension
+        emit needUpdate(); // no longer know former segment dimension
     } else {
-        emit needContentUpdate(computeSegmentRect(*s));
+        emit needUpdate(computeSegmentRect(*s));
     }
 }
 
@@ -655,7 +655,7 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
     makePreviewCache(s);
     s->addObserver(this);
-    emit needContentUpdate();
+    emit needUpdate();
 }
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
@@ -669,7 +669,7 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
     clearInCache(s, true);
     s->removeObserver(this);
     m_recordingSegments.erase(s); // this could be a recording segment
-    emit needContentUpdate(r);
+    emit needUpdate(r);
 }
 
 void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, TrackId tid)
@@ -681,14 +681,14 @@ void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, 
     // of them)
     if (setTrackHeights()) {
         RG_DEBUG << "... changed, updating";
-        emit needContentUpdate();
+        emit needUpdate();
     }
 }
 
 void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
 {
 //    RG_DEBUG << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
-    if (setTrackHeights(s)) emit needContentUpdate();
+    if (setTrackHeights(s)) emit needUpdate();
 }
 
 void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
@@ -697,7 +697,7 @@ void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment 
 //    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights";
     if (setTrackHeights(s)) {
 //        RG_DEBUG << "... changed, updating";
-        emit needContentUpdate();
+        emit needUpdate();
     }
 }
 
@@ -705,7 +705,7 @@ void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s,
 {
     clearInCache(s);
     setTrackHeights(s);
-    emit needContentUpdate();
+    emit needUpdate();
 }
 
 void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
@@ -744,7 +744,7 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
     if (!updateRect.isNull() && !m_previousSelectionUpdateRect.isNull()) {
 
         if (m_tmpSelectedSegments != m_previousTmpSelectedSegments)
-            emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
+            emit needUpdate(updateRect | m_previousSelectionUpdateRect);
 
         emit needArtifactsUpdate();
     }
@@ -792,7 +792,7 @@ void CompositionModelImpl::addRecordingItem(CompositionItemPtr item)
 {
     m_recordingSegments.insert(item->getSegment());
 
-    emit needContentUpdate();
+    emit needUpdate();
 
     //RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
     //         << m_recordingSegments.size() << " recording items";
@@ -809,7 +809,7 @@ void CompositionModelImpl::clearRecordingItems()
 
     m_recordingSegments.clear();
 
-    emit needContentUpdate();
+    emit needUpdate();
 }
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
@@ -947,7 +947,7 @@ void CompositionModelImpl::pointerPosChanged(int x)
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i) {
         // Ask CompositionView to update.
-        emit needContentUpdate(computeSegmentRect(**i));
+        emit needUpdate(computeSegmentRect(**i));
     }
 
     //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
@@ -972,18 +972,18 @@ void CompositionModelImpl::setSelected(Segment *segment, bool selected)
             m_selectedSegments.erase(i);
     }
 
-    emit needContentUpdate();
+    emit needUpdate();
 }
 
 void CompositionModelImpl::selectSegments(const SegmentSelection &segments)
 {
     m_selectedSegments = segments;
-    emit needContentUpdate();
+    emit needUpdate();
 }
 
 void CompositionModelImpl::selectionHasChanged()
 {
-    emit selectedSegments(getSelectedSegments());
+    emit selectionChanged(getSelectedSegments());
 }
 
 void CompositionModelImpl::clearSelected()
@@ -991,7 +991,7 @@ void CompositionModelImpl::clearSelected()
     //RG_DEBUG << "CompositionModelImpl::clearSelected";
 
     m_selectedSegments.clear();
-    emit needContentUpdate();
+    emit needUpdate();
 }
 
 bool CompositionModelImpl::isSelected(const Segment *s) const
@@ -1059,25 +1059,12 @@ void CompositionModelImpl::endChange()
 
     m_itemGC.clear();
 
-    emit needContentUpdate();
-}
-#if 0
-void CompositionModelImpl::setCompositionLength(int width)
-{
-    m_composition.setEndMarker(m_grid.snapX(width));
+    emit needUpdate();
 }
 
-int CompositionModelImpl::getCompositionLength()
+int CompositionModelImpl::getCompositionHeight()
 {
-    timeT endMarker = m_composition.getEndMarker();
-    return static_cast<int>(nearbyint(
-            m_grid.getRulerScale()->getWidthForDuration(0, endMarker)));
-}
-#endif
-unsigned int CompositionModelImpl::getCompositionHeight()
-{
-    return static_cast<unsigned int>(
-            m_grid.getYBinCoordinate(m_composition.getNbTracks()));
+    return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
 bool CompositionModelImpl::setTrackHeights(Segment *s)
@@ -1365,19 +1352,19 @@ CompositionModelImpl::getSegmentRects(
     return m_segmentRects;
 }
 
-CompositionModelImpl::YCoordList CompositionModelImpl::getTrackDividersIn(const QRect& rect)
+CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const QRect& rect)
 {
     int top = m_grid.getYBin(rect.y());
     int bottom = m_grid.getYBin(rect.y() + rect.height());
 
-//    RG_DEBUG << "CompositionModelImpl::getTrackDividersIn: rect "
+//    RG_DEBUG << "CompositionModelImpl::getTrackYCoords: rect "
 //              << rect.x() << ", " << rect.y() << ", "
 //              << rect.width() << "x" << rect.height() << ", top = " << top
 //              << ", bottom = " << bottom;
     
     setTrackHeights();
     
-    CompositionModelImpl::YCoordList list;
+    CompositionModelImpl::YCoordVector list;
 
     for (int pos = top; pos <= bottom; ++pos) {
         int divider = m_grid.getYBinCoordinate(pos);
@@ -1388,15 +1375,17 @@ CompositionModelImpl::YCoordList CompositionModelImpl::getTrackDividersIn(const 
     return list;
 }
 
-CompositionModelImpl::NotationPreview* CompositionModelImpl::getNotationPreviewData(const Segment* s)
+CompositionModelImpl::NotationPreview *
+CompositionModelImpl::getNotationPreviewData(const Segment *s)
 {
-    NotationPreview* npData = m_notationPreviewDataCache[s];
+    // Try the cache.
+    NotationPreview *notationPreview = m_notationPreviewDataCache[s];
 
-    if (!npData) {
-        npData = makeNotationPreviewDataCache(s);
-    }
+    // If there was nothing in the cache for this segment, generate it.
+    if (!notationPreview)
+        notationPreview = makeNotationPreviewDataCache(s);
 
-    return npData;
+    return notationPreview;
 }
 
 CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPreviewData(const Segment* s)

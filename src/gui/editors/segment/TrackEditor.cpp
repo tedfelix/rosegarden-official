@@ -298,7 +298,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     //        m_compositionView, SLOT(slotUpdateAll()));
 
     connect(m_compositionView->getModel(),
-            SIGNAL(selectedSegments(const SegmentSelection &)),
+            SIGNAL(selectionChanged(const SegmentSelection &)),
             mainViewWidget,
             SLOT(slotSelectedSegments(const SegmentSelection &)));
 

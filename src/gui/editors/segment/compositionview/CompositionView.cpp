@@ -134,9 +134,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
             this, SLOT(slotToolHelpChanged(const QString &)));
 
-    connect(m_model, SIGNAL(needContentUpdate()),
+    connect(m_model, SIGNAL(needUpdate()),
             this, SLOT(slotUpdateAll()));
-    connect(m_model, SIGNAL(needContentUpdate(const QRect&)),
+    connect(m_model, SIGNAL(needUpdate(const QRect&)),
             this, SLOT(slotAllNeedRefresh(const QRect&)));
     connect(m_model, SIGNAL(needArtifactsUpdate()),
             this, SLOT(slotUpdateArtifacts()));
@@ -197,7 +197,8 @@ void CompositionView::endAudioPreviewGeneration()
 
 void CompositionView::slotUpdateSize()
 {
-    const int height = std::max((int)m_model->getCompositionHeight(), viewport()->height());
+    const int height =
+            std::max(m_model->getCompositionHeight(), viewport()->height());
 
     const RulerScale *rulerScale = grid().getRulerScale();
     const int compositionWidth = (int)ceil(rulerScale->getTotalWidth());
@@ -757,8 +758,8 @@ void CompositionView::drawTrackDividers(
     // divider, so we need enough divider coords to do the drawing even
     // though the center of the divider might be slightly outside of the
     // viewport.
-    CompositionModelImpl::YCoordList trackYCoords =
-            m_model->getTrackDividersIn(clipRect.adjusted(0,-1,0,+1));
+    CompositionModelImpl::YCoordVector trackYCoords =
+            m_model->getTrackYCoords(clipRect.adjusted(0,-1,0,+1));
 
     // Nothing to do?  Bail.
     if (trackYCoords.empty())
@@ -770,8 +771,10 @@ void CompositionView::drawTrackDividers(
     segmentsLayerPainter->save();
 
     // For each track Y coordinate
-    for (CompositionModelImpl::YCoordList::const_iterator yi = trackYCoords.begin();
-         yi != trackYCoords.end(); ++yi) {
+    for (CompositionModelImpl::YCoordVector::const_iterator yi =
+             trackYCoords.begin();
+         yi != trackYCoords.end();
+         ++yi) {
 
         int y = *yi - 2;
         segmentsLayerPainter->setPen(m_trackDividerColor);
