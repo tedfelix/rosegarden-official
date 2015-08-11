@@ -142,8 +142,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
             newStartTime = m_currentIndex->getStartTime(m_canvas->grid());
             newEndTime = oldEndTime;
         } else {
-            newEndTime = CompositionItemHelper::getEndTime
-                         (m_currentIndex, m_canvas->grid());
+            newEndTime = m_currentIndex->getEndTime(m_canvas->grid());
             newStartTime = oldStartTime;
         }
 
@@ -379,9 +378,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         }
 
         // Change the size of the segment on the canvas.
-        CompositionItemHelper::setEndTime(m_currentIndex,
-                                          newEndTime,
-                                          m_canvas->grid());
+        m_currentIndex->setEndTime(newEndTime, m_canvas->grid());
     }
 
     // Redraw the canvas

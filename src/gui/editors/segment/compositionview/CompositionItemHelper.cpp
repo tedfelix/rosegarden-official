@@ -31,44 +31,7 @@
 
 namespace Rosegarden
 {
-    
-timeT CompositionItemHelper::getEndTime(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
-{
-    timeT t = 0;
 
-    if (item) {
-        QRect itemRect = item->rect();
-        
-        t = std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
-
-//         RG_DEBUG << "CompositionItemHelper::getEndTime() : rect width = "
-//                  << itemRect.width()
-//                  << " - item is repeating : " << item->isRepeating()
-//                  << " - endTime = " << t
-//                  << endl;
-
-    }
-
-    return t;
-}
-
-void CompositionItemHelper::setEndTime(CompositionItemPtr item, timeT time,
-                                       const Rosegarden::SnapGrid& grid)
-{
-    if (item) {
-        int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
-        QRect r = item->rect();
-        QPoint topRight = r.topRight();
-        topRight.setX(x);
-        r.setTopRight(topRight);
-        item->setWidth(r.width());
-
-        if (item->isRepeating()) {
-            SegmentRect& sr = item->getCompRect();
-            sr.setBaseWidth(r.width());
-        }
-    }
-}
 
 int CompositionItemHelper::getTrackPos(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
 {

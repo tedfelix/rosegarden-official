@@ -32,9 +32,6 @@ class Segment;
 /// ??? Get rid of this class.  Move all functions into CompositionItem.
 class CompositionItemHelper {
 public:
-    static void setEndTime(CompositionItemPtr, timeT, const SnapGrid&);
-    static timeT getEndTime(CompositionItemPtr, const SnapGrid&);
-
     static int getTrackPos(CompositionItemPtr, const SnapGrid&);
 
     // ??? This returns an object that must be deleted by the caller.

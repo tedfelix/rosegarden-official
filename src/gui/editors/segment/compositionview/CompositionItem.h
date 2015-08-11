@@ -90,6 +90,9 @@ public:
     void setStartTime(timeT, const SnapGrid &);
     timeT getStartTime(const SnapGrid &);
 
+    void setEndTime(timeT, const SnapGrid &);
+    timeT getEndTime(const SnapGrid &);
+
 private:
 
     Segment &m_segment;

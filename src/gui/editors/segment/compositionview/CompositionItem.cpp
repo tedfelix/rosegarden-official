@@ -85,5 +85,26 @@ timeT CompositionItem::getStartTime(const SnapGrid &grid)
     return grid.snapX(m_rect.x());
 }
 
+void CompositionItem::setEndTime(timeT time, const SnapGrid &grid)
+{
+    int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
+    QRect r = rect();
+    QPoint topRight = r.topRight();
+    topRight.setX(x);
+    r.setTopRight(topRight);
+    m_rect.setWidth(r.width());
+
+    if (m_rect.isRepeating()) {
+        m_rect.setBaseWidth(r.width());
+    }
+}
+
+timeT CompositionItem::getEndTime(const SnapGrid &grid)
+{
+    QRect itemRect = rect();
+
+    return std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
+}
+
 
 }
