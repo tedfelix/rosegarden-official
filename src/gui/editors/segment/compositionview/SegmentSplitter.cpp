@@ -30,6 +30,8 @@
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
+#include "document/CommandHistory.h"
+
 #include <QPoint>
 #include <QRect>
 #include <QString>
@@ -115,12 +117,12 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
             AudioSegmentSplitCommand *command =
                 new AudioSegmentSplitCommand(segment, m_canvas->grid().snapX(pos.x()));
             if (command->isValid())
-                addCommandToHistory(command);
+                CommandHistory::getInstance()->addCommand(command);
         } else {
             SegmentSplitCommand *command =
                 new SegmentSplitCommand(segment, m_canvas->grid().snapX(pos.x()));
             if (command->isValid())
-                addCommandToHistory(command);
+                CommandHistory::getInstance()->addCommand(command);
         }
 
 // 		m_canvas->updateContents(item->rect());

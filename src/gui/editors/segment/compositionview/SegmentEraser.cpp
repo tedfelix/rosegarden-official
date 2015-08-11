@@ -28,6 +28,7 @@
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
+#include "document/CommandHistory.h"
 #include <QPoint>
 #include <QString>
 #include <QMouseEvent>
@@ -65,6 +66,7 @@ void SegmentEraser::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
+    // Save the Segment for the mouse release event.
     setCurrentIndex(m_canvas->getModel()->getSegmentAt(pos));
 }
 
@@ -77,13 +79,14 @@ void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
+    // If a Segment was selected by the press event
     if (m_currentIndex) {
-        // no need to test the result, we know it's good (see mousePressEvent)
-        CompositionItem* item = m_currentIndex;
-
-        addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
+        // Erase it
+        CommandHistory::getInstance()->addCommand(
+                new SegmentEraseCommand(m_currentIndex->getSegment()));
     }
 
+    // Clear the current Segment.
     setCurrentIndex(CompositionItemPtr());
 }
 

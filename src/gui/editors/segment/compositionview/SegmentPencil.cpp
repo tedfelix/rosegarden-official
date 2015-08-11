@@ -33,6 +33,8 @@
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
+#include "document/CommandHistory.h"
+
 #include <QCursor>
 #include <QEvent>
 #include <QPoint>
@@ -186,7 +188,7 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
 
         m_newRect = false;
 
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         // add the SegmentItem by hand, instead of allowing the usual
         // update mechanism to spot it.  This way we can select the

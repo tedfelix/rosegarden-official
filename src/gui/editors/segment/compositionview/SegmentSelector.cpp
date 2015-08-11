@@ -33,6 +33,7 @@
 #include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -40,6 +41,7 @@
 #include "SegmentResizer.h"
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
+
 #include <QApplication>
 #include <QSettings>
 #include <QCursor>
@@ -319,7 +321,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                                     newTrackId);
             }
 
-            addCommandToHistory(command);
+            CommandHistory::getInstance()->addCommand(command);
         }
 
         m_canvas->getModel()->endChange();
@@ -400,7 +402,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             mcommand->addCommand(command);
         }
 
-        addCommandToHistory(mcommand);
+        CommandHistory::getInstance()->addCommand(mcommand);
 
         // generate SegmentItem
         //

@@ -34,7 +34,7 @@ class Segment;
 class SnapGrid;
 
 
-/// A changing (moving/resizing) Segment.
+/// A changing (moving/resizing/recording) Segment.
 /**
  * This class combines a Segment pointer with a SegmentRect and a saved
  * QRect (m_savedRect) which has the original position of the Segment.

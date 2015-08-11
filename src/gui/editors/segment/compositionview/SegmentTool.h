@@ -54,6 +54,7 @@ class SegmentSelector;
 typedef std::pair<QPoint, CompositionItemPtr> SegmentItemPair;
 typedef std::vector<SegmentItemPair> SegmentItemList;
 
+/// Baseclass for the Segment canvas tools, e.g. SegmentPencil.
 class SegmentTool : public BaseTool, public ActionFileClient
 {
     Q_OBJECT
@@ -64,7 +65,7 @@ public:
     virtual ~SegmentTool();
 
     /**
-     * Is called by the parent View (EditView or SegmentCanvas) when
+     * Is called by the parent View (e.g. CompositionView) when
      * the tool is set as current.
      * Add any setup here
      */
@@ -79,27 +80,29 @@ public:
             { return RosegardenScrollView::NoFollow; }
     virtual void mouseReleaseEvent(QMouseEvent *)  { }
 
-    void addCommandToHistory(Command *command);
-
 protected:
-    SegmentTool(CompositionView*, RosegardenDocument *doc);
+    /// Protected since a SegmentTool isn't very useful on its own.
+    SegmentTool(CompositionView *, RosegardenDocument *);
 
-    virtual void createMenu();
-    virtual bool hasMenu() { return true; }
-    
-    // ??? We also need a clearCurrentIndex() as there are many calls to
-    //     this that pass CompositionItemPtr().
-    // ??? And why is this called an "Index" instead of an Item?  It's
+    /// Set the Segment that the tool is working on.
+    /**
+     * The Segment tools use this to pass the changing Segment
+     * between their press, move, and release handlers.
+     */
+    // ??? We also need a clearCurrentIndex() as there is one call to
+    //     this that passes CompositionItemPtr().
+    // ??? And why is this called an "Index" instead of a Segment?  It's
     //     not an Index (integer) in the usual sense, so Index is
-    //     misleading.  Rename: setCurrentItem().
+    //     misleading.
+    // ??? Rename: setChangingSegment()
     // ??? We also need a getter and we need to make the member variable
     //     private.  This setter is *non-trivial* as it deletes the old.
-    void setCurrentIndex(CompositionItemPtr item);
+    void setCurrentIndex(CompositionItemPtr changingSegment);
 
     SegmentToolBox* getToolBox();
 
-    bool changeMade() { return m_changeMade; }
     void setChangeMade(bool c) { m_changeMade = c; }
+    bool changeMade() { return m_changeMade; }
 
     /// Sets the SnapGrid snap time based on the Shift key.
     void setSnapTime(QMouseEvent *e, timeT snapTime);
@@ -111,13 +114,17 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    CompositionView*  m_canvas;
-    // ??? Make private.
-    // ??? rename: m_currentItem
-    CompositionItemPtr   m_currentIndex;
-    RosegardenDocument* m_doc;
-//    QPoint            m_origPos;
-    bool              m_changeMade;
+    CompositionView *m_canvas;
+    // ??? Make private.  Otherwise memory is leaked.  Or is that the idea?
+    // ??? rename: m_changingSegment
+    CompositionItemPtr m_currentIndex;
+    RosegardenDocument *m_doc;
+    bool m_changeMade;
+
+private:
+    /// Right-click context menu.
+    virtual void createMenu();
+    virtual bool hasMenu() { return true; }
 
 private slots:
     // This is just a mess of forwarding functions to RosegardenMainWindow.

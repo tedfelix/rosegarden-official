@@ -41,6 +41,8 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
+#include "document/CommandHistory.h"
+
 #include <QMessageBox>
 #include <QCursor>
 #include <QEvent>
@@ -180,7 +182,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                             tr("Rescaling audio file..."), (QWidget*)parent());
                     command->connectProgressDialog(progressDlg);
                     
-                    addCommandToHistory(command);
+                    CommandHistory::getInstance()->addCommand(command);
 
                     if (progressDlg) {
                         command->disconnectProgressDialog(progressDlg);
@@ -211,15 +213,16 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                                                   newEndTime - newStartTime,
                                                   oldEndTime - oldStartTime,
                                                   newStartTime);
-                    addCommandToHistory(command);
+                    CommandHistory::getInstance()->addCommand(command);
                 }
             } else {
 
                 if (m_resizeStart) {
 
                     if (segment->getType() == Segment::Audio) {
-                        addCommandToHistory(new AudioSegmentResizeFromStartCommand
-                                            (segment, newStartTime));
+                        CommandHistory::getInstance()->addCommand(
+                                new AudioSegmentResizeFromStartCommand(
+                                        segment, newStartTime));
                     } else {
                         SegmentLinkToCopyCommand* unlinkCmd = 
                                          new SegmentLinkToCopyCommand(segment);
@@ -232,7 +235,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                         command->addCommand(unlinkCmd);
                         command->addCommand(resizeCmd);
                         
-                        addCommandToHistory(command);
+                        CommandHistory::getInstance()->addCommand(command);
                     }
 
                 } else {
@@ -250,7 +253,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                                         newStartTime,
                                         newEndTime,
                                         track->getId());
-                    addCommandToHistory(command);
+                    CommandHistory::getInstance()->addCommand(command);
                 }
             }
         }

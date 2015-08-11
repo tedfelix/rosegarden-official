@@ -139,12 +139,6 @@ SegmentTool::createMenu()
     m_menu = menu;
 }
 
-void
-SegmentTool::addCommandToHistory(Command *command)
-{
-    CommandHistory::getInstance()->addCommand(command);
-}
-
 void SegmentTool::setCurrentIndex(CompositionItemPtr item)
 {
     if (item != m_currentIndex) 

@@ -35,6 +35,8 @@
 #include "SegmentToolBox.h"
 #include "SegmentSelector.h"
 #include "document/Command.h"
+#include "document/CommandHistory.h"
+
 #include <QCursor>
 #include <QEvent>
 #include <QPoint>
@@ -211,7 +213,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
                                     newTrackId);
             }
 
-            addCommandToHistory(command);
+            CommandHistory::getInstance()->addCommand(command);
         }
 
         m_canvas->hideTextFloat();

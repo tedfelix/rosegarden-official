@@ -769,8 +769,12 @@ void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType chang
 
         // Put this one on the garbage collection list for later cleanup
         // by endChange().
+        // ??? Why can't we just delete it now?  It's not like we need it.
+        //     Maybe the caller still needs it for the time being?
         // ??? If CompositionItemPtr were a QSharedPointer,
         //     m_changingSegmentGC would be unnecessary.
+        // ??? Even better, get rid of all the pointers and go with
+        //     objects.
         m_changingSegmentGC.push_back(item);
     } else {
         // Save the original rectangle for this segment
