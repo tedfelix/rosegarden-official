@@ -60,6 +60,8 @@ protected:
 
     QPoint            m_clickPoint;
     bool              m_passedInertiaEdge;
+    bool m_changeMade;
+
 };
 
 

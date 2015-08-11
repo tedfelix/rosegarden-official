@@ -52,7 +52,11 @@ namespace Rosegarden
 const QString SegmentMover::ToolName = "segmentmover";
 
 SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
-        : SegmentTool(c, d)
+        : SegmentTool(c, d),
+        m_clickPoint(),
+        m_passedInertiaEdge(false),
+        m_changeMade(false)
+
 {
     RG_DEBUG << "SegmentMover()\n";
 }
@@ -166,7 +170,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
 
     if (getChangingSegment()) {
 
-        if (changeMade()) {
+        if (m_changeMade) {
 
             CompositionModelImpl::ChangingSegmentSet& changingItems =
                     m_canvas->getModel()->getChangingSegments();
@@ -224,8 +228,8 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
 
     }
 
-    setChangeMade(false);
-    setChangingSegment(CompositionItemPtr());
+    m_changeMade = false;
+    setChangingSegment(NULL);
 
     setBasicContextHelp();
 }
@@ -330,10 +334,10 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
         updateRect |= (*it)->rect();
         (*it)->moveTo(newX, newY);
         updateRect |= (*it)->rect();
-        setChangeMade(true);
+        m_changeMade = true;
     }
 
-    if (changeMade()) {
+    if (m_changeMade) {
         // Make sure the segments are redrawn.
         m_canvas->slotUpdateAll();
     }

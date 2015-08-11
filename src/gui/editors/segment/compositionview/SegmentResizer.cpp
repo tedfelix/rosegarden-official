@@ -263,8 +263,8 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 //     m_canvas->updateContents();
     m_canvas->update();
     
-    setChangeMade(false);
-    setChangingSegment(CompositionItemPtr());
+    //setChangeMade(false);
+    setChangingSegment(NULL);
     setBasicContextHelp();
 }
 
@@ -307,7 +307,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     /*!!!
         if (segment->getType() == Segment::Audio)
         {
-            setChangingSegment(CompositionItemPtr());
+            setChangingSegment(NULL);
             QMessageBox::information(m_canvas,
                     tr("You can't yet resize an audio segment!"));
             return RosegardenScrollView::NoFollow;

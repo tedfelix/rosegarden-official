@@ -55,10 +55,6 @@ public:
     bool isSegmentAdding() const { return m_segmentAddMode; }
     bool isSegmentCopying() const { return m_segmentCopyMode; }
 
-    // Return the SegmentItem list for other tools to use
-    //
-    SegmentItemList* getSegmentItemList() { return &m_selectedItems; }
-
     static const QString ToolName;
 
 protected:
@@ -68,8 +64,6 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    SegmentItemList m_selectedItems;
-
     bool m_segmentAddMode;
     bool m_segmentCopyMode;
     bool m_segmentCopyingAsLink;
@@ -78,6 +72,7 @@ protected:
     bool m_passedInertiaEdge;
     bool m_buttonPressed;
     bool m_selectionMoveStarted;
+    bool m_changeMade;
 
     SegmentTool *m_dispatchTool;
 };

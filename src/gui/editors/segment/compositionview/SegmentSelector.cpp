@@ -66,6 +66,7 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d)
         m_segmentQuickCopyDone(false),
         m_buttonPressed(false),
         m_selectionMoveStarted(false),
+        m_changeMade(false),
         m_dispatchTool(0)
 {
     RG_DEBUG << "SegmentSelector()\n";
@@ -279,11 +280,11 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                 m_canvas->getModel()->getChangingSegments();
         CompositionModelImpl::ChangingSegmentSet::iterator it;
 
-        if (changeMade()) {
+        if (m_changeMade) {
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (tr("Move Segment(s)", "", m_selectedItems.size()), &comp);
+                (tr("Move Segment(s)"), &comp);
 
             for (it = changingItems.begin();
                     it != changingItems.end();
@@ -336,11 +337,11 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
         //        getChangingSegment()->setZ(2); // see SegmentItem::setSelected  --??
     }
 
-    setChangeMade(false);
+    m_changeMade = false;
 
     m_selectionMoveStarted = false;
 
-    setChangingSegment(CompositionItemPtr());
+    setChangingSegment(NULL);
 
     setContextHelpFor(pos);
 }
@@ -484,10 +485,10 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             int newY = m_canvas->grid().getYBinCoordinate(trackPos);
 
             (*it)->moveTo(newX, newY);
-            setChangeMade(true);
+            m_changeMade = true;
         }
 
-        if (changeMade()) {
+        if (m_changeMade) {
             // Make sure the segments are redrawn.
             m_canvas->slotUpdateAll();
         }

@@ -26,10 +26,6 @@
 #include "CompositionModelImpl.h"
 #include "base/TimeT.h"
 
-#include <QPoint>
-#include <utility>
-#include <vector>
-
 
 class QMouseEvent;
 
@@ -37,22 +33,12 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-class Command;
-class SegmentToolBox;
+
 class RosegardenDocument;
 class CompositionView;
 
 
 //////////////////////////////////////////////////////////////////////
-
-class SegmentToolBox;
-class SegmentSelector;
-
-// Allow the tools to share the Selector tool's selection
-// through these.
-//
-typedef std::pair<QPoint, CompositionItemPtr> SegmentItemPair;
-typedef std::vector<SegmentItemPair> SegmentItemList;
 
 /// Baseclass for the Segment canvas tools, e.g. SegmentPencil.
 class SegmentTool : public BaseTool, public ActionFileClient
@@ -60,8 +46,6 @@ class SegmentTool : public BaseTool, public ActionFileClient
     Q_OBJECT
 
 public:
-    friend class SegmentToolBox;
-
     virtual ~SegmentTool();
 
     /**
@@ -90,17 +74,10 @@ protected:
     /// Set the Segment that the tool is working on.
     /**
      * The Segment tools use this to pass the changing Segment
-     * between their press, move, and release handlers.
+     * between their mouse press, move, and release handlers.
      */
-    // ??? We also need a clearCurrentIndex() as there are calls to
-    //     this that pass CompositionItemPtr().
-    // ??? We also need a getter and we need to make the member variable
-    //     private.  This setter is *non-trivial* as it deletes the old.
     void setChangingSegment(CompositionItemPtr changingSegment);
-    CompositionItemPtr getChangingSegment()  { return m_currentIndex; }
-
-    void setChangeMade(bool c) { m_changeMade = c; }
-    bool changeMade() { return m_changeMade; }
+    CompositionItemPtr getChangingSegment()  { return m_changingSegment; }
 
     /// Sets the SnapGrid snap time based on the Shift key.
     void setSnapTime(QMouseEvent *e, timeT snapTime);
@@ -115,10 +92,7 @@ private:
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
 
-    // ??? rename: m_changingSegment
-    CompositionItemPtr m_currentIndex;
-
-    bool m_changeMade;
+    CompositionItemPtr m_changingSegment;
 
 private slots:
     // This is just a mess of forwarding functions to RosegardenMainWindow.

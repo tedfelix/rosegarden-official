@@ -38,8 +38,7 @@ namespace Rosegarden
 SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
         : BaseTool("SegmentTool", canvas),
         m_canvas(canvas),
-        m_doc(doc),
-        m_changeMade(false)
+        m_doc(doc)
 {
     //RG_DEBUG << "SegmentTool::SegmentTool()";
 
@@ -73,8 +72,9 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
 }
 
 SegmentTool::~SegmentTool()
-{}
-
+{
+    delete m_changingSegment;
+}
 
 void SegmentTool::ready()
 {
@@ -88,7 +88,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::RightButton)
         return;
 
-    if (m_currentIndex) // mouse button is pressed for some tool
+    if (m_changingSegment) // mouse button is pressed for some tool
         return ;
 
     // No need to propagate.
@@ -98,18 +98,18 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
     setChangingSegment(m_canvas->getModel()->getSegmentAt(pos));
 
-    if (m_currentIndex) {
-        if (!m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
+    if (m_changingSegment) {
+        if (!m_canvas->getModel()->isSelected(m_changingSegment->getSegment())) {
 
             m_canvas->getModel()->clearSelected();
-            m_canvas->getModel()->setSelected(m_currentIndex->getSegment());
+            m_canvas->getModel()->setSelected(m_changingSegment->getSegment());
             m_canvas->getModel()->selectionHasChanged();
         }
     }
 
     showMenu();
 
-    setChangingSegment(CompositionItemPtr());
+    setChangingSegment(NULL);
 }
 
 void
@@ -141,10 +141,10 @@ SegmentTool::createMenu()
 
 void SegmentTool::setChangingSegment(CompositionItemPtr changingSegment)
 {
-    if (changingSegment != m_currentIndex)
+    if (changingSegment != m_changingSegment)
     {
-        delete m_currentIndex;
-        m_currentIndex = changingSegment;
+        delete m_changingSegment;
+        m_changingSegment = changingSegment;
     }
 }
 
