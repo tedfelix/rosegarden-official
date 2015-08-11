@@ -161,7 +161,775 @@ CompositionModelImpl::~CompositionModelImpl()
     }
 }
 
-// --- Re-order starting here ------------------------------------------
+// --- Segments -----------------------------------------------------
+
+const CompositionModelImpl::SegmentRects &
+CompositionModelImpl::getSegmentRects(
+        const QRect &clipRect,
+        NotationPreviewRanges *notationPreview,
+        AudioPreviews *audioPreview)
+{
+    Profiler profiler("CompositionModelImpl::getSegmentRects()");
+
+    // Clear the container we'll be returning.
+    m_segmentRects.clear();
+
+    //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): ruler scale is "
+    //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
+
+    const SegmentMultiSet &segments = m_composition.getSegments();
+    SegmentMultiSet::const_iterator segmentsEnd = segments.end();
+
+    // For each segment in the composition
+    for (SegmentMultiSet::const_iterator i = segments.begin();
+         i != segmentsEnd; ++i) {
+
+        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";
+
+        const Segment *s = *i;
+
+        // Moving segments are handled in the next for loop.
+        if (isChanging(s))
+            continue;
+
+        CompositionRect segmentRect = computeSegmentRect(*s);
+        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): seg rect = " << sr;
+
+        if (segmentRect.intersects(clipRect)) {
+//            RG_DEBUG << "CompositionModelImpl::getSegmentRects(): segment " << s
+//                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s);
+
+            if (isSelected(s) || isTmpSelected(s) || segmentRect.intersects(m_selectionRect)) {
+                segmentRect.setSelected(true);
+            }
+
+            if (wasTmpSelected(s) != isTmpSelected(s))
+                segmentRect.setNeedsFullUpdate(true);
+
+            bool isAudio = (s && s->getType() == Segment::Audio);
+
+            if (!isRecording(s)) {
+                QColor brushColor = GUIPalette::convertColour(m_composition.
+                                    getSegmentColourMap().getColourByIndex(s->getColourIndex()));
+                Qt::BrushStyle brushPattern =
+                    s->isTrulyLinked() ? Qt::Dense2Pattern : Qt::SolidPattern;
+                segmentRect.setBrush(QBrush(brushColor, brushPattern));
+                segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+            } else {
+                // border is the same for both audio and MIDI
+                segmentRect.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
+                // audio color
+                if (isAudio) {
+                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
+                    // MIDI/default color
+                } else {
+                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
+                }
+            }
+
+            // Notation preview data
+            if (notationPreview  &&  s->getType() == Segment::Internal) {
+                makeNotationPreviewRange(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
+                // Audio preview data
+            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
+                makeAudioPreview(audioPreview, s, segmentRect);
+            }
+
+            m_segmentRects.push_back(segmentRect);
+        } else {
+            //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): - segment out of rect";
+        }
+
+    }
+
+    // changing items (moving segments)
+
+    ChangingSegmentSet::iterator movEnd = m_changingSegments.end();
+    for (ChangingSegmentSet::iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
+        CompositionRect segmentRect((*i)->rect());
+        if (segmentRect.intersects(clipRect)) {
+            Segment *s = CompositionItemHelper::getSegment(*i);
+            segmentRect.setSelected(true);
+            QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
+            segmentRect.setBrush(brushColor);
+
+            segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+
+            // Notation preview data
+            if (notationPreview  &&  s->getType() == Segment::Internal) {
+                makeNotationPreviewRangeCS(segmentRect.topLeft(), s, segmentRect, notationPreview);
+                // Audio preview data
+            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
+                makeAudioPreview(audioPreview, s, segmentRect);
+            }
+
+            m_segmentRects.push_back(segmentRect);
+        }
+    }
+
+    // ??? Odd.  We could also have the (one) caller provide the
+    //     SegmentRects object (via reference).  Probably easier to
+    //     understand.  Performance should be about the same.  clear()
+    //     and dtor time are the same.  ctor time is trivial.
+    return m_segmentRects;
+}
+
+CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
+{
+    // ??? Combine this with getItemsAt() to make a single routine that
+    //     is focused on "getting the first item at".  Should be able to
+    //     do some simplification.
+
+    // This returns *copies* of the CompositionItem objects that must be
+    // deleted.
+    ChangingSegmentSet items = getItemsAt(pos);
+
+    //RG_DEBUG << "getFirstItemAt() got" << items.size() << "items";
+
+    if (items.empty())
+        return 0;
+
+    if (items.size() == 1)
+        return *(items.begin());
+
+    // Find the topmost item.  I.e. the item with the greatest Z value.
+
+    // SegmentOrderer determines the Z order of a segment based on whether
+    // it was last clicked.  Last clicked segments have the highest Z order.
+
+    // ??? What's the test case here?
+    //     In order to get more than one segment in here, we
+    //     need two segments to use the same space on the display.  That
+    //     only appears to happen when recording on a track that already
+    //     has segments.  Then it becomes rather difficult to select between
+    //     the two.  Like impossible.  So, I think this needs to be
+    //     addressed although I doubt anyone cares.  I recommend opening
+    //     a new "lane" when recording on a track with existing
+    //     segments.  That seems to fit the existing behavior best.  Then
+    //     overlapping becomes impossible and all this special handling
+    //     can go.
+
+    CompositionModelImpl::ChangingSegmentSet::iterator maxZItemIter = items.begin();
+    CompositionItemPtr maxZItem = *(maxZItemIter);
+    unsigned int maxZ = maxZItem->z();
+
+    // For each item
+    for (CompositionModelImpl::ChangingSegmentSet::iterator i = items.begin();
+         i != items.end(); ++i) {
+        CompositionItemPtr item = *i;
+        // If this one has the greatest z so far
+        if (item->z() > maxZ) {
+            maxZItem = item;
+            maxZ = item->z();
+            maxZItemIter = i;
+        }
+    }
+
+    // Remove the one we want so that it doesn't get deleted.
+    items.erase(maxZItemIter);
+
+    // Delete all the others.
+    for (CompositionModelImpl::ChangingSegmentSet::iterator i = items.begin();
+         i != items.end(); ++i)
+        delete *i;
+
+    // ??? Need to audit all callers.  Many of them do not delete the
+    //     returned object.  Even better, make CompositionItemPtr into a
+    //     QSharedPointer.  Then we don't care.
+
+    return maxZItem;
+}
+
+CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
+{
+    Profiler profiler("CompositionModelImpl::computeSegmentRect");
+
+    QPoint origin = topLeft(s);
+
+    bool isRecordingSegment = isRecording(&s);
+
+    if (!isRecordingSegment) {
+        // ??? Why is endTime cached?  Seems unnecessary.
+        timeT endTime = 0;
+
+        // ??? This is the only caller.  Inline this function.
+        CompositionRect cachedCR = getFromCache(&s, endTime);
+        // don't cache repeating segments - it's just hopeless, because the segment's rect may have to be recomputed
+        // in other cases than just when the segment itself is moved,
+        // for instance if another segment is moved over it
+        // ??? Inline isCachedRectCurrent().  This is the only caller.
+        //     Make it a bool isCachedRectCurrent.
+        if (!s.isRepeating() && cachedCR.isValid() && isCachedRectCurrent(s, cachedCR, origin, endTime)) {
+            //RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
+            //         << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
+            //         << cachedCR.getBaseWidth();
+
+            bool xChanged = origin.x() != cachedCR.x();
+            bool yChanged = origin.y() != cachedCR.y();
+
+            cachedCR.moveTopLeft(origin);
+
+            if (s.isRepeating() && (xChanged || yChanged)) { // update repeat marks
+
+                // this doesn't work in the general case (if there's another segment on the same track for instance),
+                // it's better to simply recompute all the marks
+                //                 CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
+                //                 for(size_t i = 0; i < repeatMarks.size(); ++i) {
+                //                     repeatMarks[i] += deltaX;
+                //                 }
+                //                 cachedCR.setRepeatMarks(repeatMarks);
+                computeRepeatMarks(cachedCR, &s);
+            }
+            updateCachedSegment(&s, cachedCR);
+            return cachedCR;
+        }
+    }
+
+    timeT startTime = s.getStartTime();
+    timeT endTime = isRecordingSegment ? m_pointerTime : s.getEndMarkerTime();
+
+
+    int h = m_grid.getYSnap() - 2;
+    int w;
+
+    if (s.isRepeating()) {
+//        timeT repeatStart = endTime;
+        timeT repeatEnd = s.getRepeatEndTime();
+        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
+                          repeatEnd - startTime)));
+        //RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is repeating - repeatStart = "
+        //         << repeatStart << " - repeatEnd : " << repeatEnd
+        //         << " w = " << w;
+    } else {
+        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
+        //RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
+        //         << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")";
+    }
+
+
+    //RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << ", w " << w << ", h " << h;
+
+    CompositionRect cr(origin, QSize(w, h));
+    QString label = strtoqstr(s.getLabel());
+    if (s.getType() == Segment::Audio) {
+        static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
+        static QRegExp re2("\\.[^.]+$"); // filename suffix
+        label.replace(re1, "").replace(re2, "");
+    }
+    cr.setLabel(label);
+
+    if (s.isRepeating()) {
+        computeRepeatMarks(cr, &s);
+    } else {
+        cr.setBaseWidth(cr.width());
+    }
+
+    updateCachedSegment(&s, cr);
+
+    return cr;
+}
+
+QPoint CompositionModelImpl::topLeft(const Segment& s) const
+{
+    Profiler profiler("CompositionModelImpl::topLeft");
+
+    int trackPosition = m_composition.getTrackPositionById(s.getTrack());
+    timeT startTime = s.getStartTime();
+
+    QPoint res;
+
+    res.setX(int(nearbyint(m_grid.getRulerScale()->getXForTime(startTime))));
+
+    res.setY(m_grid.getYBinCoordinate(trackPosition) +
+             m_composition.getSegmentVoiceIndex(&s) *
+             m_grid.getYSnap() + 1);
+
+    return res;
+}
+
+bool CompositionModelImpl::updateTrackHeight(const Segment *s)
+{
+    bool heightsChanged = false;
+
+    //RG_DEBUG << "updateTrackHeight()";
+
+    for (Composition::trackcontainer::const_iterator i =
+             m_composition.getTracks().begin();
+         i != m_composition.getTracks().end(); ++i) {
+
+        if (s && i->first != s->getTrack()) continue;
+
+        int max = m_composition.getMaxContemporaneousSegmentsOnTrack(i->first);
+        if (max == 0) max = 1;
+
+//        RG_DEBUG << "for track " << i->first << ": height = " << max << ", old height = " << m_trackHeights[i->first];
+
+        if (max != m_trackHeights[i->first]) {
+            heightsChanged = true;
+            m_trackHeights[i->first] = max;
+        }
+
+        m_grid.setBinHeightMultiple(i->second->getPosition(), max);
+    }
+
+    if (heightsChanged) {
+        //RG_DEBUG << "updateTrackHeight(): heights have changed";
+        for (SegmentMultiSet::iterator i = m_composition.begin();
+             i != m_composition.end(); ++i) {
+            computeSegmentRect(**i);
+        }
+    }
+
+    return heightsChanged;
+}
+
+void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s) const
+{
+    if (s->isRepeating()) {
+
+        timeT startTime = s->getStartTime();
+        timeT endTime = s->getEndMarkerTime();
+        timeT repeatInterval = endTime - startTime;
+
+        if (repeatInterval <= 0) {
+            //RG_DEBUG << "WARNING: CompositionModelImpl::computeRepeatMarks: Segment at " << startTime << " has repeatInterval " << repeatInterval;
+            //RG_DEBUG << kdBacktrace();
+            return ;
+        }
+
+        timeT repeatStart = endTime;
+        timeT repeatEnd = s->getRepeatEndTime();
+        sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
+                                  repeatEnd - startTime))));
+
+        CompositionRect::repeatmarks repeatMarks;
+
+        //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
+        //         << repeatStart << " - repeatEnd = " << repeatEnd;
+
+        for (timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
+            int mark = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark)));
+            //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : mark at " << mark;
+            repeatMarks.push_back(mark);
+        }
+
+        // ??? COPY.  If we could get a non-const reference to
+        //     m_repeatMarks, we could avoid the copy.
+        // ??? Or move this routine
+        //     (CompositionModelImpl::computeRepeatMarks()) to
+        //     CompositionRect::updateRepeatMarks(segment, grid).
+        sr.setRepeatMarks(repeatMarks);
+
+        if (repeatMarks.size() > 0)
+            sr.setBaseWidth(repeatMarks[0] - sr.x());
+        else {
+            //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : no repeat marks";
+            sr.setBaseWidth(sr.width());
+        }
+
+        //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : s = "
+        //         << s << " base width = " << sr.getBaseWidth()
+        //         << " - nb repeat marks = " << repeatMarks.size();
+
+    }
+}
+
+unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment* s)
+{
+    /// ??? z-order is obsolete.  Remove.
+
+    return m_segmentOrderer.getZForSegment(s);
+}
+
+void CompositionModelImpl::updateCachedSegment(const Segment*s, const CompositionRect& cr)
+{
+    m_segmentRectMap[s] = cr;
+    // ??? Why not add begin and end times to CompositionRect and get
+    //     rid of this?
+    m_segmentEndTimeMap[s] = s->getEndMarkerTime();
+}
+
+const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segment* s, timeT& endTime)
+{
+    endTime = m_segmentEndTimeMap[s];
+
+    // ??? Trying to figure out how the cached value is different from the one
+    //     we already have in the Segment.
+    //     This is different right off the bat.  Creating a segment tests this.
+    // ??? DO NOT COMMIT THIS!!!  Delete it if I accidentally commit this!
+    //Q_ASSERT_X(endTime == s->getEndMarkerTime(),
+    //           "CompositionModelImpl::getFromCache()",
+    //           "Cached end time really is different.");
+
+    return m_segmentRectMap[s];
+}
+
+bool CompositionModelImpl::isCachedRectCurrent(
+        const Segment &segment,
+        const CompositionRect &cachedCR,  // = m_segmentRectMap[segment]
+        QPoint segmentTopLeft,            // = topLeft(segment)
+        timeT cachedSegmentEndTime)       // = m_segmentEndTimeMap[segment]
+{
+    //RG_DEBUG << "isCachedRectCurrent()...";
+
+    // ??? ISTM that the cache should work as follows...  The segment begin
+    //     and end times (and repeat mode) should be used to determine
+    //     whether the cache is
+    //     current.  If the begin or end have changed, then the cached
+    //     CompositionRect is outdated and needs to be recomputed.  So,
+    //     we need to cache the begin and end time for each segment, then
+    //     cache the composition rect.  Or add the begin and end time to
+    //     CompositionRect.  Repeat mode is already there.
+
+    // If the repeating mode changes, the rect is very different.
+    bool repeatingMatches = (segment.isRepeating() == cachedCR.isRepeating());
+
+    //RG_DEBUG << "  repeatingMatches: " << repeatingMatches;
+
+    // ??? This happens when we are moving a segment.  So, when moving a
+    //     segment, this indicates that the cache is ok.  That seems
+    //     a bit too clever.
+    bool nothingMatches =
+            (segmentTopLeft.x() != cachedCR.x()  &&
+             segment.getEndMarkerTime() != cachedSegmentEndTime);
+
+    //RG_DEBUG << "  nothingMatches: " << nothingMatches;
+
+    // If the begin and end are different, the rect is different.
+    bool everythingMatches =
+            (segmentTopLeft.x() == cachedCR.x()  &&
+             segment.getEndMarkerTime() == cachedSegmentEndTime);
+
+    //RG_DEBUG << "  everythingMatches: " << everythingMatches;
+
+    /*
+       Use cases.
+
+       (Note that this routine is never called for a repeating segment.)
+
+       When adjusting the beginning of a segment, we return false since
+       nothingMatches is false and everythingMatches is false.
+
+       When adjusting the end of a segment, we return true since
+       everythingMatches is true.  I'm not sure
+       why.  I assume that the cache has been updated before we get here.
+
+       When moving a segment, we return true since nothingMatches is true.
+    */
+
+    bool isCurrent = (repeatingMatches && (nothingMatches || everythingMatches));
+
+    //RG_DEBUG << "  isCurrent: " << isCurrent;
+
+    return isCurrent;
+
+    // The original code.  It has been broken apart above for analysis.
+//    return segment.isRepeating() == cachedCR.isRepeating() &&
+//           ((segmentTopLeft.x() != cachedCR.x() && segment.getEndMarkerTime() != cachedSegmentEndTime) ||
+//            (segmentTopLeft.x() == cachedCR.x() && segment.getEndMarkerTime() == cachedSegmentEndTime));
+}
+
+void CompositionModelImpl::deleteCachedSegment(
+        const Segment *s, bool previewToo)
+{
+    if (s) {
+        m_segmentRectMap.erase(s);
+        m_segmentEndTimeMap.erase(s);
+        if (previewToo)
+            deleteCachedPreview(s);
+    } else { // clear the whole cache
+        m_segmentRectMap.clear();
+        m_segmentEndTimeMap.clear();
+        if (previewToo)
+            deleteCachedPreviews();
+    }
+}
+
+CompositionModelImpl::ChangingSegmentSet CompositionModelImpl::getItemsAt(const QPoint& point)
+{
+    //RG_DEBUG << "CompositionModelImpl::getItemsAt()";
+
+    ChangingSegmentSet res;
+
+    const SegmentMultiSet& segments = m_composition.getSegments();
+
+    // For each segment in the composition
+    for (SegmentMultiSet::const_iterator i = segments.begin();
+         i != segments.end(); ++i) {
+
+        const Segment* s = *i;
+
+        CompositionRect sr = computeSegmentRect(*s);
+        if (sr.contains(point)) {
+            //RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s;
+            // ??? Can we get rid of this copy to reduce the burden on
+            //     callers?  Otherwise callers must delete these objects.
+            //     It appears that some do not and memory is leaked.
+            //     CompositionItem is a pretty small object, so copying it
+            //     around should be ok.  Might be able to switch from
+            //     CompositionItemPtr to CompositionItem.
+            CompositionItemPtr item(new CompositionItem(*const_cast<Segment *>(s),
+                                                         sr));
+            // ??? The "z order" concept is obsolete.  This can go.
+            unsigned int z = computeZForSegment(s);
+            //RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z;
+            item->setZ(z);
+            res.insert(item);
+        } else {
+            //RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr;
+        }
+
+    }
+
+    if (res.size() == 1) { // only one segment under click point
+        Segment* s = CompositionItemHelper::getSegment(*(res.begin()));
+        m_segmentOrderer.segmentClicked(s);
+    }
+
+    return res;
+}
+
+void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
+{
+    //RG_DEBUG << "segmentAdded(): segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
+    updateTrackHeight(s);
+
+    // ??? Why do it now?  Why not let getNotationPreview() do it
+    //     on its own when/if it is needed?
+    //makePreviewCache(s);
+
+    s->addObserver(this);
+
+    emit needUpdate();
+}
+
+void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
+{
+    // Update track height for all tracks.
+    updateTrackHeight();
+
+    QRect r = computeSegmentRect(*s);
+
+    m_selectedSegments.erase(s);
+
+    deleteCachedSegment(s, true);
+    s->removeObserver(this);
+    m_recordingSegments.erase(s); // this could be a recording segment
+    emit needUpdate(r);
+}
+
+void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, TrackId tid)
+{
+    RG_DEBUG << "CompositionModelImpl::segmentTrackChanged: segment " << s << " on track " << tid << ", calling updateTrackHeight()";
+
+    // Update the height of all tracks.
+    // we don't call updateTrackHeight(s), because some of the tracks
+    // above s may have changed height as well (if s was moved off one
+    // of them)
+    if (updateTrackHeight()) {
+        RG_DEBUG << "... changed, updating";
+        emit needUpdate();
+    }
+}
+
+void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
+{
+//    RG_DEBUG << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
+    if (updateTrackHeight(s)) emit needUpdate();
+}
+
+void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
+{
+    Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
+//    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
+    if (updateTrackHeight(s)) {
+//        RG_DEBUG << "... changed, updating";
+        emit needUpdate();
+    }
+}
+
+void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
+{
+    deleteCachedSegment(s);
+    updateTrackHeight(s);
+    emit needUpdate();
+}
+
+void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
+{
+    emit needSizeUpdate();
+}
+
+// --- Recording ----------------------------------------------------
+
+void CompositionModelImpl::addRecordingItem(CompositionItemPtr item)
+{
+    m_recordingSegments.insert(item->getSegment());
+
+    emit needUpdate();
+
+    //RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
+    //         << m_recordingSegments.size() << " recording items";
+}
+
+void CompositionModelImpl::pointerPosChanged(int x)
+{
+    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() begin";
+
+    // Update the end point for the recording segments.
+    m_pointerTime = m_grid.getRulerScale()->getTimeForX(x);
+
+    // For each recording segment
+    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
+            i != m_recordingSegments.end(); ++i) {
+        // Ask CompositionView to update.
+        emit needUpdate(computeSegmentRect(**i));
+    }
+
+    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
+}
+
+void CompositionModelImpl::clearRecordingItems()
+{
+    //RG_DEBUG << "CompositionModelImpl::clearRecordingItem";
+
+    // For each recording segment, remove it from the caches.
+    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
+            i != m_recordingSegments.end(); ++i)
+        deleteCachedSegment(*i, true);
+
+    m_recordingSegments.clear();
+
+    emit needUpdate();
+}
+
+bool CompositionModelImpl::isRecording(const Segment* s) const
+{
+    return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
+}
+
+void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
+{
+    //RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()";
+    deleteCachedPreview(s);
+}
+
+// --- Changing -----------------------------------------------------
+
+void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType change)
+{
+    m_changeType = change;
+
+    // If we already know this segment is changing
+    if (m_changingSegments.find(item) != m_changingSegments.end()) {
+        //RG_DEBUG << "CompositionModelImpl::startChange : item already in";
+
+        // Put this one on the garbage collection list for later cleanup
+        // by endChange().
+        // ??? If CompositionItemPtr were a QSharedPointer,
+        //     m_changingSegmentGC would be unnecessary.
+        m_changingSegmentGC.push_back(item);
+    } else {
+        // Save the original rectangle for this segment
+        item->saveRect();
+
+        m_changingSegments.insert(item);
+    }
+}
+
+void CompositionModelImpl::startChangeSelection(ChangeType change)
+{
+    // For each selected segment
+    for (SegmentSelection::iterator i = m_selectedSegments.begin();
+            i != m_selectedSegments.end(); ++i) {
+        CompositionItemPtr item =
+                new CompositionItem(**i, computeSegmentRect(**i));
+        startChange(item, change);
+    }
+}
+
+void CompositionModelImpl::endChange()
+{
+    //RG_DEBUG << "CompositionModelImpl::endChange";
+
+    // For each segment that was changing
+    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin();
+            i != m_changingSegments.end(); ++i) {
+        delete *i;
+    }
+
+    m_changingSegments.clear();
+
+    // For each segment in the garbage collection list
+    // ??? If CompositionItemPtr were a QSharedPointer,
+    //     m_changingSegmentGC would be unnecessary.
+    for (ChangingSegmentGC::iterator i = m_changingSegmentGC.begin();
+            i != m_changingSegmentGC.end(); ++i) {
+        delete *i;
+    }
+
+    m_changingSegmentGC.clear();
+
+    emit needUpdate();
+}
+
+bool CompositionModelImpl::isChanging(const Segment* sm) const
+{
+    ChangingSegmentSet::const_iterator movEnd = m_changingSegments.end();
+
+    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
+        const CompositionItem* ci = *i;
+        const Segment* s = ci->getSegment();
+        if (sm == s)
+            return true;
+    }
+
+    return false;
+}
+
+// --- Notation Previews --------------------------------------------
+
+void CompositionModelImpl::eventAdded(const Segment *s, Event *)
+{
+    //RG_DEBUG << "CompositionModelImpl::eventAdded()";
+    Profiler profiler("CompositionModelImpl::eventAdded()");
+    deleteCachedPreview(s);
+    emit needUpdate(computeSegmentRect(*s));
+}
+
+void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
+{
+    //RG_DEBUG << "CompositionModelImpl::eventRemoved";
+    Profiler profiler("CompositionModelImpl::eventRemoved()");
+    deleteCachedPreview(s);
+    emit needUpdate(computeSegmentRect(*s));
+}
+
+void CompositionModelImpl::allEventsChanged(const Segment *s)
+{
+     Profiler profiler("CompositionModelImpl::allEventsChanged()");
+     deleteCachedPreview(s);
+    emit needUpdate(computeSegmentRect(*s));
+}
+
+void CompositionModelImpl::appearanceChanged(const Segment *s)
+{
+    //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
+    deleteCachedSegment(s, true);
+    emit needUpdate(computeSegmentRect(*s));
+}
+
+void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
+{
+    Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
+    //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
+    deleteCachedSegment(s, true);
+    if (shorten) {
+        emit needUpdate(); // no longer know former segment dimension
+    } else {
+        emit needUpdate(computeSegmentRect(*s));
+    }
+}
 
 struct RectCompare {
     bool operator()(const QRect &r1, const QRect &r2) const {
@@ -292,136 +1060,41 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
     ranges->push_back(interval);
 }
 
-void CompositionModelImpl::makeAudioPreview(
-        AudioPreviews* apRects, const Segment* segment,
-        const CompositionRect& segRect)
+CompositionModelImpl::NotationPreview *
+CompositionModelImpl::getNotationPreview(const Segment *s)
 {
-    Profiler profiler("CompositionModelImpl::makeAudioPreview");
+    // ??? Consider combining getNotationPreview() and
+    //     updateCachedNotationPreview().  The only caller of
+    //     updateCachedNotationPreview() (segmentAdded()) has no need
+    //     to call it at all.
 
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect;
+    // Try the cache.
+    NotationPreview *notationPreview = m_notationPreviewCache[s];
 
-    // ??? This is the only call to this function.  Inline it.
-    QImageVector previewImage = getAudioPreviewImage(segment);
+    // If there was nothing in the cache for this segment, generate it.
+    if (!notationPreview)
+        notationPreview = updateCachedNotationPreview(s);
 
-    // ??? COPY.  Why not create this object earlier and build the
-    //     preview in it?  That would avoid the copy.
-    AudioPreview previewItem(previewImage, segRect);
-
-    if (m_changeType == ChangeResizeFromStart) {
-        CompositionRect originalRect = computeSegmentRect(*segment);
-        previewItem.resizeOffset = segRect.x() - originalRect.x();
-    }
-
-    apRects->push_back(previewItem);
+    return notationPreview;
 }
 
-void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s) const
+CompositionModelImpl::NotationPreview *
+CompositionModelImpl::updateCachedNotationPreview(const Segment *segment)
 {
-    if (s->isRepeating()) {
+    NotationPreview *notationPreview = new NotationPreview();
 
-        timeT startTime = s->getStartTime();
-        timeT endTime = s->getEndMarkerTime();
-        timeT repeatInterval = endTime - startTime;
+    // Create the preview
+    makeNotationPreview(segment, notationPreview);
 
-        if (repeatInterval <= 0) {
-            //RG_DEBUG << "WARNING: CompositionModelImpl::computeRepeatMarks: Segment at " << startTime << " has repeatInterval " << repeatInterval;
-            //RG_DEBUG << kdBacktrace();
-            return ;
-        }
+    // Avoid potential memory leaks.
+    //delete m_notationPreviewCache[segment];
 
-        timeT repeatStart = endTime;
-        timeT repeatEnd = s->getRepeatEndTime();
-        sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
-                                  repeatEnd - startTime))));
+    // Store in the cache.
+    // Callers guarantee that m_notationPreviewCache[segment] is not
+    // currently pointing to anything.
+    m_notationPreviewCache[segment] = notationPreview;
 
-        CompositionRect::repeatmarks repeatMarks;
-
-        //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
-        //         << repeatStart << " - repeatEnd = " << repeatEnd;
-
-        for (timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
-            int mark = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark)));
-            //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : mark at " << mark;
-            repeatMarks.push_back(mark);
-        }
-
-        // ??? COPY.  If we could get a non-const reference to
-        //     m_repeatMarks, we could avoid the copy.
-        // ??? Or move this routine
-        //     (CompositionModelImpl::computeRepeatMarks()) to
-        //     CompositionRect::updateRepeatMarks(segment, grid).
-        sr.setRepeatMarks(repeatMarks);
-
-        if (repeatMarks.size() > 0)
-            sr.setBaseWidth(repeatMarks[0] - sr.x());
-        else {
-            //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : no repeat marks";
-            sr.setBaseWidth(sr.width());
-        }
-
-        //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : s = "
-        //         << s << " base width = " << sr.getBaseWidth()
-        //         << " - nb repeat marks = " << repeatMarks.size();
-
-    }
-}
-
-void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
-{
-    //RG_DEBUG << "\nCompositionModelImpl::setAudioPreviewThread()";
-
-    // For each AudioPreviewUpdater
-    while (!m_audioPreviewUpdaterMap.empty()) {
-        // Cause any running previews to be cancelled
-        delete m_audioPreviewUpdaterMap.begin()->second;
-        m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
-    }
-
-    m_audioPreviewThread = thread;
-}
-
-void CompositionModelImpl::deleteCachedPreviews()
-{
-    //RG_DEBUG << "deleteCachedPreviews";
-
-    for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
-         i != m_notationPreviewCache.end(); ++i) {
-        delete i->second;
-    }
-    for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
-         i != m_audioPeaksCache.end(); ++i) {
-        delete i->second;
-    }
-
-    m_notationPreviewCache.clear();
-    m_audioPeaksCache.clear();
-
-    m_audioPreviewImageCache.clear();
-
-    for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
-         i != m_audioPreviewUpdaterMap.end(); ++i) {
-        i->second->cancel();
-    }
-
-    const SegmentMultiSet& segments = m_composition.getSegments();
-    SegmentMultiSet::const_iterator segEnd = segments.end();
-
-    // Regenerate all of the audio previews.
-    // ??? Why?  This routine is supposed to delete all the previews.
-    //     Why is it regenerating the audio previews?  Split this out
-    //     into an updateCachedAudioPreviews() and call it where it's
-    //     needed.  Then determine whether it is really needed.
-
-    for (SegmentMultiSet::const_iterator i = segments.begin();
-            i != segEnd; ++i) {
-
-        if ((*i)->getType() == Segment::Audio) {
-            // This will create the audio preview updater.  The
-            // preview won't be calculated and cached until the
-            // updater completes and calls back.
-            makeAudioPeaksAsync((*i));
-        }
-    }
+    return notationPreview;
 }
 
 void CompositionModelImpl::makeNotationPreview(
@@ -461,9 +1134,9 @@ void CompositionModelImpl::makeNotationPreview(
 
         timeT eventStart = (*i)->getAbsoluteTime();
         timeT eventEnd = eventStart + (*i)->getDuration();
-        // 	if (eventEnd > segment->getEndMarkerTime()) {
-        // 	    eventEnd = segment->getEndMarkerTime();
-        // 	}
+        //  if (eventEnd > segment->getEndMarkerTime()) {
+        //      eventEnd = segment->getEndMarkerTime();
+        //  }
 
         int x = static_cast<int>(nearbyint(
                 m_grid.getRulerScale()->getXForTime(eventStart)));
@@ -499,6 +1172,99 @@ void CompositionModelImpl::makeNotationPreview(
 
         npData->push_back(r);
     }
+}
+
+// --- Audio Previews -----------------------------------------------
+
+void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
+{
+    //RG_DEBUG << "\nCompositionModelImpl::setAudioPreviewThread()";
+
+    // For each AudioPreviewUpdater
+    while (!m_audioPreviewUpdaterMap.empty()) {
+        // Cause any running previews to be cancelled
+        delete m_audioPreviewUpdaterMap.begin()->second;
+        m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
+    }
+
+    m_audioPreviewThread = thread;
+}
+
+void CompositionModelImpl::makeAudioPreview(
+        AudioPreviews* apRects, const Segment* segment,
+        const CompositionRect& segRect)
+{
+    Profiler profiler("CompositionModelImpl::makeAudioPreview");
+
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect;
+
+    // ??? This is the only call to this function.  Inline it.
+    QImageVector previewImage = getAudioPreviewImage(segment);
+
+    // ??? COPY.  Why not create this object earlier and build the
+    //     preview in it?  That would avoid the copy.
+    AudioPreview previewItem(previewImage, segRect);
+
+    if (m_changeType == ChangeResizeFromStart) {
+        CompositionRect originalRect = computeSegmentRect(*segment);
+        previewItem.resizeOffset = segRect.x() - originalRect.x();
+    }
+
+    apRects->push_back(previewItem);
+}
+
+CompositionModelImpl::QImageVector
+CompositionModelImpl::getAudioPreviewImage(const Segment* s)
+{
+    // If needed, begin the asynchronous process of generating an
+    // audio preview.
+    getAudioPeaks(s);
+
+    return m_audioPreviewImageCache[s];
+}
+
+CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segment* s)
+{
+    Profiler profiler("CompositionModelImpl::getAudioPeaks");
+    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks";
+
+    /**
+     * ??? This is called recursively.  This triggers the async preview
+     *     generation process (updateCachedAudioPeaks()) and is called
+     *     again once the process completes
+     *     (by slotAudioPeaksComplete()) to get the info from the cache.
+     *     This is too tangled.  Simplify.
+     */
+
+    AudioPeaks* apData = m_audioPeaksCache[s];
+
+    if (!apData) {
+        apData = updateCachedAudioPeaks(s);
+    }
+
+    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks returning";
+    return apData;
+}
+
+CompositionModelImpl::AudioPeaks *
+CompositionModelImpl::updateCachedAudioPeaks(const Segment *s)
+{
+    //RG_DEBUG << "updateCachedAudioPeaks(" << s << ")";
+
+    // ??? makePreviewCache() calls this.  That's probably not necessary
+    //     given that one way or another the preview generation will occur.
+    //     If we can get rid of the call from makePreviewCache(), we can
+    //     inline this into its only remaining caller, getAudioPeaks().
+
+    AudioPeaks* apData = new AudioPeaks();
+    makeAudioPeaksAsync(s);
+
+    // Avoid potential memory leaks.
+    //delete m_audioPeaksCache[s];
+
+    m_audioPeaksCache[s] = apData;
+
+    return apData;
 }
 
 void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
@@ -572,6 +1338,8 @@ QRect CompositionModelImpl::updateCachedPreviewImage(AudioPeaks* apData, const S
     return previewPainter.getSegmentRect();
 }
 
+// --- Previews -----------------------------------------------------
+
 void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 {
     RG_DEBUG << "slotInstrumentChanged()";
@@ -598,75 +1366,6 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
     }
 }
 
-void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
-{
-    //RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()";
-    deleteCachedPreview(s);
-}
-
-CompositionModelImpl::QImageVector
-CompositionModelImpl::getAudioPreviewImage(const Segment* s)
-{
-    // If needed, begin the asynchronous process of generating an
-    // audio preview.
-    getAudioPeaks(s);
-
-    return m_audioPreviewImageCache[s];
-}
-
-void CompositionModelImpl::eventAdded(const Segment *s, Event *)
-{
-    //RG_DEBUG << "CompositionModelImpl::eventAdded()";
-    Profiler profiler("CompositionModelImpl::eventAdded()");
-    deleteCachedPreview(s);
-    emit needUpdate(computeSegmentRect(*s));
-}
-
-void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
-{
-    //RG_DEBUG << "CompositionModelImpl::eventRemoved";
-    Profiler profiler("CompositionModelImpl::eventRemoved()");
-    deleteCachedPreview(s);
-    emit needUpdate(computeSegmentRect(*s));
-}
-
-void CompositionModelImpl::allEventsChanged(const Segment *s)
-{
-     Profiler profiler("CompositionModelImpl::allEventsChanged()");
-     deleteCachedPreview(s);
-    emit needUpdate(computeSegmentRect(*s));
-}
-
-void CompositionModelImpl::appearanceChanged(const Segment *s)
-{
-    //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
-    deleteCachedSegment(s, true);
-    emit needUpdate(computeSegmentRect(*s));
-}
-
-void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
-{
-    Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
-    //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
-    deleteCachedSegment(s, true);
-    if (shorten) {
-        emit needUpdate(); // no longer know former segment dimension
-    } else {
-        emit needUpdate(computeSegmentRect(*s));
-    }
-}
-
-#if 0
-void CompositionModelImpl::makePreviewCache(const Segment *s)
-{
-    if (s->getType() == Segment::Internal) {
-        updateCachedNotationPreview(s);
-    } else {
-        updateCachedAudioPeaks(s);
-    }
-}
-#endif
-
 void CompositionModelImpl::deleteCachedPreview(const Segment *s)
 {
     if (s->getType() == Segment::Internal) {
@@ -682,75 +1381,86 @@ void CompositionModelImpl::deleteCachedPreview(const Segment *s)
 
 }
 
-void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
+void CompositionModelImpl::deleteCachedPreviews()
 {
-    //RG_DEBUG << "segmentAdded(): segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
-    updateTrackHeight(s);
+    //RG_DEBUG << "deleteCachedPreviews";
 
-    // ??? Why do it now?  Why not let getNotationPreview() do it
-    //     on its own when/if it is needed?
-    //makePreviewCache(s);
+    for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
+         i != m_notationPreviewCache.end(); ++i) {
+        delete i->second;
+    }
+    for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
+         i != m_audioPeaksCache.end(); ++i) {
+        delete i->second;
+    }
 
-    s->addObserver(this);
+    m_notationPreviewCache.clear();
+    m_audioPeaksCache.clear();
+
+    m_audioPreviewImageCache.clear();
+
+    for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
+         i != m_audioPreviewUpdaterMap.end(); ++i) {
+        i->second->cancel();
+    }
+
+    const SegmentMultiSet& segments = m_composition.getSegments();
+    SegmentMultiSet::const_iterator segEnd = segments.end();
+
+    // Regenerate all of the audio previews.
+    // ??? Why?  This routine is supposed to delete all the previews.
+    //     Why is it regenerating the audio previews?  Split this out
+    //     into an updateCachedAudioPreviews() and call it where it's
+    //     needed.  Then determine whether it is really needed.
+
+    for (SegmentMultiSet::const_iterator i = segments.begin();
+            i != segEnd; ++i) {
+
+        if ((*i)->getType() == Segment::Audio) {
+            // This will create the audio preview updater.  The
+            // preview won't be calculated and cached until the
+            // updater completes and calls back.
+            makeAudioPeaksAsync((*i));
+        }
+    }
+}
+
+// --- Selection ----------------------------------------------------
+
+void CompositionModelImpl::setSelected(Segment *segment, bool selected)
+{
+    if (!segment) {
+        RG_DEBUG << "WARNING : CompositionModelImpl::setSelected() - segment is NULL";
+        return;
+    }
+
+    //RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected;
+
+    // Update m_selectedSegments
+    if (selected) {
+        if (!isSelected(segment))
+            m_selectedSegments.insert(segment);
+    } else {
+        SegmentSelection::iterator i = m_selectedSegments.find(segment);
+        if (i != m_selectedSegments.end())
+            m_selectedSegments.erase(i);
+    }
 
     emit needUpdate();
 }
 
-void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
+void CompositionModelImpl::selectSegments(const SegmentSelection &segments)
 {
-    // Update track height for all tracks.
-    updateTrackHeight();
-
-    QRect r = computeSegmentRect(*s);
-
-    m_selectedSegments.erase(s);
-
-    deleteCachedSegment(s, true);
-    s->removeObserver(this);
-    m_recordingSegments.erase(s); // this could be a recording segment
-    emit needUpdate(r);
-}
-
-void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, TrackId tid)
-{
-    RG_DEBUG << "CompositionModelImpl::segmentTrackChanged: segment " << s << " on track " << tid << ", calling updateTrackHeight()";
-
-    // Update the height of all tracks.
-    // we don't call updateTrackHeight(s), because some of the tracks
-    // above s may have changed height as well (if s was moved off one
-    // of them)
-    if (updateTrackHeight()) {
-        RG_DEBUG << "... changed, updating";
-        emit needUpdate();
-    }
-}
-
-void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
-{
-//    RG_DEBUG << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
-    if (updateTrackHeight(s)) emit needUpdate();
-}
-
-void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
-{
-    Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
-//    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
-    if (updateTrackHeight(s)) {
-//        RG_DEBUG << "... changed, updating";
-        emit needUpdate();
-    }
-}
-
-void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
-{
-    deleteCachedSegment(s);
-    updateTrackHeight(s);
+    m_selectedSegments = segments;
     emit needUpdate();
 }
 
-void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
+void CompositionModelImpl::clearSelected()
 {
-    emit needSizeUpdate();
+    //RG_DEBUG << "CompositionModelImpl::clearSelected";
+
+    m_selectedSegments.clear();
+    emit needUpdate();
 }
 
 void CompositionModelImpl::setSelectionRect(const QRect &rect)
@@ -770,7 +1480,7 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
     // For each segment in the composition
     for (SegmentMultiSet::iterator i = segments.begin();
          i != segEnd; ++i) {
-        
+
         CompositionRect segmentRect = computeSegmentRect(**i);
 
         if (segmentRect.intersects(m_selectionRect)) {
@@ -813,6 +1523,16 @@ void CompositionModelImpl::finalizeSelectionRect()
     m_tmpSelectedSegments.clear();
 }
 
+void CompositionModelImpl::selectionHasChanged()
+{
+    emit selectionChanged(getSelectedSegments());
+}
+
+bool CompositionModelImpl::isSelected(const Segment *s) const
+{
+    return m_selectedSegments.find(const_cast<Segment *>(s)) != m_selectedSegments.end();
+}
+
 QRect CompositionModelImpl::getSelectedSegmentsRect()
 {
     QRect selectionRect;
@@ -828,222 +1548,6 @@ QRect CompositionModelImpl::getSelectedSegmentsRect()
     return selectionRect;
 }
 
-void CompositionModelImpl::addRecordingItem(CompositionItemPtr item)
-{
-    m_recordingSegments.insert(item->getSegment());
-
-    emit needUpdate();
-
-    //RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
-    //         << m_recordingSegments.size() << " recording items";
-}
-
-void CompositionModelImpl::clearRecordingItems()
-{
-    //RG_DEBUG << "CompositionModelImpl::clearRecordingItem";
-
-    // For each recording segment, remove it from the caches.
-    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
-            i != m_recordingSegments.end(); ++i)
-        deleteCachedSegment(*i, true);
-
-    m_recordingSegments.clear();
-
-    emit needUpdate();
-}
-
-bool CompositionModelImpl::isChanging(const Segment* sm) const
-{
-    ChangingSegmentSet::const_iterator movEnd = m_changingSegments.end();
-
-    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
-        const CompositionItem* ci = *i;
-        const Segment* s = ci->getSegment();
-        if (sm == s)
-            return true;
-    }
-
-    return false;
-}
-
-bool CompositionModelImpl::isRecording(const Segment* s) const
-{
-    return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
-}
-
-CompositionModelImpl::ChangingSegmentSet CompositionModelImpl::getItemsAt(const QPoint& point)
-{
-    //RG_DEBUG << "CompositionModelImpl::getItemsAt()";
-
-    ChangingSegmentSet res;
-
-    const SegmentMultiSet& segments = m_composition.getSegments();
-
-    // For each segment in the composition
-    for (SegmentMultiSet::const_iterator i = segments.begin();
-         i != segments.end(); ++i) {
-
-        const Segment* s = *i;
-
-        CompositionRect sr = computeSegmentRect(*s);
-        if (sr.contains(point)) {
-            //RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s;
-            // ??? Can we get rid of this copy to reduce the burden on
-            //     callers?  Otherwise callers must delete these objects.
-            //     It appears that some do not and memory is leaked.
-            //     CompositionItem is a pretty small object, so copying it
-            //     around should be ok.  Might be able to switch from
-            //     CompositionItemPtr to CompositionItem.
-            CompositionItemPtr item(new CompositionItem(*const_cast<Segment *>(s),
-                                                         sr));
-            // ??? The "z order" concept is obsolete.  This can go.
-            unsigned int z = computeZForSegment(s);
-            //RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z;
-            item->setZ(z);
-            res.insert(item);
-        } else {
-            //RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr;
-        }
-
-    }
-
-    if (res.size() == 1) { // only one segment under click point
-        Segment* s = CompositionItemHelper::getSegment(*(res.begin()));
-        m_segmentOrderer.segmentClicked(s);
-    }
-
-    return res;
-}
-
-CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
-{
-    // ??? Combine this with getItemsAt() to make a single routine that
-    //     is focused on "getting the first item at".  Should be able to
-    //     do some simplification.
-
-    // This returns *copies* of the CompositionItem objects that must be
-    // deleted.
-    ChangingSegmentSet items = getItemsAt(pos);
-
-    //RG_DEBUG << "getFirstItemAt() got" << items.size() << "items";
-
-    if (items.empty())
-        return 0;
-
-    if (items.size() == 1)
-        return *(items.begin());
-
-    // Find the topmost item.  I.e. the item with the greatest Z value.
-
-    // SegmentOrderer determines the Z order of a segment based on whether
-    // it was last clicked.  Last clicked segments have the highest Z order.
-
-    // ??? What's the test case here?
-    //     In order to get more than one segment in here, we
-    //     need two segments to use the same space on the display.  That
-    //     only appears to happen when recording on a track that already
-    //     has segments.  Then it becomes rather difficult to select between
-    //     the two.  Like impossible.  So, I think this needs to be
-    //     addressed although I doubt anyone cares.  I recommend opening
-    //     a new "lane" when recording on a track with existing
-    //     segments.  That seems to fit the existing behavior best.  Then
-    //     overlapping becomes impossible and all this special handling
-    //     can go.
-
-    CompositionModelImpl::ChangingSegmentSet::iterator maxZItemIter = items.begin();
-    CompositionItemPtr maxZItem = *(maxZItemIter);
-    unsigned int maxZ = maxZItem->z();
-
-    // For each item
-    for (CompositionModelImpl::ChangingSegmentSet::iterator i = items.begin();
-         i != items.end(); ++i) {
-        CompositionItemPtr item = *i;
-        // If this one has the greatest z so far
-        if (item->z() > maxZ) {
-            maxZItem = item;
-            maxZ = item->z();
-            maxZItemIter = i;
-        }
-    }
-
-    // Remove the one we want so that it doesn't get deleted.
-    items.erase(maxZItemIter);
-
-    // Delete all the others.
-    for (CompositionModelImpl::ChangingSegmentSet::iterator i = items.begin();
-         i != items.end(); ++i)
-        delete *i;
-
-    // ??? Need to audit all callers.  Many of them do not delete the
-    //     returned object.  Even better, make CompositionItemPtr into a
-    //     QSharedPointer.  Then we don't care.
-
-    return maxZItem;
-}
-
-void CompositionModelImpl::pointerPosChanged(int x)
-{
-    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() begin";
-
-    // Update the end point for the recording segments.
-    m_pointerTime = m_grid.getRulerScale()->getTimeForX(x);
-
-    // For each recording segment
-    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
-            i != m_recordingSegments.end(); ++i) {
-        // Ask CompositionView to update.
-        emit needUpdate(computeSegmentRect(**i));
-    }
-
-    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
-}
-
-void CompositionModelImpl::setSelected(Segment *segment, bool selected)
-{
-    if (!segment) {
-        RG_DEBUG << "WARNING : CompositionModelImpl::setSelected() - segment is NULL";
-        return;
-    }
-
-    //RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected;
-
-    // Update m_selectedSegments
-    if (selected) {
-        if (!isSelected(segment))
-            m_selectedSegments.insert(segment);
-    } else {
-        SegmentSelection::iterator i = m_selectedSegments.find(segment);
-        if (i != m_selectedSegments.end())
-            m_selectedSegments.erase(i);
-    }
-
-    emit needUpdate();
-}
-
-void CompositionModelImpl::selectSegments(const SegmentSelection &segments)
-{
-    m_selectedSegments = segments;
-    emit needUpdate();
-}
-
-void CompositionModelImpl::selectionHasChanged()
-{
-    emit selectionChanged(getSelectedSegments());
-}
-
-void CompositionModelImpl::clearSelected()
-{
-    //RG_DEBUG << "CompositionModelImpl::clearSelected";
-
-    m_selectedSegments.clear();
-    emit needUpdate();
-}
-
-bool CompositionModelImpl::isSelected(const Segment *s) const
-{
-    return m_selectedSegments.find(const_cast<Segment *>(s)) != m_selectedSegments.end();
-}
-
 bool CompositionModelImpl::isTmpSelected(const Segment *s) const
 {
     return m_tmpSelectedSegments.find(const_cast<Segment *>(s)) != m_tmpSelectedSegments.end();
@@ -1054,431 +1558,22 @@ bool CompositionModelImpl::wasTmpSelected(const Segment *s) const
     return m_previousTmpSelectedSegments.find(const_cast<Segment *>(s)) != m_previousTmpSelectedSegments.end();
 }
 
-void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType change)
+// --- Misc ---------------------------------------------------------
+
+#if 0
+void CompositionModelImpl::makePreviewCache(const Segment *s)
 {
-    m_changeType = change;
-
-    // If we already know this segment is changing
-    if (m_changingSegments.find(item) != m_changingSegments.end()) {
-        //RG_DEBUG << "CompositionModelImpl::startChange : item already in";
-
-        // Put this one on the garbage collection list for later cleanup
-        // by endChange().
-        // ??? If CompositionItemPtr were a QSharedPointer,
-        //     m_changingSegmentGC would be unnecessary.
-        m_changingSegmentGC.push_back(item);
+    if (s->getType() == Segment::Internal) {
+        updateCachedNotationPreview(s);
     } else {
-        // Save the original rectangle for this segment
-        item->saveRect();
-
-        m_changingSegments.insert(item);
+        updateCachedAudioPeaks(s);
     }
 }
-
-void CompositionModelImpl::startChangeSelection(ChangeType change)
-{
-    // For each selected segment
-    for (SegmentSelection::iterator i = m_selectedSegments.begin();
-            i != m_selectedSegments.end(); ++i) {
-        CompositionItemPtr item =
-                new CompositionItem(**i, computeSegmentRect(**i));
-        startChange(item, change);
-    }
-}
-
-void CompositionModelImpl::endChange()
-{
-    //RG_DEBUG << "CompositionModelImpl::endChange";
-
-    // For each segment that was changing
-    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin();
-            i != m_changingSegments.end(); ++i) {
-        delete *i;
-    }
-
-    m_changingSegments.clear();
-
-    // For each segment in the garbage collection list
-    // ??? If CompositionItemPtr were a QSharedPointer,
-    //     m_changingSegmentGC would be unnecessary.
-    for (ChangingSegmentGC::iterator i = m_changingSegmentGC.begin();
-            i != m_changingSegmentGC.end(); ++i) {
-        delete *i;
-    }
-
-    m_changingSegmentGC.clear();
-
-    emit needUpdate();
-}
+#endif
 
 int CompositionModelImpl::getCompositionHeight()
 {
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
-}
-
-bool CompositionModelImpl::updateTrackHeight(const Segment *s)
-{
-    bool heightsChanged = false;
-
-    //RG_DEBUG << "updateTrackHeight()";
-
-    for (Composition::trackcontainer::const_iterator i = 
-             m_composition.getTracks().begin();
-         i != m_composition.getTracks().end(); ++i) {
-
-        if (s && i->first != s->getTrack()) continue;
-        
-        int max = m_composition.getMaxContemporaneousSegmentsOnTrack(i->first);
-        if (max == 0) max = 1;
-
-//        RG_DEBUG << "for track " << i->first << ": height = " << max << ", old height = " << m_trackHeights[i->first];
-
-        if (max != m_trackHeights[i->first]) {
-            heightsChanged = true;
-            m_trackHeights[i->first] = max;
-        }
-
-        m_grid.setBinHeightMultiple(i->second->getPosition(), max);
-    }
-
-    if (heightsChanged) {
-        //RG_DEBUG << "updateTrackHeight(): heights have changed";
-        for (SegmentMultiSet::iterator i = m_composition.begin();
-             i != m_composition.end(); ++i) {
-            computeSegmentRect(**i);
-        }
-    }
-
-    return heightsChanged;
-}
-
-QPoint CompositionModelImpl::topLeft(const Segment& s) const
-{
-    Profiler profiler("CompositionModelImpl::topLeft");
-
-    int trackPosition = m_composition.getTrackPositionById(s.getTrack());
-    timeT startTime = s.getStartTime();
-
-    QPoint res;
-
-    res.setX(int(nearbyint(m_grid.getRulerScale()->getXForTime(startTime))));
-
-    res.setY(m_grid.getYBinCoordinate(trackPosition) +
-             m_composition.getSegmentVoiceIndex(&s) *
-             m_grid.getYSnap() + 1);
-
-    return res;
-}
-
-bool CompositionModelImpl::isCachedRectCurrent(
-        const Segment &segment,
-        const CompositionRect &cachedCR,  // = m_segmentRectMap[segment]
-        QPoint segmentTopLeft,            // = topLeft(segment)
-        timeT cachedSegmentEndTime)       // = m_segmentEndTimeMap[segment]
-{
-    //RG_DEBUG << "isCachedRectCurrent()...";
-
-    // ??? ISTM that the cache should work as follows...  The segment begin
-    //     and end times (and repeat mode) should be used to determine
-    //     whether the cache is
-    //     current.  If the begin or end have changed, then the cached
-    //     CompositionRect is outdated and needs to be recomputed.  So,
-    //     we need to cache the begin and end time for each segment, then
-    //     cache the composition rect.  Or add the begin and end time to
-    //     CompositionRect.  Repeat mode is already there.
-
-    // If the repeating mode changes, the rect is very different.
-    bool repeatingMatches = (segment.isRepeating() == cachedCR.isRepeating());
-
-    //RG_DEBUG << "  repeatingMatches: " << repeatingMatches;
-
-    // ??? This happens when we are moving a segment.  So, when moving a
-    //     segment, this indicates that the cache is ok.  That seems
-    //     a bit too clever.
-    bool nothingMatches =
-            (segmentTopLeft.x() != cachedCR.x()  &&
-             segment.getEndMarkerTime() != cachedSegmentEndTime);
-
-    //RG_DEBUG << "  nothingMatches: " << nothingMatches;
-
-    // If the begin and end are different, the rect is different.
-    bool everythingMatches =
-            (segmentTopLeft.x() == cachedCR.x()  &&
-             segment.getEndMarkerTime() == cachedSegmentEndTime);
-
-    //RG_DEBUG << "  everythingMatches: " << everythingMatches;
-
-    /*
-       Use cases.
-
-       (Note that this routine is never called for a repeating segment.)
-
-       When adjusting the beginning of a segment, we return false since
-       nothingMatches is false and everythingMatches is false.
-
-       When adjusting the end of a segment, we return true since
-       everythingMatches is true.  I'm not sure
-       why.  I assume that the cache has been updated before we get here.
-
-       When moving a segment, we return true since nothingMatches is true.
-    */
-
-    bool isCurrent = (repeatingMatches && (nothingMatches || everythingMatches));
-
-    //RG_DEBUG << "  isCurrent: " << isCurrent;
-
-    return isCurrent;
-
-    // The original code.  It has been broken apart above for analysis.
-//    return segment.isRepeating() == cachedCR.isRepeating() &&
-//           ((segmentTopLeft.x() != cachedCR.x() && segment.getEndMarkerTime() != cachedSegmentEndTime) ||
-//            (segmentTopLeft.x() == cachedCR.x() && segment.getEndMarkerTime() == cachedSegmentEndTime));
-}
-
-void CompositionModelImpl::deleteCachedSegment(
-        const Segment *s, bool previewToo)
-{
-    if (s) {
-        m_segmentRectMap.erase(s);
-        m_segmentEndTimeMap.erase(s);
-        if (previewToo)
-            deleteCachedPreview(s);
-    } else { // clear the whole cache
-        m_segmentRectMap.clear();
-        m_segmentEndTimeMap.clear();
-        if (previewToo)
-            deleteCachedPreviews();
-    }
-}
-
-void CompositionModelImpl::updateCachedSegment(const Segment*s, const CompositionRect& cr)
-{
-    m_segmentRectMap[s] = cr;
-    // ??? Why not add begin and end times to CompositionRect and get
-    //     rid of this?
-    m_segmentEndTimeMap[s] = s->getEndMarkerTime();
-}
-
-CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
-{
-    Profiler profiler("CompositionModelImpl::computeSegmentRect");
-
-    QPoint origin = topLeft(s);
-
-    bool isRecordingSegment = isRecording(&s);
-
-    if (!isRecordingSegment) {
-        // ??? Why is endTime cached?  Seems unnecessary.
-        timeT endTime = 0;
-
-        // ??? This is the only caller.  Inline this function.
-        CompositionRect cachedCR = getFromCache(&s, endTime);
-        // don't cache repeating segments - it's just hopeless, because the segment's rect may have to be recomputed
-        // in other cases than just when the segment itself is moved,
-        // for instance if another segment is moved over it
-        // ??? Inline isCachedRectCurrent().  This is the only caller.
-        //     Make it a bool isCachedRectCurrent.
-        if (!s.isRepeating() && cachedCR.isValid() && isCachedRectCurrent(s, cachedCR, origin, endTime)) {
-            //RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
-            //         << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
-            //         << cachedCR.getBaseWidth();
-
-            bool xChanged = origin.x() != cachedCR.x();
-            bool yChanged = origin.y() != cachedCR.y();
-
-            cachedCR.moveTopLeft(origin);
-
-            if (s.isRepeating() && (xChanged || yChanged)) { // update repeat marks
-
-                // this doesn't work in the general case (if there's another segment on the same track for instance),
-                // it's better to simply recompute all the marks
-                //                 CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
-                //                 for(size_t i = 0; i < repeatMarks.size(); ++i) {
-                //                     repeatMarks[i] += deltaX;
-                //                 }
-                //                 cachedCR.setRepeatMarks(repeatMarks);
-                computeRepeatMarks(cachedCR, &s);
-            }
-            updateCachedSegment(&s, cachedCR);
-            return cachedCR;
-        }
-    }
-
-    timeT startTime = s.getStartTime();
-    timeT endTime = isRecordingSegment ? m_pointerTime : s.getEndMarkerTime();
-
-
-    int h = m_grid.getYSnap() - 2;
-    int w;
-
-    if (s.isRepeating()) {
-//        timeT repeatStart = endTime;
-        timeT repeatEnd = s.getRepeatEndTime();
-        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
-                          repeatEnd - startTime)));
-        //RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is repeating - repeatStart = "
-        //         << repeatStart << " - repeatEnd : " << repeatEnd
-        //         << " w = " << w;
-    } else {
-        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
-        //RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
-        //         << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")";
-    }
-
-
-    //RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << ", w " << w << ", h " << h;
-
-    CompositionRect cr(origin, QSize(w, h));
-    QString label = strtoqstr(s.getLabel());
-    if (s.getType() == Segment::Audio) {
-        static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
-        static QRegExp re2("\\.[^.]+$"); // filename suffix
-        label.replace(re1, "").replace(re2, "");
-    }
-    cr.setLabel(label);
-
-    if (s.isRepeating()) {
-        computeRepeatMarks(cr, &s);
-    } else {
-        cr.setBaseWidth(cr.width());
-    }
-
-    updateCachedSegment(&s, cr);
-
-    return cr;
-}
-
-unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment* s)
-{
-    /// ??? z-order is obsolete.  Remove.
-
-    return m_segmentOrderer.getZForSegment(s);
-}
-
-const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segment* s, timeT& endTime)
-{
-    endTime = m_segmentEndTimeMap[s];
-
-    // ??? Trying to figure out how the cached value is different from the one
-    //     we already have in the Segment.
-    //     This is different right off the bat.  Creating a segment tests this.
-    // ??? DO NOT COMMIT THIS!!!  Delete it if I accidentally commit this!
-    //Q_ASSERT_X(endTime == s->getEndMarkerTime(),
-    //           "CompositionModelImpl::getFromCache()",
-    //           "Cached end time really is different.");
-
-    return m_segmentRectMap[s];
-}
-
-const CompositionModelImpl::SegmentRects &
-CompositionModelImpl::getSegmentRects(
-        const QRect &clipRect,
-        NotationPreviewRanges *notationPreview,
-        AudioPreviews *audioPreview)
-{
-    Profiler profiler("CompositionModelImpl::getSegmentRects()");
-
-    // Clear the container we'll be returning.
-    m_segmentRects.clear();
-
-    //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): ruler scale is "
-    //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
-
-    const SegmentMultiSet &segments = m_composition.getSegments();
-    SegmentMultiSet::const_iterator segmentsEnd = segments.end();
-
-    // For each segment in the composition
-    for (SegmentMultiSet::const_iterator i = segments.begin();
-         i != segmentsEnd; ++i) {
-
-        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";
-        
-        const Segment *s = *i;
-
-        // Moving segments are handled in the next for loop.
-        if (isChanging(s))
-            continue;
-
-        CompositionRect segmentRect = computeSegmentRect(*s);
-        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): seg rect = " << sr;
-
-        if (segmentRect.intersects(clipRect)) {
-//            RG_DEBUG << "CompositionModelImpl::getSegmentRects(): segment " << s
-//                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s);
-                       
-            if (isSelected(s) || isTmpSelected(s) || segmentRect.intersects(m_selectionRect)) {
-                segmentRect.setSelected(true);
-            }
-
-            if (wasTmpSelected(s) != isTmpSelected(s))
-                segmentRect.setNeedsFullUpdate(true);
-
-            bool isAudio = (s && s->getType() == Segment::Audio);
-
-            if (!isRecording(s)) {
-                QColor brushColor = GUIPalette::convertColour(m_composition.
-                                    getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-                Qt::BrushStyle brushPattern =
-                    s->isTrulyLinked() ? Qt::Dense2Pattern : Qt::SolidPattern;
-                segmentRect.setBrush(QBrush(brushColor, brushPattern));
-                segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
-            } else {
-                // border is the same for both audio and MIDI
-                segmentRect.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
-                // audio color
-                if (isAudio) {
-                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
-                    // MIDI/default color
-                } else {
-                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
-                }
-            }
-
-            // Notation preview data
-            if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRange(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
-                // Audio preview data
-            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
-                makeAudioPreview(audioPreview, s, segmentRect);
-            }
-
-            m_segmentRects.push_back(segmentRect);
-        } else {
-            //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): - segment out of rect";
-        }
-
-    }
-
-    // changing items (moving segments)
-
-    ChangingSegmentSet::iterator movEnd = m_changingSegments.end();
-    for (ChangingSegmentSet::iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
-        CompositionRect segmentRect((*i)->rect());
-        if (segmentRect.intersects(clipRect)) {
-            Segment *s = CompositionItemHelper::getSegment(*i);
-            segmentRect.setSelected(true);
-            QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-            segmentRect.setBrush(brushColor);
-
-            segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
-
-            // Notation preview data
-            if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRangeCS(segmentRect.topLeft(), s, segmentRect, notationPreview);
-                // Audio preview data
-            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
-                makeAudioPreview(audioPreview, s, segmentRect);
-            }
-
-            m_segmentRects.push_back(segmentRect);
-        }
-    }
-
-    // ??? Odd.  We could also have the (one) caller provide the
-    //     SegmentRects object (via reference).  Probably easier to
-    //     understand.  Performance should be about the same.  clear()
-    //     and dtor time are the same.  ctor time is trivial.
-    return m_segmentRects;
 }
 
 CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const QRect& rect)
@@ -1503,87 +1598,6 @@ CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const Q
     }
 
     return list;
-}
-
-CompositionModelImpl::NotationPreview *
-CompositionModelImpl::getNotationPreview(const Segment *s)
-{
-    // ??? Consider combining getNotationPreview() and
-    //     updateCachedNotationPreview().  The only caller of
-    //     updateCachedNotationPreview() (segmentAdded()) has no need
-    //     to call it at all.
-
-    // Try the cache.
-    NotationPreview *notationPreview = m_notationPreviewCache[s];
-
-    // If there was nothing in the cache for this segment, generate it.
-    if (!notationPreview)
-        notationPreview = updateCachedNotationPreview(s);
-
-    return notationPreview;
-}
-
-CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segment* s)
-{
-    Profiler profiler("CompositionModelImpl::getAudioPeaks");
-    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks";
-
-    /**
-     * ??? This is called recursively.  This triggers the async preview
-     *     generation process (updateCachedAudioPeaks()) and is called
-     *     again once the process completes
-     *     (by slotAudioPeaksComplete()) to get the info from the cache.
-     *     This is too tangled.  Simplify.
-     */
-
-    AudioPeaks* apData = m_audioPeaksCache[s];
-
-    if (!apData) {
-        apData = updateCachedAudioPeaks(s);
-    }
-
-    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks returning";
-    return apData;
-}
-
-CompositionModelImpl::NotationPreview *
-CompositionModelImpl::updateCachedNotationPreview(const Segment *segment)
-{
-    NotationPreview *notationPreview = new NotationPreview();
-
-    // Create the preview
-    makeNotationPreview(segment, notationPreview);
-
-    // Avoid potential memory leaks.
-    //delete m_notationPreviewCache[segment];
-
-    // Store in the cache.
-    // Callers guarantee that m_notationPreviewCache[segment] is not
-    // currently pointing to anything.
-    m_notationPreviewCache[segment] = notationPreview;
-
-    return notationPreview;
-}
-
-CompositionModelImpl::AudioPeaks *
-CompositionModelImpl::updateCachedAudioPeaks(const Segment *s)
-{
-    //RG_DEBUG << "updateCachedAudioPeaks(" << s << ")";
-
-    // ??? makePreviewCache() calls this.  That's probably not necessary
-    //     given that one way or another the preview generation will occur.
-    //     If we can get rid of the call from makePreviewCache(), we can
-    //     inline this into its only remaining caller, getAudioPeaks().
-
-    AudioPeaks* apData = new AudioPeaks();
-    makeAudioPeaksAsync(s);
-
-    // Avoid potential memory leaks.
-    //delete m_audioPeaksCache[s];
-
-    m_audioPeaksCache[s] = apData;
-
-    return apData;
 }
 
 }
