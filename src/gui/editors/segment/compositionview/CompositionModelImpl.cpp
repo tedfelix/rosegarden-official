@@ -98,7 +98,7 @@ CompositionModelImpl::CompositionModelImpl(
 
     SegmentMultiSet &segments = m_composition.getSegments();
 
-    // For each segment in the composition
+    // For each segment in the Composition
     for (SegmentMultiSet::iterator i = segments.begin();
          i != segments.end();
          ++i) {
@@ -118,25 +118,24 @@ CompositionModelImpl::CompositionModelImpl(
 
 CompositionModelImpl::~CompositionModelImpl()
 {
-    RG_DEBUG << "CompositionModelImpl::~CompositionModelImpl()";
-
     if (!isCompositionDeleted()) {
 
         m_composition.removeObserver(this);
 
-        SegmentMultiSet& segments = m_composition.getSegments();
-        SegmentMultiSet::iterator segEnd = segments.end();
+        SegmentMultiSet &segments = m_composition.getSegments();
 
+        // For each segment in the Composition
         for (SegmentMultiSet::iterator i = segments.begin();
-                i != segEnd; ++i) {
+             i != segments.end(); ++i) {
 
+            // Unsubscribe
             (*i)->removeObserver(this);
         }
     }
 
-    RG_DEBUG << "CompositionModelImpl::~CompositionModelImpl(): removal from Segment & Composition observers OK";
-
     if (m_audioPreviewThread) {
+        // For each audio peaks updater
+        // ??? This is similar to setAudioPreviewThread().
         while (!m_audioPreviewUpdaterMap.empty()) {
             // Cause any running previews to be cancelled
             delete m_audioPreviewUpdaterMap.begin()->second;
@@ -144,10 +143,18 @@ CompositionModelImpl::~CompositionModelImpl()
         }
     }
 
+    // ??? The following code is similar to deleteCachedPreviews().
+    //     The problem is that deleteCachedPreviews() regenerates the
+    //     audio previews.  If we can make it stop doing that, then
+    //     we can call it from here.
+
+    // Delete the notation previews
     for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
          i != m_notationPreviewCache.end(); ++i) {
         delete i->second;
     }
+
+    // Delete the audio peaks
     for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
          i != m_audioPeaksCache.end(); ++i) {
         delete i->second;
