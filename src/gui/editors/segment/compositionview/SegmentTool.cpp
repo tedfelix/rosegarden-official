@@ -96,7 +96,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    setCurrentIndex(m_canvas->getModel()->getSegmentAt(pos));
+    setChangingSegment(m_canvas->getModel()->getSegmentAt(pos));
 
     if (m_currentIndex) {
         if (!m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
@@ -109,7 +109,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
     showMenu();
 
-    setCurrentIndex(CompositionItemPtr());
+    setChangingSegment(CompositionItemPtr());
 }
 
 void
@@ -139,18 +139,13 @@ SegmentTool::createMenu()
     m_menu = menu;
 }
 
-void SegmentTool::setCurrentIndex(CompositionItemPtr item)
+void SegmentTool::setChangingSegment(CompositionItemPtr changingSegment)
 {
-    if (item != m_currentIndex) 
+    if (changingSegment != m_currentIndex)
     {
         delete m_currentIndex;
-        m_currentIndex = item; 
+        m_currentIndex = changingSegment;
     }
-}
-
-SegmentToolBox* SegmentTool::getToolBox()
-{
-    return m_canvas->getToolBox();
 }
 
 void SegmentTool::setSnapTime(QMouseEvent *e, timeT snapTime)

@@ -84,22 +84,20 @@ protected:
     /// Protected since a SegmentTool isn't very useful on its own.
     SegmentTool(CompositionView *, RosegardenDocument *);
 
+    CompositionView *m_canvas;
+    RosegardenDocument *m_doc;
+
     /// Set the Segment that the tool is working on.
     /**
      * The Segment tools use this to pass the changing Segment
      * between their press, move, and release handlers.
      */
-    // ??? We also need a clearCurrentIndex() as there is one call to
-    //     this that passes CompositionItemPtr().
-    // ??? And why is this called an "Index" instead of a Segment?  It's
-    //     not an Index (integer) in the usual sense, so Index is
-    //     misleading.
-    // ??? Rename: setChangingSegment()
+    // ??? We also need a clearCurrentIndex() as there are calls to
+    //     this that pass CompositionItemPtr().
     // ??? We also need a getter and we need to make the member variable
     //     private.  This setter is *non-trivial* as it deletes the old.
-    void setCurrentIndex(CompositionItemPtr changingSegment);
-
-    SegmentToolBox* getToolBox();
+    void setChangingSegment(CompositionItemPtr changingSegment);
+    CompositionItemPtr getChangingSegment()  { return m_currentIndex; }
 
     void setChangeMade(bool c) { m_changeMade = c; }
     bool changeMade() { return m_changeMade; }
@@ -112,19 +110,15 @@ protected:
             const CompositionModelImpl::ChangingSegmentSet &items,
             CompositionItemPtr referenceItem);
 
-    //--------------- Data members ---------------------------------
-
-    CompositionView *m_canvas;
-    // ??? Make private.  Otherwise memory is leaked.  Or is that the idea?
-    // ??? rename: m_changingSegment
-    CompositionItemPtr m_currentIndex;
-    RosegardenDocument *m_doc;
-    bool m_changeMade;
-
 private:
     /// Right-click context menu.
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
+
+    // ??? rename: m_changingSegment
+    CompositionItemPtr m_currentIndex;
+
+    bool m_changeMade;
 
 private slots:
     // This is just a mess of forwarding functions to RosegardenMainWindow.

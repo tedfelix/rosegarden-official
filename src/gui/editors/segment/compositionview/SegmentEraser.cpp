@@ -67,7 +67,7 @@ void SegmentEraser::mousePressEvent(QMouseEvent *e)
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
     // Save the Segment for the mouse release event.
-    setCurrentIndex(m_canvas->getModel()->getSegmentAt(pos));
+    setChangingSegment(m_canvas->getModel()->getSegmentAt(pos));
 }
 
 void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
@@ -80,14 +80,14 @@ void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
     e->accept();
 
     // If a Segment was selected by the press event
-    if (m_currentIndex) {
+    if (getChangingSegment()) {
         // Erase it
         CommandHistory::getInstance()->addCommand(
-                new SegmentEraseCommand(m_currentIndex->getSegment()));
+                new SegmentEraseCommand(getChangingSegment()->getSegment()));
     }
 
     // Clear the current Segment.
-    setCurrentIndex(CompositionItemPtr());
+    setChangingSegment(CompositionItemPtr());
 }
 
 int SegmentEraser::mouseMoveEvent(QMouseEvent *e)

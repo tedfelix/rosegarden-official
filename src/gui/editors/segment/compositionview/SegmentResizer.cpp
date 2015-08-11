@@ -96,7 +96,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
 
     if (item) {
         RG_DEBUG << "SegmentResizer::mousePressEvent - got item" << endl;
-        setCurrentIndex(item);
+        setChangingSegment(item);
 
         // Are we resizing from start or end?
         if (item->rect().x() + item->rect().width() / 2 > pos.x()) {
@@ -126,9 +126,9 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 
     bool rescale = (e->modifiers() & Qt::ControlModifier);
 
-    if (m_currentIndex) {
+    if (getChangingSegment()) {
 
-        Segment* segment = m_currentIndex->getSegment();
+        Segment* segment = getChangingSegment()->getSegment();
 
         // We only want to snap the end that we were actually resizing.
 
@@ -140,10 +140,10 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
         timeT newStartTime, newEndTime;
 
         if (m_resizeStart) {
-            newStartTime = m_currentIndex->getStartTime(m_canvas->grid());
+            newStartTime = getChangingSegment()->getStartTime(m_canvas->grid());
             newEndTime = oldEndTime;
         } else {
-            newEndTime = m_currentIndex->getEndTime(m_canvas->grid());
+            newEndTime = getChangingSegment()->getEndTime(m_canvas->grid());
             newStartTime = oldStartTime;
         }
 
@@ -245,7 +245,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                     SegmentReconfigureCommand *command =
                         new SegmentReconfigureCommand(tr("Resize Segment"), &comp);
 
-                    int trackPos = m_currentIndex->getTrackPos(m_canvas->grid());
+                    int trackPos = getChangingSegment()->getTrackPos(m_canvas->grid());
 
                     Track *track = comp.getTrackByPosition(trackPos);
 
@@ -264,7 +264,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
     m_canvas->update();
     
     setChangeMade(false);
-    m_currentIndex = CompositionItemPtr();
+    setChangingSegment(CompositionItemPtr());
     setBasicContextHelp();
 }
 
@@ -279,7 +279,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 
     bool rescale = (e->modifiers() & Qt::ControlModifier);
 
-    if (!m_currentIndex) {
+    if (!getChangingSegment()) {
         setBasicContextHelp(rescale);
         return RosegardenScrollView::NoFollow;
     }
@@ -300,21 +300,21 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         }
     }
 
-    Segment* segment = m_currentIndex->getSegment();
+    Segment* segment = getChangingSegment()->getSegment();
 
     // Don't allow Audio segments to resize yet
     //
     /*!!!
         if (segment->getType() == Segment::Audio)
         {
-            m_currentIndex = CompositionItemPtr();
+            setChangingSegment(CompositionItemPtr());
             QMessageBox::information(m_canvas,
                     tr("You can't yet resize an audio segment!"));
             return RosegardenScrollView::NoFollow;
         }
     */
 
-    QRect oldRect = m_currentIndex->rect();
+    QRect oldRect = getChangingSegment()->rect();
 
     setSnapTime(e, SnapGrid::SnapToBeat);
 
@@ -354,7 +354,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         }
 
         // Change the size of the segment on the canvas.
-        m_currentIndex->setStartTime(newStartTime, m_canvas->grid());
+        getChangingSegment()->setStartTime(newStartTime, m_canvas->grid());
 
     } else { // resize end
 
@@ -379,11 +379,11 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         }
 
         // Change the size of the segment on the canvas.
-        m_currentIndex->setEndTime(newEndTime, m_canvas->grid());
+        getChangingSegment()->setEndTime(newEndTime, m_canvas->grid());
     }
 
     // Redraw the canvas
-    m_canvas->slotAllNeedRefresh(m_currentIndex->rect() | oldRect);
+    m_canvas->slotAllNeedRefresh(getChangingSegment()->rect() | oldRect);
 
     return RosegardenScrollView::FollowHorizontal;
 }

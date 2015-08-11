@@ -147,7 +147,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
                 item, pos, threshold, start)) {
 
             SegmentResizer* resizer = dynamic_cast<SegmentResizer*>(
-                getToolBox()->getTool(SegmentResizer::ToolName));
+                m_canvas->getToolBox()->getTool(SegmentResizer::ToolName));
 
             resizer->setEdgeThreshold(threshold);
 
@@ -182,8 +182,10 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         m_canvas->getModel()->setSelected(item->getSegment(), selecting);
 
-        //RG_DEBUG << "SegmentSelector::mousePressEvent - m_currentIndex = " << item << endl;
-        m_currentIndex = item;
+        //RG_DEBUG << "SegmentSelector::mousePressEvent - item = " << item << endl;
+        // ??? This was a line that appeared to leak memory.  Was it really
+        //     leaking memory?
+        setChangingSegment(item);
         m_clickPoint = pos;
 
         int guideX = item->rect().x();
@@ -201,7 +203,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
             // Create a new segment with the SegmentPencil tool.
 
-            m_dispatchTool = getToolBox()->getTool(SegmentPencil::ToolName);
+            m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
 
             if (m_dispatchTool) {
                 m_dispatchTool->ready(); // set mouse cursor
@@ -260,7 +262,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
     int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
-    if (!m_currentIndex) {
+    if (!getChangingSegment()) {
         m_canvas->hideSelectionRect();
         m_canvas->getModel()->finalizeSelectionRect();
         m_canvas->getModel()->selectionHasChanged();
@@ -271,7 +273,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     Composition &comp = m_doc->getComposition();
 
-    if (m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
+    if (m_canvas->getModel()->isSelected(getChangingSegment()->getSegment())) {
 
         CompositionModelImpl::ChangingSegmentSet& changingItems =
                 m_canvas->getModel()->getChangingSegments();
@@ -331,14 +333,14 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
     // if we've just finished a quick copy then drop the Z level back
     if (m_segmentQuickCopyDone) {
         m_segmentQuickCopyDone = false;
-        //        m_currentIndex->setZ(2); // see SegmentItem::setSelected  --??
+        //        getChangingSegment()->setZ(2); // see SegmentItem::setSelected  --??
     }
 
     setChangeMade(false);
 
     m_selectionMoveStarted = false;
 
-    m_currentIndex = CompositionItemPtr();
+    setChangingSegment(CompositionItemPtr());
 
     setContextHelpFor(pos);
 }
@@ -363,7 +365,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     Composition &comp = m_doc->getComposition();
 
-    if (!m_currentIndex) {
+    if (!getChangingSegment()) {
 
         // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: no current item\n";
 
@@ -418,7 +420,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
-    if (m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {
+    if (m_canvas->getModel()->isSelected(getChangingSegment()->getSegment())) {
 
         // If shift isn't being held down
         if ((e->modifiers() & Qt::ShiftModifier) == 0) {
@@ -436,7 +438,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
         CompositionModelImpl::ChangingSegmentSet& changingItems =
                 m_canvas->getModel()->getChangingSegments();
-        setCurrentIndex(findSiblingCompositionItem(changingItems, m_currentIndex));
+        setChangingSegment(findSiblingCompositionItem(changingItems, getChangingSegment()));
 
         CompositionModelImpl::ChangingSegmentSet::iterator it;
         int guideX = 0;
@@ -490,12 +492,12 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             m_canvas->slotUpdateAll();
         }
 
-        guideX = m_currentIndex->rect().x();
-        guideY = m_currentIndex->rect().y();
+        guideX = getChangingSegment()->rect().x();
+        guideY = getChangingSegment()->rect().y();
 
         m_canvas->drawGuides(guideX, guideY);
 
-        timeT currentIndexStartTime = m_canvas->grid().snapX(m_currentIndex->rect().x());
+        timeT currentIndexStartTime = m_canvas->grid().snapX(getChangingSegment()->rect().x());
 
         RealTime time = comp.getElapsedRealTime(currentIndexStartTime);
         QString ms;

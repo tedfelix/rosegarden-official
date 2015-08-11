@@ -83,7 +83,8 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
     CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
     SegmentSelector *selector =
-            dynamic_cast<SegmentSelector *>(getToolBox()->getTool(SegmentSelector::ToolName));
+            dynamic_cast<SegmentSelector *>(
+                    m_canvas->getToolBox()->getTool(SegmentSelector::ToolName));
 
     // #1027303: Segment move issue
     // Clear selection if we're clicking on an item that's not in it
@@ -102,12 +103,12 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
     if (item) {
 
-        setCurrentIndex(item);
+        setChangingSegment(item);
         m_clickPoint = pos;
 
         setSnapTime(e, SnapGrid::SnapToBeat);
 
-        Segment* s = m_currentIndex->getSegment();
+        Segment* s = getChangingSegment()->getSegment();
 
         int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
         int y = int(m_canvas->grid().getYBinCoordinate(s->getTrack()));
@@ -122,8 +123,8 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
             CompositionModelImpl::ChangingSegmentSet& changingItems =
                     m_canvas->getModel()->getChangingSegments();
-            // set m_currentIndex to its "sibling" among selected (now moving) items
-            setCurrentIndex(findSiblingCompositionItem(changingItems, m_currentIndex));
+            // set the changing segment to its "sibling" among selected (now moving) items
+            setChangingSegment(findSiblingCompositionItem(changingItems, getChangingSegment()));
 
         } else {
             RG_DEBUG << "SegmentMover::mousePressEvent() : no selection\n";
@@ -163,7 +164,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
-    if (m_currentIndex) {
+    if (getChangingSegment()) {
 
         if (changeMade()) {
 
@@ -224,7 +225,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     }
 
     setChangeMade(false);
-    m_currentIndex = CompositionItemPtr();
+    setChangingSegment(CompositionItemPtr());
 
     setBasicContextHelp();
 }
@@ -240,7 +241,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 
     Composition &comp = m_doc->getComposition();
 
-    if (!m_currentIndex) {
+    if (!getChangingSegment()) {
         setBasicContextHelp();
         return RosegardenScrollView::NoFollow;
     }
@@ -337,12 +338,12 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
         m_canvas->slotUpdateAll();
     }
 
-    guideX = m_currentIndex->rect().x();
-    guideY = m_currentIndex->rect().y();
+    guideX = getChangingSegment()->rect().x();
+    guideY = getChangingSegment()->rect().y();
 
     m_canvas->drawGuides(guideX, guideY);
 
-    timeT currentIndexStartTime = m_canvas->grid().snapX(m_currentIndex->rect().x());
+    timeT currentIndexStartTime = m_canvas->grid().snapX(getChangingSegment()->rect().x());
 
     RealTime time = comp.getElapsedRealTime(currentIndexStartTime);
     QString ms;
