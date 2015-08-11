@@ -307,16 +307,7 @@ void CompositionModelImpl::makeAudioPreview(
     apRects->push_back(previewItem);
 }
 
-#if 0
-void CompositionModelImpl::computeRepeatMarks(CompositionItemPtr item)
-{
-    Segment* s = CompositionItemHelper::getSegment(item);
-    CompositionRect& sr = item->getCompRect();
-    computeRepeatMarks(sr, s);
-}
-#endif
-
-void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s)
+void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s) const
 {
     if (s->isRepeating()) {
 
@@ -345,7 +336,11 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
             //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : mark at " << mark;
             repeatMarks.push_back(mark);
         }
+
+        // ??? COPY.  If we could get a non-const reference to
+        //     m_repeatMarks, we could avoid the copy.
         sr.setRepeatMarks(repeatMarks);
+
         if (repeatMarks.size() > 0)
             sr.setBaseWidth(repeatMarks[0] - sr.x());
         else {
@@ -890,6 +885,7 @@ CompositionModelImpl::ChangingSegmentSet CompositionModelImpl::getItemsAt(const 
             //     CompositionItemPtr to CompositionItem.
             CompositionItemPtr item(new CompositionItem(*const_cast<Segment *>(s),
                                                          sr));
+            // ??? The "z order" concept is obsolete.  This can go.
             unsigned int z = computeZForSegment(s);
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z;
             item->setZ(z);
@@ -1101,7 +1097,7 @@ int CompositionModelImpl::getCompositionHeight()
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
-bool CompositionModelImpl::updateTrackHeight(Segment *s)
+bool CompositionModelImpl::updateTrackHeight(const Segment *s)
 {
     bool heightsChanged = false;
 
@@ -1137,7 +1133,7 @@ bool CompositionModelImpl::updateTrackHeight(Segment *s)
     return heightsChanged;
 }
 
-QPoint CompositionModelImpl::topLeft(const Segment& s)
+QPoint CompositionModelImpl::topLeft(const Segment& s) const
 {
     Profiler profiler("CompositionModelImpl::topLeft");
 
@@ -1192,6 +1188,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     bool isRecordingSegment = isRecording(&s);
 
     if (!isRecordingSegment) {
+        // ??? Why is endTime cached?  Seems unnecessary.
         timeT endTime = 0;
 
         // ??? This is the only caller.  Inline this function.
@@ -1279,6 +1276,15 @@ unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment*
 const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segment* s, timeT& endTime)
 {
     endTime = m_segmentEndTimeMap[s];
+
+    // ??? Trying to figure out how the cached value is different from the one
+    //     we already have in the Segment.
+    //     This is different right off the bat.  Creating a segment tests this.
+    // ??? DO NOT COMMIT THIS!!!  Delete it if I accidentally commit this!
+    //Q_ASSERT_X(endTime == s->getEndMarkerTime(),
+    //           "CompositionModelImpl::getFromCache()",
+    //           "Cached end time really is different.");
+
     return m_segmentRectMap[s];
 }
 

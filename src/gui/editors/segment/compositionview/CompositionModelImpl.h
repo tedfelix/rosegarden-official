@@ -478,12 +478,12 @@ private:
 
     void deleteCachedPreview(const Segment *);
 
-    /// Delete cached notation and audio previews.
+    /// Delete all cached notation and audio previews.
     void deleteCachedPreviews();
 
     // --- Segments ---------------------------------------
 
-    QPoint topLeft(const Segment &);
+    QPoint topLeft(const Segment &) const;
 
     std::map<TrackId, int /* height */> m_trackHeights;
     /// Update m_trackHeights for the given Segment.
@@ -491,16 +491,24 @@ private:
      * If the Segment is NULL, all track heights are updated.
      * Returns true if a track's height has changed.
      */
-    bool updateTrackHeight(Segment *segment = 0);
+    bool updateTrackHeight(const Segment *segment = 0);
 
-    //void computeRepeatMarks(CompositionItemPtr);
-    void computeRepeatMarks(CompositionRect &sr, const Segment *s);
+    void computeRepeatMarks(CompositionRect &sr, const Segment *s) const;
 
+    // ??? Obsolete.  Remove.
     SegmentOrderer m_segmentOrderer;
+    // ??? Obsolete.  Remove.
     unsigned int computeZForSegment(const Segment *s);
 
-    /// Segment Cache
+    /// Segment Rectangle Cache
     std::map<const Segment *, CompositionRect> m_segmentRectMap;
+
+    // ??? Why?  Why not just call segment->getEndMarkerTime()?  How does
+    //     this differ from that?
+    // ??? It looks like all this is ever used for is to determine whether
+    //     the cache is current.  See computeSegmentRect().  So, this can
+    //     go since m_segmentRectMap already gives us this info.  This
+    //     appears to be unused dead-end code.
     std::map<const Segment *, timeT> m_segmentEndTimeMap;
 
     // ??? rename: updateCachedSegment()
