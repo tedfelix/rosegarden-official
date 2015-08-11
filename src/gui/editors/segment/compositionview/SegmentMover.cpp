@@ -80,7 +80,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
+    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
     SegmentSelector *selector =
             dynamic_cast<SegmentSelector *>(getToolBox()->getTool(SegmentSelector::ToolName));
 

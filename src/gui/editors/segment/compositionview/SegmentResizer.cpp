@@ -91,7 +91,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_canvas->getModel()->getFirstItemAt(pos);
+    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
         RG_DEBUG << "SegmentResizer::mousePressEvent - got item" << endl;

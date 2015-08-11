@@ -210,12 +210,12 @@ public:
             NotationPreviewRanges *notationPreviewRanges,
             AudioPreviews *audioPreviews);
 
-    /// Get the topmost item (segment) at the given position on the view.
+    /// Get the segment at the given position on the view.
     /**
      * This routine returns a pointer to a *copy* of the CompositionItem.
      * The caller is responsible for deleting the object that is returned.
      */
-    CompositionItemPtr getFirstItemAt(const QPoint &pos);
+    CompositionItemPtr getSegmentAt(const QPoint &pos);
 
     /// See CompositionView::clearSegmentRectsCache()
     /**
@@ -512,11 +512,6 @@ private:
                              timeT cachedSegmentEndTime);
     /// If Segment is NULL, all cached segments are deleted.
     void deleteCachedSegment(const Segment *, bool previewToo = false);
-
-    /// Get all the segments at a point.
-    // ??? ChangingSegmentSet looks wrong here.  But that's ok as this
-    //     routine is going away.
-    ChangingSegmentSet getItemsAt(const QPoint &);
 
     // --- Selection --------------------------------------
 

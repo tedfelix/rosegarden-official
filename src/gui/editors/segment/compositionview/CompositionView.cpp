@@ -1284,7 +1284,7 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 {
     const QPoint contentsPos = viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_model->getFirstItemAt(contentsPos);
+    CompositionItemPtr item = m_model->getSegmentAt(contentsPos);
 
     // If the user clicked on a space where there is no segment,
     // move the playback position pointer to that time.

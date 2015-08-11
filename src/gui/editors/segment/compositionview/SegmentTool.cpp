@@ -96,7 +96,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
+    setCurrentIndex(m_canvas->getModel()->getSegmentAt(pos));
 
     if (m_currentIndex) {
         if (!m_canvas->getModel()->isSelected(m_currentIndex->getSegment())) {

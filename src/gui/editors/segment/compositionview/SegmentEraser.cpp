@@ -65,7 +65,7 @@ void SegmentEraser::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    setCurrentIndex(m_canvas->getModel()->getFirstItemAt(pos));
+    setCurrentIndex(m_canvas->getModel()->getSegmentAt(pos));
 }
 
 void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
