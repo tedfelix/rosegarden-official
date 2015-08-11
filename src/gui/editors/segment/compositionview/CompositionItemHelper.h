@@ -32,22 +32,18 @@ class Segment;
 /// ??? Get rid of this class.  Move all functions into CompositionItem.
 class CompositionItemHelper {
 public:
-    static timeT getStartTime(CompositionItemPtr, const SnapGrid&);
-    static timeT getEndTime(CompositionItemPtr, const SnapGrid&);
-    static int getTrackPos(CompositionItemPtr, const SnapGrid&);
-    static void setStartTime(CompositionItemPtr, timeT, const SnapGrid&);
     static void setEndTime(CompositionItemPtr, timeT, const SnapGrid&);
-    // ??? Get rid of this.  Replace with item->getSegment().
-    static Segment* getSegment(CompositionItemPtr);
+    static timeT getEndTime(CompositionItemPtr, const SnapGrid&);
+
+    static int getTrackPos(CompositionItemPtr, const SnapGrid&);
+
     // ??? This returns an object that must be deleted by the caller.
     //     Audit all callers to make sure they delete this object.
     static CompositionItemPtr makeCompositionItem(Segment*);
-
     /// return the CompositionItemPtr in the model which references the same segment as referenceItem
     static CompositionItemPtr findSiblingCompositionItem(
             const CompositionModelImpl::ChangingSegmentSet &items,
             CompositionItemPtr referenceItem);
-
 };
 
 

@@ -288,7 +288,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
                 CompositionItemPtr item = *it;
 
-                Segment* segment = CompositionItemHelper::getSegment(item);
+                Segment* segment = item->getSegment();
 
                 TrackId origTrackId = segment->getTrack();
                 int trackPos = comp.getTrackPositionById(origTrackId);
@@ -304,8 +304,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                 int newTrackId = origTrackId;
                 if (newTrack) newTrackId = newTrack->getId();
 
-                timeT itemStartTime = CompositionItemHelper::getStartTime
-                    (item, m_canvas->grid());
+                timeT itemStartTime = item->getStartTime(m_canvas->grid());
 
                 // We absolutely don't want to snap the end time to
                 // the grid.  We want it to remain exactly the same as

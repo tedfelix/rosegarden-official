@@ -127,7 +127,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 
     if (m_currentIndex) {
 
-        Segment* segment = CompositionItemHelper::getSegment(m_currentIndex);
+        Segment* segment = m_currentIndex->getSegment();
 
         // We only want to snap the end that we were actually resizing.
 
@@ -139,8 +139,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
         timeT newStartTime, newEndTime;
 
         if (m_resizeStart) {
-            newStartTime = CompositionItemHelper::getStartTime
-                           (m_currentIndex, m_canvas->grid());
+            newStartTime = m_currentIndex->getStartTime(m_canvas->grid());
             newEndTime = oldEndTime;
         } else {
             newEndTime = CompositionItemHelper::getEndTime
@@ -301,7 +300,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         }
     }
 
-    Segment* segment = CompositionItemHelper::getSegment(m_currentIndex);
+    Segment* segment = m_currentIndex->getSegment();
 
     // Don't allow Audio segments to resize yet
     //
@@ -355,9 +354,8 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         }
 
         // Change the size of the segment on the canvas.
-        CompositionItemHelper::setStartTime(m_currentIndex,
-                                            newStartTime,
-                                            m_canvas->grid());
+        m_currentIndex->setStartTime(newStartTime, m_canvas->grid());
+
     } else { // resize end
 
         timeT itemStartTime = segment->getStartTime();

@@ -106,7 +106,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
         setSnapTime(e, SnapGrid::SnapToBeat);
 
-        Segment* s = CompositionItemHelper::getSegment(m_currentIndex);
+        Segment* s = m_currentIndex->getSegment();
 
         int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
         int y = int(m_canvas->grid().getYBinCoordinate(s->getTrack()));
@@ -182,7 +182,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
 
                 CompositionItemPtr item = *it;
 
-                Segment* segment = CompositionItemHelper::getSegment(item);
+                Segment* segment = item->getSegment();
 
                 TrackId origTrackId = segment->getTrack();
                 int trackPos = comp.getTrackPositionById(origTrackId);
@@ -198,7 +198,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
                 int newTrackId = origTrackId;
                 if (newTrack) newTrackId = newTrack->getId();
 
-                timeT newStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
+                timeT newStartTime = item->getStartTime(m_canvas->grid());
 
                 // We absolutely don't want to snap the end time
                 // to the grid.  We want it to remain exactly the same

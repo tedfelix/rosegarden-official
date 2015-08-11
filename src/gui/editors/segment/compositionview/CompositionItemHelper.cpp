@@ -32,23 +32,6 @@
 namespace Rosegarden
 {
     
-timeT CompositionItemHelper::getStartTime(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
-{
-    timeT t = 0;
-
-    if (item) {
-    // t = std::max(grid.snapX(item->rect().x()), 0L); - wrong, we can have negative start times,
-        // and if we do this we 'crop' segments when they are moved before the start of the composition
-    t = grid.snapX(item->rect().x());
-
-//         RG_DEBUG << "CompositionItemHelper::getStartTime(): item is repeating : " << item->isRepeating()
-//                  << " - startTime = " << t
-//                  << endl;
-    }
-
-    return t;
-}
-
 timeT CompositionItemHelper::getEndTime(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
 {
     timeT t = 0;
@@ -67,28 +50,6 @@ timeT CompositionItemHelper::getEndTime(CompositionItemPtr item, const Rosegarde
     }
 
     return t;
-}
-
-void CompositionItemHelper::setStartTime(CompositionItemPtr item, timeT time,
-                                         const Rosegarden::SnapGrid& grid)
-{
-    if (item) {
-        int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
-
-        RG_DEBUG << "CompositionItemHelper::setStartTime() time = " << time
-                 << " -> x = " << x << endl;
-        
-        int curX = item->rect().x();
-        item->setX(x);
-        if (item->isRepeating()) {
-            int deltaX = curX - x;
-            SegmentRect& sr = item->getCompRect();
-            int curW = sr.getBaseWidth();
-            sr.setBaseWidth(curW + deltaX);
-        }
-        
-    }
-    
 }
 
 void CompositionItemHelper::setEndTime(CompositionItemPtr item, timeT time,
@@ -112,11 +73,6 @@ void CompositionItemHelper::setEndTime(CompositionItemPtr item, timeT time,
 int CompositionItemHelper::getTrackPos(CompositionItemPtr item, const Rosegarden::SnapGrid& grid)
 {
     return grid.getYBin(item->rect().y());
-}
-
-Rosegarden::Segment* CompositionItemHelper::getSegment(CompositionItemPtr item)
-{
-    return item->getSegment();
 }
 
 CompositionItemPtr CompositionItemHelper::makeCompositionItem(Rosegarden::Segment* segment)

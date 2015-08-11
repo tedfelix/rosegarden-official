@@ -110,7 +110,7 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
     if (item) {
         setSnapTime(e, SnapGrid::SnapToBeat);
 
-        Segment* segment = CompositionItemHelper::getSegment(item);
+        Segment* segment = item->getSegment();
 
         if (segment->getType() == Segment::Audio) {
             AudioSegmentSplitCommand *command =

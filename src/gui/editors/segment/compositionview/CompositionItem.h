@@ -34,8 +34,11 @@ class Segment;
 class SnapGrid;
 
 
-/// Representation of segments that are changing.
+/// A changing (moving/resizing) Segment.
 /**
+ * This class combines a Segment pointer with a SegmentRect and a saved
+ * QRect (m_savedRect) which has the original position of the Segment.
+ *
  * When segments are being selected, moved, or resized, CompositionModelImpl
  * creates CompositionItem objects to represent those changing segments
  * as they change.
@@ -83,6 +86,9 @@ public:
     // Saved rect.  Used to store the original rect before changing it.
     void saveRect()                    { m_savedRect = rect(); }
     QRect savedRect() const            { return m_savedRect; }
+
+    void setStartTime(timeT, const SnapGrid &);
+    timeT getStartTime(const SnapGrid &);
 
 private:
 
