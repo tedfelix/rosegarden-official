@@ -28,7 +28,7 @@
 #include "CompositionColourCache.h"
 #include "CompositionItemHelper.h"
 #include "CompositionItem.h"
-#include "CompositionRect.h"
+#include "SegmentRect.h"
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
@@ -910,7 +910,7 @@ void CompositionView::drawAudioPreviews(
 void CompositionView::drawCompRect(
         QPainter *painter,
         const QRect &clipRect,
-        const CompositionRect &rect,
+        const SegmentRect &rect,
         int intersectLvl)
 {
     // Non repeating case, just draw the segment rect.
@@ -941,7 +941,7 @@ void CompositionView::drawCompRect(
 
     // *** Repeat Area
 
-    CompositionRect::repeatmarks repeatMarksX = rect.getRepeatMarks();
+    SegmentRect::repeatmarks repeatMarksX = rect.getRepeatMarks();
     QRect repeatRect = rect;
     repeatRect.setLeft(repeatMarksX[0]);
 
@@ -965,7 +965,7 @@ void CompositionView::drawCompRect(
 }
 
 void CompositionView::drawCompRectLabel(
-        QPainter *painter, const CompositionRect &rect)
+        QPainter *painter, const SegmentRect &rect)
 {
     // No label?  Bail.
     if (rect.getLabel().isEmpty())
@@ -1036,7 +1036,7 @@ void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
     QRect rect = r;
     // Shrink height by 1 to accommodate the dividers.
     // Shrink width by 1 so that adjacent segment borders don't overlap.
-    // ??? Why isn't the CompositionRect already adjusted like this?
+    // ??? Why isn't the SegmentRect already adjusted like this?
     rect.adjust(0, 0, -1, -1);
 
     p->drawRect(rect);
@@ -1068,7 +1068,7 @@ void CompositionView::drawIntersections(
              j != rects.end();
              ++j) {
 
-            CompositionRect intersectRect = i->intersected(*j);
+            SegmentRect intersectRect = i->intersected(*j);
 
             // If no intersection, try the next rect.
             if (intersectRect.isEmpty())
@@ -1137,14 +1137,14 @@ void CompositionView::drawIntersections(
              j != intersections.end();
              ++j) {
 
-            const CompositionRect &testRect = *j;
+            const SegmentRect &testRect = *j;
 
             // For each rect after j
             for (CompositionModelImpl::SegmentRects::iterator i = j + 1;
                  i != intersections.end();
                  ++i) {
 
-                CompositionRect intersectRect = testRect.intersected(*i);
+                SegmentRect intersectRect = testRect.intersected(*i);
 
                 // If we have an intersection, and it isn't simply the
                 // "i" rect.

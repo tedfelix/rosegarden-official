@@ -19,7 +19,7 @@
 #ifndef RG_COMPOSITIONITEM_H
 #define RG_COMPOSITIONITEM_H
 
-#include "CompositionRect.h"
+#include "SegmentRect.h"
 #include "base/TimeT.h"  // timeT
 
 #include <QObject>
@@ -50,7 +50,7 @@ class SnapGrid;
  */
 class CompositionItem : public QObject {
 public:
-    CompositionItem(Segment &s, const CompositionRect &r);
+    CompositionItem(Segment &s, const SegmentRect &r);
 
     // Rect Mutators
 
@@ -68,7 +68,7 @@ public:
     int y() const                      { return m_rect.y(); }
     unsigned int z() const             { return m_z; }
     bool isRepeating() const           { return m_rect.isRepeating(); }
-    CompositionRect& getCompRect()     { return m_rect; }
+    SegmentRect& getCompRect()     { return m_rect; }
 
     /// Get the start time of the repeat nearest the point.
     /**
@@ -87,7 +87,7 @@ public:
 private:
 
     Segment &m_segment;
-    CompositionRect m_rect;
+    SegmentRect m_rect;
     unsigned int m_z;
 
     QRect m_savedRect;

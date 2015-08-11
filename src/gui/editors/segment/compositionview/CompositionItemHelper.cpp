@@ -82,7 +82,7 @@ void CompositionItemHelper::setStartTime(CompositionItemPtr item, timeT time,
         item->setX(x);
         if (item->isRepeating()) {
             int deltaX = curX - x;
-            CompositionRect& sr = item->getCompRect();
+            SegmentRect& sr = item->getCompRect();
             int curW = sr.getBaseWidth();
             sr.setBaseWidth(curW + deltaX);
         }
@@ -103,7 +103,7 @@ void CompositionItemHelper::setEndTime(CompositionItemPtr item, timeT time,
         item->setWidth(r.width());
 
         if (item->isRepeating()) {
-            CompositionRect& sr = item->getCompRect();
+            SegmentRect& sr = item->getCompRect();
             sr.setBaseWidth(r.width());
         }
     }

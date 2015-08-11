@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_COMPOSITIONRECT_H
-#define RG_COMPOSITIONRECT_H
+#ifndef RG_SEGMENTRECT_H
+#define RG_SEGMENTRECT_H
 
 #include <QBrush>
 #include <QColor>
@@ -34,15 +34,15 @@ class QPoint;
 namespace Rosegarden
 {
 
-/// A segment rectangle.  (rename: SegmentRect)
-class CompositionRect : public QRect
+/// A segment rectangle.
+class SegmentRect : public QRect
 {
 public:
     typedef QVector<int> repeatmarks;
 
-    friend bool operator<(const CompositionRect&, const CompositionRect&);
+    friend bool operator<(const SegmentRect&, const SegmentRect&);
 
-    CompositionRect() :
+    SegmentRect() :
         QRect(),
         m_resized(false),
         m_selected(false),
@@ -55,7 +55,7 @@ public:
         m_z(0)
     { }
 
-    CompositionRect(const QRect &r) :
+    SegmentRect(const QRect &r) :
         QRect(r),
         m_resized(false),
         m_selected(false),
@@ -68,7 +68,7 @@ public:
         m_z(0)
     { }
 
-    CompositionRect(const QPoint &topLeft, const QSize &size) :
+    SegmentRect(const QPoint &topLeft, const QSize &size) :
         QRect(topLeft, size),
         m_resized(false),
         m_selected(false),
@@ -81,10 +81,10 @@ public:
         m_z(0)
     { }
 
-    //CompositionRect(const QPoint & topLeft, const QPoint & bottomRight)
+    //SegmentRect(const QPoint & topLeft, const QPoint & bottomRight)
     //    : QRect(topLeft, bottomRight), m_resized(false), m_selected(false),
     //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
-    //CompositionRect(int left, int top, int width, int height)
+    //SegmentRect(int left, int top, int width, int height)
     //    : QRect(left, top, width, height), m_resized(false), m_selected(false),
     //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
 
@@ -116,9 +116,9 @@ public:
     static const QColor DefaultPenColor;
     static const QColor DefaultBrushColor;
 
-    CompositionRect intersected(const CompositionRect &other) const
+    SegmentRect intersected(const SegmentRect &other) const
     {
-        CompositionRect intersected = QRect::intersected(other);
+        SegmentRect intersected = QRect::intersected(other);
 
         // Mix m_brush colors
         const QColor &thisColor = m_brush.color();

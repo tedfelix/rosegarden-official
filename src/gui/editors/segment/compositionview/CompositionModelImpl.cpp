@@ -24,7 +24,7 @@
 #include "AudioPreviewPainter.h"
 #include "CompositionItemHelper.h"
 #include "CompositionItem.h"
-#include "CompositionRect.h"
+#include "SegmentRect.h"
 #include "CompositionColourCache.h"
 
 #include "base/BaseProperties.h"
@@ -190,7 +190,7 @@ void CompositionModelImpl::getSegmentRects(
         if (isChanging(segment))
             continue;
 
-        CompositionRect segmentRect = computeSegmentRect(*segment);
+        SegmentRect segmentRect = computeSegmentRect(*segment);
 
         // If this segment isn't in the clip rect, try the next.
         if (!segmentRect.intersects(clipRect))
@@ -198,19 +198,19 @@ void CompositionModelImpl::getSegmentRects(
 
         const bool isTmpSelected2 = isTmpSelected(segment);
 
-        // Update the CompositionRect's selected state.
+        // Update the SegmentRect's selected state.
 
         segmentRect.setSelected(
                 isSelected(segment)  ||
                 isTmpSelected2  ||
                 segmentRect.intersects(m_selectionRect));
 
-        // Update the CompositionRect's "needs full update".
+        // Update the SegmentRect's "needs full update".
 
         segmentRect.setNeedsFullUpdate(
                 wasTmpSelected(segment) != isTmpSelected2);
 
-        // Update the CompositionRect's pen and brush.
+        // Update the SegmentRect's pen and brush.
 
         if (!isRecording(segment)) {
             // Pen
@@ -255,13 +255,13 @@ void CompositionModelImpl::getSegmentRects(
          i != m_changingSegments.end();
          ++i) {
 
-        CompositionRect segmentRect((*i)->rect());
+        SegmentRect segmentRect((*i)->rect());
 
         // If it doesn't intersect, try the next one.
         if (!segmentRect.intersects(clipRect))
             continue;
 
-        // Set up the CompositionRect
+        // Set up the SegmentRect
 
         // Selected
         segmentRect.setSelected(true);
@@ -356,15 +356,15 @@ CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
     return maxZItem;
 }
 
-CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
+SegmentRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
 {
     Profiler profiler("CompositionModelImpl::computeSegmentRect");
 
-    // ??? This shouldn't return a CompositionRect by value.  It's huge.
+    // ??? This shouldn't return a SegmentRect by value.  It's huge.
     //     Make it a pointer parameter.
     // ??? The second argument is ignored.  Remove it.
     // ??? Various callers to computeSegmentRect() need various
-    //     levels of CompositionRect completion.  E.g. getSegmentRects()
+    //     levels of SegmentRect completion.  E.g. getSegmentRects()
     //     needs everything filled in, but eventAdded() only needs the
     //     QRect.  That's annoying.  Analyze all callers and find out if
     //     there is a pattern we can take advantage of.  Maybe offer
@@ -380,7 +380,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
         timeT endTime = 0;
 
         // ??? This is the only caller.  Inline this function.
-        CompositionRect cachedCR = getFromCache(&s, endTime);
+        SegmentRect cachedCR = getFromCache(&s, endTime);
         // don't cache repeating segments - it's just hopeless, because the segment's rect may have to be recomputed
         // in other cases than just when the segment itself is moved,
         // for instance if another segment is moved over it
@@ -400,7 +400,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
 
                 // this doesn't work in the general case (if there's another segment on the same track for instance),
                 // it's better to simply recompute all the marks
-                //                 CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
+                //                 SegmentRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
                 //                 for(size_t i = 0; i < repeatMarks.size(); ++i) {
                 //                     repeatMarks[i] += deltaX;
                 //                 }
@@ -436,7 +436,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
 
     //RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << ", w " << w << ", h " << h;
 
-    CompositionRect cr(origin, QSize(w, h));
+    SegmentRect cr(origin, QSize(w, h));
     QString label = strtoqstr(s.getLabel());
     if (s.getType() == Segment::Audio) {
         static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
@@ -510,7 +510,7 @@ bool CompositionModelImpl::updateTrackHeight(const Segment *s)
     return heightsChanged;
 }
 
-void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s) const
+void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s) const
 {
     if (s->isRepeating()) {
 
@@ -529,7 +529,7 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
         sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
                                   repeatEnd - startTime))));
 
-        CompositionRect::repeatmarks repeatMarks;
+        SegmentRect::repeatmarks repeatMarks;
 
         //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
         //         << repeatStart << " - repeatEnd = " << repeatEnd;
@@ -544,7 +544,7 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
         //     m_repeatMarks, we could avoid the copy.
         // ??? Or move this routine
         //     (CompositionModelImpl::computeRepeatMarks()) to
-        //     CompositionRect::updateRepeatMarks(segment, grid).
+        //     SegmentRect::updateRepeatMarks(segment, grid).
         sr.setRepeatMarks(repeatMarks);
 
         if (repeatMarks.size() > 0)
@@ -568,15 +568,15 @@ unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment*
     return m_segmentOrderer.getZForSegment(s);
 }
 
-void CompositionModelImpl::updateCachedSegment(const Segment*s, const CompositionRect& cr)
+void CompositionModelImpl::updateCachedSegment(const Segment*s, const SegmentRect& cr)
 {
     m_segmentRectMap[s] = cr;
-    // ??? Why not add begin and end times to CompositionRect and get
+    // ??? Why not add begin and end times to SegmentRect and get
     //     rid of this?
     m_segmentEndTimeMap[s] = s->getEndMarkerTime();
 }
 
-const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segment* s, timeT& endTime)
+const SegmentRect& CompositionModelImpl::getFromCache(const Rosegarden::Segment* s, timeT& endTime)
 {
     endTime = m_segmentEndTimeMap[s];
 
@@ -593,7 +593,7 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
 
 bool CompositionModelImpl::isCachedRectCurrent(
         const Segment &segment,
-        const CompositionRect &cachedCR,  // = m_segmentRectMap[segment]
+        const SegmentRect &cachedCR,  // = m_segmentRectMap[segment]
         QPoint segmentTopLeft,            // = topLeft(segment)
         timeT cachedSegmentEndTime)       // = m_segmentEndTimeMap[segment]
 {
@@ -603,10 +603,10 @@ bool CompositionModelImpl::isCachedRectCurrent(
     //     and end times (and repeat mode) should be used to determine
     //     whether the cache is
     //     current.  If the begin or end have changed, then the cached
-    //     CompositionRect is outdated and needs to be recomputed.  So,
+    //     SegmentRect is outdated and needs to be recomputed.  So,
     //     we need to cache the begin and end time for each segment, then
     //     cache the composition rect.  Or add the begin and end time to
-    //     CompositionRect.  Repeat mode is already there.
+    //     SegmentRect.  Repeat mode is already there.
 
     // If the repeating mode changes, the rect is very different.
     bool repeatingMatches = (segment.isRepeating() == cachedCR.isRepeating());
@@ -686,7 +686,7 @@ CompositionModelImpl::ChangingSegmentSet CompositionModelImpl::getItemsAt(const 
 
         const Segment* s = *i;
 
-        CompositionRect sr = computeSegmentRect(*s);
+        SegmentRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
             //RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s;
             // ??? Can we get rid of this copy to reduce the burden on
@@ -1040,7 +1040,7 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
         return;
 
     // ??? rename: originalRect?
-    CompositionRect unmovedSR = computeSegmentRect(*segment);
+    SegmentRect unmovedSR = computeSegmentRect(*segment);
 
     NotationPreview* cachedNPData = getNotationPreview(segment);
 
@@ -1225,7 +1225,7 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 
 void CompositionModelImpl::makeAudioPreview(
         AudioPreviews* apRects, const Segment* segment,
-        const CompositionRect& segRect)
+        const SegmentRect& segRect)
 {
     Profiler profiler("CompositionModelImpl::makeAudioPreview");
 
@@ -1245,7 +1245,7 @@ void CompositionModelImpl::makeAudioPreview(
     AudioPreview previewItem(previewImage, segRect);
 
     if (m_changeType == ChangeResizeFromStart) {
-        CompositionRect originalRect = computeSegmentRect(*segment);
+        SegmentRect originalRect = computeSegmentRect(*segment);
         previewItem.resizeOffset = segRect.x() - originalRect.x();
     }
 
@@ -1311,7 +1311,7 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
     if (m_audioPreviewThread) {
         //RG_DEBUG << "makeAudioPeaksAsync() - new audio preview started";
 
-        CompositionRect segRect = computeSegmentRect(*segment);
+        SegmentRect segRect = computeSegmentRect(*segment);
         segRect.setWidth(segRect.getBaseWidth()); // don't use repeating area
         segRect.moveTopLeft(QPoint(0, 0));
 
@@ -1520,7 +1520,7 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
     for (SegmentMultiSet::iterator i = segments.begin();
          i != segEnd; ++i) {
 
-        CompositionRect segmentRect = computeSegmentRect(**i);
+        SegmentRect segmentRect = computeSegmentRect(**i);
 
         if (segmentRect.intersects(m_selectionRect)) {
             m_tmpSelectedSegments.insert(*i);
@@ -1550,7 +1550,7 @@ void CompositionModelImpl::finalizeSelectionRect()
     for (SegmentMultiSet::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
-        CompositionRect segmentRect = computeSegmentRect(**i);
+        SegmentRect segmentRect = computeSegmentRect(**i);
 
         if (segmentRect.intersects(m_selectionRect)) {
             setSelected(*i);
@@ -1580,7 +1580,7 @@ QRect CompositionModelImpl::getSelectedSegmentsRect()
     for (SegmentSelection::iterator i = m_selectedSegments.begin();
             i != m_selectedSegments.end(); ++i) {
 
-        CompositionRect sr = computeSegmentRect(**i);
+        SegmentRect sr = computeSegmentRect(**i);
         selectionRect |= sr;
     }
 

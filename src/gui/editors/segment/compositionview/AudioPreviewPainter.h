@@ -28,7 +28,7 @@ namespace Rosegarden {
 class CompositionModelImpl;
 class Composition;
 class Segment;
-class CompositionRect;
+class SegmentRect;
 
 class AudioPreviewPainter {
 public:
@@ -39,7 +39,7 @@ public:
 
     void paintPreviewImage();
     CompositionModelImpl::QImageVector getPreviewImage();
-    const CompositionRect& getSegmentRect() { return m_rect; }
+    const SegmentRect& getSegmentRect() { return m_rect; }
 
     static int tileWidth();
 
@@ -52,7 +52,7 @@ protected:
     CompositionModelImpl::AudioPeaks* m_apData;
     const Composition &m_composition;
     const Segment* m_segment;
-    CompositionRect m_rect;
+    SegmentRect m_rect;
 
     QImage m_image;
     CompositionModelImpl::QImageVector m_previewPixmaps;

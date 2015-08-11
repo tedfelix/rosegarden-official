@@ -19,7 +19,7 @@
 #define RG_COMPOSITIONMODELIMPL_H
 
 #include "base/SnapGrid.h"
-#include "CompositionRect.h"
+#include "SegmentRect.h"
 #include "CompositionItem.h"
 #include "SegmentOrderer.h"
 #include "base/TimeT.h"  // timeT
@@ -198,7 +198,7 @@ public:
 
     // --- Segments ---------------------------------------
 
-    typedef std::vector<CompositionRect> SegmentRects;
+    typedef std::vector<SegmentRect> SegmentRects;
 
     /// Get the segment rectangles and segment previews
     /**
@@ -224,7 +224,7 @@ public:
     void deleteCachedSegments(bool previewsToo)
             { deleteCachedSegment(0, previewsToo); }
 
-    CompositionRect computeSegmentRect(const Segment &, bool computeZ = false);
+    SegmentRect computeSegmentRect(const Segment &, bool computeZ = false);
 
     // --- Selection --------------------------------------
 
@@ -428,7 +428,7 @@ private:
     /// Make an AudioPreview for a Segment and add it to audioPreviews.
     void makeAudioPreview(
             AudioPreviews *audioPreviews, const Segment *,
-            const CompositionRect &segmentRect);
+            const SegmentRect &segmentRect);
 
     /**
      * If it's cached, it's returned immediately.  Otherwise, the process
@@ -492,8 +492,8 @@ private:
      */
     bool updateTrackHeight(const Segment *segment = 0);
 
-    /// Update CompositionRect::m_repeatMarks with the Segment's repeat marks.
-    void computeRepeatMarks(CompositionRect &, const Segment *) const;
+    /// Update SegmentRect::m_repeatMarks with the Segment's repeat marks.
+    void computeRepeatMarks(SegmentRect &, const Segment *) const;
 
     // ??? Obsolete.  Remove.
     SegmentOrderer m_segmentOrderer;
@@ -501,13 +501,13 @@ private:
     unsigned int computeZForSegment(const Segment *s);
 
     /// Segment Rectangle Cache
-    std::map<const Segment *, CompositionRect> m_segmentRectMap;
+    std::map<const Segment *, SegmentRect> m_segmentRectMap;
     /// Used to determine whether m_segmentRectMap is current.
     std::map<const Segment *, timeT> m_segmentEndTimeMap;
 
-    void updateCachedSegment(const Segment *, const CompositionRect &);
-    const CompositionRect &getFromCache(const Segment *, timeT &endTime);
-    bool isCachedRectCurrent(const Segment &s, const CompositionRect &r,
+    void updateCachedSegment(const Segment *, const SegmentRect &);
+    const SegmentRect &getFromCache(const Segment *, timeT &endTime);
+    bool isCachedRectCurrent(const Segment &s, const SegmentRect &r,
                              QPoint cachedSegmentOrigin,
                              timeT cachedSegmentEndTime);
     /// If Segment is NULL, all cached segments are deleted.

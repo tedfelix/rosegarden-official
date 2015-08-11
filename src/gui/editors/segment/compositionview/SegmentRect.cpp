@@ -16,7 +16,7 @@
 */
 
 
-#include "CompositionRect.h"
+#include "SegmentRect.h"
 #include "base/ColourMap.h"
 
 #include <QBrush>
@@ -30,6 +30,6 @@
 
 namespace Rosegarden
 {
-    const QColor CompositionRect::DefaultPenColor = QColor(Qt::black);
-    const QColor CompositionRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
+    const QColor SegmentRect::DefaultPenColor = QColor(Qt::black);
+    const QColor SegmentRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
 }

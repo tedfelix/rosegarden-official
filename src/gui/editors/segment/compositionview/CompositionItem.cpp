@@ -18,7 +18,7 @@
 
 #include "CompositionItem.h"
 
-#include "CompositionRect.h"
+#include "SegmentRect.h"
 #include "base/SnapGrid.h"
 
 #include <QRect>
@@ -30,7 +30,7 @@ namespace Rosegarden
 {
 
 
-CompositionItem::CompositionItem(Segment &s, const CompositionRect &rect)
+CompositionItem::CompositionItem(Segment &s, const SegmentRect &rect)
         : m_segment(s),
         m_rect(rect),
         m_z(0)

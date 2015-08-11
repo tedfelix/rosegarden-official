@@ -49,7 +49,7 @@ class SegmentToolBox;
 class SegmentTool;
 class Segment;
 class RosegardenDocument;
-class CompositionRect;
+class SegmentRect;
 
 /// Draws the Composition on the display.  The segment canvas.
 /**
@@ -464,14 +464,14 @@ private:
 
     /// A version of drawRect() that handles segment repeats.
     void drawCompRect(QPainter *painter, const QRect &clipRect,
-                      const CompositionRect &rect, int intersectLvl = 0);
+                      const SegmentRect &rect, int intersectLvl = 0);
 
     /// Used by drawSegments() to draw the segment labels.
     /**
      * @see setShowSegmentLabels()
      */
     void drawCompRectLabel(QPainter *painter,
-                           const CompositionRect &rect);
+                           const SegmentRect &rect);
     /// Used by drawCompRectLabel() to draw a halo around a text label.
     std::vector<QPoint> m_haloOffsets;
 
