@@ -1696,7 +1696,7 @@ Segment::countVerses()
     }
 }
 
-segmentcontainer&
+SegmentMultiSet&
 Segment::
 getCompositionSegments(void)
 {

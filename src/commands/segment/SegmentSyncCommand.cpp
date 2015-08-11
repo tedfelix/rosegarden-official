@@ -52,10 +52,10 @@ SegmentSyncCommand::SegmentSyncCommand(std::vector<Segment *> segments, int newT
     }
 }
 
-SegmentSyncCommand::SegmentSyncCommand(segmentcontainer& segments, TrackId selectedTrack, int newTranspose, int lowRange, int highRange, const Clef& clef) :
+SegmentSyncCommand::SegmentSyncCommand(SegmentMultiSet& segments, TrackId selectedTrack, int newTranspose, int lowRange, int highRange, const Clef& clef) :
         MacroCommand(tr("Sync segment parameters"))
 {
-    for (segmentcontainer::const_iterator si = segments.begin();
+    for (SegmentMultiSet::const_iterator si = segments.begin();
                         si != segments.end(); ++si) {
         if ((*si)->getTrack() == selectedTrack) {
             processSegment(**si, newTranspose, lowRange, highRange, clef);

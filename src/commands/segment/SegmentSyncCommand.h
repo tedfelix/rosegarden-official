@@ -48,7 +48,7 @@ public:
     SegmentSyncCommand(std::vector<Segment *> segments,
             int newTranspose, int lowRange, int highRange, const Clef& clef);
 
-    SegmentSyncCommand(segmentcontainer& segments, TrackId track,
+    SegmentSyncCommand(SegmentMultiSet& segments, TrackId track,
             int newTranspose, int lowRange, int highRange, const Clef& clef);
 
     virtual ~SegmentSyncCommand();

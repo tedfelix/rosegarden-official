@@ -379,7 +379,7 @@ void TrackEditor::deleteTracks(std::vector<TrackId> tracks)
     MacroCommand *macro = new MacroCommand(tr("Delete Tracks"));
 
     Composition &comp = m_doc->getComposition();
-    const segmentcontainer &segments = comp.getSegments();
+    const SegmentMultiSet &segments = comp.getSegments();
 
     // Delete the segments.
 
@@ -388,7 +388,7 @@ void TrackEditor::deleteTracks(std::vector<TrackId> tracks)
         const TrackId trackId = tracks[i];
 
         // for each segment in the composition
-        for (segmentcontainer::const_iterator segmentIter = segments.begin();
+        for (SegmentMultiSet::const_iterator segmentIter = segments.begin();
              segmentIter != segments.end();
              ++segmentIter) {
             Segment *segment = *segmentIter;

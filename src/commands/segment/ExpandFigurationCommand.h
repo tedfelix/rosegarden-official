@@ -52,7 +52,7 @@ private:
 
   Composition                   *m_composition;
   // The new segments we make.
-  segmentcontainer               m_newSegments;
+  SegmentMultiSet                m_newSegments;
   bool                           m_executed;
 };
 

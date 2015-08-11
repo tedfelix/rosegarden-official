@@ -57,7 +57,7 @@ void DeleteTracksCommand::execute()
     m_oldTracks.clear();
 
     // Alias for readability
-    const segmentcontainer &segments = m_composition->getSegments();
+    const SegmentMultiSet &segments = m_composition->getSegments();
 
     // Remove the tracks and their segments.
 
@@ -77,12 +77,12 @@ void DeleteTracksCommand::execute()
             //     SegmentEraseCommand.
 
             // For each segment in the composition.
-            for (segmentcontainer::const_iterator j = segments.begin();
+            for (SegmentMultiSet::const_iterator j = segments.begin();
                  j != segments.end();
                  /* incremented inside */) {
                 // Increment before use.  Otherwise detachSegment() will
                 // invalidate our iterator.
-                segmentcontainer::const_iterator k = j++;
+                SegmentMultiSet::const_iterator k = j++;
 
                 // If this segment is on the track we are deleting
                 if ((*k)->getTrack() == trackId) {

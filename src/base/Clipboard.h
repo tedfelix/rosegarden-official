@@ -35,9 +35,8 @@ class EventSelection;
 class Clipboard
 {
 public:
-    typedef std::multiset<Segment *, Segment::SegmentCmp> segmentcontainer;
-    typedef segmentcontainer::iterator iterator;
-    typedef segmentcontainer::const_iterator const_iterator;
+    typedef SegmentMultiSet::iterator iterator;
+    typedef SegmentMultiSet::const_iterator const_iterator;
 
     Clipboard();
     Clipboard(const Clipboard &);
@@ -184,7 +183,7 @@ public:
     void removeAudioSegments();
 
 private:
-    segmentcontainer m_segments;
+    SegmentMultiSet m_segments;
     bool m_partial;
 
     TimeSignatureSelection m_timeSigSelection;

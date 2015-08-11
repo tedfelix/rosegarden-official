@@ -356,10 +356,10 @@ getInvolvedSegments(bool onlyIfNeedTag, MacroCommand* command)
     typedef SegmentFigDataMap::value_type ValueType;
     SegmentFigDataMap   storedScans;
 
-    segmentcontainer ss = Segment::getCompositionSegments();
+    SegmentMultiSet ss = Segment::getCompositionSegments();
 
     // Loop thru all segments with scanSegment.
-    for (segmentcontainer::iterator i = ss.begin();
+    for (SegmentMultiSet::iterator i = ss.begin();
 	 i != ss.end();
 	 ++i) {
         SegmentFigData segmentData(*i);

@@ -29,13 +29,11 @@
 
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/Strings.h"  // strtoqstr()
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
@@ -47,15 +45,14 @@
 
 #include <QBrush>
 #include <QColor>
-#include <QPen>
 #include <QPoint>
 #include <QRect>
 #include <QRegExp>
 #include <QSize>
 #include <QString>
 
-#include <cmath>
-#include <algorithm>
+#include <math.h>
+#include <algorithm>  // std::lower_bound() and std::min()
 
 
 namespace Rosegarden
@@ -99,12 +96,14 @@ CompositionModelImpl::CompositionModelImpl(
     // Update the track heights for all tracks.
     updateTrackHeight();
 
-    segmentcontainer& segments = m_composition.getSegments();
-    segmentcontainer::iterator segEnd = segments.end();
+    SegmentMultiSet &segments = m_composition.getSegments();
 
-    for (segmentcontainer::iterator i = segments.begin();
-            i != segEnd; ++i) {
+    // For each segment in the composition
+    for (SegmentMultiSet::iterator i = segments.begin();
+         i != segments.end();
+         ++i) {
 
+        // Subscribe
         (*i)->addObserver(this);
     }
 
@@ -125,10 +124,10 @@ CompositionModelImpl::~CompositionModelImpl()
 
         m_composition.removeObserver(this);
 
-        segmentcontainer& segments = m_composition.getSegments();
-        segmentcontainer::iterator segEnd = segments.end();
+        SegmentMultiSet& segments = m_composition.getSegments();
+        SegmentMultiSet::iterator segEnd = segments.end();
 
-        for (segmentcontainer::iterator i = segments.begin();
+        for (SegmentMultiSet::iterator i = segments.begin();
                 i != segEnd; ++i) {
 
             (*i)->removeObserver(this);
@@ -154,6 +153,8 @@ CompositionModelImpl::~CompositionModelImpl()
         delete i->second;
     }
 }
+
+// --- Re-order starting here ------------------------------------------
 
 struct RectCompare {
     bool operator()(const QRect &r1, const QRect &r2) const {
@@ -395,8 +396,8 @@ void CompositionModelImpl::deleteCachedPreviews()
         i->second->cancel();
     }
 
-    const segmentcontainer& segments = m_composition.getSegments();
-    segmentcontainer::const_iterator segEnd = segments.end();
+    const SegmentMultiSet& segments = m_composition.getSegments();
+    SegmentMultiSet::const_iterator segEnd = segments.end();
 
     // Regenerate all of the audio previews.
     // ??? Why?  This routine is supposed to delete all the previews.
@@ -404,7 +405,7 @@ void CompositionModelImpl::deleteCachedPreviews()
     //     into an updateCachedAudioPreviews() and call it where it's
     //     needed.  Then determine whether it is really needed.
 
-    for (segmentcontainer::const_iterator i = segments.begin();
+    for (SegmentMultiSet::const_iterator i = segments.begin();
             i != segEnd; ++i) {
 
         if ((*i)->getType() == Segment::Audio) {
@@ -567,10 +568,10 @@ QRect CompositionModelImpl::updateCachedPreviewImage(AudioPeaks* apData, const S
 void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 {
     RG_DEBUG << "slotInstrumentChanged()";
-    const segmentcontainer& segments = m_composition.getSegments();
-    segmentcontainer::const_iterator segEnd = segments.end();
+    const SegmentMultiSet& segments = m_composition.getSegments();
+    SegmentMultiSet::const_iterator segEnd = segments.end();
 
-    for (segmentcontainer::const_iterator i = segments.begin();
+    for (SegmentMultiSet::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
         const Segment* s = *i;
@@ -754,13 +755,13 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
     m_previousTmpSelectedSegments = m_tmpSelectedSegments;
     m_tmpSelectedSegments.clear();
 
-    const segmentcontainer& segments = m_composition.getSegments();
-    segmentcontainer::iterator segEnd = segments.end();
+    const SegmentMultiSet& segments = m_composition.getSegments();
+    SegmentMultiSet::iterator segEnd = segments.end();
 
     QRect updateRect = m_selectionRect;
 
     // For each segment in the composition
-    for (segmentcontainer::iterator i = segments.begin();
+    for (SegmentMultiSet::iterator i = segments.begin();
          i != segEnd; ++i) {
         
         CompositionRect segmentRect = computeSegmentRect(**i);
@@ -786,11 +787,11 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
 
 void CompositionModelImpl::finalizeSelectionRect()
 {
-    const segmentcontainer &segments = m_composition.getSegments();
-    segmentcontainer::const_iterator segEnd = segments.end();
+    const SegmentMultiSet &segments = m_composition.getSegments();
+    SegmentMultiSet::const_iterator segEnd = segments.end();
 
     // For each segment in the composition
-    for (segmentcontainer::const_iterator i = segments.begin();
+    for (SegmentMultiSet::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
         CompositionRect segmentRect = computeSegmentRect(**i);
@@ -869,10 +870,10 @@ CompositionModelImpl::ChangingSegmentSet CompositionModelImpl::getItemsAt(const 
 
     ChangingSegmentSet res;
 
-    const segmentcontainer& segments = m_composition.getSegments();
+    const SegmentMultiSet& segments = m_composition.getSegments();
 
     // For each segment in the composition
-    for (segmentcontainer::const_iterator i = segments.begin();
+    for (SegmentMultiSet::const_iterator i = segments.begin();
          i != segments.end(); ++i) {
 
         const Segment* s = *i;
@@ -1135,7 +1136,7 @@ bool CompositionModelImpl::updateTrackHeight(const Segment *s)
 
     if (heightsChanged) {
         //RG_DEBUG << "updateTrackHeight(): heights have changed";
-        for (segmentcontainer::iterator i = m_composition.begin();
+        for (SegmentMultiSet::iterator i = m_composition.begin();
              i != m_composition.end(); ++i) {
             computeSegmentRect(**i);
         }
@@ -1376,11 +1377,11 @@ CompositionModelImpl::getSegmentRects(
     //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): ruler scale is "
     //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
 
-    const segmentcontainer &segments = m_composition.getSegments();
-    segmentcontainer::const_iterator segmentsEnd = segments.end();
+    const SegmentMultiSet &segments = m_composition.getSegments();
+    SegmentMultiSet::const_iterator segmentsEnd = segments.end();
 
     // For each segment in the composition
-    for (segmentcontainer::const_iterator i = segments.begin();
+    for (SegmentMultiSet::const_iterator i = segments.begin();
          i != segmentsEnd; ++i) {
 
         //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";

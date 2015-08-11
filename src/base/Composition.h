@@ -66,8 +66,8 @@ class Composition : public XmlExportable
     friend class Segment; // to call notifySegmentRepeatChanged()
     
 public:
-    typedef segmentcontainer::iterator iterator;
-    typedef segmentcontainer::const_iterator const_iterator;
+    typedef SegmentMultiSet::iterator iterator;
+    typedef SegmentMultiSet::const_iterator const_iterator;
 
     typedef std::vector<Segment *> SegmentVec;
 
@@ -209,7 +209,7 @@ public:
      * Get all segments that play on the same instrument segment s
      * plays on and start before t.
      */
-    segmentcontainer getInstrumentSegments(Segment *s, timeT t) const;
+    SegmentMultiSet getInstrumentSegments(Segment *s, timeT t) const;
 
     //////
     //
@@ -240,8 +240,8 @@ public:
     //
     //  SEGMENT
 
-    segmentcontainer& getSegments() { return m_segments; }
-    const segmentcontainer& getSegments() const { return m_segments; }
+    SegmentMultiSet& getSegments() { return m_segments; }
+    const SegmentMultiSet& getSegments() const { return m_segments; }
 
     unsigned int getNbSegments() const { return m_segments.size(); }
 
@@ -337,15 +337,15 @@ public:
     int getSegmentVoiceIndex(const Segment *) const;
 
     /**
-     * Add every segment in segmentcontainer
+     * Add every segment in SegmentMultiSet
      */
-    void addAllSegments(segmentcontainer segments);
+    void addAllSegments(SegmentMultiSet segments);
     void addAllSegments(SegmentVec segments);
 
     /**
-     * Detach every segment in segmentcontainer
+     * Detach every segment in SegmentMultiSet
      */
-    void detachAllSegments(segmentcontainer segments);
+    void detachAllSegments(SegmentMultiSet segments);
     void detachAllSegments(SegmentVec segments);
 
     //////
@@ -955,7 +955,7 @@ protected:
     //--------------- Data members ---------------------------------
     //
     trackcontainer m_tracks;
-    segmentcontainer m_segments;
+    SegmentMultiSet m_segments;
 
     // The tracks we are armed for record on
     //

@@ -300,12 +300,12 @@ Composition::weakDetachSegment(Segment *segment)
     return true;
 }
 
-// Add every segment in segmentcontainer
+// Add every segment in SegmentMultiSet
 // @author Tom Breton (Tehom)
 void
-Composition::addAllSegments(segmentcontainer segments)
+Composition::addAllSegments(SegmentMultiSet segments)
 {
-    for (segmentcontainer::iterator i = segments.begin();
+    for (SegmentMultiSet::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { addSegment(*i); }
@@ -320,12 +320,12 @@ Composition::addAllSegments(SegmentVec segments)
         { addSegment(*i); }
 }
 
-// Detach every segment in segmentcontainer
+// Detach every segment in SegmentMultiSet
 // @author Tom Breton (Tehom)
 void
-Composition::detachAllSegments(segmentcontainer segments)
+Composition::detachAllSegments(SegmentMultiSet segments)
 {
-    for (segmentcontainer::iterator i = segments.begin();
+    for (SegmentMultiSet::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { detachSegment(*i); }    
@@ -606,7 +606,7 @@ Composition::getDuration() const
 {
     timeT maxDuration = 0;
 
-    for (segmentcontainer::const_iterator i = m_segments.begin();
+    for (SegmentMultiSet::const_iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
         timeT segmentTotal = (*i)->getEndTime();
@@ -1690,7 +1690,7 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 
         // modify segment mappings
         //
-        for (segmentcontainer::const_iterator i = m_segments.begin();
+        for (SegmentMultiSet::const_iterator i = m_segments.begin();
              i != m_segments.end(); ++i) 
         {
             if ((*i)->getTrack() == oldId) (*i)->setTrack(newId);
@@ -2068,14 +2068,14 @@ Composition::getNewTrackId() const
 
 // Get all the segments that the same instrument plays that plays
 // segment s.
-// @return a segmentcontainer that includes s itself.
-segmentcontainer
+// @return a SegmentMultiSet that includes s itself.
+SegmentMultiSet
 Composition::getInstrumentSegments(Segment *s, timeT t) const
 {
-    segmentcontainer segments;
+    SegmentMultiSet segments;
     InstrumentId Instrument = getInstrumentId(s);
 
-    const segmentcontainer& allSegments = getSegments();
+    const SegmentMultiSet& allSegments = getSegments();
     for (Composition::iterator i = allSegments.begin();
          i != allSegments.end();
          ++i)
@@ -2434,7 +2434,7 @@ Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
 void
 Composition::distributeVerses()
 {
-    typedef std::map<int, segmentcontainer> SegmentMap;
+    typedef std::map<int, SegmentMultiSet> SegmentMap;
     SegmentMap tracks;
     SegmentMap repeats;
 
@@ -2449,7 +2449,7 @@ Composition::distributeVerses()
 
         // Reset all verse indexes and look for repeated segments
         repeats.clear();
-        for (segmentcontainer::iterator j = i->second.begin(); j != i->second.end(); ++j) {
+        for (SegmentMultiSet::iterator j = i->second.begin(); j != i->second.end(); ++j) {
              Segment* s = *j;
              s->setVerse(0);
              if (s->isPlainlyLinked()) {
@@ -2460,7 +2460,7 @@ Composition::distributeVerses()
         // Set verse indexes where needed
         for (SegmentMap::iterator j = repeats.begin(); j != repeats.end(); ++j) {
             int verse = 0;
-            for (segmentcontainer::iterator k = j->second.begin(); k != j->second.end(); ++k) {
+            for (SegmentMultiSet::iterator k = j->second.begin(); k != j->second.end(); ++k) {
                 Segment* s = *k;
                 s->setVerse(verse++);
             }

@@ -727,10 +727,15 @@ public:
         }
     };
 
-    typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
+    // This is a std::multiset because the segments aren't indexed by
+    // pointer address, they are indexed by track, then start time on
+    // a track (see SegmentCmp).  And it is not unusual for two
+    // Segments to start at the same time on the same track.
+    // ??? rename: SegmentMultiSet
+    typedef std::multiset<Segment *, Segment::SegmentCmp> SegmentMultiSet;
 
     // Get the segments in the current composition.
-    static segmentcontainer& getCompositionSegments(void);
+    static SegmentMultiSet& getCompositionSegments(void);
     
     void  addObserver(SegmentObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
@@ -988,7 +993,8 @@ private:
     int m_verse;       // Used to distribute lyrics among repeated segments
 };
 
-typedef Segment::segmentcontainer segmentcontainer;
+// Make it a global name.
+typedef Segment::SegmentMultiSet SegmentMultiSet;
 
 /// Base class interface for Segment notifications.
 /**
