@@ -593,9 +593,10 @@ void CompositionView::drawSegments(const QRect &clipRect)
         audioPreview = &m_audioPreview;
     }
 
+    CompositionModelImpl::SegmentRects segmentRects;
+
     // Fetch segment rectangles and (optionally) previews
-    const CompositionModelImpl::SegmentRects &segmentRects =
-            m_model->getSegmentRects(clipRect, notationPreview, audioPreview);
+    m_model->getSegmentRects(clipRect, &segmentRects, notationPreview, audioPreview);
 
     // *** Draw Segment Rectangles
 

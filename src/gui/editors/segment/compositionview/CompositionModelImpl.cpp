@@ -79,7 +79,6 @@ CompositionModelImpl::CompositionModelImpl(
     m_segmentOrderer(),
     m_segmentRectMap(),
     m_segmentEndTimeMap(),
-    m_segmentRects(),
     m_selectedSegments(),
     m_tmpSelectedSegments(),
     m_previousTmpSelectedSegments(),
@@ -163,115 +162,132 @@ CompositionModelImpl::~CompositionModelImpl()
 
 // --- Segments -----------------------------------------------------
 
-const CompositionModelImpl::SegmentRects &
-CompositionModelImpl::getSegmentRects(
+void CompositionModelImpl::getSegmentRects(
         const QRect &clipRect,
-        NotationPreviewRanges *notationPreview,
-        AudioPreviews *audioPreview)
+        SegmentRects *segmentRects,
+        NotationPreviewRanges *notationPreviewRanges,
+        AudioPreviews *audioPreviews)
 {
     Profiler profiler("CompositionModelImpl::getSegmentRects()");
 
-    // Clear the container we'll be returning.
-    m_segmentRects.clear();
+    // Start with a clean slate.
+    segmentRects->clear();
 
-    //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): ruler scale is "
-    //         << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel();
+    // For readability
+    CompositionColourCache *colourCache =
+            CompositionColourCache::getInstance();
 
     const SegmentMultiSet &segments = m_composition.getSegments();
-    SegmentMultiSet::const_iterator segmentsEnd = segments.end();
 
     // For each segment in the composition
     for (SegmentMultiSet::const_iterator i = segments.begin();
-         i != segmentsEnd; ++i) {
+         i != segments.end();
+         ++i) {
 
-        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")";
+        const Segment *segment = *i;
 
-        const Segment *s = *i;
-
-        // Moving segments are handled in the next for loop.
-        if (isChanging(s))
+        // Changing segments are handled in the next for loop.
+        if (isChanging(segment))
             continue;
 
-        CompositionRect segmentRect = computeSegmentRect(*s);
-        //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): seg rect = " << sr;
+        CompositionRect segmentRect = computeSegmentRect(*segment);
 
-        if (segmentRect.intersects(clipRect)) {
-//            RG_DEBUG << "CompositionModelImpl::getSegmentRects(): segment " << s
-//                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s);
+        // If this segment isn't in the clip rect, try the next.
+        if (!segmentRect.intersects(clipRect))
+            continue;
 
-            if (isSelected(s) || isTmpSelected(s) || segmentRect.intersects(m_selectionRect)) {
-                segmentRect.setSelected(true);
-            }
+        const bool isTmpSelected2 = isTmpSelected(segment);
 
-            if (wasTmpSelected(s) != isTmpSelected(s))
-                segmentRect.setNeedsFullUpdate(true);
+        // Update the CompositionRect's selected state.
 
-            bool isAudio = (s && s->getType() == Segment::Audio);
+        segmentRect.setSelected(
+                isSelected(segment)  ||
+                isTmpSelected2  ||
+                segmentRect.intersects(m_selectionRect));
 
-            if (!isRecording(s)) {
-                QColor brushColor = GUIPalette::convertColour(m_composition.
-                                    getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-                Qt::BrushStyle brushPattern =
-                    s->isTrulyLinked() ? Qt::Dense2Pattern : Qt::SolidPattern;
-                segmentRect.setBrush(QBrush(brushColor, brushPattern));
-                segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
-            } else {
-                // border is the same for both audio and MIDI
-                segmentRect.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
-                // audio color
-                if (isAudio) {
-                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
-                    // MIDI/default color
-                } else {
-                    segmentRect.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
-                }
-            }
+        // Update the CompositionRect's "needs full update".
 
-            // Notation preview data
-            if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRange(QPoint(0, segmentRect.y()), s, clipRect, notationPreview);
-                // Audio preview data
-            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
-                makeAudioPreview(audioPreview, s, segmentRect);
-            }
+        segmentRect.setNeedsFullUpdate(
+                wasTmpSelected(segment) != isTmpSelected2);
 
-            m_segmentRects.push_back(segmentRect);
-        } else {
-            //RG_DEBUG << "CompositionModelImpl::getSegmentRects(): - segment out of rect";
+        // Update the CompositionRect's pen and brush.
+
+        if (!isRecording(segment)) {
+            // Pen
+            segmentRect.setPen(colourCache->SegmentBorder);
+
+            // Brush
+            QColor brushColor = GUIPalette::convertColour(
+                    m_composition.getSegmentColourMap().getColourByIndex(
+                            segment->getColourIndex()));
+            Qt::BrushStyle brushPattern =
+                    segment->isTrulyLinked() ?
+                            Qt::Dense2Pattern : Qt::SolidPattern;
+            segmentRect.setBrush(QBrush(brushColor, brushPattern));
+        } else {  // Recording
+            // Pen
+            segmentRect.setPen(colourCache->RecordingSegmentBorder);
+
+            // Brush
+            if (segment->isMIDI())
+                segmentRect.setBrush(colourCache->RecordingInternalSegmentBlock);
+            else  // Audio Segment
+                segmentRect.setBrush(colourCache->RecordingAudioSegmentBlock);
         }
 
+        // Generate the requested previews.
+
+        if (segment->isMIDI()) {
+            makeNotationPreviewRange(
+                    QPoint(0, segmentRect.y()), segment, clipRect,
+                    notationPreviewRanges);
+        } else {  // Audio Segment
+            makeAudioPreview(audioPreviews, segment, segmentRect);
+        }
+
+        segmentRects->push_back(segmentRect);
     }
 
-    // changing items (moving segments)
+    // Changing Segments (Moving/Resizing)
 
-    ChangingSegmentSet::iterator movEnd = m_changingSegments.end();
-    for (ChangingSegmentSet::iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
+    // For each changing segment
+    for (ChangingSegmentSet::iterator i = m_changingSegments.begin();
+         i != m_changingSegments.end();
+         ++i) {
+
         CompositionRect segmentRect((*i)->rect());
-        if (segmentRect.intersects(clipRect)) {
-            Segment *s = CompositionItemHelper::getSegment(*i);
-            segmentRect.setSelected(true);
-            QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-            segmentRect.setBrush(brushColor);
 
-            segmentRect.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+        // If it doesn't intersect, try the next one.
+        if (!segmentRect.intersects(clipRect))
+            continue;
 
-            // Notation preview data
-            if (notationPreview  &&  s->getType() == Segment::Internal) {
-                makeNotationPreviewRangeCS(segmentRect.topLeft(), s, segmentRect, notationPreview);
-                // Audio preview data
-            } else if (audioPreview  &&  s->getType() == Segment::Audio) {
-                makeAudioPreview(audioPreview, s, segmentRect);
-            }
+        // Set up the CompositionRect
 
-            m_segmentRects.push_back(segmentRect);
+        // Selected
+        segmentRect.setSelected(true);
+
+        // Brush
+        Segment *segment = (*i)->getSegment();
+        Colour segmentColour =
+                m_composition.getSegmentColourMap().getColourByIndex(
+                        segment->getColourIndex());
+        segmentRect.setBrush(GUIPalette::convertColour(segmentColour));
+
+        // Pen
+        segmentRect.setPen(colourCache->SegmentBorder);
+
+        // Generate the preview
+
+        if (segment->isMIDI()) {
+            makeNotationPreviewRangeCS(
+                    segmentRect.topLeft(), segment, segmentRect,
+                    notationPreviewRanges);
+        } else {  // Audio Segment
+            makeAudioPreview(audioPreviews, segment, segmentRect);
         }
-    }
 
-    // ??? Odd.  We could also have the (one) caller provide the
-    //     SegmentRects object (via reference).  Probably easier to
-    //     understand.  Performance should be about the same.  clear()
-    //     and dtor time are the same.  ctor time is trivial.
-    return m_segmentRects;
+        segmentRects->push_back(segmentRect);
+    }
 }
 
 CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
@@ -343,6 +359,17 @@ CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
 CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
 {
     Profiler profiler("CompositionModelImpl::computeSegmentRect");
+
+    // ??? This shouldn't return a CompositionRect by value.  It's huge.
+    //     Make it a pointer parameter.
+    // ??? The second argument is ignored.  Remove it.
+    // ??? Various callers to computeSegmentRect() need various
+    //     levels of CompositionRect completion.  E.g. getSegmentRects()
+    //     needs everything filled in, but eventAdded() only needs the
+    //     QRect.  That's annoying.  Analyze all callers and find out if
+    //     there is a pattern we can take advantage of.  Maybe offer
+    //     two versions of computeSegmentRect().  One that just worries
+    //     about the QRect and one that fills everything in.
 
     QPoint origin = topLeft(s);
 
@@ -943,6 +970,9 @@ void CompositionModelImpl::makeNotationPreviewRange(
 {
     Profiler profiler("CompositionModelImpl::makeNotationPreviewRange");
 
+    if (!ranges)
+        return;
+
     NotationPreview* cachedNPData = getNotationPreview(segment);
 
     if (cachedNPData->empty())
@@ -1006,6 +1036,9 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
         QPoint basePoint, const Segment *segment,
         const QRect &currentRect, NotationPreviewRanges *ranges)
 {
+    if (!ranges)
+        return;
+
     // ??? rename: originalRect?
     CompositionRect unmovedSR = computeSegmentRect(*segment);
 
@@ -1197,6 +1230,12 @@ void CompositionModelImpl::makeAudioPreview(
     Profiler profiler("CompositionModelImpl::makeAudioPreview");
 
     RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect;
+
+    if (!apRects)
+        return;
+
+    // ??? Parameter order is wrong.  audioPreviews, the out
+    //     parameter, belongs at the end.
 
     // ??? This is the only call to this function.  Inline it.
     QImageVector previewImage = getAudioPreviewImage(segment);

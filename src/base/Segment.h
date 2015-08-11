@@ -95,7 +95,7 @@ public:
 
     /// A Segment contains either Internal representation or Audio
     typedef enum {
-        Internal,
+        Internal,  // ??? rename: MIDI
         Audio
     } SegmentType;
 
@@ -153,6 +153,8 @@ public:
      * Get the Segment type (Internal or Audio)
      */
     SegmentType getType() const { return m_type; }
+    bool isMIDI() const  { return (m_type == Internal); }
+    bool isAudio() const  { return (m_type == Audio); }
 
     /**
      * Get the element name this class will have when serialised

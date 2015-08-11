@@ -204,9 +204,10 @@ public:
     /**
      * ??? Audio and Notation Previews too.  Need an "ALL" category.
      */
-    const SegmentRects &getSegmentRects(
+    void getSegmentRects(
             const QRect &clipRect,
-            NotationPreviewRanges *notationPreviews,
+            SegmentRects *segmentRects,
+            NotationPreviewRanges *notationPreviewRanges,
             AudioPreviews *audioPreviews);
 
     /// Get the topmost item (segment) at the given position on the view.
@@ -516,9 +517,6 @@ private:
     // ??? ChangingSegmentSet looks wrong here.  But that's ok as this
     //     routine is going away.
     ChangingSegmentSet getItemsAt(const QPoint &);
-
-    /// Used by getSegmentRects() to return a reference for speed.
-    SegmentRects m_segmentRects;
 
     // --- Selection --------------------------------------
 
