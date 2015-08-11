@@ -339,6 +339,9 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
 
         // ??? COPY.  If we could get a non-const reference to
         //     m_repeatMarks, we could avoid the copy.
+        // ??? Or move this routine
+        //     (CompositionModelImpl::computeRepeatMarks()) to
+        //     CompositionRect::updateRepeatMarks(segment, grid).
         sr.setRepeatMarks(repeatMarks);
 
         if (repeatMarks.size() > 0)
@@ -629,7 +632,7 @@ void CompositionModelImpl::allEventsChanged(const Segment *s)
 void CompositionModelImpl::appearanceChanged(const Segment *s)
 {
     //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
-    clearInCache(s, true);
+    deleteCachedSegment(s, true);
     emit needUpdate(computeSegmentRect(*s));
 }
 
@@ -637,7 +640,7 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
     Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
     //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
-    clearInCache(s, true);
+    deleteCachedSegment(s, true);
     if (shorten) {
         emit needUpdate(); // no longer know former segment dimension
     } else {
@@ -694,7 +697,7 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 
     m_selectedSegments.erase(s);
 
-    clearInCache(s, true);
+    deleteCachedSegment(s, true);
     s->removeObserver(this);
     m_recordingSegments.erase(s); // this could be a recording segment
     emit needUpdate(r);
@@ -732,7 +735,7 @@ void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment 
 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
 {
-    clearInCache(s);
+    deleteCachedSegment(s);
     updateTrackHeight(s);
     emit needUpdate();
 }
@@ -834,7 +837,7 @@ void CompositionModelImpl::clearRecordingItems()
     // For each recording segment, remove it from the caches.
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i)
-        clearInCache(*i, true);
+        deleteCachedSegment(*i, true);
 
     m_recordingSegments.clear();
 
@@ -1151,29 +1154,88 @@ QPoint CompositionModelImpl::topLeft(const Segment& s) const
     return res;
 }
 
-bool CompositionModelImpl::isCachedRectCurrent(const Segment& s, const CompositionRect& r, QPoint cachedSegmentOrigin, timeT cachedSegmentEndTime)
+bool CompositionModelImpl::isCachedRectCurrent(
+        const Segment &segment,
+        const CompositionRect &cachedCR,  // = m_segmentRectMap[segment]
+        QPoint segmentTopLeft,            // = topLeft(segment)
+        timeT cachedSegmentEndTime)       // = m_segmentEndTimeMap[segment]
 {
-    return s.isRepeating() == r.isRepeating() &&
-           ((cachedSegmentOrigin.x() != r.x() && s.getEndMarkerTime() != cachedSegmentEndTime) ||
-            (cachedSegmentOrigin.x() == r.x() && s.getEndMarkerTime() == cachedSegmentEndTime));
+    //RG_DEBUG << "isCachedRectCurrent()...";
+
+    // ??? ISTM that the cache should work as follows...  The segment begin
+    //     and end times (and repeat mode) should be used to determine
+    //     whether the cache is
+    //     current.  If the begin or end have changed, then the cached
+    //     CompositionRect is outdated and needs to be recomputed.  So,
+    //     we need to cache the begin and end time for each segment, then
+    //     cache the composition rect.  Or add the begin and end time to
+    //     CompositionRect.  Repeat mode is already there.
+
+    // If the repeating mode changes, the rect is very different.
+    bool repeatingMatches = (segment.isRepeating() == cachedCR.isRepeating());
+
+    //RG_DEBUG << "  repeatingMatches: " << repeatingMatches;
+
+    // ??? This happens when we are moving a segment.  So, when moving a
+    //     segment, this indicates that the cache is ok.  That seems
+    //     a bit too clever.
+    bool nothingMatches =
+            (segmentTopLeft.x() != cachedCR.x()  &&
+             segment.getEndMarkerTime() != cachedSegmentEndTime);
+
+    //RG_DEBUG << "  nothingMatches: " << nothingMatches;
+
+    // If the begin and end are different, the rect is different.
+    bool everythingMatches =
+            (segmentTopLeft.x() == cachedCR.x()  &&
+             segment.getEndMarkerTime() == cachedSegmentEndTime);
+
+    //RG_DEBUG << "  everythingMatches: " << everythingMatches;
+
+    /*
+       Use cases.
+
+       (Note that this routine is never called for a repeating segment.)
+
+       When adjusting the beginning of a segment, we return false since
+       nothingMatches is false and everythingMatches is false.
+
+       When adjusting the end of a segment, we return true since
+       everythingMatches is true.  I'm not sure
+       why.  I assume that the cache has been updated before we get here.
+
+       When moving a segment, we return true since nothingMatches is true.
+    */
+
+    bool isCurrent = (repeatingMatches && (nothingMatches || everythingMatches));
+
+    //RG_DEBUG << "  isCurrent: " << isCurrent;
+
+    return isCurrent;
+
+    // The original code.  It has been broken apart above for analysis.
+//    return segment.isRepeating() == cachedCR.isRepeating() &&
+//           ((segmentTopLeft.x() != cachedCR.x() && segment.getEndMarkerTime() != cachedSegmentEndTime) ||
+//            (segmentTopLeft.x() == cachedCR.x() && segment.getEndMarkerTime() == cachedSegmentEndTime));
 }
 
-void CompositionModelImpl::clearInCache(const Segment* s, bool clearPreview)
+void CompositionModelImpl::deleteCachedSegment(
+        const Segment *s, bool previewToo)
 {
     if (s) {
         m_segmentRectMap.erase(s);
         m_segmentEndTimeMap.erase(s);
-        if (clearPreview)
+        if (previewToo)
             deleteCachedPreview(s);
     } else { // clear the whole cache
         m_segmentRectMap.clear();
         m_segmentEndTimeMap.clear();
-        if (clearPreview)
+        if (previewToo)
             deleteCachedPreviews();
     }
 }
 
-void CompositionModelImpl::putInCache(const Segment*s, const CompositionRect& cr)
+void CompositionModelImpl::updateCachedSegment(const Segment*s, const CompositionRect& cr)
 {
     m_segmentRectMap[s] = cr;
     m_segmentEndTimeMap[s] = s->getEndMarkerTime();
@@ -1219,7 +1281,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
                 //                 cachedCR.setRepeatMarks(repeatMarks);
                 computeRepeatMarks(cachedCR, &s);
             }
-            putInCache(&s, cachedCR);
+            updateCachedSegment(&s, cachedCR);
             return cachedCR;
         }
     }
@@ -1263,13 +1325,15 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
         cr.setBaseWidth(cr.width());
     }
 
-    putInCache(&s, cr);
+    updateCachedSegment(&s, cr);
 
     return cr;
 }
 
 unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment* s)
 {
+    /// ??? z-order is obsolete.  Remove.
+
     return m_segmentOrderer.getZForSegment(s);
 }
 
@@ -1392,6 +1456,10 @@ CompositionModelImpl::getSegmentRects(
         }
     }
 
+    // ??? Odd.  We could also have the (one) caller provide the
+    //     SegmentRects object (via reference).  Probably easier to
+    //     understand.  Performance should be about the same.  clear()
+    //     and dtor time are the same.  ctor time is trivial.
     return m_segmentRects;
 }
 

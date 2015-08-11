@@ -221,8 +221,8 @@ public:
     /**
      * ??? Audio and Notation Previews too.  Need an "ALL" category.
      */
-    void deleteCachedSegments(bool clearPreviews)
-            { clearInCache(0, clearPreviews); }
+    void deleteCachedSegments(bool previewsToo)
+            { deleteCachedSegment(0, previewsToo); }
 
     CompositionRect computeSegmentRect(const Segment &, bool computeZ = false);
 
@@ -493,7 +493,8 @@ private:
      */
     bool updateTrackHeight(const Segment *segment = 0);
 
-    void computeRepeatMarks(CompositionRect &sr, const Segment *s) const;
+    /// Update CompositionRect::m_repeatMarks with the Segment's repeat marks.
+    void computeRepeatMarks(CompositionRect &, const Segment *) const;
 
     // ??? Obsolete.  Remove.
     SegmentOrderer m_segmentOrderer;
@@ -502,17 +503,11 @@ private:
 
     /// Segment Rectangle Cache
     std::map<const Segment *, CompositionRect> m_segmentRectMap;
-
-    // ??? Why?  Why not just call segment->getEndMarkerTime()?  How does
-    //     this differ from that?
-    // ??? It looks like all this is ever used for is to determine whether
-    //     the cache is current.  See computeSegmentRect().  So, this can
-    //     go since m_segmentRectMap already gives us this info.  This
-    //     appears to be unused dead-end code.
+    /// Used to determine whether m_segmentRectMap is current.
+    // ??? Add begin and end time to CompositionRect and get rid of this.
     std::map<const Segment *, timeT> m_segmentEndTimeMap;
 
-    // ??? rename: updateCachedSegment()
-    void putInCache(const Segment *, const CompositionRect &);
+    void updateCachedSegment(const Segment *, const CompositionRect &);
     // ??? Inline this function.
     const CompositionRect &getFromCache(const Segment *, timeT &endTime);
     // ??? Inline this function.
@@ -520,10 +515,11 @@ private:
                              QPoint cachedSegmentOrigin,
                              timeT cachedSegmentEndTime);
     /// If Segment is NULL, all cached segments are deleted.
-    // ??? rename: deleteCachedSegment()
-    void clearInCache(const Segment *, bool clearPreviewCache = false);
+    void deleteCachedSegment(const Segment *, bool previewToo = false);
 
     /// Get all the segments at a point.
+    // ??? ChangingSegmentSet looks wrong here.  But that's ok as this
+    //     routine is going away.
     ChangingSegmentSet getItemsAt(const QPoint &);
 
     /// Used by getSegmentRects() to return a reference for speed.
