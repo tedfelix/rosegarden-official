@@ -93,8 +93,8 @@ private:
     QRect m_savedRect;
 };
 
-// ??? It might be educational to investigate whether QPointer is actually
-//     needed for this.
+// ??? A QSharedPointer would be a better approach.
+// ??? rename: ChangingSegmentPtr
 typedef QPointer<CompositionItem> CompositionItemPtr;
 
 

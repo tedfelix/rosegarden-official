@@ -98,6 +98,10 @@ class AudioPreviewThread;
  *                     ArtifactRenderer of changes.
  *   - ArtifactRenderer - Draws the Artifacts on the CompositionView.  Uses
  *                        the Composition and ArtifactState.
+ *
+ * The Renderers in the above design might work better as generators that
+ * generate some sort of intermediate representation (e.g. a
+ * std::vector<QRect>) that CompositionView can then render.
  */
 class CompositionModelImpl :
         public QObject,
@@ -154,15 +158,14 @@ public:
     typedef std::vector<QImage> QImageVector;
 
     struct AudioPreview {
-        AudioPreview(QImageVector i, QPoint bp, QRect r) :
-            image(i), basePoint(bp), rect(r), resizeOffset(0)  { }
+        AudioPreview(QImageVector i, QRect r) :
+            image(i),
+            rect(r),
+            resizeOffset(0)
+        { }
 
         // Vector of QImage tiles containing the preview graphics.
         QImageVector image;
-
-        // Upper left corner of the segment in contents coords.
-        // ??? Same as rect.topLeft().  Redundant.  Can be removed.
-        QPoint basePoint;
 
         // Segment rect in contents coords.
         QRect rect;
@@ -180,7 +183,6 @@ public:
      * RosegardenDocument::m_audioPreviewThread.
      */
     void setAudioPreviewThread(AudioPreviewThread *thread);
-    //AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 
     struct AudioPeaks {
         AudioPeaks() :
@@ -211,9 +213,6 @@ public:
     /**
      * This routine returns a pointer to a *copy* of the CompositionItem.
      * The caller is responsible for deleting the object that is returned.
-     *
-     * ??? Need to audit all callers.  Many of them do not delete this
-     *     object.
      */
     CompositionItemPtr getFirstItemAt(const QPoint &pos);
 
@@ -347,8 +346,7 @@ public slots:
 
 private slots:
     /// Connected to AudioPreviewUpdater::audioPreviewComplete()
-    // ??? rename: slotAudioPeaksComplete()
-    void slotAudioPreviewComplete(AudioPreviewUpdater *);
+    void slotAudioPeaksComplete(AudioPreviewUpdater *);
 
 private:
     // --- Misc -------------------------------------------
@@ -447,7 +445,7 @@ private:
     /// Create audio peaks for a segment asynchronously.
     /**
      * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
-     * slotAudioPreviewComplete() is called, which in turn calls
+     * slotAudioPeaksComplete() is called, which in turn calls
      * updateCachedPreviewImage().
      *
      * Also generates the preview image asynchronously.
@@ -504,13 +502,10 @@ private:
     /// Segment Rectangle Cache
     std::map<const Segment *, CompositionRect> m_segmentRectMap;
     /// Used to determine whether m_segmentRectMap is current.
-    // ??? Add begin and end time to CompositionRect and get rid of this.
     std::map<const Segment *, timeT> m_segmentEndTimeMap;
 
     void updateCachedSegment(const Segment *, const CompositionRect &);
-    // ??? Inline this function.
     const CompositionRect &getFromCache(const Segment *, timeT &endTime);
-    // ??? Inline this function.
     bool isCachedRectCurrent(const Segment &s, const CompositionRect &r,
                              QPoint cachedSegmentOrigin,
                              timeT cachedSegmentEndTime);
@@ -529,35 +524,39 @@ private:
 
     SegmentSelection m_selectedSegments;
 
+    /// Segments selected while the rubber-band is active.
     SegmentSelection m_tmpSelectedSegments;
     bool isTmpSelected(const Segment *) const;
 
+    /// Used to determine what needs updating as the rubber-band changes.
     SegmentSelection m_previousTmpSelectedSegments;
     bool wasTmpSelected(const Segment *) const;
 
+    /// Rubber-band selection rectangle
     QRect m_selectionRect;
+
+    /// Used to compute the update rect as the rubber-band changes.
     QRect m_previousSelectionUpdateRect;
 
     // --- Recording --------------------------------------
 
     typedef std::set<Segment *> RecordingSegmentSet;
     RecordingSegmentSet m_recordingSegments;
-    timeT m_pointerTimePos;
-
     bool isRecording(const Segment *) const;
+
+    /// The end time of a recording Segment.
+    timeT m_pointerTime;
 
     // --- Changing (moving and resizing) -----------------
 
-    bool isMoving(const Segment *) const;
-
     ChangeType m_changeType;
-    ChangingSegmentSet m_changingSegments;
 
-    // ??? rename: ChangingSegmentGC/m_changingSegmentGC
-    typedef std::vector<CompositionItemPtr> ItemGC;
-    /// ChangingSegments waiting for garbage collection.
-    // ??? Use QSharedPointer and get rid of this.
-    ItemGC m_itemGC;
+    ChangingSegmentSet m_changingSegments;
+    bool isChanging(const Segment *) const;
+
+    typedef std::vector<CompositionItemPtr> ChangingSegmentGC;
+    /// Changing Segment objects waiting for garbage collection.
+    ChangingSegmentGC m_changingSegmentGC;
 
 };
 

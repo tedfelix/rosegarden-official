@@ -89,10 +89,10 @@ CompositionModelImpl::CompositionModelImpl(
     m_selectionRect(),
     m_previousSelectionUpdateRect(),
     m_recordingSegments(),
-    m_pointerTimePos(0),
+    m_pointerTime(0),
     m_changeType(ChangeMove),
     m_changingSegments(),
-    m_itemGC()
+    m_changingSegmentGC()
 {
     m_composition.addObserver(this);
 
@@ -295,9 +295,9 @@ void CompositionModelImpl::makeAudioPreview(
     // ??? This is the only call to this function.  Inline it.
     QImageVector previewImage = getAudioPreviewImage(segment);
 
-    QPoint basePoint = segRect.topLeft();
-
-    AudioPreview previewItem(previewImage, basePoint, segRect);
+    // ??? COPY.  Why not create this object earlier and build the
+    //     preview in it?  That would avoid the copy.
+    AudioPreview previewItem(previewImage, segRect);
 
     if (m_changeType == ChangeResizeFromStart) {
         CompositionRect originalRect = computeSegmentRect(*segment);
@@ -511,7 +511,7 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
                             segment, segRect, this);
 
             connect(updater, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
-                    this, SLOT(slotAudioPreviewComplete(AudioPreviewUpdater*)));
+                    this, SLOT(slotAudioPeaksComplete(AudioPreviewUpdater*)));
 
             m_audioPreviewUpdaterMap[segment] = updater;
 
@@ -527,19 +527,19 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
     }
 }
 
-void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
+void CompositionModelImpl::slotAudioPeaksComplete(AudioPreviewUpdater* apu)
 {
-    RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete()";
+    RG_DEBUG << "CompositionModelImpl::slotAudioPeaksComplete()";
 
     AudioPeaks *apData = getAudioPeaks(apu->getSegment());
     QRect updateRect;
 
     if (apData) {
-        RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete(" << apu << "): apData contains " << apData->values.size() << " values already";
+        RG_DEBUG << "CompositionModelImpl::slotAudioPeaksComplete(" << apu << "): apData contains " << apData->values.size() << " values already";
         unsigned int channels = 0;
         const std::vector<float> &values = apu->getComputedValues(channels);
         if (channels > 0) {
-            RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete: set "
+            RG_DEBUG << "CompositionModelImpl::slotAudioPeaksComplete: set "
                 << values.size() << " samples on " << channels << " channels";
             apData->channels = channels;
             apData->values = values;  // ??? COPY performance issue?
@@ -844,7 +844,7 @@ void CompositionModelImpl::clearRecordingItems()
     emit needUpdate();
 }
 
-bool CompositionModelImpl::isMoving(const Segment* sm) const
+bool CompositionModelImpl::isChanging(const Segment* sm) const
 {
     ChangingSegmentSet::const_iterator movEnd = m_changingSegments.end();
 
@@ -966,6 +966,10 @@ CompositionItemPtr CompositionModelImpl::getFirstItemAt(const QPoint &pos)
          i != items.end(); ++i)
         delete *i;
 
+    // ??? Need to audit all callers.  Many of them do not delete the
+    //     returned object.  Even better, make CompositionItemPtr into a
+    //     QSharedPointer.  Then we don't care.
+
     return maxZItem;
 }
 
@@ -974,7 +978,7 @@ void CompositionModelImpl::pointerPosChanged(int x)
     //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() begin";
 
     // Update the end point for the recording segments.
-    m_pointerTimePos = m_grid.getRulerScale()->getTimeForX(x);
+    m_pointerTime = m_grid.getRulerScale()->getTimeForX(x);
 
     // For each recording segment
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
@@ -1052,7 +1056,9 @@ void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType chang
 
         // Put this one on the garbage collection list for later cleanup
         // by endChange().
-        m_itemGC.push_back(item);
+        // ??? If CompositionItemPtr were a QSharedPointer,
+        //     m_changingSegmentGC would be unnecessary.
+        m_changingSegmentGC.push_back(item);
     } else {
         // Save the original rectangle for this segment
         item->saveRect();
@@ -1085,12 +1091,14 @@ void CompositionModelImpl::endChange()
     m_changingSegments.clear();
 
     // For each segment in the garbage collection list
-    for (ItemGC::iterator i = m_itemGC.begin();
-            i != m_itemGC.end(); ++i) {
+    // ??? If CompositionItemPtr were a QSharedPointer,
+    //     m_changingSegmentGC would be unnecessary.
+    for (ChangingSegmentGC::iterator i = m_changingSegmentGC.begin();
+            i != m_changingSegmentGC.end(); ++i) {
         delete *i;
     }
 
-    m_itemGC.clear();
+    m_changingSegmentGC.clear();
 
     emit needUpdate();
 }
@@ -1238,6 +1246,8 @@ void CompositionModelImpl::deleteCachedSegment(
 void CompositionModelImpl::updateCachedSegment(const Segment*s, const CompositionRect& cr)
 {
     m_segmentRectMap[s] = cr;
+    // ??? Why not add begin and end times to CompositionRect and get
+    //     rid of this?
     m_segmentEndTimeMap[s] = s->getEndMarkerTime();
 }
 
@@ -1287,7 +1297,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     }
 
     timeT startTime = s.getStartTime();
-    timeT endTime = isRecordingSegment ? m_pointerTimePos /*s.getEndTime()*/ : s.getEndMarkerTime();
+    timeT endTime = isRecordingSegment ? m_pointerTime : s.getEndMarkerTime();
 
 
     int h = m_grid.getYSnap() - 2;
@@ -1378,7 +1388,7 @@ CompositionModelImpl::getSegmentRects(
         const Segment *s = *i;
 
         // Moving segments are handled in the next for loop.
-        if (isMoving(s))
+        if (isChanging(s))
             continue;
 
         CompositionRect segmentRect = computeSegmentRect(*s);
@@ -1514,7 +1524,7 @@ CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segm
      * ??? This is called recursively.  This triggers the async preview
      *     generation process (updateCachedAudioPeaks()) and is called
      *     again once the process completes
-     *     (by slotAudioPreviewComplete()) to get the info from the cache.
+     *     (by slotAudioPeaksComplete()) to get the info from the cache.
      *     This is too tangled.  Simplify.
      */
 
