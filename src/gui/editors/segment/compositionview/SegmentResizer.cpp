@@ -32,7 +32,6 @@
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "commands/segment/SegmentResizeFromStartCommand.h"
 #include "commands/segment/SegmentLinkToCopyCommand.h"
-#include "CompositionItemHelper.h"
 #include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
@@ -243,8 +242,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                     SegmentReconfigureCommand *command =
                         new SegmentReconfigureCommand(tr("Resize Segment"), &comp);
 
-                    int trackPos = CompositionItemHelper::getTrackPos
-                        (m_currentIndex, m_canvas->grid());
+                    int trackPos = m_currentIndex->getTrackPos(m_canvas->grid());
 
                     Track *track = comp.getTrackByPosition(trackPos);
 

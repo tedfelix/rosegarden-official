@@ -93,6 +93,8 @@ public:
     void setEndTime(timeT, const SnapGrid &);
     timeT getEndTime(const SnapGrid &);
 
+    int getTrackPos(const SnapGrid &);
+
 private:
 
     Segment &m_segment;

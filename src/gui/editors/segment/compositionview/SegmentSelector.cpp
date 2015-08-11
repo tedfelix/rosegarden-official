@@ -30,7 +30,6 @@
 #include "commands/segment/SegmentQuickCopyCommand.h"
 #include "commands/segment/SegmentQuickLinkCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
-#include "CompositionItemHelper.h"
 #include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
@@ -435,7 +434,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
         CompositionModelImpl::ChangingSegmentSet& changingItems =
                 m_canvas->getModel()->getChangingSegments();
-        setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
+        setCurrentIndex(findSiblingCompositionItem(changingItems, m_currentIndex));
 
         CompositionModelImpl::ChangingSegmentSet::iterator it;
         int guideX = 0;

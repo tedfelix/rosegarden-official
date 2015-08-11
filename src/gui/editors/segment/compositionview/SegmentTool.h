@@ -23,6 +23,7 @@
 #include "gui/general/BaseTool.h"
 #include "gui/general/ActionFileClient.h"
 #include "CompositionItem.h"
+#include "CompositionModelImpl.h"
 #include "base/TimeT.h"
 
 #include <QPoint>
@@ -102,6 +103,11 @@ protected:
 
     /// Sets the SnapGrid snap time based on the Shift key.
     void setSnapTime(QMouseEvent *e, timeT snapTime);
+
+    /// Find the CompositionItem with the same Segment as referenceItem.
+    static CompositionItemPtr findSiblingCompositionItem(
+            const CompositionModelImpl::ChangingSegmentSet &items,
+            CompositionItemPtr referenceItem);
 
     //--------------- Data members ---------------------------------
 

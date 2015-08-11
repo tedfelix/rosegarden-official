@@ -106,5 +106,10 @@ timeT CompositionItem::getEndTime(const SnapGrid &grid)
     return std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
 }
 
+int CompositionItem::getTrackPos(const SnapGrid &grid)
+{
+    return grid.getYBin(rect().y());
+}
+
 
 }

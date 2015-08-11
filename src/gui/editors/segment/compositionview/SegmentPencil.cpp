@@ -26,7 +26,6 @@
 #include "base/SnapGrid.h"
 #include "base/Track.h"
 #include "commands/segment/SegmentInsertCommand.h"
-#include "CompositionItemHelper.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"

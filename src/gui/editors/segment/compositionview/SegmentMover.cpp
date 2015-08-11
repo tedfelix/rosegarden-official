@@ -26,7 +26,6 @@
 #include "base/Track.h"
 #include "base/SnapGrid.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
-#include "CompositionItemHelper.h"
 #include "CompositionModelImpl.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
@@ -122,7 +121,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
             CompositionModelImpl::ChangingSegmentSet& changingItems =
                     m_canvas->getModel()->getChangingSegments();
             // set m_currentIndex to its "sibling" among selected (now moving) items
-            setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
+            setCurrentIndex(findSiblingCompositionItem(changingItems, m_currentIndex));
 
         } else {
             RG_DEBUG << "SegmentMover::mousePressEvent() : no selection\n";

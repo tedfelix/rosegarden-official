@@ -26,7 +26,6 @@
 #include "base/SnapGrid.h"
 #include "base/Profiler.h"
 #include "CompositionColourCache.h"
-#include "CompositionItemHelper.h"
 #include "CompositionItem.h"
 #include "SegmentRect.h"
 #include "AudioPreviewPainter.h"
@@ -378,12 +377,14 @@ void CompositionView::slotRefreshColourCache()
 
 void CompositionView::slotNewMIDIRecordingSegment(Segment *s)
 {
-    m_model->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
+    m_model->addRecordingItem(CompositionItemPtr(
+            new CompositionItem(*s, QRect())));
 }
 
 void CompositionView::slotNewAudioRecordingSegment(Segment *s)
 {
-    m_model->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
+    m_model->addRecordingItem(CompositionItemPtr(
+            new CompositionItem(*s, QRect())));
 }
 
 void CompositionView::slotStoppedRecording()

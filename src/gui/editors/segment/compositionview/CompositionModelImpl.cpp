@@ -22,7 +22,6 @@
 #include "AudioPreviewThread.h"
 #include "AudioPreviewUpdater.h"
 #include "AudioPreviewPainter.h"
-#include "CompositionItemHelper.h"
 #include "CompositionItem.h"
 #include "SegmentRect.h"
 #include "CompositionColourCache.h"

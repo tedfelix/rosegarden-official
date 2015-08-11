@@ -24,7 +24,6 @@
 #include "base/SnapGrid.h"
 #include "commands/segment/AudioSegmentSplitCommand.h"
 #include "commands/segment/SegmentSplitCommand.h"
-#include "CompositionItemHelper.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
