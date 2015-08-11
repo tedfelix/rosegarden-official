@@ -35,26 +35,12 @@ Colour::Colour()
 
 Colour::Colour(unsigned int red, unsigned int green, unsigned int blue)
 {
-    this->setColour(red, green, blue);
-}
-
-Colour::Colour(const Colour& input)
-{
-    this->setColour(input.getRed(), input.getGreen(), input.getBlue());
+    setColour(red, green, blue);
 }
 
 Colour::~Colour()
 {
 
-}
-
-Colour&
-Colour::operator= (const Colour& input)
-{
-    // We don't have to check for assignment to self because it'll have
-    //  no nasty effects (in fact, it'll do what it should - nothing)
-    this->setColour(input.getRed(), input.getGreen(), input.getBlue());
-    return *this;
 }
 
 void
@@ -63,14 +49,6 @@ Colour::setColour(unsigned int red, unsigned int green, unsigned int blue)
     (red<=255)   ? m_r=red   : m_r=0;
     (green<=255) ? m_g=green : m_g=0;
     (blue<=255)  ? m_b=blue  : m_b=0;
-}
-
-void
-Colour::getColour(unsigned int &red, unsigned int &green, unsigned int &blue) const
-{
-    red = m_r;
-    green = m_g;
-    blue = m_b;
 }
 
 unsigned int
@@ -91,6 +69,28 @@ Colour::getGreen() const
     return m_g;
 }
 
+std::string
+Colour::dataToXmlString() const
+{
+    std::stringstream output;
+    output << "red=\"" << m_r
+           << "\" green=\"" << m_g
+           << "\" blue=\"" << m_b
+           << "\"";
+
+    return output.str();
+}
+
+#if 0
+void
+Colour::getColour(unsigned int &red, unsigned int &green, unsigned int &blue) const
+{
+    red = m_r;
+    green = m_g;
+    blue = m_b;
+}
+#endif
+#if 0
 void
 Colour::setRed(unsigned int red)
 {
@@ -108,14 +108,16 @@ Colour::setGreen(unsigned int green)
 {
     (green<=255) ? m_g=green : m_g=0;
 }
-
+#endif
+#if 0
 Colour
 Colour::getContrastingColour() const
 {
     Colour ret(255-m_r, 255-m_g, 255-m_b);
     return ret;
 }
-
+#endif
+#if 0
 std::string
 Colour::toXmlString() const
 {
@@ -128,21 +130,9 @@ Colour::toXmlString() const
 
     return output.str();
 }
-
-std::string
-Colour::dataToXmlString() const
-{
-    std::stringstream output;
-    output << "red=\"" << m_r
-           << "\" green=\"" << m_g
-           << "\" blue=\"" << m_b
-           << "\"";
-
-    return output.str();
-}
-
+#endif
 // Generic Colour routines:
-
+#if 0
 Colour
 getCombinationColour(const Colour &input1, const Colour &input2)
 {
@@ -152,5 +142,6 @@ getCombinationColour(const Colour &input1, const Colour &input2)
     return ret;
 
 }
+#endif
 
 }
