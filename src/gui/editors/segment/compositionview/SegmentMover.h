@@ -41,7 +41,6 @@ class SegmentMover : public SegmentTool
     friend class SegmentToolBox;
 
 public:
-
     virtual void ready();
     virtual void stow();
 
@@ -56,12 +55,8 @@ protected:
 
     void setBasicContextHelp();
 
-    //--------------- Data members ---------------------------------
-
-    QPoint            m_clickPoint;
-    bool              m_passedInertiaEdge;
+    QPoint m_clickPoint;
     bool m_changeMade;
-
 };
 
 
