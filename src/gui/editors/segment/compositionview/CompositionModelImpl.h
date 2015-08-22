@@ -474,8 +474,7 @@ private:
 
     // --- Segments ---------------------------------------
 
-    bool updateAllTrackHeights();
-    bool updateTrackHeight(TrackId trackId);
+    void updateAllTrackHeights();
 
     /// Update SegmentRect::repeatMarks with the Segment's repeat marks.
     /**

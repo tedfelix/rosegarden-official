@@ -367,45 +367,26 @@ void CompositionModelImpl::getSegmentRect(
     segmentRect.pen = SegmentRect::DefaultPenColor;
 }
 
-bool CompositionModelImpl::updateAllTrackHeights()
+void CompositionModelImpl::updateAllTrackHeights()
 {
-    // ??? Neither of the two callers care about whether the
-    //     heights have changed.  Make the return type void and
-    //     simplify.
-    bool heightsChanged = false;
-
     // For each track in the composition
     for (Composition::trackcontainer::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {
 
-        // ??? This is the only caller to updateTrackHeight().
-        //     Inline and simplify.
-        if (updateTrackHeight(i->first))
-            heightsChanged = true;
+        const TrackId trackId = i->first;
+        const Track *track = i->second;
+
+        int heightMultiple =
+                m_composition.getMaxContemporaneousSegmentsOnTrack(trackId);
+        if (heightMultiple == 0)
+            heightMultiple = 1;
+
+        const int bin = track->getPosition();
+
+        m_grid.setBinHeightMultiple(bin, heightMultiple);
     }
-
-    return heightsChanged;
-}
-
-bool CompositionModelImpl::updateTrackHeight(TrackId trackId)
-{
-    int heightMultiple =
-            m_composition.getMaxContemporaneousSegmentsOnTrack(trackId);
-    if (heightMultiple == 0)
-        heightMultiple = 1;
-
-    Composition::trackcontainer &tracks = m_composition.getTracks();
-    const int bin = tracks[trackId]->getPosition();
-
-    // If there is no change, bail.
-    if (heightMultiple == m_grid.getBinHeightMultiple(bin))
-        return false;
-
-    m_grid.setBinHeightMultiple(bin, heightMultiple);
-
-    return true;
 }
 
 void CompositionModelImpl::computeRepeatMarks(
