@@ -44,41 +44,35 @@ public:
 
     SegmentRect() :
         QRect(),
-        m_resized(false),
         m_selected(false),
         m_needUpdate(false),
         m_brush(DefaultBrushColor),
         m_pen(DefaultPenColor),
         m_repeatMarks(),
         m_baseWidth(0),
-        m_label(),
-        m_z(0)
+        m_label()
     { }
 
     SegmentRect(const QRect &r) :
         QRect(r),
-        m_resized(false),
         m_selected(false),
         m_needUpdate(false),
         m_brush(DefaultBrushColor),
         m_pen(DefaultPenColor),
         m_repeatMarks(),
         m_baseWidth(0),
-        m_label(),
-        m_z(0)
+        m_label()
     { }
 
     SegmentRect(const QPoint &topLeft, const QSize &size) :
         QRect(topLeft, size),
-        m_resized(false),
         m_selected(false),
         m_needUpdate(false),
         m_brush(DefaultBrushColor),
         m_pen(DefaultPenColor),
         m_repeatMarks(),
         m_baseWidth(0),
-        m_label(),
-        m_z(0)
+        m_label()
     { }
 
     //SegmentRect(const QPoint & topLeft, const QPoint & bottomRight)
@@ -88,15 +82,10 @@ public:
     //    : QRect(left, top, width, height), m_resized(false), m_selected(false),
     //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
 
-    void setResized(bool s)       { m_resized = s; }
-    bool isResized() const        { return m_resized; }
     void setSelected(bool s)      { m_selected = s; }
     bool isSelected() const       { return m_selected; }
     bool needsFullUpdate() const  { return m_needUpdate; }
     void setNeedsFullUpdate(bool s) { m_needUpdate = s; }
-
-    void setZ(int z) { m_z = z; }
-    int z() const { return m_z; }
     
     // brush, pen draw info
     void setBrush(QBrush b)       { m_brush = b; }
@@ -137,7 +126,6 @@ public:
     }
 
 protected:
-    bool        m_resized;
     bool        m_selected;
     bool        m_needUpdate;
     QBrush      m_brush;
@@ -145,7 +133,6 @@ protected:
     repeatmarks m_repeatMarks;
     int         m_baseWidth;
     QString     m_label;
-    int         m_z;
 };
 
 
