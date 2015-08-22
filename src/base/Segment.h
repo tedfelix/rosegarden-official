@@ -1041,7 +1041,8 @@ public:
 
     /**
      * Called from the segment dtor
-     * MUST BE IMPLEMENTED BY ALL OBSERVERS
+     * All observers must implement this and call removeObserver() to
+     * remove themselves as observers.
      */
     virtual void segmentDeleted(const Segment *) = 0;
 };

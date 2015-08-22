@@ -369,6 +369,9 @@ void CompositionModelImpl::getSegmentRect(
 
 bool CompositionModelImpl::updateAllTrackHeights()
 {
+    // ??? Neither of the two callers care about whether the
+    //     heights have changed.  Make the return type void and
+    //     simplify.
     bool heightsChanged = false;
 
     // For each track in the composition
@@ -377,6 +380,8 @@ bool CompositionModelImpl::updateAllTrackHeights()
          i != m_composition.getTracks().end();
          ++i) {
 
+        // ??? This is the only caller to updateTrackHeight().
+        //     Inline and simplify.
         if (updateTrackHeight(i->first))
             heightsChanged = true;
     }
@@ -445,62 +450,70 @@ void CompositionModelImpl::computeRepeatMarks(
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
-    updateTrackHeight(s->getTrack());
-
-    // ??? Why do it now?  Why not let getNotationPreview() do it
-    //     on its own when/if it is needed?
-    //makePreviewCache(s);
-
+    // Keep tabs on it.
     s->addObserver(this);
 
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
     emit needUpdate();
 }
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
-    updateAllTrackHeights();
-
-    QRect r;
-    getSegmentQRect(*s, r);
-
-    m_selectedSegments.erase(s);
+    // Be tidy or else Segment's dtor will complain.
+    s->removeObserver(this);
 
     deleteCachedPreview(s);
-    s->removeObserver(this);
-    m_recordingSegments.erase(s); // this could be a recording segment
+    m_selectedSegments.erase(s);
+    m_recordingSegments.erase(s);
+
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
+    QRect r;
+    getSegmentQRect(*s, r);
     emit needUpdate(r);
 }
 
-void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment * /*s*/, TrackId /*tid*/)
+void CompositionModelImpl::segmentTrackChanged(
+        const Composition *, Segment *, TrackId /*tid*/)
 {
-    if (updateAllTrackHeights())
-        emit needUpdate();
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
+    emit needUpdate();
 }
 
-void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
+void CompositionModelImpl::segmentStartChanged(
+        const Composition *, Segment *, timeT)
 {
-    if (updateTrackHeight(s->getTrack()))
-        emit needUpdate();
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
+    emit needUpdate();
 }
 
-void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
+void CompositionModelImpl::segmentEndMarkerChanged(
+        const Composition *, Segment *, bool)
 {
     Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
 
-    if (updateTrackHeight(s->getTrack())) {
-        emit needUpdate();
-    }
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
+    emit needUpdate();
 }
 
-void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
+void CompositionModelImpl::segmentRepeatChanged(
+        const Composition *, Segment *, bool)
 {
-    // ??? Why?  Repeat on/off cannot change track height.
-    updateTrackHeight(s->getTrack());
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
     emit needUpdate();
 }
 
 void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
 {
+    // The size of the composition has changed.
+
+    // TrackEditor::commandExecuted() already updates us.  However, it
+    // shouldn't.  This is the right thing to do.
     emit needSizeUpdate();
 }
 

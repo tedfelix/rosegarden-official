@@ -1188,6 +1188,8 @@ public:
     /**
      * Called after the composition's end marker time has been
      * changed
+     *
+     * ??? rename: endTimeChanged() to differentiate from SegmentObserver.
      */
     virtual void endMarkerTimeChanged(const Composition *, bool /* shorten */) { }
 
