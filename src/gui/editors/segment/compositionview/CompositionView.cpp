@@ -1046,6 +1046,17 @@ void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
     p->restore();
 }
 
+// Functor to just compare the SegmentRect's QRect's.
+class CompareSegmentRects
+{
+public:
+    CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
+    bool operator()(const SegmentRect &sr)
+            { return (sr.rect == r); }
+private:
+    QRect r;
+};
+
 void CompositionView::drawIntersections(
         QPainter *painter, const QRect &clipRect,
         const CompositionModelImpl::SegmentRects &rects)
@@ -1078,9 +1089,9 @@ void CompositionView::drawIntersections(
 
             // Check if we've already encountered this intersection.
             CompositionModelImpl::SegmentRects::iterator t =
-                    std::find(intersections.begin(),
+                    std::find_if(intersections.begin(),
                               intersections.end(),
-                              intersectRect);
+                              CompareSegmentRects(intersectRect));
 
             // If we've already seen this intersection, try the next rect.
             if (t != intersections.end())

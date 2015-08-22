@@ -89,14 +89,6 @@ public:
 
     /// Like QRect::intersected(), but also combines the brush colors.
     SegmentRect intersected(const SegmentRect &other) const;
-
-    /// ??? Malformed.  Only compares the rect's.
-    /**
-     * Used by CompositionView::drawIntersections().
-     * ??? It should define its own compare functor.
-     */
-    bool operator==(const SegmentRect &other) const
-            { return (rect == other.rect); }
 };
 
 
