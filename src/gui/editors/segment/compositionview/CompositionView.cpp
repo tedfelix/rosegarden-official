@@ -942,7 +942,7 @@ void CompositionView::drawCompRect(
 
     // *** Repeat Area
 
-    SegmentRect::repeatmarks repeatMarksX = rect.getRepeatMarks();
+    SegmentRect::RepeatMarks repeatMarksX = rect.getRepeatMarks();
     QRect repeatRect = rect;
     repeatRect.setLeft(repeatMarksX[0]);
 
@@ -957,7 +957,7 @@ void CompositionView::drawCompRect(
     painter->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
 
     // For each repeat mark, draw it.
-    for (int i = 0; i < repeatMarksX.size(); ++i) {
+    for (size_t i = 0; i < repeatMarksX.size(); ++i) {
         int x = repeatMarksX[i];
         painter->drawLine(x, rect.top(), x, rect.bottom());
     }

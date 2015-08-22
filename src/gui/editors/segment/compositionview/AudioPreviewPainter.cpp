@@ -43,10 +43,12 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
       m_apData(apData),
       m_composition(composition),
       m_segment(segment),
-      m_rect(model.computeSegmentRect(*(segment))),
+      m_rect(),
       m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
       m_height(model.grid().getYSnap()/2)
 {
+    model.getSegmentRect(*m_segment, m_rect);
+
     int pixWidth = std::min(m_rect.getBaseWidth(), tileWidth());
 
     //NB. m_image used to be created as an 8-bit image with 4 bits per pixel.

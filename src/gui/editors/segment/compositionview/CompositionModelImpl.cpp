@@ -76,8 +76,6 @@ CompositionModelImpl::CompositionModelImpl(
     m_audioPreviewImageCache(),
     m_trackHeights(),
     m_segmentOrderer(),
-    m_segmentRectMap(),
-    m_segmentEndTimeMap(),
     m_selectedSegments(),
     m_tmpSelectedSegments(),
     m_previousTmpSelectedSegments(),
@@ -188,7 +186,8 @@ void CompositionModelImpl::getSegmentRects(
         if (isChanging(segment))
             continue;
 
-        SegmentRect segmentRect = computeSegmentRect(*segment);
+        SegmentRect segmentRect;
+        getSegmentRect(*segment, segmentRect);
 
         // If this segment isn't in the clip rect, try the next.
         if (!segmentRect.intersects(clipRect))
@@ -299,7 +298,8 @@ ChangingSegmentPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
 
         Segment &segment = **i;
 
-        SegmentRect segmentRect = computeSegmentRect(segment);
+        SegmentRect segmentRect;
+        getSegmentRect(segment, segmentRect);
 
         if (segmentRect.contains(pos)) {
             return ChangingSegmentPtr(
@@ -309,109 +309,6 @@ ChangingSegmentPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
 
     // Not found.
     return ChangingSegmentPtr();
-}
-
-SegmentRect CompositionModelImpl::computeSegmentRect(const Segment &segment)
-{
-    Profiler profiler("CompositionModelImpl::computeSegmentRect");
-
-    // ??? This shouldn't return a SegmentRect by value.  It's huge.
-    //     Make it a pointer parameter.
-    // ??? Various callers to computeSegmentRect() need various
-    //     levels of SegmentRect completion.  E.g. getSegmentRects()
-    //     needs everything filled in, but eventAdded() only needs the
-    //     QRect.  That's annoying.  Analyze all callers and find out if
-    //     there is a pattern we can take advantage of.  Maybe offer
-    //     two versions of computeSegmentRect().  One that just worries
-    //     about the QRect and one that fills everything in.  OTOH,
-    //     since this is getting cached, who cares?
-
-    // Compute the current position of the segment so we can detect
-    // movement.
-    // ??? This is quite a bit of work.  Instead, why don't we use the
-    //     Track position and the start time to detect whether the segment
-    //     has moved?
-    // ??? And why even cache the position if we constantly recompute it?
-    //     What exactly is the point of this "cache"?
-    QPoint currentPos = topLeft(segment);
-
-    bool isRecordingSegment = isRecording(&segment);
-
-    if (!isRecordingSegment) {
-        // ??? Why is endTime cached?  Seems unnecessary.  Maybe it's used to
-        //     detect when the cache is stale?  If so, there's no need to
-        //     keep it in a separate end time cache.  Add it to SegmentRect.
-        timeT endTime = m_segmentEndTimeMap[&segment];
-
-        // ??? If we use a reference, there would be no need to copy this
-        //     back after updating.  Save two copies.
-        SegmentRect cachedSR = m_segmentRectMap[&segment];
-
-        // If we've got this one in the cache
-        // Note: We don't cache repeating segments because the segment's
-        //       rect may have to be recomputed in other cases than just
-        //       when the segment itself is moved, for instance if another
-        //       segment is moved over it.
-        // ??? Inline isCachedRectCurrent().  This is the only caller.
-        //     Make it a bool isCachedRectCurrent.
-        if (!segment.isRepeating()  &&
-            cachedSR.isValid()  &&
-            isCachedRectCurrent(segment, cachedSR, currentPos, endTime)) {
-
-            // If the segment has moved
-            if (currentPos != cachedSR.topLeft()) {
-
-                // Update the position.
-                cachedSR.moveTopLeft(currentPos);
-
-                if (segment.isRepeating())
-                    computeRepeatMarks(cachedSR, &segment);
-
-                m_segmentRectMap[&segment] = cachedSR;
-                m_segmentEndTimeMap[&segment] = segment.getEndMarkerTime();
-            }
-
-            // Return the cached version.
-            return cachedSR;
-        }
-    }
-
-    timeT startTime = segment.getStartTime();
-    timeT endTime = isRecordingSegment ? m_pointerTime : segment.getEndMarkerTime();
-
-    int h = m_grid.getYSnap() - 2;
-
-    int w;
-    if (segment.isRepeating()) {
-        timeT repeatEnd = segment.getRepeatEndTime();
-        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(
-                        startTime, repeatEnd - startTime)));
-    } else {
-        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(
-                        startTime, endTime - startTime)));
-    }
-
-    SegmentRect segmentRect(currentPos, QSize(w, h));
-
-    QString label = strtoqstr(segment.getLabel());
-    if (segment.isAudio()) {
-        // Remove anything in parens and the filename suffix.
-        static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
-        static QRegExp re2("\\.[^.]+$"); // filename suffix
-        label.replace(re1, "").replace(re2, "");
-    }
-    segmentRect.setLabel(label);
-
-    if (segment.isRepeating()) {
-        computeRepeatMarks(segmentRect, &segment);
-    } else {
-        segmentRect.setBaseWidth(segmentRect.width());
-    }
-
-    m_segmentRectMap[&segment] = segmentRect;
-    m_segmentEndTimeMap[&segment] = segment.getEndMarkerTime();
-
-    return segmentRect;
 }
 
 QPoint CompositionModelImpl::topLeft(const Segment& s) const
@@ -430,6 +327,80 @@ QPoint CompositionModelImpl::topLeft(const Segment& s) const
              m_grid.getYSnap() + 1);
 
     return res;
+}
+
+void CompositionModelImpl::getSegmentQRect(const Segment &segment, QRect &rect)
+{
+    // This routine does no caching.  Caching will be implemented later
+    // if performance measurements indicate a need and we can come up
+    // with an effective caching approach.  Initial performance
+    // measurements show that this uses the same amount of CPU when
+    // recording as the previous approach.
+
+    // ??? Would getQRect() be a better name?  The problem is that
+    //     SegmentRect derives from QRect (which it really shouldn't),
+    //     so it would be easy to make the mistake of calling this
+    //     with a SegmentRect.
+
+    // ??? topLeft() does this too.  Combine?  Reuse?
+
+    const timeT startTime = segment.getStartTime();
+
+    // Compute X (left)
+    rect.setX(lround(m_grid.getRulerScale()->getXForTime(startTime)));
+
+    // Compute Y (top)
+    const int trackPosition =
+            m_composition.getTrackPositionById(segment.getTrack());
+    rect.setY(m_grid.getYBinCoordinate(trackPosition) +
+              m_composition.getSegmentVoiceIndex(&segment) *
+              m_grid.getYSnap() + 1);
+
+    // Compute height
+    rect.setHeight(m_grid.getYSnap() - 2);
+
+    // Compute width
+    int width;
+    if (segment.isRepeating()) {
+        width = lround(m_grid.getRulerScale()->getWidthForDuration(
+                           startTime,
+                           segment.getRepeatEndTime() - startTime));
+    } else {
+        const timeT endTime = isRecording(&segment) ?
+                                  m_pointerTime :
+                                  segment.getEndMarkerTime();
+        width = lround(m_grid.getRulerScale()->getWidthForDuration(
+                           startTime, endTime - startTime));
+    }
+    rect.setWidth(width);
+}
+
+void CompositionModelImpl::getSegmentRect(
+        const Segment &segment, SegmentRect &segmentRect)
+{
+    getSegmentQRect(segment, segmentRect);
+
+    QString label = strtoqstr(segment.getLabel());
+    if (segment.isAudio()) {
+        // Remove anything in parens and the filename suffix.
+        static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
+        static QRegExp re2("\\.[^.]+$"); // filename suffix
+        label.replace(re1, "").replace(re2, "");
+    }
+    segmentRect.setLabel(label);
+
+    if (segment.isRepeating()) {
+        computeRepeatMarks(segmentRect, &segment);
+    } else {
+        segmentRect.m_repeatMarks.clear();
+        segmentRect.setBaseWidth(segmentRect.width());
+    }
+
+    // Reset remaining fields.
+    segmentRect.m_selected = false;
+    segmentRect.m_needUpdate = false;
+    segmentRect.m_brush = SegmentRect::DefaultBrushColor;
+    segmentRect.m_pen = SegmentRect::DefaultPenColor;
 }
 
 bool CompositionModelImpl::updateTrackHeight(const Segment *s)
@@ -457,14 +428,6 @@ bool CompositionModelImpl::updateTrackHeight(const Segment *s)
         m_grid.setBinHeightMultiple(i->second->getPosition(), max);
     }
 
-    if (heightsChanged) {
-        //RG_DEBUG << "updateTrackHeight(): heights have changed";
-        for (SegmentMultiSet::iterator i = m_composition.begin();
-             i != m_composition.end(); ++i) {
-            computeSegmentRect(**i);
-        }
-    }
-
     return heightsChanged;
 }
 
@@ -487,7 +450,7 @@ void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s)
         sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
                                   repeatEnd - startTime))));
 
-        SegmentRect::repeatmarks repeatMarks;
+        SegmentRect::RepeatMarks repeatMarks;
 
         //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
         //         << repeatStart << " - repeatEnd = " << repeatEnd;
@@ -526,88 +489,16 @@ unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment*
     return m_segmentOrderer.getZForSegment(s);
 }
 
-bool CompositionModelImpl::isCachedRectCurrent(
-        const Segment &segment,
-        const SegmentRect &cachedCR,  // = m_segmentRectMap[segment]
-        QPoint segmentTopLeft,            // = topLeft(segment)
-        timeT cachedSegmentEndTime)       // = m_segmentEndTimeMap[segment]
-{
-    //RG_DEBUG << "isCachedRectCurrent()...";
-
-    // ??? The name of this routine doesn't match what it is doing.
-
-    // ??? ISTM that the cache should work as follows...  The segment begin
-    //     and end times (and repeat mode) should be used to determine
-    //     whether the cache is
-    //     current.  If the begin or end have changed, then the cached
-    //     SegmentRect is outdated and needs to be recomputed.  So,
-    //     we need to cache the begin and end time for each segment, then
-    //     cache the composition rect.  Or add the begin and end time to
-    //     SegmentRect.  Repeat mode is already there.
-
-    // If the repeating mode changes, the rect is very different.
-    bool repeatingMatches = (segment.isRepeating() == cachedCR.isRepeating());
-
-    //RG_DEBUG << "  repeatingMatches: " << repeatingMatches;
-
-    // It's ok if we are moving.  The caller is going to update the
-    // position anyway.
-    // ??? This happens when we are moving a segment.  So, when moving a
-    //     segment, this indicates that the cache is ok.  That seems
-    //     a bit too clever.
-    // ??? But in reality, this is all about the fact that the caller
-    //     is going to update the position anyway.
-    bool nothingMatches =
-            (segmentTopLeft.x() != cachedCR.x()  &&
-             segment.getEndMarkerTime() != cachedSegmentEndTime);
-
-    //RG_DEBUG << "  nothingMatches: " << nothingMatches;
-
-    // If the begin and end are different, the rect is different.
-    bool everythingMatches =
-            (segmentTopLeft.x() == cachedCR.x()  &&
-             segment.getEndMarkerTime() == cachedSegmentEndTime);
-
-    //RG_DEBUG << "  everythingMatches: " << everythingMatches;
-
-    /*
-       Use cases.
-
-       (Note that this routine is never called for a repeating segment.)
-
-       When adjusting the beginning of a segment, we return false since
-       nothingMatches is false and everythingMatches is false.
-
-       When adjusting the end of a segment, we return true since
-       everythingMatches is true.  I'm not sure
-       why.  I assume that the cache has been updated before we get here.
-
-       When moving a segment, we return true since nothingMatches is true.
-    */
-
-    bool isCurrent = (repeatingMatches && (nothingMatches || everythingMatches));
-
-    //RG_DEBUG << "  isCurrent: " << isCurrent;
-
-    return isCurrent;
-
-    // The original code.  It has been broken apart above for analysis.
-//    return segment.isRepeating() == cachedCR.isRepeating() &&
-//           ((segmentTopLeft.x() != cachedCR.x() && segment.getEndMarkerTime() != cachedSegmentEndTime) ||
-//            (segmentTopLeft.x() == cachedCR.x() && segment.getEndMarkerTime() == cachedSegmentEndTime));
-}
-
 void CompositionModelImpl::deleteCachedSegment(
         const Segment *s, bool previewToo)
 {
+    // ??? There is no segment cache anymore.  All this does now
+    //     is delete cached previews.
+
     if (s) {
-        m_segmentRectMap.erase(s);
-        m_segmentEndTimeMap.erase(s);
         if (previewToo)
             deleteCachedPreview(s);
     } else { // clear the whole cache
-        m_segmentRectMap.clear();
-        m_segmentEndTimeMap.clear();
         if (previewToo)
             deleteCachedPreviews();
     }
@@ -632,7 +523,8 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
     // Update track height for all tracks.
     updateTrackHeight();
 
-    QRect r = computeSegmentRect(*s);
+    QRect r;
+    getSegmentQRect(*s, r);
 
     m_selectedSegments.erase(s);
 
@@ -706,8 +598,10 @@ void CompositionModelImpl::pointerPosChanged(int x)
     // For each recording segment
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i) {
+        QRect rect;
+        getSegmentQRect(**i, rect);
         // Ask CompositionView to update.
-        emit needUpdate(computeSegmentRect(**i));
+        emit needUpdate(rect);
     }
 
     //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
@@ -763,8 +657,10 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
     // For each selected segment
     for (SegmentSelection::iterator i = m_selectedSegments.begin();
             i != m_selectedSegments.end(); ++i) {
+        SegmentRect segmentRect;
+        getSegmentRect(**i, segmentRect);
         ChangingSegmentPtr item(
-                new ChangingSegment(**i, computeSegmentRect(**i)));
+                new ChangingSegment(**i, segmentRect));
         startChange(item, change);
     }
 }
@@ -813,32 +709,44 @@ bool CompositionModelImpl::isChanging(const Segment* sm) const
 
 void CompositionModelImpl::eventAdded(const Segment *s, Event *)
 {
-    //RG_DEBUG << "CompositionModelImpl::eventAdded()";
     Profiler profiler("CompositionModelImpl::eventAdded()");
+
+    // ??? This routine gets hit really hard when recording.
+
     deleteCachedPreview(s);
-    emit needUpdate(computeSegmentRect(*s));
+    QRect rect;
+    getSegmentQRect(*s, rect);
+    emit needUpdate(rect);
 }
 
 void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
 {
-    //RG_DEBUG << "CompositionModelImpl::eventRemoved";
     Profiler profiler("CompositionModelImpl::eventRemoved()");
+
+    // ??? This routine gets hit really hard when recording.
+
     deleteCachedPreview(s);
-    emit needUpdate(computeSegmentRect(*s));
+    QRect rect;
+    getSegmentQRect(*s, rect);
+    emit needUpdate(rect);
 }
 
 void CompositionModelImpl::allEventsChanged(const Segment *s)
 {
      Profiler profiler("CompositionModelImpl::allEventsChanged()");
      deleteCachedPreview(s);
-    emit needUpdate(computeSegmentRect(*s));
+    QRect rect;
+    getSegmentQRect(*s, rect);
+    emit needUpdate(rect);
 }
 
 void CompositionModelImpl::appearanceChanged(const Segment *s)
 {
     //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
     deleteCachedSegment(s, true);
-    emit needUpdate(computeSegmentRect(*s));
+    QRect rect;
+    getSegmentQRect(*s, rect);
+    emit needUpdate(rect);
 }
 
 void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
@@ -849,7 +757,9 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
     if (shorten) {
         emit needUpdate(); // no longer know former segment dimension
     } else {
-        emit needUpdate(computeSegmentRect(*s));
+        QRect rect;
+        getSegmentQRect(*s, rect);
+        emit needUpdate(rect);
     }
 }
 
@@ -935,7 +845,8 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
         return;
 
     // ??? rename: originalRect?
-    SegmentRect unmovedSR = computeSegmentRect(*segment);
+    QRect unmovedSR;
+    getSegmentQRect(*segment, unmovedSR);
 
     NotationPreview* cachedNPData = getNotationPreview(segment);
 
@@ -1140,7 +1051,9 @@ void CompositionModelImpl::makeAudioPreview(
     AudioPreview previewItem(previewImage, segRect);
 
     if (m_changeType == ChangeResizeFromStart) {
-        SegmentRect originalRect = computeSegmentRect(*segment);
+        // ??? All we need is the x coord!
+        QRect originalRect;
+        getSegmentQRect(*segment, originalRect);
         previewItem.resizeOffset = segRect.x() - originalRect.x();
     }
 
@@ -1206,7 +1119,8 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
     if (m_audioPreviewThread) {
         //RG_DEBUG << "makeAudioPeaksAsync() - new audio preview started";
 
-        SegmentRect segRect = computeSegmentRect(*segment);
+        SegmentRect segRect;
+        getSegmentRect(*segment, segRect);
         segRect.setWidth(segRect.getBaseWidth()); // don't use repeating area
         segRect.moveTopLeft(QPoint(0, 0));
 
@@ -1295,7 +1209,9 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 
         if (track && track->getInstrument() == instrument->getId()) {
             deleteCachedPreview(s);
-            emit needUpdate(computeSegmentRect(*s));
+            QRect rect;
+            getSegmentQRect(*s, rect);
+            emit needUpdate(rect);
         }
     }
 }
@@ -1415,7 +1331,8 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
     for (SegmentMultiSet::iterator i = segments.begin();
          i != segEnd; ++i) {
 
-        SegmentRect segmentRect = computeSegmentRect(**i);
+        QRect segmentRect;
+        getSegmentQRect(**i, segmentRect);
 
         if (segmentRect.intersects(m_selectionRect)) {
             m_tmpSelectedSegments.insert(*i);
@@ -1445,7 +1362,8 @@ void CompositionModelImpl::finalizeSelectionRect()
     for (SegmentMultiSet::const_iterator i = segments.begin();
          i != segEnd; ++i) {
 
-        SegmentRect segmentRect = computeSegmentRect(**i);
+        QRect segmentRect;
+        getSegmentQRect(**i, segmentRect);
 
         if (segmentRect.intersects(m_selectionRect)) {
             setSelected(*i);
@@ -1475,7 +1393,8 @@ QRect CompositionModelImpl::getSelectedSegmentsRect()
     for (SegmentSelection::iterator i = m_selectedSegments.begin();
             i != m_selectedSegments.end(); ++i) {
 
-        SegmentRect sr = computeSegmentRect(**i);
+        QRect sr;
+        getSegmentQRect(**i, sr);
         selectionRect |= sr;
     }
 

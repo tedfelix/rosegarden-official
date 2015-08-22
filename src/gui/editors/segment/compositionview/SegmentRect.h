@@ -132,7 +132,7 @@ public:
         return intersected;
     }
 
-private:
+//private:
     bool m_selected;
     bool m_needUpdate;
     QBrush m_brush;

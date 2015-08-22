@@ -220,7 +220,8 @@ public:
     void deleteCachedSegments(bool previewsToo)
             { deleteCachedSegment(0, previewsToo); }
 
-    SegmentRect computeSegmentRect(const Segment &);
+    void getSegmentQRect(const Segment &segment, QRect &rect);
+    void getSegmentRect(const Segment &segment, SegmentRect &segmentRect);
 
     // --- Selection --------------------------------------
 
@@ -499,15 +500,8 @@ private:
     // ??? Obsolete.  Remove.
     unsigned int computeZForSegment(const Segment *s);
 
-    /// Segment Rectangle Cache
-    std::map<const Segment *, SegmentRect> m_segmentRectMap;
-    /// Used to determine whether m_segmentRectMap is current.
-    std::map<const Segment *, timeT> m_segmentEndTimeMap;
-
-    bool isCachedRectCurrent(const Segment &s, const SegmentRect &r,
-                             QPoint cachedSegmentOrigin,
-                             timeT cachedSegmentEndTime);
     /// If Segment is NULL, all cached segments are deleted.
+    // ??? There are no cached segments anymore.
     void deleteCachedSegment(const Segment *, bool previewToo = false);
 
     // --- Selection --------------------------------------
