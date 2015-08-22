@@ -474,6 +474,10 @@ void CompositionModelImpl::segmentEndMarkerChanged(
 {
     Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
 
+    // ??? This routine gets hit really hard when recording.
+    //     Just holding down a single note results in 50 calls
+    //     per second.
+
     // TrackEditor::commandExecuted() already updates us.  However, it
     // shouldn't.  This is the right thing to do.
     emit needUpdate();
@@ -634,8 +638,11 @@ void CompositionModelImpl::eventAdded(const Segment *s, Event *)
     Profiler profiler("CompositionModelImpl::eventAdded()");
 
     // ??? This routine gets hit really hard when recording.
+    //     Just holding down a single note results in 50 calls
+    //     per second.
 
     deleteCachedPreview(s);
+
     QRect rect;
     getSegmentQRect(*s, rect);
     emit needUpdate(rect);
@@ -646,8 +653,11 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
     Profiler profiler("CompositionModelImpl::eventRemoved()");
 
     // ??? This routine gets hit really hard when recording.
+    //     Just holding down a single note results in 50 calls
+    //     per second.
 
     deleteCachedPreview(s);
+
     QRect rect;
     getSegmentQRect(*s, rect);
     emit needUpdate(rect);
@@ -655,12 +665,11 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
 
 void CompositionModelImpl::allEventsChanged(const Segment *s)
 {
-    Profiler profiler("CompositionModelImpl::allEventsChanged()");
-
     // This is called by Segment::setStartTime(timeT t).  And this
     // is the only handler in the entire system.
 
     deleteCachedPreview(s);
+
     QRect rect;
     getSegmentQRect(*s, rect);
     emit needUpdate(rect);
@@ -668,12 +677,11 @@ void CompositionModelImpl::allEventsChanged(const Segment *s)
 
 void CompositionModelImpl::appearanceChanged(const Segment *s)
 {
-    //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
-
     // Called by Segment::setLabel() and Segment::setColourIndex().
 
     // Preview gets regenerated anyway.
     //deleteCachedPreview(s);
+
     QRect rect;
     getSegmentQRect(*s, rect);
     emit needUpdate(rect);
@@ -682,10 +690,14 @@ void CompositionModelImpl::appearanceChanged(const Segment *s)
 void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
     Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
-    //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
+
+    // ??? This routine gets hit really hard when recording.
+    //     Just holding down a single note results in 50 calls
+    //     per second.
 
     // Preview gets regenerated anyway.
     //deleteCachedPreview(s);
+
     if (shorten) {
         emit needUpdate(); // no longer know former segment dimension
     } else {
@@ -694,12 +706,6 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
         emit needUpdate(rect);
     }
 }
-
-struct RectCompare {
-    bool operator()(const QRect &r1, const QRect &r2) const {
-        return r1.left() < r2.left();
-    }
-};
 
 void CompositionModelImpl::makeNotationPreviewRange(
         QPoint basePoint, const Segment *segment,
@@ -710,59 +716,43 @@ void CompositionModelImpl::makeNotationPreviewRange(
     if (!ranges)
         return;
 
-    NotationPreview* cachedNPData = getNotationPreview(segment);
+    NotationPreview *notationPreview = getNotationPreview(segment);
 
-    if (cachedNPData->empty())
-        return ;
+    if (notationPreview->empty())
+        return;
 
-    NotationPreview::iterator npEnd = cachedNPData->end();
+    NotationPreview::iterator npIter = notationPreview->begin();
 
-    // Find the first preview rect that *starts within* the clipRect.
-    // Probably not the right thing to do as this means any event that starts
-    // prior to the clipRect but stretches through the clipRect will be
-    // dropped.  And this explains why long notes disappear from the segment
-    // previews.
-    // Note that NotationPreview is a std::vector, so this call will take increasing
-    // amounts of time as the number of events to the left of the clipRect
-    // increases.  This is probably at least a small part of the "CPU usage
-    // increasing over time" issue.
-    // If cachedNPData is sorted by start time, we could at least do a binary
-    // search.
-    NotationPreview::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
+    // Search for the first event that is likely to be visible.
+    // ??? Performance: LINEAR SEARCH.  While recording, this uses more
+    //     and more CPU.
+    while (npIter != notationPreview->end()  &&
+           npIter->right() < clipRect.left())
+        ++npIter;
 
     // If no preview rects were within the clipRect, bail.
-    if (npi == npEnd)
-        return ;
-
-    // ??? Go back one event if we aren't already at the beginning.  Why?
-    // Hilariously, this partially "fixes" the "missing event in preview"
-    // problem.  However, it only "fixes" the problem for a single event.
-    // Is that why this is here?
-    // When testing, to get around the fact that the segments are drawn on a
-    // segment layer in CompositionView, just disable then re-enable segment
-    // previews in the menu and the "missing event in preview" problem is easy
-    // to see.
-    if (npi != cachedNPData->begin())
-        --npi;
-
-    // Compute the interval within the Notation Preview for this segment.
+    if (npIter == notationPreview->end())
+        return;
 
     NotationPreviewRange interval;
-    interval.begin = npi;
+    // ??? Can we make NotationPreviewRange::begin (and end) a const_iterator?
+    //     Then we can make npIter a const_iterator, and notationPreview a
+    //     const *.  getNotationPreview() could then return a const pointer.
+    interval.begin = npIter;
 
-    // Compute the rightmost x coord (xLim)
-    int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
-    int xLim = std::min(clipRect.right(), segEndX);
+    // Compute the rightmost x coord
+    const int segmentEndX = lround(m_grid.getRulerScale()->getXForTime(
+            segment->getEndMarkerTime()));
+    const int right = std::min(clipRect.right(), segmentEndX);
 
-    //RG_DEBUG << "makeNotationPreviewRange : basePoint.x : " << basePoint.x();
+    // Search sequentially for the last visible preview rect.
+    while (npIter != notationPreview->end()  &&  npIter->left() < right)
+        ++npIter;
 
-    // Search sequentially for the last preview rect in the segment.
-    while (npi != npEnd  &&  npi->x() < xLim)
-        ++npi;
+    interval.end = npIter;
 
-    interval.end = npi;
-    interval.moveXOffset = 0;
     interval.segmentTop = basePoint.y();
+    interval.moveXOffset = 0;
     interval.color = segment->getPreviewColour();
 
     // Add the interval to the caller's interval list.
@@ -773,56 +763,75 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
         QPoint basePoint, const Segment *segment,
         const QRect &currentRect, NotationPreviewRanges *ranges)
 {
+    // ??? This is a variation on the previous.  Can we combine somehow?
+    //     Or split differently?  It's already pretty complicated with
+    //     the ChangeType handling.  We might be able to pull out the
+    //     determination of the range into a routine that takes a
+    //     NotationPreview and a left and right.
+    //       makeNotationPreviewRange(
+    //               NotationPreview *notationPreview,
+    //               int left, int right,
+    //               NotationPreview::iterator &begin,
+    //               NotationPreview::iterator &end)
+    //     Maybe we could replace both of these routines with the above
+    //     and leave it up to the clients to do the rest.
+
+    // ??? The caller can easily provide a clipRect so that we
+    //     can include that like the previous routine does.
+
     if (!ranges)
         return;
 
-    // ??? rename: originalRect?
-    QRect unmovedSR;
-    getSegmentQRect(*segment, unmovedSR);
+    NotationPreview *notationPreview = getNotationPreview(segment);
 
-    NotationPreview* cachedNPData = getNotationPreview(segment);
+    if (notationPreview->empty())
+        return;
 
-    if (cachedNPData->empty())
-        return ;
+    QRect originalRect;
+    getSegmentQRect(*segment, originalRect);
 
-    NotationPreview::iterator npBegin = cachedNPData->begin();
-    NotationPreview::iterator npEnd = cachedNPData->end();
+    int left;
 
-    NotationPreview::iterator npi;
-
-    if (m_changeType == ChangeResizeFromStart)
-        npi = std::lower_bound(npBegin, npEnd, currentRect, RectCompare());
-    else
-        npi = std::lower_bound(npBegin, npEnd, unmovedSR, RectCompare());
-
-    if (npi == npEnd)
-        return ;
-
-    // ??? Bump iterator back one to try and pick up the previous event
-    //     rectangle which might be needed.
-    if (npi != npBegin  &&  m_changeType != ChangeResizeFromStart) {
-        --npi;
+    if (m_changeType == ChangeResizeFromStart) {
+        left = currentRect.left();
+    } else {
+        left = originalRect.left();
     }
 
-    // Compute the interval within the Notation Preview for this segment.
+    // ??? Why no clip rect?  Seems wasteful.
+    //left = std::max(clipRect.left(), left);
+
+    NotationPreview::iterator npIter = notationPreview->begin();
+
+    // Search for the first event that is likely to be visible.
+    while (npIter != notationPreview->end()  &&
+           npIter->right() < left)
+        ++npIter;
+
+    // Nothing found, bail.
+    if (npIter == notationPreview->end())
+        return;
 
     NotationPreviewRange interval;
-    interval.begin = npi;
+    interval.begin = npIter;
 
-    // Compute the rightmost x coord (xLim)
-    int xLim = m_changeType == ChangeMove ? unmovedSR.right() : currentRect.right();
+    // Compute the rightmost x coord
+    int right = (m_changeType == ChangeMove) ?
+            originalRect.right() :
+            currentRect.right();
 
-    //RG_DEBUG << "makeNotationPreviewRangeCS : basePoint.x : " << basePoint.x();
+    // ??? Why no clip rect?  Seems wasteful.
+    //right = std::min(clipRect.right(), right);
 
-    // Search sequentially for the last preview rect in the segment.
-    while (npi != npEnd  &&  npi->x() < xLim)
-        ++npi;
+    // Search sequentially for the last visible preview rect.
+    while (npIter != notationPreview->end()  &&  npIter->left() < right)
+        ++npIter;
 
-    interval.end = npi;
+    interval.end = npIter;
     interval.segmentTop = basePoint.y();
 
     if (m_changeType == ChangeMove)
-        interval.moveXOffset = basePoint.x() - unmovedSR.x();
+        interval.moveXOffset = basePoint.x() - originalRect.x();
     else
         interval.moveXOffset = 0;
 
