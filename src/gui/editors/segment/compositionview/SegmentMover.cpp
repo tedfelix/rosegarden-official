@@ -84,71 +84,66 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
+    CompositionModelImpl *model = m_canvas->getModel();
+
     // Get the Segment that was clicked.
-    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
+    CompositionItemPtr changingSegment = model->getSegmentAt(pos);
+
+    // If the segment canvas background was clicked, clear the selection.
+    if (!changingSegment) {
+        model->clearSelected();
+        model->selectionHasChanged();
+        m_canvas->update();
+        return;
+    }
+
+    // The original segment in the composition.
+    Segment *segment = changingSegment->getSegment();
 
     // If we're clicking on a segment that isn't in the selection
-    if (item &&
-        !m_canvas->getModel()->isSelected(item->getSegment())) {
+    if (!model->isSelected(segment)) {
 
         // Clear the selection.
-        m_canvas->getModel()->clearSelected();
-        m_canvas->getModel()->selectionHasChanged();
-// 		m_canvas->updateContents();
-		m_canvas->update();
-	}
+        model->clearSelected();
+        model->selectionHasChanged();
+    }
 
-    // If a Segment was clicked
-    if (item) {
+    setChangingSegment(changingSegment);
+    m_clickPoint = pos;
 
-        setChangingSegment(item);
-        m_clickPoint = pos;
+    setSnapTime(e, SnapGrid::SnapToBeat);
 
-        setSnapTime(e, SnapGrid::SnapToBeat);
+    int x = int(m_canvas->grid().getRulerScale()->getXForTime(
+                    segment->getStartTime()));
+    int y = m_canvas->grid().getYBinCoordinate(segment->getTrack());
 
-        Segment* s = getChangingSegment()->getSegment();
+    m_canvas->drawGuides(x, y);
 
-        int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
-        int y = int(m_canvas->grid().getYBinCoordinate(s->getTrack()));
+    // If some segments are already selected
+    if (model->haveSelection()) {
 
-        m_canvas->drawGuides(x, y);
+        // Start the move on all selected segments
+        model->startChangeSelection(CompositionModelImpl::ChangeMove);
 
-        if (m_canvas->getModel()->haveSelection()) {
-            RG_DEBUG << "SegmentMover::mousePressEvent() : haveSelection\n";
-            // startChange on all selected segments
-            m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
+        // Find the clicked segment in the model.
+        CompositionItemPtr newChangingSegment =
+                model->findChangingSegment(segment);
 
-            CompositionItemPtr newChangingSegment =
-                    m_canvas->getModel()->findChangingSegment(
-                              getChangingSegment()->getSegment());
-
-            if (newChangingSegment) {
-                // Toss the local "changing" segment since it isn't going to
-                // be moving at all.  Swap it for the same changing segment in
-                // CompositionModelImpl.  That one *will* be moving and can be
-                // used to drive the guides.
-                setChangingSegment(newChangingSegment);
-            }
-
-        } else {
-            RG_DEBUG << "SegmentMover::mousePressEvent() : no selection\n";
-            m_canvas->getModel()->startChange(item, CompositionModelImpl::ChangeMove);
+        if (newChangingSegment) {
+            // Toss the local "changing" segment since it isn't going to
+            // be moving at all.  Swap it for the same changing segment in
+            // the model.  That one *will* be moving and can be used to
+            // drive the guides.
+            setChangingSegment(newChangingSegment);
         }
 
-// 		m_canvas->updateContents();
-		m_canvas->update();
+    } else {  // Nothing selected, just move the one that was clicked
+        model->startChange(changingSegment, CompositionModelImpl::ChangeMove);
+    }
 
-        m_passedInertiaEdge = false;
+    m_canvas->update();
 
-    } else {
-
-        // check for addmode - clear the selection if not
-        RG_DEBUG << "SegmentMover::mousePressEvent() : clear selection\n";
-        m_canvas->getModel()->clearSelected();
-        m_canvas->getModel()->selectionHasChanged();
-// 		m_canvas->updateContents();
-		m_canvas->update();
-	}
+    m_passedInertiaEdge = false;
 }
 
 void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
@@ -168,6 +163,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
+    // If we were actually moving something
     if (getChangingSegment()) {
 
         if (m_changeMade) {
@@ -246,6 +242,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 
     Composition &comp = m_doc->getComposition();
 
+    // If we aren't moving anything
     if (!getChangingSegment()) {
         setBasicContextHelp();
         return RosegardenScrollView::NoFollow;
