@@ -514,7 +514,6 @@ private:
 
     /// Used to determine what needs updating as the rubber-band changes.
     SegmentSelection m_previousTmpSelectedSegments;
-    bool wasTmpSelected(const Segment *) const;
 
     /// Rubber-band selection rectangle
     QRect m_selectionRect;

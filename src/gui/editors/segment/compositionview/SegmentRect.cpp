@@ -30,6 +30,30 @@
 
 namespace Rosegarden
 {
-    const QColor SegmentRect::DefaultPenColor = QColor(Qt::black);
-    const QColor SegmentRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
+
+
+const QColor SegmentRect::DefaultPenColor = QColor(Qt::black);
+const QColor SegmentRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
+
+SegmentRect SegmentRect::intersected(const SegmentRect &other) const
+{
+    SegmentRect intersected = QRect::intersected(other);
+
+    // Mix m_brush colors
+    const QColor &thisColor = brush.color();
+    const QColor &otherColor = other.brush.color();
+
+    QColor color((thisColor.red()   + otherColor.red())   / 2,
+                 (thisColor.green() + otherColor.green()) / 2,
+                 (thisColor.blue()  + otherColor.blue())  / 2);
+
+    intersected.brush = color;
+
+    // Combine selected
+    intersected.selected = (selected  ||  other.selected);
+
+    return intersected;
+}
+
+
 }

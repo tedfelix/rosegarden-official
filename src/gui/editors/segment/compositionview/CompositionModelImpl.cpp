@@ -193,25 +193,18 @@ void CompositionModelImpl::getSegmentRects(
         if (!segmentRect.intersects(clipRect))
             continue;
 
-        const bool isTmpSelected2 = isTmpSelected(segment);
-
         // Update the SegmentRect's selected state.
 
-        segmentRect.setSelected(
+        segmentRect.selected = (
                 isSelected(segment)  ||
-                isTmpSelected2  ||
+                isTmpSelected(segment)  ||
                 segmentRect.intersects(m_selectionRect));
-
-        // Update the SegmentRect's "needs full update".
-
-        segmentRect.setNeedsFullUpdate(
-                wasTmpSelected(segment) != isTmpSelected2);
 
         // Update the SegmentRect's pen and brush.
 
         if (!isRecording(segment)) {
             // Pen
-            segmentRect.setPen(colourCache->SegmentBorder);
+            segmentRect.pen = colourCache->SegmentBorder;
 
             // Brush
             QColor brushColor = GUIPalette::convertColour(
@@ -220,16 +213,16 @@ void CompositionModelImpl::getSegmentRects(
             Qt::BrushStyle brushPattern =
                     segment->isTrulyLinked() ?
                             Qt::Dense2Pattern : Qt::SolidPattern;
-            segmentRect.setBrush(QBrush(brushColor, brushPattern));
+            segmentRect.brush = QBrush(brushColor, brushPattern);
         } else {  // Recording
             // Pen
-            segmentRect.setPen(colourCache->RecordingSegmentBorder);
+            segmentRect.pen = colourCache->RecordingSegmentBorder;
 
             // Brush
             if (segment->isMIDI())
-                segmentRect.setBrush(colourCache->RecordingInternalSegmentBlock);
+                segmentRect.brush = colourCache->RecordingInternalSegmentBlock;
             else  // Audio Segment
-                segmentRect.setBrush(colourCache->RecordingAudioSegmentBlock);
+                segmentRect.brush = colourCache->RecordingAudioSegmentBlock;
         }
 
         // Generate the requested previews.
@@ -261,17 +254,17 @@ void CompositionModelImpl::getSegmentRects(
         // Set up the SegmentRect
 
         // Selected
-        segmentRect.setSelected(true);
+        segmentRect.selected = true;
 
         // Brush
         Segment *segment = (*i)->getSegment();
         Colour segmentColour =
                 m_composition.getSegmentColourMap().getColourByIndex(
                         segment->getColourIndex());
-        segmentRect.setBrush(GUIPalette::convertColour(segmentColour));
+        segmentRect.brush = GUIPalette::convertColour(segmentColour);
 
         // Pen
-        segmentRect.setPen(colourCache->SegmentBorder);
+        segmentRect.pen = colourCache->SegmentBorder;
 
         // Generate the preview
 
@@ -387,20 +380,19 @@ void CompositionModelImpl::getSegmentRect(
         static QRegExp re2("\\.[^.]+$"); // filename suffix
         label.replace(re1, "").replace(re2, "");
     }
-    segmentRect.setLabel(label);
+    segmentRect.label = label;
 
     if (segment.isRepeating()) {
         computeRepeatMarks(segmentRect, &segment);
     } else {
-        segmentRect.m_repeatMarks.clear();
-        segmentRect.setBaseWidth(segmentRect.width());
+        segmentRect.repeatMarks.clear();
+        segmentRect.baseWidth = segmentRect.width();
     }
 
     // Reset remaining fields.
-    segmentRect.m_selected = false;
-    segmentRect.m_needUpdate = false;
-    segmentRect.m_brush = SegmentRect::DefaultBrushColor;
-    segmentRect.m_pen = SegmentRect::DefaultPenColor;
+    segmentRect.selected = false;
+    segmentRect.brush = SegmentRect::DefaultBrushColor;
+    segmentRect.pen = SegmentRect::DefaultPenColor;
 }
 
 bool CompositionModelImpl::updateTrackHeight(const Segment *s)
@@ -461,18 +453,18 @@ void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s)
             repeatMarks.push_back(mark);
         }
 
-        // ??? COPY.  If we could get a non-const reference to
-        //     m_repeatMarks, we could avoid the copy.
+        // ??? COPY.
         // ??? Or move this routine
         //     (CompositionModelImpl::computeRepeatMarks()) to
         //     SegmentRect::updateRepeatMarks(segment, grid).
-        sr.setRepeatMarks(repeatMarks);
+        sr.repeatMarks = repeatMarks;
 
+        // ??? !empty() can be faster.
         if (repeatMarks.size() > 0)
-            sr.setBaseWidth(repeatMarks[0] - sr.x());
+            sr.baseWidth = repeatMarks[0] - sr.x();
         else {
             //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : no repeat marks";
-            sr.setBaseWidth(sr.width());
+            sr.baseWidth = sr.width();
         }
 
         //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : s = "
@@ -1121,7 +1113,7 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
 
         SegmentRect segRect;
         getSegmentRect(*segment, segRect);
-        segRect.setWidth(segRect.getBaseWidth()); // don't use repeating area
+        segRect.setWidth(segRect.baseWidth); // don't use repeating area
         segRect.moveTopLeft(QPoint(0, 0));
 
         if (m_audioPreviewUpdaterMap.find(segment) ==
@@ -1404,11 +1396,6 @@ QRect CompositionModelImpl::getSelectedSegmentsRect()
 bool CompositionModelImpl::isTmpSelected(const Segment *s) const
 {
     return m_tmpSelectedSegments.find(const_cast<Segment *>(s)) != m_tmpSelectedSegments.end();
-}
-
-bool CompositionModelImpl::wasTmpSelected(const Segment *s) const
-{
-    return m_previousTmpSelectedSegments.find(const_cast<Segment *>(s)) != m_previousTmpSelectedSegments.end();
 }
 
 // --- Misc ---------------------------------------------------------

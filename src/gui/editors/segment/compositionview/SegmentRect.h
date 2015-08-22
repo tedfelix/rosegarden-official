@@ -49,97 +49,52 @@ class SegmentRect : public QRect  // ??? Deriving from QRect is dangerous.
 public:
     SegmentRect() :
         QRect(),
-        m_selected(false),
-        m_needUpdate(false),
-        m_brush(DefaultBrushColor),
-        m_pen(DefaultPenColor),
-        m_repeatMarks(),
-        m_baseWidth(0),
-        m_label()
+        selected(false),
+        brush(DefaultBrushColor),
+        pen(DefaultPenColor),
+        repeatMarks(),
+        baseWidth(0),
+        label()
     { }
 
     SegmentRect(const QRect &r) :
         QRect(r),
-        m_selected(false),
-        m_needUpdate(false),
-        m_brush(DefaultBrushColor),
-        m_pen(DefaultPenColor),
-        m_repeatMarks(),
-        m_baseWidth(0),
-        m_label()
+        selected(false),
+        brush(DefaultBrushColor),
+        pen(DefaultPenColor),
+        repeatMarks(),
+        baseWidth(0),
+        label()
     { }
 
     SegmentRect(const QPoint &topLeft, const QSize &size) :
         QRect(topLeft, size),
-        m_selected(false),
-        m_needUpdate(false),
-        m_brush(DefaultBrushColor),
-        m_pen(DefaultPenColor),
-        m_repeatMarks(),
-        m_baseWidth(0),
-        m_label()
+        selected(false),
+        brush(DefaultBrushColor),
+        pen(DefaultPenColor),
+        repeatMarks(),
+        baseWidth(0),
+        label()
     { }
 
-    //SegmentRect(const QPoint & topLeft, const QPoint & bottomRight)
-    //    : QRect(topLeft, bottomRight), m_resized(false), m_selected(false),
-    //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
-    //SegmentRect(int left, int top, int width, int height)
-    //    : QRect(left, top, width, height), m_resized(false), m_selected(false),
-    //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
+    bool selected;
 
-    void setSelected(bool selected)  { m_selected = selected; }
-    bool isSelected() const  { return m_selected; }
-
-    bool needsFullUpdate() const  { return m_needUpdate; }
-    void setNeedsFullUpdate(bool needUpdate)  { m_needUpdate = needUpdate; }
-    
-    void setBrush(QBrush brush)  { m_brush = brush; }
-    QBrush getBrush() const  { return m_brush; }
-
-    void setPen(QPen pen)  { m_pen = pen; }
-    QPen getPen() const  { return m_pen; }
-
-    typedef std::vector<int> RepeatMarks;
-    void setRepeatMarks(const RepeatMarks &rm)  { m_repeatMarks = rm; }
-    const RepeatMarks &getRepeatMarks() const  { return m_repeatMarks; }
-    bool isRepeating() const  { return m_repeatMarks.size() > 0; }
-    int getBaseWidth() const  { return m_baseWidth; }
-    void setBaseWidth(int baseWidth)  { m_baseWidth = baseWidth; }
-
-    QString getLabel() const  { return m_label; }
-    void setLabel(QString label)  { m_label = label; }
-
-    static const QColor DefaultPenColor;
+    QBrush brush;
     static const QColor DefaultBrushColor;
 
-    SegmentRect intersected(const SegmentRect &other) const
-    {
-        SegmentRect intersected = QRect::intersected(other);
+    QPen pen;
+    static const QColor DefaultPenColor;
 
-        // Mix m_brush colors
-        const QColor &thisColor = m_brush.color();
-        const QColor &otherColor = other.m_brush.color();
+    typedef std::vector<int> RepeatMarks;
+    RepeatMarks repeatMarks;
+    bool isRepeating() const  { return !repeatMarks.empty(); }
 
-        QColor color((thisColor.red()   + otherColor.red())   / 2,
-                     (thisColor.green() + otherColor.green()) / 2,
-                     (thisColor.blue()  + otherColor.blue())  / 2);
+    int baseWidth;
 
-        intersected.setBrush(color);
+    QString label;
 
-        // Combine m_selected
-        intersected.setSelected((m_selected  ||  other.m_selected));
-
-        return intersected;
-    }
-
-//private:
-    bool m_selected;
-    bool m_needUpdate;
-    QBrush m_brush;
-    QPen m_pen;
-    RepeatMarks m_repeatMarks;
-    int m_baseWidth;
-    QString m_label;
+    /// Like QRect::intersected(), but also combines the brush colors.
+    SegmentRect intersected(const SegmentRect &other) const;
 };
 
 

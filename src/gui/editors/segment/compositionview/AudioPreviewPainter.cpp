@@ -49,13 +49,13 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
 {
     model.getSegmentRect(*m_segment, m_rect);
 
-    int pixWidth = std::min(m_rect.getBaseWidth(), tileWidth());
+    int pixWidth = std::min(m_rect.baseWidth, tileWidth());
 
     //NB. m_image used to be created as an 8-bit image with 4 bits per pixel.
     // QImage::Format_Indexed8 seems to be close enough, since we manipulate the
     // pixels directly by index, rather than employ drawing tools.
     m_image = QImage(pixWidth, m_rect.height(), QImage::Format_Indexed8);
-    m_penWidth = (std::max(1U, (unsigned int)m_rect.getPen().width()) * 2);
+    m_penWidth = (std::max(1U, (unsigned int)m_rect.pen.width()) * 2);
     m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
 }
 
@@ -101,14 +101,14 @@ void AudioPreviewPainter::paintPreviewImage()
 
     int samplePoints = int(values.size()) / (channels * (showMinima ? 2 : 1));
     float h1, h2, l1 = 0, l2 = 0;
-    double sampleScaleFactor = samplePoints / double(m_rect.getBaseWidth());
+    double sampleScaleFactor = samplePoints / double(m_rect.baseWidth);
     m_sliceNb = 0;
 
     initializeNewSlice();
 
     int centre = m_image.height() / 2;
 
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.getBaseWidth() << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.baseWidth << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1] << endl;
 
@@ -151,7 +151,7 @@ void AudioPreviewPainter::paintPreviewImage()
     bool meterLevels = (settings.value("audiopreviewstyle", 1).toUInt() 
 			== 1);
 
-    for (int i = 0; i < m_rect.getBaseWidth(); ++i) {
+    for (int i = 0; i < m_rect.baseWidth; ++i) {
 
 	// i is the x coordinate within the rectangle.  We need to
 	// calculate the position within the audio preview from which
@@ -174,7 +174,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    double offset = time - startTime;
 
 	    if (endTime > startTime) {
-		position = offset * m_rect.getBaseWidth() / (endTime - startTime);
+		position = offset * m_rect.baseWidth / (endTime - startTime);
 		position = int(channels * position);
 	    }
 	    
@@ -257,7 +257,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    m_image.setPixel(rectX, centre + py, pixel);
 	}
 
-        if (((i+1) % tileWidth()) == 0 || i == (m_rect.getBaseWidth() - 1)) {
+        if (((i+1) % tileWidth()) == 0 || i == (m_rect.baseWidth - 1)) {
             finalizeCurrentSlice();
             initializeNewSlice();
         }

@@ -42,7 +42,7 @@ QRect ChangingSegment::rect() const
 
     // For repeating segments, use the base width
     if (m_rect.isRepeating()) {
-        res.setWidth(m_rect.getBaseWidth());
+        res.setWidth(m_rect.baseWidth);
     }
 
     return res;
@@ -72,8 +72,8 @@ void ChangingSegment::setStartTime(timeT time, const SnapGrid &grid)
     m_rect.setX(x);
     if (m_rect.isRepeating()) {
         int deltaX = curX - x;
-        int curW = m_rect.getBaseWidth();
-        m_rect.setBaseWidth(curW + deltaX);
+        int curW = m_rect.baseWidth;
+        m_rect.baseWidth = curW + deltaX;
     }
 }
 
@@ -95,7 +95,7 @@ void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
     m_rect.setWidth(r.width());
 
     if (m_rect.isRepeating()) {
-        m_rect.setBaseWidth(r.width());
+        m_rect.baseWidth = r.width();
     }
 }
 
