@@ -235,7 +235,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     m_canvas->getModel()->endChange();
     m_canvas->slotUpdateAll();
 
-    setChangingSegment(NULL);
+    setChangingSegment(CompositionItemPtr());
 
     setBasicContextHelp();
 }

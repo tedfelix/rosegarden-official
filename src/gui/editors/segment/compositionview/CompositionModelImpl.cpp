@@ -86,8 +86,7 @@ CompositionModelImpl::CompositionModelImpl(
     m_recordingSegments(),
     m_pointerTime(0),
     m_changeType(ChangeMove),
-    m_changingSegments(),
-    m_changingSegmentGC()
+    m_changingSegments()
 {
     m_composition.addObserver(this);
 
@@ -303,8 +302,6 @@ CompositionItemPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
         SegmentRect segmentRect = computeSegmentRect(segment);
 
         if (segmentRect.contains(pos)) {
-            // ??? Need to make CompositionItemPtr into a QSharedPointer
-            //     to simplify memory management.
             CompositionItemPtr changingSegment(
                     new CompositionItem(segment, segmentRect));
 
@@ -313,7 +310,7 @@ CompositionItemPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
     }
 
     // Not found.
-    return NULL;
+    return CompositionItemPtr();
 }
 
 SegmentRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
@@ -767,15 +764,8 @@ void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType chang
     if (m_changingSegments.find(item) != m_changingSegments.end()) {
         //RG_DEBUG << "CompositionModelImpl::startChange : item already in";
 
-        // Put this one on the garbage collection list for later cleanup
-        // by endChange().
-        // ??? Why can't we just delete it now?  It's not like we need it.
-        //     Maybe the caller still needs it for the time being?
-        // ??? If CompositionItemPtr were a QSharedPointer,
-        //     m_changingSegmentGC would be unnecessary.
-        // ??? Even better, get rid of all the pointers and go with
-        //     objects.
-        m_changingSegmentGC.push_back(item);
+        // Forget about it.
+
     } else {
         // Save the original rectangle for this segment
         item->saveRect();
@@ -789,8 +779,8 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
     // For each selected segment
     for (SegmentSelection::iterator i = m_selectedSegments.begin();
             i != m_selectedSegments.end(); ++i) {
-        CompositionItemPtr item =
-                new CompositionItem(**i, computeSegmentRect(**i));
+        CompositionItemPtr item(
+                new CompositionItem(**i, computeSegmentRect(**i)));
         startChange(item, change);
     }
 }
@@ -810,30 +800,14 @@ CompositionItemPtr CompositionModelImpl::findChangingSegment(Segment *segment)
     }
 
     // Not found.
-    return NULL;
+    return CompositionItemPtr();
 }
 
 void CompositionModelImpl::endChange()
 {
     //RG_DEBUG << "CompositionModelImpl::endChange";
 
-    // For each segment that was changing
-    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin();
-            i != m_changingSegments.end(); ++i) {
-        delete *i;
-    }
-
     m_changingSegments.clear();
-
-    // For each segment in the garbage collection list
-    // ??? If CompositionItemPtr were a QSharedPointer,
-    //     m_changingSegmentGC would be unnecessary.
-    for (ChangingSegmentGC::iterator i = m_changingSegmentGC.begin();
-            i != m_changingSegmentGC.end(); ++i) {
-        delete *i;
-    }
-
-    m_changingSegmentGC.clear();
 
     emit needUpdate();
 }
@@ -843,8 +817,7 @@ bool CompositionModelImpl::isChanging(const Segment* sm) const
     ChangingSegmentSet::const_iterator movEnd = m_changingSegments.end();
 
     for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
-        const CompositionItem* ci = *i;
-        const Segment* s = ci->getSegment();
+        const Segment* s = (*i)->getSegment();
         if (sm == s)
             return true;
     }

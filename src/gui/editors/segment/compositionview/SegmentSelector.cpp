@@ -341,7 +341,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     m_selectionMoveStarted = false;
 
-    setChangingSegment(NULL);
+    setChangingSegment(CompositionItemPtr());
 
     setContextHelpFor(pos);
 }

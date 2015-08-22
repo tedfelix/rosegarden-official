@@ -51,7 +51,7 @@ class SnapGrid;
  *
  * ??? rename: ChangingSegment
  */
-class CompositionItem : public QObject {
+class CompositionItem {
 public:
     CompositionItem(Segment &s, const SegmentRect &r);
 
@@ -104,9 +104,8 @@ private:
     QRect m_savedRect;
 };
 
-// ??? A QSharedPointer would be a better approach.
 // ??? rename: ChangingSegmentPtr
-typedef QPointer<CompositionItem> CompositionItemPtr;
+typedef QSharedPointer<CompositionItem> CompositionItemPtr;
 
 
 }

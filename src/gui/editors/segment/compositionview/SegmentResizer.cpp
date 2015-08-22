@@ -264,7 +264,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
     m_canvas->update();
     
     //setChangeMade(false);
-    setChangingSegment(NULL);
+    setChangingSegment(CompositionItemPtr());
     setBasicContextHelp();
 }
 

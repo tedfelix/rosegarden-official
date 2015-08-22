@@ -73,7 +73,6 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
 
 SegmentTool::~SegmentTool()
 {
-    delete m_changingSegment;
 }
 
 void SegmentTool::ready()
@@ -109,7 +108,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
     showMenu();
 
-    setChangingSegment(NULL);
+    setChangingSegment(CompositionItemPtr());
 }
 
 void
@@ -143,8 +142,6 @@ void SegmentTool::setChangingSegment(CompositionItemPtr changingSegment)
 {
     if (changingSegment != m_changingSegment)
     {
-        // This is a QPointer.  Therefore double delete is impossible.
-        delete m_changingSegment;
         m_changingSegment = changingSegment;
     }
 }

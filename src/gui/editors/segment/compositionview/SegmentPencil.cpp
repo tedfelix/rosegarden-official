@@ -103,7 +103,6 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
     // If user clicked a rect, and pencilAnyway is false, then there's nothing
     // left to do here
     if (item) {
-        delete item;
         if (!pencilAnyway) return ;
     }
 

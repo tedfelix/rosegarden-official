@@ -549,11 +549,6 @@ private:
 
     ChangingSegmentSet m_changingSegments;
     bool isChanging(const Segment *) const;
-
-    typedef std::vector<CompositionItemPtr> ChangingSegmentGC;
-    /// Changing Segment objects waiting for garbage collection.
-    ChangingSegmentGC m_changingSegmentGC;
-
 };
 
 

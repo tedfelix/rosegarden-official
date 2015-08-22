@@ -88,8 +88,6 @@ SegmentSplitter::mousePressEvent(QMouseEvent *e)
         m_prevX = item->rect().y();
 
         drawSplitLine(e);
-
-        delete item;
     }
 
 }
@@ -127,8 +125,6 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
 
 // 		m_canvas->updateContents(item->rect());
 		m_canvas->update(item->rect());
-		
-		delete item;
     }
 
     // Reinstate the cursor
@@ -153,7 +149,6 @@ SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
     if (item) {
 //        m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
-        delete item;
         return RosegardenScrollView::FollowHorizontal;
     } else {
         m_canvas->viewport()->setCursor(Qt::SplitHCursor);

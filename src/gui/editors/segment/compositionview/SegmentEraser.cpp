@@ -87,7 +87,7 @@ void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
     }
 
     // Clear the current Segment.
-    setChangingSegment(NULL);
+    setChangingSegment(CompositionItemPtr());
 }
 
 int SegmentEraser::mouseMoveEvent(QMouseEvent *e)
