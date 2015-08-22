@@ -485,13 +485,12 @@ private:
     bool updateAllTrackHeights();
     bool updateTrackHeight(TrackId trackId);
 
-    /// Update SegmentRect::m_repeatMarks with the Segment's repeat marks.
-    void computeRepeatMarks(SegmentRect &, const Segment *) const;
-
-    // ??? Obsolete.  Remove.
-    SegmentOrderer m_segmentOrderer;
-    // ??? Obsolete.  Remove.
-    unsigned int computeZForSegment(const Segment *s);
+    /// Update SegmentRect::repeatMarks with the Segment's repeat marks.
+    /**
+     * This could be moved to SegmentRect as
+     *   computeRepeatMarks(const Segment &, const SnapGrid &);
+     */
+    void computeRepeatMarks(const Segment &, SegmentRect &) const;
 
     /// If Segment is NULL, all cached segments are deleted.
     // ??? There are no cached segments anymore.

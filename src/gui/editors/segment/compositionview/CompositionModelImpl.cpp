@@ -74,7 +74,6 @@ CompositionModelImpl::CompositionModelImpl(
     m_audioPreviewUpdaterMap(),
     m_audioPeaksCache(),
     m_audioPreviewImageCache(),
-    m_segmentOrderer(),
     m_selectedSegments(),
     m_tmpSelectedSegments(),
     m_previousTmpSelectedSegments(),
@@ -356,7 +355,7 @@ void CompositionModelImpl::getSegmentRect(
     segmentRect.label = label;
 
     if (segment.isRepeating()) {
-        computeRepeatMarks(segmentRect, &segment);
+        computeRepeatMarks(segment, segmentRect);
     } else {
         segmentRect.repeatMarks.clear();
         segmentRect.baseWidth = segmentRect.rect.width();
@@ -404,62 +403,44 @@ bool CompositionModelImpl::updateTrackHeight(TrackId trackId)
     return true;
 }
 
-void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s) const
+void CompositionModelImpl::computeRepeatMarks(
+        const Segment &segment, SegmentRect &segmentRect) const
 {
-    if (s->isRepeating()) {
+    if (!segment.isRepeating())
+        return;
 
-        timeT startTime = s->getStartTime();
-        timeT endTime = s->getEndMarkerTime();
-        timeT repeatInterval = endTime - startTime;
+    const timeT startTime = segment.getStartTime();
+    const timeT endTime = segment.getEndMarkerTime();
+    const timeT repeatInterval = endTime - startTime;
 
-        if (repeatInterval <= 0) {
-            //RG_DEBUG << "WARNING: CompositionModelImpl::computeRepeatMarks: Segment at " << startTime << " has repeatInterval " << repeatInterval;
-            //RG_DEBUG << kdBacktrace();
-            return ;
-        }
+    if (repeatInterval <= 0)
+        return;
 
-        timeT repeatStart = endTime;
-        timeT repeatEnd = s->getRepeatEndTime();
-        sr.rect.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
-                                  repeatEnd - startTime))));
+    const timeT repeatStart = endTime;
+    const timeT repeatEnd = segment.getRepeatEndTime();
 
-        SegmentRect::RepeatMarks repeatMarks;
+    segmentRect.rect.setWidth(
+            lround(m_grid.getRulerScale()->getWidthForDuration(
+                    startTime, repeatEnd - startTime)));
 
-        //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
-        //         << repeatStart << " - repeatEnd = " << repeatEnd;
+    segmentRect.repeatMarks.clear();
 
-        for (timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
-            int mark = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark)));
-            //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : mark at " << mark;
-            repeatMarks.push_back(mark);
-        }
+    // For each repeat mark
+    for (timeT repeatMark = repeatStart;
+         repeatMark < repeatEnd;
+         repeatMark += repeatInterval) {
 
-        // ??? COPY.
-        // ??? Or move this routine
-        //     (CompositionModelImpl::computeRepeatMarks()) to
-        //     SegmentRect::updateRepeatMarks(segment, grid).
-        sr.repeatMarks = repeatMarks;
-
-        // ??? !empty() can be faster.
-        if (repeatMarks.size() > 0)
-            sr.baseWidth = repeatMarks[0] - sr.rect.x();
-        else {
-            //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : no repeat marks";
-            sr.baseWidth = sr.rect.width();
-        }
-
-        //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : s = "
-        //         << s << " base width = " << sr.getBaseWidth()
-        //         << " - nb repeat marks = " << repeatMarks.size();
-
+        const int markX =
+                lround(m_grid.getRulerScale()->getXForTime(repeatMark));
+        segmentRect.repeatMarks.push_back(markX);
     }
-}
 
-unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment* s)
-{
-    /// ??? z-order is obsolete.  Remove.
-
-    return m_segmentOrderer.getZForSegment(s);
+    if (!segmentRect.repeatMarks.empty()) {
+        segmentRect.baseWidth =
+                segmentRect.repeatMarks[0] - segmentRect.rect.x();
+    } else {
+        segmentRect.baseWidth = segmentRect.rect.width();
+    }
 }
 
 void CompositionModelImpl::deleteCachedSegment(
@@ -528,7 +509,6 @@ void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment 
 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
 {
-    deleteCachedSegment(s);
     // ??? Why?  Repeat on/off cannot change track height.
     updateTrackHeight(s->getTrack());
     emit needUpdate();
