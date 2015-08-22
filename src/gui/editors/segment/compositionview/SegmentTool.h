@@ -75,17 +75,16 @@ protected:
     /**
      * The Segment tools use this to pass the changing Segment
      * between their mouse press, move, and release handlers.
+     *
+     * Note that this routine deletes the previously held changing
+     * Segment.  However, since CompositionItemPtr is a QPointer,
+     * a double delete is impossible.
      */
     void setChangingSegment(CompositionItemPtr changingSegment);
     CompositionItemPtr getChangingSegment()  { return m_changingSegment; }
 
     /// Sets the SnapGrid snap time based on the Shift key.
     void setSnapTime(QMouseEvent *e, timeT snapTime);
-
-    /// Find the CompositionItem with the same Segment as referenceItem.
-    static CompositionItemPtr findSiblingCompositionItem(
-            const CompositionModelImpl::ChangingSegmentSet &items,
-            CompositionItemPtr referenceItem);
 
 private:
     /// Right-click context menu.

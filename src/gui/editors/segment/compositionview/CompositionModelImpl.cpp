@@ -795,6 +795,24 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
     }
 }
 
+CompositionItemPtr CompositionModelImpl::findChangingSegment(Segment *segment)
+{
+    // For each changing segment
+    for (ChangingSegmentSet::const_iterator it = m_changingSegments.begin();
+         it != m_changingSegments.end();
+         ++it) {
+
+        CompositionItemPtr changingSegment = *it;
+
+        // If this one has the Segment we're looking for, return it.
+        if (changingSegment->getSegment() == segment)
+            return changingSegment;
+    }
+
+    // Not found.
+    return NULL;
+}
+
 void CompositionModelImpl::endChange()
 {
     //RG_DEBUG << "CompositionModelImpl::endChange";

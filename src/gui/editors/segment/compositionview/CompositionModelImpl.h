@@ -303,6 +303,9 @@ public:
     /// Get the segments that are moving or resizing.
     ChangingSegmentSet &getChangingSegments()  { return m_changingSegments; }
 
+    /// Find the CompositionItem for the specified Segment.
+    CompositionItemPtr findChangingSegment(Segment *);
+
     /// Cleanup after move/resize.
     void endChange();
 

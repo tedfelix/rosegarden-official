@@ -124,11 +124,17 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
             // startChange on all selected segments
             m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
 
+            CompositionItemPtr newChangingSegment =
+                    m_canvas->getModel()->findChangingSegment(
+                              getChangingSegment()->getSegment());
 
-            CompositionModelImpl::ChangingSegmentSet& changingItems =
-                    m_canvas->getModel()->getChangingSegments();
-            // set the changing segment to its "sibling" among selected (now moving) items
-            setChangingSegment(findSiblingCompositionItem(changingItems, getChangingSegment()));
+            if (newChangingSegment) {
+                // Toss the local "changing" segment since it isn't going to
+                // be moving at all.  Swap it for the same changing segment in
+                // CompositionModelImpl.  That one *will* be moving and can be
+                // used to drive the guides.
+                setChangingSegment(newChangingSegment);
+            }
 
         } else {
             RG_DEBUG << "SegmentMover::mousePressEvent() : no selection\n";
@@ -229,6 +235,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     }
 
     m_changeMade = false;
+
     setChangingSegment(NULL);
 
     setBasicContextHelp();

@@ -143,6 +143,7 @@ void SegmentTool::setChangingSegment(CompositionItemPtr changingSegment)
 {
     if (changingSegment != m_changingSegment)
     {
+        // This is a QPointer.  Therefore double delete is impossible.
         delete m_changingSegment;
         m_changingSegment = changingSegment;
     }
@@ -158,28 +159,6 @@ void SegmentTool::setSnapTime(QMouseEvent *e, timeT snapTime)
     } else {
         snapGrid.setSnapTime(SnapGrid::NoSnap);
     }
-}
-
-CompositionItemPtr SegmentTool::findSiblingCompositionItem(
-        const CompositionModelImpl::ChangingSegmentSet &items,
-        CompositionItemPtr referenceItem)
-{
-    CompositionModelImpl::ChangingSegmentSet::const_iterator it;
-    Rosegarden::Segment *referenceSegment = referenceItem->getSegment();
-
-    // For each item in the incoming container
-    for (it = items.begin(); it != items.end(); ++it) {
-        CompositionItemPtr item = *it;
-        Rosegarden::Segment *segment = item->getSegment();
-
-        // If it has the same Segment as the reference item, return it.
-        if (segment == referenceSegment) {
-            return item;
-        }
-    }
-
-    // Not found, just return the incoming item.
-    return referenceItem;
 }
 
 void SegmentTool::slotEdit()

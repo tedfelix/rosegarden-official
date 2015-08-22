@@ -437,13 +437,22 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             m_selectionMoveStarted = true;
         }
 
+        CompositionItemPtr newChangingSegment =
+                m_canvas->getModel()->findChangingSegment(
+                          getChangingSegment()->getSegment());
+
+        if (newChangingSegment) {
+            // Toss the local "changing" segment since it isn't going to
+            // be moving at all.  Swap it for the same changing segment in
+            // CompositionModelImpl.  That one *will* be moving and can be
+            // used to drive the guides.
+            setChangingSegment(newChangingSegment);
+        }
+
         CompositionModelImpl::ChangingSegmentSet& changingItems =
                 m_canvas->getModel()->getChangingSegments();
-        setChangingSegment(findSiblingCompositionItem(changingItems, getChangingSegment()));
 
         CompositionModelImpl::ChangingSegmentSet::iterator it;
-        int guideX = 0;
-        int guideY = 0;
 
         for (it = changingItems.begin();
                 it != changingItems.end();
@@ -493,8 +502,8 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             m_canvas->slotUpdateAll();
         }
 
-        guideX = getChangingSegment()->rect().x();
-        guideY = getChangingSegment()->rect().y();
+        int guideX = getChangingSegment()->rect().x();
+        int guideY = getChangingSegment()->rect().y();
 
         m_canvas->drawGuides(guideX, guideY);
 
