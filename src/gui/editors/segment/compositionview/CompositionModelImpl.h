@@ -137,8 +137,8 @@ public:
 
     /// The visible range of notation preview data for a segment.
     struct NotationPreviewRange {
-        NotationPreview::iterator begin;
-        NotationPreview::iterator end;
+        NotationPreview::const_iterator begin;
+        NotationPreview::const_iterator end;
 
         // y coord in contents coords
         int segmentTop;
@@ -399,11 +399,10 @@ private:
      */
     void makeNotationPreviewRangeCS(
             QPoint basePoint, const Segment *segment,
-            const QRect &currentRect, NotationPreviewRanges *ranges);
+            const QRect &currentRect, const QRect &clipRect,
+            NotationPreviewRanges *ranges);
 
-    NotationPreview *getNotationPreview(const Segment *);
-
-    NotationPreview *updateCachedNotationPreview(const Segment *);
+    const NotationPreview *getNotationPreview(const Segment *);
 
     void makeNotationPreview(const Segment *, NotationPreview *);
 

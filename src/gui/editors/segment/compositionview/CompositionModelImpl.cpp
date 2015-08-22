@@ -268,7 +268,7 @@ void CompositionModelImpl::getSegmentRects(
         if (segment->isMIDI()) {
             makeNotationPreviewRangeCS(
                     segmentRect.rect.topLeft(), segment, segmentRect.rect,
-                    notationPreviewRanges);
+                    clipRect, notationPreviewRanges);
         } else {  // Audio Segment
             makeAudioPreview(audioPreviews, segment, segmentRect);
         }
@@ -716,12 +716,12 @@ void CompositionModelImpl::makeNotationPreviewRange(
     if (!ranges)
         return;
 
-    NotationPreview *notationPreview = getNotationPreview(segment);
+    const NotationPreview *notationPreview = getNotationPreview(segment);
 
     if (notationPreview->empty())
         return;
 
-    NotationPreview::iterator npIter = notationPreview->begin();
+    NotationPreview::const_iterator npIter = notationPreview->begin();
 
     // Search for the first event that is likely to be visible.
     // ??? Performance: LINEAR SEARCH.  While recording, this uses more
@@ -735,9 +735,6 @@ void CompositionModelImpl::makeNotationPreviewRange(
         return;
 
     NotationPreviewRange interval;
-    // ??? Can we make NotationPreviewRange::begin (and end) a const_iterator?
-    //     Then we can make npIter a const_iterator, and notationPreview a
-    //     const *.  getNotationPreview() could then return a const pointer.
     interval.begin = npIter;
 
     // Compute the rightmost x coord
@@ -761,34 +758,23 @@ void CompositionModelImpl::makeNotationPreviewRange(
 
 void CompositionModelImpl::makeNotationPreviewRangeCS(
         QPoint basePoint, const Segment *segment,
-        const QRect &currentRect, NotationPreviewRanges *ranges)
+        const QRect &currentRect, const QRect &clipRect,
+        NotationPreviewRanges *ranges)
 {
-    // ??? This is a variation on the previous.  Can we combine somehow?
-    //     Or split differently?  It's already pretty complicated with
-    //     the ChangeType handling.  We might be able to pull out the
-    //     determination of the range into a routine that takes a
-    //     NotationPreview and a left and right.
-    //       makeNotationPreviewRange(
-    //               NotationPreview *notationPreview,
-    //               int left, int right,
-    //               NotationPreview::iterator &begin,
-    //               NotationPreview::iterator &end)
-    //     Maybe we could replace both of these routines with the above
-    //     and leave it up to the clients to do the rest.
-
-    // ??? The caller can easily provide a clipRect so that we
-    //     can include that like the previous routine does.
-
     if (!ranges)
         return;
 
-    NotationPreview *notationPreview = getNotationPreview(segment);
+    const NotationPreview *notationPreview = getNotationPreview(segment);
 
     if (notationPreview->empty())
         return;
 
     QRect originalRect;
     getSegmentQRect(*segment, originalRect);
+
+    int moveXOffset = 0;
+    if (m_changeType == ChangeMove)
+        moveXOffset = basePoint.x() - originalRect.x();
 
     int left;
 
@@ -798,10 +784,9 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
         left = originalRect.left();
     }
 
-    // ??? Why no clip rect?  Seems wasteful.
-    //left = std::max(clipRect.left(), left);
+    left = std::max(clipRect.left() - moveXOffset, left);
 
-    NotationPreview::iterator npIter = notationPreview->begin();
+    NotationPreview::const_iterator npIter = notationPreview->begin();
 
     // Search for the first event that is likely to be visible.
     while (npIter != notationPreview->end()  &&
@@ -820,8 +805,7 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
             originalRect.right() :
             currentRect.right();
 
-    // ??? Why no clip rect?  Seems wasteful.
-    //right = std::min(clipRect.right(), right);
+    right = std::min(clipRect.right() - moveXOffset, right);
 
     // Search sequentially for the last visible preview rect.
     while (npIter != notationPreview->end()  &&  npIter->left() < right)
@@ -829,51 +813,26 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
 
     interval.end = npIter;
     interval.segmentTop = basePoint.y();
-
-    if (m_changeType == ChangeMove)
-        interval.moveXOffset = basePoint.x() - originalRect.x();
-    else
-        interval.moveXOffset = 0;
-
+    interval.moveXOffset = moveXOffset;
     interval.color = segment->getPreviewColour();
 
     ranges->push_back(interval);
 }
 
-CompositionModelImpl::NotationPreview *
-CompositionModelImpl::getNotationPreview(const Segment *s)
+const CompositionModelImpl::NotationPreview *
+CompositionModelImpl::getNotationPreview(const Segment *segment)
 {
-    // ??? Consider combining getNotationPreview() and
-    //     updateCachedNotationPreview().  The only caller of
-    //     updateCachedNotationPreview() (segmentAdded()) has no need
-    //     to call it at all.
-
     // Try the cache.
-    // ??? Does this rely on NULL if not found?  If so, that is
-    //     incorrect and needs to be fixed.
-    NotationPreview *notationPreview = m_notationPreviewCache[s];
+    NotationPreviewCache::const_iterator previewIter =
+            m_notationPreviewCache.find(segment);
 
-    // If there was nothing in the cache for this segment, generate it.
-    if (!notationPreview)
-        notationPreview = updateCachedNotationPreview(s);
+    // If it was in the cache, return it.
+    if (previewIter != m_notationPreviewCache.end())
+        return previewIter->second;
 
-    return notationPreview;
-}
-
-CompositionModelImpl::NotationPreview *
-CompositionModelImpl::updateCachedNotationPreview(const Segment *segment)
-{
     NotationPreview *notationPreview = new NotationPreview();
-
-    // Create the preview
     makeNotationPreview(segment, notationPreview);
 
-    // Avoid potential memory leaks.
-    //delete m_notationPreviewCache[segment];
-
-    // Store in the cache.
-    // Callers guarantee that m_notationPreviewCache[segment] is not
-    // currently pointing to anything.
     m_notationPreviewCache[segment] = notationPreview;
 
     return notationPreview;
@@ -1168,10 +1127,12 @@ void CompositionModelImpl::deleteCachedPreview(const Segment *s)
     }
 
     if (s->getType() == Segment::Internal) {
+        // ??? Need to handle the case when it isn't there.
         NotationPreview *notationPreview = m_notationPreviewCache[s];
         delete notationPreview;
         m_notationPreviewCache.erase(s);
     } else {
+        // ??? Need to handle the case when it isn't there.
         AudioPeaks *apd = m_audioPeaksCache[s];
         delete apd;
         m_audioPeaksCache.erase(s);
