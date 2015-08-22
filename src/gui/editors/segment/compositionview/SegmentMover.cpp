@@ -33,7 +33,6 @@
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
-#include "SegmentSelector.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"
 
@@ -85,26 +84,21 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
+    // Get the Segment that was clicked.
     CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
-    SegmentSelector *selector =
-            dynamic_cast<SegmentSelector *>(
-                    m_canvas->getToolBox()->getTool(SegmentSelector::ToolName));
 
-    // #1027303: Segment move issue
-    // Clear selection if we're clicking on an item that's not in it
-    // and we're not in add mode
+    // If we're clicking on a segment that isn't in the selection
+    if (item &&
+        !m_canvas->getModel()->isSelected(item->getSegment())) {
 
-    if (selector &&
-        item &&
-        !m_canvas->getModel()->isSelected(item->getSegment()) &&
-        !selector->isSegmentAdding()) {
-
+        // Clear the selection.
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->selectionHasChanged();
 // 		m_canvas->updateContents();
 		m_canvas->update();
 	}
 
+    // If a Segment was clicked
     if (item) {
 
         setChangingSegment(item);
