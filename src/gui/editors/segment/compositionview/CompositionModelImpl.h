@@ -220,7 +220,7 @@ public:
     void deleteCachedSegments(bool previewsToo)
             { deleteCachedSegment(0, previewsToo); }
 
-    SegmentRect computeSegmentRect(const Segment &, bool computeZ = false);
+    SegmentRect computeSegmentRect(const Segment &);
 
     // --- Selection --------------------------------------
 
@@ -504,8 +504,6 @@ private:
     /// Used to determine whether m_segmentRectMap is current.
     std::map<const Segment *, timeT> m_segmentEndTimeMap;
 
-    void updateCachedSegment(const Segment *, const SegmentRect &);
-    const SegmentRect &getFromCache(const Segment *, timeT &endTime);
     bool isCachedRectCurrent(const Segment &s, const SegmentRect &r,
                              QPoint cachedSegmentOrigin,
                              timeT cachedSegmentEndTime);
