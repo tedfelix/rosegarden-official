@@ -55,18 +55,18 @@ public:
 
     // Rect Mutators
 
-    void setX(int x)                   { m_rect.setX(x); }
-    void setY(int y)                   { m_rect.setY(y); }
-    void moveTo(int x, int y)          { m_rect.moveTo(x, y); }
-    void setWidth(int w)               { m_rect.setWidth(w); }
+    void setX(int x)                   { m_rect.rect.setX(x); }
+    void setY(int y)                   { m_rect.rect.setY(y); }
+    void moveTo(int x, int y)          { m_rect.rect.moveTo(x, y); }
+    void setWidth(int w)               { m_rect.rect.setWidth(w); }
     void setZ(unsigned int z)          { m_z = z; }
 
     // Rect Accessors
 
     // rename: baseRect()?  Since it has only the baseWidth().
     QRect rect() const;
-    int x() const                      { return m_rect.x(); }
-    int y() const                      { return m_rect.y(); }
+    int x() const                      { return m_rect.rect.x(); }
+    int y() const                      { return m_rect.rect.y(); }
     unsigned int z() const             { return m_z; }
     bool isRepeating() const           { return m_rect.isRepeating(); }
     SegmentRect& getCompRect()     { return m_rect; }

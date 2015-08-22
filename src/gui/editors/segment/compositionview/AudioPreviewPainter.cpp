@@ -54,7 +54,7 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
     //NB. m_image used to be created as an 8-bit image with 4 bits per pixel.
     // QImage::Format_Indexed8 seems to be close enough, since we manipulate the
     // pixels directly by index, rather than employ drawing tools.
-    m_image = QImage(pixWidth, m_rect.height(), QImage::Format_Indexed8);
+    m_image = QImage(pixWidth, m_rect.rect.height(), QImage::Format_Indexed8);
     m_penWidth = (std::max(1U, (unsigned int)m_rect.pen.width()) * 2);
     m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
 }
@@ -108,7 +108,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
     int centre = m_image.height() / 2;
 
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.baseWidth << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.baseWidth << ", height = " << m_rect.rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1] << endl;
 
@@ -165,7 +165,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    
 	    // First find the time corresponding to this i.
 	    timeT musicalTime =
-		m_model.grid().getRulerScale()->getTimeForX(m_rect.x() + i);
+		m_model.grid().getRulerScale()->getTimeForX(m_rect.rect.x() + i);
 	    RealTime realTime =
 		m_model.getComposition().getElapsedRealTime(musicalTime);
 	    

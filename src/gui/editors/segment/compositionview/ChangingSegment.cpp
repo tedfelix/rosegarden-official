@@ -38,7 +38,7 @@ ChangingSegment::ChangingSegment(Segment &s, const SegmentRect &rect)
 
 QRect ChangingSegment::rect() const
 {
-    QRect res = m_rect;
+    QRect res = m_rect.rect;
 
     // For repeating segments, use the base width
     if (m_rect.isRepeating()) {
@@ -69,7 +69,7 @@ void ChangingSegment::setStartTime(timeT time, const SnapGrid &grid)
     int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
 
     int curX = rect().x();
-    m_rect.setX(x);
+    m_rect.rect.setX(x);
     if (m_rect.isRepeating()) {
         int deltaX = curX - x;
         int curW = m_rect.baseWidth;
@@ -82,7 +82,7 @@ timeT ChangingSegment::getStartTime(const SnapGrid &grid)
     //return std::max(grid.snapX(item->rect().x()), 0L); - wrong, we can have negative start times,
         // and if we do this we 'crop' segments when they are moved before the start of the composition
 
-    return grid.snapX(m_rect.x());
+    return grid.snapX(m_rect.rect.x());
 }
 
 void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
@@ -92,7 +92,7 @@ void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
     QPoint topRight = r.topRight();
     topRight.setX(x);
     r.setTopRight(topRight);
-    m_rect.setWidth(r.width());
+    m_rect.rect.setWidth(r.width());
 
     if (m_rect.isRepeating()) {
         m_rect.baseWidth = r.width();

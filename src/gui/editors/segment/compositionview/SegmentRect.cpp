@@ -37,7 +37,8 @@ const QColor SegmentRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G,
 
 SegmentRect SegmentRect::intersected(const SegmentRect &other) const
 {
-    SegmentRect intersected = QRect::intersected(other);
+    SegmentRect intersected;
+    intersected.rect = rect.intersected(other.rect);
 
     // Mix m_brush colors
     const QColor &thisColor = brush.color();

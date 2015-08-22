@@ -920,7 +920,7 @@ void CompositionView::drawCompRect(
 
         painter->setBrush(rect.brush);
         painter->setPen(rect.pen);
-        drawRect(painter, clipRect, rect, rect.selected, intersectLvl);
+        drawRect(painter, clipRect, rect.rect, rect.selected, intersectLvl);
 
         painter->restore();
 
@@ -933,7 +933,7 @@ void CompositionView::drawCompRect(
 
     // *** Base Segment
 
-    QRect baseRect = rect;
+    QRect baseRect = rect.rect;
     baseRect.setWidth(rect.baseWidth);
 
     painter->setPen(rect.pen);
@@ -944,7 +944,7 @@ void CompositionView::drawCompRect(
 
     // ??? COPY.
     SegmentRect::RepeatMarks repeatMarksX = rect.repeatMarks;
-    QRect repeatRect = rect;
+    QRect repeatRect = rect.rect;
     repeatRect.setLeft(repeatMarksX[0]);
 
     // The repeat area is lighter.
@@ -960,7 +960,7 @@ void CompositionView::drawCompRect(
     // For each repeat mark, draw it.
     for (size_t i = 0; i < repeatMarksX.size(); ++i) {
         int x = repeatMarksX[i];
-        painter->drawLine(x, rect.top(), x, rect.bottom());
+        painter->drawLine(x, rect.rect.top(), x, rect.rect.bottom());
     }
 
     painter->restore();
@@ -977,11 +977,11 @@ void CompositionView::drawCompRectLabel(
 
     // Pick a font that will fit nicely within a segment rect.
     QFont font;
-    font.setPixelSize(rect.height() / 2.2);
+    font.setPixelSize(rect.rect.height() / 2.2);
     font.setWeight(QFont::Bold);
     painter->setFont(font);
 
-    QRect labelRect = rect;
+    QRect labelRect = rect.rect;
     // Add a one character left margin.  Add a one pixel top margin to
     // make the text look a little more centered vertically.
     labelRect.adjust(painter->fontMetrics().width('x'), 1, 0, 0);
@@ -1073,7 +1073,7 @@ void CompositionView::drawIntersections(
             SegmentRect intersectRect = i->intersected(*j);
 
             // If no intersection, try the next rect.
-            if (intersectRect.isEmpty())
+            if (intersectRect.rect.isEmpty())
                 continue;
 
             // Check if we've already encountered this intersection.

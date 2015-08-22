@@ -190,7 +190,7 @@ void CompositionModelImpl::getSegmentRects(
         getSegmentRect(*segment, segmentRect);
 
         // If this segment isn't in the clip rect, try the next.
-        if (!segmentRect.intersects(clipRect))
+        if (!segmentRect.rect.intersects(clipRect))
             continue;
 
         // Update the SegmentRect's selected state.
@@ -198,7 +198,7 @@ void CompositionModelImpl::getSegmentRects(
         segmentRect.selected = (
                 isSelected(segment)  ||
                 isTmpSelected(segment)  ||
-                segmentRect.intersects(m_selectionRect));
+                segmentRect.rect.intersects(m_selectionRect));
 
         // Update the SegmentRect's pen and brush.
 
@@ -229,7 +229,7 @@ void CompositionModelImpl::getSegmentRects(
 
         if (segment->isMIDI()) {
             makeNotationPreviewRange(
-                    QPoint(0, segmentRect.y()), segment, clipRect,
+                    QPoint(0, segmentRect.rect.y()), segment, clipRect,
                     notationPreviewRanges);
         } else {  // Audio Segment
             makeAudioPreview(audioPreviews, segment, segmentRect);
@@ -248,7 +248,7 @@ void CompositionModelImpl::getSegmentRects(
         SegmentRect segmentRect((*i)->rect());
 
         // If it doesn't intersect, try the next one.
-        if (!segmentRect.intersects(clipRect))
+        if (!segmentRect.rect.intersects(clipRect))
             continue;
 
         // Set up the SegmentRect
@@ -270,7 +270,7 @@ void CompositionModelImpl::getSegmentRects(
 
         if (segment->isMIDI()) {
             makeNotationPreviewRangeCS(
-                    segmentRect.topLeft(), segment, segmentRect,
+                    segmentRect.rect.topLeft(), segment, segmentRect.rect,
                     notationPreviewRanges);
         } else {  // Audio Segment
             makeAudioPreview(audioPreviews, segment, segmentRect);
@@ -294,7 +294,7 @@ ChangingSegmentPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
         SegmentRect segmentRect;
         getSegmentRect(segment, segmentRect);
 
-        if (segmentRect.contains(pos)) {
+        if (segmentRect.rect.contains(pos)) {
             return ChangingSegmentPtr(
                     new ChangingSegment(segment, segmentRect));
         }
@@ -371,7 +371,7 @@ void CompositionModelImpl::getSegmentQRect(const Segment &segment, QRect &rect)
 void CompositionModelImpl::getSegmentRect(
         const Segment &segment, SegmentRect &segmentRect)
 {
-    getSegmentQRect(segment, segmentRect);
+    getSegmentQRect(segment, segmentRect.rect);
 
     QString label = strtoqstr(segment.getLabel());
     if (segment.isAudio()) {
@@ -386,7 +386,7 @@ void CompositionModelImpl::getSegmentRect(
         computeRepeatMarks(segmentRect, &segment);
     } else {
         segmentRect.repeatMarks.clear();
-        segmentRect.baseWidth = segmentRect.width();
+        segmentRect.baseWidth = segmentRect.rect.width();
     }
 
     // Reset remaining fields.
@@ -439,7 +439,7 @@ void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s)
 
         timeT repeatStart = endTime;
         timeT repeatEnd = s->getRepeatEndTime();
-        sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
+        sr.rect.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
                                   repeatEnd - startTime))));
 
         SegmentRect::RepeatMarks repeatMarks;
@@ -461,10 +461,10 @@ void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s)
 
         // ??? !empty() can be faster.
         if (repeatMarks.size() > 0)
-            sr.baseWidth = repeatMarks[0] - sr.x();
+            sr.baseWidth = repeatMarks[0] - sr.rect.x();
         else {
             //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : no repeat marks";
-            sr.baseWidth = sr.width();
+            sr.baseWidth = sr.rect.width();
         }
 
         //RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : s = "
@@ -1027,7 +1027,7 @@ void CompositionModelImpl::makeAudioPreview(
 {
     Profiler profiler("CompositionModelImpl::makeAudioPreview");
 
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect;
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect.rect;
 
     if (!apRects)
         return;
@@ -1040,13 +1040,13 @@ void CompositionModelImpl::makeAudioPreview(
 
     // ??? COPY.  Why not create this object earlier and build the
     //     preview in it?  That would avoid the copy.
-    AudioPreview previewItem(previewImage, segRect);
+    AudioPreview previewItem(previewImage, segRect.rect);
 
     if (m_changeType == ChangeResizeFromStart) {
         // ??? All we need is the x coord!
         QRect originalRect;
         getSegmentQRect(*segment, originalRect);
-        previewItem.resizeOffset = segRect.x() - originalRect.x();
+        previewItem.resizeOffset = segRect.rect.x() - originalRect.x();
     }
 
     apRects->push_back(previewItem);
@@ -1113,8 +1113,8 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
 
         SegmentRect segRect;
         getSegmentRect(*segment, segRect);
-        segRect.setWidth(segRect.baseWidth); // don't use repeating area
-        segRect.moveTopLeft(QPoint(0, 0));
+        segRect.rect.setWidth(segRect.baseWidth); // don't use repeating area
+        segRect.rect.moveTopLeft(QPoint(0, 0));
 
         if (m_audioPreviewUpdaterMap.find(segment) ==
                 m_audioPreviewUpdaterMap.end()) {
@@ -1122,7 +1122,7 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
             AudioPreviewUpdater *updater =
                     new AudioPreviewUpdater(
                             *m_audioPreviewThread, m_composition,
-                            segment, segRect, this);
+                            segment, segRect.rect, this);
 
             connect(updater, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
                     this, SLOT(slotAudioPeaksComplete(AudioPreviewUpdater*)));
@@ -1131,7 +1131,7 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
 
         } else {
 
-            m_audioPreviewUpdaterMap[segment]->setDisplayExtent(segRect);
+            m_audioPreviewUpdaterMap[segment]->setDisplayExtent(segRect.rect);
         }
 
         m_audioPreviewUpdaterMap[segment]->update();
@@ -1175,7 +1175,7 @@ QRect CompositionModelImpl::updateCachedPreviewImage(AudioPeaks* apData, const S
 
     m_audioPreviewImageCache[segment] = previewPainter.getPreviewImage();
 
-    return previewPainter.getSegmentRect();
+    return previewPainter.getSegmentRect().rect;
 }
 
 // --- Previews -----------------------------------------------------
