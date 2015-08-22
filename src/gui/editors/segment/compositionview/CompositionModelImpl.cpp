@@ -74,7 +74,6 @@ CompositionModelImpl::CompositionModelImpl(
     m_audioPreviewUpdaterMap(),
     m_audioPeaksCache(),
     m_audioPreviewImageCache(),
-    m_trackHeights(),
     m_segmentOrderer(),
     m_selectedSegments(),
     m_tmpSelectedSegments(),
@@ -88,8 +87,7 @@ CompositionModelImpl::CompositionModelImpl(
 {
     m_composition.addObserver(this);
 
-    // Update the track heights for all tracks.
-    updateTrackHeight();
+    updateAllTrackHeights();
 
     SegmentMultiSet &segments = m_composition.getSegments();
 
@@ -304,24 +302,6 @@ ChangingSegmentPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
     return ChangingSegmentPtr();
 }
 
-QPoint CompositionModelImpl::topLeft(const Segment& s) const
-{
-    Profiler profiler("CompositionModelImpl::topLeft");
-
-    int trackPosition = m_composition.getTrackPositionById(s.getTrack());
-    timeT startTime = s.getStartTime();
-
-    QPoint res;
-
-    res.setX(int(nearbyint(m_grid.getRulerScale()->getXForTime(startTime))));
-
-    res.setY(m_grid.getYBinCoordinate(trackPosition) +
-             m_composition.getSegmentVoiceIndex(&s) *
-             m_grid.getYSnap() + 1);
-
-    return res;
-}
-
 void CompositionModelImpl::getSegmentQRect(const Segment &segment, QRect &rect)
 {
     // This routine does no caching.  Caching will be implemented later
@@ -329,13 +309,6 @@ void CompositionModelImpl::getSegmentQRect(const Segment &segment, QRect &rect)
     // with an effective caching approach.  Initial performance
     // measurements show that this uses the same amount of CPU when
     // recording as the previous approach.
-
-    // ??? Would getQRect() be a better name?  The problem is that
-    //     SegmentRect derives from QRect (which it really shouldn't),
-    //     so it would be easy to make the mistake of calling this
-    //     with a SegmentRect.
-
-    // ??? topLeft() does this too.  Combine?  Reuse?
 
     const timeT startTime = segment.getStartTime();
 
@@ -395,32 +368,40 @@ void CompositionModelImpl::getSegmentRect(
     segmentRect.pen = SegmentRect::DefaultPenColor;
 }
 
-bool CompositionModelImpl::updateTrackHeight(const Segment *s)
+bool CompositionModelImpl::updateAllTrackHeights()
 {
     bool heightsChanged = false;
 
-    //RG_DEBUG << "updateTrackHeight()";
-
+    // For each track in the composition
     for (Composition::trackcontainer::const_iterator i =
              m_composition.getTracks().begin();
-         i != m_composition.getTracks().end(); ++i) {
+         i != m_composition.getTracks().end();
+         ++i) {
 
-        if (s && i->first != s->getTrack()) continue;
-
-        int max = m_composition.getMaxContemporaneousSegmentsOnTrack(i->first);
-        if (max == 0) max = 1;
-
-//        RG_DEBUG << "for track " << i->first << ": height = " << max << ", old height = " << m_trackHeights[i->first];
-
-        if (max != m_trackHeights[i->first]) {
+        if (updateTrackHeight(i->first))
             heightsChanged = true;
-            m_trackHeights[i->first] = max;
-        }
-
-        m_grid.setBinHeightMultiple(i->second->getPosition(), max);
     }
 
     return heightsChanged;
+}
+
+bool CompositionModelImpl::updateTrackHeight(TrackId trackId)
+{
+    int heightMultiple =
+            m_composition.getMaxContemporaneousSegmentsOnTrack(trackId);
+    if (heightMultiple == 0)
+        heightMultiple = 1;
+
+    Composition::trackcontainer &tracks = m_composition.getTracks();
+    const int bin = tracks[trackId]->getPosition();
+
+    // If there is no change, bail.
+    if (heightMultiple == m_grid.getBinHeightMultiple(bin))
+        return false;
+
+    m_grid.setBinHeightMultiple(bin, heightMultiple);
+
+    return true;
 }
 
 void CompositionModelImpl::computeRepeatMarks(SegmentRect& sr, const Segment* s) const
@@ -498,8 +479,7 @@ void CompositionModelImpl::deleteCachedSegment(
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
-    //RG_DEBUG << "segmentAdded(): segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
-    updateTrackHeight(s);
+    updateTrackHeight(s->getTrack());
 
     // ??? Why do it now?  Why not let getNotationPreview() do it
     //     on its own when/if it is needed?
@@ -512,8 +492,7 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
-    // Update track height for all tracks.
-    updateTrackHeight();
+    updateAllTrackHeights();
 
     QRect r;
     getSegmentQRect(*s, r);
@@ -526,32 +505,23 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
     emit needUpdate(r);
 }
 
-void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, TrackId tid)
+void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment * /*s*/, TrackId /*tid*/)
 {
-    RG_DEBUG << "CompositionModelImpl::segmentTrackChanged: segment " << s << " on track " << tid << ", calling updateTrackHeight()";
-
-    // Update the height of all tracks.
-    // we don't call updateTrackHeight(s), because some of the tracks
-    // above s may have changed height as well (if s was moved off one
-    // of them)
-    if (updateTrackHeight()) {
-        RG_DEBUG << "... changed, updating";
+    if (updateAllTrackHeights())
         emit needUpdate();
-    }
 }
 
 void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
 {
-//    RG_DEBUG << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
-    if (updateTrackHeight(s)) emit needUpdate();
+    if (updateTrackHeight(s->getTrack()))
+        emit needUpdate();
 }
 
 void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
 {
     Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
-//    RG_DEBUG << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling updateTrackHeight()";
-    if (updateTrackHeight(s)) {
-//        RG_DEBUG << "... changed, updating";
+
+    if (updateTrackHeight(s->getTrack())) {
         emit needUpdate();
     }
 }
@@ -559,7 +529,8 @@ void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
 {
     deleteCachedSegment(s);
-    updateTrackHeight(s);
+    // ??? Why?  Repeat on/off cannot change track height.
+    updateTrackHeight(s->getTrack());
     emit needUpdate();
 }
 
@@ -1426,8 +1397,7 @@ CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const Q
 //              << rect.width() << "x" << rect.height() << ", top = " << top
 //              << ", bottom = " << bottom;
     
-    // Update track height for all tracks.
-    updateTrackHeight();
+    updateAllTrackHeights();
     
     CompositionModelImpl::YCoordVector list;
 

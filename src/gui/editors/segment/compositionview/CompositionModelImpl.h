@@ -482,15 +482,8 @@ private:
 
     // --- Segments ---------------------------------------
 
-    QPoint topLeft(const Segment &) const;
-
-    std::map<TrackId, int /* height */> m_trackHeights;
-    /// Update m_trackHeights for the given Segment.
-    /**
-     * If the Segment is NULL, all track heights are updated.
-     * Returns true if a track's height has changed.
-     */
-    bool updateTrackHeight(const Segment *segment = 0);
+    bool updateAllTrackHeights();
+    bool updateTrackHeight(TrackId trackId);
 
     /// Update SegmentRect::m_repeatMarks with the Segment's repeat marks.
     void computeRepeatMarks(SegmentRect &, const Segment *) const;
