@@ -152,76 +152,88 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
-    QPoint pos = m_canvas->viewportToContents(e->pos());
+    // If we weren't moving anything, bail.
+    if (!getChangingSegment())
+        return;
 
-    Composition &comp = m_doc->getComposition();
+    if (m_changeMade) {
 
-    int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-    int currentTrackPos = m_canvas->grid().getYBin(pos.y());
-    int trackDiff = currentTrackPos - startDragTrackPos;
+        QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    // If we were actually moving something
-    if (getChangingSegment()) {
+        // Compute how far we've moved vertically.
+        const int startTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
+        const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
+        const int deltaTrack = currentTrackPos - startTrackPos;
 
-        if (m_changeMade) {
+        CompositionModelImpl::ChangingSegmentSet &changingSegments =
+                m_canvas->getModel()->getChangingSegments();
 
-            CompositionModelImpl::ChangingSegmentSet& changingItems =
-                    m_canvas->getModel()->getChangingSegments();
+        Composition &comp = m_doc->getComposition();
 
-            SegmentReconfigureCommand *command =
-                new SegmentReconfigureCommand
-                (changingItems.size() == 1 ? tr("Move Segment") : tr("Move Segments"), &comp);
+        SegmentReconfigureCommand *command =
+            new SegmentReconfigureCommand(
+                    changingSegments.size() == 1 ?
+                            tr("Move Segment") :
+                            tr("Move Segments"),
+                    &comp);
 
+        // For each changing segment
+        for (CompositionModelImpl::ChangingSegmentSet::iterator it =
+                 changingSegments.begin();
+             it != changingSegments.end();
+             ++it) {
 
-            CompositionModelImpl::ChangingSegmentSet::iterator it;
+            CompositionItemPtr changingSegment = *it;
 
-            for (it = changingItems.begin();
-                    it != changingItems.end();
-                    ++it) {
+            // The original Segment in the Composition.
+            Segment *segment = changingSegment->getSegment();
 
-                CompositionItemPtr item = *it;
+            // New Track ID
 
-                Segment* segment = item->getSegment();
+            TrackId origTrackId = segment->getTrack();
+            int trackPos = comp.getTrackPositionById(origTrackId) + deltaTrack;
 
-                TrackId origTrackId = segment->getTrack();
-                int trackPos = comp.getTrackPositionById(origTrackId);
-                trackPos += trackDiff;
-
-                if (trackPos < 0) {
-                    trackPos = 0;
-                } else if (trackPos >= (int)comp.getNbTracks()) {
-                    trackPos = comp.getNbTracks() - 1;
-                }
-
-                Track *newTrack = comp.getTrackByPosition(trackPos);
-                int newTrackId = origTrackId;
-                if (newTrack) newTrackId = newTrack->getId();
-
-                timeT newStartTime = item->getStartTime(m_canvas->grid());
-
-                // We absolutely don't want to snap the end time
-                // to the grid.  We want it to remain exactly the same
-                // as it was, but relative to the new start time.
-                timeT newEndTime = newStartTime + segment->getEndMarkerTime(false)
-                                   - segment->getStartTime();
-
-                command->addSegment(segment,
-                                    newStartTime,
-                                    newEndTime,
-                                    newTrackId);
+            if (trackPos < 0) {
+                trackPos = 0;
+            } else if (trackPos >= (int)comp.getNbTracks()) {
+                trackPos = comp.getNbTracks() - 1;
             }
 
-            CommandHistory::getInstance()->addCommand(command);
+            Track *newTrack = comp.getTrackByPosition(trackPos);
+
+            int newTrackId = origTrackId;
+            if (newTrack)
+                newTrackId = newTrack->getId();
+
+            // New start time
+
+            timeT newStartTime = changingSegment->getStartTime(m_canvas->grid());
+
+            // New end time
+
+            // We absolutely don't want to snap the end time
+            // to the grid.  We want it to remain exactly the same
+            // as it was, but relative to the new start time.
+            timeT newEndTime = newStartTime +
+                    segment->getEndMarkerTime(false) - segment->getStartTime();
+
+            // Add the changed segment to the command
+
+            command->addSegment(segment,
+                                newStartTime,
+                                newEndTime,
+                                newTrackId);
         }
 
-        m_canvas->hideTextFloat();
-        m_canvas->hideGuides();
-        m_canvas->getModel()->endChange();
-        m_canvas->slotUpdateAll();
+        CommandHistory::getInstance()->addCommand(command);
 
+        m_changeMade = false;
     }
 
-    m_changeMade = false;
+    m_canvas->hideTextFloat();
+    m_canvas->hideGuides();
+    m_canvas->getModel()->endChange();
+    m_canvas->slotUpdateAll();
 
     setChangingSegment(NULL);
 
@@ -233,15 +245,13 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
+    // If we aren't moving anything, bail.
+    if (!getChangingSegment())
+        return RosegardenScrollView::NoFollow;
+
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
     setSnapTime(e, SnapGrid::SnapToBeat);
-
-    // If we aren't moving anything
-    if (!getChangingSegment()) {
-        setBasicContextHelp();
-        return RosegardenScrollView::NoFollow;
-    }
 
     // If shift isn't being held down
     if ((e->modifiers() & Qt::ShiftModifier) == 0) {
