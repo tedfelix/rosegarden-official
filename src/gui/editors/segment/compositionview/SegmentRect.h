@@ -24,7 +24,8 @@
 #include <QPen>
 #include <QRect>
 #include <QString>
-#include <QVector>
+
+#include <vector>
 
 
 class QSize;
@@ -35,13 +36,17 @@ namespace Rosegarden
 {
 
 /// A segment rectangle.
-class SegmentRect : public QRect
+/**
+ * ??? This class shouldn't derive from QRect.  QRect doesn't provide a
+ *     virtual dtor.  Therefore, if you have a QRect pointer to a SegmentRect,
+ *     and you delete through that pointer, the SegmentRect's dtor will not be
+ *     called.  This class should have a QRect member and provide functions
+ *     that delegate to corresponding QRect functions for those that need
+ *     them.
+ */
+class SegmentRect : public QRect  // ??? Deriving from QRect is dangerous.
 {
 public:
-    typedef QVector<int> repeatmarks;
-
-    friend bool operator<(const SegmentRect&, const SegmentRect&);
-
     SegmentRect() :
         QRect(),
         m_selected(false),
@@ -82,25 +87,27 @@ public:
     //    : QRect(left, top, width, height), m_resized(false), m_selected(false),
     //      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
 
-    void setSelected(bool s)      { m_selected = s; }
-    bool isSelected() const       { return m_selected; }
-    bool needsFullUpdate() const  { return m_needUpdate; }
-    void setNeedsFullUpdate(bool s) { m_needUpdate = s; }
-    
-    // brush, pen draw info
-    void setBrush(QBrush b)       { m_brush = b; }
-    QBrush getBrush() const       { return m_brush; }
-    void setPen(QPen b)           { m_pen = b; }
-    QPen getPen() const           { return m_pen; }
+    void setSelected(bool selected)  { m_selected = selected; }
+    bool isSelected() const  { return m_selected; }
 
-    // repeating segments
-    void                setRepeatMarks(const repeatmarks& rm) { m_repeatMarks = rm; }
-    const repeatmarks&  getRepeatMarks() const                { return m_repeatMarks; }
-    bool                isRepeating() const                   { return m_repeatMarks.size() > 0; }
-    int                 getBaseWidth() const                  { return m_baseWidth; }
-    void                setBaseWidth(int bw)                  { m_baseWidth = bw; }
-    QString             getLabel() const                      { return m_label; }
-    void                setLabel(QString l)                   { m_label = l; }
+    bool needsFullUpdate() const  { return m_needUpdate; }
+    void setNeedsFullUpdate(bool needUpdate)  { m_needUpdate = needUpdate; }
+    
+    void setBrush(QBrush brush)  { m_brush = brush; }
+    QBrush getBrush() const  { return m_brush; }
+
+    void setPen(QPen pen)  { m_pen = pen; }
+    QPen getPen() const  { return m_pen; }
+
+    typedef std::vector<int> RepeatMarks;
+    void setRepeatMarks(const RepeatMarks &rm)  { m_repeatMarks = rm; }
+    const RepeatMarks &getRepeatMarks() const  { return m_repeatMarks; }
+    bool isRepeating() const  { return m_repeatMarks.size() > 0; }
+    int getBaseWidth() const  { return m_baseWidth; }
+    void setBaseWidth(int baseWidth)  { m_baseWidth = baseWidth; }
+
+    QString getLabel() const  { return m_label; }
+    void setLabel(QString label)  { m_label = label; }
 
     static const QColor DefaultPenColor;
     static const QColor DefaultBrushColor;
@@ -125,14 +132,14 @@ public:
         return intersected;
     }
 
-protected:
-    bool        m_selected;
-    bool        m_needUpdate;
-    QBrush      m_brush;
-    QPen        m_pen;
-    repeatmarks m_repeatMarks;
-    int         m_baseWidth;
-    QString     m_label;
+private:
+    bool m_selected;
+    bool m_needUpdate;
+    QBrush m_brush;
+    QPen m_pen;
+    RepeatMarks m_repeatMarks;
+    int m_baseWidth;
+    QString m_label;
 };
 
 
