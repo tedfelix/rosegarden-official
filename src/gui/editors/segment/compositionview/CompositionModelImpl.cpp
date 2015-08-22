@@ -450,9 +450,7 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 
     // TrackEditor::commandExecuted() already updates us.  However, it
     // shouldn't.  This is the right thing to do.
-    QRect r;
-    getSegmentQRect(*s, r);
-    emit needUpdate(r);
+    emit needUpdate();
 }
 
 void CompositionModelImpl::segmentTrackChanged(
@@ -500,42 +498,36 @@ void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
 
 // --- Recording ----------------------------------------------------
 
-void CompositionModelImpl::addRecordingItem(ChangingSegmentPtr item)
+void CompositionModelImpl::addRecordingItem(ChangingSegmentPtr changingSegment)
 {
-    m_recordingSegments.insert(item->getSegment());
+    m_recordingSegments.insert(changingSegment->getSegment());
 
     emit needUpdate();
-
-    //RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
-    //         << m_recordingSegments.size() << " recording items";
 }
 
 void CompositionModelImpl::pointerPosChanged(int x)
 {
-    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() begin";
-
     // Update the end point for the recording segments.
     m_pointerTime = m_grid.getRulerScale()->getTimeForX(x);
 
     // For each recording segment
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
-            i != m_recordingSegments.end(); ++i) {
+         i != m_recordingSegments.end();
+         ++i) {
+
         QRect rect;
         getSegmentQRect(**i, rect);
         // Ask CompositionView to update.
         emit needUpdate(rect);
     }
-
-    //RG_DEBUG << "CompositionModelImpl::pointerPosChanged() end";
 }
 
 void CompositionModelImpl::clearRecordingItems()
 {
-    //RG_DEBUG << "CompositionModelImpl::clearRecordingItem";
-
-    // For each recording segment, remove it from the caches.
+    // For each recording segment
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
-            i != m_recordingSegments.end(); ++i)
+         i != m_recordingSegments.end();
+         ++i)
         deleteCachedPreview(*i);
 
     m_recordingSegments.clear();
@@ -543,51 +535,59 @@ void CompositionModelImpl::clearRecordingItems()
     emit needUpdate();
 }
 
-bool CompositionModelImpl::isRecording(const Segment* s) const
+bool CompositionModelImpl::isRecording(const Segment *s) const
 {
-    return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
+    return (m_recordingSegments.find(const_cast<Segment *>(s)) !=
+            m_recordingSegments.end());
 }
 
-void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
+void CompositionModelImpl::slotAudioFileFinalized(Segment *s)
 {
-    //RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()";
+    // Recording is finished, and the Audio preview is ready to display.
+    // Clear the old one out of the cache so the new one will appear.
+    // Works fine even without this line, but I suspect this is
+    // because of TrackEditor::commandExecuted().  If so, then this
+    // needs to be here.
     deleteCachedPreview(s);
 }
 
 // --- Changing -----------------------------------------------------
 
-void CompositionModelImpl::startChange(ChangingSegmentPtr item, ChangeType change)
+void CompositionModelImpl::startChange(
+        ChangingSegmentPtr changingSegment, ChangeType changeType)
 {
-    m_changeType = change;
+    m_changeType = changeType;
 
-    // If we already know this segment is changing
-    if (m_changingSegments.find(item) != m_changingSegments.end()) {
-        //RG_DEBUG << "CompositionModelImpl::startChange : item already in";
-
-        // Forget about it.
-
-    } else {
+    // If we weren't aware that this segment is changing
+    if (m_changingSegments.find(changingSegment) == m_changingSegments.end()) {
         // Save the original rectangle for this segment
-        item->saveRect();
+        changingSegment->saveRect();
 
-        m_changingSegments.insert(item);
+        m_changingSegments.insert(changingSegment);
     }
 }
 
-void CompositionModelImpl::startChangeSelection(ChangeType change)
+void CompositionModelImpl::startChangeSelection(ChangeType changeType)
 {
     // For each selected segment
     for (SegmentSelection::iterator i = m_selectedSegments.begin();
-            i != m_selectedSegments.end(); ++i) {
+         i != m_selectedSegments.end();
+         ++i) {
+
+        Segment &segment = **i;
+
+        // Make a ChangingSegment
         SegmentRect segmentRect;
-        getSegmentRect(**i, segmentRect);
-        ChangingSegmentPtr item(
-                new ChangingSegment(**i, segmentRect));
-        startChange(item, change);
+        getSegmentRect(segment, segmentRect);
+        ChangingSegmentPtr changingSegment(
+                new ChangingSegment(segment, segmentRect));
+
+        startChange(changingSegment, changeType);
     }
 }
 
-ChangingSegmentPtr CompositionModelImpl::findChangingSegment(Segment *segment)
+ChangingSegmentPtr CompositionModelImpl::findChangingSegment(
+        const Segment *segment)
 {
     // For each changing segment
     for (ChangingSegmentSet::const_iterator it = m_changingSegments.begin();
@@ -607,20 +607,20 @@ ChangingSegmentPtr CompositionModelImpl::findChangingSegment(Segment *segment)
 
 void CompositionModelImpl::endChange()
 {
-    //RG_DEBUG << "CompositionModelImpl::endChange";
-
     m_changingSegments.clear();
 
     emit needUpdate();
 }
 
-bool CompositionModelImpl::isChanging(const Segment* sm) const
+bool CompositionModelImpl::isChanging(const Segment *s) const
 {
-    ChangingSegmentSet::const_iterator movEnd = m_changingSegments.end();
+    // For each ChangingSegment
+    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin();
+         i != m_changingSegments.end();
+         ++i) {
 
-    for (ChangingSegmentSet::const_iterator i = m_changingSegments.begin(); i != movEnd; ++i) {
-        const Segment* s = (*i)->getSegment();
-        if (sm == s)
+        // If we've found it
+        if ((*i)->getSegment() == s)
             return true;
     }
 

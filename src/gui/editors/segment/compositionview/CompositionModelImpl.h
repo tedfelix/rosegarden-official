@@ -296,7 +296,7 @@ public:
     ChangingSegmentSet &getChangingSegments()  { return m_changingSegments; }
 
     /// Find the ChangingSegment for the specified Segment.
-    ChangingSegmentPtr findChangingSegment(Segment *);
+    ChangingSegmentPtr findChangingSegment(const Segment *);
 
     /// Cleanup after move/resize.
     void endChange();
