@@ -22,7 +22,7 @@
 #include "misc/Debug.h"
 #include "commands/segment/SegmentEraseCommand.h"
 #include "CompositionView.h"
-#include "CompositionItem.h"
+#include "ChangingSegment.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -87,7 +87,7 @@ void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
     }
 
     // Clear the current Segment.
-    setChangingSegment(CompositionItemPtr());
+    setChangingSegment(ChangingSegmentPtr());
 }
 
 int SegmentEraser::mouseMoveEvent(QMouseEvent *e)

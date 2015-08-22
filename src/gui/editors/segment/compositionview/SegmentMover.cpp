@@ -86,7 +86,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
     CompositionModelImpl *model = m_canvas->getModel();
 
     // Get the Segment that was clicked.
-    CompositionItemPtr changingSegment = model->getSegmentAt(pos);
+    ChangingSegmentPtr changingSegment = model->getSegmentAt(pos);
 
     // If the segment canvas background was clicked, clear the selection.
     if (!changingSegment) {
@@ -125,7 +125,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
         model->startChangeSelection(CompositionModelImpl::ChangeMove);
 
         // Find the clicked segment in the model.
-        CompositionItemPtr newChangingSegment =
+        ChangingSegmentPtr newChangingSegment =
                 model->findChangingSegment(segment);
 
         if (newChangingSegment) {
@@ -183,7 +183,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
              it != changingSegments.end();
              ++it) {
 
-            CompositionItemPtr changingSegment = *it;
+            ChangingSegmentPtr changingSegment = *it;
 
             // The original Segment in the Composition.
             Segment *segment = changingSegment->getSegment();
@@ -235,7 +235,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
     m_canvas->getModel()->endChange();
     m_canvas->slotUpdateAll();
 
-    setChangingSegment(CompositionItemPtr());
+    setChangingSegment(ChangingSegmentPtr());
 
     setBasicContextHelp();
 }
@@ -280,7 +280,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
          it != changingSegments.end();
          ++it) {
 
-        CompositionItemPtr changingSegment = *it;
+        ChangingSegmentPtr changingSegment = *it;
 
         const timeT newStartTime = grid.snapX(changingSegment->savedRect().x() + dx);
         const int newX = int(grid.getRulerScale()->getXForTime(newStartTime));

@@ -16,7 +16,7 @@
 */
 
 
-#include "CompositionItem.h"
+#include "ChangingSegment.h"
 
 #include "SegmentRect.h"
 #include "base/SnapGrid.h"
@@ -30,13 +30,13 @@ namespace Rosegarden
 {
 
 
-CompositionItem::CompositionItem(Segment &s, const SegmentRect &rect)
+ChangingSegment::ChangingSegment(Segment &s, const SegmentRect &rect)
         : m_segment(s),
         m_rect(rect),
         m_z(0)
 {}
 
-QRect CompositionItem::rect() const
+QRect ChangingSegment::rect() const
 {
     QRect res = m_rect;
 
@@ -48,7 +48,7 @@ QRect CompositionItem::rect() const
     return res;
 }
 
-timeT CompositionItem::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos)
+timeT ChangingSegment::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos)
 {
     timeT startTime = m_segment.getStartTime();
     timeT repeatInterval = m_segment.getEndMarkerTime() - startTime;
@@ -64,7 +64,7 @@ timeT CompositionItem::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos)
     return startTime + count * repeatInterval;
 }
 
-void CompositionItem::setStartTime(timeT time, const SnapGrid &grid)
+void ChangingSegment::setStartTime(timeT time, const SnapGrid &grid)
 {
     int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
 
@@ -77,7 +77,7 @@ void CompositionItem::setStartTime(timeT time, const SnapGrid &grid)
     }
 }
 
-timeT CompositionItem::getStartTime(const SnapGrid &grid)
+timeT ChangingSegment::getStartTime(const SnapGrid &grid)
 {
     //return std::max(grid.snapX(item->rect().x()), 0L); - wrong, we can have negative start times,
         // and if we do this we 'crop' segments when they are moved before the start of the composition
@@ -85,7 +85,7 @@ timeT CompositionItem::getStartTime(const SnapGrid &grid)
     return grid.snapX(m_rect.x());
 }
 
-void CompositionItem::setEndTime(timeT time, const SnapGrid &grid)
+void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
 {
     int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
     QRect r = rect();
@@ -99,14 +99,14 @@ void CompositionItem::setEndTime(timeT time, const SnapGrid &grid)
     }
 }
 
-timeT CompositionItem::getEndTime(const SnapGrid &grid)
+timeT ChangingSegment::getEndTime(const SnapGrid &grid)
 {
     QRect itemRect = rect();
 
     return std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
 }
 
-int CompositionItem::getTrackPos(const SnapGrid &grid)
+int ChangingSegment::getTrackPos(const SnapGrid &grid)
 {
     return grid.getYBin(rect().y());
 }

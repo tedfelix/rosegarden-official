@@ -22,7 +22,7 @@
 #include "AudioPreviewThread.h"
 #include "AudioPreviewUpdater.h"
 #include "AudioPreviewPainter.h"
-#include "CompositionItem.h"
+#include "ChangingSegment.h"
 #include "SegmentRect.h"
 #include "CompositionColourCache.h"
 
@@ -288,7 +288,7 @@ void CompositionModelImpl::getSegmentRects(
     }
 }
 
-CompositionItemPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
+ChangingSegmentPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
 {
     const SegmentMultiSet &segments = m_composition.getSegments();
 
@@ -302,15 +302,15 @@ CompositionItemPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
         SegmentRect segmentRect = computeSegmentRect(segment);
 
         if (segmentRect.contains(pos)) {
-            CompositionItemPtr changingSegment(
-                    new CompositionItem(segment, segmentRect));
+            ChangingSegmentPtr changingSegment(
+                    new ChangingSegment(segment, segmentRect));
 
             return changingSegment;
         }
     }
 
     // Not found.
-    return CompositionItemPtr();
+    return ChangingSegmentPtr();
 }
 
 SegmentRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool /*computeZ*/)
@@ -702,7 +702,7 @@ void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
 
 // --- Recording ----------------------------------------------------
 
-void CompositionModelImpl::addRecordingItem(CompositionItemPtr item)
+void CompositionModelImpl::addRecordingItem(ChangingSegmentPtr item)
 {
     m_recordingSegments.insert(item->getSegment());
 
@@ -756,7 +756,7 @@ void CompositionModelImpl::slotAudioFileFinalized(Segment* s)
 
 // --- Changing -----------------------------------------------------
 
-void CompositionModelImpl::startChange(CompositionItemPtr item, ChangeType change)
+void CompositionModelImpl::startChange(ChangingSegmentPtr item, ChangeType change)
 {
     m_changeType = change;
 
@@ -779,20 +779,20 @@ void CompositionModelImpl::startChangeSelection(ChangeType change)
     // For each selected segment
     for (SegmentSelection::iterator i = m_selectedSegments.begin();
             i != m_selectedSegments.end(); ++i) {
-        CompositionItemPtr item(
-                new CompositionItem(**i, computeSegmentRect(**i)));
+        ChangingSegmentPtr item(
+                new ChangingSegment(**i, computeSegmentRect(**i)));
         startChange(item, change);
     }
 }
 
-CompositionItemPtr CompositionModelImpl::findChangingSegment(Segment *segment)
+ChangingSegmentPtr CompositionModelImpl::findChangingSegment(Segment *segment)
 {
     // For each changing segment
     for (ChangingSegmentSet::const_iterator it = m_changingSegments.begin();
          it != m_changingSegments.end();
          ++it) {
 
-        CompositionItemPtr changingSegment = *it;
+        ChangingSegmentPtr changingSegment = *it;
 
         // If this one has the Segment we're looking for, return it.
         if (changingSegment->getSegment() == segment)
@@ -800,7 +800,7 @@ CompositionItemPtr CompositionModelImpl::findChangingSegment(Segment *segment)
     }
 
     // Not found.
-    return CompositionItemPtr();
+    return ChangingSegmentPtr();
 }
 
 void CompositionModelImpl::endChange()

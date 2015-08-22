@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_COMPOSITIONITEM_H
-#define RG_COMPOSITIONITEM_H
+#ifndef RG_CHANGINGSEGMENT_H
+#define RG_CHANGINGSEGMENT_H
 
 #include "SegmentRect.h"
 #include "base/TimeT.h"  // timeT
@@ -40,7 +40,7 @@ class SnapGrid;
  * QRect (m_savedRect) which has the original position of the Segment.
  *
  * When segments are being selected, moved, or resized, CompositionModelImpl
- * creates CompositionItem objects to represent those changing segments
+ * creates ChangingSegment objects to represent those changing segments
  * as they change.
  *
  * All these accessors and mutators strike me as being rather unsavory.
@@ -48,12 +48,10 @@ class SnapGrid;
  * what it is.  rect() could be a helper function, and m_savedRect could
  * be kept private since its mutator is interesting.
  * It would be a lot easier to understand.
- *
- * ??? rename: ChangingSegment
  */
-class CompositionItem {
+class ChangingSegment {
 public:
-    CompositionItem(Segment &s, const SegmentRect &r);
+    ChangingSegment(Segment &s, const SegmentRect &r);
 
     // Rect Mutators
 
@@ -104,8 +102,7 @@ private:
     QRect m_savedRect;
 };
 
-// ??? rename: ChangingSegmentPtr
-typedef QSharedPointer<CompositionItem> CompositionItemPtr;
+typedef QSharedPointer<ChangingSegment> ChangingSegmentPtr;
 
 
 }

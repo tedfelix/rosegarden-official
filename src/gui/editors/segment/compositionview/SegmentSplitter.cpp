@@ -76,7 +76,7 @@ SegmentSplitter::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
+    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
         // Remove cursor and replace with line on a SegmentItem
@@ -104,7 +104,7 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
+    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
         setSnapTime(e, SnapGrid::SnapToBeat);
@@ -144,7 +144,7 @@ SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
     //     appear.  We should be able to query the QMouseEvent for the
     //     button state and bail if left isn't currently pressed.
 
-    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
+    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
 //        m_canvas->viewport()->setCursor(Qt::blankCursor);

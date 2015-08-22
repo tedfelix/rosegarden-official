@@ -108,7 +108,7 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
 
     showMenu();
 
-    setChangingSegment(CompositionItemPtr());
+    setChangingSegment(ChangingSegmentPtr());
 }
 
 void
@@ -138,7 +138,7 @@ SegmentTool::createMenu()
     m_menu = menu;
 }
 
-void SegmentTool::setChangingSegment(CompositionItemPtr changingSegment)
+void SegmentTool::setChangingSegment(ChangingSegmentPtr changingSegment)
 {
     if (changingSegment != m_changingSegment)
     {

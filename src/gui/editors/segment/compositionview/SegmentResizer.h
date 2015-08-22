@@ -25,7 +25,7 @@
 
 class QPoint;
 class QMouseEvent;
-class CompositionItemPtr;
+class ChangingSegmentPtr;
 
 
 namespace Rosegarden
@@ -54,7 +54,7 @@ public:
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
 
-    static bool cursorIsCloseEnoughToEdge(CompositionItemPtr, const QPoint&, int, bool &);
+    static bool cursorIsCloseEnoughToEdge(ChangingSegmentPtr, const QPoint&, int, bool &);
 
     void setEdgeThreshold(int e) { m_edgeThreshold = e; }
     int getEdgeThreshold() { return m_edgeThreshold; }

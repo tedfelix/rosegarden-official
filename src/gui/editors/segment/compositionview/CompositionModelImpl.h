@@ -20,7 +20,7 @@
 
 #include "base/SnapGrid.h"
 #include "SegmentRect.h"
-#include "CompositionItem.h"
+#include "ChangingSegment.h"
 #include "SegmentOrderer.h"
 #include "base/TimeT.h"  // timeT
 
@@ -211,11 +211,7 @@ public:
             AudioPreviews *audioPreviews);
 
     /// Get the segment at the given position on the view.
-    /**
-     * This routine returns a pointer to a *copy* of the CompositionItem.
-     * The caller is responsible for deleting the object that is returned.
-     */
-    CompositionItemPtr getSegmentAt(const QPoint &pos);
+    ChangingSegmentPtr getSegmentAt(const QPoint &pos);
 
     /// See CompositionView::clearSegmentRectsCache()
     /**
@@ -255,7 +251,7 @@ public:
 
     // ??? This category might make more sense combined with Segments.
 
-    void addRecordingItem(CompositionItemPtr);
+    void addRecordingItem(ChangingSegmentPtr);
     /// Update the recording segments on the display.
     void pointerPosChanged(int x);
     void clearRecordingItems();
@@ -267,24 +263,24 @@ public:
     enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
     /// Begin move/resize for a single segment.
-    void startChange(CompositionItemPtr, ChangeType change);
+    void startChange(ChangingSegmentPtr, ChangeType change);
     /// Begin move for all selected segments.
     void startChangeSelection(ChangeType change);
 
-    /// Compare Segment pointers in a CompositionItem.
+    /// Compare Segment pointers in a ChangingSegment.
     /**
-     * Used by ChangingSegmentSet to order the CompositionItem objects.
+     * Used by ChangingSegmentSet to order the ChangingSegment objects.
      *
      * All this indexing with pointers gives me the willies.  IDs are safer.
      */
-    struct CompositionItemPtrCompare {
-        bool operator()(CompositionItemPtr c1, CompositionItemPtr c2) const
+    struct ChangingSegmentPtrCompare {
+        bool operator()(ChangingSegmentPtr c1, ChangingSegmentPtr c2) const
         {
             // operator< on Segment *'s?  I guess order isn't too important.
             return c1->getSegment() < c2->getSegment();
 
             // ??? Is the above better than just comparing the
-            //     CompositionItemPtr addresses?
+            //     ChangingSegmentPtr addresses?
             // Compare the QPointer addresses
             //return c1.data() < c2.data();
         }
@@ -297,14 +293,14 @@ public:
      * is already in m_changingSegments.  With a std::vector, this would be an
      * exponential search.  In practice, what is the worst use-case?
      */
-    typedef std::set<CompositionItemPtr, CompositionItemPtrCompare>
+    typedef std::set<ChangingSegmentPtr, ChangingSegmentPtrCompare>
             ChangingSegmentSet;
 
     /// Get the segments that are moving or resizing.
     ChangingSegmentSet &getChangingSegments()  { return m_changingSegments; }
 
-    /// Find the CompositionItem for the specified Segment.
-    CompositionItemPtr findChangingSegment(Segment *);
+    /// Find the ChangingSegment for the specified Segment.
+    ChangingSegmentPtr findChangingSegment(Segment *);
 
     /// Cleanup after move/resize.
     void endChange();

@@ -26,7 +26,7 @@
 #include "base/SnapGrid.h"
 #include "base/Profiler.h"
 #include "CompositionColourCache.h"
-#include "CompositionItem.h"
+#include "ChangingSegment.h"
 #include "SegmentRect.h"
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenDocument.h"
@@ -377,14 +377,14 @@ void CompositionView::slotRefreshColourCache()
 
 void CompositionView::slotNewMIDIRecordingSegment(Segment *s)
 {
-    m_model->addRecordingItem(CompositionItemPtr(
-            new CompositionItem(*s, QRect())));
+    m_model->addRecordingItem(ChangingSegmentPtr(
+            new ChangingSegment(*s, QRect())));
 }
 
 void CompositionView::slotNewAudioRecordingSegment(Segment *s)
 {
-    m_model->addRecordingItem(CompositionItemPtr(
-            new CompositionItem(*s, QRect())));
+    m_model->addRecordingItem(ChangingSegmentPtr(
+            new ChangingSegment(*s, QRect())));
 }
 
 void CompositionView::slotStoppedRecording()
@@ -1285,7 +1285,7 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
 {
     const QPoint contentsPos = viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_model->getSegmentAt(contentsPos);
+    ChangingSegmentPtr item = m_model->getSegmentAt(contentsPos);
 
     // If the user clicked on a space where there is no segment,
     // move the playback position pointer to that time.

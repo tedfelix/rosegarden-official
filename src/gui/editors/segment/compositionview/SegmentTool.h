@@ -22,7 +22,7 @@
 #include "gui/general/RosegardenScrollView.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/ActionFileClient.h"
-#include "CompositionItem.h"
+#include "ChangingSegment.h"
 #include "CompositionModelImpl.h"
 #include "base/TimeT.h"
 
@@ -75,13 +75,9 @@ protected:
     /**
      * The Segment tools use this to pass the changing Segment
      * between their mouse press, move, and release handlers.
-     *
-     * Note that this routine deletes the previously held changing
-     * Segment.  However, since CompositionItemPtr is a QPointer,
-     * a double delete is impossible.
      */
-    void setChangingSegment(CompositionItemPtr changingSegment);
-    CompositionItemPtr getChangingSegment()  { return m_changingSegment; }
+    void setChangingSegment(ChangingSegmentPtr changingSegment);
+    ChangingSegmentPtr getChangingSegment()  { return m_changingSegment; }
 
     /// Sets the SnapGrid snap time based on the Shift key.
     void setSnapTime(QMouseEvent *e, timeT snapTime);
@@ -91,7 +87,7 @@ private:
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
 
-    CompositionItemPtr m_changingSegment;
+    ChangingSegmentPtr m_changingSegment;
 
 private slots:
     // This is just a mess of forwarding functions to RosegardenMainWindow.

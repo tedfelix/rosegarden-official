@@ -92,7 +92,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    CompositionItemPtr item = m_canvas->getModel()->getSegmentAt(pos);
+    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
         RG_DEBUG << "SegmentResizer::mousePressEvent - got item" << endl;
@@ -264,7 +264,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
     m_canvas->update();
     
     //setChangeMade(false);
-    setChangingSegment(CompositionItemPtr());
+    setChangingSegment(ChangingSegmentPtr());
     setBasicContextHelp();
 }
 
@@ -388,7 +388,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     return RosegardenScrollView::FollowHorizontal;
 }
 
-bool SegmentResizer::cursorIsCloseEnoughToEdge(CompositionItemPtr p, const QPoint &coord,
+bool SegmentResizer::cursorIsCloseEnoughToEdge(ChangingSegmentPtr p, const QPoint &coord,
         int edgeThreshold, bool &start)
 {
     if (abs(p->rect().x() + p->rect().width() - coord.x()) < edgeThreshold) {
