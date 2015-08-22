@@ -443,21 +443,6 @@ void CompositionModelImpl::computeRepeatMarks(
     }
 }
 
-void CompositionModelImpl::deleteCachedSegment(
-        const Segment *s, bool previewToo)
-{
-    // ??? There is no segment cache anymore.  All this does now
-    //     is delete cached previews.
-
-    if (s) {
-        if (previewToo)
-            deleteCachedPreview(s);
-    } else { // clear the whole cache
-        if (previewToo)
-            deleteCachedPreviews();
-    }
-}
-
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
     updateTrackHeight(s->getTrack());
@@ -480,7 +465,7 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 
     m_selectedSegments.erase(s);
 
-    deleteCachedSegment(s, true);
+    deleteCachedPreview(s);
     s->removeObserver(this);
     m_recordingSegments.erase(s); // this could be a recording segment
     emit needUpdate(r);
@@ -557,7 +542,7 @@ void CompositionModelImpl::clearRecordingItems()
     // For each recording segment, remove it from the caches.
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
             i != m_recordingSegments.end(); ++i)
-        deleteCachedSegment(*i, true);
+        deleteCachedPreview(*i);
 
     m_recordingSegments.clear();
 
@@ -676,8 +661,12 @@ void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
 
 void CompositionModelImpl::allEventsChanged(const Segment *s)
 {
-     Profiler profiler("CompositionModelImpl::allEventsChanged()");
-     deleteCachedPreview(s);
+    Profiler profiler("CompositionModelImpl::allEventsChanged()");
+
+    // This is called by Segment::setStartTime(timeT t).  And this
+    // is the only handler in the entire system.
+
+    deleteCachedPreview(s);
     QRect rect;
     getSegmentQRect(*s, rect);
     emit needUpdate(rect);
@@ -686,7 +675,11 @@ void CompositionModelImpl::allEventsChanged(const Segment *s)
 void CompositionModelImpl::appearanceChanged(const Segment *s)
 {
     //RG_DEBUG << "CompositionModelImpl::appearanceChanged";
-    deleteCachedSegment(s, true);
+
+    // Called by Segment::setLabel() and Segment::setColourIndex().
+
+    // Preview gets regenerated anyway.
+    //deleteCachedPreview(s);
     QRect rect;
     getSegmentQRect(*s, rect);
     emit needUpdate(rect);
@@ -696,7 +689,9 @@ void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
     Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
     //RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")";
-    deleteCachedSegment(s, true);
+
+    // Preview gets regenerated anyway.
+    //deleteCachedPreview(s);
     if (shorten) {
         emit needUpdate(); // no longer know former segment dimension
     } else {
@@ -851,6 +846,8 @@ CompositionModelImpl::getNotationPreview(const Segment *s)
     //     to call it at all.
 
     // Try the cache.
+    // ??? Does this rely on NULL if not found?  If so, that is
+    //     incorrect and needs to be fixed.
     NotationPreview *notationPreview = m_notationPreviewCache[s];
 
     // If there was nothing in the cache for this segment, generate it.
@@ -1161,6 +1158,12 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 
 void CompositionModelImpl::deleteCachedPreview(const Segment *s)
 {
+    // For NULL, delete everything.
+    if (!s) {
+        deleteCachedPreviews();
+        return;
+    }
+
     if (s->getType() == Segment::Internal) {
         NotationPreview *notationPreview = m_notationPreviewCache[s];
         delete notationPreview;

@@ -244,9 +244,9 @@ void CompositionView::hideSelectionRect()
     slotUpdateArtifacts();
 }
 
-void CompositionView::clearSegmentRectsCache(bool clearPreviews)
+void CompositionView::deleteCachedPreviews()
 {
-    m_model->deleteCachedSegments(clearPreviews);
+    m_model->deleteCachedPreviews();
 }
 
 SegmentSelection
@@ -371,7 +371,6 @@ void CompositionView::slotAllNeedRefresh(const QRect &rect)
 void CompositionView::slotRefreshColourCache()
 {
     CompositionColourCache::getInstance()->init();
-    clearSegmentRectsCache();
     updateAll();
 }
 

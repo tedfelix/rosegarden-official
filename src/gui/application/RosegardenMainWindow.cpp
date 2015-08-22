@@ -6939,7 +6939,7 @@ RosegardenMainWindow::slotChangeCompositionLength()
               dialog.getEndMarker(),
               dialog.autoExpandEnabled());
 
-        m_view->getTrackEditor()->getCompositionView()->clearSegmentRectsCache(true);
+        m_view->getTrackEditor()->getCompositionView()->deleteCachedPreviews();
         CommandHistory::getInstance()->addCommand(command);
 
         // If you change the composition length to 50 while the pointer is still

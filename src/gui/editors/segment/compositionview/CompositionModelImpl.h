@@ -58,7 +58,6 @@ class AudioPreviewThread;
  * segments and events with a sense of position on a view.  The key member
  * objects are:
  *
- *   - m_segmentRectMap
  *   - m_notationPreviewCache
  *   - m_audioPeaksCache
  *   - m_audioPreviewImageCache
@@ -152,6 +151,9 @@ public:
     /// A vector of NotationPreviewRange objects, one per segment.
     typedef std::vector<NotationPreviewRange> NotationPreviewRanges;
 
+    /// Delete all cached notation and audio previews.
+    void deleteCachedPreviews();
+
     // --- Audio Previews ---------------------------------
 
     /// Audio Preview Image (tiled)
@@ -212,13 +214,6 @@ public:
 
     /// Get the segment at the given position on the view.
     ChangingSegmentPtr getSegmentAt(const QPoint &pos);
-
-    /// See CompositionView::clearSegmentRectsCache()
-    /**
-     * ??? Audio and Notation Previews too.  Need an "ALL" category.
-     */
-    void deleteCachedSegments(bool previewsToo)
-            { deleteCachedSegment(0, previewsToo); }
 
     void getSegmentQRect(const Segment &segment, QRect &rect);
     void getSegmentRect(const Segment &segment, SegmentRect &segmentRect);
@@ -477,9 +472,6 @@ private:
 
     void deleteCachedPreview(const Segment *);
 
-    /// Delete all cached notation and audio previews.
-    void deleteCachedPreviews();
-
     // --- Segments ---------------------------------------
 
     bool updateAllTrackHeights();
@@ -491,10 +483,6 @@ private:
      *   computeRepeatMarks(const Segment &, const SnapGrid &);
      */
     void computeRepeatMarks(const Segment &, SegmentRect &) const;
-
-    /// If Segment is NULL, all cached segments are deleted.
-    // ??? There are no cached segments anymore.
-    void deleteCachedSegment(const Segment *, bool previewToo = false);
 
     // --- Selection --------------------------------------
 

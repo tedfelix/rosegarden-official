@@ -686,7 +686,7 @@ void TrackEditor::slotCommandExecuted()
 
         // Redraw the contents.
         // ??? CompositionView should take care of this.
-        m_compositionView->clearSegmentRectsCache(true);
+        m_compositionView->deleteCachedPreviews();
         m_compositionView->updateContents();
 
         Composition &composition = m_doc->getComposition();

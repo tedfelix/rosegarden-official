@@ -101,13 +101,11 @@ public:
      */
     void setShowPreviews(bool previews)  { m_showPreviews = previews; }
 
-    /// Delegates to CompositionModelImpl::clearSegmentRectsCache().
+    /// Delegates to CompositionModelImpl::deleteCachedPreviews().
     /**
      * Redrawing previews is expensive.  This routine is primarily used
      * to indicate that the preview cache needs to be regenerated for
-     * zoom and the commands (e.g. transpose).  Other that that, it
-     * appears to have little effect.  The segment rect cache is
-     * regenerated as needed without this routine's help.
+     * zoom and the commands (e.g. transpose).
      *
      * In a perfect world, the preview cache should be regenerated for
      * the following reasons only:
@@ -115,7 +113,7 @@ public:
      *   2. Zoom.
      *   3. More?
      */
-    void clearSegmentRectsCache(bool clearPreviews = false);
+    void deleteCachedPreviews();
 
     /// Delegates to CompositionModelImpl::setAudioPreviewThread().
     /**

@@ -1055,7 +1055,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
         grid().getRulerScale()->getXForTime(pointerTime);
     compositionView->drawPointer(pointerXPosition);
 
-    compositionView->clearSegmentRectsCache(true);
+    compositionView->deleteCachedPreviews();
     compositionView->slotUpdateSize();
     compositionView->slotUpdateAll();
 
