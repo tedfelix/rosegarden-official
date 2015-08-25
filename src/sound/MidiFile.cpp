@@ -1207,7 +1207,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     }
                     if (lsb >= 0) {
                         rosegardenSegment->insert
-                        (Controller(MIDI_CONTROLLER_BANK_LSB, msb).
+                        (Controller(MIDI_CONTROLLER_BANK_LSB, lsb).
                          getAsEvent(rosegardenTime));
                     }
 
