@@ -175,6 +175,7 @@ public slots:
 protected:
     virtual void showEvent(QShowEvent * event);
     void hideOrShowRulers();
+    bool linearMode();   // Return true when notation page layout is linear
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
@@ -286,7 +287,6 @@ private:
 
     QGridLayout *m_layout; // I own this
 
-    bool m_linearMode;
     bool m_tempoRulerIsVisible;         // Only valid in linear mode
     bool m_rawNoteRulerIsVisible;       // Only valid in linear mode
     bool m_chordNameRulerIsVisible;     // Only valid in linear mode
