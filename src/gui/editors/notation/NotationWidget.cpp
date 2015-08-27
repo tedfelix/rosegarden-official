@@ -601,6 +601,8 @@ NotationWidget::resumeLayoutUpdates()
 void
 NotationWidget::slotGenerateHeaders()
 {
+    if (!linearMode()) return;  // Staff headers don't exist out of linear mode
+    
     m_headersNeedRegeneration = false;
 
     if (m_headersGroup) disconnect(m_headersGroup, SIGNAL(headersResized(int)),
