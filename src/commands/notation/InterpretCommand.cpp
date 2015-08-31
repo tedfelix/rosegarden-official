@@ -561,11 +561,16 @@ InterpretCommand::articulate()
             timeT duration = e->getNotationDuration();
 
             // don't mess with the duration of a tied note
-            bool tiedForward = false;
-            e->get<Bool>(TIED_FORWARD, tiedForward);
-            if (tiedForward) {
+            bool tied = false;
+            e->get<Bool>(TIED_FORWARD, tied);
+            if (!tied)
+                e->get<Bool>(TIED_BACKWARD, tied);
+            if (tied) {
                 durationChange = 0;
-                NOTATION_DEBUG << "InterpretCommand::modifySegment: Tied forward note encountered, durationChange is " << durationChange << endl;
+                NOTATION_DEBUG << "InterpretCommand::modifySegment: Tied "
+                               << (e->has(TIED_FORWARD) ? "for" : "back")
+                               << "ward note encountered, durationChange is "
+                               << durationChange << endl;
             }
 
             timeT newDuration = duration + duration * durationChange / 100;
