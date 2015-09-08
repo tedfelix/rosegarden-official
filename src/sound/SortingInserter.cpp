@@ -28,9 +28,19 @@ insertSorted(MappedInserterBase &exporter)
     // std::list sort is stable, so we get same-time events in the
     // order we inserted them, important for NoteOffs.
     m_list.sort(merc);
-    typedef std::list<MappedEvent>::const_iterator iterator;
-    for(iterator i = m_list.begin(); i != m_list.end(); ++i) {
-        exporter.insertCopy(*i);
+    std::list<MappedEvent>::const_iterator i = m_list.begin();
+    if (i != m_list.end() && i->getEventTime() < RealTime::zeroTime) {
+        // Negative time if the composition starts before the bar 1
+        RealTime timeOffset = - i->getEventTime();
+        for(; i != m_list.end(); ++i) {
+            MappedEvent *mE = new MappedEvent(*i);
+            mE->setEventTime(mE->getEventTime() + timeOffset);
+            exporter.insertCopy(*mE);
+        }
+    } else {
+        for(; i != m_list.end(); ++i) {
+            exporter.insertCopy(*i);
+        }
     }
 }
 
