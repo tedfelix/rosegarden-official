@@ -259,8 +259,10 @@ void InternalSegmentMapper::fillBuffer()
                                     e.setPitch(e.getPitch() +
                                                m_segment->getTranspose());
                                 }
-                                enqueueNoteoff(playTime + playDuration,
-                                               e.getPitch());
+                                if (e.getType() != MappedEvent::MidiNoteOneShot) {
+                                    enqueueNoteoff(playTime + playDuration,
+                                                   e.getPitch());
+                                }
                             }
                             mapAnEvent(&e); 
                         } else {}
@@ -338,18 +340,14 @@ void
 InternalSegmentMapper::
 enqueueNoteoff(timeT time, int pitch)
 {
-    typedef NoteoffContainer::iterator iterator;
-    // Remove any existing pending noteoff of that pitch.  Since
-    // remove_if doesn't work on std::map, we use this written-out
-    // equivalent.
-    iterator iter = m_noteOffs.begin();
-    while(iter != m_noteOffs.end()) {
-        if (iter->second == pitch) {
-            iterator tmp = iter;
-            ++iter;
-            m_noteOffs.erase(tmp);
-        } else {
-            ++iter;
+    for (NoteoffContainer::iterator i = m_noteOffs.begin();
+         i != m_noteOffs.end(); ++i) {
+        if (i->second == pitch) {
+#ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
+            SEQMAN_DEBUG << "duplicated NOTE OFF  pitch: " << pitch
+                         << " at " << time << std::endl;
+#endif
+            break;
         }
     }
 
