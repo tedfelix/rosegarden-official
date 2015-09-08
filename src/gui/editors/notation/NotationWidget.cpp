@@ -65,6 +65,7 @@
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/RawNoteRuler.h"
+#include "gui/rulers/LoopRuler.h"
 
 #include "gui/seqmanager/SequenceManager.h"
 
@@ -480,10 +481,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
 
-    // There's a slotEnsureTimeVisible in MatrixWidget.  Maybe this was
-    // copied from there?
-    //connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
-    //        this, SLOT(slotEnsureTimeVisible(timeT)));
+    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
 
     connect(m_scene, SIGNAL(layoutUpdated(timeT,timeT)),
             m_controlsWidget, SLOT(slotUpdateRulers(timeT,timeT)));
@@ -536,6 +535,11 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, SLOT(slotPointerPositionChanged(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
+
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(dragLoopToPosition(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(dragLoopToPosition(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
@@ -990,6 +994,17 @@ NotationWidget::slotEnsureLastMouseMoveVisible()
     if (m_scene) m_scene->constrainToSegmentArea(pos);
     // Reduce margin from 5O (default) to 10 pixels to fix bug #2954074
     m_view->ensureVisible(QRectF(pos, pos), 10, 10);
+    m_inMove = false;
+}
+
+void
+NotationWidget::slotEnsureTimeVisible(timeT t)
+{
+    m_inMove = true;
+    QPointF pos = m_view->mapToScene(0,m_view->height()/2);
+    pos.setX(m_scene->getRulerScale()->getXForTime(t));
+    if (m_scene) m_scene->constrainToSegmentArea(pos);
+    m_view->ensureVisible(QRectF(pos, pos));
     m_inMove = false;
 }
 

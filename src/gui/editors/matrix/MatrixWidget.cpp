@@ -62,6 +62,7 @@
 #include "gui/rulers/StandardRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
+#include "gui/rulers/LoopRuler.h"
 
 #include "gui/general/IconLoader.h"
 
@@ -466,6 +467,11 @@ MatrixWidget::setSegments(RosegardenDocument *document,
             this, SLOT(slotPointerPositionChanged(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
+
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(dragLoopToPosition(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(dragLoopToPosition(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));

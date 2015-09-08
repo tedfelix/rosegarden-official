@@ -192,6 +192,7 @@ protected slots:
 
     void slotHScroll();
     void slotHScrollBarRangeChanged(int min, int max);
+    void slotEnsureTimeVisible(timeT);
 
     /// The horizontal zoom thumbwheel moved
     void slotHorizontalThumbwheelMoved(int);
