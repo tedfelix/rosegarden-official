@@ -664,25 +664,34 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
     // Behaviour differs from TimeSignature::getDurationListForInterval
 
     timeT acc = 0;
+    timeT qt = (*i)->getNotationAbsoluteTime();
     timeT required = (*i)->getNotationDuration();
+    timeT maxdur = (*i)->getAbsoluteTime() + (*i)->getDuration() - qt;
+
+    if (maxdur <= 0) {
+        return *noteItr;
+    }
 
     // While we've not yet accumulated the required amount of time, build
     // the duration list (dl).
     while (acc < required) {
         timeT remaining = required - acc;
         if (splitAtBars) {
-            timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
+            timeT thisNoteStart = qt + acc;
             timeT toNextBar =
                     segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
             if (toNextBar > 0 && remaining > toNextBar)
                 remaining = toNextBar;
         }
         timeT component = Note::getNearestNote(remaining).getDuration();
-        if (component > (required - acc))
-            dl.push_back(required - acc);
-        else
-            dl.push_back(component);
+        timeT dur = (component > (required - acc) ? (required - acc) : component);
+        if (maxdur <= dur) {
+            // Split point doesn't preseve performance time
+            break;
+        }
+        dl.push_back(dur);
         acc += component;
+        maxdur -= dur;
     }
 
     if (dl.size() < 2) {
