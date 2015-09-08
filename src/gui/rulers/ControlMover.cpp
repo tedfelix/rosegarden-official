@@ -111,8 +111,10 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         float deltaX = (e->x-m_mouseStartX);
         float deltaY = (e->y-m_mouseStartY);
 
-        float dScreenX = deltaX/m_ruler->getXScale();
-        float dScreenY = deltaY/m_ruler->getYScale();        
+        double xscale = m_ruler->getXScale();
+        double yscale = m_ruler->getYScale();
+        float dScreenX = deltaX / xscale;
+        float dScreenY = deltaY / yscale;
 
         if (e->modifiers & Qt::ControlModifier) {
             // If the control key is held down, restrict movement to either horizontal or vertical
@@ -143,8 +145,10 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
             item = dynamic_cast <EventControlItem*> (*it);
 
             float x = pIt->x()+deltaX;
-            x = std::max(x,m_ruler->getXMin());
-            x = std::min(x,m_ruler->getXMax());
+            float xmin = m_ruler->getXMin() * xscale;
+            float xmax = (m_ruler->getXMax() - 1) * xscale;
+            x = std::max(x,xmin);
+            x = std::min(x,xmax);
 
             float y = pIt->y()+deltaY;
             y = std::max(y,0.0f);

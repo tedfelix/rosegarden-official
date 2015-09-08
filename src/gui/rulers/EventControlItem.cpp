@@ -57,8 +57,9 @@ void EventControlItem::updateFromEvent()
     long value = 0;
     m_eventAdapter->getValue(value);
 
-    reconfigure(m_controlRuler->getRulerScale()->getXForTime(m_eventAdapter->getTime()),
-            m_controlRuler->valueToY(value));
+    double xscale = m_controlRuler->getXScale();
+    reconfigure(m_controlRuler->getRulerScale()->getXForTime(m_eventAdapter->getTime())*xscale,
+                m_controlRuler->valueToY(value));
 }
 
 void EventControlItem::setY(float y)

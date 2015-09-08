@@ -306,6 +306,7 @@ ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter
             this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
 
     addRuler(controlruler,QString::fromStdString(controlParameter.getName()));
+    controlruler->setViewSegment(m_viewSegment);
 }
 
 void

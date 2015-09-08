@@ -72,6 +72,16 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
         ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
         //if (ruler) ruler->insertControllerEvent(e->x,e->y);
         if (ruler) {
+            double xscale = m_ruler->getXScale();
+            float xmin = m_ruler->getXMin() * xscale;
+            float xmax = (m_ruler->getXMax() - 1) * xscale;
+            float x = e->x;
+
+            if (x < xmin) {
+                x = xmin;
+            } else if (x > xmax) {
+                x = xmax;
+            }
 
             // If shift was pressed, draw a line of controllers between the new
             // control event and the previous one
@@ -82,15 +92,15 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 
                 // if no origin point was set, do not draw a line
                 if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
-                    ruler->addControlLine(m_controlLineOrigin.first,
+                    ruler->addControlLine(m_controlLineOrigin.first / xscale,
                                           m_controlLineOrigin.second,
-                                          e->x,
+                                          x / xscale,
                                           e->y,
                                           eraseExistingControllers);
                 }
             } else {
 
-                ControlItem *item = ruler->addControlItem(e->x,e->y);
+                ControlItem *item = ruler->addControlItem(x,e->y);
                 ControlMouseEvent *newevent = new ControlMouseEvent(e);
                 newevent->itemList.push_back(item);
                 m_overItem = true;
@@ -98,7 +108,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             }
 
             // Save these coordinates for next time
-            m_controlLineOrigin.first = e->x;
+            m_controlLineOrigin.first = x;
             m_controlLineOrigin.second = e->y;
         }
     }

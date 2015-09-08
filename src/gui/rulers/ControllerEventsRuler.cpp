@@ -79,9 +79,6 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         m_controller = 0;
     }
 
-    // This is necessary to run the overloaded method, the base method has already run
-    setViewSegment(segment);
-
     setMenuName("controller_events_ruler_menu");
 //    drawBackground(); Now in paintEvent
 //    init();
