@@ -84,6 +84,8 @@ SF2PatchExtractor::isSF2File(string fileName)
     return true;
 }
 
+#define SF2_PRESET_HEADER_SIZE 38
+
 SF2PatchExtractor::Device
 SF2PatchExtractor::read(string fileName)
 {
@@ -137,7 +139,7 @@ SF2PatchExtractor::read(string fileName)
                 continue;
             }
 
-            int presets = pdtachunk.size / 38;
+            int presets = (pdtachunk.size / SF2_PRESET_HEADER_SIZE) - 1;
             for (int i = 0; i < presets; ++i) {
 
                 char name[21];
@@ -151,16 +153,12 @@ SF2PatchExtractor::read(string fileName)
                 // cerr << "Read name as " << name << endl;
 
                 file->seekg(14, ios::cur);
-
-                if (i == presets - 1 &&
-                        bank == 255 &&
-                        program == 255 &&
-                        string(name) == "EOP")
-                    continue;
-
                 device[bank][program] = name;
             }
+
+            file->seekg(SF2_PRESET_HEADER_SIZE, ios::cur);
         }
+        break;
     }
 
     file->close();
