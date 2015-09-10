@@ -3704,26 +3704,6 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         switch ((*i)->getType()) {
 
-        case MappedEvent::MidiNoteOneShot:
-            {
-                snd_seq_ev_set_noteon(&event,
-                                      channel,
-                                      (*i)->getPitch(),
-                                      (*i)->getVelocity());
-                needNoteOff = true;
-    
-                if (!isSoftSynth) {
-                    LevelInfo info;
-                    info.level = (*i)->getVelocity();
-                    info.levelRight = 0;
-                    SequencerDataBlock::getInstance()->setInstrumentLevel
-                        ((*i)->getInstrument(), info);
-                }
-
-                weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
-            }
-            break;
-
         case MappedEvent::MidiNote:
             // We always use plain NOTE ON here, not ALSA
             // time+duration notes, because we have our own NOTE
@@ -3731,28 +3711,25 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             // this function) and we want to ensure it gets used
             // for the purposes of e.g. soft synths
             //
-            if ((*i)->getVelocity() > 0) {
-                snd_seq_ev_set_noteon(&event,
-                                      channel,
-                                      (*i)->getPitch(),
-                                      (*i)->getVelocity());
+            if ((*i)->getVelocity() == 0) {
+                break;
+            }
+        case MappedEvent::MidiNoteOneShot:
+            snd_seq_ev_set_noteon(&event,
+                                  channel,
+                                  (*i)->getPitch(),
+                                  (*i)->getVelocity());
+            needNoteOff = true;
 
-                if (!isSoftSynth) {
-                    LevelInfo info;
-                    info.level = (*i)->getVelocity();
-                    info.levelRight = 0;
-                    SequencerDataBlock::getInstance()->setInstrumentLevel
-                        ((*i)->getInstrument(), info);
-                }
-
-                weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
-            } else {
-                snd_seq_ev_set_noteoff(&event,
-                                       channel,
-                                       (*i)->getPitch(),
-                                       NOTE_OFF_VELOCITY);
+            if (!isSoftSynth) {
+                LevelInfo info;
+                info.level = (*i)->getVelocity();
+                info.levelRight = 0;
+                SequencerDataBlock::getInstance()->setInstrumentLevel
+                    ((*i)->getInstrument(), info);
             }
 
+            weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
             break;
 
         case MappedEvent::MidiProgramChange:
