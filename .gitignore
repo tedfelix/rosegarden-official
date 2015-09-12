@@ -13,6 +13,7 @@ rosegarden
 .svn
 *.moc
 *.o
+*.qm
 src/gui/dialogs/RosegardenTransportUi.h
 src/gui/studio/DeviceManagerDialogUi.h
 data/data.cpp
