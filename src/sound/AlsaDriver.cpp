@@ -3712,6 +3712,18 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             // for the purposes of e.g. soft synths
             //
             if ((*i)->getVelocity() == 0) {
+                // NOTE OFF with duration zero is scheduled from the
+                // internal segment mapper and we don't use that message
+                // in realtime otherwise it is a duplicate.
+                // When we receive a NOTE OFF message from MIDI input, the
+                // duration is never zero but at least 1 msec (see the case
+                // for SND_SEQ_EVENT_NOTEOFF in getMappedEventList).
+                if ((*i)->getDuration() != RealTime::zeroTime) {
+                    snd_seq_ev_set_noteoff(&event,
+                                           channel,
+                                           (*i)->getPitch(),
+                                           NOTE_OFF_VELOCITY);
+                }
                 break;
             }
         case MappedEvent::MidiNoteOneShot:
@@ -3719,7 +3731,12 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                                   channel,
                                   (*i)->getPitch(),
                                   (*i)->getVelocity());
-            needNoteOff = true;
+
+            // NOTE ON from MIDI input is scheduled with duration -1
+            // and we don't use the NOTE OFF stack for MIDI input.
+            if ((*i)->getDuration() > RealTime(-1, 0)) {
+                needNoteOff = true;
+            }
 
             if (!isSoftSynth) {
                 LevelInfo info;
