@@ -137,6 +137,16 @@ NoteInsertionCommand::modifySegment()
 
     } else {
 
+        segment.getTimeSlice(m_insertionTime, i, j);
+        for (Segment::iterator k = i; k != j; ++k) {
+            if ((*k)->isa(Indication::EventType) &&
+                (*k)->getSubOrdering() <= actualSubordering) {
+                // Decrement subordering to put the grace note
+                // before the indication (i.e. slur), otherwise
+                // it becomes part of the indication.
+                actualSubordering = (*k)->getSubOrdering() - 1;
+            }
+        }
         e = new Event
             (Note::EventType,
              m_insertionTime,

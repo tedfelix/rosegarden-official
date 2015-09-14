@@ -24,6 +24,7 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
+#include "base/BaseProperties.h"
 #include "document/BasicCommand.h"
 #include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
@@ -196,9 +197,29 @@ void
 AddIndicationCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
+    Segment::iterator i, j;
+    int actualSubordering = Indication::EventSubOrdering;
+
+    helper.segment().getTimeSlice(getStartTime(), i, j);
+    for (Segment::iterator k = i; k != j; ++k) {
+        if ((*k)->has(BaseProperties::IS_GRACE_NOTE)) {
+            // If a grace note is inserted before an indication, the
+            // subordering is minor than Indication::EventSubOrdering,
+            // therefore we have to decrement the subordering to insert
+            // the new indication before the grace note.
+            if ((*k)->getSubOrdering() <= actualSubordering) {
+                actualSubordering = (*k)->getSubOrdering() - 1;
+            }
+        }
+    }
 
     Indication indication(m_indicationType, m_indicationDuration);
-    Event *e = indication.getAsEvent(m_indicationStart);
+    Event *e;
+
+    e = new Event(Indication::EventType, m_indicationStart, m_indicationDuration,
+                  actualSubordering);
+    e->set<String>(Indication::IndicationTypePropertyName, m_indicationType);
+    e->set<Int>("indicationduration", m_indicationDuration);
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
 
