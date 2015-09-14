@@ -191,7 +191,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
-    lastX = m_rulerScale->getXForTime(m_segment->getStartTime());
+    lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
 
     if (m_nextItemLeft != m_controlItemMap.end()) {
         EventControlItem *item = static_cast<EventControlItem*> (m_nextItemLeft->second);

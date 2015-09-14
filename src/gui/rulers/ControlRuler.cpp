@@ -493,7 +493,7 @@ void ControlRuler::paintEvent(QPaintEvent */*event*/)
     double xstart = m_rulerScale->getXForTime(m_segment->getStartTime());
     double xend = m_rulerScale->getXForTime(m_segment->getEndTime());
 
-    xstart = mapXToWidget(xstart);
+    xstart = mapXToWidget(xstart*m_xScale);
     xend = mapXToWidget(xend*m_xScale);
 
     RG_DEBUG << "ControlRuler::paintEvent: xstart=" << xstart;
