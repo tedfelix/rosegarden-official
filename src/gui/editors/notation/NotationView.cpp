@@ -3365,6 +3365,7 @@ NotationView::slotEditAddSustain(bool down)
                        instrument->getDevice()->getType() == Device::SoftSynth) {
                 CommandHistory::getInstance()->addCommand(
                         new SustainInsertionCommand(*segment, insertionTime, down, 64));
+                return;
             }
         }
     }
