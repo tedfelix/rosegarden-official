@@ -1385,7 +1385,18 @@ NotationWidget::slotSetInsertedSymbol(Symbol type)
 void
 NotationWidget::setPointerPosition(timeT t)
 {
+    // Fixes problem with sustaining notes while adding notes with
+    // the pencil tool.  Also avoids moving playback position in
+    // playback mode, allowing editing of a loop in real-time.
+    disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+               RosegardenMainWindow::self(),
+               SLOT(slotSetPointerPosition(timeT)));
+
     m_document->slotSetPointerPosition(t);
+
+    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+            RosegardenMainWindow::self(),
+            SLOT(slotSetPointerPosition(timeT)));
 }
 
 void
