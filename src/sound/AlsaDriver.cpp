@@ -3543,6 +3543,18 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
+        if ((*i)->getType() == MappedEvent::MidiNote &&
+            (*i)->getDuration() == RealTime::zeroTime &&
+            (*i)->getVelocity() == 0) {
+            // NOTE OFF with duration zero is scheduled from the
+            // internal segment mapper and we don't use that message
+            // in realtime otherwise it is a duplicate.
+            // When we receive a NOTE OFF message from MIDI input, the
+            // duration is never zero but at least 1 msec (see the case
+            // for SND_SEQ_EVENT_NOTEOFF in getMappedEventList).
+            continue;
+        }
+
         bool debug = throttledDebug();
         if (debug) {
             RG_DEBUG << "AlsaDriver::processMidiOut() for each event...";
@@ -3712,20 +3724,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             // for the purposes of e.g. soft synths
             //
             if ((*i)->getVelocity() == 0) {
-                // NOTE OFF with duration zero is scheduled from the
-                // internal segment mapper and we don't use that message
-                // in realtime otherwise it is a duplicate.
-                // When we receive a NOTE OFF message from MIDI input, the
-                // duration is never zero but at least 1 msec (see the case
-                // for SND_SEQ_EVENT_NOTEOFF in getMappedEventList).
-                if ((*i)->getDuration() != RealTime::zeroTime) {
-                    snd_seq_ev_set_noteoff(&event,
-                                           channel,
-                                           (*i)->getPitch(),
-                                           NOTE_OFF_VELOCITY);
-                }
+                snd_seq_ev_set_noteoff(&event,
+                                       channel,
+                                       (*i)->getPitch(),
+                                       NOTE_OFF_VELOCITY);
                 break;
             }
+
         case MappedEvent::MidiNoteOneShot:
             snd_seq_ev_set_noteon(&event,
                                   channel,
