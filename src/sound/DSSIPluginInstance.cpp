@@ -874,6 +874,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 {
     static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
     int evCount = 0;
+    unsigned int evDeferred = 0;
 
     bool needLock = false;
     if (m_descriptor->select_program)
@@ -921,7 +922,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     }
 #endif
 
-    while (m_eventBuffer.getReadSpace() > 0) {
+    while (m_eventBuffer.getReadSpace() > evDeferred) {
 
         snd_seq_event_t *ev = localEventBuffer + evCount;
         *ev = m_eventBuffer.peek();
@@ -940,8 +941,18 @@ DSSIPluginInstance::run(const RealTime &blockTime)
         std::cerr << "Type: " << int(ev->type) << ", pitch: " << int(ev->data.note.note) << ", velocity: " << int(ev->data.note.velocity) << std::endl;
 #endif
 
-        if (frameOffset >= int(m_blockSize))
-            break;
+        if (frameOffset >= int(m_blockSize)) {
+            if (m_eventBuffer.getReadSpace() == ++evDeferred) {
+                break;
+            }
+            // The events are possibly unsorted because we can merge events played in
+            // realtime with recorded events (generally sorted but not immediate), so
+            // we reinsert the current event at the last position and continue to read
+            // the other events.
+            m_eventBuffer.skip(1);
+            m_eventBuffer.write(ev, 1);
+            continue;
+        }
         if (frameOffset < 0)
             frameOffset = 0;
 
@@ -1078,6 +1089,8 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
     size_t index = 0;
     unsigned long *counts = (unsigned long *)
                             alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
+    unsigned long *evDeferred = (unsigned long *)
+                                alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
     LADSPA_Handle *instances = (LADSPA_Handle *)
                                alloca(m_groupLocalEventBufferCount * sizeof(LADSPA_Handle));
 
@@ -1088,6 +1101,7 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 
         DSSIPluginInstance *instance = *i;
         counts[index] = 0;
+        evDeferred[index] = 0;
         instances[index] = instance->m_instanceHandle;
 
 #ifdef DEBUG_DSSI_PROCESS
@@ -1104,7 +1118,7 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
             (instance->m_instanceHandle, bank, program);
         }
 
-        while (instance->m_eventBuffer.getReadSpace() > 0) {
+        while (instance->m_eventBuffer.getReadSpace() > evDeferred[index]) {
 
             snd_seq_event_t *ev = m_groupLocalEventBuffers[index] + counts[index];
             *ev = instance->m_eventBuffer.peek();
@@ -1122,8 +1136,19 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
             << ", block size " << m_blockSize << std::endl;
 #endif
 
-            if (frameOffset >= int(m_blockSize))
-                break;
+            if (frameOffset >= int(m_blockSize)) {
+                if (instance->m_eventBuffer.getReadSpace() == ++evDeferred[index]) {
+                    break;
+                }
+                // The events are possibly unsorted because we can merge events played in
+                // realtime with recorded events (generally sorted but not immediate), so
+                // we reinsert the current event at the last position and continue to read
+                // the other events.
+                instance->m_eventBuffer.skip(1);
+                instance->m_eventBuffer.write(ev, 1);
+                continue;
+            }
+
             if (frameOffset < 0)
                 frameOffset = 0;
 
