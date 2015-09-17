@@ -914,7 +914,8 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
         ++j;
         if ((*i)->isa(Note::EventRestType) &&
-            !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+            !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE) &&
+            !(*i)->has(BaseProperties::INVISIBLE)) {
 #ifdef DEBUG_NORMALIZE_RESTS
             cerr << "normalizeRests: erasing rest at " << (*i)->getAbsoluteTime() << endl;
 #endif
