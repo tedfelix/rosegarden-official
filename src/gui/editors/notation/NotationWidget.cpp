@@ -617,6 +617,7 @@ NotationWidget::slotGenerateHeaders()
 
     m_headersGroup->setFixedSize(m_headersGroup->sizeHint());
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
+    m_headersButtons->setFixedWidth(m_headersGroup->sizeHint().width());
 
     delete m_headersScene;  // delete the old m_headersGroup if any
     m_headersScene = new QGraphicsScene();
