@@ -1207,9 +1207,10 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     // replace-note-by-rest option.  We still lose in the case where
     // another note starts before this one, overlaps it, but then also
     // ends before it does -- but I think we can live with that.
-    
+
     iterator j = i;
-    timeT endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
+    timeT dur = (*i)->getGreaterDuration();
+    timeT endTime = (*i)->getAbsoluteTime() + dur;
 
     while (j != end() && (*j)->getAbsoluteTime() < endTime) {
 	
@@ -1239,7 +1240,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     if (e->has(BEAMED_GROUP_TUPLET_BASE)==false){
        // replace with a rest
        Event *newRest = new Event(Note::EventRestType,
-                                  e->getAbsoluteTime(), e->getDuration(),
+                                  e->getAbsoluteTime(), dur,
                                   Note::EventRestSubOrdering);
        insert(newRest);
        erase(i);

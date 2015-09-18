@@ -90,6 +90,15 @@ Event::EventData::getNotationDuration() const
     else return static_cast<PropertyStore<Int> *>(i->second)->getData();
 }
 
+timeT
+Event::getGreaterDuration()
+{
+    if (isa(Note::EventType)) {
+        return std::max(getDuration(), getNotationDuration());
+    }
+    return getDuration();
+}
+
 void
 Event::EventData::setTime(const PropertyName &name, timeT t, timeT deft)
 {

@@ -45,7 +45,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime, bool 
     if (i != t.end()) {
 	m_beginTime = (*i)->getAbsoluteTime();
 	while (i != j) {
-	    m_endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
+	    m_endTime = (*i)->getAbsoluteTime() + (*i)->getGreaterDuration();
 	    m_segmentEvents.insert(*i);
 	    ++i;
 	}
@@ -59,7 +59,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime, bool 
 
         while (i != t.begin() && i != t.end() && i != j) {
 
-            if ((*i)->getAbsoluteTime() + (*i)->getDuration() > beginTime)
+            if ((*i)->getAbsoluteTime() + (*i)->getGreaterDuration() > beginTime)
             {
                 m_segmentEvents.insert(*i); // duplicates are filtered automatically
                 m_beginTime = (*i)->getAbsoluteTime();
@@ -115,7 +115,7 @@ EventSelection::insertThisEvent(Event *e)
 	m_haveRealStartTime = true;
     }
 
-    timeT eventDuration = e->getDuration();
+    timeT eventDuration = e->getGreaterDuration();
     if (eventDuration == 0) eventDuration = 1;
 
     timeT eventEndTime = e->getAbsoluteTime() + eventDuration;
@@ -173,7 +173,7 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
         //       it.
     //}
 
-    timeT eventDuration = e->getDuration();
+    timeT eventDuration = e->getGreaterDuration();
     if (eventDuration == 0) eventDuration = 1;
 
     timeT eventStartTime = e->getAbsoluteTime();

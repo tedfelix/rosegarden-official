@@ -559,7 +559,7 @@ Segment::insert(Event *e)
     // Event Start Time
     timeT t0 = e->getAbsoluteTime();
     // Event End Time
-    timeT t1 = t0 + e->getDuration();
+    timeT t1 = t0 + e->getGreaterDuration();
 
     // If this event starts before the segment start time
     if (t0 < m_startTime ||
@@ -584,8 +584,7 @@ Segment::insert(Event *e)
 
     iterator i = EventContainer::insert(e);
     notifyAdd(e);
-    updateRefreshStatuses(e->getAbsoluteTime(),
-                          e->getAbsoluteTime() + e->getDuration());
+    updateRefreshStatuses(e->getAbsoluteTime(), t1);
     return i;
 }
 
@@ -608,9 +607,8 @@ Segment::erase(iterator pos)
 
     Q_CHECK_PTR(e);
     
-
     timeT t0 = e->getAbsoluteTime();
-    timeT t1 = t0 + e->getDuration();
+    timeT t1 = t0 + e->getGreaterDuration();
 
     EventContainer::erase(pos);
     notifyRemove(e);

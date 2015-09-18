@@ -295,6 +295,14 @@ public:
     timeT getNotationDuration() const { return m_data->getNotationDuration(); }
 
     /**
+     * Return the greater of getDuration() or getNotationDuration() for note
+     * events.  Return getDuration() for all other event types.
+     *
+     * \author Tito Latini
+     */
+    timeT getGreaterDuration();
+
+    /**
      * Return whether this event's section of a triggered ornament
      * is masked, for use when the event is part of a multiple-tied-note
      * ornament trigger.
