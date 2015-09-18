@@ -542,22 +542,24 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     Command *activeCommand = 0;  //Used in rest / note mode code
     NoteInsertionCommand *insertionCommand = 0; //Used in rest / note mode code
-    
-    if(!isaRestInserter()) { //In Note Mode.
-        // Insert Note (Code taken from old NoteInserter) 
-        timeT noteEnd = time + note.getDuration();
 
-        // #1046934: make it possible to insert triplet at end of segment!
-        if (m_widget->isInTupletMode()) {
-            noteEnd = time + (note.getDuration() * m_widget->getTupledCount() / m_widget->getUntupledCount());
-        }
+    // Insert Note (Code taken from old NoteInserter)
+    timeT noteEnd = time + note.getDuration();
 
-        if (time < segment.getStartTime() ||
-            endTime > segment.getEndMarkerTime() ||
-            noteEnd > segment.getEndMarkerTime()) {
-            return 0;
-        }
+    // #1046934: make it possible to insert triplet at end of segment!
+    if (m_widget->isInTupletMode()) {
+        noteEnd = time + (note.getDuration() * m_widget->getTupledCount() / m_widget->getUntupledCount());
+    }
 
+    if (time < segment.getStartTime() ||
+        endTime > segment.getEndMarkerTime() ||
+        noteEnd > segment.getEndMarkerTime()) {
+        return 0;
+    }
+
+    if (isaRestInserter()) {
+        insertionCommand = new RestInsertionCommand(segment, time, endTime, note);
+    } else {
         pitch += getOttavaShift(segment, time) * 12;
 
         float targetSubordering = 0;
@@ -569,7 +571,8 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
             (segment, time, endTime, note, pitch, accidental,
              (m_autoBeam && !m_widget->isInTupletMode() && !m_widget->isInGraceMode()) ?
              NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
-             m_autoTieBarlines ? NoteInsertionCommand::AutoTieBarlinesOn : NoteInsertionCommand::AutoTieBarlinesOff,
+             m_autoTieBarlines ?
+             NoteInsertionCommand::AutoTieBarlinesOn : NoteInsertionCommand::AutoTieBarlinesOff,
              m_matrixInsertType && !m_widget->isInGraceMode() ?
              NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
              m_widget->isInGraceMode() ?
@@ -580,61 +583,36 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
              targetSubordering,
              m_defaultStyle,
              velocity);
+    }
 
-        activeCommand = insertionCommand;
+    activeCommand = insertionCommand;
 
-        if (m_widget->isInTupletMode() && !m_widget->isInGraceMode()) {
-            Segment::iterator i(segment.findTime(time));
-            if (i != segment.end() &&
-                !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+    if (m_widget->isInTupletMode() && !m_widget->isInGraceMode()) {
+        Segment::iterator i(segment.findTime(time));
+        if (i != segment.end() &&
+            !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
             
-                MacroCommand *command = new MacroCommand(insertionCommand->getName());
-                //## Attempted fix to bug reported on rg-user by SlowPic
-                //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
-                //# HJJ: Comment out this attempt. It breaks the splitting of
-                //#      the first bars into rests.
-                //## if ((*i)->isa(Note::EventRestType) &&
-                //## (*i)->getNotationDuration() > (note.getDuration() * 3)) {
-                // split the rest
-                command->addCommand(new RestInsertionCommand
-                                    (segment, time,
-                                     time + note.getDuration() * 2,
-                                     Note::getNearestNote(note.getDuration() * 2))); // have to find out what these 2 mean
-                //## }
-                //# These comments should probably be deleted.
-            
+            MacroCommand *command = new MacroCommand(insertionCommand->getName());
+            //## Attempted fix to bug reported on rg-user by SlowPic
+            //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
+            //# HJJ: Comment out this attempt. It breaks the splitting of
+            //#      the first bars into rests.
+            //## if ((*i)->isa(Note::EventRestType) &&
+            //## (*i)->getNotationDuration() > (note.getDuration() * 3)) {
+            // split the rest
+            command->addCommand(new RestInsertionCommand
+                                (segment, time,
+                                 time + note.getDuration() * 2,
+                                 Note::getNearestNote(note.getDuration() * 2))); // have to find out what these 2 mean
+            //## }
+            //# These comments should probably be deleted.
 
-                command->addCommand(new TupletCommand
-                                    (segment, time, note.getDuration(),
-                                            m_widget->getUntupledCount(),
-                                            m_widget->getTupledCount(), true)); // #1046934: "has timing already"
-                command->addCommand(insertionCommand);
-                activeCommand = command;
-            }
-        }
-    } else {  //In Rest Mode.
-        // Insert a Rest (Code taken from old Rest Inserter)
-        if (time < segment.getStartTime() ||
-            endTime > segment.getEndMarkerTime() ||
-            time + note.getDuration() > segment.getEndMarkerTime()) {
-            return 0;
-        }
-
-        insertionCommand = new RestInsertionCommand(segment, time, endTime, note);
-    
-        activeCommand = insertionCommand;
-
-        if (m_widget->isInTupletMode()) {
-            Segment::iterator i(segment.findTime(time));
-            if (i != segment.end() &&
-                !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) { //+ scope
-
-                MacroCommand *command = new MacroCommand(insertionCommand->getName());
-                command->addCommand(new TupletCommand
-                                    (segment, time, note.getDuration()));
-                command->addCommand(insertionCommand);
-                activeCommand = command;
-            }
+            command->addCommand(new TupletCommand
+                                (segment, time, note.getDuration(),
+                                 m_widget->getUntupledCount(),
+                                 m_widget->getTupledCount(), true)); // #1046934: "has timing already"
+            command->addCommand(insertionCommand);
+            activeCommand = command;
         }
     }
 
