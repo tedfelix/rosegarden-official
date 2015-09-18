@@ -59,6 +59,8 @@ public:
 class AbstractCommandBuilder
 {
 public:
+    virtual ~AbstractCommandBuilder();
+
     // may throw CommandCancelled
     virtual Command *build(QString actionName,
                            EventSelection &s,

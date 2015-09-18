@@ -36,6 +36,10 @@
 
 namespace Rosegarden {
 
+AbstractCommandBuilder::~AbstractCommandBuilder()
+{
+}
+
 CommandRegistry::CommandRegistry()
 {
 }
