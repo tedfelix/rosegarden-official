@@ -1105,49 +1105,53 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 
 void CompositionModelImpl::deleteCachedPreview(const Segment *s)
 {
-    // For NULL, delete everything.
-    if (!s) {
-        deleteCachedPreviews();
+    if (!s)
         return;
-    }
 
+    // MIDI
     if (s->getType() == Segment::Internal) {
-        // ??? Need to handle the case when it isn't there.
-        NotationPreview *notationPreview = m_notationPreviewCache[s];
-        delete notationPreview;
-        m_notationPreviewCache.erase(s);
-    } else {
-        // ??? Need to handle the case when it isn't there.
-        AudioPeaks *apd = m_audioPeaksCache[s];
-        delete apd;
-        m_audioPeaksCache.erase(s);
+        NotationPreviewCache::iterator i = m_notationPreviewCache.find(s);
+        if (i != m_notationPreviewCache.end()) {
+            delete i->second;
+            m_notationPreviewCache.erase(i);
+        }
+    } else {  // Audio
+        AudioPeaksCache::iterator i = m_audioPeaksCache.find(s);
+        if (i != m_audioPeaksCache.end()) {
+            delete i->second;
+            m_audioPeaksCache.erase(i);
+        }
         m_audioPreviewImageCache.erase(s);
     }
-
 }
 
 void CompositionModelImpl::deleteCachedPreviews()
 {
     //RG_DEBUG << "deleteCachedPreviews()";
 
+    // Notation Previews
+
     for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
          i != m_notationPreviewCache.end(); ++i) {
         delete i->second;
     }
-    for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
-         i != m_audioPeaksCache.end(); ++i) {
-        delete i->second;
-    }
-
     m_notationPreviewCache.clear();
-    m_audioPeaksCache.clear();
 
-    m_audioPreviewImageCache.clear();
+    // Audio Peaks Generators
 
     for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
          i != m_audioPreviewUpdaterMap.end(); ++i) {
         i->second->cancel();
     }
+
+    // Audio Peaks and Previews
+
+    for (AudioPeaksCache::iterator i = m_audioPeaksCache.begin();
+         i != m_audioPeaksCache.end(); ++i) {
+        delete i->second;
+    }
+    m_audioPeaksCache.clear();
+    m_audioPreviewImageCache.clear();
 }
 
 // --- Selection ----------------------------------------------------
