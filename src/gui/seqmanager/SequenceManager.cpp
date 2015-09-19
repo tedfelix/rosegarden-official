@@ -669,15 +669,17 @@ punchin:
                     // what files it needs to write to.
                     m_doc->addRecordMIDISegment(*i);
 
-                    // Get the channel based on the instrument number.  E.g.
-                    // MIDI Instrument #1 is channel 0.
-                    int channel = inst->getNaturalChannel();
+                    if (inst->getType() == Instrument::Midi) {
+                        // Get the channel based on the instrument number.  E.g.
+                        // MIDI Instrument #1 is channel 0.
+                        int channel = inst->getNaturalChannel();
 
-                    // Send Program Changes on recording tracks like 11.11.42
-                    // used to.  Fix for bug #1356 "Wrong instrument when
-                    // recording on multiple tracks/channels".  This is a
-                    // simple way to support multiple MIDI controllers.
-                    StudioControl::sendChannelSetup(inst, channel);
+                        // Send Program Changes on recording tracks like 11.11.42
+                        // used to.  Fix for bug #1356 "Wrong instrument when
+                        // recording on multiple tracks/channels".  This is a
+                        // simple way to support multiple MIDI controllers.
+                        StudioControl::sendChannelSetup(inst, channel);
+                    }
                 }
             }
         }
