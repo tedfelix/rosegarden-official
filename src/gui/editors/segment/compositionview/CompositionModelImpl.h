@@ -424,9 +424,6 @@ private:
     void makeAudioPreview(const Segment *, const SegmentRect &,
                           AudioPreviews *audioPreviews);
 
-    /// Also generates the preview image asynchronously.
-    AudioPeaks *getAudioPeaks(const Segment *);
-
     /// Create audio peaks for a segment asynchronously.
     /**
      * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
@@ -434,7 +431,7 @@ private:
      *
      * Also generates the preview image asynchronously.
      */
-    void makeAudioPeaksAsync(const Segment *);
+    void updateAudioPeaksCache(const Segment *);
 
     /// More of an AudioPeaksThread.
     AudioPreviewThread *m_audioPreviewThread;

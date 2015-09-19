@@ -136,9 +136,6 @@ CompositionModelImpl::~CompositionModelImpl()
     }
 
     // ??? The following code is similar to deleteCachedPreviews().
-    //     The problem is that deleteCachedPreviews() regenerates the
-    //     audio previews.  If we can make it stop doing that, then
-    //     we can call it from here.
 
     // Delete the notation previews
     for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
@@ -954,7 +951,7 @@ void CompositionModelImpl::makeAudioPreview(
 
     // If needed, begin the asynchronous process of generating an
     // audio preview.
-    getAudioPeaks(segment);
+    updateAudioPeaksCache(segment);
 
     // ??? COPY.  This copies a vector of QImage objects.  That seems
     //     wasteful.  Some sort of pointer approach should be better.
@@ -975,10 +972,9 @@ void CompositionModelImpl::makeAudioPreview(
     audioPreviews->push_back(audioPreview);
 }
 
-CompositionModelImpl::AudioPeaks *CompositionModelImpl::getAudioPeaks(
-        const Segment *segment)
+void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
 {
-    Profiler profiler("CompositionModelImpl::getAudioPeaks");
+    Profiler profiler("CompositionModelImpl::updateAudioPeaksCache");
 
     // We must use find() because C++ makes no guarantee that a new
     // map element is zeroed out.  IOW, m_audioPeaksCache[segment] may be
@@ -986,27 +982,16 @@ CompositionModelImpl::AudioPeaks *CompositionModelImpl::getAudioPeaks(
     AudioPeaksCache::const_iterator audioPeaksIter =
             m_audioPeaksCache.find(segment);
 
-    // If not found in the cache, begin the cache update process
-    if (audioPeaksIter == m_audioPeaksCache.end()) {
-        // Create an empty one and put it in the cache.
-        AudioPeaks *audioPeaks = new AudioPeaks();
-        m_audioPeaksCache[segment] = audioPeaks;
+    // If it's already in the cache, bail.
+    if (audioPeaksIter != m_audioPeaksCache.end())
+        return;
 
-        // Fire off the async generation of audio peaks.  This will come
-        // back in slotAudioPeaksComplete().
-        makeAudioPeaksAsync(segment);
+    // Create an empty one and put it in the cache.
+    AudioPeaks *audioPeaks = new AudioPeaks();
+    m_audioPeaksCache[segment] = audioPeaks;
 
-        // Return the empty one for now.
-        return audioPeaks;
-    }
-
-    return audioPeaksIter->second;
-}
-
-void CompositionModelImpl::makeAudioPeaksAsync(const Segment *segment)
-{
     if (!m_audioPreviewThread) {
-        RG_DEBUG << "makeAudioPeaksAsync() - No audio preview thread set.";
+        RG_DEBUG << "updateAudioPeaksCache() - No audio preview thread set.";
         return;
     }
 
@@ -1044,10 +1029,6 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment *segment)
 void CompositionModelImpl::slotAudioPeaksComplete(
         AudioPreviewUpdater *audioPreviewUpdater)
 {
-    // ??? Because this no longer calls getAudioPeaks(), getAudioPeaks()
-    //     can be simplified to return void.  And renamed to
-    //     updateAudioPeaksCache() or something like that.
-
     // Find the entry in the cache that we need to fill in with the results.
     AudioPeaksCache::const_iterator audioPeaksIter =
             m_audioPeaksCache.find(audioPreviewUpdater->getSegment());
@@ -1089,27 +1070,34 @@ void CompositionModelImpl::slotAudioPeaksComplete(
 
 void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
 {
-    RG_DEBUG << "slotInstrumentChanged()";
-    const SegmentMultiSet& segments = m_composition.getSegments();
-    SegmentMultiSet::const_iterator segEnd = segments.end();
+    //RG_DEBUG << "slotInstrumentChanged()";
 
+    const SegmentMultiSet &segments = m_composition.getSegments();
+
+    // For each Segment in the Composition
     for (SegmentMultiSet::const_iterator i = segments.begin();
-         i != segEnd; ++i) {
+         i != segments.end();
+         ++i) {
 
-        const Segment* s = *i;
-        TrackId trackId = s->getTrack();
-        Track *track = getComposition().getTrackById(trackId);
+        const Segment *segment = *i;
 
-        // We need to update the cache for audio segments, because the
-        // instrument playback level is reflected in the audio
-        // preview.  And we need to update it for midi segments,
-        // because the preview style differs depending on whether the
-        // segment is on a percussion instrument or not
+        const TrackId trackId = segment->getTrack();
+        const Track *track = getComposition().getTrackById(trackId);
 
-        if (track && track->getInstrument() == instrument->getId()) {
-            deleteCachedPreview(s);
+        // If this is the Instrument that changed
+        if (track  &&  track->getInstrument() == instrument->getId()) {
+            // We need to update the cache for audio segments, because the
+            // instrument playback level is reflected in the audio
+            // preview.  And we need to update it for midi segments,
+            // because the preview style differs depending on whether the
+            // segment is on a percussion instrument or not.  (On a
+            // percussion Instrument, event duration is ignored and
+            // all notes appear short.  Toggle the Percussion checkbox
+            // to test.)
+            deleteCachedPreview(segment);
+
             QRect rect;
-            getSegmentQRect(*s, rect);
+            getSegmentQRect(*segment, rect);
             emit needUpdate(rect);
         }
     }
@@ -1140,7 +1128,7 @@ void CompositionModelImpl::deleteCachedPreview(const Segment *s)
 
 void CompositionModelImpl::deleteCachedPreviews()
 {
-    //RG_DEBUG << "deleteCachedPreviews";
+    //RG_DEBUG << "deleteCachedPreviews()";
 
     for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
          i != m_notationPreviewCache.end(); ++i) {
@@ -1159,26 +1147,6 @@ void CompositionModelImpl::deleteCachedPreviews()
     for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
          i != m_audioPreviewUpdaterMap.end(); ++i) {
         i->second->cancel();
-    }
-
-    const SegmentMultiSet& segments = m_composition.getSegments();
-    SegmentMultiSet::const_iterator segEnd = segments.end();
-
-    // Regenerate all of the audio previews.
-    // ??? Why?  This routine is supposed to delete all the previews.
-    //     Why is it regenerating the audio previews?  Split this out
-    //     into an updateCachedAudioPreviews() and call it where it's
-    //     needed.  Then determine whether it is really needed.
-
-    for (SegmentMultiSet::const_iterator i = segments.begin();
-            i != segEnd; ++i) {
-
-        if ((*i)->getType() == Segment::Audio) {
-            // This will create the audio preview updater.  The
-            // preview won't be calculated and cached until the
-            // updater completes and calls back.
-            makeAudioPeaksAsync((*i));
-        }
     }
 }
 
