@@ -830,89 +830,103 @@ CompositionModelImpl::getNotationPreview(const Segment *segment)
     if (previewIter != m_notationPreviewCache.end())
         return previewIter->second;
 
-    NotationPreview *notationPreview = new NotationPreview();
-    makeNotationPreview(segment, notationPreview);
+    NotationPreview *notationPreview = makeNotationPreview(segment);
 
     m_notationPreviewCache[segment] = notationPreview;
 
     return notationPreview;
 }
 
-void CompositionModelImpl::makeNotationPreview(
-        const Segment *segment, NotationPreview *npData)
+CompositionModelImpl::NotationPreview *
+CompositionModelImpl::makeNotationPreview(
+        const Segment *segment)
 {
-    //RG_DEBUG << "makeNotationPreview()";
+    Profiler profiler("CompositionModelImpl::makeNotationPreview()");
 
-    // ??? This routine is called constantly while recording and events
-    //     are coming in.  It is one possible source of the increasing CPU
+    // ??? This routine is called 50 times a second when recording and
+    //     a single key is held down.
+    // ??? This routine is one possible source of the increasing CPU
     //     usage while recording.  For the recording case, the obvious
     //     optimization would be to add the new notes to the existing
     //     cached preview rather than regenerating the preview.
-    Profiler profiler("CompositionModelImpl::makeNotationPreview()");
 
-    npData->clear();
+    NotationPreview *notationPreview = new NotationPreview;
 
-    int segStartX = static_cast<int>(nearbyint(
-            m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
+    int segStartX = lround(
+            m_grid.getRulerScale()->getXForTime(segment->getStartTime()));
 
     bool isPercussion = false;
     Track *track = m_composition.getTrackById(segment->getTrack());
     if (track) {
         InstrumentId iid = track->getInstrument();
         Instrument *instrument = m_studio.getInstrumentById(iid);
-        if (instrument && instrument->isPercussion()) isPercussion = true;
+        if (instrument  &&  instrument->isPercussion())
+            isPercussion = true;
     }
 
     // For each event in the segment
     for (Segment::const_iterator i = segment->begin();
-         i != segment->end(); ++i) {
+         i != segment->end();
+         ++i) {
+
+        Event *event = *i;
+
+        // If this isn't a note, try the next event.
+        if (!event->isa(Note::EventType))
+            continue;
 
         long pitch = 0;
-        if (!(*i)->isa(Note::EventType) ||
-            !(*i)->get<Int>(BaseProperties::PITCH, pitch)) {
+        // Get the pitch.  If there is no pitch property, try the next event.
+        if (!event->get<Int>(BaseProperties::PITCH, pitch))
             continue;
-        }
 
-        timeT eventStart = (*i)->getAbsoluteTime();
-        timeT eventEnd = eventStart + (*i)->getDuration();
-        //  if (eventEnd > segment->getEndMarkerTime()) {
-        //      eventEnd = segment->getEndMarkerTime();
-        //  }
+        const timeT eventStart = event->getAbsoluteTime();
+        const timeT eventEnd = eventStart + event->getDuration();
 
-        int x = static_cast<int>(nearbyint(
-                m_grid.getRulerScale()->getXForTime(eventStart)));
-        int width = static_cast<int>(nearbyint(
+        int x = lround(
+                m_grid.getRulerScale()->getXForTime(eventStart));
+        int width = lround(
                 m_grid.getRulerScale()->getWidthForDuration(
-                        eventStart, eventEnd - eventStart)));
+                        eventStart, eventEnd - eventStart));
 
-        //RG_DEBUG << "CompositionModelImpl::makeNotationPreview(): x = " << x << ", width = " << width << " (time = " << eventStart << ", duration = " << eventEnd - eventStart << ")";
-
+        // If the event starts on or before the segment border
         if (x <= segStartX) {
+            // Move the left edge to the right by 1
             ++x;
-            if (width > 1) --width;
+            // But leave the right edge alone.
+            if (width > 1)
+                --width;
         }
-        if (width > 1) --width;
-        if (width < 1) ++width;
 
-        const double y0 = 0;
-        const double y1 = m_grid.getYSnap();
-        double y = y1 + ((y0 - y1) * (pitch - 16)) / 96;
+        // Make sure we draw something.
+        if (width < 1)
+            width = 1;
+
+        const int y0 = 0;
+        const int y1 = m_grid.getYSnap();
+        int y = lround(y1 + ((y0 - y1) * (pitch - 16)) / 96.0);
 
         int height = 1;
 
+        // On a percussion track...
         if (isPercussion) {
             height = 2;
-            if (width > 2) width = 2;
+            // Make events appear as dots instead of lines.
+            if (width > 2)
+                width = 2;
         }
 
-        if (y < y0) y = y0;
-        if (y > y1 - height + 1) y = y1 - height + 1;
+        if (y < y0)
+            y = y0;
+        if (y > y1 - height + 1)
+            y = y1 - height + 1;
 
-        // ??? static_cast<int>(nearbyint(y))?
-        QRect r(x, static_cast<int>(y), width, height);
+        QRect r(x, y, width, height);
 
-        npData->push_back(r);
+        notationPreview->push_back(r);
     }
+
+    return notationPreview;
 }
 
 // --- Audio Previews -----------------------------------------------

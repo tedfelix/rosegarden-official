@@ -404,7 +404,7 @@ private:
 
     const NotationPreview *getNotationPreview(const Segment *);
 
-    void makeNotationPreview(const Segment *, NotationPreview *);
+    NotationPreview *makeNotationPreview(const Segment *);
 
     typedef std::map<const Segment *, NotationPreview *> NotationPreviewCache;
     NotationPreviewCache m_notationPreviewCache;

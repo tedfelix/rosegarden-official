@@ -61,7 +61,11 @@ class BasicCommand;
  * EventContainer is a precursor to Segment, used in code that needs
  * to store events but doesn't need all the ancillary data and
  * behaviors that Segment provides.
- **/
+ *
+ * ??? The STL container classes are not intended to be derived from.
+ *     They provide no virtual dtor.  EventContainer should instead
+ *     have a std::multiset member object.
+ */
 class EventContainer : public std::multiset<Event*, Event::EventCmp>
 {
  public:
