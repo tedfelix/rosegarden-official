@@ -663,11 +663,6 @@ int main(int argc, char *argv[])
     struct timeval logoShowTime;
     gettimeofday(&logoShowTime, 0);
 
-    //
-    // Start application
-    //
-    RosegardenMainWindow *rosegardengui = 0;
-
 #ifndef NO_SOUND
     theApp.setNoSequencerMode(nosequencer);
 #else
@@ -676,17 +671,29 @@ int main(int argc, char *argv[])
 
     RG_INFO << "Creating RosegardenMainWindow instance...";
 
-    rosegardengui = new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
+    //
+    // Start application
+    //
+    // ??? Would be nice to put this on the stack instead of the heap.  It's
+    //     only 616 bytes.  I ran into two problems.  First, the call to
+    //     setAttribute(Qt::WA_DeleteOnClose) in RosegardenMainWindow's ctor
+    //     has to be removed.  And second, the call to QApplication::exec()
+    //     at the end of this routine never returns.  That would need to be
+    //     tracked down and fixed before this could be done.
+    RosegardenMainWindow *mainWindow =
+            new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
 
-    rosegardengui->setIsFirstRun(newVersion);
+    mainWindow->setIsFirstRun(newVersion);
 
     //@@@ QApplication.setMainWidget() is no longer supported.
     //@@@ The documentation suggests connecting the lastWindowsClosed() signal
     //@@@ to the quit() slot, but QApplication has a boolean quitOnLastWindowClosed
     //@@@ property that defaults to true, so calling quit() should not be needed.
-    //theApp.setMainWidget(rosegardengui);
+    //theApp.setMainWidget(mainWindow);
 
-    rosegardengui->show();
+    // This parentless/shown window will become the main window when
+    // QApplication::exec() is called.
+    mainWindow->show();
 
     // raise start logo
     //
@@ -699,13 +706,13 @@ int main(int argc, char *argv[])
 
     for (int i = 1; i < args.size(); ++i) {
         if (args[i].startsWith("-")) continue;
-        rosegardengui->openFile(args[i], RosegardenMainWindow::ImportCheckType);
+        mainWindow->openFile(args[i], RosegardenMainWindow::ImportCheckType);
         break;
     }
 
     //@@@???
     QObject::connect(&theApp, SIGNAL(aboutToSaveState()),
-                     rosegardengui, SLOT(slotDeleteTransport()));
+                     mainWindow, SLOT(slotDeleteTransport()));
 
     // Now that we've started up, raise start logo
     //
@@ -817,7 +824,7 @@ int main(int argc, char *argv[])
         QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
 
-        rosegardengui->awaitDialogClearance();
+        mainWindow->awaitDialogClearance();
         dialog->exec();
 
         CurrentProgressDialog::thaw();
@@ -827,13 +834,13 @@ int main(int argc, char *argv[])
     RG_INFO << "Launching the sequencer...";
 
     try {
-        rosegardengui->launchSequencer();
+        mainWindow->launchSequencer();
     } catch (std::string e) {
-        RG_DEBUG << "RosegardenGUI - " << e << endl;
+        RG_DEBUG << "mainWindow->launchSequencer() - " << e << endl;
     } catch (QString e) {
-        RG_DEBUG << "RosegardenGUI - " << e << endl;
+        RG_DEBUG << "mainWindow->launchSequencer() - " << e << endl;
     } catch (Exception e) {
-        RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
+        RG_DEBUG << "mainWindow->launchSequencer() - " << e.getMessage() << endl;
     }
 
 //#define STYLE_TEST
