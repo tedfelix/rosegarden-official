@@ -76,8 +76,8 @@ public:
 
     enum ConversionType {
         CONVERT_REPLACE,
-        CONVERT_AUGMENT,
-        CONVERT_APPEND
+        CONVERT_AUGMENT,  // ??? Unused
+        CONVERT_APPEND    // ??? Unused
     };
 
     MidiFile(Studio *studio);
@@ -103,6 +103,10 @@ public:
     /**
      * Convert a MIDI file to a Rosegarden composition.  Return true
      * for success.
+     *
+     * ??? The only caller of this,
+     *     RosegardenMainWindow::createDocumentFromMIDIFile(), only calls
+     *     with type = CONVERT_REPLACE.
      */
     bool convertToRosegarden(Composition &c, ConversionType type);
 

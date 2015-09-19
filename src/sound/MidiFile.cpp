@@ -1170,6 +1170,15 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                         if (type == CONVERT_REPLACE) {
 
+                            // ??? Setting up the instrument just because we
+                            //     received a Program Change seems rather
+                            //     arbitrary.  See Bug #1439.  What really
+                            //     should be done is a two-pass approach where
+                            //     we import everything as-is, then do a second
+                            //     pass checking to see if there are PC's,
+                            //     BS's, and CC's at time 0 that can be
+                            //     removed and converted to Instrument
+                            //     settings.
                             instrument = m_studio->getInstrumentById(compInstrument);
                             if (instrument) {
                                 instrument->setPercussion(percussion);
@@ -1182,6 +1191,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                                 }
                             }
                         } else { // not CONVERT_REPLACE
+                            // ??? type is always CONVERT_REPLACE.  This code
+                            //     is never executed.
                             instrument =
                                 m_studio->assignMidiProgramToInstrument
                                 (program, msb, lsb, percussion);
@@ -1217,7 +1228,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     break;
 
                 case MIDI_CTRL_CHANGE:
-
                     // If it's a bank select, interpret it (or remember
                     // for later insertion) instead of just inserting it
                     // as a Rosegarden event
