@@ -976,83 +976,81 @@ void CompositionModelImpl::makeAudioPreview(
 }
 
 CompositionModelImpl::AudioPeaks *CompositionModelImpl::getAudioPeaks(
-        const Segment *s)
+        const Segment *segment)
 {
     Profiler profiler("CompositionModelImpl::getAudioPeaks");
 
     // We must use find() because C++ makes no guarantee that a new
-    // map element is zeroed out.  IOW, m_audioPeaksCache[s] may be undefined.
-    AudioPeaksCache::const_iterator audioPeaksIter = m_audioPeaksCache.find(s);
+    // map element is zeroed out.  IOW, m_audioPeaksCache[segment] may be
+    // undefined.
+    AudioPeaksCache::const_iterator audioPeaksIter =
+            m_audioPeaksCache.find(segment);
 
     // If not found in the cache, begin the cache update process
-    if (audioPeaksIter == m_audioPeaksCache.end())
-        return updateCachedAudioPeaks(s);
+    if (audioPeaksIter == m_audioPeaksCache.end()) {
+        // Create an empty one and put it in the cache.
+        AudioPeaks *audioPeaks = new AudioPeaks();
+        m_audioPeaksCache[segment] = audioPeaks;
+
+        // Fire off the async generation of audio peaks.  This will come
+        // back in slotAudioPeaksComplete().
+        makeAudioPeaksAsync(segment);
+
+        // Return the empty one for now.
+        return audioPeaks;
+    }
 
     return audioPeaksIter->second;
 }
 
-CompositionModelImpl::AudioPeaks *
-CompositionModelImpl::updateCachedAudioPeaks(const Segment *s)
+void CompositionModelImpl::makeAudioPeaksAsync(const Segment *segment)
 {
-    //RG_DEBUG << "updateCachedAudioPeaks(" << s << ")";
-
-    // ??? makePreviewCache() calls this.  That's probably not necessary
-    //     given that one way or another the preview generation will occur.
-    //     If we can get rid of the call from makePreviewCache(), we can
-    //     inline this into its only remaining caller, getAudioPeaks().
-
-    AudioPeaks* apData = new AudioPeaks();
-    makeAudioPeaksAsync(s);
-
-    // Avoid potential memory leaks.
-    //delete m_audioPeaksCache[s];
-
-    m_audioPeaksCache[s] = apData;
-
-    return apData;
-}
-
-void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
-{
-    if (m_audioPreviewThread) {
-        //RG_DEBUG << "makeAudioPeaksAsync() - new audio preview started";
-
-        SegmentRect segRect;
-        getSegmentRect(*segment, segRect);
-        segRect.rect.setWidth(segRect.baseWidth); // don't use repeating area
-        segRect.rect.moveTopLeft(QPoint(0, 0));
-
-        if (m_audioPreviewUpdaterMap.find(segment) ==
-                m_audioPreviewUpdaterMap.end()) {
-
-            AudioPreviewUpdater *updater =
-                    new AudioPreviewUpdater(
-                            *m_audioPreviewThread, m_composition,
-                            segment, segRect.rect, this);
-
-            connect(updater, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
-                    this, SLOT(slotAudioPeaksComplete(AudioPreviewUpdater*)));
-
-            m_audioPreviewUpdaterMap[segment] = updater;
-
-        } else {
-
-            m_audioPreviewUpdaterMap[segment]->setDisplayExtent(segRect.rect);
-        }
-
-        m_audioPreviewUpdaterMap[segment]->update();
-
-    } else {
-        RG_DEBUG << "makeAudioPeaksAsync() - no audio preview thread set";
+    if (!m_audioPreviewThread) {
+        RG_DEBUG << "makeAudioPeaksAsync() - No audio preview thread set.";
+        return;
     }
+
+    SegmentRect segmentRect;
+    // Use getSegmentRect() since we need the baseWidth.
+    getSegmentRect(*segment, segmentRect);
+    // Go with the baseWidth instead of the full repeating width.
+    segmentRect.rect.setWidth(segmentRect.baseWidth);
+    segmentRect.rect.moveTopLeft(QPoint(0, 0));
+
+    // If we don't already have an audio peaks generator for this segment
+    if (m_audioPreviewUpdaterMap.find(segment) ==
+            m_audioPreviewUpdaterMap.end()) {
+
+        AudioPreviewUpdater *generator =
+                new AudioPreviewUpdater(
+                        *m_audioPreviewThread, m_composition,
+                        segment, segmentRect.rect, this);
+
+        connect(generator, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
+                this, SLOT(slotAudioPeaksComplete(AudioPreviewUpdater*)));
+
+        m_audioPreviewUpdaterMap[segment] = generator;
+
+    } else {  // We have a peaks gen for this segment.
+
+        // Adjust the size in case the segment was resized.
+        m_audioPreviewUpdaterMap[segment]->setDisplayExtent(segmentRect.rect);
+    }
+
+    // Queue a request for async generation of the peaks.
+    m_audioPreviewUpdaterMap[segment]->update();
 }
 
 void CompositionModelImpl::slotAudioPeaksComplete(AudioPreviewUpdater* apu)
 {
     // ??? We already know it's in m_audioPeaksCache.
-    //     updateCachedAudioPeaks() put it there.  Just pull it out of
+    //     getAudioPeaks() put it there.  Just pull it out of
     //     m_audioPeaksCache.
     //     No need for this "recursive" call to the function that called us.
+    // ??? OTOH, would it be possible to erase m_audioPeaksCache[seg] before
+    //     the thread completes and this function is called?  If so, then
+    //     another generate needs to be fired off.  And this "recursive"
+    //     call makes sense.
     AudioPeaks *apData = getAudioPeaks(apu->getSegment());
 
     QRect updateRect;
@@ -1316,17 +1314,6 @@ bool CompositionModelImpl::isTmpSelected(const Segment *s) const
 }
 
 // --- Misc ---------------------------------------------------------
-
-#if 0
-void CompositionModelImpl::makePreviewCache(const Segment *s)
-{
-    if (s->getType() == Segment::Internal) {
-        updateCachedNotationPreview(s);
-    } else {
-        updateCachedAudioPeaks(s);
-    }
-}
-#endif
 
 int CompositionModelImpl::getCompositionHeight()
 {

@@ -52,6 +52,7 @@ public:
                         CompositionModelImpl *parent);
     ~AudioPreviewUpdater();
 
+    // ??? rename: generateAsync()
     void update();
     void cancel();
 

@@ -427,9 +427,6 @@ private:
     /// Also generates the preview image asynchronously.
     AudioPeaks *getAudioPeaks(const Segment *);
 
-    /// Also generates the preview image asynchronously.
-    AudioPeaks *updateCachedAudioPeaks(const Segment *);
-
     /// Create audio peaks for a segment asynchronously.
     /**
      * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
@@ -457,10 +454,6 @@ private:
     std::map<const Segment *, QImageVector> m_audioPreviewImageCache;
 
     // --- Notation and Audio Previews --------------------
-
-    /// Make and cache notation or audio preview for segment.
-    // ??? rename: updateCachedPreview()?
-    //void makePreviewCache(const Segment *);
 
     void deleteCachedPreview(const Segment *);
 
