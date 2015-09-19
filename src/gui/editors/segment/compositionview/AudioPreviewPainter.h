@@ -30,6 +30,10 @@ class Composition;
 class Segment;
 class SegmentRect;
 
+/**
+ * ??? If audio previews are ever split off from CompositionModelImpl,
+ *     might want to move all of this into that new audio preview class.
+ */
 class AudioPreviewPainter {
 public:
     AudioPreviewPainter(CompositionModelImpl& model,
@@ -37,7 +41,10 @@ public:
 			const Composition &composition,
 			const Segment* segment);
 
+    // ??? This is the only function.  It could be called by the ctor and
+    //     made private.  Then construction would generate the preview image.
     void paintPreviewImage();
+
     CompositionModelImpl::QImageVector getPreviewImage();
     const SegmentRect& getSegmentRect() { return m_rect; }
 

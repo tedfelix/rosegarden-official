@@ -1041,48 +1041,48 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment *segment)
     m_audioPreviewUpdaterMap[segment]->update();
 }
 
-void CompositionModelImpl::slotAudioPeaksComplete(AudioPreviewUpdater* apu)
+void CompositionModelImpl::slotAudioPeaksComplete(
+        AudioPreviewUpdater *audioPreviewUpdater)
 {
-    // ??? We already know it's in m_audioPeaksCache.
-    //     getAudioPeaks() put it there.  Just pull it out of
-    //     m_audioPeaksCache.
-    //     No need for this "recursive" call to the function that called us.
-    // ??? OTOH, would it be possible to erase m_audioPeaksCache[seg] before
-    //     the thread completes and this function is called?  If so, then
-    //     another generate needs to be fired off.  And this "recursive"
-    //     call makes sense.
-    AudioPeaks *apData = getAudioPeaks(apu->getSegment());
+    // ??? Because this no longer calls getAudioPeaks(), getAudioPeaks()
+    //     can be simplified to return void.  And renamed to
+    //     updateAudioPeaksCache() or something like that.
 
-    QRect updateRect;
+    // Find the entry in the cache that we need to fill in with the results.
+    AudioPeaksCache::const_iterator audioPeaksIter =
+            m_audioPeaksCache.find(audioPreviewUpdater->getSegment());
 
-    if (apData) {
-        RG_DEBUG << "CompositionModelImpl::slotAudioPeaksComplete(" << apu << "): apData contains " << apData->values.size() << " values already";
-        unsigned int channels = 0;
-        const std::vector<float> &values = apu->getComputedValues(channels);
-        if (channels > 0) {
-            RG_DEBUG << "CompositionModelImpl::slotAudioPeaksComplete: set "
-                << values.size() << " samples on " << channels << " channels";
-            apData->channels = channels;
-            apData->values = values;  // ??? COPY performance issue?
-            // ??? This is the only call to this function.  Inline it.
-            updateRect = updateCachedPreviewImage(apData, apu->getSegment());
-        }
-    }
+    // If there's no place to put the results, bail.
+    if (audioPeaksIter == m_audioPeaksCache.end())
+        return;
 
-    if (!updateRect.isEmpty())
-        emit needUpdate(updateRect);
-}
+    AudioPeaks *audioPeaks = audioPeaksIter->second;
+    if (!audioPeaks)
+        return;
 
-QRect CompositionModelImpl::updateCachedPreviewImage(AudioPeaks* apData, const Segment* segment)
-{
-    //RG_DEBUG << "updateCachedPreviewImage()";
+    unsigned channels = 0;
+    const std::vector<float> &values =
+            audioPreviewUpdater->getComputedValues(channels);
 
-    AudioPreviewPainter previewPainter(*this, apData, m_composition, segment);
+    // If we didn't get any peaks, bail.
+    if (channels == 0)
+        return;
+
+    audioPeaks->channels = channels;
+    // Copy the peaks to the cache.
+    audioPeaks->values = values;
+
+    AudioPreviewPainter previewPainter(
+            *this, audioPeaks, m_composition, audioPreviewUpdater->getSegment());
+    // Convert audio peaks to an image.
     previewPainter.paintPreviewImage();
 
-    m_audioPreviewImageCache[segment] = previewPainter.getPreviewImage();
+    // Cache the image.
+    m_audioPreviewImageCache[audioPreviewUpdater->getSegment()] =
+            previewPainter.getPreviewImage();
 
-    return previewPainter.getSegmentRect().rect;
+    if (!previewPainter.getSegmentRect().rect.isEmpty())
+        emit needUpdate(previewPainter.getSegmentRect().rect);
 }
 
 // --- Previews -----------------------------------------------------

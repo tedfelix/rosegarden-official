@@ -87,6 +87,13 @@ AudioPreviewThread::process()
     std::cerr << "AudioPreviewThread::process()\n";
 #endif
 
+    // ??? There appears to be a bug that causes this to run one extra time
+    //     at the beginning of a set of updates.  It's really easy to see
+    //     if you enable the sleep(5) below.  The first preview takes 10
+    //     seconds to appear.  Then the subsequent previews take 5 seconds
+    //     each.  It's as if a garbage entry is always at the head of the
+    //     queue.
+
     if (!m_queue.empty()) {
 
         int failed = 0;
@@ -106,6 +113,9 @@ AudioPreviewThread::process()
         int token = rec.first;
         Request req = rec.second;
         m_mutex.unlock();
+
+        // DEBUG.  Slow things down for testing.
+        //sleep(5);
 
         std::vector<float> results;
 

@@ -430,15 +430,11 @@ private:
     /// Create audio peaks for a segment asynchronously.
     /**
      * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
-     * slotAudioPeaksComplete() is called, which in turn calls
-     * updateCachedPreviewImage().
+     * slotAudioPeaksComplete() is called.
      *
      * Also generates the preview image asynchronously.
      */
     void makeAudioPeaksAsync(const Segment *);
-
-    /// Convert AudioPeaks into a QImageVector and add to m_audioPreviewImageCache.
-    QRect updateCachedPreviewImage(AudioPeaks *, const Segment *);
 
     /// More of an AudioPeaksThread.
     AudioPreviewThread *m_audioPreviewThread;
