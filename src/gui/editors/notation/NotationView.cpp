@@ -4185,44 +4185,36 @@ void
 //NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
-    // NOTE: these next comments are from before 1.0, and that should be
-    // understood when considering them in relation to Thorn
-    //
-    //!!! Problematic.  Ideally we wouldn't insert events into windows
-    //that weren't actually visible, otherwise all hell could break
-    //loose (metaphorically speaking, I should probably add).  I did
-    //think of checking isActiveWindow() and returning if the current
-    //window wasn't active, but that will prevent anyone from
-    //step-recording from e.g. vkeybd, which cannot be used without
-    //losing focus (and thus active-ness) from the Rosegarden window.
 
-    //!!! I know -- we'll keep track of which edit view (or main view,
-    //or mixer, etc) is active, and we'll only allow insertion into
-    //the most recently activated.  How about that?
-
-    /* was toggle */
-//      QAction *action = dynamic_cast<QAction*>
-//         (actionCollection()->action("toggle_step_by_step"));
-        QAction *action = findAction("toggle_step_by_step");
+    // find step recording action in menu (it ought to exist!)
+    QAction *action = findAction("toggle_step_by_step");
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
     }
-    if (!action->isChecked())
-        return ;
+
+    // return if we're not in step recording (step by step) mode
+    if (!action->isChecked()) return ;
+
+    // return if this window is not active, to avoid a window that is out of
+    // sight and out of mind filling rapidly with unexpected gibberish which has
+    // to be undone one event at a time
+    //
+    // NOTE: This prevents using step recording mode with an external app like
+    // VMPK.  I can't think of any other way to avoid the far greater problem of
+    // having to undo 15,000 unexpected events you didn't intend to record in an
+    // out of focus view that got left in step record mode.
+    if (!isActiveWindow()) return;
 
     Segment *segment = getCurrentSegment();
 
     NoteRestInserter *noteInserter = dynamic_cast<NoteRestInserter *>
                                      (m_notationWidget->getCurrentTool());
     if (!noteInserter) {
-        static bool showingError = false;
-        if (showingError)
-            return ;
-        showingError = true;
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Can't insert note: No note duration selected"));
-        showingError = false;
-        return ;
+        // The old behavior was totally evil, so let's try failing silently and
+        // see how obnoxious it is for the user to discover the hard way that
+        // nothing is happening, because the wrong tool is selected.
+        return;
     }
 
 //    if (m_inPaintEvent) {

@@ -1645,13 +1645,17 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
     }
-    if (!action->isChecked())
-        return ;
 
-//    if (m_inPaintEvent) {
-//        m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
-//        return ;
-//    }
+    // return if not in step recording mode
+    if (!action->isChecked()) return;
+
+    // return if this window isn't active, to avoid filling a forgotten edit
+    // view with garbage while banging away in some other window.
+    //
+    // NOTE: This prevents using something like VMPK for step recording, but I
+    // see no better alternative.
+    if (!isActiveWindow()) return;
+
 
     Segment *segment = getCurrentSegment();
 
@@ -1727,13 +1731,8 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     timeT endTime(insertionTime + getSnapGrid()->getSnapTime(insertionTime));
 
     if (endTime <= insertionTime) {
-        static bool showingError = false;
-        if (showingError)
-            return ;
-        showingError = true;
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Can't insert note: No grid duration selected"));
-        showingError = false;
-        return ;
+        // Fail silently, as in notation view
+        return;
     }
 
     MatrixInsertionCommand* command = 
