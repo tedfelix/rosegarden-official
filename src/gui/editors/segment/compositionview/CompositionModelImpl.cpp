@@ -229,7 +229,7 @@ void CompositionModelImpl::getSegmentRects(
                     QPoint(0, segmentRect.rect.y()), segment, clipRect,
                     notationPreviewRanges);
         } else {  // Audio Segment
-            makeAudioPreview(audioPreviews, segment, segmentRect);
+            makeAudioPreview(segment, segmentRect, audioPreviews);
         }
 
         segmentRects->push_back(segmentRect);
@@ -270,7 +270,7 @@ void CompositionModelImpl::getSegmentRects(
                     segmentRect.rect.topLeft(), segment, segmentRect.rect,
                     clipRect, notationPreviewRanges);
         } else {  // Audio Segment
-            makeAudioPreview(audioPreviews, segment, segmentRect);
+            makeAudioPreview(segment, segmentRect, audioPreviews);
         }
 
         segmentRects->push_back(segmentRect);
@@ -933,11 +933,9 @@ CompositionModelImpl::makeNotationPreview(
 
 void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 {
-    //RG_DEBUG << "\nCompositionModelImpl::setAudioPreviewThread()";
-
     // For each AudioPreviewUpdater
     while (!m_audioPreviewUpdaterMap.empty()) {
-        // Cause any running previews to be cancelled
+        // Delete it
         delete m_audioPreviewUpdaterMap.begin()->second;
         m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
     }
@@ -946,67 +944,51 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 }
 
 void CompositionModelImpl::makeAudioPreview(
-        AudioPreviews* apRects, const Segment* segment,
-        const SegmentRect& segRect)
+        const Segment *segment, const SegmentRect &segmentRect,
+        AudioPreviews *audioPreviews)
 {
     Profiler profiler("CompositionModelImpl::makeAudioPreview");
 
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreview - segRect = " << segRect.rect;
-
-    if (!apRects)
+    if (!audioPreviews)
         return;
 
-    // ??? Parameter order is wrong.  audioPreviews, the out
-    //     parameter, belongs at the end.
-
-    // ??? This is the only call to this function.  Inline it.
-    QImageVector previewImage = getAudioPreviewImage(segment);
-
-    // ??? COPY.  Why not create this object earlier and build the
-    //     preview in it?  That would avoid the copy.
-    AudioPreview previewItem(previewImage, segRect.rect);
-
-    if (m_changeType == ChangeResizeFromStart) {
-        // ??? All we need is the x coord!
-        QRect originalRect;
-        getSegmentQRect(*segment, originalRect);
-        previewItem.resizeOffset = segRect.rect.x() - originalRect.x();
-    }
-
-    apRects->push_back(previewItem);
-}
-
-CompositionModelImpl::QImageVector
-CompositionModelImpl::getAudioPreviewImage(const Segment* s)
-{
     // If needed, begin the asynchronous process of generating an
     // audio preview.
-    getAudioPeaks(s);
+    getAudioPeaks(segment);
 
-    return m_audioPreviewImageCache[s];
-}
+    // ??? COPY.  This copies a vector of QImage objects.  That seems
+    //     wasteful.  Some sort of pointer approach should be better.
+    //     Would it be ok for AudioPreview to just have a pointer
+    //     into the m_audioPreviewImageCache?  Perhaps a QSharedPointer
+    //     for safety?  Are the AudioPreview objects ephemeral enough?
+    AudioPreview audioPreview(
+            m_audioPreviewImageCache[segment], segmentRect.rect);
 
-CompositionModelImpl::AudioPeaks* CompositionModelImpl::getAudioPeaks(const Segment* s)
-{
-    Profiler profiler("CompositionModelImpl::getAudioPeaks");
-    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks";
+    if (m_changeType == ChangeResizeFromStart) {
+        int originalRectX =
+                lround(m_grid.getRulerScale()->getXForTime(
+                        segment->getStartTime()));
 
-    /**
-     * ??? This is called recursively.  This triggers the async preview
-     *     generation process (updateCachedAudioPeaks()) and is called
-     *     again once the process completes
-     *     (by slotAudioPeaksComplete()) to get the info from the cache.
-     *     This is too tangled.  Simplify.
-     */
-
-    AudioPeaks* apData = m_audioPeaksCache[s];
-
-    if (!apData) {
-        apData = updateCachedAudioPeaks(s);
+        audioPreview.resizeOffset = segmentRect.rect.x() - originalRectX;
     }
 
-    //RG_DEBUG << "CompositionModelImpl::getAudioPeaks returning";
-    return apData;
+    audioPreviews->push_back(audioPreview);
+}
+
+CompositionModelImpl::AudioPeaks *CompositionModelImpl::getAudioPeaks(
+        const Segment *s)
+{
+    Profiler profiler("CompositionModelImpl::getAudioPeaks");
+
+    // We must use find() because C++ makes no guarantee that a new
+    // map element is zeroed out.  IOW, m_audioPeaksCache[s] may be undefined.
+    AudioPeaksCache::const_iterator audioPeaksIter = m_audioPeaksCache.find(s);
+
+    // If not found in the cache, begin the cache update process
+    if (audioPeaksIter == m_audioPeaksCache.end())
+        return updateCachedAudioPeaks(s);
+
+    return audioPeaksIter->second;
 }
 
 CompositionModelImpl::AudioPeaks *
@@ -1067,9 +1049,12 @@ void CompositionModelImpl::makeAudioPeaksAsync(const Segment* segment)
 
 void CompositionModelImpl::slotAudioPeaksComplete(AudioPreviewUpdater* apu)
 {
-    RG_DEBUG << "CompositionModelImpl::slotAudioPeaksComplete()";
-
+    // ??? We already know it's in m_audioPeaksCache.
+    //     updateCachedAudioPeaks() put it there.  Just pull it out of
+    //     m_audioPeaksCache.
+    //     No need for this "recursive" call to the function that called us.
     AudioPeaks *apData = getAudioPeaks(apu->getSegment());
+
     QRect updateRect;
 
     if (apData) {

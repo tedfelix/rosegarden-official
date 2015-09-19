@@ -160,13 +160,14 @@ public:
     typedef std::vector<QImage> QImageVector;
 
     struct AudioPreview {
-        AudioPreview(QImageVector i, QRect r) :
-            image(i),
+        AudioPreview(const QImageVector &i, QRect r) :
+            image(i),  // ??? COPY
             rect(r),
             resizeOffset(0)
         { }
 
         // Vector of QImage tiles containing the preview graphics.
+        // ??? COPY.  This would be faster as a pointer.
         QImageVector image;
 
         // Segment rect in contents coords.
@@ -420,16 +421,8 @@ private:
     //      See makeAudioPreview().
 
     /// Make an AudioPreview for a Segment and add it to audioPreviews.
-    void makeAudioPreview(
-            AudioPreviews *audioPreviews, const Segment *,
-            const SegmentRect &segmentRect);
-
-    /**
-     * If it's cached, it's returned immediately.  Otherwise, the process
-     * of generating the preview asynchronously is started by a call to
-     * getAudioPeaks().
-     */
-    QImageVector getAudioPreviewImage(const Segment *);
+    void makeAudioPreview(const Segment *, const SegmentRect &,
+                          AudioPreviews *audioPreviews);
 
     /// Also generates the preview image asynchronously.
     AudioPeaks *getAudioPeaks(const Segment *);
