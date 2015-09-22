@@ -594,7 +594,7 @@ Segment::updateEndTime()
 {
     m_endTime = m_startTime;
     for (iterator i = begin(); i != end(); ++i) {
-        timeT t = (*i)->getAbsoluteTime() + (*i)->getDuration();
+        timeT t = (*i)->getAbsoluteTime() + (*i)->getGreaterDuration();
         if (t > m_endTime) m_endTime = t;
     }
 }
@@ -636,7 +636,7 @@ Segment::erase(iterator from, iterator to)
 {
     timeT startTime = 0, endTime = m_endTime;
     if (from != end()) startTime = (*from)->getAbsoluteTime();
-    if (to != end()) endTime = (*to)->getAbsoluteTime() + (*to)->getDuration();
+    if (to != end()) endTime = (*to)->getAbsoluteTime() + (*to)->getGreaterDuration();
 
     // Not very efficient, but without an observer event for
     // multiple erase we can't do any better.
