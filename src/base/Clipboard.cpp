@@ -101,9 +101,9 @@ Clipboard::newSegment()
 }
 
 Segment *
-Clipboard::newSegment(const Segment *copyFrom)
+Clipboard::newSegment(const Segment *copyFrom, bool deep)
 {
-    Segment *s = copyFrom->clone();
+    Segment *s = copyFrom->clone(deep);
     m_segments.insert(s);
     // don't change m_partial as we are inserting a complete segment
     return s;

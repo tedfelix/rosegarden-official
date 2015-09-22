@@ -93,8 +93,13 @@ public:
      * Add a new segment to the clipboard, containing copies of
      * the events in copyFrom.  (The clipboard retains ownership
      * of the new segment.)
+     * The parameter deep is passed to the Segment::clone() method used to
+     * create the new segment. This parameter is added to help fixing #1446.
+     * It is related to linked segments and has nothing to do with the "deep
+     * copies" vs "aliases" mentioned in the comment before the above
+     * "class clipboard" line.
      */
-    Segment *newSegment(const Segment *copyFrom);
+    Segment *newSegment(const Segment *copyFrom, bool deep = true);
 
     /**
      * Add one or more new segments to the clipboard, containing

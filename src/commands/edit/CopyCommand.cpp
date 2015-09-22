@@ -52,7 +52,8 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
         std::string label = (*i)->getLabel();
-        m_sourceClipboard->newSegment(*i)->setLabel(
+        // Fix #1446 : Make a deep copy only when segment is truly linked.
+        m_sourceClipboard->newSegment(*i, (*i)->isTrulyLinked())->setLabel(
                 appendLabel(label, qstrtostr(tr("(copied)"))));
     }
 }
