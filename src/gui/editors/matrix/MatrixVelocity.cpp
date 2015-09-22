@@ -226,15 +226,18 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
             commandLabel = tr("Change Velocities");
         }
 
+        m_scene->setSelection(0, false);
+
         CommandHistory::getInstance()->addCommand
             (new ChangeVelocityCommand(m_velocityDelta, *selection, false));
+
+        m_scene->setSelection(selection, false);
     }
 
     // Reset the start of mousemove
     m_velocityDelta = m_mouseStartY = 0;
     m_currentElement = 0;
     setBasicContextHelp();
-    delete selection;
 }
 
 void
