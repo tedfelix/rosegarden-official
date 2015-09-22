@@ -3032,8 +3032,9 @@ Instrument *
 RosegardenDocument::
 getInstrument(Segment *segment)
 {
-    if (!segment)
-        { return 0; }
+    if (!segment || !(segment->getComposition())) {
+        return 0;
+    }
 
     Studio &studio = getStudio();
     Instrument *instrument =
