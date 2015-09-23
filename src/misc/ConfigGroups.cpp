@@ -57,4 +57,6 @@ namespace Rosegarden
     const char* const PitchBendSequenceConfigGroup = "PitchBendSequence";
     const char* const CheckButtonConfigGroup = "CheckButton_Memory";
     const char* const SelectDialogConfigGroup = "SelectDialog_Memory";
+    const char* const QuantizeDialogNotationConfigGroup = "Quantize_Dialog_Notation";
+    const char* const QuantizeDialogGridConfigGroup = "Quantize_Dialog_Grid";
 }
