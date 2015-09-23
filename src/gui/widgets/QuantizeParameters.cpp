@@ -24,7 +24,6 @@
 #include "base/BasicQuantizer.h"
 #include "base/LegatoQuantizer.h"
 #include "base/NotationQuantizer.h"
-#include "misc/ConfigGroups.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
@@ -167,11 +166,11 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    if (m_configCategory.isEmpty()) {
+    if (!m_configCategory.isEmpty()) {
         if (defaultQuantizer == Notation)
-            m_configCategory = QuantizeDialogNotationConfigGroup;
+            m_configCategory = "Quantize Dialog Notation";
         else
-            m_configCategory = QuantizeDialogGridConfigGroup;
+            m_configCategory = "Quantize Dialog Grid";
     }
 
     int defaultSwing = 0;
