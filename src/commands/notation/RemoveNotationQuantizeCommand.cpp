@@ -54,6 +54,14 @@ RemoveNotationQuantizeCommand::modifySegment()
                                      (*i)->getAbsoluteTime(),
                                      (*i)->getDuration()));
 
+        if ((*i)->isa(Note::EventType) &&
+            (*i)->getNotationDuration() > (*i)->getDuration()) {
+            toInsert.push_back(new Event(Note::EventRestType,
+                                         (*i)->getAbsoluteTime() + (*i)->getDuration(),
+                                         (*i)->getNotationDuration() - (*i)->getDuration(),
+                                         Note::EventRestSubOrdering));
+        }
+
         toErase.push_back(*i);
     }
 
