@@ -1187,6 +1187,8 @@ conformRulerSelectionState(void)
     ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
     if (cr->isAnyRulerVisible())
         {
+            cr->slotSelectionChanged(getSelection());
+
             enterActionState("have_control_ruler");
             if (cr->hasSelection())
                 { enterActionState("have_controller_selection"); }

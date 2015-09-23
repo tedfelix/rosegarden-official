@@ -51,17 +51,11 @@ void
 PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (m_canSelect) {
-        if (e->itemList.size()) {
-            ControlItem *item = *(e->itemList.begin());
-            if (item->isSelected()) {
-
-            } else {
-                if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
-                    m_ruler->clearSelectedItems();
-                }
-
-                m_ruler->addToSelection(item);
-            }
+        unsigned int items = e->itemList.size();
+        if (m_ruler->getSelectedItems()->empty() && items > 0) {
+            // If there aren't selected items, we select the last of
+            // the mouse click items because it is over the others.
+            m_ruler->addToSelection(e->itemList[items-1]);
         }
     }
 
