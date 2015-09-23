@@ -100,18 +100,19 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     m_buttonPressed = true;
 
+    QPoint pos = m_canvas->viewportToContents(e->pos());
+
+    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
+
     // Shift adds to the selection.
     m_segmentAddMode = ((e->modifiers() & Qt::ShiftModifier) != 0);
     // Ctrl is segment copy.
     m_segmentCopyMode = ((e->modifiers() & Qt::ControlModifier) != 0);
     // Alt+Ctrl is copy as link.
     m_segmentCopyingAsLink = (
-            ((e->modifiers() & Qt::AltModifier) != 0) &&
-            ((e->modifiers() & Qt::ControlModifier) != 0));
-
-    QPoint pos = m_canvas->viewportToContents(e->pos());
-
-    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
+        (item && item->getSegment()->isTrulyLinked()) ||
+        (((e->modifiers() & Qt::AltModifier) != 0) &&
+         ((e->modifiers() & Qt::ControlModifier) != 0)));
 
     // If we're in segmentAddMode or not clicking on an item then we don't
     // clear the selection vector.  If we're clicking on an item and it's
