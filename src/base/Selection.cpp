@@ -87,9 +87,11 @@ EventSelection::EventSelection(const EventSelection &sel) :
 
 EventSelection::~EventSelection()
 {
-  // Notify observers of deconstruction
-    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
-	(*i)->eventSelectionDestroyed(this);
+    if (!m_observers.empty()) {
+        // Notify observers of deconstruction
+        for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+            (*i)->eventSelectionDestroyed(this);
+        }
     }
     m_originalSegment.removeObserver(this);
 }
