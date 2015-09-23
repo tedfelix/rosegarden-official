@@ -48,12 +48,10 @@ public:
 
     QuantizeParameters(QWidget *parent,
                        QuantizerType defaultQuantizer,
-                       bool showNotationOption,
-                       QString configCategory);
+                       bool showNotationOption);
     
     /**
      * Returned quantizer object is on heap -- caller must delete.
-     * Also writes values to KConfig if so requested in constructor.
      */
     Quantizer *getQuantizer() const;
 
@@ -68,9 +66,8 @@ public slots:
     void slotTypeChanged(int);
 
 protected:
-    QString m_configCategory;
-
     std::vector<timeT> m_standardQuantizations;
+    bool m_inNotation;
 
     QVBoxLayout *m_mainLayout;
 

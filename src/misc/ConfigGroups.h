@@ -60,6 +60,8 @@ namespace Rosegarden
     extern const char* const PitchBendSequenceConfigGroup;
     extern const char* const CheckButtonConfigGroup;
     extern const char* const SelectDialogConfigGroup;
+    extern const char* const GridQuantizeConfigGroup;
+    extern const char* const NotationQuantizeConfigGroup;
 }
 
 #endif

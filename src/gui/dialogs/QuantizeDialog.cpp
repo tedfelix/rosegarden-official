@@ -41,7 +41,7 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
 
     m_quantizeFrame = new QuantizeParameters(this , inNotation ?
             QuantizeParameters::Notation : QuantizeParameters::Grid,
-            false, 0);
+            false);
     vboxLayout->addWidget(m_quantizeFrame);
 
     m_quantizeFrame->getAdvancedWidget()->show();

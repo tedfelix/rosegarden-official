@@ -19,6 +19,7 @@
 #include "QuantizeParameters.h"
 
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
@@ -50,13 +51,12 @@ namespace Rosegarden
 
 QuantizeParameters::QuantizeParameters(QWidget *parent,
                                        QuantizerType defaultQuantizer,
-                                       bool showNotationOption,
-                                       QString configCategory) :
+                                       bool showNotationOption) :
         QFrame(parent),
-        m_configCategory(configCategory),
-        m_standardQuantizations
-        (BasicQuantizer::getStandardQuantizations())
+        m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
 {
+    m_inNotation = (defaultQuantizer == Notation);
+
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setSpacing(5);
     setContentsMargins(5, 5, 5, 5);
@@ -166,59 +166,37 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    if (!m_configCategory.isEmpty()) {
-        if (defaultQuantizer == Notation)
-            m_configCategory = "Quantize Dialog Notation";
-        else
-            m_configCategory = "Quantize Dialog Grid";
-    }
-
     int defaultSwing = 0;
     int defaultIterate = 100;
 
-    if (!m_configCategory.isEmpty()) {
-        QSettings settings;
-        settings.beginGroup( m_configCategory );
+    QSettings settings;
+    settings.beginGroup(m_inNotation ? NotationQuantizeConfigGroup : GridQuantizeConfigGroup);
 
-        defaultType = settings.value("quantizetype", (defaultQuantizer == Notation)
-                ? 2 : (defaultQuantizer == Legato) ? 1 : 0).toInt();
-        defaultUnit = settings.value("quantizeunit", static_cast<unsigned long long>(defaultUnit)).toInt();
-        defaultSwing = settings.value("quantizeswing", defaultSwing).toInt();
-        defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
-        m_notationTarget->setChecked(qStrToBool(settings.value
-                ("quantizenotationonly", (defaultQuantizer == Notation))));
-        m_durationCheckBox->setChecked(qStrToBool(settings.value
-                ("quantizedurations", "false")));
-        m_simplicityCombo->setCurrentIndex(settings.value
-                ("quantizesimplicity", 13).toInt()  - 11);
-        m_maxTuplet->setCurrentIndex(settings.value
-                ("quantizemaxtuplet", 3).toInt()  - 1);
-        m_counterpoint->setChecked(qStrToBool(settings.value
-                ("quantizecounterpoint", "false" )));
-        m_rebeam->setChecked(qStrToBool(settings.value
-                ("quantizerebeam", "true")));
-        m_makeViable->setChecked(qStrToBool(settings.value
-                ("quantizemakeviable", "false")));
-        m_deCounterpoint->setChecked(qStrToBool(settings.value
-                ("quantizedecounterpoint", "false")));
-        m_articulate->setChecked(qStrToBool(settings.value
-                ("quantizearticulate", "true")));
+    defaultType = settings.value("quantizetype", (defaultQuantizer == Notation)
+            ? 2 : (defaultQuantizer == Legato) ? 1 : 0).toInt();
+    defaultUnit = settings.value("quantizeunit", static_cast<unsigned long long>(defaultUnit)).toInt();
+    defaultSwing = settings.value("quantizeswing", defaultSwing).toInt();
+    defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
+    m_notationTarget->setChecked(qStrToBool(settings.value
+            ("quantizenotationonly", (defaultQuantizer == Notation))));
+    m_durationCheckBox->setChecked(qStrToBool(settings.value
+            ("quantizedurations", "false")));
+    m_simplicityCombo->setCurrentIndex(settings.value
+            ("quantizesimplicity", 13).toInt()  - 11);
+    m_maxTuplet->setCurrentIndex(settings.value
+            ("quantizemaxtuplet", 3).toInt()  - 1);
+    m_counterpoint->setChecked(qStrToBool(settings.value
+            ("quantizecounterpoint", "false" )));
+    m_rebeam->setChecked(qStrToBool(settings.value
+            ("quantizerebeam", "true")));
+    m_makeViable->setChecked(qStrToBool(settings.value
+            ("quantizemakeviable", "false")));
+    m_deCounterpoint->setChecked(qStrToBool(settings.value
+            ("quantizedecounterpoint", "false")));
+    m_articulate->setChecked(qStrToBool(settings.value
+            ("quantizearticulate", "true")));
 
-        settings.endGroup();
-    } else {
-        defaultType =
-            (defaultQuantizer == Notation) ? 2 :
-            (defaultQuantizer == Legato) ? 1 : 0;
-        m_notationTarget->setChecked(defaultQuantizer == Notation);
-        m_durationCheckBox->setChecked(false);
-        m_simplicityCombo->setCurrentIndex(2);
-        m_maxTuplet->setCurrentIndex(2);
-        m_counterpoint->setChecked(false);
-        m_rebeam->setChecked(true);
-        m_makeViable->setChecked(defaultQuantizer == Notation);
-        m_deCounterpoint->setChecked(defaultQuantizer == Notation);
-        m_articulate->setChecked(true);
-    }
+    settings.endGroup();
 
     m_postProcessingBox->show();
 
@@ -360,35 +338,33 @@ QuantizeParameters::getQuantizer() const
         quantizer = nq;
     }
 
-    if (!m_configCategory.isEmpty()) {
-        QSettings settings;
-        settings.beginGroup( m_configCategory );
+    QSettings settings;
+    settings.beginGroup(m_inNotation ? NotationQuantizeConfigGroup : GridQuantizeConfigGroup);
 
-        settings.setValue("quantizetype", type);
-        settings.setValue("quantizeunit", static_cast<unsigned long long>(unit));
-        settings.setValue("quantizeswing", swing);
-        settings.setValue("quantizeiterate", iterate);
-        settings.setValue("quantizenotationonly",
-                           m_notationTarget->isChecked());
-        if (type == 0) {
-            settings.setValue("quantizedurations",
-                               m_durationCheckBox->isChecked());
-        } else {
-            settings.setValue("quantizesimplicity",
-                               m_simplicityCombo->currentIndex() + 11);
-            settings.setValue("quantizemaxtuplet",
-                               m_maxTuplet->currentIndex() + 1);
-            settings.setValue("quantizecounterpoint",
-                               m_counterpoint->isChecked());
-            settings.setValue("quantizearticulate",
-                               m_articulate->isChecked());
-        }
-        settings.setValue("quantizerebeam", m_rebeam->isChecked());
-        settings.setValue("quantizemakeviable", m_makeViable->isChecked());
-        settings.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
-
-        settings.endGroup();
+    settings.setValue("quantizetype", type);
+    settings.setValue("quantizeunit", static_cast<unsigned long long>(unit));
+    settings.setValue("quantizeswing", swing);
+    settings.setValue("quantizeiterate", iterate);
+    settings.setValue("quantizenotationonly",
+                       m_notationTarget->isChecked());
+    if (type == 0) {
+        settings.setValue("quantizedurations",
+                           m_durationCheckBox->isChecked());
+    } else {
+        settings.setValue("quantizesimplicity",
+                           m_simplicityCombo->currentIndex() + 11);
+        settings.setValue("quantizemaxtuplet",
+                           m_maxTuplet->currentIndex() + 1);
+        settings.setValue("quantizecounterpoint",
+                           m_counterpoint->isChecked());
+        settings.setValue("quantizearticulate",
+                           m_articulate->isChecked());
     }
+    settings.setValue("quantizerebeam", m_rebeam->isChecked());
+    settings.setValue("quantizemakeviable", m_makeViable->isChecked());
+    settings.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
+
+    settings.endGroup();
 
     return quantizer;
 }
