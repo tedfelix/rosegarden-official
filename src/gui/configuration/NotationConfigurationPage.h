@@ -34,7 +34,6 @@ class QCheckBox;
 namespace Rosegarden
 {
 
-class QuantizeParameters;
 class FontRequester;
 
 
@@ -92,7 +91,6 @@ protected:
     QComboBox *m_accBarPolicy;
     QComboBox *m_keySigCancelMode;
     QCheckBox *m_splitAndTie;
-    QuantizeParameters *m_quantizeFrame;
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;
     QCheckBox *m_showRepeated;
