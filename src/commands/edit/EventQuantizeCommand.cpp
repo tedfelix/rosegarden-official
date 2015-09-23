@@ -137,6 +137,8 @@ EventQuantizeCommand::modifySegment()
         settings.endGroup();
     }
 
+    timeT endTime = segment.getEndTime();
+
     if (m_selection) {
         m_quantizer->quantize(m_selection);
 
@@ -144,6 +146,10 @@ EventQuantizeCommand::modifySegment()
         m_quantizer->quantize(&segment,
                               segment.findTime(getStartTime()),
                               segment.findTime(getEndTime()));
+    }
+
+    if (segment.getEndTime() < endTime) {
+        segment.setEndTime(endTime);
     }
 
     if (m_progressTotal > 0) {
