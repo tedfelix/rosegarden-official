@@ -240,7 +240,13 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
         // For selected items, draw the value in text alongside the marker
         // By preference, this should sit on top of the new line that represents this value change
-        str = QString::number(yToValue((*it)->y())-m_controller->getDefault());
+        
+        // Any controller that has a default of 64 is presumed to be or behave
+        // like pan, and display a working range of -64 to 64, centered on 0,
+        // rather than the usual 0 to 127.  Note, the == 64 is hard coded
+        // elsewhere, so one more won't hurt.  Fixes #1451.
+        int offsetFactor = (m_controller->getDefault() == 64 ? 64 : 0);
+        str = QString::number(yToValue((*it)->y()) - offsetFactor);
         int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
         int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
         
