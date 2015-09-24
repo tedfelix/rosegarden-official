@@ -576,6 +576,10 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
             number = res.toULong();
     }
 
+    //NOTE: while debugging #1451 I determined that the pan controller sets
+    // values 0 to 127 like anything else, and the difference in interpretation
+    // (improperly applied to volume and expression) is happening at a more
+    // superficial level; all of this code here is working logically
     if (m_controller->getType() == Rosegarden::Controller::EventType)
     {
         controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, initialValue);

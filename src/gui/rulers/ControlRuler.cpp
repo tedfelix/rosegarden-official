@@ -740,6 +740,8 @@ float ControlRuler::valueToY(long val)
 
 long ControlRuler::yToValue(float y)
 {
+    // NOTE: while debugging #1451 I had debug output here and it confirmed that
+    // value is returning very reasonable numbers, which get mangled elsewhere
     long value = (long)(y*(getMaxItemValue()-getMinItemValue()))+getMinItemValue();
     return value;
 }
