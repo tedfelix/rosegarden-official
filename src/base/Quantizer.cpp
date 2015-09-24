@@ -76,6 +76,11 @@ Quantizer::quantize(Segment *s,
 {
     Q_ASSERT(m_toInsert.size() == 0);
 
+    m_normalizeRegion.first =
+        (from != s->end() ? (*from)->getAbsoluteTime() : s->getStartTime());
+    m_normalizeRegion.second =
+        (to != s->end() ? (*to)->getAbsoluteTime() : s->getEndTime());
+
     quantizeRange(s, from, to);
 
     insertNewEvents(s);
@@ -128,6 +133,9 @@ Quantizer::quantize(EventSelection *selection)
     for (int i = 0; i < int(m_toInsert.size()); ++i) {
 	selection->addEvent(m_toInsert[i]);
     }
+
+    m_normalizeRegion.first = segment.getStartTime();
+    m_normalizeRegion.second = segment.getEndTime();
 
     // and then to the segment
     insertNewEvents(&segment);
@@ -454,8 +462,8 @@ Quantizer::insertNewEvents(Segment *s) const
 
 	timeT myTime = m_toInsert[i]->getAbsoluteTime();
 	timeT myDur  = m_toInsert[i]->getDuration();
-	if (i == 0 || myTime < minTime) minTime = myTime;
-	if (i == 0 || myTime + myDur > maxTime) maxTime = myTime + myDur;
+	if (myTime < minTime) minTime = myTime;
+	if (myTime + myDur > maxTime) maxTime = myTime + myDur;
 
 	s->insert(m_toInsert[i]);
     }
