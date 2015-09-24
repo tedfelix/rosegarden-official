@@ -23,9 +23,6 @@
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
-//#include "commands/matrix/MatrixModifyCommand.h"
-//#include "commands/matrix/MatrixInsertionCommand.h"
-//#include "commands/notation/NormalizeRestsCommand.h"
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
 #include "ControlRuler.h"
@@ -46,12 +43,6 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
     m_notOverCursor = Qt::CrossCursor;
     m_controlLineOrigin.first = -1;
     m_controlLineOrigin.second = -1;
-//    createAction("select", SLOT(slotSelectSelected()));
-//    createAction("draw", SLOT(slotDrawSelected()));
-//    createAction("erase", SLOT(slotEraseSelected()));
-//    createAction("resize", SLOT(slotResizeSelected()));
-//
-//    createMenu();
 }
 
 void
