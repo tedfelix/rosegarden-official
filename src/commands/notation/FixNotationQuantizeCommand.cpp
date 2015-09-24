@@ -57,7 +57,12 @@ FixNotationQuantizeCommand::modifySegment()
         timeT ud = (*i)->getDuration();
         timeT qt = (*i)->getNotationAbsoluteTime();
         timeT qd = (*i)->getNotationDuration();
+        timeT maxDur = segment.getBarEndForTime(qt) - qt;
         timeT dur = (ud == qd ? Note::getNearestNote(qd).getDuration() : qd);
+
+        if (dur > maxDur) {
+            dur = maxDur;
+        }
 
         toErase.push_back(*i);
         toInsert.push_back(new Event(**i, qt, dur));
