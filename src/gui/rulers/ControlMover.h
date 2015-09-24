@@ -19,8 +19,6 @@
 #define RG_CONTROLMOVER_H
 
 #include "ControlTool.h"
-//#include <QString>
-//#include "base/Event.h"
 #include "ControlItem.h"
 #include <QCursor>
 
@@ -45,22 +43,14 @@ public:
     virtual FollowMode handleMouseMove(const ControlMouseEvent *);
     virtual void handleMouseRelease(const ControlMouseEvent *);
 
-    /**
-     * Respond to an event being deleted -- it may be the one the tool
-     * is remembering as the current event.
-     */
-//    virtual void handleEventRemoved(Event *event);
-
     virtual void ready();
     virtual void stow();
 
     static const QString ToolName;
     
 signals:
-//    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 
 protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 protected:
     void setCursor(const ControlMouseEvent *);
