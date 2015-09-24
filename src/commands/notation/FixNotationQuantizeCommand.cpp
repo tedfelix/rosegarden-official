@@ -78,6 +78,8 @@ FixNotationQuantizeCommand::modifySegment()
         segment.insert(toInsert[j]);
     }
 
+    segment.normalizeRests(segment.getStartTime(), segment.getEndTime());
+
     /*!!!
         Segment *segment(&m_selection->getSegment());
         m_quantizer->fixQuantizedValues
