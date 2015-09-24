@@ -33,7 +33,6 @@ namespace Rosegarden
 class Segment;
 class RulerScale;
 class Event;
-//class EditViewBase;
 class ControlParameter;
 class ControlItem;
 
@@ -48,7 +47,7 @@ public:
                           RulerScale*,
                           QWidget* parent=0,
                           const ControlParameter *controller = 0,
-                          const char* name=0 );	//, WFlags f=0);
+                          const char* name=0 );
 
     virtual ~ControllerEventsRuler();
 
@@ -64,11 +63,8 @@ public:
     virtual void setSegment(Segment *);
 
     // SegmentObserver interface
-//    virtual void elementAdded(const ViewSegment *, ViewElement*);
     virtual void eventAdded(const Segment *, Event *);
-//    virtual void elementRemoved(const ViewSegment *, ViewElement*);
     virtual void eventRemoved(const Segment *, Event *);
-//    virtual void viewSegmentDeleted(const ViewSegment *);
     virtual void segmentDeleted(const Segment *);
 
     virtual ControlItem* addControlItem(float, float);
@@ -96,8 +92,6 @@ public:
     virtual Event * insertEvent(float,float);
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
-//    virtual void clearControllerEvents();
-//    virtual void startControlLine();
 
     ControlParameter* getControlParameter() { return m_controller; }
 
