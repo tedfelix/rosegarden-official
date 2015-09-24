@@ -39,7 +39,15 @@ namespace Rosegarden
 ControlPainter::ControlPainter(ControlRuler *parent) :
     ControlMover(parent, "ControlPainter")
 {
-    m_overCursor = Qt::OpenHandCursor;
+    // Bug #1452 "Control ruler hand cursor is obnoxious"
+    //
+    // After attempting to puzzle through the cursor switching logic and work
+    // out better logic or a more suitable alternative than Qt::OpenHandCursor, 
+    // I concluded that using the cross in all cases feels just fine in
+    // practice.  I decided to just set them the same and leave the switching
+    // logic in place, because it doesn't seem worth the effort to rip it all
+    // out.
+    m_overCursor = Qt::CrossCursor;
     m_notOverCursor = Qt::CrossCursor;
     m_controlLineOrigin.first = -1;
     m_controlLineOrigin.second = -1;
