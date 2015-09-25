@@ -603,15 +603,25 @@ MatrixScene::slotCommandExecuted()
 void
 MatrixScene::checkUpdate()
 {
+    bool updateSelectionElementStatus = false;
+
     for (unsigned int i = 0; i < m_viewSegments.size(); ++i) {
 
         SegmentRefreshStatus &rs = m_viewSegments[i]->getRefreshStatus();
-        
+
         if (rs.needsRefresh()) {
             m_viewSegments[i]->updateElements(rs.from(), rs.to());
+            if (!updateSelectionElementStatus && m_selection) {
+                updateSelectionElementStatus =
+                    (m_viewSegments[i]->getSegment() == m_selection->getSegment());
+            }
         }
-            
+
         rs.setNeedsRefresh(false);
+    }
+
+    if (updateSelectionElementStatus) {
+        setSelectionElementStatus(m_selection, true);
     }
 }
 
