@@ -151,7 +151,10 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
             m_scene->addItem(m_item);
         }
         float width = m_width;
-        if (width < 1) width = 1;
+        if (width < 1) {
+            x0 = std::max(0.0, x1 - 1);
+            width = 1;
+        }
         QRectF rect(0, 0, width, fres + 1);
         item->setRect(rect);
         item->setPen
