@@ -115,7 +115,7 @@ public:
      */
     void deleteCachedPreviews();
 
-    /// Delegates to CompositionModelImpl::setAudioPreviewThread().
+    /// Delegates to CompositionModelImpl::setAudioPeaksThread().
     /**
      * This is called when the document is being destroyed or the
      * application is going down.
@@ -359,7 +359,7 @@ private:
 
     // --- Event Handlers ---------------------------------
 
-    /// Redraw in response to AudioPreviewThread::AudioPreviewQueueEmpty.
+    /// Redraw in response to AudioPeaksThread::AudioPeaksQueueEmpty.
     virtual bool event(QEvent *);
 
     /// Passes the event on to the current tool.

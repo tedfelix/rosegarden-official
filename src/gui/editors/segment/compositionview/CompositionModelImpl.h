@@ -46,7 +46,7 @@ class Instrument;
 class Event;
 class Composition;
 class AudioPeaksGenerator;
-class AudioPreviewThread;
+class AudioPeaksThread;
 
 /// Model layer between CompositionView and Composition.
 /**
@@ -183,9 +183,9 @@ public:
 
     /**
      * Used by CompositionView's ctor to connect
-     * RosegardenDocument::m_audioPreviewThread.
+     * RosegardenDocument::m_audioPeaksThread.
      */
-    void setAudioPreviewThread(AudioPreviewThread *thread);
+    void setAudioPeaksThread(AudioPeaksThread *thread);
 
     struct AudioPeaks {
         AudioPeaks() :
@@ -194,7 +194,7 @@ public:
 
         unsigned int channels;
 
-        // See AudioPreviewThread::getPreview()
+        // See AudioPeaksThread::getPeaks()
         typedef std::vector<float> Values;
         Values values;
     };
@@ -433,8 +433,7 @@ private:
      */
     void updateAudioPeaksCache(const Segment *);
 
-    /// More of an AudioPeaksThread.
-    AudioPreviewThread *m_audioPreviewThread;
+    AudioPeaksThread *m_audioPeaksThread;
 
     typedef std::map<const Segment *, AudioPeaksGenerator *>
             AudioPeaksGeneratorMap;

@@ -19,7 +19,7 @@
 
 #include "CompositionModelImpl.h"
 #include "SegmentOrderer.h"
-#include "AudioPreviewThread.h"
+#include "AudioPeaksThread.h"
 #include "AudioPeaksGenerator.h"
 #include "AudioPreviewPainter.h"
 #include "ChangingSegment.h"
@@ -70,7 +70,7 @@ CompositionModelImpl::CompositionModelImpl(
     m_grid(rulerScale, trackCellHeight),
     m_instrumentStaticSignals(),
     m_notationPreviewCache(),
-    m_audioPreviewThread(0),
+    m_audioPeaksThread(0),
     m_audioPeaksGeneratorMap(),
     m_audioPeaksCache(),
     m_audioPreviewImageCache(),
@@ -125,9 +125,9 @@ CompositionModelImpl::~CompositionModelImpl()
         }
     }
 
-    if (m_audioPreviewThread) {
+    if (m_audioPeaksThread) {
         // For each audio peaks updater
-        // ??? This is similar to setAudioPreviewThread().
+        // ??? This is similar to setAudioPeaksThread().
         while (!m_audioPeaksGeneratorMap.empty()) {
             // Cause any running previews to be cancelled
             delete m_audioPeaksGeneratorMap.begin()->second;
@@ -928,7 +928,7 @@ CompositionModelImpl::makeNotationPreview(
 
 // --- Audio Previews -----------------------------------------------
 
-void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
+void CompositionModelImpl::setAudioPeaksThread(AudioPeaksThread *thread)
 {
     // For each AudioPeaksGenerator
     while (!m_audioPeaksGeneratorMap.empty()) {
@@ -937,7 +937,7 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
         m_audioPeaksGeneratorMap.erase(m_audioPeaksGeneratorMap.begin());
     }
 
-    m_audioPreviewThread = thread;
+    m_audioPeaksThread = thread;
 }
 
 void CompositionModelImpl::makeAudioPreview(
@@ -990,7 +990,7 @@ void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
     AudioPeaks *audioPeaks = new AudioPeaks();
     m_audioPeaksCache[segment] = audioPeaks;
 
-    if (!m_audioPreviewThread) {
+    if (!m_audioPeaksThread) {
         RG_DEBUG << "updateAudioPeaksCache() - No audio preview thread set.";
         return;
     }
@@ -1008,7 +1008,7 @@ void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
 
         AudioPeaksGenerator *generator =
                 new AudioPeaksGenerator(
-                        *m_audioPreviewThread, m_composition,
+                        *m_audioPeaksThread, m_composition,
                         segment, segmentRect.rect, this);
 
         connect(generator, SIGNAL(audioPeaksComplete(AudioPeaksGenerator*)),

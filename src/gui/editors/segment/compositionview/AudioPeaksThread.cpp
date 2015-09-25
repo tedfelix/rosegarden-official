@@ -16,7 +16,7 @@
 */
 
 
-#include "AudioPreviewThread.h"
+#include "AudioPeaksThread.h"
 #include "AudioPreviewReadyEvent.h"
 
 #include "base/RealTime.h"
@@ -28,16 +28,16 @@
 #include <QObject>
 #include <QThread>
 
-#define DEBUG_AUDIO_PREVIEW_THREAD 1
+#define DEBUG_AUDIO_PEAKS_THREAD 1
 
 namespace Rosegarden
 {
 
 
-const QEvent::Type AudioPreviewThread::AudioPreviewReady       = QEvent::Type(QEvent::User + 1);
-const QEvent::Type AudioPreviewThread::AudioPreviewQueueEmpty  = QEvent::Type(QEvent::User + 2);
+const QEvent::Type AudioPeaksThread::AudioPeaksReady       = QEvent::Type(QEvent::User + 1);
+const QEvent::Type AudioPeaksThread::AudioPeaksQueueEmpty  = QEvent::Type(QEvent::User + 2);
 
-AudioPreviewThread::AudioPreviewThread(AudioFileManager *manager) :
+AudioPeaksThread::AudioPeaksThread(AudioFileManager *manager) :
         m_manager(manager),
         m_nextToken(0),
         m_exiting(false),
@@ -45,13 +45,13 @@ AudioPreviewThread::AudioPreviewThread(AudioFileManager *manager) :
 {}
 
 void
-AudioPreviewThread::run()
+AudioPeaksThread::run()
 {
     bool emptyQueueSignalled = false;
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
 
-    std::cerr << "AudioPreviewThread::run entering\n";
+    std::cerr << "AudioPeaksThread::run entering\n";
 #endif
 
     while (!m_exiting) {
@@ -59,7 +59,7 @@ AudioPreviewThread::run()
         if (m_queue.empty()) {
             if (m_emptyQueueListener && !emptyQueueSignalled) {
                 QApplication::postEvent(m_emptyQueueListener,
-                                        new QEvent(AudioPreviewQueueEmpty));
+                                        new QEvent(AudioPeaksQueueEmpty));
                 emptyQueueSignalled = true;
             }
 
@@ -69,28 +69,28 @@ AudioPreviewThread::run()
         }
     }
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-    std::cerr << "AudioPreviewThread::run exiting\n";
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+    std::cerr << "AudioPeaksThread::run exiting\n";
 #endif
 }
 
 void
-AudioPreviewThread::finish()
+AudioPeaksThread::finish()
 {
     m_exiting = true;
 }
 
 bool
-AudioPreviewThread::process()
+AudioPeaksThread::process()
 {
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-    std::cerr << "AudioPreviewThread::process()\n";
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+    std::cerr << "AudioPeaksThread::process()\n";
 #endif
 
     // ??? There appears to be a bug that causes this to run one extra time
     //     at the beginning of a set of updates.  It's really easy to see
-    //     if you enable the sleep(5) below.  The first preview takes 10
-    //     seconds to appear.  Then the subsequent previews take 5 seconds
+    //     if you enable the sleep(5) below.  The first result takes 10
+    //     seconds to appear.  Then the subsequent results take 5 seconds
     //     each.  It's as if a garbage entry is always at the head of the
     //     queue.
 
@@ -107,7 +107,7 @@ AudioPreviewThread::process()
         RequestQueue::iterator i = m_queue.begin();
 
         // i->first is width, which we use only to provide an ordering to
-        // ensure we do smaller previews first.  We don't use it here.
+        // ensure we do smaller files first.  We don't use it here.
 
         RequestRec &rec = i->second;
         int token = rec.first;
@@ -120,11 +120,12 @@ AudioPreviewThread::process()
         std::vector<float> results;
 
         try {
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-            std::cerr << "AudioPreviewThread::process() file id " << req.audioFileId << std::endl;
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+            std::cerr << "AudioPeaksThread::process() file id " << req.audioFileId << std::endl;
 #endif
 
             // Requires thread-safe AudioFileManager::getPreview
+            // ??? rename: getPeaks()
             results = m_manager->getPreview(req.audioFileId,
                                             req.audioStartTime,
                                             req.audioEndTime,
@@ -132,8 +133,8 @@ AudioPreviewThread::process()
                                             req.showMinima);
         } catch (AudioFileManager::BadAudioPathException e) {
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-            std::cerr << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage() << std::endl;
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+            std::cerr << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage() << std::endl;
 #endif
 
             // OK, we hope this just means we're still recording -- so
@@ -142,8 +143,8 @@ AudioPreviewThread::process()
 
         } catch (PeakFileManager::BadPeakFileException e) {
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-            std::cerr << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage() << std::endl;
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+            std::cerr << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage() << std::endl;
 #endif
 
             // As above
@@ -178,29 +179,29 @@ AudioPreviewThread::process()
         m_mutex.unlock();
 
         if (failed > 0 && failed == inQueue) {
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-            std::cerr << "AudioPreviewThread::process() - return true\n";
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+            std::cerr << "AudioPeaksThread::process() - return true\n";
 #endif
 
             return true; // delay and try again
         }
     }
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-    std::cerr << "AudioPreviewThread::process() - return false\n";
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+    std::cerr << "AudioPeaksThread::process() - return false\n";
 #endif
 
     return false;
 }
 
 int
-AudioPreviewThread::requestPreview(const Request &request)
+AudioPeaksThread::requestPeaks(const Request &request)
 {
     m_mutex.lock();
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
 
-    std::cerr << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify << std::endl;
+    std::cerr << "AudioPeaksThread::requestPeaks() for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify << std::endl;
 #endif 
     /*!!!
         for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
@@ -218,21 +219,21 @@ AudioPreviewThread::requestPreview(const Request &request)
 
     //     if (!running()) start();
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
-    std::cerr << "AudioPreviewThread::requestPreview - token = " << token << std::endl;
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
+    std::cerr << "AudioPeaksThread::requestPeaks() - token = " << token << std::endl;
 #endif
 
     return token;
 }
 
 void
-AudioPreviewThread::cancelPreview(int token)
+AudioPeaksThread::cancelPeaks(int token)
 {
     m_mutex.lock();
 
-#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+#ifdef DEBUG_AUDIO_PEAKS_THREAD
 
-    std::cerr << "AudioPreviewThread::cancelPreview for token " << token << std::endl;
+    std::cerr << "AudioPeaksThread::cancelPeaks() for token " << token << std::endl;
 #endif
 
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
@@ -246,7 +247,7 @@ AudioPreviewThread::cancelPreview(int token)
 }
 
 void
-AudioPreviewThread::getPreview(int token, unsigned int &channels,
+AudioPeaksThread::getPeaks(int token, unsigned int &channels,
                                std::vector<float> &values)
 {
     m_mutex.lock();

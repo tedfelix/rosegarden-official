@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_AUDIOPREVIEWTHREAD_H
-#define RG_AUDIOPREVIEWTHREAD_H
+#ifndef RG_AUDIOPEAKSTHREAD_H
+#define RG_AUDIOPEAKSTHREAD_H
 
 #include "base/RealTime.h"
 #include <map>
@@ -39,15 +39,10 @@ class AudioFileManager;
 
 
 /// Generate audio peaks asynchronously.
-/**
- * While this is used for generating audio previews, it would be more
- * accurately named "AudioPeaksThread".  "Preview" can be replaced with
- * "Peaks" wherever it occurs in this class.
- */
-class AudioPreviewThread : public QThread
+class AudioPeaksThread : public QThread
 {
 public:
-    AudioPreviewThread(AudioFileManager *manager);
+    AudioPeaksThread(AudioFileManager *manager);
     
     virtual void run();
     virtual void finish();
@@ -61,15 +56,15 @@ public:
         QObject *notify;
     };
 
-    virtual int requestPreview(const Request &request);
-    virtual void cancelPreview(int token);
-    virtual void getPreview(int token, unsigned int &channels,
+    virtual int requestPeaks(const Request &request);
+    virtual void cancelPeaks(int token);
+    virtual void getPeaks(int token, unsigned int &channels,
                             std::vector<float> &values);
 
     void setEmptyQueueListener(QObject* o) { m_emptyQueueListener = o; }
 
-    static const QEvent::Type AudioPreviewReady;
-    static const QEvent::Type AudioPreviewQueueEmpty;
+    static const QEvent::Type AudioPeaksReady;
+    static const QEvent::Type AudioPeaksQueueEmpty;
     
 
 protected:

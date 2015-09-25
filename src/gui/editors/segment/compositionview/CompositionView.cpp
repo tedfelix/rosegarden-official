@@ -20,7 +20,7 @@
 #include "CompositionView.h"
 
 #include "misc/Debug.h"
-#include "AudioPreviewThread.h"
+#include "AudioPeaksThread.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SnapGrid.h"
@@ -158,8 +158,8 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             m_model, SLOT(slotAudioFileFinalized(Segment*)));
 
     // Audio Preview Thread
-    m_model->setAudioPreviewThread(&doc->getAudioPreviewThread());
-    doc->getAudioPreviewThread().setEmptyQueueListener(this);
+    m_model->setAudioPeaksThread(&doc->getAudioPeaksThread());
+    doc->getAudioPeaksThread().setEmptyQueueListener(this);
 
     // Update timer
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
@@ -190,7 +190,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
 void CompositionView::endAudioPreviewGeneration()
 {
     if (m_model) {
-        m_model->setAudioPreviewThread(0);
+        m_model->setAudioPeaksThread(0);
     }
 }
 
@@ -1226,7 +1226,7 @@ void CompositionView::drawTextFloat(QPainter *p)
 
 bool CompositionView::event(QEvent *e)
 {
-    if (e->type() == AudioPreviewThread::AudioPreviewQueueEmpty) {
+    if (e->type() == AudioPeaksThread::AudioPeaksQueueEmpty) {
         // Audio previews have been generated, redraw the segments.
         segmentsNeedRefresh();
         viewport()->update();

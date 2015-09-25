@@ -25,7 +25,7 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
-#include "gui/editors/segment/compositionview/AudioPreviewThread.h"
+#include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "sound/AudioFileManager.h"
 #include "base/Event.h"
@@ -256,13 +256,13 @@ public:
     const Studio& getStudio() const { return m_studio;}
 
     /*
-     * return the AudioPreviewThread
+     * return the AudioPeaksThread
      */
-    AudioPreviewThread& getAudioPreviewThread()
-        { return m_audioPreviewThread; }
+    AudioPeaksThread& getAudioPeaksThread()
+        { return m_audioPeaksThread; }
 
-    const AudioPreviewThread& getAudioPreviewThread() const
-        { return m_audioPreviewThread; }
+    const AudioPeaksThread& getAudioPeaksThread() const
+        { return m_audioPeaksThread; }
 
     /*
      * return the AudioFileManager
@@ -673,7 +673,7 @@ protected:
     /**
      * calculates AudioFile previews
      */
-    AudioPreviewThread m_audioPreviewThread;
+    AudioPeaksThread m_audioPeaksThread;
 
     typedef std::map<InstrumentId, Segment *> RecordingSegmentMap;
 

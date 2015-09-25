@@ -18,7 +18,7 @@
 #define RG_MODULE_STRING "[AudioPeaksGenerator]"
 
 #include "AudioPeaksGenerator.h"
-#include "AudioPreviewThread.h"
+#include "AudioPeaksThread.h"
 #include "AudioPreviewReadyEvent.h"
 #include "CompositionModelImpl.h"
 
@@ -37,7 +37,7 @@ namespace Rosegarden
 
 static int apuExtantCount = 0;
 
-AudioPeaksGenerator::AudioPeaksGenerator(AudioPreviewThread &thread,
+AudioPeaksGenerator::AudioPeaksGenerator(AudioPeaksThread &thread,
         const Composition& c, const Segment* s,
         const QRect& r,
         CompositionModelImpl* parent)
@@ -59,7 +59,7 @@ AudioPeaksGenerator::~AudioPeaksGenerator()
     --apuExtantCount;
     RG_DEBUG << "dtor on " << this << " ( token " << m_token << ") (now " << apuExtantCount << " extant)" << endl;
     if (m_token >= 0)
-        m_thread.cancelPreview(m_token);
+        m_thread.cancelPeaks(m_token);
 }
 
 void AudioPeaksGenerator::update()
@@ -75,7 +75,7 @@ void AudioPeaksGenerator::update()
     << m_segment->getAudioFileId() << " requesting values - thread running : "
     << m_thread.isRunning() << " - thread finished : " << m_thread.isFinished() << endl;
 
-    AudioPreviewThread::Request request;
+    AudioPeaksThread::Request request;
     request.audioFileId = m_segment->getAudioFileId();
     request.audioStartTime = audioStartTime;
     request.audioEndTime = audioEndTime;
@@ -83,15 +83,15 @@ void AudioPeaksGenerator::update()
     request.showMinima = m_showMinima;
     request.notify = this;
 
-    if (m_token >= 0) m_thread.cancelPreview(m_token);
-    m_token = m_thread.requestPreview(request);
+    if (m_token >= 0) m_thread.cancelPeaks(m_token);
+    m_token = m_thread.requestPeaks(request);
 
     if (!m_thread.isRunning()) m_thread.start();
 }
 
 void AudioPeaksGenerator::cancel()
 {
-    if (m_token >= 0) m_thread.cancelPreview(m_token);
+    if (m_token >= 0) m_thread.cancelPeaks(m_token);
     m_token = -1;
 }
 
@@ -100,7 +100,7 @@ bool AudioPeaksGenerator::event(QEvent *e)
     
     RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")" << endl;
 
-    if (e->type() == AudioPreviewThread::AudioPreviewReady) {
+    if (e->type() == AudioPeaksThread::AudioPeaksReady) {
         AudioPreviewReadyEvent *ev = dynamic_cast<AudioPreviewReadyEvent *>(e);
         if (ev) {
             int token = (int)ev->data();
@@ -111,7 +111,7 @@ bool AudioPeaksGenerator::event(QEvent *e)
             if (m_token >= 0 && token >= m_token) {
 
                 m_token = -1;
-                m_thread.getPreview(token, m_channels, m_values);
+                m_thread.getPeaks(token, m_channels, m_values);
 
                 if (m_channels == 0) {
                     RG_DEBUG << "failed to find peaks!\n";
@@ -128,7 +128,7 @@ bool AudioPeaksGenerator::event(QEvent *e)
                 // this one is out of date already
                 std::vector<float> tmp;
                 unsigned int tmpChannels;
-                m_thread.getPreview(token, tmpChannels, tmp);
+                m_thread.getPeaks(token, tmpChannels, tmp);
 
                 RG_DEBUG << "got obsolete peaks (" << tmpChannels
                 << " channels, " << tmp.size() << " samples)\n";

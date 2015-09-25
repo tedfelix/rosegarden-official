@@ -33,16 +33,16 @@ namespace Rosegarden
 class Segment;
 class CompositionModelImpl;
 class Composition;
-class AudioPreviewThread;
+class AudioPeaksThread;
 
 
-/// Sends a request to the AudioPreviewThread to generate audio peaks (m_values).
+/// Sends a request to the AudioPeaksThread to generate audio peaks (m_values).
 class AudioPeaksGenerator : public QObject
 {
     Q_OBJECT
 
 public:
-    AudioPeaksGenerator(AudioPreviewThread &thread,
+    AudioPeaksGenerator(AudioPeaksThread &thread,
                         const Composition &composition,
                         const Segment *segment,
                         const QRect &displayExtent,
@@ -68,7 +68,7 @@ signals:
 protected:
     virtual bool event(QEvent*);
 
-    AudioPreviewThread& m_thread;
+    AudioPeaksThread &m_thread;
 
     const Composition& m_composition;
     const Segment*     m_segment;

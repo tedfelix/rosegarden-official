@@ -57,7 +57,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
-#include "gui/editors/segment/compositionview/AudioPreviewThread.h"
+#include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
@@ -118,7 +118,7 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
         : QObject(parent),
         m_modified(false),
         m_autoSaved(false),
-        m_audioPreviewThread(&m_audioFileManager),
+        m_audioPeaksThread(&m_audioFileManager),
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
         m_quickMarkerTime(-1),
@@ -150,8 +150,8 @@ RosegardenDocument::~RosegardenDocument()
     RG_DEBUG << "~RosegardenDocument()\n";
     m_beingDestroyed = true;
 
-    m_audioPreviewThread.finish();
-    m_audioPreviewThread.wait();
+    m_audioPeaksThread.finish();
+    m_audioPeaksThread.wait();
 
     deleteEditViews();
 
