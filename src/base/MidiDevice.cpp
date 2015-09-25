@@ -337,7 +337,7 @@ MidiDevice::addProgram(const MidiProgram &prog)
     // Refuse duplicates
     for (ProgramList::const_iterator it = m_programList.begin();
          it != m_programList.end(); ++it) {
-        if (*it == prog) return;
+        if (it->partialCompare(prog)) return;
     }
 
     m_programList.push_back(prog);
@@ -514,7 +514,7 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
     ProgramList::const_iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (*it == program) {
+        if (it->partialCompare(program)) {
             std::string kmn = it->getKeyMapping();
             if (kmn == "") return 0;
             return getKeyMappingByName(kmn);
@@ -531,7 +531,7 @@ MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
     ProgramList::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (*it == program) {
+        if (it->partialCompare(program)) {
             it->setKeyMapping(mapping);
         }
     }
@@ -705,7 +705,7 @@ MidiDevice::getProgramName(const MidiProgram &program) const
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it)
     {
-        if (*it == program) return it->getName();
+        if (it->partialCompare(program)) return it->getName();
     }
 
     return std::string("");
@@ -769,7 +769,7 @@ MidiDevice::mergeProgramList(const ProgramList &programList)
     {
         for (oIt = m_programList.begin(); oIt != m_programList.end(); ++oIt)
         {
-            if (*it == *oIt)
+            if (it->partialCompare(*oIt))
             {
                 clash = true;
                 break;

@@ -705,7 +705,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     }
 
     // If the programs have changed, we need to repopulate the combobox.
-    if (programs != m_programs)
+    if (!partialCompareWithName(programs, m_programs))
     {
         // Update the cache.
         m_programs = programs;
@@ -822,14 +822,14 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 
     // For each variation
     for (size_t i = 0; i < variations.size(); ++i) {
-        if (getSelectedInstrument()->getProgram() == variations[i]) {
+        if (getSelectedInstrument()->getProgram().partialCompare(variations[i])) {
             currentVariation = i;
             break;
         }
     }
 
     // If the variations have changed, repopulate the combobox.
-    if (m_variations != variations) {
+    if (!partialCompareWithName(variations, m_variations)) {
         RG_DEBUG << "updateVariationComboBox(): Repopulating the combobox";
 
         // Update the cache.

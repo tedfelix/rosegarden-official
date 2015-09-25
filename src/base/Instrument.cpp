@@ -433,10 +433,17 @@ Instrument::isProgramValid() const
 
     ProgramList programList = md->getPrograms(m_program.getBank());
 
-    bool programChangeValid =
-            (std::find(programList.begin(),
-                       programList.end(),
-                       m_program) != programList.end());
+    bool programChangeValid = false;
+
+    // For each program in this bank
+    for (ProgramList::const_iterator programIter = programList.begin();
+         programIter != programList.end();
+         ++programIter) {
+        if (programIter->partialCompare(m_program)) {
+            programChangeValid = true;
+            break;
+        }
+    }
 
     if (!programChangeValid)
         return false;

@@ -75,14 +75,6 @@ public:
     MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "",
                 std::string keyMapping = "");
 
-    // Only compares m_bank and m_program.  Does not compare m_name or
-    // m_keyMapping.
-    // ??? WARNING: This is a partial compare.  It should be renamed to
-    //     partialCompare().  operator==() should only be used for full
-    //     compares.
-    // !!! rename: partialCompare()
-    bool operator==(const MidiProgram &p) const;
-    
     const MidiBank&     getBank() const;
     MidiByte            getProgram() const;
     const std::string  &getName() const;
@@ -90,6 +82,13 @@ public:
 
     void                setName(const std::string &name);
     void                setKeyMapping(const std::string &name);
+
+    // Only compares m_bank and m_program.  Does not compare m_name or
+    // m_keyMapping.
+    bool partialCompare(const MidiProgram &rhs) const;
+    // Only compares m_bank, m_program, and m_name.  Does not compare
+    // m_keyMapping.
+    bool partialCompareWithName(const MidiProgram &rhs) const;
 
 private:
     MidiBank m_bank;
@@ -99,6 +98,21 @@ private:
 };
 
 typedef std::vector<MidiProgram> ProgramList;
+
+inline bool
+partialCompareWithName(const ProgramList &lhs, const ProgramList &rhs)
+{
+    if (lhs.size() != rhs.size())
+        return false;
+
+    for (unsigned i = 0; i < lhs.size(); ++i) {
+        if (!lhs[i].partialCompareWithName(rhs[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 class MidiKeyMapping
 {

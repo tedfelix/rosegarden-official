@@ -92,15 +92,20 @@ MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, std::string nam
 }
 
 bool
-MidiProgram::operator==(const MidiProgram &p) const
+MidiProgram::partialCompare(const MidiProgram &rhs) const
 {
-    // ??? The use of MidiBank::partialCompare() here looks wrong, but
-    //     since the bank's name field is not used by a MidiProgram,
-    //     this is probably OK.  In fact MidiBank's op== would probably
-    //     work fine as well.
-    return m_bank.partialCompare(p.m_bank)  &&  m_program == p.m_program;
+    return m_bank.partialCompare(rhs.m_bank)  &&  m_program == rhs.m_program;
 }
-    
+
+bool
+MidiProgram::partialCompareWithName(const MidiProgram &rhs) const
+{
+    return (m_name == rhs.m_name  &&
+            m_program == rhs.m_program  &&
+            m_bank.getMSB() == rhs.m_bank.getMSB()  &&
+            m_bank.getLSB() == rhs.m_bank.getLSB());
+}
+
 const MidiBank &
 MidiProgram::getBank() const
 {
