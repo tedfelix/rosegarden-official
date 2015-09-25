@@ -554,7 +554,10 @@ void NotationSelector::drag(int x, int y, bool final)
                                  *selection));
             haveSomething = true;
         } else {
-            if (dragTime != clickedTime) {
+            timeT endTime = m_selectedStaff->getSegment().getEndTime();
+            timeT newEndTime = dragTime + selection->getTotalDuration();
+
+            if (dragTime != clickedTime && newEndTime <= endTime) {
                 mc = new MoveCommand
                      (m_selectedStaff->getSegment(),  //!!!sort
                       dragTime - clickedTime, true, *selection);
