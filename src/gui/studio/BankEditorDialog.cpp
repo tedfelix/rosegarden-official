@@ -1703,7 +1703,7 @@ BankEditorDialog::slotEditPaste()
         // Remove programs that will be overwritten
         //
         for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-            if (!(it->getBank() == m_lastBank))
+            if (!(it->getBank().partialCompare(m_lastBank)))
                 tempProg.push_back(*it);
         }
         m_programList = tempProg;
@@ -1716,7 +1716,7 @@ BankEditorDialog::slotEditPaste()
         // Add the new programs
         //
         for (it = tempProg.begin(); it != tempProg.end(); ++it) {
-            if (it->getBank() == sourceBank) {
+            if (it->getBank().partialCompare(sourceBank)) {
                 // Insert with new MSB and LSB
                 //
                 MidiProgram copyProgram(m_lastBank,

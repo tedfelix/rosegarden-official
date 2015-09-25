@@ -412,10 +412,18 @@ Instrument::isProgramValid() const
 
     BankList validBanks = md->getBanks(isPercussion());
 
-    bool bankValid =
-            (std::find(validBanks.begin(),
-                       validBanks.end(),
-                       m_program.getBank()) != validBanks.end());
+    bool bankValid = false;
+
+    // For each valid bank
+    for (BankList::const_iterator oBankIter = validBanks.begin();
+         oBankIter != validBanks.end();
+         ++oBankIter)
+    {
+        if (oBankIter->partialCompare(m_program.getBank())) {
+            bankValid = true;
+            break;
+        }
+    }
 
     if (!bankValid)
         return false;

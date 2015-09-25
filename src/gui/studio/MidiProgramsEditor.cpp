@@ -127,7 +127,7 @@ MidiProgramsEditor::getBankSubset(const MidiBank &bank)
     ProgramList::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->getBank() == bank)
+        if (it->getBank().partialCompare(bank))
             program.push_back(*it);
     }
 
@@ -147,7 +147,7 @@ MidiProgramsEditor::modifyCurrentPrograms(const MidiBank &oldBank,
     ProgramList::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->getBank() == oldBank) {
+        if (it->getBank().partialCompare(oldBank)) {
             *it = MidiProgram(newBank, it->getProgram(), it->getName());
         }
     }
@@ -624,14 +624,15 @@ MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
 bool
 MidiProgramsEditor::banklistContains(const MidiBank &bank)
 {
-    BankList::iterator it;
-
-    MidiBank bankNotPercussion = MidiBank(!bank.isPercussion(),
-                                          bank.getMSB(), bank.getLSB());
-    
-    for (it = m_bankList.begin(); it != m_bankList.end(); ++it)
-        if (*it == bank || *it == bankNotPercussion)
+    // For each bank
+    for (BankList::iterator it = m_bankList.begin();
+         it != m_bankList.end();
+         ++it)
+    {
+        // Just compare the MSB/LSB.
+        if (it->getMSB() == bank.getMSB()  &&  it->getLSB() == bank.getLSB())
             return true;
+    }
 
     return false;
 }
@@ -642,7 +643,9 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
     ProgramList::iterator it = m_programList.begin();
 
     for (; it != m_programList.end(); ++it) {
-        if (it->getBank() == bank && it->getProgram() == programNo) {
+        if (it->getBank().partialCompare(bank)  &&
+            it->getProgram() == programNo) {
+
             //Only show hits to avoid overflow of console.
             RG_DEBUG << "it->getBank() " << "== bank" << endl;
             return &(*it);

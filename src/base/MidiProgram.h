@@ -25,35 +25,39 @@ namespace Rosegarden
 typedef unsigned char MidiByte;
 typedef unsigned int InstrumentId;
 
+/**
+ * ??? This data structure doesn't match the concept of a bank.  A bank
+ *     is a container of programs.  There is no such containment here.  If
+ *     there were, it is possible that much of the code that works with
+ *     banks would be simplified.  E.g. there are many places throughout
+ *     the system where a program list is searched for all programs in a
+ *     bank.  That would be eliminated.
+ */
 class MidiBank
 {
 public:
     MidiBank();
     MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name = "");
 
-    // ??? Malformed.  Does not compare all fields.
-    bool operator==(const MidiBank &b) const;
-    // ??? Malformed.  Does not compare all fields.
-    bool operator!=(const MidiBank &b) const  { return !operator==(b); }
-    /**
-     * Compare all fields.  This is what operator==() should be doing.
-     * Since it isn't, I am going to carefully transition each caller of
-     * op==() to fullCompare() and test to make sure there are no ill
-     * effects.  Once all have been safely transitioned, op==() will
-     * be modified to do a full compare and this will be removed.
-     * A partialCompare() may be needed for those that depend on
-     * the current op==() behavior.
-     */
-    bool fullCompare(const MidiBank &rhs) const;
-    /// Compare all fields except name.
-    bool partialCompare(const MidiBank &rhs) const;
-
     bool                isPercussion() const;
     MidiByte            getMSB() const;
     MidiByte            getLSB() const;
-    std::string         getName() const;
 
     void                setName(std::string name);
+    std::string         getName() const;
+
+    /// A full comparison of all fields.
+    /**
+     * This probably isn't what you want.  See partialCompare().
+     */
+    bool operator==(const MidiBank &rhs) const;
+    bool operator!=(const MidiBank &rhs) const  { return !operator==(rhs); }
+    /// Compare all fields except name.
+    /**
+     * Since MidiProgram stores a partial MidiBank object (without name),
+     * a partial comparison such as this is frequently needed.
+     */
+    bool partialCompare(const MidiBank &rhs) const;
 
 private:
     bool m_percussion;
@@ -71,7 +75,12 @@ public:
     MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "",
                 std::string keyMapping = "");
 
-    // comparator disregards name
+    // Only compares m_bank and m_program.  Does not compare m_name or
+    // m_keyMapping.
+    // ??? WARNING: This is a partial compare.  It should be renamed to
+    //     partialCompare().  operator==() should only be used for full
+    //     compares.
+    // !!! rename: partialCompare()
     bool operator==(const MidiProgram &p) const;
     
     const MidiBank&     getBank() const;

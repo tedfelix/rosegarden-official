@@ -547,7 +547,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
         // Find the selected bank in the MIDI Device's bank list.
         for (unsigned int i = 0; i < banks.size(); ++i) {
-            if (getSelectedInstrument()->getProgram().getBank() == banks[i]) {
+            if (getSelectedInstrument()->getProgram().getBank().partialCompare(banks[i])) {
                 currentBank = i;
                 break;
             }

@@ -30,27 +30,14 @@ MidiBank::MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name
 }
 
 bool
-MidiBank::operator==(const MidiBank &b) const
+MidiBank::operator==(const MidiBank &rhs) const
 {
-#if 1
-    // Incomplete
-    return m_percussion == b.m_percussion && m_msb == b.m_msb && m_lsb == b.m_lsb;
-#else
-    // Complete
-    return (m_percussion == b.m_percussion  &&
-            m_msb == b.m_msb  &&
-            m_lsb == b.m_lsb  &&
-            m_name == b.m_name);
-#endif
-}
-
-bool
-MidiBank::fullCompare(const MidiBank &rhs) const
-{
+    // Complete compare.
+    // If you need to compare everything except the name, use partialCompare().
     return (m_percussion == rhs.m_percussion  &&
             m_msb == rhs.m_msb  &&
             m_lsb == rhs.m_lsb  &&
-            m_name == rhs.m_name);
+            m_name == rhs.m_name);  // See partialCompare() which doesn't compare the name.
 }
 
 bool
@@ -107,7 +94,11 @@ MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, std::string nam
 bool
 MidiProgram::operator==(const MidiProgram &p) const
 {
-    return m_bank == p.m_bank && m_program == p.m_program;
+    // ??? The use of MidiBank::partialCompare() here looks wrong, but
+    //     since the bank's name field is not used by a MidiProgram,
+    //     this is probably OK.  In fact MidiBank's op== would probably
+    //     work fine as well.
+    return m_bank.partialCompare(p.m_bank)  &&  m_program == p.m_program;
 }
     
 const MidiBank &
