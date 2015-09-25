@@ -315,6 +315,10 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     if (!m_viewSegment) return;
 
     PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, m_viewSegment, m_scale, this);
+
+    connect(controlruler, SIGNAL(rulerSelectionChanged(EventSelection *)),
+            this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
+
     controlruler->setXOffset(m_gutter);
     controlruler->updateSelection(&m_selectedElements);
 
@@ -325,6 +329,8 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     QString name = QString::fromStdString(propertyName.getName());
     if (name == "velocity") name = tr("Velocity");
     addRuler(controlruler, name);
+    // Update selection drawing in matrix view.
+    emit childRulerSelectionChanged(0);
 }
 
 void
