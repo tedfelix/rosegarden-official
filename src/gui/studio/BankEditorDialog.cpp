@@ -1185,11 +1185,17 @@ BankEditorDialog::slotDelete()
 
             // Copy across all programs that aren't in the doomed bank
             //
-            ProgramList::iterator it;
-            ProgramList tempList;
-            for (it = m_programList.begin(); it != m_programList.end(); ++it)
-                if (!(it->getBank() == bank))
-                    tempList.push_back(*it);
+            ProgramList newProgramList;
+            for (ProgramList::iterator it = m_programList.begin();
+                 it != m_programList.end();
+                 ++it) {
+                // If this program isn't in the bank that is being deleted,
+                // add it to the new program list.  We use partialCompare()
+                // because the MidiBank objects in the program list do not
+                // have their name fields filled in.
+                if (!it->getBank().partialCompare(bank))
+                    newProgramList.push_back(*it);
+            }
 
             // Erase the bank and repopulate
             //
@@ -1197,7 +1203,7 @@ BankEditorDialog::slotDelete()
                 m_bankList.begin();
             er += currentBank;
             m_bankList.erase(er);
-            m_programList = tempList;
+            m_programList = newProgramList;
             keepBankListForNextPopulate();
 
             // the listview automatically selects a new current item

@@ -31,9 +31,23 @@ public:
     MidiBank();
     MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name = "");
 
-    // comparator disregards name
+    // ??? Malformed.  Does not compare all fields.
     bool operator==(const MidiBank &b) const;
-    
+    // ??? Malformed.  Does not compare all fields.
+    bool operator!=(const MidiBank &b) const  { return !operator==(b); }
+    /**
+     * Compare all fields.  This is what operator==() should be doing.
+     * Since it isn't, I am going to carefully transition each caller of
+     * op==() to fullCompare() and test to make sure there are no ill
+     * effects.  Once all have been safely transitioned, op==() will
+     * be modified to do a full compare and this will be removed.
+     * A partialCompare() may be needed for those that depend on
+     * the current op==() behavior.
+     */
+    bool fullCompare(const MidiBank &rhs) const;
+    /// Compare all fields except name.
+    bool partialCompare(const MidiBank &rhs) const;
+
     bool                isPercussion() const;
     MidiByte            getMSB() const;
     MidiByte            getLSB() const;

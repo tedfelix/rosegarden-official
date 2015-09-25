@@ -32,9 +32,35 @@ MidiBank::MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name
 bool
 MidiBank::operator==(const MidiBank &b) const
 {
+#if 1
+    // Incomplete
     return m_percussion == b.m_percussion && m_msb == b.m_msb && m_lsb == b.m_lsb;
+#else
+    // Complete
+    return (m_percussion == b.m_percussion  &&
+            m_msb == b.m_msb  &&
+            m_lsb == b.m_lsb  &&
+            m_name == b.m_name);
+#endif
 }
-    
+
+bool
+MidiBank::fullCompare(const MidiBank &rhs) const
+{
+    return (m_percussion == rhs.m_percussion  &&
+            m_msb == rhs.m_msb  &&
+            m_lsb == rhs.m_lsb  &&
+            m_name == rhs.m_name);
+}
+
+bool
+MidiBank::partialCompare(const MidiBank &rhs) const
+{
+    return (m_percussion == rhs.m_percussion  &&
+            m_msb == rhs.m_msb  &&
+            m_lsb == rhs.m_lsb);
+}
+
 bool
 MidiBank::isPercussion() const
 {
