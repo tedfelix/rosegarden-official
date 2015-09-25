@@ -1103,32 +1103,30 @@ void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
     }
 }
 
-void CompositionModelImpl::deleteCachedPreview(const Segment *s)
+void CompositionModelImpl::deleteCachedPreview(const Segment *segment)
 {
-    if (!s)
+    if (!segment)
         return;
 
     // MIDI
-    if (s->getType() == Segment::Internal) {
-        NotationPreviewCache::iterator i = m_notationPreviewCache.find(s);
+    if (segment->getType() == Segment::Internal) {
+        NotationPreviewCache::iterator i = m_notationPreviewCache.find(segment);
         if (i != m_notationPreviewCache.end()) {
             delete i->second;
             m_notationPreviewCache.erase(i);
         }
     } else {  // Audio
-        AudioPeaksCache::iterator i = m_audioPeaksCache.find(s);
+        AudioPeaksCache::iterator i = m_audioPeaksCache.find(segment);
         if (i != m_audioPeaksCache.end()) {
             delete i->second;
             m_audioPeaksCache.erase(i);
         }
-        m_audioPreviewImageCache.erase(s);
+        m_audioPreviewImageCache.erase(segment);
     }
 }
 
 void CompositionModelImpl::deleteCachedPreviews()
 {
-    //RG_DEBUG << "deleteCachedPreviews()";
-
     // Notation Previews
 
     for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
@@ -1137,7 +1135,7 @@ void CompositionModelImpl::deleteCachedPreviews()
     }
     m_notationPreviewCache.clear();
 
-    // Audio Peaks Generators
+    // Stop Audio Peaks Generators
 
     for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
          i != m_audioPreviewUpdaterMap.end(); ++i) {
@@ -1159,13 +1157,12 @@ void CompositionModelImpl::deleteCachedPreviews()
 void CompositionModelImpl::setSelected(Segment *segment, bool selected)
 {
     if (!segment) {
-        RG_DEBUG << "WARNING : CompositionModelImpl::setSelected() - segment is NULL";
+        RG_DEBUG << "setSelected(): WARNING - segment is NULL";
         return;
     }
 
-    //RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected;
-
     // Update m_selectedSegments
+
     if (selected) {
         if (!isSelected(segment))
             m_selectedSegments.insert(segment);
@@ -1186,8 +1183,6 @@ void CompositionModelImpl::selectSegments(const SegmentSelection &segments)
 
 void CompositionModelImpl::clearSelected()
 {
-    //RG_DEBUG << "CompositionModelImpl::clearSelected";
-
     m_selectedSegments.clear();
     emit needUpdate();
 }
@@ -1196,38 +1191,38 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
 {
     m_selectionRect = rect.normalized();
 
-    //RG_DEBUG << "setSelectionRect: " << r << " -> " << m_selectionRect;
-
     m_previousTmpSelectedSegments = m_tmpSelectedSegments;
     m_tmpSelectedSegments.clear();
 
-    const SegmentMultiSet& segments = m_composition.getSegments();
-    SegmentMultiSet::iterator segEnd = segments.end();
+    const SegmentMultiSet &segments = m_composition.getSegments();
 
     QRect updateRect = m_selectionRect;
 
     // For each segment in the composition
     for (SegmentMultiSet::iterator i = segments.begin();
-         i != segEnd; ++i) {
+         i != segments.end();
+         ++i) {
+
+        Segment *segment = *i;
 
         QRect segmentRect;
-        getSegmentQRect(**i, segmentRect);
+        getSegmentQRect(*segment, segmentRect);
 
         if (segmentRect.intersects(m_selectionRect)) {
-            m_tmpSelectedSegments.insert(*i);
+            m_tmpSelectedSegments.insert(segment);
             updateRect |= segmentRect;
         }
     }
 
     updateRect = updateRect.normalized();
 
-    if (!updateRect.isNull() && !m_previousSelectionUpdateRect.isNull()) {
+    // If the selection has changed, update the segments.
+    if (m_tmpSelectedSegments != m_previousTmpSelectedSegments)
+        emit needUpdate(updateRect | m_previousSelectionUpdateRect);
 
-        if (m_tmpSelectedSegments != m_previousTmpSelectedSegments)
-            emit needUpdate(updateRect | m_previousSelectionUpdateRect);
-
+    // If the rubber band has size, update it.
+    if (!updateRect.isNull())
         emit needArtifactsUpdate();
-    }
 
     m_previousSelectionUpdateRect = updateRect;
 }
@@ -1235,22 +1230,28 @@ void CompositionModelImpl::setSelectionRect(const QRect &rect)
 void CompositionModelImpl::finalizeSelectionRect()
 {
     const SegmentMultiSet &segments = m_composition.getSegments();
-    SegmentMultiSet::const_iterator segEnd = segments.end();
 
     // For each segment in the composition
     for (SegmentMultiSet::const_iterator i = segments.begin();
-         i != segEnd; ++i) {
+         i != segments.end();
+         ++i) {
+
+        Segment *segment = *i;
 
         QRect segmentRect;
-        getSegmentQRect(**i, segmentRect);
+        getSegmentQRect(*segment, segmentRect);
 
         if (segmentRect.intersects(m_selectionRect)) {
-            setSelected(*i);
+            // ??? This triggers an update for each selected segment.
+            //     Wasteful.
+            setSelected(segment);
         }
     }
 
     // Clear the selection rect state for the next time.
-    m_previousSelectionUpdateRect = m_selectionRect = QRect();
+    m_previousSelectionUpdateRect = QRect();
+    m_selectionRect = QRect();
+    m_previousTmpSelectedSegments.clear();
     m_tmpSelectedSegments.clear();
 }
 
@@ -1261,7 +1262,8 @@ void CompositionModelImpl::selectionHasChanged()
 
 bool CompositionModelImpl::isSelected(const Segment *s) const
 {
-    return m_selectedSegments.find(const_cast<Segment *>(s)) != m_selectedSegments.end();
+    return m_selectedSegments.find(const_cast<Segment *>(s)) !=
+               m_selectedSegments.end();
 }
 
 QRect CompositionModelImpl::getSelectedSegmentsRect()
@@ -1269,12 +1271,14 @@ QRect CompositionModelImpl::getSelectedSegmentsRect()
     QRect selectionRect;
 
     // For each selected segment, accumulate the selection rect
-    for (SegmentSelection::iterator i = m_selectedSegments.begin();
-            i != m_selectedSegments.end(); ++i) {
+    for (SegmentSelection::iterator segIter = m_selectedSegments.begin();
+         segIter != m_selectedSegments.end();
+         ++segIter) {
 
-        QRect sr;
-        getSegmentQRect(**i, sr);
-        selectionRect |= sr;
+        QRect segmentRect;
+        getSegmentQRect(**segIter, segmentRect);
+
+        selectionRect |= segmentRect;
     }
 
     return selectionRect;
@@ -1282,37 +1286,33 @@ QRect CompositionModelImpl::getSelectedSegmentsRect()
 
 bool CompositionModelImpl::isTmpSelected(const Segment *s) const
 {
-    return m_tmpSelectedSegments.find(const_cast<Segment *>(s)) != m_tmpSelectedSegments.end();
+    return m_tmpSelectedSegments.find(const_cast<Segment *>(s)) !=
+               m_tmpSelectedSegments.end();
 }
 
 // --- Misc ---------------------------------------------------------
 
-int CompositionModelImpl::getCompositionHeight()
+int CompositionModelImpl::getCompositionHeight() const
 {
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
-CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(const QRect& rect)
+CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
+        const QRect &rect)
 {
     int top = m_grid.getYBin(rect.y());
     int bottom = m_grid.getYBin(rect.y() + rect.height());
 
-//    RG_DEBUG << "CompositionModelImpl::getTrackYCoords: rect "
-//              << rect.x() << ", " << rect.y() << ", "
-//              << rect.width() << "x" << rect.height() << ", top = " << top
-//              << ", bottom = " << bottom;
-    
+    // Make sure we have the latest track heights.
     updateAllTrackHeights();
-    
-    CompositionModelImpl::YCoordVector list;
+
+    CompositionModelImpl::YCoordVector yCoordVector;
 
     for (int pos = top; pos <= bottom; ++pos) {
-        int divider = m_grid.getYBinCoordinate(pos);
-        list.push_back(divider);
-//        RG_DEBUG << "divider at " << divider;
+        yCoordVector.push_back(m_grid.getYBinCoordinate(pos));
     }
 
-    return list;
+    return yCoordVector;
 }
 
 }

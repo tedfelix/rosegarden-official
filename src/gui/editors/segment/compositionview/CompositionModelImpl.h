@@ -313,7 +313,7 @@ public:
     YCoordVector getTrackYCoords(const QRect &clipRect);
 
     /// Number of pixels needed vertically to render all tracks.
-    int getCompositionHeight();
+    int getCompositionHeight() const;
 
 signals:
     /// Connected to CompositionView::slotUpdateAll()
