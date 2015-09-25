@@ -16,8 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_AUDIOPREVIEWUPDATER_H
-#define RG_AUDIOPREVIEWUPDATER_H
+#ifndef RG_AUDIOPEAKSGENERATOR_H
+#define RG_AUDIOPEAKSGENERATOR_H
 
 #include <QObject>
 #include <QRect>
@@ -37,20 +37,17 @@ class AudioPreviewThread;
 
 
 /// Sends a request to the AudioPreviewThread to generate audio peaks (m_values).
-/**
- * ??? rename: AudioPeaksGenerator
- */
-class AudioPreviewUpdater : public QObject
+class AudioPeaksGenerator : public QObject
 {
     Q_OBJECT
 
 public:
-    AudioPreviewUpdater(AudioPreviewThread &thread,
+    AudioPeaksGenerator(AudioPreviewThread &thread,
                         const Composition &composition,
                         const Segment *segment,
                         const QRect &displayExtent,
                         CompositionModelImpl *parent);
-    ~AudioPreviewUpdater();
+    ~AudioPeaksGenerator();
 
     // ??? rename: generateAsync()
     void update();
@@ -66,7 +63,7 @@ public:
     { channels = m_channels; return m_values; }
 
 signals:
-    void audioPreviewComplete(AudioPreviewUpdater*);
+    void audioPeaksComplete(AudioPeaksGenerator *);
 
 protected:
     virtual bool event(QEvent*);
@@ -81,7 +78,7 @@ protected:
     // ??? rename: m_peaks
     std::vector<float>             m_values;
 
-    intptr_t m_previewToken;
+    intptr_t m_token;
 };
 
 

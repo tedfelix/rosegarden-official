@@ -15,9 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[AudioPreviewUpdater]"
+#define RG_MODULE_STRING "[AudioPeaksGenerator]"
 
-#include "AudioPreviewUpdater.h"
+#include "AudioPeaksGenerator.h"
 #include "AudioPreviewThread.h"
 #include "AudioPreviewReadyEvent.h"
 #include "CompositionModelImpl.h"
@@ -37,7 +37,7 @@ namespace Rosegarden
 
 static int apuExtantCount = 0;
 
-AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
+AudioPeaksGenerator::AudioPeaksGenerator(AudioPreviewThread &thread,
         const Composition& c, const Segment* s,
         const QRect& r,
         CompositionModelImpl* parent)
@@ -48,21 +48,21 @@ AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
         m_rect(r),
         m_showMinima(false),
         m_channels(0),
-        m_previewToken( -1)
+        m_token( -1)
 {
     ++apuExtantCount;
-    RG_DEBUG << "AudioPreviewUpdater::AudioPreviewUpdater " << this << " (now " << apuExtantCount << " extant)" << endl;
+    RG_DEBUG << "ctor " << this << " (now " << apuExtantCount << " extant)" << endl;
 }
 
-AudioPreviewUpdater::~AudioPreviewUpdater()
+AudioPeaksGenerator::~AudioPeaksGenerator()
 {
     --apuExtantCount;
-    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater on " << this << " ( token " << m_previewToken << ") (now " << apuExtantCount << " extant)" << endl;
-    if (m_previewToken >= 0)
-        m_thread.cancelPreview(m_previewToken);
+    RG_DEBUG << "dtor on " << this << " ( token " << m_token << ") (now " << apuExtantCount << " extant)" << endl;
+    if (m_token >= 0)
+        m_thread.cancelPreview(m_token);
 }
 
-void AudioPreviewUpdater::update()
+void AudioPeaksGenerator::update()
 {
     // Get sample start and end times and work out duration
     //
@@ -71,7 +71,7 @@ void AudioPreviewUpdater::update()
                             m_composition.getElapsedRealTime(m_segment->getEndMarkerTime()) -
                             m_composition.getElapsedRealTime(m_segment->getStartTime()) ;
 
-    RG_DEBUG << "AudioPreviewUpdater(" << this << ")::update() - for file id "
+    RG_DEBUG << "AudioPeaksGenerator(" << this << ")::update() - for file id "
     << m_segment->getAudioFileId() << " requesting values - thread running : "
     << m_thread.isRunning() << " - thread finished : " << m_thread.isFinished() << endl;
 
@@ -83,45 +83,45 @@ void AudioPreviewUpdater::update()
     request.showMinima = m_showMinima;
     request.notify = this;
 
-    if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
-    m_previewToken = m_thread.requestPreview(request);
+    if (m_token >= 0) m_thread.cancelPreview(m_token);
+    m_token = m_thread.requestPreview(request);
 
     if (!m_thread.isRunning()) m_thread.start();
 }
 
-void AudioPreviewUpdater::cancel()
+void AudioPeaksGenerator::cancel()
 {
-    if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
-    m_previewToken = -1;
+    if (m_token >= 0) m_thread.cancelPreview(m_token);
+    m_token = -1;
 }
 
-bool AudioPreviewUpdater::event(QEvent *e)
+bool AudioPeaksGenerator::event(QEvent *e)
 {
     
-    RG_DEBUG << "AudioPreviewUpdater(" << this << ")::event (" << e << ")" << endl;
+    RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")" << endl;
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
         AudioPreviewReadyEvent *ev = dynamic_cast<AudioPreviewReadyEvent *>(e);
         if (ev) {
             int token = (int)ev->data();
-            m_channels = 0; // to be filled as getPreview return value
+            m_channels = 0; // to be filled as getComputedValues() return value
 
-            RG_DEBUG << "AudioPreviewUpdater::token " << token << ", my token " << m_previewToken << endl;
+            RG_DEBUG << "AudioPeaksGenerator::token " << token << ", my token " << m_token << endl;
 
-            if (m_previewToken >= 0 && token >= m_previewToken) {
+            if (m_token >= 0 && token >= m_token) {
 
-                m_previewToken = -1;
+                m_token = -1;
                 m_thread.getPreview(token, m_channels, m_values);
 
                 if (m_channels == 0) {
-                    RG_DEBUG << "AudioPreviewUpdater: failed to find preview!\n";
+                    RG_DEBUG << "failed to find peaks!\n";
                 } else {
 
-                    RG_DEBUG << "AudioPreviewUpdater: got correct preview (" << m_channels
+                    RG_DEBUG << "got correct peaks (" << m_channels
                     << " channels, " << m_values.size() << " samples)\n";
                 }
 
-                emit audioPreviewComplete(this);
+                emit audioPeaksComplete(this);
 
             } else {
 
@@ -130,7 +130,7 @@ bool AudioPreviewUpdater::event(QEvent *e)
                 unsigned int tmpChannels;
                 m_thread.getPreview(token, tmpChannels, tmp);
 
-                RG_DEBUG << "AudioPreviewUpdater: got obsolete preview (" << tmpChannels
+                RG_DEBUG << "got obsolete peaks (" << tmpChannels
                 << " channels, " << tmp.size() << " samples)\n";
             }
 
@@ -143,4 +143,4 @@ bool AudioPreviewUpdater::event(QEvent *e)
 }
 
 }
-#include "AudioPreviewUpdater.moc"
+#include "AudioPeaksGenerator.moc"

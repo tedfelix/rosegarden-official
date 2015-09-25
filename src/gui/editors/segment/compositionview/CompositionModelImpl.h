@@ -45,7 +45,7 @@ class InstrumentStaticSignals;
 class Instrument;
 class Event;
 class Composition;
-class AudioPreviewUpdater;
+class AudioPeaksGenerator;
 class AudioPreviewThread;
 
 /// Model layer between CompositionView and Composition.
@@ -342,8 +342,8 @@ public slots:
     void slotInstrumentChanged(Instrument *);
 
 private slots:
-    /// Connected to AudioPreviewUpdater::audioPreviewComplete()
-    void slotAudioPeaksComplete(AudioPreviewUpdater *);
+    /// Connected to AudioPeaksGenerator::audioPeaksComplete()
+    void slotAudioPeaksComplete(AudioPeaksGenerator *);
 
 private:
     // --- Misc -------------------------------------------
@@ -414,7 +414,7 @@ private:
 
     // AudioPreview generation happens in three steps.
     //   1. The AudioPeaks are generated asynchronously for a segment.
-    //      See AudioPreviewUpdater.
+    //      See AudioPeaksGenerator.
     //   2. The audio preview image is created from the AudioPeaks.
     //      See AudioPreviewPainter.
     //   3. An AudioPreview object is created using the audio preview image.
@@ -426,7 +426,7 @@ private:
 
     /// Create audio peaks for a segment asynchronously.
     /**
-     * Uses an AudioPreviewUpdater.  When the AudioPreviewUpdater is done,
+     * Uses an AudioPeaksGenerator.  When the AudioPeaksGenerator is done,
      * slotAudioPeaksComplete() is called.
      *
      * Also generates the preview image asynchronously.
@@ -436,10 +436,9 @@ private:
     /// More of an AudioPeaksThread.
     AudioPreviewThread *m_audioPreviewThread;
 
-    /// More of an AudioPeaksGeneratorMap.
-    typedef std::map<const Segment *, AudioPreviewUpdater *>
-            AudioPreviewUpdaterMap;
-    AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
+    typedef std::map<const Segment *, AudioPeaksGenerator *>
+            AudioPeaksGeneratorMap;
+    AudioPeaksGeneratorMap m_audioPeaksGeneratorMap;
 
     typedef std::map<const Segment *, AudioPeaks *> AudioPeaksCache;
     AudioPeaksCache m_audioPeaksCache;

@@ -20,7 +20,7 @@
 #include "CompositionModelImpl.h"
 #include "SegmentOrderer.h"
 #include "AudioPreviewThread.h"
-#include "AudioPreviewUpdater.h"
+#include "AudioPeaksGenerator.h"
 #include "AudioPreviewPainter.h"
 #include "ChangingSegment.h"
 #include "SegmentRect.h"
@@ -71,7 +71,7 @@ CompositionModelImpl::CompositionModelImpl(
     m_instrumentStaticSignals(),
     m_notationPreviewCache(),
     m_audioPreviewThread(0),
-    m_audioPreviewUpdaterMap(),
+    m_audioPeaksGeneratorMap(),
     m_audioPeaksCache(),
     m_audioPreviewImageCache(),
     m_selectedSegments(),
@@ -128,10 +128,10 @@ CompositionModelImpl::~CompositionModelImpl()
     if (m_audioPreviewThread) {
         // For each audio peaks updater
         // ??? This is similar to setAudioPreviewThread().
-        while (!m_audioPreviewUpdaterMap.empty()) {
+        while (!m_audioPeaksGeneratorMap.empty()) {
             // Cause any running previews to be cancelled
-            delete m_audioPreviewUpdaterMap.begin()->second;
-            m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
+            delete m_audioPeaksGeneratorMap.begin()->second;
+            m_audioPeaksGeneratorMap.erase(m_audioPeaksGeneratorMap.begin());
         }
     }
 
@@ -930,11 +930,11 @@ CompositionModelImpl::makeNotationPreview(
 
 void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 {
-    // For each AudioPreviewUpdater
-    while (!m_audioPreviewUpdaterMap.empty()) {
+    // For each AudioPeaksGenerator
+    while (!m_audioPeaksGeneratorMap.empty()) {
         // Delete it
-        delete m_audioPreviewUpdaterMap.begin()->second;
-        m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
+        delete m_audioPeaksGeneratorMap.begin()->second;
+        m_audioPeaksGeneratorMap.erase(m_audioPeaksGeneratorMap.begin());
     }
 
     m_audioPreviewThread = thread;
@@ -1003,35 +1003,35 @@ void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
     segmentRect.rect.moveTopLeft(QPoint(0, 0));
 
     // If we don't already have an audio peaks generator for this segment
-    if (m_audioPreviewUpdaterMap.find(segment) ==
-            m_audioPreviewUpdaterMap.end()) {
+    if (m_audioPeaksGeneratorMap.find(segment) ==
+            m_audioPeaksGeneratorMap.end()) {
 
-        AudioPreviewUpdater *generator =
-                new AudioPreviewUpdater(
+        AudioPeaksGenerator *generator =
+                new AudioPeaksGenerator(
                         *m_audioPreviewThread, m_composition,
                         segment, segmentRect.rect, this);
 
-        connect(generator, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
-                this, SLOT(slotAudioPeaksComplete(AudioPreviewUpdater*)));
+        connect(generator, SIGNAL(audioPeaksComplete(AudioPeaksGenerator*)),
+                this, SLOT(slotAudioPeaksComplete(AudioPeaksGenerator*)));
 
-        m_audioPreviewUpdaterMap[segment] = generator;
+        m_audioPeaksGeneratorMap[segment] = generator;
 
     } else {  // We have a peaks gen for this segment.
 
         // Adjust the size in case the segment was resized.
-        m_audioPreviewUpdaterMap[segment]->setDisplayExtent(segmentRect.rect);
+        m_audioPeaksGeneratorMap[segment]->setDisplayExtent(segmentRect.rect);
     }
 
     // Queue a request for async generation of the peaks.
-    m_audioPreviewUpdaterMap[segment]->update();
+    m_audioPeaksGeneratorMap[segment]->update();
 }
 
 void CompositionModelImpl::slotAudioPeaksComplete(
-        AudioPreviewUpdater *audioPreviewUpdater)
+        AudioPeaksGenerator *generator)
 {
     // Find the entry in the cache that we need to fill in with the results.
     AudioPeaksCache::const_iterator audioPeaksIter =
-            m_audioPeaksCache.find(audioPreviewUpdater->getSegment());
+            m_audioPeaksCache.find(generator->getSegment());
 
     // If there's no place to put the results, bail.
     if (audioPeaksIter == m_audioPeaksCache.end())
@@ -1043,7 +1043,7 @@ void CompositionModelImpl::slotAudioPeaksComplete(
 
     unsigned channels = 0;
     const std::vector<float> &values =
-            audioPreviewUpdater->getComputedValues(channels);
+            generator->getComputedValues(channels);
 
     // If we didn't get any peaks, bail.
     if (channels == 0)
@@ -1054,12 +1054,12 @@ void CompositionModelImpl::slotAudioPeaksComplete(
     audioPeaks->values = values;
 
     AudioPreviewPainter previewPainter(
-            *this, audioPeaks, m_composition, audioPreviewUpdater->getSegment());
+            *this, audioPeaks, m_composition, generator->getSegment());
     // Convert audio peaks to an image.
     previewPainter.paintPreviewImage();
 
     // Cache the image.
-    m_audioPreviewImageCache[audioPreviewUpdater->getSegment()] =
+    m_audioPreviewImageCache[generator->getSegment()] =
             previewPainter.getPreviewImage();
 
     if (!previewPainter.getSegmentRect().rect.isEmpty())
@@ -1137,8 +1137,8 @@ void CompositionModelImpl::deleteCachedPreviews()
 
     // Stop Audio Peaks Generators
 
-    for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
-         i != m_audioPreviewUpdaterMap.end(); ++i) {
+    for (AudioPeaksGeneratorMap::iterator i = m_audioPeaksGeneratorMap.begin();
+         i != m_audioPeaksGeneratorMap.end(); ++i) {
         i->second->cancel();
     }
 
