@@ -80,7 +80,7 @@ private:
     void linkedSegmentChanged(Segment* s, const timeT from, const timeT to);
     void eraseNonIgnored(Segment *s, Segment::const_iterator itrFrom, 
                                      Segment::const_iterator itrTo);
-    void insertMappedEvent(Segment *seg, const Event *e, timeT t, 
+    void insertMappedEvent(Segment *seg, const Event *e, timeT t, timeT nt,
                                          int semitones, int steps);
     LinkedSegmentParamsList::iterator findParamsItrForSegment(Segment *s);
     static void handleImpliedCMajor(Segment *s);

@@ -227,8 +227,11 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
                                     itr != s->findTime(to); ++itr) {
             const Event *e = *itr;
         
-            timeT eventT = (e->getAbsoluteTime()-sourceSegStartTime)
+            timeT eventT = (e->getAbsoluteTime() - sourceSegStartTime)
                            + segStartTime;
+
+            timeT eventNotationT = (e->getNotationAbsoluteTime() - sourceSegStartTime)
+                                   + segStartTime;
 
             int semitones =
                     linkedSegToUpdate->getLinkTransposeParams().m_semitones -
@@ -236,7 +239,7 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
             int steps = linkedSegToUpdate->getLinkTransposeParams().m_steps -
                                         s->getLinkTransposeParams().m_steps;
         
-            insertMappedEvent(linkedSegToUpdate,e,eventT,semitones,steps);
+            insertMappedEvent(linkedSegToUpdate,e,eventT,eventNotationT,semitones,steps);
         }
         
         // Now only send one resize notification to observers if needed.
@@ -247,7 +250,7 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
 }
 
 void
-SegmentLinker::insertMappedEvent(Segment *seg, const Event *e, timeT t, 
+SegmentLinker::insertMappedEvent(Segment *seg, const Event *e, timeT t, timeT nt,
                                                int semitones, int steps)
 {
     bool ignore;
@@ -255,9 +258,14 @@ SegmentLinker::insertMappedEvent(Segment *seg, const Event *e, timeT t,
         && ignore) {
         return;
     }
-        
-    Event *refSegEvent = new Event(*e,t);
-    
+
+    Event *refSegEvent = new Event(*e,
+                                   t,
+                                   e->getDuration(),
+                                   e->getSubOrdering(),
+                                   nt,
+                                   e->getNotationDuration());
+
     bool needsInsertion = true;
 
     //correct for temporal (and pitch shift??) here eventually...
@@ -352,9 +360,11 @@ SegmentLinker::refreshSegment(Segment *seg)
         const Event *refEvent = *segitr;
 
         timeT refEventTime = refEvent->getAbsoluteTime() - sourceSegStartTime;
-        timeT freshEventTime = refEventTime+startTime;
-        
-        insertMappedEvent(seg,refEvent,freshEventTime,
+        timeT freshEventTime = refEventTime + startTime;
+        timeT refEventNotationTime = refEvent->getNotationAbsoluteTime() - sourceSegStartTime;
+        timeT freshEventNotationTime = refEventNotationTime + startTime;
+
+        insertMappedEvent(seg,refEvent,freshEventTime,freshEventNotationTime,
                           seg->getLinkTransposeParams().m_semitones,
                           seg->getLinkTransposeParams().m_steps);
     }
