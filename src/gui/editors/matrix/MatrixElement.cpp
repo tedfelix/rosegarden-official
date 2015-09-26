@@ -192,11 +192,11 @@ MatrixElement::setSelected(bool selected)
         dynamic_cast<QAbstractGraphicsShapeItem *>(m_item);
     if (!item) return;
 
-    QColor colour;
-
     if (selected) {
-        item->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectedElement),
-                          2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+        QPen pen(GUIPalette::getColour(GUIPalette::SelectedElement), 2,
+                 Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+        pen.setCosmetic(!m_drum);
+        item->setPen(pen);
     } else {
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
