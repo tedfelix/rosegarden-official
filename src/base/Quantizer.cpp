@@ -93,6 +93,9 @@ Quantizer::quantize(EventSelection *selection)
 
     Segment &segment = selection->getSegment();
 
+    m_normalizeRegion.first = segment.getStartTime();
+    m_normalizeRegion.second = segment.getEndTime();
+
     // Attempt to handle non-contiguous selections.
 
     // We have to be a bit careful here, because the rest-
@@ -136,9 +139,6 @@ Quantizer::quantize(EventSelection *selection)
             selection->addEvent(m_toInsert[i]);
         }
     }
-
-    m_normalizeRegion.first = segment.getStartTime();
-    m_normalizeRegion.second = segment.getEndTime();
 
     // and then to the segment
     insertNewEvents(&segment);
@@ -458,29 +458,56 @@ Quantizer::insertNewEvents(Segment *s) const
 {
     size_t sz = m_toInsert.size();
 
-    timeT minTime = m_normalizeRegion.first,
-	  maxTime = m_normalizeRegion.second;
-
-    bool hasEndTime = maxTime > 0;
+    timeT startTime = m_normalizeRegion.first;
+    timeT endTime = m_normalizeRegion.second;
+    timeT minTime = (sz > 0 ? endTime : 0);
+    timeT maxTime = (sz > 0 ? startTime : 0);
 
     for (size_t i = 0; i < sz; ++i) {
 
 	timeT myTime = m_toInsert[i]->getAbsoluteTime();
 	timeT myDur  = m_toInsert[i]->getDuration();
 
-        if (hasEndTime && myTime >= maxTime) {
+        if (endTime > 0 && myTime >= endTime) {
             cerr << "Quantizer::insertNewEvents(): ignoring event outside the segment at "
                  << myTime << endl;
             continue;
         }
 
-	if (myTime < minTime) minTime = myTime;
-
-        if (!hasEndTime && myTime + myDur > maxTime) {
-            maxTime = myTime + myDur;
-        }
+        if (myTime < minTime) minTime = myTime;
+        if (myTime + myDur > maxTime) maxTime = myTime + myDur;
 
 	s->insert(m_toInsert[i]);
+    }
+
+    if (minTime < startTime) {
+        minTime = startTime;
+    } else if (minTime > startTime) {
+        timeT barStart = s->getBarStartForTime(minTime);
+
+        if (barStart <= startTime) {
+            minTime = startTime;
+        } else if (minTime != barStart) {
+            minTime = barStart;
+        } else {
+            // Maybe some events are quantized from the previous bar.
+            minTime = std::max(startTime, s->getBarStartForTime(barStart - 1));
+        }
+    }
+
+    if (endTime > 0) {
+        if (maxTime > endTime) {
+            maxTime = endTime;
+        } else if (maxTime < endTime) {
+            timeT barEnd = s->getBarEndForTime(maxTime);
+
+            if (barEnd >= endTime) {
+                maxTime = endTime;
+            } else {
+                // Maybe some quantized events occupied two bars.
+                maxTime = std::min(endTime, s->getBarEndForTime(barEnd + 1));
+            }
+        }
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
