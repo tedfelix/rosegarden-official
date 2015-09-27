@@ -144,17 +144,50 @@ PasteEventsCommand::isPossible()
         return false;
     }
 
-    if (m_pasteType != Restricted) {
-        return true;
-    }
-
     Segment *source = m_clipboard->getSingleSegment();
+    Segment *destination(&getSegment());
 
-    timeT pasteTime = getStartTime();
+    timeT pasteTime = std::max(getStartTime(), destination->getStartTime());
     timeT origin = source->getStartTime();
     timeT duration = source->getEndTime() - origin;
 
+    if (m_pasteType == MatrixOverlay) {
+        // Compute the duration of the source without the rests at the end.
+        Segment::iterator last = source->end();
+        for (--last ; last != source->begin(); --last) {
+            if (!(*last)->isa(Note::EventRestType)) {
+                break;
+            }
+            duration = (*last)->getAbsoluteTime() - origin;
+        }
+    }
+
     RG_DEBUG << "PasteEventsCommand::isPossible: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
+
+    if (pasteTime + duration > destination->getEndTime()) {
+        return false;
+    }
+
+    if (m_pasteType == OpenAndPaste &&
+        destination->begin() != destination->end()) {
+        timeT lastEnd = destination->getEndTime();
+        // Ignore the rests at the end of the destination segment.
+        Segment::iterator last = destination->end();
+        for (--last ; last != destination->begin(); --last) {
+            if (!(*last)->isa(Note::EventRestType)) {
+                break;
+            }
+            lastEnd = (*last)->getAbsoluteTime();
+        }
+
+        if (lastEnd + duration > destination->getEndTime()) {
+            return false;
+        }
+    }
+
+    if (m_pasteType != Restricted) {
+        return true;
+    }
 
     SegmentNotationHelper helper(getSegment());
     return helper.removeRests(pasteTime, duration, true);
@@ -169,12 +202,13 @@ PasteEventsCommand::modifySegment()
         return ;
 
     Segment *source = m_clipboard->getSingleSegment();
+    Segment *destination(&getSegment());
 
-    timeT pasteTime = getStartTime();
+    timeT destEndTime = destination->getEndTime();
+    timeT pasteTime = std::max(getStartTime(), destination->getStartTime());
     timeT origin = source->getStartTime();
     timeT duration = source->getEndTime() - origin;
 
-    Segment *destination(&getSegment());
     SegmentNotationHelper helper(*destination);
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
@@ -201,10 +235,15 @@ PasteEventsCommand::modifySegment()
         // we do the actual paste after this switch statement
         // (except where individual cases do the work and return)
 
-    case Restricted:
-        if (!helper.removeRests(pasteTime, duration))
-            return ;
-        break;
+    case Restricted: {
+            // removeRests() changes the duration destructively but the
+            // variable "duration" is used by normalizeRests()
+            timeT d = duration;
+            if (!helper.removeRests(pasteTime, d)) {
+                return;
+            }
+            break;
+        }
 
     case Simple:
         destination->erase(destination->findTime(pasteTime),
@@ -212,38 +251,59 @@ PasteEventsCommand::modifySegment()
         break;
 
     case OpenAndPaste: {
-            std::vector<Event *> copies;
+            timeT endTime = pasteTime + duration;
+            std::vector<Event *> copies, toErase;
             for (Segment::iterator i = destination->findTime(pasteTime);
-                    i != destination->end(); ++i) {
+                 i != destination->end(); ++i) {
                 Event *e = (*i)->copyMoving(duration);
+                timeT myTime =
+                    e->getAbsoluteTime() + e->getGreaterDuration() + duration;
+
+                toErase.push_back(*i);
+
+                if (e->isa(Note::EventRestType)) {
+                    if (myTime > destEndTime) {
+                        continue;
+                    }
+                }
                 if (e->has(BEAMED_GROUP_ID)) {
                     e->set
                     <Int>(BEAMED_GROUP_ID, groupIdMap[e->get
                                                       <Int>(BEAMED_GROUP_ID)]);
                 }
+                if (myTime > endTime) {
+                    endTime = myTime;
+                }
                 copies.push_back(e);
             }
 
-            destination->erase(destination->findTime(pasteTime),
-                               destination->end());
+            for (size_t i = 0; i < toErase.size(); ++i) {
+                destination->eraseSingle(toErase[i]);
+            }
 
             for (size_t i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
                 m_pastedEvents.addEvent(copies[i]);
             }
 
+            endTime = std::min(destEndTime, destination->getBarEndForTime(endTime));
+            duration = endTime - pasteTime;
             break;
         }
 
     case NoteOverlay:
         for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
-            if ((*i)->isa(Note::EventRestType))
+            if ((*i)->isa(Note::EventRestType)) {
                 continue;
+            }
+
             Event *e = (*i)->copyMoving(pasteTime - origin);
+
             if (e->has(BEAMED_GROUP_ID)) {
                 e->set<Int>(BEAMED_GROUP_ID,
                             groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
             }
+
             if ((*i)->isa(Note::EventType)) {
                 // e is model event: we retain ownership of it
                 Segment::iterator i = helper.insertNote(e);
@@ -260,9 +320,9 @@ PasteEventsCommand::modifySegment()
     case MatrixOverlay:
 
         for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
-
-            if ((*i)->isa(Note::EventRestType))
+            if ((*i)->isa(Note::EventRestType)) {
                 continue;
+            }
 
             Event *e = (*i)->copyMoving(pasteTime - origin);
 
@@ -283,12 +343,12 @@ PasteEventsCommand::modifySegment()
             m_pastedEvents.addEvent(e);
         }
 
-//        destination->normalizeRests(pasteTime, pasteTime + duration);
- 
-        // We ran the normalizeRests() calls like this as far back as I can go
-        // in history, and since normalizeRests() has been implicated in a
-        // string of recent paste bugs, we're going with the historical version: 
-        destination->normalizeRests(source->getStartTime(), source->getEndTime());
+        timeT endTime = pasteTime + duration;
+        if (endTime > destEndTime) {
+            endTime = destEndTime;
+        }
+
+        destination->normalizeRests(pasteTime, endTime);
 
         return ;
     }
@@ -306,13 +366,7 @@ PasteEventsCommand::modifySegment()
         m_pastedEvents.addEvent(e);
     }
 
-//    destination->normalizeRests(pasteTime, pasteTime + duration);
-
-
-    // We ran the normalizeRests() calls like this as far back as I can go
-    // in history, and since normalizeRests() has been implicated in a
-    // string of recent paste bugs, we're going with the historical version: 
-    destination->normalizeRests(source->getStartTime(), source->getEndTime());
+    destination->normalizeRests(pasteTime, pasteTime + duration);
 }
 
 EventSelection
