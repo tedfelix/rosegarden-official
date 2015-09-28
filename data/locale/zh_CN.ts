@@ -12,163 +12,198 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation>管理 MIDI 设备</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+26"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
         <translation>MIDI 播放</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+57"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Sends its data through</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-5"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Rosegarden 播放设备</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default playback device</source>
         <translation>默认播放设备</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-44"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;创建一个新的播放设备. 双击设备名称来修改. 选中一个设备并点击右边的一个 MIDI 输出端口将它们连接起来.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+88"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>库...</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+19"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
         <translation>控制器...</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+43"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;创建一个新的播放设备&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
+        <location line="+250"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location line="-26"/>
+        <location line="-228"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;删除选中的播放设备.  使用该设备的所有音轨都需要重新分配, 这些音轨上音色和库的改变将永久丢失&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+19"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
         <translation>MIDI 输出</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+69"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
         <translation>可用输出</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location line="+344"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation>无端口</translation>
     </message>
     <message>
-        <location line="-39"/>
+        <location line="-334"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-39"/>
         <source>Internal Synth</source>
         <translation>内部合成器</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-60"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;可用的 MIDI 输出 (硬件或软件)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+100"/>
+        <location line="+340"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;在连接一个新的设备或启动一个新的软件合成器后点击以刷新端口列表&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-37"/>
+        <location line="-337"/>
+        <location line="+340"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location line="-38"/>
+        <location line="-303"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
         <translation>MIDI 录音</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+39"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;创建一个新的录音设备&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+25"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;删除选中的录音设备&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>删除</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+82"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
         <translation>数据接收来源</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-5"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Rosegarden 录音设备</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
         <translation>默认录音设备</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+26"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
         <translation>MIDI 输入</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+69"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
         <translation>可用的输入</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-45"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;可用的 MIDI 输入 (来自硬件或软件)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -13330,7 +13365,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/commands/segment/CutToTriggerSegmentCommand.cpp" line="+50"/>
         <source>Make Ornament</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">制作装饰符号</translation>
     </message>
 </context>
 <context>
@@ -15733,7 +15768,7 @@ Would you like to use
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">导出失败. 无法打开文件以写入.</translation>
     </message>
     <message>
         <location line="+169"/>
@@ -20298,7 +20333,9 @@ Please select any you wish to delete permanently from the hard disk.
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">音频文件路径不存在或不可写.
+请于录音之前在文档属性中设置一个有效的音频文件路径.
+要现在设置吗?</translation>
     </message>
     <message>
         <location line="-1633"/>
@@ -24773,198 +24810,238 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>RosegardenTransport</name>
     <message>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation>Rosegarden 播放控制器</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+34"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
         <translation>隐藏额外控件</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+36"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
         <translation>Panic 按钮</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+35"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
         <translation>节拍器</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>提供一个节拍器以便跟随它演奏</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+465"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>显示 Rosegarden 的输入输出 MIDI 数据</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+469"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
         <translation>输入</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+464"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+465"/>
+        <location line="+465"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation>没有事件</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+23"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
         <translation>录音</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation>录制 MIDI 或音频</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+41"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
         <translation>循环</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>开启或关闭标记循环(如果设置的话)</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+41"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
         <translation>独奏</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation>除当前选中的音轨外全部静音</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+23"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
         <translation>从这里开始反复范围</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+20"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
         <translation>从这里结束反复范围</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+1037"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
         <translation>拍号</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+464"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
         <translation type="unfinished">DIV</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+465"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+467"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+474"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
         <translation type="unfinished">END</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+467"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
         <translation>小节</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+151"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>在实际时间, 音乐时间和帧计数之间切换</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+33"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
         <translation>显示附加的控制器</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+36"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
         <translation>倒带</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>将当前游标位置后退一小节.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+29"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
         <translation>跳转到起点</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>将当前游标位置移动到乐曲起点. (如果游标尚在起点之前则跳回.)</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+26"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>从当前的游标位置播放, 如果正在播放则暂停.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+38"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation>停止播放或录音.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+32"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
         <translation>快进</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>将当前游标位置前移一小节.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+29"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
         <translation>跳转到终点</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>将当前游标位置移动到乐曲结尾. (如果游标已经超过结尾了则跳回.)</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+27"/>
+        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
         <translation>以倒计时方式显示时间</translation>
     </message>
