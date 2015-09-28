@@ -504,7 +504,7 @@
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+327"/>
+        <location line="+334"/>
         <source>Welcome!</source>
         <translation>Bem-vindo!</translation>
     </message>
@@ -652,20 +652,20 @@
         <translation>&lt;qt&gt;&lt;p&gt;Nenhuma faixa foi armada para a gravação..&lt;/p&gt;&lt;p&gt;Por favor arme ao menos uma faixa como gravavel &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; e tente novamente&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+179"/>
+        <location line="+181"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Não foi possível iniciar a gravação de áudio.&lt;/p&gt;&lt;p&gt;Por favor, definir um caminho válido de gravação em&lt;b&gt;Composição -&gt; Editar Propriedades do Documento... -&gt; Áudio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
+        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+179"/>
         <source>This event is tied to another event.</source>
         <translation>Este evento está ligado a outro evento.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1043"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1049"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+907"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1656"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1683"/>
         <source>%1 Controller %2 %3</source>
         <translation>Controles %1 - %2 %3</translation>
     </message>
@@ -11241,12 +11241,12 @@ red1</translation>
 <context>
     <name>Rosegarden::AddIndicationCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+107"/>
+        <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+108"/>
         <source>Can&apos;t add identical overlapping indications</source>
         <translation>Não é possível adicionar idênticas indicações sobrepostas</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+134"/>
         <source>Add S&amp;lur</source>
         <translation>Adicionar &amp;Ligadura</translation>
     </message>
@@ -12663,7 +12663,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
         <translation>Realmente excluir este banco?</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+59"/>
         <source>Really delete this key mapping?</source>
         <translation>Realmente excluir este mapeamento de teclas?</translation>
     </message>
@@ -13509,7 +13509,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+325"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+330"/>
         <source>Velocity</source>
         <translation>Velocidade</translation>
     </message>
@@ -13525,7 +13525,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+288"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+284"/>
         <source>Unsupported Event Type</source>
         <translation>Tipo de Evento Incompatível</translation>
     </message>
@@ -13540,13 +13540,13 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
         <translation>Controlador Eventos</translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+138"/>
         <location line="+22"/>
         <source>Insert Line of Controllers</source>
         <translation>Inserir linha de controlador</translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+119"/>
         <source>Controller Event Number</source>
         <translation>Controlador Número de eventos</translation>
     </message>
@@ -13564,7 +13564,7 @@ Por favor, selecione os que deseja excluir permanentemente do disco rígido.
         <translation>(excerto)</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>(copied)</source>
         <translation>(copiado)</translation>
     </message>
@@ -17512,7 +17512,7 @@ Clique duas vezes para abrir o editor de marcas.</translation>
         <translation>Mudanças de velocidades</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+34"/>
         <source>Click and drag to scale velocity of selected notes</source>
         <translation>Clique e arraste a escala de velocidade das notas selecionadas</translation>
     </message>
@@ -17593,7 +17593,7 @@ Clique duas vezes para abrir o editor de marcas.</translation>
         <translation>Desligado</translation>
     </message>
     <message>
-        <location line="+435"/>
+        <location line="+437"/>
         <source>Trigger Segment</source>
         <translation>Armar Segmento</translation>
     </message>
@@ -17634,18 +17634,16 @@ Clique duas vezes para abrir o editor de marcas.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+155"/>
-        <location line="+95"/>
+        <location line="+249"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-95"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation>Não é possível inserir notas: Nenhuma duração de grade selecionada</translation>
+        <translation type="obsolete">Não é possível inserir notas: Nenhuma duração de grade selecionada</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+0"/>
         <source>Unknown note insert action %1</source>
         <translation>Ação de inserção  de nota desconhecida  %1</translation>
     </message>
@@ -17658,7 +17656,7 @@ Clique duas vezes para abrir o editor de marcas.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-848"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-853"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -17678,7 +17676,7 @@ Clique duas vezes para abrir o editor de marcas.</translation>
         <translation>Redefinir Zoom</translation>
     </message>
     <message>
-        <location line="+1124"/>
+        <location line="+1129"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rodar volante para mudar o segmento ativo&lt;/qt&gt;</translation>
     </message>
@@ -18113,13 +18111,13 @@ Clique duas vezes para abrir o editor de marcas.</translation>
 <context>
     <name>Rosegarden::NotationConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="+53"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="+52"/>
         <location line="+1"/>
         <source>Notation</source>
         <translation>Notação</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="+81"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="+80"/>
         <source>Default layout mode</source>
         <translation>Modo de Layout padrão</translation>
     </message>
@@ -18707,7 +18705,7 @@ Este é um bug (o programa antes teria deixado de funcionar por agora)</translat
         <translation>  Nenhuma seleção </translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+50"/>
         <source>  Font:  </source>
         <translation>  Fonte:  </translation>
     </message>
@@ -18721,14 +18719,13 @@ Este é um bug (o programa antes teria deixado de funcionar por agora)</translat
         <location line="+103"/>
         <location line="+56"/>
         <location line="+898"/>
-        <location line="+729"/>
-        <location line="+850"/>
-        <location line="+269"/>
+        <location line="+730"/>
+        <location line="+1111"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3238"/>
+        <location line="-3231"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation>Fonte desconhecida &quot;%1&quot;, usando padrão</translation>
     </message>
@@ -18848,12 +18845,12 @@ Este é um bug (o programa antes teria deixado de funcionar por agora)</translat
         <translation type="obsolete">Fazer Ornamento</translation>
     </message>
     <message>
-        <location line="-2164"/>
+        <location line="-2166"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2202"/>
+        <location line="+2204"/>
         <source>Use Ornament</source>
         <translation>Usar Ornamento</translation>
     </message>
@@ -18888,7 +18885,7 @@ Este é um bug (o programa antes teria deixado de funcionar por agora)</translat
         <translation>Sustain</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Não há nenhum controlador de sustain definido para este dispositivo.
@@ -18950,12 +18947,11 @@ Assegure que o dispositivo está configurado corretamente na caixa de diálogo G
         <translation>Por número de semitons: </translation>
     </message>
     <message>
-        <location line="+215"/>
         <source>Can&apos;t insert note: No note duration selected</source>
-        <translation>Não é possível inserir nota: Nenhuma duração da nota selecionada</translation>
+        <translation type="obsolete">Não é possível inserir nota: Nenhuma duração da nota selecionada</translation>
     </message>
     <message>
-        <location line="+164"/>
+        <location line="+371"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Tempo: %1 (%2.%3s)</translation>
     </message>
@@ -19034,7 +19030,7 @@ Assegure que o dispositivo está configurado corretamente na caixa de diálogo G
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1435"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1461"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -19059,7 +19055,7 @@ Assegure que o dispositivo está configurado corretamente na caixa de diálogo G
         <translation>Fechar cabeçalhos da faixa</translation>
     </message>
     <message>
-        <location line="+1445"/>
+        <location line="+1471"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rodar volante para mudar o segmento ativo&lt;/qt&gt;</translation>
@@ -20197,12 +20193,12 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
     </message>
     <message>
         <location line="+2"/>
-        <location line="+140"/>
+        <location line="+118"/>
         <source>None</source>
         <translation>Nenhum</translation>
     </message>
     <message>
-        <location line="-139"/>
+        <location line="-117"/>
         <source>2-in-the-time-of-3</source>
         <translation>2-no-tempo-de-3</translation>
     </message>
@@ -20267,7 +20263,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
         <translation>Dividir e ligar acordes sobrepostos</translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+77"/>
         <source>Full quantize</source>
         <translation>Quantização completa</translation>
     </message>
@@ -20601,7 +20597,7 @@ Pode haver algumas incompatibilidades com o formato do arquivo.</translation>
         <location line="+45"/>
         <location line="+42"/>
         <location line="+405"/>
-        <location line="+655"/>
+        <location line="+658"/>
         <location line="+25"/>
         <location line="+3"/>
         <location line="+37"/>
@@ -20613,7 +20609,7 @@ Pode haver algumas incompatibilidades com o formato do arquivo.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-2511"/>
+        <location line="-2514"/>
         <source>Could not save document at %1
 (%2)</source>
         <translation>Não foi possível salvar o documento em %1
@@ -20718,7 +20714,7 @@ Selecione os que você deseja excluir permanentemente do disco rígido.
         <translation>Falha ao renomear arquivo de saída temporária &apos;%1&apos; no arquivo de saída desejado &apos;%2&apos;</translation>
     </message>
     <message>
-        <location line="+187"/>
+        <location line="+190"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Erro ao escrever sobre &apos;%1&apos;</translation>
     </message>
@@ -20777,7 +20773,7 @@ Suporte para esses elementos podem desaparecer em versões futuras do Rosegarden
 Nós recomendamos que você salve novamente o arquivo a partir desta versão do Rosegarden para garantir que ele ainda pode ser re-carregado em futuras versões.</translation>
     </message>
     <message>
-        <location line="+1220"/>
+        <location line="+1221"/>
         <source>Warning</source>
         <translation type="unfinished">Aviso</translation>
     </message>
@@ -20795,7 +20791,7 @@ Gostaria de configurá-lo agora?</translation>
         <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Canais foram remapeado &lt;/h2&gt;&lt;p&gt;Começando com a versão 10.02, Rosegarden já não fornece controles para mudar o canal associado a cada instrumento MIDI. Em vez disso, cada instrumento utiliza o mesmo canal que o número de instrumentos. Por exemplo, &quot;Dispositivo MIDI do Sistema de Entrada #12&quot; sempre usa o canal 12.&lt;/p&gt;&lt;p&gt;O arquivo que você acabou de carregar os instrumentos contidos cujos canais diferiram dos números dos instrumentos..Estes canais têm sido transferidos para esse instrumento # 1 sempre usará o canal 1, independentemente do canal que poderia ter usado anteriormente.Na maioria dos casos, você não vai experimentar diferença, mas você pode ter que fazer algumas pequenas mudanças para este arquivo para que ele vbenha a desempenhar como pretendido. Nós recomendamos que você salve este arquivo para evitar ver este aviso no futuro.&lt;/p&gt;&lt;p&gt;Pedimos desculpas por qualquer inconveniente.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-571"/>
+        <location line="-572"/>
         <source>Insert Recorded MIDI</source>
         <translation>Inserir MIDI Gravado</translation>
     </message>
@@ -22364,7 +22360,7 @@ Gostaria de configurá-lo agora?</translation>
         <translation>Clique e arraste para selecionar segmentos</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+207"/>
         <source>Move Segment(s)</source>
         <translation type="unfinished">Mover Segmento(s) %n</translation>
     </message>
@@ -25518,13 +25514,13 @@ Gostaria de configurá-lo agora?</translation>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="-6"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="-5"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="-39"/>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="-15"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="-21"/>
         <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="-6"/>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="-4"/>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="-6"/>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+11"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="-757"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="-996"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="-758"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="-991"/>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="-7"/>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="-6"/>
         <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="-6"/>

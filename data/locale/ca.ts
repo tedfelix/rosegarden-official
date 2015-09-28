@@ -10717,9 +10717,9 @@ del menú Edita. Per altra banda també podeu canviar
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1043"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1049"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+907"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1656"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1683"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 controlador %2 %3</translation>
     </message>
@@ -10734,7 +10734,7 @@ del menú Edita. Per altra banda també podeu canviar
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+327"/>
+        <location line="+334"/>
         <source>Welcome!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10842,7 +10842,7 @@ del menú Edita. Per altra banda també podeu canviar
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+179"/>
+        <location line="+181"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10980,7 +10980,7 @@ del menú Edita. Per altra banda també podeu canviar
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+176"/>
+        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+179"/>
         <source>This event is tied to another event.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11154,12 +11154,12 @@ del menú Edita. Per altra banda també podeu canviar
 <context>
     <name>Rosegarden::AddIndicationCommand</name>
     <message>
-        <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+107"/>
+        <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="+108"/>
         <source>Can&apos;t add identical overlapping indications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+134"/>
         <source>Add S&amp;lur</source>
         <translation type="unfinished">Afegeix el &amp;lligat</translation>
     </message>
@@ -12600,7 +12600,7 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
         <translation type="unfinished">Confirmeu l&apos;eliminació d&apos;aquest banc?</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+59"/>
         <source>Really delete this key mapping?</source>
         <translation type="unfinished">Voleu suprimir aquest banc?</translation>
     </message>
@@ -13454,7 +13454,7 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+325"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+330"/>
         <source>Velocity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13470,7 +13470,7 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+288"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+284"/>
         <source>Unsupported Event Type</source>
         <translation type="unfinished">Tipus d&apos;esdeveniment desconegut</translation>
     </message>
@@ -13485,13 +13485,13 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
         <translation type="unfinished">Controlador d&apos;esdeveniments</translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+138"/>
         <location line="+22"/>
         <source>Insert Line of Controllers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+119"/>
         <source>Controller Event Number</source>
         <translation type="unfinished">Número de controlador d&apos;esdeveniments</translation>
     </message>
@@ -13509,7 +13509,7 @@ Seleccioneu els que voleu esborrar permanentment del disc dur.
         <translation type="unfinished">(extracte)</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>(copied)</source>
         <translation type="unfinished">(copiat)</translation>
     </message>
@@ -17700,7 +17700,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Velocitat:</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+34"/>
         <source>Click and drag to scale velocity of selected notes</source>
         <translation type="unfinished">Fes clic per seleccionar un tipus de lletra</translation>
     </message>
@@ -17773,7 +17773,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">S&apos;està eliminant la selecció...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1361"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1362"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Acció d&apos;afegir una nota, desconeguda: %1</translation>
     </message>
@@ -17786,7 +17786,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">S&apos;està desquantificant...</translation>
     </message>
     <message>
-        <location line="-1503"/>
+        <location line="-1504"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;sense nom&gt;</translation>
     </message>
@@ -17861,7 +17861,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+871"/>
+        <location line="+873"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17877,8 +17877,7 @@ Double-click to open the marker editor.</source>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+155"/>
-        <location line="+95"/>
+        <location line="+249"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -17896,7 +17895,7 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">%1%</translation>
     </message>
     <message>
-        <location line="-864"/>
+        <location line="-863"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Es mostra la indicació de compàs estimada</translation>
     </message>
@@ -17937,7 +17936,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Suprimeix els activadors</translation>
     </message>
     <message>
-        <location line="-824"/>
+        <location line="-826"/>
         <source>Matrix</source>
         <translation type="unfinished">Matriu</translation>
     </message>
@@ -17954,9 +17953,8 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">%1 - Tots els fragments - %2</translation>
     </message>
     <message>
-        <location line="+1432"/>
         <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="unfinished">No s&apos;ha pogut afegir una nota: No hi ha seleccionada una durada de graella.</translation>
+        <translation type="obsolete">No s&apos;ha pogut afegir una nota: No hi ha seleccionada una durada de graella.</translation>
     </message>
     <message>
         <source> Chord </source>
@@ -17966,7 +17964,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-848"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-853"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17986,7 +17984,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1124"/>
+        <location line="+1129"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18714,13 +18712,13 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
 <context>
     <name>Rosegarden::NotationConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="+53"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.h" line="+52"/>
         <location line="+1"/>
         <source>Notation</source>
         <translation type="unfinished">Partitura</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="+81"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="+80"/>
         <source>Default layout mode</source>
         <translation type="unfinished">Format per defecte</translation>
     </message>
@@ -19330,7 +19328,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         </translation>
     </message>
     <message>
-        <location line="+150"/>
+        <location line="+152"/>
         <source>  Font:  </source>
         <translation type="unfinished">  Font:  </translation>
     </message>
@@ -19366,7 +19364,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="obsolete">S&apos;està reconciliant els pentagrames...</translation>
     </message>
     <message>
-        <location line="-115"/>
+        <location line="-117"/>
         <source>  No selection </source>
         <translation type="unfinished">  No hi ha cap selecció </translation>
     </message>
@@ -19395,7 +19393,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="obsolete">Treset</translation>
     </message>
     <message>
-        <location line="+2673"/>
+        <location line="+2676"/>
         <source>Chord</source>
         <translation type="unfinished">Acord</translation>
     </message>
@@ -19416,7 +19414,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="obsolete">Anotacions ocultes</translation>
     </message>
     <message>
-        <location line="-2273"/>
+        <location line="-2274"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">Es desconeix l&apos;acció d&apos;espaiat %1</translation>
     </message>
@@ -19499,7 +19497,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="unfinished">No s&apos;han pogut enganxar múltiples fragments en un de sol</translation>
     </message>
     <message>
-        <location line="-784"/>
+        <location line="-786"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19512,7 +19510,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         </translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+88"/>
         <location line="+173"/>
         <location line="+52"/>
         <location line="+57"/>
@@ -19521,14 +19519,13 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <location line="+103"/>
         <location line="+56"/>
         <location line="+898"/>
-        <location line="+729"/>
-        <location line="+850"/>
-        <location line="+269"/>
+        <location line="+730"/>
+        <location line="+1111"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-3055"/>
+        <location line="-3048"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19560,12 +19557,12 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="unfinished">No s&apos;ha pogut enganxar en aquest punt.</translation>
     </message>
     <message>
-        <location line="+2831"/>
+        <location line="+2824"/>
         <source>Move Events to Staff Above</source>
         <translation type="unfinished">&amp;Mou els esdeveniments a un altre fragment</translation>
     </message>
     <message>
-        <location line="-2690"/>
+        <location line="-2683"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">S&apos;està apujant les velocitats...</translation>
     </message>
@@ -19583,7 +19580,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="obsolete">S&apos;està definint les velocitats...</translation>
     </message>
     <message>
-        <location line="+2837"/>
+        <location line="+2830"/>
         <source>Edit Text Event</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19602,7 +19599,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="obsolete">No s&apos;ha seleccionat cap durada de nota</translation>
     </message>
     <message>
-        <location line="-2154"/>
+        <location line="-2147"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Acció d&apos;afegir una nota, desconeguda: %1</translation>
     </message>
@@ -19628,13 +19625,13 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="obsolete">S&apos;està interpretant la selecció...</translation>
     </message>
     <message>
-        <location line="+2328"/>
+        <location line="+2321"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation type="unfinished">S&apos;està afegeix un punt...</translation>
     </message>
     <message>
-        <location line="-1949"/>
+        <location line="-1942"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">Ornament a la pista %1 compàs %2</translation>
     </message>
@@ -19683,7 +19680,7 @@ Això és un bug del programa (el programa es pot haver penjat)</translation>
         <translation type="unfinished">Sosté</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished">No hi ha cap controlador definit per aquest dispositiu.
@@ -19728,7 +19725,7 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
         <translation type="unfinished">Introdueix el número de semitons a transposar:</translation>
     </message>
     <message>
-        <location line="+379"/>
+        <location line="+371"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation type="unfinished">Temps: %1 (%2.%3s)</translation>
     </message>
@@ -19778,15 +19775,14 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-822"/>
         <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="unfinished">No s&apos;ha pogut afegir una nota: No hi ha seleccionada s&apos;ha seleccionat cap durada</translation>
+        <translation type="obsolete">No s&apos;ha pogut afegir una nota: No hi ha seleccionada s&apos;ha seleccionat cap durada</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1435"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1461"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19811,7 +19807,7 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
         <translation type="unfinished">Canvia el nom de la pista</translation>
     </message>
     <message>
-        <location line="+1445"/>
+        <location line="+1471"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -20923,12 +20919,12 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
     </message>
     <message>
         <location line="+2"/>
-        <location line="+140"/>
+        <location line="+118"/>
         <source>None</source>
         <translation type="unfinished">Cap</translation>
     </message>
     <message>
-        <location line="-139"/>
+        <location line="-117"/>
         <source>2-in-the-time-of-3</source>
         <translation type="unfinished">2 en el temps de 3</translation>
     </message>
@@ -20997,7 +20993,7 @@ Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI</tr
         <translation type="unfinished">Divideix-i-lliga els acords encavalcats</translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+77"/>
         <source>Full quantize</source>
         <translation type="unfinished">Quantificació total</translation>
     </message>
@@ -21351,7 +21347,7 @@ Voleu desar-lo?</translation>
         <location line="+45"/>
         <location line="+42"/>
         <location line="+405"/>
-        <location line="+655"/>
+        <location line="+658"/>
         <location line="+25"/>
         <location line="+3"/>
         <location line="+37"/>
@@ -21363,7 +21359,7 @@ Voleu desar-lo?</translation>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-2509"/>
+        <location line="-2512"/>
         <source>Could not save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21461,7 +21457,7 @@ Seleccioneu de la llista els fitxers que voleu esborrar del disc dur.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1818"/>
+        <location line="+1822"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21479,7 +21475,7 @@ Voleu configurar-ho ara?</translation>
         <translation type="obsolete">Desa el fitxer...</translation>
     </message>
     <message>
-        <location line="-1632"/>
+        <location line="-1633"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23154,7 +23150,7 @@ Voleu configurar-ho ara?</translation>
         <translation type="unfinished">Fes clic per seleccionar un tipus de lletra</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+207"/>
         <source>Move Segment(s)</source>
         <translation type="unfinished">
         </translation>
