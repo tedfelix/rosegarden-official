@@ -12,198 +12,163 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished">Kelola Perangkat MIDI</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+88"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Controllers...</source>
         <translation type="unfinished">Kontroler...</translation>
     </message>
     <message>
-        <location line="+43"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+250"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation type="unfinished">Baru</translation>
     </message>
     <message>
-        <location line="-228"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation type="unfinished">Hapus</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI outputs</source>
         <translation type="unfinished">Keluaran MIDI</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available outputs</source>
         <translation type="unfinished">Keluaran yang tersedia</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation type="unfinished">Tidak ada port</translation>
     </message>
     <message>
-        <location line="-334"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-39"/>
+        <location line="-39"/>
         <source>Internal Synth</source>
         <translation type="unfinished">Sintese Internal</translation>
     </message>
     <message>
-        <location line="-60"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Keluaran MIDI yang tersedia (perangkat keras maupun lunak)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+100"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-337"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
+        <location line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-303"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
+        <location line="-38"/>
         <source>MIDI Recording</source>
         <translation type="unfinished">Perekaman MIDI</translation>
     </message>
     <message>
-        <location line="+39"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Membuat perangkat rekaman baru&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Menghapus perangkat rekaman yang dipilih&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Hapus</translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Receives its data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished">Perangkat rekam Rosegarden</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default record device</source>
         <translation type="unfinished">Perangkat rekam baku</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
+        <location line="+6"/>
         <source>MIDI inputs</source>
         <translation type="unfinished">Masukan MIDI</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available inputs</source>
         <translation type="unfinished">Masukan yang tersedia</translation>
     </message>
     <message>
-        <location line="-45"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+9"/>
+        <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Masukan MIDI yang tersedia (dari perangkat keras maupun lunak)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -468,10 +433,6 @@
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation>F1</translation>
-    </message>
-    <message>
-        <source>&amp;Rosegarden tutorial</source>
-        <translation type="obsolete">Tutorial &amp;Rosegarden</translation>
     </message>
     <message>
         <location line="-3214"/>
@@ -1312,14 +1273,6 @@
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;undo</source>
-        <translation type="obsolete">Tidak ada yang bisa dibatalka&amp;n</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;redo</source>
-        <translation type="obsolete">Tidak ada &amp;yang bisa diulang</translation>
     </message>
     <message>
         <location line="-4034"/>
@@ -4821,14 +4774,6 @@
         <translation>&amp;Impor</translation>
     </message>
     <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Impor berkas &amp;Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">Impor berkas &amp;MIDI...</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Impor berkas &amp;Hydrogen...</translation>
@@ -4844,10 +4789,6 @@
         <translation>Gabungkan Ber&amp;kas...</translation>
     </message>
     <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Gabungkan berkas &amp;MIDI...</translation>
-    </message>
-    <message>
         <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Gabungkan berkas &amp;Hydrogen...</translation>
@@ -4858,26 +4799,6 @@
         <translation>&amp;Ekspor</translation>
     </message>
     <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Ekspor berkas &amp;Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">Ekspor berkas &amp;MIDI...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">Ekspor berkas skor &amp;Csound...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">Ekspor berkas M&amp;up...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Ekspor berkas Music&amp;XML...</translation>
-    </message>
-    <message>
         <location line="+7"/>
         <source>&amp;Open...</source>
         <translation>&amp;Buka...</translation>
@@ -4886,10 +4807,6 @@
         <location line="+9"/>
         <source>Open &amp;Recent</source>
         <translation>Te&amp;rakhir Dibuka</translation>
-    </message>
-    <message>
-        <source>Save &amp;As...</source>
-        <translation type="obsolete">Simpan Sebag&amp;ai...</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -5072,10 +4989,6 @@
         <location line="+2"/>
         <source>Toggle Repeat</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open in &amp;Default editor</source>
-        <translation type="obsolete">Buka &amp;di Penyunting Baku</translation>
     </message>
     <message>
         <location line="+64"/>
@@ -5282,14 +5195,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Impor berkas &amp;X11 Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Gabungkan berkas &amp;X11 Rosegarden...</translation>
-    </message>
-    <message>
         <location line="+63"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>Mi&amp;kser MIDI</translation>
@@ -5298,10 +5203,6 @@
         <location line="-61"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation>Tampilkan Penggaris Te&amp;mpo</translation>
-    </message>
-    <message>
-        <source>Export &amp;LilyPond file...</source>
-        <translation type="obsolete">Ekspor berkas &amp;LilyPond...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7247,10 +7148,6 @@
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Suara</translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
@@ -10818,10 +10715,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Blue pastel</source>
-        <translation type="obsolete">Biru pastel</translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>Red pastel</source>
         <translation>Merah pastel</translation>
@@ -10917,10 +10810,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
         <source>Replace segment contents</source>
         <translation type="unfinished"></translation>
@@ -10982,14 +10871,6 @@
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Hak cipta 2000-2010 pada tim pengembang Rosegarden&lt;/p&gt;&lt;p&gt;Versi %1 &amp;nbsp; versi Qt %2&lt;br&gt;Kunci bangun: %3&lt;/p&gt;&lt;p&gt;Rosegarden dipersembahkan untuk Anda oleh tim dari para relawan di penjuru dunia.  Untuk daftar kontributor, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Untuk informasi lebih lanjut mengenai Rosegarden, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Lisensi: Lisensi Publik Umum GNU Versi 2&lt;/p&gt; {2000-2011 ?} {1 ?} {2&lt;?} {3&lt;?} {2&lt;?}</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Hak cipta 2000-2010 pada tim pengembang Rosegarden&lt;/p&gt;&lt;p&gt;Versi %1 &amp;nbsp; versi Qt %2&lt;br&gt;Kunci bangun: %3&lt;/p&gt;&lt;p&gt;Rosegarden dipersembahkan untuk Anda oleh tim dari para relawan di penjuru dunia.  Untuk daftar kontributor, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;Untuk informasi lebih lanjut mengenai Rosegarden, kunjungi &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Lisensi: Lisensi Publik Umum GNU Versi 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -11550,14 +11431,6 @@
         <translation type="unfinished">Mengonversi berkas suara...</translation>
     </message>
     <message>
-        <source>Resampling audio file...</source>
-        <translation type="obsolete">Mensampel ulang berkas suara...</translation>
-    </message>
-    <message>
-        <source>Converting and resampling audio file...</source>
-        <translation type="obsolete">Mengonversi dan mensampel ulang berkas suara...</translation>
-    </message>
-    <message>
         <location line="-30"/>
         <source>Importing audio file...</source>
         <translation>Mengimpor berkas suara...</translation>
@@ -11639,10 +11512,6 @@
         <location line="+1"/>
         <source>File</source>
         <translation>Berkas</translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;tidak ada berkas suara&gt;</translation>
     </message>
     <message>
         <location line="+332"/>
@@ -11768,10 +11637,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location line="+1"/>
         <source>Enter new label</source>
         <translation>Masukkan label baru</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">mengimpor berkas suara jarak jauh</translation>
     </message>
     <message>
         <location line="+172"/>
@@ -14152,22 +14017,6 @@ This could cause problems if it overrides a different computed value later on.</
         <source>Value</source>
         <translation>Nilai</translation>
     </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Nilai Pertama</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Nilai Kedua</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Nilai Rendah</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Nilai Tinggi</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::EventQuantizeCommand</name>
@@ -14562,14 +14411,6 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <translation>Mengunduh %1...</translation>
     </message>
     <message>
-        <source>Failed to connect to FTP server</source>
-        <translation type="obsolete">Gagal terhubung ke server FTP</translation>
-    </message>
-    <message>
-        <source>Login failed</source>
-        <translation type="obsolete">Gagal masuk</translation>
-    </message>
-    <message>
         <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Proses unduh dibatalkan</translation>
@@ -14897,10 +14738,6 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <translation>Adobe Acrobat Reader (tidak bebas)</translation>
     </message>
     <message>
-        <source>KPDF (KDE 3.x)</source>
-        <translation type="obsolete">KPDF (KDE 3.x)</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Dipakai untuk melihat hasil LilyPond</translation>
@@ -14909,10 +14746,6 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <location line="+5"/>
         <source>Command-line file printing utility</source>
         <translation>Utilitas cetak berkas dari baris perintah</translation>
-    </message>
-    <message>
-        <source>KPrinter (KDE 3)</source>
-        <translation type="obsolete">KPrinter (KDE 3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15969,10 +15802,6 @@ Apakah Anda ingin menggunakan
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Selected tracks</source>
-        <translation type="obsolete">Jalur terpilih</translation>
-    </message>
-    <message>
         <location line="+16"/>
         <source>Compatibility level</source>
         <translation>Tingkat kompatibilitas</translation>
@@ -16731,10 +16560,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location line="-2"/>
         <source>Receive external</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -18663,10 +18488,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Menurunkan velositas...</translation>
     </message>
     <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Mengatur Velositas...</translation>
-    </message>
-    <message>
         <location line="+744"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished"></translation>
@@ -18685,10 +18506,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+2"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Buat Ornamen</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -19101,10 +18918,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>Preset:</translation>
     </message>
     <message>
-        <source>User</source>
-        <translation type="obsolete">Pengguna</translation>
-    </message>
-    <message>
         <location line="-67"/>
         <location line="+687"/>
         <source>%1 Sequence</source>
@@ -19332,14 +19145,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Value (%):</source>
-        <translation type="obsolete">Nilai (%):</translation>
-    </message>
-    <message>
-        <source>Duration (%):</source>
-        <translation type="obsolete">Durasi (%):</translation>
-    </message>
-    <message>
         <location line="+50"/>
         <source>Ramp duration (%):</source>
         <translation type="unfinished"></translation>
@@ -19360,17 +19165,9 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
-    </message>
-    <message>
         <location line="-28"/>
         <source>Bend Sequence</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="obsolete">Resolusi:</translation>
     </message>
     <message>
         <location line="+190"/>
@@ -19707,10 +19504,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
-    <message>
-        <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;h3&gt;Memproses...&lt;/h3&gt;&lt;/qt&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ProjectPackager</name>
@@ -19900,13 +19693,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+2"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::PropertyViewRuler</name>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">%1 kontroler</translation>
     </message>
 </context>
 <context>
@@ -20368,10 +20154,6 @@ Mungkin saja ada beberapa ketidakcocokan dengan format berkasnya.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <source>Open Directory</source>
-        <translation type="obsolete">Buka Direktori</translation>
-    </message>
-    <message>
         <location line="+1335"/>
         <source>Loading plugins...</source>
         <translation>Memuat pengaya...</translation>
@@ -20527,10 +20309,6 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Menyimpan berkas...</translation>
-    </message>
-    <message>
         <location line="-1633"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
@@ -20657,10 +20435,6 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">mengimpor berkas suara jarak jauh</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -21237,18 +21011,6 @@ Kesalahan adalah: %2</translation>
         <translation>Tidak dapat memuat berkas X11 Rosegarden.  Sepertinya rusak.</translation>
     </message>
     <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Buka Berkas Hydrogen</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Mengimpor berkas Hydrogen...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Tidak dapat memuat berkas Hydrogen.  Sepertinya rusak..</translation>
-    </message>
-    <message>
         <location line="+1035"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Gagal membuka berkas temporer untuk ekspor LilyPond.&lt;/p&gt;&lt;p&gt;Mungkin saja ini diakibatkan Anda kekurangan ruang kosong pada &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -21527,10 +21289,6 @@ Would you like to set it now?</source>
         <location line="+1073"/>
         <source>Play List</source>
         <translation>Daftar Main</translation>
-    </message>
-    <message>
-        <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="obsolete">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -22148,13 +21906,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+207"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished">
-        </translation>
-    </message>
-    <message>
-        <location line="+141"/>
+        <location line="+348"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22188,8 +21940,15 @@ Would you like to set it now?</source>
         <source>Click and drag to copy segments</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location line="-287"/>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+293"/>
         <source>Click and drag to copy segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23990,10 +23749,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;belum berjudul&gt;</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="obsolete">Peringatan</translation>
-    </message>
-    <message>
         <location line="+849"/>
         <source>Mute track</source>
         <translation type="unfinished"></translation>
@@ -24781,13 +24536,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>Rosegarden::Ui</name>
-    <message>
-        <source>[ No port ]</source>
-        <translation type="obsolete">[ Tiada port ]</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="+43"/>
@@ -25024,247 +24772,200 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(direkam)</translation>
-    </message>
-</context>
-<context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation type="unfinished">Transpor Rosegarden</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Hide additional controls</source>
         <translation type="unfinished">Sembunyikan kontrol tambahan</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Panic Button</source>
         <translation type="unfinished">Tombol Panik</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronom</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+469"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>IN</source>
         <translation type="unfinished">MASUK</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>OUT</source>
         <translation type="unfinished">KELUAR</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Record</source>
         <translation type="unfinished">Rekam</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Solo</source>
         <translation type="unfinished">Solo</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Start loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>End loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1037"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
+        <location line="+3"/>
         <source>SIG</source>
         <translation type="unfinished">SIG</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>DIV</source>
         <translation type="unfinished">DIV</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>/16</source>
         <translation type="unfinished">/16</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>TEMPO</source>
         <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
-        <location line="+474"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>END</source>
         <translation type="unfinished">AKHIR</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>BAR</source>
         <translation type="unfinished">BAR</translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Show additional controls</source>
         <translation type="unfinished">Tampilkan kontrol tambahan</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind</source>
         <translation type="unfinished">Putar Ulang</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
         <translation type="unfinished">Putar Ulang ke Awal</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Play/Pause</source>
         <translation type="unfinished">Putar/Tahan</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Stop</source>
         <translation type="unfinished">Henti</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward to end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Display time to end</source>
         <translation type="unfinished"></translation>
     </message>

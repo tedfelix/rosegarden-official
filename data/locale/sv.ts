@@ -12,202 +12,163 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation>Hantera MIDI-enheter</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI Playback</source>
         <translation>MIDI-uppspelning</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Sends its data through</source>
         <translation>Skickar data genom</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Rosegarden uppspelningsenhet</translation>
     </message>
     <message>
-        <location line="+253"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
+        <location line="+36"/>
         <source>Internal Synth</source>
         <translation>Intern synt</translation>
     </message>
     <message>
-        <location line="-243"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
+        <location line="-31"/>
         <source>Default playback device</source>
         <translation>Standarduppspelningsenhet</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Skapa nya uppspelningsenheter här. Klicka på enhetsnamnet för att ändra det. Välj en enhet här och anslut den till en MIDI-utgång genom att klicka på en port till höger.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+7"/>
+        <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Bankdefinitioner gör det möjligt att tala om för Rosegarden vilka program eller patcher som är tillgängliga att använda i utrustningen (verklig synt eller programvarusynt) ansluten till enheten.&lt;/p&gt;&lt;p&gt;Någonting måste vara definierat för alla program- eller bankändringar du vill sända, eftersom Rosegarden döljer alla program- och banknummer som är odefinierade.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Banker...</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Redigera effekter kopplade till enheten.&lt;p&gt;&lt;p&gt;Du måste definiera effekter här för att kunna använda dem var som helst i Rosegarden, såsom på styrlinjaler eller i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;. Du kan ändra vilka effekter som visas i rutan &lt;b&gt;Instrumentparametrar&lt;/b&gt;, och arrangera om deras utläggning&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Controllers...</source>
         <translation>Effekter...</translation>
     </message>
     <message>
-        <location line="+43"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa en ny uppspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+250"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location line="-228"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Radera den markerade uppspelningsenheten. Alla spår som använder enheten måste tilldelas på nytt, och alla program- eller bankändringar för dessa spår kommer att förloras permanent&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation>Radera</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI outputs</source>
         <translation>MIDI-utgångar</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available outputs</source>
         <translation>Tillgängliga utgångar</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation>Ingen utgång</translation>
     </message>
     <message>
-        <location line="-394"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-35"/>
+        <location line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-utgångar (maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+39"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tillgängliga MIDI-ingångar (från maskinvara eller programvara)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-244"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-36"/>
+        <location line="-36"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka för att uppdatera portlistan efter att ha anslutit ny utrustning eller startat en ny programsynt&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-667"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-73"/>
+        <location line="-73"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+330"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
+        <location line="+36"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location line="-303"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
+        <location line="-38"/>
         <source>MIDI Recording</source>
         <translation>MIDI-inspelning</translation>
     </message>
     <message>
-        <location line="+39"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Skapa en ny inspelningsenhet&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Radera den markerade inspelningsenheten&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Radera</translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Receives its data from</source>
         <translation>Tar emot sin data från</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Rosegarden inspelningsenhet</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default record device</source>
         <translation>Standardinspelningsenhet</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
+        <location line="+6"/>
         <source>MIDI inputs</source>
         <translation>MIDI-ingångar</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available inputs</source>
         <translation>Tillgängliga ingångar</translation>
     </message>
@@ -472,10 +433,6 @@
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation>F1</translation>
-    </message>
-    <message>
-        <source>&amp;Rosegarden tutorial</source>
-        <translation type="obsolete">Rosegarden &amp;handledning</translation>
     </message>
     <message>
         <location line="-3214"/>
@@ -972,11 +929,6 @@
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <source>Enter, Media Play, Ctrl+Return</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="obsolete">Enter, Media Play, Ctrl+Return</translation>
-    </message>
-    <message>
         <location line="+132"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
@@ -1244,14 +1196,6 @@
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;undo</source>
-        <translation type="obsolete">Ingenting att å&amp;ngra</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;redo</source>
-        <translation type="obsolete">Ingenting att &amp;göra om</translation>
     </message>
     <message>
         <location line="-4034"/>
@@ -2357,10 +2301,6 @@
         <translation>Öppna i ton&amp;höjdsföljare</translation>
     </message>
     <message>
-        <source>Add Clef Change in this link only...</source>
-        <translation type="obsolete">Lägg till klavändring enbart för den här länken...</translation>
-    </message>
-    <message>
         <location line="-2452"/>
         <source>Add &amp;Layer</source>
         <translation>Lägg till &amp;lager</translation>
@@ -3107,10 +3047,6 @@
         <location line="+1991"/>
         <source>&amp;Print...</source>
         <translation>Skriv &amp;ut...</translation>
-    </message>
-    <message>
-        <source>P&amp;rint preview...</source>
-        <translation type="obsolete">&amp;Förhandsgranska utskrift...</translation>
     </message>
     <message>
         <location line="-1935"/>
@@ -4747,21 +4683,9 @@
         <translation>&amp;Importera</translation>
     </message>
     <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Importera Rosegarden-&amp;projektfil...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">Importera &amp;MIDI-fil...</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Importera &amp;Hydrogen-fil...</translation>
-    </message>
-    <message>
-        <source>Import MusicXM&amp;L file...</source>
-        <translation type="obsolete">Importera MusicXM&amp;L-fil...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4774,42 +4698,14 @@
         <translation>Sammanfoga &amp;fil...</translation>
     </message>
     <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Sammanfoga &amp;MIDI-fil...</translation>
-    </message>
-    <message>
         <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Sammanfoga &amp;Hydrogen-fil...</translation>
     </message>
     <message>
-        <source>Merge MusicXM&amp;L file...</source>
-        <translation type="obsolete">Sammanfoga MusicXM&amp;L-fil...</translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>&amp;Export</source>
         <translation>E&amp;xportera</translation>
-    </message>
-    <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Exportera Rosegarden-&amp;projektfil...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">Exportera &amp;MIDI-fil...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">Exportera &amp;Csound-partiturfil...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">Exportera M&amp;up-fil...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Exportera Music&amp;XML-fil...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4822,10 +4718,6 @@
         <translation>Öppna s&amp;enaste</translation>
     </message>
     <message>
-        <source>Save &amp;As...</source>
-        <translation type="obsolete">Spara s&amp;om...</translation>
-    </message>
-    <message>
         <location line="+19"/>
         <source>Save as &amp;Template...</source>
         <translation>Spara som &amp;mall...</translation>
@@ -4834,10 +4726,6 @@
         <location line="+1"/>
         <source>Re&amp;vert</source>
         <translation>Å&amp;terställ</translation>
-    </message>
-    <message>
-        <source>Prin&amp;t preview...</source>
-        <translation type="obsolete">Förhands&amp;granska utskrift...</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4919,10 +4807,6 @@
         <location line="+1"/>
         <source>Set Tempos from &amp;Beat Segment</source>
         <translation>Ställ in tempon från takt&amp;segment</translation>
-    </message>
-    <message>
-        <source>Fit existing beats to beat segment</source>
-        <translation type="obsolete">Passa in befintliga takter i taktsegment</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -5009,10 +4893,6 @@
         <location line="+2"/>
         <source>Toggle Repeat</source>
         <translation>Ändra upprepning</translation>
-    </message>
-    <message>
-        <source>Open in &amp;Default editor</source>
-        <translation type="obsolete">Öppna i &amp;standardeditor</translation>
     </message>
     <message>
         <location line="+64"/>
@@ -5311,14 +5191,6 @@
         <translation>Visa &amp;uppspelningslinjal</translation>
     </message>
     <message>
-        <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Importera &amp;X11 Rosegarden-fil...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Sammanfoga &amp;X11 Rosegarden-fil...</translation>
-    </message>
-    <message>
         <location line="+63"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>MIDI-mi&amp;xer</translation>
@@ -5327,10 +5199,6 @@
         <location line="-61"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation>Visa &amp;tempolinjal</translation>
-    </message>
-    <message>
-        <source>Export &amp;LilyPond file...</source>
-        <translation type="obsolete">Exportera &amp;Lilypond-fil...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10547,10 +10415,6 @@
         <translation>allmän avbildning</translation>
     </message>
     <message>
-        <source>Blue pastel</source>
-        <translation type="obsolete">Pastellblå</translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>Red pastel</source>
         <translation>Pastellröd</translation>
@@ -10594,10 +10458,6 @@
         <location line="+1"/>
         <source>Unknown</source>
         <translation>Okänd</translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
@@ -11011,22 +10871,6 @@
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2 or later&lt;/p&gt; {2000-2015 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2014 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2012 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2 or later&lt;/p&gt; {2000-2014 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2012 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2011 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2010 Rosegardens utvecklingsgrupp&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Byggnyckel: %3&lt;/p&gt;&lt;p&gt;Rosegarden har tagits fram av en grupp frivilliga över hela världen. Besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; för att se en lista med bidragsgivare.&lt;br&gt;För ytterligare information om Rosegarden, besök &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licens: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -11587,14 +11431,6 @@
         <translation>Konverterar ljudfil...</translation>
     </message>
     <message>
-        <source>Resampling audio file...</source>
-        <translation type="obsolete">Samplar om ljudfil...</translation>
-    </message>
-    <message>
-        <source>Converting and resampling audio file...</source>
-        <translation type="obsolete">Konverterar och samplar om ljudfil...</translation>
-    </message>
-    <message>
         <location line="-30"/>
         <source>Importing audio file...</source>
         <translation>Importerar ljudfil...</translation>
@@ -11676,10 +11512,6 @@
         <location line="+1"/>
         <source>File</source>
         <translation>Fil</translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;inga ljudfiler&gt;</translation>
     </message>
     <message>
         <location line="+332"/>
@@ -11805,10 +11637,6 @@ Välj de du vill ta bort permanent från hårddisken.
         <location line="+1"/>
         <source>Enter new label</source>
         <translation>Skriv nytt namn</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">importerar ljudfil från annan dator</translation>
     </message>
     <message>
         <location line="+172"/>
@@ -13532,10 +13360,6 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::DeleteRangeCommand</name>
     <message>
-        <source>Rejoin Command</source>
-        <translation type="obsolete">Återförena</translation>
-    </message>
-    <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+322"/>
         <source>Delete Range</source>
         <translation>Ta bort omfång</translation>
@@ -14193,45 +14017,9 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
         <translation>Mönster</translation>
     </message>
     <message>
-        <source>Flat - set %1 to value</source>
-        <translation type="obsolete">Jämn: Ställ in %1 till ett värde</translation>
-    </message>
-    <message>
-        <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="obsolete">Växlande: Ställ in %1 till maximum och minimum för varannan händelse</translation>
-    </message>
-    <message>
-        <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="obsolete">Crescendo: Ställ in %1 stigande från minimum till maximum</translation>
-    </message>
-    <message>
-        <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="obsolete">Diminuendo: Ställ in %1 fallande från maximum till minimum</translation>
-    </message>
-    <message>
-        <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="obsolete">Ringning: Ställ in %1 växlande från maximum till minimum med båda bortdöende till tystnad</translation>
-    </message>
-    <message>
         <location line="-81"/>
         <source>Value</source>
         <translation>Värde</translation>
-    </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Första värdet</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Andra värdet</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Lägsta värdet</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Högsta värdet</translation>
     </message>
 </context>
 <context>
@@ -14627,22 +14415,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Laddar ner %1...</translation>
     </message>
     <message>
-        <source>Failed to connect to FTP server</source>
-        <translation type="obsolete">Misslyckades ansluta till FTP-server</translation>
-    </message>
-    <message>
-        <source>Login failed</source>
-        <translation type="obsolete">Inloggning misslyckades</translation>
-    </message>
-    <message>
-        <source>Failed to change to correct directory</source>
-        <translation type="obsolete">Misslyckades byta till rätt katalog</translation>
-    </message>
-    <message>
-        <source>FTP download aborted</source>
-        <translation type="obsolete">Nerladdning med FTP avbruten</translation>
-    </message>
-    <message>
         <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Nerladdning avbruten</translation>
@@ -14970,10 +14742,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Adobe Acrobat läsare (icke-fri)</translation>
     </message>
     <message>
-        <source>KPDF (KDE 3.x)</source>
-        <translation type="obsolete">KPDF (KDE 3.x)</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>Används för att förhandsgranska utdata skapad av Lilypond</translation>
@@ -14982,10 +14750,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location line="+5"/>
         <source>Command-line file printing utility</source>
         <translation>Utskriftsverktyg för filer på kommandoraden</translation>
-    </message>
-    <message>
-        <source>KPrinter (KDE 3)</source>
-        <translation type="obsolete">Kprinter (KDE 3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15042,13 +14806,6 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
         <source>Insert Generated Region</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Guitar::Fingering</name>
-    <message>
-        <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="obsolete">kunde inte tolka fingersättning &apos;%1&apos; i &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -16049,10 +15806,6 @@ Vill du använda
         <translation>&lt;qt&gt;Välj vilka spår eller segment att exportera&lt;/qt&gt;</translation>
     </message>
     <message>
-        <source>Selected tracks</source>
-        <translation type="obsolete">Valda spår</translation>
-    </message>
-    <message>
         <location line="+16"/>
         <source>Compatibility level</source>
         <translation>Kompatibilitetsnivå</translation>
@@ -16534,10 +16287,6 @@ Vill du använda
 <context>
     <name>Rosegarden::LoopRuler</name>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningsmarkören.&lt;/p&gt;&lt;p&gt;Skift-klicka och dra för att ange ett intervall för upprepning eller redigering.&lt;/p&gt;&lt;p&gt;Skift-klicka för att rensa upprepningen eller intervallet.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att starta uppspelning.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+80"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningspekaren.&lt;/p&gt;&lt;p&gt;Skift-klicka och dra för att ange ett intervall att repetera eller redigera.&lt;/p&gt;&lt;p&gt;Skift-klicka för att ta bort repetition eller intervall.&lt;/p&gt;&lt;p&gt;Klicka och dra för att flytta uppspelningspekaren låst till takter.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att starta uppspelning.&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -16744,14 +16493,6 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <translation>&lt;qt&gt;Ställ in MIDI-bank som program ska väljas från&lt;/qt&gt;</translation>
     </message>
     <message>
-        <source>auto</source>
-        <translation type="obsolete">automatiskt</translation>
-    </message>
-    <message>
-        <source>fixed</source>
-        <translation type="obsolete">låst</translation>
-    </message>
-    <message>
         <location line="+26"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ställ in MIDI-program eller &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -16825,10 +16566,6 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <location line="-2"/>
         <source>Receive external</source>
         <translation>Ta emot extern</translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -17555,10 +17292,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Enligt antal halvtonsteg:</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Ställ in händelseljudstyrkor</translation>
-    </message>
-    <message>
         <location line="-320"/>
         <source>Trigger Segment</source>
         <translation>Utlösande segment</translation>
@@ -17572,10 +17305,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <location line="-826"/>
         <source>Matrix</source>
         <translation>Matris</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Kan inte infoga not: Ingen rutnätslängd vald</translation>
     </message>
 </context>
 <context>
@@ -17705,13 +17434,6 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <location line="+114"/>
         <source>http://rosegardenmusic.com/wiki/doc:midi-filter-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midi-filter-en</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiKeyMapTreeWidgetItem</name>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Tonartsändring</translation>
     </message>
 </context>
 <context>
@@ -18649,10 +18371,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>  Ingen markering </translation>
     </message>
     <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Triol</translation>
-    </message>
-    <message>
         <location line="+2676"/>
         <source>Chord</source>
         <translation>Ackord</translation>
@@ -18693,10 +18411,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <location line="+1"/>
         <source>LilyPond preview options</source>
         <translation>Förhandsgranskningsalternativ för Lilypond</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Export misslyckades. Filen kunde inte öppnas för skrivning.</translation>
     </message>
     <message>
         <location line="+296"/>
@@ -18784,14 +18498,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Minskar ljudstyrkor...</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Ställ in händelseljudstyrkor</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Ställer in ljudstyrkor...</translation>
-    </message>
-    <message>
         <location line="+2830"/>
         <source>Edit Text Event</source>
         <translation>Redigera texthändelse</translation>
@@ -18831,10 +18537,6 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <location line="+2"/>
         <source>Ornament bar %1</source>
         <translation>Ornament takt %1</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Skapa ornament</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -18965,10 +18667,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location line="+20"/>
         <source>Cycling slashes...</source>
         <translation>Växlar tvärbalkar...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Kan inte infoga not: Inget notvärde valt</translation>
     </message>
 </context>
 <context>
@@ -19221,10 +18919,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
-        <source>Pitch Bend Sequence</source>
-        <translation type="obsolete">Tonhöjdsavvikelse för sekvens</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+129"/>
         <source>Preset</source>
         <translation>Förinställning</translation>
@@ -19233,10 +18927,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location line="+5"/>
         <source>Preset:</source>
         <translation>Förinställning:</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="obsolete">Användare</translation>
     </message>
     <message>
         <location line="-67"/>
@@ -19466,14 +19156,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Value (%):</source>
-        <translation type="obsolete">Värde (%):</translation>
-    </message>
-    <message>
-        <source>Duration (%):</source>
-        <translation type="obsolete">Varaktighet (%):</translation>
-    </message>
-    <message>
         <location line="-851"/>
         <source>Ramp duration (%):</source>
         <translation>Rampens varaktighet (%):</translation>
@@ -19494,29 +19176,9 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <translation>Slutvärde (%):</translation>
     </message>
     <message>
-        <source>Vibrato start amplitude (%):</source>
-        <translation type="obsolete">Startamplitud för vibrato (%):</translation>
-    </message>
-    <message>
-        <source>Vibrato end amplitude (%):</source>
-        <translation type="obsolete">Slutamplitud för vibrato (%):</translation>
-    </message>
-    <message>
-        <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
-    </message>
-    <message>
         <location line="-28"/>
         <source>Bend Sequence</source>
         <translation>Avvikelseföljd</translation>
-    </message>
-    <message>
-        <source>Vibrato wavelength:</source>
-        <translation type="obsolete">Våglängd för vibrato:</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="obsolete">Upplösning:</translation>
     </message>
     <message>
         <location line="+190"/>
@@ -19853,10 +19515,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
-    <message>
-        <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;h3&gt;Behandlar...&lt;/h3&gt;&lt;/qt&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ProjectPackager</name>
@@ -20046,13 +19704,6 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
         <location line="+2"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Kunde inte starta bakgrundsbehandlingsskript %1.&lt;/qt&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::PropertyViewRuler</name>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">%1 effekt</translation>
     </message>
 </context>
 <context>
@@ -20514,10 +20165,6 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <source>Open Directory</source>
-        <translation type="obsolete">Öppna katalog</translation>
-    </message>
-    <message>
         <location line="+1335"/>
         <source>Loading plugins...</source>
         <translation>Läser in insticksmoduler...</translation>
@@ -20682,10 +20329,6 @@ Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper 
 Vill du ställa in den nu?</translation>
     </message>
     <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Sparar fil...</translation>
-    </message>
-    <message>
         <location line="-1633"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fel vid skrivning till &apos;%1&apos;</translation>
@@ -20744,10 +20387,6 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 Stöd för elementen kan försvinna i framtida versioner av Rosegarden.
 Du rekommenderas att spara filen med den här versionen av Rosegarden,
 för att försäkra dig om att den kan läsas in igen i framtida versioner.</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Kanalernas avbildning har ändrats&lt;/h2&gt;&lt;p&gt;Från och med version 10.02 tillhandahåller inte Rosegarden längre kontroller för att ändra kanalen som hör ihop med varje MIDI-instrument. Istället använder varje instrument samma kanal som sitt instrumentnummer. Exempelvis använder alltid &quot;MIDI-systemingångsenhet 12&quot; kanal 12.&lt;/p&gt;&lt;p&gt;Filen du just har läst in innehåller instrument vars kanaler skiljer sig från instrumentnumren. Tilldelningen av dessa kanaler har ändrats så att instrument 1 alltid använder kanal 1, oberoende av vilken kanal det tidigare kan ha använt. I de flesta fall kommer du inte att märka någon skillnad, men du kanske måste göra några små ändringar av filen för att den ska spelas upp som avsett. Vi rekommenderar att du sparar filen för att undvika den här varningen i fortsättningen.&lt;/p&gt;&lt;p&gt;Vi ber om ursäkt för alla eventuella olägenheter.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+650"/>
@@ -20818,10 +20457,6 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
         <translation>Kan inte lägga till släppt fil. Den här versionen av Rosegarden byggdes inte med ljudstöd.</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">importerar ljudfil från annan dator</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -21411,18 +21046,6 @@ Segment -&gt; Sammanfoga segment.
         <translation>Kan inte läsa in X11 Rosegarden-fil. Den verkar vara skadad.</translation>
     </message>
     <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Öppna Hydrogen-fil</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Importerar Hydrogen-fil...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Kan inte läsa in Hydrogen-fil. Den verkar vara skadad.</translation>
-    </message>
-    <message>
         <location line="+1035"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Misslyckades öppna en tillfällig fil för export till LilyPond.&lt;/p&gt;&lt;p&gt;Detta betyder troligen att diskutrymmet på &lt;pre&gt;%1&lt;/pre&gt; har tagit slut&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -21708,10 +21331,6 @@ Vill du ställa in den nu?</translation>
         <location line="+1073"/>
         <source>Play List</source>
         <translation>Spellista</translation>
-    </message>
-    <message>
-        <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="obsolete">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -22325,10 +21944,13 @@ Vill du ange den nu?</translation>
         <source>Click and drag to select segments</source>
         <translation>Klicka och dra för att markera segment</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="+207"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished">Flytta segment</translation>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location line="+141"/>
@@ -22361,17 +21983,9 @@ Vill du ange den nu?</translation>
         <translation>Klicka och dra för att flytta segment; håll ner Ctrl för att kopiera det; Cltr+Alt för en länkad kopia; dubbelklicka för att redigera</translation>
     </message>
     <message>
-        <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
-        <translation type="obsolete">Klicka och dra för att flytta segment; håll ner Ctrl för att kopiera dem</translation>
-    </message>
-    <message>
         <location line="-4"/>
         <source>Click and drag to copy segments</source>
         <translation>Klicka och dra för att kopiera segment</translation>
-    </message>
-    <message>
-        <source>Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit</source>
-        <translation type="obsolete">Klicka och dra för att flytta segment; håll ner Ctrl för att kopiera det; dubbelklicka för att redigera</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22444,22 +22058,11 @@ Vill du ange den nu?</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::SegmentSplitTwiceCommand</name>
-    <message>
-        <source>Split Twice Segment</source>
-        <translation type="obsolete">Dela segment två gånger</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+61"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation>Klicka på ett segment för att dela det itu; håll ner Skift för att undvika fästande på rutnätet för taktslag</translation>
-    </message>
-    <message>
-        <source>Click on a segment to split it in two</source>
-        <translation type="obsolete">Klicka på ett segment för att dela det itu</translation>
     </message>
 </context>
 <context>
@@ -24190,18 +23793,6 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="obsolete">Varning</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before recording audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Sökvägen till ljudfiler finns inte eller är inte skrivbar.
-Ställ in sökvägen till ljudfiler till en giltig katalog i dokumentegenskaper innan ljud spelas in.
-Vill du ställa in den nu?</translation>
-    </message>
-    <message>
         <location line="+849"/>
         <source>Mute track</source>
         <translation>Gör spår stumt</translation>
@@ -24214,14 +23805,6 @@ Vill du ställa in den nu?</translation>
 </context>
 <context>
     <name>Rosegarden::TrackEditor</name>
-    <message>
-        <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="obsolete">Omvandla upprepat segment till riktiga kopior</translation>
-    </message>
-    <message>
-        <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="obsolete">Omvandla upprepade segment till riktiga kopior</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+379"/>
         <source>Delete Tracks</source>
@@ -24261,10 +23844,6 @@ Vill du ställa in den nu?</translation>
 </context>
 <context>
     <name>Rosegarden::TrackLabel</name>
-    <message>
-        <source>&lt;qt&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Klicka och håll med endera musknapp för att tilldela spåret till ett instrument.&lt;/qt&gt;</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -25003,13 +24582,6 @@ Vill du ställa in den nu?</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::Ui</name>
-    <message>
-        <source>[ No port ]</source>
-        <translation type="obsolete">[ Ingen port ]</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="+43"/>
@@ -25246,247 +24818,200 @@ Vill du ställa in den nu?</translation>
     </message>
 </context>
 <context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(inspelad)</translation>
-    </message>
-</context>
-<context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation>Spelkontrollpanel</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Hide additional controls</source>
         <translation>Dölj flera knappar</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Panic Button</source>
         <translation>Panikknapp</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation>Återställer alla MIDI-enheter om du har toner som fastnat</translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>Tillhandahåller ett metronomtick att spela efter</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Visar MIDI-aktivitet in, till och ut från Rosegarden</translation>
     </message>
     <message>
-        <location line="+469"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>IN</source>
         <translation>IN</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>OUT</source>
         <translation>   UT</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation>INGENTING</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Record</source>
         <translation>Spela in</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation>Spela in antingen MIDI eller ljud</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Loop</source>
         <translation>Upprepa</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>Sätt på eller stäng av upprepningsmarkeringar (om inställda)</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation>Tystar alla utom nuvarande markerat spår</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Start loop or range here</source>
         <translation>Börja loop eller omfång här</translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>End loop or range here</source>
         <translation>Avsluta loop eller omfång här</translation>
     </message>
     <message>
-        <location line="+1037"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
+        <location line="+3"/>
         <source>SIG</source>
         <translation>SIG</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>DIV</source>
         <translation>DIV</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>TEMPO</source>
         <translation>TEMPO</translation>
     </message>
     <message>
-        <location line="+474"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>END</source>
         <translation>SLUT</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>BAR</source>
         <translation>TAKT</translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>Växla mellan klocktid, metronomtid och antal ramar</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Show additional controls</source>
         <translation>Visa flera knappar</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind</source>
         <translation>Spola tillbaka</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>Flyttar nuvarande visarposition en takt bakåt.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
         <translation>Spola tillbaka till början</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>Flyttar markören till kompositionens början. (Detta kan betyda att gå framåt om markören för tillfället är framför början.)</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Play/Pause</source>
         <translation>Spela/Pausera</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>Spelar upp från nuvarande visarposition, eller gör paus i uppspelningen om den redan pågår.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Stop</source>
         <translation>Stoppa</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation>Stoppar uppspelning eller inspelning.</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward</source>
         <translation>Spola fram</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>Flyttar nuvarande visarposition en takt framåt.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward to end</source>
         <translation>Spola fram till slutet</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>Flyttar markören till kompositionens slut. (Det kan betyda att gå bakåt om markören för tillfället redan är bortom slutet.)</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Display time to end</source>
         <translation>Visa tid till slutet</translation>
     </message>

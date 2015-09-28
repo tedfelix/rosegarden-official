@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>:</name>
     <message>
         <source></source>
@@ -19,198 +12,163 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished">Rheoli Dyfeisiau MIDI</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+88"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Rheoli Rhengau ....</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Controllers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+43"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+250"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation type="unfinished">Newydd</translation>
     </message>
     <message>
-        <location line="-228"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-334"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-39"/>
+        <location line="-39"/>
         <source>Internal Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-60"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+100"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-337"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
+        <location line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-303"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
+        <location line="-38"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Receives its data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default record device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
+        <location line="+6"/>
         <source>MIDI inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-45"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+9"/>
+        <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1492,10 +1450,6 @@
         <translation type="unfinished">Ychwanegu Newid Ar&amp;wydd Amseriad...</translation>
     </message>
     <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">Cylch&amp;rannau</translation>
-    </message>
-    <message>
         <location line="-3958"/>
         <location line="+1289"/>
         <location line="+2085"/>
@@ -2730,26 +2684,6 @@
         <translation type="unfinished">&amp;Buanedd</translation>
     </message>
     <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Cyrchydd Yn &amp;Ol</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Cyrchydd Ym&amp;laen</translation>
-    </message>
-    <message>
-        <source>Cursor For&amp;ward Bar</source>
-        <translation type="obsolete">Cyrchydd Y&amp;mlaen Un Far</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Cyrchydd i&apos;r De&amp;chrau</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Cyrchydd i&apos;r Diwe&amp;dd</translation>
-    </message>
-    <message>
         <location line="+1527"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation type="unfinished"></translation>
@@ -2852,30 +2786,6 @@
         <location line="+1565"/>
         <source>P&amp;anic</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
     </message>
     <message>
         <location line="-3126"/>
@@ -3102,10 +3012,6 @@
         <translation type="unfinished">B&amp;ylchu</translation>
     </message>
     <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>&amp;Layout Mode</source>
         <translation type="unfinished">Haenlun</translation>
@@ -3129,10 +3035,6 @@
         <location line="+1"/>
         <source>Open L&amp;yric Editor</source>
         <translation type="unfinished">Agor Golygydd G&amp;eiriau</translation>
-    </message>
-    <message>
-        <source>Add Event Ruler</source>
-        <translation type="obsolete">Hidlen Ddigwyddiadau</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -3984,18 +3886,6 @@
         <translation type="unfinished">Dewisydd Traw</translation>
     </message>
     <message>
-        <source>Cursor &amp;Up Staff</source>
-        <translation type="obsolete">Cyrchydd i &amp;Fyny Un Erwydd</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Down Staff</source>
-        <translation type="obsolete">Cyrchydd i &amp;Lawr Un Erwydd</translation>
-    </message>
-    <message>
-        <source>Cursor Ne&amp;xt Segment</source>
-        <translation type="obsolete">Creu Cylchran</translation>
-    </message>
-    <message>
         <location line="-1785"/>
         <location line="+1909"/>
         <source>&amp;Insert Note</source>
@@ -4152,42 +4042,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
         <location line="-4075"/>
         <location line="+288"/>
         <source>Preferences...</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">A3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">A6</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">A2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">A5</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -4222,10 +4080,6 @@
         <location line="-1976"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rewind</source>
-        <translation type="obsolete">Ail-ddirwyn</translation>
     </message>
     <message>
         <location line="-1008"/>
@@ -4920,14 +4774,6 @@
         <translation type="unfinished">&amp;Mewnforio</translation>
     </message>
     <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Mewnforio ffeil &amp;Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">Mewnforio ffeil &amp;MIDI...</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation type="unfinished">Mewnforio ffeil &amp;Rosegarden 2.1...</translation>
@@ -4943,10 +4789,6 @@
         <translation type="unfinished">Cyfuno &amp;Ffeil...</translation>
     </message>
     <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Cyfuno ffeil &amp;MIDI...</translation>
-    </message>
-    <message>
         <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation type="unfinished">Mewnforio ffeil &amp;Rosegarden 2.1...</translation>
@@ -4955,26 +4797,6 @@
         <location line="+2"/>
         <source>&amp;Export</source>
         <translation type="unfinished">&amp;Allforio</translation>
-    </message>
-    <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Mewnforio ffeil &amp;Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">Allforio ffeil &amp;MIDI...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">Allforio ffeil sgor &amp;Csound...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">Allforio ffeil &amp;Mup...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Allforio ffeil Music&amp;XML...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -5162,10 +4984,6 @@
         <location line="+1"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation type="unfinished">&amp;Cadw&apos;r Ddogfen Gyfredol fel Stiwdio Rhagosodedig</translation>
-    </message>
-    <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Cylch&amp;rannau</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -5515,20 +5333,6 @@
         <location line="+52"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Mae angen ar y math gludo Cyfyngedig digon o le gwag
-(yn cynnwys dim ond seibiau) wrth y lleoliad gludo
-i gadw yr holl ddigwyddiadau i gael eu gludo.
-Doedd dim digon o le.
-Os ydych eisiau gludo beth bynnag, ystyriwch defnyddio
-un o&apos;r mathau gludo eraill o&apos;r dewisiad &quot;Gludo&quot; ar y
-ddewislen Golygu.  Cewch hefyd newid y math gludo
-rhagosodedig i rhwybeth arall yn lle Cyfyngedig
-os hoffech chi.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+58"/>
@@ -7329,26 +7133,6 @@ os hoffech chi.</translation>
         <location line="+1"/>
         <source>Pistol shot</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="-24"/>
@@ -10686,10 +10470,6 @@ os hoffech chi.</translation>
         <translation type="unfinished">Anhysbys</translation>
     </message>
     <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
         <location line="+131"/>
         <source>%1. %2</source>
@@ -11651,14 +11431,6 @@ os hoffech chi.</translation>
         <translation type="unfinished">Allforio ffeil sain ...</translation>
     </message>
     <message>
-        <source>Resampling audio file...</source>
-        <translation type="obsolete">Allforio ffeil sain ...</translation>
-    </message>
-    <message>
-        <source>Converting and resampling audio file...</source>
-        <translation type="obsolete">Allforio ffeil sain ...</translation>
-    </message>
-    <message>
         <location line="-30"/>
         <source>Importing audio file...</source>
         <translation type="unfinished">Allforio ffeil sain ...</translation>
@@ -11740,10 +11512,6 @@ os hoffech chi.</translation>
         <location line="+1"/>
         <source>File</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;dim ffeil sain&gt;</translation>
     </message>
     <message>
         <location line="+332"/>
@@ -11862,10 +11630,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Mewnosod label newydd</translation>
     </message>
     <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">Allforio ffeil sain ...</translation>
-    </message>
-    <message>
         <location line="+172"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation type="unfinished"></translation>
@@ -11932,10 +11696,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="-133"/>
         <source>Mono or stereo</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Solo</source>
-        <translation type="obsolete">Unawd</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -12443,10 +12203,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Rheoli Rhengau MIDI a Rhaglenni</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ail-osod</translation>
-    </message>
-    <message>
         <location line="+23"/>
         <source>Device and Banks</source>
         <translation type="unfinished"></translation>
@@ -12658,10 +12414,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+37"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="obsolete">Newid Allwedd</translation>
     </message>
 </context>
 <context>
@@ -13217,10 +12969,6 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <source>Configure Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="+48"/>
         <source>Rosegarden - Preferences</source>
         <translation type="unfinished"></translation>
@@ -13647,14 +13395,6 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
-        <source>D</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="+59"/>
         <source>C</source>
         <comment>note name</comment>
@@ -13927,133 +13667,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+8"/>
         <source>Segment Summary</source>
         <translation type="unfinished">Cylchrannau</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EditView</name>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">rheolydd %1</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Plygu Traw</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Math o ddigwyddiad na chynhelir:</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>%1 flat</source>
-        <translation type="obsolete">%1 lleddf</translation>
-    </message>
-    <message>
-        <source>%1 sharp</source>
-        <translation type="obsolete">%1 llon</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">&amp;Mewnosod nodyn</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">Wythfed &amp;Uwch</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">Wythfed &amp;Is</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Dangos arwydd amseriad wedi&apos;i amcangyfrif</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Gosod &amp;Tempo i Barhad Cylchran Sain</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Gosod &amp;Tempo i Barhad Cylchran Sain</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">Ail-&amp;raddu...</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Trawsgyweirio</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Mewnosod faint o hanner-tonau i drawsgyweirio:</translation>
-    </message>
-    <message>
-        <source>Transposing...</source>
-        <translation type="obsolete">Trawsgyweirio...</translation>
-    </message>
-    <message>
-        <source>Transposing up one semitone...</source>
-        <translation type="obsolete">Trawsgyweirio i fyny un hanner-ton...</translation>
-    </message>
-    <message>
-        <source>Transposing up one octave...</source>
-        <translation type="obsolete">Trawsgyweirio i fyny un wythfed...</translation>
-    </message>
-    <message>
-        <source>Transposing down one semitone...</source>
-        <translation type="obsolete">Trawsgyweirio i lawr un hanner-ton...</translation>
-    </message>
-    <message>
-        <source>Transposing down one octave...</source>
-        <translation type="obsolete">Trawsgyweirio i lawr un wythfed...</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Dechrau...</translation>
-    </message>
-    <message>
-        <source>Retrograding...</source>
-        <translation type="obsolete">Ail-&amp;raddu...</translation>
-    </message>
-    <message>
-        <source>Retrograde inverting...</source>
-        <translation type="obsolete">Ail-&amp;raddu...</translation>
-    </message>
-    <message>
-        <source>Jogging left...</source>
-        <translation type="obsolete">Cau&apos;r ffeil...</translation>
     </message>
 </context>
 <context>
@@ -14395,45 +14008,9 @@ Gall hyn achosi problemau os mae&apos;n newid gwerth gwahanol sydd wedi&apos;i c
         <translation type="unfinished">Patrwm</translation>
     </message>
     <message>
-        <source>Flat - set %1 to value</source>
-        <translation type="obsolete">Lleddf - gosod %1 i&apos;r gwerth</translation>
-    </message>
-    <message>
-        <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="obsolete">Eiledu - gosod %1 i&apos;r mwyaf a&apos;r lleiaf ar bob yn ail ddigwyddiad</translation>
-    </message>
-    <message>
-        <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="obsolete">Crescendo - gosod %1 i godi o&apos;r lleiaf i&apos;r mwyaf</translation>
-    </message>
-    <message>
-        <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="obsolete">Diminuendo - gosod %1 i syrthio o&apos;r mwyaf i&apos;r lleiaf</translation>
-    </message>
-    <message>
-        <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="obsolete">Atseinio - gosod %1 i fynd bob yn ail o&apos;r mwyaf i&apos;r lleiaf, efo&apos;r dau yn distewi i sero</translation>
-    </message>
-    <message>
         <location line="-81"/>
         <source>Value</source>
         <translation type="unfinished">Gwerth</translation>
-    </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Gwerth Cyntaf</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Ail Werth</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Gwerth LSB</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Gwerth Cyntaf</translation>
     </message>
 </context>
 <context>
@@ -14693,10 +14270,6 @@ Gall hyn achosi problemau os mae&apos;n newid gwerth gwahanol sydd wedi&apos;i c
         <location line="+18"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 - Triggered Segment: %2</source>
-        <translation type="obsolete">Creu Cylchran</translation>
     </message>
 </context>
 <context>
@@ -15095,10 +14668,6 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="obsolete">Arferol</translation>
-    </message>
-    <message>
         <location line="+6"/>
         <source>Safe</source>
         <translation type="unfinished"></translation>
@@ -15127,10 +14696,6 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
         <location line="+2"/>
         <source>Main window</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matrics</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16149,49 +15714,6 @@ Example text from file:</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::LatencyConfigurationPage</name>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Hwyrni</translation>
-    </message>
-    <message>
-        <source>Sequencer Latency</source>
-        <translation type="obsolete">Hwyrni Dilyniannydd</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">Hwyrni JACK</translation>
-    </message>
-    <message>
-        <source>Use the &quot;Fetch JACK latencies&quot; button to discover the latency values set at
-the sequencer.  It&apos;s recommended that you use the returned values but it&apos;s also
-possible to override them manually using the sliders.  Note that if you change
-your JACK server parameters you should always fetch the latency values again.
-The latency values will be stored by Rosegarden for use next time.</source>
-        <translation type="obsolete">Defynyddiwch y botwm &quot;Nol hwyrnioedd JACK&quot; i ddarganfod y gwerthoedd hwyrni sydd wedi eu gosod
-wrth y dilyniannydd.  Y peth gorau yw defnyddio&apos;r gwerthoedd a ddangosir, ond mae&apos;n bosibl hefyd
-i&apos;w newid a llaw gan ddefnyddio&apos;r llithryddion.  Noder: ar ol i chi newid paramedrau eich
-gweinydd JACK, dylech nol y gwerthoedd hwyrni eto.  Bydd Rosegarden yn cadw&apos;r gwerthoedd
-hwyrni i ddeffnyddio&apos;r tro nesaf.</translation>
-    </message>
-    <message>
-        <source>JACK playback latency (in ms)</source>
-        <translation type="obsolete">Hwyrni chwarae JACK (mewn ms)</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">Hwyrni recordio JACK (mewn ms)</translation>
-    </message>
-    <message>
-        <source>Fetch JACK latencies</source>
-        <translation type="obsolete">Nol hwyrnioedd JACK</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">Hwyrni JACK</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="+630"/>
@@ -16990,10 +16512,6 @@ fel arfer yn achosi oedi wrth ddechrau&apos;r chwarae o achos cymaint y ddata sy
         <translation type="unfinished">Rhaglen</translation>
     </message>
     <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Sianel</translation>
-    </message>
-    <message>
         <location line="-46"/>
         <source>Percussion</source>
         <translation type="unfinished">Trawiad</translation>
@@ -17037,10 +16555,6 @@ fel arfer yn achosi oedi wrth ddechrau&apos;r chwarae o achos cymaint y ddata sy
         <location line="-2"/>
         <source>Receive external</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -17259,10 +16773,6 @@ fel arfer yn achosi oedi wrth ddechrau&apos;r chwarae o achos cymaint y ddata sy
         <location line="+2"/>
         <source>Recording</source>
         <translation type="unfinished">Ail-&amp;raddu...</translation>
-    </message>
-    <message>
-        <source>Synth plugin </source>
-        <translation type="obsolete">Botwm ategyn sain</translation>
     </message>
     <message>
         <location line="+124"/>
@@ -17660,77 +17170,9 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Paramedrau Offerynnau</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t apply piano roll layout</source>
-        <translation type="obsolete">Methu gweithredu haenlun rholyn piano</translation>
-    </message>
-    <message>
-        <source>  No selection </source>
-        <translation type="obsolete">   Dim dewisiad</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Cwanteiddio...</translation>
-    </message>
-    <message>
-        <source>Collapsing notes...</source>
-        <translation type="obsolete">Dat-ehangu nodau...</translation>
-    </message>
-    <message>
-        <source>Making legato...</source>
-        <translation type="obsolete">Gwneud addurnodau...</translation>
-    </message>
-    <message>
-        <source>Note: %1 (%2.%3s)</source>
-        <translation type="obsolete">Amser: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">&amp;%1%2</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Amser: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Torri&apos;r dewisiad i&apos;r gludfwrdd... </translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Copio&apos;r dewisiad i&apos;r gludfwrdd...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Mae&apos;r gludfwrdd yn wag</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Mewnosod cynnyws y gludfwrdd...</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point</source>
-        <translation type="obsolete">Methu gludo wrth y fan yma</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Dileu&apos;r dewisiad...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1362"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Gweithrediad anhysbys %1 wrth fewnosod nodyn</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Mewnosod nodyn</translation>
-    </message>
-    <message>
-        <source>Unquantizing...</source>
-        <translation type="obsolete">Dad-gwanteiddio...</translation>
     </message>
     <message>
         <location line="-1504"/>
@@ -17754,18 +17196,6 @@ Double-click to open the marker editor.</source>
             <numerusform>
         </numerusform>
         </translation>
-    </message>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">rheolydd %1</translation>
-    </message>
-    <message>
-        <source>Pitch Bend</source>
-        <translation type="obsolete">Plygu Traw</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Math o ddigwyddiad na chynhelir:</translation>
     </message>
     <message>
         <location line="+254"/>
@@ -17834,14 +17264,6 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Dangos arwydd cywair wedi&apos;i amcangyfrif</translation>
     </message>
     <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">Chwyddo:</translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
         <location line="-863"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Dangos arwydd amseriad wedi&apos;i amcangyfrif</translation>
@@ -17857,22 +17279,6 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Mewnosod faint o hanner-tonau i drawsgyweirio:</translation>
     </message>
     <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Codi buaneddau...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Iselhau buaneddau...</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Gosod Buaneddau Digwyddiadau</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Gosod Buaneddau...</translation>
-    </message>
-    <message>
         <location line="-320"/>
         <source>Trigger Segment</source>
         <translation type="unfinished">Dileu Cylchran</translation>
@@ -17886,22 +17292,6 @@ Double-click to open the marker editor.</source>
         <location line="-826"/>
         <source>Matrix</source>
         <translation type="unfinished">Matrics</translation>
-    </message>
-    <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Trawiad</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Dim parhad nodau wedi&apos;i ddewis</translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete">Cord</translation>
     </message>
 </context>
 <context>
@@ -18031,13 +17421,6 @@ Double-click to open the marker editor.</source>
         <location line="+114"/>
         <source>http://rosegardenmusic.com/wiki/doc:midi-filter-en</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiKeyMapTreeWidgetItem</name>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Newid Allwedd</translation>
     </message>
 </context>
 <context>
@@ -18353,274 +17736,9 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <source>Librarian</source>
-        <translation type="obsolete">Rhaglengellydd</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Enw</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">Ebost</translation>
-    </message>
-    <message>
-        <source>The librarian maintains the Rosegarden device data for this device.
-If you&apos;ve made modifications to suit your own device, it might be worth
-liaising with the librarian in order to publish your information for the benefit
-of others.</source>
-        <translation type="obsolete">Mae&apos;r rhaglengellydd yn cynnal y gwybodaeth generig Rheng a Rhaglen ar gyfer y  ddyfais yma.
-Os ydych wedi gwneud addasiadau i Reng ar gyfer eich dyfais eich hun, efallai bydd hi&apos;n werth
-cysylltu a&apos;r rhaglengellydd er mwyn cyhoeddi eich gwybodaeth Rheng i fantais eraill.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+67"/>
         <source>Provided by</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewMatrixView</name>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Matrics</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;di-deitl&gt;</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete">Rhwydell:</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Dim</translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete">Uned</translation>
-    </message>
-    <message>
-        <source>Beat</source>
-        <translation type="obsolete">Curiad</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="obsolete">Bar</translation>
-    </message>
-    <message>
-        <source> Velocity: </source>
-        <translation type="obsolete">Buanedd:</translation>
-    </message>
-    <message>
-        <source> Quantize: </source>
-        <translation type="obsolete">Cwanteiddio:</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">Chwyddo:</translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Gosod Buaneddau Digwyddiadau</translation>
-    </message>
-    <message>
-        <source>Trigger Segment</source>
-        <translation type="obsolete">Dileu Cylchran</translation>
-    </message>
-    <message>
-        <source>Remove Triggers</source>
-        <translation type="obsolete">&amp;Gwaredu Arwydd</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Dangos arwydd amseriad wedi&apos;i amcangyfrif</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Trawsgyweirio</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Mewnosod faint o hanner-tonau i drawsgyweirio:</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Dim parhad nodau wedi&apos;i ddewis</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewNotationView</name>
-    <message>
-        <source>Note &amp;Font</source>
-        <translation type="obsolete">&amp;Ffont i&apos;r Nodau</translation>
-    </message>
-    <message>
-        <source>Si&amp;ze</source>
-        <translation type="obsolete">Ma&amp;int</translation>
-    </message>
-    <message>
-        <source>S&amp;pacing</source>
-        <translation type="obsolete">B&amp;ylchu</translation>
-    </message>
-    <message>
-        <source>  Font:  </source>
-        <translation type="obsolete">Ffont:</translation>
-    </message>
-    <message>
-        <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="obsolete">Ffont anhysbys &quot;%1&quot;; yn defnyddio&apos;r rhagosod</translation>
-    </message>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">Maint:</translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">Bylchu:</translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Maint ffont Lilypad</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Maint ffont Lilypad</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Methodd yr allforio.  Methu agor y ffeil i ysgrifennu.</translation>
-    </message>
-    <message>
-        <source>Unknown font action %1</source>
-        <translation type="obsolete">Gweithrediad ffont anhysbys %1</translation>
-    </message>
-    <message>
-        <source>Unknown font size action %1</source>
-        <translation type="obsolete">Gweithrediad maint ffont anhysbys %1</translation>
-    </message>
-    <message>
-        <source>Unknown spacing action %1</source>
-        <translation type="obsolete">Gweithrediad bylchu anhysbys %1</translation>
-    </message>
-    <message>
-        <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="obsolete">Methu gludo Cylchrannau lluosol i mewn i un</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point.</source>
-        <translation type="obsolete">Methu gludo wrth y fan yma.</translation>
-    </message>
-    <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Mae angen ar y math gludo Cyfyngedig digon o le gwag
-(yn cynnwys dim ond seibiau) wrth y lleoliad gludo
-i gadw yr holl ddigwyddiadau i gael eu gludo.
-Doedd dim digon o le.
-Os ydych eisiau gludo beth bynnag, ystyriwch defnyddio
-un o&apos;r mathau gludo eraill o&apos;r dewisiad &quot;Gludo&quot; ar y
-ddewislen Golygu.  Cewch hefyd newid y math gludo
-rhagosodedig i rhwybeth arall yn lle Cyfyngedig
-os hoffech chi.</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Mae&apos;r gludfwrdd yn wag</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Mewnosod cynnyws y gludfwrdd...</translation>
-    </message>
-    <message>
-        <source>Raising velocities...</source>
-        <translation type="obsolete">Codi buaneddau...</translation>
-    </message>
-    <message>
-        <source>Lowering velocities...</source>
-        <translation type="obsolete">Iselhau buaneddau...</translation>
-    </message>
-    <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Gosod Buaneddau Digwyddiadau</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Gosod Buaneddau...</translation>
-    </message>
-    <message>
-        <source>Unknown note insert action %1</source>
-        <translation type="obsolete">Gweithrediad anhysbys %1 wrth fewnosod nodyn</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Mewnosod nodyn</translation>
-    </message>
-    <message>
-        <source>Ornament bar %1</source>
-        <translation type="obsolete">Cylch&amp;rannau</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Enw&apos;r arwydd</translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">&amp;Gwaredu Pob Arwydd</translation>
-    </message>
-    <message>
-        <source>Estimated key signature shown</source>
-        <translation type="obsolete">Dangos arwydd cywair wedi&apos;i amcangyfrif</translation>
-    </message>
-    <message>
-        <source>Estimated time signature shown</source>
-        <translation type="obsolete">Dangos arwydd amseriad wedi&apos;i amcangyfrif</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Dim parhad nodau wedi&apos;i ddewis</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Amser: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Tripled</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Cord</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">Gwyrdd</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Trawsgyweirio</translation>
-    </message>
-    <message>
-        <source>By number of semitones: </source>
-        <translation type="obsolete">Mewnosod faint o hanner-tonau i drawsgyweirio:</translation>
     </message>
 </context>
 <context>
@@ -18668,14 +17786,6 @@ os hoffech chi.</translation>
         <location line="+13"/>
         <source>%1 % (normal)</source>
         <translation type="unfinished">Arferol</translation>
-    </message>
-    <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Dim</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -18887,10 +17997,6 @@ os hoffech chi.</translation>
         <location line="+9"/>
         <source>Font size for multi-staff views</source>
         <translation type="unfinished">Maint ffont i olygon erwydd lluosol</translation>
-    </message>
-    <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Maint wynebfath ar gyfer argraffu (pt)</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -19203,14 +18309,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <source>Starting...</source>
-        <translation type="obsolete">Dechrau...</translation>
-    </message>
-    <message>
-        <source>Preparing to print...</source>
-        <translation type="obsolete">Paratoi argraffu...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+121"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">&amp;Ffont i&apos;r Nodau</translation>
@@ -19224,14 +18322,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <location line="+20"/>
         <source>S&amp;pacing</source>
         <translation type="unfinished">B&amp;ylchu</translation>
-    </message>
-    <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Dim</translation>
     </message>
     <message numerus="yes">
         <location line="-8"/>
@@ -19262,45 +18352,9 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Bylchu:</translation>
     </message>
     <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Yn Barod.</translation>
-    </message>
-    <message>
-        <source>Laying out score...</source>
-        <translation type="obsolete">Haenlunio&apos;r sgor...</translation>
-    </message>
-    <message>
-        <source>Laying out staff %1...</source>
-        <translation type="obsolete">Haenlunio erwydd %1...</translation>
-    </message>
-    <message>
-        <source>Reconciling staffs...</source>
-        <translation type="obsolete">Cysoni erwyddau...</translation>
-    </message>
-    <message>
         <location line="-117"/>
         <source>  No selection </source>
         <translation type="unfinished">   Dim dewisiad</translation>
-    </message>
-    <message>
-        <source>Sizing and allocating canvas...</source>
-        <translation type="obsolete">Meintio a dosrannu&apos;r cynfas...</translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">nodyn</translation>
-    </message>
-    <message>
-        <source>rest</source>
-        <translation type="obsolete">saib</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">Parhad</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Tripled</translation>
     </message>
     <message>
         <location line="+2676"/>
@@ -19320,17 +18374,9 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
     <message>
-        <source>Hidden annotations</source>
-        <translation type="obsolete">Anodiadau cudd</translation>
-    </message>
-    <message>
         <location line="-2274"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">Gweithrediad bylchu anhysbys %1</translation>
-    </message>
-    <message>
-        <source>Unknown proportion action %1</source>
-        <translation type="obsolete">Gweithrediad ffont anhysbys %1</translation>
     </message>
     <message>
         <location line="-51"/>
@@ -19338,33 +18384,9 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Gweithrediad ffont anhysbys %1</translation>
     </message>
     <message>
-        <source>Unknown font size %1</source>
-        <translation type="obsolete">Maint ffont anhysbys %1</translation>
-    </message>
-    <message>
         <location line="+26"/>
         <source>Unknown font size action %1</source>
         <translation type="unfinished">Gweithrediad maint ffont anhysbys %1</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Argraffu...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Rhagolygu...</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Allforio ffeil Lilypond...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Dewis un neu mwy o Ffeiliau Sain</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Allforio ffeil Lilypond...</translation>
     </message>
     <message>
         <location line="-147"/>
@@ -19375,26 +18397,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <location line="+1"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished">Maint ffont Lilypad</translation>
-    </message>
-    <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Allforio ffeil Lilypond...</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Methodd yr allforio.  Methu agor y ffeil i ysgrifennu.</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Torri&apos;r dewisiad i&apos;r gludfwrdd... </translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Dileu&apos;r dewisiad...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Copio&apos;r dewisiad i&apos;r gludfwrdd...</translation>
     </message>
     <message>
         <location line="+296"/>
@@ -19482,14 +18484,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Iselhau buaneddau...</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Gosod Buaneddau Digwyddiadau</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Gosod Buaneddau...</translation>
-    </message>
-    <message>
         <location line="+2830"/>
         <source>Edit Text Event</source>
         <translation type="unfinished"></translation>
@@ -19505,10 +18499,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Dat-ehangu nodau...</translation>
     </message>
     <message>
-        <source>No note duration selected</source>
-        <translation type="obsolete">Dim parhad nodau wedi&apos;i ddewis</translation>
-    </message>
-    <message>
         <location line="-2147"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Gweithrediad anhysbys %1 wrth fewnosod nodyn</translation>
@@ -19517,22 +18507,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <location line="+4"/>
         <source>Inserting note</source>
         <translation type="unfinished">Mewnosod nodyn</translation>
-    </message>
-    <message>
-        <source>No rest duration selected</source>
-        <translation type="obsolete">Dim parhad saib wedi&apos;i ddewis</translation>
-    </message>
-    <message>
-        <source>No note or rest duration selected</source>
-        <translation type="obsolete">Dim parhad saib wedi&apos;i ddewis</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Cwanteiddio...</translation>
-    </message>
-    <message>
-        <source>Interpreting selection...</source>
-        <translation type="obsolete">Dehongli dewisiad...</translation>
     </message>
     <message>
         <location line="+2321"/>
@@ -19549,10 +18523,6 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <location line="+2"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Cylch&amp;rannau</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Enw&apos;r arwydd</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -19682,10 +18652,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+20"/>
         <source>Cycling slashes...</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Dim parhad nodau wedi&apos;i ddewis</translation>
     </message>
 </context>
 <context>
@@ -20530,10 +19496,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Prosesu...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+65"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
@@ -20730,13 +19692,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     </message>
 </context>
 <context>
-    <name>Rosegarden::PropertyViewRuler</name>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">rheolydd %1</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::QuantizeDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/QuantizeDialog.cpp" line="+36"/>
@@ -20874,10 +19829,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">Ar ol cwanteiddio</translation>
     </message>
     <message>
-        <source>Show advanced options</source>
-        <translation type="obsolete">Dangos &amp;Anodiadau</translation>
-    </message>
-    <message>
         <location line="+6"/>
         <source>Re-beam</source>
         <translation type="unfinished">Ail-drawstio</translation>
@@ -20901,14 +19852,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+77"/>
         <source>Full quantize</source>
         <translation type="unfinished">Cwanteiddydd Rhwydell</translation>
-    </message>
-    <message>
-        <source>Show Advanced Options</source>
-        <translation type="obsolete">Dangos &amp;Anodiadau</translation>
-    </message>
-    <message>
-        <source>Hide Advanced Options</source>
-        <translation type="obsolete">Anodiadau cudd</translation>
     </message>
 </context>
 <context>
@@ -21221,12 +20164,6 @@ There may be some incompatibilities with the file format.</source>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Mae&apos;r ffeil cyfredol wedi&apos;i addasu.
-Ydych eisiau ei gadw?</translation>
-    </message>
-    <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="+345"/>
         <source>Rosegarden - Warning</source>
         <translation type="unfinished"></translation>
@@ -21366,10 +20303,6 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Cadw ffeil...</translation>
-    </message>
-    <message>
         <location line="-1633"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
@@ -21449,10 +20382,6 @@ er mwyn sicrhau y bydd o&apos;n dal i gael ei ail-lwytho mewn fersiynau dyfodol.
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Dim cylchrannau di-sain yn y cyfansoddiad</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+292"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished">Rhaid i&apos;r dewisiad gynnwys dim ond cylchrannau sain neu di-sain</translation>
@@ -21501,10 +20430,6 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">Allforio ffeil sain ...</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -21754,14 +20679,6 @@ Error was : %2</source>
         <location line="+54"/>
         <source>Closing file...</source>
         <translation type="unfinished">Cau&apos;r ffeil...</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Argraffu...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Rhagolygu...</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -22090,42 +21007,6 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <location line="+21"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Agor Ffeil Rosegarden 2.1</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Mewnforio ffeil Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Methu llwytho&apos;r ffeil Rosegarden 2.1.  Ymddengys ei fod yn llygredig.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Mewnforio ffeil Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Ffeiliau Rosegarden-4</translation>
-    </message>
-    <message>
-        <source>Notation previews through LilyPond</source>
-        <translation type="obsolete">Allforio ffeil Lilypond...</translation>
-    </message>
-    <message>
-        <source>%1 - for LilyPond preview support</source>
-        <translation type="obsolete">Maint ffont Lilypad</translation>
-    </message>
-    <message>
-        <source>%1 - for audio file import</source>
-        <translation type="obsolete">Llwybr ffeil sain:</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">(rhagosod)</translation>
     </message>
     <message>
         <location line="+1035"/>
@@ -23023,13 +21904,7 @@ Would you like to set it now?</source>
         <translation type="unfinished">Newid i Erfyn Dewis</translation>
     </message>
     <message>
-        <location line="+207"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished">
-        </translation>
-    </message>
-    <message>
-        <location line="+141"/>
+        <location line="+348"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23063,8 +21938,15 @@ Would you like to set it now?</source>
         <source>Click and drag to copy segments</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location line="-287"/>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+293"/>
         <source>Click and drag to copy segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23131,13 +22013,6 @@ Would you like to set it now?</source>
         <location line="+1"/>
         <source>(split)</source>
         <translation type="unfinished">%1 (wedi&apos;i hollti)</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::SegmentSplitTwiceCommand</name>
-    <message>
-        <source>Split Twice Segment</source>
-        <translation type="obsolete">Hollti Cylchran</translation>
     </message>
 </context>
 <context>
@@ -23973,26 +22848,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
         <location line="-276"/>
         <source>%1: %2</source>
         <translation type="unfinished">&amp;%1%2</translation>
@@ -24001,13 +22856,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location line="+3"/>
         <source> in %1</source>
         <translation type="unfinished">Dat-&amp;wneud %1</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Sain</translation>
     </message>
 </context>
 <context>
@@ -24911,14 +23759,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 </context>
 <context>
     <name>Rosegarden::TrackEditor</name>
-    <message>
-        <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="obsolete">Trosi Cylchran wedi ei Ailadrodd i mewn i Copiau go Iawn</translation>
-    </message>
-    <message>
-        <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="obsolete">Trosi Cylchrannau wedi ei Ailadrodd i mewn i Copiau go Iawn</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+379"/>
         <source>Delete Tracks</source>
@@ -25930,258 +24770,200 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>RosegardenApplication</name>
-    <message>
-        <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="obsolete">Rosegarden - Dilyniannydd a golygydd nodiant cerddorol</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">%1 (wedi&apos;i recordio)</translation>
-    </message>
-</context>
-<context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation type="unfinished">Cludiant Rosegarden</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Hide additional controls</source>
         <translation type="unfinished">Cuddio rheolau ychwanegol</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Panic Button</source>
         <translation type="unfinished">Botwm Dychryn</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation type="unfinished">Ail-osod pob dyfais MIDI os mae ganddoch nodau glynedig</translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronom</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation type="unfinished">Darparu clic metronom i chi chwarae ynghyd a fo</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation type="unfinished">Dangos gweithgarwch MIDI i mewn ac allan o Rosegarden</translation>
     </message>
     <message>
-        <location line="+469"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>IN</source>
         <translation type="unfinished">I MEWN</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>OUT</source>
         <translation type="unfinished">ALLAN</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation type="unfinished">DIM DIGWYDDIADAU</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Record</source>
         <translation type="unfinished">Recordio</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation type="unfinished">Recordio ai MIDI neu sain</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Loop</source>
         <translation type="unfinished">Dolen</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation type="unfinished">Dangos a cuddio&apos;r nodwyr dolen (os ar osod)</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Solo</source>
         <translation type="unfinished">Unawd</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation type="unfinished">Distewi pob un trac ond yr yn sydd wedi&apos;i ddewis yn gyfredol</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Start loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>End loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1037"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
+        <location line="+3"/>
         <source>SIG</source>
         <translation type="unfinished">SIG</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>DIV</source>
         <translation type="unfinished">DIV</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>/16</source>
         <translation type="unfinished">/16</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>TEMPO</source>
         <translation type="unfinished">TEMPO</translation>
     </message>
     <message>
-        <location line="+474"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>END</source>
         <translation type="unfinished">DIWEDD</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>BAR</source>
         <translation type="unfinished">BAR</translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation type="unfinished">Newid rhwng amser gwir, amser cerddorol, a fframiau SMPTE</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Show additional controls</source>
         <translation type="unfinished">Dangos rheolau ychwanegol</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind</source>
         <translation type="unfinished">Ail-ddirwyn</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation type="unfinished">Symud lle&apos;r pwyntydd cyfredol yn ol un far.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
         <translation type="unfinished">Ail-ddirwyn i&apos;r dechrau</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation type="unfinished">Symud lle y pwyntydd i ddechrau&apos;r cyfansoddiad.  (Gall hyn olygu symud ymlaen os mae&apos;r pwyntydd cyn y dechreuad ar hyn o bryd.)</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Play/Pause</source>
         <translation type="unfinished">Chwarae/Seibio</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation type="unfinished">Chwarae o le y pwyntydd cyfredol, neu seibio chwarae os ar fynd.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation type="unfinished">Aros chwarae neu recordio.</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward</source>
         <translation type="unfinished">Brys ymlaen</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation type="unfinished">Symud lle y pwyntydd cyfredol ymlaen un far.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward to end</source>
         <translation type="unfinished">Brys ymlaen i&apos;r diwedd</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation type="unfinished">Symud y pwyntydd i ddiwedd y cyfansoddiad.  (Gall hyn olygu symud yn ol os mae&apos;r pwyntydd tu hwnt i&apos;r diwedd yn barod.)</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Display time to end</source>
         <translation type="unfinished">Dangos amser i&apos;r diwedd</translation>
     </message>

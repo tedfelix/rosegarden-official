@@ -13,197 +13,162 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="473"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="44"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="474"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="101"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="476"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="96"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="477"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="106"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="482"/>
         <source>Default playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="62"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="150"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="153"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="491"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="172"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="493"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="175"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="495"/>
         <source>Controllers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="218"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="497"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="221"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="471"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="499"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="527"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="243"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="501"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="246"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="503"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="265"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="504"/>
         <source>MIDI outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="334"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="506"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="339"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="683"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="511"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="552"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="349"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="513"/>
         <source>Internal Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="289"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="517"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="389"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="729"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="520"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="559"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="392"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="732"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="522"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="561"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="429"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="523"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="468"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="525"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="493"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="529"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="496"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="531"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="578"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="533"/>
         <source>Receives its data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="573"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="534"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="583"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
         <source>Default record device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="609"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
         <source>MIDI inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="678"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="547"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="633"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="556"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -21902,10 +21867,12 @@ Would you like to set it now?</source>
         <source>Click and drag to select segments</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="288"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished"></translation>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="429"/>
@@ -24767,237 +24734,197 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1046"/>
         <source>Rosegarden Transport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="59"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1048"/>
         <source>Hide additional controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="95"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1052"/>
         <source>Panic Button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="98"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1055"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="133"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1059"/>
         <source>Metronome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="136"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1062"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="601"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1066"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1070"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1068"/>
         <source>IN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1534"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1069"/>
         <source>OUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1999"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2464"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1070"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1071"/>
         <source>NO EVENTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2487"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1073"/>
         <source>Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2490"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1076"/>
         <source>Record either MIDI or audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2531"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1080"/>
         <source>Loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2534"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1083"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2575"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1087"/>
         <source>Solo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2578"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1090"/>
         <source>Mutes all but the currently selected track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2601"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1094"/>
         <source>Start loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2621"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1098"/>
         <source>End loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="3658"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1101"/>
         <source>SIG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="4122"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1102"/>
         <source>DIV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="4587"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1103"/>
         <source>/16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5054"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1104"/>
         <source>TEMPO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5528"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1105"/>
         <source>END</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5995"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1106"/>
         <source>BAR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6146"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1108"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6179"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1112"/>
         <source>Show additional controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6215"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1116"/>
         <source>Rewind</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6218"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1119"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6247"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1123"/>
         <source>Rewind to beginning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6250"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1126"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6276"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1130"/>
         <source>Play/Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6279"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1133"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6317"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1137"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6320"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1140"/>
         <source>Stops playback or recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6352"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1144"/>
         <source>Fast forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6355"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1147"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6384"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1151"/>
         <source>Fast forward to end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6387"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1154"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6414"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1158"/>
         <source>Display time to end</source>
         <translation type="unfinished"></translation>

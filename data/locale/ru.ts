@@ -12,198 +12,163 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation>Управление MIDI-устройствами</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI Playback</source>
         <translation>Воспроизведение MIDI</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Sends its data through</source>
         <translation>Отправляет данные через</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Устройство воспроизведения Rosegarden</translation>
     </message>
     <message>
-        <location line="+253"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
+        <location line="+36"/>
         <source>Internal Synth</source>
         <translation>Внутренний вирт. инструмент</translation>
     </message>
     <message>
-        <location line="-243"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
+        <location line="-31"/>
         <source>Default playback device</source>
         <translation>Устройство воспроизведения по умолчанию</translation>
     </message>
     <message>
-        <location line="-44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+88"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Банки...</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Controllers...</source>
         <translation>Контроллеры...</translation>
     </message>
     <message>
-        <location line="+43"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Создать новое устройство воспроизведения&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+250"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation>Создать</translation>
     </message>
     <message>
-        <location line="-228"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Удалить выбранное устройство воспроизведения. Все использующие его дорожки придётся переназначить, а изменения программ и банков в них будут безвозвратно потеряны.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI outputs</source>
         <translation>Выходы MIDI</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available outputs</source>
         <translation>Доступные выходы</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation>Нет порта</translation>
     </message>
     <message>
-        <location line="-394"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-35"/>
+        <location line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Доступные выходы MIDI (аппаратные или программные)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+39"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Доступные входы MIDI (аппаратные или программные)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-244"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-36"/>
+        <location line="-36"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Щёлкните для обновления списка портов после подсоединения нового устройства или запуска нового виртуального инструмента&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-337"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
+        <location line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location line="-303"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
+        <location line="-38"/>
         <source>MIDI Recording</source>
         <translation>Запись MIDI</translation>
     </message>
     <message>
-        <location line="+39"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Создать новое устройство записи&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Удалить выбранное устройство записи&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Receives its data from</source>
         <translation>Получает данные от</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Устройство записи Rosegarden</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default record device</source>
         <translation>Устройство записи по умолчанию</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
+        <location line="+6"/>
         <source>MIDI inputs</source>
         <translation>Входы MIDI</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available inputs</source>
         <translation>Доступные входы</translation>
     </message>
@@ -429,10 +394,6 @@
         <location line="+1"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
-    </message>
-    <message>
-        <source>&amp;Rosegarden tutorial</source>
-        <translation type="obsolete">&amp;Урок по Rosegarden</translation>
     </message>
     <message>
         <location line="-3207"/>
@@ -4005,14 +3966,6 @@
         <translation>&amp;Импортировать</translation>
     </message>
     <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Импортировать файл &amp;проекта Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">Импортировать ф&amp;айл MIDI...</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>Импортировать фай&amp;л Hydrogen...</translation>
@@ -4028,10 +3981,6 @@
         <translation>Объединить с &amp;файлом...</translation>
     </message>
     <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Объединить с ф&amp;айлом MIDI...</translation>
-    </message>
-    <message>
         <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Объединить с фай&amp;лом Hydrogen...</translation>
@@ -4042,37 +3991,9 @@
         <translation>&amp;Экспортировать</translation>
     </message>
     <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Экспортировать файл &amp;проекта Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Export &amp;LilyPond file...</source>
-        <translation type="obsolete">Э&amp;кспортировать в файл LilyPond...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">Экспортировать в ф&amp;айл MIDI...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">Экспортировать в &amp;партитуру Csound...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">Экспортировать в фа&amp;йл Mup...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Э&amp;кспортировать в файл Music&amp;XML...</translation>
-    </message>
-    <message>
         <location line="+7"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
-    </message>
-    <message>
-        <source>Save &amp;As...</source>
-        <translation type="obsolete">Сохранить &amp;как...</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -4439,20 +4360,6 @@
         <translation>Вставить как &amp;новый переключаемый сегмент</translation>
     </message>
     <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Ограниченный способ вставки требует достаточного
-количества свободного дискового пространства
-для хранения всех вставляемых событий.
-В настоящий момент дискового постранства не хватает..
-Если вам всё равно необходимо вставить данные, 
-используйте любой другой тип вставки
-из меню &quot;Правка&quot;.  Вы также можете сменить
-стандартный тип вставки с Ограниченной 
-на какую-либо другую.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+58"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
@@ -4522,10 +4429,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
         <location line="+131"/>
         <source>%1. %2</source>
@@ -4587,11 +4490,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation>Символы</translation>
     </message>
     <message>
-        <source>Enter, Media Play, Ctrl+Return</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="obsolete">Enter, Media Play, Ctrl+Return</translation>
-    </message>
-    <message>
         <location line="+623"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
@@ -4642,14 +4540,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+302"/>
         <source>Show &amp;Toolbar</source>
         <translation>&amp;Показать панель</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;undo</source>
-        <translation type="obsolete">Нет &amp;отменяемых действий</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;redo</source>
-        <translation type="obsolete">Нет &amp;возвращаемых действий</translation>
     </message>
     <message>
         <location line="-4153"/>
@@ -5290,14 +5180,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation>Дубль-бемоль</translation>
     </message>
     <message>
-        <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Импортировать файл Rosegarden для &amp;X11...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Объединить с файлом Rosegarden для &amp;X11...</translation>
-    </message>
-    <message>
         <location line="+37"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
@@ -5408,10 +5290,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+R</translation>
-    </message>
-    <message>
-        <source>Open in &amp;Default editor</source>
-        <translation type="obsolete">Открыть в редакторе по &amp;умолчанию</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -10932,10 +10810,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
         <source>Replace segment contents</source>
         <translation type="unfinished"></translation>
@@ -10997,14 +10871,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Авторские права 2000-2010 команда разработчиков Rosegarden &lt;/p&gt;&lt;p&gt;Версия: %1 &amp;nbsp; Версия Qt: %2&lt;br&gt;Ключ сборки: %3&lt;/p&gt;&lt;p&gt;Rosegarden был создан для вас международной командой разработчиков. Полный список участников проекта вы можете получить по &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;этому&lt;/a&gt; адресу.&lt;br&gt;Более подробная информация о Rosegarden есть на &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;сайте программы&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Лицензия: GNU General Public License Version 2&lt;/p&gt; {2000-2011 ?} {1 ?} {2&lt;?} {3&lt;?} {2&lt;?}</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Авторские права 2000-2010 команда разработчиков Rosegarden &lt;/p&gt;&lt;p&gt;Версия: %1 &amp;nbsp; Версия Qt: %2&lt;br&gt;Ключ сборки: %3&lt;/p&gt;&lt;p&gt;Rosegarden был создан для вас международной командой разработчиков. Полный список участников проекта вы можете получить по &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;этому&lt;/a&gt; адресу.&lt;br&gt;Более подробная информация о Rosegarden есть на &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;сайте программы&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Лицензия: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -11641,10 +11507,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location line="+1"/>
         <source>File</source>
         <translation>Файл</translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;нет звуковых файлов&gt;</translation>
     </message>
     <message>
         <location line="+332"/>
@@ -13501,10 +13363,6 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DeleteRangeCommand</name>
     <message>
-        <source>Rejoin Command</source>
-        <translation type="obsolete">Команда воссоединения</translation>
-    </message>
-    <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+322"/>
         <source>Delete Range</source>
         <translation>Удалить диапазон</translation>
@@ -14163,45 +14021,9 @@ This could cause problems if it overrides a different computed value later on.</
         <translation type="unfinished">Образец</translation>
     </message>
     <message>
-        <source>Flat - set %1 to value</source>
-        <translation type="obsolete">Бемоль - установить значение %1</translation>
-    </message>
-    <message>
-        <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="obsolete">Переменный — установить %1 в макс. или мин. значение на переменных событиях</translation>
-    </message>
-    <message>
-        <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="obsolete">Крещендо - установить повышение %1 от мин до макс</translation>
-    </message>
-    <message>
-        <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="obsolete">Диминуэндо - установить %1 с понижением от макс. до мин.</translation>
-    </message>
-    <message>
-        <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="obsolete">Звон - установить %1 чередующимся от макс. до мин. значения c угасанием до нуля</translation>
-    </message>
-    <message>
         <location line="-81"/>
         <source>Value</source>
         <translation>Значение</translation>
-    </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Первое значение</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Второе значение</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Низкое значение</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Высокое значение</translation>
     </message>
 </context>
 <context>
@@ -14597,22 +14419,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Скачивается %1...</translation>
     </message>
     <message>
-        <source>Failed to connect to FTP server</source>
-        <translation type="obsolete">Не удалось соединиться с сервером FTP</translation>
-    </message>
-    <message>
-        <source>Login failed</source>
-        <translation type="obsolete">Не удалось авторизоваться</translation>
-    </message>
-    <message>
-        <source>Failed to change to correct directory</source>
-        <translation type="obsolete">Не удалось сменить каталог</translation>
-    </message>
-    <message>
-        <source>FTP download aborted</source>
-        <translation type="obsolete">Скачивание с FTP прервано</translation>
-    </message>
-    <message>
         <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Скачивание отменено</translation>
@@ -14941,10 +14747,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Adobe Acrobat Reader (несвободное)</translation>
     </message>
     <message>
-        <source>KPDF (KDE 3.x)</source>
-        <translation type="obsolete">KPDF (KDE 3.x)</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Used to preview generated LilyPond output</source>
         <translation type="unfinished"></translation>
@@ -14953,10 +14755,6 @@ Would you like to try and locate this file or skip it?</source>
         <location line="+5"/>
         <source>Command-line file printing utility</source>
         <translation>Утилита печати</translation>
-    </message>
-    <message>
-        <source>KPrinter (KDE 3)</source>
-        <translation type="obsolete">KPrinter (KDE 3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -16021,10 +15819,6 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Selected tracks</source>
-        <translation type="obsolete">Выделенные дорожки</translation>
-    </message>
-    <message>
         <location line="+16"/>
         <source>Compatibility level</source>
         <translation>Уровень совместимости</translation>
@@ -16789,10 +16583,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Получать извне</translation>
     </message>
     <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
-    </message>
-    <message>
         <location line="+88"/>
         <source>No connection</source>
         <translation>Нет связи</translation>
@@ -17516,10 +17306,6 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">По числу полутонов:</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Установить силу нажатия</translation>
-    </message>
-    <message>
         <location line="-320"/>
         <source>Trigger Segment</source>
         <translation type="unfinished">Переключаемый сегмент</translation>
@@ -17533,10 +17319,6 @@ Double-click to open the marker editor.</source>
         <location line="-826"/>
         <source>Matrix</source>
         <translation>Матричный редактор</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Невозможно вставить ноту: не выбрана длительность сетки</translation>
     </message>
 </context>
 <context>
@@ -18660,10 +18442,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Параметры предосмотра LilyPond</translation>
     </message>
     <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Не удалось выполнить экспорт.  Файл не мог быть открыт для записи.</translation>
-    </message>
-    <message>
         <location line="+296"/>
         <source>Clipboard is empty</source>
         <translation>Буфер обмена пуст</translation>
@@ -18741,14 +18519,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Понижение силы нажатия...</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Установить силу нажатия</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Устанавливается сила нажатия...</translation>
-    </message>
-    <message>
         <location line="+2830"/>
         <source>Edit Text Event</source>
         <translation type="unfinished"></translation>
@@ -18788,10 +18558,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+2"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Создать украшение</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -18923,10 +18689,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+20"/>
         <source>Cycling slashes...</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Невозможно вставить ноту: не выбрана длительность ноты</translation>
     </message>
 </context>
 <context>
@@ -19179,10 +18941,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
-        <source>Pitch Bend Sequence</source>
-        <translation type="obsolete">Последовательность сдвига высоты тона</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+129"/>
         <source>Preset</source>
         <translation>Профиль</translation>
@@ -19191,10 +18949,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+5"/>
         <source>Preset:</source>
         <translation>Профиль:</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="obsolete">Пользовательский</translation>
     </message>
     <message>
         <location line="-67"/>
@@ -19424,14 +19178,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>Перед смещением</translation>
     </message>
     <message>
-        <source>Value (%):</source>
-        <translation type="obsolete">Значение (%):</translation>
-    </message>
-    <message>
-        <source>Duration (%):</source>
-        <translation type="obsolete">Длительность (%):</translation>
-    </message>
-    <message>
         <location line="+50"/>
         <source>Ramp duration (%):</source>
         <translation>Длительность смещения (%):</translation>
@@ -19452,29 +19198,9 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>Конечное значение (%):</translation>
     </message>
     <message>
-        <source>Vibrato start amplitude (%):</source>
-        <translation type="obsolete">Начальная амплитуда вибрато (%):</translation>
-    </message>
-    <message>
-        <source>Vibrato end amplitude (%):</source>
-        <translation type="obsolete">Конечная амплитуда вибрато (%):</translation>
-    </message>
-    <message>
-        <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
-    </message>
-    <message>
         <location line="-28"/>
         <source>Bend Sequence</source>
         <translation>Последовательность смещения</translation>
-    </message>
-    <message>
-        <source>Vibrato wavelength:</source>
-        <translation type="obsolete">Длина волны вибрато:</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="obsolete">Разрешение:</translation>
     </message>
     <message>
         <location line="+190"/>
@@ -20000,13 +19726,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+2"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::PropertyViewRuler</name>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">Контроллер %1</translation>
     </message>
 </context>
 <context>
@@ -20635,10 +20354,6 @@ Would you like to set it now?</source>
         <translation type="unfinished">Каталог со звуковыми файлами не существует или закрыт для записи.
  Укажите правильный каталог в свойствах документа перед началом записи.
 Хотите сделать это прямо сейчас?</translation>
-    </message>
-    <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Сохраняется файл...</translation>
     </message>
     <message>
         <location line="-1633"/>
@@ -21274,19 +20989,6 @@ No segment will be split.</source>
         <location line="+21"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Открыть файл Hydrogen</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Импортируется файл Hydrogen...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Не удалось загрузить файл Hydrogen.
-Скорее всего, файл поврежден.</translation>
     </message>
     <message>
         <location line="+152"/>
@@ -22272,12 +21974,7 @@ Would you like to set it now?</source>
         <translation>Выделите сегменты щелчком и перетаскиванием</translation>
     </message>
     <message>
-        <location line="+207"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished">Переместить сегмент</translation>
-    </message>
-    <message>
-        <location line="+141"/>
+        <location line="+348"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished">Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
     </message>
@@ -22311,8 +22008,17 @@ Would you like to set it now?</source>
         <source>Click and drag to copy segments</source>
         <translation type="unfinished">Скопируйте сегмент щелчком и перетаскиванием</translation>
     </message>
+    <message numerus="yes">
+        <location line="-287"/>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+293"/>
         <source>Click and drag to copy segment</source>
         <translation type="unfinished">Скопируйте сегмент щелчком и перетаскиванием</translation>
     </message>
@@ -22382,22 +22088,11 @@ Would you like to set it now?</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::SegmentSplitTwiceCommand</name>
-    <message>
-        <source>Split Twice Segment</source>
-        <translation type="obsolete">Разделить сегмент надвое</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+61"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished">Разделите сегмент на две части щелчком по нему, с Shift прилипание к тактовой сетке отключается</translation>
-    </message>
-    <message>
-        <source>Click on a segment to split it in two</source>
-        <translation type="obsolete">Разделите сегмент на две части щелчком по нему</translation>
     </message>
 </context>
 <context>
@@ -24131,18 +23826,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;без имени&gt;</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="obsolete">Предупреждение</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before recording audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Каталог со звуковыми файлами не существует или закрыт для записи.
- Укажите правильный каталог в свойствах документа перед началом записи.
-Хотите сделать это прямо сейчас?</translation>
-    </message>
-    <message>
         <location line="+849"/>
         <source>Mute track</source>
         <translation>Приглушить дорожку</translation>
@@ -24155,14 +23838,6 @@ Would you like to set it now?</source>
 </context>
 <context>
     <name>Rosegarden::TrackEditor</name>
-    <message>
-        <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="obsolete">Превратить повторение сегмента в его настоящие копии</translation>
-    </message>
-    <message>
-        <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="obsolete">Превратить повторение сегментов в их настоящие копии</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+379"/>
         <source>Delete Tracks</source>
@@ -25182,242 +24857,202 @@ Would you like to set it now?</source>
 <context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation>Транспорт Rosegarden</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Hide additional controls</source>
         <translation>Скрыть дополнительные кнопки</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Panic Button</source>
         <translation>Panic (снять все события)</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation type="unfinished">Перезагрузить все устройства MIDI при «проглатывании» нот</translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Metronome</source>
         <translation>Метроном</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>Включает метроном</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Показывает MIDI-события в и вне Rosegarden</translation>
     </message>
     <message>
-        <location line="+469"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>IN</source>
         <translation>ВХ</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>OUT</source>
         <translation>ВЫХ</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation>НЕТ СОБЫТИЙ</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Record</source>
         <translation>Записать</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation>Записать MIDI или звук</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Loop</source>
         <translation>Петля</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>Включить или выключить метки цикла (если установлены)</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Solo</source>
         <translation>Соло</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation>Приглушить все дорожки кроме выбранных</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Start loop or range here</source>
         <translation>Начать петлю или область здесь</translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>End loop or range here</source>
         <translation>Закончить здесь петлю или область</translation>
     </message>
     <message>
-        <location line="+1037"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
+        <location line="+3"/>
         <source>SIG</source>
         <translation>РАЗМ</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>DIV</source>
         <translation>ДЕЛ</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>TEMPO</source>
         <translation>ТЕМП</translation>
     </message>
     <message>
-        <location line="+474"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>END</source>
         <translation>КНЦ</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>BAR</source>
         <translation>ТАКТ</translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>Переключиться между реальным временем, музыкальным и кадрами</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Show additional controls</source>
         <translation>Показать дополнительные кнопки управления</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind</source>
         <translation>Перемотать назад</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>Перемещает текущую позицию курсора на один такт назад.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
         <translation>Перемотать к началу</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>Перемещает текущую позицию курсора к концу композиции.
 (Если курсор уже находится в начале композиции, курсор
 переместится вперёд.)</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Play/Pause</source>
         <translation>Воспроизведение/Пауза</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>Воспроизводит композицию начиная с текущей позиции курсора, либо приостанавливает воспроизведение.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation>Останавливает воспроизведение или запись.</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward</source>
         <translation>Перемотать вперёд</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>Перемещает текущую позицию курсора на один такт вперёд.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward to end</source>
         <translation>Перемотать до конца</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>Перемещает текущую позицию курсора к концу композиции.
 (Если курсор уже находится в конце композиции, то курсор
 переместится назад.)</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Display time to end</source>
         <translation>Показать время до конца</translation>
     </message>

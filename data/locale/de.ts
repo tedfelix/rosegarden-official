@@ -12,202 +12,163 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation>MIDI-Geräte verwalten</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI Playback</source>
         <translation>MIDI Wiedergabe</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Sends its data through</source>
         <translation>Sendet Daten durch</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Rosegarden Wiedergabe Gerät</translation>
     </message>
     <message>
-        <location line="+253"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
+        <location line="+36"/>
         <source>Internal Synth</source>
         <translation>Interner Synthesizer</translation>
     </message>
     <message>
-        <location line="-243"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-31"/>
+        <location line="-31"/>
         <source>Default playback device</source>
         <translation>Voreingestelltes Wiedergabe Gerät</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Durch anklicken des Gerätenamens kann dieser geändert werden. Durch anklicken eines Ports auf der rechten Seite kann ein Gerät ausgewählt und mit einem MIDI Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+7"/>
+        <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Mit der Definition einer Bank kann man Rosegarden mitteilen, welche Programme und Patches bei der angeschlossenen Ausrüstung (Hardware oder Software Synthesizer) verfügbar sind. &lt;/p&gt;&lt;p&gt;Da Rosegarden alle Bänke und Programme, die undefiniert sind, nicht anzeigt, muss für jedes Programm oder jede Bank etwas definiert sein, falls Daten übertragen werden sollen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Bänke verwalten...</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Bearbeite die mit diesem Gerät verbundenen Regler.&lt;/p&gt;&lt;p&gt;Damit Regler irgendwo in Rosegarden, wie zum Beispiel in der Kontrolleiste oder der Box für die &lt;b&gt;Instrumenten Parameter&lt;/b&gt;, benutzt werden können, müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Regler in der Box für die &lt;b&gt;Instrumenten Parameter&lt;/b&gt; angezeigt und ein Layout bestimmt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Controllers...</source>
         <translation>Regler...</translation>
     </message>
     <message>
-        <location line="+43"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Neues Wiedergabegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+250"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation>Neu</translation>
     </message>
     <message>
-        <location line="-228"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Das ausgewählte Wiedergabe-Gerät löschen. Alle Spuren, die dieses Gerät benutzen, müssen neu zugeordnet werden. Außerdem sind alle Programme oder Bank Änderungen von diesen Spuren endgültig verloren.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI outputs</source>
         <translation>MIDI Ausgabe</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available outputs</source>
         <translation>Vorhandene Ausgaben</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation>Kein Anschluss</translation>
     </message>
     <message>
-        <location line="-394"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-35"/>
+        <location line="-35"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vorhandene MIDI Ausgabegeräte (Hardware oder Software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+39"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vorhandene MIDI Eingabegeräte (Hardware oder Software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-244"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-36"/>
+        <location line="-36"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Anklicken um die Liste der Anschlüsse zu aktualisieren, nachdem ein neues Gerät angeschlossen oder ein neuer Software Synthesizer gestartet wurde.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-667"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-73"/>
+        <location line="-73"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Durch anklicken des Gerätenamens kann dieser geändert werden. Durch anklicken eines Ports auf der rechten Seite kann ein Gerät ausgewählt und mit einem MIDI Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+330"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+36"/>
+        <location line="+36"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation>Erneuern</translation>
     </message>
     <message>
-        <location line="-303"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
+        <location line="-38"/>
         <source>MIDI Recording</source>
         <translation>MIDI Aufnahme</translation>
     </message>
     <message>
-        <location line="+39"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ein neues Aufnahmegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Das ausgewählte Aufnahmegerät löschen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Receives its data from</source>
         <translation>Empfängt Daten von</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Rosegarden Aufnahme Gerät</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default record device</source>
         <translation>Voreingestelltes Aufnahme Gerät</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
+        <location line="+6"/>
         <source>MIDI inputs</source>
         <translation>MIDI Eingabe</translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available inputs</source>
         <translation>Verfügbare Eingaben</translation>
     </message>
@@ -295,10 +256,6 @@
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-11"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
         <translation>Ausklingen - %1 abwechselnd auf Max und Min setzen, dabei bis auf 0 verringern</translation>
-    </message>
-    <message>
-        <source>Half-wave crescendo - set %1 rising from min to max n a half sine wave contour</source>
-        <translation type="obsolete">Halbwellen Crescendo - setzte %1 aufsteigend von min bis max in einer halben Sinuswelle als Einhüllende</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+28"/>
@@ -442,10 +399,6 @@
         <location line="+1"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
-    </message>
-    <message>
-        <source>&amp;Rosegarden tutorial</source>
-        <translation type="obsolete">&amp;Rosegarden Handbuch</translation>
     </message>
     <message>
         <location line="-3207"/>
@@ -813,11 +766,6 @@
         <source>Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+D</translation>
-    </message>
-    <message>
-        <source>Enter, Media Play, Ctrl+Return</source>
-        <comment>keyboard shortcut</comment>
-        <translation type="obsolete">Enter, Media Play, Ctrl+Return</translation>
     </message>
     <message>
         <location line="+132"/>
@@ -1518,14 +1466,6 @@
         <location line="+2124"/>
         <source>Rulers Toolbar</source>
         <translation>Lineal-Symbolleiste</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;undo</source>
-        <translation type="obsolete">Nichts rückgängig z&amp;u machen</translation>
-    </message>
-    <message>
-        <source>Nothing to &amp;redo</source>
-        <translation type="obsolete">Nichts zu wiede&amp;rholen</translation>
     </message>
     <message>
         <location line="-3029"/>
@@ -3183,10 +3123,6 @@
         <translation>Regler Event kopieren (&amp;C)</translation>
     </message>
     <message>
-        <source>Paste Events (&amp;V)</source>
-        <translation type="obsolete">Regler Event einfügen (&amp;V)</translation>
-    </message>
-    <message>
         <location line="-1722"/>
         <location line="+1724"/>
         <source>&amp;Place a Controller for Each Note</source>
@@ -3955,26 +3891,10 @@
         <translation>Regler (&amp;N)</translation>
     </message>
     <message>
-        <source>Cut controller events (&amp;X)</source>
-        <translation type="obsolete">Regler Event ausschneiden (&amp;X)</translation>
-    </message>
-    <message>
-        <source>&amp;Copy controller events</source>
-        <translation type="obsolete">Regler Event kopieren (&amp;C)</translation>
-    </message>
-    <message>
-        <source>Paste events (&amp;V)</source>
-        <translation type="obsolete">Regler Event einfügen (&amp;V)</translation>
-    </message>
-    <message>
         <location line="-1721"/>
         <location line="+1724"/>
         <source>&amp;Set Controller Values</source>
         <translation>Werte für die Regler ein&amp;stellen</translation>
-    </message>
-    <message>
-        <source>&amp;Place a controller for each note</source>
-        <translation type="obsolete">Regler für jede Note &amp;platzieren</translation>
     </message>
     <message>
         <location line="-1721"/>
@@ -4038,10 +3958,6 @@
         <location line="+371"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation>Im Tonlagen T&amp;racker öffnen</translation>
-    </message>
-    <message>
-        <source>Add Clef Change in this link only...</source>
-        <translation type="obsolete">Nur in diesem Link die Änderung des Notenschlüssels hinzufügen...</translation>
     </message>
     <message>
         <location line="-2445"/>
@@ -4772,21 +4688,9 @@
         <translation>&amp;Importieren</translation>
     </message>
     <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Rosegarden &amp;Projekt-Datei importieren...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">&amp;MIDI-Datei importieren...</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation>&amp;Hydrogen-Datei importieren...</translation>
-    </message>
-    <message>
-        <source>Import MusicXM&amp;L file...</source>
-        <translation type="obsolete">MusicXM&amp;L Datei importieren...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4799,42 +4703,14 @@
         <translation>Mit &amp;Datei zusammenfügen...</translation>
     </message>
     <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Mit &amp;MIDI-Datei zusammenfügen...</translation>
-    </message>
-    <message>
         <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation>Mit &amp;Hydrogen-Datei zusammenfügen...</translation>
     </message>
     <message>
-        <source>Merge MusicXM&amp;L file...</source>
-        <translation type="obsolete">Mit MusicXM&amp;L--Datei zusammenfügen...</translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>&amp;Export</source>
         <translation>&amp;Exportieren</translation>
-    </message>
-    <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Rosegarden &amp;Projekt-Datei exportieren...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">&amp;MIDI-Datei exportieren...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">&amp;Csound-Datei exportieren...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">M&amp;up-Datei exportieren...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Music&amp;XML-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -4845,10 +4721,6 @@
         <location line="+9"/>
         <source>Open &amp;Recent</source>
         <translation>Öf&amp;fne letzte Datei</translation>
-    </message>
-    <message>
-        <source>Save &amp;As...</source>
-        <translation type="obsolete">Speichern &amp;als...</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -4947,10 +4819,6 @@
         <translation>Tempi vom &amp;Beat-Segment setzen</translation>
     </message>
     <message>
-        <source>Fit existing beats to beat segment</source>
-        <translation type="obsolete">Existierende Takte an Takt-Segment anpassen</translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>Change &amp;Composition Start and End...</source>
         <translation>&amp;Anfang und Ende der Komposition ändern...</translation>
@@ -5030,10 +4898,6 @@
         <location line="+1"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation>Aktuelles Dokument als &amp;Standardstudio speichern</translation>
-    </message>
-    <message>
-        <source>Open in &amp;Default editor</source>
-        <translation type="obsolete">Im Stan&amp;dard Editor öffnen</translation>
     </message>
     <message>
         <location line="+66"/>
@@ -5240,14 +5104,6 @@
         <translation>&amp;Wiedegabepositionslineal anzeigen</translation>
     </message>
     <message>
-        <source>Import &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">&amp;X11 Rosegarden Datei importieren...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;X11 Rosegarden file...</source>
-        <translation type="obsolete">Mit &amp;X11 Rosegarden Datei zusammenfügen...</translation>
-    </message>
-    <message>
         <location line="+63"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>MIDI Mi&amp;xer</translation>
@@ -5261,10 +5117,6 @@
         <location line="-72"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation>&amp;Tempolineal anzeigen</translation>
-    </message>
-    <message>
-        <source>Export &amp;LilyPond file...</source>
-        <translation type="obsolete">&amp;LilyPond-Datei exportieren...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10573,10 +10425,6 @@
         <translation>allgemein</translation>
     </message>
     <message>
-        <source>Blue pastel</source>
-        <translation type="obsolete">blau pastell</translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>Red pastel</source>
         <translation>rot pastell</translation>
@@ -10620,10 +10468,6 @@
         <location line="+1"/>
         <source>Unknown</source>
         <translation>Unbekannt</translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
@@ -10964,10 +10808,6 @@
         <translation>Kein Sound-Treiber verfügbar: Software ohne Sound-Unterstützung kompiliert?</translation>
     </message>
     <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
         <source>Replace segment contents</source>
         <translation>Inhalt des Segmentes ersetzen</translation>
@@ -11029,22 +10869,6 @@
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2 oder später&lt;/p&gt; {2000-2015 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2014 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2014 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2 oder später&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2012 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2012 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2 oder später&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2011 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-2011 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Copyright 2000-2010 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Copyright 2000-20010 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -11605,14 +11429,6 @@
         <translation>Audiodatei wird gerade konvertiert...</translation>
     </message>
     <message>
-        <source>Resampling audio file...</source>
-        <translation type="obsolete">Die Sampleraten der Audiodatei werden neu berechnet...</translation>
-    </message>
-    <message>
-        <source>Converting and resampling audio file...</source>
-        <translation type="obsolete">Umwandele und resample die Audiodatei...</translation>
-    </message>
-    <message>
         <location line="-30"/>
         <source>Importing audio file...</source>
         <translation>Audiodatei wird importiert...</translation>
@@ -11694,10 +11510,6 @@
         <location line="+1"/>
         <source>File</source>
         <translation>Datei</translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;keine Audiodateien&gt;</translation>
     </message>
     <message>
         <location line="+332"/>
@@ -11823,10 +11635,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <location line="+1"/>
         <source>Enter new label</source>
         <translation>Neue Bezeichnung eingeben</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">importiere eine entfernte (remote) Audiodatei</translation>
     </message>
     <message>
         <location line="+172"/>
@@ -13550,10 +13358,6 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
 <context>
     <name>Rosegarden::DeleteRangeCommand</name>
     <message>
-        <source>Rejoin Command</source>
-        <translation type="obsolete">Ernerut verbinden Befehl</translation>
-    </message>
-    <message>
         <location filename="../../src/commands/segment/DeleteRangeCommand.cpp" line="+322"/>
         <source>Delete Range</source>
         <translation>Bereich löschen</translation>
@@ -14211,45 +14015,9 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
         <translation>Muster</translation>
     </message>
     <message>
-        <source>Flat - set %1 to value</source>
-        <translation type="obsolete">Flach - %1 auf den Wert setzen</translation>
-    </message>
-    <message>
-        <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="obsolete">Abwechselnd - %1 abwechselnd auf Max und Min setzen</translation>
-    </message>
-    <message>
-        <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="obsolete">Crescendo - %1 von Min auf Max steigen lassen</translation>
-    </message>
-    <message>
-        <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="obsolete">Diminuendo - %1 von Max auf Min verringern</translation>
-    </message>
-    <message>
-        <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="obsolete">Ausklingen - %1 abwechselnd auf Max und Min setzen, dabei bis auf 0 verringern</translation>
-    </message>
-    <message>
         <location line="-81"/>
         <source>Value</source>
         <translation>Wert</translation>
-    </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Erster Wert</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Zweiter Wert</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">LSB-Wert</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">MSB Wert</translation>
     </message>
 </context>
 <context>
@@ -14645,22 +14413,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Herunterladen %1...</translation>
     </message>
     <message>
-        <source>Failed to connect to FTP server</source>
-        <translation type="obsolete">Verbindungsaufbau zu FTP Server schlug fehl</translation>
-    </message>
-    <message>
-        <source>Login failed</source>
-        <translation type="obsolete">Login fehlgeschlagen</translation>
-    </message>
-    <message>
-        <source>Failed to change to correct directory</source>
-        <translation type="obsolete">Wechsel in richtiges Verzeichnis nicht möglich</translation>
-    </message>
-    <message>
-        <source>FTP download aborted</source>
-        <translation type="obsolete">FTP Verbindung unterbrochen</translation>
-    </message>
-    <message>
         <location line="+292"/>
         <source>Download cancelled</source>
         <translation>Download abgebrochen</translation>
@@ -14936,10 +14688,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Rosegarden muss neu gestartet werden, damit die Änderungen in der Darstellung aktiv werden.</translation>
     </message>
     <message>
-        <source>KPrinter (KDE 3)</source>
-        <translation type="obsolete">KPrinter (KDE 3)</translation>
-    </message>
-    <message>
         <location line="-196"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
@@ -14990,10 +14738,6 @@ Would you like to try and locate this file or skip it?</source>
         <location line="+1"/>
         <source>Adobe Acrobat Reader (non-free)</source>
         <translation>Adobe Acrobat Reader (kostenpflichtig)</translation>
-    </message>
-    <message>
-        <source>KPDF (KDE 3.x)</source>
-        <translation type="obsolete">KPDF (KDE 3.x)</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -15060,13 +14804,6 @@ Would you like to try and locate this file or skip it?</source>
         <location filename="../../src/commands/notation/GeneratedRegionInsertionCommand.cpp" line="+32"/>
         <source>Insert Generated Region</source>
         <translation>Erzeugte Region einfügen</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Guitar::Fingering</name>
-    <message>
-        <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation type="obsolete">Konnte den Fingersatz &apos;%1&apos; in &apos;%2&apos; nicht erkennen (&apos;parsen&apos;)</translation>
     </message>
 </context>
 <context>
@@ -16062,10 +15799,6 @@ Wollen Sie stattdessen
         <translation>Grundlegende Optionen</translation>
     </message>
     <message>
-        <source>Selected tracks</source>
-        <translation type="obsolete">Ausgewählte Spuren</translation>
-    </message>
-    <message>
         <location line="+31"/>
         <source>Compatibility level</source>
         <translation>LilyPond Kompatibilitätsstufe</translation>
@@ -16158,10 +15891,6 @@ Wollen Sie stattdessen
         <location line="+78"/>
         <source>Print short staff names</source>
         <translation>Kurzbezeichnungen des Notensystems drucken</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Nützlich für große, komplexe Partituren; hier werden die Kurzbezeichnungen bei jedem Zeilenumbruch in der Paritur gedruckt. Dadurch kann man leichter über mehrere Seiten verfolgen, welche Zeile zu welchem Instrument gehört.&lt;/qt&gt;  </translation>
     </message>
     <message>
         <location line="+42"/>
@@ -16556,10 +16285,6 @@ Wollen Sie stattdessen
 <context>
     <name>Rosegarden::LoopRuler</name>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Klick und ziehen um den Wiedergabe Zeiger zu verschieben.&lt;/p&gt;&lt;p&gt;Shift-Klick und ziehen um einen Bereich für Schleifen oder Bearbeitung zu definieren.&lt;/p&gt;&lt;p&gt;Shift-Klick um eine Schleife oder Bereich zu löschen.&lt;/p&gt;&lt;p&gt;Doppelklick um die Wiedergabe zu starten.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+80"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klick und ziehen um den Wiedergabe Zeiger zu verschieben.&lt;/p&gt;&lt;p&gt;Shift-Klick und ziehen um einen Bereich für Schleifen oder Bearbeitung zu definieren.&lt;/p&gt;&lt;p&gt;Shift-Klick um eine Schleife oder Bereich zu löschen.&lt;/p&gt;&lt;p&gt;Ctrl-Klick und ziehen um den Wiedergabe Zeiger zu verschieben und auf einen Takt einrasten zu lassen.&lt;/p&gt;&lt;p&gt;Doppelklick um die Wiedergabe zu starten.&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -16768,14 +16493,6 @@ verursacht.</translation>
         <translation>&lt;qt&gt;MIDI Bank definieren, von der Programme ausgewählt werden sollen.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <source>auto</source>
-        <translation type="obsolete">auto</translation>
-    </message>
-    <message>
-        <source>fixed</source>
-        <translation type="obsolete">fest</translation>
-    </message>
-    <message>
         <location line="+26"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;MIDI Programm oder &amp;quot;patch&amp;quot; definieren&lt;/qt&gt;</translation>
@@ -16849,10 +16566,6 @@ verursacht.</translation>
         <location line="-2"/>
         <source>Receive external</source>
         <translation>Empfang von extern</translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -17579,10 +17292,6 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <translation>Anzahl der Halbtöne, um die transponiert werden soll:</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Anschlagstärke der Events setzen</translation>
-    </message>
-    <message>
         <location line="-320"/>
         <source>Trigger Segment</source>
         <translation>Getriggertes Segment</translation>
@@ -17596,10 +17305,6 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <location line="-826"/>
         <source>Matrix</source>
         <translation>Matrix</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Kann Note nicht einfügen: Keine Rasterdauer gewählt</translation>
     </message>
 </context>
 <context>
@@ -17729,13 +17434,6 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <location line="+114"/>
         <source>http://rosegardenmusic.com/wiki/doc:midi-filter-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midi-filter-en</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiKeyMapTreeWidgetItem</name>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Tasten-Übersetzungstabelle</translation>
     </message>
 </context>
 <context>
@@ -18681,10 +18379,6 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>  Keine Auswahl </translation>
     </message>
     <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Triole</translation>
-    </message>
-    <message>
         <location line="+2676"/>
         <source>Chord</source>
         <translation>Akkord</translation>
@@ -18725,10 +18419,6 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location line="+1"/>
         <source>LilyPond preview options</source>
         <translation>LilyPond-Vorschau Einstellungen</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Der Export ist fehlgeschlagen. Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
         <location line="+296"/>
@@ -18808,14 +18498,6 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Anschlagstärke verringern...</translation>
     </message>
     <message>
-        <source>Set Event Velocities</source>
-        <translation type="obsolete">Anschlagstärke der Events setzen</translation>
-    </message>
-    <message>
-        <source>Setting Velocities...</source>
-        <translation type="obsolete">Anschlagstärke setzen...</translation>
-    </message>
-    <message>
         <location line="+2830"/>
         <source>Edit Text Event</source>
         <translation>EventText ändern</translation>
@@ -18855,10 +18537,6 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location line="+2"/>
         <source>Ornament bar %1</source>
         <translation>Verzierung in Takt %1</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Verzierung hinzufügen</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -18989,10 +18667,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location line="+20"/>
         <source>Cycling slashes...</source>
         <translation>Zahl der Wiederholungsstriche zyklisch erhöhen...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Note kann nicht eingefügt werden: Keine Dauer ausgewählt</translation>
     </message>
 </context>
 <context>
@@ -19245,10 +18919,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
 <context>
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
-        <source>Pitch Bend Sequence</source>
-        <translation type="obsolete">Tonhöhen-Sequenz</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+129"/>
         <source>Preset</source>
         <translation>Voreinstellung</translation>
@@ -19257,10 +18927,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location line="+5"/>
         <source>Preset:</source>
         <translation>Voreinstellung:</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="obsolete">Nutzer</translation>
     </message>
     <message>
         <location line="-67"/>
@@ -19485,21 +19151,9 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <translation>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</translation>
     </message>
     <message>
-        <source>User %1</source>
-        <translation type="obsolete">Nutzer %1</translation>
-    </message>
-    <message>
         <location line="-901"/>
         <source>Pre Bend</source>
         <translation>Pre Bend</translation>
-    </message>
-    <message>
-        <source>Value (%):</source>
-        <translation type="obsolete">Wert (%):</translation>
-    </message>
-    <message>
-        <source>Duration (%):</source>
-        <translation type="obsolete">Dauer (%):</translation>
     </message>
     <message>
         <location line="+50"/>
@@ -19522,29 +19176,9 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <translation>End Wert (%):</translation>
     </message>
     <message>
-        <source>Vibrato start amplitude (%):</source>
-        <translation type="obsolete">Amplitude des Vibrato am Anfang (%):</translation>
-    </message>
-    <message>
-        <source>Vibrato end amplitude (%):</source>
-        <translation type="obsolete">Amplitude des Vibrato am Ende (%):</translation>
-    </message>
-    <message>
-        <source>http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</source>
-        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en</translation>
-    </message>
-    <message>
         <location line="-28"/>
         <source>Bend Sequence</source>
         <translation>Änderungs Sequenz</translation>
-    </message>
-    <message>
-        <source>Vibrato wavelength:</source>
-        <translation type="obsolete">Wellenlänge des Vibrato:</translation>
-    </message>
-    <message>
-        <source>Resolution:</source>
-        <translation type="obsolete">Auflösung:</translation>
     </message>
     <message>
         <location line="+190"/>
@@ -19881,10 +19515,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
-    <message>
-        <source>&lt;qt&gt;&lt;h3&gt;Processing...&lt;/h3&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;h3&gt;Verarbeitung...&lt;/h3&gt;&lt;/qt&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ProjectPackager</name>
@@ -20074,13 +19704,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <location line="+2"/>
         <source>&lt;qt&gt;Could not start backend processing script %1.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Das Skript %1 kann nicht gestartet werden.&lt;/qt&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::PropertyViewRuler</name>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">%1 Regler</translation>
     </message>
 </context>
 <context>
@@ -20542,10 +20165,6 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <source>Open Directory</source>
-        <translation type="obsolete">Verzeichnis öffnen</translation>
-    </message>
-    <message>
         <location line="+1335"/>
         <source>Loading plugins...</source>
         <translation>Plugins werden geladen...</translation>
@@ -20712,10 +20331,6 @@ Dokumenteigenschaften bevor Sie Audio aufnehmen.
 Möchten Sie den Pfad jetzt setzen?</translation>
     </message>
     <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Datei speichern...</translation>
-    </message>
-    <message>
         <location line="-1633"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fehler beim Schreiben auf %1&apos;</translation>
@@ -20774,10 +20389,6 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 In Zukunft wird dieser Elementtyp vielleicht nicht mehr unterstützt.
 Empfehlung: speichern Sie diese Datei aus dieser Version von Rosegarden heraus
 um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;h2&gt;Channels were remapped&lt;/h2&gt;&lt;p&gt;Beginning with version 10.02, Rosegarden no longer provides controls for changing the channel associated with each MIDI instrument.  Instead, each instrument uses the same channel as its instrument number.  For example, &quot;MIDI Input System Device #12&quot; always uses channel 12.&lt;/p&gt;&lt;p&gt;The file you just loaded contained instruments whose channels differed from the instrument numbers.  These channels have been reassigned so that instrument #1 will always use channel 1, regardless of what channel it might have used previously.  In most cases, you will experience no difference, but you may have to make some small changes to this file in order for it to play as intended.  We recommend that you save this file in order to avoid seeing this warning in the future.&lt;/p&gt;&lt;p&gt;We apologize for any inconvenience.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;h2&gt;Die Kanäle wurden neu zugewiesen&lt;/h2&gt;&lt;p&gt;Ab Version 10.02 bietet Rosegarden nicht länger die Möglichkeit, die Kanäle, die mit einem MIDI-Instrument verbunden sind, zu ändern.  Stattdessen nutzt jedes Instument den Kanal mit der entsprechenden Nummer des Instrumentes.  Zum Beispiel nutzt &quot;Allgemeines MIDI Gerät #12&quot; immer den Kanal 12.&lt;/p&gt;&lt;p&gt;Die gerade geladene Datei enthält Instrumente, deren Nummer vom Kanal abweicht. Diese Kanäle wurden so umsortiert, dass Instrument #1 immer Kanal 1 benutzt, unabhängig von der vorherigen Zuordnung.  In den meisten Fällen gibt es keinen Unterschied zu vorher, aber es müssen evtl. kleine Änderungen erfolgen, damit die Datei so spielt wie geplant.  Wir empfehlen diese Datei zu speichern, damit die Warnung in Zukunft nicht mehr erscheint.&lt;/p&gt;&lt;p&gt;Wir bitten alle Unannehmlichkeiten zu entschuldigen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+650"/>
@@ -20848,10 +20459,6 @@ Siehe: Editieren -&gt; Einstellungen -&gt; Audio.</translation>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
         <translation>Kann abgelgte Date nicht hinzufügen. Diese Version von Rosegarden wurde nicht mit Audio-Unterstützung gebaut.</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">importiere eine entfernte (remote) Audiodatei</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -21447,18 +21054,6 @@ Segmente-&gt;Segmente zusammenfassen.
         <translation>Disee X11 Rosegarden Datei kann nicht geladen werden. Sie scheint beschädigt zu sein.</translation>
     </message>
     <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Hydrogen Datei öffnen</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Hydrogen Datei importiertieren...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Diese Hydrogen Datei kann nicht geladen werden. Sie scheint beschädigt zu sein.</translation>
-    </message>
-    <message>
         <location line="+1035"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Es konnte kein temporäres File für den Export von LilyPond angelegt werden.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, dass der Speicherplatz auf &lt;pre&gt;%1&lt;/pre&gt; komplett belegt ist.&lt;/p&gt;&lt;/qt&gt;</translation>
@@ -21742,10 +21337,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <location line="+1073"/>
         <source>Play List</source>
         <translation>Abspiel-Liste</translation>
-    </message>
-    <message>
-        <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
-        <translation type="obsolete">http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -22359,10 +21950,13 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <source>Click and drag to select segments</source>
         <translation>Klicken und ziehen um Segmente auszuwählen </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="+207"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished">Bewege Segment</translation>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location line="+141"/>
@@ -22395,17 +21989,9 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <translation>Klicken und ziehen bewegt ein Segment; Bei halten der Strg-Taste wird eine Kopie erstellt; Strg + Alt erzeugt eine verlinkte Kopie, Doppelklick zum editieren</translation>
     </message>
     <message>
-        <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
-        <translation type="obsolete">Klicken und ziehen bewegt das Segment. Bei halten der STRG-Taste wird eine Kopie erstellt</translation>
-    </message>
-    <message>
         <location line="-4"/>
         <source>Click and drag to copy segments</source>
         <translation>Klicken und ziehen kopiert ein Segment</translation>
-    </message>
-    <message>
-        <source>Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit</source>
-        <translation type="obsolete">Klicken und ziehen bewegt ein Segment; Bei halten der Strg-Taste wird eine Kopie erstellt; Doppelklick zum editieren</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -22478,22 +22064,11 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::SegmentSplitTwiceCommand</name>
-    <message>
-        <source>Split Twice Segment</source>
-        <translation type="obsolete">Segment teilen</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+61"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation>Klick auf Segment teilt es in zwei; Halten Sie Shift gedrückt, um das Einrasten an Taktschlägen zu vermeiden</translation>
-    </message>
-    <message>
-        <source>Click on a segment to split it in two</source>
-        <translation type="obsolete">Klicken auf ein Segment, teilt es in zwei </translation>
     </message>
 </context>
 <context>
@@ -24225,19 +23800,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before recording audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Der angegebene Audio-Dateipfad existiert entweder nicht oder ist nicht schreibbar.
-Bitte setzen Sie den Audio-Dateipfad auf ein gültiges Verzeichnis in dem
-Dokumenteigenschaften bevor Sie Audio aufnehmen.
-Möchten Sie den Pfad jetzt setzen?</translation>
-    </message>
-    <message>
         <location line="+849"/>
         <source>Mute track</source>
         <translation>Spur stummschalten</translation>
@@ -24250,14 +23812,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
 </context>
 <context>
     <name>Rosegarden::TrackEditor</name>
-    <message>
-        <source>Turn Repeating Segment into Real Copies</source>
-        <translation type="obsolete">Wiederholungssegment in echte Kopien umwandeln</translation>
-    </message>
-    <message>
-        <source>Turn Repeating Segments into Real Copies</source>
-        <translation type="obsolete">Wiederholungssegmente in echte Kopien umwandeln</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+379"/>
         <source>Delete Tracks</source>
@@ -24297,10 +23851,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
 </context>
 <context>
     <name>Rosegarden::TrackLabel</name>
-    <message>
-        <source>&lt;qt&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;Klicken und einen beliebigen Mausknopf festhalten um diese Spur einem Instrument zuzuordnen.&lt;/qt&gt;</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -25039,13 +24589,6 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::Ui</name>
-    <message>
-        <source>[ No port ]</source>
-        <translation type="obsolete">[ kein Anschluß ]</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::UnGraceCommand</name>
     <message>
         <location filename="../../src/commands/notation/UnGraceCommand.h" line="+43"/>
@@ -25282,247 +24825,200 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     </message>
 </context>
 <context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(aufgenommen)</translation>
-    </message>
-</context>
-<context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation>Rosegarden Bedienfeld</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Hide additional controls</source>
         <translation>Zusätzliche Kontrollelemente verbergen</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Panic Button</source>
         <translation>Not-Halt</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation>Setzt alle MIDI-Geräte bei hängengebliebenen Tönen zurück</translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>Stellt einen Metronom-Klick zur Verfügung</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Zeigt MIDI-Aktivitäten aus Rosegarden heraus und nach Rosegarden hinein</translation>
     </message>
     <message>
-        <location line="+469"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>IN</source>
         <translation>IN</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>OUT</source>
         <translation>OUT</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation>NO EVENTS</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Record</source>
         <translation>Aufnahme</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation>MIDI- oder Audio-Aufnahme</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Loop</source>
         <translation>Schleife</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>Schleifen-Markierungen an- oder ausschalten (wenn gesetzt)</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation>Schaltet alle Spuren stumm bis auf die aktuell ausgewählte</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Start loop or range here</source>
         <translation>Beginne Schleife oder Bereich hier</translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>End loop or range here</source>
         <translation>Beende Schleife oder Bereich hier</translation>
     </message>
     <message>
-        <location line="+1037"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
+        <location line="+3"/>
         <source>SIG</source>
         <translation>SIG</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>DIV</source>
         <translation>DIV</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>TEMPO</source>
         <translation>TEMPO</translation>
     </message>
     <message>
-        <location line="+474"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>END</source>
         <translation>END</translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>BAR</source>
         <translation>BAR</translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>Zwischen Echtzeit, Taktschlägen und Rahmen umschalten</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Show additional controls</source>
         <translation>Weitere Kontrollelemente anzeigen</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind</source>
         <translation>Zurückspulen</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>Bewegt den aktuellen Zeiger einen Takt zurück.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
         <translation>Zum Beginn zurückspulen</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>Bewegt den Zeiger zum Beginn des Stücks.  (Wenn sich der Zeiger bereits vor dem Beginn des Stücks befindet, wird der Zeiger entsprechend vorwärts bewegt.)</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Play/Pause</source>
         <translation>Wiedergabe/Pause</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>Spielt von der aktuellen Cursorposition, oder hält die Wiedergabe an, wenn sie schon im Gang ist.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation>Beendet Wiedergabe bzw. Aufnahme.</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward</source>
         <translation>Schnell vorspulen</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>Bewegt die aktuelle Cursorposition einen Takt vorwärts.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward to end</source>
         <translation>Schnell ans Ende vorspulen</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>Bewegt den Zeiger zum Ende des Stücks.  (Wenn sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger entsprechend zurück bewegt.)</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Display time to end</source>
         <translation>Zeit bis zum Ende zeigen</translation>
     </message>

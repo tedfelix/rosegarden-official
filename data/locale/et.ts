@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
-    <name></name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
     <name>:</name>
     <message>
         <source></source>
@@ -19,198 +12,163 @@
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+473"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished">MIDI seadmete haldamine</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-44"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+88"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Pangad...</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Controllers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+43"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+250"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <location line="+28"/>
         <source>New</source>
         <translation type="unfinished">Uus</translation>
     </message>
     <message>
-        <location line="-228"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-26"/>
+        <location line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>MIDI outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
         <location line="+41"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-334"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-39"/>
+        <location line="-39"/>
         <source>Internal Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-60"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+100"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+3"/>
         <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-337"/>
-        <location line="+340"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-37"/>
+        <location line="-37"/>
         <location line="+39"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-303"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="-38"/>
+        <location line="-38"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+4"/>
+        <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+82"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Receives its data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+1"/>
+        <location line="+1"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+5"/>
         <source>Default record device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+6"/>
+        <location line="+6"/>
         <source>MIDI inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-45"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="+9"/>
+        <location line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1492,10 +1450,6 @@
         <translation type="unfinished">Lisa &amp;taktimõõdu muutus...</translation>
     </message>
     <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">Seg&amp;mendid</translation>
-    </message>
-    <message>
         <location line="-3958"/>
         <location line="+1289"/>
         <location line="+2085"/>
@@ -2730,26 +2684,6 @@
         <translation type="unfinished">Kiirus:</translation>
     </message>
     <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Kursor &amp;tagasi</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Kursor &amp;edasi</translation>
-    </message>
-    <message>
-        <source>Cursor For&amp;ward Bar</source>
-        <translation type="obsolete">Kursor takti v&amp;õrra edasi</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Kursor &amp;algusesse</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Kursor &amp;lõppu</translation>
-    </message>
-    <message>
         <location line="+1527"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation type="unfinished"></translation>
@@ -2852,30 +2786,6 @@
         <location line="+1565"/>
         <source>P&amp;anic</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
     </message>
     <message>
         <location line="-3126"/>
@@ -3102,10 +3012,6 @@
         <translation type="unfinished">Sa&amp;mm</translation>
     </message>
     <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Kestvus  </translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>&amp;Layout Mode</source>
         <translation type="unfinished">Paigutus</translation>
@@ -3129,10 +3035,6 @@
         <location line="+1"/>
         <source>Open L&amp;yric Editor</source>
         <translation type="unfinished">Ava s&amp;õnade redaktor</translation>
-    </message>
-    <message>
-        <source>Add Event Ruler</source>
-        <translation type="obsolete">Sündmuste filter</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -3984,10 +3886,6 @@
         <translation type="unfinished">Puhasta valik</translation>
     </message>
     <message>
-        <source>Cursor Ne&amp;xt Segment</source>
-        <translation type="obsolete">Loo segment</translation>
-    </message>
-    <message>
         <location line="-1785"/>
         <location line="+1909"/>
         <source>&amp;Insert Note</source>
@@ -4139,42 +4037,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
         <location line="-4075"/>
         <location line="+288"/>
         <source>Preferences...</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">A3</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">A6</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">A2</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">%1</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">A5</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -4214,10 +4080,6 @@
         <location line="+6"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rewind</source>
-        <translation type="obsolete">Tagasi kerimine</translation>
     </message>
     <message>
         <location line="-1014"/>
@@ -4912,14 +4774,6 @@
         <translation type="unfinished">&amp;Impordi</translation>
     </message>
     <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Impordi &amp;Rosegarden 2.1 fail...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">Impordi &amp;MIDI fail...</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation type="unfinished">Impordi &amp;Rosegarden 2.1 fail...</translation>
@@ -4935,10 +4789,6 @@
         <translation type="unfinished">Liida &amp;fail...</translation>
     </message>
     <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Liida &amp;MIDI fail...</translation>
-    </message>
-    <message>
         <location line="+3"/>
         <source>Merge &amp;Hydrogen file...</source>
         <translation type="unfinished">Impordi &amp;Rosegarden 2.1 fail...</translation>
@@ -4947,26 +4797,6 @@
         <location line="+2"/>
         <source>&amp;Export</source>
         <translation type="unfinished">&amp;Ekspordi</translation>
-    </message>
-    <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Impordi &amp;Rosegarden 2.1 fail...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">Ekspordi &amp;MIDI fail...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">Expordi &amp;Csound noodikirja fail...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">Ekspordi M&amp;up fail...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Ekspordi Music&amp;XML fail...</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -5154,10 +4984,6 @@
         <location line="+1"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation type="unfinished">&amp;Salvesta aktiivne dokument vaikestuudioks</translation>
-    </message>
-    <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Seg&amp;mendid</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -7307,26 +7133,6 @@
         <location line="+1"/>
         <source>Pistol shot</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="-24"/>
@@ -10664,10 +10470,6 @@
         <translation type="unfinished">Tundmatu</translation>
     </message>
     <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
         <location line="+131"/>
         <source>%1. %2</source>
@@ -11629,10 +11431,6 @@
         <translation type="unfinished">Audio eelvaatluse genereerimine...</translation>
     </message>
     <message>
-        <source>Resampling audio file...</source>
-        <translation type="obsolete">Faili lugemine...</translation>
-    </message>
-    <message>
         <location line="-30"/>
         <source>Importing audio file...</source>
         <translation type="unfinished">Rosegarden 2.1 faili import...</translation>
@@ -11714,10 +11512,6 @@
         <location line="+1"/>
         <source>File</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;audiofailid puuduvad&gt;</translation>
     </message>
     <message>
         <location line="+332"/>
@@ -11836,10 +11630,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">Rosegarden 2.1 faili import...</translation>
-    </message>
-    <message>
         <location line="+172"/>
         <source>importing an audio file that needs to be converted or resampled</source>
         <translation type="unfinished"></translation>
@@ -11906,10 +11696,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="-133"/>
         <source>Mono or stereo</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Solo</source>
-        <translation type="obsolete">Soolo</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -12415,10 +12201,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+100"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Lähtesta</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -13187,10 +12969,6 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ConfigureDialog</name>
     <message>
-        <source>Configure Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="+48"/>
         <source>Rosegarden - Preferences</source>
         <translation type="unfinished"></translation>
@@ -13617,14 +13395,6 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
-        <source>D</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="+59"/>
         <source>C</source>
         <comment>note name</comment>
@@ -13897,101 +13667,6 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+8"/>
         <source>Segment Summary</source>
         <translation type="unfinished">Segmendi parameetrid</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EditView</name>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">Vali...</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Toetuseta sündmuse tüüp:</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>%1 flat</source>
-        <translation type="obsolete">%1 bemoll</translation>
-    </message>
-    <message>
-        <source>%1 sharp</source>
-        <translation type="obsolete">%1 diees</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">L&amp;isa noot</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">Oktav &amp;üles</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">Oktav &amp;alla</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Noodivar&amp;te suund</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Noodivar&amp;te suund</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">Faili lugemine...</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponeerimine</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Käivitamine...</translation>
-    </message>
-    <message>
-        <source>Retrograding...</source>
-        <translation type="obsolete">Faili lugemine...</translation>
-    </message>
-    <message>
-        <source>Retrograde inverting...</source>
-        <translation type="obsolete">Faili lugemine...</translation>
-    </message>
-    <message>
-        <source>Jogging left...</source>
-        <translation type="obsolete">Faili sulgemine...</translation>
     </message>
 </context>
 <context>
@@ -14333,22 +14008,6 @@ This could cause problems if it overrides a different computed value later on.</
         <source>Value</source>
         <translation type="unfinished">Väärtus</translation>
     </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Esimene väärtus</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Teine väärtus</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Väärtus</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Esimene väärtus</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::EventQuantizeCommand</name>
@@ -14607,10 +14266,6 @@ This could cause problems if it overrides a different computed value later on.</
         <location line="+18"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 - Triggered Segment: %2</source>
-        <translation type="obsolete">Loo segment</translation>
     </message>
 </context>
 <context>
@@ -15008,10 +14663,6 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normaalne</translation>
-    </message>
-    <message>
         <location line="+6"/>
         <source>Safe</source>
         <translation type="unfinished"></translation>
@@ -15040,10 +14691,6 @@ Would you like to try and locate this file or skip it?</source>
         <location line="+2"/>
         <source>Main window</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Maatriks</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16062,33 +15709,6 @@ Example text from file:</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::LatencyConfigurationPage</name>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Latents</translation>
-    </message>
-    <message>
-        <source>Sequencer Latency</source>
-        <translation type="obsolete">Sekventseri latents</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">JACK latents</translation>
-    </message>
-    <message>
-        <source>JACK playback latency (in ms)</source>
-        <translation type="obsolete">JACK&apos;i mahamängimise latents (millisekundites)</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">JACK&apos;i salvestamise latents (millisekundites)</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">JACK&apos;i latents</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
         <location filename="../../src/document/io/LilyPondExporter.cpp" line="+630"/>
@@ -16880,10 +16500,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished">Programm</translation>
     </message>
     <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Kanal</translation>
-    </message>
-    <message>
         <location line="-46"/>
         <source>Percussion</source>
         <translation type="unfinished">Löökriistad</translation>
@@ -16927,10 +16543,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location line="-2"/>
         <source>Receive external</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -17149,10 +16761,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location line="+2"/>
         <source>Recording</source>
         <translation type="unfinished">Faili lugemine...</translation>
-    </message>
-    <message>
-        <source>Synth plugin </source>
-        <translation type="obsolete">Näita &amp;annotatsioone</translation>
     </message>
     <message>
         <location line="+124"/>
@@ -17550,62 +17158,6 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Instrumendi parameetrid</translation>
-    </message>
-    <message>
-        <source>  No selection </source>
-        <translation type="obsolete">  Valik puudub </translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Kvantimine...</translation>
-    </message>
-    <message>
-        <source>Collapsing notes...</source>
-        <translation type="obsolete">Nootide kokkutõmbamine...</translation>
-    </message>
-    <message>
-        <source>Making legato...</source>
-        <translation type="obsolete">Akordi loomine...</translation>
-    </message>
-    <message>
-        <source>Note: %1 (%2.%3s)</source>
-        <translation type="obsolete">Aeg: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">&amp;%1%2</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Aeg: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Valiku lõikamine lõikepuhvrisse...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Valiku kopeerimine lõikepuhvrisse...</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Lõikelaua sisu lisamine...</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Valiku kustutamine...</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Noodi lisamine</translation>
-    </message>
-    <message>
-        <source>Unquantizing...</source>
-        <translation type="obsolete">Kvantimise eemaldamine...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="-142"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;nimetu&gt;</translation>
@@ -17627,14 +17179,6 @@ Double-click to open the marker editor.</source>
             <numerusform>
         </numerusform>
         </translation>
-    </message>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">Vali...</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Toetuseta sündmuse tüüp:</translation>
     </message>
     <message>
         <location line="+254"/>
@@ -17708,14 +17252,6 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Suurendus:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
         <location line="-863"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished"></translation>
@@ -17744,22 +17280,6 @@ Double-click to open the marker editor.</source>
         <location line="-826"/>
         <source>Matrix</source>
         <translation type="unfinished">Maatriks</translation>
-    </message>
-    <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Löökriistad</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">Kestvus</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Nooti pole võimalik lisada: noodi pikkust pole valitud</translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete">Tekita a&amp;kord</translation>
     </message>
 </context>
 <context>
@@ -18204,187 +17724,9 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <source>Name</source>
-        <translation type="obsolete">Nimi</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">E-posti aadress</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+67"/>
         <source>Provided by</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewMatrixView</name>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Maatriks</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;nimetu&gt;</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">Kestvus</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete"> Võre: </translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Puudub</translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete"> Üksus</translation>
-    </message>
-    <message>
-        <source>Beat</source>
-        <translation type="obsolete">Löök</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="obsolete">Takt</translation>
-    </message>
-    <message>
-        <source> Velocity: </source>
-        <translation type="obsolete">Kiirus:</translation>
-    </message>
-    <message>
-        <source> Quantize: </source>
-        <translation type="obsolete"> Kvantimine: </translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Suurendus:  </translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Trigger Segment</source>
-        <translation type="obsolete">Kustuta segment</translation>
-    </message>
-    <message>
-        <source>Remove Triggers</source>
-        <translation type="obsolete">&amp;Eemalda märgis</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponeerimine</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No grid duration selected</source>
-        <translation type="obsolete">Nooti pole võimalik lisada: noodi pikkust pole valitud</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NewNotationView</name>
-    <message>
-        <source>Note &amp;Font</source>
-        <translation type="obsolete">Noodikirja &amp;font</translation>
-    </message>
-    <message>
-        <source>Si&amp;ze</source>
-        <translation type="obsolete">Suu&amp;rus</translation>
-    </message>
-    <message>
-        <source>  Font:  </source>
-        <translation type="obsolete">  Font:  </translation>
-    </message>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">  Suurus:  </translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">  Samm:  </translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Lilypond&apos;i ekpordi seadistused</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Lilypond&apos;i ekpordi seadistused</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Eksport ebaõnnestus. Faili ei õnnestunud kirjutamiseks avada.</translation>
-    </message>
-    <message>
-        <source>Can&apos;t paste multiple Segments into one</source>
-        <translation type="obsolete">Mitut segmenti ei saa ühte asetada</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>S&amp;pacing</source>
-        <translation type="obsolete">Sa&amp;mm</translation>
-    </message>
-    <message>
-        <source>Unknown font &quot;%1&quot;, using default</source>
-        <translation type="obsolete">Tundmatu font &quot;%1&quot;, kasutatakse vaikeväärtust</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t paste at this point.</source>
-        <translation type="obsolete">Sellesse kohta ei saa asetada.</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Lõikelaua sisu lisamine...</translation>
-    </message>
-    <message>
-        <source>Inserting note</source>
-        <translation type="obsolete">Noodi lisamine</translation>
-    </message>
-    <message>
-        <source>Ornament bar %1</source>
-        <translation type="obsolete">Seg&amp;mendid</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Märgise nimi  </translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">Eemalda kõik märgised</translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Nooti pole võimalik lisada: noodi pikkust pole valitud</translation>
-    </message>
-    <message>
-        <source>Time: %1 (%2.%3s)</source>
-        <translation type="obsolete">Aeg: %1 (%2.%3s)</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">Kestvus</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Triool</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Tekita a&amp;kord</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">&amp;Rajad</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transponeerimine</translation>
     </message>
 </context>
 <context>
@@ -18432,18 +17774,6 @@ Double-click to open the marker editor.</source>
         <location line="+13"/>
         <source>%1 % (normal)</source>
         <translation type="unfinished">Normaalne</translation>
-    </message>
-    <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Kestvus  </translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Puudub</translation>
-    </message>
-    <message>
-        <source>Full</source>
-        <translation type="obsolete">Täis</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -18655,10 +17985,6 @@ Double-click to open the marker editor.</source>
         <location line="+9"/>
         <source>Font size for multi-staff views</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Fondi suurus trükkimisel (punktides)</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -18970,14 +18296,6 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <source>Starting...</source>
-        <translation type="obsolete">Käivitamine...</translation>
-    </message>
-    <message>
-        <source>Preparing to print...</source>
-        <translation type="obsolete">Ettevalmistus trükkimiseks...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+121"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">Noodikirja &amp;font</translation>
@@ -18991,14 +18309,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+20"/>
         <source>S&amp;pacing</source>
         <translation type="unfinished">Sa&amp;mm</translation>
-    </message>
-    <message>
-        <source>Du&amp;ration Factor</source>
-        <translation type="obsolete">Kestvus  </translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Puudub</translation>
     </message>
     <message numerus="yes">
         <location line="-8"/>
@@ -19029,29 +18339,9 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">  Samm:  </translation>
     </message>
     <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Valmis.</translation>
-    </message>
-    <message>
         <location line="-117"/>
         <source>  No selection </source>
         <translation type="unfinished">  Valik puudub </translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">noot</translation>
-    </message>
-    <message>
-        <source>rest</source>
-        <translation type="obsolete">paus</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - Notation</source>
-        <translation type="obsolete">Kestvus</translation>
-    </message>
-    <message>
-        <source>Triplet</source>
-        <translation type="obsolete">Triool</translation>
     </message>
     <message>
         <location line="+2676"/>
@@ -19071,10 +18361,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
     <message>
-        <source>Hidden annotations</source>
-        <translation type="obsolete">Peidetud annotatsioonid</translation>
-    </message>
-    <message>
         <location line="-2274"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished"></translation>
@@ -19090,26 +18376,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Trükkimine...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Eelvaatlus...</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Lilypond faili eksport...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Audiofaili valimine</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Lilypond faili eksport...</translation>
-    </message>
-    <message>
         <location line="-147"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished">Lilypond&apos;i ekpordi seadistused</translation>
@@ -19118,26 +18384,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+1"/>
         <source>LilyPond preview options</source>
         <translation type="unfinished">Lilypond&apos;i ekpordi seadistused</translation>
-    </message>
-    <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Lilypond faili eksport...</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Eksport ebaõnnestus. Faili ei õnnestunud kirjutamiseks avada.</translation>
-    </message>
-    <message>
-        <source>Cutting selection to clipboard...</source>
-        <translation type="obsolete">Valiku lõikamine lõikepuhvrisse...</translation>
-    </message>
-    <message>
-        <source>Deleting selection...</source>
-        <translation type="obsolete">Valiku kustutamine...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Valiku kopeerimine lõikepuhvrisse...</translation>
     </message>
     <message>
         <location line="+296"/>
@@ -19235,10 +18481,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">Nootide kokkutõmbamine...</translation>
     </message>
     <message>
-        <source>No note duration selected</source>
-        <translation type="obsolete">Noodi pikkust pole valitud</translation>
-    </message>
-    <message>
         <location line="-2147"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished"></translation>
@@ -19247,22 +18489,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+4"/>
         <source>Inserting note</source>
         <translation type="unfinished">Noodi lisamine</translation>
-    </message>
-    <message>
-        <source>No rest duration selected</source>
-        <translation type="obsolete">Pausi pikkust pole valitud</translation>
-    </message>
-    <message>
-        <source>No note or rest duration selected</source>
-        <translation type="obsolete">Pausi pikkust pole valitud</translation>
-    </message>
-    <message>
-        <source>Quantizing...</source>
-        <translation type="obsolete">Kvantimine...</translation>
-    </message>
-    <message>
-        <source>Interpreting selection...</source>
-        <translation type="obsolete">Valiku interpreteerimine...</translation>
     </message>
     <message>
         <location line="+2321"/>
@@ -19279,10 +18505,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+2"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Seg&amp;mendid</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Märgise nimi  </translation>
     </message>
     <message>
         <location line="+38"/>
@@ -19417,10 +18639,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+20"/>
         <source>Cycling slashes...</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can&apos;t insert note: No note duration selected</source>
-        <translation type="obsolete">Nooti pole võimalik lisada: noodi pikkust pole valitud</translation>
     </message>
 </context>
 <context>
@@ -20265,10 +19483,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Töötlemine...</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="+65"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
@@ -20937,12 +20151,6 @@ There may be some incompatibilities with the file format.</source>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Käesolevat faili on muudetud.
-Kas salvestada see?</translation>
-    </message>
-    <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="+345"/>
         <source>Rosegarden - Warning</source>
         <translation type="unfinished"></translation>
@@ -21082,10 +20290,6 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Faili salvestamine...</translation>
-    </message>
-    <message>
         <location line="-1633"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
@@ -21162,10 +20366,6 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Kompostsioonis pole mitte-audio segmente</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+292"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished">Valik peab sisldama kas ainult audiosegmente või ainult mitte audiosegmente.</translation>
@@ -21214,10 +20414,6 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <location line="+3"/>
         <source>Cannot add dropped file.  This version of rosegarden was not built with audio support.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">Rosegarden 2.1 faili import...</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -21466,14 +20662,6 @@ Error was : %2</source>
         <location line="+54"/>
         <source>Closing file...</source>
         <translation type="unfinished">Faili sulgemine...</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Trükkimine...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Eelvaatlus...</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -21799,42 +20987,6 @@ Error was : %2</source>
         <location line="+21"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Rosegarden 2.1 faili avamine</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Rosegarden 2.1 faili import...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Rosegarden 2.1 faili ei õnnestu avada. See paistab olevat vigane.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Rosegarden 2.1 faili import...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Rosegarden-4 failid</translation>
-    </message>
-    <message>
-        <source>Notation previews through LilyPond</source>
-        <translation type="obsolete">Lilypond faili eksport...</translation>
-    </message>
-    <message>
-        <source>%1 - for LilyPond preview support</source>
-        <translation type="obsolete">Lilypond&apos;i ekpordi seadistused</translation>
-    </message>
-    <message>
-        <source>%1 - for audio file import</source>
-        <translation type="obsolete">Audiofailide asukoht:</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;vaikeväärtus&gt;</translation>
     </message>
     <message>
         <location line="+1035"/>
@@ -22732,13 +21884,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+207"/>
-        <source>Move Segment(s)</source>
-        <translation type="unfinished">
-        </translation>
-    </message>
-    <message>
-        <location line="+141"/>
+        <location line="+348"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22772,8 +21918,15 @@ Would you like to set it now?</source>
         <source>Click and drag to copy segments</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location line="-287"/>
+        <source>Move %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+293"/>
         <source>Click and drag to copy segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22840,13 +21993,6 @@ Would you like to set it now?</source>
         <location line="+1"/>
         <source>(split)</source>
         <translation type="unfinished">%1 (tükeldatud)</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::SegmentSplitTwiceCommand</name>
-    <message>
-        <source>Split Twice Segment</source>
-        <translation type="obsolete">Segmendi tükeldamine</translation>
     </message>
 </context>
 <context>
@@ -23682,26 +22828,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
         <location line="-276"/>
         <source>%1: %2</source>
         <translation type="unfinished">&amp;%1%2</translation>
@@ -23710,13 +22836,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location line="+3"/>
         <source> in %1</source>
         <translation type="unfinished">V&amp;õta tagasi %1</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::Studio</name>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Audio</translation>
     </message>
 </context>
 <context>
@@ -25631,254 +24750,200 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
-    <name>RosegardenApplication</name>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenDocument</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(kopeeritud)</translation>
-    </message>
-</context>
-<context>
     <name>RosegardenTransport</name>
     <message>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+25"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1046"/>
         <source>Rosegarden Transport</source>
         <translation type="unfinished">Rosegardeni transport</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Hide additional controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Panic Button</source>
         <translation type="unfinished">Paanika nupp</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation type="unfinished">Lähtestab kõik MIDI seadmed kui mõni noot on hangunud</translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronoom</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+469"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>IN</source>
         <translation type="unfinished">IN</translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>OUT</source>
         <translation type="unfinished">OUT</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <location line="+1"/>
         <source>NO EVENTS</source>
         <translation type="unfinished">NO EVENTS</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Record</source>
         <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation type="unfinished">MIDI või audio salvestamine</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Loop</source>
         <translation type="unfinished">Kordus</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Solo</source>
         <translation type="unfinished">Soolo</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation type="unfinished">Vaigistab kõik rajad peale aktiivse</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Start loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>End loop or range here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1037"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
+        <location line="+3"/>
         <source>SIG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+464"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>DIV</source>
         <translation type="unfinished">IV</translation>
     </message>
     <message>
-        <location line="+465"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>/16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>TEMPO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+474"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>END</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+467"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>BAR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+2"/>
+        <location line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Show additional controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind</source>
         <translation type="unfinished">Tagasi kerimine</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation type="unfinished">Liigutab kursori asukoha ühe takti võrra tagasi.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Rewind to beginning</source>
         <translation type="unfinished">Tagasikerimine algusesse</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation type="unfinished">Liigutab kursori kompositsiooni algusese. (See võib tähendada edasi liigutamist kui kursor asub eespool algust.)</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Play/Pause</source>
         <translation type="unfinished">Esita/paus</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation type="unfinished">Mahamängimine alates kursori asukohast või paus kui mahamängimine on aktiivne.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation type="unfinished">Peatab mahamängimise või salvestamise.</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward</source>
         <translation type="unfinished">Edasi kerimine</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation type="unfinished">Liigutab aktiivse kursori ühe takti võrra edasi.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Fast forward to end</source>
         <translation type="unfinished">Kiire kerimine lõppu</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation type="unfinished">Liigutab kursori kompositsiooni lõppu. (See võib tähendada tagasi liikumist kui kursor on juba lõpust üle.)</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="+4"/>
+        <location line="+4"/>
         <source>Display time to end</source>
         <translation type="unfinished">Näita aega lõpuni</translation>
     </message>
