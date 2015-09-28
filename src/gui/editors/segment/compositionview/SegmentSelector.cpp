@@ -285,7 +285,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (tr("Move Segment(s)"), &comp);
+                (tr("Move %n Segment(s)", "", CompositionModelImpl::ChangingSegmentSet.size()), &comp);
 
             for (it = changingItems.begin();
                     it != changingItems.end();
