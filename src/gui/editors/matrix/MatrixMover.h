@@ -66,7 +66,7 @@ protected:
 
     MatrixElement *m_currentElement;
     MatrixViewSegment *m_currentViewSegment;
-    timeT m_clickSnappedLeftTime;
+    timeT m_clickSnappedLeftDeltaTime;
 
     std::vector<MatrixElement *> m_duplicateElements;
     bool m_quickCopy;
