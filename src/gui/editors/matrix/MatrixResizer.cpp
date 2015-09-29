@@ -107,7 +107,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
     if (!m_currentElement || !m_currentViewSegment) return NoFollow;
 
     if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
+        setContextHelp(tr("Hold Alt to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }

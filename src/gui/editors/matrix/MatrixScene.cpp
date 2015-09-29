@@ -517,7 +517,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
 
     mme.time = m_scale->getTimeForX(sx);
 
-    if (e->modifiers() & Qt::ShiftModifier) {
+    if (e->modifiers() & Qt::AltModifier) {
         mme.snappedLeftTime = mme.time;
         mme.snappedRightTime = mme.time;
         mme.snapUnit = Note(Note::Shortest).getDuration();
