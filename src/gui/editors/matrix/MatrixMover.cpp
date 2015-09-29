@@ -127,9 +127,9 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         }
 
         // if the selection already contains the event, remove it from the
-        // selection if ctrl is pressed
+        // selection if shift is pressed
         if (selection->contains(event)) {
-            if (e->modifiers & Qt::ControlModifier) {
+            if (e->modifiers & Qt::ShiftModifier) {
                 newSelection->removeEvent(event);
             }
         } else {
