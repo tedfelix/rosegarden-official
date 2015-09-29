@@ -125,7 +125,17 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         } else {
             newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
-        
+
+        // if the selection already contains the event, remove it from the
+        // selection if ctrl is pressed
+        if (selection->contains(event)) {
+            if (e->modifiers & Qt::ControlModifier) {
+                newSelection->removeEvent(event);
+            }
+        } else {
+            newSelection->addEvent(event);
+        }
+
         m_scene->setSelection(newSelection, true);
         selection = newSelection;
     } else {
