@@ -1175,6 +1175,15 @@ TrackButtons::trackSelectionChanged(const Composition *, TrackId trackId)
 }
 
 void
+TrackButtons::segmentRemoved(const Composition *, Segment *)
+{
+    // If recording causes the track heights to change, this makes sure
+    // they go back if needed when recording stops.
+
+    slotUpdateTracks();
+}
+
+void
 TrackButtons::slotTrackSelected(int trackId)
 {
     // Select the track.

@@ -285,6 +285,7 @@ protected:
     virtual void trackChanged(const Composition *, Track*);
     virtual void tracksDeleted(const Composition *, std::vector<TrackId> &trackIds);
     virtual void trackSelectionChanged(const Composition *, TrackId trackId);
+    virtual void segmentRemoved(const Composition *, Segment *);
 
     int labelWidth();
     int trackHeight(TrackId trackId);
