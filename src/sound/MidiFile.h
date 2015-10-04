@@ -125,6 +125,7 @@ private:
     bool parseHeader(std::ifstream *midiFile);
     /// Convert a track to events in m_midiComposition.
     bool parseTrack(std::ifstream *midiFile);
+    // m_midiComposition track to MIDI channel.
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
     /// Find the next track chunk and set m_trackByteCount.
     bool findNextTrack(std::ifstream *midiFile);
