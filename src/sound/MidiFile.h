@@ -129,6 +129,11 @@ private:
     bool consolidateNoteOffEvents(TrackId track);
 
     // Read
+    /// Read a "variable-length quantity" from the MIDI byte stream.
+    /**
+     * In case the first byte has already been read, it can be sent
+     * in as firstByte.
+     */
     long readNumber(std::ifstream *midiFile, int firstByte = -1);
     MidiByte read(std::ifstream *midiFile);
     std::string read(std::ifstream *midiFile,

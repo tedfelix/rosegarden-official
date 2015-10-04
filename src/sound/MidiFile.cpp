@@ -106,47 +106,7 @@ MidiFile::midiBytesToInt(const std::string &bytes)
 MidiByte
 MidiFile::read(std::ifstream *midiFile)
 {
-#if 0
-    // ??? This is just a special case of the read() that takes a number of
-    //     bytes.  Why maintain two functions?  Have this one call the other
-    //     and cast the byte to a MidiByte.
-
-    if (midiFile->eof())
-        throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
-
-    // For each track section we can read only m_trackByteCount bytes.
-    if (m_decrementCount  &&  m_trackByteCount <= 0)
-        throw(Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track"))));
-
-    char byte;
-    midiFile->read(&byte, 1);
-
-    if (!midiFile)
-        throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
-
-    if (m_decrementCount)
-        --m_trackByteCount;
-
-    ++m_bytesRead;
-
-    // Every 2000 bytes...
-    if (m_bytesRead >= 2000) {
-
-        m_bytesRead = 0;
-
-        // Update the progress dialog if one is connected.
-        emit progress((int)(double(midiFile->tellg()) /
-                            double(m_fileSize) * 20.0));
-
-        // Kick the event loop to make sure the UI doesn't become
-        // unresponsive during a long load.
-        qApp->processEvents(QEventLoop::AllEvents);
-    }
-
-    return static_cast<MidiByte>(byte);
-#else
     return static_cast<MidiByte>(read(midiFile, 1)[0]);
-#endif
 }
 
 std::string
@@ -168,12 +128,6 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     char fileMidiByte;
     std::string stringRet;
 
-    // ??? read() can read multiple bytes.  That would be faster.  We
-    //     fail if it can't read it all anyway.  Detecting failure is
-    //     just checking eof or !midiFile.  Downside would be that the
-    //     error message sent to cerr would be less informative.  Actually,
-    //     it has been pretty useless since there was a stringRet = "" just
-    //     before the cerr line for many years.
     while (stringRet.length() < numberOfBytes  &&
            midiFile->read(&fileMidiByte, 1)) {
         stringRet += fileMidiByte;
@@ -187,7 +141,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     }
 
     if (m_decrementCount)
-        m_trackByteCount -= stringRet.length();
+        m_trackByteCount -= numberOfBytes;
 
     m_bytesRead += numberOfBytes;
 
@@ -207,26 +161,26 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     return stringRet;
 }
 
-
-// Get a long number of variable length from the MIDI byte stream.
-//
-//
 long
-MidiFile::readNumber(std::ifstream* midiFile, int firstByte)
+MidiFile::readNumber(std::ifstream *midiFile, int firstByte)
 {
-    long longRet = 0;
+    if (midiFile->eof())
+        return 0;
+
     MidiByte midiByte;
 
+    // If we already have the first byte, use it
     if (firstByte >= 0) {
         midiByte = (MidiByte)firstByte;
-    } else if (midiFile->eof()) {
-        return longRet;
-    } else {
+    } else {  // read it
         midiByte = read(midiFile);
     }
 
-    longRet = midiByte;
-    if (midiByte & 0x80 ) {
+    long longRet = midiByte;
+
+    // See MIDI spec section 4, pages 2 and 11.
+
+    if (midiByte & 0x80) {
         longRet &= 0x7F;
         do {
             midiByte = read(midiFile);
@@ -236,8 +190,6 @@ MidiFile::readNumber(std::ifstream* midiFile, int firstByte)
 
     return longRet;
 }
-
-
 
 // Seeks to the next track in the midi file and sets the number
 // of bytes to be read in the counter m_trackByteCount.
