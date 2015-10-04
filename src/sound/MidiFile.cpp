@@ -59,7 +59,8 @@ using std::ends;
 using std::ios;
 
 MidiFile::MidiFile(const QString &filename, Studio *studio) :
-    SoundFile(filename),
+    m_fileName(filename),
+    m_fileSize(0),
     m_format(MIDI_FILE_NOT_LOADED),
     m_numberOfTracks(0),
     m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),

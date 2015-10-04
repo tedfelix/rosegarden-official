@@ -16,7 +16,6 @@
 #define RG_MIDIFILE_H
 
 #include "base/Composition.h"
-#include "SoundFile.h"
 
 #include <QObject>
 
@@ -37,12 +36,8 @@ class Studio;
  * Despite the fact you can reuse this object it's probably safer just
  * to create it for a single way conversion and then throw it away (MIDI
  * to Composition conversion invalidates the internal MIDI model).
- *
- * Derived from SoundFile but still had some features in common with it
- * which could theoretically be moved up into the base for use in other
- * derived classes.
  */
-class MidiFile : public QObject, public SoundFile
+class MidiFile : public QObject
 {
     Q_OBJECT
 public:
@@ -58,7 +53,7 @@ public:
     /**
      * Returns false on error.  Call getError() for the error message.
      */
-    virtual bool open();
+    bool open();
 
     /// Error message when open() fails.
     std::string getError() const  { return m_error; }
@@ -76,9 +71,6 @@ public:
      * Call this after calling open().
      *
      * ??? Why not combine open() and convertToRosegarden() into one?
-     *     Sure it doesn't conform to SoundFile, but is SoundFile's
-     *     interface really the right way to do this?  After all, the
-     *     close() function is unused.
      *
      * ??? The only caller of this,
      *     RosegardenMainWindow::createDocumentFromMIDIFile(), only calls
@@ -98,20 +90,11 @@ public:
      * Call write() after this to write the file.
      *
      * ??? Why not combine convertToMidi() and write() into one?
-     *     Sure it doesn't conform to SoundFile, but is SoundFile's
-     *     interface really the right way to do this?  After all, the
-     *     close() function is unused.
      */
     void convertToMidi(Composition &comp);
 
     /// Call this after convertToMidi().
-    virtual bool write();
-
-
-    // *** Miscellaneous
-
-    /// Unused.  Required by SoundFile.
-    virtual void close()  { }
+    bool write();
 
 signals:
     /// Progress in percent.  Connect to ProgressDialog::setValue(int).
@@ -126,6 +109,9 @@ private:
     // - m_midiComposition
     // - clearMidiComposition()
     friend class MidiInserter;
+
+    QString m_fileName;
+    size_t m_fileSize;
 
     enum FileFormatType {
         MIDI_SINGLE_TRACK_FILE          = 0x00,
