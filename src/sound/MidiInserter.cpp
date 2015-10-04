@@ -18,6 +18,8 @@
 #define RG_MODULE_STRING "[MidiInserter]"
 
 #include "MidiInserter.h"
+
+#include "MidiEvent.h"
 #include "base/Composition.h"
 #include "base/MidiTypes.h"
 #include "misc/Debug.h"

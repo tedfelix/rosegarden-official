@@ -12,55 +12,72 @@
 */
 
 
-#ifndef RG_MIDI_FILE_H
-#define RG_MIDI_FILE_H
+#ifndef RG_MIDIFILE_H
+#define RG_MIDIFILE_H
 
-#include <QObject>
-
-#include "Midi.h"
-#include "MidiEvent.h"
 #include "base/Composition.h"
 #include "SoundFile.h"
 
+#include <QObject>
+
 #include <fstream>
 #include <string>
-#include <list>
+#include <vector>
 #include <map>
-
-// Conversion class for Composition to and
-// from MIDI Files.  Despite the fact you can reuse this
-// object it's probably safer just to create it for a
-// single way conversion and then throw it away (MIDI
-// to Composition conversion invalidates the internal
-// MIDI model).
-//
-// Derived from SoundFile but still had some features
-// in common with it which could theoretically be moved
-// up into the base for use in other derived classes.
-//
-// [rwb]
-//
-//
 
 namespace Rosegarden
 {
 
-// Our internal MIDI structure is just a list of MidiEvents.
-// We use a list and not a set because we want the order of
-// the events to be arbitrary until we explicitly sort them
-// (necessary when converting Composition absolute times to
-// MIDI delta times).
-//
+
+class MidiEvent;
+class Studio;
+
+/**
+ * Our internal MIDI structure is just a list of MidiEvents.
+ * We use a list and not a set because we want the order of
+ * the events to be arbitrary until we explicitly sort them
+ * (necessary when converting Composition absolute times to
+ * MIDI delta times).
+ */
 typedef std::vector<MidiEvent *> MidiTrack;
 typedef std::map<unsigned int, MidiTrack> MidiComposition;
 
-class Studio;
- 
+/// Conversion class for Composition to and from MIDI Files.
+/**
+ * Despite the fact you can reuse this object it's probably safer just
+ * to create it for a single way conversion and then throw it away (MIDI
+ * to Composition conversion invalidates the internal MIDI model).
+ *
+ * Derived from SoundFile but still had some features in common with it
+ * which could theoretically be moved up into the base for use in other
+ * derived classes.
+ */
 class MidiFile : public QObject, public SoundFile
 {
     Q_OBJECT
 public:
-    friend class MidiInserter;
+    MidiFile(Studio *studio);
+    MidiFile(const QString &filename, Studio *studio);
+    ~MidiFile();
+
+    // SoundFile overrides
+    virtual bool open();
+    virtual bool write();
+    virtual void close();
+
+    enum TimingFormat {
+        MIDI_TIMING_PPQ_TIMEBASE,
+        MIDI_TIMING_SMPTE
+    };
+    TimingFormat timingFormat() const  { return m_timingFormat; }
+
+    /// Only valid if timing format is PPQ timebase.
+    int timingDivision() const  { return m_timingDivision; }
+
+    /// Only valid if timing format is SMPTE.
+    void smpteFrameSpecification(int &fps, int &subframes) const
+            { fps = m_fps; subframes = m_subframes; }
+
     enum FileFormatType {
         MIDI_SINGLE_TRACK_FILE          = 0x00,
         MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
@@ -68,37 +85,20 @@ public:
         MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
         MIDI_FILE_NOT_LOADED            = 0xFF
     };
+    FileFormatType fileFormat() const  { return m_format; }
 
-    enum TimingFormat {
-        MIDI_TIMING_PPQ_TIMEBASE,
-        MIDI_TIMING_SMPTE
-    };
+    unsigned int numberOfTracks() const  { return m_numberOfTracks; }
+
+    bool hasTimeChanges() const  { return m_containsTimeChanges; }
+
+    // If a file open or save failed
+    std::string getError() const  { return m_error; }
 
     enum ConversionType {
         CONVERT_REPLACE,
-        CONVERT_AUGMENT,  // ??? Unused
+        //CONVERT_AUGMENT,
         CONVERT_APPEND    // ??? Unused
     };
-
-    MidiFile(Studio *studio);
-    MidiFile (const QString &fn, Studio *studio);
-    ~MidiFile();
-
-    // Declare our virtuals
-    //
-    virtual bool open();
-    virtual bool write();
-    virtual void close();
-
-    TimingFormat timingFormat() { return m_timingFormat; }
-    int timingDivision() { return m_timingDivision; } // only valid if timing format is PPQ timebase
-    void smpteFrameSpecification(int &fps, int &subframes) { fps = m_fps; subframes = m_subframes; } // only valid if timing format is SMPTE
-    FileFormatType fileFormat() { return m_format; }
-    unsigned int numberOfTracks() { return m_numberOfTracks; }
-    bool hasTimeChanges() { return m_containsTimeChanges; }
-
-    // If a file open or save failed
-    std::string getError() { return m_error; }
 
     /**
      * Convert a MIDI file to a Rosegarden composition.  Return true
@@ -120,6 +120,13 @@ signals:
     void setValue(int);
     
 private:
+    // MidiInserter uses:
+    // - m_timingDivision
+    // - m_format
+    // - m_numberOfTracks
+    // - m_midiComposition
+    // - clearMidiComposition()
+    friend class MidiInserter;
 
     TimingFormat           m_timingFormat;
     int                    m_timingDivision;   // pulses per quarter note
@@ -165,9 +172,8 @@ private:
     void longToMidiBytes(std::ofstream* midiFile, unsigned long number);
     std::string longToVarBuffer(unsigned long number);
 
-    // The pointer to the Studio for Instrument stuff
-    //
-    Studio   *m_studio;
+    // For Instrument stuff.
+    Studio *m_studio;
 
     std::string m_error;
 };

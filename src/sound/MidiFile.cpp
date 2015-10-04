@@ -13,10 +13,10 @@
     COPYING included with this distribution for more information.
 */
 
-#include <QApplication>
+#include "MidiFile.h"
 
 #include "Midi.h"
-#include "MidiFile.h"
+#include "MidiEvent.h"
 #include "base/Segment.h"
 #include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
@@ -34,6 +34,8 @@
 #include "sound/MappedBufMetaIterator.h"
 #include "sound/MidiInserter.h"
 #include "sound/SortingInserter.h"
+
+#include <QApplication>
 
 #include <iostream>
 #include <fstream>
@@ -70,9 +72,8 @@ MidiFile::MidiFile(Studio *studio):
         m_studio(studio)
 {}
 
-MidiFile::MidiFile(const QString &fn,
-                   Studio *studio):
-        SoundFile(fn),
+MidiFile::MidiFile(const QString &filename, Studio *studio):
+        SoundFile(filename),
         m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
         m_timingDivision(0),
         m_fps(0),
