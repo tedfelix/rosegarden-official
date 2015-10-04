@@ -41,22 +41,12 @@ class MidiFile : public QObject
 {
     Q_OBJECT
 public:
+    // ??? studio shouldn't come in through the ctor.  It's only used by
+    //     convertToRosegarden().  It should come in there.
+    // ??? filename should be moved to the convert routines' parameter
+    //     lists.
     MidiFile(const QString &filename, Studio *studio);
     virtual ~MidiFile();
-
-
-    // *** Standard MIDI File to Rosegarden
-
-    // See RosegardenMainWindow::createDocumentFromMIDIFile().
-
-    /// Call convertToRosegarden() after calling this.
-    /**
-     * Returns false on error.  Call getError() for the error message.
-     */
-    bool open();
-
-    /// Error message when open() fails.
-    std::string getError() const  { return m_error; }
 
     enum ConversionType {
         CONVERT_REPLACE,
@@ -64,37 +54,28 @@ public:
         CONVERT_APPEND  // ??? Unused
     };
 
+    /// Convert a MIDI file to a Rosegarden composition.
     /**
-     * Convert a MIDI file to a Rosegarden composition.  Return true
-     * for success.
+     * Returns true on success.
      *
-     * Call this after calling open().
-     *
-     * ??? Why not combine open() and convertToRosegarden() into one?
+     * See RosegardenMainWindow::createDocumentFromMIDIFile().
      *
      * ??? The only caller of this,
      *     RosegardenMainWindow::createDocumentFromMIDIFile(), only calls
-     *     with type = CONVERT_REPLACE.
+     *     with type = CONVERT_REPLACE.  Remove type.
      */
-    bool convertToRosegarden(Composition &c, ConversionType type);
+    bool convertToRosegarden(Composition &composition, ConversionType type);
 
+    /// Error message when convertToRosegarden() fails.
+    std::string getError() const  { return m_error; }
 
-    // *** Rosegarden to Standard MIDI File
-
-    // See RosegardenMainWindow::exportMIDIFile().
-
-    /**
-     * Convert a Rosegarden composition to MIDI format, storing the
-     * result internally for later writing.
+    /// Convert a Rosegarden composition to MIDI format.
+    /*
+     * Returns true on success.
      *
-     * Call write() after this to write the file.
-     *
-     * ??? Why not combine convertToMidi() and write() into one?
+     * See RosegardenMainWindow::exportMIDIFile().
      */
-    void convertToMidi(Composition &comp);
-
-    /// Call this after convertToMidi().
-    bool write();
+    bool convertToMidi(Composition &composition);
 
 signals:
     /// Progress in percent.  Connect to ProgressDialog::setValue(int).
@@ -151,6 +132,7 @@ private:
 
     // *** Standard MIDI File to Rosegarden
 
+    bool open();
     bool parseHeader(const std::string &midiHeader);
     bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
@@ -186,6 +168,7 @@ private:
 
     // *** Rosegarden to Standard MIDI File
 
+    bool write();
     bool writeHeader(std::ofstream *midiFile);
     bool writeTrack(std::ofstream *midiFile, TrackId trackNumber);
 

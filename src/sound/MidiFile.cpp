@@ -738,6 +738,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 {
     Profiler profiler("MidiFile::convertToRosegarden");
 
+    if (!open())
+        return false;
+
     MidiTrack::iterator midiEvent;
     Segment *rosegardenSegment;
     Segment *conductorSegment = 0;
@@ -1443,7 +1446,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 // times.
 //
 //
-void
+bool
 MidiFile::convertToMidi(Composition &comp)
 {
 
@@ -1467,6 +1470,8 @@ MidiFile::convertToMidi(Composition &comp)
     MidiInserter inserter(comp, 480, end);
     sorter.insertSorted(inserter);
     inserter.assignToMidiFile(*this);
+
+    return write();
 }
 
 

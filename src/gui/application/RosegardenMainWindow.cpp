@@ -4129,7 +4129,8 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
-    if (!midiFile.open()) {
+    if (!midiFile.convertToRosegarden(newDoc->getComposition(),
+                                      MidiFile::CONVERT_REPLACE)) {
         CurrentProgressDialog::freeze();
         // NOTE: Someone flagged midiFile.getError() with a warning about tr().
         // This stuff either gets translated at the source, if we own it, or it
@@ -4140,9 +4141,6 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
         progressDlg->close();
         return 0;
     }
-
-    midiFile.convertToRosegarden(newDoc->getComposition(),
-                                 MidiFile::CONVERT_REPLACE);
 
     disconnect(&midiFile, 0, progressDlg, 0);
 
@@ -5250,9 +5248,7 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
-    midiFile.convertToMidi(m_doc->getComposition());
-
-    if (!midiFile.write()) {
+    if (!midiFile.convertToMidi(m_doc->getComposition())) {
         CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
