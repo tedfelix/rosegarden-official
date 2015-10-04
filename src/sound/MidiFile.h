@@ -127,13 +127,10 @@ private:
     bool consolidateNoteOffEvents(TrackId track);
 
     // Read
-    // ??? rename: readNumber()
-    long getNumberFromMidiBytes(std::ifstream *midiFile, int firstByte = -1);
-    // ??? rename: read()
-    MidiByte getMidiByte(std::ifstream *midiFile);
-    // ??? rename: read()
-    std::string getMidiBytes(std::ifstream *midiFile,
-                             unsigned long numberOfBytes);
+    long readNumber(std::ifstream *midiFile, int firstByte = -1);
+    MidiByte read(std::ifstream *midiFile);
+    std::string read(std::ifstream *midiFile,
+                     unsigned long numberOfBytes);
 
     // Conversion
     int midiBytesToInt(const std::string &bytes);
@@ -158,10 +155,8 @@ private:
     bool writeTrack(std::ofstream *midiFile, TrackId trackNumber);
 
     // Write
-    // ??? rename: writeInt()
-    void intToMidiBytes(std::ofstream *midiFile, int number);
-    // ??? rename: writeLong()
-    void longToMidiBytes(std::ofstream *midiFile, unsigned long number);
+    void writeInt(std::ofstream *midiFile, int number);
+    void writeLong(std::ofstream *midiFile, unsigned long number);
 
     // Conversion
     std::string longToVarBuffer(unsigned long number);

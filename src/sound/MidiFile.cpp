@@ -133,7 +133,7 @@ MidiFile::midiBytesToInt(const string& bytes)
 // m_trackByteCount.
 //
 MidiByte
-MidiFile::getMidiByte(ifstream* midiFile)
+MidiFile::read(ifstream* midiFile)
 {
     static int bytesGot = 0; // purely for progress reporting purposes
 
@@ -172,7 +172,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
 // held in m_trackByteCount.
 //
 string
-MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
+MidiFile::read(ifstream* midiFile, unsigned long numberOfBytes)
 {
     string stringRet;
     char fileMidiByte;
@@ -246,7 +246,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 //
 //
 long
-MidiFile::getNumberFromMidiBytes(ifstream* midiFile, int firstByte)
+MidiFile::readNumber(ifstream* midiFile, int firstByte)
 {
     long longRet = 0;
     MidiByte midiByte;
@@ -256,14 +256,14 @@ MidiFile::getNumberFromMidiBytes(ifstream* midiFile, int firstByte)
     } else if (midiFile->eof()) {
         return longRet;
     } else {
-        midiByte = getMidiByte(midiFile);
+        midiByte = read(midiFile);
     }
 
     longRet = midiByte;
     if (midiByte & 0x80 ) {
         longRet &= 0x7F;
         do {
-            midiByte = getMidiByte(midiFile);
+            midiByte = read(midiFile);
             longRet = (longRet << 7) + (midiByte & 0x7F);
         } while (!midiFile->eof() && (midiByte & 0x80));
     }
@@ -284,10 +284,10 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
     m_decrementCount = false;
 
     while (!midiFile->eof() && (m_decrementCount == false )) {
-        buffer = getMidiBytes(midiFile, 4);
+        buffer = read(midiFile, 4);
 
         if (buffer.compare(0, 4, MIDI_TRACK_HEADER) == 0) {
-            m_trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
+            m_trackByteCount = midiBytesToLong(read(midiFile, 4));
             m_decrementCount = true;
         }
 
@@ -331,7 +331,7 @@ MidiFile::open(const QString &filename)
             midiFile->seekg(0, std::ios::beg);
 
             // Parse the MIDI header first.  The first 14 bytes of the file.
-            if (!parseHeader(getMidiBytes(midiFile, 14))) {
+            if (!parseHeader(read(midiFile, 14))) {
                 m_format = MIDI_FILE_NOT_LOADED;
                 m_error = "Not a MIDI file.";
                 return (false);
@@ -513,14 +513,14 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
             throw (Exception(qstrtostr(QObject::tr("Invalid event code found"))));
         }
 
-        deltaTime = getNumberFromMidiBytes(midiFile);
+        deltaTime = readNumber(midiFile);
 
 #ifdef MIDI_DEBUG
         cerr << "read delta time " << deltaTime << endl;
 #endif
 
         // Get a single byte
-        midiByte = getMidiByte(midiFile);
+        midiByte = read(midiFile);
 
         if (!(midiByte & MIDI_STATUS_BYTE_MASK)) {
             if (runningStatus < 0) {
@@ -540,21 +540,21 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 #endif
 
             eventCode = midiByte;
-            data1 = getMidiByte(midiFile);
+            data1 = read(midiFile);
         }
 
         if (eventCode == MIDI_FILE_META_EVENT) // meta events
         {
-            //            metaEventCode = getMidiByte(midiFile);
+            //            metaEventCode = read(midiFile);
             metaEventCode = data1;
-            messageLength = getNumberFromMidiBytes(midiFile);
+            messageLength = readNumber(midiFile);
 
 #ifdef MIDI_DEBUG
 
             std::cerr << "Meta event of type " << int(metaEventCode) << " and " << messageLength << " bytes found" << std::endl;
 #endif
 
-            metaMessage = getMidiBytes(midiFile, messageLength);
+            metaMessage = read(midiFile, messageLength);
 
             if (metaEventCode == MIDI_TIME_SIGNATURE ||
                     metaEventCode == MIDI_SET_TEMPO)
@@ -617,7 +617,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
             case MIDI_CTRL_CHANGE:
-                data2 = getMidiByte(midiFile);
+                data2 = read(midiFile);
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
@@ -633,7 +633,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 break;
 
             case MIDI_PITCH_BEND:
-                data2 = getMidiByte(midiFile);
+                data2 = read(midiFile);
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
@@ -649,14 +649,14 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
-                messageLength = getNumberFromMidiBytes(midiFile, data1);
+                messageLength = readNumber(midiFile, data1);
 
 #ifdef MIDI_DEBUG
 
                 std::cerr << "SysEx of " << messageLength << " bytes found" << std::endl;
 #endif
 
-                metaMessage = getMidiBytes(midiFile, messageLength);
+                metaMessage = read(midiFile, messageLength);
 
                 if (MidiByte(metaMessage[metaMessage.length() - 1]) !=
                         MIDI_END_OF_EXCLUSIVE) {
@@ -1491,7 +1491,7 @@ MidiFile::convertToMidi(Composition &comp, const QString &filename)
 // write out to the MidiFile.
 //
 void
-MidiFile::intToMidiBytes(std::ofstream* midiFile, int number)
+MidiFile::writeInt(std::ofstream* midiFile, int number)
 {
     MidiByte upper;
     MidiByte lower;
@@ -1505,7 +1505,7 @@ MidiFile::intToMidiBytes(std::ofstream* midiFile, int number)
 }
 
 void
-MidiFile::longToMidiBytes(std::ofstream* midiFile, unsigned long number)
+MidiFile::writeLong(std::ofstream* midiFile, unsigned long number)
 {
     MidiByte upper1;
     MidiByte lower1;
@@ -1587,11 +1587,11 @@ MidiFile::writeHeader(std::ofstream* midiFile)
 
     // Number of Tracks we're writing out
     //
-    intToMidiBytes(midiFile, m_numberOfTracks);
+    writeInt(midiFile, m_numberOfTracks);
 
     // Timing Division
     //
-    intToMidiBytes(midiFile, m_timingDivision);
+    writeInt(midiFile, m_timingDivision);
 
     return (true);
 }
@@ -1729,7 +1729,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 
     // ..now the length of the buffer..
     //
-    longToMidiBytes(midiFile, (long)trackBuffer.length());
+    writeLong(midiFile, (long)trackBuffer.length());
 
     // ..then the buffer itself..
     //
