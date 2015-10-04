@@ -191,30 +191,59 @@ MidiFile::readNumber(std::ifstream *midiFile, int firstByte)
     return longRet;
 }
 
-// Seeks to the next track in the midi file and sets the number
-// of bytes to be read in the counter m_trackByteCount.
-//
 bool
-MidiFile::skipToNextTrack(std::ifstream *midiFile)
+MidiFile::findNextTrack(std::ifstream *midiFile)
 {
-    std::string buffer, buffer2;
-    m_trackByteCount = -1;
-    m_decrementCount = false;
+#if 0
+// ??? Original non-standards compliant code cleaned up.
 
-    while (!midiFile->eof() && (m_decrementCount == false )) {
-        buffer = read(midiFile, 4);
+    // Assume not found.
+    m_decrementCount = false;
+    m_trackByteCount = -1;
+
+    while (!midiFile->eof()) {
+        std::string buffer = read(midiFile, 4);
 
         if (buffer.compare(0, 4, MIDI_TRACK_HEADER) == 0) {
             m_trackByteCount = midiBytesToLong(read(midiFile, 4));
             m_decrementCount = true;
+            break;
         }
-
     }
 
-    if ( m_trackByteCount == -1 ) // we haven't found a track
-        return (false);
-    else
-        return (true);
+    // Found track?
+    return m_decrementCount;
+#else
+    // Conforms to recommendation in the MIDI spec, section 4, page 3:
+    // "Your programs should /expect/ alien chunks and treat them as if
+    // they weren't there."  (Emphasis theirs.)
+
+    // Assume not found.
+    m_decrementCount = false;
+    m_trackByteCount = -1;
+
+    // For each chunk
+    while (!midiFile->eof()) {
+        // Read the chunk type and size.
+        std::string chunkType = read(midiFile, 4);
+        long chunkSize = midiBytesToLong(read(midiFile, 4));
+
+        // If we've found a track chunk
+        if (chunkType.compare(0, 4, MIDI_TRACK_HEADER) == 0) {
+            m_trackByteCount = chunkSize;
+            m_decrementCount = true;
+            break;
+        }
+
+        RG_DEBUG << "findNextTrack(): skipping alien chunk.  Type:" << chunkType;
+
+        // Alien chunk encountered, evasive maneuvers (skip it).
+        read(midiFile, chunkSize);
+    }
+
+    // Found track?
+    return m_decrementCount;
+#endif
 }
 
 bool
@@ -261,7 +290,7 @@ MidiFile::open(const QString &filename)
                 std::cerr << "Parsing Track " << j << '\n';
 //#endif
 
-                if (!skipToNextTrack(midiFile)) {
+                if (!findNextTrack(midiFile)) {
 #ifdef MIDI_DEBUG
                     std::cerr << "Couldn't find Track " << j << '\n';
 #endif

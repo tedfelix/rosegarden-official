@@ -125,7 +125,8 @@ private:
     bool parseHeader(const std::string &midiHeader);
     bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
-    bool skipToNextTrack(std::ifstream *midiFile);
+    /// Find the next track chunk and set m_trackByteCount.
+    bool findNextTrack(std::ifstream *midiFile);
     bool consolidateNoteOffEvents(TrackId track);
 
     // Read
