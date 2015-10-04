@@ -58,6 +58,7 @@ MidiFile::MidiFile() :
     m_fileSize(0),
     m_trackByteCount(0),
     m_decrementCount(false),
+    m_bytesRead(0),
     m_containsTimeChanges(false)
 {
 }
@@ -105,9 +106,10 @@ MidiFile::midiBytesToInt(const std::string &bytes)
 MidiByte
 MidiFile::read(std::ifstream *midiFile)
 {
-    // For progress reporting.
-    // ??? This can be moved to a member variable and cleared in the ctor.
-    static int bytesRead = 0;
+#if 0
+    // ??? This is just a special case of the read() that takes a number of
+    //     bytes.  Why maintain two functions?  Have this one call the other
+    //     and cast the byte to a MidiByte.
 
     if (midiFile->eof())
         throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
@@ -125,12 +127,12 @@ MidiFile::read(std::ifstream *midiFile)
     if (m_decrementCount)
         --m_trackByteCount;
 
-    ++bytesRead;
+    ++m_bytesRead;
 
     // Every 2000 bytes...
-    if (bytesRead >= 2000) {
+    if (m_bytesRead >= 2000) {
 
-        bytesRead = 0;
+        m_bytesRead = 0;
 
         // Update the progress dialog if one is connected.
         emit progress((int)(double(midiFile->tellg()) /
@@ -142,77 +144,63 @@ MidiFile::read(std::ifstream *midiFile)
     }
 
     return static_cast<MidiByte>(byte);
+#else
+    return static_cast<MidiByte>(read(midiFile, 1)[0]);
+#endif
 }
 
-
-// Gets a specified number of bytes from the MIDI byte stream.  For
-// each track section we can read only a specified number of bytes
-// held in m_trackByteCount.
-//
 std::string
-MidiFile::read(std::ifstream* midiFile, unsigned long numberOfBytes)
+MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
 {
-    std::string stringRet;
-    char fileMidiByte;
-    static int bytesGot = 0; // purely for progress reporting purposes
-
     if (midiFile->eof()) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MIDI file EOF - got "
-        << stringRet.length() << " bytes out of "
-        << numberOfBytes << '\n';
-#endif
+        std::cerr << "MidiFile::read(): MIDI file EOF - got 0 bytes out of " << numberOfBytes << '\n';
 
         throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
-
     }
 
-    if (m_decrementCount && (numberOfBytes > (unsigned long)m_trackByteCount)) {
-#ifdef MIDI_DEBUG
-        std::cerr << "Attempt to get more bytes than allowed on Track ("
-        << numberOfBytes
-        << " > "
-        << m_trackByteCount << '\n';
-#endif
-
-        //!!! Investigate -- I'm seeing this on new-notation-quantization
-        // branch: load glazunov.rg, run Interpret on first segment, export
-        // and attempt to import again
+    // For each track section we can read only m_trackByteCount bytes.
+    if (m_decrementCount  &&  numberOfBytes > (unsigned long)m_trackByteCount) {
+        std::cerr << "MidiFile::read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")\n";
 
         throw(Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track"))));
     }
 
-    while (stringRet.length() < numberOfBytes &&
-            midiFile->read(&fileMidiByte, 1)) {
+    char fileMidiByte;
+    std::string stringRet;
+
+    // ??? read() can read multiple bytes.  That would be faster.  We
+    //     fail if it can't read it all anyway.  Detecting failure is
+    //     just checking eof or !midiFile.  Downside would be that the
+    //     error message sent to cerr would be less informative.  Actually,
+    //     it has been pretty useless since there was a stringRet = "" just
+    //     before the cerr line for many years.
+    while (stringRet.length() < numberOfBytes  &&
+           midiFile->read(&fileMidiByte, 1)) {
         stringRet += fileMidiByte;
     }
 
-    // if we've reached the end of file without fulfilling the
-    // quota then panic as our parsing has performed incorrectly
-    //
+    // Unexpected EOF
     if (stringRet.length() < numberOfBytes) {
-        stringRet = "";
-#ifdef MIDI_DEBUG
-
-        std::cerr << "Attempt to read past file end - got "
-        << stringRet.length() << " bytes out of "
-        << numberOfBytes << '\n';
-#endif
+        std::cerr << "MidiFile::read(): Attempt to read past file end - got " << stringRet.length() << " bytes out of " << numberOfBytes << '\n';
 
         throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
-
     }
 
-    // decrement the byte count
     if (m_decrementCount)
         m_trackByteCount -= stringRet.length();
 
-    // update a progress dialog if we have one
-    //
-    bytesGot += numberOfBytes;
-    if (bytesGot % 2000 == 0) {
+    m_bytesRead += numberOfBytes;
+
+    // Every 2000 bytes...
+    if (m_bytesRead >= 2000) {
+        m_bytesRead = 0;
+
+        // Update the progress dialog if one is connected.
         emit progress((int)(double(midiFile->tellg()) /
-                               double(m_fileSize) * 20.0));
+                            double(m_fileSize) * 20.0));
+
+        // Kick the event loop to make sure the UI doesn't become
+        // unresponsive during a long load.
         qApp->processEvents(QEventLoop::AllEvents);
     }
 
@@ -277,13 +265,6 @@ MidiFile::skipToNextTrack(std::ifstream *midiFile)
         return (true);
 }
 
-
-// Read in a MIDI file.  The parsing process throws string
-// exceptions back up here if we run into trouble which we
-// can then pass back out to whoever called us using a nice
-// bool.
-//
-//
 bool
 MidiFile::open(const QString &filename)
 {
@@ -299,6 +280,9 @@ MidiFile::open(const QString &filename)
     // Open the file
     std::ifstream *midiFile = new std::ifstream(filename.toLocal8Bit(), std::ios::in | std::ios::binary);
 
+    // The parsing process throws string exceptions back up here if we
+    // run into trouble which we can then pass back out to whomever
+    // called us using a nice bool.
     try {
         if (*midiFile) {
 

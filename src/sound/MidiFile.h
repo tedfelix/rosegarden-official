@@ -120,6 +120,7 @@ private:
 
     // *** Standard MIDI File to Rosegarden
 
+    /// Read in a MIDI file.
     bool open(const QString &filename);
     bool parseHeader(const std::string &midiHeader);
     bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
@@ -146,6 +147,9 @@ private:
      * parts of the file.
      */
     bool m_decrementCount;
+
+    /// Counter for kicking the message loop.
+    int m_bytesRead;
 
     std::string m_error;
 
