@@ -29,7 +29,7 @@ namespace Rosegarden
 
 
 class MidiEvent;
-class Studio;
+class RosegardenDocument;
 
 /// Conversion class for Composition to and from MIDI Files.
 /**
@@ -41,41 +41,27 @@ class MidiFile : public QObject
 {
     Q_OBJECT
 public:
-    // ??? studio shouldn't come in through the ctor.  It's only used by
-    //     convertToRosegarden().  It should come in there.
-    // ??? filename should be moved to the convert routines' parameter
-    //     lists.
-    MidiFile(const QString &filename, Studio *studio);
+    MidiFile();
     virtual ~MidiFile();
-
-    enum ConversionType {
-        CONVERT_REPLACE,
-        //CONVERT_AUGMENT,
-        CONVERT_APPEND  // ??? Unused
-    };
 
     /// Convert a MIDI file to a Rosegarden composition.
     /**
      * Returns true on success.
      *
      * See RosegardenMainWindow::createDocumentFromMIDIFile().
-     *
-     * ??? The only caller of this,
-     *     RosegardenMainWindow::createDocumentFromMIDIFile(), only calls
-     *     with type = CONVERT_REPLACE.  Remove type.
      */
-    bool convertToRosegarden(Composition &composition, ConversionType type);
+    bool convertToRosegarden(const QString &filename, RosegardenDocument *);
 
     /// Error message when convertToRosegarden() fails.
     std::string getError() const  { return m_error; }
 
-    /// Convert a Rosegarden composition to MIDI format.
+    /// Convert a Rosegarden composition to a MIDI file.
     /*
      * Returns true on success.
      *
      * See RosegardenMainWindow::exportMIDIFile().
      */
-    bool convertToMidi(Composition &composition);
+    bool convertToMidi(Composition &, const QString &filename);
 
 signals:
     /// Progress in percent.  Connect to ProgressDialog::setValue(int).
@@ -91,8 +77,7 @@ private:
     // - clearMidiComposition()
     friend class MidiInserter;
 
-    QString m_fileName;
-    size_t m_fileSize;
+    // *** Standard MIDI File Header
 
     enum FileFormatType {
         MIDI_SINGLE_TRACK_FILE          = 0x00,
@@ -118,6 +103,8 @@ private:
     int m_fps;
     int m_subframes;
 
+    // *** Internal MIDI Composition
+
     /**
      * Our internal MIDI composition is just a vector of MidiEvents.
      * We use a vector and not a set because we want the order of
@@ -132,7 +119,7 @@ private:
 
     // *** Standard MIDI File to Rosegarden
 
-    bool open();
+    bool open(const QString &filename);
     bool parseHeader(const std::string &midiHeader);
     bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
@@ -152,6 +139,7 @@ private:
     int midiBytesToInt(const std::string &bytes);
     long midiBytesToLong(const std::string &bytes);
 
+    size_t m_fileSize;
     /// Number of bytes left to read in the current track.
     long m_trackByteCount;
     /// Allow decrementing of m_trackByteCount while reading.
@@ -161,14 +149,11 @@ private:
      */
     bool m_decrementCount;
 
-    // For Instrument stuff.
-    Studio *m_studio;
-
     std::string m_error;
 
     // *** Rosegarden to Standard MIDI File
 
-    bool write();
+    bool write(const QString &filename);
     bool writeHeader(std::ofstream *midiFile);
     bool writeTrack(std::ofstream *midiFile, TrackId trackNumber);
 

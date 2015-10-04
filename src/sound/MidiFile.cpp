@@ -27,6 +27,7 @@
 #include "base/Studio.h"
 #include "base/MidiTypes.h"
 #include "base/Profiler.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "misc/Debug.h"
@@ -58,20 +59,19 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-MidiFile::MidiFile(const QString &filename, Studio *studio) :
-    m_fileName(filename),
-    m_fileSize(0),
+MidiFile::MidiFile() :
     m_format(MIDI_FILE_NOT_LOADED),
     m_numberOfTracks(0),
     m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
     m_timingDivision(0),
     m_fps(0),
     m_subframes(0),
+    m_fileSize(0),
     m_trackByteCount(0),
     m_decrementCount(false),
-    m_studio(studio),
     m_containsTimeChanges(false)
-{}
+{
+}
 
 // Make sure we clear away the m_midiComposition
 //
@@ -307,19 +307,19 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
 //
 //
 bool
-MidiFile::open()
+MidiFile::open(const QString &filename)
 {
     bool retOK = true;
     m_error = "";
 
 #ifdef MIDI_DEBUG
 
-    std::cerr << "MidiFile::open() : fileName = " << m_fileName << endl;
+    std::cerr << "MidiFile::open() : fileName = " << filename << endl;
 #endif
 
     clearMidiComposition();
     // Open the file
-    ifstream *midiFile = new ifstream(m_fileName.toLocal8Bit(), ios::in | ios::binary);
+    ifstream *midiFile = new ifstream(filename.toLocal8Bit(), ios::in | ios::binary);
 
     try {
         if (*midiFile) {
@@ -734,12 +734,23 @@ static unsigned long gcd(unsigned long a, unsigned long b)
 // pure virtual.
 //
 bool
-MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
+MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 {
     Profiler profiler("MidiFile::convertToRosegarden");
 
-    if (!open())
+    enum ConversionType {
+        CONVERT_REPLACE,
+        //CONVERT_AUGMENT,
+        CONVERT_APPEND  // ??? Unused
+    };
+
+    const ConversionType type = CONVERT_REPLACE;
+
+    if (!open(filename))
         return false;
+
+    Composition &composition = doc->getComposition();
+    Studio &studio = doc->getStudio();
 
     MidiTrack::iterator midiEvent;
     Segment *rosegardenSegment;
@@ -806,7 +817,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     // Clear down the assigned Instruments we already have
     //
     if (type == CONVERT_REPLACE) {
-        m_studio->unassignAllInstruments();
+        studio.unassignAllInstruments();
     }
 
     std::vector<Segment *> addedSegments;
@@ -1170,7 +1181,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                             //     BS's, and CC's at time 0 that can be
                             //     removed and converted to Instrument
                             //     settings.
-                            instrument = m_studio->getInstrumentById(compInstrument);
+                            instrument = studio.getInstrumentById(compInstrument);
                             if (instrument) {
                                 instrument->setPercussion(percussion);
                                 instrument->setSendProgramChange(true);
@@ -1185,7 +1196,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                             // ??? type is always CONVERT_REPLACE.  This code
                             //     is never executed.
                             instrument =
-                                m_studio->assignMidiProgramToInstrument
+                                studio.assignMidiProgramToInstrument
                                 (program, msb, lsb, percussion);
                         }
                     }
@@ -1422,10 +1433,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 s->setEndMarkerTime(s->getStartTime() +
                                     Note(Note::Crotchet).getDuration());
             }
-            Instrument *instr = m_studio->getInstrumentFor(s);
+            Instrument *instr = studio.getInstrumentFor(s);
             if (instr) {
                 if (s->getLabel() == "") {
-                    s->setLabel(m_studio->getSegmentName(instr->getId()));
+                    s->setLabel(studio.getSegmentName(instr->getId()));
                 }
             }
         }
@@ -1447,7 +1458,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 //
 //
 bool
-MidiFile::convertToMidi(Composition &comp)
+MidiFile::convertToMidi(Composition &comp, const QString &filename)
 {
 
     MappedBufMetaIterator * metaiterator =
@@ -1471,7 +1482,7 @@ MidiFile::convertToMidi(Composition &comp)
     sorter.insertSorted(inserter);
     inserter.assignToMidiFile(*this);
 
-    return write();
+    return write(filename);
 }
 
 
@@ -1730,12 +1741,12 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 // Writes out a MIDI file from the internal Midi representation
 //
 bool
-MidiFile::write()
+MidiFile::write(const QString &filename)
 {
     bool retOK = true;
 
     std::ofstream *midiFile =
-        new std::ofstream(m_fileName.toLocal8Bit(), ios::out | ios::binary);
+        new std::ofstream(filename.toLocal8Bit(), ios::out | ios::binary);
 
 
     if (!(*midiFile)) {

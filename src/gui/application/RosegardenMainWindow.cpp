@@ -4115,10 +4115,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     //
     RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
 
-//    QString fname(QFile::encodeName(file));
-
-//    MidiFile midiFile(fname, &newDoc->getStudio());
-    MidiFile midiFile(file, &newDoc->getStudio());
+    MidiFile midiFile;
 
     StartupLogo::hideIfStillThere();
     ProgressDialog *progressDlg = new ProgressDialog(tr("Importing MIDI file..."),
@@ -4129,8 +4126,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
-    if (!midiFile.convertToRosegarden(newDoc->getComposition(),
-                                      MidiFile::CONVERT_REPLACE)) {
+    if (!midiFile.convertToRosegarden(file, newDoc)) {
         CurrentProgressDialog::freeze();
         // NOTE: Someone flagged midiFile.getError() with a warning about tr().
         // This stuff either gets translated at the source, if we own it, or it
@@ -5240,15 +5236,12 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     ProgressDialog * progressDlg = new ProgressDialog(tr("Exporting MIDI file..."),
                                (QWidget*)this);
 
-//    QString fname(QFile::encodeName(file));
-
-//    MidiFile midiFile(fname, &m_doc->getStudio());
-    MidiFile midiFile(file, &m_doc->getStudio());
+    MidiFile midiFile;
 
     connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
-    if (!midiFile.convertToMidi(m_doc->getComposition())) {
+    if (!midiFile.convertToMidi(m_doc->getComposition(), file)) {
         CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
