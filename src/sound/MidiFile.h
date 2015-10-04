@@ -46,17 +46,15 @@ class MidiFile : public QObject, public SoundFile
 {
     Q_OBJECT
 public:
-    //MidiFile(Studio *studio);
     MidiFile(const QString &filename, Studio *studio);
     virtual ~MidiFile();
 
-    // SoundFile overrides
-    virtual bool open();
-    virtual bool write();
-    virtual void close()  { }
+    // *** Standard MIDI File to Rosegarden
 
-    // If a file open or save failed
-    std::string getError() const  { return m_error; }
+    // See RosegardenMainWindow::createDocumentFromMIDIFile().
+
+    /// Call convertToRosegarden() after calling this.
+    virtual bool open();
 
     enum ConversionType {
         CONVERT_REPLACE,
@@ -68,24 +66,53 @@ public:
      * Convert a MIDI file to a Rosegarden composition.  Return true
      * for success.
      *
+     * Call this after calling open().
+     *
+     * ??? Why not combine open() and convertToRosegarden() into one?
+     *     Sure it doesn't conform to SoundFile, but is SoundFile's
+     *     interface really the right way to do this?  After all, the
+     *     close() function is unused.
+     *
      * ??? The only caller of this,
      *     RosegardenMainWindow::createDocumentFromMIDIFile(), only calls
      *     with type = CONVERT_REPLACE.
      */
     bool convertToRosegarden(Composition &c, ConversionType type);
 
+    // *** Rosegarden to Standard MIDI File
+
+    // See RosegardenMainWindow::exportMIDIFile().
+
     /**
      * Convert a Rosegarden composition to MIDI format, storing the
      * result internally for later writing.
+     *
+     * Call write() after this to write the file.
+     *
+     * ??? Why not combine convertToMidi() and write() into one?
+     *     Sure it doesn't conform to SoundFile, but is SoundFile's
+     *     interface really the right way to do this?  After all, the
+     *     close() function is unused.
      */
     void convertToMidi(Composition &comp);
 
+    /// Call this after convertToMidi().
+    virtual bool write();
+
+    // *** Miscellaneous
+
+    /// Error message when open() or write() fail.
+    std::string getError() const  { return m_error; }
+
+    /// Unused.  Required by SoundFile.
+    virtual void close()  { }
+
 signals:
-    // Progress in percent.
-    // ??? rename: progress(int) (search on "SIGNAL(setValue(int))")
-    void setValue(int);
-    
+    /// Progress in percent.  Connect to ProgressDialog::setValue(int).
+    void progress(int);
+
 private:
+    // convertToMidi() uses MidiInserter.
     // MidiInserter uses:
     // - m_timingDivision
     // - m_format
@@ -93,6 +120,17 @@ private:
     // - m_midiComposition
     // - clearMidiComposition()
     friend class MidiInserter;
+
+    enum FileFormatType {
+        MIDI_SINGLE_TRACK_FILE          = 0x00,
+        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
+        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
+        MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
+        MIDI_FILE_NOT_LOADED            = 0xFF
+    };
+    FileFormatType m_format;
+
+    unsigned m_numberOfTracks;
 
     enum TimingFormat {
         MIDI_TIMING_PPQ_TIMEBASE,
@@ -107,22 +145,14 @@ private:
     int m_fps;
     int m_subframes;
 
-    enum FileFormatType {
-        MIDI_SINGLE_TRACK_FILE          = 0x00,
-        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
-        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
-        MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
-        MIDI_FILE_NOT_LOADED            = 0xFF
-    };
-    FileFormatType m_format;
-
-    unsigned int           m_numberOfTracks;
-    bool                   m_containsTimeChanges;
-
-    // Internal counters
-    //
-    long                  m_trackByteCount;
-    bool                  m_decrementCount;
+    /// Number of bytes left to read in the current track.
+    long m_trackByteCount;
+    /// Allow decrementing of m_trackByteCount while reading.
+    /**
+     * Set to true while processing a track.  false while processing other
+     * parts of the file.
+     */
+    bool m_decrementCount;
 
     /**
      * Our internal MIDI structure is just a list of MidiEvents.
@@ -169,6 +199,10 @@ private:
     Studio *m_studio;
 
     std::string m_error;
+
+    // UNUSED
+    // ??? Set but never used.
+    bool m_containsTimeChanges;
 };
 
 }

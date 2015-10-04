@@ -4126,7 +4126,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
     CurrentProgressDialog::set(progressDlg);
 
-    connect(&midiFile, SIGNAL(setValue(int)),
+    connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
     if (!midiFile.open()) {
@@ -5247,7 +5247,7 @@ RosegardenMainWindow::exportMIDIFile(QString file)
 //    MidiFile midiFile(fname, &m_doc->getStudio());
     MidiFile midiFile(file, &m_doc->getStudio());
 
-    connect(&midiFile, SIGNAL(setValue(int)),
+    connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
     midiFile.convertToMidi(m_doc->getComposition());

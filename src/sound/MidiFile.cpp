@@ -58,34 +58,18 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-#if 0
-MidiFile::MidiFile(Studio *studio):
-        SoundFile("unnamed.mid"),
-        m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
-        m_timingDivision(0),
-        m_fps(0),
-        m_subframes(0),
-        m_format(MIDI_FILE_NOT_LOADED),
-        m_numberOfTracks(0),
-        m_containsTimeChanges(false),
-        m_trackByteCount(0),
-        m_decrementCount(false),
-        m_studio(studio)
-{}
-#endif
-
-MidiFile::MidiFile(const QString &filename, Studio *studio):
-        SoundFile(filename),
-        m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
-        m_timingDivision(0),
-        m_fps(0),
-        m_subframes(0),
-        m_format(MIDI_FILE_NOT_LOADED),
-        m_numberOfTracks(0),
-        m_containsTimeChanges(false),
-        m_trackByteCount(0),
-        m_decrementCount(false),
-        m_studio(studio)
+MidiFile::MidiFile(const QString &filename, Studio *studio) :
+    SoundFile(filename),
+    m_format(MIDI_FILE_NOT_LOADED),
+    m_numberOfTracks(0),
+    m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
+    m_timingDivision(0),
+    m_fps(0),
+    m_subframes(0),
+    m_trackByteCount(0),
+    m_decrementCount(false),
+    m_studio(studio),
+    m_containsTimeChanges(false)
 {}
 
 // Make sure we clear away the m_midiComposition
@@ -170,7 +154,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
         ++bytesGot;
         if (bytesGot % 2000 == 0) {
 
-            emit setValue((int)(double(midiFile->tellg()) /
+            emit progress((int)(double(midiFile->tellg()) /
                                    double(m_fileSize) * 20.0));
             qApp->processEvents( QEventLoop::AllEvents );  // note: was qApp->processEvents(50)
         }
@@ -248,7 +232,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     //
     bytesGot += numberOfBytes;
     if (bytesGot % 2000 == 0) {
-        emit setValue((int)(double(midiFile->tellg()) /
+        emit progress((int)(double(midiFile->tellg()) /
                                double(m_fileSize) * 20.0));
         qApp->processEvents(QEventLoop::AllEvents);
     }
@@ -878,7 +862,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
         // progress - 20% total in file import itself and then 80%
         // split over these tracks
-        emit setValue(20 +
+        emit progress(20 +
                       (int)((80.0 * double(i) / double(m_numberOfTracks))));
         qApp->processEvents(QEventLoop::AllEvents);
 
@@ -1716,7 +1700,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         ++progressCount;
 
         if (progressCount % 500 == 0) {
-            emit setValue(progressCount * 100 / progressTotal);
+            emit progress(progressCount * 100 / progressTotal);
             //qApp->processEvents(500);
             qApp->processEvents(QEventLoop::AllEvents);
         }
