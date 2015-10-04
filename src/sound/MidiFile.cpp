@@ -284,16 +284,25 @@ MidiFile::read(const QString &filename)
 
         m_containsTimeChanges = false;
 
-        // ??? This is always the same as j.  Get rid of it.
-        TrackId i = 0;
+        // Each source (MIDI file) track might map to more than one
+        // destination (Rosegarden) track.
+        // parseTrack() splits multiple channels on a single MIDI file
+        // track into multiple Rosegarden tracks.
+        // ??? To avoid confusion in this routine (exposing details of
+        //     parseTrack()), why not move this to member scope as
+        //     m_destTrackId?  parseTrack() would use it as necessary.
+        //     That should be a little cleaner.
+        // ??? Why would we even need this at all?  m_midiComposition.size()
+        //     should be perfect.
+        TrackId destTrackId = 0;
 
-        for (unsigned int j = 0; j < m_numberOfTracks; ++j) {
+        for (TrackId srcTrackId = 0; srcTrackId < m_numberOfTracks; ++srcTrackId) {
 
-            RG_DEBUG << "read(): Parsing Track " << j;
+            RG_DEBUG << "read(): Parsing MIDI file track " << srcTrackId << " to rg track " << destTrackId;
 
             // Skip any alien chunks.
             if (!findNextTrack(midiFile)) {
-                std::cerr << "MidiFile::read(): Couldn't find Track " << j << '\n';
+                std::cerr << "MidiFile::read(): Couldn't find Track " << srcTrackId << '\n';
 
                 m_error = "File corrupted or in non-standard format?";
                 m_format = MIDI_FILE_NOT_LOADED;
@@ -302,22 +311,21 @@ MidiFile::read(const QString &filename)
 
             RG_DEBUG << "read(): Track has " << m_trackByteCount << " bytes";
 
-            // Read the track into m_midiComposition.
-            if (!parseTrack(midiFile, i)) {
-                std::cerr << "MidiFile::read(): Track " << j << " parsing failed\n";
+            // Read the track(s) into m_midiComposition.
+            // NOTE: parseTrack() might create more than one track in
+            //       m_midiComposition!  It will modify destTrackId if it does.
+            if (!parseTrack(midiFile, destTrackId)) {
+                std::cerr << "MidiFile::read(): Track " << srcTrackId << " parsing failed\n";
 
                 m_error = "File corrupted or in non-standard format?";
                 m_format = MIDI_FILE_NOT_LOADED;
                 return false;
             }
 
-            ++i; // j is the source track number, i the destination
+            ++destTrackId;
         }
 
-        // ??? But i will always be m_numberOfTracks!  Get rid of this!
-        m_numberOfTracks = i;
-
-    } catch (Exception e) {
+    } catch (Exception &e) {
         std::cerr << "MidiFile::read() - caught exception - " << e.getMessage() << '\n';
 
         m_error = e.getMessage();
@@ -636,7 +644,8 @@ MidiFile::parseTrack(std::ifstream* midiFile, TrackId &lastTrackNum)
         midiFile->ignore();
     }
 
-    return (true);
+    // ??? We only ever return true.  No sense in returning anything, then.
+    return true;
 }
 
 // borrowed from ALSA pcm_timer.c
@@ -750,10 +759,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
     std::vector<Segment *> addedSegments;
 
-#ifdef MIDI_DEBUG
-    std::cerr << "NUMBER OF TRACKS = " << m_numberOfTracks << '\n';
-    std::cerr << "MIDI COMP SIZE = " << m_midiComposition.size() << '\n';
-#endif
+    RG_DEBUG << "MIDI COMP SIZE = " << m_midiComposition.size() << '\n';
 
     if (m_timingFormat == MIDI_TIMING_SMPTE) {
         
@@ -771,7 +777,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // slightly simpler code.  So, SMPTE only.
 
         std::map<int, tempoT> tempi;
-        for (TrackId i = 0; i < m_numberOfTracks; ++i) {
+        for (TrackId i = 0; i < m_midiComposition.size(); ++i) {
             for (midiEvent = m_midiComposition[i].begin();
                  midiEvent != m_midiComposition[i].end();
                  ++midiEvent) {        
@@ -798,7 +804,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
     }
 
-    for (TrackId i = 0; i < m_numberOfTracks; ++i) {
+    for (TrackId i = 0; i < m_midiComposition.size(); ++i) {
 
         segmentTime = 0;
         trackName = std::string("Imported MIDI");
@@ -806,7 +812,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // progress - 20% total in file import itself and then 80%
         // split over these tracks
         emit progress(20 +
-                      (int)((80.0 * double(i) / double(m_numberOfTracks))));
+                      (int)((80.0 * double(i) / double(m_midiComposition.size()))));
         qApp->processEvents(QEventLoop::AllEvents);
 
         // Convert the deltaTime to an absolute time since
