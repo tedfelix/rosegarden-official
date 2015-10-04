@@ -58,6 +58,7 @@ using std::endl;
 using std::ends;
 using std::ios;
 
+#if 0
 MidiFile::MidiFile(Studio *studio):
         SoundFile("unnamed.mid"),
         m_timingFormat(MIDI_TIMING_PPQ_TIMEBASE),
@@ -71,6 +72,7 @@ MidiFile::MidiFile(Studio *studio):
         m_decrementCount(false),
         m_studio(studio)
 {}
+#endif
 
 MidiFile::MidiFile(const QString &filename, Studio *studio):
         SoundFile(filename),
@@ -1854,14 +1856,6 @@ MidiFile::clearMidiComposition()
     m_midiComposition.clear();
     m_trackChannelMap.clear();
 }
-
-// Doesn't do anything yet - doesn't need to.  We need to satisfy
-// the pure virtual function in the base class.
-//
-void
-MidiFile::close()
-{}
-
 
 
 }

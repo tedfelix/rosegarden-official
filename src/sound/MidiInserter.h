@@ -45,7 +45,7 @@ class MidiInserter : public MappedInserterBase
         // Make and insert a tempo event.
         void insertTempo(timeT t, long tempo);
         void endTrack(timeT t);
-        MidiTrack m_midiTrack;
+        MidiFile::MidiTrack m_midiTrack;
         timeT     m_previousTime;
     };
 

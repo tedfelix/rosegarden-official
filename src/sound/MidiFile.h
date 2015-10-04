@@ -32,16 +32,6 @@ namespace Rosegarden
 class MidiEvent;
 class Studio;
 
-/**
- * Our internal MIDI structure is just a list of MidiEvents.
- * We use a list and not a set because we want the order of
- * the events to be arbitrary until we explicitly sort them
- * (necessary when converting Composition absolute times to
- * MIDI delta times).
- */
-typedef std::vector<MidiEvent *> MidiTrack;
-typedef std::map<unsigned int, MidiTrack> MidiComposition;
-
 /// Conversion class for Composition to and from MIDI Files.
 /**
  * Despite the fact you can reuse this object it's probably safer just
@@ -56,40 +46,14 @@ class MidiFile : public QObject, public SoundFile
 {
     Q_OBJECT
 public:
-    MidiFile(Studio *studio);
+    //MidiFile(Studio *studio);
     MidiFile(const QString &filename, Studio *studio);
-    ~MidiFile();
+    virtual ~MidiFile();
 
     // SoundFile overrides
     virtual bool open();
     virtual bool write();
-    virtual void close();
-
-    enum TimingFormat {
-        MIDI_TIMING_PPQ_TIMEBASE,
-        MIDI_TIMING_SMPTE
-    };
-    TimingFormat timingFormat() const  { return m_timingFormat; }
-
-    /// Only valid if timing format is PPQ timebase.
-    int timingDivision() const  { return m_timingDivision; }
-
-    /// Only valid if timing format is SMPTE.
-    void smpteFrameSpecification(int &fps, int &subframes) const
-            { fps = m_fps; subframes = m_subframes; }
-
-    enum FileFormatType {
-        MIDI_SINGLE_TRACK_FILE          = 0x00,
-        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
-        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
-        MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
-        MIDI_FILE_NOT_LOADED            = 0xFF
-    };
-    FileFormatType fileFormat() const  { return m_format; }
-
-    unsigned int numberOfTracks() const  { return m_numberOfTracks; }
-
-    bool hasTimeChanges() const  { return m_containsTimeChanges; }
+    virtual void close()  { }
 
     // If a file open or save failed
     std::string getError() const  { return m_error; }
@@ -97,7 +61,7 @@ public:
     enum ConversionType {
         CONVERT_REPLACE,
         //CONVERT_AUGMENT,
-        CONVERT_APPEND    // ??? Unused
+        CONVERT_APPEND  // ??? Unused
     };
 
     /**
@@ -117,6 +81,8 @@ public:
     void convertToMidi(Composition &comp);
 
 signals:
+    // Progress in percent.
+    // ??? rename: progress(int) (search on "SIGNAL(setValue(int))")
     void setValue(int);
     
 private:
@@ -128,11 +94,28 @@ private:
     // - clearMidiComposition()
     friend class MidiInserter;
 
-    TimingFormat           m_timingFormat;
-    int                    m_timingDivision;   // pulses per quarter note
-    int                    m_fps;
-    int                    m_subframes;
-    FileFormatType         m_format;
+    enum TimingFormat {
+        MIDI_TIMING_PPQ_TIMEBASE,
+        MIDI_TIMING_SMPTE
+    };
+    TimingFormat m_timingFormat;
+
+    /// Pulses Per Quarter note.  (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE)
+    int m_timingDivision;
+
+    // For SMPTE.
+    int m_fps;
+    int m_subframes;
+
+    enum FileFormatType {
+        MIDI_SINGLE_TRACK_FILE          = 0x00,
+        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
+        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
+        MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
+        MIDI_FILE_NOT_LOADED            = 0xFF
+    };
+    FileFormatType m_format;
+
     unsigned int           m_numberOfTracks;
     bool                   m_containsTimeChanges;
 
@@ -140,6 +123,16 @@ private:
     //
     long                  m_trackByteCount;
     bool                  m_decrementCount;
+
+    /**
+     * Our internal MIDI structure is just a list of MidiEvents.
+     * We use a list and not a set because we want the order of
+     * the events to be arbitrary until we explicitly sort them
+     * (necessary when converting Composition absolute times to
+     * MIDI delta times).
+     */
+    typedef std::vector<MidiEvent *> MidiTrack;
+    typedef std::map<unsigned int, MidiTrack> MidiComposition;
 
     // Internal MidiComposition
     //
@@ -180,4 +173,4 @@ private:
 
 }
 
-#endif // RG_MIDI_FILE_H
+#endif // RG_MIDIFILE_H
