@@ -376,22 +376,19 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     MidiByte eventCode = 0x80;
     unsigned long accumulatedTime = 0;
 
-    // The trackNum passed in to this method is the default track for
-    // all events provided they're all on the same channel.  If we find
-    // events on more than one channel, we increment trackNum and record
-    // the mapping from channel to trackNum in this channelTrackMap.
-    // We then return the new trackNum by reference so the calling
-    // method knows we've got more tracks than expected.
+    // lastTrackNum is the default track for all events provided they're
+    // all on the same channel.  If we find events on more than one
+    // channel, we increment lastTrackNum and record the mapping from
+    // channel to trackNum in channelToTrack.
 
     // This would be a vector<TrackId> but TrackId is unsigned
     // and we need -1 to indicate "not yet used"
-    std::vector<int> channelTrackMap(16, -1);
+    std::vector<int> channelToTrack(16, -1);
 
     // This is used to store the last absolute time found on each track,
     // allowing us to modify delta-times correctly when separating events
     // out from one to multiple tracks
-    //
-    std::map<int, unsigned long> trackTimeMap;
+    std::map<int /*track*/, unsigned long /*lastTime*/> trackTimeMap;
 
     // Meta-events don't have a channel, so we place them in a fixed
     // track number instead
@@ -406,20 +403,18 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
     // Since no event and its associated delta time can fit in just one
     // byte, a single remaining byte in the track has to be padding.
-    // This obscure and non-standard, but such files do exist; ordinarily
+    // This is obscure and non-standard, but such files do exist; ordinarily
     // there should be no bytes in the track after the last event.
-    while (!midiFile->eof() && ( m_trackByteCount > 1 ) ) {
+    while (!midiFile->eof()  &&  m_trackByteCount > 1) {
         if (eventCode < 0x80) {
-            std::cerr << "WARNING: Invalid event code " << eventCode << " in MIDI file\n";
+            std::cerr << "MidiFile::parseTrack(): WARNING: Invalid event code " << eventCode << " in MIDI file\n";
 
             throw (Exception(qstrtostr(QObject::tr("Invalid event code found"))));
         }
 
         unsigned long deltaTime = readNumber(midiFile);
 
-#ifdef MIDI_DEBUG
-        std::cerr << "read delta time " << deltaTime << '\n';
-#endif
+        RG_DEBUG << "parseTrack(): read delta time " << deltaTime;
 
         // Get a single byte
         MidiByte midiByte = read(midiFile);
@@ -427,42 +422,33 @@ MidiFile::parseTrack(std::ifstream *midiFile)
         MidiByte data1 = 0;
 
         if (!(midiByte & MIDI_STATUS_BYTE_MASK)) {
-            if (runningStatus < 0) {
+            if (runningStatus < 0)
                 throw (Exception(qstrtostr(QObject::tr("Running status used for first event in track"))));
-            }
 
             eventCode = (MidiByte)runningStatus;
             data1 = midiByte;
 
-#ifdef MIDI_DEBUG
-            std::cerr << "using running status (byte " << int(midiByte) << " found)\n";
-#endif
+            RG_DEBUG << "parseTrack(): using running status (byte " << int(midiByte) << " found)";
 
         } else {
-#ifdef MIDI_DEBUG
-            std::cerr << "have new event code " << int(midiByte) << '\n';
-#endif
+            RG_DEBUG << "parseTrack(): have new event code " << int(midiByte);
 
             eventCode = midiByte;
             data1 = read(midiFile);
         }
 
-        if (eventCode == MIDI_FILE_META_EVENT) // meta events
-        {
-            //            metaEventCode = read(midiFile);
+        if (eventCode == MIDI_FILE_META_EVENT) {
+
             MidiByte metaEventCode = data1;
             unsigned messageLength = readNumber(midiFile);
 
-#ifdef MIDI_DEBUG
-
-            std::cerr << "Meta event of type " << int(metaEventCode) << " and " << messageLength << " bytes found\n";
-#endif
+            RG_DEBUG << "parseTrack(): Meta event of type " << int(metaEventCode) << " and " << messageLength << " bytes found";
 
             std::string metaMessage = read(midiFile, messageLength);
 
             if (metaEventCode == MIDI_TIME_SIGNATURE ||
-                    metaEventCode == MIDI_SET_TEMPO)
-            {
+                metaEventCode == MIDI_SET_TEMPO) {
+
                 m_containsTimeChanges = true;
             }
 
@@ -478,35 +464,42 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
             m_midiComposition[metaTrack].push_back(e);
 
-        } else { // the rest
+        } else {  // not a meta event
 
             runningStatus = eventCode;
 
             MidiEvent *midiEvent;
 
             int channel = (eventCode & MIDI_CHANNEL_NUM_MASK);
-            if (channelTrackMap[channel] == -1) {
+            if (channelToTrack[channel] == -1) {
                 if (!firstTrack) {
                     ++lastTrackNum;
                 } else {
                     firstTrack = false;
                 }
-                std::cerr << "MidiFile: new channel map entry: channel " << channel << " -> track " << lastTrackNum << '\n';
-                channelTrackMap[channel] = lastTrackNum;
+                RG_DEBUG << "parseTrack(): new channel map entry: channel " << channel << " -> track " << lastTrackNum;
+                channelToTrack[channel] = lastTrackNum;
                 m_trackChannelMap[lastTrackNum] = channel;
             }
 
-            TrackId trackNum = channelTrackMap[channel];
+            TrackId trackNum = channelToTrack[channel];
 
+#ifdef DEBUG
             {
-                static int prevTrackNum = -1, prevChannel = -1;
-                if (prevTrackNum != (int) trackNum ||
-                    prevChannel != (int) channel) {
-                    std::cerr << "MidiFile: track number for channel " << channel << " is " << trackNum << '\n';
+                static int prevTrackNum = -1;
+                static int prevChannel = -1;
+                // If the pairing has changed
+                if (prevTrackNum != (int)trackNum  ||
+                    prevChannel != (int)channel) {
+
+                    // Report it for debugging.
+                    RG_DEBUG << "parseTrack(): track number for channel " << channel << " is " << trackNum;
+
                     prevTrackNum = trackNum;
                     prevChannel = channel;
                 }
             }
+#endif
 
             // accumulatedTime is abs time of last event on any track;
             // trackTimeMap[trackNum] is that of last event on this track
