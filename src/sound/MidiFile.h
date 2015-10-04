@@ -124,7 +124,7 @@ private:
     bool read(const QString &filename);
     bool parseHeader(const std::string &midiHeader);
     /// Convert a track to events in m_midiComposition.
-    bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
+    bool parseTrack(std::ifstream *midiFile);
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
     /// Find the next track chunk and set m_trackByteCount.
     bool findNextTrack(std::ifstream *midiFile);

@@ -284,25 +284,13 @@ MidiFile::read(const QString &filename)
 
         m_containsTimeChanges = false;
 
-        // Each source (MIDI file) track might map to more than one
-        // destination (Rosegarden) track.
-        // parseTrack() splits multiple channels on a single MIDI file
-        // track into multiple Rosegarden tracks.
-        // ??? To avoid confusion in this routine (exposing details of
-        //     parseTrack()), why not move this to member scope as
-        //     m_destTrackId?  parseTrack() would use it as necessary.
-        //     That should be a little cleaner.
-        // ??? Why would we even need this at all?  m_midiComposition.size()
-        //     should be perfect.
-        TrackId destTrackId = 0;
+        for (unsigned track = 0; track < m_numberOfTracks; ++track) {
 
-        for (TrackId srcTrackId = 0; srcTrackId < m_numberOfTracks; ++srcTrackId) {
-
-            RG_DEBUG << "read(): Parsing MIDI file track " << srcTrackId << " to rg track " << destTrackId;
+            RG_DEBUG << "read(): Parsing MIDI file track " << track;
 
             // Skip any alien chunks.
             if (!findNextTrack(midiFile)) {
-                std::cerr << "MidiFile::read(): Couldn't find Track " << srcTrackId << '\n';
+                std::cerr << "MidiFile::read(): Couldn't find Track " << track << '\n';
 
                 m_error = "File corrupted or in non-standard format?";
                 m_format = MIDI_FILE_NOT_LOADED;
@@ -311,21 +299,17 @@ MidiFile::read(const QString &filename)
 
             RG_DEBUG << "read(): Track has " << m_trackByteCount << " bytes";
 
-            // Read the track(s) into m_midiComposition.
-            // NOTE: parseTrack() might create more than one track in
-            //       m_midiComposition!  It will modify destTrackId if it does.
-            if (!parseTrack(midiFile, destTrackId)) {
-                std::cerr << "MidiFile::read(): Track " << srcTrackId << " parsing failed\n";
+            // Read the track into m_midiComposition.
+            if (!parseTrack(midiFile)) {
+                std::cerr << "MidiFile::read(): Track " << track << " parsing failed\n";
 
                 m_error = "File corrupted or in non-standard format?";
                 m_format = MIDI_FILE_NOT_LOADED;
                 return false;
             }
-
-            ++destTrackId;
         }
 
-    } catch (Exception &e) {
+    } catch (const Exception &e) {
         std::cerr << "MidiFile::read() - caught exception - " << e.getMessage() << '\n';
 
         m_error = e.getMessage();
@@ -398,8 +382,10 @@ MidiFile::parseHeader(const std::string &midiHeader)
 // our local map of MIDI events.
 //
 bool
-MidiFile::parseTrack(std::ifstream* midiFile, TrackId &lastTrackNum)
+MidiFile::parseTrack(std::ifstream *midiFile)
 {
+    TrackId lastTrackNum = m_midiComposition.size();
+
     MidiByte midiByte, metaEventCode, data1, data2;
     MidiByte eventCode = 0x80;
     std::string metaMessage;
