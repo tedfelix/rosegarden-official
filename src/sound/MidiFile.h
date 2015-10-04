@@ -18,6 +18,7 @@
 #include "base/Composition.h"
 
 #include <QObject>
+#include <QString>
 
 #include <fstream>
 #include <string>
