@@ -216,8 +216,8 @@ public:
     /// Get the segment at the given position on the view.
     ChangingSegmentPtr getSegmentAt(const QPoint &pos);
 
-    void getSegmentQRect(const Segment &segment, QRect &rect);
-    void getSegmentRect(const Segment &segment, SegmentRect &segmentRect);
+    void getSegmentQRect(const Segment &segment, QRect &rect) const;
+    void getSegmentRect(const Segment &segment, SegmentRect &segmentRect) const;
 
     // --- Selection --------------------------------------
 
@@ -242,7 +242,7 @@ public:
     bool haveMultipleSelection() const  { return m_selectedSegments.size() > 1; }
     SegmentSelection getSelectedSegments()  { return m_selectedSegments; }
     /// Bounding rect of the currently selected segments.
-    QRect getSelectedSegmentsRect();
+    QRect getSelectedSegmentsRect() const;
 
     // --- Recording --------------------------------------
 
@@ -405,9 +405,14 @@ private:
 
     const NotationPreview *getNotationPreview(const Segment *);
 
-    NotationPreview *makeNotationPreview(const Segment *);
+    NotationPreview *makeNotationPreview(const Segment *) const;
 
     typedef std::map<const Segment *, NotationPreview *> NotationPreviewCache;
+    // We might make these caches mutable to allow more functions
+    // to be const.  However, the public deleteCachedPreviews() leads
+    // one to believe that the state of the cache is indeed important to
+    // the outside world.  Renaming it to something like "refreshNeeded()"
+    // might get around this.
     NotationPreviewCache m_notationPreviewCache;
 
     // --- Audio Previews ---------------------------------

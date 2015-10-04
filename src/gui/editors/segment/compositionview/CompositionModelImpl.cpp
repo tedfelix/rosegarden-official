@@ -298,7 +298,8 @@ ChangingSegmentPtr CompositionModelImpl::getSegmentAt(const QPoint &pos)
     return ChangingSegmentPtr();
 }
 
-void CompositionModelImpl::getSegmentQRect(const Segment &segment, QRect &rect)
+void CompositionModelImpl::getSegmentQRect(
+        const Segment &segment, QRect &rect) const
 {
     // This routine does no caching.  Caching will be implemented later
     // if performance measurements indicate a need and we can come up
@@ -338,7 +339,7 @@ void CompositionModelImpl::getSegmentQRect(const Segment &segment, QRect &rect)
 }
 
 void CompositionModelImpl::getSegmentRect(
-        const Segment &segment, SegmentRect &segmentRect)
+        const Segment &segment, SegmentRect &segmentRect) const
 {
     getSegmentQRect(segment, segmentRect.rect);
 
@@ -836,7 +837,7 @@ CompositionModelImpl::getNotationPreview(const Segment *segment)
 
 CompositionModelImpl::NotationPreview *
 CompositionModelImpl::makeNotationPreview(
-        const Segment *segment)
+        const Segment *segment) const
 {
     Profiler profiler("CompositionModelImpl::makeNotationPreview()");
 
@@ -1266,7 +1267,7 @@ bool CompositionModelImpl::isSelected(const Segment *s) const
                m_selectedSegments.end();
 }
 
-QRect CompositionModelImpl::getSelectedSegmentsRect()
+QRect CompositionModelImpl::getSelectedSegmentsRect() const
 {
     QRect selectionRect;
 
