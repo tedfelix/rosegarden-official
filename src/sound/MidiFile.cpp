@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MidiFile]"
+
 #include "MidiFile.h"
 
 #include "Midi.h"
@@ -29,7 +31,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "misc/Debug.h"
-//#include "misc/Strings.h"
+#include "misc/Strings.h"
 #include "sound/MappedBufMetaIterator.h"
 #include "sound/MidiInserter.h"
 #include "sound/SortingInserter.h"
@@ -39,14 +41,12 @@
 #include <string>
 #include <sstream>
 
+// ??? Get rid of this.  Use RG_NO_DEBUG_PRINT instead.
 #define MIDI_DEBUG 1
 
 namespace Rosegarden
 {
 
-
-using std::string;
-using std::ifstream;
 
 MidiFile::MidiFile() :
     m_format(MIDI_FILE_NOT_LOADED),
@@ -62,26 +62,16 @@ MidiFile::MidiFile() :
 {
 }
 
-// Make sure we clear away the m_midiComposition
-//
 MidiFile::~MidiFile()
 {
     clearMidiComposition();
 }
 
-
-// A couple of convenience functions.   Watch the byte conversions out
-// of the STL strings.
-//
-//
 long
-MidiFile::midiBytesToLong(const string& bytes)
+MidiFile::midiBytesToLong(const std::string &bytes)
 {
     if (bytes.length() != 4) {
-#ifdef MIDI_DEBUG
-        std::cerr << "WARNING: Wrong length for long data (" << bytes.length()
-        << ", should be 4)\n";
-#endif
+        std::cerr << "MidiFile::midiBytesToLong(): WARNING: Wrong length for long data (" << bytes.length() << ", should be 4)\n";
 
         // TRANSLATOR: "long" is a C++ data type
         throw (Exception(qstrtostr(QObject::tr("Wrong length for long data in MIDI stream"))));
@@ -92,19 +82,16 @@ MidiFile::midiBytesToLong(const string& bytes)
                    ((long)(((MidiByte)bytes[2]) << 8)) |
                    ((long)((MidiByte)(bytes[3])));
 
-    std::cerr << "midiBytesToLong(" << int((MidiByte)bytes[0]) << "," << int((MidiByte)bytes[1]) << "," << int((MidiByte)bytes[2]) << "," << int((MidiByte)bytes[3]) << ") -> " << longRet << '\n';
+    RG_DEBUG << "midiBytesToLong(" << int((MidiByte)bytes[0]) << "," << int((MidiByte)bytes[1]) << "," << int((MidiByte)bytes[2]) << "," << int((MidiByte)bytes[3]) << ") -> " << longRet;
 
     return longRet;
 }
 
 int
-MidiFile::midiBytesToInt(const string& bytes)
+MidiFile::midiBytesToInt(const std::string &bytes)
 {
     if (bytes.length() != 2) {
-#ifdef MIDI_DEBUG
-        std::cerr << "WARNING: Wrong length for int data (" << bytes.length()
-        << ", should be 2)\n";
-#endif
+        std::cerr << "MidiFile::midiBytesToInt(): WARNING: Wrong length for int data (" << bytes.length() << ", should be 2)\n";
 
         // TRANSLATOR: "int" is a C++ data type
         throw (Exception(qstrtostr(QObject::tr("Wrong length for int data in MIDI stream"))));
@@ -115,44 +102,46 @@ MidiFile::midiBytesToInt(const string& bytes)
     return (intRet);
 }
 
-
-
-// Gets a single byte from the MIDI byte stream.  For each track
-// section we can read only a specified number of bytes held in
-// m_trackByteCount.
-//
 MidiByte
-MidiFile::read(ifstream* midiFile)
+MidiFile::read(std::ifstream *midiFile)
 {
-    static int bytesGot = 0; // purely for progress reporting purposes
+    // For progress reporting.
+    // ??? This can be moved to a member variable and cleared in the ctor.
+    static int bytesRead = 0;
 
-    if (midiFile->eof()) {
+    if (midiFile->eof())
         throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
-    }
 
-    if (m_decrementCount && m_trackByteCount <= 0) {
+    // For each track section we can read only m_trackByteCount bytes.
+    if (m_decrementCount  &&  m_trackByteCount <= 0)
         throw(Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track"))));
-    }
 
     char byte;
-    if (midiFile->read(&byte, 1)) {
+    midiFile->read(&byte, 1);
 
+    if (!midiFile)
+        throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
+
+    if (m_decrementCount)
         --m_trackByteCount;
 
-        // update a progress dialog if we have one
-        //
-        ++bytesGot;
-        if (bytesGot % 2000 == 0) {
+    ++bytesRead;
 
-            emit progress((int)(double(midiFile->tellg()) /
-                                   double(m_fileSize) * 20.0));
-            qApp->processEvents( QEventLoop::AllEvents );  // note: was qApp->processEvents(50)
-        }
+    // Every 2000 bytes...
+    if (bytesRead >= 2000) {
 
-        return (MidiByte)byte;
+        bytesRead = 0;
+
+        // Update the progress dialog if one is connected.
+        emit progress((int)(double(midiFile->tellg()) /
+                            double(m_fileSize) * 20.0));
+
+        // Kick the event loop to make sure the UI doesn't become
+        // unresponsive during a long load.
+        qApp->processEvents(QEventLoop::AllEvents);
     }
 
-    throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
+    return static_cast<MidiByte>(byte);
 }
 
 
@@ -160,10 +149,10 @@ MidiFile::read(ifstream* midiFile)
 // each track section we can read only a specified number of bytes
 // held in m_trackByteCount.
 //
-string
-MidiFile::read(ifstream* midiFile, unsigned long numberOfBytes)
+std::string
+MidiFile::read(std::ifstream* midiFile, unsigned long numberOfBytes)
 {
-    string stringRet;
+    std::string stringRet;
     char fileMidiByte;
     static int bytesGot = 0; // purely for progress reporting purposes
 
@@ -235,7 +224,7 @@ MidiFile::read(ifstream* midiFile, unsigned long numberOfBytes)
 //
 //
 long
-MidiFile::readNumber(ifstream* midiFile, int firstByte)
+MidiFile::readNumber(std::ifstream* midiFile, int firstByte)
 {
     long longRet = 0;
     MidiByte midiByte;
@@ -266,9 +255,9 @@ MidiFile::readNumber(ifstream* midiFile, int firstByte)
 // of bytes to be read in the counter m_trackByteCount.
 //
 bool
-MidiFile::skipToNextTrack(ifstream *midiFile)
+MidiFile::skipToNextTrack(std::ifstream *midiFile)
 {
-    string buffer, buffer2;
+    std::string buffer, buffer2;
     m_trackByteCount = -1;
     m_decrementCount = false;
 
@@ -308,7 +297,7 @@ MidiFile::open(const QString &filename)
 
     clearMidiComposition();
     // Open the file
-    ifstream *midiFile = new ifstream(filename.toLocal8Bit(), std::ios::in | std::ios::binary);
+    std::ifstream *midiFile = new std::ifstream(filename.toLocal8Bit(), std::ios::in | std::ios::binary);
 
     try {
         if (*midiFile) {
@@ -391,7 +380,7 @@ MidiFile::open(const QString &filename)
 //
 //
 bool
-MidiFile::parseHeader(const string &midiHeader)
+MidiFile::parseHeader(const std::string &midiHeader)
 {
     if (midiHeader.size() < 14) {
 #ifdef MIDI_DEBUG
@@ -448,7 +437,7 @@ MidiFile::parseHeader(const string &midiHeader)
 // our local map of MIDI events.
 //
 bool
-MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
+MidiFile::parseTrack(std::ifstream* midiFile, TrackId &lastTrackNum)
 {
     MidiByte midiByte, metaEventCode, data1, data2;
     MidiByte eventCode = 0x80;
@@ -741,7 +730,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     Segment *rosegardenSegment;
     Segment *conductorSegment = 0;
     Event *rosegardenEvent;
-    string trackName;
+    std::string trackName;
 
     // Time conversions
     //
@@ -858,7 +847,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     for (TrackId i = 0; i < m_numberOfTracks; ++i) {
 
         segmentTime = 0;
-        trackName = string("Imported MIDI");
+        trackName = std::string("Imported MIDI");
 
         // progress - 20% total in file import itself and then 80%
         // split over these tracks
@@ -1593,7 +1582,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     // First we write into the trackBuffer, then write it out to the
     // file with it's accompanying length.
     //
-    string trackBuffer;
+    std::string trackBuffer;
 
     long progressTotal = (long)m_midiComposition[trackNumber].size();
     long progressCount = 0;
