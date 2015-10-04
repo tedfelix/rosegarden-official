@@ -19,7 +19,7 @@
 
 #include "AudioPeaksGenerator.h"
 #include "AudioPeaksThread.h"
-#include "AudioPreviewReadyEvent.h"
+#include "AudioPeaksReadyEvent.h"
 #include "CompositionModelImpl.h"
 
 #include "misc/Debug.h"
@@ -101,7 +101,7 @@ bool AudioPeaksGenerator::event(QEvent *e)
     RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")" << endl;
 
     if (e->type() == AudioPeaksThread::AudioPeaksReady) {
-        AudioPreviewReadyEvent *ev = dynamic_cast<AudioPreviewReadyEvent *>(e);
+        AudioPeaksReadyEvent *ev = dynamic_cast<AudioPeaksReadyEvent *>(e);
         if (ev) {
             int token = (int)ev->data();
             m_channels = 0; // to be filled as getComputedValues() return value

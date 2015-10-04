@@ -17,7 +17,7 @@
 
 
 #include "AudioPeaksThread.h"
-#include "AudioPreviewReadyEvent.h"
+#include "AudioPeaksReadyEvent.h"
 
 #include "base/RealTime.h"
 #include "sound/AudioFileManager.h"
@@ -172,7 +172,7 @@ AudioPeaksThread::process()
                 unsigned int channels = audioFile->getChannels();
                 m_results[token] = ResultsPair(channels, results);
                 QObject *notify = req.notify;
-                QApplication::postEvent(notify, new AudioPreviewReadyEvent(token));
+                QApplication::postEvent(notify, new AudioPeaksReadyEvent(token));
             }
         }
 
