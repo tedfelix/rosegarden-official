@@ -49,12 +49,19 @@ public:
     MidiFile(const QString &filename, Studio *studio);
     virtual ~MidiFile();
 
+
     // *** Standard MIDI File to Rosegarden
 
     // See RosegardenMainWindow::createDocumentFromMIDIFile().
 
     /// Call convertToRosegarden() after calling this.
+    /**
+     * Returns false on error.  Call getError() for the error message.
+     */
     virtual bool open();
+
+    /// Error message when open() fails.
+    std::string getError() const  { return m_error; }
 
     enum ConversionType {
         CONVERT_REPLACE,
@@ -79,6 +86,7 @@ public:
      */
     bool convertToRosegarden(Composition &c, ConversionType type);
 
+
     // *** Rosegarden to Standard MIDI File
 
     // See RosegardenMainWindow::exportMIDIFile().
@@ -99,10 +107,8 @@ public:
     /// Call this after convertToMidi().
     virtual bool write();
 
-    // *** Miscellaneous
 
-    /// Error message when open() or write() fail.
-    std::string getError() const  { return m_error; }
+    // *** Miscellaneous
 
     /// Unused.  Required by SoundFile.
     virtual void close()  { }
@@ -145,6 +151,39 @@ private:
     int m_fps;
     int m_subframes;
 
+    /**
+     * Our internal MIDI composition is just a vector of MidiEvents.
+     * We use a vector and not a set because we want the order of
+     * the events to be arbitrary until we explicitly sort them
+     * (necessary when converting Composition absolute times to
+     * MIDI delta times).
+     */
+    typedef std::vector<MidiEvent *> MidiTrack;
+    typedef std::map<TrackId, MidiTrack> MidiComposition;
+    MidiComposition m_midiComposition;
+    void clearMidiComposition();
+
+    // *** Standard MIDI File to Rosegarden
+
+    bool parseHeader(const std::string &midiHeader);
+    bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
+    std::map<TrackId, int /*channel*/> m_trackChannelMap;
+    bool skipToNextTrack(std::ifstream *midiFile);
+    bool consolidateNoteOffEvents(TrackId track);
+
+    // Read
+    // ??? rename: readNumber()
+    long getNumberFromMidiBytes(std::ifstream *midiFile, int firstByte = -1);
+    // ??? rename: read()
+    MidiByte getMidiByte(std::ifstream *midiFile);
+    // ??? rename: read()
+    std::string getMidiBytes(std::ifstream *midiFile,
+                             unsigned long numberOfBytes);
+
+    // Conversion
+    int midiBytesToInt(const std::string &bytes);
+    long midiBytesToLong(const std::string &bytes);
+
     /// Number of bytes left to read in the current track.
     long m_trackByteCount;
     /// Allow decrementing of m_trackByteCount while reading.
@@ -154,56 +193,30 @@ private:
      */
     bool m_decrementCount;
 
-    /**
-     * Our internal MIDI structure is just a list of MidiEvents.
-     * We use a list and not a set because we want the order of
-     * the events to be arbitrary until we explicitly sort them
-     * (necessary when converting Composition absolute times to
-     * MIDI delta times).
-     */
-    typedef std::vector<MidiEvent *> MidiTrack;
-    typedef std::map<unsigned int, MidiTrack> MidiComposition;
-
-    // Internal MidiComposition
-    //
-    MidiComposition       m_midiComposition;
-    std::map<int, int>    m_trackChannelMap;
-
-    // Clear the m_midiComposition
-    //
-    void clearMidiComposition();
-
-    // Split the tasks up with these top level private methods
-    //
-    bool parseHeader(const std::string& midiHeader);
-    bool parseTrack(std::ifstream* midiFile, unsigned int &trackNum);
-    bool writeHeader(std::ofstream* midiFile);
-    bool writeTrack(std::ofstream* midiFile, unsigned int trackNum);
-
-    bool consolidateNoteOffEvents(TrackId track);
-
-    // Internal convenience functions
-    //
-    int midiBytesToInt(const std::string& bytes);
-    long midiBytesToLong(const std::string& bytes);
-    long getNumberFromMidiBytes(std::ifstream* midiFile, int firstByte = -1);
-    MidiByte getMidiByte(std::ifstream* midiFile);
-    std::string getMidiBytes(std::ifstream* midiFile,
-                                   unsigned long bytes);
-    bool skipToNextTrack(std::ifstream *midiFile);
-    void intToMidiBytes(std::ofstream* midiFile, int number);
-    void longToMidiBytes(std::ofstream* midiFile, unsigned long number);
-    std::string longToVarBuffer(unsigned long number);
-
     // For Instrument stuff.
     Studio *m_studio;
 
     std::string m_error;
 
+    // *** Rosegarden to Standard MIDI File
+
+    bool writeHeader(std::ofstream *midiFile);
+    bool writeTrack(std::ofstream *midiFile, TrackId trackNumber);
+
+    // Write
+    // ??? rename: writeInt()
+    void intToMidiBytes(std::ofstream *midiFile, int number);
+    // ??? rename: writeLong()
+    void longToMidiBytes(std::ofstream *midiFile, unsigned long number);
+
+    // Conversion
+    std::string longToVarBuffer(unsigned long number);
+
     // UNUSED
     // ??? Set but never used.
     bool m_containsTimeChanges;
 };
+
 
 }
 
