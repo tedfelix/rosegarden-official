@@ -309,11 +309,30 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
 
 void CompositionView::slotUpdateAll()
 {
-    // This one doesn't get called too often while recording.
-    //Profiler profiler("CompositionView::slotUpdateAll()");
+    Profiler profiler("CompositionView::slotUpdateAll()");
+
+    // ??? This routine gets hit really hard when recording.
+    //     Just holding down a single note results in 50 calls
+    //     per second.
 
     // Redraw the segments and artifacts.
+
+#if 1
+    // Since we might be reacting to a user change (e.g. zoom), we
+    // need to react immediately.
     updateAll();
+#else
+    QRect viewportContentsRect(
+            contentsX(), contentsY(),
+            viewport()->rect().width(), viewport()->rect().height());
+
+    // Redraw the segments and artifacts.
+    // Uses 55% less CPU than updateAll() when recording.  But introduces a
+    // delay of up to 1/10 second for user interaction like zoom.  We need to
+    // untangle user updates and automatic updates (like recording) so that we
+    // can treat them differently.
+    slotAllNeedRefresh(viewportContentsRect);
+#endif
 }
 
 void CompositionView::slotUpdateTimer()
