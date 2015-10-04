@@ -656,7 +656,9 @@ void CompositionView::drawSegments(const QRect &clipRect)
                 // Make the rect thicker vertically to match the old
                 // appearance.  Without this, the rect is thin, which gives
                 // slightly more information.
-                eventRect.adjust(0,0,0,1);
+                // Also make the rect longer to close the gaps between the
+                // events.  This is in keeping with the old appearance.
+                eventRect.adjust(0,0,1,1);
 
                 // Per the Qt docs, fillRect() should be faster than
                 // drawRect().  In practice, a small improvement was noted.
