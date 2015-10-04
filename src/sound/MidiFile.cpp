@@ -275,8 +275,8 @@ MidiFile::read(const QString &filename)
     // run into trouble which we can then pass back out to whomever
     // called us using m_error and a nice bool.
     try {
-        // Parse the MIDI header first.  The first 14 bytes of the file.
-        if (!parseHeader(read(midiFile, 14))) {
+        // Parse the MIDI header first.
+        if (!parseHeader(midiFile)) {
             m_format = MIDI_FILE_NOT_LOADED;
             m_error = "Not a MIDI file.";
             return false;
@@ -284,6 +284,7 @@ MidiFile::read(const QString &filename)
 
         m_containsTimeChanges = false;
 
+        // For each track chunk in the MIDI file.
         for (unsigned track = 0; track < m_numberOfTracks; ++track) {
 
             RG_DEBUG << "read(): Parsing MIDI file track " << track;
@@ -321,76 +322,58 @@ MidiFile::read(const QString &filename)
     return true;
 }
 
-// Parse and ensure the MIDI Header is legitimate
-//
-//
 bool
-MidiFile::parseHeader(const std::string &midiHeader)
+MidiFile::parseHeader(std::ifstream *midiFile)
 {
-    if (midiHeader.size() < 14) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::parseHeader() - file header undersized\n";
-#endif
+    // The basic MIDI header is 14 bytes.
+    std::string midiHeader = read(midiFile, 14);
 
-        return (false);
+    if (midiHeader.size() < 14) {
+        std::cerr << "MidiFile::parseHeader() - file header undersized\n";
+        return false;
     }
 
     if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::parseHeader()"
-        << "- file header not found or malformed\n";
-#endif
-        return (false);
+        std::cerr << "MidiFile::parseHeader() - file header not found or malformed\n";
+        return false;
     }
 
-    if (midiBytesToLong(midiHeader.substr(4, 4)) != 6L) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::parseHeader()"
-        << " - header length incorrect\n";
-#endif
-
-        return (false);
-    }
-
+    long chunkSize = midiBytesToLong(midiHeader.substr(4, 4));
     m_format = (FileFormatType)midiBytesToInt(midiHeader.substr(8, 2));
     m_numberOfTracks = midiBytesToInt(midiHeader.substr(10, 2));
     m_timingDivision = midiBytesToInt(midiHeader.substr(12, 2));
     m_timingFormat = MIDI_TIMING_PPQ_TIMEBASE;
 
     if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::parseHeader()"
-                  << "- can't load sequential track file\n";
-#endif
-        return (false);
+        std::cerr << "MidiFile::parseHeader() - can't load sequential track (Format 2) MIDI file\n";
+        return false;
     }
 
     if (m_timingDivision > 32767) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::parseHeader() - file uses SMPTE timing\n";
-#endif
+        RG_DEBUG << "parseHeader() - file uses SMPTE timing";
+
         m_timingFormat = MIDI_TIMING_SMPTE;
         m_fps = 256 - (m_timingDivision >> 8);
         m_subframes = (m_timingDivision & 0xff);
     }
 
+    if (chunkSize > 6) {
+        // Skip any remaining bytes in the header chunk.
+        // MIDI spec section 4, page 5: "[...] more parameters may be
+        // added to the MThd chunk in the future: it is important to
+        // read and honor the length, even if it is longer than 6."
+        midiFile->seekg(chunkSize - 6, std::ios::cur);
+    }
+
     return true;
 }
 
-
-// Extract the contents from a MIDI file track and places it into
-// our local map of MIDI events.
-//
 bool
 MidiFile::parseTrack(std::ifstream *midiFile)
 {
     TrackId lastTrackNum = m_midiComposition.size();
 
-    MidiByte midiByte, metaEventCode, data1, data2;
     MidiByte eventCode = 0x80;
-    std::string metaMessage;
-    unsigned int messageLength;
-    unsigned long deltaTime;
     unsigned long accumulatedTime = 0;
 
     // The trackNum passed in to this method is the default track for
@@ -419,7 +402,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
     bool firstTrack = true;
 
-    std::cerr << "Parse track: last track number is " << lastTrackNum << '\n';
+    RG_DEBUG << "parseTrack(): last track number is " << lastTrackNum;
 
     // Since no event and its associated delta time can fit in just one
     // byte, a single remaining byte in the track has to be padding.
@@ -427,22 +410,21 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // there should be no bytes in the track after the last event.
     while (!midiFile->eof() && ( m_trackByteCount > 1 ) ) {
         if (eventCode < 0x80) {
-#ifdef MIDI_DEBUG
-            std::cerr << "WARNING: Invalid event code " << eventCode
-            << " in MIDI file\n";
-#endif
+            std::cerr << "WARNING: Invalid event code " << eventCode << " in MIDI file\n";
 
             throw (Exception(qstrtostr(QObject::tr("Invalid event code found"))));
         }
 
-        deltaTime = readNumber(midiFile);
+        unsigned long deltaTime = readNumber(midiFile);
 
 #ifdef MIDI_DEBUG
         std::cerr << "read delta time " << deltaTime << '\n';
 #endif
 
         // Get a single byte
-        midiByte = read(midiFile);
+        MidiByte midiByte = read(midiFile);
+
+        MidiByte data1 = 0;
 
         if (!(midiByte & MIDI_STATUS_BYTE_MASK)) {
             if (runningStatus < 0) {
@@ -468,15 +450,15 @@ MidiFile::parseTrack(std::ifstream *midiFile)
         if (eventCode == MIDI_FILE_META_EVENT) // meta events
         {
             //            metaEventCode = read(midiFile);
-            metaEventCode = data1;
-            messageLength = readNumber(midiFile);
+            MidiByte metaEventCode = data1;
+            unsigned messageLength = readNumber(midiFile);
 
 #ifdef MIDI_DEBUG
 
             std::cerr << "Meta event of type " << int(metaEventCode) << " and " << messageLength << " bytes found\n";
 #endif
 
-            metaMessage = read(midiFile, messageLength);
+            std::string metaMessage = read(midiFile, messageLength);
 
             if (metaEventCode == MIDI_TIME_SIGNATURE ||
                     metaEventCode == MIDI_SET_TEMPO)
@@ -539,27 +521,29 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
             case MIDI_CTRL_CHANGE:
-                data2 = read(midiFile);
+                {
+                    MidiByte data2 = read(midiFile);
 
-                // create and store our event
-                midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
+                    // create and store our event
+                    midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
 
 #ifdef MIDI_DEBUG
-                std::cerr << "MIDI event for channel " << channel + 1 << " (track "
-                << trackNum << ")\n";
-                midiEvent->print();
+                    std::cerr << "MIDI event for channel " << channel + 1 << " (track " << trackNum << ")\n";
+                    midiEvent->print();
 #endif
 
-
-                m_midiComposition[trackNum].push_back(midiEvent);
+                    m_midiComposition[trackNum].push_back(midiEvent);
+                }
                 break;
 
             case MIDI_PITCH_BEND:
-                data2 = read(midiFile);
+                {
+                    MidiByte data2 = read(midiFile);
 
-                // create and store our event
-                midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
-                m_midiComposition[trackNum].push_back(midiEvent);
+                    // create and store our event
+                    midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
+                    m_midiComposition[trackNum].push_back(midiEvent);
+                }
                 break;
 
             case MIDI_PROG_CHANGE:
@@ -571,34 +555,29 @@ MidiFile::parseTrack(std::ifstream *midiFile)
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
-                messageLength = readNumber(midiFile, data1);
+                {
+                    unsigned messageLength = readNumber(midiFile, data1);
 
-#ifdef MIDI_DEBUG
+                    RG_DEBUG << "SysEx of " << messageLength << " bytes found";
 
-                std::cerr << "SysEx of " << messageLength << " bytes found\n";
-#endif
+                    std::string sysex = read(midiFile, messageLength);
 
-                metaMessage = read(midiFile, messageLength);
+                    if (MidiByte(sysex[sysex.length() - 1]) !=
+                            MIDI_END_OF_EXCLUSIVE) {
+                        std::cerr << "MidiFile::parseTrack() - malformed or unsupported SysEx type\n";
+                        continue;
+                    }
 
-                if (MidiByte(metaMessage[metaMessage.length() - 1]) !=
-                        MIDI_END_OF_EXCLUSIVE) {
-#ifdef MIDI_DEBUG
-                    std::cerr << "MidiFile::parseTrack() - "
-                    << "malformed or unsupported SysEx type\n";
-#endif
+                    // chop off the EOX
+                    // length fixed by Pedro Lopez-Cabanillas (20030523)
+                    //
+                    sysex = sysex.substr(0, sysex.length() - 1);
 
-                    continue;
+                    midiEvent = new MidiEvent(deltaTime,
+                                              MIDI_SYSTEM_EXCLUSIVE,
+                                              sysex);
+                    m_midiComposition[trackNum].push_back(midiEvent);
                 }
-
-                // chop off the EOX
-                // length fixed by Pedro Lopez-Cabanillas (20030523)
-                //
-                metaMessage = metaMessage.substr(0, metaMessage.length() - 1);
-
-                midiEvent = new MidiEvent(deltaTime,
-                                          MIDI_SYSTEM_EXCLUSIVE,
-                                          metaMessage);
-                m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
             case MIDI_END_OF_EXCLUSIVE:

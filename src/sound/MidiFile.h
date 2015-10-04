@@ -81,9 +81,9 @@ private:
     // *** Standard MIDI File Header
 
     enum FileFormatType {
-        MIDI_SINGLE_TRACK_FILE          = 0x00,
-        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
-        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
+        MIDI_SINGLE_TRACK_FILE          = 0x00,  // Format 0
+        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,  // Format 1
+        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,  // Format 2
         MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
         MIDI_FILE_NOT_LOADED            = 0xFF
     };
@@ -122,7 +122,7 @@ private:
 
     /// Read a MIDI file into m_midiComposition.
     bool read(const QString &filename);
-    bool parseHeader(const std::string &midiHeader);
+    bool parseHeader(std::ifstream *midiFile);
     /// Convert a track to events in m_midiComposition.
     bool parseTrack(std::ifstream *midiFile);
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
