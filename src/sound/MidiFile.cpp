@@ -237,8 +237,8 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
 
         RG_DEBUG << "findNextTrack(): skipping alien chunk.  Type:" << chunkType;
 
-        // Alien chunk encountered, evasive maneuvers (skip it).
-        read(midiFile, chunkSize);
+        // Alien chunk encountered, initiate evasive maneuvers (skip it).
+        midiFile->seekg(chunkSize, std::ios::cur);
     }
 
     // Found track?
@@ -247,98 +247,86 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
 }
 
 bool
-MidiFile::open(const QString &filename)
+MidiFile::read(const QString &filename)
 {
-    bool retOK = true;
+    RG_DEBUG << "read(): filename = " << filename;
+
     m_error = "";
 
-#ifdef MIDI_DEBUG
-
-    std::cerr << "MidiFile::open() : fileName = " << filename << '\n';
-#endif
-
     clearMidiComposition();
+
     // Open the file
-    std::ifstream *midiFile = new std::ifstream(filename.toLocal8Bit(), std::ios::in | std::ios::binary);
+    std::ifstream *midiFile =
+            new std::ifstream(filename.toLocal8Bit(),
+                              std::ios::in | std::ios::binary);
+
+    if (!(*midiFile)) {
+        m_error = "File not found or not readable.";
+        m_format = MIDI_FILE_NOT_LOADED;
+        return false;
+    }
+
+    // Compute the file size so we can report progress.
+    midiFile->seekg(0, std::ios::end);
+    m_fileSize = midiFile->tellg();
+    midiFile->seekg(0, std::ios::beg);
 
     // The parsing process throws string exceptions back up here if we
     // run into trouble which we can then pass back out to whomever
-    // called us using a nice bool.
+    // called us using m_error and a nice bool.
     try {
-        if (*midiFile) {
-
-            // Set file size so we can count it off
-            //
-            midiFile->seekg(0, std::ios::end);
-            m_fileSize = midiFile->tellg();
-            midiFile->seekg(0, std::ios::beg);
-
-            // Parse the MIDI header first.  The first 14 bytes of the file.
-            if (!parseHeader(read(midiFile, 14))) {
-                m_format = MIDI_FILE_NOT_LOADED;
-                m_error = "Not a MIDI file.";
-                return (false);
-            }
-
-            m_containsTimeChanges = false;
-
-            TrackId i = 0;
-
-            for (unsigned int j = 0; j < m_numberOfTracks; ++j) {
-
-//#ifdef MIDI_DEBUG
-                std::cerr << "Parsing Track " << j << '\n';
-//#endif
-
-                if (!findNextTrack(midiFile)) {
-#ifdef MIDI_DEBUG
-                    std::cerr << "Couldn't find Track " << j << '\n';
-#endif
-
-                    m_error = "File corrupted or in non-standard format?";
-                    m_format = MIDI_FILE_NOT_LOADED;
-                    return (false);
-                }
-
-#ifdef MIDI_DEBUG
-                std::cerr << "Track has " << m_trackByteCount << " bytes\n";
-#endif
-
-                // Run through the events taking them into our internal
-                // representation.
-                if (!parseTrack(midiFile, i)) {
-//#ifdef MIDI_DEBUG
-                    std::cerr << "Track " << j << " parsing failed\n";
-//#endif
-
-                    m_error = "File corrupted or in non-standard format?";
-                    m_format = MIDI_FILE_NOT_LOADED;
-                    return (false);
-                }
-
-                ++i; // j is the source track number, i the destination
-            }
-
-            m_numberOfTracks = i;
-        } else {
-            m_error = "File not found or not readable.";
+        // Parse the MIDI header first.  The first 14 bytes of the file.
+        if (!parseHeader(read(midiFile, 14))) {
             m_format = MIDI_FILE_NOT_LOADED;
-            return (false);
+            m_error = "Not a MIDI file.";
+            return false;
         }
 
-        // Close the file now
-        midiFile->close();
+        m_containsTimeChanges = false;
+
+        // ??? This is always the same as j.  Get rid of it.
+        TrackId i = 0;
+
+        for (unsigned int j = 0; j < m_numberOfTracks; ++j) {
+
+            RG_DEBUG << "read(): Parsing Track " << j;
+
+            // Skip any alien chunks.
+            if (!findNextTrack(midiFile)) {
+                std::cerr << "MidiFile::read(): Couldn't find Track " << j << '\n';
+
+                m_error = "File corrupted or in non-standard format?";
+                m_format = MIDI_FILE_NOT_LOADED;
+                return false;
+            }
+
+            RG_DEBUG << "read(): Track has " << m_trackByteCount << " bytes";
+
+            // Read the track into m_midiComposition.
+            if (!parseTrack(midiFile, i)) {
+                std::cerr << "MidiFile::read(): Track " << j << " parsing failed\n";
+
+                m_error = "File corrupted or in non-standard format?";
+                m_format = MIDI_FILE_NOT_LOADED;
+                return false;
+            }
+
+            ++i; // j is the source track number, i the destination
+        }
+
+        // ??? But i will always be m_numberOfTracks!  Get rid of this!
+        m_numberOfTracks = i;
+
     } catch (Exception e) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::open() - caught exception - "
-        << e.getMessage() << '\n';
-#endif
+        std::cerr << "MidiFile::read() - caught exception - " << e.getMessage() << '\n';
 
         m_error = e.getMessage();
-        retOK = false;
+        return false;
     }
 
-    return (retOK);
+    midiFile->close();
+
+    return true;
 }
 
 // Parse and ensure the MIDI Header is legitimate
@@ -685,7 +673,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
     const ConversionType type = CONVERT_REPLACE;
 
-    if (!open(filename))
+    // Read the MIDI file into m_midiComposition.
+    if (!read(filename))
         return false;
 
     Composition &composition = doc->getComposition();

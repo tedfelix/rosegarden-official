@@ -120,9 +120,10 @@ private:
 
     // *** Standard MIDI File to Rosegarden
 
-    /// Read in a MIDI file.
-    bool open(const QString &filename);
+    /// Read a MIDI file into m_midiComposition.
+    bool read(const QString &filename);
     bool parseHeader(const std::string &midiHeader);
+    /// Convert a track to events in m_midiComposition.
     bool parseTrack(std::ifstream *midiFile, TrackId &lastTrackNum);
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
     /// Find the next track chunk and set m_trackByteCount.
