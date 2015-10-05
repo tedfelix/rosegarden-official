@@ -328,22 +328,22 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_defClef->setFont(m_font);
     m_defClef->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
     m_defClef->setMinimumWidth(width11);
-    m_defClef->addItem(tr("treble"), TrebleClef);
-    m_defClef->addItem(tr("bass"), BassClef);
-    m_defClef->addItem(tr("crotales"), CrotalesClef);
-    m_defClef->addItem(tr("xylophone"), XylophoneClef);
-    m_defClef->addItem(tr("guitar"), GuitarClef);
-    m_defClef->addItem(tr("contrabass"), ContrabassClef);
-    m_defClef->addItem(tr("celesta"), CelestaClef);
-    m_defClef->addItem(tr("old celesta"), OldCelestaClef);
-    m_defClef->addItem(tr("french"), FrenchClef);
-    m_defClef->addItem(tr("soprano"), SopranoClef);
-    m_defClef->addItem(tr("mezzosoprano"), MezzosopranoClef);
-    m_defClef->addItem(tr("alto"), AltoClef);
-    m_defClef->addItem(tr("tenor"), TenorClef);
-    m_defClef->addItem(tr("baritone"), BaritoneClef);
-    m_defClef->addItem(tr("varbaritone"), VarbaritoneClef);
-    m_defClef->addItem(tr("subbass"), SubbassClef);
+    m_defClef->addItem(tr("treble", "Clef name"), TrebleClef);
+    m_defClef->addItem(tr("bass", "Clef name"), BassClef);
+    m_defClef->addItem(tr("crotales", "Clef name"), CrotalesClef);
+    m_defClef->addItem(tr("xylophone", "Clef name"), XylophoneClef);
+    m_defClef->addItem(tr("guitar", "Clef name"), GuitarClef);
+    m_defClef->addItem(tr("contrabass", "Clef name"), ContrabassClef);
+    m_defClef->addItem(tr("celesta", "Clef name"), CelestaClef);
+    m_defClef->addItem(tr("old celesta", "Clef name"), OldCelestaClef);
+    m_defClef->addItem(tr("french", "Clef name"), FrenchClef);
+    m_defClef->addItem(tr("soprano", "Clef name"), SopranoClef);
+    m_defClef->addItem(tr("mezzosoprano", "Clef name"), MezzosopranoClef);
+    m_defClef->addItem(tr("alto", "Clef name"), AltoClef);
+    m_defClef->addItem(tr("tenor", "Clef name"), TenorClef);
+    m_defClef->addItem(tr("baritone", "Clef name"), BaritoneClef);
+    m_defClef->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
+    m_defClef->addItem(tr("subbass", "Clef name"), SubbassClef);
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
         m_defClef->addItem(tr("two bar"), TwoBarClef); */
