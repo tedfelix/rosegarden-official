@@ -5395,7 +5395,7 @@
     <message>
         <location line="+2"/>
         <source>Bass</source>
-        <translation>Fa</translation>
+        <translation>Basse</translation>
     </message>
     <message>
         <location line="-329"/>
