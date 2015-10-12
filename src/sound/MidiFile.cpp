@@ -434,130 +434,129 @@ MidiFile::parseTrack(std::ifstream *midiFile)
                                          metaMessage);
             m_midiComposition[metaTrack].push_back(e);
 
-            // ??? We could "continue" here to reduce the indentation.
+            // Get the next event.
+            continue;
+        }
 
-        } else {  // not a meta event
+        runningStatus = statusByte;
 
-            runningStatus = statusByte;
+        int channel = (statusByte & MIDI_CHANNEL_NUM_MASK);
 
-            int channel = (statusByte & MIDI_CHANNEL_NUM_MASK);
-
-            // If this channel hasn't been seen yet in this MIDI file track
-            if (channelToTrack[channel] == -1) {
-                // If this is the first m_midiComposition track we've
-                // used
-                if (firstTrack) {
-                    // We've already allocated an m_midiComposition track for
-                    // the first channel we encounter.  Use it.
-                    firstTrack = false;
-                } else {  // We need a new track.
-                    // Allocate a new track for this channel.
-                    ++lastTrackNum;
-                    trackTimeMap[lastTrackNum] = 0;
-                }
-
-                RG_DEBUG << "parseTrack(): new channel map entry: channel " << channel << " -> track " << lastTrackNum;
-
-                channelToTrack[channel] = lastTrackNum;
-                m_trackChannelMap[lastTrackNum] = channel;
+        // If this channel hasn't been seen yet in this MIDI file track
+        if (channelToTrack[channel] == -1) {
+            // If this is the first m_midiComposition track we've
+            // used
+            if (firstTrack) {
+                // We've already allocated an m_midiComposition track for
+                // the first channel we encounter.  Use it.
+                firstTrack = false;
+            } else {  // We need a new track.
+                // Allocate a new track for this channel.
+                ++lastTrackNum;
+                trackTimeMap[lastTrackNum] = 0;
             }
 
-            TrackId trackNum = channelToTrack[channel];
+            RG_DEBUG << "parseTrack(): new channel map entry: channel " << channel << " -> track " << lastTrackNum;
+
+            channelToTrack[channel] = lastTrackNum;
+            m_trackChannelMap[lastTrackNum] = channel;
+        }
+
+        TrackId trackNum = channelToTrack[channel];
 
 #ifdef DEBUG
-            {
-                static int prevTrackNum = -1;
-                static int prevChannel = -1;
+        {
+            static int prevTrackNum = -1;
+            static int prevChannel = -1;
 
-                // If we're on a different track or channel
-                if (prevTrackNum != (int)trackNum  ||
-                    prevChannel != (int)channel) {
+            // If we're on a different track or channel
+            if (prevTrackNum != (int)trackNum  ||
+                prevChannel != (int)channel) {
 
-                    // Report it for debugging.
-                    RG_DEBUG << "parseTrack(): track number for channel " << channel << " is " << trackNum;
+                // Report it for debugging.
+                RG_DEBUG << "parseTrack(): track number for channel " << channel << " is " << trackNum;
 
-                    prevTrackNum = trackNum;
-                    prevChannel = channel;
-                }
+                prevTrackNum = trackNum;
+                prevChannel = channel;
             }
+        }
 #endif
 
-            // Compute the difference between this event and the previous
-            // event on this track.
-            deltaTime = eventTime - trackTimeMap[trackNum];
-            // Store the absolute time of the last event on this track.
-            trackTimeMap[trackNum] = eventTime;
+        // Compute the difference between this event and the previous
+        // event on this track.
+        deltaTime = eventTime - trackTimeMap[trackNum];
+        // Store the absolute time of the last event on this track.
+        trackTimeMap[trackNum] = eventTime;
 
-            switch (statusByte & MIDI_MESSAGE_TYPE_MASK) {
-            case MIDI_NOTE_ON:        // These events have two data bytes.
-            case MIDI_NOTE_OFF:
-            case MIDI_POLY_AFTERTOUCH:
-            case MIDI_CTRL_CHANGE:
-            case MIDI_PITCH_BEND:
-                {
-                    MidiByte data2 = read(midiFile);
+        switch (statusByte & MIDI_MESSAGE_TYPE_MASK) {
+        case MIDI_NOTE_ON:        // These events have two data bytes.
+        case MIDI_NOTE_OFF:
+        case MIDI_POLY_AFTERTOUCH:
+        case MIDI_CTRL_CHANGE:
+        case MIDI_PITCH_BEND:
+            {
+                MidiByte data2 = read(midiFile);
 
-                    // create and store our event
-                    MidiEvent *midiEvent =
-                            new MidiEvent(deltaTime, statusByte, data1, data2);
-                    m_midiComposition[trackNum].push_back(midiEvent);
+                // create and store our event
+                MidiEvent *midiEvent =
+                        new MidiEvent(deltaTime, statusByte, data1, data2);
+                m_midiComposition[trackNum].push_back(midiEvent);
 
-                    if (statusByte != MIDI_PITCH_BEND) {
-                        RG_DEBUG << "parseTrack(): MIDI event for channel " << channel + 1 << " (track " << trackNum << ')';
-                        // ??? This prints to cout.  We need an operator<<() to
-                        //     allow printing to RG_DEBUG output.
-                        //midiEvent->print();
-                        //RG_DEBUG << *midiEvent;  // Preferred.
-                    }
+                if (statusByte != MIDI_PITCH_BEND) {
+                    RG_DEBUG << "parseTrack(): MIDI event for channel " << channel + 1 << " (track " << trackNum << ')';
+                    // ??? This prints to cout.  We need an operator<<() to
+                    //     allow printing to RG_DEBUG output.
+                    //midiEvent->print();
+                    //RG_DEBUG << *midiEvent;  // Preferred.
                 }
-                break;
-
-            case MIDI_PROG_CHANGE:    // These events have a single data byte.
-            case MIDI_CHNL_AFTERTOUCH:
-                {
-                    RG_DEBUG << "parseTrack(): Program change or channel aftertouch: time " << deltaTime << ", code " << (int)statusByte << ", data " << (int) data1  << " going to track " << trackNum;
-
-                    // create and store our event
-                    MidiEvent *midiEvent =
-                            new MidiEvent(deltaTime, statusByte, data1);
-                    m_midiComposition[trackNum].push_back(midiEvent);
-                }
-                break;
-
-            case MIDI_SYSTEM_EXCLUSIVE:
-                {
-                    unsigned messageLength = readNumber(midiFile, data1);
-
-                    RG_DEBUG << "parseTrack(): SysEx of " << messageLength << " bytes found";
-
-                    std::string sysex = read(midiFile, messageLength);
-
-                    if (MidiByte(sysex[sysex.length() - 1]) !=
-                            MIDI_END_OF_EXCLUSIVE) {
-                        std::cerr << "MidiFile::parseTrack() - malformed or unsupported SysEx type\n";
-                        continue;
-                    }
-
-                    // Chop off the EOX.
-                    sysex = sysex.substr(0, sysex.length() - 1);
-
-                    // create and store our event
-                    MidiEvent *midiEvent =
-                            new MidiEvent(deltaTime,
-                                          MIDI_SYSTEM_EXCLUSIVE,
-                                          sysex);
-                    m_midiComposition[trackNum].push_back(midiEvent);
-                }
-                break;
-
-            case MIDI_END_OF_EXCLUSIVE:
-                std::cerr << "MidiFile::parseTrack() - Found a stray MIDI_END_OF_EXCLUSIVE\n";
-                break;
-
-            default:
-                std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Status Byte:  " << (int)statusByte << '\n';
-                break;
             }
+            break;
+
+        case MIDI_PROG_CHANGE:    // These events have a single data byte.
+        case MIDI_CHNL_AFTERTOUCH:
+            {
+                RG_DEBUG << "parseTrack(): Program change or channel aftertouch: time " << deltaTime << ", code " << (int)statusByte << ", data " << (int) data1  << " going to track " << trackNum;
+
+                // create and store our event
+                MidiEvent *midiEvent =
+                        new MidiEvent(deltaTime, statusByte, data1);
+                m_midiComposition[trackNum].push_back(midiEvent);
+            }
+            break;
+
+        case MIDI_SYSTEM_EXCLUSIVE:
+            {
+                unsigned messageLength = readNumber(midiFile, data1);
+
+                RG_DEBUG << "parseTrack(): SysEx of " << messageLength << " bytes found";
+
+                std::string sysex = read(midiFile, messageLength);
+
+                if (MidiByte(sysex[sysex.length() - 1]) !=
+                        MIDI_END_OF_EXCLUSIVE) {
+                    std::cerr << "MidiFile::parseTrack() - malformed or unsupported SysEx type\n";
+                    continue;
+                }
+
+                // Chop off the EOX.
+                sysex = sysex.substr(0, sysex.length() - 1);
+
+                // create and store our event
+                MidiEvent *midiEvent =
+                        new MidiEvent(deltaTime,
+                                      MIDI_SYSTEM_EXCLUSIVE,
+                                      sysex);
+                m_midiComposition[trackNum].push_back(midiEvent);
+            }
+            break;
+
+        case MIDI_END_OF_EXCLUSIVE:
+            std::cerr << "MidiFile::parseTrack() - Found a stray MIDI_END_OF_EXCLUSIVE\n";
+            break;
+
+        default:
+            std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Status Byte:  " << (int)statusByte << '\n';
+            break;
         }
     }
 
