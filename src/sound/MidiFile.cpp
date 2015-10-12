@@ -115,14 +115,16 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (midiFile->eof()) {
         std::cerr << "MidiFile::read(): MIDI file EOF - got 0 bytes out of " << numberOfBytes << '\n';
 
-        throw(Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading"))));
+        throw(Exception(qstrtostr(
+              tr("End of MIDI file encountered while reading"))));
     }
 
     // For each track section we can read only m_trackByteCount bytes.
     if (m_decrementCount  &&  numberOfBytes > (unsigned long)m_trackByteCount) {
         std::cerr << "MidiFile::read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")\n";
 
-        throw(Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track"))));
+        throw(Exception(qstrtostr(
+              tr("Attempt to get more bytes than expected on Track"))));
     }
 
     char fileMidiByte;
@@ -137,7 +139,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (stringRet.length() < numberOfBytes) {
         std::cerr << "MidiFile::read(): Attempt to read past file end - got " << stringRet.length() << " bytes out of " << numberOfBytes << '\n';
 
-        throw(Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end"))));
+        throw(Exception(qstrtostr(tr("Attempt to read past MIDI file end"))));
     }
 
     if (m_decrementCount)
@@ -191,7 +193,7 @@ MidiFile::readNumber(std::ifstream *midiFile, int firstByte)
     return longRet;
 }
 
-bool
+void
 MidiFile::findNextTrack(std::ifstream *midiFile)
 {
 #if 0
@@ -232,7 +234,7 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
         if (chunkType.compare(0, 4, MIDI_TRACK_HEADER) == 0) {
             m_trackByteCount = chunkSize;
             m_decrementCount = true;
-            break;
+            return;
         }
 
         RG_DEBUG << "findNextTrack(): skipping alien chunk.  Type:" << chunkType;
@@ -241,8 +243,12 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
         midiFile->seekg(chunkSize, std::ios::cur);
     }
 
-    // Found track?
-    return m_decrementCount;
+    // Track not found.
+    // ??? Why not throw()?  Since the caller expects it, that would
+    //     simplify things.
+    std::cerr << "MidiFile::findNextTrack(): Couldn't find Track\n";
+    throw(Exception(qstrtostr(
+          tr("File corrupted or in non-standard format"))));
 #endif
 }
 
@@ -276,11 +282,7 @@ MidiFile::read(const QString &filename)
     // called us using m_error and a nice bool.
     try {
         // Parse the MIDI header first.
-        if (!parseHeader(midiFile)) {
-            m_format = MIDI_FILE_NOT_LOADED;
-            m_error = "Not a MIDI file.";
-            return false;
-        }
+        parseHeader(midiFile);
 
         m_containsTimeChanges = false;
 
@@ -290,30 +292,19 @@ MidiFile::read(const QString &filename)
             RG_DEBUG << "read(): Parsing MIDI file track " << track;
 
             // Skip any alien chunks.
-            if (!findNextTrack(midiFile)) {
-                std::cerr << "MidiFile::read(): Couldn't find Track " << track << '\n';
-
-                m_error = "File corrupted or in non-standard format?";
-                m_format = MIDI_FILE_NOT_LOADED;
-                return false;
-            }
+            findNextTrack(midiFile);
 
             RG_DEBUG << "read(): Track has " << m_trackByteCount << " bytes";
 
             // Read the track into m_midiComposition.
-            if (!parseTrack(midiFile)) {
-                std::cerr << "MidiFile::read(): Track " << track << " parsing failed\n";
-
-                m_error = "File corrupted or in non-standard format?";
-                m_format = MIDI_FILE_NOT_LOADED;
-                return false;
-            }
+            parseTrack(midiFile);
         }
 
     } catch (const Exception &e) {
         std::cerr << "MidiFile::read() - caught exception - " << e.getMessage() << '\n';
 
         m_error = e.getMessage();
+        m_format = MIDI_FILE_NOT_LOADED;
         return false;
     }
 
@@ -322,7 +313,7 @@ MidiFile::read(const QString &filename)
     return true;
 }
 
-bool
+void
 MidiFile::parseHeader(std::ifstream *midiFile)
 {
     // The basic MIDI header is 14 bytes.
@@ -330,12 +321,12 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (midiHeader.size() < 14) {
         std::cerr << "MidiFile::parseHeader() - file header undersized\n";
-        return false;
+        throw(Exception(qstrtostr(tr("Not a MIDI file"))));
     }
 
     if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
         std::cerr << "MidiFile::parseHeader() - file header not found or malformed\n";
-        return false;
+        throw(Exception(qstrtostr(tr("Not a MIDI file"))));
     }
 
     long chunkSize = midiBytesToLong(midiHeader.substr(4, 4));
@@ -346,7 +337,7 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
         std::cerr << "MidiFile::parseHeader() - can't load sequential track (Format 2) MIDI file\n";
-        return false;
+        throw(Exception(qstrtostr(tr("Unexpected MIDI file format"))));
     }
 
     if (m_timingDivision > 32767) {
@@ -364,11 +355,9 @@ MidiFile::parseHeader(std::ifstream *midiFile)
         // read and honor the length, even if it is longer than 6."
         midiFile->seekg(chunkSize - 6, std::ios::cur);
     }
-
-    return true;
 }
 
-bool
+void
 MidiFile::parseTrack(std::ifstream *midiFile)
 {
     // The term "Track" is overloaded in this routine.  The first
@@ -378,8 +367,6 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // To improve clarity, "MIDI file track" will be used to refer to
     // the first sense of the term.  Occasionally, "m_midiComposition
     // track" will be used to refer to the second sense.
-
-    MidiByte eventCode = 0x80;
 
     // Absolute time of the last event on any track.
     unsigned long accumulatedTime = 0;
@@ -412,48 +399,50 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
     RG_DEBUG << "parseTrack(): last track number is " << lastTrackNum;
 
-    // Since no event and its associated delta time can fit in just one
+    // While there is still data to read in the MIDI file track.
+    // Why "m_trackByteCount > 1" instead of "m_trackByteCount > 0"?  Since
+    // no event and its associated delta time can fit in just one
     // byte, a single remaining byte in the MIDI file track has to be padding.
     // This is obscure and non-standard, but such files do exist; ordinarily
     // there should be no bytes in the MIDI file track after the last event.
     while (!midiFile->eof()  &&  m_trackByteCount > 1) {
-        if (eventCode < 0x80) {
-            std::cerr << "MidiFile::parseTrack(): WARNING: Invalid event code " << eventCode << " in MIDI file\n";
-
-            throw (Exception(qstrtostr(QObject::tr("Invalid event code found"))));
-        }
 
         unsigned long deltaTime = readNumber(midiFile);
 
         RG_DEBUG << "parseTrack(): read delta time " << deltaTime;
 
+        // Compute the absolute time for the event.
+        accumulatedTime += deltaTime;
+
         // Get a single byte
         MidiByte midiByte = read(midiFile);
 
+        MidiByte statusByte = 0;
         MidiByte data1 = 0;
 
-        if (!(midiByte & MIDI_STATUS_BYTE_MASK)) {
+        // If this is a status byte, use it.
+        if (midiByte & MIDI_STATUS_BYTE_MASK) {
+            RG_DEBUG << "parseTrack(): have new status byte" << QString("0x%1").arg(midiByte, 0, 16);
+
+            statusByte = midiByte;
+            data1 = read(midiFile);
+        } else {  // Use running status.
+            // If we haven't seen a status byte yet, fail.
             if (runningStatus < 0)
                 throw (Exception(qstrtostr(QObject::tr("Running status used for first event in track"))));
 
-            eventCode = (MidiByte)runningStatus;
+            statusByte = (MidiByte)runningStatus;
             data1 = midiByte;
 
             RG_DEBUG << "parseTrack(): using running status (byte " << int(midiByte) << " found)";
-
-        } else {
-            RG_DEBUG << "parseTrack(): have new event code " << int(midiByte);
-
-            eventCode = midiByte;
-            data1 = read(midiFile);
         }
 
-        if (eventCode == MIDI_FILE_META_EVENT) {
+        if (statusByte == MIDI_FILE_META_EVENT) {
 
             MidiByte metaEventCode = data1;
             unsigned messageLength = readNumber(midiFile);
 
-            RG_DEBUG << "parseTrack(): Meta event of type " << int(metaEventCode) << " and " << messageLength << " bytes found";
+            RG_DEBUG << "parseTrack(): Meta event of type " << QString("0x%1").arg(metaEventCode, 0, 16) << " and " << messageLength << " bytes found";
 
             std::string metaMessage = read(midiFile, messageLength);
 
@@ -463,8 +452,6 @@ MidiFile::parseTrack(std::ifstream *midiFile)
                 m_containsTimeChanges = true;
             }
 
-            // Compute the absolute time for the event.
-            accumulatedTime += deltaTime;
             // Compute the difference between this event and the previous
             // event on this track.
             deltaTime = accumulatedTime - trackTimeMap[metaTrack];
@@ -480,22 +467,22 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
         } else {  // not a meta event
 
-            runningStatus = eventCode;
+            runningStatus = statusByte;
 
-            int channel = (eventCode & MIDI_CHANNEL_NUM_MASK);
+            int channel = (statusByte & MIDI_CHANNEL_NUM_MASK);
 
             // If this channel hasn't been seen yet in this MIDI file track
             if (channelToTrack[channel] == -1) {
-                // If this isn't the first m_midiComposition track we've
+                // If this is the first m_midiComposition track we've
                 // used
-                if (!firstTrack) {
-                    // Allocate a new track for this channel.
-                    ++lastTrackNum;
-                    trackTimeMap[lastTrackNum] = 0;
-                } else {
+                if (firstTrack) {
                     // We've already allocated an m_midiComposition track for
                     // the first channel we encounter.  Use it.
                     firstTrack = false;
+                } else {  // We need a new track.
+                    // Allocate a new track for this channel.
+                    ++lastTrackNum;
+                    trackTimeMap[lastTrackNum] = 0;
                 }
 
                 RG_DEBUG << "parseTrack(): new channel map entry: channel " << channel << " -> track " << lastTrackNum;
@@ -529,15 +516,13 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             // trackTimeMap[trackNum] is the absolute time of the last event
             // on this track.
 
-            // Compute the absolute time for the event.
-            accumulatedTime += deltaTime;
             // Compute the difference between this event and the previous
             // event on this track.
             deltaTime = accumulatedTime - trackTimeMap[trackNum];
             // Store the absolute time of the last event on this track.
             trackTimeMap[trackNum] = accumulatedTime;
 
-            switch (eventCode & MIDI_MESSAGE_TYPE_MASK) {
+            switch (statusByte & MIDI_MESSAGE_TYPE_MASK) {
             case MIDI_NOTE_ON:
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
@@ -547,7 +532,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
                     // create and store our event
                     MidiEvent *midiEvent =
-                            new MidiEvent(deltaTime, eventCode, data1, data2);
+                            new MidiEvent(deltaTime, statusByte, data1, data2);
                     m_midiComposition[trackNum].push_back(midiEvent);
 
                     RG_DEBUG << "parseTrack(): MIDI event for channel " << channel + 1 << " (track " << trackNum << ')';
@@ -564,7 +549,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
                     // create and store our event
                     MidiEvent *midiEvent =
-                            new MidiEvent(deltaTime, eventCode, data1, data2);
+                            new MidiEvent(deltaTime, statusByte, data1, data2);
                     m_midiComposition[trackNum].push_back(midiEvent);
                 }
                 break;
@@ -572,11 +557,11 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             case MIDI_PROG_CHANGE:
             case MIDI_CHNL_AFTERTOUCH:
                 {
-                    RG_DEBUG << "parseTrack(): Program change or channel aftertouch: time " << deltaTime << ", code " << (int)eventCode << ", data " << (int) data1  << " going to track " << trackNum;
+                    RG_DEBUG << "parseTrack(): Program change or channel aftertouch: time " << deltaTime << ", code " << (int)statusByte << ", data " << (int) data1  << " going to track " << trackNum;
 
                     // create and store our event
                     MidiEvent *midiEvent =
-                            new MidiEvent(deltaTime, eventCode, data1);
+                            new MidiEvent(deltaTime, statusByte, data1);
                     m_midiComposition[trackNum].push_back(midiEvent);
                 }
                 break;
@@ -611,7 +596,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
                 break;
 
             default:
-                std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Event Code:  " << (int)eventCode << '\n';
+                std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Status Byte:  " << (int)statusByte << '\n';
                 break;
             }
         }
@@ -622,9 +607,6 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // the following MIDI file track (if there is one.)
     if (m_trackByteCount == 1)
         midiFile->ignore();
-
-    // ??? We only ever return true.  No sense in returning anything, then.
-    return true;
 }
 
 // borrowed from ALSA pcm_timer.c

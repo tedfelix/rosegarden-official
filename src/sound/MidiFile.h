@@ -122,13 +122,13 @@ private:
 
     /// Read a MIDI file into m_midiComposition.
     bool read(const QString &filename);
-    bool parseHeader(std::ifstream *midiFile);
+    void parseHeader(std::ifstream *midiFile);
     /// Convert a track to events in m_midiComposition.
-    bool parseTrack(std::ifstream *midiFile);
+    void parseTrack(std::ifstream *midiFile);
     // m_midiComposition track to MIDI channel.
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
     /// Find the next track chunk and set m_trackByteCount.
-    bool findNextTrack(std::ifstream *midiFile);
+    void findNextTrack(std::ifstream *midiFile);
     bool consolidateNoteOffEvents(TrackId track);
 
     // Read
