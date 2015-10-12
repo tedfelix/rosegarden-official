@@ -72,8 +72,8 @@ public:
 
     ~MidiEvent();
 
-    // View our event as text
-    //
+
+    /// To std::cout.
     void print();
 
 
@@ -105,9 +105,7 @@ public:
     friend bool operator<(const MidiEvent &a, const MidiEvent &b);
 
 private:
-
-    MidiEvent& operator=(const MidiEvent);
-
+    /// Sometimes this is a delta time, sometimes it is an absolute time.
     timeT m_deltaTime;
     timeT m_duration;
     MidiByte          m_eventCode;

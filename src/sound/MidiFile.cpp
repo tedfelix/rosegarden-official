@@ -608,31 +608,13 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     Composition &composition = doc->getComposition();
     Studio &studio = doc->getStudio();
 
-    Segment *rosegardenSegment;
     Segment *conductorSegment = 0;
-    Event *rosegardenEvent;
-    std::string trackName;
 
-    // Time conversions
-    //
-    timeT rosegardenTime = 0;
-    timeT rosegardenDuration = 0;
     timeT maxTime = 0;
 
     // To create rests
     //
     timeT endOfLastNote;
-
-    // Event specific vars
-    //
-    int numerator = 4;
-    int denominator = 4;
-    timeT segmentTime;
-
-    // keys
-    int accidentals;
-    bool isMinor;
-    bool isSharp;
 
     if (type == CONVERT_REPLACE)
         composition.clear();
@@ -648,8 +630,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         if ((*ci)->getTrack() >= compTrack)
             compTrack = (*ci)->getTrack() + 1;
     }
-
-    Track *track = 0;
 
     // precalculate the timing factor
     //
@@ -724,50 +704,63 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
     }
 
-    for (TrackId i = 0; i < m_midiComposition.size(); ++i) {
+    int numerator = 4;
+    int denominator = 4;
 
-        segmentTime = 0;
-        trackName = std::string("Imported MIDI");
+    // For each track
+    for (TrackId trackId = 0;
+         trackId < m_midiComposition.size();
+         ++trackId) {
 
         // progress - 20% total in file import itself and then 80%
         // split over these tracks
         emit progress(20 +
-                      (int)((80.0 * double(i) / double(m_midiComposition.size()))));
+                      (int)(80.0 * double(trackId) /
+                            double(m_midiComposition.size())));
         qApp->processEvents(QEventLoop::AllEvents);
 
-        // Convert the deltaTime to an absolute time since
-        // the start of the segment.  The addTime method
+        timeT absTime = 0;
+
+        // For each event in the track
+        // Convert m_deltaTime to an absolute time since
+        // the start of the segment.  addTime()
         // returns the sum of the current Midi Event delta
         // time plus the argument.
-        //
-        for (MidiTrack::iterator midiEvent = m_midiComposition[i].begin();
-             midiEvent != m_midiComposition[i].end();
+        // ??? So, MidiEvent::m_deltaTime becomes an absolute time.
+        //     Recommend adding a MidiEvent::m_absoluteTime to make this
+        //     clearer.  Then the transform becomes:
+        //        absTime += (*midiEvent)->m_deltaTime;
+        //        (*midiEvent)->m_absoluteTime = absTime;
+        //     Or can we just leave the delta time and have a running
+        //     absolute time in the "for each event" loop coming up?
+        for (MidiTrack::iterator midiEvent = m_midiComposition[trackId].begin();
+             midiEvent != m_midiComposition[trackId].end();
              ++midiEvent) {
-            segmentTime = (*midiEvent)->addTime(segmentTime);
+            absTime = (*midiEvent)->addTime(absTime);
         }
 
         // Consolidate NOTE ON and NOTE OFF events into a NOTE ON with
         // a duration.
         //
-        consolidateNoteOffEvents(i);
+        consolidateNoteOffEvents(trackId);
 
-        if (m_trackChannelMap.find(i) != m_trackChannelMap.end()) {
-            compInstrument = MidiInstrumentBase + m_trackChannelMap[i];
+        if (m_trackChannelMap.find(trackId) != m_trackChannelMap.end()) {
+            compInstrument = MidiInstrumentBase + m_trackChannelMap[trackId];
         } else {
             compInstrument = MidiInstrumentBase;
         }
 
-        rosegardenSegment = new Segment;
+        Segment *rosegardenSegment = new Segment;
         rosegardenSegment->setTrack(compTrack);
         rosegardenSegment->setStartTime(0);
 
-        track = new Track(compTrack,         // id
-                          compInstrument,    // instrument
-                          compTrack,         // position
-                          trackName,         // name
-                          false);           // muted
+        Track *track = new Track(compTrack,        // id
+                                 compInstrument,   // instrument
+                                 compTrack,        // position
+                                 "Imported MIDI",  // label
+                                 false);           // muted
 
-        RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument << ", name = " << trackName;
+        RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument;
 
         // rest creation token needs to be reset here
         //
@@ -776,16 +769,19 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         int msb = -1, lsb = -1; // for bank selects
         Instrument *instrument = 0;
 
-        for (MidiTrack::const_iterator midiEvent = m_midiComposition[i].begin();
-             midiEvent != m_midiComposition[i].end();
+        // For each event on the current track
+        for (MidiTrack::const_iterator midiEvent = m_midiComposition[trackId].begin();
+             midiEvent != m_midiComposition[trackId].end();
              ++midiEvent) {
 
-            rosegardenEvent = 0;
+            Event *rosegardenEvent = 0;
 
             // [cc] -- avoid floating-point where possible
 
             timeT rawTime = (*midiEvent)->getTime();
             timeT rawDuration = (*midiEvent)->getDuration();
+            timeT rosegardenTime = 0;
+            timeT rosegardenDuration = 0;
 
             if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
 
@@ -933,21 +929,23 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_KEY_SIGNATURE:
-                    // get the details
-                    accidentals = (int) (*midiEvent)->getMetaMessage()[0];
-                    isMinor = (int) (*midiEvent)->getMetaMessage()[1];
-                    isSharp = accidentals < 0 ? false : true;
-                    accidentals = accidentals < 0 ? -accidentals : accidentals;
-                    // create the key event
-                    //
-                    try {
-                        rosegardenEvent = Rosegarden::Key
-                                          (accidentals, isSharp, isMinor).
-                                          getAsEvent(rosegardenTime);
-                    }
-                    catch (...) {
-                        std::cerr << "MidiFile::convertToRosegarden() - badly formed key signature\n";
-                        break;
+                    {
+                        // get the details
+                        int accidentals = (int) (*midiEvent)->getMetaMessage()[0];
+                        bool isMinor = (int) (*midiEvent)->getMetaMessage()[1];
+                        bool isSharp = accidentals < 0 ? false : true;
+                        accidentals = accidentals < 0 ? -accidentals : accidentals;
+                        // create the key event
+                        //
+                        try {
+                            rosegardenEvent = Rosegarden::Key
+                                              (accidentals, isSharp, isMinor).
+                                              getAsEvent(rosegardenTime);
+                        }
+                        catch (...) {
+                            std::cerr << "MidiFile::convertToRosegarden() - badly formed key signature\n";
+                            break;
+                        }
                     }
                     break;
 
