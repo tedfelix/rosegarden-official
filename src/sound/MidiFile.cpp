@@ -711,7 +711,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
         RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << rosegardenTrackId << ", instrument = " << instrumentId;
 
-        // Used to fill out the segment with rests up to the end of track time.
+        // Used for filling the space between events with rests.  Also used
+        // for padding the end of the track with rests.
         timeT endOfLastNote = 0;
 
         int bankMsb = -1;
@@ -726,17 +727,16 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
              ++midiEventIter) {
             const MidiEvent &midiEvent = **midiEventIter;
 
-            Event *rosegardenEvent = 0;
-
-            const timeT rawTime = midiEvent.getTime();
-            const timeT rawDuration = midiEvent.getDuration();
+            const timeT midiAbsoluteTime = midiEvent.getTime();
+            const timeT midiDuration = midiEvent.getDuration();
             timeT rosegardenTime = 0;
             timeT rosegardenDuration = 0;
 
             if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
-                rosegardenTime = static_cast<timeT>(rawTime * midiToRgTime);
+                rosegardenTime =
+                        static_cast<timeT>(midiAbsoluteTime * midiToRgTime);
                 rosegardenDuration =
-                        static_cast<timeT>(rawDuration * midiToRgTime);
+                        static_cast<timeT>(midiDuration * midiToRgTime);
             } else {
 
                 // SMPTE timestamps are a count of the number of
@@ -746,13 +746,13 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 // go through a realtime -> musical time conversion
                 // for these, having added our tempo changes earlier
                 
-                rosegardenTime = composition.getElapsedTimeForRealTime
-                    (RealTime::frame2RealTime(rawTime,
-                                              m_fps * m_subframes));
+                rosegardenTime = composition.getElapsedTimeForRealTime(
+                    RealTime::frame2RealTime(midiAbsoluteTime,
+                                             m_fps * m_subframes));
 
-                rosegardenDuration = composition.getElapsedTimeForRealTime
-                    (RealTime::frame2RealTime(rawTime + rawDuration,
-                                              m_fps * m_subframes))
+                rosegardenDuration = composition.getElapsedTimeForRealTime(
+                    RealTime::frame2RealTime(midiAbsoluteTime + midiDuration,
+                                             m_fps * m_subframes))
                     - rosegardenTime;
             }
 
@@ -761,49 +761,57 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                      << ", event type " << (int)midiEvent.getMessageType()
                      << ", previous max time " << maxTime
                      << ", potential max time " << (rosegardenTime + rosegardenDuration)
-                     << ", ev raw time " << rawTime
-                     << ", ev raw duration " << midiEvent.getDuration()
+                     << ", ev raw time " << midiAbsoluteTime
+                     << ", ev raw duration " << midiDuration
                      << ", crotchet " << Note(Note::Crotchet).getDuration()
                      << ", midiToRgTime " << midiToRgTime
                      << ", sfps " << m_fps * m_subframes;
 
-            if (rosegardenTime + rosegardenDuration > maxTime) {
+            if (rosegardenTime + rosegardenDuration > maxTime)
                 maxTime = rosegardenTime + rosegardenDuration;
-            }
 
+            // If we don't have any events yet
             if (segment->empty()) {
+                // Save the beginning of the bar so we can pad to the
+                // left with rests.
+                // ??? But if we have a loop with a precise start and end,
+                //     this ruins the start.  This would preserve it:
+                //       endOfLastNote = rosegardenTime;
+                //     If the user wants the beginning on a bar, they can
+                //     easily do that.  We shouldn't be modifying things.
                 endOfLastNote = composition.getBarStartForTime(rosegardenTime);
             }
+
+            // The incoming midiEvent is transformed into this rosegardenEvent.
+            Event *rosegardenEvent = 0;
 
             if (midiEvent.isMeta()) {
 
                 switch (midiEvent.getMetaEventCode()) {
 
                 case MIDI_TEXT_EVENT: {
-                        std::string text = midiEvent.getMetaMessage();
-                        rosegardenEvent =
+                    std::string text = midiEvent.getMetaMessage();
+                    rosegardenEvent =
                             Text(text).getAsEvent(rosegardenTime);
-                    }
                     break;
+                }
 
                 case MIDI_LYRIC: {
-                        std::string text = midiEvent.getMetaMessage();
-                        rosegardenEvent =
-                            Text(text, Text::Lyric).
-                            getAsEvent(rosegardenTime);
-                    }
+                    std::string text = midiEvent.getMetaMessage();
+                    rosegardenEvent =
+                            Text(text, Text::Lyric).getAsEvent(rosegardenTime);
                     break;
+                }
 
                 case MIDI_TEXT_MARKER: {
-                        std::string text = midiEvent.getMetaMessage();
-                        composition.addMarker(new Marker
-                                              (rosegardenTime, text, ""));
-                    }
+                    std::string text = midiEvent.getMetaMessage();
+                    composition.addMarker(
+                            new Marker(rosegardenTime, text, ""));
                     break;
+                }
 
                 case MIDI_COPYRIGHT_NOTICE:
-                    composition.setCopyrightNote(
-                            midiEvent.getMetaMessage());
+                    composition.setCopyrightNote(midiEvent.getMetaMessage());
                     break;
 
                 case MIDI_TRACK_NAME:
@@ -816,6 +824,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                 case MIDI_END_OF_TRACK: {
                     timeT trackEndTime = rosegardenTime;
+
                     // If the track's empty (or worse)
                     if (trackEndTime <= 0) {
                         // Make it a full bar.
@@ -824,32 +833,38 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                 Note(Note::Crotchet).getDuration() * 4 *
                                     numerator / denominator;
                     }
+
+                    // If there's space between the last note and the track
+                    // end, fill it out with rests.
                     if (endOfLastNote < trackEndTime) {
                         // If there's nothing in the segment yet, then we
                         // shouldn't fill with rests because we don't want
-                        // to cause the otherwise empty segment to be created
-                        if (segment->size() > 0) {
+                        // to cause the otherwise empty segment to be created.
+                        if (!segment->empty())
                             segment->fillWithRests(trackEndTime);
-                        }
                     }
-                }
+
                     break;
+                }
 
                 case MIDI_SET_TEMPO:
+                    // We've already handled the SMPTE case above.
                     if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
-                        // (if we have smpte, we have already done this)
-
                         MidiByte m0 = midiEvent.getMetaMessage()[0];
                         MidiByte m1 = midiEvent.getMetaMessage()[1];
                         MidiByte m2 = midiEvent.getMetaMessage()[2];
 
-                        long tempo = (((m0 << 8) + m1) << 8) + m2;
+                        // usecs per quarter-note
+                        long midiTempo = (((m0 << 8) + m1) << 8) + m2;
 
-                        if (tempo != 0) {
-                            double qpm = 60000000.0 / double(tempo);
-                            tempoT rgt(Composition::getTempoForQpm(qpm));
-                            //RG_DEBUG << "convertToRosegarden(): converted MIDI tempo " << tempo << " to Rosegarden tempo " << rgt;
-                            composition.addTempoAtTime(rosegardenTime, rgt);
+                        if (midiTempo != 0) {
+                            // Convert to quarter-notes per minute.
+                            double qpm = 60000000.0 / double(midiTempo);
+                            tempoT rosegardenTempo(
+                                    Composition::getTempoForQpm(qpm));
+                            //RG_DEBUG << "convertToRosegarden(): converted MIDI tempo " << midiTempo << " to Rosegarden tempo " << rosegardenTempo;
+                            composition.addTempoAtTime(
+                                    rosegardenTime, rosegardenTempo);
                         }
                     }
                     break;
@@ -901,7 +916,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
                 }
 
-            } else
+            } else {  // Not a meta-event.
                 switch (midiEvent.getMessageType()) {
                 case MIDI_NOTE_ON:
 
@@ -912,7 +927,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                     endOfLastNote = rosegardenTime + rosegardenDuration;
 
-                    RG_DEBUG << "convertToRosegarden(): note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << rawTime << " and duration " << midiEvent.getDuration();
+                    RG_DEBUG << "convertToRosegarden(): note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << midiAbsoluteTime << " and duration " << midiDuration;
 
                     // create and populate event
                     rosegardenEvent = new Event(Note::EventType,
@@ -979,7 +994,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                         // here, but now we do them all at the end only if the
                         // segment has no other name set (e.g. from instrument
                         // meta event)
-                        if (rawTime == 0) break; // no insert
+                        if (midiAbsoluteTime == 0) break; // no insert
                     }
 
                     // did we have a bank select? if so, insert that too
@@ -1020,7 +1035,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     // have an instrument, then apply it to the instrument
                     // instead of inserting
 
-                    if (instrument && rawTime == 0) {
+                    if (instrument && midiAbsoluteTime == 0) {
                         if (midiEvent.getData1() == MIDI_CONTROLLER_VOLUME) {
                             instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, midiEvent.getData2());
                             break;
@@ -1090,20 +1105,20 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 default:
                     std::cerr << "MidiFile::convertToRosegarden() - Unsupported event code = " << (int)midiEvent.getMessageType();
                     break;
-                }
+                }  // switch message type (non-meta-event)
+            }  // if meta-event
 
             if (rosegardenEvent) {
-                //if (fillFromTime < rosegardenTime) {
-                //   rosegardenSegment->fillWithRests(fillFromTime, rosegardenTime);
-                //}
+                // If there's a gap between the last note and this event
                 if (endOfLastNote < rosegardenTime) {
+                    // Fill it with rests.
                     segment->fillWithRests(endOfLastNote, rosegardenTime);
                 }
                 segment->insert(rosegardenEvent);
             }
-        }
+        }  // for each event
 
-        if (segment->size() > 0) {
+        if (!segment->empty()) {
 
             // if all we have is key signatures and rests, take this
             // to be a conductor segment and don't insert it
