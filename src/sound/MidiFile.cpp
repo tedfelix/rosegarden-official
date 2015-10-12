@@ -44,6 +44,9 @@
 // ??? Get rid of this.  Use RG_NO_DEBUG_PRINT instead.
 #define MIDI_DEBUG 1
 
+// New two-pass instrument configuration approach.
+#define INSTRUMENT_TWO_PASS 0
+
 namespace Rosegarden
 {
 
@@ -556,7 +559,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             break;
 
         default:
-            std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Status Byte:  " << (int)statusByte << '\n';
+            std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Status Byte:  " << QString("0x%1").arg(statusByte, 0, 16) << '\n';
             break;
         }
     }
@@ -930,7 +933,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 case MIDI_SEQUENCER_SPECIFIC:
                 case MIDI_SMPTE_OFFSET:
                 default:
-                    std::cerr << "MidiFile::convertToRosegarden() - unsupported META event code " << (int)(midiEvent.getMetaEventCode()) << '\n';
+                    std::cerr << "MidiFile::convertToRosegarden() - unsupported META event code " << QString("0x%1").arg(midiEvent.getMetaEventCode(), 0, 16) << '\n';
                     break;
                 }
 
@@ -938,16 +941,15 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 switch (midiEvent.getMessageType()) {
                 case MIDI_NOTE_ON:
 
-                    // A zero velocity here is a virtual "NOTE OFF"
-                    // so we ignore this event
-                    //
-                    if (midiEvent.getVelocity() == 0) break;
+                    // Note-off?  Ignore.  Note-ons and note-offs have been
+                    // consolidated.  Stray note-offs can be ignored.
+                    if (midiEvent.getVelocity() == 0)
+                        break;
 
                     endOfLastNote = rosegardenTime + rosegardenDuration;
 
                     RG_DEBUG << "convertToRosegarden(): note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << midiAbsoluteTime << " and duration " << midiDuration;
 
-                    // create and populate event
                     rosegardenEvent = new Event(Note::EventType,
                                                 rosegardenTime,
                                                 rosegardenDuration);
@@ -957,26 +959,31 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                               midiEvent.getVelocity());
                     break;
 
-                    // We ignore any NOTE OFFs here as we've already
-                    // converted NOTE ONs to have duration
-                    //
                 case MIDI_NOTE_OFF:
-                    continue;
+                    // Note-off?  Ignore.  Note-ons and note-offs have been
+                    // consolidated.  Stray note-offs can be ignored.
                     break;
 
                 case MIDI_PROG_CHANGE:
-                    // Attempt to turn the prog change we've found into an
-                    // Instrument.  Send the program number and whether or
-                    // not we're on the percussion channel.
-                    //
-                    // Note that we make no attempt to do the right
-                    // thing with program changes during a track -- we
-                    // just save them as events.  Only the first is
-                    // used to select the instrument.  If it's at time
-                    // zero, it's not saved as an event.
-                    //
                     //RG_DEBUG << "convertToRosegarden(): Program change found";
 
+                    // ??? Recommend we preserve the current behavior and add
+                    //     a member variable to enable a mode whereby all
+                    //     BS/PCs/CCs are simple preserved.
+                    //       bool m_preserveBSPCCC;
+                    //     Have it configurable in the settings for Will.
+                    //     This will be a simple first step on the way to doing
+                    //     this right.
+                    // ??? For now, mark the code with INSTRUMENT_TWO_PASS.
+                    // ??? We need to implement a two-pass approach where
+                    //     we import everything as-is, then do a second
+                    //     pass checking to see if there are PC's,
+                    //     BS's, and CC's at time 0 that can be
+                    //     removed and converted to Instrument
+                    //     settings.  We can do this immediately after the
+                    //     event processing loop and before the track loop
+                    //     ends.
+#if !INSTRUMENT_TWO_PASS
                     if (!instrument) {
 
                         bool percussion = (midiEvent.getChannelNumber() ==
@@ -985,13 +992,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                         // ??? Setting up the instrument just because we
                         //     received a Program Change seems rather
-                        //     arbitrary.  See Bug #1439.  What really
-                        //     should be done is a two-pass approach where
-                        //     we import everything as-is, then do a second
-                        //     pass checking to see if there are PC's,
-                        //     BS's, and CC's at time 0 that can be
-                        //     removed and converted to Instrument
-                        //     settings.
+                        //     arbitrary.  See Bug #1439.
                         instrument = studio.getInstrumentById(instrumentId);
                         if (instrument) {
                             instrument->setPercussion(percussion);
@@ -1027,13 +1028,14 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                         (Controller(MIDI_CONTROLLER_BANK_LSB, bankLsb).
                          getAsEvent(rosegardenTime));
                     }
+#endif
 
-                    rosegardenEvent =
-                        ProgramChange(midiEvent.getData1()).
-                        getAsEvent(rosegardenTime);
+                    rosegardenEvent = ProgramChange(midiEvent.getData1()).
+                                          getAsEvent(rosegardenTime);
                     break;
 
                 case MIDI_CTRL_CHANGE:
+#if !INSTRUMENT_TWO_PASS
                     // If it's a bank select, interpret it (or remember
                     // for later insertion) instead of just inserting it
                     // as a Rosegarden event
@@ -1087,37 +1089,38 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                             break;
                         }
                     }
+#endif
 
                     rosegardenEvent =
-                        Controller(midiEvent.getData1(),
-                                   midiEvent.getData2()).
-                        getAsEvent(rosegardenTime);
+                            Controller(midiEvent.getData1(),
+                                       midiEvent.getData2()).
+                                getAsEvent(rosegardenTime);
                     break;
 
                 case MIDI_PITCH_BEND:
                     rosegardenEvent =
-                        PitchBend(midiEvent.getData2(),
-                                  midiEvent.getData1()).
-                        getAsEvent(rosegardenTime);
+                            PitchBend(midiEvent.getData2(),
+                                      midiEvent.getData1()).
+                                getAsEvent(rosegardenTime);
                     break;
 
                 case MIDI_SYSTEM_EXCLUSIVE:
                     rosegardenEvent =
-                        SystemExclusive(midiEvent.getMetaMessage()).
-                        getAsEvent(rosegardenTime);
+                            SystemExclusive(midiEvent.getMetaMessage()).
+                                getAsEvent(rosegardenTime);
                     break;
 
                 case MIDI_POLY_AFTERTOUCH:
                     rosegardenEvent =
-                        KeyPressure(midiEvent.getData1(),
-                                    midiEvent.getData2()).
-                        getAsEvent(rosegardenTime);
+                            KeyPressure(midiEvent.getData1(),
+                                        midiEvent.getData2()).
+                                getAsEvent(rosegardenTime);
                     break;
 
                 case MIDI_CHNL_AFTERTOUCH:
                     rosegardenEvent =
-                        ChannelPressure(midiEvent.getData1()).
-                        getAsEvent(rosegardenTime);
+                            ChannelPressure(midiEvent.getData1()).
+                                getAsEvent(rosegardenTime);
                     break;
 
                 default:
@@ -1179,6 +1182,13 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 }
             }
 
+#if INSTRUMENT_TWO_PASS
+            // ??? At this point we could check for Bank Selects, Program
+            //     Changes and CC's at time zero on this track.  If there
+            //     are any, we could configure the track's instrument to
+            //     match and remove the BS/PC/CC events at time 0.
+#endif
+
 #ifdef DEBUG
             RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << segment->getStartTime() << " and end time " << segment->getEndTime();
             // Secret trigger end time for testing.
@@ -1214,7 +1224,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             delete track;
             track = 0;
         }
-    }
+    }  // for each track
 
     // Adjust the composition to hold the segments.
     composition.setEndMarker(composition.getBarEndForTime(maxTime));
