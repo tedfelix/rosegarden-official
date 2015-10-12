@@ -359,6 +359,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // This is used to store the last absolute time found on each track,
     // allowing us to modify delta-times correctly when separating events
     // out from one to multiple tracks
+    // ??? rename: lastEventTime[track]?
     std::map<int /*track*/, unsigned long /*lastTime*/> trackTimeMap;
     trackTimeMap[lastTrackNum] = 0;
 
@@ -584,19 +585,18 @@ static unsigned long gcd(unsigned long a, unsigned long b)
     return b;
 }
 
-// If we wanted to abstract the MidiFile class to make it more useful to
-// other applications (and formats) we'd make this method and its twin
-// pure virtual.
-//
 bool
 MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 {
     Profiler profiler("MidiFile::convertToRosegarden");
 
+    // ??? This can be done with copy/paste.  Seems safe to remove this
+    //     and only support REPLACE.  It's all we've ever supported.
+    //     April 12, 2003 this was added and no one used it.
     enum ConversionType {
         CONVERT_REPLACE,
-        //CONVERT_AUGMENT,
-        CONVERT_APPEND  // ??? Unused
+        //CONVERT_AUGMENT,  // ??? Add new tracks?
+        CONVERT_APPEND      // ??? Was never used.
     };
 
     const ConversionType type = CONVERT_REPLACE;
@@ -608,7 +608,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     Composition &composition = doc->getComposition();
     Studio &studio = doc->getStudio();
 
-    MidiTrack::iterator midiEvent;
     Segment *rosegardenSegment;
     Segment *conductorSegment = 0;
     Event *rosegardenEvent;
@@ -659,7 +658,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     int divisor = m_timingDivision ? m_timingDivision : 96;
 
     unsigned long multiplier = crotchetTime;
-    int g = (int)gcd(crotchetTime, divisor);
+    const int g = (int)gcd(crotchetTime, divisor);
     multiplier /= g;
     divisor /= g;
 
@@ -678,7 +677,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
     std::vector<Segment *> addedSegments;
 
-    RG_DEBUG << "MIDI COMP SIZE = " << m_midiComposition.size() << '\n';
+    RG_DEBUG << "convertToRosegarden(): MIDI COMP SIZE = " << m_midiComposition.size();
 
     if (m_timingFormat == MIDI_TIMING_SMPTE) {
         
@@ -696,8 +695,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // slightly simpler code.  So, SMPTE only.
 
         std::map<int, tempoT> tempi;
+        // For each track
         for (TrackId i = 0; i < m_midiComposition.size(); ++i) {
-            for (midiEvent = m_midiComposition[i].begin();
+            // for each event
+            for (MidiTrack::const_iterator midiEvent = m_midiComposition[i].begin();
                  midiEvent != m_midiComposition[i].end();
                  ++midiEvent) {        
                 if ((*midiEvent)->isMeta()) {
@@ -739,7 +740,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // returns the sum of the current Midi Event delta
         // time plus the argument.
         //
-        for (midiEvent = m_midiComposition[i].begin();
+        for (MidiTrack::iterator midiEvent = m_midiComposition[i].begin();
              midiEvent != m_midiComposition[i].end();
              ++midiEvent) {
             segmentTime = (*midiEvent)->addTime(segmentTime);
@@ -766,7 +767,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                           trackName,         // name
                           false);           // muted
 
-        std::cerr << "New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument << ", name = " << trackName << std::endl;
+        RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument << ", name = " << trackName;
 
         // rest creation token needs to be reset here
         //
@@ -775,7 +776,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         int msb = -1, lsb = -1; // for bank selects
         Instrument *instrument = 0;
 
-        for (midiEvent = m_midiComposition[i].begin();
+        for (MidiTrack::const_iterator midiEvent = m_midiComposition[i].begin();
              midiEvent != m_midiComposition[i].end();
              ++midiEvent) {
 
@@ -818,21 +819,18 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     - rosegardenTime;
             }
 
-#ifdef MIDI_DEBUG
-            std::cerr << "MIDI file import: origin " << origin
-                      << ", event time " << rosegardenTime
-                      << ", duration " << rosegardenDuration
-                      << ", event type " << (int)(*midiEvent)->getMessageType()
-                      << ", previous max time " << maxTime
-                      << ", potential max time " << (rosegardenTime + rosegardenDuration)
-                      << ", ev raw time " << (*midiEvent)->getTime()
-                      << ", ev raw duration " << (*midiEvent)->getDuration()
-                      << ", crotchet " << crotchetTime
-                      << ", multiplier " << multiplier
-                      << ", divisor " << divisor
-                      << ", sfps " << m_fps * m_subframes
-                      << std::endl;
-#endif
+            RG_DEBUG << "convertToRosegarden(): MIDI file import: origin " << origin
+                     << ", event time " << rosegardenTime
+                     << ", duration " << rosegardenDuration
+                     << ", event type " << (int)(*midiEvent)->getMessageType()
+                     << ", previous max time " << maxTime
+                     << ", potential max time " << (rosegardenTime + rosegardenDuration)
+                     << ", ev raw time " << (*midiEvent)->getTime()
+                     << ", ev raw duration " << (*midiEvent)->getDuration()
+                     << ", crotchet " << crotchetTime
+                     << ", multiplier " << multiplier
+                     << ", divisor " << divisor
+                     << ", sfps " << m_fps * m_subframes;
 
             if (rosegardenTime + rosegardenDuration > maxTime) {
                 maxTime = rosegardenTime + rosegardenDuration;
@@ -912,7 +910,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                         if (tempo != 0) {
                             double qpm = 60000000.0 / double(tempo);
                             tempoT rgt(Composition::getTempoForQpm(qpm));
-//                            std::cout << "MidiFile: converted MIDI tempo " << tempo << " to Rosegarden tempo " << rgt << std::endl;
+                            //RG_DEBUG << "convertToRosegarden(): converted MIDI tempo " << tempo << " to Rosegarden tempo " << rgt;
                             composition.addTempoAtTime(rosegardenTime, rgt);
                         }
                     }
@@ -948,11 +946,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                           getAsEvent(rosegardenTime);
                     }
                     catch (...) {
-#ifdef MIDI_DEBUG
-                        std::cerr << "MidiFile::convertToRosegarden - "
-                        << " badly formed key signature"
-                        << std::endl;
-#endif
+                        std::cerr << "MidiFile::convertToRosegarden() - badly formed key signature\n";
                         break;
                     }
                     break;
@@ -964,11 +958,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 case MIDI_SEQUENCER_SPECIFIC:
                 case MIDI_SMPTE_OFFSET:
                 default:
-#ifdef MIDI_DEBUG
-                    std::cerr << "MidiFile::convertToRosegarden - "
-                              << "unsupported META event code "
-                              << (int)((*midiEvent)->getMetaEventCode()) << '\n';
-#endif
+                    std::cerr << "MidiFile::convertToRosegarden() - unsupported META event code " << (int)((*midiEvent)->getMetaEventCode()) << '\n';
                     break;
                 }
 
@@ -983,9 +973,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                     endOfLastNote = rosegardenTime + rosegardenDuration;
 
-#ifdef MIDI_DEBUG
-                    std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << (*midiEvent)->getTime() << " and duration " << (*midiEvent)->getDuration() << std::endl;
-#endif
+                    RG_DEBUG << "convertToRosegarden(): note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << (*midiEvent)->getTime() << " and duration " << (*midiEvent)->getDuration();
 
                     // create and populate event
                     rosegardenEvent = new Event(Note::EventType,
@@ -1015,7 +1003,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     // used to select the instrument.  If it's at time
                     // zero, it's not saved as an event.
                     //
-//                    std::cerr << "Program change found" << std::endl;
+                    //RG_DEBUG << "convertToRosegarden(): Program change found";
 
                     if (!instrument) {
 
@@ -1170,13 +1158,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 default:
-
-#ifdef MIDI_DEBUG
-                    std::cerr << "MidiFile::convertToRosegarden - "
-                    << "Unsupported event code = "
-                    << (int)(*midiEvent)->getMessageType() << std::endl;
-#endif
-
+                    std::cerr << "MidiFile::convertToRosegarden() - Unsupported event code = " << (int)(*midiEvent)->getMessageType();
                     break;
                 }
 
@@ -1234,15 +1216,16 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 }
             }
 
-#ifdef MIDI_DEBUG
-            std::cerr << "MIDI import: adding segment with start time " << rosegardenSegment->getStartTime() << " and end time " << rosegardenSegment->getEndTime() << std::endl;
+#ifdef DEBUG
+            RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << rosegardenSegment->getStartTime() << " and end time " << rosegardenSegment->getEndTime();
+            // Secret trigger end time for testing.
             if (rosegardenSegment->getEndTime() == 2880) {
-                std::cerr << "events:" << std::endl;
+                RG_DEBUG << "  events:";
                 for (Segment::iterator i = rosegardenSegment->begin();
                      i != rosegardenSegment->end(); ++i) {
-                    std::cerr << "type = " << (*i)->getType() << std::endl;
-                    std::cerr << "time = " << (*i)->getAbsoluteTime() << std::endl;
-                    std::cerr << "duration = " << (*i)->getDuration() << std::endl;
+                    RG_DEBUG << "    type = " << (*i)->getType();
+                    RG_DEBUG << "    time = " << (*i)->getAbsoluteTime();
+                    RG_DEBUG << "    duration = " << (*i)->getDuration();
                 }
             }
 #endif
@@ -1277,11 +1260,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         Segment *s = *i;
         if (s) {
             timeT duration = s->getEndMarkerTime() - s->getStartTime();
-/*
-            std::cerr << "duration = " << duration << " (start "
-                      << s->getStartTime() << ", end " << s->getEndTime()
-                      << ", marker " << s->getEndMarkerTime() << ")" << std::endl;
-*/
+            //RG_DEBUG << "convertToRosegarden(): duration = " << duration << " (start " << s->getStartTime() << ", end " << s->getEndTime() << ", marker " << s->getEndMarkerTime() << ")";
             if (duration == 0) {
                 s->setEndMarkerTime(s->getStartTime() +
                                     Note(Note::Crotchet).getDuration());
