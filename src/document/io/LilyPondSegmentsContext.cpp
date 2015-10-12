@@ -55,7 +55,8 @@ LilyPondSegmentsContext::~LilyPondSegmentsContext()
         for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
             if (sit->rawVoltaChain) {
                 VoltaChain::iterator i;
-                for (i = sit->rawVoltaChain->begin(); i != sit->rawVoltaChain->end(); ++i) {
+                for (i = sit->rawVoltaChain->begin();
+                        i != sit->rawVoltaChain->end(); ++i) {
                     delete *i;
                 }
                 delete sit->rawVoltaChain;
@@ -265,6 +266,11 @@ LilyPondSegmentsContext::precompute()
                  sd = getNextSynchronousSegment()) {
                 repeatList.push_back(sd);
             }
+
+            // The element of repeatList are the data related to one group of
+            // synchronous repeated segments.
+            // There should be one and only one element of repeatList in each
+            // of the tracks.
 
             // Sort the volta
             sortAndGatherVolta(repeatList);
@@ -693,11 +699,11 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
         // Is the volta indexed by idx similar to a previous one ?
         bool found = false;
         int idx2;
-        for (idx2 = 0; idx2 < idx; idx2++) {
+        for (idx2 = 0; idx2 < (int)(*it1)->sortedVoltaChain->size(); idx2++) {
             bool linked = true;
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
                 Segment * seg1 = (*(*it)->rawVoltaChain)[idx]->segment;
-                Segment * seg2 = (*(*it)->rawVoltaChain)[idx2]->segment;
+                Segment * seg2 = (*(*it)->sortedVoltaChain)[idx2]->segment;
                 if (!seg1->isPlainlyLinkedTo(seg2)) {
                     linked = false;
                     break;
@@ -711,7 +717,7 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
         if (found) {
             // Add new volta number in existing volta
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-                (*(*it)->sortedVoltaChain)[idx2]->voltaNumber.insert(idx + 1);   /// Number not needed in rawVoltaChain ???
+                (*(*it)->sortedVoltaChain)[idx2]->voltaNumber.insert(idx + 1);
             }
         } else {
             // Add one more volta
@@ -720,7 +726,7 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
             }
         }
     }
-}
+}        
 
 void
 LilyPondSegmentsContext::dump()
@@ -785,6 +791,43 @@ LilyPondSegmentsContext::dump()
         }
     }
     std::cout << std::endl;
+}
+
+void
+LilyPondSegmentsContext::dumpSDL(SegmentDataList & l)
+{
+    SegmentDataList::iterator it;
+    std::cout << "------->\n";
+    for (it = l.begin(); it != l.end(); ++it) {
+        std::cout << " \"" << (*it)->segment->getLabel() << "\"" << std::endl;
+        
+        if ((*it)->rawVoltaChain) {
+            std::cout << "raw:" << std::endl;
+            VoltaChain::iterator ivc;
+            for (ivc=(*it)->rawVoltaChain->begin();
+                     ivc!=(*it)->rawVoltaChain->end(); ++ivc) {
+                std::cout << "   \"" << (*ivc)->segment->getLabel() << "\" :";
+                for (std::set<int>::iterator u=(*ivc)->voltaNumber.begin();
+                        u!=(*ivc)->voltaNumber.end(); ++u) {
+                    std::cout << " " << (*u);
+                }
+            }
+        }
+        
+        if ((*it)->sortedVoltaChain) {
+            std::cout << std::endl << "sorted:" << std::endl;
+            VoltaChain::iterator ivc;
+            for (ivc=(*it)->sortedVoltaChain->begin();
+                     ivc!=(*it)->sortedVoltaChain->end(); ++ivc) {
+                std::cout << "   \"" << (*ivc)->segment->getLabel() << "\" :";
+                for (std::set<int>::iterator u=(*ivc)->voltaNumber.begin();
+                        u!=(*ivc)->voltaNumber.end(); ++u) {
+                    std::cout << " " << (*u);
+                }
+            }
+        }
+    }
+    std::cout << std::endl << "<--------" << std::endl;
 }
 
 }

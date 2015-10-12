@@ -97,7 +97,7 @@ public:
     timeT getFirstSegmentStartTime() { return m_firstSegmentStartTime; }
 
     /**
-     * Return the smaller start time of the segments being exported.
+     * Return the larger end time of the segments being exported.
      * Only valid after precompute() has been executed.
      */
     timeT getLastSegmentEndTime() { return m_lastSegmentEndTime; }
@@ -171,7 +171,7 @@ public:
      */
     std::string getVoltaText();
 
-    /// Only for debug
+    /// Only for instrumentation while debugging
     void dump();
 
 protected :
@@ -277,6 +277,10 @@ private :
     */
     void sortAndGatherVolta(SegmentDataList &);
 
+    // Only for instrumentation while debugging
+    void dumpSDL(SegmentDataList & l);
+
+    
     TrackMap m_segments;
 
     LilyPondExporter * m_exporter;
