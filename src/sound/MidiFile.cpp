@@ -158,7 +158,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
 
         // Kick the event loop to make sure the UI doesn't become
         // unresponsive during a long load.
-        qApp->processEvents(QEventLoop::AllEvents);
+        qApp->processEvents();
     }
 
     return stringRet;
@@ -582,20 +582,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
     composition.clear();
 
-    const int rosegardenPPQ = Note(Note::Crotchet).getDuration();
-    const int midiFilePPQ = m_timingDivision ? m_timingDivision : 96;
-    // Conversion factor.
-    const double midiToRgTime =
-            static_cast<double>(rosegardenPPQ) /
-            static_cast<double>(midiFilePPQ);
-
-    //bool haveTimeSignatures = false;
-    InstrumentId compInstrument = MidiInstrumentBase;
-
     // Clear down the assigned Instruments we already have
     studio.unassignAllInstruments();
-
-    std::vector<Segment *> addedSegments;
 
     RG_DEBUG << "convertToRosegarden(): MIDI COMP SIZE = " << m_midiComposition.size();
 
@@ -614,7 +602,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // good idea to mess with file loading just for the sake of
         // slightly simpler code.  So, SMPTE only.
 
-        std::map<int, tempoT> tempi;
+        typedef std::map<int /*time*/, tempoT> TempoMap;
+        TempoMap tempi;
+
         // For each track
         for (TrackId i = 0; i < m_midiComposition.size(); ++i) {
             // For each event
@@ -640,25 +630,42 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 }
             }
         }
-        for (std::map<int, tempoT>::const_iterator i = tempi.begin();
-             i != tempi.end(); ++i) {
-            timeT t = composition.getElapsedTimeForRealTime
-                (RealTime::frame2RealTime(i->first, m_fps * m_subframes));
+
+        // For each set tempo meta-event
+        for (TempoMap::const_iterator i = tempi.begin();
+             i != tempi.end();
+             ++i) {
+            timeT t = composition.getElapsedTimeForRealTime(
+                    RealTime::frame2RealTime(i->first, m_fps * m_subframes));
             composition.addTempoAtTime(t, i->second);
         }
     }
 
+    const int rosegardenPPQ = Note(Note::Crotchet).getDuration();
+    const int midiFilePPQ = m_timingDivision ? m_timingDivision : 96;
+    // Conversion factor.
+    const double midiToRgTime =
+            static_cast<double>(rosegardenPPQ) /
+            static_cast<double>(midiFilePPQ);
+
     // To create rests.
     timeT endOfLastNote = 0;
+
     // Used to expand the composition if needed.
     timeT maxTime = 0;
+
     Segment *conductorSegment = 0;
+
     // Time Signature
     int numerator = 4;
     int denominator = 4;
 
     // Destination TrackId in the composition.
     TrackId compositionTrackId = 0;
+
+    // Keep track of the segments we add to the composition for
+    // post-processing.
+    std::vector<Segment *> addedSegments;
 
     // For each track
     // ??? BIG loop.
@@ -668,35 +675,32 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
         // progress - 20% total in file import itself and then 80%
         // split over these tracks
-        emit progress(20 +
-                      (int)(80.0 * double(trackId) /
-                            double(m_midiComposition.size())));
-        qApp->processEvents(QEventLoop::AllEvents);
+        emit progress(20 + static_cast<int>(
+                      80.0 * trackId / m_midiComposition.size()));
+        // Kick the event loop.
+        qApp->processEvents();
 
         timeT absTime = 0;
 
-        // For each event in the track
-        // Convert m_deltaTime to an absolute time since
-        // the start of the segment.  addTime()
-        // returns the sum of the current Midi Event delta
-        // time plus the argument.
+        // Convert the event times from delta to absolute for
+        // consolidateNoteOffEvents().
         // ??? So, MidiEvent::m_deltaTime becomes an absolute time.
         //     Recommend adding a MidiEvent::m_absoluteTime to make this
         //     clearer.  Then the transform becomes:
         //        absTime += (*midiEvent)->m_deltaTime;
         //        (*midiEvent)->m_absoluteTime = absTime;
-        //     Or can we just leave the delta time and have a running
-        //     absolute time in the "for each event" loop coming up?
         for (MidiTrack::iterator midiEvent = m_midiComposition[trackId].begin();
              midiEvent != m_midiComposition[trackId].end();
              ++midiEvent) {
             absTime = (*midiEvent)->addTime(absTime);
         }
 
-        // Consolidate NOTE ON and NOTE OFF events into a NOTE ON with
+        // Consolidate NOTE ON and NOTE OFF events into NOTE ON events with
         // a duration.
-        //
+        // ??? rename: consolidateNoteEvents()
         consolidateNoteOffEvents(trackId);
+
+        InstrumentId compInstrument = MidiInstrumentBase;
 
         if (m_trackChannelMap.find(trackId) != m_trackChannelMap.end()) {
             compInstrument = MidiInstrumentBase + m_trackChannelMap[trackId];
@@ -720,7 +724,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         //
         endOfLastNote = 0;
 
-        int msb = -1, lsb = -1; // for bank selects
+        int bankMsb = -1;
+        int bankLsb = -1;
         Instrument *instrument = 0;
 
         // For each event on the current track
@@ -731,16 +736,15 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
             Event *rosegardenEvent = 0;
 
-            // [cc] -- avoid floating-point where possible
-
-            timeT rawTime = (*midiEvent)->getTime();
-            timeT rawDuration = (*midiEvent)->getDuration();
+            const timeT rawTime = (*midiEvent)->getTime();
+            const timeT rawDuration = (*midiEvent)->getDuration();
             timeT rosegardenTime = 0;
             timeT rosegardenDuration = 0;
 
             if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
-                rosegardenTime = timeT(rawTime * midiToRgTime);
-                rosegardenDuration = timeT(rawDuration * midiToRgTime);
+                rosegardenTime = static_cast<timeT>(rawTime * midiToRgTime);
+                rosegardenDuration =
+                        static_cast<timeT>(rawDuration * midiToRgTime);
             } else {
 
                 // SMPTE timestamps are a count of the number of
@@ -765,7 +769,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                      << ", event type " << (int)(*midiEvent)->getMessageType()
                      << ", previous max time " << maxTime
                      << ", potential max time " << (rosegardenTime + rosegardenDuration)
-                     << ", ev raw time " << (*midiEvent)->getTime()
+                     << ", ev raw time " << rawTime
                      << ", ev raw duration " << (*midiEvent)->getDuration()
                      << ", crotchet " << Note(Note::Crotchet).getDuration()
                      << ", midiToRgTime " << midiToRgTime
@@ -871,7 +875,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     composition.addTimeSignature
                         (rosegardenTime,
                          TimeSignature(numerator, denominator));
-                    //haveTimeSignatures = true;
                     break;
 
                 case MIDI_KEY_SIGNATURE:
@@ -917,7 +920,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                     endOfLastNote = rosegardenTime + rosegardenDuration;
 
-                    RG_DEBUG << "convertToRosegarden(): note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << (*midiEvent)->getTime() << " and duration " << (*midiEvent)->getDuration();
+                    RG_DEBUG << "convertToRosegarden(): note at " << rosegardenTime << ", duration " << rosegardenDuration << ", midi time " << rawTime << " and duration " << (*midiEvent)->getDuration();
 
                     // create and populate event
                     rosegardenEvent = new Event(Note::EventType,
@@ -969,10 +972,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                             instrument->setPercussion(percussion);
                             instrument->setSendProgramChange(true);
                             instrument->setProgramChange(program);
-                            instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
+                            instrument->setSendBankSelect(bankMsb >= 0  ||  bankLsb >= 0);
                             if (instrument->sendsBankSelect()) {
-                                instrument->setMSB(msb >= 0 ? msb : 0);
-                                instrument->setLSB(lsb >= 0 ? lsb : 0);
+                                instrument->setMSB(bankMsb >= 0 ? bankMsb : 0);
+                                instrument->setLSB(bankLsb >= 0 ? bankLsb : 0);
                             }
                         }
                     }
@@ -984,19 +987,19 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                         // here, but now we do them all at the end only if the
                         // segment has no other name set (e.g. from instrument
                         // meta event)
-                        if ((*midiEvent)->getTime() == 0) break; // no insert
+                        if (rawTime == 0) break; // no insert
                     }
 
                     // did we have a bank select? if so, insert that too
 
-                    if (msb >= 0) {
+                    if (bankMsb >= 0) {
                         rosegardenSegment->insert
-                        (Controller(MIDI_CONTROLLER_BANK_MSB, msb).
+                        (Controller(MIDI_CONTROLLER_BANK_MSB, bankMsb).
                          getAsEvent(rosegardenTime));
                     }
-                    if (lsb >= 0) {
+                    if (bankLsb >= 0) {
                         rosegardenSegment->insert
-                        (Controller(MIDI_CONTROLLER_BANK_LSB, lsb).
+                        (Controller(MIDI_CONTROLLER_BANK_LSB, bankLsb).
                          getAsEvent(rosegardenTime));
                     }
 
@@ -1011,12 +1014,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     // as a Rosegarden event
 
                     if ((*midiEvent)->getData1() == MIDI_CONTROLLER_BANK_MSB) {
-                        msb = (*midiEvent)->getData2();
+                        bankMsb = (*midiEvent)->getData2();
                         break;
                     }
 
                     if ((*midiEvent)->getData1() == MIDI_CONTROLLER_BANK_LSB) {
-                        lsb = (*midiEvent)->getData2();
+                        bankLsb = (*midiEvent)->getData2();
                         break;
                     }
 
@@ -1025,7 +1028,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     // have an instrument, then apply it to the instrument
                     // instead of inserting
 
-                    if (instrument && (*midiEvent)->getTime() == 0) {
+                    if (instrument && rawTime == 0) {
                         if ((*midiEvent)->getData1() == MIDI_CONTROLLER_VOLUME) {
                             instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, (*midiEvent)->getData2());
                             break;
@@ -1485,8 +1488,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 
         if (progressCount % 500 == 0) {
             emit progress(progressCount * 100 / progressTotal);
-            //qApp->processEvents(500);
-            qApp->processEvents(QEventLoop::AllEvents);
+            qApp->processEvents();
         }
     }
 
