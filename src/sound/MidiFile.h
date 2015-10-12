@@ -173,10 +173,6 @@ private:
 
     // Conversion
     std::string longToVarBuffer(unsigned long number);
-
-    // UNUSED
-    // ??? Set but never used.
-    bool m_containsTimeChanges;
 };
 
 
