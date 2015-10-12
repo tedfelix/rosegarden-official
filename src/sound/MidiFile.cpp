@@ -859,7 +859,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                         if (midiTempo != 0) {
                             // Convert to quarter-notes per minute.
-                            double qpm = 60000000.0 / double(midiTempo);
+                            double qpm = 60000000.0 / midiTempo;
                             tempoT rosegardenTempo(
                                     Composition::getTempoForQpm(qpm));
                             //RG_DEBUG << "convertToRosegarden(): converted MIDI tempo " << midiTempo << " to Rosegarden tempo " << rosegardenTempo;
@@ -869,41 +869,59 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     }
                     break;
 
-                case MIDI_TIME_SIGNATURE:
-                    numerator = (int) midiEvent.getMetaMessage()[0];
-                    denominator = 1 << ((int)midiEvent.getMetaMessage()[1]);
+                case MIDI_TIME_SIGNATURE: {
+                    std::string metaMessage = midiEvent.getMetaMessage();
 
-                    // NB. a MIDI time signature also has
-                    // metamessage[2] and [3], containing some timing data
+                    numerator = static_cast<int>(metaMessage[0]);
+                    denominator = 1 << static_cast<int>(metaMessage[1]);
 
-                    if (numerator == 0) numerator = 4;
-                    if (denominator == 0) denominator = 4;
+                    // A MIDI time signature has additional information that
+                    // we ignore.  From the spec, section 4 page 10:
+                    // metaMessage[2] "expresses the number of *MIDI clocks*
+                    //   in a metronome tick."
+                    // metaMessage[3] "expresses the number of notated
+                    //   32nd-notes in what MIDI thinks of as a quarter-note
+                    //   (24 MIDI clocks)."
 
-                    composition.addTimeSignature
-                        (rosegardenTime,
-                         TimeSignature(numerator, denominator));
+                    // Fall back on 4/4
+                    if (numerator == 0)
+                        numerator = 4;
+                    if (denominator == 0)
+                        denominator = 4;
+
+                    composition.addTimeSignature(
+                            rosegardenTime,
+                            TimeSignature(numerator, denominator));
+
                     break;
+                }
 
-                case MIDI_KEY_SIGNATURE:
-                    {
-                        // get the details
-                        int accidentals = (int) midiEvent.getMetaMessage()[0];
-                        bool isMinor = (int) midiEvent.getMetaMessage()[1];
-                        bool isSharp = accidentals < 0 ? false : true;
-                        accidentals = accidentals < 0 ? -accidentals : accidentals;
-                        // create the key event
-                        //
-                        try {
-                            rosegardenEvent = Rosegarden::Key
-                                              (accidentals, isSharp, isMinor).
-                                              getAsEvent(rosegardenTime);
-                        }
-                        catch (...) {
-                            std::cerr << "MidiFile::convertToRosegarden() - badly formed key signature\n";
-                            break;
-                        }
+                case MIDI_KEY_SIGNATURE: {
+                    std::string metaMessage = midiEvent.getMetaMessage();
+
+                    // Whether char is signed or unsigned is platform
+                    // dependent.  Casting to signed char guarantees the
+                    // correct results on all platforms.
+
+                    int accidentals =
+                            abs(static_cast<signed char>(metaMessage[0]));
+                    bool isSharp =
+                            (static_cast<signed char>(metaMessage[0]) >= 0);
+
+                    bool isMinor = (metaMessage[1] != 0);
+
+                    try {
+                        rosegardenEvent =
+                                Rosegarden::Key(accidentals, isSharp, isMinor).
+                                        getAsEvent(rosegardenTime);
                     }
+                    catch (...) {
+                        std::cerr << "MidiFile::convertToRosegarden() - badly formed key signature\n";
+                        break;
+                    }
+
                     break;
+                }
 
                 case MIDI_SEQUENCE_NUMBER:
                 case MIDI_CHANNEL_PREFIX_OR_PORT:
