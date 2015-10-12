@@ -170,6 +170,15 @@ public:
      * Return the text of the current volta.
      */
     std::string getVoltaText();
+    
+    /**
+     * Return true if LilyPond automatic volta mode is usable.
+     * Valid as soon as precompute() has been executed.
+     * 
+     * Currently, this is a global flag: automatic and manual repeat/volta
+     * are not mixed in the same score.
+     */
+    bool isAutomaticVoltaUsable() { return m_automaticVoltaUsable; } 
 
     /// Only for instrumentation while debugging
     void dump();
@@ -289,6 +298,7 @@ private :
     timeT m_epsilon;
     timeT m_firstSegmentStartTime;
     timeT m_lastSegmentEndTime;
+    bool m_automaticVoltaUsable;
 
     TrackMap::iterator m_trackIterator;
     SegmentSet::iterator m_segIterator;

@@ -36,6 +36,7 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(LilyPondExporter *exporter,
     m_composition(composition),
     m_firstSegmentStartTime(0),
     m_lastSegmentEndTime(0),
+    m_automaticVoltaUsable(true),
     m_nextRepeatId(1),
     m_repeatWithVolta(false),
     m_currentVoltaChain(0),
@@ -84,7 +85,11 @@ LilyPondSegmentsContext::precompute()
 {
     TrackMap::iterator tit;
     SegmentSet::iterator sit;
-
+    
+    // Set at initialization. Will be clear if needed by sortAndGatherVolta()
+    // method.
+    m_automaticVoltaUsable = true;
+    
     // Find the start time of the first segment and the end time of the
     // last segment.
     m_firstSegmentStartTime = m_composition->getEndMarker();
@@ -507,23 +512,39 @@ LilyPondSegmentsContext::isLastVolta()
 std::string
 LilyPondSegmentsContext::getVoltaText()
 {
-/// TODO : Modification needed to deal with the new "volta as ordinary segment" mode
-
-    if (!(*m_segIterator).sortedVoltaChain) return std::string("");
-    ++m_voltaIterator;
-    if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return std::string("");
-    
     std::stringstream out;
     std::set<int>::iterator it;
-    bool firstTime = true;
-    for (it = (*m_voltaIterator)->voltaNumber.begin();
-         it != (*m_voltaIterator)->voltaNumber.end(); ++it) {
-        if (firstTime) {
-            firstTime = false;
+    int last, current;
+    
+    if (!(*m_segIterator).sortedVoltaChain) return std::string("");
+    if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return std::string("");
+    
+    it = (*m_voltaIterator)->voltaNumber.begin();
+    last = *it;
+    out << last;
+    current = last;
+    
+    for (++it; it != (*m_voltaIterator)->voltaNumber.end(); ++it) {        
+        if (*it > current + 1) {
+            if (current == last) {
+                out << ", " << *it;
+                last = current = *it;
+            } else if (current == (last + 1)) {
+                out << ", " << current << ", " << *it;
+                last = current = *it;
+            } else {
+                out << "-" << current << ", " << *it;
+                last = current = *it;
+            }
         } else {
-            out << ", ";
+            current = *it;
         }
-        out << *it;
+    }
+
+    if (current == (last + 1)) {
+        out << ", " << current;
+    } else if (current > (last + 1)) {
+        out << "-" << current;
     }
 
     return std::string(out.str());
@@ -719,6 +740,9 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
                 (*(*it)->sortedVoltaChain)[idx2]->voltaNumber.insert(idx + 1);
             }
+            // Automatic volta in LilyPond is not possible when volta others
+            // than the first one is played several time.
+            if (idx2 != 0) m_automaticVoltaUsable = false;
         } else {
             // Add one more volta
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
@@ -726,7 +750,7 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
             }
         }
     }
-}        
+}
 
 void
 LilyPondSegmentsContext::dump()
