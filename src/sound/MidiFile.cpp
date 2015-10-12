@@ -590,17 +590,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 {
     Profiler profiler("MidiFile::convertToRosegarden");
 
-    // ??? This can be done with copy/paste.  Seems safe to remove this
-    //     and only support REPLACE.  It's all we've ever supported.
-    //     April 12, 2003 this was added and no one used it.
-    enum ConversionType {
-        CONVERT_REPLACE,
-        //CONVERT_AUGMENT,  // ??? Add new tracks?
-        CONVERT_APPEND      // ??? Was never used.
-    };
-
-    const ConversionType type = CONVERT_REPLACE;
-
     // Read the MIDI file into m_midiComposition.
     if (!read(filename))
         return false;
@@ -608,21 +597,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     Composition &composition = doc->getComposition();
     Studio &studio = doc->getStudio();
 
-    Segment *conductorSegment = 0;
-
-    timeT maxTime = 0;
-
-    // To create rests
-    //
-    timeT endOfLastNote;
-
-    if (type == CONVERT_REPLACE)
-        composition.clear();
-
-    timeT origin = 0;
-    if (type == CONVERT_APPEND && composition.getDuration() > 0) {
-        origin = composition.getBarEndForTime(composition.getDuration());
-    }
+    composition.clear();
 
     TrackId compTrack = 0;
     for (Composition::iterator ci = composition.begin();
@@ -650,10 +625,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     InstrumentId compInstrument = MidiInstrumentBase;
 
     // Clear down the assigned Instruments we already have
-    //
-    if (type == CONVERT_REPLACE) {
-        studio.unassignAllInstruments();
-    }
+    studio.unassignAllInstruments();
 
     std::vector<Segment *> addedSegments;
 
@@ -704,10 +676,16 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
     }
 
+    // To create rests.
+    timeT endOfLastNote = 0;
+    // Used to expand the composition if needed.
+    timeT maxTime = 0;
+    Segment *conductorSegment = 0;
     int numerator = 4;
     int denominator = 4;
 
     // For each track
+    // ??? BIG loop.
     for (TrackId trackId = 0;
          trackId < m_midiComposition.size();
          ++trackId) {
@@ -770,6 +748,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         Instrument *instrument = 0;
 
         // For each event on the current track
+        // ??? BIG loop.
         for (MidiTrack::const_iterator midiEvent = m_midiComposition[trackId].begin();
              midiEvent != m_midiComposition[trackId].end();
              ++midiEvent) {
@@ -786,10 +765,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
 
                 if (rawTime < maxRawTime) {
-                    rosegardenTime = origin +
+                    rosegardenTime =
                         timeT((rawTime * multiplier) / divisor);
                 } else {
-                    rosegardenTime = origin +
+                    rosegardenTime =
                         timeT((double(rawTime) * multiplier) / double(divisor) + 0.01);
                 }
 
@@ -815,8 +794,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     - rosegardenTime;
             }
 
-            RG_DEBUG << "convertToRosegarden(): MIDI file import: origin " << origin
-                     << ", event time " << rosegardenTime
+            RG_DEBUG << "convertToRosegarden(): MIDI file import: event time " << rosegardenTime
                      << ", duration " << rosegardenDuration
                      << ", event type " << (int)(*midiEvent)->getMessageType()
                      << ", previous max time " << maxTime
@@ -863,10 +841,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
-                    if (type == CONVERT_REPLACE) {
-                        composition.setCopyrightNote((*midiEvent)->
-                                                     getMetaMessage());
-                    }
+                    composition.setCopyrightNote(
+                            (*midiEvent)->getMetaMessage());
                     break;
 
                 case MIDI_TRACK_NAME:
@@ -1009,34 +985,25 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                            MIDI_PERCUSSION_CHANNEL);
                         int program = (*midiEvent)->getData1();
 
-                        if (type == CONVERT_REPLACE) {
-
-                            // ??? Setting up the instrument just because we
-                            //     received a Program Change seems rather
-                            //     arbitrary.  See Bug #1439.  What really
-                            //     should be done is a two-pass approach where
-                            //     we import everything as-is, then do a second
-                            //     pass checking to see if there are PC's,
-                            //     BS's, and CC's at time 0 that can be
-                            //     removed and converted to Instrument
-                            //     settings.
-                            instrument = studio.getInstrumentById(compInstrument);
-                            if (instrument) {
-                                instrument->setPercussion(percussion);
-                                instrument->setSendProgramChange(true);
-                                instrument->setProgramChange(program);
-                                instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
-                                if (instrument->sendsBankSelect()) {
-                                    instrument->setMSB(msb >= 0 ? msb : 0);
-                                    instrument->setLSB(lsb >= 0 ? lsb : 0);
-                                }
+                        // ??? Setting up the instrument just because we
+                        //     received a Program Change seems rather
+                        //     arbitrary.  See Bug #1439.  What really
+                        //     should be done is a two-pass approach where
+                        //     we import everything as-is, then do a second
+                        //     pass checking to see if there are PC's,
+                        //     BS's, and CC's at time 0 that can be
+                        //     removed and converted to Instrument
+                        //     settings.
+                        instrument = studio.getInstrumentById(compInstrument);
+                        if (instrument) {
+                            instrument->setPercussion(percussion);
+                            instrument->setSendProgramChange(true);
+                            instrument->setProgramChange(program);
+                            instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
+                            if (instrument->sendsBankSelect()) {
+                                instrument->setMSB(msb >= 0 ? msb : 0);
+                                instrument->setLSB(lsb >= 0 ? lsb : 0);
                             }
-                        } else { // not CONVERT_REPLACE
-                            // ??? type is always CONVERT_REPLACE.  This code
-                            //     is never executed.
-                            instrument =
-                                studio.assignMidiProgramToInstrument
-                                (program, msb, lsb, percussion);
                         }
                     }
 
@@ -1249,7 +1216,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
     }
 
-    if (type == CONVERT_REPLACE || maxTime > composition.getEndMarker()) {
+    // If needed, expand the composition to hold the segments
+    if (maxTime > composition.getEndMarker()) {
         composition.setEndMarker(composition.getBarEndForTime(maxTime));
     }
 
