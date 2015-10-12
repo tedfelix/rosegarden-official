@@ -683,22 +683,17 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         timeT absTime = 0;
 
         // Convert the event times from delta to absolute for
-        // consolidateNoteOffEvents().
-        // ??? So, MidiEvent::m_deltaTime becomes an absolute time.
-        //     Introduce a MidiEvent::m_absoluteTime to make this
-        //     clearer.  Then the transform becomes:
-        //        absTime += (*midiEvent)->m_deltaTime;
-        //        (*midiEvent)->m_absoluteTime = absTime;
+        // consolidateNoteEvents().
         for (MidiTrack::iterator midiEvent = m_midiComposition[trackId].begin();
              midiEvent != m_midiComposition[trackId].end();
              ++midiEvent) {
-            absTime = (*midiEvent)->addTime(absTime);
+            absTime += (*midiEvent)->getTime();
+            (*midiEvent)->setTime(absTime);
         }
 
         // Consolidate NOTE ON and NOTE OFF events into NOTE ON events with
         // a duration.
-        // ??? rename: consolidateNoteEvents()
-        consolidateNoteOffEvents(trackId);
+        consolidateNoteEvents(trackId);
 
         InstrumentId compInstrument = MidiInstrumentBase;
 
@@ -1546,7 +1541,7 @@ MidiFile::write(const QString &filename)
 }
 
 void
-MidiFile::consolidateNoteOffEvents(TrackId trackId)
+MidiFile::consolidateNoteEvents(TrackId trackId)
 {
     MidiTrack &track = m_midiComposition[trackId];
 
@@ -1602,7 +1597,7 @@ MidiFile::consolidateNoteOffEvents(TrackId trackId)
             // on percussion tracks.  Instead of setting the duration to
             // 0 in this case, which has no meaning, set it to 1.
             if (noteDuration == 0) {
-                std::cerr << "MidiFile::consolidateNoteOffEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood.\n";
+                std::cerr << "MidiFile::consolidateNoteEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood.\n";
                 noteDuration = 1;
             }
 

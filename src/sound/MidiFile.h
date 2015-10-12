@@ -130,7 +130,7 @@ private:
     /// Find the next track chunk and set m_trackByteCount.
     void findNextTrack(std::ifstream *midiFile);
     /// Combine each note-on/note-off pair into a single note event with a duration.
-    void consolidateNoteOffEvents(TrackId trackId);
+    void consolidateNoteEvents(TrackId trackId);
 
     // Read
     /// Read a "variable-length quantity" from the MIDI byte stream.

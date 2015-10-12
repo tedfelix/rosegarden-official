@@ -22,10 +22,10 @@ namespace Rosegarden
 {
 
 
-/// MidiEvent holds MIDI and Event data during MIDI file I/O.
+/// For standard MIDI file I/O.
 /**
  * MidiEvent is a representation of MIDI which we use
- * for the import/export of MidiFiles.  It uses std::strings for
+ * for the import/export of MIDI files.  It uses std::string for
  * meta event messages which makes them nice and easy to handle.
  *
  * We don't use this class at all for playback or recording of MIDI -
@@ -40,38 +40,30 @@ class MidiEvent
 public:
     MidiEvent();
 
-    /// An event with no data.  Unused.
-//    MidiEvent(timeT deltaTime,
-//              MidiByte eventCode);
-
     /// An event with one data byte.  E.g. Program Change.
-    MidiEvent(timeT deltaTime,
+    MidiEvent(timeT time,
               MidiByte eventCode,
               MidiByte data1);
 
     /// An event with two data bytes.  E.g. Note-On.
-    MidiEvent(timeT deltaTime,
+    MidiEvent(timeT time,
               MidiByte eventCode,
               MidiByte data1,
               MidiByte data2);
 
     /// Meta event
-    MidiEvent(timeT deltaTime,
+    MidiEvent(timeT time,
               MidiByte eventCode,
               MidiByte metaEventCode,
               const std::string &metaMessage);
 
     /// Sysex event
-    MidiEvent(timeT deltaTime,
+    MidiEvent(timeT time,
               MidiByte eventCode,
               const std::string &sysEx);
 
-    ~MidiEvent();
-
-    void setTime(const timeT &time) { m_deltaTime = time; }
-    timeT getTime() const { return m_deltaTime; }
-    /// Convert delta time to absolute time.
-    timeT addTime(const timeT &time);
+    void setTime(const timeT &time)  { m_time = time; }
+    timeT getTime() const  { return m_time; }
 
     void setDuration(const timeT& duration) { m_duration = duration; }
     timeT getDuration() const { return m_duration; }
@@ -88,7 +80,7 @@ public:
     MidiByte getData2() const { return m_data2; }
     MidiByte getVelocity() const { return m_data2; }
 
-    bool isMeta() const { return(m_eventCode == MIDI_FILE_META_EVENT); }
+    bool isMeta() const { return (m_eventCode == MIDI_FILE_META_EVENT); }
     MidiByte getMetaEventCode() const { return m_metaEventCode; }
     void setMetaMessage(const std::string &meta) { m_metaMessage = meta; }
     std::string getMetaMessage() const { return m_metaMessage; }
@@ -96,11 +88,9 @@ public:
     /// Debugging.  Dump to std::cout.
     void print();
 
-    //friend bool operator<(const MidiEvent &a, const MidiEvent &b);
-
 private:
-    // ??? Sometimes this is a delta time, sometimes it is an absolute time.
-    timeT m_deltaTime;
+    /// Delta or absolute time, depending.
+    timeT m_time;
     timeT m_duration;
     MidiByte m_eventCode;
     MidiByte m_data1;
@@ -109,17 +99,6 @@ private:
     MidiByte m_metaEventCode;
     std::string m_metaMessage;
 };
-
-#if 0
-/// Comparator for sorting
-struct MidiEventCmp
-{
-    bool operator()(const MidiEvent &mE1, const MidiEvent &mE2) const
-                    { return mE1.getTime() < mE2.getTime(); }
-    bool operator()(const MidiEvent *mE1, const MidiEvent *mE2) const
-                    { return mE1->getTime() < mE2->getTime(); }
-};
-#endif
 
 
 }

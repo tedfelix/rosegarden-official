@@ -22,81 +22,69 @@ namespace Rosegarden
 
 
 MidiEvent::MidiEvent() :
-    m_deltaTime(0),
+    m_time(0),
     m_duration(0),
     m_eventCode(0),
     m_data1(0),
     m_data2(0),
     m_metaEventCode(0),
     m_metaMessage()
-{}
+{
+}
 
-#if 0
-MidiEvent::MidiEvent(timeT deltaTime,
-                     MidiByte eventCode):
-        m_deltaTime(deltaTime),
-        m_duration(0),
-        m_eventCode(eventCode),
-        m_data1(0),
-        m_data2(0),
-        m_metaEventCode(0),
-        m_metaMessage("")
-{}
-#endif
-
-MidiEvent::MidiEvent(timeT deltaTime,
+MidiEvent::MidiEvent(timeT time,
                      MidiByte eventCode,
                      MidiByte data1):
-        m_deltaTime(deltaTime),
+        m_time(time),
         m_duration(0),
         m_eventCode(eventCode),
         m_data1(data1),
         m_data2(0),
         m_metaEventCode(0),
         m_metaMessage("")
-{}
+{
+}
 
-MidiEvent::MidiEvent(timeT deltaTime,
+MidiEvent::MidiEvent(timeT time,
                      MidiByte eventCode,
                      MidiByte data1,
                      MidiByte data2):
-        m_deltaTime(deltaTime),
+        m_time(time),
         m_duration(0),
         m_eventCode(eventCode),
         m_data1(data1),
         m_data2(data2),
         m_metaEventCode(0),
         m_metaMessage("")
+{
+}
 
-{}
-
-MidiEvent::MidiEvent(timeT deltaTime,
+MidiEvent::MidiEvent(timeT time,
                      MidiByte eventCode,
                      MidiByte metaEventCode,
                      const std::string &metaMessage):
-        m_deltaTime(deltaTime),
+        m_time(time),
         m_duration(0),
         m_eventCode(eventCode),
         m_data1(0),
         m_data2(0),
         m_metaEventCode(metaEventCode),
         m_metaMessage(metaMessage)
-{}
+{
+}
 
-MidiEvent::MidiEvent(timeT deltaTime,
+MidiEvent::MidiEvent(timeT time,
                      MidiByte eventCode,
                      const std::string &sysEx):
-        m_deltaTime(deltaTime),
+        m_time(time),
         m_duration(0),
         m_eventCode(eventCode),
         m_data1(0),
         m_data2(0),
         m_metaEventCode(0),
         m_metaMessage(sysEx)
-{}
-
-MidiEvent::~MidiEvent()
-{}
+{
+}
 
 // Show a representation of our MidiEvent purely for information
 // purposes (also demos how we decode them)
@@ -259,25 +247,6 @@ MidiEvent::print()
 
     return ;
 }
-
-// Adds the argument to _deltaTime and returns the result
-// thus aggregating the times as we go aint
-timeT
-MidiEvent::addTime(const timeT &time)
-{
-    m_deltaTime += time;
-    return m_deltaTime;
-}
-
-
-#if 0
-// Compare based on time
-bool
-operator<(const MidiEvent &a, const MidiEvent &b)
-{
-    return a.getTime() < b.getTime();
-}
-#endif
 
 
 }
