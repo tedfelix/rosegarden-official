@@ -718,6 +718,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // for padding the end of the track with rests.
         timeT endOfLastNote = 0;
 
+        // Statistics.
+        int noteCount = 0;
+        int keySigCount = 0;
+
         int bankMsb = -1;
         int bankLsb = -1;
         Instrument *instrument = 0;
@@ -923,6 +927,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                         break;
                     }
 
+                    ++keySigCount;
+
                     break;
                 }
 
@@ -957,6 +963,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                               midiEvent.getPitch());
                     rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
                                               midiEvent.getVelocity());
+
+                    ++noteCount;
+
                     break;
 
                 case MIDI_NOTE_OFF:
@@ -1150,45 +1159,80 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             continue;
         }
 
-        // if all we have is key signatures and rests, take this
-        // to be a conductor segment and don't insert it
-        //
-        bool keySigsOnly = true;
-        bool haveKeySig = false;
-        for (Segment::iterator i = segment->begin();
-                i != segment->end(); ++i) {
-            if (!(*i)->isa(Rosegarden::Key::EventType) &&
-                    !(*i)->isa(Note::EventRestType)) {
-                keySigsOnly = false;
-                break;
-            } else if ((*i)->isa(Rosegarden::Key::EventType)) {
-                haveKeySig = true;
-            }
+        // Need to count rests separately.
+        int restCount = 0;
+
+        // For each event in the segment
+        for (Segment::const_iterator i = segment->begin();
+             i != segment->end();
+             ++i) {
+            const Event &event = **i;
+
+            if (event.isa(Note::EventRestType))
+                ++restCount;
         }
 
-        if (keySigsOnly) {
+        int nonRestCount = segment->size() - restCount;
+
+        RG_DEBUG << "convertToRosegarden(): Track analysis...";
+        RG_DEBUG << "  Total events:" << segment->size();
+        RG_DEBUG << "  Notes:" << noteCount;
+        RG_DEBUG << "  Rests:" << restCount;
+        RG_DEBUG << "  Non-rests:" << nonRestCount;
+        RG_DEBUG << "  Key signatures:" << keySigCount;
+
+        // Key sigs and no notes means a conductor segment.
+        // Note: A conductor track also contains time signatures and
+        //       tempo events, however we've already added those to the
+        //       composition above.  They are not added to the segment.
+        if (noteCount == 0  &&  keySigCount > 0) {
             conductorSegment = segment;
-            continue;
-        } else if (!haveKeySig && conductorSegment) {
+
+            // If this conductor segment has nothing but rests and key sigs,
+            // there's no need to add it to the composition.
+            if (nonRestCount == keySigCount)
+                continue;
+        }
+
+        // If this track has no key sigs and we have a conductor segment
+        if (keySigCount == 0  &&  conductorSegment) {
             // copy across any key sigs from the conductor segment
 
             timeT segmentStartTime = segment->getStartTime();
             timeT earliestEventEndTime = segmentStartTime;
 
+            // For each event in the segment
             for (Segment::iterator i = conductorSegment->begin();
-                    i != conductorSegment->end(); ++i) {
-                if ((*i)->getAbsoluteTime() + (*i)->getDuration() <
+                 i != conductorSegment->end();
+                 ++i) {
+                const Event &event = **i;
+
+                // If this isn't a key sig, try the next event.
+                if (!event.isa(Rosegarden::Key::EventType))
+                    continue;
+
+                // ??? Should we really expand the segment?  Seems like
+                //     it would make more sense to only add the key sigs
+                //     that fall within the segment's time.  If there isn't
+                //     one at the very start of the segment, then insert
+                //     the previous.
+
+                // Adjust the earliest event time if needed.
+                if (event.getAbsoluteTime() + event.getDuration() <
                         earliestEventEndTime) {
                     earliestEventEndTime =
-                        (*i)->getAbsoluteTime() + (*i)->getDuration();
+                            event.getAbsoluteTime() + event.getDuration();
                 }
-                segment->insert(new Event(**i));
+
+                segment->insert(new Event(event));
             }
 
-            if (earliestEventEndTime < segmentStartTime) {
+            // Add rests to the beginning.
+            // ??? No need.  It happens anyway.  Must be someone else doing
+            //     this.
+            if (earliestEventEndTime < segmentStartTime)
                 segment->fillWithRests(earliestEventEndTime,
-                                                 segmentStartTime);
-            }
+                                       segmentStartTime);
         }
 
 #if INSTRUMENT_TWO_PASS
