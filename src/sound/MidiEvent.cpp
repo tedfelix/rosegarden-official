@@ -11,25 +11,27 @@
   COPYING included with this distribution for more information.
 */
 
-#include "Midi.h"
 #include "MidiEvent.h"
+
+#include "Midi.h"
+
 #include <iostream>
 
-// MidiEvent is a representation of MIDI which we use
-// for the import/export of MidiFiles.  It uses std::strings for
-// meta event messages which makes them nice and easy to handle.
-//
-//
 namespace Rosegarden
 {
 
-using std::string;
-using std::cout;
-using std::endl;
 
-MidiEvent::MidiEvent()
+MidiEvent::MidiEvent() :
+    m_deltaTime(0),
+    m_duration(0),
+    m_eventCode(0),
+    m_data1(0),
+    m_data2(0),
+    m_metaEventCode(0),
+    m_metaMessage()
 {}
 
+#if 0
 MidiEvent::MidiEvent(timeT deltaTime,
                      MidiByte eventCode):
         m_deltaTime(deltaTime),
@@ -40,6 +42,7 @@ MidiEvent::MidiEvent(timeT deltaTime,
         m_metaEventCode(0),
         m_metaMessage("")
 {}
+#endif
 
 MidiEvent::MidiEvent(timeT deltaTime,
                      MidiByte eventCode,
@@ -70,7 +73,7 @@ MidiEvent::MidiEvent(timeT deltaTime,
 MidiEvent::MidiEvent(timeT deltaTime,
                      MidiByte eventCode,
                      MidiByte metaEventCode,
-                     const string &metaMessage):
+                     const std::string &metaMessage):
         m_deltaTime(deltaTime),
         m_duration(0),
         m_eventCode(eventCode),
@@ -82,7 +85,7 @@ MidiEvent::MidiEvent(timeT deltaTime,
 
 MidiEvent::MidiEvent(timeT deltaTime,
                      MidiByte eventCode,
-                     const string &sysEx):
+                     const std::string &sysEx):
         m_deltaTime(deltaTime),
         m_duration(0),
         m_eventCode(eventCode),
@@ -97,53 +100,52 @@ MidiEvent::~MidiEvent()
 
 // Show a representation of our MidiEvent purely for information
 // purposes (also demos how we decode them)
-//
-//
 void
 MidiEvent::print()
 {
     timeT tempo;
     int tonality;
-    string sharpflat;
+    std::string sharpflat;
 
     if (m_metaEventCode) {
         switch (m_metaEventCode) {
         case MIDI_SEQUENCE_NUMBER:
-            cout << "MIDI SEQUENCE NUMBER" << endl;
+            std::cout << "MIDI SEQUENCE NUMBER\n";
             break;
 
         case MIDI_TEXT_EVENT:
-            cout << "MIDI TEXT:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "MIDI TEXT:\t\"" << m_metaMessage << "\"\n";
             break;
 
         case MIDI_COPYRIGHT_NOTICE:
-            cout << "COPYRIGHT:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "COPYRIGHT:\t\"" << m_metaMessage << "\"\n";
+            break;
 
         case MIDI_TRACK_NAME:
-            cout << "TRACK NAME:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "TRACK NAME:\t\"" << m_metaMessage << "\"\n";
             break;
 
         case MIDI_INSTRUMENT_NAME:
-            cout << "INSTRUMENT NAME:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "INSTRUMENT NAME:\t\"" << m_metaMessage << "\"\n";
             break;
 
         case MIDI_LYRIC:
-            cout << "LYRIC:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "LYRIC:\t\"" << m_metaMessage << "\"\n";
             break;
 
         case MIDI_TEXT_MARKER:
-            cout << "MARKER:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "MARKER:\t\"" << m_metaMessage << "\"\n";
             break;
 
         case MIDI_CUE_POINT:
-            cout << "CUE POINT:\t\"" << m_metaMessage << "\"" << endl;
+            std::cout << "CUE POINT:\t\"" << m_metaMessage << "\"\n";
             break;
 
             // Sets a Channel number for a TRACK before it starts
         case MIDI_CHANNEL_PREFIX:
-            cout << "CHANNEL PREFIX:\t"
-            << (timeT)m_metaMessage[0]
-            << endl;
+            std::cout << "CHANNEL PREFIX:\t"
+                 << (timeT)m_metaMessage[0]
+                 << '\n';
             break;
 
             // These are actually the same case but this is not an
@@ -151,12 +153,12 @@ MidiEvent::print()
             // assume it's a MIDI_CHANNEL_PREFIX though
             //
         case MIDI_CHANNEL_PREFIX_OR_PORT:
-            cout << "FIXED CHANNEL PREFIX:\t"
-            << (timeT)m_metaMessage[0] << endl;
+            std::cout << "FIXED CHANNEL PREFIX:\t"
+                 << (timeT)m_metaMessage[0] << '\n';
             break;
 
         case MIDI_END_OF_TRACK:
-            cout << "END OF TRACK" << endl;
+            std::cout << "END OF TRACK\n";
             break;
 
         case MIDI_SET_TEMPO:
@@ -166,25 +168,25 @@ MidiEvent::print()
                 (short)(MidiByte)m_metaMessage[2];
 
             tempo = 60000000 / tempo;
-            cout << "SET TEMPO:\t" << tempo << endl;
+            std::cout << "SET TEMPO:\t" << tempo << '\n';
             break;
 
         case MIDI_SMPTE_OFFSET:
-            cout << "SMPTE TIME CODE:\t"
-            << (timeT)m_metaMessage[0]
-            << ":" << (timeT)m_metaMessage[1]
-            << ":" << (timeT)m_metaMessage[2]
-            << "  -  fps = " << (timeT)m_metaMessage[3]
-            << "  - subdivsperframe = "
-            << (timeT)m_metaMessage[4]
-            << endl;
+            std::cout << "SMPTE TIME CODE:\t"
+                 << (timeT)m_metaMessage[0]
+                 << ":" << (timeT)m_metaMessage[1]
+                 << ":" << (timeT)m_metaMessage[2]
+                 << "  -  fps = " << (timeT)m_metaMessage[3]
+                 << "  - subdivsperframe = "
+                 << (timeT)m_metaMessage[4]
+                 << '\n';
             break;
 
         case MIDI_TIME_SIGNATURE:
-            cout << "TIME SIGNATURE:\t"
-            << (timeT)m_metaMessage[0]
-            << "/"
-            << (1 << (timeT)m_metaMessage[1]) << endl;
+            std::cout << "TIME SIGNATURE:\t"
+                 << (timeT)m_metaMessage[0]
+                 << "/"
+                 << (1 << (timeT)m_metaMessage[1]) << '\n';
             break;
 
         case MIDI_KEY_SIGNATURE:
@@ -197,59 +199,59 @@ MidiEvent::print()
                 sharpflat += " sharp";
             }
 
-            cout << "KEY SIGNATURE:\t" << sharpflat << " "
-            << (((int)m_metaMessage[1]) == 0 ? "major" : "minor")
-            << endl;
+            std::cout << "KEY SIGNATURE:\t" << sharpflat << " "
+                 << (((int)m_metaMessage[1]) == 0 ? "major" : "minor")
+                 << '\n';
 
             break;
 
         case MIDI_SEQUENCER_SPECIFIC:
-            cout << "SEQUENCER SPECIFIC:\t\"" << m_metaMessage << endl;
+            std::cout << "SEQUENCER SPECIFIC:\t\"" << m_metaMessage << '\n';
             break;
 
 
         default:
-            cout << "Undefined MIDI META event - "
-            << (timeT)m_metaEventCode << endl;
+            std::cout << "Undefined MIDI META event - "
+                 << (timeT)m_metaEventCode << '\n';
             break;
         }
     } else {
         switch (m_eventCode & MIDI_MESSAGE_TYPE_MASK) {
         case MIDI_NOTE_ON:
-            cout << "NOTE ON:\t" << (int)m_data1 << " - "
-            << (int)m_data2 << endl;
+            std::cout << "NOTE ON:\t" << (int)m_data1 << " - "
+                 << (int)m_data2 << '\n';
             break;
 
         case MIDI_NOTE_OFF:
-            cout << "NOTE OFF:\t" << (int)m_data1 << " - "
-            << (int)m_data2 << endl;
+            std::cout << "NOTE OFF:\t" << (int)m_data1 << " - "
+                 << (int)m_data2 << '\n';
             break;
 
         case MIDI_POLY_AFTERTOUCH:
-            cout << "POLY AFTERTOUCH:\t" << (int)m_data1
-            << " - " << (int)m_data2 << endl;
+            std::cout << "POLY AFTERTOUCH:\t" << (int)m_data1
+                 << " - " << (int)m_data2 << '\n';
             break;
 
         case MIDI_CTRL_CHANGE:
-            cout << "CTRL CHANGE:\t" << (int)m_data1
-            << " - " << (int)m_data2 << endl;
+            std::cout << "CTRL CHANGE:\t" << (int)m_data1
+                 << " - " << (int)m_data2 << '\n';
             break;
 
         case MIDI_PITCH_BEND:
-            cout << "PITCH BEND:\t" << (int)m_data1
-            << " - " << (int)m_data2 << endl;
+            std::cout << "PITCH BEND:\t" << (int)m_data1
+                 << " - " << (int)m_data2 << '\n';
             break;
 
         case MIDI_PROG_CHANGE:
-            cout << "PROG CHANGE:\t" << (int)m_data1 << endl;
+            std::cout << "PROG CHANGE:\t" << (int)m_data1 << '\n';
             break;
 
         case MIDI_CHNL_AFTERTOUCH:
-            cout << "CHNL AFTERTOUCH\t" << (int)m_data1 << endl;
+            std::cout << "CHNL AFTERTOUCH\t" << (int)m_data1 << '\n';
             break;
 
         default:
-            cout << "Undefined MIDI event" << endl;
+            std::cout << "Undefined MIDI event\n";
             break;
         }
     }
@@ -268,15 +270,14 @@ MidiEvent::addTime(const timeT &time)
 }
 
 
+#if 0
 // Compare based on time
-//
 bool
 operator<(const MidiEvent &a, const MidiEvent &b)
 {
     return a.getTime() < b.getTime();
 }
+#endif
 
 
 }
-
-
