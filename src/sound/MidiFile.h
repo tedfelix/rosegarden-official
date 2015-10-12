@@ -129,7 +129,8 @@ private:
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
     /// Find the next track chunk and set m_trackByteCount.
     void findNextTrack(std::ifstream *midiFile);
-    bool consolidateNoteOffEvents(TrackId track);
+    /// Combine each note-on/note-off pair into a single note event with a duration.
+    void consolidateNoteOffEvents(TrackId trackId);
 
     // Read
     /// Read a "variable-length quantity" from the MIDI byte stream.

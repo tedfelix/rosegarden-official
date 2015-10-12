@@ -516,7 +516,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
         case MIDI_PROG_CHANGE:    // These events have a single data byte.
         case MIDI_CHNL_AFTERTOUCH:
             {
-                RG_DEBUG << "parseTrack(): Program change or channel aftertouch: time " << deltaTime << ", code " << (int)statusByte << ", data " << (int) data1  << " going to track " << trackNum;
+                RG_DEBUG << "parseTrack(): Program change (Cn) or channel aftertouch (Dn): time " << deltaTime << ", code " << QString("0x%1").arg(statusByte, 0, 16) << ", data " << (int) data1  << " going to track " << trackNum;
 
                 // create and store our event
                 MidiEvent *midiEvent =
@@ -685,7 +685,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // Convert the event times from delta to absolute for
         // consolidateNoteOffEvents().
         // ??? So, MidiEvent::m_deltaTime becomes an absolute time.
-        //     Recommend adding a MidiEvent::m_absoluteTime to make this
+        //     Introduce a MidiEvent::m_absoluteTime to make this
         //     clearer.  Then the transform becomes:
         //        absTime += (*midiEvent)->m_deltaTime;
         //        (*midiEvent)->m_absoluteTime = absTime;
@@ -1545,64 +1545,85 @@ MidiFile::write(const QString &filename)
     return (retOK);
 }
 
-// Delete dead NOTE OFF and NOTE ON/Zero Velocty Events after
-// reading them and modifying their relevant NOTE ONs
-//
-bool
-MidiFile::consolidateNoteOffEvents(TrackId track)
+void
+MidiFile::consolidateNoteOffEvents(TrackId trackId)
 {
-    MidiTrack::iterator nOE, mE = m_midiComposition[track].begin();
-    bool notesOnTrack = false;
-    bool noteOffFound;
+    MidiTrack &track = m_midiComposition[trackId];
 
-    for (;mE != m_midiComposition[track].end(); ++mE) {
-        if ((*mE)->getMessageType() == MIDI_NOTE_ON && (*mE)->getVelocity() > 0) {
-            // We've found a note - flag it
-            //
-            if (!notesOnTrack)
-                notesOnTrack = true;
+    // For each MIDI event on the track.
+    for (MidiTrack::iterator firstEventIter = track.begin();
+         firstEventIter != track.end();
+         ++firstEventIter) {
+        MidiEvent &firstEvent = **firstEventIter;
 
-            noteOffFound = false;
+        // Not a note-on?  Try the next event.
+        if (firstEvent.getMessageType() != MIDI_NOTE_ON)
+            continue;
 
-            for (nOE = mE; nOE != m_midiComposition[track].end(); ++nOE) {
-                if (((*nOE)->getChannelNumber() == (*mE)->getChannelNumber()) &&
-                        ((*nOE)->getPitch() == (*mE)->getPitch()) &&
-                        ((*nOE)->getMessageType() == MIDI_NOTE_OFF ||
-                         ((*nOE)->getMessageType() == MIDI_NOTE_ON &&
-                          (*nOE)->getVelocity() == 0x00))) {
-                    timeT noteDuration = ((*nOE)->getTime() - (*mE)->getTime());
+        // Note-on with velocity 0 is a note-off.  Try the next event.
+        if (firstEvent.getVelocity() == 0)
+            continue;
 
-                    // Some MIDI files floating around in the real world
-                    // apparently have NOTE ON followed immediately by NOTE OFF
-                    // on percussion tracks.  Instead of setting the duration to
-                    // 0 in this case, which has no meaning, set it to 1.
-                    if (noteDuration == 0) {
-                        std::cerr << "MidiFile::consolidateNoteOffEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood."
-                                  << std::endl;
-                        noteDuration = 1;
-                    }
-                    (*mE)->setDuration(noteDuration);
+        // At this point, firstEvent is a note-on event.
+        // Search for the matching note-off event.
 
-                    delete *nOE;
-                    m_midiComposition[track].erase(nOE);
+        bool noteOffFound = false;
 
-                    noteOffFound = true;
-                    break;
-                }
+        MidiTrack::iterator secondEventIter;
+
+        // For each following MIDI event
+        for (secondEventIter = firstEventIter + 1;
+             secondEventIter != track.end();
+             ++secondEventIter) {
+            const MidiEvent &secondEvent = **secondEventIter;
+
+            bool noteOff = (secondEvent.getMessageType() == MIDI_NOTE_OFF  ||
+                    (secondEvent.getMessageType() == MIDI_NOTE_ON  &&
+                     secondEvent.getVelocity() == 0x00));
+
+            // Not a note-off?  Try the next event.
+            if (!noteOff)
+                continue;
+
+            // Wrong pitch?  Try the next event.
+            if (secondEvent.getPitch() != firstEvent.getPitch())
+                continue;
+
+            // Wrong channel?  Try the next event.
+            // Note: Since all the events in a track are for a single channel,
+            //       this will never be true.
+            if (secondEvent.getChannelNumber() != firstEvent.getChannelNumber())
+                continue;
+
+            timeT noteDuration = secondEvent.getTime() - firstEvent.getTime();
+
+            // Some MIDI files floating around in the real world
+            // apparently have note-on followed immediately by note-off
+            // on percussion tracks.  Instead of setting the duration to
+            // 0 in this case, which has no meaning, set it to 1.
+            if (noteDuration == 0) {
+                std::cerr << "MidiFile::consolidateNoteOffEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood.\n";
+                noteDuration = 1;
             }
 
-            // If no matching NOTE OFF has been found then set
-            // Event duration to length of Segment
-            //
-            if (noteOffFound == false) {
-                --nOE; // avoid crash due to nOE == track.end()
-                (*mE)->setDuration((*nOE)->getTime() - (*mE)->getTime());
+            firstEvent.setDuration(noteDuration);
 
-            }
+            // Remove the note-off.
+            delete *secondEventIter;
+            track.erase(secondEventIter);
+
+            noteOffFound = true;
+            break;
+        }
+
+        if (!noteOffFound) {
+            // avoid crash due to secondEventIter == track.end()
+            --secondEventIter;
+            // Set Event duration to length of Segment.
+            firstEvent.setDuration(
+                    (*secondEventIter)->getTime() - firstEvent.getTime());
         }
     }
-
-    return notesOnTrack;
 }
 
 // Clear down the MidiFile Composition
