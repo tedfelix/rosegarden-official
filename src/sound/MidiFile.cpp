@@ -568,23 +568,6 @@ MidiFile::parseTrack(std::ifstream *midiFile)
         midiFile->ignore();
 }
 
-// borrowed from ALSA pcm_timer.c
-//
-static unsigned long gcd(unsigned long a, unsigned long b)
-{
-    unsigned long r;
-    if (a < b) {
-        r = a;
-        a = b;
-        b = r;
-    }
-    while ((r = a % b) != 0) {
-        a = b;
-        b = r;
-    }
-    return b;
-}
-
 bool
 MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 {
@@ -599,27 +582,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
     composition.clear();
 
-    TrackId compTrack = 0;
-    for (Composition::iterator ci = composition.begin();
-            ci != composition.end(); ++ci) {
-        if ((*ci)->getTrack() >= compTrack)
-            compTrack = (*ci)->getTrack() + 1;
-    }
-
-    // precalculate the timing factor
-    //
-    // [cc] -- attempt to avoid floating-point rounding errors
-    timeT crotchetTime = Note(Note::Crotchet).getDuration();
-    int divisor = m_timingDivision ? m_timingDivision : 96;
-
-    unsigned long multiplier = crotchetTime;
-    const int g = (int)gcd(crotchetTime, divisor);
-    multiplier /= g;
-    divisor /= g;
-
-    timeT maxRawTime = LONG_MAX;
-    if ((long)multiplier > (long)divisor)
-        maxRawTime = (maxRawTime / multiplier) * divisor;
+    const int rosegardenPPQ = Note(Note::Crotchet).getDuration();
+    const int midiFilePPQ = m_timingDivision ? m_timingDivision : 96;
+    // Conversion factor.
+    const double midiToRgTime =
+            static_cast<double>(rosegardenPPQ) /
+            static_cast<double>(midiFilePPQ);
 
     //bool haveTimeSignatures = false;
     InstrumentId compInstrument = MidiInstrumentBase;
@@ -649,11 +617,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         std::map<int, tempoT> tempi;
         // For each track
         for (TrackId i = 0; i < m_midiComposition.size(); ++i) {
-            // for each event
+            // For each event
             for (MidiTrack::const_iterator midiEvent = m_midiComposition[i].begin();
                  midiEvent != m_midiComposition[i].end();
                  ++midiEvent) {        
                 if ((*midiEvent)->isMeta()) {
+                    // If we have a set tempo meta-event
                     if ((*midiEvent)->getMetaEventCode() == MIDI_SET_TEMPO) {
                         MidiByte m0 = (*midiEvent)->getMetaMessage()[0];
                         MidiByte m1 = (*midiEvent)->getMetaMessage()[1];
@@ -662,6 +631,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                         if (tempo != 0) {
                             double qpm = 60000000.0 / double(tempo);
                             tempoT rgt(Composition::getTempoForQpm(qpm));
+                            // Store the tempo in the tempo map.
+                            // ??? Strange.  The event's time is a delta
+                            //     time at this point.  Seems wrong.
                             tempi[(*midiEvent)->getTime()] = rgt;
                         }
                     }
@@ -681,8 +653,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     // Used to expand the composition if needed.
     timeT maxTime = 0;
     Segment *conductorSegment = 0;
+    // Time Signature
     int numerator = 4;
     int denominator = 4;
+
+    // Destination TrackId in the composition.
+    TrackId compositionTrackId = 0;
 
     // For each track
     // ??? BIG loop.
@@ -729,16 +705,16 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
 
         Segment *rosegardenSegment = new Segment;
-        rosegardenSegment->setTrack(compTrack);
+        rosegardenSegment->setTrack(compositionTrackId);
         rosegardenSegment->setStartTime(0);
 
-        Track *track = new Track(compTrack,        // id
-                                 compInstrument,   // instrument
-                                 compTrack,        // position
-                                 "Imported MIDI",  // label
-                                 false);           // muted
+        Track *track = new Track(compositionTrackId,  // id
+                                 compInstrument,      // instrument
+                                 compositionTrackId,  // position
+                                 "Imported MIDI",     // label
+                                 false);              // muted
 
-        RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << compTrack << ", instrument = " << compInstrument;
+        RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << compositionTrackId << ", instrument = " << compInstrument;
 
         // rest creation token needs to be reset here
         //
@@ -763,18 +739,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             timeT rosegardenDuration = 0;
 
             if (m_timingFormat == MIDI_TIMING_PPQ_TIMEBASE) {
-
-                if (rawTime < maxRawTime) {
-                    rosegardenTime =
-                        timeT((rawTime * multiplier) / divisor);
-                } else {
-                    rosegardenTime =
-                        timeT((double(rawTime) * multiplier) / double(divisor) + 0.01);
-                }
-
-                rosegardenDuration =
-                    timeT((rawDuration * multiplier) / divisor);
-
+                rosegardenTime = timeT(rawTime * midiToRgTime);
+                rosegardenDuration = timeT(rawDuration * midiToRgTime);
             } else {
 
                 // SMPTE timestamps are a count of the number of
@@ -801,9 +767,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                      << ", potential max time " << (rosegardenTime + rosegardenDuration)
                      << ", ev raw time " << (*midiEvent)->getTime()
                      << ", ev raw duration " << (*midiEvent)->getDuration()
-                     << ", crotchet " << crotchetTime
-                     << ", multiplier " << multiplier
-                     << ", divisor " << divisor
+                     << ", crotchet " << Note(Note::Crotchet).getDuration()
+                     << ", midiToRgTime " << midiToRgTime
                      << ", sfps " << m_fps * m_subframes;
 
             if (rosegardenTime + rosegardenDuration > maxTime) {
@@ -855,8 +820,13 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
                 case MIDI_END_OF_TRACK: {
                     timeT trackEndTime = rosegardenTime;
+                    // If the track's empty (or worse)
                     if (trackEndTime <= 0) {
-                        trackEndTime = crotchetTime * 4 * numerator / denominator;
+                        // Make it a full bar.
+                        // ??? Use Semibreve instead of Crotchet*4.
+                        trackEndTime =
+                                Note(Note::Crotchet).getDuration() * 4 *
+                                    numerator / denominator;
                     }
                     if (endOfLastNote < trackEndTime) {
                         // If there's nothing in the segment yet, then we
@@ -1206,7 +1176,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
             composition.addSegment(rosegardenSegment);
             addedSegments.push_back(rosegardenSegment);
-            compTrack++;
+
+            // Next track in the composition.
+            ++compositionTrackId;
 
         } else {
             delete rosegardenSegment;
@@ -1216,10 +1188,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
     }
 
-    // If needed, expand the composition to hold the segments
-    if (maxTime > composition.getEndMarker()) {
-        composition.setEndMarker(composition.getBarEndForTime(maxTime));
-    }
+    // Adjust the composition to hold the segments.
+    composition.setEndMarker(composition.getBarEndForTime(maxTime));
 
     for (std::vector<Segment *>::iterator i = addedSegments.begin();
          i != addedSegments.end(); ++i) {
