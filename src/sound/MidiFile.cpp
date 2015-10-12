@@ -1139,91 +1139,94 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             }
         }  // for each event
 
-        if (!segment->empty()) {
-
-            // if all we have is key signatures and rests, take this
-            // to be a conductor segment and don't insert it
-            //
-            bool keySigsOnly = true;
-            bool haveKeySig = false;
-            for (Segment::iterator i = segment->begin();
-                    i != segment->end(); ++i) {
-                if (!(*i)->isa(Rosegarden::Key::EventType) &&
-                        !(*i)->isa(Note::EventRestType)) {
-                    keySigsOnly = false;
-                    break;
-                } else if ((*i)->isa(Rosegarden::Key::EventType)) {
-                    haveKeySig = true;
-                }
-            }
-
-            if (keySigsOnly) {
-                conductorSegment = segment;
-                continue;
-            } else if (!haveKeySig && conductorSegment) {
-                // copy across any key sigs from the conductor segment
-
-                timeT segmentStartTime = segment->getStartTime();
-                timeT earliestEventEndTime = segmentStartTime;
-
-                for (Segment::iterator i = conductorSegment->begin();
-                        i != conductorSegment->end(); ++i) {
-                    if ((*i)->getAbsoluteTime() + (*i)->getDuration() <
-                            earliestEventEndTime) {
-                        earliestEventEndTime =
-                            (*i)->getAbsoluteTime() + (*i)->getDuration();
-                    }
-                    segment->insert(new Event(**i));
-                }
-
-                if (earliestEventEndTime < segmentStartTime) {
-                    segment->fillWithRests(earliestEventEndTime,
-                                                     segmentStartTime);
-                }
-            }
-
-#if INSTRUMENT_TWO_PASS
-            // ??? At this point we could check for Bank Selects, Program
-            //     Changes and CC's at time zero on this track.  If there
-            //     are any, we could configure the track's instrument to
-            //     match and remove the BS/PC/CC events at time 0.
-#endif
-
-#ifdef DEBUG
-            RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << segment->getStartTime() << " and end time " << segment->getEndTime();
-            // Secret trigger end time for testing.
-            if (segment->getEndTime() == 2880) {
-                RG_DEBUG << "  events:";
-                for (Segment::iterator i = segment->begin();
-                     i != segment->end(); ++i) {
-                    RG_DEBUG << "    type = " << (*i)->getType();
-                    RG_DEBUG << "    time = " << (*i)->getAbsoluteTime();
-                    RG_DEBUG << "    duration = " << (*i)->getDuration();
-                }
-            }
-#endif
-
-            // add the Segment to the Composition and increment the
-            // Rosegarden segment number
-            //
-            composition.addTrack(track);
-
-            std::vector<TrackId> trackIds;
-            trackIds.push_back(track->getId());
-            composition.notifyTracksAdded(trackIds);
-
-            composition.addSegment(segment);
-            addedSegments.push_back(segment);
-
-            // Next Track in the Composition.
-            ++rosegardenTrackId;
-
-        } else {
+        // Empty segment?  Toss it.
+        if (segment->empty()) {
             delete segment;
             segment = 0;
             delete track;
             track = 0;
+
+            // Try the next track
+            continue;
         }
+
+        // if all we have is key signatures and rests, take this
+        // to be a conductor segment and don't insert it
+        //
+        bool keySigsOnly = true;
+        bool haveKeySig = false;
+        for (Segment::iterator i = segment->begin();
+                i != segment->end(); ++i) {
+            if (!(*i)->isa(Rosegarden::Key::EventType) &&
+                    !(*i)->isa(Note::EventRestType)) {
+                keySigsOnly = false;
+                break;
+            } else if ((*i)->isa(Rosegarden::Key::EventType)) {
+                haveKeySig = true;
+            }
+        }
+
+        if (keySigsOnly) {
+            conductorSegment = segment;
+            continue;
+        } else if (!haveKeySig && conductorSegment) {
+            // copy across any key sigs from the conductor segment
+
+            timeT segmentStartTime = segment->getStartTime();
+            timeT earliestEventEndTime = segmentStartTime;
+
+            for (Segment::iterator i = conductorSegment->begin();
+                    i != conductorSegment->end(); ++i) {
+                if ((*i)->getAbsoluteTime() + (*i)->getDuration() <
+                        earliestEventEndTime) {
+                    earliestEventEndTime =
+                        (*i)->getAbsoluteTime() + (*i)->getDuration();
+                }
+                segment->insert(new Event(**i));
+            }
+
+            if (earliestEventEndTime < segmentStartTime) {
+                segment->fillWithRests(earliestEventEndTime,
+                                                 segmentStartTime);
+            }
+        }
+
+#if INSTRUMENT_TWO_PASS
+        // ??? At this point we could check for Bank Selects, Program
+        //     Changes and CC's at time zero on this track.  If there
+        //     are any, we could configure the track's instrument to
+        //     match and remove the BS/PC/CC events at time 0.
+#endif
+
+#ifdef DEBUG
+        RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << segment->getStartTime() << " and end time " << segment->getEndTime();
+        // Secret trigger end time for testing.
+        if (segment->getEndTime() == 2880) {
+            RG_DEBUG << "  events:";
+            for (Segment::iterator i = segment->begin();
+                 i != segment->end(); ++i) {
+                RG_DEBUG << "    type = " << (*i)->getType();
+                RG_DEBUG << "    time = " << (*i)->getAbsoluteTime();
+                RG_DEBUG << "    duration = " << (*i)->getDuration();
+            }
+        }
+#endif
+
+        // add the Segment to the Composition and increment the
+        // Rosegarden segment number
+        //
+        composition.addTrack(track);
+
+        std::vector<TrackId> trackIds;
+        trackIds.push_back(track->getId());
+        composition.notifyTracksAdded(trackIds);
+
+        composition.addSegment(segment);
+        addedSegments.push_back(segment);
+
+        // Next Track in the Composition.
+        ++rosegardenTrackId;
+
     }  // for each track
 
     // Adjust the composition to hold the segments.
