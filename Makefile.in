@@ -166,18 +166,18 @@ install:
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME32DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME64DIR)
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden.png $(INSTMIME16DIR)/audio-x-rosegarden-composition.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden.png $(INSTMIME32DIR)/audio-x-rosegarden-composition.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden.png $(INSTMIME64DIR)/audio-x-rosegarden-composition.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgd.png $(INSTMIME16DIR)/audio-x-rosegarden-device.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgd.png $(INSTMIME32DIR)/audio-x-rosegarden-device.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgd.png $(INSTMIME64DIR)/audio-x-rosegarden-device.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgp.png $(INSTMIME16DIR)/audio-x-rosegarden-project.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgp.png $(INSTMIME32DIR)/audio-x-rosegarden-project.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgp.png $(INSTMIME64DIR)/audio-x-rosegarden-project.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgt.png $(INSTMIME16DIR)/audio-x-rosegarden-template.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgt.png $(INSTMIME32DIR)/audio-x-rosegarden-template.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgt.png $(INSTMIME64DIR)/audio-x-rosegarden-template.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden.png $(INSTMIME16DIR)/application-x-rosegarden-composition.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden.png $(INSTMIME32DIR)/application-x-rosegarden-composition.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden.png $(INSTMIME64DIR)/application-x-rosegarden-composition.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgd.png $(INSTMIME16DIR)/application-x-rosegarden-device.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgd.png $(INSTMIME32DIR)/application-x-rosegarden-device.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgd.png $(INSTMIME64DIR)/application-x-rosegarden-device.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgp.png $(INSTMIME16DIR)/application-x-rosegarden-project.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgp.png $(INSTMIME32DIR)/application-x-rosegarden-project.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgp.png $(INSTMIME64DIR)/application-x-rosegarden-project.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgt.png $(INSTMIME16DIR)/application-x-rosegarden-template.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgt.png $(INSTMIME32DIR)/application-x-rosegarden-template.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgt.png $(INSTMIME64DIR)/application-x-rosegarden-template.png
 	$(MKDIR_P) -m 755 $(INSTMIMEXMLDIR)
 	$(INSTALL) -m 644 data/mime/rosegarden.xml $(INSTMIMEXMLDIR)
 	$(MKDIR_P) -m 755 $(INSTDESKTOPDIR)
@@ -194,9 +194,9 @@ install:
 
 uninstall:
 	rm -f $(INSTBINDIR)/rosegarden
-	rm -f $(INSTMIME16DIR)/audio-x-rosegarden*
-	rm -f $(INSTMIME32DIR)/audio-x-rosegarden*
-	rm -f $(INSTMIME64DIR)/audio-x-rosegarden*
+	rm -f $(INSTMIME16DIR)/application-x-rosegarden*
+	rm -f $(INSTMIME32DIR)/application-x-rosegarden*
+	rm -f $(INSTMIME64DIR)/application-x-rosegarden*
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
 	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
