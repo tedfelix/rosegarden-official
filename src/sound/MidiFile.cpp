@@ -293,12 +293,12 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (midiHeader.size() < 14) {
         std::cerr << "MidiFile::parseHeader() - file header undersized\n";
-        throw Exception(qstrtostr(QOject::tr("Not a MIDI file")));
+        throw Exception(qstrtostr(QObject::tr("Not a MIDI file")));
     }
 
     if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
         std::cerr << "MidiFile::parseHeader() - file header not found or malformed\n";
-        throw Exception(qstrtostr(QOject::tr("Not a MIDI file")));
+        throw Exception(qstrtostr(QObject::tr("Not a MIDI file")));
     }
 
     long chunkSize = midiBytesToLong(midiHeader.substr(4, 4));
@@ -309,7 +309,7 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
         std::cerr << "MidiFile::parseHeader() - can't load sequential track (Format 2) MIDI file\n";
-        throw Exception(qstrtostr(QOject::tr("Unexpected MIDI file format")));
+        throw Exception(qstrtostr(QObject::tr("Unexpected MIDI file format")));
     }
 
     if (m_timingDivision > 32767) {

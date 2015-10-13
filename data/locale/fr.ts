@@ -10691,11 +10691,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+68"/>
+        <location line="+5"/>
+        <source>Not a MIDI file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Unexpected MIDI file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Invalid event code found</source>
         <translation type="obsolete">Un code d&apos;événement invalide a été trouvé</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+93"/>
         <source>Running status used for first event in track</source>
         <translation>Le premier événement de la piste utilise le &quot;Running status&quot;</translation>
     </message>
@@ -10896,20 +10907,6 @@ Le démarrage du pilote a échoué avec le message suivant :
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
         <translation>Mettre à jour les traits</translation>
-    </message>
-</context>
-<context>
-    <name>QOject</name>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="-109"/>
-        <location line="+5"/>
-        <source>Not a MIDI file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Unexpected MIDI file format</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

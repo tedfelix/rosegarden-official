@@ -10751,11 +10751,22 @@
         <translation>Archivo dañado o en formato no estándar</translation>
     </message>
     <message>
+        <location line="+68"/>
+        <location line="+5"/>
+        <source>Not a MIDI file</source>
+        <translation>No es archivo MIDI</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Unexpected MIDI file format</source>
+        <translation>Archivo MIDI de formato inesperado</translation>
+    </message>
+    <message>
         <source>Invalid event code found</source>
         <translation type="obsolete">Se encontró un código de evento erróneo</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+93"/>
         <source>Running status used for first event in track</source>
         <translation>Estado de ejecución usado por primero evento en pista</translation>
     </message>
@@ -10898,15 +10909,12 @@
 <context>
     <name>QOject</name>
     <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="-109"/>
-        <location line="+5"/>
         <source>Not a MIDI file</source>
-        <translation>No es archivo MIDI</translation>
+        <translation type="obsolete">No es archivo MIDI</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Unexpected MIDI file format</source>
-        <translation>Archivo MIDI de formato inesperado</translation>
+        <translation type="obsolete">Archivo MIDI de formato inesperado</translation>
     </message>
 </context>
 <context>

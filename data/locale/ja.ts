@@ -10696,11 +10696,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+68"/>
+        <location line="+5"/>
+        <source>Not a MIDI file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Unexpected MIDI file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Invalid event code found</source>
         <translation type="obsolete">不正なイベントコードが見つかりました</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+93"/>
         <source>Running status used for first event in track</source>
         <translation>トラック中の最初のイベントのために使われている動作ステータス</translation>
     </message>
@@ -10890,20 +10901,6 @@
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QOject</name>
-    <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="-109"/>
-        <location line="+5"/>
-        <source>Not a MIDI file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Unexpected MIDI file format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
