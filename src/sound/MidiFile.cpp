@@ -77,8 +77,7 @@ MidiFile::midiBytesToLong(const std::string &bytes)
         std::cerr << "MidiFile::midiBytesToLong(): WARNING: Wrong length for long data (" << bytes.length() << ", should be 4)\n";
 
         // TRANSLATOR: "long" is a C++ data type
-        throw Exception(qstrtostr(
-                tr("Wrong length for long data in MIDI stream")));
+        throw Exception(qstrtostr(QObject::tr("Wrong length for long data in MIDI stream")));
     }
 
     long longRet = ((long)(((MidiByte)bytes[0]) << 24)) |
@@ -98,8 +97,7 @@ MidiFile::midiBytesToInt(const std::string &bytes)
         std::cerr << "MidiFile::midiBytesToInt(): WARNING: Wrong length for int data (" << bytes.length() << ", should be 2)\n";
 
         // TRANSLATOR: "int" is a C++ data type
-        throw Exception(qstrtostr(
-                tr("Wrong length for int data in MIDI stream")));
+        throw Exception(qstrtostr(QObject::tr("Wrong length for int data in MIDI stream")));
     }
 
     int intRet = ((int)(((MidiByte)bytes[0]) << 8)) |
@@ -119,16 +117,14 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (midiFile->eof()) {
         std::cerr << "MidiFile::read(): MIDI file EOF - got 0 bytes out of " << numberOfBytes << '\n';
 
-        throw Exception(qstrtostr(
-                tr("End of MIDI file encountered while reading")));
+        throw Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading")));
     }
 
     // For each track section we can read only m_trackByteCount bytes.
     if (m_decrementCount  &&  numberOfBytes > (unsigned long)m_trackByteCount) {
         std::cerr << "MidiFile::read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")\n";
 
-        throw Exception(qstrtostr(
-                tr("Attempt to get more bytes than expected on Track")));
+        throw Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track")));
     }
 
     char fileMidiByte;
@@ -143,7 +139,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (stringRet.length() < numberOfBytes) {
         std::cerr << "MidiFile::read(): Attempt to read past file end - got " << stringRet.length() << " bytes out of " << numberOfBytes << '\n';
 
-        throw Exception(qstrtostr(tr("Attempt to read past MIDI file end")));
+        throw Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end")));
     }
 
     if (m_decrementCount)
@@ -229,8 +225,7 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
 
     // Track not found.
     std::cerr << "MidiFile::findNextTrack(): Couldn't find Track\n";
-    throw Exception(qstrtostr(
-            tr("File corrupted or in non-standard format")));
+    throw Exception(qstrtostr(QObject::tr("File corrupted or in non-standard format")));
 }
 
 bool
@@ -298,12 +293,12 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (midiHeader.size() < 14) {
         std::cerr << "MidiFile::parseHeader() - file header undersized\n";
-        throw Exception(qstrtostr(tr("Not a MIDI file")));
+        throw Exception(qstrtostr(QOject::tr("Not a MIDI file")));
     }
 
     if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
         std::cerr << "MidiFile::parseHeader() - file header not found or malformed\n";
-        throw Exception(qstrtostr(tr("Not a MIDI file")));
+        throw Exception(qstrtostr(QOject::tr("Not a MIDI file")));
     }
 
     long chunkSize = midiBytesToLong(midiHeader.substr(4, 4));
@@ -314,7 +309,7 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
         std::cerr << "MidiFile::parseHeader() - can't load sequential track (Format 2) MIDI file\n";
-        throw Exception(qstrtostr(tr("Unexpected MIDI file format")));
+        throw Exception(qstrtostr(QOject::tr("Unexpected MIDI file format")));
     }
 
     if (m_timingDivision > 32767) {
@@ -407,8 +402,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
         } else {  // Use running status.
             // If we haven't seen a status byte yet, fail.
             if (runningStatus < 0)
-                throw Exception(qstrtostr(
-                        tr("Running status used for first event in track")));
+                throw Exception(qstrtostr(QObject::tr("Running status used for first event in track")));
 
             statusByte = (MidiByte)runningStatus;
             data1 = midiByte;
