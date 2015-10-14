@@ -44,9 +44,6 @@
 // ??? Get rid of this.  Use RG_NO_DEBUG_PRINT instead.
 #define MIDI_DEBUG 1
 
-// New two-pass instrument configuration approach.
-#define INSTRUMENT_TWO_PASS 0
-
 namespace Rosegarden
 {
 
@@ -716,10 +713,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         int noteCount = 0;
         int keySigCount = 0;
 
-        int bankMsb = -1;
-        int bankLsb = -1;
-        Instrument *instrument = 0;
-
         // For each event on the current track
         // ??? BIG loop.
         for (MidiTrack::const_iterator midiEventIter =
@@ -968,132 +961,11 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_PROG_CHANGE:
-                    //RG_DEBUG << "convertToRosegarden(): Program change found";
-
-                    // ??? Recommend we preserve the current behavior and add
-                    //     a member variable to enable a mode whereby all
-                    //     BS/PCs/CCs are simple preserved.
-                    //       bool m_preserveBSPCCC;
-                    //     Have it configurable in the settings for Will.
-                    //     This will be a simple first step on the way to doing
-                    //     this right.
-                    // ??? For now, mark the code with INSTRUMENT_TWO_PASS.
-                    // ??? We need to implement a two-pass approach where
-                    //     we import everything as-is, then do a second
-                    //     pass checking to see if there are PC's,
-                    //     BS's, and CC's at time 0 that can be
-                    //     removed and converted to Instrument
-                    //     settings.  We can do this immediately after the
-                    //     event processing loop and before the track loop
-                    //     ends.
-#if !INSTRUMENT_TWO_PASS
-                    if (!instrument) {
-
-                        bool percussion = (midiEvent.getChannelNumber() ==
-                                           MIDI_PERCUSSION_CHANNEL);
-                        int program = midiEvent.getData1();
-
-                        // ??? Setting up the instrument just because we
-                        //     received a Program Change seems rather
-                        //     arbitrary.  See Bug #1439.
-                        instrument = studio.getInstrumentById(instrumentId);
-                        if (instrument) {
-                            instrument->setPercussion(percussion);
-                            instrument->setSendProgramChange(true);
-                            instrument->setProgramChange(program);
-                            instrument->setSendBankSelect(bankMsb >= 0  ||  bankLsb >= 0);
-                            if (instrument->sendsBankSelect()) {
-                                instrument->setMSB(bankMsb >= 0 ? bankMsb : 0);
-                                instrument->setLSB(bankLsb >= 0 ? bankLsb : 0);
-                            }
-                        }
-                    }
-
-                    // assign it here
-                    if (instrument) {
-                        track->setInstrument(instrument->getId());
-                        // We used to set the segment name from the instrument
-                        // here, but now we do them all at the end only if the
-                        // segment has no other name set (e.g. from instrument
-                        // meta event)
-                        if (midiAbsoluteTime == 0) break; // no insert
-                    }
-
-                    // did we have a bank select? if so, insert that too
-
-                    if (bankMsb >= 0) {
-                        segment->insert
-                        (Controller(MIDI_CONTROLLER_BANK_MSB, bankMsb).
-                         getAsEvent(rosegardenTime));
-                    }
-                    if (bankLsb >= 0) {
-                        segment->insert
-                        (Controller(MIDI_CONTROLLER_BANK_LSB, bankLsb).
-                         getAsEvent(rosegardenTime));
-                    }
-#endif
-
                     rosegardenEvent = ProgramChange(midiEvent.getData1()).
                                           getAsEvent(rosegardenTime);
                     break;
 
                 case MIDI_CTRL_CHANGE:
-#if !INSTRUMENT_TWO_PASS
-                    // If it's a bank select, interpret it (or remember
-                    // for later insertion) instead of just inserting it
-                    // as a Rosegarden event
-
-                    if (midiEvent.getData1() == MIDI_CONTROLLER_BANK_MSB) {
-                        bankMsb = midiEvent.getData2();
-                        break;
-                    }
-
-                    if (midiEvent.getData1() == MIDI_CONTROLLER_BANK_LSB) {
-                        bankLsb = midiEvent.getData2();
-                        break;
-                    }
-
-                    // If it's something we can use as an instrument
-                    // parameter, and it's at time zero, and we already
-                    // have an instrument, then apply it to the instrument
-                    // instead of inserting
-
-                    if (instrument && midiAbsoluteTime == 0) {
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_VOLUME) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_PAN) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_PAN, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_ATTACK) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_ATTACK, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_RELEASE) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_RELEASE, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_FILTER) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_FILTER, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_RESONANCE) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_RESONANCE, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_CHORUS) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_CHORUS, midiEvent.getData2());
-                            break;
-                        }
-                        if (midiEvent.getData1() == MIDI_CONTROLLER_REVERB) {
-                            instrument->setControllerValue(MIDI_CONTROLLER_REVERB, midiEvent.getData2());
-                            break;
-                        }
-                    }
-#endif
-
                     rosegardenEvent =
                             Controller(midiEvent.getData1(),
                                        midiEvent.getData2()).
@@ -1184,8 +1056,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
             // If this conductor segment has nothing but rests and key sigs,
             // there's no need to add it to the composition.
-            if (nonRestCount == keySigCount)
+            // ??? This probably never happens.  Conductor tracks almost
+            //     always have a few text events in them.
+            if (nonRestCount == keySigCount) {
+                // ??? Memory leak.  conductorSegment will not be deleted.
                 continue;
+            }
         }
 
         // If this track has no key sigs and we have a conductor segment
@@ -1229,12 +1105,99 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                        segmentStartTime);
         }
 
-#if INSTRUMENT_TWO_PASS
-        // ??? At this point we could check for Bank Selects, Program
-        //     Changes and CC's at time zero on this track.  If there
-        //     are any, we could configure the track's instrument to
-        //     match and remove the BS/PC/CC events at time 0.
-#endif
+        // Configure the Instrument based on events at time 0.
+
+        Instrument *instrument = studio.getInstrumentById(instrumentId);
+
+        if (instrument) {
+            instrument->setPercussion(
+                    instrument->getNaturalChannel() ==
+                            MIDI_PERCUSSION_CHANNEL);
+
+            track->setInstrument(instrument->getId());
+
+            Segment::iterator msbIter = segment->end();
+            Segment::iterator lsbIter = segment->end();
+
+            // For each event in the segment
+            for (Segment::iterator i = segment->begin();
+                 i != segment->end();
+                 /* increment before use */) {
+                // Increment before use.  This allows us to delete events
+                // from the Segment.
+                Segment::iterator j = i++;
+
+                const Event &event = **j;
+
+                // We only care about events at time 0.
+                if (event.getAbsoluteTime() > 0)
+                    break;
+
+                // If this is a Bank Select MSB, save it.
+                if (event.isa(Controller::EventType)  &&
+                    event.get<Int>(Controller::NUMBER) ==
+                            MIDI_CONTROLLER_BANK_MSB) {
+                    msbIter = j;
+                    continue;
+                }
+
+                // If this is a Bank Select LSB, save it.
+                if (event.isa(Controller::EventType)  &&
+                    event.get<Int>(Controller::NUMBER) ==
+                            MIDI_CONTROLLER_BANK_LSB) {
+                    lsbIter = j;
+                    continue;
+                }
+
+                // If this is a Program Change
+                if (event.isa(ProgramChange::EventType)) {
+                    // Configure the instrument.
+                    int program = event.get<Int>(ProgramChange::PROGRAM);
+                    instrument->setProgramChange(program);
+                    instrument->setSendProgramChange(true);
+
+                    // Remove the program change from the Segment.
+                    segment->erase(j);
+
+                    continue;
+                }
+
+                // If this is a control change
+                if (event.isa(Controller::EventType)) {
+                    int controller = event.get<Int>(Controller::NUMBER);
+
+                    // Only process the four that usually appear in the
+                    // Instrument Parameters box.
+                    if (controller == MIDI_CONTROLLER_VOLUME  ||
+                        controller == MIDI_CONTROLLER_PAN  ||
+                        controller == MIDI_CONTROLLER_REVERB  ||
+                        controller == MIDI_CONTROLLER_CHORUS) {
+
+                        // Configure the Instrument.
+                        instrument->setControllerValue(
+                                controller,
+                                event.get<Int>(Controller::VALUE));
+
+                        // Remove the event from the Segment.
+                        segment->erase(j);
+
+                        continue;
+                    }
+                }
+            }
+
+            // If we have both msb and lsb for bank select
+            if (msbIter != segment->end()  &&  lsbIter != segment->end()) {
+                // Configure the Instrument
+                instrument->setMSB((*msbIter)->get<Int>(Controller::VALUE));
+                instrument->setLSB((*lsbIter)->get<Int>(Controller::VALUE));
+                instrument->setSendBankSelect(true);
+
+                // Remove the events.
+                segment->erase(msbIter);
+                segment->erase(lsbIter);
+            }
+        }
 
 #ifdef DEBUG
         RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << segment->getStartTime() << " and end time " << segment->getEndTime();
