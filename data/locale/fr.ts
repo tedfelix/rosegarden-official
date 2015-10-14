@@ -10688,18 +10688,18 @@
     <message>
         <location line="+86"/>
         <source>File corrupted or in non-standard format</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier corrompu ou pas du format attendu</translation>
     </message>
     <message>
         <location line="+68"/>
         <location line="+5"/>
         <source>Not a MIDI file</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce n&apos;est pas un fichier MIDI</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Unexpected MIDI file format</source>
-        <translation type="unfinished"></translation>
+        <translation>Format de fichier MIDI inattendu</translation>
     </message>
     <message>
         <source>Invalid event code found</source>
@@ -12633,7 +12633,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="-188"/>
         <location line="+188"/>
         <source> </source>
-        <translation type="unfinished"> </translation>
+        <translation> </translation>
     </message>
     <message>
         <location line="-188"/>
@@ -13983,7 +13983,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+5"/>
         <source>Use notation duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser la durée indiquée dans la partition</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16595,7 +16595,7 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;Send bank select for variation&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Emettre la banque sélectionnée pour les variations&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -22188,7 +22188,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+4"/>
         <source>Pitch</source>
-        <translation type="unfinished">Tessiture</translation>
+        <translation>Tessiture</translation>
     </message>
     <message>
         <location line="+4"/>
