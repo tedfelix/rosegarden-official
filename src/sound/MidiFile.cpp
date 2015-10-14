@@ -326,6 +326,8 @@ MidiFile::parseHeader(std::ifstream *midiFile)
     }
 }
 
+static const std::string defaultTrackName = "Imported MIDI";
+
 void
 MidiFile::parseTrack(std::ifstream *midiFile)
 {
@@ -361,6 +363,9 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // Meta-events don't have a channel, so we place them in a fixed
     // track number instead
     TrackId metaTrack = lastTrackNum;
+
+    std::string trackName = defaultTrackName;
+    std::string instrumentName;
 
     // Remember the last non-meta status byte (-1 if we haven't seen one)
     int runningStatus = -1;
@@ -428,6 +433,11 @@ MidiFile::parseTrack(std::ifstream *midiFile)
                                          metaEventCode,
                                          metaMessage);
             m_midiComposition[metaTrack].push_back(e);
+
+            if (metaEventCode == MIDI_TRACK_NAME)
+                trackName = metaMessage;
+            else if (metaEventCode == MIDI_INSTRUMENT_NAME)
+                instrumentName = metaMessage;
 
             // Get the next event.
             continue;
@@ -560,6 +570,13 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // the following MIDI file track (if there is one.)
     if (m_trackByteCount == 1)
         midiFile->ignore();
+
+    if (instrumentName != "")
+        trackName += " (" + instrumentName + ")";
+
+    // Fill out the Track Names
+    for (TrackId i = metaTrack; i <= lastTrackNum; ++i)
+        m_trackNames.push_back(trackName);
 }
 
 bool
@@ -570,6 +587,11 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     // Read the MIDI file into m_midiComposition.
     if (!read(filename))
         return false;
+
+    if (m_midiComposition.size() != m_trackNames.size()) {
+        std::cerr << "MidiFile::convertToRosegarden(): m_midiComposition and m_trackNames size mismatch\n";
+        return false;
+    }
 
     Composition &composition = doc->getComposition();
     Studio &studio = doc->getStudio();
@@ -694,13 +716,14 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
 
         Segment *segment = new Segment;
+        segment->setLabel(m_trackNames[trackId]);
         segment->setTrack(rosegardenTrackId);
         segment->setStartTime(0);
 
         Track *track = new Track(rosegardenTrackId,   // id
                                  instrumentId,        // instrument
                                  rosegardenTrackId,   // position
-                                 "Imported MIDI",     // label
+                                 m_trackNames[trackId],  // label
                                  false);              // muted
 
         RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << rosegardenTrackId << ", instrument = " << instrumentId;
@@ -809,11 +832,11 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_TRACK_NAME:
-                    track->setLabel(midiEvent.getMetaMessage());
+                    // We already handled this in parseTrack().
                     break;
 
                 case MIDI_INSTRUMENT_NAME:
-                    segment->setLabel(midiEvent.getMetaMessage());
+                    // We already handled this in parseTrack().
                     break;
 
                 case MIDI_END_OF_TRACK: {
@@ -1197,6 +1220,16 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 segment->erase(msbIter);
                 segment->erase(lsbIter);
             }
+
+            // Use the program name for a label if nothing else
+            // was found.
+            std::string programName = instrument->getProgramName();
+            if (programName != "") {
+                if (track->getLabel() == defaultTrackName)
+                    track->setLabel(instrument->getProgramName());
+                if (segment->getLabel() == defaultTrackName)
+                    segment->setLabel(instrument->getProgramName());
+            }
         }
 
 #ifdef DEBUG
@@ -1239,15 +1272,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         if (s) {
             timeT duration = s->getEndMarkerTime() - s->getStartTime();
             //RG_DEBUG << "convertToRosegarden(): duration = " << duration << " (start " << s->getStartTime() << ", end " << s->getEndTime() << ", marker " << s->getEndMarkerTime() << ")";
+            // Make sure any zero-length segments are at least a crotchet
+            // wide.
+            // ??? Move this into the "for each track" loop.
             if (duration == 0) {
                 s->setEndMarkerTime(s->getStartTime() +
                                     Note(Note::Crotchet).getDuration());
-            }
-            Instrument *instr = studio.getInstrumentFor(s);
-            if (instr) {
-                if (s->getLabel() == "") {
-                    s->setLabel(studio.getSegmentName(instr->getId()));
-                }
             }
         }
     }

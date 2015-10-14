@@ -127,6 +127,8 @@ private:
     void parseTrack(std::ifstream *midiFile);
     // m_midiComposition track to MIDI channel.
     std::map<TrackId, int /*channel*/> m_trackChannelMap;
+    // Names for each track.
+    std::vector<std::string> m_trackNames;
     /// Find the next track chunk and set m_trackByteCount.
     void findNextTrack(std::ifstream *midiFile);
     /// Combine each note-on/note-off pair into a single note event with a duration.
