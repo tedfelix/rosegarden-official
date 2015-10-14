@@ -162,6 +162,11 @@ public:
     bool isVolta();
 
     /**
+     * Return true if the segment is the first volta of a chain
+     */
+    bool isFirstVolta();
+
+    /**
      * Return true if the segment is the last volta of a chain
      */
     bool isLastVolta();
@@ -170,6 +175,11 @@ public:
      * Return the text of the current volta.
      */
     std::string getVoltaText();
+
+    /**
+     * Return the number of time the current volta is played.
+     */
+    int getVoltaRepeatCount();
     
     /**
      * Return true if LilyPond automatic volta mode is usable.
@@ -314,6 +324,7 @@ private :
 
     bool m_repeatWithVolta;
     VoltaChain * m_currentVoltaChain;
+    bool m_firstVolta;
     bool m_lastVolta;
 
 };

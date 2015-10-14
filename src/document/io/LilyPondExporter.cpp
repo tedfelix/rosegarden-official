@@ -1444,6 +1444,8 @@ LilyPondExporter::write()
                 str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                     << "\" {"; // indent+
 
+                str << std::endl << indent(col) << "% Segment: " << seg->getLabel();
+                
                 str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
                 str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
@@ -1593,12 +1595,36 @@ LilyPondExporter::write()
                          !haveRepeatingWithVolta &&
                          !haveVolta) {
                     if (!lsc.isVolta()) {
-                        str << std::endl << indent(col++) 
-                            << "\\repeat volta " << lsc.getNumberOfRepeats() << " {";
+                        str << std::endl << indent(col++); 
+                        if (lsc.isAutomaticVoltaUsable()) {
+                            str << "\\repeat volta "
+                                << lsc.getNumberOfRepeats() << " ";
+                        }
+                        // Opening of main repeating segment
+                        str << "{   % Repeating stegment start here";
+                        str << std::endl << indent(col)
+                            << "% Segment: " << seg->getLabel();
                         haveRepeatingWithVolta = true;
+                        if (!lsc.isAutomaticVoltaUsable()) {
+                           str << std::endl << indent(col)
+                               << "\\set Score.repeatCommands = #'(start-repeat)";
+                        }
                     } else {
+                        str << std::endl << indent(col) 
+                            << "{   % Alternative start here";
                         str << std::endl << indent(col++) 
-                            << "{     % Alternative start here";
+                            << "    % Segment: " << seg->getLabel();
+                        if (!lsc.isAutomaticVoltaUsable()) {
+                            str << std::endl << indent(col)
+                                << "\\set Score.repeatCommands = ";
+                            if (lsc.isFirstVolta()) {   
+                                str << "#'((volta \""
+                                    << lsc.getVoltaText() << "\"))";
+                            } else {
+                                str << "#'((volta #f) (volta \""
+                                    << lsc.getVoltaText() << "\") end-repeat)";
+                            }
+                        }
                         if (m_voltaBar) {
                             str << std::endl << indent(col) 
                                 << "\\bar \"|\" ";
@@ -1667,8 +1693,11 @@ LilyPondExporter::write()
             // Open alternate parts if repeat with volta from linked segments
             if (haveRepeatingWithVolta) {
                 if (!lsc.isVolta()) {
-                    str << std::endl << indent(--col) << "} \% close main repeat ";
-                    str << std::endl << indent (col++) << "\\alternative {" <<  std::endl;
+                    str << std::endl << indent(--col) << "} \% close main repeat";
+                    if (lsc.isAutomaticVoltaUsable()) {
+                        str << std::endl << indent (col++) << "\\alternative  {";
+                    }
+                    str <<  std::endl;
                 } else {
                     // Close alternative segment
                     str << std::endl << indent(--col) << "}";
@@ -1687,11 +1716,27 @@ LilyPondExporter::write()
 
             if (lsc.isVolta()) {
                 // close volta
+                if (!lsc.isAutomaticVoltaUsable() && lsc.isLastVolta()) {
+                    str << std::endl << indent (col)
+                        << "\\set Score.repeatCommands = ";
+                    if (lsc.getVoltaRepeatCount() > 1) {
+                        str << "#'((volta #f) end-repeat)";
+                    } else {
+                        str << "#'((volta #f))";
+                    }
+                    if (lsc.getVoltaRepeatCount() < 1) {
+                        std::cerr << "BUG in LilyPondExporter : "
+                                  << "lsc.getVoltaRepeatCount() = "
+                                  << lsc.getVoltaRepeatCount() << std::endl;
+                    }
+                }
                 str << std::endl << indent(--col) << "}" << std::endl;  // indent-
 
                 if (lsc.isLastVolta()) {
-                    // close alternative section
-                    str << std::endl << indent(--col) << "}" << std::endl;  // indent-
+                    if (lsc.isAutomaticVoltaUsable()) {
+                        // close alternative section
+                        str << std::endl << indent(--col) << "}" << std::endl;  // indent-
+                    }
 
                    // close Voice context
                     str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-

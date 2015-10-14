@@ -40,6 +40,7 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(LilyPondExporter *exporter,
     m_nextRepeatId(1),
     m_repeatWithVolta(false),
     m_currentVoltaChain(0),
+    m_firstVolta(false),
     m_lastVolta(false)
 {
     m_segments.clear();
@@ -430,6 +431,7 @@ LilyPondSegmentsContext::useNextSegment()
         // Process possible volta segment
         if (m_segIterator->numberOfRepeatLinks) {
             if (!m_currentVoltaChain) {
+                m_firstVolta = true;
                 m_currentVoltaChain = m_segIterator->sortedVoltaChain;
                 m_voltaIterator = m_currentVoltaChain->begin();
                 if (m_voltaIterator != m_currentVoltaChain->end()) {
@@ -437,6 +439,7 @@ LilyPondSegmentsContext::useNextSegment()
                     return (*m_voltaIterator)->segment;
                 }
             } else {
+                m_firstVolta = false;
                 ++m_voltaIterator;
                 if (m_voltaIterator != m_currentVoltaChain->end()) {
                     VoltaChain::iterator nextIt = m_voltaIterator;
@@ -504,6 +507,12 @@ LilyPondSegmentsContext::isVolta()
 }
 
 bool
+LilyPondSegmentsContext::isFirstVolta()
+{
+    return m_firstVolta;
+}
+
+bool
 LilyPondSegmentsContext::isLastVolta()
 {
     return m_lastVolta;
@@ -548,6 +557,15 @@ LilyPondSegmentsContext::getVoltaText()
     }
 
     return std::string(out.str());
+}
+
+int
+LilyPondSegmentsContext::getVoltaRepeatCount()
+{
+    if (!(*m_segIterator).sortedVoltaChain) return 0;
+    if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return 0;
+    
+    return (*m_voltaIterator)->voltaNumber.size();
 }
 
 bool
