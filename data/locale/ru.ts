@@ -331,23 +331,23 @@
         <translation type="unfinished">Не удаётся открыть файл шрифтовой карты &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="+30"/>
-        <location line="+33"/>
-        <location line="+61"/>
-        <location line="+49"/>
-        <location line="+143"/>
-        <location line="+157"/>
-        <location line="+1207"/>
-        <location line="+48"/>
-        <location line="+73"/>
-        <location line="+1942"/>
-        <location line="+860"/>
+        <location filename="../QMenuStrings.cpp" line="+66"/>
         <location line="+115"/>
+        <location line="+70"/>
+        <location line="+1104"/>
+        <location line="+140"/>
+        <location line="+45"/>
+        <location line="+49"/>
+        <location line="+242"/>
+        <location line="+36"/>
+        <location line="+106"/>
+        <location line="+747"/>
+        <location line="+54"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location line="-4687"/>
+        <location line="-942"/>
         <source>&amp;Add Audio File...</source>
         <translation>&amp;Добавить звуковой файл...</translation>
     </message>
@@ -357,37 +357,37 @@
         <translation>&amp;Экспортировать звуковой файл...</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+31"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+166"/>
-        <location line="+1207"/>
-        <location line="+48"/>
-        <location line="+75"/>
-        <location line="+1993"/>
-        <location line="+807"/>
+        <location line="-1757"/>
         <location line="+106"/>
+        <location line="+79"/>
+        <location line="+1104"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+49"/>
+        <location line="+235"/>
+        <location line="+43"/>
+        <location line="+159"/>
+        <location line="+685"/>
+        <location line="+65"/>
         <source>&amp;Close</source>
         <translation>&amp;Закрыть</translation>
     </message>
     <message>
-        <location line="-4677"/>
-        <location line="+31"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+166"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+798"/>
+        <location line="-2701"/>
         <location line="+106"/>
+        <location line="+79"/>
+        <location line="+1104"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+284"/>
+        <location line="+211"/>
+        <location line="+676"/>
+        <location line="+65"/>
         <source>&amp;Edit</source>
         <translation>&amp;Правка</translation>
     </message>
     <message>
-        <location line="-4685"/>
+        <location line="-951"/>
         <source>&amp;Unload Audio File</source>
         <translation>&amp;Выгрузить звуковой файл</translation>
     </message>
@@ -407,131 +407,131 @@
         <translation>Удалить &amp;неиспользуемые звуковые файлы...</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+59"/>
+        <location line="-1682"/>
         <location line="+1"/>
-        <location line="+51"/>
+        <location line="+62"/>
         <location line="+1"/>
-        <location line="+134"/>
+        <location line="+1092"/>
+        <location line="+158"/>
         <location line="+1"/>
-        <location line="+51"/>
+        <location line="+48"/>
         <location line="+1"/>
-        <location line="+1193"/>
-        <location line="+173"/>
+        <location line="+49"/>
         <location line="+1"/>
-        <location line="+69"/>
+        <location line="+46"/>
         <location line="+1"/>
-        <location line="+1693"/>
-        <location line="+880"/>
-        <location line="+342"/>
+        <location line="+226"/>
+        <location line="+73"/>
         <location line="+1"/>
-        <location line="+57"/>
+        <location line="+664"/>
+        <location line="+172"/>
         <location line="+1"/>
+        <location line="+1690"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location line="-3207"/>
-        <location line="+1937"/>
-        <location line="+880"/>
+        <location line="-3121"/>
+        <location line="+1269"/>
+        <location line="+1863"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>Ру&amp;ководство по сообщению об ошибках</translation>
     </message>
     <message>
-        <location line="-4310"/>
-        <location line="+59"/>
-        <location line="+52"/>
-        <location line="+135"/>
-        <location line="+52"/>
-        <location line="+1196"/>
-        <location line="+171"/>
-        <location line="+70"/>
-        <location line="+1696"/>
-        <location line="+880"/>
-        <location line="+340"/>
-        <location line="+58"/>
+        <location line="-4289"/>
+        <location line="+63"/>
+        <location line="+1095"/>
+        <location line="+156"/>
+        <location line="+49"/>
+        <location line="+50"/>
+        <location line="+47"/>
+        <location line="+227"/>
+        <location line="+73"/>
+        <location line="+667"/>
+        <location line="+170"/>
+        <location line="+1693"/>
         <source>&amp;About Rosegarden</source>
         <translation>&amp;О Rosegarden</translation>
     </message>
     <message>
-        <location line="-4708"/>
-        <location line="+1496"/>
-        <location line="+1937"/>
+        <location line="-3129"/>
+        <location line="+527"/>
+        <location line="+2605"/>
         <source>General Toolbar</source>
         <translation>Общая панель</translation>
     </message>
     <message>
-        <location line="-3403"/>
-        <location line="+156"/>
-        <location line="+272"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
+        <location line="-4258"/>
+        <location line="+88"/>
+        <location line="+1132"/>
+        <location line="+288"/>
+        <location line="+364"/>
+        <location line="+741"/>
         <source>&amp;Copy</source>
         <translation>&amp;Копировать</translation>
     </message>
     <message>
-        <location line="-4381"/>
-        <location line="+156"/>
-        <location line="+272"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
+        <location line="-2604"/>
+        <location line="+88"/>
+        <location line="+1132"/>
+        <location line="+288"/>
+        <location line="+364"/>
+        <location line="+741"/>
         <source>&amp;Paste</source>
         <translation>Вст&amp;авить</translation>
     </message>
     <message>
-        <location line="-4370"/>
-        <location line="+192"/>
-        <location line="+52"/>
+        <location line="-2802"/>
+        <location line="+148"/>
+        <location line="+1163"/>
+        <location line="+487"/>
         <location line="+36"/>
+        <location line="+73"/>
+        <location line="+694"/>
+        <location line="+2063"/>
+        <location line="+3"/>
+        <location line="+3"/>
         <location line="+36"/>
-        <location line="+1126"/>
-        <location line="+72"/>
-        <location line="+163"/>
-        <location line="+1931"/>
-        <location line="+863"/>
-        <location line="+123"/>
         <source>Switch to Select Tool</source>
         <translation>Выделение</translation>
     </message>
     <message>
-        <location line="-4593"/>
-        <location line="+192"/>
-        <location line="+4279"/>
-        <location line="+123"/>
+        <location line="-4557"/>
+        <location line="+1686"/>
+        <location line="+2830"/>
+        <location line="+3"/>
         <source>Switch to Inserting Notes</source>
         <translation>Вставка нот</translation>
     </message>
     <message>
-        <location line="-4593"/>
-        <location line="+192"/>
-        <location line="+104"/>
-        <location line="+36"/>
-        <location line="+1135"/>
-        <location line="+27"/>
-        <location line="+36"/>
-        <location line="+2065"/>
-        <location line="+12"/>
-        <location line="+864"/>
-        <location line="+123"/>
+        <location line="-4650"/>
+        <location line="+132"/>
+        <location line="+60"/>
+        <location line="+1102"/>
+        <location line="+524"/>
+        <location line="+89"/>
+        <location line="+694"/>
+        <location line="+53"/>
+        <location line="+1994"/>
+        <location line="+3"/>
+        <location line="+28"/>
         <source>Switch to Erase Tool</source>
         <translation>Ластик</translation>
     </message>
     <message>
-        <location line="-4592"/>
+        <location line="-4660"/>
+        <location line="+185"/>
+        <location line="+1104"/>
+        <location line="+185"/>
         <location line="+49"/>
-        <location line="+300"/>
-        <location line="+1207"/>
-        <location line="+48"/>
-        <location line="+73"/>
-        <location line="+1980"/>
-        <location line="+822"/>
+        <location line="+278"/>
+        <location line="+144"/>
+        <location line="+763"/>
         <source>&amp;Save</source>
         <translation>Со&amp;хранить</translation>
     </message>
     <message>
-        <location line="-4393"/>
+        <location line="-1382"/>
         <source>&amp;Insert Event</source>
         <translation>&amp;Вставить событие</translation>
     </message>
@@ -551,103 +551,103 @@
         <translation>&amp;Расширенный редактор событий</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+272"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
+        <location line="-1131"/>
+        <location line="+1132"/>
+        <location line="+288"/>
+        <location line="+364"/>
+        <location line="+741"/>
         <source>Cu&amp;t</source>
         <translation>&amp;Вырезать</translation>
     </message>
     <message>
-        <location line="-4198"/>
-        <location line="+281"/>
+        <location line="-2480"/>
+        <location line="+1123"/>
         <source>C&amp;lear Selection</source>
         <translation>&amp;Снять выделение</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+1363"/>
+        <location line="-1114"/>
+        <location line="+2558"/>
         <source>&amp;Filter Selection</source>
         <translation>&amp;Фильтровать выделение</translation>
     </message>
     <message>
-        <location line="-1641"/>
-        <location line="+58"/>
-        <location line="+230"/>
-        <location line="+1364"/>
-        <location line="+1997"/>
-        <location line="+760"/>
-        <location line="+60"/>
+        <location line="-2742"/>
+        <location line="+194"/>
+        <location line="+1116"/>
+        <location line="+55"/>
+        <location line="+642"/>
+        <location line="+592"/>
+        <location line="+154"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location line="-4468"/>
-        <location line="+58"/>
-        <location line="+4351"/>
-        <location line="+60"/>
+        <location line="-2752"/>
+        <location line="+1310"/>
+        <location line="+55"/>
+        <location line="+1234"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Музыкальное время</translation>
     </message>
     <message>
-        <location line="-4468"/>
-        <location line="+58"/>
-        <location line="+4351"/>
-        <location line="+60"/>
+        <location line="-2598"/>
+        <location line="+1310"/>
+        <location line="+55"/>
+        <location line="+1234"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Реальное время</translation>
     </message>
     <message>
-        <location line="-4468"/>
-        <location line="+58"/>
-        <location line="+4351"/>
-        <location line="+60"/>
+        <location line="-2598"/>
+        <location line="+1310"/>
+        <location line="+55"/>
+        <location line="+1234"/>
         <source>Ra&amp;w Times</source>
         <translation type="unfinished">&amp;Грубое время</translation>
     </message>
     <message>
-        <location line="-4466"/>
-        <location line="+397"/>
-        <location line="+1289"/>
-        <location line="+2040"/>
+        <location line="-2293"/>
+        <location line="+1007"/>
+        <location line="+774"/>
+        <location line="+703"/>
         <source>Se&amp;gment</source>
         <translation>Сег&amp;мент</translation>
     </message>
     <message>
-        <location line="-3725"/>
-        <location line="+397"/>
-        <location line="+1289"/>
-        <location line="+2049"/>
+        <location line="-2483"/>
+        <location line="+1007"/>
+        <location line="+783"/>
+        <location line="+694"/>
         <source>Edit &amp;With</source>
         <translation>&amp;Открыть в редакторе...</translation>
     </message>
     <message>
-        <location line="-3734"/>
-        <location line="+399"/>
-        <location line="+1288"/>
-        <location line="+2057"/>
-        <location line="+371"/>
+        <location line="-2481"/>
+        <location line="+1005"/>
+        <location line="+169"/>
+        <location line="+623"/>
+        <location line="+686"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>&amp;Матричный редактор</translation>
     </message>
     <message>
-        <location line="-4114"/>
-        <location line="+397"/>
-        <location line="+3364"/>
-        <location line="+371"/>
+        <location line="-2484"/>
+        <location line="+1007"/>
+        <location line="+186"/>
+        <location line="+623"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>&amp;Нотный редактор</translation>
     </message>
     <message>
-        <location line="-2872"/>
-        <location line="+1937"/>
-        <location line="+880"/>
+        <location line="-953"/>
+        <location line="+1269"/>
+        <location line="+1863"/>
         <source>About &amp;Qt</source>
         <translation>О &amp;Qt</translation>
     </message>
     <message>
-        <location line="-619"/>
+        <location line="-2482"/>
         <source>Import Rosegarden &amp;Project File...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -722,13 +722,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+53"/>
-        <location line="+371"/>
+        <location line="-570"/>
+        <location line="+623"/>
         <source>Open in &amp;Default Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-257"/>
+        <location line="+114"/>
         <source>&amp;Update all Figurations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -739,44 +739,44 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+406"/>
+        <location line="-2361"/>
         <source>Hide St&amp;atusbar</source>
         <translation>&amp;Строка состояния</translation>
     </message>
     <message>
-        <location line="-4393"/>
+        <location line="+12"/>
+        <location line="+1163"/>
+        <location line="+151"/>
         <location line="+3"/>
-        <location line="+1250"/>
-        <location line="+3152"/>
         <source>Actions Toolbar</source>
         <translation>Панель «Действия»</translation>
     </message>
     <message>
-        <location line="-4404"/>
-        <location line="+51"/>
-        <location line="+4354"/>
-        <location line="+57"/>
+        <location line="-1316"/>
+        <location line="+1314"/>
+        <location line="+48"/>
+        <location line="+1234"/>
         <source>Time Toolbar</source>
         <translation>Панель «Время»</translation>
     </message>
     <message>
-        <location line="-4461"/>
-        <location line="+1250"/>
-        <location line="+167"/>
-        <location line="+70"/>
-        <location line="+1700"/>
-        <location line="+884"/>
+        <location line="-1435"/>
+        <location line="+154"/>
+        <location line="+144"/>
+        <location line="+300"/>
+        <location line="+675"/>
+        <location line="+1859"/>
         <source>Transport Toolbar</source>
         <translation>Транспорт</translation>
     </message>
     <message>
-        <location line="-4069"/>
-        <location line="+4088"/>
+        <location line="-2976"/>
+        <location line="+1136"/>
         <source>Zoom Toolbar</source>
         <translation>Панель «Масштаб»</translation>
     </message>
     <message>
-        <location line="-713"/>
+        <location line="+2030"/>
         <source>Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -826,7 +826,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3354"/>
+        <location line="+2"/>
         <source>Insert Marker</source>
         <translation>Вставить маркер</translation>
     </message>
@@ -846,42 +846,42 @@
         <translation>Изменить маркер</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+72"/>
-        <location line="+1126"/>
+        <location line="-2747"/>
+        <location line="+712"/>
+        <location line="+35"/>
+        <location line="+2016"/>
         <location line="+36"/>
-        <location line="+54"/>
         <source>Switch to Move Tool</source>
         <translation>Перемещение</translation>
     </message>
     <message>
-        <location line="-1279"/>
-        <location line="+27"/>
-        <location line="+1171"/>
-        <location line="+18"/>
-        <location line="+45"/>
+        <location line="-4706"/>
+        <location line="+2601"/>
+        <location line="+44"/>
+        <location line="+2034"/>
+        <location line="+36"/>
         <source>Switch to Draw Tool</source>
         <translation>Рисование</translation>
     </message>
     <message>
-        <location line="-1252"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+1162"/>
-        <location line="+45"/>
+        <location line="-4697"/>
+        <location line="+1907"/>
+        <location line="+703"/>
+        <location line="+44"/>
+        <location line="+2052"/>
         <source>Switch to Resize Tool</source>
         <translation>Смена размера</translation>
     </message>
     <message>
-        <location line="-1133"/>
-        <location line="+3341"/>
-        <location line="+621"/>
-        <location line="+159"/>
+        <location line="-4641"/>
+        <location line="+194"/>
+        <location line="+1420"/>
+        <location line="+373"/>
         <source>&amp;Delete</source>
         <translation>&amp;Удалить</translation>
     </message>
     <message>
-        <location line="-4083"/>
+        <location line="-1755"/>
         <source>&amp;Grid</source>
         <translation>&amp;Сетка</translation>
     </message>
@@ -902,370 +902,370 @@
     </message>
     <message>
         <location line="+41"/>
-        <location line="+1288"/>
-        <location line="+1996"/>
+        <location line="+1736"/>
+        <location line="+747"/>
         <source>&amp;Composition</source>
         <translation>&amp;Композиция</translation>
     </message>
     <message>
-        <location line="-3283"/>
-        <location line="+1288"/>
-        <location line="+1996"/>
-        <location line="+669"/>
+        <location line="-2844"/>
+        <location line="+362"/>
+        <location line="+1736"/>
+        <location line="+747"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Добавить смену &amp;темпа...</translation>
     </message>
     <message>
-        <location line="-3952"/>
-        <location line="+1288"/>
-        <location line="+1996"/>
-        <location line="+677"/>
+        <location line="-2836"/>
+        <location line="+354"/>
+        <location line="+1736"/>
+        <location line="+747"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Добавить &amp;смену размера...</translation>
     </message>
     <message>
-        <location line="-3958"/>
-        <location line="+1289"/>
-        <location line="+2085"/>
-        <location line="+371"/>
+        <location line="-2480"/>
+        <location line="+1203"/>
+        <location line="+623"/>
+        <location line="+658"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Редактор &amp;событий</translation>
     </message>
     <message>
-        <location line="-3738"/>
-        <location line="+1571"/>
+        <location line="-2477"/>
+        <location line="+2766"/>
         <source>Ad&amp;just</source>
         <translation>Коррек&amp;ция</translation>
     </message>
     <message>
-        <location line="-1570"/>
-        <location line="+1756"/>
+        <location line="-2765"/>
+        <location line="+2951"/>
         <source>&amp;Quantize</source>
         <translation>&amp;Квантование</translation>
     </message>
     <message>
-        <location line="-1755"/>
-        <location line="+1756"/>
-        <location line="+1628"/>
-        <location line="+433"/>
+        <location line="-2950"/>
+        <location line="+1275"/>
+        <location line="+561"/>
+        <location line="+1115"/>
         <source>&amp;Quantize...</source>
         <translation>&amp;Квантовать...</translation>
     </message>
     <message>
-        <location line="-3799"/>
+        <location line="-2933"/>
         <source>&amp;Legato</source>
         <translation>&amp;Легато</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1555"/>
+        <location line="+2750"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation>Объединить ноты с &amp;одинаковой высотой тона</translation>
     </message>
     <message>
-        <location line="-1546"/>
-        <location line="+1822"/>
-        <location line="+1550"/>
+        <location line="-2741"/>
+        <location line="+1824"/>
+        <location line="+1193"/>
         <source>Jog &amp;Left</source>
         <translation>Сместить в&amp;лево</translation>
     </message>
     <message>
-        <location line="-3354"/>
-        <location line="+1778"/>
+        <location line="-2999"/>
+        <location line="+2973"/>
         <source>&amp;Increase Velocity</source>
         <translation>У&amp;величить силу нажатия</translation>
     </message>
     <message>
-        <location line="-1769"/>
-        <location line="+1778"/>
+        <location line="-2964"/>
+        <location line="+2973"/>
         <source>&amp;Reduce Velocity</source>
         <translation>Уме&amp;ньшить силу нажатия</translation>
     </message>
     <message>
-        <location line="-1768"/>
+        <location line="-2963"/>
         <source>Set Event &amp;Velocities...</source>
         <translation>&amp;Установить силу нажатия...</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+1694"/>
+        <location line="+2889"/>
         <source>&amp;Halve Durations</source>
         <translation>&amp;В половину меньше</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>&amp;Double Durations</source>
         <translation>&amp;Удвоенная</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>Stretch or S&amp;quash...</source>
         <translation>&amp;Растянуть или сжать...</translation>
     </message>
     <message>
-        <location line="-1693"/>
-        <location line="+1694"/>
+        <location line="-2888"/>
+        <location line="+2889"/>
         <source>Trans&amp;pose</source>
         <translation>&amp;Транспозиция</translation>
     </message>
     <message>
-        <location line="-1693"/>
-        <location line="+1694"/>
+        <location line="-2888"/>
+        <location line="+2889"/>
         <source>&amp;Up a Semitone</source>
         <translation>Полутоном &amp;выше</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>&amp;Down a Semitone</source>
         <translation>Полутоном &amp;ниже</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>Up an &amp;Octave</source>
         <translation>&amp;Октавой выше</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>Down an Octa&amp;ve</source>
         <translation>&amp;Октавой ниже</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation>&amp;Транспонировать по полутонам...</translation>
     </message>
     <message>
-        <location line="-1693"/>
-        <location line="+1159"/>
+        <location line="-2888"/>
+        <location line="+1162"/>
+        <location line="+560"/>
+        <location line="+632"/>
         <location line="+535"/>
-        <location line="+1576"/>
-        <location line="+434"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>&amp;Транспонировать на интервал...</translation>
     </message>
     <message>
-        <location line="-3702"/>
-        <location line="+1694"/>
+        <location line="-2887"/>
+        <location line="+2889"/>
         <source>&amp;Invert</source>
         <translation>&amp;Инвертировать</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1686"/>
+        <location line="-2880"/>
+        <location line="+2881"/>
         <source>&amp;Retrograde</source>
         <translation>&amp;Ракоход («Крабий канон»)</translation>
     </message>
     <message>
-        <location line="-1677"/>
-        <location line="+1678"/>
+        <location line="-2872"/>
+        <location line="+2873"/>
         <source>Re&amp;trograde Invert</source>
         <translation>&amp;Инвертированный ракоход</translation>
     </message>
     <message>
-        <location line="-1677"/>
+        <location line="-2872"/>
         <source>Trigger Se&amp;gment...</source>
         <translation>&amp;Переключаемые сегменты...</translation>
     </message>
     <message>
         <location line="+153"/>
-        <location line="+1794"/>
-        <location line="+1431"/>
+        <location line="+1677"/>
+        <location line="+1312"/>
         <source>&amp;Tools</source>
         <translation>&amp;Инструменты</translation>
     </message>
     <message>
-        <location line="-3224"/>
-        <location line="+1794"/>
-        <location line="+1431"/>
-        <location line="+305"/>
+        <location line="-2988"/>
+        <location line="+988"/>
+        <location line="+689"/>
+        <location line="+1312"/>
         <source>&amp;Select and Edit</source>
         <translation>&amp;Выделение и правка</translation>
     </message>
     <message>
-        <location line="-3521"/>
-        <location line="+3225"/>
-        <location line="+314"/>
+        <location line="-2980"/>
+        <location line="+997"/>
+        <location line="+680"/>
         <source>&amp;Draw</source>
         <translation>&amp;Рисование</translation>
     </message>
     <message>
-        <location line="-3530"/>
-        <location line="+1795"/>
-        <location line="+1430"/>
-        <location line="+314"/>
+        <location line="-1668"/>
+        <location line="+997"/>
+        <location line="+680"/>
+        <location line="+1313"/>
         <source>&amp;Erase</source>
         <translation>&amp;Ластик</translation>
     </message>
     <message>
-        <location line="-3702"/>
+        <location line="-3153"/>
         <location line="+172"/>
-        <location line="+1553"/>
-        <location line="+1672"/>
-        <location line="+287"/>
+        <location line="+970"/>
+        <location line="+707"/>
+        <location line="+1071"/>
         <source>&amp;Move</source>
         <translation>&amp;Перемещение</translation>
     </message>
     <message>
-        <location line="-3503"/>
+        <location line="-2739"/>
         <source>Resi&amp;ze</source>
         <translation>С&amp;мена размера</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+3225"/>
-        <location line="+305"/>
+        <location line="+988"/>
+        <location line="+689"/>
         <source>S&amp;plit</source>
         <translation>&amp;Разделение</translation>
     </message>
     <message>
-        <location line="-3521"/>
+        <location line="-1668"/>
         <source>&amp;Velocity</source>
         <translation>&amp;Сила нажатия</translation>
     </message>
     <message>
         <location line="-189"/>
-        <location line="+1725"/>
+        <location line="+2920"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation>Переместить курсор &amp;вперёд и выбрать ноту</translation>
     </message>
     <message>
-        <location line="-1689"/>
-        <location line="+1725"/>
+        <location line="-2884"/>
+        <location line="+2920"/>
         <source>Clear L&amp;oop</source>
         <translation>Снять п&amp;етлю</translation>
     </message>
     <message>
-        <location line="-935"/>
-        <location line="+48"/>
-        <location line="+2540"/>
+        <location line="-1999"/>
+        <location line="+278"/>
+        <location line="+631"/>
         <source>T&amp;ransport</source>
         <translation>&amp;Транспорт</translation>
     </message>
     <message>
-        <location line="-3351"/>
-        <location line="+764"/>
-        <location line="+48"/>
-        <location line="+931"/>
-        <location line="+1609"/>
+        <location line="-1803"/>
+        <location line="+895"/>
+        <location line="+278"/>
+        <location line="+631"/>
+        <location line="+1134"/>
         <source>&amp;Play</source>
         <translation>&amp;Воспроизвести</translation>
     </message>
     <message>
-        <location line="-3351"/>
-        <location line="+764"/>
-        <location line="+48"/>
-        <location line="+937"/>
-        <location line="+1611"/>
+        <location line="-2937"/>
+        <location line="+895"/>
+        <location line="+278"/>
+        <location line="+639"/>
+        <location line="+1132"/>
         <source>&amp;Stop</source>
         <translation>&amp;Остановить</translation>
     </message>
     <message>
-        <location line="-3329"/>
-        <location line="+734"/>
-        <location line="+48"/>
-        <location line="+973"/>
-        <location line="+1583"/>
+        <location line="-2913"/>
+        <location line="+865"/>
+        <location line="+278"/>
+        <location line="+647"/>
+        <location line="+1160"/>
         <source>Re&amp;wind</source>
         <translation>Перемотать &amp;назад</translation>
     </message>
     <message>
-        <location line="-3329"/>
-        <location line="+726"/>
-        <location line="+48"/>
-        <location line="+981"/>
-        <location line="+1583"/>
+        <location line="-2941"/>
+        <location line="+857"/>
+        <location line="+278"/>
+        <location line="+655"/>
+        <location line="+1160"/>
         <source>&amp;Fast Forward</source>
         <translation>Перемотать &amp;вперёд</translation>
     </message>
     <message>
-        <location line="-3329"/>
-        <location line="+718"/>
-        <location line="+48"/>
-        <location line="+989"/>
+        <location line="-2941"/>
+        <location line="+849"/>
+        <location line="+278"/>
+        <location line="+1823"/>
         <source>Rewind to &amp;Beginning</source>
         <translation>Перемотать к &amp;началу</translation>
     </message>
     <message>
-        <location line="-1754"/>
-        <location line="+718"/>
-        <location line="+48"/>
-        <location line="+995"/>
+        <location line="-2949"/>
+        <location line="+849"/>
+        <location line="+278"/>
+        <location line="+1829"/>
         <source>Fast Forward to &amp;End</source>
         <translation>Перемотать к &amp;концу</translation>
     </message>
     <message>
-        <location line="-1759"/>
-        <location line="+1782"/>
-        <location line="+1571"/>
+        <location line="-2954"/>
+        <location line="+1805"/>
+        <location line="+1172"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation>&amp;Прокручивать по ходу воспроизведения</translation>
     </message>
     <message>
-        <location line="-3117"/>
-        <location line="+1909"/>
+        <location line="-2741"/>
+        <location line="+3104"/>
         <source>&amp;Upper Octave</source>
         <translation>&amp;Октавой выше</translation>
     </message>
     <message>
-        <location line="-1601"/>
-        <location line="+1918"/>
+        <location line="-2796"/>
+        <location line="+3113"/>
         <source>C&amp;hord Insert Mode</source>
         <translation>&amp;Режим ввода аккордов</translation>
     </message>
     <message>
-        <location line="-1909"/>
-        <location line="+1937"/>
+        <location line="-3104"/>
+        <location line="+3132"/>
         <source>Ste&amp;p Recording</source>
         <translation>&amp;Пошаговая запись</translation>
     </message>
     <message>
-        <location line="-2824"/>
-        <location line="+1293"/>
-        <location line="+1990"/>
+        <location line="-4019"/>
+        <location line="+1735"/>
+        <location line="+753"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Панели</translation>
     </message>
     <message>
-        <location line="-3276"/>
-        <location line="+1301"/>
-        <location line="+1982"/>
+        <location line="-2481"/>
+        <location line="+1735"/>
+        <location line="+761"/>
         <source>&amp;Rulers</source>
         <translation>&amp;Линейки</translation>
     </message>
     <message>
-        <location line="-3282"/>
-        <location line="+1301"/>
+        <location line="-2495"/>
+        <location line="+2496"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation type="unfinished">Линейка а&amp;ккордов</translation>
     </message>
     <message>
-        <location line="-1300"/>
-        <location line="+1302"/>
+        <location line="-2495"/>
+        <location line="+2497"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation type="unfinished">Линейка &amp;темпа</translation>
     </message>
     <message>
-        <location line="-407"/>
-        <location line="+1937"/>
-        <location line="+882"/>
+        <location line="-1602"/>
+        <location line="+1271"/>
+        <location line="+1861"/>
         <source>Tools Toolbar</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location line="-2672"/>
-        <location line="+48"/>
-        <location line="+2570"/>
+        <location line="-2854"/>
+        <location line="+278"/>
+        <location line="+661"/>
         <source>&amp;Record</source>
         <translation>&amp;Записать</translation>
     </message>
     <message>
-        <location line="-2559"/>
+        <location line="-650"/>
         <source>Number of Stereo &amp;Inputs</source>
         <translation>Количество стерео&amp;входов</translation>
     </message>
@@ -1290,7 +1290,7 @@
         <translation>Показать &amp;неназначенные фейдеры</translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+917"/>
         <source>C&amp;ut and Close</source>
         <translation>В&amp;ырезать и закрыть</translation>
     </message>
@@ -1370,21 +1370,21 @@
         <translation>Показывать &amp;заголовки дорожек</translation>
     </message>
     <message>
-        <location line="-1275"/>
-        <location line="+1288"/>
-        <location line="+2065"/>
-        <location line="+371"/>
+        <location line="-2470"/>
+        <location line="+1182"/>
+        <location line="+623"/>
+        <location line="+678"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>Редактор &amp;перкуссии</translation>
     </message>
     <message>
-        <location line="-2434"/>
+        <location line="+2"/>
         <source>Add Cle&amp;f Change...</source>
         <translation>Добавить смену &amp;ключа...</translation>
     </message>
     <message>
-        <location line="-1289"/>
-        <location line="+1291"/>
+        <location line="-2484"/>
+        <location line="+2486"/>
         <source>Add &amp;Key Change...</source>
         <translation>Добавить смену &amp;тональности...</translation>
     </message>
@@ -1399,13 +1399,13 @@
         <translation>Добавить &amp;отпускание педали</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location line="+2111"/>
+        <location line="-628"/>
+        <location line="+632"/>
         <source>&amp;Convert Notation for...</source>
         <translation>Переписать партитуру &amp;для...</translation>
     </message>
     <message>
-        <location line="-1260"/>
+        <location line="+851"/>
         <source>Add &amp;Segno</source>
         <translation>Добавить с&amp;эньо</translation>
     </message>
@@ -1425,310 +1425,310 @@
         <translation>Н&amp;оты</translation>
     </message>
     <message>
-        <location line="-1964"/>
-        <location line="+31"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+166"/>
-        <location line="+1207"/>
-        <location line="+48"/>
-        <location line="+75"/>
-        <location line="+1993"/>
-        <location line="+807"/>
+        <location line="-2894"/>
         <location line="+106"/>
+        <location line="+79"/>
+        <location line="+1104"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+49"/>
+        <location line="+235"/>
+        <location line="+43"/>
+        <location line="+159"/>
+        <location line="+685"/>
+        <location line="+65"/>
         <source>Ctrl+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location line="-4667"/>
-        <location line="+59"/>
-        <location line="+52"/>
-        <location line="+135"/>
-        <location line="+52"/>
-        <location line="+1194"/>
-        <location line="+173"/>
-        <location line="+70"/>
-        <location line="+1694"/>
-        <location line="+880"/>
-        <location line="+342"/>
-        <location line="+58"/>
+        <location line="-2620"/>
+        <location line="+63"/>
+        <location line="+1093"/>
+        <location line="+158"/>
+        <location line="+49"/>
+        <location line="+50"/>
+        <location line="+47"/>
+        <location line="+227"/>
+        <location line="+73"/>
+        <location line="+665"/>
+        <location line="+172"/>
+        <location line="+1691"/>
         <source>F1</source>
         <comment>keyboard shortcut</comment>
         <translation>F1</translation>
     </message>
     <message>
-        <location line="-4687"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+166"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
-        <location line="+168"/>
+        <location line="-4368"/>
         <location line="+106"/>
+        <location line="+79"/>
+        <location line="+1104"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+131"/>
+        <location line="+364"/>
+        <location line="+676"/>
+        <location line="+65"/>
         <source>Ctrl+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-4646"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+166"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
-        <location line="+168"/>
+        <location line="-2701"/>
         <location line="+106"/>
+        <location line="+79"/>
+        <location line="+1104"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+131"/>
+        <location line="+364"/>
+        <location line="+676"/>
+        <location line="+65"/>
         <source>Ctrl+Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-4646"/>
-        <location line="+156"/>
-        <location line="+272"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
+        <location line="-2595"/>
+        <location line="+88"/>
+        <location line="+1132"/>
+        <location line="+288"/>
+        <location line="+364"/>
+        <location line="+741"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-4381"/>
-        <location line="+156"/>
-        <location line="+272"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
+        <location line="-2604"/>
+        <location line="+88"/>
+        <location line="+1132"/>
+        <location line="+288"/>
+        <location line="+364"/>
+        <location line="+741"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-4366"/>
+        <location line="-2765"/>
+        <location line="+185"/>
+        <location line="+1104"/>
+        <location line="+185"/>
         <location line="+49"/>
-        <location line="+300"/>
-        <location line="+1207"/>
-        <location line="+48"/>
-        <location line="+73"/>
-        <location line="+1980"/>
-        <location line="+822"/>
+        <location line="+278"/>
+        <location line="+144"/>
+        <location line="+763"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location line="-4393"/>
-        <location line="+1132"/>
-        <location line="+1909"/>
-        <location line="+823"/>
-        <location line="+371"/>
-        <location line="+195"/>
+        <location line="-2671"/>
+        <location line="+1017"/>
+        <location line="+272"/>
+        <location line="+289"/>
+        <location line="+623"/>
+        <location line="+1920"/>
         <source>I</source>
         <comment>keyboard shortcut</comment>
         <translation>I</translation>
     </message>
     <message>
-        <location line="-4421"/>
-        <location line="+1666"/>
-        <location line="+1993"/>
-        <location line="+621"/>
+        <location line="-2823"/>
+        <location line="+334"/>
+        <location line="+373"/>
+        <location line="+750"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete</translation>
     </message>
     <message>
-        <location line="-4271"/>
-        <location line="+1051"/>
-        <location line="+1909"/>
-        <location line="+877"/>
-        <location line="+371"/>
-        <location line="+231"/>
+        <location line="-2728"/>
+        <location line="+927"/>
+        <location line="+353"/>
+        <location line="+262"/>
+        <location line="+623"/>
+        <location line="+1866"/>
         <source>E</source>
         <comment>keyboard shortcut</comment>
         <translation>E</translation>
     </message>
     <message>
-        <location line="-4429"/>
-        <location line="+272"/>
-        <location line="+1330"/>
-        <location line="+2002"/>
-        <location line="+630"/>
+        <location line="-3873"/>
+        <location line="+1132"/>
+        <location line="+288"/>
+        <location line="+364"/>
+        <location line="+741"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-4207"/>
-        <location line="+281"/>
-        <location line="+1354"/>
-        <location line="+2025"/>
-        <location line="+751"/>
+        <location line="-2674"/>
+        <location line="+185"/>
+        <location line="+1123"/>
+        <location line="+708"/>
+        <location line="+718"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location line="-4402"/>
-        <location line="+281"/>
-        <location line="+1354"/>
-        <location line="+2776"/>
+        <location line="-2725"/>
+        <location line="+185"/>
+        <location line="+1123"/>
+        <location line="+1426"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation>Escape</translation>
     </message>
     <message>
-        <location line="-4121"/>
-        <location line="+1363"/>
+        <location line="-2540"/>
+        <location line="+2558"/>
         <source>Ctrl+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location line="-1563"/>
+        <location line="-2871"/>
+        <location line="+756"/>
+        <location line="+988"/>
+        <location line="+163"/>
+        <location line="+526"/>
+        <location line="+168"/>
+        <location line="+1144"/>
+        <location line="+925"/>
         <location line="+36"/>
-        <location line="+36"/>
-        <location line="+571"/>
-        <location line="+555"/>
-        <location line="+72"/>
-        <location line="+1167"/>
-        <location line="+1431"/>
-        <location line="+305"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation>F2</translation>
     </message>
     <message>
-        <location line="-4164"/>
-        <location line="+72"/>
-        <location line="+589"/>
-        <location line="+537"/>
+        <location line="-3923"/>
+        <location line="+970"/>
+        <location line="+163"/>
+        <location line="+544"/>
+        <location line="+168"/>
+        <location line="+35"/>
+        <location line="+2016"/>
         <location line="+36"/>
-        <location line="+54"/>
-        <location line="+2598"/>
-        <location line="+287"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation>F5</translation>
     </message>
     <message>
-        <location line="-4164"/>
-        <location line="+27"/>
-        <location line="+607"/>
-        <location line="+564"/>
-        <location line="+18"/>
-        <location line="+45"/>
-        <location line="+1168"/>
-        <location line="+1430"/>
-        <location line="+314"/>
+        <location line="-4706"/>
+        <location line="+756"/>
+        <location line="+997"/>
+        <location line="+680"/>
+        <location line="+168"/>
+        <location line="+44"/>
+        <location line="+1101"/>
+        <location line="+933"/>
+        <location line="+36"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation>F3</translation>
     </message>
     <message>
-        <location line="-4164"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+580"/>
-        <location line="+582"/>
-        <location line="+45"/>
-        <location line="+2598"/>
-        <location line="+305"/>
+        <location line="-4697"/>
+        <location line="+765"/>
+        <location line="+988"/>
+        <location line="+154"/>
+        <location line="+535"/>
+        <location line="+168"/>
+        <location line="+44"/>
+        <location line="+2052"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation>F6</translation>
     </message>
     <message>
-        <location line="-4155"/>
-        <location line="+36"/>
-        <location line="+571"/>
-        <location line="+564"/>
-        <location line="+27"/>
-        <location line="+36"/>
-        <location line="+1168"/>
-        <location line="+1430"/>
-        <location line="+314"/>
+        <location line="-4715"/>
+        <location line="+756"/>
+        <location line="+997"/>
+        <location line="+154"/>
+        <location line="+526"/>
+        <location line="+168"/>
+        <location line="+53"/>
+        <location line="+1092"/>
+        <location line="+933"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation>F4</translation>
     </message>
     <message>
-        <location line="-4027"/>
-        <location line="+4121"/>
+        <location line="-4605"/>
+        <location line="+194"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Delete, Ctrl+D</translation>
     </message>
     <message>
-        <location line="-3805"/>
-        <location line="+1725"/>
+        <location line="+316"/>
+        <location line="+2920"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation>Вставить последовательность сдвига в&amp;ысоты тона...</translation>
     </message>
     <message>
-        <location line="-2001"/>
-        <location line="+2351"/>
+        <location line="-3196"/>
+        <location line="+3546"/>
         <source>0</source>
         <comment>keyboard shortcut</comment>
         <translation>0</translation>
     </message>
     <message>
-        <location line="-2341"/>
-        <location line="+2332"/>
+        <location line="-3536"/>
+        <location line="+3527"/>
         <source>3</source>
         <comment>keyboard shortcut</comment>
         <translation>3</translation>
     </message>
     <message>
-        <location line="-2322"/>
-        <location line="+2313"/>
+        <location line="-3517"/>
+        <location line="+3508"/>
         <source>6</source>
         <comment>keyboard shortcut</comment>
         <translation>6</translation>
     </message>
     <message>
-        <location line="-2303"/>
-        <location line="+2294"/>
+        <location line="-3498"/>
+        <location line="+3489"/>
         <source>8</source>
         <comment>keyboard shortcut</comment>
         <translation>8</translation>
     </message>
     <message>
-        <location line="-2284"/>
-        <location line="+2275"/>
+        <location line="-3479"/>
+        <location line="+3470"/>
         <source>4</source>
         <comment>keyboard shortcut</comment>
         <translation>4</translation>
     </message>
     <message>
-        <location line="-2265"/>
-        <location line="+2256"/>
+        <location line="-3460"/>
+        <location line="+3451"/>
         <source>2</source>
         <comment>keyboard shortcut</comment>
         <translation>2</translation>
     </message>
     <message>
-        <location line="-2247"/>
-        <location line="+2238"/>
+        <location line="-3442"/>
+        <location line="+3433"/>
         <source>1</source>
         <comment>keyboard shortcut</comment>
         <translation>1</translation>
     </message>
     <message>
-        <location line="-2229"/>
-        <location line="+2220"/>
+        <location line="-3424"/>
+        <location line="+3415"/>
         <source>5</source>
         <comment>keyboard shortcut</comment>
         <translation>5</translation>
     </message>
     <message>
-        <location line="-2214"/>
+        <location line="-3409"/>
         <source>Show A&amp;ctions Toolbar</source>
         <translation>&amp;Действия</translation>
     </message>
@@ -1739,118 +1739,118 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+1302"/>
+        <location line="+2497"/>
         <source>Add &amp;Control Ruler</source>
         <translation>Добавить линейку &amp;контроллера</translation>
     </message>
     <message>
-        <location line="-1284"/>
-        <location line="+1551"/>
+        <location line="-2479"/>
+        <location line="+2746"/>
         <source>`</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1528"/>
-        <location line="+1756"/>
-        <location line="+1628"/>
-        <location line="+433"/>
+        <location line="-2723"/>
+        <location line="+1275"/>
+        <location line="+561"/>
+        <location line="+1115"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation>=</translation>
     </message>
     <message>
-        <location line="-3808"/>
-        <location line="+3384"/>
-        <location line="+433"/>
+        <location line="-2942"/>
+        <location line="+1275"/>
+        <location line="+561"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation>+</translation>
     </message>
     <message>
-        <location line="-3808"/>
+        <location line="-1827"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation>-</translation>
     </message>
     <message>
         <location line="+18"/>
-        <location line="+1822"/>
-        <location line="+1550"/>
+        <location line="+1824"/>
+        <location line="+1193"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Left</translation>
     </message>
     <message>
-        <location line="-3363"/>
-        <location line="+1822"/>
-        <location line="+1550"/>
+        <location line="-3008"/>
+        <location line="+1824"/>
+        <location line="+1193"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Right</translation>
     </message>
     <message>
-        <location line="-3363"/>
-        <location line="+1778"/>
-        <location line="+1650"/>
+        <location line="-3008"/>
+        <location line="+1880"/>
+        <location line="+1093"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Up</translation>
     </message>
     <message>
-        <location line="-3419"/>
-        <location line="+1778"/>
-        <location line="+1632"/>
+        <location line="-2964"/>
+        <location line="+1862"/>
+        <location line="+1111"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Down</translation>
     </message>
     <message>
-        <location line="-3398"/>
-        <location line="+1694"/>
+        <location line="-2961"/>
+        <location line="+2889"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>Ctrl+Shift+H</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+H</translation>
     </message>
     <message>
-        <location line="-1683"/>
-        <location line="+1694"/>
-        <location line="+1711"/>
+        <location line="-2878"/>
+        <location line="+1857"/>
+        <location line="+1032"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Up</translation>
     </message>
     <message>
-        <location line="-3396"/>
-        <location line="+1694"/>
-        <location line="+1693"/>
+        <location line="-2880"/>
+        <location line="+1839"/>
+        <location line="+1050"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Down</translation>
     </message>
     <message>
-        <location line="-3378"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Up</translation>
     </message>
     <message>
-        <location line="-1685"/>
-        <location line="+1694"/>
+        <location line="-2880"/>
+        <location line="+2889"/>
         <source>Ctrl+Down</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Down</translation>
     </message>
     <message>
-        <location line="-1682"/>
+        <location line="-2877"/>
         <source>Shift+Alt+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Alt+I</translation>
@@ -1863,679 +1863,679 @@
     </message>
     <message>
         <location line="+5"/>
-        <location line="+1724"/>
+        <location line="+2919"/>
         <source>Co&amp;ntrollers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1721"/>
-        <location line="+1724"/>
+        <location line="-2916"/>
+        <location line="+2919"/>
         <source>&amp;Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1721"/>
-        <location line="+1725"/>
+        <location line="-2916"/>
+        <location line="+2920"/>
         <source>Insert C&amp;ontroller  Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1716"/>
-        <location line="+1725"/>
+        <location line="-2911"/>
+        <location line="+2920"/>
         <source>Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Left</translation>
     </message>
     <message>
-        <location line="-1716"/>
-        <location line="+1725"/>
+        <location line="-2911"/>
+        <location line="+2920"/>
         <source>Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Right</translation>
     </message>
     <message>
-        <location line="-1723"/>
-        <location line="+1725"/>
+        <location line="-2918"/>
+        <location line="+2920"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation>Курсор на такт &amp;назад и выделить</translation>
     </message>
     <message>
-        <location line="-1718"/>
-        <location line="+1725"/>
+        <location line="-2913"/>
+        <location line="+2920"/>
         <source>Ctrl+Shift+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Left</translation>
     </message>
     <message>
-        <location line="-1723"/>
-        <location line="+1725"/>
+        <location line="-2918"/>
+        <location line="+2920"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation>Курсор на такт впер&amp;ёд и выделить</translation>
     </message>
     <message>
-        <location line="-1718"/>
-        <location line="+1725"/>
+        <location line="-2913"/>
+        <location line="+2920"/>
         <source>Ctrl+Shift+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+Right</translation>
     </message>
     <message>
-        <location line="-1716"/>
-        <location line="+1725"/>
+        <location line="-2911"/>
+        <location line="+2920"/>
         <source>Ctrl+;</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+;</translation>
     </message>
     <message>
-        <location line="-1716"/>
-        <location line="+1725"/>
+        <location line="-2911"/>
+        <location line="+2920"/>
         <source>Ctrl+:</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+:</translation>
     </message>
     <message>
-        <location line="-1716"/>
-        <location line="+1743"/>
+        <location line="-2911"/>
+        <location line="+2938"/>
         <source>Alt+PgUp</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgUp</translation>
     </message>
     <message>
-        <location line="-1734"/>
-        <location line="+1743"/>
+        <location line="-2929"/>
+        <location line="+2938"/>
         <source>Alt+PgDown</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+PgDown</translation>
     </message>
     <message>
-        <location line="-1732"/>
-        <location line="+1755"/>
+        <location line="-2927"/>
+        <location line="+2950"/>
         <source>Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Left</translation>
     </message>
     <message>
-        <location line="-1740"/>
-        <location line="+1755"/>
+        <location line="-2935"/>
+        <location line="+2950"/>
         <source>Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Right</translation>
     </message>
     <message>
-        <location line="-1740"/>
-        <location line="+1755"/>
+        <location line="-2935"/>
+        <location line="+2950"/>
         <source>Ctrl+Left</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Left</translation>
     </message>
     <message>
-        <location line="-1746"/>
-        <location line="+1755"/>
+        <location line="-2941"/>
+        <location line="+2950"/>
         <source>Ctrl+Right</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Right</translation>
     </message>
     <message>
-        <location line="-1743"/>
-        <location line="+1782"/>
-        <location line="+1571"/>
+        <location line="-2938"/>
+        <location line="+1805"/>
+        <location line="+1172"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation>Pause</translation>
     </message>
     <message>
-        <location line="-3344"/>
-        <location line="+709"/>
-        <location line="+48"/>
-        <location line="+1031"/>
-        <location line="+1565"/>
+        <location line="-2968"/>
+        <location line="+840"/>
+        <location line="+278"/>
+        <location line="+687"/>
+        <location line="+1178"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Ctrl+P</translation>
     </message>
     <message>
-        <location line="-3298"/>
+        <location line="-2928"/>
         <location line="+9"/>
-        <location line="+3216"/>
-        <location line="+305"/>
+        <location line="+979"/>
+        <location line="+689"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
         <translation>F7</translation>
     </message>
     <message>
-        <location line="-3518"/>
+        <location line="-1665"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do</source>
         <translation>I/до</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>A</source>
         <comment>keyboard shortcut</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>I/do sharp</source>
         <translation>I/до диез</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Shift+A</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+A</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re flat</source>
         <translation>II/ре бемоль</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
-        <location line="+792"/>
+        <location line="-3405"/>
+        <location line="+1153"/>
+        <location line="+1951"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location line="-2699"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re</source>
         <translation>II/ре</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>S</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>II/re sharp</source>
         <translation>II/ре диез</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+S</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi flat</source>
         <translation>III/ми бемоль</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+D</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>III/mi</source>
         <translation>III/ми</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
-        <location line="+1013"/>
-        <location line="+371"/>
+        <location line="-3405"/>
+        <location line="+751"/>
+        <location line="+623"/>
+        <location line="+1730"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation>D</translation>
     </message>
     <message>
-        <location line="-3291"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa</source>
         <translation>IV/фа</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>F</source>
         <comment>keyboard shortcut</comment>
         <translation>F</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>IV/fa sharp</source>
         <translation>IV/фа диез</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Shift+F</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+F</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol flat</source>
         <translation>V/соль бемоль</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol</source>
         <translation>V/соль</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>J</source>
         <comment>keyboard shortcut</comment>
         <translation>J</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>V/sol sharp</source>
         <translation>V/соль диез</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Shift+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+J</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la flat</source>
         <translation>VI/ля бемоль</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la</source>
         <translation>VI/ля</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>K</source>
         <comment>keyboard shortcut</comment>
         <translation>K</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VI/la sharp</source>
         <translation>VI/ля диез</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Shift+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+K</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti flat</source>
         <translation>VII/си бемоль</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+L</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+L</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-3102"/>
         <location line="+154"/>
         <location line="+154"/>
-        <location line="+1601"/>
+        <location line="+2796"/>
         <location line="+154"/>
         <location line="+154"/>
         <source>VII/ti</source>
         <translation>VII/си</translation>
     </message>
     <message>
-        <location line="-2210"/>
-        <location line="+1909"/>
+        <location line="-3405"/>
+        <location line="+3104"/>
         <source>L</source>
         <comment>keyboard shortcut</comment>
         <translation>L</translation>
     </message>
     <message>
-        <location line="-1899"/>
-        <location line="+1909"/>
+        <location line="-3094"/>
+        <location line="+3104"/>
         <source>Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Q</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+Q</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Q</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>W</source>
         <comment>keyboard shortcut</comment>
         <translation>W</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+W</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+W</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+E</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+E</translation>
     </message>
     <message>
-        <location line="-1891"/>
-        <location line="+1909"/>
-        <location line="+1021"/>
+        <location line="-3086"/>
+        <location line="+1382"/>
+        <location line="+1722"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation>R</translation>
     </message>
     <message>
-        <location line="-2921"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+R</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
-        <location line="+985"/>
+        <location line="-3095"/>
+        <location line="+1346"/>
+        <location line="+1758"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation>U</translation>
     </message>
     <message>
-        <location line="-2885"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+U</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location line="-1891"/>
-        <location line="+1909"/>
+        <location line="-3086"/>
+        <location line="+3104"/>
         <source>Shift+I</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+I</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
         <translation>O</translation>
     </message>
     <message>
-        <location line="-1899"/>
-        <location line="+1909"/>
+        <location line="-3094"/>
+        <location line="+3104"/>
         <source>Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Z</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+Z</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+Z</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
-        <location line="+581"/>
+        <location line="-3095"/>
+        <location line="+942"/>
+        <location line="+2162"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+X</translation>
     </message>
     <message>
-        <location line="-2481"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
         <translation>X</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+X</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
-        <location line="+563"/>
+        <location line="-3095"/>
+        <location line="+924"/>
+        <location line="+2180"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+C</translation>
     </message>
     <message>
-        <location line="-2463"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
         <translation>C</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>V</source>
         <comment>keyboard shortcut</comment>
         <translation>V</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+V</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+B</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>B</source>
         <comment>keyboard shortcut</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+B</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+B</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Ctrl+Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+N</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
-        <location line="+651"/>
-        <location line="+371"/>
+        <location line="-3095"/>
+        <location line="+389"/>
+        <location line="+623"/>
+        <location line="+2092"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation>N</translation>
     </message>
     <message>
-        <location line="-2922"/>
-        <location line="+1909"/>
+        <location line="-3095"/>
+        <location line="+3104"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Shift+N</translation>
     </message>
     <message>
-        <location line="-1900"/>
-        <location line="+1909"/>
-        <location line="+565"/>
+        <location line="-3095"/>
+        <location line="+926"/>
+        <location line="+2178"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
-        <location line="-2465"/>
-        <location line="+1909"/>
-        <location line="+606"/>
-        <location line="+371"/>
+        <location line="-3095"/>
+        <location line="+344"/>
+        <location line="+623"/>
+        <location line="+2137"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation>M</translation>
     </message>
     <message>
-        <location line="-2877"/>
-        <location line="+1918"/>
+        <location line="-3095"/>
+        <location line="+3113"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
         <translation>H</translation>
     </message>
     <message>
-        <location line="-1682"/>
+        <location line="-2516"/>
         <source>Panning &amp;Law</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2560,7 +2560,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+929"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation>Alt+Shift+X</translation>
@@ -2612,14 +2612,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+2091"/>
-        <location line="+371"/>
+        <location line="-1269"/>
+        <location line="+623"/>
+        <location line="+652"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2452"/>
+        <location line="+10"/>
         <source>Add &amp;Layer</source>
         <translation>Добавить &amp;слой</translation>
     </message>
@@ -2760,7 +2760,7 @@
         <translation>&amp;Пометки</translation>
     </message>
     <message>
-        <location line="-1512"/>
+        <location line="-2707"/>
         <source>Nothing to &amp;Undo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2771,46 +2771,46 @@
     </message>
     <message>
         <location line="+355"/>
-        <location line="+1724"/>
+        <location line="+2919"/>
         <source>Cut Controller Events (&amp;X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1723"/>
-        <location line="+1724"/>
+        <location line="-2918"/>
+        <location line="+2919"/>
         <source>&amp;Copy Controller Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1722"/>
-        <location line="+1724"/>
+        <location line="-2917"/>
+        <location line="+2919"/>
         <source>&amp;Place a Controller for Each Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1031"/>
-        <location line="+1937"/>
+        <location line="-2226"/>
+        <location line="+3132"/>
         <source>&amp;Rosegarden Tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1667"/>
-        <location line="+2002"/>
+        <location line="-2772"/>
+        <location line="+364"/>
         <location line="+551"/>
-        <location line="+79"/>
+        <location line="+190"/>
         <source>&amp;Nothing to Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2623"/>
-        <location line="+2002"/>
+        <location line="-1096"/>
+        <location line="+364"/>
         <location line="+543"/>
-        <location line="+87"/>
+        <location line="+198"/>
         <source>N&amp;othing to Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2527"/>
+        <location line="+105"/>
         <source>&amp;Guess Beats</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3036,8 +3036,8 @@
         <translation>&amp;Восстановить направление штилей</translation>
     </message>
     <message>
-        <location line="-1481"/>
-        <location line="+1482"/>
+        <location line="-2676"/>
+        <location line="+2677"/>
         <source>&amp;Phrase</source>
         <translation>Фр&amp;аза</translation>
     </message>
@@ -3075,14 +3075,14 @@
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+1968"/>
+        <location line="-766"/>
+        <location line="+775"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location line="-1966"/>
+        <location line="+2"/>
         <source>&amp;Triplet</source>
         <translation>&amp;Триоль</translation>
     </message>
@@ -3130,15 +3130,15 @@
         <translation>Легато с&amp;низу</translation>
     </message>
     <message>
-        <location line="-1543"/>
-        <location line="+1551"/>
+        <location line="-2738"/>
+        <location line="+2746"/>
         <source>~</source>
         <comment>keyboard shortcut</comment>
         <translation>~</translation>
     </message>
     <message>
-        <location line="-1549"/>
-        <location line="+1551"/>
+        <location line="-2744"/>
+        <location line="+2746"/>
         <source>&amp;Untie</source>
         <translation>&amp;Разлиговать ноты</translation>
     </message>
@@ -3210,14 +3210,14 @@
         <translation>&amp;Нормализовать паузы</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+1472"/>
+        <location line="-1264"/>
+        <location line="+1271"/>
         <source>Ctrl+N</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location line="-1470"/>
+        <location line="+2"/>
         <source>&amp;Collapse Rests</source>
         <translation>&amp;Объединить паузы</translation>
     </message>
@@ -3227,8 +3227,8 @@
         <translation>&amp;Ноты</translation>
     </message>
     <message>
-        <location line="-1547"/>
-        <location line="+1555"/>
+        <location line="-2742"/>
+        <location line="+2750"/>
         <source>Ctrl+=</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+=</translation>
@@ -3387,13 +3387,13 @@
         <translation>Т&amp;очный тайминг</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+1550"/>
+        <location line="-1183"/>
+        <location line="+1193"/>
         <source>Jog &amp;Right</source>
         <translation>Сместить в&amp;право</translation>
     </message>
     <message>
-        <location line="-1541"/>
+        <location line="+9"/>
         <source>&amp;Visibility</source>
         <translation>&amp;Видимость</translation>
     </message>
@@ -3501,7 +3501,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+760"/>
+        <location line="-2601"/>
         <source>Switch To &amp;Notes</source>
         <translation>&amp;Ноты</translation>
     </message>
@@ -3521,25 +3521,25 @@
         <translation>В&amp;ыключить точки</translation>
     </message>
     <message>
-        <location line="-2663"/>
-        <location line="+1909"/>
+        <location line="-497"/>
+        <location line="+3104"/>
         <source>&amp;Insert Note</source>
         <translation>&amp;Вставить ноту</translation>
     </message>
     <message>
-        <location line="-1601"/>
-        <location line="+1909"/>
+        <location line="-2796"/>
+        <location line="+3104"/>
         <source>&amp;Lower Octave</source>
         <translation>&amp;Октавой ниже</translation>
     </message>
     <message>
-        <location line="-1338"/>
-        <location line="+1990"/>
+        <location line="-2091"/>
+        <location line="+753"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation>&amp;Инструменты</translation>
     </message>
     <message>
-        <location line="-1989"/>
+        <location line="+1"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>&amp;Знаки альтерации</translation>
     </message>
@@ -3559,23 +3559,23 @@
         <translation>&amp;Группировка</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+1987"/>
+        <location line="-754"/>
+        <location line="+756"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation>&amp;Транспорт</translation>
     </message>
     <message>
-        <location line="-1986"/>
+        <location line="+1"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation>О&amp;блик</translation>
     </message>
     <message>
-        <location line="+1990"/>
+        <location line="-753"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation type="unfinished">Показать линейку с именами а&amp;ккордов</translation>
     </message>
     <message>
-        <location line="-1982"/>
+        <location line="+761"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation type="unfinished">Показать линейку &amp;исполняемых нот</translation>
     </message>
@@ -3610,12 +3610,12 @@
         <translation>Пометки</translation>
     </message>
     <message>
-        <location line="-3024"/>
+        <location line="-4219"/>
         <source>Show T&amp;ransport Toolbar</source>
         <translation>&amp;Транспорт</translation>
     </message>
     <message>
-        <location line="+2185"/>
+        <location line="+3380"/>
         <source>S&amp;ymbols</source>
         <translation>Сим&amp;волы</translation>
     </message>
@@ -3630,26 +3630,26 @@
         <translation>Нотоносец ни&amp;же</translation>
     </message>
     <message>
-        <location line="-1734"/>
-        <location line="+1743"/>
+        <location line="-2929"/>
+        <location line="+2938"/>
         <source>Pre&amp;vious Segment</source>
         <translation>&amp;Предыдущий сегмент</translation>
     </message>
     <message>
-        <location line="-1734"/>
-        <location line="+1743"/>
+        <location line="-2929"/>
+        <location line="+2938"/>
         <source>Ne&amp;xt Segment</source>
         <translation>&amp;Следующий сегмент</translation>
     </message>
     <message>
-        <location line="-1732"/>
-        <location line="+1755"/>
+        <location line="-2927"/>
+        <location line="+2950"/>
         <source>Step &amp;Back</source>
         <translation>Шаг &amp;назад</translation>
     </message>
     <message>
-        <location line="-1740"/>
-        <location line="+1755"/>
+        <location line="-2935"/>
+        <location line="+2950"/>
         <source>Step &amp;Forward</source>
         <translation>Шаг &amp;вперёд</translation>
     </message>
@@ -3659,32 +3659,32 @@
         <translation>&amp;Линейки</translation>
     </message>
     <message>
-        <location line="-415"/>
-        <location line="+1937"/>
-        <location line="+880"/>
+        <location line="-1610"/>
+        <location line="+1269"/>
+        <location line="+1863"/>
         <source>Rosegarden &amp;Manual</source>
         <translation>&amp;Руководство по Rosegarden</translation>
     </message>
     <message>
-        <location line="-4075"/>
-        <location line="+288"/>
+        <location line="-4102"/>
+        <location line="+1116"/>
         <source>Preferences...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location line="+290"/>
+        <location line="-826"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation>Курсор &amp;назад и выделить ноту</translation>
     </message>
     <message>
-        <location line="+1074"/>
-        <location line="+1997"/>
+        <location line="+1523"/>
+        <location line="+746"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Параметры</translation>
     </message>
     <message>
-        <location line="-2984"/>
-        <location line="+1755"/>
+        <location line="-2182"/>
+        <location line="+2950"/>
         <source>Step Back (Left)</source>
         <translation>Шаг назад (влево)</translation>
     </message>
@@ -3694,13 +3694,13 @@
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location line="-1718"/>
-        <location line="+1755"/>
+        <location line="-2913"/>
+        <location line="+2950"/>
         <source>Step Forward (Right)</source>
         <translation>Шаг вперёд (вправо)</translation>
     </message>
     <message>
-        <location line="-2674"/>
+        <location line="-1846"/>
         <source>&amp;Action</source>
         <translation>&amp;Действие</translation>
     </message>
@@ -3720,7 +3720,7 @@
         <translation>Справка</translation>
     </message>
     <message>
-        <location line="+1906"/>
+        <location line="+1078"/>
         <source>Show La&amp;yer Toolbar</source>
         <translation>С&amp;лои</translation>
     </message>
@@ -3916,7 +3916,7 @@
         <translation>Панель слоёв</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="-4419"/>
         <source>Switch to Insert Tool</source>
         <translation>Вставка</translation>
     </message>
@@ -3971,7 +3971,7 @@
         <translation>Сделать видимым</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1097"/>
         <source>Auto-Beam when appropriate</source>
         <translation>Автогруппировка при возможности</translation>
     </message>
@@ -3991,7 +3991,7 @@
         <translation>Бекар</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+622"/>
         <source>&amp;New</source>
         <translation>&amp;Создать</translation>
     </message>
@@ -4262,13 +4262,13 @@
         <translation>П&amp;ерераспределить инструменты...</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <location line="+305"/>
+        <location line="-651"/>
+        <location line="+689"/>
         <source>&amp;Resize</source>
         <translation>&amp;Смена размера</translation>
     </message>
     <message>
-        <location line="-241"/>
+        <location line="+64"/>
         <source>P&amp;unch in Record</source>
         <translation>Записать &amp;врезкой</translation>
     </message>
@@ -4318,14 +4318,14 @@
         <translation>Показывать м&amp;етки дорожек</translation>
     </message>
     <message>
-        <location line="-2412"/>
-        <location line="+1937"/>
-        <location line="+880"/>
+        <location line="-864"/>
+        <location line="+1269"/>
+        <location line="+1863"/>
         <source>&amp;Support Rosegarden</source>
         <translation>&amp;Поддержать Rosegarden</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-1858"/>
         <source>Tracks Toolbar</source>
         <translation>Панель «Дорожки»</translation>
     </message>
@@ -4335,7 +4335,7 @@
         <translation>Панель «Правка»</translation>
     </message>
     <message>
-        <location line="+215"/>
+        <location line="+66"/>
         <source>Insert Tempo Change</source>
         <translation>Вставить смену темпа</translation>
     </message>
@@ -4375,7 +4375,7 @@
         <translation>Открыть редактор темпа и размера</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="-2552"/>
         <source>&amp;Edit Item</source>
         <translation>&amp;Изменить</translation>
     </message>
@@ -4390,7 +4390,7 @@
         <translation>&amp;Параметры</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+2591"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>Вставить как &amp;новый переключаемый сегмент</translation>
     </message>
@@ -4415,7 +4415,7 @@
         <translation>Бас</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-2626"/>
+        <location filename="../QMenuStrings.cpp" line="+345"/>
         <location filename="../InstrumentStrings.cpp" line="-74"/>
         <source>Triangle</source>
         <translation>Треугольник</translation>
@@ -4452,8 +4452,8 @@
         <translation>Стабильная фаза</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+58"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+721"/>
+        <location filename="../../src/base/Studio.cpp" line="+58"/>
         <location filename="../AutoloadStrings.cpp" line="-700"/>
         <source>Audio</source>
         <translation>Звук</translation>
@@ -4470,32 +4470,32 @@
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-2073"/>
+        <location filename="../QMenuStrings.cpp" line="-1245"/>
         <source>Play Preview</source>
         <translation>Воспроизвести фрагмент</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+4296"/>
+        <location line="-1763"/>
         <location line="+106"/>
+        <location line="+1183"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+1171"/>
         <source>&amp;Nothing to undo</source>
         <translation>Нет &amp;отменяемых действий</translation>
     </message>
     <message>
-        <location line="-4646"/>
-        <location line="+70"/>
-        <location line="+49"/>
-        <location line="+134"/>
-        <location line="+4296"/>
+        <location line="-2636"/>
         <location line="+106"/>
+        <location line="+1183"/>
+        <location line="+131"/>
+        <location line="+54"/>
+        <location line="+1171"/>
         <source>N&amp;othing to redo</source>
         <translation>Нет &amp;возвращаемых действий</translation>
     </message>
     <message>
-        <location line="-4472"/>
+        <location line="-1292"/>
         <source>&amp;Select All</source>
         <translation>В&amp;ыделить всё</translation>
     </message>
@@ -4510,7 +4510,7 @@
         <translation>Установить &amp;длительность сегмента...</translation>
     </message>
     <message>
-        <location line="+1670"/>
+        <location line="+1461"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>Показать панель си&amp;мволов</translation>
     </message>
@@ -4525,7 +4525,7 @@
         <translation>Символы</translation>
     </message>
     <message>
-        <location line="+623"/>
+        <location line="-2120"/>
         <source>Insert, Media Stop</source>
         <comment>keyboard shortcut</comment>
         <translation>Insert, Media Stop</translation>
@@ -4572,12 +4572,12 @@
         <translation>End</translation>
     </message>
     <message>
-        <location line="+302"/>
+        <location line="-2465"/>
         <source>Show &amp;Toolbar</source>
         <translation>&amp;Показать панель</translation>
     </message>
     <message>
-        <location line="-4153"/>
+        <location line="+162"/>
         <source>Select &amp;All Events</source>
         <translation>В&amp;ыделить все события</translation>
     </message>
@@ -4642,15 +4642,15 @@
         <translation>&amp;Инструменты</translation>
     </message>
     <message>
-        <location line="-365"/>
-        <location line="+369"/>
-        <location line="+1301"/>
-        <location line="+2008"/>
+        <location line="+4"/>
+        <location line="+1035"/>
+        <location line="+726"/>
+        <location line="+735"/>
         <source>Show St&amp;atusbar</source>
         <translation>&amp;Строка состояния</translation>
     </message>
     <message>
-        <location line="-3260"/>
+        <location line="-2447"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation>Повторить последнее &amp;квантование</translation>
     </message>
@@ -4680,51 +4680,51 @@
         <translation>Удалить п&amp;ереключатели</translation>
     </message>
     <message>
-        <location line="+1734"/>
+        <location line="+2929"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation>Курсор &amp;назад и выделить ноту</translation>
     </message>
     <message>
-        <location line="-1689"/>
-        <location line="+1725"/>
+        <location line="-2884"/>
+        <location line="+2920"/>
         <source>Set Loop &amp;to Selection</source>
         <translation>Сделать &amp;петлю из выделения</translation>
     </message>
     <message>
-        <location line="-1637"/>
-        <location line="+1776"/>
+        <location line="-2832"/>
+        <location line="+2971"/>
         <source>S&amp;olo</source>
         <translation>Со&amp;ло</translation>
     </message>
     <message>
-        <location line="-1766"/>
-        <location line="+709"/>
-        <location line="+48"/>
-        <location line="+1031"/>
-        <location line="+1565"/>
+        <location line="-2961"/>
+        <location line="+840"/>
+        <location line="+278"/>
+        <location line="+687"/>
+        <location line="+1178"/>
         <source>P&amp;anic</source>
         <translation>Па&amp;ника</translation>
     </message>
     <message>
-        <location line="-3686"/>
-        <location line="+1302"/>
+        <location line="-3316"/>
+        <location line="+2497"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation>Показать линейку &amp;силы нажатия</translation>
     </message>
     <message>
-        <location line="-1301"/>
-        <location line="+1302"/>
+        <location line="-2496"/>
+        <location line="+2497"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation>Показать линейку &amp;высоты тона</translation>
     </message>
     <message>
-        <location line="-406"/>
-        <location line="+2124"/>
+        <location line="-1601"/>
+        <location line="+3319"/>
         <source>Rulers Toolbar</source>
         <translation>Линейки</translation>
     </message>
     <message>
-        <location line="-1922"/>
+        <location line="-2756"/>
         <source>&amp;Settings</source>
         <translation>Пара&amp;метры</translation>
     </message>
@@ -4784,7 +4784,7 @@
         <translation>Показывать &amp;аудиосубмиксы</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="-93"/>
         <source>Switch to Inserting Tool</source>
         <translation>Вставка</translation>
     </message>
@@ -4794,13 +4794,13 @@
         <translation>Объединить паузы после удаления</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <location line="+1991"/>
+        <location line="+203"/>
+        <location line="+752"/>
         <source>&amp;Print...</source>
         <translation>&amp;Печать...</translation>
     </message>
     <message>
-        <location line="-1992"/>
+        <location line="-1"/>
         <source>P&amp;rint Preview...</source>
         <translation>Прос&amp;мотр печати...</translation>
     </message>
@@ -5000,8 +5000,8 @@
         <translation>Добавить &amp;фразировочную лигу</translation>
     </message>
     <message>
-        <location line="-1538"/>
-        <location line="+1551"/>
+        <location line="-2733"/>
+        <location line="+2746"/>
         <source>T&amp;ie</source>
         <translation>&amp;Связующая лига</translation>
     </message>
@@ -5171,31 +5171,31 @@
         <translation>Вставить паузу</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+516"/>
+        <location line="-2220"/>
+        <location line="+2227"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
         <translation>P</translation>
     </message>
     <message>
-        <location line="-505"/>
+        <location line="+11"/>
         <source>Triplet Insert Mo&amp;de</source>
         <translation>Режим ввода &amp;триолей</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+1190"/>
+        <location line="-4313"/>
+        <location line="+4320"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation>G</translation>
     </message>
     <message>
-        <location line="-1179"/>
+        <location line="+11"/>
         <source>Grace Insert &amp;Mode</source>
         <translation>Режим ввода &amp;форшлагов</translation>
     </message>
     <message>
-        <location line="+258"/>
+        <location line="-3103"/>
         <source>No Accidental</source>
         <translation>Без знака альтерации</translation>
     </message>
@@ -5215,7 +5215,7 @@
         <translation>Дубль-бемоль</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+655"/>
         <source>Ctrl+O</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+O</translation>
@@ -5258,13 +5258,13 @@
     </message>
     <message>
         <location line="+7"/>
-        <location line="+841"/>
+        <location line="+613"/>
         <source>Ctrl+Shift+V</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location line="-839"/>
+        <location line="-611"/>
         <source>&amp;Insert Range...</source>
         <translation>Вст&amp;авить область...</translation>
     </message>
@@ -5286,32 +5286,32 @@
         <translation>Открыть &amp;редактор темпа и размера</translation>
     </message>
     <message>
-        <location line="-2048"/>
-        <location line="+2060"/>
+        <location line="+12"/>
+        <location line="+683"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+K</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="-680"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
         <translation>Вставить &amp;быстрый маркер в точку воспроизведения</translation>
     </message>
     <message>
-        <location line="-1234"/>
-        <location line="+1243"/>
+        <location line="+9"/>
+        <location line="+1500"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation>Перейти к б&amp;ыстрому маркеру</translation>
     </message>
     <message>
-        <location line="-1236"/>
-        <location line="+1243"/>
+        <location line="-1493"/>
+        <location line="+1500"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-1496"/>
         <source>MIDI Mi&amp;xer</source>
         <translation>М&amp;икшер MIDI</translation>
     </message>
@@ -5327,58 +5327,58 @@
         <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+371"/>
+        <location line="-613"/>
+        <location line="+623"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Ввод</translation>
     </message>
     <message>
-        <location line="-324"/>
-        <location line="+452"/>
+        <location line="-495"/>
+        <location line="+542"/>
         <source>R&amp;elabel...</source>
         <translation>Изменить &amp;метку...</translation>
     </message>
     <message>
-        <location line="-442"/>
-        <location line="+433"/>
+        <location line="-551"/>
+        <location line="+561"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>Повторить последнее &amp;квантование</translation>
     </message>
     <message>
-        <location line="-422"/>
+        <location line="+11"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>&amp;Растянуть или сжать...</translation>
     </message>
     <message>
-        <location line="-3408"/>
-        <location line="+1293"/>
-        <location line="+2117"/>
+        <location line="-1860"/>
+        <location line="+1862"/>
+        <location line="+626"/>
         <source>Set Start &amp;Time...</source>
         <translation>Установить &amp;время начала...</translation>
     </message>
     <message>
-        <location line="-3409"/>
-        <location line="+1293"/>
-        <location line="+2117"/>
+        <location line="-2487"/>
+        <location line="+1862"/>
+        <location line="+626"/>
         <source>Set &amp;Duration...</source>
         <translation>Установить &amp;длительность...</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location line="+382"/>
+        <location line="-1219"/>
+        <location line="+612"/>
         <source>Join</source>
         <translation>Объединить</translation>
     </message>
     <message>
-        <location line="-375"/>
-        <location line="+382"/>
+        <location line="-605"/>
+        <location line="+612"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location line="-376"/>
+        <location line="+6"/>
         <source> Split &amp;at Time...</source>
         <translation>Разделить по &amp;времени...</translation>
     </message>
@@ -5410,15 +5410,15 @@
         <translation>Вк&amp;лючить или отключить записываемость</translation>
     </message>
     <message>
-        <location line="-3928"/>
-        <location line="+365"/>
-        <location line="+1293"/>
-        <location line="+1990"/>
+        <location line="-2015"/>
+        <location line="+1039"/>
+        <location line="+696"/>
+        <location line="+753"/>
         <source>Show Main &amp;Toolbar</source>
         <translation>&amp;Основная панель</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="-724"/>
         <source>Sh&amp;ow Segment Labels</source>
         <translation>Показывать &amp;метки сегментов</translation>
     </message>
@@ -5428,19 +5428,19 @@
         <translation>Основная панель</translation>
     </message>
     <message>
-        <location line="-1629"/>
-        <location line="+1636"/>
+        <location line="+7"/>
+        <location line="+1107"/>
         <source>Rewind to Beginning</source>
         <translation>Перемотать в начало</translation>
     </message>
     <message>
-        <location line="-1629"/>
-        <location line="+1638"/>
+        <location line="-1098"/>
+        <location line="+1105"/>
         <source>Fast Forward to End</source>
         <translation>Перемотать в конец</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location line="-3577"/>
         <source>&amp;Clear Selection</source>
         <translation>&amp;Снять выделение</translation>
     </message>
@@ -8373,8 +8373,8 @@
         <translation>&amp;lt;нет&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+3"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="-37"/>
+        <location filename="../../src/base/Studio.cpp" line="+3"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+535"/>
         <location filename="../AutoloadStrings.cpp" line="-258"/>
         <source>Synth plugin</source>
@@ -10511,9 +10511,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+448"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+643"/>
         <location line="+7"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+448"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10528,10 +10528,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1049"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+907"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1683"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1049"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
         <source>%1 Controller %2 %3</source>
         <translation>Контроллер %1 — %2 %3</translation>
     </message>
@@ -10896,6 +10896,58 @@
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
         <source>Update Figurations</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+630"/>
+        <source>LilyPond does not allow spaces or backslashes in filenames.
+
+Would you like to use
+
+ %1
+
+ instead?</source>
+        <translation type="unfinished">В Lilypond недопустимы пробелы и обратные черты в именах файлов.
+
+Вы хотите использовать
+
+ %1
+
+ вместо них?</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Export failed.  The file could not be opened for writing.</source>
+        <translation type="unfinished">Не удалось выполнить экспорт.  Файл не мог быть открыт для записи.</translation>
+    </message>
+    <message>
+        <location line="+169"/>
+        <source>Export succeeded, but the composition was empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Export of selected track failed.  There are no segments on the selected track.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Export of selected segments failed.  No segments are selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1869"/>
+        <source>warning: overlong bar truncated here</source>
+        <translation type="unfinished">Предупреждение: слишком длинный такт здесь урезан</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>warning: bar too short, padding with rests</source>
+        <translation type="unfinished">Предупреждение: слишком короткий такт был заполнен паузами.</translation>
     </message>
 </context>
 <context>
@@ -15782,7 +15834,6 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+630"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15790,7 +15841,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation>В Lilypond недопустимы пробелы и обратные черты в именах файлов.
+        <translation type="obsolete">В Lilypond недопустимы пробелы и обратные черты в именах файлов.
 
 Вы хотите использовать
 
@@ -15799,39 +15850,16 @@ Would you like to use
  вместо них?</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Не удалось выполнить экспорт.  Файл не мог быть открыт для записи.</translation>
+        <translation type="obsolete">Не удалось выполнить экспорт.  Файл не мог быть открыт для записи.</translation>
     </message>
     <message>
-        <location line="+169"/>
-        <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1824"/>
         <source>warning: overlong bar truncated here</source>
-        <translation>Предупреждение: слишком длинный такт здесь урезан</translation>
+        <translation type="obsolete">Предупреждение: слишком длинный такт здесь урезан</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation>Предупреждение: слишком короткий такт был заполнен паузами.</translation>
+        <translation type="obsolete">Предупреждение: слишком короткий такт был заполнен паузами.</translation>
     </message>
 </context>
 <context>
