@@ -628,7 +628,7 @@ LilyPondExporter::write()
                 dynamic_cast<QWidget*>(qApp),
                 baseName, 
                 QObject::tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
-                            "Would you like to use\n\n %1\n\n instead?"),
+                            "Would you like to use\n\n %1\n\n instead?").arg(tmpName),
                 QMessageBox::Yes |QMessageBox::Cancel,
                 QMessageBox::Cancel);
         if (reply != QMessageBox::Yes)
