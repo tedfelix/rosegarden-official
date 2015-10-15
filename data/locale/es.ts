@@ -10914,48 +10914,44 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">LilyPond no permite espacios o barras invertidas en los nombres de archivo.
+        <translation>LilyPond no permite espacios o barras invertidas en los nombres de archivo.
 
-¿Quiere usar
-
- %1
-
-en su lugar? </translation>
+¿Quiere usar «%1» en su lugar? </translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
+        <translation>Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
     </message>
     <message>
         <location line="+169"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished">Éxito al exportar, pero la composición fue vácia.</translation>
+        <translation>Éxito al exportar, pero la composición fue vacía.</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished">Fallo al exportar pistas no silenciadas.  No hay pistas no silenciadas, o no hay segmentos en ellas.</translation>
+        <translation>Fallo al exportar pistas no silenciadas.  No hay pistas no silenciadas, o no hay segmentos en ellas.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished">Fallo al exportar pista seleccionada.  No hay segmentos en las pista seleccionada.</translation>
+        <translation>Fallo al exportar pista seleccionada.  No hay segmentos en las pista seleccionada.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished">Fallo al exportar segmentos seleccionadas.  Ningún segmento seleccionado.</translation>
+        <translation>Fallo al exportar segmentos seleccionadas.  Ningún segmento seleccionado.</translation>
     </message>
     <message>
         <location line="+1869"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="unfinished">aviso: compás demasiado largo truncado aquí</translation>
+        <translation>aviso: compás demasiado largo truncado aquí</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="unfinished">aviso: compás demasiado corto; rellenando con silencios </translation>
+        <translation>aviso: compás demasiado corto; rellenando con silencios </translation>
     </message>
 </context>
 <context>
