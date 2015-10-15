@@ -4295,7 +4295,7 @@
         <location line="+2746"/>
         <source>`</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>`</translation>
     </message>
     <message>
         <location line="+58"/>
@@ -10917,7 +10917,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">Lilypond n&apos;accepte pas d&apos;espaces ou de barre inverse (&quot;\&quot;) dans les noms de fichiers.
+        <translation>Lilypond n&apos;accepte pas d&apos;espaces ou de barre inverse (&quot;\&quot;) dans les noms de fichiers.
 
 Voulez-vous utiliser
 
@@ -10928,37 +10928,37 @@ Voulez-vous utiliser
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec d&apos;exportation. Le fichier n&apos;a pas pu être ouvert en écriture.</translation>
     </message>
     <message>
         <location line="+169"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished">L&apos;exportation s&apos;est bien passée, mais la composition est vide.</translation>
+        <translation>L&apos;exportation s&apos;est bien passée, mais la composition est vide.</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished">Echec de l&apos;exportation des pistes non assourdies.  Il n&apos;y a pas de pistes non assourdies ou elles ne contiennent pas de segments.</translation>
+        <translation>Echec de l&apos;exportation des pistes non assourdies.  Il n&apos;y a pas de pistes non assourdies ou elles ne contiennent pas de segments.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished">Echec de l&apos;exportation de la piste sélectionnée.  Il n&apos;y a pas de segment sur la piste sélectionnée.</translation>
+        <translation>Echec de l&apos;exportation de la piste sélectionnée.  Il n&apos;y a pas de segment sur la piste sélectionnée.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished">Echec de l&apos;exportation des segments sélectionnés.  Aucun segment n&apos;est sélectionné.</translation>
+        <translation>Echec de l&apos;exportation des segments sélectionnés.  Aucun segment n&apos;est sélectionné.</translation>
     </message>
     <message>
         <location line="+1869"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="unfinished">avertissement: une mesure anormalement longue a été tronquée</translation>
+        <translation>avertissement: une mesure anormalement longue a été tronquée</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="unfinished">avertissement: une mesure trop courte a été complétée par des silences</translation>
+        <translation>avertissement: une mesure trop courte a été complétée par des silences</translation>
     </message>
 </context>
 <context>
@@ -21256,7 +21256,7 @@ Afin de recevoir de l&apos;assistance pour configurer correctement votre audio e
         <location line="+34"/>
         <location line="+156"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation>Échec d&apos;exportation. Le fichier n&apos;a pas put être ouvert en écriture.</translation>
+        <translation>Échec d&apos;exportation. Le fichier n&apos;a pas pu être ouvert en écriture.</translation>
     </message>
     <message>
         <location line="-216"/>
