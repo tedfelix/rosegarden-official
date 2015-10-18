@@ -1,10 +1,9 @@
 
-AC_INIT(Rosegarden, 15.10, rosegarden-devel@lists.sourceforge.net)
+AC_INIT(Rosegarden, 15.12, rosegarden-devel@lists.sourceforge.net)
 
 dnl  Each release will need the proper version  (e.g. 09.10) in the line above
 dnl  and the proper codename (e.g. Abraham Darby) in the following line
-CODENAME="Oranges and Lemons"
-#CODENAME="Peace"
+CODENAME="Peace"
 #CODENAME="Querida"
 #CODENAME="Rhapsody in Blue"
 #CODENAME="Seagull"
