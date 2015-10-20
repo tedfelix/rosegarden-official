@@ -67,7 +67,7 @@ private:
     // Since Qt4 makes signals "protected" we do this to give Instrument
     // the ability to directly emit the signals.  When we upgrade to
     // Qt5, we can remove this.
-    friend Instrument;
+    friend class Instrument;
 };
 
 
