@@ -942,7 +942,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 #endif
 
         if (frameOffset >= int(m_blockSize)) {
-            if (m_eventBuffer.getReadSpace() == ++evDeferred) {
+            if (m_eventBuffer.getReadSpace() == 1) {
                 break;
             }
             // The events are possibly unsorted because we can merge events played in
@@ -951,6 +951,10 @@ DSSIPluginInstance::run(const RealTime &blockTime)
             // the other events.
             m_eventBuffer.skip(1);
             m_eventBuffer.write(ev, 1);
+            if (m_eventBuffer.getReadSpace() == ++evDeferred) {
+                // No other events to read.
+                break;
+            }
             continue;
         }
         if (frameOffset < 0)
@@ -1137,7 +1141,7 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 #endif
 
             if (frameOffset >= int(m_blockSize)) {
-                if (instance->m_eventBuffer.getReadSpace() == ++evDeferred[index]) {
+                if (instance->m_eventBuffer.getReadSpace() == 1) {
                     break;
                 }
                 // The events are possibly unsorted because we can merge events played in
@@ -1146,6 +1150,10 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
                 // the other events.
                 instance->m_eventBuffer.skip(1);
                 instance->m_eventBuffer.write(ev, 1);
+                if (instance->m_eventBuffer.getReadSpace() == ++evDeferred[index]) {
+                    // No other events to read.
+                    break;
+                }
                 continue;
             }
 
