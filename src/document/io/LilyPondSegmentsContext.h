@@ -120,14 +120,32 @@ public:
     int getTrackPos();
 
     /**
-     * Prepare to get the segments on the current track.
-     * Return null if there is no segment on the current track.
+     * Prepare to get the segments on the first voice of the first track.
+     * Return -1 if there is no track.
+     */
+    int useFirstVoice();
+
+    /**
+     * Go to the next voice.
+     * Return -1 if there is no more voice.
+     */
+    int useNextVoice();
+
+    /**
+     * Return the current voice index or -1
+     */
+    int getVoiceIndex();
+
+    /**
+     * Prepare to get the segments on the current track and for the current
+     * voice.
+     * Return null if there is no segment on the current track and voice.
      */
     Segment * useFirstSegment();
 
     /**
      * Go to the next segment.
-     * Return null if there is no more segment on the current track.
+     * Return null if there is no more segment on the current track and voice.
      */
     Segment * useNextSegment();
 
@@ -196,10 +214,10 @@ public:
 protected :
 
     /**
-     * Look in the specified track for linked segments which may be
-     * exported as repeat with volta and mark them accordingly.
+     * Look in the specified voice of the specified track for linked segments
+     * which may be exported as repeat with volta and mark them accordingly.
      */
-    void lookForRepeatedLinks(int trackId);
+    void lookForRepeatedLinks(int trackId, int voiceIndex);
 
 
 private :
@@ -296,6 +314,17 @@ private :
     */
     void sortAndGatherVolta(SegmentDataList &);
 
+   /**
+    * Initialize a SegmentSet::iterator looking at a given voiceIndex only
+    */
+    SegmentSet::iterator firstSlot(SegmentSet &segSet, int voiceIndex);
+
+   /**
+    * Increment a SegmentSet::iterator looking at a given voiceIndex only
+    */
+    SegmentSet::iterator nextSlot(SegmentSet &segSet,
+                                  int voiceIndex, SegmentSet::iterator it);
+
     // Only for instrumentation while debugging
     void dumpSDL(SegmentDataList & l);
 
@@ -311,6 +340,7 @@ private :
     bool m_automaticVoltaUsable;
 
     TrackMap::iterator m_trackIterator;
+    int m_voiceIndex;
     SegmentSet::iterator m_segIterator;
     VoltaChain::iterator m_voltaIterator;
 
@@ -322,11 +352,14 @@ private :
     TrackMap::iterator m_GSSTrackIterator;
     SegmentSet::iterator m_GSSSegIterator;
 
-    bool m_repeatWithVolta;
+    bool m_repeatWithVolta; // Repeat with volta is usable in LilyPondExporter
+    
+    // Values associated with segment returned by useNextSegment()
     VoltaChain * m_currentVoltaChain;
     bool m_firstVolta;
     bool m_lastVolta;
-
+    
+    bool m_lastWasOK;  // To deal with recursivity in useNextSegment()
 };
 
 
