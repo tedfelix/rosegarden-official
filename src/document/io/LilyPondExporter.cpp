@@ -1390,14 +1390,16 @@ LilyPondExporter::write()
                             }
                         }
 
-                        // Set always midi instrument for the Staff
-                        std::ostringstream staffMidiName;
+                        // Set midi instrument for the Staff when possible
                         Instrument *instr = m_studio->getInstrumentById(
-                                                                        m_composition->getTrackById(lastTrackIndex)->getInstrument());
-                        staffMidiName << instr->getProgramName();
-
-                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
-                            << "\"" << std::endl;
+                            m_composition->getTrackById(lastTrackIndex)
+                                                            ->getInstrument());
+                        if (instr) {
+                            str << indent(col)
+                                << "\\set Staff.midiInstrument = \""
+                                << instr->getProgramName().c_str()
+                                << "\"" << std::endl;
+                        }
 
                         // multi measure rests are used by default
                         str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
