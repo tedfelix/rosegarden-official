@@ -1794,8 +1794,12 @@ LilyPondExporter::write()
                             }
 
                             if (isLyric) {
+                                // Very old .rg files may not have the verse property.
+                                // In such a case there is only one verse which
+                                // is numbered 0.
                                 long verse;
-                                (*j)->get<Int>(Text::LyricVersePropertyName, verse);
+                                if (! (*j)->get<Int>(Text::LyricVersePropertyName,
+                                                     verse)) verse = 0;
 
                                 if (verse == currentVerse) {
                                     std::string ssyllable;
