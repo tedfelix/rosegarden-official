@@ -1344,43 +1344,30 @@ MidiFile::longToVarBuffer(unsigned long value)
 }
 
 bool
-MidiFile::writeHeader(std::ofstream* midiFile)
+MidiFile::writeHeader(std::ofstream *midiFile)
 {
     // Our identifying Header string
-    //
     *midiFile << MIDI_FILE_HEADER.c_str();
 
     // Write number of Bytes to follow
-    //
-    *midiFile << (MidiByte) 0x00;
-    *midiFile << (MidiByte) 0x00;
-    *midiFile << (MidiByte) 0x00;
-    *midiFile << (MidiByte) 0x06;
+    *midiFile << static_cast<MidiByte>(0x00);
+    *midiFile << static_cast<MidiByte>(0x00);
+    *midiFile << static_cast<MidiByte>(0x00);
+    *midiFile << static_cast<MidiByte>(0x06);
 
-    // Write File Format
-    //
-    *midiFile << (MidiByte) 0x00;
-    *midiFile << (MidiByte) m_format;
-
-    // Number of Tracks we're writing out
-    //
+    writeInt(midiFile, static_cast<int>(m_format));
     writeInt(midiFile, m_numberOfTracks);
-
-    // Timing Division
-    //
     writeInt(midiFile, m_timingDivision);
 
-    return (true);
+    // ??? We always return true.  Why return anything at all?
+    return true;
 }
 
-// Write a MIDI track to file
-//
 bool
-MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
+MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 {
-    bool retOK = true;
+    // ??? rename: previousEventCode
     MidiByte eventCode = 0;
-    MidiTrack::iterator midiEvent;
 
     // First we write into the trackBuffer, then write it out to the
     // file with it's accompanying length.
@@ -1390,15 +1377,16 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     long progressTotal = (long)m_midiComposition[trackNumber].size();
     long progressCount = 0;
 
-    for (midiEvent = m_midiComposition[trackNumber].begin();
-            midiEvent != m_midiComposition[trackNumber].end();
-            ++midiEvent) {
+    for (MidiTrack::iterator i = m_midiComposition[trackNumber].begin();
+         i != m_midiComposition[trackNumber].end();
+         ++i) {
+        const MidiEvent &midiEvent = **i;
 
         // HACK for #1404.  I gave up trying to find where the events
         // were originating, and decided to try just stripping them.  If
         // you can't do it right, do it badly, and somebody will
         // eventually freak out, then fix it the right way.
-        if ((*midiEvent)->getData1() == 121) {
+        if (midiEvent.getData1() == 121) {
             RG_WARNING << "writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404.";
             continue;
         }
@@ -1406,75 +1394,83 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         // Write the time to the buffer in MIDI format
         //
         //
-        trackBuffer += longToVarBuffer((*midiEvent)->getTime());
+        trackBuffer += longToVarBuffer(midiEvent.getTime());
 
         RG_DEBUG << "MIDI event for channel "
-                  << (int)(*midiEvent)->getChannelNumber() << " (track "
+                  << (int)midiEvent.getChannelNumber() << " (track "
                   << (int)trackNumber << ") "
-                  << " time" << (*midiEvent)->getTime();
-        RG_DEBUG << *midiEvent;
+                  << " time" << midiEvent.getTime();
+        RG_DEBUG << midiEvent;
 
-        if ((*midiEvent)->isMeta()) {
+        if (midiEvent.isMeta()) {
             trackBuffer += MIDI_FILE_META_EVENT;
-            trackBuffer += (*midiEvent)->getMetaEventCode();
+            trackBuffer += midiEvent.getMetaEventCode();
 
             // Variable length number field
-            trackBuffer += longToVarBuffer((*midiEvent)->
+            trackBuffer += longToVarBuffer(midiEvent.
                                            getMetaMessage().length());
 
-            trackBuffer += (*midiEvent)->getMetaMessage();
+            trackBuffer += midiEvent.getMetaMessage();
             eventCode = 0;
         } else {
-            // Send the normal event code (with encoded channel information)
-            //
-            // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
-            if (((*midiEvent)->getEventCode() != eventCode) ||
-                    ((*midiEvent)->getEventCode() == MIDI_SYSTEM_EXCLUSIVE)) {
-                trackBuffer += (*midiEvent)->getEventCode();
-                eventCode = (*midiEvent)->getEventCode();
+            // Fix for bug #106 (formerly 674731) "MIDI sysex events badly
+            // encoded" by Pedro Lopez-Cabanillas (20030531) r4311.  Make
+            // an exception to running status for SYSEX.
+
+            // If the event code has changed, or this is a SYSEX event, we
+            // can't use running status.
+            // Running status is "[f]or Voice and Mode messages only."
+            // Sysex is a system message.  See the MIDI spec, Section 2,
+            // page 5.
+            if ((midiEvent.getEventCode() != eventCode) ||
+                (midiEvent.getEventCode() == MIDI_SYSTEM_EXCLUSIVE)) {
+
+                // Send the normal event code (with encoded channel information)
+                trackBuffer += midiEvent.getEventCode();
+                eventCode = midiEvent.getEventCode();
             }
 
             // Send the relevant data
             //
-            switch ((*midiEvent)->getMessageType()) {
+            switch (midiEvent.getMessageType()) {
             case MIDI_NOTE_ON:
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
-                trackBuffer += (*midiEvent)->getData1();
-                trackBuffer += (*midiEvent)->getData2();
+                trackBuffer += midiEvent.getData1();
+                trackBuffer += midiEvent.getData2();
                 break;
 
             case MIDI_CTRL_CHANGE:
-                trackBuffer += (*midiEvent)->getData1();
-                trackBuffer += (*midiEvent)->getData2();
+                trackBuffer += midiEvent.getData1();
+                trackBuffer += midiEvent.getData2();
                 break;
 
             case MIDI_PROG_CHANGE:
-                trackBuffer += (*midiEvent)->getData1();
+                trackBuffer += midiEvent.getData1();
                 break;
 
             case MIDI_CHNL_AFTERTOUCH:
-                trackBuffer += (*midiEvent)->getData1();
+                trackBuffer += midiEvent.getData1();
                 break;
 
             case MIDI_PITCH_BEND:
-                trackBuffer += (*midiEvent)->getData1();
-                trackBuffer += (*midiEvent)->getData2();
+                trackBuffer += midiEvent.getData1();
+                trackBuffer += midiEvent.getData2();
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
 
                 // write out message length
                 trackBuffer +=
-                    longToVarBuffer((*midiEvent)->getMetaMessage().length());
+                    longToVarBuffer(midiEvent.getMetaMessage().length());
 
                 // now the message
-                trackBuffer += (*midiEvent)->getMetaMessage();
+                trackBuffer += midiEvent.getMetaMessage();
 
                 break;
 
             default:
-                RG_WARNING << "writeTrack() - cannot write unsupported MIDI event: " << (*midiEvent)->getMessageType();
+                RG_WARNING << "writeTrack() - cannot write unsupported MIDI event: " << midiEvent.getMessageType();
                 break;
             }
         }
@@ -1502,7 +1498,8 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     //
     *midiFile << trackBuffer;
 
-    return (retOK);
+    // ??? We always return true.  Why return anything at all?
+    return true;
 }
 
 // Writes out a MIDI file from the internal Midi representation
