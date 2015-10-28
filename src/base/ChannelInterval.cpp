@@ -46,11 +46,6 @@ assertSane() const
 }
 #endif
 
-#if defined NDEBUG
-DEFINE_DUMMY_PRINTER(ChannelInterval);
-
-#else
-
 QDebug &operator<<(QDebug &dbg, const ChannelInterval &channelInterval) {
     dbg
         << "interval" << channelInterval.m_start.toString()
@@ -60,7 +55,7 @@ QDebug &operator<<(QDebug &dbg, const ChannelInterval &channelInterval) {
     dbg.space();
     return dbg;
 }
-#endif
+
 
 }
 

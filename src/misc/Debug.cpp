@@ -13,10 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Strings.h"
 #include "Debug.h"
 
-#ifndef NDEBUG
+#include "Strings.h"
 
 #include "base/Event.h"
 #include "base/Segment.h"
@@ -28,21 +27,21 @@
 namespace Rosegarden
 {
 
+
 QDebug &
 operator<<(QDebug &dbg, const std::string &s)
 {
     dbg << strtoqstr(s);
+
     return dbg;
 }
 
 QDebug &
 operator<<(QDebug &dbg, const Rosegarden::Event &e)
 {
-    dbg << "Event type : " << e.getType() << endl;
-
-    dbg << "\tDuration : " << e.getDuration()
-    << "\n\tAbsolute Time : " << e.getAbsoluteTime()
-    << endl;
+    dbg << "Event type : " << e.getType() << '\n';
+    dbg << "\tDuration : " << e.getDuration() << '\n';
+    dbg << "\tAbsolute Time : " << e.getAbsoluteTime() << '\n';
 
     //     for (Event::PropertyMap::const_iterator i = e.properties().begin();
     //          i != e.properties().end(); ++i) {
@@ -59,20 +58,20 @@ QDebug &
 operator<<(QDebug &dbg, const Rosegarden::Segment &t)
 {
 //    dbg << "Segment for instrument " << t.getTrack()
-//    << " starting at " << t.getStartTime() << endl;
+//        << " starting at " << t.getStartTime() << '\n';
 
-    dbg << "Segment Object" << endl;
-    dbg << "  Label: " << t.getLabel() << endl;
-    dbg << "  Track: " << t.getTrack() << endl;
+    dbg << "Segment Object\n";
+    dbg << "  Label: " << t.getLabel() << '\n';
+    dbg << "  Track: " << t.getTrack() << '\n';
     // Assume 4/4 time and provide a potentially helpful bar number.
     dbg << "  Start Time: " << t.getStartTime() << 
-        "(4/4 bar" << t.getStartTime() / (960.0*4.0) + 1 << ")" << endl;
+        "(4/4 bar" << t.getStartTime() / (960.0*4.0) + 1 << ")\n";
     dbg << "  End Time: " << t.getEndTime() << 
-        "(4/4 bar" << t.getEndTime() / (960.0*4.0) + 1 << ")" << endl;
+        "(4/4 bar" << t.getEndTime() / (960.0*4.0) + 1 << ")\n";
     dbg << "  End Marker Time: " << t.getEndMarkerTime() << 
-        "(4/4 bar" << t.getEndMarkerTime() / (960.0*4.0) + 1 << ")" << endl;
+        "(4/4 bar" << t.getEndMarkerTime() / (960.0*4.0) + 1 << ")\n";
 
-    dbg << "Events:" << endl;
+    dbg << "Events:\n";
 
     for (Rosegarden::Segment::const_iterator i = t.begin();
             i != t.end(); ++i) {
@@ -124,8 +123,5 @@ operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
     return dbg;
 }
 
+
 }
-
-#endif
-
-
