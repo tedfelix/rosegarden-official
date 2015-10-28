@@ -166,9 +166,10 @@ private:
 
     // *** Rosegarden to Standard MIDI File
 
+    /// Write m_midiComposition to a MIDI file.
     bool write(const QString &filename);
-    bool writeHeader(std::ofstream *midiFile);
-    bool writeTrack(std::ofstream *midiFile, TrackId trackNumber);
+    void writeHeader(std::ofstream *midiFile);
+    void writeTrack(std::ofstream *midiFile, TrackId trackNumber);
 
     // Write
     /// Write an int as 2 bytes.
