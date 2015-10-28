@@ -113,7 +113,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_percussionCheckBox->setFont(f);
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
     connect(m_percussionCheckBox, SIGNAL(clicked(bool)),
-            this, SLOT(slotPercussionClicked(bool)));
+            SLOT(slotPercussionClicked(bool)));
     m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
 
     // Bank Label
@@ -126,7 +126,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_bankCheckBox->setFont(f);
     m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
     connect(m_bankCheckBox, SIGNAL(clicked(bool)),
-            this, SLOT(slotBankClicked(bool)));
+            SLOT(slotBankClicked(bool)));
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
 
     // Ensure a reasonable amount of space in the dropdowns even
@@ -145,7 +145,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     // Activated by m_bankCheckBox
     //m_bankComboBox->setDisabled(true);
     connect(m_bankComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotSelectBank(int)));
+            SLOT(slotSelectBank(int)));
     //m_bankComboBox->setCurrentIndex(-1);
     m_mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
 
@@ -159,7 +159,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_programCheckBox->setFont(f);
     m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
     connect(m_programCheckBox, SIGNAL(clicked(bool)),
-            this, SLOT(slotProgramClicked(bool)));
+            SLOT(slotProgramClicked(bool)));
     m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
 
     // Program ComboBox
@@ -171,7 +171,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     // Activated by m_programCheckBox
     //m_programComboBox->setDisabled(true);
     connect(m_programComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotSelectProgram(int)));
+            SLOT(slotSelectProgram(int)));
     //m_programComboBox->setCurrentIndex(-1);
     m_mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
 
@@ -185,7 +185,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_variationCheckBox->setFont(f);
     m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
     connect(m_variationCheckBox, SIGNAL(clicked(bool)),
-            this, SLOT(slotVariationClicked(bool)));
+            SLOT(slotVariationClicked(bool)));
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
 
     // Variation ComboBox
@@ -197,7 +197,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     // Activated by m_variationCheckBox
     //m_variationComboBox->setDisabled(true);
     connect(m_variationComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotSelectVariation(int)));
+            SLOT(slotSelectVariation(int)));
     //m_variationComboBox->setCurrentIndex(-1);
     m_mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
 
@@ -218,7 +218,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_channelValue->addItem(tr("Fixed"));
     m_channelValue->setMinimumContentsLength(comboWidth);
     connect(m_channelValue, SIGNAL(activated(int)),
-            this, SLOT(slotSelectChannel(int)));
+            SLOT(slotSelectChannel(int)));
     //m_channelValue->setCurrentIndex(-1);
     m_mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
 
@@ -255,14 +255,13 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     // Rotary Mapper
     m_rotaryMapper = new QSignalMapper(this);
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotControllerChanged(int)));
+            SLOT(slotControllerChanged(int)));
 
     // Hold on to this to make sure it stays around as long as we do.
     m_instrumentStaticSignals = Instrument::getStaticSignals();
 
     connect(m_instrumentStaticSignals.data(),
             SIGNAL(changed(Instrument *)),
-            this,
             SLOT(slotInstrumentChanged(Instrument *)));
 }
 
@@ -866,6 +865,15 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 void
 MIDIInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
 {
+    // ??? Simplify: We don't need the instrument pointer.  We can simply
+    //     perform a full update every time we get this notification.  We
+    //     could also get clever, but I'm not sure the value.  If each of
+    //     the update routines is clever enough to avoid unnecessary updates,
+    //     there's no need for more cleverness.  However, one approach would
+    //     be to cache the last Instrument parameters we displayed.  Then
+    //     check the cache to see if anything has changed.  Unfortunately,
+    //     Instrument derives from QObject which makes copying inconvenient.
+
     if (!instrument)
         return;
 
