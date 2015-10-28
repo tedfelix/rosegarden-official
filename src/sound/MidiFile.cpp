@@ -506,10 +506,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
                 if (statusByte != MIDI_PITCH_BEND) {
                     RG_DEBUG << "parseTrack(): MIDI event for channel " << channel + 1 << " (track " << trackNum << ')';
-                    // ??? This prints to cout.  We need an operator<<() to
-                    //     allow printing to RG_DEBUG output.
-                    //midiEvent->print();
-                    //RG_DEBUG << *midiEvent;  // Preferred.
+                    RG_DEBUG << *midiEvent;
                 }
             }
             break;
@@ -1472,7 +1469,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
                   << (int)(*midiEvent)->getChannelNumber() << " (track "
                   << (int)trackNumber << ") "
                   << " time" << (*midiEvent)->getTime();
-        //(*midiEvent)->print();
+        RG_DEBUG << *midiEvent;
 
         if ((*midiEvent)->isMeta()) {
             trackBuffer += MIDI_FILE_META_EVENT;
