@@ -41,9 +41,6 @@
 #include <string>
 #include <sstream>
 
-// ??? Get rid of this.  Use RG_NO_DEBUG_PRINT instead.
-#define MIDI_DEBUG 1
-
 namespace Rosegarden
 {
 
@@ -71,7 +68,7 @@ long
 MidiFile::midiBytesToLong(const std::string &bytes)
 {
     if (bytes.length() != 4) {
-        std::cerr << "MidiFile::midiBytesToLong(): WARNING: Wrong length for long data (" << bytes.length() << ", should be 4)\n";
+        RG_WARNING << "midiBytesToLong(): WARNING: Wrong length for long data (" << bytes.length() << ", should be 4)";
 
         // TRANSLATOR: "long" is a C++ data type
         throw Exception(qstrtostr(QObject::tr("Wrong length for long data in MIDI stream")));
@@ -91,7 +88,7 @@ int
 MidiFile::midiBytesToInt(const std::string &bytes)
 {
     if (bytes.length() != 2) {
-        std::cerr << "MidiFile::midiBytesToInt(): WARNING: Wrong length for int data (" << bytes.length() << ", should be 2)\n";
+        RG_WARNING << "midiBytesToInt(): WARNING: Wrong length for int data (" << bytes.length() << ", should be 2)";
 
         // TRANSLATOR: "int" is a C++ data type
         throw Exception(qstrtostr(QObject::tr("Wrong length for int data in MIDI stream")));
@@ -112,14 +109,14 @@ std::string
 MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
 {
     if (midiFile->eof()) {
-        std::cerr << "MidiFile::read(): MIDI file EOF - got 0 bytes out of " << numberOfBytes << '\n';
+        RG_WARNING << "read(): MIDI file EOF - got 0 bytes out of " << numberOfBytes;
 
         throw Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading")));
     }
 
     // For each track section we can read only m_trackByteCount bytes.
     if (m_decrementCount  &&  numberOfBytes > (unsigned long)m_trackByteCount) {
-        std::cerr << "MidiFile::read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")\n";
+        RG_WARNING << "read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")";
 
         throw Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track")));
     }
@@ -134,7 +131,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
 
     // Unexpected EOF
     if (stringRet.length() < numberOfBytes) {
-        std::cerr << "MidiFile::read(): Attempt to read past file end - got " << stringRet.length() << " bytes out of " << numberOfBytes << '\n';
+        RG_WARNING << "read(): Attempt to read past file end - got " << stringRet.length() << " bytes out of " << numberOfBytes;
 
         throw Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end")));
     }
@@ -221,7 +218,7 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
     }
 
     // Track not found.
-    std::cerr << "MidiFile::findNextTrack(): Couldn't find Track\n";
+    RG_WARNING << "findNextTrack(): Couldn't find Track";
     throw Exception(qstrtostr(QObject::tr("File corrupted or in non-standard format")));
 }
 
@@ -270,7 +267,7 @@ MidiFile::read(const QString &filename)
         }
 
     } catch (const Exception &e) {
-        std::cerr << "MidiFile::read() - caught exception - " << e.getMessage() << '\n';
+        RG_WARNING << "read() - caught exception - " << e.getMessage();
 
         m_error = e.getMessage();
         m_format = MIDI_FILE_NOT_LOADED;
@@ -289,12 +286,12 @@ MidiFile::parseHeader(std::ifstream *midiFile)
     std::string midiHeader = read(midiFile, 14);
 
     if (midiHeader.size() < 14) {
-        std::cerr << "MidiFile::parseHeader() - file header undersized\n";
+        RG_WARNING << "parseHeader() - file header undersized";
         throw Exception(qstrtostr(QObject::tr("Not a MIDI file")));
     }
 
     if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
-        std::cerr << "MidiFile::parseHeader() - file header not found or malformed\n";
+        RG_WARNING << "parseHeader() - file header not found or malformed";
         throw Exception(qstrtostr(QObject::tr("Not a MIDI file")));
     }
 
@@ -305,7 +302,7 @@ MidiFile::parseHeader(std::ifstream *midiFile)
     m_timingFormat = MIDI_TIMING_PPQ_TIMEBASE;
 
     if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
-        std::cerr << "MidiFile::parseHeader() - can't load sequential track (Format 2) MIDI file\n";
+        RG_WARNING << "parseHeader() - can't load sequential track (Format 2) MIDI file";
         throw Exception(qstrtostr(QObject::tr("Unexpected MIDI file format")));
     }
 
@@ -539,7 +536,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
                 if (MidiByte(sysex[sysex.length() - 1]) !=
                         MIDI_END_OF_EXCLUSIVE) {
-                    std::cerr << "MidiFile::parseTrack() - malformed or unsupported SysEx type\n";
+                    RG_WARNING << "parseTrack() - malformed or unsupported SysEx type";
                     continue;
                 }
 
@@ -556,11 +553,11 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             break;
 
         case MIDI_END_OF_EXCLUSIVE:
-            std::cerr << "MidiFile::parseTrack() - Found a stray MIDI_END_OF_EXCLUSIVE\n";
+            RG_WARNING << "parseTrack() - Found a stray MIDI_END_OF_EXCLUSIVE";
             break;
 
         default:
-            std::cerr << "MidiFile::parseTrack() - Unsupported MIDI Status Byte:  " << QString("0x%1").arg(statusByte, 0, 16) << '\n';
+            RG_WARNING << "parseTrack() - Unsupported MIDI Status Byte:  " << QString("0x%1").arg(statusByte, 0, 16);
             break;
         }
     }
@@ -589,7 +586,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         return false;
 
     if (m_midiComposition.size() != m_trackNames.size()) {
-        std::cerr << "MidiFile::convertToRosegarden(): m_midiComposition and m_trackNames size mismatch\n";
+        RG_WARNING << "convertToRosegarden(): m_midiComposition and m_trackNames size mismatch";
         return false;
     }
 
@@ -933,7 +930,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                                         getAsEvent(rosegardenTime);
                     }
                     catch (...) {
-                        std::cerr << "MidiFile::convertToRosegarden() - badly formed key signature\n";
+                        RG_WARNING << "convertToRosegarden() - badly formed key signature";
                         break;
                     }
 
@@ -949,7 +946,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 case MIDI_SEQUENCER_SPECIFIC:
                 case MIDI_SMPTE_OFFSET:
                 default:
-                    std::cerr << "MidiFile::convertToRosegarden() - unsupported META event code " << QString("0x%1").arg(midiEvent.getMetaEventCode(), 0, 16) << '\n';
+                    RG_WARNING << "convertToRosegarden() - unsupported META event code " << QString("0x%1").arg(midiEvent.getMetaEventCode(), 0, 16);
                     break;
                 }
 
@@ -1022,7 +1019,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 default:
-                    std::cerr << "MidiFile::convertToRosegarden() - Unsupported event code = " << (int)midiEvent.getMessageType();
+                    RG_WARNING << "convertToRosegarden() - Unsupported event code = " << (int)midiEvent.getMessageType();
                     break;
                 }  // switch message type (non-meta-event)
             }  // if meta-event
@@ -1462,7 +1459,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         // you can't do it right, do it badly, and somebody will
         // eventually freak out, then fix it the right way.
         if ((*midiEvent)->getData1() == 121) {
-            std::cerr << "MidiFile::writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404." << std::endl;
+            RG_WARNING << "writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404.";
             continue;
         }
 
@@ -1471,14 +1468,11 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         //
         trackBuffer += longToVarBuffer((*midiEvent)->getTime());
 
-#ifdef MIDI_DEBUG
-        std::cerr << "MIDI event for channel "
+        RG_DEBUG << "MIDI event for channel "
                   << (int)(*midiEvent)->getChannelNumber() << " (track "
                   << (int)trackNumber << ") "
-                  << " time" << (*midiEvent)->getTime()
-                  << std::endl;
-        (*midiEvent)->print();
-#endif
+                  << " time" << (*midiEvent)->getTime();
+        //(*midiEvent)->print();
 
         if ((*midiEvent)->isMeta()) {
             trackBuffer += MIDI_FILE_META_EVENT;
@@ -1540,12 +1534,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
                 break;
 
             default:
-#ifdef MIDI_DEBUG
-
-                std::cerr << "MidiFile::writeTrack()"
-                << " - cannot write unsupported MIDI event\n";
-#endif
-
+                RG_WARNING << "writeTrack() - cannot write unsupported MIDI event: " << (*midiEvent)->getMessageType();
                 break;
             }
         }
@@ -1588,10 +1577,7 @@ MidiFile::write(const QString &filename)
 
 
     if (!(*midiFile)) {
-#ifdef MIDI_DEBUG
-        std::cerr << "MidiFile::write() - can't write file\n";
-#endif
-
+        RG_WARNING << "write() - can't write file";
         m_format = MIDI_FILE_NOT_LOADED;
         return false;
     }
@@ -1671,7 +1657,7 @@ MidiFile::consolidateNoteEvents(TrackId trackId)
             // on percussion tracks.  Instead of setting the duration to
             // 0 in this case, which has no meaning, set it to 1.
             if (noteDuration == 0) {
-                std::cerr << "MidiFile::consolidateNoteEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood.\n";
+                RG_WARNING << "consolidateNoteEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood.";
                 noteDuration = 1;
             }
 
@@ -1703,7 +1689,7 @@ MidiFile::clearMidiComposition()
     for (MidiComposition::iterator ci = m_midiComposition.begin();
             ci != m_midiComposition.end(); ++ci) {
 
-        //std::cerr << "MidiFile::clearMidiComposition: track " << ci->first << std::endl;
+        //RG_DEBUG << "MidiFile::clearMidiComposition: track " << ci->first;
 
         for (MidiTrack::iterator ti = ci->second.begin();
                 ti != ci->second.end(); ++ti) {
