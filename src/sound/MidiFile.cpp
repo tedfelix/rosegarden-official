@@ -1239,14 +1239,15 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
 #endif
 
+        // This does not send a "track added" notification.
         composition.addTrack(track);
 
         // Notify Composition observers of the new track.
-        // ??? Why not do this all at once after the track loop is done?
         std::vector<TrackId> trackIds;
         trackIds.push_back(track->getId());
         composition.notifyTracksAdded(trackIds);
 
+        // This also sends a "segment added" notification.
         composition.addSegment(segment);
 
         // Next Track in the Composition.
@@ -1260,127 +1261,88 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     return true;
 }
 
-// Takes a Composition and turns it into internal MIDI representation
-// that can then be written out to file.
-//
-// For the moment we should watch to make sure that multiple Segment
-// (parts) don't equate to multiple segments in the MIDI Composition.
-//
-// This is a two pass operation - firstly convert the RG Composition
-// into MIDI events and insert anything extra we need (i.e. NOTE OFFs)
-// with absolute times before then processing all timings into delta
-// times.
-//
-//
 bool
 MidiFile::convertToMidi(Composition &comp, const QString &filename)
 {
 
-    MappedBufMetaIterator * metaiterator =
+    MappedBufMetaIterator *metaIterator =
         RosegardenMainWindow::self()->
         getSequenceManager()->
         makeTempMetaiterator();
 
     RealTime start = comp.getElapsedRealTime(comp.getStartMarker());
     RealTime end   = comp.getElapsedRealTime(comp.getEndMarker());
+
     // For ramping, we need to get MappedEvents in order, but
     // fetchEvents's order is only approximately
     // right, so we sort events first.
     SortingInserter sorter;
-    metaiterator->jumpToTime(start);
+
+    metaIterator->jumpToTime(start);
+    // Copy the events from metaIterator to sorter.
     // Give the end a little margin to make it insert noteoffs at the
     // end.  If they tied with the end they'd get lost.
-    metaiterator->
-        fetchEvents(sorter, start, end + RealTime(0,1000));
-    delete metaiterator;
+    metaIterator->fetchEvents(sorter, start, end + RealTime(0,1000));
+
+    delete metaIterator;
+
     MidiInserter inserter(comp, 480, end);
+    // Copy the events from sorter to inserter.
     sorter.insertSorted(inserter);
+    // Finally, copy the events from inserter to m_midiComposition.
     inserter.assignToMidiFile(*this);
 
+    // Write m_midiComposition to the file.
     return write(filename);
 }
 
-
-
-// Convert an integer into a two byte representation and
-// write out to the MidiFile.
-//
 void
-MidiFile::writeInt(std::ofstream* midiFile, int number)
+MidiFile::writeInt(std::ofstream *midiFile, int number)
 {
-    MidiByte upper;
-    MidiByte lower;
-
-    upper = (number & 0xFF00) >> 8;
-    lower = (number & 0x00FF);
-
-    *midiFile << (MidiByte) upper;
-    *midiFile << (MidiByte) lower;
-
+    *midiFile << static_cast<MidiByte>((number & 0xFF00) >> 8);
+    *midiFile << static_cast<MidiByte>(number & 0x00FF);
 }
 
 void
-MidiFile::writeLong(std::ofstream* midiFile, unsigned long number)
+MidiFile::writeLong(std::ofstream *midiFile, unsigned long number)
 {
-    MidiByte upper1;
-    MidiByte lower1;
-    MidiByte upper2;
-    MidiByte lower2;
-
-    upper1 = (number & 0xff000000) >> 24;
-    lower1 = (number & 0x00ff0000) >> 16;
-    upper2 = (number & 0x0000ff00) >> 8;
-    lower2 = (number & 0x000000ff);
-
-    *midiFile << (MidiByte) upper1;
-    *midiFile << (MidiByte) lower1;
-    *midiFile << (MidiByte) upper2;
-    *midiFile << (MidiByte) lower2;
-
+    *midiFile << static_cast<MidiByte>((number & 0xFF000000) >> 24);
+    *midiFile << static_cast<MidiByte>((number & 0x00FF0000) >> 16);
+    *midiFile << static_cast<MidiByte>((number & 0x0000FF00) >> 8);
+    *midiFile << static_cast<MidiByte>(number & 0x000000FF);
 }
 
-// Turn a delta time into a MIDI time - overlapping into
-// a maximum of four bytes using the MSB as the carry on
-// flag.
-//
 std::string
-MidiFile::longToVarBuffer(unsigned long number)
+MidiFile::longToVarBuffer(unsigned long value)
 {
-    std::string rS;
+    // See WriteVarLen() in the MIDI Spec section 4, page 11.
 
-    long inNumber = number;
-    long outNumber;
+    // Convert value into a "variable-length quantity" in buffer.
 
-    // get the lowest 7 bits of the number
-    outNumber = number & 0x7f;
+    // Start with the lowest 7 bits of the number
+    long buffer = value & 0x7f;
 
-    // Shift and test and move the numbers
-    // on if we need them - setting the MSB
-    // as we go.
-    //
-    while ((inNumber >>= 7 ) > 0) {
-        outNumber <<= 8;
-        outNumber |= 0x80;
-        outNumber += (inNumber & 0x7f);
+    while ((value >>= 7 ) > 0) {
+        buffer <<= 8;
+        buffer |= 0x80;
+        buffer += (value & 0x7f);
     }
 
-    // Now move the converted number out onto the buffer
-    //
+    // Copy buffer to returnString and return it.
+
+    std::string returnString;
+
     while (true) {
-        rS += (MidiByte)(outNumber & 0xff);
-        if (outNumber & 0x80)
-            outNumber >>= 8;
+        returnString += (MidiByte)(buffer & 0xff);
+        if (buffer & 0x80)
+            buffer >>= 8;
         else
             break;
     }
 
-    return rS;
+    return returnString;
 }
 
-
-
-// Write out the MIDI file header
-//
 bool
 MidiFile::writeHeader(std::ofstream* midiFile)
 {

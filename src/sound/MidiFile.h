@@ -171,11 +171,14 @@ private:
     bool writeTrack(std::ofstream *midiFile, TrackId trackNumber);
 
     // Write
+    /// Write an int as 2 bytes.
     void writeInt(std::ofstream *midiFile, int number);
+    /// Write a long as 4 bytes.
     void writeLong(std::ofstream *midiFile, unsigned long number);
 
     // Conversion
-    std::string longToVarBuffer(unsigned long number);
+    /// Convert a value to a "variable-length quantity" in a std::string.
+    std::string longToVarBuffer(unsigned long value);
 };
 
 
