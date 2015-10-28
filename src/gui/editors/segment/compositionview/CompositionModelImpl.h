@@ -28,6 +28,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QSharedPointer>
+#include <QTimer>
 
 #include <vector>
 #include <map>
@@ -47,6 +48,7 @@ class Event;
 class Composition;
 class AudioPeaksGenerator;
 class AudioPeaksThread;
+
 
 /// Model layer between CompositionView and Composition.
 /**
@@ -345,6 +347,9 @@ private slots:
     /// Connected to AudioPeaksGenerator::audioPeaksComplete()
     void slotAudioPeaksComplete(AudioPeaksGenerator *);
 
+    /// Handler for m_updateTimer.
+    void slotUpdateTimer();
+
 private:
     // --- Misc -------------------------------------------
 
@@ -489,6 +494,19 @@ private:
 
     /// The end time of a recording Segment.
     timeT m_pointerTime;
+
+    /**
+     * Since there is currently no way to separate low-frequency
+     * changes from high-frequency changes, we have to assume that
+     * when we are recording, high-frequency changes will be coming
+     * in and they can be ignored.  We'll update the display on
+     * a timer (m_updateTimer) instead of in response to incoming
+     * changes.  This results in a 13-28% performance improvement.
+     */
+    bool m_recording;
+
+    /// See m_recording.
+    QTimer m_updateTimer;
 
     // --- Changing (moving and resizing) -----------------
 

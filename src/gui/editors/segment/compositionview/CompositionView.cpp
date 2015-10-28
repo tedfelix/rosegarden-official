@@ -1369,11 +1369,11 @@ void CompositionView::drawPointer(int pos)
     if (m_pointerPos == pos)
         return;
 
+    Profiler profiler("CompositionView::drawPointer()");
+
     const int oldPos = m_pointerPos;
     m_pointerPos = pos;
 
-    // This routine calls us back for each recording segment to make
-    // sure we update the display as the recording segments expand.
     m_model->pointerPosChanged(pos);
 
     int deltaPos = abs(m_pointerPos - oldPos);

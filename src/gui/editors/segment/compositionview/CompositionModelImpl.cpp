@@ -50,6 +50,7 @@
 #include <QRegExp>
 #include <QSize>
 #include <QString>
+#include <QTimer>
 
 #include <math.h>
 #include <algorithm>  // std::lower_bound() and std::min()
@@ -82,6 +83,8 @@ CompositionModelImpl::CompositionModelImpl(
     m_previousSelectionUpdateRect(),
     m_recordingSegments(),
     m_pointerTime(0),
+    m_recording(false),
+    m_updateTimer(),
     m_changeType(ChangeMove),
     m_changingSegments()
 {
@@ -107,6 +110,8 @@ CompositionModelImpl::CompositionModelImpl(
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
+
+    connect(&m_updateTimer, SIGNAL(timeout()), SLOT(slotUpdateTimer()));
 }
 
 CompositionModelImpl::~CompositionModelImpl()
@@ -468,6 +473,12 @@ void CompositionModelImpl::segmentTrackChanged(
 void CompositionModelImpl::segmentStartChanged(
         const Composition *, Segment *, timeT)
 {
+    // Ignore high-frequency updates during record.
+    // This routine gets hit really hard when recording and
+    // notes are coming in.
+    if (m_recording)
+        return;
+
     // TrackEditor::commandExecuted() already updates us.  However, it
     // shouldn't.  This is the right thing to do.
     emit needUpdate();
@@ -476,11 +487,12 @@ void CompositionModelImpl::segmentStartChanged(
 void CompositionModelImpl::segmentEndMarkerChanged(
         const Composition *, Segment *, bool)
 {
-    Profiler profiler("CompositionModelImpl::segmentEndMarkerChanged()");
-
-    // ??? This routine gets hit really hard when recording.
-    //     Just holding down a single note results in 50 calls
-    //     per second.
+    // Ignore high-frequency updates during record.
+    // This routine gets hit really hard when recording.
+    // Just holding down a single note results in 50 calls
+    // per second.
+    if (m_recording)
+        return;
 
     // TrackEditor::commandExecuted() already updates us.  However, it
     // shouldn't.  This is the right thing to do.
@@ -511,27 +523,26 @@ void CompositionModelImpl::addRecordingItem(ChangingSegmentPtr changingSegment)
     m_recordingSegments.insert(changingSegment->getSegment());
 
     emit needUpdate();
+
+    if (!m_recording) {
+        m_recording = true;
+        m_updateTimer.start(100);
+    }
 }
 
 void CompositionModelImpl::pointerPosChanged(int x)
 {
     // Update the end point for the recording segments.
     m_pointerTime = m_grid.getRulerScale()->getTimeForX(x);
-
-    // For each recording segment
-    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
-         i != m_recordingSegments.end();
-         ++i) {
-
-        QRect rect;
-        getSegmentQRect(**i, rect);
-        // Ask CompositionView to update.
-        emit needUpdate(rect);
-    }
 }
 
 void CompositionModelImpl::clearRecordingItems()
 {
+    if (m_recording) {
+        m_recording = false;
+        m_updateTimer.stop();
+    }
+
     // For each recording segment
     for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
          i != m_recordingSegments.end();
@@ -557,6 +568,22 @@ void CompositionModelImpl::slotAudioFileFinalized(Segment *s)
     // because of TrackEditor::commandExecuted().  If so, then this
     // needs to be here.
     deleteCachedPreview(s);
+}
+
+void CompositionModelImpl::slotUpdateTimer()
+{
+    Profiler profiler("CompositionModelImpl::slotUpdateTimer()");
+
+    // For each recording segment, delete the preview cache to make sure
+    // it is regenerated with the latest events.
+    for (RecordingSegmentSet::iterator i = m_recordingSegments.begin();
+         i != m_recordingSegments.end();
+         ++i) {
+        deleteCachedPreview(*i);
+    }
+
+    // Make sure the recording segments get drawn.
+    emit needUpdate();
 }
 
 // --- Changing -----------------------------------------------------
@@ -639,11 +666,12 @@ bool CompositionModelImpl::isChanging(const Segment *s) const
 
 void CompositionModelImpl::eventAdded(const Segment *s, Event *)
 {
-    Profiler profiler("CompositionModelImpl::eventAdded()");
-
-    // ??? This routine gets hit really hard when recording.
-    //     Just holding down a single note results in 50 calls
-    //     per second.
+    // Ignore high-frequency updates during record.
+    // This routine gets hit really hard when recording.
+    // Just holding down a single note results in 50 calls
+    // per second.
+    if (m_recording)
+        return;
 
     deleteCachedPreview(s);
 
@@ -654,11 +682,12 @@ void CompositionModelImpl::eventAdded(const Segment *s, Event *)
 
 void CompositionModelImpl::eventRemoved(const Segment *s, Event *)
 {
-    Profiler profiler("CompositionModelImpl::eventRemoved()");
-
-    // ??? This routine gets hit really hard when recording.
-    //     Just holding down a single note results in 50 calls
-    //     per second.
+    // Ignore high-frequency updates during record.
+    // This routine gets hit really hard when recording.
+    // Just holding down a single note results in 50 calls
+    // per second.
+    if (m_recording)
+        return;
 
     deleteCachedPreview(s);
 
@@ -693,11 +722,12 @@ void CompositionModelImpl::appearanceChanged(const Segment *s)
 
 void CompositionModelImpl::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
-    Profiler profiler("CompositionModelImpl::endMarkerTimeChanged(Segment *, bool)");
-
-    // ??? This routine gets hit really hard when recording.
-    //     Just holding down a single note results in 50 calls
-    //     per second.
+    // Ignore high-frequency updates during record.
+    // This routine gets hit really hard when recording.
+    // Just holding down a single note results in 50 calls
+    // per second.
+    if (m_recording)
+        return;
 
     // Preview gets regenerated anyway.
     //deleteCachedPreview(s);
