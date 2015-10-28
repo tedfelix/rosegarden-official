@@ -61,6 +61,7 @@ MidiFile::MidiFile() :
 
 MidiFile::~MidiFile()
 {
+    // Delete all the event objects.
     clearMidiComposition();
 }
 
@@ -74,12 +75,12 @@ MidiFile::midiBytesToLong(const std::string &bytes)
         throw Exception(qstrtostr(QObject::tr("Wrong length for long data in MIDI stream")));
     }
 
-    long longRet = ((long)(((MidiByte)bytes[0]) << 24)) |
-                   ((long)(((MidiByte)bytes[1]) << 16)) |
-                   ((long)(((MidiByte)bytes[2]) << 8)) |
-                   ((long)((MidiByte)(bytes[3])));
+    long longRet = static_cast<long>(static_cast<MidiByte>(bytes[0])) << 24 |
+                   static_cast<long>(static_cast<MidiByte>(bytes[1])) << 16 |
+                   static_cast<long>(static_cast<MidiByte>(bytes[2])) << 8 |
+                   static_cast<long>(static_cast<MidiByte>(bytes[3]));
 
-    RG_DEBUG << "midiBytesToLong(" << int((MidiByte)bytes[0]) << "," << int((MidiByte)bytes[1]) << "," << int((MidiByte)bytes[2]) << "," << int((MidiByte)bytes[3]) << ") -> " << longRet;
+    RG_DEBUG << "midiBytesToLong(" << static_cast<long>(static_cast<MidiByte>(bytes[0])) << "," << static_cast<long>(static_cast<MidiByte>(bytes[1])) << "," << static_cast<long>(static_cast<MidiByte>(bytes[2])) << "," << static_cast<long>(static_cast<MidiByte>(bytes[3])) << ") -> " << longRet;
 
     return longRet;
 }
@@ -94,9 +95,8 @@ MidiFile::midiBytesToInt(const std::string &bytes)
         throw Exception(qstrtostr(QObject::tr("Wrong length for int data in MIDI stream")));
     }
 
-    int intRet = ((int)(((MidiByte)bytes[0]) << 8)) |
-                 ((int)(((MidiByte)bytes[1])));
-    return (intRet);
+    return static_cast<int>(static_cast<MidiByte>(bytes[0])) << 8 |
+           static_cast<int>(static_cast<MidiByte>(bytes[1]));
 }
 
 MidiByte
@@ -115,7 +115,9 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     }
 
     // For each track section we can read only m_trackByteCount bytes.
-    if (m_decrementCount  &&  numberOfBytes > (unsigned long)m_trackByteCount) {
+    if (m_decrementCount  &&
+        numberOfBytes > static_cast<unsigned long>(m_trackByteCount)) {
+
         RG_WARNING << "read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")";
 
         throw Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track")));
@@ -146,8 +148,9 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
         m_bytesRead = 0;
 
         // Update the progress dialog if one is connected.
-        emit progress((int)(double(midiFile->tellg()) /
-                            double(m_fileSize) * 20.0));
+        emit progress(static_cast<int>(
+                          static_cast<double>(midiFile->tellg()) /
+                          static_cast<double>(m_fileSize) * 20.0));
 
         // Kick the event loop to make sure the UI doesn't become
         // unresponsive during a long load.
@@ -167,7 +170,7 @@ MidiFile::readNumber(std::ifstream *midiFile, int firstByte)
 
     // If we already have the first byte, use it
     if (firstByte >= 0) {
-        midiByte = (MidiByte)firstByte;
+        midiByte = static_cast<MidiByte>(firstByte);
     } else {  // read it
         midiByte = read(midiFile);
     }
@@ -296,7 +299,8 @@ MidiFile::parseHeader(std::ifstream *midiFile)
     }
 
     long chunkSize = midiBytesToLong(midiHeader.substr(4, 4));
-    m_format = (FileFormatType)midiBytesToInt(midiHeader.substr(8, 2));
+    m_format = static_cast<FileFormatType>(
+            midiBytesToInt(midiHeader.substr(8, 2)));
     m_numberOfTracks = midiBytesToInt(midiHeader.substr(10, 2));
     m_timingDivision = midiBytesToInt(midiHeader.substr(12, 2));
     m_timingFormat = MIDI_TIMING_PPQ_TIMEBASE;
@@ -353,9 +357,8 @@ MidiFile::parseTrack(std::ifstream *midiFile)
     // This is used to store the last absolute time found on each track,
     // allowing us to modify delta-times correctly when separating events
     // out from one to multiple tracks
-    // ??? rename: lastEventTime[track]?
-    std::map<int /*track*/, unsigned long /*lastTime*/> trackTimeMap;
-    trackTimeMap[lastTrackNum] = 0;
+    std::map<int /*track*/, unsigned long /*lastTime*/> lastEventTime;
+    lastEventTime[lastTrackNum] = 0;
 
     // Meta-events don't have a channel, so we place them in a fixed
     // track number instead
@@ -403,10 +406,10 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             if (runningStatus < 0)
                 throw Exception(qstrtostr(QObject::tr("Running status used for first event in track")));
 
-            statusByte = (MidiByte)runningStatus;
+            statusByte = static_cast<MidiByte>(runningStatus);
             data1 = midiByte;
 
-            RG_DEBUG << "parseTrack(): using running status (byte " << int(midiByte) << " found)";
+            RG_DEBUG << "parseTrack(): using running status (byte " << QString("0x%1").arg(midiByte, 0, 16) << " found)";
         }
 
         if (statusByte == MIDI_FILE_META_EVENT) {
@@ -420,9 +423,9 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
             // Compute the difference between this event and the previous
             // event on this track.
-            deltaTime = eventTime - trackTimeMap[metaTrack];
+            deltaTime = eventTime - lastEventTime[metaTrack];
             // Store the absolute time of the last event on this track.
-            trackTimeMap[metaTrack] = eventTime;
+            lastEventTime[metaTrack] = eventTime;
 
             // create and store our event
             MidiEvent *e = new MidiEvent(deltaTime,
@@ -455,7 +458,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             } else {  // We need a new track.
                 // Allocate a new track for this channel.
                 ++lastTrackNum;
-                trackTimeMap[lastTrackNum] = 0;
+                lastEventTime[lastTrackNum] = 0;
             }
 
             RG_DEBUG << "parseTrack(): new channel map entry: channel " << channel << " -> track " << lastTrackNum;
@@ -472,8 +475,8 @@ MidiFile::parseTrack(std::ifstream *midiFile)
             static int prevChannel = -1;
 
             // If we're on a different track or channel
-            if (prevTrackNum != (int)trackNum  ||
-                prevChannel != (int)channel) {
+            if (prevTrackNum != static_cast<int>(trackNum)  ||
+                prevChannel != channel) {
 
                 // Report it for debugging.
                 RG_DEBUG << "parseTrack(): track number for channel " << channel << " is " << trackNum;
@@ -486,9 +489,9 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 
         // Compute the difference between this event and the previous
         // event on this track.
-        deltaTime = eventTime - trackTimeMap[trackNum];
+        deltaTime = eventTime - lastEventTime[trackNum];
         // Store the absolute time of the last event on this track.
-        trackTimeMap[trackNum] = eventTime;
+        lastEventTime[trackNum] = eventTime;
 
         switch (statusByte & MIDI_MESSAGE_TYPE_MASK) {
         case MIDI_NOTE_ON:        // These events have two data bytes.
@@ -687,11 +690,11 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
         // Convert the event times from delta to absolute for
         // consolidateNoteEvents().
-        for (MidiTrack::iterator midiEvent = m_midiComposition[trackId].begin();
-             midiEvent != m_midiComposition[trackId].end();
-             ++midiEvent) {
-            absTime += (*midiEvent)->getTime();
-            (*midiEvent)->setTime(absTime);
+        for (MidiTrack::iterator eventIter = m_midiComposition[trackId].begin();
+             eventIter != m_midiComposition[trackId].end();
+             ++eventIter) {
+            absTime += (*eventIter)->getTime();
+            (*eventIter)->setTime(absTime);
         }
 
         // Consolidate NOTE ON and NOTE OFF events into NOTE ON events with
@@ -705,16 +708,16 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             instrumentId = MidiInstrumentBase + m_trackChannelMap[trackId];
         }
 
-        Segment *segment = new Segment;
-        segment->setLabel(m_trackNames[trackId]);
-        segment->setTrack(rosegardenTrackId);
-        segment->setStartTime(0);
-
         Track *track = new Track(rosegardenTrackId,   // id
                                  instrumentId,        // instrument
                                  rosegardenTrackId,   // position
                                  m_trackNames[trackId],  // label
                                  false);              // muted
+
+        Segment *segment = new Segment;
+        segment->setLabel(m_trackNames[trackId]);
+        segment->setTrack(rosegardenTrackId);
+        segment->setStartTime(0);
 
         RG_DEBUG << "convertToRosegarden(): New Rosegarden track: id = " << rosegardenTrackId << ", instrument = " << instrumentId;
 
@@ -1394,8 +1397,8 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
         trackBuffer += longToVarBuffer(midiEvent.getTime());
 
         RG_DEBUG << "MIDI event for channel "
-                  << (int)midiEvent.getChannelNumber() << " (track "
-                  << (int)trackNumber << ") "
+                  << static_cast<int>(midiEvent.getChannelNumber())
+                  << " (track " << trackNumber << ") "
                   << " time" << midiEvent.getTime();
         RG_DEBUG << midiEvent;
 
@@ -1465,7 +1468,7 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
     // Now we write the track to the file.
 
     *midiFile << MIDI_TRACK_HEADER.c_str();
-    writeLong(midiFile, (long)trackBuffer.length());
+    writeLong(midiFile, trackBuffer.length());
     *midiFile << trackBuffer;
 }
 
@@ -1574,26 +1577,30 @@ MidiFile::consolidateNoteEvents(TrackId trackId)
     }
 }
 
-// Clear down the MidiFile Composition
-//
 void
 MidiFile::clearMidiComposition()
 {
-    for (MidiComposition::iterator ci = m_midiComposition.begin();
-            ci != m_midiComposition.end(); ++ci) {
+    // For each track
+    for (MidiComposition::iterator trackIter = m_midiComposition.begin();
+         trackIter != m_midiComposition.end();
+         ++trackIter) {
 
-        //RG_DEBUG << "MidiFile::clearMidiComposition: track " << ci->first;
+        MidiTrack &midiTrack = trackIter->second;
 
-        for (MidiTrack::iterator ti = ci->second.begin();
-                ti != ci->second.end(); ++ti) {
-            delete *ti;
+        // For each event on the track.
+        for (MidiTrack::iterator eventIter = midiTrack.begin();
+             eventIter != midiTrack.end();
+             ++eventIter) {
+
+            delete *eventIter;
         }
 
-        ci->second.clear();
+        midiTrack.clear();
     }
 
     m_midiComposition.clear();
     m_trackChannelMap.clear();
+    m_trackNames.clear();
 }
 
 
