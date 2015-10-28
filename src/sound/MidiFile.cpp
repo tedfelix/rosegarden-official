@@ -670,10 +670,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     // Destination TrackId in the Composition.
     TrackId rosegardenTrackId = 0;
 
-    // Keep track of the segments we add to the composition for
-    // post-processing.
-    std::vector<Segment *> addedSegments;
-
     // For each track
     // ??? BIG loop.
     for (TrackId trackId = 0;
@@ -837,11 +833,12 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     timeT trackEndTime = rosegardenTime;
 
                     // If the track's empty (or worse)
-                    if (trackEndTime <= 0) {
+                    if (trackEndTime - segment->getStartTime() <= 0) {
+                        RG_WARNING << "convertToRosegarden(): Zero-length track encountered";
+
                         // Make it a full bar.
-                        // ??? Use Semibreve instead of Crotchet*4.
-                        trackEndTime =
-                                Note(Note::Crotchet).getDuration() * 4 *
+                        trackEndTime = segment->getStartTime() +
+                                Note(Note::Semibreve).getDuration() *
                                     numerator / denominator;
                     }
 
@@ -1228,29 +1225,29 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
 #ifdef DEBUG
         RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << segment->getStartTime() << " and end time " << segment->getEndTime();
-        // Secret trigger end time for testing.
+        // For this secret event dump to be triggered, a track that ends
+        // on beat 4 (2880 = 3 * 960) is required.  To generate such
+        // a track in rg, set the time signature to 3/4 and reduce the
+        // composition to one bar in length.  Make a single bar segment and
+        // add events to it.  Export as MIDI.
         if (segment->getEndTime() == 2880) {
             RG_DEBUG << "  events:";
             for (Segment::iterator i = segment->begin();
                  i != segment->end(); ++i) {
-                RG_DEBUG << "    type = " << (*i)->getType();
-                RG_DEBUG << "    time = " << (*i)->getAbsoluteTime();
-                RG_DEBUG << "    duration = " << (*i)->getDuration();
+                RG_DEBUG << **i;
             }
         }
 #endif
 
-        // add the Segment to the Composition and increment the
-        // Rosegarden segment number
-        //
         composition.addTrack(track);
 
+        // Notify Composition observers of the new track.
+        // ??? Why not do this all at once after the track loop is done?
         std::vector<TrackId> trackIds;
         trackIds.push_back(track->getId());
         composition.notifyTracksAdded(trackIds);
 
         composition.addSegment(segment);
-        addedSegments.push_back(segment);
 
         // Next Track in the Composition.
         ++rosegardenTrackId;
@@ -1259,22 +1256,6 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
     // Adjust the composition to hold the segments.
     composition.setEndMarker(composition.getBarEndForTime(maxTime));
-
-    for (std::vector<Segment *>::iterator i = addedSegments.begin();
-         i != addedSegments.end(); ++i) {
-        Segment *s = *i;
-        if (s) {
-            timeT duration = s->getEndMarkerTime() - s->getStartTime();
-            //RG_DEBUG << "convertToRosegarden(): duration = " << duration << " (start " << s->getStartTime() << ", end " << s->getEndTime() << ", marker " << s->getEndMarkerTime() << ")";
-            // Make sure any zero-length segments are at least a crotchet
-            // wide.
-            // ??? Move this into the "for each track" loop.
-            if (duration == 0) {
-                s->setEndMarkerTime(s->getStartTime() +
-                                    Note(Note::Crotchet).getDuration());
-            }
-        }
-    }
 
     return true;
 }
