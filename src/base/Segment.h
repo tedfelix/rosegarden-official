@@ -793,7 +793,7 @@ public:
     * Return true if the segment is connected to a SegmentLinker.
     * This doesn't always mean that the segment is really linked : 
     *    - The segment may be the only one referenced by the SegmentLinker.
-    *      (Probaly this should not be, but nevertheless is not impossible.)
+    *      (Probably this should not be, but nevertheless is not impossible.)
     *    - The segment is a repeating one opened in the notation editor.
     *      It is a linked segment, but linked with temporary segments which
     *      composition doesn't know.

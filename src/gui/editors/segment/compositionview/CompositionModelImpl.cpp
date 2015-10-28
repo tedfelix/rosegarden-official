@@ -36,6 +36,7 @@
 #include "base/Profiler.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
+#include "base/SegmentLinker.h"
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
 #include "base/Studio.h"
@@ -344,6 +345,11 @@ void CompositionModelImpl::getSegmentRect(
     getSegmentQRect(segment, segmentRect.rect);
 
     QString label = strtoqstr(segment.getLabel());
+    if (segment.isTrulyLinked()) {
+        // Add the linker Id to a linked segment label
+        unsigned linkId = segment.getLinker()->getSegmentLinkerId();
+        label += QString(" L{%1}").arg(linkId);
+    }
     if (segment.isAudio()) {
         // Remove anything in parens and the filename suffix.
         static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
