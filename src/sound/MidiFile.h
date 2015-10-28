@@ -133,6 +133,9 @@ private:
     void findNextTrack(std::ifstream *midiFile);
     /// Combine each note-on/note-off pair into a single note event with a duration.
     void consolidateNoteEvents(TrackId trackId);
+    /// Configure the Instrument based on events in Segment at time 0.
+    static void configureInstrument(
+            Track *track, Segment *segment, Instrument *instrument);
 
     // Read
     /// Read a "variable-length quantity" from the MIDI byte stream.

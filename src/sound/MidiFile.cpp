@@ -1123,108 +1123,8 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         }
 
         // Configure the Instrument based on events at time 0.
-
-        Instrument *instrument = studio.getInstrumentById(instrumentId);
-
-        if (instrument) {
-            instrument->setPercussion(
-                    instrument->getNaturalChannel() ==
-                            MIDI_PERCUSSION_CHANNEL);
-
-            track->setInstrument(instrument->getId());
-
-            Segment::iterator msbIter = segment->end();
-            Segment::iterator lsbIter = segment->end();
-
-            // For each event in the segment
-            for (Segment::iterator i = segment->begin();
-                 i != segment->end();
-                 /* increment before use */) {
-                // Increment before use.  This allows us to delete events
-                // from the Segment.
-                Segment::iterator j = i++;
-
-                const Event &event = **j;
-
-                // We only care about events at time 0.
-                if (event.getAbsoluteTime() > 0)
-                    break;
-
-                // If this is a Bank Select MSB, save it.
-                if (event.isa(Controller::EventType)  &&
-                    event.get<Int>(Controller::NUMBER) ==
-                            MIDI_CONTROLLER_BANK_MSB) {
-                    msbIter = j;
-                    continue;
-                }
-
-                // If this is a Bank Select LSB, save it.
-                if (event.isa(Controller::EventType)  &&
-                    event.get<Int>(Controller::NUMBER) ==
-                            MIDI_CONTROLLER_BANK_LSB) {
-                    lsbIter = j;
-                    continue;
-                }
-
-                // If this is a Program Change
-                if (event.isa(ProgramChange::EventType)) {
-                    // Configure the instrument.
-                    int program = event.get<Int>(ProgramChange::PROGRAM);
-                    instrument->setProgramChange(program);
-                    instrument->setSendProgramChange(true);
-
-                    // Remove the program change from the Segment.
-                    segment->erase(j);
-
-                    continue;
-                }
-
-                // If this is a control change
-                if (event.isa(Controller::EventType)) {
-                    int controller = event.get<Int>(Controller::NUMBER);
-
-                    // Only process the four that usually appear in the
-                    // Instrument Parameters box.
-                    if (controller == MIDI_CONTROLLER_VOLUME  ||
-                        controller == MIDI_CONTROLLER_PAN  ||
-                        controller == MIDI_CONTROLLER_REVERB  ||
-                        controller == MIDI_CONTROLLER_CHORUS) {
-
-                        // Configure the Instrument.
-                        instrument->setControllerValue(
-                                controller,
-                                event.get<Int>(Controller::VALUE));
-
-                        // Remove the event from the Segment.
-                        segment->erase(j);
-
-                        continue;
-                    }
-                }
-            }
-
-            // If we have both msb and lsb for bank select
-            if (msbIter != segment->end()  &&  lsbIter != segment->end()) {
-                // Configure the Instrument
-                instrument->setMSB((*msbIter)->get<Int>(Controller::VALUE));
-                instrument->setLSB((*lsbIter)->get<Int>(Controller::VALUE));
-                instrument->setSendBankSelect(true);
-
-                // Remove the events.
-                segment->erase(msbIter);
-                segment->erase(lsbIter);
-            }
-
-            // Use the program name for a label if nothing else
-            // was found.
-            std::string programName = instrument->getProgramName();
-            if (programName != "") {
-                if (track->getLabel() == defaultTrackName)
-                    track->setLabel(instrument->getProgramName());
-                if (segment->getLabel() == defaultTrackName)
-                    segment->setLabel(instrument->getProgramName());
-            }
-        }
+        configureInstrument(track, segment,
+                            studio.getInstrumentById(instrumentId));
 
 #ifdef DEBUG
         RG_DEBUG << "convertToRosegarden(): MIDI import: adding segment with start time " << segment->getStartTime() << " and end time " << segment->getEndTime();
@@ -1262,6 +1162,111 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     composition.setEndMarker(composition.getBarEndForTime(maxTime));
 
     return true;
+}
+
+void MidiFile::configureInstrument(
+        Track *track, Segment *segment, Instrument *instrument)
+{
+    if (!instrument)
+        return;
+
+    instrument->setPercussion(
+            instrument->getNaturalChannel() ==
+                    MIDI_PERCUSSION_CHANNEL);
+
+    track->setInstrument(instrument->getId());
+
+    Segment::iterator msbIter = segment->end();
+    Segment::iterator lsbIter = segment->end();
+
+    // For each event in the segment
+    for (Segment::iterator i = segment->begin();
+         i != segment->end();
+         /* increment before use */) {
+        // Increment before use.  This allows us to delete events
+        // from the Segment.
+        Segment::iterator j = i++;
+
+        const Event &event = **j;
+
+        // We only care about events at time 0.
+        if (event.getAbsoluteTime() > 0)
+            break;
+
+        // If this is a Bank Select MSB, save it.
+        if (event.isa(Controller::EventType)  &&
+            event.get<Int>(Controller::NUMBER) ==
+                    MIDI_CONTROLLER_BANK_MSB) {
+            msbIter = j;
+            continue;
+        }
+
+        // If this is a Bank Select LSB, save it.
+        if (event.isa(Controller::EventType)  &&
+            event.get<Int>(Controller::NUMBER) ==
+                    MIDI_CONTROLLER_BANK_LSB) {
+            lsbIter = j;
+            continue;
+        }
+
+        // If this is a Program Change
+        if (event.isa(ProgramChange::EventType)) {
+            // Configure the instrument.
+            int program = event.get<Int>(ProgramChange::PROGRAM);
+            instrument->setProgramChange(program);
+            instrument->setSendProgramChange(true);
+
+            // Remove the program change from the Segment.
+            segment->erase(j);
+
+            continue;
+        }
+
+        // If this is a control change
+        if (event.isa(Controller::EventType)) {
+            int controller = event.get<Int>(Controller::NUMBER);
+
+            // Only process the four that usually appear in the
+            // Instrument Parameters box.
+            if (controller == MIDI_CONTROLLER_VOLUME  ||
+                controller == MIDI_CONTROLLER_PAN  ||
+                controller == MIDI_CONTROLLER_REVERB  ||
+                controller == MIDI_CONTROLLER_CHORUS) {
+
+                // Configure the Instrument.
+                instrument->setControllerValue(
+                        controller,
+                        event.get<Int>(Controller::VALUE));
+
+                // Remove the event from the Segment.
+                segment->erase(j);
+
+                continue;
+            }
+        }
+    }
+
+    // If we have both msb and lsb for bank select
+    if (msbIter != segment->end()  &&  lsbIter != segment->end()) {
+        // Configure the Instrument
+        instrument->setMSB((*msbIter)->get<Int>(Controller::VALUE));
+        instrument->setLSB((*lsbIter)->get<Int>(Controller::VALUE));
+        instrument->setSendBankSelect(true);
+
+        // Remove the events.
+        segment->erase(msbIter);
+        segment->erase(lsbIter);
+    }
+
+    // Use the program name for a label if nothing else
+    // was found.
+    std::string programName = instrument->getProgramName();
+    if (programName != "") {
+        if (track->getLabel() == defaultTrackName)
+            track->setLabel(instrument->getProgramName());
+        if (segment->getLabel() == defaultTrackName)
+            segment->setLabel(instrument->getProgramName());
+    }
 }
 
 bool
