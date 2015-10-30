@@ -25,7 +25,9 @@
  * This file defines a class which maintains the context of the segments
  * which have to be exported to LilyPond.
  *
- * This context is used to 
+ * This class is used to 
+ *      - Hide the segments of the composition which are not exported
+ *      - Simplify the access of voices inside a same track
  *      - See when a repeating segment may be printed inside
  *        repeat bars. (i.e. when no other unrepeating segment
  *        coexists at the same time on an other track).
@@ -120,13 +122,15 @@ public:
     int getTrackPos();
 
     /**
-     * Prepare to get the segments on the first voice of the first track.
+     * Prepare to get the segments on the first voice of the current track.
+     * Return the voice index of the first voice.
      * Return -1 if there is no track.
      */
     int useFirstVoice();
 
     /**
      * Go to the next voice.
+     * Return the voice index of this voice.
      * Return -1 if there is no more voice.
      */
     int useNextVoice();
@@ -222,8 +226,6 @@ protected :
 
 private :
 
-    typedef std::list<Segment *> SegmentList;   /// CURRENTLY NOT USED
-  
     struct Volta {
         Segment * segment;
         timeT duration;
@@ -288,13 +290,15 @@ private :
         bool operator()(const SegmentData &s1, const SegmentData &s2) const;
     };
     typedef std::multiset<SegmentData, LilyPondSegmentsContext::SegmentDataCmp> SegmentSet;
-    typedef std::map<int, SegmentSet> TrackMap;
+    typedef std::map<int, SegmentSet> VoiceMap;
+    typedef std::map<int, VoiceMap> TrackMap;
 
     typedef std::list<const SegmentData *> SegmentDataList;
 
 
    /**
-    * Begin to look on all tracks for all segments synchronous of the given one.
+    * Begin to look on all tracks/voices for all segments synchronous of the
+    * given one.
     * Return null if no segment found.
     */
     const SegmentData * getFirstSynchronousSegment(Segment * seg);
@@ -314,21 +318,11 @@ private :
     */
     void sortAndGatherVolta(SegmentDataList &);
 
-   /**
-    * Initialize a SegmentSet::iterator looking at a given voiceIndex only
-    */
-    SegmentSet::iterator firstSlot(SegmentSet &segSet, int voiceIndex);
-
-   /**
-    * Increment a SegmentSet::iterator looking at a given voiceIndex only
-    */
-    SegmentSet::iterator nextSlot(SegmentSet &segSet,
-                                  int voiceIndex, SegmentSet::iterator it);
 
     // Only for instrumentation while debugging
     void dumpSDL(SegmentDataList & l);
 
-    
+
     TrackMap m_segments;
 
     LilyPondExporter * m_exporter;
@@ -340,16 +334,18 @@ private :
     bool m_automaticVoltaUsable;
 
     TrackMap::iterator m_trackIterator;
-    int m_voiceIndex;
+    VoiceMap::iterator m_voiceIterator;
     SegmentSet::iterator m_segIterator;
     VoltaChain::iterator m_voltaIterator;
 
     int m_nextRepeatId;
 
-    // Used by "Get Synchronous Segment" methods getFirstSynchronousSegment()
-    // and getNextSynchronousSegment()
+    // Used by "Get Synchronous Segment" (GSS) methods
+    // getFirstSynchronousSegment() and getNextSynchronousSegment() to remember
+    // the current position in maps and set.
     Segment * m_GSSSegment;
     TrackMap::iterator m_GSSTrackIterator;
+    VoiceMap::iterator m_GSSVoiceIterator;
     SegmentSet::iterator m_GSSSegIterator;
 
     bool m_repeatWithVolta; // Repeat with volta is usable in LilyPondExporter

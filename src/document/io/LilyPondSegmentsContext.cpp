@@ -52,29 +52,35 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(LilyPondExporter *exporter,
 LilyPondSegmentsContext::~LilyPondSegmentsContext()
 {
     TrackMap::iterator tit;
+    VoiceMap::iterator vit;
     SegmentSet::iterator sit;
 
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
-            if (sit->rawVoltaChain) {
-                VoltaChain::iterator i;
-                for (i = sit->rawVoltaChain->begin();
-                        i != sit->rawVoltaChain->end(); ++i) {
-                    delete *i;
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
+                if (sit->rawVoltaChain) {
+                    VoltaChain::iterator i;
+                    for (i = sit->rawVoltaChain->begin();
+                            i != sit->rawVoltaChain->end(); ++i) {
+                        delete *i;
+                    }
+                    delete sit->rawVoltaChain;
+                    delete sit->sortedVoltaChain;
                 }
-                delete sit->rawVoltaChain;
-                delete sit->sortedVoltaChain;
             }
         }
     }
 }
 
+
 void
 LilyPondSegmentsContext::addSegment(Segment *segment)
 {
     int trackPos = m_composition->getTrackPositionById(segment->getTrack());
-    m_segments[trackPos].insert(SegmentData(segment));
+    int voice = m_composition->getSegmentVoiceIndex(segment);
+    m_segments[trackPos][voice].insert(SegmentData(segment));
 }
+
 
 bool
 LilyPondSegmentsContext::containsNoSegment()
@@ -86,6 +92,7 @@ void
 LilyPondSegmentsContext::precompute()
 {
     TrackMap::iterator tit;
+    VoiceMap::iterator vit;
     SegmentSet::iterator sit;
     
     // Set at initialization.
@@ -98,12 +105,14 @@ LilyPondSegmentsContext::precompute()
     m_firstSegmentStartTime = m_composition->getEndMarker();
     m_lastSegmentEndTime = m_composition->getStartMarker();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        sit = tit->second.begin();
-        if (sit != tit->second.end()) {
-            timeT start = sit->segment->getStartTime();
-            if (start < m_firstSegmentStartTime) m_firstSegmentStartTime = start;
-            timeT end = sit->segment->getEndMarkerTime();
-            if (end > m_lastSegmentEndTime) m_lastSegmentEndTime = end;
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            sit = vit->second.begin();
+            if (sit != vit->second.end()) {
+                timeT start = sit->segment->getStartTime();
+                if (start < m_firstSegmentStartTime) m_firstSegmentStartTime = start;
+                timeT end = sit->segment->getEndMarkerTime();
+                if (end > m_lastSegmentEndTime) m_lastSegmentEndTime = end;
+            }
         }
     }
 
@@ -111,28 +120,31 @@ LilyPondSegmentsContext::precompute()
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         /* int trackPos = tit->first; */
         /* Track * track = m_composition->getTrackByPosition(trackPos); */
-        SegmentSet &segSet = tit->second;
-        for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-            Segment * seg = sit->segment;
-            sit->duration = seg->getEndMarkerTime() - seg->getStartTime();
-            if (!seg->isRepeating()) {
-                sit->wholeDuration = sit->duration;
-                sit->numberOfRepeats = 0;
-                sit->remainderDuration = 0;
-            } else {
-                SegmentSet::iterator next = sit;
-                ++next;
-                timeT endOfRepeat;
-                if (next == segSet.end()) {
-                    endOfRepeat = m_composition->getEndMarker();
-                } else {
-                    endOfRepeat = (*next).segment->getStartTime();
-                }
-                sit->wholeDuration = endOfRepeat - seg->getStartTime();
-                sit->numberOfRepeats = sit->wholeDuration / sit->duration;
-                sit->remainderDuration = sit->wholeDuration % sit->duration;
-                if (sit->remainderDuration < m_epsilon) {
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            /* int voiceIndex = vit->first; */
+            SegmentSet &segSet = vit->second;
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                Segment * seg = sit->segment;
+                sit->duration = seg->getEndMarkerTime() - seg->getStartTime();
+                if (!seg->isRepeating()) {
+                    sit->wholeDuration = sit->duration;
+                    sit->numberOfRepeats = 0;
                     sit->remainderDuration = 0;
+                } else {
+                    SegmentSet::iterator next = sit;
+                    ++next;
+                    timeT endOfRepeat;
+                    if (next == segSet.end()) {
+                        endOfRepeat = m_composition->getEndMarker();
+                    } else {
+                        endOfRepeat = (*next).segment->getStartTime();
+                    }
+                    sit->wholeDuration = endOfRepeat - seg->getStartTime();
+                    sit->numberOfRepeats = sit->wholeDuration / sit->duration;
+                    sit->remainderDuration = sit->wholeDuration % sit->duration;
+                    if (sit->remainderDuration < m_epsilon) {
+                        sit->remainderDuration = 0;
+                    }
                 }
             }
         }
@@ -150,35 +162,41 @@ LilyPondSegmentsContext::precompute()
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         /* int trackPos = tit->first; */
         /* Track * track = m_composition->getTrackByPosition(trackPos); */
-        SegmentSet &segSet = tit->second;
-        for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-            Segment * seg = sit->segment;
-            timeT start = seg->getStartTime();
-            timeT end = start + sit->wholeDuration;
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            /* int voiceIndex = vit->first; */
+            SegmentSet &segSet = vit->second;
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                Segment * seg = sit->segment;
+                timeT start = seg->getStartTime();
+                timeT end = start + sit->wholeDuration;
 
-            TrackMap::iterator tit2;
-            SegmentSet::iterator sit2;
-            for (tit2 = m_segments.begin(); tit2 != m_segments.end(); ++tit2) {
-                /* int trackPos2 = tit2->first; */
-                /* Track * track2 = m_composition->getTrackByPosition(trackPos2); */
-                SegmentSet &segSet2 = tit2->second;
-                for (sit2 = segSet2.begin(); sit2 != segSet2.end(); ++sit2) {
-                    Segment * seg2 = sit2->segment;
-                    if (seg == seg2) continue;
-                    timeT start2 = seg2->getStartTime();
-                    timeT end2 = start2 + sit2->wholeDuration;
+                TrackMap::iterator tit2;
+                VoiceMap::iterator vit2;
+                SegmentSet::iterator sit2;
+                for (tit2 = m_segments.begin(); tit2 != m_segments.end(); ++tit2) {
+                    /* int trackPos2 = tit2->first; */
+                    /* Track * track2 = m_composition->getTrackByPosition(trackPos2); */
+                    for (vit2 = tit2->second.begin(); vit2 != tit2->second.end(); ++vit2) {
+                        SegmentSet &segSet2 = vit2->second;
+                        for (sit2 = segSet2.begin(); sit2 != segSet2.end(); ++sit2) {
+                            Segment * seg2 = sit2->segment;
+                            if (seg == seg2) continue;
+                            timeT start2 = seg2->getStartTime();
+                            timeT end2 = start2 + sit2->wholeDuration;
 
-                    // When the two segments have the same bounds,
-                    // repeat is possible.
-                    if ((start2 == start) && (end2 == end)
-                        && (sit->duration == sit2->duration)) continue;
+                            // When the two segments have the same bounds,
+                            // repeat is possible.
+                            if ((start2 == start) && (end2 == end)
+                                && (sit->duration == sit2->duration)) continue;
 
-                    // If the second segment is starting somewhere inside
-                    // the first one, repeat is neither possible for the first
-                    // segment nor for the second one.
-                    if ((start2 >= start) && (start2 < end)) {
-                        sit->synchronous = false;
-                        sit2->synchronous = false;
+                            // If the second segment is starting somewhere inside
+                            // the first one, repeat is neither possible for the first
+                            // segment nor for the second one.
+                            if ((start2 >= start) && (start2 < end)) {
+                                sit->synchronous = false;
+                                sit2->synchronous = false;
+                            }
+                        }
                     }
                 }
             }
@@ -189,11 +207,13 @@ LilyPondSegmentsContext::precompute()
     // Look for linked segments which may be exported as repeat with volta
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         int trackPos = tit->first;
-        int trackId = m_composition->getTrackByPosition(trackPos)->getId();
-        int voiceCount = m_composition->getMaxContemporaneousSegmentsOnTrack(trackId);
-        // No LllyPond automatic volta when multiple voices on the same track
+
+        // No LilyPond automatic volta when multiple voices on the same track
+        int voiceCount = tit->second.size();
         if (voiceCount > 1) m_automaticVoltaUsable = false;
-        for (int voice = 0; voice < voiceCount; voice++) {
+
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            int voice = vit->first;
             lookForRepeatedLinks(trackPos, voice);
         }
     }
@@ -201,14 +221,16 @@ LilyPondSegmentsContext::precompute()
     // Check linked segment repeat consistency between tracks and mark
     // inconsistant repeats
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
-            if (sit->repeatId) {
-                const SegmentData * sd;
-                for (sd = getFirstSynchronousSegment(sit->segment);
-                             sd; sd = getNextSynchronousSegment()) {
-                    if (!sd->repeatId) {
-                        sit->noRepeat = true;
-                        break;
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
+                if (sit->repeatId) {
+                    const SegmentData * sd;
+                    for (sd = getFirstSynchronousSegment(sit->segment);
+                                sd; sd = getNextSynchronousSegment()) {
+                        if (!sd->repeatId) {
+                            sit->noRepeat = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -217,21 +239,22 @@ LilyPondSegmentsContext::precompute()
 
     // Reset all the repeatId
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
-            sit->repeatId = 0;
-            sit->volta = false;
-            sit->ignored = false;
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
+                sit->repeatId = 0;
+                sit->volta = false;
+                sit->ignored = false;
+            }
         }
     }
-
 
     // Then look again for repeats from linked segments
     // (without looking at the inconsistant ones)
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         int trackPos = tit->first;
-        int trackId = m_composition->getTrackByPosition(trackPos)->getId();
-        int voiceCount = m_composition->getMaxContemporaneousSegmentsOnTrack(trackId);
-        for (int voice = 0; voice < voiceCount; voice++) {
+
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            int voice = vit->first;
             lookForRepeatedLinks(trackPos, voice);
         }
     }
@@ -241,12 +264,11 @@ LilyPondSegmentsContext::precompute()
     int currentRepeatId = 0;
     const SegmentData * currentMainSeg = 0;
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        int trackPos = tit->first;
-        int trackId = m_composition->getTrackByPosition(trackPos)->getId();
-        int voiceCount = m_composition->getMaxContemporaneousSegmentsOnTrack(trackId);
-        for (int voice = 0; voice < voiceCount; voice++) {
-            for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
-                if (m_composition->getSegmentVoiceIndex(sit->segment) != voice) continue;
+        // int trackPos = tit->first;
+        // int trackId = m_composition->getTrackByPosition(trackPos)->getId();
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            // int voiceIndex = vit->first;
+            for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
                 if (sit->repeatId) {
                     if (sit->repeatId != currentRepeatId) {
                         currentRepeatId = sit->repeatId;
@@ -277,8 +299,9 @@ LilyPondSegmentsContext::precompute()
     // Look for the repeat sequences in the first voice of the first track
     tit = m_segments.begin();
     if (tit == m_segments.end()) return;   // This should not happen
-    for (sit = tit->second.begin(); sit != tit->second.end(); ++sit) {
-        if (m_composition->getSegmentVoiceIndex(sit->segment) != 0) continue;
+    vit = tit->second.begin();
+    if (vit == tit->second.end()) return;  // This should not happen
+    for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
         if (sit->rawVoltaChain) {
             SegmentDataList repeatList;
             repeatList.clear();
@@ -287,28 +310,33 @@ LilyPondSegmentsContext::precompute()
 
             // Gather data from the other tracks
             for (sd = getFirstSynchronousSegment(sit->segment); sd;
-                 sd = getNextSynchronousSegment()) {
+                sd = getNextSynchronousSegment()) {
                 repeatList.push_back(sd);
             }
 
             // The element of repeatList are the data related to one group of
             // synchronous repeated segments.
             // There should be one and only one element of repeatList in each
-            // of the tracks.
+            // of the tracks/voices.
 
             // Sort the volta
             sortAndGatherVolta(repeatList);
         }
     }
 
+
+
     // Compute the LilyPond start times with all segments unfolded.
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         /* int trackPos = tit->first; */
         /* Track * track = m_composition->getTrackByPosition(trackPos); */
-        SegmentSet &segSet = tit->second;
-        for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-            Segment * seg = sit->segment;
-            sit->startTime = seg->getStartTime() - m_firstSegmentStartTime;
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            // int voiceIndex = vit->first;
+            SegmentSet &segSet = vit->second;
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                Segment * seg = sit->segment;
+                sit->startTime = seg->getStartTime() - m_firstSegmentStartTime;
+            }
         }
     }
 }
@@ -317,6 +345,7 @@ void
 LilyPondSegmentsContext::fixRepeatStartTimes()
 {
     TrackMap::iterator tit;
+    VoiceMap::iterator vit;
     SegmentSet::iterator sit;
 
     // precompute() should have been called already and
@@ -327,10 +356,12 @@ LilyPondSegmentsContext::fixRepeatStartTimes()
     std::map<timeT, const SegmentData *> repeatedSegments;
     repeatedSegments.clear();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        SegmentSet &segSet = tit->second;
-        for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-            if (sit->numberOfRepeats && sit->synchronous) {
-                repeatedSegments[sit->startTime] = &(*sit);
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            SegmentSet &segSet = vit->second;
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                if (sit->numberOfRepeats && sit->synchronous) {
+                    repeatedSegments[sit->startTime] = &(*sit);
+                }
             }
         }
     }
@@ -341,10 +372,12 @@ LilyPondSegmentsContext::fixRepeatStartTimes()
         const SegmentData *segData = it->second;
         timeT deltaT = segData->wholeDuration - segData->duration;
         for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-            SegmentSet &segSet = tit->second;
-            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-                if (sit->startTime > it->first) {
-                    sit->startTime -= deltaT;
+            for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+                SegmentSet &segSet = vit->second;
+                for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                    if (sit->startTime > it->first) {
+                        sit->startTime -= deltaT;
+                    }
                 }
             }
         }
@@ -353,11 +386,11 @@ LilyPondSegmentsContext::fixRepeatStartTimes()
     }
 }
 
-
 void
 LilyPondSegmentsContext::fixVoltaStartTimes()
 {
     TrackMap::iterator tit;
+    VoiceMap::iterator vit;
     SegmentSet::iterator sit;
 
     // precompute() should have been called already and
@@ -371,10 +404,12 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
     std::map<timeT, const SegmentData *> repeatedSegments;
     repeatedSegments.clear();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        SegmentSet &segSet = tit->second;
-        for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-            if (sit->numberOfRepeatLinks) {
-                repeatedSegments[sit->startTime] = &(*sit);
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            SegmentSet &segSet = vit->second;
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                if (sit->numberOfRepeatLinks) {
+                    repeatedSegments[sit->startTime] = &(*sit);
+                }
             }
         }
     }
@@ -397,10 +432,12 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
 
         // Fix the segment start time when needed
         for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-            SegmentSet &segSet = tit->second;
-            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-                if (sit->startTime > it->first) {
-                    sit->startTime -= deltaT;
+            for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+                SegmentSet &segSet = vit->second;
+                for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                    if (sit->startTime > it->first) {
+                        sit->startTime -= deltaT;
+                    }
                 }
             }
         }
@@ -438,28 +475,27 @@ LilyPondSegmentsContext::useFirstVoice()
     int trackPos = getTrackPos();
     if (trackPos == -1) return -1;
 
-    m_voiceIndex = 0;
-    return 0;
+    m_voiceIterator = m_trackIterator->second.begin();
+    if (m_voiceIterator == m_trackIterator->second.end()) return -1;
+
+    return m_voiceIterator->first;
 }
 
 int
 LilyPondSegmentsContext::useNextVoice()
 {
-    ++m_voiceIndex;
-
-    int trackPos = getTrackPos();
-    if (trackPos == -1) return -1;
-    int trackId = m_composition->getTrackByPosition(trackPos)->getId();
-    int voiceCount = m_composition->getMaxContemporaneousSegmentsOnTrack(trackId);
-
-    return m_voiceIndex < voiceCount ? m_voiceIndex : -1;
+    if (m_trackIterator == m_segments.end()) return -1;
+    ++m_voiceIterator;
+    if (m_voiceIterator == m_trackIterator->second.end()) return -1;
+    return m_voiceIterator->first;
 }
 
 int
 LilyPondSegmentsContext::getVoiceIndex()
 {
     if (m_trackIterator == m_segments.end()) return -1;
-    return m_voiceIndex;
+    if (m_voiceIterator == m_trackIterator->second.end()) return -1;
+    return m_voiceIterator->first;
 }
 
 Segment *
@@ -468,11 +504,9 @@ LilyPondSegmentsContext::useFirstSegment()
     m_lastWasOK = false;
     m_firstVolta = false;
     m_lastVolta = false;
-    m_segIterator = (*m_trackIterator).second.begin();
-    if (m_segIterator == (*m_trackIterator).second.end()) return 0;
-    int voice = m_composition->getSegmentVoiceIndex(m_segIterator->segment);
-    if (voice != m_voiceIndex) return useNextSegment();
-    if (m_repeatWithVolta && (*m_segIterator).ignored) return useNextSegment();
+    m_segIterator = m_voiceIterator->second.begin();
+    if (m_segIterator == m_voiceIterator->second.end()) return 0;
+    if (m_repeatWithVolta && m_segIterator->ignored) return useNextSegment();
     
     m_lastWasOK = true;
     return m_segIterator->segment;
@@ -514,9 +548,7 @@ LilyPondSegmentsContext::useNextSegment()
     m_lastWasOK = false;
 
     ++m_segIterator;
-    if (m_segIterator == (*m_trackIterator).second.end()) return 0;
-    int voice = m_composition->getSegmentVoiceIndex(m_segIterator->segment);
-    if (voice != m_voiceIndex) return useNextSegment();
+    if (m_segIterator == (*m_voiceIterator).second.end()) return 0;
     if (m_repeatWithVolta && (*m_segIterator).ignored) return useNextSegment();
 
     m_lastWasOK = true;
@@ -649,8 +681,11 @@ LilyPondSegmentsContext::getFirstSynchronousSegment(Segment * seg)
     m_GSSTrackIterator = m_segments.begin();
     if (m_GSSTrackIterator == m_segments.end()) return 0;
 
-    m_GSSSegIterator = m_GSSTrackIterator->second.begin();
-    if (m_GSSSegIterator == m_GSSTrackIterator->second.end()) return 0;
+    m_GSSVoiceIterator = m_GSSTrackIterator->second.begin();
+    if (m_GSSVoiceIterator == m_GSSTrackIterator->second.end()) return 0;
+
+    m_GSSSegIterator = m_GSSVoiceIterator->second.begin();
+    if (m_GSSSegIterator == m_GSSVoiceIterator->second.end()) return 0;
 
     if (m_GSSSegIterator->synchronous &&
         (m_GSSSegIterator->segment != m_GSSSegment) &&
@@ -667,11 +702,14 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
 {
     for (;;) {
         ++m_GSSSegIterator;
-        if (m_GSSSegIterator == m_GSSTrackIterator->second.end()) {
-            ++m_GSSTrackIterator;
-            if (m_GSSTrackIterator == m_segments.end()) return 0;
-            m_GSSSegIterator = m_GSSTrackIterator->second.begin();
-            if (m_GSSSegIterator == m_GSSTrackIterator->second.end()) return 0;
+        if (m_GSSSegIterator == m_GSSVoiceIterator->second.end()) {
+            ++m_GSSVoiceIterator;
+            if (m_GSSVoiceIterator == m_GSSTrackIterator->second.end()) {
+                ++m_GSSTrackIterator;
+                if (m_GSSTrackIterator == m_segments.end()) return 0;
+                m_GSSVoiceIterator = m_GSSTrackIterator->second.begin();
+            }
+            m_GSSSegIterator = m_GSSVoiceIterator->second.begin();
         }
 
         if (m_GSSSegIterator->synchronous &&
@@ -683,38 +721,13 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
     }
 }
 
-LilyPondSegmentsContext::SegmentSet::iterator
-LilyPondSegmentsContext::firstSlot(SegmentSet &segSet, int voiceIndex)
-{
-    SegmentSet::iterator sit;
-    for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-        int voice = m_composition->getSegmentVoiceIndex(sit->segment);
-        if (voice == voiceIndex) break;
-    }
-    return sit;
-}
-
-LilyPondSegmentsContext::SegmentSet::iterator
-LilyPondSegmentsContext::nextSlot(SegmentSet &segSet,
-                                  int voiceIndex, SegmentSet::iterator it)
-{
-    SegmentSet::iterator sit;
-    if (it == segSet.end()) return it;
-    for (sit = ++it; sit != segSet.end(); ++sit) {
-        int voice = m_composition->getSegmentVoiceIndex(sit->segment);
-        if (voice == voiceIndex) break;
-    }
-    return sit;
-}
-
 void
 LilyPondSegmentsContext::lookForRepeatedLinks(int trackId, int voiceIndex)
 {
-    SegmentSet &segSet = m_segments[trackId];
+    SegmentSet &segSet = m_segments[trackId][voiceIndex];
 
     SegmentSet::iterator sit;
-    for (sit = firstSlot(segSet, voiceIndex); sit != segSet.end();
-                         sit = nextSlot(segSet, voiceIndex, sit)) {
+    for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
 
         // Skip segments already registered in a repeat chain
         if (sit->repeatId) continue;
@@ -738,9 +751,9 @@ LilyPondSegmentsContext::lookForRepeatedLinks(int trackId, int voiceIndex)
         SegmentSet::iterator mainSegIt = sit;
         SegmentSet::iterator sitv = sit;
         SegmentSet::iterator sitm;
-        sitv = nextSlot(segSet, voiceIndex, sitv);
+        ++sitv;
         for (sitm = sitv; sitv != segSet.end(); ) {
-            sitm = nextSlot(segSet, voiceIndex, sitm);
+            ++sitm;
             // *sitv is the volta and *sitm the next repetition (if any).
 
             // Is *sitv a valid volta ?
@@ -795,9 +808,9 @@ LilyPondSegmentsContext::lookForRepeatedLinks(int trackId, int voiceIndex)
             if (!again) break;
             mainSegIt = sitm;
             sitm->ignored = true;
-            sitv = nextSlot(segSet, voiceIndex, sitv);
-            sitv = nextSlot(segSet, voiceIndex, sitv);
-            sitm = nextSlot(segSet, voiceIndex, sitm);
+            ++sitv;
+            ++sitv;
+            ++sitm;
         }
 
         if (repeatFound) {
@@ -862,60 +875,65 @@ LilyPondSegmentsContext::dump()
 {
 
     TrackMap::iterator tit;
+    VoiceMap::iterator vit;
     SegmentSet::iterator sit;
 
     std::cout << std::endl;
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         int trackPos = (*tit).first;
         Track * track = m_composition->getTrackByPosition(trackPos);
-        SegmentSet &segSet = (*tit).second;
-
         std::cout << "Track pos=" << trackPos << " id=" << track->getId()
                   << "   \"" << track->getLabel() << "\"" << std::endl;
-        for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-            Segment * seg = (*sit).segment;
+                  
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            std::cout << "  Voice index = " << vit->first << std::endl;
+            SegmentSet &segSet = vit->second;
 
-            std::cout << "     Segment \"" << seg->getLabel() << "\""
-                      << " voice=" << m_composition->getSegmentVoiceIndex(seg)
-                      << " start=" << seg->getStartTime()
-                      << " duration=" << (*sit).duration
-                      << " wholeDuration=" <<  (*sit).wholeDuration
-                      << std::endl;
-            std::cout << "               numRepeat=" << (*sit).numberOfRepeats
-                      << " remainder=" << (*sit).remainderDuration
-                      << " synchronous=" << (*sit).synchronous
-                      << " lilyStart=" << (*sit).startTime
-                      << std::endl;
-            std::cout << "               noRepeat=" << (*sit).noRepeat
-                      << " repeatId=" << (*sit).repeatId
-                      << " numberOfRepeatLinks=" << (*sit).numberOfRepeatLinks
-                      << " rawVoltaChain=" << (*sit).rawVoltaChain
-                      << std::endl;
-            if (sit->rawVoltaChain) {
-                VoltaChain::iterator i;
-                for (i = sit->rawVoltaChain->begin(); i != sit->rawVoltaChain->end(); ++i) {
-                    std::cout << "                 --> \"" << (*i)->segment->getLabel()
-                              << "\": ";
-                    std::set<int>::iterator j;
-                    for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
-                        std::cout << (*j) << " ";
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                Segment * seg = (*sit).segment;
+
+                std::cout << "     Segment \"" << seg->getLabel() << "\""
+                        << " voice=" << m_composition->getSegmentVoiceIndex(seg)
+                        << " start=" << seg->getStartTime()
+                        << " duration=" << (*sit).duration
+                        << " wholeDuration=" <<  (*sit).wholeDuration
+                        << std::endl;
+                std::cout << "               numRepeat=" << (*sit).numberOfRepeats
+                        << " remainder=" << (*sit).remainderDuration
+                        << " synchronous=" << (*sit).synchronous
+                        << " lilyStart=" << (*sit).startTime
+                        << std::endl;
+                std::cout << "               noRepeat=" << (*sit).noRepeat
+                        << " repeatId=" << (*sit).repeatId
+                        << " numberOfRepeatLinks=" << (*sit).numberOfRepeatLinks
+                        << " rawVoltaChain=" << (*sit).rawVoltaChain
+                        << std::endl;
+                if (sit->rawVoltaChain) {
+                    VoltaChain::iterator i;
+                    for (i = sit->rawVoltaChain->begin(); i != sit->rawVoltaChain->end(); ++i) {
+                        std::cout << "                 --> \"" << (*i)->segment->getLabel()
+                                << "\": ";
+                        std::set<int>::iterator j;
+                        for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
+                            std::cout << (*j) << " ";
+                        }
+                        std::cout << "\n";
                     }
-                    std::cout << "\n";
                 }
-            }
-            std::cout << "               sortedVoltaChain=" << (*sit).sortedVoltaChain
-                      << " ignored=" << (*sit).ignored
-                      << std::endl;
-            if (sit->sortedVoltaChain) {
-                VoltaChain::iterator i;
-                for (i = sit->sortedVoltaChain->begin(); i != sit->sortedVoltaChain->end(); ++i) {
-                    std::cout << "                 --> \"" << (*i)->segment->getLabel()
-                              << "\": ";
-                    std::set<int>::iterator j;
-                    for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
-                        std::cout << (*j) << " ";
+                std::cout << "               sortedVoltaChain=" << (*sit).sortedVoltaChain
+                        << " ignored=" << (*sit).ignored
+                        << std::endl;
+                if (sit->sortedVoltaChain) {
+                    VoltaChain::iterator i;
+                    for (i = sit->sortedVoltaChain->begin(); i != sit->sortedVoltaChain->end(); ++i) {
+                        std::cout << "                 --> \"" << (*i)->segment->getLabel()
+                                << "\": ";
+                        std::set<int>::iterator j;
+                        for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
+                            std::cout << (*j) << " ";
+                        }
+                        std::cout << "\n";
                     }
-                    std::cout << "\n";
                 }
             }
         }
