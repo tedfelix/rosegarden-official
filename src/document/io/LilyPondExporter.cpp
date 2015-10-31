@@ -894,6 +894,7 @@ LilyPondExporter::write()
         lsc.fixVoltaStartTimes();
     }
 
+
     // If any segment is not starting at a bar boundary, adapted
     // \partial or \skip keywords must be added to the output file.
     // We have to know what segment is starting first to compute
@@ -1519,7 +1520,8 @@ LilyPondExporter::write()
                 std::string lilyText = "";      // text events
                 std::string prevStyle = "";     // track note styles
 
-                Rosegarden::Key key;
+                Rosegarden::Key key = lsc.getPreviousKey();
+
                 bool haveRepeating = false;
                 bool haveAlternates = false;
 
@@ -2613,12 +2615,16 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
             try {
+                // Remember current key to write key signature only when
+                // there is a key change
+                Rosegarden::Key previousKey = key;
+
                 // grab the value of the key anyway, so we know what it was for
                 // future calls to writePitch() (fixes #2039048)
                 key = Rosegarden::Key(**i);
                 // then we only write a \key change to the export stream if the
                 // key signature was meant to be visible
-                if (!hiddenKey) {
+                if ((key != previousKey) && !hiddenKey) {
                     str << "\\key ";
 
                     Accidental accidental = Accidentals::NoAccidental;

@@ -94,6 +94,47 @@ LilyPondSegmentsContext::precompute()
     TrackMap::iterator tit;
     VoiceMap::iterator vit;
     SegmentSet::iterator sit;
+
+    // Look for previous key of each segment.
+    // Walk through the segments of a voice and set the previousKey of each
+    // segment to the value of the last key found in the previous contiguous 
+    // segment.
+    // This works because segments of a same voice can be contiguous but can't
+    // overlap.
+    for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            // int voiceIndex = vit->first;
+            SegmentSet &segSet = vit->second;
+            Rosegarden::Key key;
+            bool firstSeg = true;
+            timeT lastEndTime;
+            Rosegarden::Key lastKey = Rosegarden::Key("undefined");
+            for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
+                Segment * seg = sit->segment;
+                Segment::iterator i;
+                key = Rosegarden::Key("undefined");
+                for (i = seg->begin(); i != seg->end(); ++i) {
+                    Event *e = *i;
+                    if (e->isa(Rosegarden::Key::EventType)) {
+                        key = Rosegarden::Key(*e);
+                    }
+                }
+                if (firstSeg) {
+                    sit->previousKey = lastKey;
+                } else {
+                    if ((seg->getStartTime() - lastEndTime) < m_epsilon) {
+                        sit->previousKey = lastKey;
+                    } else {
+                        sit->previousKey = Rosegarden::Key("undefined");
+                    }
+                }
+                firstSeg = false;
+                lastEndTime = seg->getEndMarkerTime();
+                lastKey = key;
+            }
+        }
+    }
+
     
     // Set at initialization.
     // If needed, sortAndGatherVolta() method or following "Look for linked
@@ -279,9 +320,10 @@ LilyPondSegmentsContext::precompute()
                         // Main repeating segment or volta ?
                         if (sit->volta) {
                             // Insert volta in list
-                            Volta * volta = new Volta(sit->segment,
-                                                    sit->duration,
-                                                    currentMainSeg->numberOfRepeatLinks);
+                            SegmentData sd = *sit;
+                            Volta * volta = new Volta(
+                                        &(*sit),
+                                        currentMainSeg->numberOfRepeatLinks);
                             currentMainSeg->rawVoltaChain->push_back(volta);
                         } else {
                             // Count more one repeat
@@ -339,6 +381,7 @@ LilyPondSegmentsContext::precompute()
             }
         }
     }
+
 }
 
 void
@@ -425,8 +468,8 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
         VoltaChain::iterator vci;
         for (vci = segData->sortedVoltaChain->begin();
              vci != segData->sortedVoltaChain->end(); ++vci) {
-            wholeDuration += (*vci)->duration * (*vci)->voltaNumber.size();
-            duration += (*vci)->duration;
+            wholeDuration += (*vci)->data->duration * (*vci)->voltaNumber.size();
+            duration += (*vci)->data->duration;
         }
         timeT deltaT = wholeDuration - duration;
 
@@ -525,7 +568,7 @@ LilyPondSegmentsContext::useNextSegment()
                     m_voltaIterator = m_currentVoltaChain->begin();
                     if (m_voltaIterator != m_currentVoltaChain->end()) {
                         if (m_currentVoltaChain->size() == 1) m_lastVolta = true;
-                        return (*m_voltaIterator)->segment;
+                        return (*m_voltaIterator)->data->segment;
                     }
                 } else {
                     m_firstVolta = false;
@@ -536,7 +579,7 @@ LilyPondSegmentsContext::useNextSegment()
                         if (nextIt == m_currentVoltaChain->end()) {
                             m_lastVolta = true;
                         }
-                        return (*m_voltaIterator)->segment;
+                        return (*m_voltaIterator)->data->segment;
                     } else {
                         m_lastVolta = false;
                         m_currentVoltaChain = 0;
@@ -659,6 +702,13 @@ LilyPondSegmentsContext::getVoltaRepeatCount()
     if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return 0;
     
     return (*m_voltaIterator)->voltaNumber.size();
+}
+
+Rosegarden::Key
+LilyPondSegmentsContext::getPreviousKey()
+{
+    if (m_currentVoltaChain) return (*m_voltaIterator)->data->previousKey;
+    return m_segIterator->previousKey;
 }
 
 bool
@@ -841,8 +891,8 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
         for (idx2 = 0; idx2 < (int)(*it1)->sortedVoltaChain->size(); idx2++) {
             bool linked = true;
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-                Segment * seg1 = (*(*it)->rawVoltaChain)[idx]->segment;
-                Segment * seg2 = (*(*it)->sortedVoltaChain)[idx2]->segment;
+                Segment * seg1 = (*(*it)->rawVoltaChain)[idx]->data->segment;
+                Segment * seg2 = (*(*it)->sortedVoltaChain)[idx2]->data->segment;
                 if (!seg1->isPlainlyLinkedTo(seg2)) {
                     linked = false;
                     break;
@@ -883,8 +933,8 @@ LilyPondSegmentsContext::dump()
         int trackPos = (*tit).first;
         Track * track = m_composition->getTrackByPosition(trackPos);
         std::cout << "Track pos=" << trackPos << " id=" << track->getId()
-                  << "   \"" << track->getLabel() << "\"" << std::endl;
-                  
+            << "   \"" << track->getLabel() << "\"" << std::endl;
+
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             std::cout << "  Voice index = " << vit->first << std::endl;
             SegmentSet &segSet = vit->second;
@@ -893,26 +943,27 @@ LilyPondSegmentsContext::dump()
                 Segment * seg = (*sit).segment;
 
                 std::cout << "     Segment \"" << seg->getLabel() << "\""
-                        << " voice=" << m_composition->getSegmentVoiceIndex(seg)
-                        << " start=" << seg->getStartTime()
-                        << " duration=" << (*sit).duration
-                        << " wholeDuration=" <<  (*sit).wholeDuration
-                        << std::endl;
+                    << " voice=" << m_composition->getSegmentVoiceIndex(seg)
+                    << " start=" << seg->getStartTime()
+                    << " duration=" << (*sit).duration
+                    << " wholeDuration=" <<  (*sit).wholeDuration
+                    << " previousKey = " << (*sit).previousKey.getName()
+                    << std::endl;
                 std::cout << "               numRepeat=" << (*sit).numberOfRepeats
-                        << " remainder=" << (*sit).remainderDuration
-                        << " synchronous=" << (*sit).synchronous
-                        << " lilyStart=" << (*sit).startTime
-                        << std::endl;
+                    << " remainder=" << (*sit).remainderDuration
+                    << " synchronous=" << (*sit).synchronous
+                    << " lilyStart=" << (*sit).startTime
+                    << std::endl;
                 std::cout << "               noRepeat=" << (*sit).noRepeat
-                        << " repeatId=" << (*sit).repeatId
-                        << " numberOfRepeatLinks=" << (*sit).numberOfRepeatLinks
-                        << " rawVoltaChain=" << (*sit).rawVoltaChain
-                        << std::endl;
+                    << " repeatId=" << (*sit).repeatId
+                    << " numberOfRepeatLinks=" << (*sit).numberOfRepeatLinks
+                    << " rawVoltaChain=" << (*sit).rawVoltaChain
+                    << std::endl;
                 if (sit->rawVoltaChain) {
                     VoltaChain::iterator i;
                     for (i = sit->rawVoltaChain->begin(); i != sit->rawVoltaChain->end(); ++i) {
-                        std::cout << "                 --> \"" << (*i)->segment->getLabel()
-                                << "\": ";
+                        std::cout << "                 --> \"" << (*i)->data->segment->getLabel()
+                            << "\": ";
                         std::set<int>::iterator j;
                         for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
                             std::cout << (*j) << " ";
@@ -926,8 +977,9 @@ LilyPondSegmentsContext::dump()
                 if (sit->sortedVoltaChain) {
                     VoltaChain::iterator i;
                     for (i = sit->sortedVoltaChain->begin(); i != sit->sortedVoltaChain->end(); ++i) {
-                        std::cout << "                 --> \"" << (*i)->segment->getLabel()
-                                << "\": ";
+                        std::cout << "                 --> \"" << (*i)->data->segment->getLabel()
+                                << "\"  [" << (*i)->data->previousKey.getName()
+                                << "] : ";
                         std::set<int>::iterator j;
                         for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
                             std::cout << (*j) << " ";
@@ -948,13 +1000,13 @@ LilyPondSegmentsContext::dumpSDL(SegmentDataList & l)
     std::cout << "------->\n";
     for (it = l.begin(); it != l.end(); ++it) {
         std::cout << " \"" << (*it)->segment->getLabel() << "\"" << std::endl;
-        
+
         if ((*it)->rawVoltaChain) {
             std::cout << "raw:" << std::endl;
             VoltaChain::iterator ivc;
             for (ivc=(*it)->rawVoltaChain->begin();
                      ivc!=(*it)->rawVoltaChain->end(); ++ivc) {
-                std::cout << "   \"" << (*ivc)->segment->getLabel() << "\" :";
+                std::cout << "   \"" << (*ivc)->data->segment->getLabel() << "\" :";
                 for (std::set<int>::iterator u=(*ivc)->voltaNumber.begin();
                         u!=(*ivc)->voltaNumber.end(); ++u) {
                     std::cout << " " << (*u);
@@ -967,7 +1019,7 @@ LilyPondSegmentsContext::dumpSDL(SegmentDataList & l)
             VoltaChain::iterator ivc;
             for (ivc=(*it)->sortedVoltaChain->begin();
                      ivc!=(*it)->sortedVoltaChain->end(); ++ivc) {
-                std::cout << "   \"" << (*ivc)->segment->getLabel() << "\" :";
+                std::cout << "   \"" << (*ivc)->data->segment->getLabel() << "\" :";
                 for (std::set<int>::iterator u=(*ivc)->voltaNumber.begin();
                         u!=(*ivc)->voltaNumber.end(); ++u) {
                     std::cout << " " << (*u);

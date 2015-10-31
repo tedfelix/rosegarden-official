@@ -204,6 +204,14 @@ public:
     int getVoltaRepeatCount();
     
     /**
+     * Return the last key signature defined on the last contiguous segment
+     * on the same voice.
+     * Return an undefined key (or default key) if the previous segment is
+     * not contiguous or if there is no previous segment.
+     */
+    Rosegarden::Key getPreviousKey();
+    
+    /**
      * Return true if LilyPond automatic volta mode is usable.
      * Valid as soon as precompute() has been executed.
      * 
@@ -225,16 +233,16 @@ protected :
 
 
 private :
+    
+    struct SegmentData;
 
     struct Volta {
-        Segment * segment;
-        timeT duration;
+        const SegmentData * data;
         std::set<int> voltaNumber;
 
-        Volta(Segment * seg, timeT voltaDuration, int number)
+        Volta(const SegmentData *sd, int number)
         {
-            segment = seg;
-            duration = voltaDuration;
+            data = sd;
             voltaNumber.insert(number);
         }
     };
@@ -265,6 +273,8 @@ private :
         mutable timeT startTime;              // In LilyPond output
         mutable timeT endTime;                // In LilyPond output
 
+        mutable Rosegarden::Key previousKey;  // Last key in the previous segment
+
         SegmentData(Segment * seg)
         {
             segment = seg;
@@ -283,6 +293,7 @@ private :
             sortedVoltaChain = 0;
             startTime = 0;
             endTime = 0;
+            previousKey = Rosegarden::Key("undefined");
         }
     };
 
