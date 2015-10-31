@@ -223,14 +223,6 @@ public:
     /// Only for instrumentation while debugging
     void dump();
 
-protected :
-
-    /**
-     * Look in the specified voice of the specified track for linked segments
-     * which may be exported as repeat with volta and mark them accordingly.
-     */
-    void lookForRepeatedLinks(int trackId, int voiceIndex);
-
 
 private :
     
@@ -321,7 +313,14 @@ private :
     */
     const SegmentData * getNextSynchronousSegment();
 
-   /**
+    /**
+     * Look in the specified voice of the specified track for linked segments
+     * which may be exported as repeat with volta and mark them accordingly.
+     * The concerned segments are gathered in the set passed as argument.
+     */
+    void lookForRepeatedLinks(SegmentSet &segSet);
+
+    /**
     * Look for similar segments in the raw volta chain (on all tracks
     * simultaneously) and fill the sorted volta chain accordingly.
     * The argument is the list of the associated synchronous main repeat

@@ -247,15 +247,13 @@ LilyPondSegmentsContext::precompute()
 
     // Look for linked segments which may be exported as repeat with volta
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        int trackPos = tit->first;
 
         // No LilyPond automatic volta when multiple voices on the same track
         int voiceCount = tit->second.size();
         if (voiceCount > 1) m_automaticVoltaUsable = false;
 
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
-            int voice = vit->first;
-            lookForRepeatedLinks(trackPos, voice);
+            lookForRepeatedLinks(vit->second);
         }
     }
 
@@ -292,11 +290,8 @@ LilyPondSegmentsContext::precompute()
     // Then look again for repeats from linked segments
     // (without looking at the inconsistant ones)
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
-        int trackPos = tit->first;
-
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
-            int voice = vit->first;
-            lookForRepeatedLinks(trackPos, voice);
+            lookForRepeatedLinks(vit->second);
         }
     }
 
@@ -772,10 +767,8 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
 }
 
 void
-LilyPondSegmentsContext::lookForRepeatedLinks(int trackId, int voiceIndex)
+LilyPondSegmentsContext::lookForRepeatedLinks(SegmentSet & segSet)
 {
-    SegmentSet &segSet = m_segments[trackId][voiceIndex];
-
     SegmentSet::iterator sit;
     for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
 
