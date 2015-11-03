@@ -150,7 +150,9 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument 
     //table->setSelectionMode(QTableWidget::NoSelection);
     table->setSelectionBehavior( QAbstractItemView::SelectRows );
     table->setSelectionMode( QAbstractItemView::SingleSelection );
-    table->setSortingEnabled(true);
+    
+    // Sorting must be disabled while filling the table
+    table->setSortingEnabled(false);
     
     table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Type")));    // p1=column
     table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Track")));
@@ -300,6 +302,9 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument 
 
         ++i;
     }
+
+    // Sorting may be enabled now
+    table->setSortingEnabled(true);
 
     layout->addWidget(table, 0, 0);
 
