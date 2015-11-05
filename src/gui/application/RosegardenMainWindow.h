@@ -92,6 +92,7 @@ class SequencerThread;
 class TranzportClient;
 class WarningWidget;
 class DocumentConfigureDialog;
+class ConfigureDialog;
 
 /// The main Rosegarden application window.
 /**
@@ -949,9 +950,14 @@ public slots:
     void slotEditDocumentProperties();
     
     /**
-     * Reset m_configDlg when the document properties dialog is closing.
+     * Reset m_configDlg when the configuration dialog is closing.
      */
     void slotResetConfigDlg(); 
+    
+    /**
+     * Reset m_docConfigDlg when the document properties dialog is closing.
+     */
+    void slotResetDocConfigDlg(); 
 
     /**
      * Manage MIDI Devices
@@ -1717,7 +1723,8 @@ private:
     MarkerEditor          *m_markerEditor;
     TempoView             *m_tempoView;
     TriggerSegmentManager *m_triggerSegmentManager;
-    DocumentConfigureDialog *m_configDlg;
+    ConfigureDialog       *m_configDlg;
+    DocumentConfigureDialog *m_docConfigDlg;
     std::set<ControlEditorDialog *> m_controlEditors;
     /// List of plugin dialogs to make sure we don't launch more than one.
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
