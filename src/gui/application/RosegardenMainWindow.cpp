@@ -285,6 +285,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_markerEditor(0),
     m_tempoView(0),
     m_triggerSegmentManager(0),
+    m_configDlg(0),
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
     m_updateUITimer(new QTimer(static_cast<QObject *>(this))),
     m_inputTimer(new QTimer(static_cast<QObject *>(this))),
@@ -5998,10 +5999,20 @@ RosegardenMainWindow::slotEditDocumentProperties()
 {
     RG_DEBUG << "RosegardenMainWindow::slotEditDocumentProperties\n";
 
-    DocumentConfigureDialog *configDlg =
-        new DocumentConfigureDialog(m_doc, this);
+    // Don't create a dialog if there is already one
+    if (!m_configDlg) {
+        m_configDlg = new DocumentConfigureDialog(m_doc, this);
 
-    configDlg->show();
+        // Close the dialog if the document is changed : fix #1462
+        connect(this, SIGNAL(documentAboutToChange()),
+                m_configDlg, SLOT(slotCancelOrClose()));
+
+        // Clear m_configDlg if the dialog is destroyed
+        connect(m_configDlg, SIGNAL(destroyed()),
+                this, SLOT(slotResetConfigDlg()));
+    }
+
+    m_configDlg->show();
 }
 
 void
@@ -6009,12 +6020,34 @@ RosegardenMainWindow::slotOpenAudioPathSettings()
 {
     RG_DEBUG << "RosegardenMainWindow::slotOpenAudioPathSettings\n";
 
-    DocumentConfigureDialog *configDlg =
-        new DocumentConfigureDialog(m_doc, this);
+    // Don't create a dialog if there is already one
+    if (!m_configDlg) {
+        m_configDlg = new DocumentConfigureDialog(m_doc, this);
 
-    configDlg->showAudioPage();
-    configDlg->show();
+        // Close the dialog if the document is changed : fix #1462
+        connect(this, SIGNAL(documentAboutToChange()),
+                m_configDlg, SLOT(slotCancelOrClose()));
+
+        // Clear m_configDlg if the dialog is destroyed
+        connect(m_configDlg, SIGNAL(destroyed()),
+                this, SLOT(slotResetConfigDlg()));
+    }
+
+    m_configDlg->showAudioPage();
+    m_configDlg->show();
 }
+
+void
+RosegardenMainWindow::slotResetConfigDlg()
+{
+    // Remove the connections before clearing m_configDlg
+    disconnect(m_configDlg, SIGNAL(destroyed()),
+               this, SLOT(slotResetConfigDlg()));
+    disconnect(this, SIGNAL(documentAboutToChange()),
+                m_configDlg, SLOT(slotCancelOrClose()));
+    m_configDlg = 0;
+}
+
 
 void
 RosegardenMainWindow::slotEditKeys()
