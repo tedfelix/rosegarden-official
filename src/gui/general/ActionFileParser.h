@@ -32,9 +32,11 @@ namespace Rosegarden
 {
 
 
-/// Convert .rc files to menus and actions.
-/*
- * @see ActionFileClient
+/// Convert a .rc file to QMenu and QToolBar objects.
+/**
+ * This class is used by ActionFileClient to load the menus and toolbars
+ * from a .rc file and translate them into QMenu and QToolBar objects that
+ * are then added as children to the ActionFileClient deriver.
  */
 class ActionFileParser : public QObject, public QXmlDefaultHandler
 {
@@ -46,7 +48,9 @@ public:
     
     bool load(QString actionRcFile);
 
+    /// Enable/disable and show/hide actions based on the new state.
     void enterActionState(QString stateName);
+    /// Enable/disable and show/hide actions based on leaving the state.
     void leaveActionState(QString stateName);
 
 private slots:
@@ -162,12 +166,14 @@ private:
     bool fatalError(const QXmlParseException &exception);
 };
 
-// A QMenu needs a QWidget as its parent, but the action file client
-// will not necessarily be a QWidget -- for example, it might be a
-// tool object.  In this case, we need to make a menu that has no
-// parent, but we need to wrap it in something that is parented by the
-// action file client so that we can find it later and it shares the
-// scope of the client.  This is that wrapper.
+/**
+ * A QMenu needs a QWidget as its parent, but the action file client
+ * will not necessarily be a QWidget -- for example, it might be a
+ * tool object.  In this case, we need to make a menu that has no
+ * parent, but we need to wrap it in something that is parented by the
+ * action file client so that we can find it later and it shares the
+ * scope of the client.  This is that wrapper.
+ */
 class ActionFileMenuWrapper : public QObject
 {
     Q_OBJECT
