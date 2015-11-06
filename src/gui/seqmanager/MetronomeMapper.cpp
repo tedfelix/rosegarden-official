@@ -15,34 +15,29 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MetronomeMapper]"
 
 #include "MetronomeMapper.h"
+
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
-#include "base/AllocateChannels.h"
-#include "base/Event.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
+#include "base/MidiProgram.h"  // For InstrumentId
 #include "base/RealTime.h"
-#include "base/Segment.h"
 #include "base/Studio.h"
-#include "base/TriggerSegment.h"
+#include "base/TimeT.h"
 #include "document/RosegardenDocument.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
-#include "gui/seqmanager/SegmentMapper.h"
 #include "sound/ControlBlock.h"
 #include "sound/MappedEvent.h"
 #include "sound/Midi.h"
-#include <QApplication>
-#include <QDir>
-#include <QSettings>
-#include <QString>
-#include <algorithm>
 
-// #define DEBUG_METRONOME_MAPPER 1
+#include <QSettings>
+
+#include <algorithm>  // For std::sort().
 
 namespace Rosegarden
 {
+
 
 MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     MappedEventBuffer(doc),
@@ -50,7 +45,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     m_tickDuration(0, 100000000),
     m_channelManager(0) // We will set this below after we find instrument.
 {
-    SEQMAN_DEBUG << "MetronomeMapper ctor : " << this << endl;
+    RG_DEBUG << "ctor: " << this;
 
     // get metronome device
     Studio &studio = m_doc->getStudio();
@@ -60,11 +55,11 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
         m_doc->getStudio().getMetronomeFromDevice(device);
 
     if (metronome) {
-        SEQMAN_DEBUG << "MetronomeMapper: have metronome, it's on instrument " << metronome->getInstrument() << endl;
+        RG_DEBUG << "ctor: have metronome, it's on instrument " << metronome->getInstrument();
         m_metronome = new MidiMetronome(*metronome);
     } else {
         m_metronome = new MidiMetronome(SystemInstrumentBase);
-        SEQMAN_DEBUG << "MetronomeMapper: no metronome for device " << device << endl;
+        RG_DEBUG << "ctor: no metronome for device " << device;
     }
     {
         // As we promised, set instrument
@@ -121,10 +116,10 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
         // do something
     }
 
-    sortTicks();
+    std::sort(m_ticks.begin(), m_ticks.end());
 
     if (m_ticks.empty()) {
-        SEQMAN_DEBUG << "MetronomeMapper : WARNING no ticks generated\n";
+        RG_DEBUG << "ctor: WARNING no ticks generated";
     }
 
     settings.endGroup();
@@ -132,7 +127,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
 
 MetronomeMapper::~MetronomeMapper()
 {
-    SEQMAN_DEBUG << "~MetronomeMapper " << this << endl;
+    RG_DEBUG << "dtor: " << this;
     delete m_metronome;
 }
 
@@ -146,17 +141,13 @@ void MetronomeMapper::fillBuffer()
     RealTime eventTime;
     Composition& comp = m_doc->getComposition();
 
-    SEQMAN_DEBUG << "MetronomeMapper::fillBuffer: instrument is "
-                 << m_metronome->getInstrument() << endl;
+    RG_DEBUG << "fillBuffer(): instrument is " << m_metronome->getInstrument();
 
     int index = 0;
 
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
 
-        /*
-        SEQMAN_DEBUG << "MetronomeMapper::fillBuffer: velocity = "
-                     << int(velocity) << endl;
-                     */
+        //RG_DEBUG << "fillBuffer(): velocity = " << int(velocity);
 
         eventTime = comp.getElapsedRealTime(i->first);
 
@@ -201,15 +192,7 @@ void MetronomeMapper::fillBuffer()
     m_channelManager.reallocateEternalChannel();
     m_channelManager.setDirty();
 
-    SEQMAN_DEBUG << "MetronomeMapper::fillBuffer: - "
-                 << "Total events written = " << index
-                 << endl;
-}
-
-void
-MetronomeMapper::sortTicks()
-{
-    sort(m_ticks.begin(), m_ticks.end());
+    RG_DEBUG << "fillBuffer(): - Total events written = " << index;
 }
 
 int
@@ -277,10 +260,7 @@ mutedEtc(MappedEvent *evt)
     // Apparently some clock events need to escape muting?
     if (evt->getType() == MappedEvent::MidiSystemMessage &&
         evt->getData1() == MIDI_TIMING_CLOCK) {
-        /*
-          std::cout << "MetronomeMapper::shouldPlay - " 
-          << "found clock" << std::endl;
-        */ 
+        //RG_DEBUG << "mutedEtc() - found clock";
         return false;
     }
 
@@ -291,7 +271,9 @@ bool
 MetronomeMapper::
 shouldPlay(MappedEvent *evt, RealTime sliceStart)
 {
-    if(mutedEtc(evt)) { return false; }
+    if (mutedEtc(evt))
+        return false;
+
     // Otherwise it should play if it's not already all done sounding.
     // The timeslice logic will have already excluded events that
     // start too late.

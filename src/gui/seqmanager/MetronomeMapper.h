@@ -18,55 +18,54 @@
 #ifndef RG_METRONOMEMAPPER_H
 #define RG_METRONOMEMAPPER_H
 
-#include "base/Event.h"
-#include "base/MidiProgram.h"
+#include "base/MidiProgram.h"  // For InstrumentId
 #include "base/RealTime.h"
-#include "gui/seqmanager/ChannelManager.h"
+#include "base/TimeT.h"
+#include "gui/seqmanager/ChannelManager.h"  // For EternalChannelManager
 #include "gui/seqmanager/MappedEventBuffer.h"
+
 #include <QString>
+
 #include <utility>
 #include <vector>
 
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 class MidiMetronome;
 
+
 class MetronomeMapper : public MappedEventBuffer
 {
-    friend class SegmentMapperFactory;
-
- public:
+public:
     virtual ~MetronomeMapper();
 
     InstrumentId getMetronomeInstrument();
 
-    // overrides from SegmentMapper
-    virtual int getSegmentRepeatCount();
+    // MappedEventBuffer overrides.
 
+    virtual int getSegmentRepeatCount();
     // Do channel-setup
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                         RealTime start, bool firstOutput);
-
+                          RealTime start, bool firstOutput);
     virtual void makeReady(MappedInserterBase &inserter, RealTime time);
-
-    
-    // Return whether the event should be played.
+    /// Should the event be played?
     virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
- protected:
-    MetronomeMapper(RosegardenDocument *doc);
-
     virtual int calculateSize();
-
-    void sortTicks();
-
-    // override from SegmentMapper
     virtual void fillBuffer();
 
-    // Whether the metronome is muted regarding this event.
+private:
+    // Only SegmentMapperFactory::makeMetronome() is permitted to construct
+    // MetronomeMapper objects.
+    MetronomeMapper(RosegardenDocument *doc);
+    // SegmentMapperFactory::makeMetronome() calls the ctor.
+    friend class SegmentMapperFactory;
+
+    /// Whether the metronome is muted regarding this event.
     bool mutedEtc(MappedEvent *evt);
-    
+
     //--------------- Data members ---------------------------------
     typedef std::pair<timeT, int> Tick;
     typedef std::vector<Tick> TickContainer;
@@ -74,8 +73,8 @@ class MetronomeMapper : public MappedEventBuffer
 
     TickContainer m_ticks;
     bool m_deleteMetronome;
-    const MidiMetronome* m_metronome;
-    RealTime m_tickDuration;
+    const MidiMetronome *m_metronome;
+    const RealTime m_tickDuration;
     EternalChannelManager m_channelManager;
 };
 
