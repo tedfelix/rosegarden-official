@@ -307,8 +307,6 @@ private:
         MAIN_COL,
     };
 
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
-
 };
 
 }

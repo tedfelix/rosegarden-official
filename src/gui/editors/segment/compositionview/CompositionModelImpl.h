@@ -368,8 +368,6 @@ private:
     virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
     virtual void endMarkerTimeChanged(const Composition *, bool shorten);
 
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
-
     // --- Notation Previews ------------------------------
 
     // SegmentObserver Interface

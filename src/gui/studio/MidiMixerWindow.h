@@ -120,8 +120,6 @@ protected:
 
     // Grab IPB controls and remove Volume.
     ControlList getIPBForMidiMixer(MidiDevice *) const;
-
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

@@ -101,8 +101,6 @@ private:
 
     QPixmap                                      m_monoPixmap;
     QPixmap                                      m_stereoPixmap;
-
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

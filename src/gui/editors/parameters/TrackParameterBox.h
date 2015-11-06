@@ -166,8 +166,6 @@ private:
     virtual void trackSelectionChanged(const Composition *, TrackId);
 
     void selectedTrackNameChanged();
-
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

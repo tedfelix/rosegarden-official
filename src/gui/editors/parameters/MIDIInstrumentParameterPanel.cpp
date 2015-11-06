@@ -257,10 +257,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             SLOT(slotControllerChanged(int)));
 
-    // Hold on to this to make sure it stays around as long as we do.
-    m_instrumentStaticSignals = Instrument::getStaticSignals();
-
-    connect(m_instrumentStaticSignals.data(),
+    connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             SLOT(slotInstrumentChanged(Instrument *)));
 }

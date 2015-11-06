@@ -91,10 +91,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     createGUI("midimixer.rc");
     setRewFFwdToAutoRepeat();
 
-    // Hold on to this to make sure it stays around as long as we do.
-    m_instrumentStaticSignals = Instrument::getStaticSignals();
-
-    connect(m_instrumentStaticSignals.data(),
+    connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));

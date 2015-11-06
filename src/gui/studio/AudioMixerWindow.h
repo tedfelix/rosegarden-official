@@ -186,8 +186,6 @@ private:
     QPixmap m_stereoPixmap;
 
     void setRewFFwdToAutoRepeat();
-
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

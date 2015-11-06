@@ -197,8 +197,6 @@ private:
 
     /// Update all widgets from the selected Instrument.
     void updateWidgets();
-
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

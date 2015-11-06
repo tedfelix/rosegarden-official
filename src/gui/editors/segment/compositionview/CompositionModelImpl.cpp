@@ -70,7 +70,6 @@ CompositionModelImpl::CompositionModelImpl(
     m_composition(composition),
     m_studio(studio),
     m_grid(rulerScale, trackCellHeight),
-    m_instrumentStaticSignals(),
     m_notationPreviewCache(),
     m_audioPeaksThread(0),
     m_audioPeaksGeneratorMap(),
@@ -103,10 +102,7 @@ CompositionModelImpl::CompositionModelImpl(
         (*i)->addObserver(this);
     }
 
-    // Hold on to this to make sure it stays around as long as we do.
-    m_instrumentStaticSignals = Instrument::getStaticSignals();
-
-    connect(m_instrumentStaticSignals.data(),
+    connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));

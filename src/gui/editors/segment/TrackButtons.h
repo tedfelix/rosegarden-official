@@ -362,8 +362,6 @@ private:
 
     /// Select the given track.  This displays it with a highlight.
     void selectTrack(int position);
-
-    QSharedPointer<InstrumentStaticSignals> m_instrumentStaticSignals;
 };
 
 

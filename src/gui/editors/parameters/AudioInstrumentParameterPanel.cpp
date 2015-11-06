@@ -123,10 +123,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
     connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
             this, SLOT(slotSynthGUIButtonClicked()));
 
-    // Hold on to this to make sure it stays around as long as we do.
-    m_instrumentStaticSignals = Instrument::getStaticSignals();
-
-    connect(m_instrumentStaticSignals.data(),
+    connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
