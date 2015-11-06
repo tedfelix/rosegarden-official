@@ -225,11 +225,12 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     std::vector<std::string> names(metadata.getPropertyNames());
     
     QTableWidgetItem* tabItem;
-    int row = m_metadata->rowCount();
     int col = 0;
-    m_metadata->setRowCount(row + 1);
+    int row = 0;
     
     for (unsigned int i = 0; i < names.size(); ++i) {
+
+        m_metadata->setRowCount(row + 1);
 
         if (shown.find(names[i]) != shown.end())
             continue;
@@ -241,20 +242,23 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
 //        new QListWidgetItem(m_metadata, name, strtoqstr(metadata.get<String>(names[i])));
         // qt4: icon, text, type
+        tabItem = new QTableWidgetItem(name);
+        m_metadata->setItem(row, 0, tabItem);
         tabItem = new QTableWidgetItem(strtoqstr(metadata.get<String>(names[i])));
-        m_metadata->setItem(row, col, tabItem);
+        m_metadata->setItem(row, 1, tabItem);
 
         shown.insert(names[i]);
+        row++;
     }
 
     layoutOtherHeaders->addWidget(m_metadata, 0, 0, 0- 0+1, 1-0+ 1);
 
     QPushButton* addPropButton = new QPushButton(tr("Add New Property"),
-                                 frameOtherHeaders);
+                                                 frameOtherHeaders);
     layoutOtherHeaders->addWidget(addPropButton, 1, 0, Qt::AlignHCenter);
 
     QPushButton* deletePropButton = new QPushButton(tr("Delete Property"),
-                                    frameOtherHeaders);
+                                                    frameOtherHeaders);
     layoutOtherHeaders->addWidget(deletePropButton, 1, 1, Qt::AlignHCenter);
 
     frameOtherHeaders->setLayout(layoutOtherHeaders);
