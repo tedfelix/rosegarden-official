@@ -13,6 +13,8 @@
   COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AlsaDriver]"
+
 #include <iostream>
 #include "misc/Debug.h"
 #include <cstdlib>
@@ -47,6 +49,7 @@
 #include <QTime>
 
 #include <pthread.h>
+#include <math.h>
 
 
 // #define DEBUG_ALSA 1
@@ -1813,7 +1816,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         // note (since there are 24 MIDI Clocks in a quarter note).
         //
         long spp =
-            long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
+            lround(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
                   m_midiClockInterval) / 6.0 );
 
         // Ok now we have the new SPP - stop the transport and restart with the
