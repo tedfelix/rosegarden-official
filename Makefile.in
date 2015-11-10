@@ -160,7 +160,7 @@ dependencies: $(KEYSOURCES) $(HEADERS) Makefile
 qrc:	locale
 	@bash ./scripts/rebuild-qrc
 
-install:
+install: all
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
 	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
