@@ -208,7 +208,7 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
 
         vomitus += "</html>";
 
-        puke(vomitus, m_process->readAllStandardError());
+        puke(vomitus, QString::fromUtf8(m_process->readAllStandardError()));
 
         // puke doesn't actually work, so we have to return in order to avoid
         // further processing
