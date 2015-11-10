@@ -1062,7 +1062,11 @@ QTextEdit
     color: #000000;
 }
 
-
+QMessageBox QTextEdit
+{
+    background: #000000;
+    color: #FFFFFF;
+}
 
 QWidget#LED
 {

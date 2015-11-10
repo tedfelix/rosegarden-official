@@ -88,7 +88,7 @@ protected slots:
     /**
      * Display an explanatory failure message and terminate processing
      */
-    void puke(QString error);
+    void puke(const QString &error, const QString &details = QString());
 
     /**
      * Try to run convert-ly and call runLilyPond() if successful

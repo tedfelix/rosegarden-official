@@ -94,13 +94,18 @@ LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename
 }
 
 void
-LilyPondProcessor::puke(QString error)
+LilyPondProcessor::puke(const QString& error, const QString &details)
 {
     m_progress->setMaximum(100);
     m_progress->hide();
 
     m_info->setText(tr("Fatal error.  Processing aborted."));
-    QMessageBox::critical(this, tr("Rosegarden - Fatal processing error!"), error, QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox messageBox(this);
+    messageBox.setIcon(QMessageBox::Critical);
+    messageBox.setWindowTitle(tr("Rosegarden - Fatal processing error!"));
+    messageBox.setText(error);
+    messageBox.setDetailedText(details);
+    messageBox.exec();
 
     // abort processing after a fatal error, so calls to puke() abort the whole
     // process in its tracks
@@ -188,19 +193,22 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         std::cerr << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false") << std::endl
                   << " exportedBrackets == " << (exportedBrackets ? "true" : "false") << std::endl;
 
-        QString vomitus = QString(tr("<qt><p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p></qt>"));
+        QString vomitus = "<html>";
+        vomitus += tr("<p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p>");
 
         if (exportedBeams) {
-            vomitus += QString(tr("<qt><p>You opted to export Rosegarden's beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden's) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.</p></qt>"));
+            vomitus += tr("<p>You opted to export Rosegarden's beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden's) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.</p>");
         }
 
         if (exportedBrackets) {
-            vomitus += QString(tr("<qt><p>You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you've selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.</p></qt>"));
+            vomitus += tr("<p>You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you've selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.</p>");
         }
 
-        vomitus += QString(tr("<qt><p>Processing terminated due to fatal errors.</p></qt>"));
+        vomitus += tr("<p>Processing terminated due to fatal errors.</p>");
 
-        puke(vomitus);
+        vomitus += "</html>";
+
+        puke(vomitus, m_process->readAllStandardError());
 
         // puke doesn't actually work, so we have to return in order to avoid
         // further processing
