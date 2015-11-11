@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QDir>
+#include <QTextCodec>
 
 #include <iostream>
 
@@ -208,7 +209,8 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
 
         vomitus += "</html>";
 
-        puke(vomitus, QString::fromUtf8(m_process->readAllStandardError()));
+        QTextCodec *codec = QTextCodec::codecForLocale();
+        puke(vomitus, codec->toUnicode(m_process->readAllStandardError()));
 
         // puke doesn't actually work, so we have to return in order to avoid
         // further processing
