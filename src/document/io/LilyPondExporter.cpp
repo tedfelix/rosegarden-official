@@ -1900,8 +1900,8 @@ LilyPondExporter::write()
     str << indent(col++) << "\\layout {" << std::endl;
 
     // indent instrument names
-    str << indent(col) <<  "indent = 3.0\\cm" << std::endl
-        << "short-indent = 1.5\\cm" << std::endl;
+    str << indent(col) << "indent = 3.0\\cm" << std::endl
+        << indent(col) << "short-indent = 1.5\\cm" << std::endl;
 
     if (!m_exportEmptyStaves) {
         str << indent(col) << "\\context { \\Staff \\RemoveEmptyStaves }" << std::endl;
