@@ -29,6 +29,9 @@
 #include "NotationScene.h"
 #include "NotationMouseEvent.h"
 #include "document/CommandHistory.h"
+#include "misc/ConfigGroups.h"
+
+#include <QSettings>
 
 namespace Rosegarden
 {
@@ -40,6 +43,13 @@ TextInserter::TextInserter(NotationWidget *widget) :
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("notes", SLOT(slotNotesSelected()));
+
+    QSettings settings;
+    settings.beginGroup(TextEventDialogConfigGroup);
+    const QString lastText = settings.value("lastText").toString();
+    const QString lastTextType = settings.value("lastTextType", QString::fromStdString(Text::Dynamic)).toString();
+    m_text = Text(lastText.toStdString(), lastTextType.toStdString());
+    settings.endGroup();
 }
 
 void
@@ -93,6 +103,12 @@ TextInserter::handleLeftButtonPress(const NotationMouseEvent *e)
     if (dialog->exec() == QDialog::Accepted) {
 
         m_text = dialog->getText();
+
+        QSettings settings;
+        settings.beginGroup(TextEventDialogConfigGroup);
+        settings.setValue("lastText", QString::fromStdString(m_text.getText()));
+        settings.setValue("lastTextType", QString::fromStdString(m_text.getTextType()));
+        settings.endGroup();
 
         TextInsertionCommand *command =
             new TextInsertionCommand

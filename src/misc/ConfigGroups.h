@@ -62,6 +62,7 @@ namespace Rosegarden
     extern const char* const SelectDialogConfigGroup;
     extern const char* const GridQuantizeConfigGroup;
     extern const char* const NotationQuantizeConfigGroup;
+    extern const char* const TextEventDialogConfigGroup;
 }
 
 #endif
