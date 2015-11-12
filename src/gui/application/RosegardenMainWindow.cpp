@@ -6007,16 +6007,8 @@ RosegardenMainWindow::slotConfigure()
 void
 RosegardenMainWindow::slotResetConfigDlg()
 {
-    // Remove the connections before clearing m_configDlg
-    disconnect(m_configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
-               this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
-    disconnect(m_configDlg, SIGNAL(updateSidebarStyle(unsigned int)),
-               this, SLOT(slotUpdateSidebarStyle(unsigned int)));
-    disconnect(this, SIGNAL(documentAboutToChange()),
-               m_configDlg, SLOT(slotCancelOrClose()));
-    disconnect(m_configDlg, SIGNAL(destroyed()),
-               this, SLOT(slotResetConfigDlg()));
-
+    // The configuration dialog has been closed.
+    // Qt should have removed the connections.
     m_configDlg = 0;
 }
 
@@ -6066,11 +6058,8 @@ RosegardenMainWindow::slotOpenAudioPathSettings()
 void
 RosegardenMainWindow::slotResetDocConfigDlg()
 {
-    // Remove the connections before clearing m_docConfigDlg
-    disconnect(m_docConfigDlg, SIGNAL(destroyed()),
-               this, SLOT(slotResetDocConfigDlg()));
-    disconnect(this, SIGNAL(documentAboutToChange()),
-                m_docConfigDlg, SLOT(slotCancelOrClose()));
+    // The document configuration dialog has been closed.
+    // Qt should have removed the connections.
     m_docConfigDlg = 0;
 }
 
