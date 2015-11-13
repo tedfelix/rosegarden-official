@@ -44,6 +44,8 @@ public:
         TransportStopAtTime // time arg required
     };
 
+    virtual ~ExternalTransport() {}
+
     virtual TransportToken transportChange(TransportRequest) = 0;
     virtual TransportToken transportJump(TransportRequest, RealTime) = 0;
 

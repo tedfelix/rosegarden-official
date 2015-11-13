@@ -28,6 +28,7 @@ class EventSelection;
 	
 class EventSelectionObserver {
 public:
+    virtual ~EventSelectionObserver();
     virtual void eventSelected(EventSelection *e,Event *)=0;
     virtual void eventDeselected(EventSelection *e,Event *)=0; 
     virtual void eventSelectionDestroyed(EventSelection *e)=0;

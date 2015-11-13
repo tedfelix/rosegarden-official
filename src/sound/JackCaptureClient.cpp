@@ -274,6 +274,7 @@ JackCaptureClient::stopProcessing()
 void
 JackCaptureClient::jackShutdown(void *arg)
 {
+    (void)arg;
 #if DEBUG_JACK_CAPTURE_CLIENT
 //    JackCaptureClient *jcc = (JackCaptureClient*)arg;
     std::cout << "Shutdown by Jack!!!!!!!!!" << std::endl;

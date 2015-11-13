@@ -26,6 +26,7 @@
 #define RG_COMMAND_H
 
 #include <QString>
+#include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
 
 #include <vector>
 
@@ -91,6 +92,7 @@ protected:
  */
 class BundleCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(BundleCommand)
 public:
     BundleCommand(QString name);
     virtual ~BundleCommand();

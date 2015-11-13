@@ -77,6 +77,7 @@ public:
 
 protected:
     PluginFactory() { }
+    virtual ~PluginFactory();
 
     // for call by RunnablePluginInstance dtor
     virtual void releasePlugin(RunnablePluginInstance *, QString identifier) = 0;

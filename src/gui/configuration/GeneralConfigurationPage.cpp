@@ -95,12 +95,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     // encourage users to pick that one.  Stupid users, always foiling the
     // best-intentioned plans with their bumbling.  Alas.
 //    m_graphicsSystem->addItem(tr("Unstable"));   // opengl
-    m_lastGraphicsSystemIndex = settings.value("graphics_system", Raster).toUInt();
+    m_lastGraphicsSystemIndex = settings.value("graphics_system", Raster).toInt();
     m_graphicsSystem->setCurrentIndex(m_lastGraphicsSystemIndex);
     layout->addWidget(m_graphicsSystem, row, 1, 1, 2);
     ++row;
 
-    QString graphicsSystemTip(tr("<qt><p>Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.</p></qt>"));
+    QString graphicsSystemTip(tr("<qt><p>Qt offers you the choice of two graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.</p></qt>"));
     gsLabel->setToolTip(graphicsSystemTip);
     m_graphicsSystem->setToolTip(graphicsSystemTip);
 

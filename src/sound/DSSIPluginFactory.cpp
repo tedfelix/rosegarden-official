@@ -283,12 +283,12 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
 
 
 void
-DSSIPluginFactory::discoverPlugins(QString soName)
+DSSIPluginFactory::discoverPlugin(const QString &soName)
 {
     void *libraryHandle = dlopen( qstrtostr(soName).c_str(), RTLD_LAZY);
 
     if (!libraryHandle) {
-        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: couldn't dlopen "
+        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin: couldn't dlopen "
         << soName << " - " << dlerror() << std::endl;
         return ;
     }
@@ -297,7 +297,7 @@ DSSIPluginFactory::discoverPlugins(QString soName)
                                   dlsym(libraryHandle, "dssi_descriptor");
 
     if (!fn) {
-        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: No descriptor function in " << soName << std::endl;
+        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin: No descriptor function in " << soName << std::endl;
         return ;
     }
 
@@ -308,7 +308,7 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 
         const LADSPA_Descriptor * ladspaDescriptor = descriptor->LADSPA_Plugin;
         if (!ladspaDescriptor) {
-            std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: No LADSPA descriptor for plugin " << index << " in " << soName << std::endl;
+            std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin: No LADSPA descriptor for plugin " << index << " in " << soName << std::endl;
             ++index;
             continue;
         }
@@ -371,7 +371,7 @@ DSSIPluginFactory::discoverPlugins(QString soName)
     }
 
     if (dlclose(libraryHandle) != 0) {
-        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins - can't unload " << libraryHandle << std::endl;
+        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin - can't unload " << libraryHandle << std::endl;
         return ;
     }
 }

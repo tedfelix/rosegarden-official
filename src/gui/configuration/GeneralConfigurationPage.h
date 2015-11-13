@@ -129,7 +129,7 @@ protected:
     QComboBox *m_filePrinter;
     QComboBox *m_graphicsSystem;
 
-    unsigned int m_lastGraphicsSystemIndex;
+    int m_lastGraphicsSystemIndex;
 };
 
 }

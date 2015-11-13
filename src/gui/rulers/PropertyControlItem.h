@@ -46,6 +46,7 @@ public:
     void updateSegment();
 
 protected:
+    using ControlItem::reconfigure;
     void reconfigure(float x0,float x1,float y);
 
     //--------------- Data members ---------------------------------

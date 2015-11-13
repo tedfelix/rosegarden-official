@@ -161,6 +161,11 @@ ParameterPattern::setProperties(QMainWindow *parent,
             (new SelectionPropertyCommand(dialog.getResult()));
     } else { delete situation; }
 }
+
+ParameterPattern::~ParameterPattern()
+{
+
+}
     
 void
 ParameterPattern::

@@ -660,4 +660,8 @@ MarkerSelection::MarkerSelection(Composition &composition, timeT beginTime,
     }
 }
 
+EventSelectionObserver::~EventSelectionObserver()
+{
+}
+
 }

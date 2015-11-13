@@ -89,6 +89,10 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     setlocale(LC_ALL, loc);
 }
 
+PluginFactory::~PluginFactory()
+{
+}
+
 
 }
 

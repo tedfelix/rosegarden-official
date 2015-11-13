@@ -43,8 +43,9 @@ typedef std::vector<int> ParameterPatternBareParameters;
 // its nested types, and its descendants' vtables.  Only a static
 // instance of each subclass exists.
 // @author Tom Breton (Tehom)
-struct ParameterPattern
+class ParameterPattern
 {
+public:
     // Many of the nested classes had to be all public so that derived
     // classes could see them, so in order to have degree of
     // encapsulation, they are protected and the classes that would
@@ -148,6 +149,8 @@ public:
     /*** The abstract virtual methods ***/
 
 protected:
+    virtual ~ParameterPattern();
+
     virtual QString getText(QString propertyName) const =0;
 
     // Get the arguments that inform gui sliders or spinboxes.  This

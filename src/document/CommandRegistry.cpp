@@ -67,6 +67,10 @@ CommandRegistry::slotInvokeCommand()
     invokeCommand(actionName);
 }
 
+CommandArgumentQuerier::~CommandArgumentQuerier()
+{
+}
+
 }
 
 #include "CommandRegistry.moc"

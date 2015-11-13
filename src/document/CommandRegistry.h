@@ -146,7 +146,8 @@ public:
     virtual QString getText(QString message, bool *ok) = 0;
 
 protected:
-    CommandArgumentQuerier() { };
+    CommandArgumentQuerier() { }
+    virtual ~CommandArgumentQuerier();
 };
 
 }

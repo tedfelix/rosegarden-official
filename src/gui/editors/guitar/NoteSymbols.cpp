@@ -473,8 +473,6 @@ NoteSymbols::getFretNumber ( int imgHeight,
         // User pressing above the guitar chord to mark line muted or opened
         valueOk = true;
     } else {
-        typedef std::pair<unsigned int, unsigned int> RangePair;
-
         posPair min_pos;
         posPair max_pos;
 

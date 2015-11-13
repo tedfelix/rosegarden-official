@@ -225,7 +225,6 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     std::vector<std::string> names(metadata.getPropertyNames());
     
     QTableWidgetItem* tabItem;
-    int col = 0;
     int row = 0;
     
     for (unsigned int i = 0; i < names.size(); ++i) {

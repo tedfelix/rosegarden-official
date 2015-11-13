@@ -134,9 +134,6 @@ ColourConfigurationPage::slotAddNew()
                                            tr("New"),
                                            &ok, 0);
 
-    // !!! This is very suspicious
-    bool c_ok;
-    
     if ((ok == true) && (!newName.isEmpty())) {
         //QColorDialog box(this, "", true);
 
@@ -144,11 +141,9 @@ ColourConfigurationPage::slotAddNew()
         //QColor col = QColorDialog::getColor();
         // QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
         
-        if ( c_ok ) {
-            Colour temp2 = GUIPalette::convertColour(temp);
-            m_map.addItem(temp2, qstrtostr(newName));
-            m_colourtable->populate_table(m_map, m_listmap);
-        }
+        Colour temp2 = GUIPalette::convertColour(temp);
+        m_map.addItem(temp2, qstrtostr(newName));
+        m_colourtable->populate_table(m_map, m_listmap);
         // Else we don't do anything as they either didn't give a name
         //  or didn't give a colour
     }

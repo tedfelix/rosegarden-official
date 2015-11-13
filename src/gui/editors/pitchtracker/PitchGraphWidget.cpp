@@ -32,8 +32,6 @@
 // maybe move this out of this file?
 #include <math.h>
 
-#define DEBUG_PRINT_ALL 0
-
 //using namespace Rosegarden;
 namespace Rosegarden {
 

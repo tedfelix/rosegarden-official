@@ -30,6 +30,7 @@ class EventSelection;
 class SelectionManager
 {
 public:
+    virtual ~SelectionManager() {}
     virtual EventSelection *getSelection() const = 0;
     virtual void setSelection(EventSelection *s, bool preview) = 0;
 };

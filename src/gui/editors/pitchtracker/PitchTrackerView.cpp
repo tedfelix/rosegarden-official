@@ -47,6 +47,8 @@
 
 #include <QDebug>
 
+#define DEBUG_PRINT_ALL 0
+
 namespace Rosegarden
 {
 

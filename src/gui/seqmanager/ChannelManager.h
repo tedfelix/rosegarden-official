@@ -104,6 +104,7 @@ public:
     class Callbacks
     {
     public:
+        virtual ~Callbacks();
         virtual ControllerAndPBList getControllers(
             Instrument *instrument, RealTime start) = 0;
     };

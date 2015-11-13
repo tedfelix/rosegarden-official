@@ -651,7 +651,7 @@ LADSPAPluginFactory::discoverPlugins()
         QDir pluginDir(*i, "*.so");
 
         for (unsigned int j = 0; j < pluginDir.count(); ++j) {
-            discoverPlugins(QString("%1/%2").arg(*i).arg(pluginDir[j]));
+            discoverPlugin(QString("%1/%2").arg(*i).arg(pluginDir[j]));
         }
     }
 
@@ -663,7 +663,7 @@ LADSPAPluginFactory::discoverPlugins()
 }
 
 void
-LADSPAPluginFactory::discoverPlugins(QString soName)
+LADSPAPluginFactory::discoverPlugin(const QString &soName)
 {
     QByteArray bso = soName.toLocal8Bit();
     void *libraryHandle = dlopen(bso.data(), RTLD_LAZY);

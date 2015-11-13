@@ -98,11 +98,8 @@ BundleCommand::~BundleCommand()
 QString
 BundleCommand::getName() const
 {
-#warning BundleCommand::getName() needs i18n fix
-	return "FIXME: BundleCommand getName() i18n"; //!!!
     if (m_commands.size() == 1) return m_name;
-    //!!! kde i18n
-//!!!    return tr("%1 (%n change(s))", "", m_commands.size()).arg(m_name);
+    return tr("%1 (%n change(s))", "", m_commands.size()).arg(m_name);
 }
 
 }

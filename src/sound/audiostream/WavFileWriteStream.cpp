@@ -72,7 +72,7 @@ WavFileWriteStream::putInterleavedFrames(size_t count, float *frames)
 
     sf_count_t written = sf_writef_float(m_file, frames, count);
 
-    return (written == count);
+    return (size_t(written) == count);
 }
 
 }

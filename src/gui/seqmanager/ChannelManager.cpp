@@ -636,6 +636,10 @@ getControllers(Instrument *instrument, RealTime /*start*/)
     return ControllerAndPBList(instrument->getStaticControllers());
 }
 
+ChannelManager::Callbacks::~Callbacks()
+{
+}
+
 }
 
 #include "ChannelManager.moc"
