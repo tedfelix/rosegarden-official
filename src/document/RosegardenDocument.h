@@ -153,19 +153,13 @@ public:
      * returns if the document is modified or not. Use this to
      * determine if your document needs saving by the user on closing.
      */
-    bool isModified() const { return m_modified; };
+    bool isModified() const { return m_modified; }
 
     /**
      * clears the 'modified' status of the document (sets it back to false).
      * 
      */
     void clearModifiedStatus();
-
-    /**
-     * "save modified" - asks the user for saving if the document is
-     * modified
-     */
-    bool saveIfModified();
 
     /**
      * get the autosave interval in seconds
@@ -217,6 +211,11 @@ public:
      * returns the pathname of the current document file
      */
     const QString &getAbsFilePath() const;
+
+    /**
+     * removes the autosave file (e.g. after saving)
+     */
+    void deleteAutoSaveFile();
 
     /**
      * sets the filename of the document
@@ -449,6 +448,8 @@ public:
     /// Verify that the audio path exists and can be written to.
     void checkAudioPath(Track *track);
 
+    bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -521,7 +522,7 @@ signals:
     void docColoursChanged();
     void devicesResyncd();
 
-protected:
+private:
     /**
      * initializes the document generally
      */
@@ -579,9 +580,6 @@ protected:
     void saveSegment(QTextStream&, Segment*, ProgressDialog*,
                      long totalNbOfEvents, long &count,
                      QString extraAttributes = QString::null);
-
-    bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
-
 
     /// Identifies a specific event within a specific segment.
     /**

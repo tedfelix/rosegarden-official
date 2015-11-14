@@ -1637,6 +1637,12 @@ private:
      */
     void checkAudioPath();
 
+    /**
+     * "save modified" - asks the user for saving if the document is
+     * modified
+     */
+    bool saveIfModified();
+
     //--------------- Data members ---------------------------------
 
     bool m_alwaysUseDefaultStudio;
