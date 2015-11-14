@@ -928,7 +928,7 @@ EventView::slotEditCut()
         }
 
         addCommandToHistory(new CutCommand(*cutSelection,
-                                           getDocument()->getClipboard()));
+                                           getClipboard()));
     }
 }
 
@@ -974,14 +974,14 @@ EventView::slotEditCopy()
 
     if (copySelection) {
         addCommandToHistory(new CopyCommand(*copySelection,
-                                            getDocument()->getClipboard()));
+                                            getClipboard()));
     }
 }
 
 void
 EventView::slotEditPaste()
 {
-    if (getDocument()->getClipboard()->isEmpty()) {
+    if (getClipboard()->isEmpty()) {
         slotStatusHelpMsg(tr("Clipboard is empty"));
         return ;
     }
@@ -1016,7 +1016,7 @@ EventView::slotEditPaste()
 
 
     PasteEventsCommand *command = new PasteEventsCommand
-                                  (*m_segments[0], getDocument()->getClipboard(),
+                                  (*m_segments[0], getClipboard(),
                                    insertionTime, PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {

@@ -884,7 +884,7 @@ MatrixView::slotEditCut()
     EventSelection *selection = getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, m_document->getClipboard()));
+        (new CutCommand(*selection, getClipboard()));
 }
 
 void
@@ -893,18 +893,18 @@ MatrixView::slotEditCopy()
     EventSelection *selection = getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, m_document->getClipboard()));
+        (new CopyCommand(*selection, getClipboard()));
 //    emit usedSelection();//!!!
 }
 
 void
 MatrixView::slotEditPaste()
 {
-    if (m_document->getClipboard()->isEmpty()) return;
+    if (getClipboard()->isEmpty()) return;
 
     PasteEventsCommand *command = new PasteEventsCommand
         (*m_matrixWidget->getCurrentSegment(),
-         m_document->getClipboard(),
+         getClipboard(),
          getInsertionTime(),
          PasteEventsCommand::MatrixOverlay);
 
@@ -1054,7 +1054,7 @@ MatrixView::slotEditCopyControllers()
     EventSelection *selection = cr->getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, m_document->getClipboard()));
+        (new CopyCommand(*selection, getClipboard()));
 }
 
 void
@@ -1064,7 +1064,7 @@ MatrixView::slotEditCutControllers()
     EventSelection *selection = cr->getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, m_document->getClipboard()));
+        (new CutCommand(*selection, getClipboard()));
 }
 
 void

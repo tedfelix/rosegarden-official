@@ -32,7 +32,7 @@ class QCloseEvent;
 
 namespace Rosegarden
 {
-
+class Clipboard;
 class Command;
 class Segment;
 class RosegardenDocument;
@@ -52,6 +52,8 @@ public:
 
     const RosegardenDocument *getDocument() const { return m_doc; }
     RosegardenDocument *getDocument() { return m_doc; }
+
+    Clipboard *getClipboard();
 
     /**
      * Return our local shortcut object

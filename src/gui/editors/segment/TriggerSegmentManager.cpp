@@ -343,7 +343,7 @@ TriggerSegmentManager::slotDelete()
 void
 TriggerSegmentManager::slotPasteAsNew()
 {
-    Clipboard *clipboard = m_doc->getClipboard();
+    Clipboard *clipboard = Clipboard::mainClipboard();
 
     if (clipboard->isEmpty()) {
         QMessageBox::information(this, tr("Rosegarden"), tr("Clipboard is empty"));

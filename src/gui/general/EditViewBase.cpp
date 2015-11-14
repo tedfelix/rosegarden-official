@@ -65,6 +65,11 @@ EditViewBase::~EditViewBase()
     slotSaveOptions();
 }
 
+Clipboard *EditViewBase::getClipboard()
+{
+    return Clipboard::mainClipboard();
+}
+
 void
 EditViewBase::slotSegmentDeleted(Segment *s)
 {
@@ -245,18 +250,18 @@ void EditViewBase::slotStatusHelpMsg(const QString &text)
 void
 EditViewBase::slotTestClipboard()
 {
-    if (getDocument()->getClipboard()->isEmpty()) {
+    if (getClipboard()->isEmpty()) {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
         leaveActionState("have_clipboard");
-	leaveActionState("have_clipboard_single_segment");
+        leaveActionState("have_clipboard_single_segment");
     } else {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty" << endl;
         enterActionState("have_clipboard");
-        if (getDocument()->getClipboard()->isSingleSegment()) {
+        if (getClipboard()->isSingleSegment()) {
             enterActionState("have_clipboard_single_segment");
         } else {
             leaveActionState("have_clipboard_single_segment");
-        }           
+        }
     }
 }
 

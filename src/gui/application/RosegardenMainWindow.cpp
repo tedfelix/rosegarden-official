@@ -276,7 +276,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_useSequencer(useSequencer),
     m_dockVisible(true),
     m_autoSaveTimer(new QTimer(static_cast<QObject *>(this))),
-    m_clipboard(new Clipboard),
+    m_clipboard(Clipboard::mainClipboard()),
     m_playList(0),
     m_synthManager(0),
     m_audioMixer(0),
@@ -585,8 +585,6 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_updateUITimer;
     delete m_autoSaveTimer;
     delete m_cpuMeterTimer;
-
-    delete m_clipboard;
 }
 
 int RosegardenMainWindow::sigpipe[2];

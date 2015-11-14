@@ -187,6 +187,11 @@ public:
      */
     void removeAudioSegments();
 
+    /**
+     * Returns the user clipboard.
+     */
+    static Clipboard *mainClipboard();
+
 private:
     SegmentMultiSet m_segments;
     bool m_partial;

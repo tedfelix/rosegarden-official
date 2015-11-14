@@ -25,7 +25,6 @@
 #include "base/AudioDevice.h"
 #include "base/AudioPluginInstance.h"
 #include "base/BaseProperties.h"
-#include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Configuration.h"
 #include "base/Device.h"
@@ -2912,13 +2911,6 @@ RosegardenDocument::clearAllPlugins()
             */
         }
     }
-}
-
-Clipboard*
-RosegardenDocument::getClipboard()
-{
-    RosegardenMainWindow *mainWindow = (RosegardenMainWindow*)parent();
-    return mainWindow->getClipboard();
 }
 
 void RosegardenDocument::slotDocColoursChanged()

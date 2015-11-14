@@ -51,7 +51,6 @@ class ProgressDialog;
 class MappedEventList;
 class Event;
 class EditViewBase;
-class Clipboard;
 class AudioPluginManager;
 
 
@@ -279,11 +278,6 @@ public:
 
     const DocumentConfiguration& getConfiguration() const 
         { return m_config; }
-
-    /**
-     * returns the cut/copy/paste clipboard
-     */
-    Clipboard *getClipboard();
 
     /**
      * Returns whether the sequencer us running

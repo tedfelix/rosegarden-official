@@ -423,4 +423,10 @@ Clipboard::removeAudioSegments()
         clear();
 }
 
+Clipboard *Clipboard::mainClipboard()
+{
+    static Clipboard s_mainClipboard;
+    return &s_mainClipboard;
+}
+
 }

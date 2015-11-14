@@ -1624,7 +1624,7 @@ NotationView::slotEditCut()
     EventSelection *selection = getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, m_document->getClipboard()));
+        (new CutCommand(*selection, getClipboard()));
 }
 
 void
@@ -1641,7 +1641,7 @@ NotationView::slotEditCopy()
     EventSelection *selection = getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, m_document->getClipboard()));
+        (new CopyCommand(*selection, getClipboard()));
 }
 
 void
@@ -1650,13 +1650,13 @@ NotationView::slotEditCutAndClose()
     EventSelection *selection = getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CutAndCloseCommand(*selection, m_document->getClipboard()));
+        (new CutAndCloseCommand(*selection, getClipboard()));
 }
 
 void
 NotationView::slotEditPaste()
 {
-    Clipboard *clipboard = m_document->getClipboard();
+    Clipboard *clipboard = getClipboard();
 
     if (clipboard->isEmpty()) return;
     if (!clipboard->isSingleSegment()) {
@@ -1712,7 +1712,7 @@ NotationView::slotEditPaste()
 void
 NotationView::slotEditGeneralPaste()
 {
-    Clipboard *clipboard = getDocument()->getClipboard();
+    Clipboard *clipboard = getClipboard();
 
     if (clipboard->isEmpty()) {
         slotStatusHelpMsg(tr("Clipboard is empty"));
@@ -1925,7 +1925,7 @@ NotationView::slotEditCopyControllers()
     EventSelection *selection = cr->getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CopyCommand(*selection, m_document->getClipboard()));
+        (new CopyCommand(*selection, getClipboard()));
 }
 
 void
@@ -1935,7 +1935,7 @@ NotationView::slotEditCutControllers()
     EventSelection *selection = cr->getSelection();
     if (!selection) return;
     CommandHistory::getInstance()->addCommand
-        (new CutCommand(*selection, m_document->getClipboard()));
+        (new CutCommand(*selection, getClipboard()));
 }
 
 void
