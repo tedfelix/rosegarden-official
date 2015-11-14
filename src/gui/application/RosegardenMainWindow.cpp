@@ -275,7 +275,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_storedLoopEnd(0),
     m_useSequencer(useSequencer),
     m_dockVisible(true),
-    m_autoSaveTimer(new QTimer(static_cast<QObject *>(this))),
+    m_autoSaveTimer(new QTimer(this)),
     m_clipboard(Clipboard::mainClipboard()),
     m_playList(0),
     m_synthManager(0),
@@ -288,8 +288,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_configDlg(0),
     m_docConfigDlg(0),
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
-    m_updateUITimer(new QTimer(static_cast<QObject *>(this))),
-    m_inputTimer(new QTimer(static_cast<QObject *>(this))),
+    m_updateUITimer(new QTimer(this)),
+    m_inputTimer(new QTimer(this)),
     m_startupTester(0),
     m_firstRun(false),
     m_haveAudioImporter(false),
@@ -301,7 +301,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_tranzport(0),
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(0),
-    m_cpuMeterTimer(new QTimer(static_cast<QObject *>(this)))
+    m_cpuMeterTimer(new QTimer(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -573,14 +573,6 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_tranzport;    
     delete m_doc;
     Profiles::getInstance()->dump();
-
-    // ??? I don't think any of these need to be deleted.  They were created
-    //     and passed the "this" pointer as their parent QObject.  That means
-    //     that they will be deleted when their parent (this) goes away.
-    delete m_inputTimer;
-    delete m_updateUITimer;
-    delete m_autoSaveTimer;
-    delete m_cpuMeterTimer;
 }
 
 int RosegardenMainWindow::sigpipe[2];
@@ -1846,15 +1838,6 @@ RosegardenMainWindow::queryClose()
 
     // Let the user save any unsaved changes.
     return saveIfModified();
-}
-
-void
-RosegardenMainWindow::slotFileNewWindow()
-{
-    TmpStatusMsg msg(tr("Opening a new application window..."), this);
-
-    RosegardenMainWindow *new_window = new RosegardenMainWindow();
-    new_window->show();
 }
 
 void

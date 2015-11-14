@@ -556,11 +556,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    // Ensure quit on last window close
-    //@@@ ???
-    //
-    QObject::connect(&theApp, SIGNAL(lastWindowClosed()), &theApp, SLOT(quit()));
-
     settings.beginGroup(GeneralOptionsConfigGroup);
 
 //#define DEBUG_PROGRESS
@@ -669,25 +664,10 @@ int main(int argc, char *argv[])
 
     RG_INFO << "Creating RosegardenMainWindow instance...";
 
-    //
-    // Start application
-    //
-    // ??? Would be nice to put this on the stack instead of the heap.  It's
-    //     only 616 bytes.  I ran into two problems.  First, the call to
-    //     setAttribute(Qt::WA_DeleteOnClose) in RosegardenMainWindow's ctor
-    //     has to be removed.  And second, the call to QApplication::exec()
-    //     at the end of this routine never returns.  That would need to be
-    //     tracked down and fixed before this could be done.
     RosegardenMainWindow *mainWindow =
             new RosegardenMainWindow(!RosegardenApplication::noSequencerMode(), startLogo);
 
     mainWindow->setIsFirstRun(newVersion);
-
-    //@@@ QApplication.setMainWidget() is no longer supported.
-    //@@@ The documentation suggests connecting the lastWindowsClosed() signal
-    //@@@ to the quit() slot, but QApplication has a boolean quitOnLastWindowClosed
-    //@@@ property that defaults to true, so calling quit() should not be needed.
-    //theApp.setMainWidget(mainWindow);
 
     // This parentless/shown window will become the main window when
     // QApplication::exec() is called.

@@ -1276,12 +1276,11 @@ void
 SequenceManager::preparePlayback(bool /*forceProgramChanges*/)
 {
     Studio &studio = m_doc->getStudio();
-    InstrumentList list = studio.getAllInstruments();
+    const InstrumentList list = studio.getAllInstruments();
 
     // Send the MappedInstruments full information to the Sequencer 
-    InstrumentList::iterator it = list.begin();
+    InstrumentList::const_iterator it = list.begin();
     for (; it != list.end(); ++it) {
-
         StudioControl::sendMappedInstrument(MappedInstrument(*it));
     }
 }
@@ -1289,32 +1288,9 @@ SequenceManager::preparePlayback(bool /*forceProgramChanges*/)
 void
 SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
-    RosegardenMainViewWidget *v;
-// 	QList<RosegardenMainViewWidget>& viewList = m_doc->getViewList();
-    QList<RosegardenMainViewWidget*> viewList = m_doc->getViewList();
-
-    // Some bit of incomplete rewriting here...  I wonder if this fixes one of
-    // the mysterious crashes. It used to read:
-    //
-    //   for (v = viewList.first(); v != 0; v = viewList.next()) {
-    //
-    // but that no longer compiles, because QList has no ::next() method (though
-    // it apparently did in Qt3.)  It seemed after a glance at the QList API the
-    // thing to do would be to do what someone started here, and take advantage
-    // of how you can use QList like an array, addressed by index in brackets.
-    // The problem is whoever started that never did anything with v, and I
-    // wound up here because I happened to notice the compiler warning about v
-    // always being used uninitialized.
-    //
-    // I'm not sure what this code does, and have only done very minimal
-    // research into any of this.  This solution looks sensible, but there may
-    // be unintended consequences.
-    for (int i=0; i < viewList.count(); i++ ) {
-        std::cerr << "SequenceManager::setAudioLevel() firing mysterious code that used to have v uninitialized." << std::endl;
-        v = viewList[i];
+    foreach(RosegardenMainViewWidget* v, m_doc->getViewList()) {
         v->showVisuals(mE);
     }
-
 }
 
 void

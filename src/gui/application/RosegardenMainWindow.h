@@ -572,12 +572,6 @@ public slots:
     virtual void slotOpenAudioPathSettings();
 
     /**
-     * open a new application window by creating a new instance of
-     * RosegardenMainWindow
-     */
-    void slotFileNewWindow();
-
-    /**
      * clears the document in the actual view to reuse it as the new
      * document
      */
