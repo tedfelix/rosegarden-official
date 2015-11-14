@@ -70,10 +70,10 @@ if(USE_QT4)
 else()
 
    # Locate Qt5 on the system.
-   find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network)
+   find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
 
    set(QT_QTCORE_LIBRARY Qt5::Core)
-   set(QT_QTGUI_LIBRARY Qt5::Widgets)
+   set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
    set(QT_QTXML_LIBRARY Qt5::Xml)
    set(QT_QTNETWORK_LIBRARY Qt5::Network)
    set(QT_QTTEST_LIBRARY Qt5::Test)
