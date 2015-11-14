@@ -53,6 +53,9 @@ The optional [-DCMAKE_BUILD_TYPE=Debug] will build Rosegarden so that it is usef
 for debugging, which can greatly improve our ability to find and correct bugs by
 allowing Rosegarden to produce useful stack traces when it crashes.  WARNING!
 Enabling this option results in an approximately 300 MB rosegarden binary!
+It also results in the use of shared libs, and the building of unit tests.
+If you want to disable this (to go back to a static lib and no unit tests),
+pass -DBUILD_TESTING=OFF to cmake.
 
 
 Runtime requirements

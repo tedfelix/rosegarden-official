@@ -730,7 +730,7 @@ set(rg_RCS
 )
 
 # Define a static lib with the whole code
-add_library(rosegardenprivate STATIC ${rg_SOURCES} ${rg_UIS} ${rg_RCS})
+add_library(rosegardenprivate ${RG_LIBRARY_TYPE} ${rg_SOURCES} ${rg_UIS} ${rg_RCS})
 
 # Link to the following libraries
 target_link_libraries(rosegardenprivate
@@ -754,4 +754,12 @@ add_executable(rosegarden gui/application/main.cpp)
 target_link_libraries(rosegarden rosegardenprivate)
 
 # Install executable
-install(TARGETS rosegarden RUNTIME DESTINATION "bin")
+install(TARGETS rosegarden RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# Install shared libs, if any
+if(RG_LIBRARY_TYPE STREQUAL "SHARED")
+  install(TARGETS rosegardenprivate
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif()
