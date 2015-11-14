@@ -1,5 +1,3 @@
-enable_testing()
-
 include_directories(../src)
 
 # Code factorization: this macro defines unit tests

@@ -36,6 +36,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # This takes care of installing into "lib64" on distros that use that, for instance.
 include(GNUInstallDirs)
 
+# Activate unit tests (this enables `make test`)
+enable_testing()
+
 # Check whether we explicitely select the Qt version to be used or autodetect
 if(NOT USE_QT4 AND NOT USE_QT5)
    # Autodetect, prefering Qt 4
