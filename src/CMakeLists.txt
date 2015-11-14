@@ -729,11 +729,11 @@ set(rg_RCS
   ../data/data.qrc
 )
 
-# This is the main command, we define an executable called rosegarden, with its source files
-add_executable(rosegarden ${rg_SOURCES} ${rg_UIS} ${rg_RCS})
+# Define a static lib with the whole code
+add_library(rosegardenprivate STATIC ${rg_SOURCES} ${rg_UIS} ${rg_RCS})
 
-# Link rosegarden to the following libraries
-target_link_libraries(rosegarden
+# Link to the following libraries
+target_link_libraries(rosegardenprivate
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
   ${QT_QTXML_LIBRARY}
@@ -747,6 +747,11 @@ target_link_libraries(rosegarden
   ${SAMPLERATE_LIBRARIES}
   ${rg_OPTIONAL_LIBS}
 )
+
+# Define an executable called rosegarden, with just the main.cpp, linking to the lib with all the code
+add_executable(rosegarden gui/application/main.cpp)
+
+target_link_libraries(rosegarden rosegardenprivate)
 
 # Install executable
 install(TARGETS rosegarden RUNTIME DESTINATION "bin")
