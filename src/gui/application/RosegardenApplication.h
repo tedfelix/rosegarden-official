@@ -43,7 +43,7 @@ class RosegardenApplication : public QApplication
     Q_OBJECT
 public:
     RosegardenApplication(int &argc, char **argv) :
-        QApplication(argc, argv), m_noSequencerMode(false) {}
+        QApplication(argc, argv) {}
 
     /**
      * Handle the attempt at creation of a new instance - 
@@ -56,10 +56,8 @@ public:
 
     static RosegardenApplication* ApplicationObject();
 
-    static QByteArray Empty;
-
-    void setNoSequencerMode(bool m=true) { m_noSequencerMode = m; }
-    bool noSequencerMode() { return m_noSequencerMode; }
+    static void setNoSequencerMode(bool m=true);
+    static bool noSequencerMode();
 
     virtual void saveState(QSessionManager&);
     
@@ -77,10 +75,6 @@ public slots:
 protected:
 
     virtual bool notify(QObject * receiver, QEvent * event);
-    
-    //--------------- Data members ---------------------------------
-    
-    bool m_noSequencerMode;
 };
 
 #define rosegardenApplication RosegardenApplication::ApplicationObject()

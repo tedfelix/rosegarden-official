@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include "NotationRules.h"
 #include "base/NotationTypes.h"
+#include "NotationRules.h"
 #include "base/BaseProperties.h"
 
 #include <iostream>

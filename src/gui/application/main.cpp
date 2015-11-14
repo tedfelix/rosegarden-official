@@ -662,9 +662,9 @@ int main(int argc, char *argv[])
     gettimeofday(&logoShowTime, 0);
 
 #ifndef NO_SOUND
-    theApp.setNoSequencerMode(nosequencer);
+    RosegardenApplication::setNoSequencerMode(nosequencer);
 #else
-    theApp.setNoSequencerMode(true);
+    RosegardenApplication::setNoSequencerMode(true);
 #endif // NO_SOUND
 
     RG_INFO << "Creating RosegardenMainWindow instance...";
@@ -679,7 +679,7 @@ int main(int argc, char *argv[])
     //     at the end of this routine never returns.  That would need to be
     //     tracked down and fixed before this could be done.
     RosegardenMainWindow *mainWindow =
-            new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
+            new RosegardenMainWindow(!RosegardenApplication::noSequencerMode(), startLogo);
 
     mainWindow->setIsFirstRun(newVersion);
 

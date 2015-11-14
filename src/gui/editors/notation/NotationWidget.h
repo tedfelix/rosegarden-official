@@ -38,6 +38,7 @@ class QTimer;
 namespace Rosegarden
 {
 
+class Device;
 class RosegardenDocument;
 class Segment;
 class NotationScene;

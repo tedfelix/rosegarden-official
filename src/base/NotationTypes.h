@@ -20,7 +20,6 @@
 #include <map>
 
 #include "Event.h"
-#include "Instrument.h"
 
 /*
  * NotationTypes.h

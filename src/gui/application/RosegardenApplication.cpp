@@ -38,6 +38,9 @@
 
 namespace Rosegarden
 {
+
+static bool s_noSequencerMode = false;
+
 /*&&&
 int RosegardenApplication::newInstance()
 {
@@ -103,17 +106,25 @@ RosegardenApplication* RosegardenApplication::ApplicationObject()
     return dynamic_cast<RosegardenApplication*>(qApp);
 }
 
+void RosegardenApplication::setNoSequencerMode(bool m)
+{
+    s_noSequencerMode = m;
+}
+
+bool RosegardenApplication::noSequencerMode()
+{
+    return s_noSequencerMode;
+}
+
 bool
 RosegardenApplication::notify(QObject * receiver, QEvent * event) 
 {
-    try { return QApplication::notify(receiver, event); } 
+    try { return QApplication::notify(receiver, event); }
     catch(std::exception& e) {
         RG_DEBUG << "Exception thrown:" << e.what();
         return false;
     }
 }
-
-QByteArray RosegardenApplication::Empty;
 
 }
 

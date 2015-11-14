@@ -30,7 +30,7 @@ class QString;
  *
  * Use as follows :
  * { // some block of code starts here
- *  TmpStatusMsg tmpMsg("doing something...", rosegardenApplication);
+ *  TmpStatusMsg tmpMsg("doing something...", mainWindow);
  *
  *  // do something
  *

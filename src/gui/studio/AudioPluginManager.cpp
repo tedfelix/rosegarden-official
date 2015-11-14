@@ -71,7 +71,7 @@ AudioPluginManager::Enumerator::run()
 
     RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n" << endl;
 
-    if (!rosegardenApplication->noSequencerMode()) {
+    if (!RosegardenApplication::noSequencerMode()) {
         // We only waste the time looking for plugins here if we
         // know we're actually going to be able to use them.
         PluginFactory::enumerateAllPlugins(rawPlugins);
