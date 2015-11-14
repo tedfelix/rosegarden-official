@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for input in `ls -1 data/locale/*.ts | grep -v rosegarden.ts`; do
+    lrelease $input
+done
+

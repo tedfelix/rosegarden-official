@@ -55,15 +55,15 @@ TRANSLATORS: Translation process in brief, change 'fi.ts' with your own locale
 
 MAINTAINERS: Update translations
 
-1  run "make ts"
+1  run "scripts/make-ts"
 
 
 MAINTAINERS: Update translations & drop obsolete translations
 
-1  run "make ts-noobsolete"
+1  run "NOOBSOLETE=1 scripts/make-ts"
 
 
 MAINTAINERS: Release all translations
 
-1  run "make locale"
+1  run "scripts/make-locale"
 

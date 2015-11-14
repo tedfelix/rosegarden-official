@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Set $NOOBSOLETE to 1 to drop obsolete translations
+
+PERL=perl
+
+$PERL scripts/extract_instrument_tr_strings.pl data/presets/presets.xml > data/InstrumentStrings.cpp
+
+$PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc > data/QMenuStrings.cpp
+
+gunzip -c data/autoload/autoload.rg > data/autoload/autoload.xml
+$PERL scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml > data/AutoloadStrings.cpp
+rm -f data/autoload/autoload.xml
+
+mkdir -p data/locale
+TRANSLATIONS=`ls data/locale/*.ts | grep -v rosegarden.ts`
+if [ $NOOBSOLETE -eq 1 ]; then
+    NOOBSOPT="-noobsolete"
+fi
+lupdate $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $TRANSLATIONS
+scripts/ts-stats
