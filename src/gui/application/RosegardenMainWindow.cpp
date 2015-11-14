@@ -5409,8 +5409,7 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
     ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting LilyPond file..."),
                                (QWidget*)this);
 
-//    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
-    LilyPondExporter e(this, m_doc, std::string(file.toLocal8Bit()));
+    LilyPondExporter e(m_doc, m_view->getSelection(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));

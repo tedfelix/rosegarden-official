@@ -1422,7 +1422,10 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    // This is awful...
+    RosegardenMainViewWidget * view = static_cast<RosegardenMainViewWidget *>(parent());
+
+    LilyPondExporter e(m_doc, view->getSelection(), std::string(QFile::encodeName(file)), this);
 
     if (!e.write()) {
         QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());

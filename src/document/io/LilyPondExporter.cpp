@@ -80,36 +80,19 @@ using namespace BaseProperties;
 
 const PropertyName LilyPondExporter::SKIP_PROPERTY = "LilyPondExportSkipThisEvent";
 
-LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
-                                   RosegardenDocument *doc,
-                                   std::string fileName) :
+LilyPondExporter::LilyPondExporter(RosegardenDocument *doc,
+                                   const SegmentSelection &selection,
+                                   const std::string &fileName,
+                                   NotationView *parent) :
     ProgressReporter(parent),
     m_doc(doc),
     m_fileName(fileName),
-    m_lastClefFound(Clef::Treble)
-{
-    m_composition = &m_doc->getComposition();
-    m_studio = &m_doc->getStudio();
-    m_view = parent->getView();
-    m_notationView = NULL;
-
-    readConfigVariables();
-    m_language = LilyPondLanguage::create(m_exportNoteLanguage);
-}
-
-LilyPondExporter::LilyPondExporter(NotationView *parent,
-                                   RosegardenDocument *doc,
-                                   std::string fileName) :
-    ProgressReporter(parent),
-    m_doc(doc),
-    m_fileName(fileName),
-    m_lastClefFound(Clef::Treble)
-
+    m_lastClefFound(Clef::Treble),
+    m_selection(selection)
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
     m_notationView = parent;
-    m_view = static_cast<RosegardenMainViewWidget *>(m_notationView->parent());
 
     readConfigVariables();
     m_language = LilyPondLanguage::create(m_exportNoteLanguage);
@@ -158,13 +141,11 @@ bool
 LilyPondExporter::isSegmentToPrint(Segment *seg)
 {
     bool currentSegmentSelected = false;
-    if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 
-        (m_view != NULL) && (m_view->haveSelection())) {
+    if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && !m_selection.empty()) {
         //
         // Check whether the current segment is in the list of selected segments.
         //
-        SegmentSelection selection = m_view->getSelection();
-        for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); ++it) {
+        for (SegmentSelection::iterator it = m_selection.begin(); it != m_selection.end(); ++it) {
             if ((*it) == seg) currentSegmentSelected = true;
         }
     } else if ((m_exportSelection == EXPORT_EDITED_SEGMENTS) && (m_notationView != NULL)) {
@@ -180,7 +161,6 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
     bool ok1 = m_exportSelection == EXPORT_ALL_TRACKS;
     bool ok2 = (m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted());
     bool ok3 = (m_exportSelection == EXPORT_SELECTED_TRACK)
-               && (m_view != NULL)
                && (track->getId() == m_composition->getSelectedTrack());
     bool ok4 = (m_exportSelection == EXPORT_SELECTED_SEGMENTS) && currentSegmentSelected;
     bool ok5 = (m_exportSelection == EXPORT_EDITED_SEGMENTS) && currentSegmentSelected;

@@ -32,6 +32,7 @@
 #include "base/Event.h"
 #include "base/PropertyName.h"
 #include "base/Segment.h"
+#include "base/Selection.h"
 #include "document/io/LilyPondLanguage.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/editors/notation/NotationView.h"
@@ -93,8 +94,10 @@ public:
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 
 public:
-    LilyPondExporter(RosegardenMainWindow *parent, RosegardenDocument *, std::string fileName);
-    LilyPondExporter(NotationView *parent, RosegardenDocument *, std::string fileName);
+    LilyPondExporter(RosegardenDocument *doc,
+                     const SegmentSelection &selection,
+                     const std::string &fileName,
+                     NotationView *parent = 0);
     ~LilyPondExporter();
 
    /**
@@ -109,8 +112,7 @@ public:
     */
     QString getMessage() { return m_warningMessage; }
 
-protected:
-    RosegardenMainViewWidget *m_view;
+private:
     NotationView *m_notationView;
     RosegardenDocument *m_doc;
     Composition *m_composition;
@@ -118,6 +120,7 @@ protected:
     std::string m_fileName;
     Clef m_lastClefFound;
     LilyPondLanguage *m_language;
+    SegmentSelection m_selection;
 
     void readConfigVariables(void);
 
