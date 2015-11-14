@@ -124,7 +124,8 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
         m_quickMarkerTime(-1),
         m_autoSavePeriod(0),
         m_beingDestroyed(false),
-        m_clearCommandHistory(clearCommandHistory)
+        m_clearCommandHistory(clearCommandHistory),
+        m_useSequencer(true)
 {
     checkSequencerTimer();
 
@@ -198,6 +199,11 @@ void RosegardenDocument::deleteEditViews()
     for (int i = 0; i < int(views.size()); ++i) {
         delete views[i];
     }
+}
+
+void RosegardenDocument::setSequencerEnabled(bool b)
+{
+    m_useSequencer = b;
 }
 
 void RosegardenDocument::setAbsFilePath(const QString &filename)
@@ -1623,13 +1629,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
 
 bool RosegardenDocument::isSequencerRunning()
 {
-    RosegardenMainWindow* parentApp = dynamic_cast<RosegardenMainWindow*>(parent());
-    if (!parentApp) {
-        RG_DEBUG << "RosegardenDocument::isSequencerRunning() : parentApp == 0\n";
-        return false;
-    }
-
-    return parentApp->isSequencerRunning();
+    return m_useSequencer;
 }
 
 bool

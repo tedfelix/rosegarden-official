@@ -368,6 +368,8 @@ public:
 
 protected:
 
+    RosegardenDocument* newDocument(bool skipAutoload = false);
+
     /**** File handling code that we don't want the outside world to use ****/
     /**/
     /**/
@@ -376,8 +378,6 @@ protected:
      * Create document from a file
      */
     RosegardenDocument* createDocument(QString filePath, ImportType type = ImportRG4);
-    
-    
     
     /**
      * Create a document from RG file

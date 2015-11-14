@@ -135,6 +135,11 @@ public:
      */
     void deleteEditViews();
 
+    /**
+     * Sets whether the sequencer is enabled
+     */
+    void setSequencerEnabled(bool b);
+
 protected:
     /**
      * sets the modified flag for the document after a modifying
@@ -745,6 +750,8 @@ private:
      * construction.  Usually true.
      */
     bool m_clearCommandHistory;
+
+    bool m_useSequencer;
 };
 
 

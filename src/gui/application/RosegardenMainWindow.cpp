@@ -327,7 +327,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     // start of docking code 
     this->setDockOptions(QMainWindow::AnimatedDocks);
 
-    RosegardenDocument* doc = new RosegardenDocument(this, m_pluginManager);
+    RosegardenDocument* doc = newDocument();
+    doc->setSequencerEnabled(m_useSequencer);
 
     m_dockLeft = new QDockWidget(tr("Special Parameters"), this);
     m_dockLeft->setObjectName("SpecialParametersDock");
@@ -1633,8 +1634,7 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
 
     // Create a new blank document
     //
-    RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager,
-                               true); // skipAutoload
+    RosegardenDocument *newDoc = newDocument(true); // skipAutoload
 
     // ignore return thingy
     //
@@ -1857,7 +1857,7 @@ RosegardenMainWindow::slotFileNew()
     }
 
     if (makeNew) {
-        setDocument(new RosegardenDocument(this, m_pluginManager));
+        setDocument(newDocument());
         leaveActionState("have_segments"); 
     }
 }
@@ -2296,7 +2296,7 @@ RosegardenMainWindow::slotFileClose()
     TmpStatusMsg msg(tr("Closing file..."), this);
 
     if (saveIfModified()) {
-        setDocument(new RosegardenDocument(this, m_pluginManager));
+        setDocument(newDocument());
     }
 
     // Don't close the whole view (i.e. Quit), just close the doc.
@@ -4092,7 +4092,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 
     // Create new document (autoload is inherent)
     //
-    RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
+    RosegardenDocument *newDoc = newDocument();
 
     MidiFile midiFile;
 
@@ -4311,7 +4311,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
+    RosegardenDocument *newDoc = newDocument();
 
     RG21Loader rg21Loader(&newDoc->getStudio());
 
@@ -4432,7 +4432,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
+    RosegardenDocument *newDoc = newDocument();
 
     HydrogenLoader hydrogenLoader(&newDoc->getStudio());
 
@@ -4554,7 +4554,7 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = new RosegardenDocument(this, m_pluginManager);
+    RosegardenDocument *newDoc = newDocument();
 
     MusicXMLLoader musicxmlLoader(&newDoc->getStudio());
 
@@ -8279,6 +8279,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
     // obliterate the command history!
     bool clearCommandHistory = false, skipAutoload = true;
     RosegardenDocument *doc = new RosegardenDocument(this, 0, skipAutoload, clearCommandHistory);
+    doc->setSequencerEnabled(m_useSequencer);
 
     Studio &oldStudio = m_doc->getStudio();
     Studio &newStudio = doc->getStudio();
@@ -8750,7 +8751,14 @@ RosegardenMainWindow::uiUpdateKludge()
     //     objects they are modifying.  That, in turn, would cause
     //     relevant portions of the UI (observers) to update.
     m_view->slotSelectTrackSegments(
-            m_doc->getComposition().getSelectedTrack());
+                m_doc->getComposition().getSelectedTrack());
+}
+
+RosegardenDocument *RosegardenMainWindow::newDocument(bool skipAutoload)
+{
+    RosegardenDocument *doc = new RosegardenDocument(this, m_pluginManager, skipAutoload);
+    doc->setSequencerEnabled(m_useSequencer);
+    return doc;
 }
 
 
