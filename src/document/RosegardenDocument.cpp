@@ -110,10 +110,11 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-RosegardenDocument::RosegardenDocument(QWidget *parent,
+RosegardenDocument::RosegardenDocument(QObject *parent,
                                    AudioPluginManager *pluginManager,
                                    bool skipAutoload,
-                                   bool clearCommandHistory)
+                                   bool clearCommandHistory,
+                                       bool useSequencer)
         : QObject(parent),
         m_modified(false),
         m_autoSaved(false),
@@ -125,7 +126,7 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
         m_autoSavePeriod(0),
         m_beingDestroyed(false),
         m_clearCommandHistory(clearCommandHistory),
-        m_useSequencer(true)
+        m_useSequencer(useSequencer)
 {
     checkSequencerTimer();
 
@@ -199,11 +200,6 @@ void RosegardenDocument::deleteEditViews()
     for (int i = 0; i < int(views.size()); ++i) {
         delete views[i];
     }
-}
-
-void RosegardenDocument::setSequencerEnabled(bool b)
-{
-    m_useSequencer = b;
 }
 
 void RosegardenDocument::setAbsFilePath(const QString &filename)

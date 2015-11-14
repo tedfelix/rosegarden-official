@@ -328,7 +328,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     this->setDockOptions(QMainWindow::AnimatedDocks);
 
     RosegardenDocument* doc = newDocument();
-    doc->setSequencerEnabled(m_useSequencer);
 
     m_dockLeft = new QDockWidget(tr("Special Parameters"), this);
     m_dockLeft->setObjectName("SpecialParametersDock");
@@ -8278,8 +8277,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
     // We're only using this document temporarily, so we don't want to let it
     // obliterate the command history!
     bool clearCommandHistory = false, skipAutoload = true;
-    RosegardenDocument *doc = new RosegardenDocument(this, 0, skipAutoload, clearCommandHistory);
-    doc->setSequencerEnabled(m_useSequencer);
+    RosegardenDocument *doc = new RosegardenDocument(this, 0, skipAutoload, clearCommandHistory, m_useSequencer);
 
     Studio &oldStudio = m_doc->getStudio();
     Studio &newStudio = doc->getStudio();
@@ -8756,11 +8754,10 @@ RosegardenMainWindow::uiUpdateKludge()
 
 RosegardenDocument *RosegardenMainWindow::newDocument(bool skipAutoload)
 {
-    RosegardenDocument *doc = new RosegardenDocument(this, m_pluginManager, skipAutoload);
-    doc->setSequencerEnabled(m_useSequencer);
-    return doc;
+    return new RosegardenDocument(this, m_pluginManager, skipAutoload,
+                                  true, /*clear command history*/
+                                  m_useSequencer);
 }
-
 
 RosegardenMainWindow *RosegardenMainWindow::m_myself = 0;
 
