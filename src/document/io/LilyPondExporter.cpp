@@ -83,14 +83,14 @@ const PropertyName LilyPondExporter::SKIP_PROPERTY = "LilyPondExportSkipThisEven
 LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
-    ProgressReporter((QObject *)parent),
+    ProgressReporter(parent),
     m_doc(doc),
     m_fileName(fileName),
     m_lastClefFound(Clef::Treble)
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
-    m_view = ((RosegardenMainWindow *)parent)->getView();
+    m_view = parent->getView();
     m_notationView = NULL;
 
     readConfigVariables();
@@ -100,7 +100,7 @@ LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
 LilyPondExporter::LilyPondExporter(NotationView *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
-    ProgressReporter((QObject *)parent),
+    ProgressReporter(parent),
     m_doc(doc),
     m_fileName(fileName),
     m_lastClefFound(Clef::Treble)
@@ -108,7 +108,7 @@ LilyPondExporter::LilyPondExporter(NotationView *parent,
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
-    m_notationView = ((NotationView *)parent);
+    m_notationView = parent;
     m_view = static_cast<RosegardenMainViewWidget *>(m_notationView->parent());
 
     readConfigVariables();

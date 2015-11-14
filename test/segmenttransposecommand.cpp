@@ -4,9 +4,21 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include <QTest>
 
 using namespace Rosegarden;
 using std::cout;
+
+class TestSegmentTransposeCommand : public QObject
+{
+    Q_OBJECT
+
+private Q_SLOTS:
+    void testSegmentBbtoF();
+    void testGistoAis();
+    void testSegmentCisToC();
+    void testUndo();
+};
 
 /**
  * Bb in Bb major became E# in F major, due to segment 
@@ -14,7 +26,7 @@ using std::cout;
  *
  * Should be F
  */
-int testSegmentBbtoF()
+void TestSegmentTransposeCommand::testSegmentBbtoF()
 {
     Segment * segment1 = new Segment();
     Note * n = new Note(Note::QuarterNote);
@@ -29,20 +41,15 @@ int testSegmentBbtoF()
     EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
     EventSelection::eventcontainer::iterator i;
     for (i = m_selection.getSegmentEvents().begin();
-            i != m_selection.getSegmentEvents().end(); ++i) {
-	if ((*i)->isa(Note::EventType)) {
+         i != m_selection.getSegmentEvents().end(); ++i) {
+        if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
             std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
             std::cout << "accidental: " << resultPitch.getDisplayAccidental(Key("F major")) << std::endl;
             std::cout << "DisplayAccidental: " << resultPitch.getDisplayAccidental(Key("F major")) << std::endl;
-            if (resultPitch.getDisplayAccidental(Key("F major")) != Accidentals::NoAccidental)
-            {
-                return -1;
-            }
+            QCOMPARE(resultPitch.getDisplayAccidental(Key("F major")), Accidentals::NoAccidental);
         }
     }
-    
-    return 0;
 }
 
 /**
@@ -51,7 +58,7 @@ int testSegmentBbtoF()
  *
  * Should be A#
  */
-int testGistoAis()
+void TestSegmentTransposeCommand::testGistoAis()
 {
     Segment * segment1 = new Segment();
     Note * n = new Note(Note::QuarterNote);
@@ -66,8 +73,8 @@ int testGistoAis()
     EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
     EventSelection::eventcontainer::iterator i;
     for (i = m_selection.getSegmentEvents().begin();
-            i != m_selection.getSegmentEvents().end(); ++i) {
-	if ((*i)->isa(Note::EventType)) {
+         i != m_selection.getSegmentEvents().end(); ++i) {
+        if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
             std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
             std::cout << "accidental: " << resultPitch.getDisplayAccidental(Key("F# major")) << std::endl;
@@ -75,18 +82,16 @@ int testGistoAis()
             if (resultPitch.getDisplayAccidental(Key("F# major")) != Accidentals::NoAccidental)
             {
                 std::cout << "Gis in E major does not become A#-in-F#-major (no-accidental) when transposed upwards by a small second" << std::endl;
-                return -1;
+                QVERIFY(false);
             }
         }
     }
-    
-    return 0;
 }
 
 /**
  * A C# in the key of C# major somehow became a B# in the key of C
  */
-int testSegmentCisToC()
+void TestSegmentTransposeCommand::testSegmentCisToC()
 {
     Segment * segment1 = new Segment();
     Note * n = new Note(Note::QuarterNote);
@@ -102,7 +107,7 @@ int testSegmentCisToC()
     EventSelection::eventcontainer::iterator i;
     for (i = m_selection.getSegmentEvents().begin();
             i != m_selection.getSegmentEvents().end(); ++i) {
-	if ((*i)->isa(Note::EventType)) {
+        if ((*i)->isa(Note::EventType)) {
             Pitch resultPitch(**i);
             std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
             std::cout << "accidental: " << resultPitch.getDisplayAccidental(Key("C major")) << std::endl;
@@ -110,15 +115,13 @@ int testSegmentCisToC()
             if (resultPitch.getDisplayAccidental(Key("C major")) != Accidentals::NoAccidental)
             {
                 std::cout << "C# in C# major does not lose accidental when transposed downwards by 1 semitone" << std::endl;
-                return -1;
+                QVERIFY(false);
             }
         }
     }
-    
-    return 0;
 }
 
-int testUndo()
+void TestSegmentTransposeCommand::testUndo()
 {
     Segment * segment1 = new Segment();
     Segment * segment2 = new Segment();
@@ -147,15 +150,8 @@ int testUndo()
     mockCommand2a->unexecute();
     mockCommand1b->unexecute();
     mockCommand1a->unexecute();
-    
-    return 0;
 }
 
-int test_segmenttransposecommand(int argc, char** argv)
-{
-    return 
-    	testGistoAis() +
-    	testSegmentCisToC() +
-    	testUndo() + 
-        testSegmentBbtoF();
-}
+QTEST_MAIN(TestSegmentTransposeCommand)
+
+#include "segmenttransposecommand.moc"
