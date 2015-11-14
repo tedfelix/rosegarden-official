@@ -324,10 +324,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager = new AudioPluginManager();
 
-
-    QPixmap dummyPixmap; // any icon will do
-   
-
     // start of docking code 
     this->setDockOptions(QMainWindow::AnimatedDocks);
 

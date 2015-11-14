@@ -426,6 +426,11 @@ public:
      */
     SequenceManager* getSequenceManager();
 
+    /**
+     * Set the sequence manager (called by SequenceManager itself)
+     */
+    void setSequenceManager(SequenceManager *sm);
+
     QStringList getTimers();
     QString getCurrentTimer();
     void setCurrentTimer(QString);
@@ -710,6 +715,8 @@ private:
      * A configuration object
      */
     DocumentConfiguration m_config;
+
+    SequenceManager *m_seqManager;
 
     /**
      * AudioPluginManager - sequencer and local plugin management

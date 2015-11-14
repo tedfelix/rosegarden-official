@@ -118,6 +118,7 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
         m_modified(false),
         m_autoSaved(false),
         m_audioPeaksThread(&m_audioFileManager),
+        m_seqManager(0),
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
         m_quickMarkerTime(-1),
@@ -1094,7 +1095,12 @@ void RosegardenDocument::initialiseStudio()
 SequenceManager *
 RosegardenDocument::getSequenceManager()
 {
-    return (dynamic_cast<RosegardenMainWindow*>(parent()))->getSequenceManager();
+    return m_seqManager;
+}
+
+void RosegardenDocument::setSequenceManager(SequenceManager *sm)
+{
+    m_seqManager = sm;
 }
 
 

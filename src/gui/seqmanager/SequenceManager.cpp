@@ -140,6 +140,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     m_doc = doc;
     Composition &comp = m_doc->getComposition();
 
+    m_doc->setSequenceManager(this);
+
     // Must recreate and reconnect the countdown timer and dialog
     // (bug 729039)
     //
