@@ -19,7 +19,11 @@
 #ifndef DEVICESMANAGERNEW_H
 #define DEVICESMANAGERNEW_H
 
-#include "DeviceManagerDialogUi.h"
+#ifdef CMAKE_BUILD
+#include "ui_DeviceManagerDialogUi.h"
+#else
+#include "gui/studio/DeviceManagerDialogUi.h"
+#endif
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"

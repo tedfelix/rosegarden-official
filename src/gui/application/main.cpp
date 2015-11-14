@@ -326,8 +326,6 @@ static QString description =
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/Xatom.h>
-#include <X11/SM/SMlib.h>
 
 static int xErrorHandler(Display *dpy, XErrorEvent *err)
 {

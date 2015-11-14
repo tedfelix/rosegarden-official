@@ -27,7 +27,6 @@
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
-#include "gui/studio/DeviceManagerDialogUi.h"
 
 #include <QDockWidget>
 #include <QString>

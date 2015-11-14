@@ -89,12 +89,12 @@ public:
 public:
     enum ButtonMasks
     {
-#if BIG_ENDIAN
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
     #define SWAP(x) ((((uint32_t)(x) & 0xff000000) >> 24) |     \
                      (((uint32_t)(x) & 0x00ff0000) >> 8)  |     \
                      (((uint32_t)(x) & 0x0000ff00) << 8)  |     \
                      (((uint32_t)(x) & 0x000000ff) << 24))
-#elif LITTLE_ENDIAN
+#elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
     #define SWAP(x) x
 #else
     #error No endianness defined

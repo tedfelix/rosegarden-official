@@ -76,8 +76,6 @@ AudioConfigurationPage::AudioConfigurationPage(
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    QLabel *label = 0;
-
     int row = 0;
 
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -101,7 +99,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 #ifdef HAVE_LIBJACK
     settings.beginGroup( SequencerOptionsConfigGroup );
 
-    label = new QLabel(tr("Record audio files as"), frame);
+    QLabel *label = new QLabel(tr("Record audio files as"), frame);
     m_audioRecFormat = new QComboBox(frame);
     connect(m_audioRecFormat, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_audioRecFormat->addItem(tr("16-bit PCM WAV format (smaller files)"));

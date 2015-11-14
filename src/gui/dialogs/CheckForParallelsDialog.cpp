@@ -880,7 +880,9 @@ CheckForParallelsDialog::hasParallels(std::vector<Transition> &tSet, std::vector
 void
 CheckForParallelsDialog::addText(QString text)
 {
-    textBrowser->setCursor(QTextCursor::End);
+    QTextCursor cursor = textBrowser->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    textBrowser->setTextCursor(cursor);
     textBrowser->setTextColor(QColor("black"));
     textBrowser->insertPlainText(text);
 
