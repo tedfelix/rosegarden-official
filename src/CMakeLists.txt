@@ -6,7 +6,6 @@
 # This way, only the files using that header will get rebuilt
 add_definitions(-DVERSION="${ROSEGARDEN_VERSION}")
 add_definitions(-DCODENAME="${ROSEGARDEN_CODENAME}")
-add_definitions(-DBUILDKEY="TODO") # this was a sha1 of the sources
 
 # Set CMAKE_AUTOMOC_RELAXED_MODE temporarily, until we can ditch the autoconf build system
 # at which point we can remove all #include "foo.moc", keeping an included moc file
@@ -55,6 +54,7 @@ if(ALSA_FOUND)
 endif()
 
 set(rg_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
   document/GzipFile.cpp
   document/LinkedSegmentsCommand.cpp
   document/Command.cpp
@@ -747,6 +747,28 @@ target_link_libraries(rosegardenprivate
   ${SAMPLERATE_LIBRARIES}
   ${rg_OPTIONAL_LIBS}
 )
+
+#########################
+# Magic for SVN revision number, found on
+# http://stackoverflow.com/questions/3780667/use-cmake-to-get-build-time-svn-revision
+
+# a custom target that is always built
+add_custom_target(svnheader ALL DEPENDS svn_header) # svn_header never gets created, it's just a unique string
+
+# creates svnheader.h using cmake script
+add_custom_command(OUTPUT svn_header ${CMAKE_CURRENT_BINARY_DIR}/svnheader.h
+    COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+                         -P ${CMAKE_CURRENT_SOURCE_DIR}/getsvn.cmake)
+
+# svnversion.h is a generated file
+set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
+    PROPERTIES GENERATED TRUE
+    HEADER_FILE_ONLY TRUE)
+
+# explicitly say that the target depends on the svnheader
+add_dependencies(rosegardenprivate svnheader)
+#########################
+
 
 # Define an executable called rosegarden, with just the main.cpp, linking to the lib with all the code
 add_executable(rosegarden gui/application/main.cpp)
