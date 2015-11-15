@@ -2016,6 +2016,58 @@ LilyPondExporter::calculateDuration(Segment *s,
     return duration;
 }
 
+void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str)
+{
+    try {
+        Guitar::Chord chord = Guitar::Chord(**i);
+        const Guitar::Fingering& fingering = chord.getFingering();
+
+        int barreStart = 0, barreEnd = 0, barreFret = 0;
+
+        //
+        // Check if there is a barre.
+        //
+        if (fingering.hasBarre()) {
+            Guitar::Fingering::Barre barre = fingering.getBarre();
+            barreStart = barre.start;
+            barreEnd = barre.end;
+            barreFret = barre.fret;
+        }
+
+        if (barreStart == 0) {
+            str << " s4*0^\\markup \\fret-diagram #\"";
+        } else {
+            str << " s4*0^\\markup \\override #'(barre-type . straight) \\fret-diagram #\"";
+        }
+        //
+        // Check each string individually.
+        // Note: LilyPond numbers strings differently.
+        //
+        for (int stringNum = 6; stringNum >= 1; --stringNum) {
+            if (barreStart == stringNum) {
+                str << "c:" << barreStart << "-" << barreEnd << "-" << barreFret << ";";
+            }
+
+            if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::MUTED) {
+                str << stringNum << "-x;";
+            } else if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::OPEN) {
+                str << stringNum << "-o;";
+            } else {
+                int stringStatus = fingering.getStringStatus(6-stringNum);
+                if ((stringNum <= barreStart) && (stringNum >= barreEnd)) {
+                    str << stringNum << "-" << barreFret << ";";
+                } else {
+                    str << stringNum << "-" << stringStatus << ";";
+                }
+            }
+        }
+        str << "\" ";
+
+    } catch (Exception e) { // GuitarChord ctor failed
+        RG_DEBUG << "Bad GuitarChord event in LilyPond export" << endl;
+    }
+}
+
 void
 LilyPondExporter::writeBar(Segment *s,
                            int barNo, timeT barStart, timeT barEnd, int col,
@@ -2623,55 +2675,7 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
         } else if ((*i)->isa(Guitar::Chord::EventType)) {
-
-            try {
-                Guitar::Chord chord = Guitar::Chord(**i);
-                const Guitar::Fingering& fingering = chord.getFingering();
-            
-                int barreStart = 0, barreEnd = 0, barreFret = 0;
-
-                // 
-                // Check if there is a barre.
-                //
-                if (fingering.hasBarre()) {
-                    Guitar::Fingering::Barre barre = fingering.getBarre();
-                    barreStart = barre.start;
-                    barreEnd = barre.end;
-                    barreFret = barre.fret;
-                }
-
-                if (barreStart == 0) {
-                    str << " s4*0^\\markup \\fret-diagram #\"";
-                } else {
-                    str << " s4*0^\\markup \\override #'(barre-type . straight) \\fret-diagram #\"";
-                }
-                //
-                // Check each string individually.
-                // Note: LilyPond numbers strings differently.
-                //
-                for (int stringNum = 6; stringNum >= 1; --stringNum) {
-                    if (barreStart == stringNum) {
-                        str << "c:" << barreStart << "-" << barreEnd << "-" << barreFret << ";";
-                    }
-
-                    if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::MUTED) {
-                        str << stringNum << "-x;";
-                    } else if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::OPEN) {
-                        str << stringNum << "-o;";
-                    } else {
-                        int stringStatus = fingering.getStringStatus(6-stringNum);
-                        if ((stringNum <= barreStart) && (stringNum >= barreEnd)) {
-                            str << stringNum << "-" << barreFret << ";";
-                        } else {
-                            str << stringNum << "-" << stringStatus << ";";
-                        }
-                    }
-                }
-                str << "\" ";
-
-            } catch (Exception e) { // GuitarChord ctor failed
-                RG_DEBUG << "Bad GuitarChord event in LilyPond export" << endl;
-            }
+            handleGuitarChord(i, str);
         }
 
         // LilyPond 2.0 introduces required postfix syntax for beaming
