@@ -6,6 +6,7 @@ macro(RG_UNIT_TESTS)
       add_executable(${_testname} ${_testname}.cpp)
       add_test(${_testname} ${CMAKE_CURRENT_BINARY_DIR}/${_testname})
       target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} rosegardenprivate)
+      set_target_properties(${_testname} PROPERTIES COMPILE_FLAGS -DSRCDIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/\\"")
    endforeach(_testname)
 endmacro()
 
@@ -16,3 +17,4 @@ RG_UNIT_TESTS(
    transpose
 )
 
+add_subdirectory(lilypond)

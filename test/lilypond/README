@@ -1,0 +1,46 @@
+Lilypond export test
+====================
+
+Run the test with ./lilypond_export_test
+
+It loads .rg files from data/examples, then exports to foo_out.ly (in the builddir),
+and compares with foo.ly in baseline (which is the expected value).
+
+In case of a test failure
+-------------------------
+
+The test will show only the first difference.
+
+To see the full diff, run this from the build dir:
+$ diff ../../../test/lilypond/baseline/foo.ly foo_out.ly
+
+If the new file is correct:
+$ cp foo_out.ly ../../../test/lilypond/baseline/foo.ly
+
+If the new file is incorrect, fix the regression in the code :)
+
+To regenerate the full baseline
+-------------------------------
+
+* Delete all files from baseline/*.ly
+* Run the test
+* Move all files from builddir to baseline
+
+To add a new testcase
+---------------------
+
+* Commit the .rg file in data/examples.
+* Add one line in the cpp file, in testExamples_data()
+* Run the test, it will fail, but it will leave foo.ly behind in the builddir, after checking that it compiles with `lilypond`.
+* Copy foo.ly from the builddir to ../../../test/lilypond/baseline/, and add it to SVN.
+* Run the test again
+
+Checking the baseline compiles
+------------------------------
+
+$ ./check_all_files.sh
+
+This will generate a .ps file per file in baseline/*.ly, in baseline/tmp/.
+
+You can open these files to check how things look like visually.
+
