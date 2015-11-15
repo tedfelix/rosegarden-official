@@ -220,7 +220,6 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_deviceRunningId(Device::NO_DEVICE),
     m_deviceInstrumentBase(MidiInstrumentBase),
     m_deviceReadInstrumentBase(0),
-    m_sendProgramChange(false),
     m_sendBankSelect(false),
     m_msb(0),
     m_lsb(0),
@@ -1476,11 +1475,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     //
                     // File formats <1.6.0 assume the existence of bank tag implies
                     // send program change should be set to true.
-                    m_sendProgramChange = !(atts.value("send").toLower() == "false");
+                    bool sendProgramChange = !(atts.value("send").toLower() == "false");
 
                     MidiByte id = atts.value("id").toInt();
                     m_instrument->setProgramChange(id);
-                    m_instrument->setSendProgramChange(m_sendProgramChange);
+                    m_instrument->setSendProgramChange(sendProgramChange);
                 }
             } else
             {
