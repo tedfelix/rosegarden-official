@@ -2171,7 +2171,6 @@ LilyPondExporter::writeBar(Segment *s,
         // before we consider how to write the event itself (at least
         // for tuplets)
         QString startGroupBeamingsStr;
-        QString endGroupBeamingsStr;
 
         if (event->isa(Note::EventType) || event->isa(Note::EventRestType) ||
             event->isa(Clef::EventType) || event->isa(Rosegarden::Key::EventType) ||
@@ -2187,11 +2186,11 @@ LilyPondExporter::writeBar(Segment *s,
                         // and leaving an old one
                         if (groupType == GROUP_TYPE_TUPLED) {
                             if (m_exportBeams && notesInBeamedGroup > 0)
-                                endGroupBeamingsStr += "] ";
-                            endGroupBeamingsStr += "} ";
+                                str << "] ";
+                            str << "} ";
                         } else if (groupType == GROUP_TYPE_BEAMED) {
                             if (m_exportBeams && notesInBeamedGroup > 0)
-                                endGroupBeamingsStr += "] ";
+                                str << "] ";
                         }
                     }
 
@@ -2233,12 +2232,12 @@ LilyPondExporter::writeBar(Segment *s,
                     // leaving a beamed group
                     if (groupType == GROUP_TYPE_TUPLED) {
                         if (m_exportBeams && notesInBeamedGroup > 0)
-                            endGroupBeamingsStr += "] ";
-                        endGroupBeamingsStr += "} ";
+                            str << "] ";
+                        str << "} ";
                         tupletRatio = std::pair<int, int>(1, 1);
                     } else if (groupType == GROUP_TYPE_BEAMED) {
                         if (m_exportBeams && notesInBeamedGroup > 0)
-                            endGroupBeamingsStr += "] ";
+                            str << "] ";
                     }
                     groupId = -1;
                     groupType = "";
@@ -2255,7 +2254,6 @@ LilyPondExporter::writeBar(Segment *s,
 
         // Test whether the next note is grace note or not.
         // The start or end of beamed grouping should be put in proper places.
-        str << qStrToStrUtf8(endGroupBeamingsStr);
         if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
             if (isGrace == 0) { 
                 isGrace = 1;
