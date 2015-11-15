@@ -1,3 +1,0 @@
-#!/bin/sh
-rm dependencies ; touch dependencies
-find . -name \*.cpp -print | xargs --max-args=100 makedepend -fdependencies -a -Y -Isrc
