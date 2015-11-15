@@ -1611,4 +1611,3 @@ MidiFile::clearMidiComposition()
 
 }
 
-#include "MidiFile.moc"

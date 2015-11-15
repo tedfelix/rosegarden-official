@@ -1023,4 +1023,3 @@ PeakFile::getSplitPoints(const RealTime &startTime,
 }
 
 
-#include "PeakFile.moc"

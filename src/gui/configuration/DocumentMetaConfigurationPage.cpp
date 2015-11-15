@@ -321,4 +321,3 @@ DocumentMetaConfigurationPage::apply()
 }
 
 }
-#include "DocumentMetaConfigurationPage.moc"

@@ -118,4 +118,3 @@ ConfigureDialog::setNotationPage()
 
 
 }
-#include "ConfigureDialog.moc"

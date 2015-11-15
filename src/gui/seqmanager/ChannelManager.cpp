@@ -642,4 +642,3 @@ ChannelManager::Callbacks::~Callbacks()
 
 }
 
-#include "ChannelManager.moc"

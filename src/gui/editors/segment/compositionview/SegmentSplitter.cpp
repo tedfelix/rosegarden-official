@@ -188,4 +188,3 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 
 
 }
-#include "SegmentSplitter.moc"

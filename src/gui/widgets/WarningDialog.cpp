@@ -104,4 +104,3 @@ WarningDialog::addWarning(Message message)
 
 }
 
-#include "WarningDialog.moc"

@@ -27,4 +27,3 @@ namespace Rosegarden
 
 }
 
-#include "InstrumentStaticSignals.moc"

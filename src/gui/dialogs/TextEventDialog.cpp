@@ -642,4 +642,3 @@ TextEventDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "TextEventDialog.moc"

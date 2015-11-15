@@ -41,4 +41,3 @@ ControlTool::createMenu()
 }
 
 }
-#include "ControlTool.moc"

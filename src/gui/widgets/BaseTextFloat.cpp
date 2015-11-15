@@ -147,4 +147,3 @@ BaseTextFloat::slotTimeout()
 
 }
 
-#include "BaseTextFloat.moc"

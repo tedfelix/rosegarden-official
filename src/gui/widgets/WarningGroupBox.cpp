@@ -36,4 +36,3 @@ WarningGroupBox::~WarningGroupBox()
 
 }
 
-#include "WarningGroupBox.moc"

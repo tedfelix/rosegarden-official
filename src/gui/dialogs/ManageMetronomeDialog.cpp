@@ -549,4 +549,3 @@ ManageMetronomeDialog::getMetronome(Device *dev)
 
 
 }
-#include "ManageMetronomeDialog.moc"

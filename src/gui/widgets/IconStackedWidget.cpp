@@ -157,4 +157,3 @@ IconStackedWidget::setPageByIndex(int index)
     slotPageSelect();
 }
 
-#include "IconStackedWidget.moc"

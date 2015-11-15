@@ -136,4 +136,3 @@ SplitByPitchDialog::getClefHandling()
 }
 
 }
-#include "SplitByPitchDialog.moc"

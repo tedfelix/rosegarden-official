@@ -774,4 +774,3 @@ NotationConfigurationPage::apply()
 }
 
 }
-#include "NotationConfigurationPage.moc"

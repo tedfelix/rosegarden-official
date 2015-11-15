@@ -519,4 +519,3 @@ TempoDialog::slotHelpRequested()
 }
 }
 
-#include "TempoDialog.moc"

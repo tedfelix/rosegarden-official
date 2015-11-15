@@ -8763,4 +8763,3 @@ RosegardenMainWindow *RosegardenMainWindow::m_myself = 0;
 
 }// end namespace Rosegarden
 
-#include "RosegardenMainWindow.moc"

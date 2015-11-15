@@ -204,4 +204,3 @@ InstrumentParameterBox::emitInstrumentPercussionSetChanged()
 
 }
 
-#include "InstrumentParameterBox.moc"

@@ -94,4 +94,3 @@ const QString NotationEraser::ToolName = "notationeraser";
 
 }
 
-#include "NotationEraser.moc"

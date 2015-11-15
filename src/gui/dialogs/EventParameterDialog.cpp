@@ -216,4 +216,3 @@ EventParameterDialog::getResult(void)
 }
 
 }
-#include "EventParameterDialog.moc"

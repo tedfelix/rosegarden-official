@@ -301,4 +301,3 @@ void SegmentPencil::setContextHelpFor(QPoint p)
 }
 
 }
-#include "SegmentPencil.moc"

@@ -363,4 +363,3 @@ void HeadersConfigurationPage::apply()
 }
 
 }
-#include "HeadersConfigurationPage.moc"

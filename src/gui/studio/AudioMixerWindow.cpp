@@ -1763,4 +1763,3 @@ AudioMixerWindow::setRewFFwdToAutoRepeat()
 
 
 }
-#include "AudioMixerWindow.moc"

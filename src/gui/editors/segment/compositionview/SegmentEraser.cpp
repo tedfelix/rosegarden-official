@@ -107,4 +107,3 @@ void SegmentEraser::setBasicContextHelp()
 
 
 }
-#include "SegmentEraser.moc"

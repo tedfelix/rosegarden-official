@@ -181,4 +181,4 @@ void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
 
 }
 
-#include "SqueezedLabel.moc"
+#include "moc_SqueezedLabel.cpp"

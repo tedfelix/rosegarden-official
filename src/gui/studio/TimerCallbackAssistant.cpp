@@ -47,4 +47,3 @@ TimerCallbackAssistant::slotCallback()
 }
 
 }
-#include "TimerCallbackAssistant.moc"

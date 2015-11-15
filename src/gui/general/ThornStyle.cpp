@@ -125,4 +125,3 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
 
 }
 
-#include "ThornStyle.moc"

@@ -950,4 +950,3 @@ void TrackEditor::dropEvent(QDropEvent *e)
 
 } // end namespace Rosegarden
 
-#include "TrackEditor.moc"

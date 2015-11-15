@@ -471,4 +471,3 @@ AudioInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
 
 
 }
-#include "AudioInstrumentParameterPanel.moc"

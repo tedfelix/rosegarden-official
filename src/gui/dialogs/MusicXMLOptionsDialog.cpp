@@ -265,4 +265,3 @@ MusicXMLOptionsDialog::accept()
 }
 
 }
-#include "MusicXMLOptionsDialog.moc"

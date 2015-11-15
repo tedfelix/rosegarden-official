@@ -7,13 +7,7 @@
 add_definitions(-DVERSION="${ROSEGARDEN_VERSION}")
 add_definitions(-DCODENAME="${ROSEGARDEN_CODENAME}")
 
-# Set CMAKE_AUTOMOC_RELAXED_MODE temporarily, until we can ditch the autoconf build system
-# at which point we can remove all #include "foo.moc", keeping an included moc file
-# only in the file with Q_PRIVATE_SLOT, or in future files with a Q_OBJECT in the .cpp file,
-# like this: #include "moc_SqueezedLabel.cpp".
-set(CMAKE_AUTOMOC_RELAXED_MODE ON)
-
-# This is also temporary
+# This is temporary
 add_definitions(-DCMAKE_BUILD)
 
 # Define the include paths (-I...)

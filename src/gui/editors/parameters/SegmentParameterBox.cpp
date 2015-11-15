@@ -1200,4 +1200,3 @@ SegmentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrange
 }
 
 }
-#include "SegmentParameterBox.moc"

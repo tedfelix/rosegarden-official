@@ -90,5 +90,4 @@ FontRequester::slotChoose()
 
 }
 
-#include "FontRequester.moc"
 

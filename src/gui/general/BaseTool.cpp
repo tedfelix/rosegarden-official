@@ -78,5 +78,4 @@ void BaseTool::setContextHelp(const QString &help)
 
 }
 
-#include "BaseTool.moc"
 

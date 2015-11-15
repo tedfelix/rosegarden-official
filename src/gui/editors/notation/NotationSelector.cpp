@@ -913,4 +913,3 @@ const QString NotationSelector::ToolName = "notationselector";
 const QString NotationSelectorNoTies::ToolName = "notationselectornoties";
 
 }
-#include "NotationSelector.moc"

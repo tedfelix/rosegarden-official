@@ -127,4 +127,3 @@ CompositionLengthDialog::autoExpandEnabled()
 }
 
 }
-#include "CompositionLengthDialog.moc"

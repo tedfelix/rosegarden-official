@@ -492,4 +492,3 @@ MarkerRuler::mouseDoubleClickEvent(QMouseEvent *)
 }
 
 }
-#include "MarkerRuler.moc"

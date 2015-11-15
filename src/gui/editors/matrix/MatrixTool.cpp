@@ -170,4 +170,3 @@ MatrixTool::createMenu()
 }    
 
 }
-#include "MatrixTool.moc"

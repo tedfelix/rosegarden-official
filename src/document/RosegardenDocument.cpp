@@ -3008,4 +3008,3 @@ RosegardenDocument::checkAudioPath(Track *track)
 }
 
 }
-#include "RosegardenDocument.moc"

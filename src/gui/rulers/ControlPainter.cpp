@@ -141,4 +141,3 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 const QString ControlPainter::ToolName = "painter";
 }
 
-#include "ControlPainter.moc"

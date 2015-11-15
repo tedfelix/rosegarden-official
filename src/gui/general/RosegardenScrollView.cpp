@@ -440,4 +440,3 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
 
 
 }
-#include "RosegardenScrollView.moc"

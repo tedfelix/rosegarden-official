@@ -353,4 +353,3 @@ IntervalDialog::getTransposeSegmentBack()
 }
 
 }
-#include "IntervalDialog.moc"

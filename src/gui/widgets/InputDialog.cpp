@@ -117,4 +117,3 @@ InputDialog::getText(QWidget *parent, const QString &title, const QString &label
 
 }
 
-#include "InputDialog.moc"

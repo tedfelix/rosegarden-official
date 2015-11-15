@@ -303,5 +303,4 @@ Led::minimumSizeHint() const
 
 }
 
-#include "Led.moc"
 

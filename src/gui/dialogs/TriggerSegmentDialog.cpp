@@ -188,4 +188,3 @@ TriggerSegmentDialog::accept()
 }
 
 }
-#include "TriggerSegmentDialog.moc"

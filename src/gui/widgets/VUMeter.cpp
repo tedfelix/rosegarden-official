@@ -678,4 +678,3 @@ VUMeter::slotStopShowingPeakLeft()
 }
 
 }
-#include "VUMeter.moc"

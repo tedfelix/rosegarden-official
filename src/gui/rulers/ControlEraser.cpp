@@ -164,4 +164,3 @@ const QString ControlEraser::ToolName = "eraser";
 
 }
 
-#include "ControlEraser.moc"

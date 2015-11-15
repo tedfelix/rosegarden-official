@@ -412,4 +412,3 @@ TupletDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "TupletDialog.moc"

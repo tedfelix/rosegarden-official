@@ -117,5 +117,4 @@ GuitarChordEditorDialog::accept()
 
 }
 
-#include "GuitarChordEditorDialog.moc"
 

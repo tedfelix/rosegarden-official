@@ -351,4 +351,3 @@ ClefDialog::accept()
 
 
 }
-#include "ClefDialog.moc"

@@ -1539,5 +1539,4 @@ slotInstrumentGone(void)
 
 }
 
-#include "MatrixWidget.moc"
 

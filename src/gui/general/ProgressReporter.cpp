@@ -43,4 +43,3 @@ void ProgressReporter::slotCancel()
 };
 
 }
-#include "ProgressReporter.moc"

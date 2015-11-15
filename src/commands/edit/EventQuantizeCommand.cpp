@@ -284,4 +284,3 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
 }
 
 }
-#include "EventQuantizeCommand.moc"

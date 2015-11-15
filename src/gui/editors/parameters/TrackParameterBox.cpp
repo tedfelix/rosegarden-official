@@ -1261,4 +1261,3 @@ TrackParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangeme
 }
 
 }
-#include "TrackParameterBox.moc"

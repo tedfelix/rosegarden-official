@@ -353,4 +353,3 @@ AudioSplitDialog::slotThresholdChanged(int threshold)
 }
 
 }
-#include "AudioSplitDialog.moc"

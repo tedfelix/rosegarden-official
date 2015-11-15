@@ -92,4 +92,3 @@ SegmentTool* SegmentToolBox::getTool(QString toolName)
 }
 
 }
-#include "SegmentToolBox.moc"

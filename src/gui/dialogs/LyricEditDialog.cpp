@@ -335,4 +335,3 @@ LyricEditDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "LyricEditDialog.moc"

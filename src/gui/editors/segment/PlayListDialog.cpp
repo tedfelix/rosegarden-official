@@ -95,4 +95,3 @@ void PlayListDialog::slotClose()
 }
 
 }
-#include "PlayListDialog.moc"

@@ -77,4 +77,3 @@ CurrentProgressDialog* CurrentProgressDialog::m_instance = 0;
 ProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 
 }
-#include "CurrentProgressDialog.moc"

@@ -875,5 +875,4 @@ ActionFileMenuWrapper::getMenu()
 
 }
 
-#include "ActionFileParser.moc"
 

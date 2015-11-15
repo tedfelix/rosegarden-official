@@ -149,4 +149,3 @@ RescaleDialog::slotToChanged(int i)
 */
 
 }
-#include "RescaleDialog.moc"

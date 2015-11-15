@@ -595,5 +595,4 @@ const QString MatrixSelector::ToolName  = "selector";
 
 }
 
-#include "MatrixSelector.moc"
 

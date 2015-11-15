@@ -586,4 +586,3 @@ GuitarChordSelectorDialog::saveUserChordMap()
 }
 
 
-#include "GuitarChordSelectorDialog.moc"

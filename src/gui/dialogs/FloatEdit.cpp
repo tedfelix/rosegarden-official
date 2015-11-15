@@ -104,4 +104,3 @@ FloatEdit::reparent(QWidget *newParent)
 
 
 }
-#include "FloatEdit.moc"

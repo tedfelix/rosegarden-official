@@ -5229,4 +5229,3 @@ NotationView::slotInterpretActivate()
 
 } // end namespace Rosegarden
 
-#include "NotationView.moc"

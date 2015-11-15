@@ -259,4 +259,3 @@ IdentifyTextCodecDialog::getExampleText()
 }    
 
 }
-#include "IdentifyTextCodecDialog.moc"

@@ -245,4 +245,3 @@ DiatonicPitchChooser::getStep() const
 }
 
 }
-#include "DiatonicPitchChooser.moc"

@@ -418,4 +418,3 @@ MIDIConfigurationPage::apply()
 }
 
 }
-#include "MIDIConfigurationPage.moc"

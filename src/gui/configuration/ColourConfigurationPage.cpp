@@ -172,4 +172,3 @@ ColourConfigurationPage::slotDelete()
 }
 
 }
-#include "ColourConfigurationPage.moc"

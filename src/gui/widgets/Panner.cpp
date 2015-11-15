@@ -272,4 +272,3 @@ Panner::moveTo(QPoint p)
    
 }
 
-#include "Panner.moc"

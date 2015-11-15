@@ -72,4 +72,3 @@ slotInstrumentGone(void)
 
 }
 
-#include "InstrumentParameterPanel.moc"

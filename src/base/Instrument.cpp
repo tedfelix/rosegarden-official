@@ -893,4 +893,3 @@ RecordIn::toXmlString()
 
 }
 
-#include "Instrument.moc"

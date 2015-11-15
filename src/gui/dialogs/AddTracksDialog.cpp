@@ -130,4 +130,3 @@ AddTracksDialog::getInsertPosition()
 }
 
 }
-#include "AddTracksDialog.moc"

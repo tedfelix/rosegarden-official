@@ -284,5 +284,4 @@ const QString MatrixResizer::ToolName   = "resizer";
 
 }
 
-#include "MatrixResizer.moc"
 

@@ -222,4 +222,3 @@ FileDialog::getSaveFileName(QWidget *parent,
 
 }
 
-#include "FileDialog.moc"

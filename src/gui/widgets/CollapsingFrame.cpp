@@ -139,4 +139,3 @@ CollapsingFrame::toggle()
 }
 
 }
-#include "CollapsingFrame.moc"

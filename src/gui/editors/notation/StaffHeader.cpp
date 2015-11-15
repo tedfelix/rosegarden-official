@@ -1029,5 +1029,4 @@ StaffHeader::segmentDeleted(const Segment *seg)
 
 }
 
-#include "StaffHeader.moc"
 

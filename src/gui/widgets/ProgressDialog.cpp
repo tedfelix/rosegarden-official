@@ -406,4 +406,3 @@ ProgressDialog::show() {
 
 }
 
-#include "ProgressDialog.moc"

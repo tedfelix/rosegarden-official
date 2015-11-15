@@ -336,4 +336,3 @@ void SegmentMover::setBasicContextHelp()
 
 
 }
-#include "SegmentMover.moc"

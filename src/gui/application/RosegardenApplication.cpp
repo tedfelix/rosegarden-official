@@ -128,4 +128,3 @@ RosegardenApplication::notify(QObject * receiver, QEvent * event)
 
 }
 
-#include "RosegardenApplication.moc"

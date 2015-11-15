@@ -1027,4 +1027,3 @@ AudioPluginDialog::slotHelpRequested()
 }
 
 }
-#include "AudioPluginDialog.moc"

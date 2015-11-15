@@ -1572,4 +1572,3 @@ EventView::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "EventView.moc"

@@ -122,5 +122,4 @@ NotationToolBox::setScene(NotationScene *scene)
 
 }
 
-#include "NotationToolBox.moc"
 

@@ -724,5 +724,4 @@ void NoteRestInserter::slotNotesSelected()
 const QString NoteRestInserter::ToolName     = "noterestinserter";
 
 }
-#include "NoteRestInserter.moc"
 

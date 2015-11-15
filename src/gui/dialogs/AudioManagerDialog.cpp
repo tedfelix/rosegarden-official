@@ -1411,4 +1411,3 @@ AudioManagerDialog::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "AudioManagerDialog.moc"

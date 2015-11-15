@@ -367,4 +367,3 @@ TimeSignatureDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "TimeSignatureDialog.moc"

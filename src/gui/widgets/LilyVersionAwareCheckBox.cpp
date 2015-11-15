@@ -42,4 +42,3 @@ void LilyVersionAwareCheckBox::slotCheckVersion(int value)
 
 
 }
-#include "LilyVersionAwareCheckBox.moc"

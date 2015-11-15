@@ -221,6 +221,5 @@ void LircCommander::slotExecute(const char *command)
 
 }
 
-#include "LircCommander.moc"
 
 #endif

@@ -1436,4 +1436,3 @@ void CompositionView::drawTextFloat(int x, int y, const QString &text)
 
 
 }
-#include "CompositionView.moc"

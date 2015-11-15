@@ -57,4 +57,3 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
 }
 
 }
-#include "AudioPlayingDialog.moc"

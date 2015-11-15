@@ -163,4 +163,3 @@ ConfigureDialogBase::setPageByIndex(int index)
 
 
 }
-#include "ConfigureDialogBase.moc"

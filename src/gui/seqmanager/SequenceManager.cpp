@@ -2079,4 +2079,3 @@ makeTempMetaiterator(void)
 }
 
 }
-#include "SequenceManager.moc"

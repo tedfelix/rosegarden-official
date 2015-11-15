@@ -53,4 +53,3 @@ LineEdit::~LineEdit()
 
 }
 
-#include "LineEdit.moc"

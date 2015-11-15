@@ -143,4 +143,3 @@ bool AudioPeaksGenerator::event(QEvent *e)
 }
 
 }
-#include "AudioPeaksGenerator.moc"

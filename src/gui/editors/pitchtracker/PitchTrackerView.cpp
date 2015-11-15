@@ -427,5 +427,4 @@ PitchTrackerView::slotUpdateValues(timeT time)
     }
 }
 } // Rosegarden namespace
-#include "PitchTrackerView.moc"
 

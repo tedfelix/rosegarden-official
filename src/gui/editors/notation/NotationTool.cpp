@@ -138,5 +138,4 @@ NotationTool::createMenu()
 
 }
 
-#include "NotationTool.moc"
 

@@ -138,6 +138,5 @@ const QString TextInserter::ToolName = "textinserter";
 
 }
 
-#include "TextInserter.moc"
 
 

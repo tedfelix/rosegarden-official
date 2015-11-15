@@ -494,4 +494,3 @@ ControlEditorDialog::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "ControlEditorDialog.moc"

@@ -101,4 +101,3 @@ TimeDialog::getTime() const
 }
 
 }
-#include "TimeDialog.moc"

@@ -150,5 +150,4 @@ RecentFiles::addFile(QString name)
 
 }
 
-#include "RecentFiles.moc"
 

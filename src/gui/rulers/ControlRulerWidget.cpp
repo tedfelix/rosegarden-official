@@ -511,4 +511,3 @@ ControlRulerWidget::getSituation(void)
 
 }
 
-#include "ControlRulerWidget.moc"

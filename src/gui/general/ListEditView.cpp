@@ -327,4 +327,3 @@ void ListEditView::toggleWidget(QWidget* widget,
 }
 
 }
-#include "ListEditView.moc"

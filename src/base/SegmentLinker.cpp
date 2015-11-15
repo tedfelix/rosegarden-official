@@ -412,4 +412,3 @@ SegmentLinker::LinkedSegmentParams::LinkedSegmentParams(Segment *s) :
 
 }
 
-#include "SegmentLinker.moc"

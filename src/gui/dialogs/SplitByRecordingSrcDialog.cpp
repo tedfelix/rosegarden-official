@@ -125,4 +125,3 @@ SplitByRecordingSrcDialog::getDevice()
 }
 
 }
-#include "SplitByRecordingSrcDialog.moc"

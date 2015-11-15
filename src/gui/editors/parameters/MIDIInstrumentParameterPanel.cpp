@@ -1244,4 +1244,3 @@ slotSelectChannel(int index)
 
 
 }
-#include "MIDIInstrumentParameterPanel.moc"

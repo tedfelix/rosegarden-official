@@ -257,5 +257,4 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
 }
 
 }
-#include "PitchGraphWidget.moc"
 

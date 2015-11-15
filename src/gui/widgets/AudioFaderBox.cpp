@@ -319,4 +319,3 @@ AudioFaderBox::setFont(QFont f)
 
 
 }
-#include "AudioFaderBox.moc"

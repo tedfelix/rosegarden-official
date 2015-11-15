@@ -1773,4 +1773,3 @@ EventContainer::findEventOfType(EventContainer::iterator i,
 
 }
 
-#include "Segment.moc"

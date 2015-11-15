@@ -116,4 +116,3 @@ FileMergeDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "FileMergeDialog.moc"

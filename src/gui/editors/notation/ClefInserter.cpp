@@ -93,6 +93,5 @@ const QString ClefInserter::ToolName = "clefinserter";
 
 }
 
-#include "ClefInserter.moc"
 
 

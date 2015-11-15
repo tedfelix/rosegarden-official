@@ -892,4 +892,3 @@ CheckForParallelsDialog::addText(QString text)
 
 }
 
-#include "CheckForParallelsDialog.moc"

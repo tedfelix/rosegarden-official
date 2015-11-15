@@ -101,4 +101,3 @@ DialogSuppressor::isSuppressed(QString settingsKey)
 
 }
 
-#include "DialogSuppressor.moc"

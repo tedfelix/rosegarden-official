@@ -224,6 +224,5 @@ void AudioListView::dropEvent(QDropEvent* e)
 
 
 }
-#include "AudioListView.moc"
 
 

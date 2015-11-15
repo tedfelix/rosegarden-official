@@ -1349,4 +1349,3 @@ CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
 }
 
 }
-#include "CompositionModelImpl.moc"

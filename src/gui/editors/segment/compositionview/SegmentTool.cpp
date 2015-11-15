@@ -246,4 +246,3 @@ void SegmentTool::slotSplitSelected()
 
 }
 
-#include "SegmentTool.moc"

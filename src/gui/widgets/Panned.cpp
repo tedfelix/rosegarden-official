@@ -267,4 +267,3 @@ Panned::leaveEvent(QEvent *)
 
 }
 
-#include "Panned.moc"

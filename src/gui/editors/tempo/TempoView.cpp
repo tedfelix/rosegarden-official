@@ -794,4 +794,3 @@ TempoView::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "TempoView.moc"

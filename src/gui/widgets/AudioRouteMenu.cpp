@@ -407,4 +407,3 @@ slotInstrumentGone(void)
 }
 
 }
-#include "AudioRouteMenu.moc"

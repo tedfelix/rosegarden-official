@@ -219,4 +219,3 @@ PluginControl::slotValueChanged(float value)
 }
 
 }
-#include "PluginControl.moc"

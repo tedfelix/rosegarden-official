@@ -1069,4 +1069,3 @@ DeviceManagerDialog::connectSignalsToSlots()
 
 } // namespace Rosegarden
 
-#include "DeviceManagerDialog.moc"

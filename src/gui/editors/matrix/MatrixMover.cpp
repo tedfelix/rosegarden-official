@@ -428,4 +428,3 @@ const QString MatrixMover::ToolName = "mover";
 
 }
 
-#include "MatrixMover.moc"

@@ -59,4 +59,3 @@ PluginPushButton::~PluginPushButton()
 }
 
 }
-#include "PluginPushButton.moc"

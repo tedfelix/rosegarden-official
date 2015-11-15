@@ -630,4 +630,3 @@ MarkerEditor::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "MarkerEditor.moc"

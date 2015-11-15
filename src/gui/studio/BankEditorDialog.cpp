@@ -1877,4 +1877,3 @@ BankEditorDialog::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "BankEditorDialog.moc"

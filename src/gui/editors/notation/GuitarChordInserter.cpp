@@ -144,4 +144,3 @@ const QString GuitarChordInserter::ToolName = "guitarchordinserter";
 
 }
 
-#include "GuitarChordInserter.moc"

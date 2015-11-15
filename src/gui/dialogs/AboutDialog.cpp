@@ -70,6 +70,5 @@ AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
     this->exec();
 }
 }
-#include "AboutDialog.moc"
  
 

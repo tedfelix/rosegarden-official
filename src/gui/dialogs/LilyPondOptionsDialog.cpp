@@ -492,4 +492,3 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 }
 
 }
-#include "LilyPondOptionsDialog.moc"

@@ -65,4 +65,3 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
 }
 
 }
-#include "ShowSequencerStatusDialog.moc"

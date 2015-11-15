@@ -59,4 +59,3 @@ CountdownBar::setPosition(int position)
 }
 
 }
-#include "CountdownBar.moc"

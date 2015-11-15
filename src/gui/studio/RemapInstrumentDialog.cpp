@@ -188,4 +188,3 @@ RemapInstrumentDialog::slotApply()
 }
 
 }
-#include "RemapInstrumentDialog.moc"

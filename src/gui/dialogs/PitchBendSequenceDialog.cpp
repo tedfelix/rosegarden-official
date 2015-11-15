@@ -1063,4 +1063,3 @@ PitchBendSequenceDialog::slotHelpRequested()
 }
 }
 
-#include "PitchBendSequenceDialog.moc"

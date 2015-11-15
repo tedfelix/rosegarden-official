@@ -413,4 +413,3 @@ void SegmentResizer::setBasicContextHelp(bool ctrlPressed)
 
 
 }
-#include "SegmentResizer.moc"

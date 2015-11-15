@@ -204,4 +204,3 @@ void ControlMover::stow()
 const QString ControlMover::ToolName = "mover";
 }
 
-#include "ControlMover.moc"

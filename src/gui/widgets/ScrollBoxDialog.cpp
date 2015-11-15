@@ -61,4 +61,3 @@ void ScrollBoxDialog::setPageSize(const QSize& s)
 }
 
 }
-#include "ScrollBoxDialog.moc"

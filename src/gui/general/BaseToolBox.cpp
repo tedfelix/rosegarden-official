@@ -45,4 +45,3 @@ BaseToolBox::getTool(QString toolName)
 }
 
 }
-#include "BaseToolBox.moc"

@@ -351,4 +351,3 @@ const QString MatrixPainter::ToolName = "painter";
 
 }
 
-#include "MatrixPainter.moc"

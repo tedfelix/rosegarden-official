@@ -290,4 +290,3 @@ void FontViewFrame::setRow(int row)
 }
 
 }
-#include "FontViewFrame.moc"

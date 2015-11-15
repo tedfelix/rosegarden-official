@@ -56,4 +56,3 @@ void MatrixConfigurationPage::apply()
 }
 
 }
-#include "MatrixConfigurationPage.moc"

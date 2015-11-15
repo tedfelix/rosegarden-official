@@ -481,4 +481,3 @@ KeySignatureDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "KeySignatureDialog.moc"

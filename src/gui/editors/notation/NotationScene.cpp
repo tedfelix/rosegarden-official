@@ -2065,5 +2065,4 @@ NotationScene::dumpBarDataMap()
 
 }
 
-#include "NotationScene.moc"
 

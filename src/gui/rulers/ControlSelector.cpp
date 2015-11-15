@@ -128,4 +128,3 @@ const QString ControlSelector::ToolName = "selector";
 
 }
 
-#include "ControlSelector.moc"

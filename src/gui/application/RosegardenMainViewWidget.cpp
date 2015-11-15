@@ -2257,4 +2257,3 @@ bool RosegardenMainViewWidget::hasNonAudioSegment(const SegmentSelection &segmen
 
 
 }
-#include "RosegardenMainViewWidget.moc"

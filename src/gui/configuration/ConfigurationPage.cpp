@@ -35,4 +35,3 @@ ConfigurationPage::slotModified()
 }
 
 }
-#include "ConfigurationPage.moc"

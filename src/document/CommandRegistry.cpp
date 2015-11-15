@@ -73,5 +73,4 @@ CommandArgumentQuerier::~CommandArgumentQuerier()
 
 }
 
-#include "CommandRegistry.moc"
 

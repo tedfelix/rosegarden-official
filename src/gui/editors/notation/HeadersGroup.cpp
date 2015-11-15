@@ -261,5 +261,4 @@ HeadersGroup::minimumSizeHint() const
 }
 
 }
-#include "HeadersGroup.moc"
 

@@ -529,4 +529,3 @@ EventFilterDialog::keepEvent(Event* const &e)
 
 }
 
-#include "EventFilterDialog.moc"

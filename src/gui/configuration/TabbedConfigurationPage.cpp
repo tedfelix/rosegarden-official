@@ -57,4 +57,3 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 }
 
 }
-#include "TabbedConfigurationPage.moc"

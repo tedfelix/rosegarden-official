@@ -50,4 +50,3 @@ void LedButton::mousePressEvent( QMouseEvent *e )
 
 }
 
-#include "LedButton.moc"

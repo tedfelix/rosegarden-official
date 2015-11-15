@@ -206,4 +206,3 @@ WarningWidget::displayGraphicsAdvisory()
 // thing to talk to, so you probably need to run QSynth now &c.
 //
 }
-#include "WarningWidget.moc"

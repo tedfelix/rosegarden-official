@@ -560,4 +560,3 @@ reserveChannel(ChannelId channel, FixedChannelSet& channelSet)
 
 }
 
-#include "AllocateChannels.moc"

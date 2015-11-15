@@ -197,4 +197,3 @@ AudioPropertiesPage::apply()
 }
 
 }
-#include "AudioPropertiesPage.moc"

@@ -684,4 +684,3 @@ TranzportClient::readData()
 
 }
 
-#include "TranzportClient.moc"

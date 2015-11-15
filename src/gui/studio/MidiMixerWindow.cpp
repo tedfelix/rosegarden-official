@@ -768,4 +768,3 @@ MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
 
 
 }
-#include "MidiMixerWindow.moc"

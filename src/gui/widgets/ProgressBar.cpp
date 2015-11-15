@@ -88,4 +88,3 @@ ProgressBar::WTF(int /* wtf */)
 
 
 }
-#include "ProgressBar.moc"

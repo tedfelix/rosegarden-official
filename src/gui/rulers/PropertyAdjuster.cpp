@@ -164,4 +164,3 @@ const QString PropertyAdjuster::ToolName = "adjuster";
 
 }
 
-#include "PropertyAdjuster.moc"

@@ -320,4 +320,3 @@ PeakFileManager::stopPreview()
 }
 
 
-#include "PeakFileManager.moc"

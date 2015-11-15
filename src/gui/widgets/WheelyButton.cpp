@@ -40,4 +40,3 @@ namespace Rosegarden
         setFont(font);
     }
 }
-#include "WheelyButton.moc"

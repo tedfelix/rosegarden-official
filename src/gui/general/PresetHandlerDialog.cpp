@@ -323,4 +323,3 @@ PresetHandlerDialog::accept()
 }
 
 }
-#include "PresetHandlerDialog.moc"

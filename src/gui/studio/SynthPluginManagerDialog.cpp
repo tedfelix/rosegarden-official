@@ -422,4 +422,3 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 
 }
 
-#include "SynthPluginManagerDialog.moc"

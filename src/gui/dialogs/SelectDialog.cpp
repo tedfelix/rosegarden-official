@@ -990,4 +990,3 @@ SelectDialog::makeAdvancedTab()
 
 } // namespace
 
-#include "SelectDialog.moc"

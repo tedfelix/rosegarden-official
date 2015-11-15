@@ -150,4 +150,3 @@ InterpretDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "InterpretDialog.moc"

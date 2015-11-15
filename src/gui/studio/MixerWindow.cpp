@@ -68,4 +68,3 @@ MixerWindow::slotClose()
 }
 
 }
-#include "MixerWindow.moc"

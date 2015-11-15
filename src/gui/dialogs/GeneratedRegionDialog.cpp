@@ -130,4 +130,3 @@ assignFigurationSource(int itemIndex)
 
 }
 
-#include "GeneratedRegionDialog.moc"

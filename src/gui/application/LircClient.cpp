@@ -90,6 +90,5 @@ void LircClient::readButton()
 
 }
 
-#include "LircClient.moc"
 
 #endif

@@ -587,4 +587,3 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 
 
 }
-#include "SegmentSelector.moc"

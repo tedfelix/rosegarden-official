@@ -73,4 +73,3 @@ void IconButton::setCheckedColor(QColor color)
     m_checkedColor = color;
 }
 
-#include "IconButton.moc"

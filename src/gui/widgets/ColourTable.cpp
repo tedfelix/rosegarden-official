@@ -141,4 +141,3 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
 }
 
 }
-#include "ColourTable.moc"

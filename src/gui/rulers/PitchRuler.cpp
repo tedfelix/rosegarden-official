@@ -45,4 +45,3 @@ PitchRuler::minimumSizeHint() const
 }
 
 }
-#include "PitchRuler.moc"

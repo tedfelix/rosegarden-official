@@ -92,4 +92,3 @@ int ControlRulerTabBar::addTab(const QString &text)
 
 }
 
-#include "ControlRulerTabBar.moc"

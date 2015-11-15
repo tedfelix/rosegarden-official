@@ -70,4 +70,3 @@ slotInstrumentGone(void)
 }
 
 }
-#include "InstrumentAliasButton.moc"

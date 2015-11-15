@@ -1805,4 +1805,3 @@ NotationWidget::slotRegenerateHeaders() {
 
 }
 
-#include "NotationWidget.moc"

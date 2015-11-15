@@ -102,4 +102,3 @@ InsertTupletDialog::getTupledCount() const
 
 
 }
-#include "InsertTupletDialog.moc"

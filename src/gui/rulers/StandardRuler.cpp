@@ -183,4 +183,3 @@ void StandardRuler::paintEvent(QPaintEvent *e)
 }
 */
 }
-#include "StandardRuler.moc"

@@ -1133,4 +1133,3 @@ RG_DEBUG << "ProjectPackager::finishUnpack - exit code: " << exitCode;
 
 }
 
-#include "ProjectPackager.moc"

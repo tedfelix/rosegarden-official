@@ -321,4 +321,3 @@ MidiFilterDialog::setModified(bool value)
 
 
 }
-#include "MidiFilterDialog.moc"

@@ -128,4 +128,3 @@ MarkerModifyDialog::initialise(Composition *composition,
 }
 
 }
-#include "MarkerModifyDialog.moc"

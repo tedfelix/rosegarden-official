@@ -1197,4 +1197,3 @@ TrackButtons::slotTrackSelected(int trackId)
 
 
 }
-#include "TrackButtons.moc"

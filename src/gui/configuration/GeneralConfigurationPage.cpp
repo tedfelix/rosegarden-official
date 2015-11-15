@@ -564,4 +564,3 @@ void GeneralConfigurationPage::apply()
 
 
 }
-#include "GeneralConfigurationPage.moc"

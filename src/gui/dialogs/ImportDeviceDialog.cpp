@@ -481,4 +481,3 @@ ImportDeviceDialog::importFromLSCP(QString filename)
 }
 
 }
-#include "ImportDeviceDialog.moc"

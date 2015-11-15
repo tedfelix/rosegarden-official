@@ -38,4 +38,3 @@ DeferScrollArea::wheelEvent(QWheelEvent* e)
 
 }
 
-#include "DeferScrollArea.moc"

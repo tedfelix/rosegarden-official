@@ -67,4 +67,3 @@ PropertyBox::paintEvent(QPaintEvent *e)
 }
 
 }
-#include "PropertyBox.moc"

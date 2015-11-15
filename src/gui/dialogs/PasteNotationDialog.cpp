@@ -154,4 +154,3 @@ PasteNotationDialog::slotHelpRequested()
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 }
-#include "PasteNotationDialog.moc"

@@ -73,4 +73,3 @@ ControlToolBox::createTool(QString toolName)
 }
 
 }
-#include "ControlToolBox.moc"

@@ -903,5 +903,4 @@ MatrixScene::playNote(Segment &segment, int pitch, int velocity)
 
 }
 
-#include "MatrixScene.moc"
 

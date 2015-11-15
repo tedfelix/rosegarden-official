@@ -33,4 +33,3 @@ TristateCheckBox::~TristateCheckBox()
 {}
 
 }
-#include "TristateCheckBox.moc"

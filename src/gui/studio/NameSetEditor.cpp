@@ -216,4 +216,3 @@ NameSetEditor::slotToggleInitialLabel()
 }
 
 }
-#include "NameSetEditor.moc"

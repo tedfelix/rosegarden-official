@@ -69,5 +69,4 @@ const QString MatrixEraser::ToolName = "eraser";
 
 }
 
-#include "MatrixEraser.moc"
 

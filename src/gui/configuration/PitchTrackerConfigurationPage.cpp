@@ -264,4 +264,3 @@ PitchTrackerConfigurationPage::apply()
 }
 
 }
-#include "PitchTrackerConfigurationPage.moc"

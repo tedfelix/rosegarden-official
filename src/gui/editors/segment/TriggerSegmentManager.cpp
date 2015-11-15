@@ -555,4 +555,3 @@ TriggerSegmentManager::slotHelpAbout()
     new AboutDialog(this);
 }
 }
-#include "TriggerSegmentManager.moc"

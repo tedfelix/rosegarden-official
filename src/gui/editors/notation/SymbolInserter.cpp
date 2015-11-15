@@ -93,6 +93,5 @@ const QString SymbolInserter::ToolName = "symbolinserter";
 
 }
 
-#include "SymbolInserter.moc"
 
 

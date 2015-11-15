@@ -134,4 +134,3 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
 }
 
 }
-#include "NoteFontViewer.moc"

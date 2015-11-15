@@ -73,4 +73,3 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
 }
 
 }
-#include "BeatsBarsDialog.moc"

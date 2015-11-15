@@ -1209,4 +1209,3 @@ AudioFileManager::getActualSampleRates() const
 }
 
 
-#include "AudioFileManager.moc"

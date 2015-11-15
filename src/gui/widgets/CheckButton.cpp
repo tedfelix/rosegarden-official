@@ -88,4 +88,3 @@ CheckButton::toggle(bool state)
 
 }
 
-#include "CheckButton.moc"

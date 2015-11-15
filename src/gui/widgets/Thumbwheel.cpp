@@ -494,5 +494,4 @@ Thumbwheel::setBright(const bool v)
 
 }
 
-#include "Thumbwheel.moc"
 

@@ -112,4 +112,3 @@ MatrixToolBox::setScene(MatrixScene *scene)
 }
 
 }
-#include "MatrixToolBox.moc"

@@ -784,4 +784,3 @@ std::pair<int, int> ControlRuler::getZMinMax()
 }
 
 }
-#include "ControlRuler.moc"

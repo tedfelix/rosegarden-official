@@ -297,4 +297,3 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
 
 }
 
-#include "LilyPondProcessor.moc"

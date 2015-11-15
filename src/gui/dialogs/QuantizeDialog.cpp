@@ -63,4 +63,3 @@ QuantizeDialog::getQuantizer() const
 
 
 }
-#include "QuantizeDialog.moc"

@@ -89,4 +89,3 @@ TrackLabelDialog::getSecondaryText()
 
 } // namespace
 
-#include "TrackLabelDialog.moc"

@@ -1215,4 +1215,3 @@ TransportDialog::slotResetBackground()
 }
 
 }
-#include "TransportDialog.moc"

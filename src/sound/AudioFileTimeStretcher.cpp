@@ -263,5 +263,4 @@ AudioFileTimeStretcher::slotStopTimestretch()
 
 }
 
-#include "AudioFileTimeStretcher.moc"
 

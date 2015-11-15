@@ -781,4 +781,3 @@ TimeWidget::slotMSecUpdate()
 }
 
 }
-#include "TimeWidget.moc"

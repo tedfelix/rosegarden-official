@@ -162,5 +162,4 @@ StartupTester::slotNetworkFinished(QNetworkReply *reply)
 
 }
 
-#include "StartupTester.moc"
 

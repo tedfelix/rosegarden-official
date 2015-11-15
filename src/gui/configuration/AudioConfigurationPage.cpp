@@ -304,5 +304,4 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
 }
 
 }
-#include "AudioConfigurationPage.moc"
 

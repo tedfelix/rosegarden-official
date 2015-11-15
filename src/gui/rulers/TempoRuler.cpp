@@ -1039,4 +1039,3 @@ TempoRuler::createMenu()
 
 
 }
-#include "TempoRuler.moc"

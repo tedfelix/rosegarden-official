@@ -149,7 +149,6 @@ void StartupLogo::hideIfStillThere()
 StartupLogo* StartupLogo::m_instance = 0;
 bool StartupLogo::m_wasClosed = false;
 
-#include "StartupLogo.moc"
 
 }
 

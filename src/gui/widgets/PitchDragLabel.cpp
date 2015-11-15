@@ -262,4 +262,3 @@ PitchDragLabel::calculatePixmap() const
 }
 
 }
-#include "PitchDragLabel.moc"

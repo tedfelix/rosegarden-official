@@ -88,5 +88,4 @@ copyAuxProperties(Segment *source, Segment *target)
 
 }
 
-// #include "LinkedSegmentsCommand.moc"
 
