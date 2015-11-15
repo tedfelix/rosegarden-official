@@ -510,7 +510,7 @@ globalTempo = {
                 \repeat unfold 8 {
                     \clef "bass"
                     \key gis \minor
-                    gis, 8 [ ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
+                    gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
                     gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
                     gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
                     gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |

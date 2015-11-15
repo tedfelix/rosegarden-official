@@ -2170,6 +2170,7 @@ LilyPondExporter::writeBar(Segment *s,
 
     bool overlong = false;
     bool newBeamedGroup = false;
+    bool inBeamedGroup = false;
     int notesInBeamedGroup = 0;
 
     while (s->isBeforeEndMarker(i)) {
@@ -2182,27 +2183,40 @@ LilyPondExporter::writeBar(Segment *s,
         // First test whether we're entering or leaving a group,
         // before we consider how to write the event itself (at least
         // for tuplets)
-        QString startGroupBeamingsStr;
+        QString startTupledStr;
 
         if (event->isa(Note::EventType) || event->isa(Note::EventRestType) ||
             event->isa(Clef::EventType) || event->isa(Rosegarden::Key::EventType) ||
             event->isa(Symbol::EventType)) {
 
             long newGroupId = -1;
-            if (event->get<Int>(BEAMED_GROUP_ID, newGroupId)) {
+            event->get<Int>(BEAMED_GROUP_ID, newGroupId);
 
-                if (newGroupId != groupId) {
-                    // entering a new beamed group
+            //RG_DEBUG << "BEAMED_GROUP_ID" << newGroupId;
+            if (newGroupId != groupId) {
 
-                    if (groupId != -1) {
-                        // and leaving an old one
-                        endBeamedGroup(groupType, str, notesInBeamedGroup);
+                if (groupId != -1) {
+
+                    //RG_DEBUG << "Leaving beamed group" << groupId << "notesInBeamedGroup=" << notesInBeamedGroup;
+                    // leaving a beamed group
+
+                    endBeamedGroup(groupType, str, notesInBeamedGroup);
+                    if (groupType == GROUP_TYPE_TUPLED) {
+                        tupletRatio = std::pair<int, int>(1, 1);
                     }
+                    groupId = -1;
+                    groupType = "";
+                    inBeamedGroup = false;
+                }
 
+                if (newGroupId != -1) {
+
+                    // entering a new beamed group
                     groupId = newGroupId;
                     groupType = "";
-                    (void)event->get<String>(BEAMED_GROUP_TYPE, groupType);
+                    event->get<String>(BEAMED_GROUP_TYPE, groupType); // might fail
 
+                    //RG_DEBUG << "Entering group" << groupId << "type" << groupType;
                     if (groupType == GROUP_TYPE_TUPLED) {
                         long numerator = 0;
                         long denominator = 0;
@@ -2215,33 +2229,20 @@ LilyPondExporter::writeBar(Segment *s,
                             groupId = -1;
                             groupType = "";
                         } else {
-                            startGroupBeamingsStr += QString("\\times %1/%2 { ").arg(numerator).arg(denominator);
+                            startTupledStr += QString("\\times %1/%2 { ").arg(numerator).arg(denominator);
                             tupletRatio = std::pair<int, int>(numerator, denominator);
                             // Require explicit beamed groups,
                             // fixes bug #1683205.
                             // HJJ: Why line below was originally present?
                             // newBeamedGroup = true;
-                            notesInBeamedGroup = 0;
                         }
                     } else if (groupType == GROUP_TYPE_BEAMED) {
                         newBeamedGroup = true;
-                        notesInBeamedGroup = 0;
+                        inBeamedGroup = true;
                         // there can currently be only on group type, reset tuplet ratio
                         tupletRatio = std::pair<int, int>(1,1);
                     }
-                }
-
-            } else {
-
-                if (groupId != -1) {
-                    // leaving a beamed group
-
-                    endBeamedGroup(groupType, str, notesInBeamedGroup);
-                    if (groupType == GROUP_TYPE_TUPLED) {
-                        tupletRatio = std::pair<int, int>(1, 1);
-                    }
-                    groupId = -1;
-                    groupType = "";
+                    notesInBeamedGroup = 0;
                 }
             }
         } else if (event->isa(Controller::EventType) &&
@@ -2266,7 +2267,7 @@ LilyPondExporter::writeBar(Segment *s,
             // str << "%{ grace ends %} "; // DEBUG
             str << "} ";
         }
-        str << qStrToStrUtf8(startGroupBeamingsStr);
+        str << qStrToStrUtf8(startTupledStr);
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration
@@ -2446,7 +2447,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\unHideNotes ";
             }
 
-            if (newBeamedGroup) {
+            if (inBeamedGroup) {
                 // This is a workaround for bug #1705430:
                 //   Beaming groups erroneous after merging notes
                 // There will be fewer "e4. [ ]" errors in LilyPond-compiling.
@@ -2460,11 +2461,12 @@ LilyPondExporter::writeBar(Segment *s,
                 case Note::SixteenthNote:
                 case Note::EighthNote:
                     notesInBeamedGroup++;
+                    //RG_DEBUG << "notesInBeamedGroup++" << notesInBeamedGroup;
                     break;
                 }
             }
             // // Old version before the workaround for bug #1705430:
-            // if (newBeamedGroup)
+            // if (inBeamedGroup)
             //    notesInBeamedGroup++;
         } else if (event->isa(Note::EventRestType)) {
 
@@ -2591,8 +2593,10 @@ LilyPondExporter::writeBar(Segment *s,
                 handleEndingPostEvents(postEventsInProgress, i, str);
                 handleStartingPostEvents(postEventsToStart, str);
 
-                if (newBeamedGroup)
+                if (inBeamedGroup) {
                     notesInBeamedGroup++;
+                    //RG_DEBUG << "inBeamedGroup -> notesInBeamedGroup++" << notesInBeamedGroup;
+                }
             } else {
                 MultiMeasureRestCount--;
             }
@@ -2677,6 +2681,7 @@ LilyPondExporter::writeBar(Segment *s,
         if (m_exportBeams && newBeamedGroup && notesInBeamedGroup > 0) {
             str << "[ ";
             newBeamedGroup = false;
+            //RG_DEBUG << "BEGIN" << notesInBeamedGroup;
         }
 
         if (event->isa(Indication::EventType)) {
@@ -2690,6 +2695,7 @@ LilyPondExporter::writeBar(Segment *s,
     } // end of the gigantic while loop, I think
 
     if (groupId != -1) {
+        //RG_DEBUG << "End of bar, ending beaming group" << groupId << groupType << notesInBeamedGroup;
         endBeamedGroup(groupType, str, notesInBeamedGroup);
     }
 
@@ -2993,6 +2999,7 @@ LilyPondExporter::writePitch(const Event *note,
         }
     }
 
+    //RG_DEBUG << "NOTE" << lilyNote;
     str << lilyNote;
 }
 

@@ -129,7 +129,7 @@ globalTempo = {
 %% 75
                 < c''' b'' > 4 -\tenuto-\staccato < a'' b'' > 8 -\tenuto r r2  |
                 b'' 4. a'' -\tenuto g'' 4 -\tenuto  |
-                a'' 4 -\tenuto < g'' fis'' > 2 -\tenuto r4 [  |
+                a'' 4 -\tenuto < g'' fis'' > 2 -\tenuto r4  |
                 fis'' 2. -\tenuto < e'' fis'' > 4 -\tenuto-\staccato  |
                 g'' 4. a'' -\tenuto < fis'' e'' > 4 -\tenuto-\staccato  |
 %% 80
@@ -161,7 +161,7 @@ globalTempo = {
                 g'' 1  |
                 < g'' fis'' > 8 -\tenuto-\staccato [ ] r e'' -\tenuto fis'' ^( r ) g'' 4 a''  |
                 d'' 4. -\tenuto d''' -\tenuto < c''' b'' > 8 -\tenuto r  |
-                c''' 4 -\tenuto < b'' a'' > -\tenuto-\staccato r8 [ b'' -\tenuto c''' 4  |
+                c''' 4 -\tenuto < b'' a'' > -\tenuto-\staccato r8 b'' -\tenuto c''' 4  |
                 b'' 4. -\tenuto a'' 2 -\tenuto r8  |
 %% 110
                 c''' 4 -\tenuto < b'' a'' > 4. -\tenuto r8 g'' -\tenuto [ fis'' ]  |

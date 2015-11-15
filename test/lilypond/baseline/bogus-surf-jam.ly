@@ -278,7 +278,7 @@ globalTempo = {
                 \skip 1*167 
                 \clef "treble"
                 \key g \minor
-                r2 [ r4 r8 \times 2/3 { f' 16 ees' d' }  |
+                r2 r4 r8 \times 2/3 { f' 16 ees' d' }  |
             } % Voice
 
             \context Voice = "voice 11" {
@@ -395,7 +395,7 @@ globalTempo = {
                 \skip 1*167 
                 \clef "treble"
                 \key g \minor
-                r2 [ r4 r8 \times 2/3 { f'' 16 ees'' d'' }  |
+                r2 r4 r8 \times 2/3 { f'' 16 ees'' d'' }  |
             } % Voice
 
             \context Voice = "voice 16" {
@@ -637,7 +637,7 @@ globalTempo = {
                 \repeat unfold 1 {
                     \clef "treble"
                     \key g \minor
-                    R1*3 [  |
+                    R1*3  |
                     r2 r4 r8 d'' 16 [ bes' ]  |
                     c'' 8 [ c'' ees'' g'' ] f'' [ f'' g'' ees'' ]  |
                     c'' 8 [ c'' ees'' g'' ] f'' 4. g'' 16 [ ees'' ]  |
@@ -802,7 +802,7 @@ globalTempo = {
                 \repeat unfold 1 {
                     \clef "treble"
                     \key g \minor
-                    R1*2 [  |
+                    R1*2  |
                     r2 r4 r  |
                     R1*4  |
                     r2 r4 r8 \times 2/3 { f'' 16 e'' d'' }  |

@@ -785,7 +785,7 @@ globalTempo = {
 
                 \skip 4.*42 
                 \clef "bass"
-                b,, 4 r [ r d, r c r8 d, r d, r d,  |
+                b,, 4 r r d, r c r8 d, r d, r d,  |
                 d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ]  |
             } % Voice
 
@@ -831,7 +831,7 @@ globalTempo = {
 
                 \skip 4.*90 
                 \clef "bass"
-                b,, 4 r [ r d, r c r8 d, r d, r d,  |
+                b,, 4 r r d, r c r8 d, r d, r d,  |
                 d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ]  |
             } % Voice
 
@@ -922,7 +922,7 @@ globalTempo = {
 
                 \skip 4.*186 
                 \clef "bass"
-                b,, 4 r [ r d, r c r8 d, r d, r d,  |
+                b,, 4 r r d, r c r8 d, r d, r d,  |
                 d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ]  |
             } % Voice
 
