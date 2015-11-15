@@ -76,13 +76,20 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
             defaultUnitType = maxUnitType;
     }
 
-    timingLayout->addWidget(new QLabel(tr("Play "), timingBox), 0, 0);
+    int timingRow = 0;
+
+    m_hasTimingAlready = new QCheckBox
+        (tr("Timing is already correct: update display only"), timingBox);
+    m_hasTimingAlready->setChecked(false);
+    timingLayout->addWidget(m_hasTimingAlready, timingRow, 0, 1, 3);
+
+    timingLayout->addWidget(new QLabel(tr("Play "), timingBox), ++timingRow, 0);
 
     m_untupledCombo = new QComboBox(timingBox);
-    timingLayout->addWidget(m_untupledCombo, 0, 1);
+    timingLayout->addWidget(m_untupledCombo, timingRow, 1);
 
     m_unitCombo = new QComboBox(timingBox);
-    timingLayout->addWidget(m_unitCombo, 0, 2);
+    timingLayout->addWidget(m_unitCombo, timingRow, 2);
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
         Note note(t);
@@ -97,15 +104,10 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
         }
     }
 
-    timingLayout->addWidget(new QLabel(tr("in the time of  "), timingBox), 1, 0);
+    timingLayout->addWidget(new QLabel(tr("in the time of  "), timingBox), ++timingRow, 0);
 
     m_tupledCombo = new QComboBox(timingBox);
-    timingLayout->addWidget(m_tupledCombo, 1, 1);
-
-    m_hasTimingAlready = new QCheckBox
-        (tr("Timing is already correct: update display only"), timingBox);
-    m_hasTimingAlready->setChecked(false);
-    timingLayout->addWidget(m_hasTimingAlready, 2, 0, 1, 3);
+    timingLayout->addWidget(m_tupledCombo, timingRow, 1);
 
     timingBox->setLayout(timingLayout);
 
