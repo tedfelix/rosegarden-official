@@ -244,7 +244,7 @@ void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 void RosegardenDocument::setModified(bool m)
 {
     m_modified = m;
-    RG_DEBUG << "RosegardenDocument[" << this << "]::setModified(" << m << ")\n";
+    RG_DEBUG << "[" << (void*)this << "] setModified(" << m << ")\n";
 }
 
 void RosegardenDocument::clearModifiedStatus()
