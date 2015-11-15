@@ -44,6 +44,7 @@ endif()
 if(LIRCCLIENT_FOUND)
     include_directories(${LIRCCLIENT_INCLUDE_DIR})
     add_definitions(-DHAVE_LIRC)
+    set(CMAKE_AUTOMOC_MOC_OPTIONS ${CMAKE_AUTOMOC_MOC_OPTIONS} -DHAVE_LIRC) # for cmake 2.8.12, fixed in 2.8.12.1 (https://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=a1b9465b)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LIRCCLIENT_LIBRARY})
 endif()
 
@@ -739,7 +740,6 @@ target_link_libraries(rosegardenprivate
   ${QT_QTXML_LIBRARY}
   ${QT_QTNETWORK_LIBRARY}
   ${ZLIB_LIBRARY}
-  ${X11_LIBRARIES}
   ${CMAKE_DL_LIBS}
   ${LIBLO_LIBRARIES}
   ${LRDF_LIBRARIES}
@@ -773,7 +773,12 @@ add_dependencies(rosegardenprivate svnheader)
 # Define an executable called rosegarden, with just the main.cpp, linking to the lib with all the code
 add_executable(rosegarden gui/application/main.cpp)
 
-target_link_libraries(rosegarden rosegardenprivate)
+target_link_libraries(rosegarden
+  rosegardenprivate
+  ${QT_QTCORE_LIBRARY}
+  ${QT_QTGUI_LIBRARY}
+  ${X11_LIBRARIES}
+)
 
 # Install executable
 install(TARGETS rosegarden RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
