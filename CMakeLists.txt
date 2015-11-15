@@ -25,10 +25,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 # Enable the really useful automoc feature from cmake
 set(CMAKE_AUTOMOC TRUE)
 
-# Handle .ui and .qrc files automatically too
-set(CMAKE_AUTOUIC TRUE)
-set(CMAKE_AUTORCC TRUE)
-
 # Find headers in "." as well
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

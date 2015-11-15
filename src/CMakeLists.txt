@@ -720,17 +720,17 @@ set(rg_SOURCES
   sequencer/RosegardenSequencer.cpp
 )
 
-set(rg_UIS
+qt4_wrap_ui(rg_SOURCES
   gui/dialogs/RosegardenTransportUi.ui
   gui/studio/DeviceManagerDialogUi.ui
 )
 
-set(rg_RCS
-  ../data/data.qrc
+qt4_add_resources(rg_SOURCES
+   ../data/data.qrc
 )
 
 # Define a static lib with the whole code
-add_library(rosegardenprivate ${RG_LIBRARY_TYPE} ${rg_SOURCES} ${rg_UIS} ${rg_RCS})
+add_library(rosegardenprivate ${RG_LIBRARY_TYPE} ${rg_SOURCES})
 
 # Link to the following libraries
 target_link_libraries(rosegardenprivate
