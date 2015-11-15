@@ -27,17 +27,17 @@ http://www.rosegardenmusic.com/wiki/dev:contributing
 Installation instructions
 -------------------------
 
-In the directory where you found this README file, create a build directory.
+In the directory where you found this README file, create a build directory
+and compile the code there. Here are the commands to do so:
 
     mkdir build
     cd build
-
-Once you have a configure script, ensure that all of your build dependencies
-have been installed, and then run:
-
     cmake .. -DCMAKE_INSTALL_PREFIX=[PREFIX] [-DCMAKE_BUILD_TYPE=Debug]
     make
     make install
+
+You can also simply open the CMakeLists.txt file in an IDE (such as QtCreator,
+KDevelop or Eclipse) and trigger the build from there.
 
 New starting with 10.02, most of the application data files are bundled in the
 rosegarden binary.  The install process will only copy a few files to various
