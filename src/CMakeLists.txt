@@ -7,9 +7,6 @@
 add_definitions(-DVERSION="${ROSEGARDEN_VERSION}")
 add_definitions(-DCODENAME="${ROSEGARDEN_CODENAME}")
 
-# This is temporary
-add_definitions(-DCMAKE_BUILD)
-
 # Define the include paths (-I...)
 include_directories(
     ${ZLIB_INCLUDE_DIR}

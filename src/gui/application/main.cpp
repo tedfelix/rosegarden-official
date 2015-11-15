@@ -29,9 +29,7 @@
 #include "gui/application/RosegardenApplication.h"
 #include "base/RealTime.h"
 
-#ifdef CMAKE_BUILD
 #include <svnversion.h> // generated file
-#endif
 
 #include <QSettings>
 #include <QDesktopWidget>

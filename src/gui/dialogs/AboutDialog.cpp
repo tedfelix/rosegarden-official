@@ -23,9 +23,7 @@
 #include <QLabel>
 #include <QDialogButtonBox>
 
-#ifdef CMAKE_BUILD
 #include <svnversion.h> // generated file
-#endif
 
 namespace Rosegarden
 {
