@@ -7,9 +7,9 @@
 include(FindSubversion)
 
 if(Subversion_FOUND)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/.svn")
+    if(EXISTS "${SOURCE_DIR}/../.svn")
         # extract working copy information for SOURCE_DIR into MY_XXX variables
-        Subversion_WC_INFO(${CMAKE_SOURCE_DIR} MY)
+        Subversion_WC_INFO(${SOURCE_DIR} MY)
         SET(SVN_REVISION "${MY_WC_REVISION}")
     else ()
         SET(SVN_REVISION "-1")
