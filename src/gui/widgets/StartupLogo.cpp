@@ -23,6 +23,8 @@
 #include "gui/general/IconLoader.h"
 #include "gui/general/ResourceFinder.h"
 
+#include "rosegarden-version.h"
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>

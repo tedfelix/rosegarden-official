@@ -21,6 +21,8 @@
 #include "misc/Strings.h"
 #include "ChordMap.h"
 
+#include "rosegarden-version.h"
+
 #include <QFile>
 #include <QTextStream>
 

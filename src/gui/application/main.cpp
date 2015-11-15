@@ -30,6 +30,7 @@
 #include "base/RealTime.h"
 
 #include <svnversion.h> // generated file
+#include "rosegarden-version.h"
 
 #include <QSettings>
 #include <QDesktopWidget>
@@ -319,9 +320,6 @@ and libRosegardenSound:
 The main Sequencer state machine is a good starting point and clearly
 visible at the bottom of rosegarden/sequencer/main.cpp.
 */
-
-static QString description =
-       QObject::tr("Rosegarden - A sequencer and musical notation editor");
 
 // -----------------------------------------------------------------
 

@@ -21,6 +21,8 @@
 #include <cstdio>
 #include <algorithm>
 
+#include "rosegarden-version.h"
+
 #ifdef HAVE_ALSA
 
 // ALSA

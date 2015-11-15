@@ -25,6 +25,8 @@
 #include "base/Profiler.h"
 #include <misc/Strings.h>
 
+#include "rosegarden-version.h"
+
 using std::cout;
 using std::cerr;
 using std::endl;

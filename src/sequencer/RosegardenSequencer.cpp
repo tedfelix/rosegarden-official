@@ -39,6 +39,8 @@
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenMainWindow.h"
 
+#include "rosegarden-version.h"
+
 // #define DEBUG_ROSEGARDEN_SEQUENCER
 
 namespace Rosegarden

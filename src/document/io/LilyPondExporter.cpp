@@ -60,6 +60,8 @@
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 
+#include "rosegarden-version.h"
+
 #include <QSettings>
 #include <QMessageBox>
 #include <QFileInfo>

@@ -24,6 +24,7 @@
 #include <QDialogButtonBox>
 
 #include <svnversion.h> // generated file
+#include "rosegarden-version.h"
 
 namespace Rosegarden
 {

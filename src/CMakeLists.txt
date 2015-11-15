@@ -1,11 +1,7 @@
 # Building the rosegarden executable
 
 # Compiler definitions
-# For now we do it the old way, passing -D to each and every file
-# TODO use this instead: configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rosegarden-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/rosegarden-version.h )
-# This way, only the files using that header will get rebuilt
-add_definitions(-DVERSION="${ROSEGARDEN_VERSION}")
-add_definitions(-DCODENAME="${ROSEGARDEN_CODENAME}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rosegarden-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegarden-version.h )
 
 # Define the include paths (-I...)
 include_directories(

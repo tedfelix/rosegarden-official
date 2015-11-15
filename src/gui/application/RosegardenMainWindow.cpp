@@ -190,6 +190,8 @@
 #include "gui/widgets/InputDialog.h"
 #include "TranzportClient.h"
 
+#include "rosegarden-version.h"
+
 #include <QApplication>
 #include <QDesktopServices>
 #include <QSettings>

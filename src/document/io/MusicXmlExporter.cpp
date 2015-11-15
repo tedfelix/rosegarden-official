@@ -27,6 +27,8 @@
 #include "misc/ConfigGroups.h"
 #include "base/StaffExportTypes.h"
 
+#include "rosegarden-version.h"
+
 #include <QSettings>
 
 #include <sstream>
