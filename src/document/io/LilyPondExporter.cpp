@@ -2016,6 +2016,32 @@ LilyPondExporter::calculateDuration(Segment *s,
     return duration;
 }
 
+static std::string lilyClefType(const std::string &clefType)
+{
+    if (clefType == Clef::Treble) {
+        return "treble";
+    } else if (clefType == Clef::French) {
+        return "french";
+    } else if (clefType == Clef::Soprano) {
+        return "soprano";
+    } else if (clefType == Clef::Mezzosoprano) {
+        return "mezzosoprano";
+    } else if (clefType == Clef::Alto) {
+        return "alto";
+    } else if (clefType == Clef::Tenor) {
+        return "tenor";
+    } else if (clefType == Clef::Baritone) {
+        return "baritone";
+    } else if (clefType == Clef::Varbaritone) {
+        return "varbaritone";
+    } else if (clefType == Clef::Bass) {
+        return "bass";
+    } else if (clefType == Clef::Subbass) {
+        return "subbass";
+    }
+    return std::string();
+}
+
 void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str)
 {
     try {
@@ -2134,21 +2160,23 @@ LilyPondExporter::writeBar(Segment *s,
 
     while (s->isBeforeEndMarker(i)) {
 
-        if ((*i)->getNotationAbsoluteTime() >= barEnd)
+        Event *event = *i;
+
+        if (event->getNotationAbsoluteTime() >= barEnd)
             break;
 
         // First test whether we're entering or leaving a group,
         // before we consider how to write the event itself (at least
-        // for pre-2.0 LilyPond output)
-        QString startGroupBeamingsStr = "";
-        QString endGroupBeamingsStr = "";
+        // for tuplets)
+        QString startGroupBeamingsStr;
+        QString endGroupBeamingsStr;
 
-        if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType) ||
-            (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType) ||
-            (*i)->isa(Symbol::EventType)) {
+        if (event->isa(Note::EventType) || event->isa(Note::EventRestType) ||
+            event->isa(Clef::EventType) || event->isa(Rosegarden::Key::EventType) ||
+            event->isa(Symbol::EventType)) {
 
             long newGroupId = -1;
-            if ((*i)->get<Int>(BEAMED_GROUP_ID, newGroupId)) {
+            if (event->get<Int>(BEAMED_GROUP_ID, newGroupId)) {
 
                 if (newGroupId != groupId) {
                     // entering a new beamed group
@@ -2167,14 +2195,13 @@ LilyPondExporter::writeBar(Segment *s,
 
                     groupId = newGroupId;
                     groupType = "";
-                    (void)(*i)->get
-                        <String>(BEAMED_GROUP_TYPE, groupType);
+                    (void)event->get<String>(BEAMED_GROUP_TYPE, groupType);
 
                     if (groupType == GROUP_TYPE_TUPLED) {
                         long numerator = 0;
                         long denominator = 0;
-                        (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT, numerator);
-                        (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, denominator);
+                        event->get<Int>(BEAMED_GROUP_TUPLED_COUNT, numerator);
+                        event->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, denominator);
                         if (numerator == 0 || denominator == 0) {
                             std::cerr << "WARNING: LilyPondExporter::writeBar: "
                                       << "tupled event without tupled/untupled counts"
@@ -2215,19 +2242,19 @@ LilyPondExporter::writeBar(Segment *s,
                     groupType = "";
                 }
             }
-        } else if ((*i)->isa(Controller::EventType) &&
-                   (*i)->has(Controller::NUMBER) &&
-                   (*i)->has(Controller::VALUE)) {
-            if ((*i)->get <Int>(Controller::NUMBER) == 64) {
-                postEventsToStart.insert(*i);
-                postEventsInProgress.insert(*i);
+        } else if (event->isa(Controller::EventType) &&
+                   event->has(Controller::NUMBER) &&
+                   event->has(Controller::VALUE)) {
+            if (event->get <Int>(Controller::NUMBER) == 64) {
+                postEventsToStart.insert(event);
+                postEventsInProgress.insert(event);
             }
         }
 
         // Test whether the next note is grace note or not.
         // The start or end of beamed grouping should be put in proper places.
         str << qStrToStrUtf8(endGroupBeamingsStr);
-        if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
+        if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
             if (isGrace == 0) { 
                 isGrace = 1;
                 str << "\\grace { ";
@@ -2248,8 +2275,8 @@ LilyPondExporter::writeBar(Segment *s,
             soundingDuration = duration * tupletRatio.first / tupletRatio.second;
         }
 
-        if ((*i)->has(SKIP_PROPERTY)) {
-            (*i)->unset(SKIP_PROPERTY);
+        if (event->has(SKIP_PROPERTY)) {
+            event->unset(SKIP_PROPERTY);
             ++i;
             continue;
         }
@@ -2257,9 +2284,9 @@ LilyPondExporter::writeBar(Segment *s,
         bool needsSlashRest = false;
 
         // symbols have no duration, so handle these ahead of anything else
-        if ((*i)->isa(Symbol::EventType)) {
+        if (event->isa(Symbol::EventType)) {
 
-            Symbol symbol(**i);
+            Symbol symbol(*event);
 
             if (symbol.getSymbolType() == Symbol::Segno) {
                 str << "\\mark \\markup { \\musicglyph #\"scripts.segno\" } ";
@@ -2269,7 +2296,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\breathe ";
             }
 
-        } else if ((*i)->isa(Note::EventType)) {
+        } else if (event->isa(Note::EventType)) {
 
             Chord chord(*s, i, m_composition->getNotationQuantizer());
             Event *e = *chord.getInitialNote();
@@ -2286,13 +2313,7 @@ LilyPondExporter::writeBar(Segment *s,
                     << xDisplacement << " ";
             }
 
-            bool hiddenNote = false;
-            if (e->has(INVISIBLE)) {
-                if (e->get<Bool>(INVISIBLE)) {
-                    hiddenNote = true;
-                }
-            }
-    
+            const bool hiddenNote = e->has(INVISIBLE) && e->get<Bool>(INVISIBLE);
             if (hiddenNote) {
                 str << "\\hideNotes ";
             }
@@ -2326,44 +2347,45 @@ LilyPondExporter::writeBar(Segment *s,
 
             for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
-                if ((*i)->isa(Text::EventType)) {
-                    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2,
+                event = *i;
+                if (event->isa(Text::EventType)) {
+                    if (!handleDirective(event, lilyText, nextBarIsAlt1, nextBarIsAlt2,
                                          nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
 
-                        handleText(*i, lilyText);
+                        handleText(event, lilyText);
                     }
 
-                } else if ((*i)->isa(Note::EventType)) {
+                } else if (event->isa(Note::EventType)) {
 
                     if (m_languageLevel >= LILYPOND_VERSION_2_8) {
                         // one \tweak per each chord note
                         if (chord.size() > 1)
-                            writeStyle(*i, prevStyle, col, str, true);
+                            writeStyle(event, prevStyle, col, str, true);
                         else
-                            writeStyle(*i, prevStyle, col, str, false);
+                            writeStyle(event, prevStyle, col, str, false);
                     } else {
                         // only one override per chord, and that outside the <>
                         stylei = i;
                     }
 
-                    writePitch(*i, key, str);
+                    writePitch(event, key, str);
 
                     bool noteHasCautionaryAccidental = false;
-                    (*i)->get
+                    event->get
                         <Bool>(NotationProperties::USE_CAUTIONARY_ACCIDENTAL, noteHasCautionaryAccidental);
                     if (noteHasCautionaryAccidental)
                         str << "?";
 
                     // get TIED_FORWARD and TIE_IS_ABOVE for later
-                    (*i)->get<Bool>(TIED_FORWARD, tiedForward);
-                    (*i)->get<Bool>(TIE_IS_ABOVE, tiedUp);
+                    event->get<Bool>(TIED_FORWARD, tiedForward);
+                    event->get<Bool>(TIE_IS_ABOVE, tiedUp);
 
                     str << " ";
-                } else if ((*i)->isa(Indication::EventType)) {
-                    preEventsToStart.insert(*i);
-                    preEventsInProgress.insert(*i);
-                    postEventsToStart.insert(*i);
-                    postEventsInProgress.insert(*i);
+                } else if (event->isa(Indication::EventType)) {
+                    preEventsToStart.insert(event);
+                    preEventsInProgress.insert(event);
+                    postEventsToStart.insert(event);
+                    postEventsInProgress.insert(event);
                 }
 
                 if (i == chord.getFinalElement())
@@ -2391,7 +2413,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << lilyText;
                 lilyText = "";
             }
-            writeSlashes(*i, str);
+            writeSlashes(event, str);
 
             writtenDuration += soundingDuration;
             std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
@@ -2443,14 +2465,9 @@ LilyPondExporter::writeBar(Segment *s,
             // // Old version before the workaround for bug #1705430:
             // if (newBeamedGroup)
             //    notesInBeamedGroup++;
-        } else if ((*i)->isa(Note::EventRestType)) {
+        } else if (event->isa(Note::EventRestType)) {
 
-            bool hiddenRest = false;
-            if ((*i)->has(INVISIBLE)) {
-                if ((*i)->get<Bool>(INVISIBLE)) {
-                    hiddenRest = true;
-                }
-            }
+            const bool hiddenRest = event->has(INVISIBLE) && event->get<Bool>(INVISIBLE);
 
             // If the rest has a manually repositioned Y coordinate, we try to
             // create a letter note of an appropriate height, and bind a \rest
@@ -2460,11 +2477,10 @@ LilyPondExporter::writeBar(Segment *s,
             // and yields terrible results, so we have to offer some manual
             // mechanism for adjusting the rests unless we want users to have to
             // edit .ly files by hand to correct for this, which we do not.
-            bool offsetRest = false;
+            bool offsetRest = event->has(DISPLACED_Y);
             int restOffset  = 0;
-            if ((*i)->has(DISPLACED_Y)) {
-                restOffset  = (*i)->get<Int>(DISPLACED_Y);
-                offsetRest = true;
+            if (offsetRest) {
+                restOffset  = event->get<Int>(DISPLACED_Y);
             }
 
             //if (offsetRest) {
@@ -2484,7 +2500,7 @@ LilyPondExporter::writeBar(Segment *s,
                     Segment::iterator mm_i = i;
                     while (s->isBeforeEndMarker(++mm_i)) {
                         if ((*mm_i)->isa(Note::EventRestType) &&
-                            (*mm_i)->getNotationDuration() == (*i)->getNotationDuration() &&
+                            (*mm_i)->getNotationDuration() == event->getNotationDuration() &&
                             timeSignature == m_composition->getTimeSignatureAt((*mm_i)->getNotationAbsoluteTime())) {
                             MultiMeasureRestCount++;
                         } else {
@@ -2508,7 +2524,7 @@ LilyPondExporter::writeBar(Segment *s,
                         int heightOnStaff = 4 + offset;
 
                         // find out the pitch corresponding to the rest position
-                        Clef m_lastClefFound((*s).getClefAtTime((*i)->getAbsoluteTime()));
+                        Clef m_lastClefFound((*s).getClefAtTime(event->getAbsoluteTime()));
                         Pitch helper(heightOnStaff, m_lastClefFound, Rosegarden::Key::DefaultKey);
 
                         // use MIDI pitch to get a named note with octavation
@@ -2535,7 +2551,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                         // a rest CAN have a fermata, and it could have a text
                         // mark conceivably, so we need to export these
-                        std::vector<Mark> marks(Marks::getMarks(**i));
+                        std::vector<Mark> marks(Marks::getMarks(*event));
                         for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
                             // even at the most optimistic, I doubt we'd ever
                             // find a way to get a stemUp from a rest, so just
@@ -2583,39 +2599,20 @@ LilyPondExporter::writeBar(Segment *s,
             std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
             durationRatioSum = fractionSum(durationRatioSum, ratio);
             // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
-        } else if ((*i)->isa(Clef::EventType)) {
+        } else if (event->isa(Clef::EventType)) {
 
             try {
                 // Incomplete: Set which note the clef should center on  (DMM - why?)
                 // To allow octavation of the clef, enclose the clefname always with quotes.
                 str << "\\clef \"";
 
-                Clef clef(**i);
-                if (clef.getClefType() == Clef::Treble) {
-                    str << "treble";
-                } else if (clef.getClefType() == Clef::French) {
-                    str << "french";
-                } else if (clef.getClefType() == Clef::Soprano) {
-                    str << "soprano";
-                } else if (clef.getClefType() == Clef::Mezzosoprano) {
-                    str << "mezzosoprano";
-                } else if (clef.getClefType() == Clef::Alto) {
-                    str << "alto";
-                } else if (clef.getClefType() == Clef::Tenor) {
-                    str << "tenor";
-                } else if (clef.getClefType() == Clef::Baritone) {
-                    str << "baritone";
-                } else if (clef.getClefType() == Clef::Varbaritone) {
-                    str << "varbaritone";
-                } else if (clef.getClefType() == Clef::Bass) {
-                    str << "bass";
-                } else if (clef.getClefType() == Clef::Subbass) {
-                    str << "subbass";
-                }
+                Clef clef(*event);
+                const std::string clefType = clef.getClefType();
+                str << lilyClefType(clefType);
 
                 // save clef for later use by rests that need repositioned
                 m_lastClefFound = clef;
-                RG_DEBUG << "clef:" << clef.getClefType() << "lastClefFound:" << m_lastClefFound.getClefType();
+                RG_DEBUG << "clef:" << clefType << "lastClefFound:" << m_lastClefFound.getClefType();
 
                 // Transpose the clef one or two octaves up or down, if specified.
                 int octaveOffset = clef.getOctaveOffset();
@@ -2631,12 +2628,9 @@ LilyPondExporter::writeBar(Segment *s,
                 std::cerr << "Bad clef: " << e.getMessage() << std::endl;
             }
 
-        } else if ((*i)->isa(Rosegarden::Key::EventType)) {
+        } else if (event->isa(Rosegarden::Key::EventType)) {
             // don't export invisible key signatures
-            bool hiddenKey = false;
-            if ((*i)->has(INVISIBLE)) {
-                (*i)->get <Bool>(INVISIBLE, hiddenKey);
-            }
+            const bool hiddenKey = event->has(INVISIBLE) && event->get<Bool>(INVISIBLE);
 
             try {
                 // Remember current key to write key signature only when
@@ -2645,7 +2639,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                 // grab the value of the key anyway, so we know what it was for
                 // future calls to writePitch() (fixes #2039048)
-                key = Rosegarden::Key(**i);
+                key = Rosegarden::Key(*event);
                 // then we only write a \key change to the export stream if the
                 // key signature was meant to be visible
                 if ((key != previousKey) && !hiddenKey) {
@@ -2667,14 +2661,14 @@ LilyPondExporter::writeBar(Segment *s,
                 std::cerr << "Bad key: " << e.getMessage() << std::endl;
             }
 
-        } else if ((*i)->isa(Text::EventType)) {
+        } else if (event->isa(Text::EventType)) {
 
-            if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2,
+            if (!handleDirective(event, lilyText, nextBarIsAlt1, nextBarIsAlt2,
                                  nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
-                handleText(*i, lilyText);
+                handleText(event, lilyText);
             }
 
-        } else if ((*i)->isa(Guitar::Chord::EventType)) {
+        } else if (event->isa(Guitar::Chord::EventType)) {
             handleGuitarChord(i, str);
         }
 
@@ -2684,11 +2678,11 @@ LilyPondExporter::writeBar(Segment *s,
             newBeamedGroup = false;
         }
 
-        if ((*i)->isa(Indication::EventType)) {
-            preEventsToStart.insert(*i);
-            preEventsInProgress.insert(*i);
-            postEventsToStart.insert(*i);
-            postEventsInProgress.insert(*i);
+        if (event->isa(Indication::EventType)) {
+            preEventsToStart.insert(event);
+            preEventsInProgress.insert(event);
+            postEventsToStart.insert(event);
+            postEventsInProgress.insert(event);
         }
 
         ++i;
