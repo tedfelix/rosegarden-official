@@ -1,5 +1,5 @@
 # CMake version required. This must be the very first line, because it sets default policies affecting everything else
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.7)
 
 # Project name
 project(rosegarden)
@@ -56,7 +56,7 @@ if(USE_QT4)
    set(QT_MIN_VERSION "4.8.0")
 
    # Locate Qt4 on the system.
-   find_package(Qt4 REQUIRED QtGui QtXml QtNetwork)
+   find_package(Qt4 REQUIRED QtCore QtGui QtXml QtNetwork QtTest)
 
    # properly set up compile flags (QT_DEBUG/QT_NO_DEBUG, ...)
    include(${QT_USE_FILE})
