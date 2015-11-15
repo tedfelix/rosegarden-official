@@ -2096,6 +2096,18 @@ void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str
     }
 }
 
+void LilyPondExporter::endBeamedGroup(std::string groupType, std::ofstream &str, int notesInBeamedGroup)
+{
+    if (groupType == GROUP_TYPE_TUPLED) {
+        if (m_exportBeams && notesInBeamedGroup > 0)
+            str << "] ";
+        str << "} ";
+    } else if (groupType == GROUP_TYPE_BEAMED) {
+        if (m_exportBeams && notesInBeamedGroup > 0)
+            str << "] ";
+    }
+}
+
 void
 LilyPondExporter::writeBar(Segment *s,
                            int barNo, timeT barStart, timeT barEnd, int col,
@@ -2184,14 +2196,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                     if (groupId != -1) {
                         // and leaving an old one
-                        if (groupType == GROUP_TYPE_TUPLED) {
-                            if (m_exportBeams && notesInBeamedGroup > 0)
-                                str << "] ";
-                            str << "} ";
-                        } else if (groupType == GROUP_TYPE_BEAMED) {
-                            if (m_exportBeams && notesInBeamedGroup > 0)
-                                str << "] ";
-                        }
+                        endBeamedGroup(groupType, str, notesInBeamedGroup);
                     }
 
                     groupId = newGroupId;
@@ -2230,14 +2235,10 @@ LilyPondExporter::writeBar(Segment *s,
 
                 if (groupId != -1) {
                     // leaving a beamed group
+
+                    endBeamedGroup(groupType, str, notesInBeamedGroup);
                     if (groupType == GROUP_TYPE_TUPLED) {
-                        if (m_exportBeams && notesInBeamedGroup > 0)
-                            str << "] ";
-                        str << "} ";
                         tupletRatio = std::pair<int, int>(1, 1);
-                    } else if (groupType == GROUP_TYPE_BEAMED) {
-                        if (m_exportBeams && notesInBeamedGroup > 0)
-                            str << "] ";
                     }
                     groupId = -1;
                     groupType = "";
@@ -2689,15 +2690,7 @@ LilyPondExporter::writeBar(Segment *s,
     } // end of the gigantic while loop, I think
 
     if (groupId != -1) {
-        if (groupType == GROUP_TYPE_TUPLED) {
-            if (m_exportBeams && notesInBeamedGroup > 0)
-                str << "] ";
-            str << "} ";
-            tupletRatio = std::pair<int, int>(1, 1);
-        } else if (groupType == GROUP_TYPE_BEAMED) {
-            if (m_exportBeams && notesInBeamedGroup > 0)
-                str << "] ";
-        }
+        endBeamedGroup(groupType, str, notesInBeamedGroup);
     }
 
     if (isGrace == 1) {
