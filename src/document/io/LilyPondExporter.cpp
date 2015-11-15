@@ -1925,7 +1925,7 @@ LilyPondExporter::calculateDuration(Segment *s,
     timeT absTime = (*i)->getNotationAbsoluteTime();
 
     RG_DEBUG << "LilyPondExporter::calculateDuration: first duration, absTime: "
-             << duration << ", " << absTime << endl;
+             << duration << ", " << absTime;
 
     timeT durationCorrection = 0;
 
@@ -1942,7 +1942,7 @@ LilyPondExporter::calculateDuration(Segment *s,
     duration += durationCorrection;
 
     RG_DEBUG << "LilyPondExporter::calculateDuration: now duration is "
-             << duration << " after correction of " << durationCorrection << endl;
+             << duration << " after correction of " << durationCorrection;
 
     soundingDuration = duration * tupletRatio.first/ tupletRatio.second;
 
@@ -1953,8 +1953,7 @@ LilyPondExporter::calculateDuration(Segment *s,
         overlong = true;
     }
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: time to barEnd is "
-             << toNext << endl;
+    RG_DEBUG << "LilyPondExporter::calculateDuration: time to barEnd is " << toNext;
 
     // Examine the following event, and truncate our duration
     // if we overlap it.
@@ -1997,7 +1996,7 @@ LilyPondExporter::calculateDuration(Segment *s,
     }
 
     if (s->isBeforeEndMarker(nextElt)) {
-        RG_DEBUG << "LilyPondExporter::calculateDuration: inside conditional " << endl;
+        RG_DEBUG << "LilyPondExporter::calculateDuration: inside conditional";
         toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
         // if the note was lengthened, assume it was lengthened to the left
         // when truncating to the beginning of the next note
@@ -2010,10 +2009,9 @@ LilyPondExporter::calculateDuration(Segment *s,
         }
     }
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: second toNext is "
-             << toNext << endl;
+    RG_DEBUG << "LilyPondExporter::calculateDuration: second toNext is" << toNext;
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
+    RG_DEBUG << "LilyPondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration;
 
     return duration;
 }
@@ -2417,20 +2415,20 @@ LilyPondExporter::writeBar(Segment *s,
                 offsetRest = true;
             }
 
-            if (offsetRest) {
-                std::cout << "REST OFFSET: " << restOffset << std::endl;
-            } else {
-                std::cout << "NO REST OFFSET" << std::endl;
-            }
+            //if (offsetRest) {
+            //    RG_DEBUG << "REST OFFSET: " << restOffset;
+            //} else {
+            //    RG_DEBUG << "NO REST OFFSET";
+            //}
 
             if (MultiMeasureRestCount == 0) {
                 if (hiddenRest) {
-                    std::cout << "HIDDEN REST.  Using duration " << duration << std::endl;
+                    RG_DEBUG << "HIDDEN REST.  Using duration " << duration;
                     str << "s";
                 } else if (duration == timeSignature.getBarDuration()) {
                     // Look ahead the segment in order to detect
                     // the number of measures in the multi measure rest.
-                    std::cout << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)" << std::endl;
+                    RG_DEBUG << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)";
                     Segment::iterator mm_i = i;
                     while (s->isBeforeEndMarker(++mm_i)) {
                         if ((*mm_i)->isa(Note::EventRestType) &&
@@ -2469,12 +2467,11 @@ LilyPondExporter::writeBar(Segment *s,
                         // write named note
                         str << n;
 
-                        std::cout << "Offsetting rest: "
+                        RG_DEBUG << "Offsetting rest: "
                                   << "offset = " << offset << ", "
                                   << "heightOnStaff = " << heightOnStaff << ", "
                                   << "pitch = " << p << ", "
-                                  << "note = " << n
-                                  << std::endl;
+                                  << "note = " << n;
 
                         // defer the \rest until after any duration, because it
                         // can't come before a duration
@@ -2566,13 +2563,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                 // save clef for later use by rests that need repositioned
                 m_lastClefFound = clef;
-                std::cout << "getting clef"
-                          << std::endl
-                          << "clef: "
-                          << clef.getClefType()
-                          << " lastClefFound: "
-                          << m_lastClefFound.getClefType()
-                          << std::endl;
+                RG_DEBUG << "clef:" << clef.getClefType() << "lastClefFound:" << m_lastClefFound.getClefType();
 
                 // Transpose the clef one or two octaves up or down, if specified.
                 int octaveOffset = clef.getOctaveOffset();
