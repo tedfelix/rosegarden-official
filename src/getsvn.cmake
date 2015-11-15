@@ -6,20 +6,31 @@
 # the FindSubversion.cmake module is part of the standard distribution
 include(FindSubversion)
 
+SET(MY_WC_REVISION "-1")
 if(Subversion_FOUND)
-    if(EXISTS "${SOURCE_DIR}/../.svn")
-        # extract working copy information for SOURCE_DIR into MY_XXX variables
-        Subversion_WC_INFO(${SOURCE_DIR} MY)
-        SET(SVN_REVISION "${MY_WC_REVISION}")
-    else ()
-        SET(SVN_REVISION "-1")
-    endif()
-else()
-    set(SVN_REVISION "-1")
+   if(EXISTS "${SOURCE_DIR}/../.svn")
+      # extract working copy information for SOURCE_DIR into MY_XXX variables, especially MY_WC_REVISION
+      Subversion_WC_INFO(${SOURCE_DIR} MY)
+      message(STATUS "SVN revision ${MY_WC_REVISION}")
+   elseif(EXISTS "${SOURCE_DIR}/../.git")
+      # Assume this is git-svn
+      find_program(GIT_EXE git)
+      if (GIT_EXE)
+         execute_process(COMMAND ${GIT_EXE} svn info
+            OUTPUT_VARIABLE MY_WC_INFO
+            ERROR_VARIABLE git_svn_info_error
+            RESULT_VARIABLE git_svn_info_result
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+         string(REGEX REPLACE "^(.*\n)?Revision: ([^\n]+).*" "\\2" MY_WC_REVISION "${MY_WC_INFO}")
+         message(STATUS "SVN revision ${MY_WC_REVISION}")
+      endif()
+   endif()
 endif()
 
+
 # write a file with the define
-file(WRITE svnversion.h.txt "#define BUILDKEY ${SVN_REVISION}\n")
+file(WRITE svnversion.h.txt "#define BUILDKEY ${MY_WC_REVISION}\n")
 
 # copy the file to the final header only if the version changes
 # reduces needless rebuilds
