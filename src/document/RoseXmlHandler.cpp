@@ -1338,7 +1338,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 setMIDIDeviceConnection(connection);
             }
 
-            setMIDIDeviceName(nameStr);
+            if (m_createDevices)
+                setMIDIDeviceName(nameStr);
 
             QString vstr = atts.value("variation").toLower();
             MidiDevice::VariationType variation =
