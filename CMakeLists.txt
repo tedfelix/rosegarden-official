@@ -7,16 +7,16 @@ project(rosegarden)
 # Version
 set(ROSEGARDEN_VERSION "15.12")
 set(ROSEGARDEN_CODENAME "Peace")
-# "Querida"
-# "Rhapsody in Blue"
-# "Seagull"
-# "Twice in a Blue Moon"
-# "Ultimate Pleasure"
-# "Vesper"
-# "Worcestershire"
-# "Xerxes"
-# "Yesterday"
-# "Zepherine Drouhin"
+#set(ROSEGARDEN_CODENAME "Querida")
+#set(ROSEGARDEN_CODENAME "Rhapsody in Blue")
+#set(ROSEGARDEN_CODENAME "Seagull")
+#set(ROSEGARDEN_CODENAME "Twice in a Blue Moon")
+#set(ROSEGARDEN_CODENAME "Ultimate Pleasure")
+#set(ROSEGARDEN_CODENAME "Vesper")
+#set(ROSEGARDEN_CODENAME "Worcestershire")
+#set(ROSEGARDEN_CODENAME "Xerxes")
+#set(ROSEGARDEN_CODENAME "Yesterday")
+#set(ROSEGARDEN_CODENAME "Zepherine Drouhin")
 
 
 # Make it possible to use cmake files from the cmake subdir
