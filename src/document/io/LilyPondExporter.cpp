@@ -2196,21 +2196,16 @@ LilyPondExporter::writeBar(Segment *s,
             if (newGroupId != groupId) {
 
                 if (groupId != -1) {
-
                     //RG_DEBUG << "Leaving beamed group" << groupId << "notesInBeamedGroup=" << notesInBeamedGroup;
                     // leaving a beamed group
-
                     endBeamedGroup(groupType, str, notesInBeamedGroup);
-                    if (groupType == GROUP_TYPE_TUPLED) {
-                        tupletRatio = std::pair<int, int>(1, 1);
-                    }
+                    tupletRatio = std::pair<int, int>(1, 1);
                     groupId = -1;
                     groupType = "";
                     inBeamedGroup = false;
                 }
 
                 if (newGroupId != -1) {
-
                     // entering a new beamed group
                     groupId = newGroupId;
                     groupType = "";
