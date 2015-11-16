@@ -406,7 +406,6 @@ set(rg_SOURCES
   gui/seqmanager/MetronomeMapper.cpp
   gui/seqmanager/TempoSegmentMapper.cpp
   gui/seqmanager/MappedEventBuffer.cpp
-  gui/seqmanager/SegmentMapperFactory.cpp
   gui/seqmanager/SequenceManager.cpp
   gui/seqmanager/MarkerMapper.cpp
   gui/seqmanager/SegmentMapper.cpp

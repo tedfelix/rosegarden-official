@@ -57,7 +57,10 @@ class RealTime;
  */
 class InternalSegmentMapper : public SegmentMapper
 {
-    friend class SegmentMapperFactory;
+public:
+    InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
+
+private:
     friend class ControllerSearch;
     friend class ControllerContextMap;
 
@@ -90,7 +93,6 @@ class InternalSegmentMapper : public SegmentMapper
     typedef std::multiset<Noteoff, NoteoffCmp>
         NoteoffContainer;
 
-    InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
     ~InternalSegmentMapper(void);
 
     // Do channel-setup

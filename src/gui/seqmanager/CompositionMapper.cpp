@@ -23,7 +23,6 @@
 #include "base/Segment.h"
 #include "document/RosegardenDocument.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
-#include "gui/seqmanager/SegmentMapperFactory.h"
 #include "gui/seqmanager/SegmentMapper.h"
 
 
@@ -132,7 +131,7 @@ CompositionMapper::mapSegment(Segment *segment)
         return;
     }
     SegmentMapper *mapper =
-        SegmentMapperFactory::makeMapperForSegment(m_doc, segment);
+        SegmentMapper::makeMapperForSegment(m_doc, segment);
 
     if (mapper) {
         m_segmentMappers[segment] = mapper;

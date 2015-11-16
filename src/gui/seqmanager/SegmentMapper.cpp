@@ -15,10 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentMapper]"
 
 #include "SegmentMapper.h"
-#include "misc/Debug.h"
 
+#include "InternalSegmentMapper.h"
+#include "AudioSegmentMapper.h"
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "base/Segment.h"
@@ -51,6 +54,37 @@ initSpecial(void)
 SegmentMapper::~SegmentMapper()
 {
     SEQMAN_DEBUG << "~SegmentMapper : " << this << endl;
+}
+
+SegmentMapper *
+SegmentMapper::makeMapperForSegment(RosegardenDocument *doc,
+                                    Segment *segment)
+{
+    SegmentMapper *mapper = 0;
+
+    if (segment == 0) {
+        RG_DEBUG << "makeMapperForSegment() segment == 0";
+        return 0;
+    }
+
+    switch (segment->getType()) {
+    case Segment::Internal :
+        mapper = new InternalSegmentMapper(doc, segment);
+        break;
+    case Segment::Audio :
+        mapper = new AudioSegmentMapper(doc, segment);
+        break;
+    default:
+        RG_DEBUG << "makeMapperForSegment(" << segment << ") : can't map, unknown segment type " << segment->getType();
+        mapper = 0;
+    }
+
+    // ??? InternalSegmentMapper and AudioSegmentMapper's ctors should
+    //     call init().
+    if (mapper)
+        mapper->init();
+
+    return mapper;
 }
 
 int

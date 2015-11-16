@@ -28,11 +28,10 @@ class RosegardenDocument;
 
 class AudioSegmentMapper : public SegmentMapper
 {
-    friend class SegmentMapperFactory;
-
-protected:
+public:
     AudioSegmentMapper(RosegardenDocument *, Segment *);
 
+protected:
     virtual int calculateSize();
 
     /// dump all segment data in the file

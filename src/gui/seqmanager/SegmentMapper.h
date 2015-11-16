@@ -34,6 +34,9 @@ class SegmentMapper : public MappedEventBuffer
 public:
     virtual ~SegmentMapper();
 
+    /// Create the appropriate mapper for the segment type.  Factory function.
+    static SegmentMapper *makeMapperForSegment(RosegardenDocument *, Segment *);
+
     virtual int getSegmentRepeatCount();
 
     virtual void initSpecial(void);
