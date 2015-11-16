@@ -84,6 +84,10 @@ public:
     /// Access to the internal buffer of events.  NOT LOCKED
     /**
      * un-locked, use only from write/resize thread
+     *
+     * ??? Unsafe.  This allows direct access to the buffer without any
+     *     sort of range checking.  Recommend adding an operator[] and/or an
+     *     at() that asserts on range problems.
      */
     MappedEvent *getBuffer() { return m_buffer; }
 

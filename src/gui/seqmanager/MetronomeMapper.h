@@ -60,9 +60,6 @@ public:
     virtual void fillBuffer();
 
 private:
-    /// Whether the metronome is muted regarding this event.
-    bool mutedEtc(MappedEvent *evt);
-
     enum TickType {
         BarTick = 0,
         BeatTick = 1,

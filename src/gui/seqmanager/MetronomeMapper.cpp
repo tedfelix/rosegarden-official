@@ -80,6 +80,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
         //     might cause duplicate events.  Might be better to perform the
         //     Composition expansion one bar prior to hitting the end.
         //     And add a "moreTicks(newEndTime)" function to this class.
+        //     Beware that it will need to increase the buffer's capacity.
         for (timeT barTime = composition.getBarStart(-20);
              barTime < composition.getEndMarker();
              barTime = composition.getBarEndForTime(barTime)) {
@@ -168,32 +169,39 @@ InstrumentId MetronomeMapper::getMetronomeInstrument() const
 
 void MetronomeMapper::fillBuffer()
 {
-    RealTime eventTime;
-    Composition& comp = m_doc->getComposition();
+    //RG_DEBUG << "fillBuffer(): instrument is " << m_metronome->getInstrument();
 
-    RG_DEBUG << "fillBuffer(): instrument is " << m_metronome->getInstrument();
+    Q_ASSERT_X(capacity() >= static_cast<int>(m_ticks.size()),
+               "MetronomeMapper::fillBuffer()",
+               "Buffer capacity is too small.");
+
+    Composition &composition = m_doc->getComposition();
 
     const RealTime tickDuration(0, 100000000);
 
     int index = 0;
 
     // For each tick
-    for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
+    for (TickContainer::iterator tick = m_ticks.begin();
+         tick != m_ticks.end();
+         ++tick) {
 
         //RG_DEBUG << "fillBuffer(): velocity = " << int(velocity);
 
-        eventTime = comp.getElapsedRealTime(i->first);
+        RealTime eventTime = composition.getElapsedRealTime(tick->first);
 
         MappedEvent e;
 
-        if (i->second == MidiTimingClockTick) {
-            e = MappedEvent(0, MappedEvent::MidiSystemMessage);
+        if (tick->second == MidiTimingClockTick) {
+            e = MappedEvent(0,  // Instrument ID is irrelevant
+                            MappedEvent::MidiSystemMessage);
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
         } else {
             MidiByte velocity;
             MidiByte pitch;
-            switch (i->second) {
+
+            switch (tick->second) {
             case BarTick:
                 velocity = m_metronome->getBarVelocity();
                 pitch = m_metronome->getBarPitch();
@@ -217,51 +225,28 @@ void MetronomeMapper::fillBuffer()
                             velocity,
                             eventTime,
                             tickDuration,
-                            RealTime::zeroTime);
+                            RealTime::zeroTime);  // audioStartMarker
         }
 
+        // Add the event to the buffer.
         getBuffer()[index] = e;
+
         ++index;
     }
 
+    //RG_DEBUG << "fillBuffer(): capacity: " << capacity();
+    //RG_DEBUG << "  Total events written: " << index;
+
     resize(index);
+
     m_channelManager.reallocateEternalChannel();
     m_channelManager.setDirty();
-
-    RG_DEBUG << "fillBuffer(): - Total events written = " << index;
 }
 
 int
 MetronomeMapper::calculateSize()
 {
-    QSettings settings;
-    settings.beginGroup(Rosegarden::SequencerOptionsConfigGroup);
-
-    int midiClock = settings.value("midiclock", 0).toInt() ;
-    int mtcMode = settings.value("mtcmode", 0).toInt() ;
-
-    // base size for Metronome ticks
-    size_t size = m_ticks.size();
-    Composition& comp = m_doc->getComposition();
-
-    if (midiClock == 1) {
-
-        using Rosegarden::Note;
-
-        // Allow room for MIDI clocks
-        int clocks = ( 24 * ( comp.getEndMarker() - comp.getStartMarker() ) ) / 
-            Note(Note::Crotchet).getDuration();
-
-        size += clocks;
-    }
-
-    if (mtcMode > 0) {
-        // Allow room for MTC timing messages (how?)
-    }
-
-    settings.endGroup();
-
-    return int(size);
+    return static_cast<int>(m_ticks.size());
 }
 
 int
@@ -272,7 +257,7 @@ MetronomeMapper::getSegmentRepeatCount()
 
 void
 MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                         RealTime start, bool firstOutput)
+                          RealTime start, bool firstOutput)
 {
     ChannelManager::SimpleCallbacks callbacks;
     m_channelManager.doInsert(inserter, evt, start, &callbacks,
@@ -284,36 +269,26 @@ MetronomeMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
     ChannelManager::SimpleCallbacks callbacks;
-    // m_channelManager.setInstrument(m_doc->getStudio().getInstrumentById(getMetronomeInstrument()));
-    m_channelManager.makeReady(inserter, time, &callbacks,
-                               NO_TRACK);
-}
-
-bool
-MetronomeMapper::
-mutedEtc(MappedEvent *evt)
-{
-    // Apparently some clock events need to escape muting?
-    if (evt->getType() == MappedEvent::MidiSystemMessage &&
-        evt->getData1() == MIDI_TIMING_CLOCK) {
-        //RG_DEBUG << "mutedEtc() - found clock";
-        return false;
-    }
-
-    return (ControlBlock::getInstance()->isMetronomeMuted());
+    m_channelManager.makeReady(inserter, time, &callbacks, NO_TRACK);
 }
 
 bool
 MetronomeMapper::
 shouldPlay(MappedEvent *evt, RealTime sliceStart)
 {
-    if (mutedEtc(evt))
+    // If it's finished, don't play it.
+    if (evt->EndedBefore(sliceStart))
         return false;
 
-    // Otherwise it should play if it's not already all done sounding.
-    // The timeslice logic will have already excluded events that
-    // start too late.
-    return !evt->EndedBefore(sliceStart);
+    // If it's a MIDI Timing Clock, always play it.
+    if (evt->getType() == MappedEvent::MidiSystemMessage  &&
+        evt->getData1() == MIDI_TIMING_CLOCK) {
+        return true;
+    }
+
+    // It's a metronome event.  Play it if the metronome isn't muted.
+
+    return !ControlBlock::getInstance()->isMetronomeMuted();
 }
 
 
