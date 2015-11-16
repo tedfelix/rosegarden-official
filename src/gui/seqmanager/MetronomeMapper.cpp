@@ -123,6 +123,8 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     }
 
     settings.endGroup();
+
+    init();
 }
 
 MetronomeMapper::~MetronomeMapper()

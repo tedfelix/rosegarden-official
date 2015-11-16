@@ -54,7 +54,6 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "MarkerMapper.h"
 #include "MetronomeMapper.h"
-#include "SegmentMapperFactory.h"
 #include "TempoSegmentMapper.h"
 #include "TimeSigSegmentMapper.h"
 #include "sound/AudioFile.h"
@@ -1472,7 +1471,7 @@ void SequenceManager::resetMetronomeMapper()
         m_metronomeMapper->removeOwner();
     }
 
-    m_metronomeMapper = SegmentMapperFactory::makeMetronome(m_doc);
+    m_metronomeMapper = new MetronomeMapper(m_doc);
     m_metronomeMapper->addOwner();
     RosegardenSequencer::getInstance()->segmentAdded
         (m_metronomeMapper);
@@ -1488,7 +1487,7 @@ void SequenceManager::resetTempoSegmentMapper()
         m_tempoSegmentMapper->removeOwner();
     }
 
-    m_tempoSegmentMapper = SegmentMapperFactory::makeTempo(m_doc);
+    m_tempoSegmentMapper = new TempoSegmentMapper(m_doc);
     m_tempoSegmentMapper->addOwner();
     RosegardenSequencer::getInstance()->segmentAdded
         (m_tempoSegmentMapper);
@@ -1504,7 +1503,7 @@ void SequenceManager::resetTimeSigSegmentMapper()
         m_timeSigSegmentMapper->removeOwner();
     }
 
-    m_timeSigSegmentMapper = SegmentMapperFactory::makeTimeSig(m_doc);
+    m_timeSigSegmentMapper = new TimeSigSegmentMapper(m_doc);
     m_timeSigSegmentMapper->addOwner();
     RosegardenSequencer::getInstance()->segmentAdded
         (m_timeSigSegmentMapper);
@@ -2068,7 +2067,7 @@ makeTempMetaiterator(void)
     metaiterator->addSegment(m_timeSigSegmentMapper);
     // We don't hold on to the marker mapper because we only use it
     // when exporting.
-    metaiterator->addSegment(SegmentMapperFactory::makeMarker(m_doc));
+    metaiterator->addSegment(new MarkerMapper(m_doc));
     typedef CompositionMapper::SegmentMappers container;
     typedef container::iterator iterator;
     container &mapperContainer = m_compositionMapper->m_segmentMappers;

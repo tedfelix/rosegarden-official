@@ -40,6 +40,7 @@ class MidiMetronome;
 class MetronomeMapper : public MappedEventBuffer
 {
 public:
+    MetronomeMapper(RosegardenDocument *doc);
     virtual ~MetronomeMapper();
 
     InstrumentId getMetronomeInstrument();
@@ -57,12 +58,6 @@ public:
     virtual void fillBuffer();
 
 private:
-    // Only SegmentMapperFactory::makeMetronome() is permitted to construct
-    // MetronomeMapper objects.
-    MetronomeMapper(RosegardenDocument *doc);
-    // SegmentMapperFactory::makeMetronome() calls the ctor.
-    friend class SegmentMapperFactory;
-
     /// Whether the metronome is muted regarding this event.
     bool mutedEtc(MappedEvent *evt);
 

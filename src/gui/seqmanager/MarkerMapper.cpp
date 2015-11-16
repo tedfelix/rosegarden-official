@@ -29,8 +29,10 @@ namespace Rosegarden
 
 MarkerMapper::
 MarkerMapper(RosegardenDocument *doc) :
-  SpecialSegmentMapper(doc)
-{ }
+    SpecialSegmentMapper(doc)
+{
+    init();
+}
 
 void MarkerMapper::fillBuffer()
 {

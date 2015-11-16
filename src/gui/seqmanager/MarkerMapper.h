@@ -30,11 +30,10 @@ class RosegardenDocument;
 // @author Tom Breton (Tehom)
 class MarkerMapper : public SpecialSegmentMapper
 {
-    friend class SegmentMapperFactory;
-
-protected:
+public:
     MarkerMapper(RosegardenDocument *doc);
 
+protected:
     // override from MappedEventBuffer
     virtual int calculateSize();
 

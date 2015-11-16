@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentMapperFactory]"
 
 #include "SegmentMapperFactory.h"
 
@@ -23,12 +24,9 @@
 #include "misc/Debug.h"
 #include "gui/seqmanager/AudioSegmentMapper.h"
 #include "gui/seqmanager/InternalSegmentMapper.h"
-#include "gui/seqmanager/MarkerMapper.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
-#include "gui/seqmanager/MetronomeMapper.h"
 #include "gui/seqmanager/SegmentMapper.h"
-#include "gui/seqmanager/TempoSegmentMapper.h"
-#include "gui/seqmanager/TimeSigSegmentMapper.h"
+
 #include <QString>
 
 
@@ -42,7 +40,7 @@ SegmentMapperFactory::makeMapperForSegment(RosegardenDocument *doc,
     SegmentMapper *mapper = 0;
 
     if (segment == 0) {
-        SEQMAN_DEBUG << "SegmentMapperFactory::makeMapperForSegment() segment == 0\n";
+        RG_DEBUG << "makeMapperForSegment() segment == 0";
         return 0;
     }
     
@@ -54,47 +52,15 @@ SegmentMapperFactory::makeMapperForSegment(RosegardenDocument *doc,
         mapper = new AudioSegmentMapper(doc, segment);
         break;
     default:
-        SEQMAN_DEBUG << "SegmentMapperFactory::makeMapperForSegment("
-                     << segment
-                     << ") : can't map, unknown segment type "
-                     << segment->getType() << endl;
+        RG_DEBUG << "makeMapperForSegment(" << segment << ") : can't map, unknown segment type " << segment->getType();
         mapper = 0;
     }
 
-    if (mapper) { mapper->init(); }
+    // ??? InternalSegmentMapper and AudioSegmentMapper's ctors should
+    //     call init().
+    if (mapper)
+        mapper->init();
 
-    return mapper;
-}
-
-MetronomeMapper *
-SegmentMapperFactory::makeMetronome(RosegardenDocument *doc)
-{
-    MetronomeMapper *mapper = new MetronomeMapper(doc);
-    mapper->init();
-    return mapper;
-}
-
-TimeSigSegmentMapper *
-SegmentMapperFactory::makeTimeSig(RosegardenDocument *doc)
-{
-    TimeSigSegmentMapper *mapper = new TimeSigSegmentMapper(doc);
-    mapper->init();
-    return mapper;
-}
-
-TempoSegmentMapper *
-SegmentMapperFactory::makeTempo(RosegardenDocument *doc)
-{
-    TempoSegmentMapper* mapper = new TempoSegmentMapper(doc);
-    mapper->init();
-    return mapper;
-}
-
-MarkerMapper *
-SegmentMapperFactory::makeMarker(RosegardenDocument *doc)
-{
-    MarkerMapper* mapper = new MarkerMapper(doc);
-    mapper->init();
     return mapper;
 }
 

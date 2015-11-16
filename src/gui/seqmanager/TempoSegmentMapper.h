@@ -29,13 +29,14 @@ class RealTime;
 
 class TempoSegmentMapper : public SpecialSegmentMapper
 {
-    friend class SegmentMapperFactory;
-
-protected:
+public:
     TempoSegmentMapper(RosegardenDocument *doc) :
-        SpecialSegmentMapper(doc) {
+        SpecialSegmentMapper(doc)
+    {
+        init();
     }
 
+protected:
     // overrides from SegmentMapper
     virtual int calculateSize();
 

@@ -28,14 +28,14 @@ class RosegardenDocument;
 
 class TimeSigSegmentMapper : public SpecialSegmentMapper
 {
-    friend class SegmentMapperFactory;
-
 public:
+    TimeSigSegmentMapper(RosegardenDocument *doc) :
+        SpecialSegmentMapper(doc)
+    {
+        init();
+    }
 
 protected:
-    TimeSigSegmentMapper(RosegardenDocument *doc) :
-	SpecialSegmentMapper(doc) {}
-
     // overrides from SegmentMapper
     virtual int calculateSize();
 

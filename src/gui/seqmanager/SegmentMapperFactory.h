@@ -21,23 +21,19 @@
 namespace Rosegarden
 {
 
+
 class Segment;
 class RosegardenDocument;
-class MarkerMapper;
-class MetronomeMapper;
 class SegmentMapper;
-class TempoSegmentMapper;
-class TimeSigSegmentMapper;
 
 class SegmentMapperFactory
 {
 public:
+    /// Create the appropriate mapper for the segment type.
+    // ??? This could be moved to SegmentMapper.
     static SegmentMapper *makeMapperForSegment(RosegardenDocument *, Segment *);
-    static MetronomeMapper *makeMetronome(RosegardenDocument *);
-    static TimeSigSegmentMapper *makeTimeSig(RosegardenDocument *);
-    static TempoSegmentMapper *makeTempo(RosegardenDocument *);
-    static MarkerMapper *makeMarker(RosegardenDocument *);
 };
+
 
 }
 
