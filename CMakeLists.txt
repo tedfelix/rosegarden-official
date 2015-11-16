@@ -26,9 +26,6 @@ endif(NOT CMAKE_BUILD_TYPE)
 # Make it possible to use cmake files from the cmake subdir
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-# Tweak RPATH handling so that installed debug builds work out of the box
-include(RPathHandling)
-
 # Enable the really useful automoc feature from cmake
 set(CMAKE_AUTOMOC TRUE)
 
@@ -39,6 +36,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # This takes care of installing into "lib64" on distros that use that, for instance,
 # by setting CMAKE_INSTALL_FULL_LIBDIR.
 include(GNUInstallDirs)
+
+# Tweak RPATH handling so that installed debug builds work out of the box
+include(RPathHandling)
 
 # Activate unit tests (this enables `make test`)
 enable_testing()
