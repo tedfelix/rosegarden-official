@@ -52,6 +52,7 @@
 
 #include <pthread.h>
 #include <math.h>
+#include <unistd.h>
 
 
 // #define DEBUG_ALSA 1
@@ -1832,11 +1833,19 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         // Now send the START/CONTINUE
         //
         if (m_playStartPosition == RealTime::zeroTime)
-            sendSystemQueued(SND_SEQ_EVENT_START, "",
-                             m_alsaPlayStartTime);
+            sendSystemDirect(SND_SEQ_EVENT_START, NULL);
         else
-            sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
-                             m_alsaPlayStartTime);
+            sendSystemDirect(SND_SEQ_EVENT_CONTINUE, NULL);
+
+        // A short delay is required to give the slave time to get
+        // ready for the first clock.  The MIDI Spec (section 2, page 30)
+        // recommends at least 1ms.  We'll go with 2ms to be safe.
+        // Without this delay, slave sequencers will typically be
+        // behind by one MIDI clock.
+        // ??? Will this cause problems with MMC and MTC above?
+        // ??? Sleeping is pretty unsavory.  Is there a better way to
+        //     delay playback?  E.g. by biasing the ALSA times?
+        //::usleep(2000);
     }
 
 #ifdef HAVE_LIBJACK
