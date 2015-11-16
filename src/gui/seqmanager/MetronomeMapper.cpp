@@ -41,56 +41,84 @@ namespace Rosegarden
 
 MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     MappedEventBuffer(doc),
-    m_metronome(0),  // no metronome to begin with
-    m_tickDuration(0, 100000000),
+    m_metronome(0),
     m_channelManager(0) // We will set this below after we find instrument.
 {
-    RG_DEBUG << "ctor: " << this;
+    //RG_DEBUG << "ctor: " << this;
 
-    // get metronome device
     Studio &studio = m_doc->getStudio();
-    int device = studio.getMetronomeDevice();
+
+    const DeviceId metronomeDeviceId = studio.getMetronomeDevice();
 
     const MidiMetronome *metronome =
-        m_doc->getStudio().getMetronomeFromDevice(device);
+            studio.getMetronomeFromDevice(metronomeDeviceId);
 
     if (metronome) {
-        RG_DEBUG << "ctor: have metronome, it's on instrument " << metronome->getInstrument();
+        //RG_DEBUG << "ctor: have metronome, it's on instrument " << metronome->getInstrument();
+        // Make a local copy.
         m_metronome = new MidiMetronome(*metronome);
     } else {
+        RG_WARNING << "ctor: no metronome for device " << metronomeDeviceId;
         m_metronome = new MidiMetronome(SystemInstrumentBase);
-        RG_DEBUG << "ctor: no metronome for device " << device;
     }
-    {
-        // As we promised, set instrument
-        InstrumentId id = m_metronome->getInstrument();
-        m_channelManager.setInstrument(doc->getStudio().getInstrumentById(id));
-    }
-        
-    Composition& c = m_doc->getComposition();
-    timeT t = c.getBarStart( -20); // somewhat arbitrary
+
+    // As we promised, set instrument
+    m_channelManager.setInstrument(
+            studio.getInstrumentById(m_metronome->getInstrument()));
+
+    Composition &composition = m_doc->getComposition();
+
+    // Bar time.
+    // Start at a somewhat arbitrary time prior to the beginning of
+    // the composition.
+    timeT barTime = composition.getBarStart(-20);
+
     int depth = m_metronome->getDepth();
 
+    // If the metronome has beats at the very least, generate the metronome
+    // ticks.
     if (depth > 0) {
-        while (t < c.getEndMarker()) {
+        // For each bar
+        // ??? To avoid dropping a tick when expanding the Composition, we
+        //     could simply generate one bar too many of these.  Though that
+        //     might cause duplicate events.  Might be better to perform the
+        //     Composition expansion one bar prior to hitting the end.
+        //     And add a "moreTicks(newEndTime)" function to this class.
+        while (barTime < composition.getEndMarker()) {
 
-            TimeSignature sig = c.getTimeSignatureAt(t);
-            timeT barDuration = sig.getBarDuration();
+            TimeSignature timeSig = composition.getTimeSignatureAt(barTime);
+            timeT barDuration = timeSig.getBarDuration();
+
+            // Get the beat and subbeat divisions.
             std::vector<int> divisions;
-            if (depth > 0) sig.getDivisions(depth - 1, divisions);
+            if (depth > 0)
+                timeSig.getDivisions(depth - 1, divisions);
+
             int ticks = 1;
 
+            // For each tick type (bar/beat/subbeat)
+            // ??? Consider using TickType.
+            // ??? Consider adding "1" to the front of divisions.  That might
+            //     make the special bar case a little less special.
             for (int i = -1; i < (int)divisions.size(); ++i) {
-                if (i >= 0) ticks *= divisions[i];
+                // For beat and subbeat, use the division from the
+                // time signature.
+                if (i != -1)
+                    ticks *= divisions[i];
 
+                // For each tick
                 for (int tick = 0; tick < ticks; ++tick) {
-                    if (i >= 0 && (tick % divisions[i] == 0)) continue;
-                    timeT tickTime = t + (tick * barDuration) / ticks;
-                    m_ticks.push_back(Tick(tickTime, i + 1));
+                    // For beat and subbeat, drop the first tick.
+                    if (i != -1  &&  (tick % divisions[i] == 0))
+                        continue;
+
+                    timeT tickTime = barTime + (tick * barDuration) / ticks;
+                    m_ticks.push_back(Tick(tickTime, static_cast<TickType>(i + 1)));
                 }
             }
 
-            t = c.getBarEndForTime(t);
+            // Next bar
+            barTime = composition.getBarEndForTime(barTime);
         }
     }
 
@@ -105,10 +133,10 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
 
         // Insert 24 clocks per quarter note
         //
-        for (timeT insertTime = c.getStartMarker();
-             insertTime < c.getEndMarker();
+        for (timeT insertTime = composition.getStartMarker();
+             insertTime < composition.getEndMarker();
              insertTime += quarterNote / 24) {
-            m_ticks.push_back(Tick(insertTime, 3));
+            m_ticks.push_back(Tick(insertTime, MidiTimingClockTick));
         }
     }
 
@@ -145,6 +173,8 @@ void MetronomeMapper::fillBuffer()
 
     RG_DEBUG << "fillBuffer(): instrument is " << m_metronome->getInstrument();
 
+    const RealTime tickDuration(0, 100000000);
+
     int index = 0;
 
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
@@ -155,7 +185,7 @@ void MetronomeMapper::fillBuffer()
 
         MappedEvent e;
 
-        if (i->second == 3) { // MIDI Clock
+        if (i->second == MidiTimingClockTick) {
             e = MappedEvent(0, MappedEvent::MidiSystemMessage);
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
@@ -163,18 +193,21 @@ void MetronomeMapper::fillBuffer()
             MidiByte velocity;
             MidiByte pitch;
             switch (i->second) {
-            case 0:
+            case BarTick:
                 velocity = m_metronome->getBarVelocity();
                 pitch = m_metronome->getBarPitch();
                 break;
-            case 1:
+            case BeatTick:
                 velocity = m_metronome->getBeatVelocity();
                 pitch = m_metronome->getBeatPitch();
                 break;
-            default:
+            case SubBeatTick:
                 velocity = m_metronome->getSubBeatVelocity();
                 pitch = m_metronome->getSubBeatPitch();
                 break;
+            case MidiTimingClockTick:
+            default:
+                RG_WARNING << "fillBuffer(): Unexpected tick type";
             }
 
             e = MappedEvent(m_metronome->getInstrument(),
@@ -182,7 +215,7 @@ void MetronomeMapper::fillBuffer()
                             pitch,
                             velocity,
                             eventTime,
-                            m_tickDuration,
+                            tickDuration,
                             RealTime::zeroTime);
         }
 
@@ -268,7 +301,7 @@ mutedEtc(MappedEvent *evt)
 
     return (ControlBlock::getInstance()->isMetronomeMuted());
 }
-    
+
 bool
 MetronomeMapper::
 shouldPlay(MappedEvent *evt, RealTime sliceStart)
@@ -281,5 +314,6 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     // start too late.
     return !evt->EndedBefore(sliceStart);
 }
-    
+
+
 }

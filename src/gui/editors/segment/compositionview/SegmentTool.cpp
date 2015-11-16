@@ -52,8 +52,15 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
     createAction("edit_pitch_tracker", SLOT(slotEditInPitchTracker()));
     // Can we get some of the following connectionless mojo for some
     // of these others too?
-    //createAction("edit_undo", ...);  // handled by a higher authority?
-    //createAction("edit_redo", ...);  // handled by a higher authority?
+    // The undo and redo actions are available globally through
+    // CommandHistory.  See ActionFileParser::findStandardAction() which
+    // allows them to be found easily.  Since disparate parts of the
+    // system need the exact same QAction objects, it might be a good
+    // idea to introduce a global QAction repository for all QAction
+    // objects.  RosegardenMainWindow might suffice.  This would also
+    // simplify the implementation of a shortcut manager.
+    //createAction("edit_undo", ...);  // handled by CommandHistory
+    //createAction("edit_redo", ...);  // handled by CommandHistory
     createAction("edit_cut", SLOT(slotEditCut()));
     createAction("edit_copy", SLOT(slotEditCopy()));
     createAction("edit_paste", SLOT(slotEditPaste()));

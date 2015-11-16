@@ -61,17 +61,22 @@ private:
     /// Whether the metronome is muted regarding this event.
     bool mutedEtc(MappedEvent *evt);
 
-    //--------------- Data members ---------------------------------
-    typedef std::pair<timeT, int> Tick;
+    enum TickType {
+        BarTick = 0,
+        BeatTick = 1,
+        SubBeatTick = 2,
+        MidiTimingClockTick = 3  // MIDI Spec, Section 2, Page 30.
+    };
+    typedef std::pair<timeT, TickType> Tick;
     typedef std::vector<Tick> TickContainer;
-    friend bool operator<(Tick, Tick);
-
+    /// The ticks of the metronome.
     TickContainer m_ticks;
-    bool m_deleteMetronome;
+
     const MidiMetronome *m_metronome;
-    const RealTime m_tickDuration;
+
     EternalChannelManager m_channelManager;
 };
+
 
 }
 
