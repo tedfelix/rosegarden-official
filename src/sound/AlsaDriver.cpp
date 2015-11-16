@@ -1801,10 +1801,6 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         m_eat_mtc = 0;
     }
 
-    if (getMTCStatus() == TRANSPORT_MASTER) {
-        insertMTCFullFrame(position);
-    }
-
     // If MIDI Sync is enabled then adjust for the MIDI Clock to
     // synchronise the sequencer with the clock.
     //
@@ -1842,10 +1838,18 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         // recommends at least 1ms.  We'll go with 2ms to be safe.
         // Without this delay, slave sequencers will typically be
         // behind by one MIDI clock.
-        // ??? Will this cause problems with MMC and MTC above?
-        // ??? Sleeping is pretty unsavory.  Is there a better way to
-        //     delay playback?  E.g. by biasing the ALSA times?
-        //::usleep(2000);
+
+        // Shift the ALSA clock to get a 2ms delay before starting playback.
+        m_alsaPlayStartTime = {0, 2000000};
+    }
+
+    // Since the MTC message is queued, it needs to know that
+    // m_alsaPlayStartTime may have been modified by MIDI sync above.
+    // So, we handle it after MIDI sync.
+
+    if (getMTCStatus() == TRANSPORT_MASTER) {
+        // Queue up the MTC message.
+        insertMTCFullFrame(position);
     }
 
 #ifdef HAVE_LIBJACK
