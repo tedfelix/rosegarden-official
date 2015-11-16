@@ -68,100 +68,100 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
 
     Composition &composition = m_doc->getComposition();
 
-    // Bar time.
-    // Start at a somewhat arbitrary time prior to the beginning of
-    // the composition.
-    timeT barTime = composition.getBarStart(-20);
-
     int depth = m_metronome->getDepth();
 
-    // If the metronome has beats at the very least, generate the metronome
+    // If the metronome has bars at the very least, generate the metronome
     // ticks.
     if (depth > 0) {
-        // For each bar
+        // For each bar, starting at a somewhat arbitrary time prior to the
+        // beginning of the composition.
         // ??? To avoid dropping a tick when expanding the Composition, we
         //     could simply generate one bar too many of these.  Though that
         //     might cause duplicate events.  Might be better to perform the
         //     Composition expansion one bar prior to hitting the end.
         //     And add a "moreTicks(newEndTime)" function to this class.
-        while (barTime < composition.getEndMarker()) {
+        for (timeT barTime = composition.getBarStart(-20);
+             barTime < composition.getEndMarker();
+             barTime = composition.getBarEndForTime(barTime)) {
+
+            // Add the bar tick
+            m_ticks.push_back(Tick(barTime, BarTick));
+
+            // If all they want is bars, move to the next bar.
+            if (depth == 1)
+                continue;
+
+            // Handle beats and subbeats.
 
             TimeSignature timeSig = composition.getTimeSignatureAt(barTime);
             timeT barDuration = timeSig.getBarDuration();
 
             // Get the beat and subbeat divisions.
             std::vector<int> divisions;
-            if (depth > 0)
-                timeSig.getDivisions(depth - 1, divisions);
+            timeSig.getDivisions(depth - 1, divisions);
 
             int ticks = 1;
 
-            // For each tick type (bar/beat/subbeat)
-            // ??? Consider using TickType.
-            // ??? Consider adding "1" to the front of divisions.  That might
-            //     make the special bar case a little less special.
-            for (int i = -1; i < (int)divisions.size(); ++i) {
-                // For beat and subbeat, use the division from the
-                // time signature.
-                if (i != -1)
-                    ticks *= divisions[i];
+            // For each tick type (beat then subbeat)
+            for (int i = 0; i < (int)divisions.size(); ++i) {
+                ticks *= divisions[i];
 
                 // For each tick
                 for (int tick = 0; tick < ticks; ++tick) {
-                    // For beat and subbeat, drop the first tick.
-                    if (i != -1  &&  (tick % divisions[i] == 0))
+                    // Drop the first tick.
+                    if (tick % divisions[i] == 0)
                         continue;
 
                     timeT tickTime = barTime + (tick * barDuration) / ticks;
                     m_ticks.push_back(Tick(tickTime, static_cast<TickType>(i + 1)));
                 }
             }
-
-            // Next bar
-            barTime = composition.getBarEndForTime(barTime);
         }
     }
 
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
+    int midiClock = settings.value("midiclock", 0).toInt();
+    //int mtcMode = settings.value("mtcmode", 0).toInt() ;
+    settings.endGroup();
 
-    int midiClock = settings.value("midiclock", 0).toInt() ;
-    int mtcMode = settings.value("mtcmode", 0).toInt() ;
-
+    // Send
     if (midiClock == 1) {
-        timeT quarterNote = Note(Note::Crotchet).getDuration();
+        // 24 MIDI timing clocks per quarter note
+        timeT midiClockTime = Note(Note::Crotchet).getDuration() / 24;
 
-        // Insert 24 clocks per quarter note
-        //
-        for (timeT insertTime = composition.getStartMarker();
-             insertTime < composition.getEndMarker();
-             insertTime += quarterNote / 24) {
-            m_ticks.push_back(Tick(insertTime, MidiTimingClockTick));
+        // For each MIDI timing clock
+        for (timeT t = composition.getStartMarker();
+             t < composition.getEndMarker();
+             t += midiClockTime) {
+            m_ticks.push_back(Tick(t, MidiTimingClockTick));
         }
     }
 
-    if (mtcMode > 0) {
-        // do something
-    }
+    //if (mtcMode > 0) {
+    //    // do something
+    //}
 
     std::sort(m_ticks.begin(), m_ticks.end());
 
     if (m_ticks.empty()) {
-        RG_DEBUG << "ctor: WARNING no ticks generated";
+        RG_WARNING << "ctor: WARNING no ticks generated";
     }
 
-    settings.endGroup();
-
+    // This eventually calls fillBuffer() which will convert (map) the
+    // ticks in m_ticks to events in m_buffer.
     init();
 }
 
 MetronomeMapper::~MetronomeMapper()
 {
     RG_DEBUG << "dtor: " << this;
+
     delete m_metronome;
+    m_metronome = NULL;
 }
 
-InstrumentId MetronomeMapper::getMetronomeInstrument()
+InstrumentId MetronomeMapper::getMetronomeInstrument() const
 {
     return m_metronome->getInstrument();
 }
@@ -177,6 +177,7 @@ void MetronomeMapper::fillBuffer()
 
     int index = 0;
 
+    // For each tick
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
 
         //RG_DEBUG << "fillBuffer(): velocity = " << int(velocity);

@@ -43,9 +43,10 @@ public:
     MetronomeMapper(RosegardenDocument *doc);
     virtual ~MetronomeMapper();
 
-    InstrumentId getMetronomeInstrument();
+    InstrumentId getMetronomeInstrument() const;
 
-    // MappedEventBuffer overrides.
+
+    // *** MappedEventBuffer overrides.
 
     virtual int getSegmentRepeatCount();
     // Do channel-setup
@@ -55,6 +56,7 @@ public:
     /// Should the event be played?
     virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
     virtual int calculateSize();
+    /// Convert m_ticks to events in m_buffer.
     virtual void fillBuffer();
 
 private:
