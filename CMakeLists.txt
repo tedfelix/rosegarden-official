@@ -138,9 +138,9 @@ pkg_check_modules(LIBLO REQUIRED liblo>=0.7)
 
 pkg_check_modules(LRDF REQUIRED lrdf>=0.2)
 
-pkg_check_modules(FFTW3F fftw3f>=3.0.0)
+pkg_check_modules(FFTW3F REQUIRED fftw3f>=3.0.0)
 
-pkg_check_modules(SAMPLERATE samplerate>=0.1.2)
+pkg_check_modules(SAMPLERATE REQUIRED samplerate>=0.1.2)
 
 # Optional dependencies ---------------------------------------
 
