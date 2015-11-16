@@ -18,6 +18,10 @@ set(ROSEGARDEN_CODENAME "Peace")
 #set(ROSEGARDEN_CODENAME "Yesterday")
 #set(ROSEGARDEN_CODENAME "Zepherine Drouhin")
 
+# Make the build type default to "Release"
+if(NOT CMAKE_BUILD_TYPE)
+   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 # Make it possible to use cmake files from the cmake subdir
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -170,7 +174,7 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 # BUILD_TESTING is a builtin option in cmake, which defaults to ON.
 # We'll set it to OFF in release mode, and let users (developers) choose in debug mode.
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(BUILD_TESTING OFF)
 endif()
 
