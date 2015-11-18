@@ -253,8 +253,8 @@ globalTempo = {
 
                 \skip 1*144 
 %% 145
-                \times 2/3 { \clef "treble_8"
-                bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
+                \clef "treble_8"
+                \times 2/3 { bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
                 \times 2/3 { bes' 16 g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { a' 8 bes' c'' }  |
                 \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { g' g bes } \times 2/3 { g d f } \times 2/3 { d' g bes } \times 2/3 { g' d' f' } \times 2/3 { g'' g' bes' } \times 2/3 { g' d' f' }  |
                 \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { g' g bes } \times 2/3 { g d f } \times 2/3 { d g, bes, } \times 2/3 { g, d, f, } \times 2/3 { g, 8 bes, b, }  |
@@ -368,9 +368,9 @@ globalTempo = {
                 \override MultiMeasureRest #'expand-limit = 1
 
                 \skip 1*48 
-                \times 2/3 { \clef "treble_8"
+                \clef "treble_8"
                 \key g \minor
-                bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
+                \times 2/3 { bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
 %% 50
                 \times 2/3 { bes' 16 g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { a' 8 bes' c'' }  |
                 \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' f' ees' } \times 2/3 { d' g bes } \times 2/3 { g d' f' } \times 2/3 { g' bes d' } \times 2/3 { bes g f } \times 2/3 { f 8 a c' }  |
@@ -714,9 +714,9 @@ globalTempo = {
                 \override MultiMeasureRest #'expand-limit = 1
 
                 \skip 1*96 
-                \times 2/3 { \clef "treble_8"
+                \clef "treble_8"
                 \key g \minor
-                bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
+                \times 2/3 { bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
                 \times 2/3 { bes' 16 g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { a' 8 bes' c'' }  |
                 \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { d' g bes } \times 2/3 { g d' f' } \times 2/3 { d'' g' bes' } \times 2/3 { g d f } \times 2/3 { d' g' bes' } \times 2/3 { g' d' f' }  |
 %% 100
@@ -852,9 +852,9 @@ globalTempo = {
                 \override MultiMeasureRest #'expand-limit = 1
 
                 \skip 1*180 
-                \times 2/3 { \clef "treble_8"
+                \clef "treble_8"
                 \key bes \major
-                } \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } \times 2/3 { c' d' bes } \times 2/3 { d' c' bes }  |
+                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } \times 2/3 { c' d' bes } \times 2/3 { d' c' bes }  |
                 \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } c' 2  |
                 \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } \times 2/3 { c' d' bes } \times 2/3 { d' c' bes }  |
                 \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } c' 2  |

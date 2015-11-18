@@ -389,8 +389,8 @@ globalTempo = {
                     fis' 8 [ d' _~ ] d' 16 [ e' fis' 8 _~ ] fis' 4 _~  |
                     fis' 16 _~ [ g' e' 8 \) ] d' 4 _\( b 8 [ cis' \) ]  |
                     cis' 4 -\accent _\( d' 2 \)  |
-                    \times 4/6 { \key a \minor
-                    r16 aes''' f''' aes''' cis''' f''' } \times 4/6 { b'' cis''' bes'' cis''' gis'' cis''' } \times 4/6 { fis'' gis'' f'' gis'' cis'' f'' }  |
+                    \key a \minor
+                    \times 4/6 { r16 aes''' f''' aes''' cis''' f''' } \times 4/6 { b'' cis''' bes'' cis''' gis'' cis''' } \times 4/6 { fis'' gis'' f'' gis'' cis'' f'' }  |
                     \times 4/6 { b' 16 bes' gis'' fis'' f'' cis''' } \times 4/6 { bes'' gis'' f''' ees''' cis''' bes'' } \times 4/6 { gis'' fis''' f''' ees''' f''' cis''' }  |
 %% 60
                     \times 4/6 { bes'' 16 a''' fis''' a''' d''' fis''' } \times 4/6 { c''' d''' b'' d''' a'' d''' } \times 4/6 { g'' a'' fis'' a'' d'' fis'' }  |
@@ -401,8 +401,8 @@ globalTempo = {
                     < e' g > 8 _~ [ < c' e' > ] < b c' > 4 < a c' > 8 [ < a c' > ]  |
 %% 65
                     r8 < d b > \> < b d > 4 < b d > 8 [ < b d > ]  |
-                    \times 4/6 { \clef "treble"
-                    r16-\p  \! gis' g' gis' f' gis' } \times 4/6 { ees' gis' d' gis' c' gis' } \times 4/6 { b gis' a gis' g' f' }  |
+                    \clef "treble"
+                    \times 4/6 { r16-\p  \! gis' g' gis' f' gis' } \times 4/6 { ees' gis' d' gis' c' gis' } \times 4/6 { b gis' a gis' g' f' }  |
                     \times 4/6 { g' 16 c'' bes' c'' gis' c'' } \times 4/6 { g' _\markup { \bold \italic "cresc." } c'' f' c'' e' c'' } \times 4/6 { d' c'' c' c'' gis' g' }  |
                     \times 4/6 { gis' 16 cis'' c'' cis'' bes' cis'' } \times 4/6 { gis' cis'' g' cis'' f' cis'' } \times 4/6 { ees' ees'' d'' ees'' cis'' ees'' }  |
                     \times 4/6 { c'' 16 ees'' bes' ees'' gis' ees'' } \times 4/6 { g' e'' ees'' e'' b' e'' } \times 4/6 { g' g'' fis'' g'' e'' g'' }  |

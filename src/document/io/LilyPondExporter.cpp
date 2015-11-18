@@ -2183,11 +2183,15 @@ LilyPondExporter::writeBar(Segment *s,
         QString startTupledStr;
 
         if (event->isa(Note::EventType) || event->isa(Note::EventRestType) ||
-            event->isa(Clef::EventType) || event->isa(Rosegarden::Key::EventType) ||
+            event->isa(Clef::EventType) || event->isa(Key::EventType) ||
             event->isa(Symbol::EventType)) {
 
             long newGroupId = -1;
-            event->get<Int>(BEAMED_GROUP_ID, newGroupId);
+            if (event->isa(Note::EventType)
+                    || event->isa(Note::EventRestType) // TODO don't consider first/last rests in the beam as beamed, to match the on-screen rendering
+                    ) {
+                event->get<Int>(BEAMED_GROUP_ID, newGroupId);
+            }
 
             //RG_DEBUG << event->toXmlString() << "BEAMED_GROUP_ID" << newGroupId;
             if (newGroupId != groupId) {

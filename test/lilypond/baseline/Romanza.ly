@@ -106,9 +106,9 @@ globalTempo = {
                 \time 3/4
                 
                 \repeat volta 2 {
-                    \times 2/3 { \clef "treble_8"
+                    \clef "treble_8"
                     \key e \minor
-                    b' 8 b g } \times 2/3 { b' b g } \times 2/3 { b' b g }  |
+                    \times 2/3 { b' 8 b g } \times 2/3 { b' b g } \times 2/3 { b' b g }  |
                     \times 2/3 { b' 8 b g } \times 2/3 { a' b g } \times 2/3 { g' b g }  |
                     \times 2/3 { g' 8 b g } \times 2/3 { fis' b g } \times 2/3 { e' b g }  |
                     \times 2/3 { e' 8 b g } \times 2/3 { g' b g } \times 2/3 { b' b g }  |
@@ -137,9 +137,9 @@ globalTempo = {
 
                 \skip 2.*16 
                 \repeat volta 2 {
-                    \times 2/3 { \clef "treble_8"
+                    \clef "treble_8"
                     \key cis \minor
-                    \stemDown gis' 8 b gis } \times 2/3 { gis' b gis } \times 2/3 { gis' b gis } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 b gis } \times 2/3 { gis' b gis } \times 2/3 { gis' b gis } \stemNeutral  |
                     \times 2/3 { \stemDown gis' 8 b gis } \times 2/3 { fis' b gis } \times 2/3 { e' b gis } \stemNeutral  |
 %% 35
                     \times 2/3 { \stemDown e' 8 a fis } \times 2/3 { dis' a fis } \times 2/3 { dis' a fis } \stemNeutral  |
