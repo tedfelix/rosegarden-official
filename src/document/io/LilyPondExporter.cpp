@@ -1926,8 +1926,7 @@ LilyPondExporter::calculateDuration(Segment *s,
     timeT duration = (*i)->getNotationDuration();
     timeT absTime = (*i)->getNotationAbsoluteTime();
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: first duration, absTime: "
-             << duration << ", " << absTime;
+    //RG_DEBUG << "calculateDuration: first duration, absTime:" << duration << "," << absTime;
 
     timeT durationCorrection = 0;
 
@@ -1943,8 +1942,7 @@ LilyPondExporter::calculateDuration(Segment *s,
 
     duration += durationCorrection;
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: now duration is "
-             << duration << " after correction of " << durationCorrection;
+    //RG_DEBUG << "calculateDuration: now duration is" << duration << "after correction of" << durationCorrection;
 
     soundingDuration = duration * tupletRatio.first/ tupletRatio.second;
 
@@ -1955,7 +1953,7 @@ LilyPondExporter::calculateDuration(Segment *s,
         overlong = true;
     }
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: time to barEnd is " << toNext;
+    //RG_DEBUG << "calculateDuration: time to barEnd is " << toNext;
 
     // Examine the following event, and truncate our duration
     // if we overlap it.
@@ -1998,7 +1996,7 @@ LilyPondExporter::calculateDuration(Segment *s,
     }
 
     if (s->isBeforeEndMarker(nextElt)) {
-        RG_DEBUG << "LilyPondExporter::calculateDuration: inside conditional";
+        //RG_DEBUG << "calculateDuration: inside conditional";
         toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
         // if the note was lengthened, assume it was lengthened to the left
         // when truncating to the beginning of the next note
@@ -2011,9 +2009,8 @@ LilyPondExporter::calculateDuration(Segment *s,
         }
     }
 
-    RG_DEBUG << "LilyPondExporter::calculateDuration: second toNext is" << toNext;
-
-    RG_DEBUG << "LilyPondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration;
+    //RG_DEBUG << "calculateDuration: second toNext is" << toNext;
+    //RG_DEBUG << "calculateDuration: final duration, soundingDuration:" << duration << "," << soundingDuration;
 
     return duration;
 }
