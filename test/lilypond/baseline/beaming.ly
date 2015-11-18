@@ -41,8 +41,8 @@ globalTempo = {
                 
                 \clef "treble"
                 \key c \major
-                \stemUp b' 4. g' 8 [ ] b' [ d'' ] b' [ g' ] \stemNeutral  |
-                R1  |
+                \stemUp b' 4. g' 8 b' [ d'' ] b' [ g' ] \stemNeutral  |
+                d' 8 g 16 r r8 g r2  |
                 \bar "|."
             } % Voice
         >> % Staff (final) ends

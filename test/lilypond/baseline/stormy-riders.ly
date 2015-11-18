@@ -162,9 +162,9 @@ globalTempo = {
                 \skip 2.*108 
                 \clef "treble"
                 \key b \minor
-                < fis'' d'' > 8. [ ] < fis'' d'' > < e'' cis'' > < d'' b' > < fis'' d'' > 1. 
+                < fis'' d'' > 8. < fis'' d'' > < e'' cis'' > < d'' b' > < fis'' d'' > 1. 
                 % warning: overlong bar truncated here |
-                < fis'' d'' > 8. [ < fis'' d'' > ] < e'' cis'' > [ < d'' b' > ] < e'' cis'' > 16. [ ] < d'' b' > [ < cis'' a' > ] < b' g' > _~ [ ] < b' g' > 4. _~ < b' g' > 2.  |
+                < fis'' d'' > 8. [ < fis'' d'' > ] < e'' cis'' > [ < d'' b' > ] < e'' cis'' > 16. < d'' b' > [ < cis'' a' > ] < b' g' > _~ < b' g' > 4. _~ < b' g' > 2.  |
                 g'' 8. g'' fis'' e'' b'' 1.  |
 %% 40
                 fis'' 8. [ fis'' ] e'' [ d'' ] e'' 16. [ d'' ] cis'' [ b' _~ ] b' 4. _~ b' 2.  |
@@ -205,13 +205,13 @@ globalTempo = {
 
                 \skip 2.*18 
                 \key b \minor
-                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
-                d' 32 [ dis' ] e' 16 g' 8 [ d'' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
-                d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. [ ] c'' 8 [ ] d'' 32 [ dis'' ] e'' 8. _~ e'' 2.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ d'' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. c'' 8 d'' 32 [ dis'' ] e'' 8. _~ e'' 2.  |
 %% 10
-                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
-                c' 32 [ cis' ] d' 16 fis' 8 [ a' ] fis' [ d' ] ais' 16 b' 8. [ ais' 16 ] b' 8. [ ] a' 8 [ ] b' 16 c'' 8. _~ c'' 2.  |
-                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                c' 32 [ cis' ] d' 16 fis' 8 [ a' ] fis' [ d' ] ais' 16 b' 8. [ ais' 16 ] b' 8. a' 8 b' 16 c'' 8. _~ c'' 2.  |
+                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
             } % Voice
 
             \context Voice = "voice 10" {
@@ -232,11 +232,11 @@ globalTempo = {
                 \key b \minor
                 d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 [ g' ] g' 8 [ e' ] \times 2/3 { b' d'' fis'' } d'' 32 dis'' e'' 8. g'' 16 e'' d'' 8 a' 32 ais' b' 16 g' 8 d' 32 dis' e' 16 d' 8  |
 %% 20
-                d' 32 [ dis' ] e' 16 g' 8 [ d'' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 16 [ d' b a' ] g' e' 8 [ b' 16 a' ] g' [ e' ] d'' 8 [ b' ]  |
-                d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. [ ] c'' 8 [ ] d'' 32 [ e'' ] d'' 16 [ c'' a' ] \times 4/5 { dis'' e'' d'' c'' a' } \times 4/5 { g' a' e' d' c' } g' 32 gis' a' 8.  |
-                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] dis' 32 [ e' ] g' 16 [ a' g' ais' ] a' [ g' a' d''' ] d''' 64 dis''' e''' 32 b'' 16 [ g'' b'' ] a'' [ g'' ] e''  |
+                d' 32 [ dis' ] e' 16 g' 8 [ d'' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 16 [ d' b a' ] g' e' 8 [ b' 16 a' ] g' [ e' ] d'' 8 [ b' ]  |
+                d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. c'' 8 d'' 32 [ e'' ] d'' 16 [ c'' a' ] \times 4/5 { dis'' e'' d'' c'' a' } \times 4/5 { g' a' e' d' c' } g' 32 gis' a' 8.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 dis' 32 [ e' ] g' 16 [ a' g' ais' ] a' [ g' a' d''' ] d''' 64 dis''' e''' 32 b'' 16 [ g'' b'' ] a'' [ g'' ] e''  |
                 c'' 64 cis'' d'' 32 e'' 16 fis'' a'' b'' d'' 64 dis'' e'' 32 fis'' 16 d'' b' a' a' 64 ais' b' 32 d'' 16 a' fis' e' e' 64 f' fis' 32 e' 16 a' ais' b' \times 4/5 { c'' g'' e'' g'' b' } \times 4/5 { a'' c'' e' c'' a'' } \times 2/3 { d'' e'' b' ais' a' g' } \times 2/3 { e' g' dis' e' g' b' }  |
-                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
             } % Voice
 
             \context Voice = "voice 12" {
@@ -246,13 +246,13 @@ globalTempo = {
 
                 \skip 2.*90 
                 \key b \minor
-                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
-                d' 32 [ dis' ] e' 16 g' 8 [ d'' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
-                d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. [ ] c'' 8 [ ] d'' 32 [ dis'' ] e'' 8. _~ e'' 2.  |
-                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ d'' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. c'' 8 d'' 32 [ dis'' ] e'' 8. _~ e'' 2.  |
+                d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
 %% 35
-                c' 32 [ cis' ] d' 16 fis' 8 [ a' ] fis' [ d' ] ais' 16 b' 8. [ ais' 16 ] b' 8. [ ] a' 8 [ ] b' 16 c'' 8. _~ c'' 2.  |
-                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. [ ] d' 8 [ ] d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                c' 32 [ cis' ] d' 16 fis' 8 [ a' ] fis' [ d' ] ais' 16 b' 8. [ ais' 16 ] b' 8. a' 8 b' 16 c'' 8. _~ c'' 2.  |
+                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
             } % Voice
 
             \context Voice = "voice 13" {
@@ -377,8 +377,8 @@ globalTempo = {
                 \skip 2.*90 
                 \clef "treble_8"
                 \key d \major
-                e 8 [ g ] b [ g ] e g 4 g d 8 [ ] e 4 a, 16 [ b, ] d [ e g a ] b [ cis' ] e' 8 r  |
-                e 8 [ g ] b [ g ] e g 4 g d 8 [ ] a 8. [ bes 16 ] a [ g ] e 8 e 4 d 8 [ b, ]  |
+                e 8 [ g ] b [ g ] e g 4 g d 8 e 4 a, 16 [ b, ] d [ e g a ] b [ cis' ] e' 8 r  |
+                e 8 [ g ] b [ g ] e g 4 g d 8 a 8. [ bes 16 ] a [ g ] e 8 e 4 d 8 [ b, ]  |
                 e 8 a c' a e d' 4 d' g 8 e 16 [ d ] b, 8 a 16 g e 8 c' 16 [ b a b ] e' 8 [ b _~ ]  |
                 b 4 a g 8 e 4. b 4 b 8 [ b ] a [ g ] b 4. g 8  |
 %% 35
@@ -421,12 +421,12 @@ globalTempo = {
                 \skip 2.*18 
                 \clef "treble_8"
                 \key d \major
-                e 8 [ g ] b [ g ] e g 4 g d 8 [ ] e 4 a, 16 [ b, ] d [ e g a ] b [ cis' ] e' 8 r  |
-                e 8 [ g ] b [ g ] e g 4 g d 8 [ ] a 8. [ bes 16 ] a [ g ] e 8 e 4 d 8 [ b, ]  |
+                e 8 [ g ] b [ g ] e g 4 g d 8 e 4 a, 16 [ b, ] d [ e g a ] b [ cis' ] e' 8 r  |
+                e 8 [ g ] b [ g ] e g 4 g d 8 a 8. [ bes 16 ] a [ g ] e 8 e 4 d 8 [ b, ]  |
                 e 8 a c' a e d' 4 d' g 8 e 16 [ d ] b, 8 a 16 g e 8 c' 16 [ b a b ] e' 8 [ b _~ ]  |
 %% 10
                 b 4 a g 8 e 4. b 4 b 8 [ b ] a [ g ] b 4. g 8  |
-                d 4 a 32 _~ [ < d' a > _~ ] < fis' d' a > 16 _~ < fis' d' a > 8 _~ [ < fis' d' a > _~ ] < fis' d' a > 32 _~ [ < d' fis' a > _~ ] < fis' d' a > 8. _~ < fis' d' a > 4 d 8 c 4 g 32 _~ [ < c' g > _~ ] < e' c' g > 8. _~ [ ] < c' e' g > 8 [ e' 32 _~ < c' e' > _~ < g c' e' > _~ < c g c' e' > _~ ] < e' c' g c > 8 _~ [ < e' c' g c > ]  |
+                d 4 a 32 _~ [ < d' a > _~ ] < fis' d' a > 16 _~ < fis' d' a > 8 _~ [ < fis' d' a > _~ ] < fis' d' a > 32 _~ [ < d' fis' a > _~ ] < fis' d' a > 8. _~ < fis' d' a > 4 d 8 c 4 g 32 _~ [ < c' g > _~ ] < e' c' g > 8. _~ < c' e' g > 8 [ e' 32 _~ < c' e' > _~ < g c' e' > _~ < c g c' e' > _~ ] < e' c' g c > 8 _~ [ < e' c' g c > ]  |
                 e 32 _~ [ < e g > _~ ] < b g e > 8. _~ < b g e > \breve  |
             } % Voice
 
@@ -455,12 +455,12 @@ globalTempo = {
                 \skip 2.*90 
                 \clef "treble_8"
                 \key d \major
-                e 8 [ g ] b [ g ] e g 4 g d 8 [ ] e 4 a, 16 [ b, ] d [ e g a ] b [ cis' ] e' 8 r  |
-                e 8 [ g ] b [ g ] e g 4 g d 8 [ ] a 8. [ bes 16 ] a [ g ] e 8 e 4 d 8 [ b, ]  |
+                e 8 [ g ] b [ g ] e g 4 g d 8 e 4 a, 16 [ b, ] d [ e g a ] b [ cis' ] e' 8 r  |
+                e 8 [ g ] b [ g ] e g 4 g d 8 a 8. [ bes 16 ] a [ g ] e 8 e 4 d 8 [ b, ]  |
                 e 8 a c' a e d' 4 d' g 8 e 16 [ d ] b, 8 a 16 g e 8 c' 16 [ b a b ] e' 8 [ b _~ ]  |
                 b 4 a g 8 e 4. b 4 b 8 [ b ] a [ g ] b 4. g 8  |
 %% 35
-                d 4 a 32 _~ [ < d' a > _~ ] < fis' d' a > 16 _~ < fis' d' a > 8 _~ [ < fis' d' a > _~ ] < fis' d' a > 32 _~ [ < d' fis' a > _~ ] < fis' d' a > 8. _~ < fis' d' a > 4 d 8 c 4 g 32 _~ [ < c' g > _~ ] < e' c' g > 8. _~ [ ] < c' e' g > 8 [ e' 32 _~ < c' e' > _~ < g c' e' > _~ < c g c' e' > _~ ] < e' c' g c > 8 _~ [ < e' c' g c > ]  |
+                d 4 a 32 _~ [ < d' a > _~ ] < fis' d' a > 16 _~ < fis' d' a > 8 _~ [ < fis' d' a > _~ ] < fis' d' a > 32 _~ [ < d' fis' a > _~ ] < fis' d' a > 8. _~ < fis' d' a > 4 d 8 c 4 g 32 _~ [ < c' g > _~ ] < e' c' g > 8. _~ < c' e' g > 8 [ e' 32 _~ < c' e' > _~ < g c' e' > _~ < c g c' e' > _~ ] < e' c' g c > 8 _~ [ < e' c' g c > ]  |
                 e 32 _~ [ < e g > _~ ] < b g e > 8. _~ < b g e > \breve  |
             } % Voice
         >> % Staff ends
@@ -595,7 +595,7 @@ globalTempo = {
                 e' 16 [ g' b' d'' ] fis'' b'' 1 e'' 8. [ fis'' ] d'' [ b' ] g'  |
 %% 5
                 < d' a' > 1 r4 r16 c'' 8. [ e'' ] g'' [ b'' ] d'''  |
-                c''' 16 a'' c''' g'' b'' g'' a'' fis'' a'' e'' g'' e'' fis'' d'' fis'' c'' e'' c'' d'' b' d'' a' c'' a' b' g' b' fis' [ ] a' [ fis' g' e' ] g' [ d' fis' d' ]  |
+                c''' 16 a'' c''' g'' b'' g'' a'' fis'' a'' e'' g'' e'' fis'' d'' fis'' c'' e'' c'' d'' b' d'' a' c'' a' b' g' b' fis' a' [ fis' g' e' ] g' [ d' fis' d' ]  |
             } % Voice
 
             \context Voice = "voice 30" {

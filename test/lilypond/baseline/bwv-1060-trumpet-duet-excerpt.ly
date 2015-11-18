@@ -159,8 +159,8 @@ globalTempo = {
                 \breathe a 8 _( [ d' ) fis' _( e' ) ] a [ d' 16 _( e' ) ] fis' _( [ e' ) fis' _( e' ) ]  |
                 d' 8 [ e' 16 fis' ] g' [ a' b' 8 ] b' _( [ e' ) ] b' _( [ e' ) ]  |
 %% 5
-                r4 e'' 16 ^( [ d'' c'' b' ) ] a' 8 [ ] r r4  |
-                r4 c'' 16 _( [ b' a' g' ) ] f' 8 [ ] r r f' 16 [ g' ]  |
+                r4 e'' 16 ^( [ d'' c'' b' ) ] a' 8 r r4  |
+                r4 c'' 16 _( [ b' a' g' ) ] f' 8 r r f' 16 [ g' ]  |
                 a' 16 [ b' c'' b' ] a' [ g' fis'? e' ] dis' 8 [ b' e' a' ]  |
                 \breathe g' 8. -\tenuto [ fis' 16 ] fis' 8. _\markup { \finger "0 1" } -\trill [ e' 16 ] e' [ b cis' dis' ] e' [ fis' g' a' ]  |
                 b' 8 ^( [ c'' ) b' ^( a' ) ] b' _( [ a' ) g' _( fis' ) ]  |
@@ -169,11 +169,11 @@ globalTempo = {
                 fis' 8 _( [ g' ) a' _( g' ) ] fis' _( [ c'' ) b' _( g' ) ]  |
                 dis' 8 _( [ a' ) g' _( e' ) ] g' _( [ fis' ) ] r4  |
                 b 8 _( [ e' ) g' _( fis' ) ] b [ e' 16 _( fis' ) ] g' _( [ fis' ) g' _( fis' ) ]  |
-                e' 8 [ fis' 16 g' ] a' [ b' ] c'' 8 [ ] c'' 2 _\markup { \finger "0 1" } -\startTrillSpan s4*0 \stopTrillSpan _~  |
+                e' 8 [ fis' 16 g' ] a' [ b' ] c'' 8 c'' 2 _\markup { \finger "0 1" } -\startTrillSpan s4*0 \stopTrillSpan _~  |
 %% 15
-                c'' 8 -\tenuto _~ [ ] \breathe b' _( [ a' g' ) ] fis' _( [ e' ) d' _( cis' ) ]  |
+                c'' 8 -\tenuto _~ \breathe b' _( [ a' g' ) ] fis' _( [ e' ) d' _( cis' ) ]  |
                 a 8 _( [ d' ) fis' _( e' ) ] a [ d' 16 _( e' ) ] fis' _( [ e' ) fis' _( e' ) ]  |
-                d' 8 [ e' 16 fis' ] g' [ a' ] b' 8 [ ] b' 2 \startTrillSpan _~ 
+                d' 8 [ e' 16 fis' ] g' [ a' ] b' 8 b' 2 \startTrillSpan _~ 
                 % warning: overlong bar truncated here |
                 b' 8 -\tenuto _~ \breathe c'' \stopTrillSpan [ b' a' ] g' [ fis' e' dis' ]  |
                 e' 4 -\tenuto r8 fis' 16 [ g' ] a' [ g' fis' e' ] d' [ c' b a ]  |

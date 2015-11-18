@@ -153,20 +153,20 @@ globalTempo = {
 %% 95
                 d'' 1 -\tenuto  |
                 R1*5  |
-                r2 \times 2/3 { a'' 8 r g'' -\staccato } fis'' -\staccato [ ] g'' 16 r  |
+                r2 \times 2/3 { a'' 8 r g'' -\staccato } fis'' -\staccato g'' 16 r  |
                 a'' 4 -\tenuto r8 g'' 4. -\tenuto r4  |
                 R1  |
-                \times 2/3 { a'' 8 -\tenuto g'' -\staccato r } fis'' [ ] r e'' 4 -\staccato fis'' 8 r  |
+                \times 2/3 { a'' 8 -\tenuto g'' -\staccato r } fis'' r e'' 4 -\staccato fis'' 8 r  |
 %% 105
                 g'' 1  |
-                < g'' fis'' > 8 -\tenuto-\staccato [ ] r e'' -\tenuto fis'' ^( r ) g'' 4 a''  |
+                < g'' fis'' > 8 -\tenuto-\staccato r e'' -\tenuto fis'' ^( r ) g'' 4 a''  |
                 d'' 4. -\tenuto d''' -\tenuto < c''' b'' > 8 -\tenuto r  |
                 c''' 4 -\tenuto < b'' a'' > -\tenuto-\staccato r8 b'' -\tenuto c''' 4  |
                 b'' 4. -\tenuto a'' 2 -\tenuto r8  |
 %% 110
                 c''' 4 -\tenuto < b'' a'' > 4. -\tenuto r8 g'' -\tenuto [ fis'' ]  |
                 g'' 4 -\tenuto a'' 8 -\staccato a'' 4. -\tenuto r8 a''  |
-                g'' 4 -\tenuto fis'' -\tenuto e'' -\tenuto d'' 8 -\tenuto [ ] e'' 32 -\staccato r r16  |
+                g'' 4 -\tenuto fis'' -\tenuto e'' -\tenuto d'' 8 -\tenuto e'' 32 -\staccato r r16  |
                 d''' 4. -\tenuto c''' -\tenuto b'' 4 -\tenuto  |
                 a'' 2. -\tenuto d'' 4  |
 %% 115
@@ -226,9 +226,9 @@ globalTempo = {
                 b' 8 r a' r g' r a' r  |
 %% 25
                 g' 4 r8 fis' 4. r4  |
-                g' 8 r fis' -\staccato [ ] e' 4 -\tenuto-\staccato fis' 8. r16 r8  |
+                g' 8 r fis' -\staccato e' 4 -\tenuto-\staccato fis' 8. r16 r8  |
                 g' 4 -\staccato fis' 8 -\staccato [ e' ] r d' 4 -\staccato e' 8 -\tenuto  |
-                r8 fis' r g' 4 -\staccato a' 8 -\staccato [ ] g' -\staccato fis' 16 -\staccato r  |
+                r8 fis' r g' 4 -\staccato a' 8 -\staccato g' -\staccato fis' 16 -\staccato r  |
                 < g' fis' > 8 -\staccato-\tenuto r < e' fis' > -\tenuto-\staccato r g' 4. -\tenuto r8  |
 %% 30
                 R1  |
@@ -253,17 +253,17 @@ globalTempo = {
                 g' 8 -\staccato g' 16. r32 ) r8 fis' -\staccato fis' r e' 16. r32 d'' 8  |
                 r8 c'' -\staccato b' -\staccato a' -\staccato b' r a' r  |
                 g' 8 -\staccato [ g' ] r fis' 16 r fis' 8 r e' 16 r d'' 16. r32  |
-                r8 c'' -\staccato [ ] b' -\staccato a' -\staccato b' -\staccato [ a' -\staccato ] g' -\staccato a' 16 -\staccato r  |
+                r8 c'' -\staccato b' -\staccato a' -\staccato b' -\staccato [ a' -\staccato ] g' -\staccato a' 16 -\staccato r  |
                 b' 4 r8 a' 16 r a' 4 r  |
 %% 50
                 R1  |
                 b' 4 r8 a' -\staccato a' 4 -\staccato g' 16 r g' 8 -\tenuto  |
-                r8 a' 4 -\staccato b' -\staccato a' 8 -\staccato [ ] g' -\tenuto fis' -\staccato  |
+                r8 a' 4 -\staccato b' -\staccato a' 8 -\staccato g' -\tenuto fis' -\staccato  |
                 g' 4 r8 e' 16 r e' 4 -\staccato r  |
                 R1  |
 %% 55
                 g' 8. r16 r8 e' 16 r e' 4 -\staccato fis' 16 r fis' 8 -\tenuto  |
-                r8 g' 4 -\staccato a' -\staccato g' 8 -\staccato [ ] fis' 16 r g' r  |
+                r8 g' 4 -\staccato a' -\staccato g' 8 -\staccato fis' 16 r g' r  |
                 fis' 8 r e' -\staccato r d' r r d'' -\tenuto  |
                 r8 d'' 4 -\staccato c'' 8 -\staccato d'' -\staccato c'' -\staccato b' -\staccato c'' -\staccato  |
                 d'' 8 -\tenuto-\staccato d'' 4 -\staccato c'' 8 -\staccato < b' c'' > 4 -\staccato b' 16 r b' 8 
@@ -271,50 +271,50 @@ globalTempo = {
 %% 60
                 \skip 16 r16 c'' 4 -\staccato d'' -\staccato c'' 8 -\staccato b' 16. r32 r8  |
                 < d'' b' > 8 -\staccato < d'' b' > 16.. -\tenuto r64 r8 < a' c'' > 16 r < a' c'' > 4 -\staccato < b' g' > 16 r < g' b' > 8  |
-                r8 < a' c'' > -\staccato [ ] < c'' a' > -\staccato r < c'' a' > 16. r32 r8 r4  |
-                < d'' b' > 8 -\staccato < d'' b' > -\staccato [ ] r < c'' a' > -\staccato [ ] < c'' a' > r < g' b' > 16 r < g' b' > 8 -\tenuto  |
+                r8 < a' c'' > -\staccato < c'' a' > -\staccato r < c'' a' > 16. r32 r8 r4  |
+                < d'' b' > 8 -\staccato < d'' b' > -\staccato r < c'' a' > -\staccato < c'' a' > r < g' b' > 16 r < g' b' > 8 -\tenuto  |
                 r8 < a' c'' > -\tenuto-\staccato < a' c'' > -\staccato r < c'' a' > 16. r32 r8 r4  |
 %% 65
-                < d'' b' > 8 -\staccato < d'' b' > [ ] r < c'' a' > 16 r < c'' a' > 4 -\staccato < d'' b' > 8 -\staccato < b' d'' > -\tenuto 
+                < d'' b' > 8 -\staccato < d'' b' > r < c'' a' > 16 r < c'' a' > 4 -\staccato < d'' b' > 8 -\staccato < b' d'' > -\tenuto 
                 % warning: overlong bar truncated here |
                 \skip 16 r16 r8 r4 r2  |
-                < d'' b' > 8 -\staccato < d'' b' > [ ] r < a' c'' > 16 r < c'' a' > 8 r < d'' b' > 16 r < d'' b' > 8 -\staccato  |
+                < d'' b' > 8 -\staccato < d'' b' > r < a' c'' > 16 r < c'' a' > 8 r < d'' b' > 16 r < d'' b' > 8 -\staccato  |
                 R1  |
                 d'' 4 r8 b' 4 -\tenuto r8 c'' 16. r32 b' 8 -\staccato  |
 %% 70
                 c'' 4 r8 d'' 4 -\tenuto r8 c'' -\staccato b' -\staccato  |
-                c'' 8 [ ] b' 16 r a' 8 -\staccato b' 4 -\staccato a' 16 r g' 8 -\staccato [ ] a' 16 r  |
+                c'' 8 b' 16 r a' 8 -\staccato b' 4 -\staccato a' 16 r g' 8 -\staccato a' 16 r  |
                 b' 8 r a' 16. r32 r8 g' r fis' -\staccato r  |
-                fis' 8 -\staccato [ ] g' 16. r32 r8 a' 4 -\tenuto r8 r4  |
+                fis' 8 -\staccato g' 16. r32 r8 a' 4 -\tenuto r8 r4  |
                 R1  |
 %% 75
-                fis' 8 -\staccato [ ] g' 16. r32 r8 a' r g' -\staccato fis' -\tenuto-\staccato g' 16 -\staccato r  |
+                fis' 8 -\staccato g' 16. r32 r8 a' r g' -\staccato fis' -\tenuto-\staccato g' 16 -\staccato r  |
                 a' 8 r g' 16 -\staccato r fis' -\staccato r g' -\staccato r fis' -\staccato r < e' fis' > -\staccato r r8  |
                 g' 4 r r2  |
                 r2 r4 e' 16 r fis' r  |
                 g' 4 -\staccato r8 fis' -\staccato r4 e' 8 r  |
 %% 80
-                fis' 8 -\staccato [ ] e' 16 r d' r e' r fis' 8 -\staccato r d' -\staccato r  |
-                d'' 8 -\staccato [ ] d'' 16. r32 r8 c'' -\staccato [ ] c'' r b' 16 -\staccato r b' 8 )  |
+                fis' 8 -\staccato e' 16 r d' r e' r fis' 8 -\staccato r d' -\staccato r  |
+                d'' 8 -\staccato d'' 16. r32 r8 c'' -\staccato c'' r b' 16 -\staccato r b' 8 )  |
                 r2 r4 d' 8 -\staccato r  |
-                d'' 16 r d'' 8 r c'' 16 -\staccato r c'' 8 r b' -\staccato [ ] b' -\tenuto  |
-                r8 c'' r d'' r c'' -\staccato [ ] b' 16 r r8  |
+                d'' 16 r d'' 8 r c'' 16 -\staccato r c'' 8 r b' -\staccato b' -\tenuto  |
+                r8 c'' r d'' r c'' -\staccato b' 16 r r8  |
 %% 85
-                < d'' b' > 8 -\staccato < d'' b' > 16. -\tenuto r32 r8 < a' c'' > -\staccato [ ] < a' c'' > r < b' g' > 16 r < g' b' > 8 -\staccato  |
+                < d'' b' > 8 -\staccato < d'' b' > 16. -\tenuto r32 r8 < a' c'' > -\staccato < a' c'' > r < b' g' > 16 r < g' b' > 8 -\staccato  |
                 R1  |
-                < b' d'' > 8 -\staccato < b' d'' > 16.. -\tenuto r64 r8 < c'' a' > -\staccato [ ] < a' c'' > r < b' g' > 16 r < g' b' > 8 -\staccato  |
+                < b' d'' > 8 -\staccato < b' d'' > 16.. -\tenuto r64 r8 < c'' a' > -\staccato < a' c'' > r < b' g' > 16 r < g' b' > 8 -\staccato  |
                 R1  |
                 fis' 8 r r e' 16. r32 r2  |
 %% 90
                 r2 r  |
                 fis' 8 r r e' r2  |
                 d' 16. r32 r8 e' 16. r32 r8 fis' -\staccato r g' r  |
-                g' 8 -\staccato [ g' ] r fis' 16 r fis' 8 r e' -\staccato [ ] a' -\tenuto  |
+                g' 8 -\staccato [ g' ] r fis' 16 r fis' 8 r e' -\staccato a' -\tenuto  |
                 r8 g' -\staccato r4 r2  |
 %% 95
                 g' 8 -\staccato [ g' ] r fis' 16 r fis' 8 r e' 16 r a' 8  |
-                r8 g' r d'' 4 -\staccato c'' 8 -\staccato [ ] < b' c'' > 16 -\tenuto-\staccato r c'' -\staccato r  |
-                d'' 8 -\staccato [ d'' -\staccato ] r c'' -\staccato [ ] c'' r b' -\staccato [ ] b' -\staccato  |
+                r8 g' r d'' 4 -\staccato c'' 8 -\staccato < b' c'' > 16 -\tenuto-\staccato r c'' -\staccato r  |
+                d'' 8 -\staccato [ d'' -\staccato ] r c'' -\staccato c'' r b' -\staccato b' -\staccato  |
                 R1  |
                 d'' 8 -\staccato [ d'' ] r c'' 16 r c'' 8 r b' 16 r b' 16. -\tenuto \clef "treble"
                 r32 
@@ -350,12 +350,12 @@ globalTempo = {
                 % warning: overlong bar truncated here |
                 \skip 8 \skip 16 \skip 32 r8 fis' 4. r4 g' 32 
                 % warning: overlong bar truncated here |
-                \skip 16 \skip 32 r8 fis' -\staccato [ ] e' 4 -\tenuto-\staccato fis' 8. r16 r8 g' 32 -\staccato 
+                \skip 16 \skip 32 r8 fis' -\staccato e' 4 -\tenuto-\staccato fis' 8. r16 r8 g' 32 -\staccato 
                 % warning: overlong bar truncated here |
 %% 115
                 \skip 8 \skip 16 \skip 32 fis' 8 -\staccato [ e' ] r d' 4 -\staccato e' 8 -\tenuto r32 
                 % warning: overlong bar truncated here |
-                \skip 16 \skip 32 fis' 8 r g' 4 -\staccato a' 8 -\staccato [ ] g' -\staccato fis' 16 -\staccato r < g' fis' > 32 -\staccato-\tenuto 
+                \skip 16 \skip 32 fis' 8 r g' 4 -\staccato a' 8 -\staccato g' -\staccato fis' 16 -\staccato r < g' fis' > 32 -\staccato-\tenuto 
                 % warning: overlong bar truncated here |
                 \skip 16 \skip 32 r8 < e' fis' > -\tenuto-\staccato r g' 4. -\tenuto r8 r32 
                 % warning: overlong bar truncated here |
@@ -370,9 +370,9 @@ globalTempo = {
                 % warning: overlong bar truncated here |
                 \skip 8 \skip 16 \skip 32 r8 fis' 4 -\tenuto r8 e' r fis' 32 -\tenuto 
                 % warning: overlong bar truncated here |
-                \skip 8 \skip 16 \skip 32 r8 g' 4 -\tenuto r8 a' 4 -\staccato g' 32 -\staccato [ ] 
+                \skip 8 \skip 16 \skip 32 r8 g' 4 -\tenuto r8 a' 4 -\staccato g' 32 -\staccato 
                 % warning: overlong bar truncated here |
-                \skip 16 \skip 32 fis' 8 [ ] r e' 4 -\staccato d' 16 r e' -\staccato r fis' -\staccato r g' 32 
+                \skip 16 \skip 32 fis' 8 r e' 4 -\staccato d' 16 r e' -\staccato r fis' -\staccato r g' 32 
                 % warning: overlong bar truncated here |
 %% 125
                 \skip 16 r32 g' 8. r16 fis' 8 -\staccato fis' 4 r r32 
@@ -866,7 +866,7 @@ globalTempo = {
                 % 119040 + 3520 < 122880  &&  11/12 < 4/4
                 r16  |
                 g' 16 r g' 8 \times 2/3 { r _( g' r ) } \times 2/3 { r f' r } g' r  |
-                g' 8 -\staccato [ ] fis' 16 r g' r fis' r e' 8 -\staccato r \times 2/3 { r e' -\staccato r }  |
+                g' 8 -\staccato fis' 16 r g' r fis' r e' 8 -\staccato r \times 2/3 { r e' -\staccato r }  |
 %% 35
                 fis' 16 r fis' 8 -\staccato r fis' 16. r32 r8 g' -\staccato r fis' -\staccato  |
                 r8 e' -\staccato r d' 16. r32 r4 d' 8 -\staccato r  |
@@ -887,8 +887,8 @@ globalTempo = {
                 d 16 r d 8 -\staccato \times 2/3 { r a r } a r \times 2/3 { g -\staccato g _( r ) }  |
 %% 50
                 r4 r16 r32 d' 8 -\staccato d' -\staccato c' -\staccato b 16 \times 2/3 { r8 c' -\staccato r }  |
-                g 16 r g 8 -\staccato r d' -\staccato [ ] d' r c' 16 r b 8 -\staccato  |
-                r8 c' 16. r32 r8 d' r c' -\staccato [ ] \times 2/3 { b c' -\staccato r }  |
+                g 16 r g 8 -\staccato r d' -\staccato d' r c' 16 r b 8 -\staccato  |
+                r8 c' 16. r32 r8 d' r c' -\staccato \times 2/3 { b c' -\staccato r }  |
                 d' 16. r32 r8 r c' -\staccato r2  |
                 r2 r  |
 %% 55
@@ -941,36 +941,36 @@ globalTempo = {
                 R1  |
 %% 95
                 fis' 16 r fis' 8 -\staccato r e' -\staccato r2  |
-                r8 fis' -\staccato [ ] e' -\staccato [ ] fis' 16 r e' r fis' r e' r fis' r  |
-                g' 8 -\staccato [ ] g' 16 r fis' 32. r64 r16 r8 r2  |
+                r8 fis' -\staccato e' -\staccato fis' 16 r e' r fis' r e' r fis' r  |
+                g' 8 -\staccato g' 16 r fis' 32. r64 r16 r8 r2  |
                 \times 2/3 { g' 8 g' -\staccato r } fis' 16 -\staccato r r8 r2  |
-                g' 8 -\staccato [ ] g' 16 r32 fis' 16 r32 r16 g' 8 -\staccato \times 2/3 { r g' r } fis' 32. r64 r16 g' 8 -\staccato  |
+                g' 8 -\staccato g' 16 r32 fis' 16 r32 r16 g' 8 -\staccato \times 2/3 { r g' r } fis' 32. r64 r16 g' 8 -\staccato  |
 %% 100
                 r8 fis' 16 r \times 2/3 { e' 8 -\staccato fis' -\staccato r } g' 16 r fis' r e' r fis' r  |
                 e' 16 -\tenuto r r8 r4 r2  |
                 R1  |
                 g' 16 r r8 r4 r2  |
-                g' 16 r g' 8 -\staccato r g' r fis' -\staccato [ ] \times 2/3 { e' -\staccato fis' -\staccato r }  |
+                g' 16 r g' 8 -\staccato r g' r fis' -\staccato \times 2/3 { e' -\staccato fis' -\staccato r }  |
 %% 105
                 g' 8 r r4 r2  |
                 r2 r8 r16 r32 r64 g' 16 -\tenuto \times 2/3 { r8 fis' r }  |
                 g' 8 r fis' 16 r g' 8 r4 r8 fis' -\staccato  |
-                \times 2/3 { g' 8 fis' -\staccato r } e' 16 r fis' r g' 16. r32 r8 fis' -\staccato [ ] e' 16 r  |
+                \times 2/3 { g' 8 fis' -\staccato r } e' 16 r fis' r g' 16. r32 r8 fis' -\staccato e' 16 r  |
                 fis' 8 -\staccato [ e' -\staccato ] r d' -\staccato r4 r8 d' 16 r  |
 %% 110
                 e' 8 -\staccato r fis' 16 r g' 8 -\staccato r4 \times 2/3 { e' 8 -\staccato r d' -\staccato }  |
                 e' 8 -\staccato r fis' 16 r g' 8 -\staccato r a' -\staccato r < b' a' > 16 -\tenuto r  |
-                r8 a' -\staccato r g' -\staccato r a' -\staccato [ ] g' 16 r a' r  |
+                r8 a' -\staccato r g' -\staccato r a' -\staccato g' 16 r a' r  |
                 g' 16 r fis' r r8 e' 16 r r2  |
                 g' 8 -\staccato [ fis' -\staccato ] \times 2/3 { r e' r } r2  |
 %% 115
-                g' 8 -\staccato [ ] fis' 16 r \times 2/3 { r8 e' r } r2  |
+                g' 8 -\staccato fis' 16 r \times 2/3 { r8 e' r } r2  |
                 g' 8 -\staccato [ fis' -\staccato ] r e' -\staccato r d' 16 r c' r d' -\staccato r  |
                 e' 16 r r8 r d' -\staccato r2  |
                 r2 r  |
                 g 16 r f r \times 2/3 { r8 g r } r2  |
 %% 120
-                g 8 -\staccato [ ] fis 32. r64 r16 r8 e 16 r r4 d 8 -\staccato r  |
+                g 8 -\staccato fis 32. r64 r16 r8 e 16 r r4 d 8 -\staccato r  |
                 e 16 r r8 r fis 32. r64 r16 r2  |
                 g 32. r64 r16 r8 r fis 16 r r2  |
                 fis 16 r r8 \times 2/3 { r e r } r r16 r32 d 8 -\staccato r32 r8  |

@@ -143,7 +143,7 @@ globalTempo = {
                 ees'' 16. -\staccato bes' 4 r32 d'' 16. ^( r32 ) c'' 4 bes' 8 -\staccato [ d'' -\tenuto _~ ]  |
 %% 50
                 d'' 8 -\tenuto-\staccato _~ bes' -\tenuto-\staccato ees'' -\tenuto-\staccato d'' -\staccato c'' 16 -\tenuto bes' 16. _( r32 r16 ) a' -\tenuto bes' 8 -\staccato r16  |
-                g' 4 bes' 8 -\staccato a' 4 f' 8 -\staccato [ ] g' 16 -\staccato r a' 8 -\staccato  |
+                g' 4 bes' 8 -\staccato a' 4 f' 8 -\staccato g' 16 -\staccato r a' 8 -\staccato  |
                 bes' 4 a' 8. r16 g' 4. -\tenuto r8  |
                 g' 4 -\tenuto r8 bes' 4 -\tenuto r8 c'' 4 -\staccato  |
                 bes' 4 -\tenuto r8 a' 4 -\tenuto r8 bes' 4 -\staccato  |
@@ -168,10 +168,10 @@ globalTempo = {
                 ees'' 4 -\tenuto d'' 8 -\tenuto ees'' 4 -\tenuto f'' 8 -\tenuto [ ees'' -\tenuto ] d'' -\tenuto  |
                 c'' 4 -\tenuto ees'' 8 -\tenuto [ d'' -\tenuto ] c'' 4 -\tenuto bes'  |
                 c'' 1 -\tenuto  |
-                g' 4 -\tenuto g'' 4. -\tenuto f'' 8 [ ] < ees'' d'' > 4 -\tenuto-\staccato  |
+                g' 4 -\tenuto g'' 4. -\tenuto f'' 8 < ees'' d'' > 4 -\tenuto-\staccato  |
 %% 70
                 ees'' 8. -\tenuto d'' 8 -\tenuto r16 c'' 4 -\tenuto d'' 8 -\tenuto ees'' 4 -\tenuto  |
-                g' 4 -\tenuto g'' 4. -\tenuto f'' 8 -\tenuto [ ] ees'' -\tenuto d'' -\tenuto  |
+                g' 4 -\tenuto g'' 4. -\tenuto f'' 8 -\tenuto ees'' -\tenuto d'' -\tenuto  |
                 ees'' 4 -\tenuto g'' f'' ees''  |
                 c'' 4. -\tenuto ees'' 2 -\tenuto r8  |
                 c'' 4 -\tenuto d'' 8 -\tenuto c'' 2 -\tenuto bes' 8 -\tenuto  |
@@ -203,7 +203,7 @@ globalTempo = {
                 bes' 4 -\tenuto c'' 8 -\tenuto [ bes' -\tenuto ] a' -\staccato-\tenuto r16 bes' 4 r16  |
                 bes' 4 -\tenuto a' 8 bes' 4 -\tenuto a' 8 -\tenuto g' 4  |
                 bes' 4 -\tenuto c'' -\tenuto d'' -\tenuto bes' -\tenuto  |
-                < ees'' ees'' > 8 -\tenuto-\staccato [ ] bes' -\tenuto d'' 4 -\tenuto c'' 4. bes' 8  |
+                < ees'' ees'' > 8 -\tenuto-\staccato bes' -\tenuto d'' 4 -\tenuto c'' 4. bes' 8  |
                 d'' 4 -\tenuto bes' 8 -\tenuto a' 4 -\tenuto bes' 8 a' 4 -\tenuto  |
 %% 100
                 < g' a' > 8 -\tenuto r r16 bes' 2 -\tenuto r16.. 

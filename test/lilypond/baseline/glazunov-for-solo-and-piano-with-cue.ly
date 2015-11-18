@@ -57,7 +57,7 @@ globalTempo = {
                 a' 8 \! ^( [ b' ) ] gis' 4 ^( _~ gis' 8 \> [ a' ) ] fis' 4 ^( _~  |
                 fis' 8 -\p \! [ dis' ) \< ] e' 4 ^( _~ e' 8 ^\markup { \bold "allargando poco" } [ cis' ) ] d' 4  |
                 c' 8 -\f \! ^( [ cis' gis' r16 fis' ) ] e' 8 \> ^( [ dis' gis a ) \! ]  |
-                b 8 ^\markup { \bold "animando" } ^( \< cis' 4 ) d' 8 -\accent _~ [ ] d' \! [ cis' \> ^( gis a ) ]  |
+                b 8 ^\markup { \bold "animando" } ^( \< cis' 4 ) d' 8 -\accent _~ d' \! [ cis' \> ^( gis a ) ]  |
                 b 8 \! \< ^( [ cis' e' ) d' -\accent _~ ] d' \! [ cis' \> ^( gis a ) ]  |
 %% 15
                 b 8 \! \< ^( [ d' gis' fis' ) ] f' ^( [ gis' b' a' ) ]  |
@@ -104,7 +104,7 @@ globalTempo = {
                 a 4. ^\markup { \bold "riten." } ^( \< b 8 ) gis 4. \! _( \> fis 8 )  |
                 \clef "tenor"
                 \key a \major
-                fis 8 ^\markup { \bold \large "Tempo I" } \! [ ] cis -\p -\staccato _( [ dis -\staccato f -\staccato ) ] fis -\staccato _( [ gis -\staccato ] a 4 -\tenuto )  |
+                fis 8 ^\markup { \bold \large "Tempo I" } \! cis -\p -\staccato _( [ dis -\staccato f -\staccato ) ] fis -\staccato _( [ gis -\staccato ] a 4 -\tenuto )  |
 %% 50
                 r8 [ gis -\staccato ^( a -\staccato b -\staccato ) ] cis' -\staccato ^( [ d' -\staccato ] e' 4 -\tenuto )  |
                 r8 [ fis -\staccato _( gis -\staccato a -\staccato ) ] b -\staccato ^( [ cis' -\staccato ] d' 4 -\tenuto )  |
@@ -164,9 +164,9 @@ globalTempo = {
 %% 15
                     r4 < d' b > 2 -\p \< < b d' > 4  |
                     < d' b > 2 -\mf \! < b cis' > 4 \> r  |
-                    r8 \! [ ] < a' cis'' > -\p -\staccato [ < cis'' dis'' a' > -\staccato < f'' a' cis'' > -\staccato ] < fis'' a' cis'' > -\staccato [ < a' a'' cis'' > -\staccato ] r4  |
-                    r8 [ ] < cis'' gis'' > -\staccato [ < gis'' a'' cis'' > -\staccato < b'' cis'' gis'' > -\staccato ] < cis'' gis'' cis''' > -\staccato [ < e'' e''' > -\staccato ] r4  |
-                    r8 [ ] < cis'' fis'' cis''' > -\staccato [ < d'' fis'' d''' > -\staccato < e'' e''' cis''' > -\staccato ] < fis''' fis'' cis''' > -\staccato [ < a'' a''' > -\staccato ] r4  |
+                    r8 \! < a' cis'' > -\p -\staccato [ < cis'' dis'' a' > -\staccato < f'' a' cis'' > -\staccato ] < fis'' a' cis'' > -\staccato [ < a' a'' cis'' > -\staccato ] r4  |
+                    r8 < cis'' gis'' > -\staccato [ < gis'' a'' cis'' > -\staccato < b'' cis'' gis'' > -\staccato ] < cis'' gis'' cis''' > -\staccato [ < e'' e''' > -\staccato ] r4  |
+                    r8 < cis'' fis'' cis''' > -\staccato [ < d'' fis'' d''' > -\staccato < e'' e''' cis''' > -\staccato ] < fis''' fis'' cis''' > -\staccato [ < a'' a''' > -\staccato ] r4  |
 %% 20
                     r8 [ < e'' cis'' e' > -\staccato < fis' cis'' fis'' > -\staccato < gis' cis'' gis'' > -\staccato ] < a' a'' cis'' > -\staccato [ < cis'' cis''' > -\staccato ] cis' 4 _( _~  |
                     cis' 8 [ ais ) ] b 4 _( _~ b 8 \< [ gis ) ] a 4  |
@@ -189,15 +189,15 @@ globalTempo = {
                     < d'' fis' d' > 4 ) < e' b' e'' > < e' a' cis' > 8 _( \> [ < e' e'' cis' > < cis' fis'' e' > < cis' g'' e' > ) ]  |
 %% 35
                     < a' a'' > 4 \! _( < a fis' a' a'' > \< r < a e' g' a'' >  |
-                    a'' 4 < b a'' d' fis' > ) < cis' a'' > 8 \! [ ] < cis' a' a'' > ^( [ < cis' b' b'' > < cis' cis'' cis''' > ]  |
-                    < d'' d''' > 8 ) r r4 d' 8 [ ] b' ^( [ < b a' cis'' > < b a' dis'' > ]  |
-                    < g' b' e'' > 8 [ < g' b' fis'' > ] < g'' a' e' > ) [ < e' a' > ] < a' fis' > [ ] < fis' a' fis'' > ^( [ < gis' e'' gis'' > < bes' e'' bes'' > ]  |
+                    a'' 4 < b a'' d' fis' > ) < cis' a'' > 8 \! < cis' a' a'' > ^( [ < cis' b' b'' > < cis' cis'' cis''' > ]  |
+                    < d'' d''' > 8 ) r r4 d' 8 b' ^( [ < b a' cis'' > < b a' dis'' > ]  |
+                    < g' b' e'' > 8 [ < g' b' fis'' > ] < g'' a' e' > ) [ < e' a' > ] < a' fis' > < fis' a' fis'' > ^( [ < gis' e'' gis'' > < bes' e'' bes'' > ]  |
                     < b' d'' b'' > 8 [ < cis'' d'' cis''' > ] < d'' d''' fis'' > 4 ) < cis'' fis'' cis''' > \< < a'' cis''' cis'' > 8 [ < dis''' dis'' fis'' > ]  |
 %% 40
                     < b'' cis''' f'' f''' > 4. -\f \! ^( \> < fis''' fis'' > 8 ) < a'' fis''' fis'' cis''' > 4 < a' fis' b > -\p \!  |
-                    < b e' g' > 2 _( < a a' e' > 8 ) [ ] < a' e'' > ^( < cis'' a'' > 4 )  |
-                    < b e' g' > 2 _( < e' a' a > 8 ) [ ] < a' e'' > ^( < cis'' a'' > 4 )  |
-                    r4-\mf  < d'' fis'' > \< ^( < g' e'' > 4. b' 8 [ ]  |
+                    < b e' g' > 2 _( < a a' e' > 8 ) < a' e'' > ^( < cis'' a'' > 4 )  |
+                    < b e' g' > 2 _( < e' a' a > 8 ) < a' e'' > ^( < cis'' a'' > 4 )  |
+                    r4-\mf  < d'' fis'' > \< ^( < g' e'' > 4. b' 8  |
                     < fis' d'' > 8 -\f ) \! [ < b' fis'' > ^( ] < b'' d'' > 4 ) < bes d' > 4. \> _( < bes cis' > 8  |
 %% 45
                     b 8 ) \! [ < g'' b' > ] < b'' d'' > 4 < b d' > -\mf _( dis' )  |

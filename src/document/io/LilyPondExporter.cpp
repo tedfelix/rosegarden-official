@@ -2093,14 +2093,14 @@ void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str
     }
 }
 
-void LilyPondExporter::endBeamedGroup(std::string groupType, std::ofstream &str, int notesInBeamedGroup)
+void LilyPondExporter::endBeamedGroup(std::string groupType, std::ofstream &str, bool inBeamedGroup, bool newBeamedGroup)
 {
     if (groupType == GROUP_TYPE_TUPLED) {
-        if (m_exportBeams && notesInBeamedGroup > 0)
+        if (m_exportBeams && inBeamedGroup && !newBeamedGroup) // newBeamedGroup is false only once we generated a "["
             str << "] ";
         str << "} ";
     } else if (groupType == GROUP_TYPE_BEAMED) {
-        if (m_exportBeams && notesInBeamedGroup > 0)
+        if (m_exportBeams && inBeamedGroup && !newBeamedGroup)
             str << "] ";
     }
 }
@@ -2189,13 +2189,13 @@ LilyPondExporter::writeBar(Segment *s,
             long newGroupId = -1;
             event->get<Int>(BEAMED_GROUP_ID, newGroupId);
 
-            //RG_DEBUG << "BEAMED_GROUP_ID" << newGroupId;
+            //RG_DEBUG << event->toXmlString() << "BEAMED_GROUP_ID" << newGroupId;
             if (newGroupId != groupId) {
 
                 if (groupId != -1) {
                     //RG_DEBUG << "Leaving beamed group" << groupId << "notesInBeamedGroup=" << notesInBeamedGroup;
                     // leaving a beamed group
-                    endBeamedGroup(groupType, str, notesInBeamedGroup);
+                    endBeamedGroup(groupType, str, inBeamedGroup, newBeamedGroup);
                     tupletRatio = std::pair<int, int>(1, 1);
                     groupId = -1;
                     groupType = "";
@@ -2236,6 +2236,18 @@ LilyPondExporter::writeBar(Segment *s,
                     }
                     notesInBeamedGroup = 0;
                 }
+            } else if (inBeamedGroup
+                       && (event->isa(Note::EventType) || event->isa(Note::EventRestType))
+                       && (!event->has(SKIP_PROPERTY))) {
+
+                // This is the second note or rest in this beamed group -> add '[' after the first one.
+                if (m_exportBeams && newBeamedGroup && notesInBeamedGroup > 0) {
+                    str << "[ ";
+                    newBeamedGroup = false;
+                    //RG_DEBUG << "BEGIN" << notesInBeamedGroup;
+                }
+
+
             }
         } else if (event->isa(Controller::EventType) &&
                    event->has(Controller::NUMBER) &&
@@ -2669,13 +2681,6 @@ LilyPondExporter::writeBar(Segment *s,
             handleGuitarChord(i, str);
         }
 
-        // LilyPond 2.0 introduces required postfix syntax for beaming
-        if (m_exportBeams && newBeamedGroup && notesInBeamedGroup > 0) {
-            str << "[ ";
-            newBeamedGroup = false;
-            //RG_DEBUG << "BEGIN" << notesInBeamedGroup;
-        }
-
         if (event->isa(Indication::EventType)) {
             preEventsToStart.insert(event);
             preEventsInProgress.insert(event);
@@ -2687,8 +2692,8 @@ LilyPondExporter::writeBar(Segment *s,
     } // end of the gigantic while loop, I think
 
     if (groupId != -1) {
-        //RG_DEBUG << "End of bar, ending beaming group" << groupId << groupType << notesInBeamedGroup;
-        endBeamedGroup(groupType, str, notesInBeamedGroup);
+        //RG_DEBUG << "End of bar, ending beaming group" << groupId << groupType;
+        endBeamedGroup(groupType, str, inBeamedGroup, newBeamedGroup);
     }
 
     if (isGrace == 1) {

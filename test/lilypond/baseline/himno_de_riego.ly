@@ -68,7 +68,7 @@ globalTempo = {
                 < cis'' e'' > 4 < cis'' a' > 8 < d'' b' > 4 < gis' b' > 8  |
                 < cis'' e'' > 4. r4 < cis'' a' > 8  |
                 < b' gis' > 4 < cis'' a' > 8 < d'' b' > 4 < e'' cis'' > 8  |
-                < fis'' d'' > 4. < d'' b' > 4 < fis'' d'' > 8 [ ]  |
+                < fis'' d'' > 4. < d'' b' > 4 < fis'' d'' > 8  |
                 < e'' cis'' > 8 [ < fis'' d'' > < e'' cis'' > ] < d'' b' > [ < cis'' a' > < b' gis' > ]  |
 %% 25
                 a' 4. r8 r4  |
