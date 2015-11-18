@@ -45,7 +45,7 @@ global = {
                 \override MultiMeasureRest #'expand-limit = 1
                 \time 4/4
                 
-                cis' 8 [ b cis' cis' ] cis' [ b 4 cis' 8 ]  |
+                cis' 8 [ b cis' cis' ] cis' b 4 cis' 8  |
                 cis' 16 [ b cis' r ] cis' [ b 8 cis' 16 ] cis' 8 [ r16 cis' 8 ] e' 16 [ b 8 ]  |
                 a'' 16 [ g'' 32 a'' 16 g'' 32 r16 ] a'' [ g'' 8 a'' 16 ] a'' 8 [ r16 a'' 8 ] c''' 16 [ g'' 8 ]  |
                 \bar "|."

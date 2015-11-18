@@ -2190,7 +2190,20 @@ LilyPondExporter::writeBar(Segment *s,
             if (event->isa(Note::EventType)
                     || event->isa(Note::EventRestType) // TODO don't consider first/last rests in the beam as beamed, to match the on-screen rendering
                     ) {
+
                 event->get<Int>(BEAMED_GROUP_ID, newGroupId);
+
+                // Is it really beamed? 4ths and longer notes cannot be
+                // (ex: bug #1705430, beaming groups erroneous after merging notes)
+                // HJJ: This should be fixed in notation engine,
+                //      after which the workaround below should be removed.
+                std::string groupTypeProp = "";
+                event->get<String>(BEAMED_GROUP_TYPE, groupTypeProp); // might fail
+                if (groupTypeProp == GROUP_TYPE_BEAMED) {
+                    const int noteType = event->get<Int>(NOTE_TYPE);
+                    if (noteType >= Note::QuarterNote)
+                        newGroupId = -1;
+                }
             }
 
             //RG_DEBUG << event->toXmlString() << "BEAMED_GROUP_ID" << newGroupId;
@@ -2456,26 +2469,8 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
             if (inBeamedGroup) {
-                // This is a workaround for bug #1705430:
-                //   Beaming groups erroneous after merging notes
-                // There will be fewer "e4. [ ]" errors in LilyPond-compiling.
-                // HJJ: This should be fixed in notation engine,
-                //      after which the workaround below should be removed.
-                Note note(Note::getNearestNote(duration, MAX_DOTS));
-
-                switch (note.getNoteType()) {
-                case Note::SixtyFourthNote:
-                case Note::ThirtySecondNote:
-                case Note::SixteenthNote:
-                case Note::EighthNote:
-                    notesInBeamedGroup++;
-                    //RG_DEBUG << "notesInBeamedGroup++" << notesInBeamedGroup;
-                    break;
-                }
+                notesInBeamedGroup++;
             }
-            // // Old version before the workaround for bug #1705430:
-            // if (inBeamedGroup)
-            //    notesInBeamedGroup++;
         } else if (event->isa(Note::EventRestType)) {
 
             const bool hiddenRest = event->has(INVISIBLE) && event->get<Bool>(INVISIBLE);

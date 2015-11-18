@@ -63,7 +63,7 @@ globalTempo = {
                 a' 4 ^\markup { \bold "calando" } \! ^( gis' 2 ) \> cis' 4  |
                 a' 2. ^\markup { \bold "Tempo I." } \! gis' 16 ^( [ fis' e' fis' ) ]  |
                 gis' 2. cis' 4 ^(  |
-                fis' 8 ) r [ fis' 4 _~ ] fis' 16 [ a' ^( gis' fis' e' 32 d' cis' b a b cis' d' ) ]  |
+                fis' 8 ) r fis' 4 _~ fis' 16 [ a' ^( gis' fis' e' 32 d' cis' b a b cis' d' ) ]  |
 %% 20
                 e' 2. e' 8 ^( [ fis' ) ]  |
                 d' 4. ^( e' 8 ) cis' 4 \< cis' 8 ^( [ a' ) ]  |
