@@ -2,15 +2,8 @@
 #
 # make-release-tarball
 #
-# Copyright (c) 2009  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
-# Released under the GPL
-#
-# REQUIRES: 
-#
-#
-# PURPOSE:
-#
-#
+# Copyright (c) 2009, 2015  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under version 2 of the GPL
 #
 
 myname=$(basename $0)
@@ -21,19 +14,17 @@ usage() {
 Usage: $myname [TARGET]
 
 Must run from a valid rosegarden/ directory.  Examines the current directory to
-determine where it resides in the Subversion repository (typically
-branches/stable_YY_MM for release candidates) and pulls a clean copy from there.
-Bootstraps the fresh checkout and performs some preparatory cleanups, then
-leaves rosegarden-[VERSION]-[TARGET].tar.bz2 ready for release.
+determine where it resides in the Subversion repository, and pulls a clean copy
+from there.  Leaves rosegarden-[VERSION]-[TARGET].tar.bz2 ready for release.
 
 VERSION - extracted from source
 
-TARGET  - assumes that configure.ac already has the correct version in the
-          AC_INIT call and the codename has been set on the CODENAME= line; use
-          the target "RELEASE" for a final release or a release candidate (as
-          opposed to an alpha, beta, pre, etc.)
+TARGET  - assumes that CMakeLists.txt already has the correct ROSEGARDEN_VERSION
+          and ROSEGARDEN_CODENAME set; use the target "RELEASE" for a final
+          release or a release candidate (as opposed to an alpha, beta, pre, etc.)
 
 Example: $myname alpha-2
+         $myname RELEASE
 EOF
     exit 1
 }
@@ -46,10 +37,10 @@ puke() {
 [ -z "$target" ] && usage
 
 [ -d "src" ] || puke "$myname must be run from a top level directory!"
-[ -f "configure.ac" ] || puke "No configure.ac!  Is this a top level directory?"
+[ -f "Doxyfile" ] || puke "No Doxyfile!  Is this a top level directory?"
 [ -d ".svn" ] || puke "No .svn directory.  Is this a development tree?"
 
-VERSION=$(grep AC_INIT configure.ac|cut -d \, -f 2|sed 's/ //g')
+VERSION=$(grep ROSEGARDEN_VERSION CMakeLists.txt|cut -d \" -f 2|sed 's/ //g')
 
 URL=$(svn info | grep '^URL' | awk '{print $NF}')
 
@@ -68,11 +59,11 @@ cd $outDir || puke "Unable to change to $outDir!"
 echo "Rewriting version from $VERSION to $NEW_VERSION in configure.ac..."
 # NOTE: . is a regex wildcard, but it does match a simple . so I've elected not
 # to bother with some hackery to escape it to \. here
-sed "s/$VERSION/$NEW_VERSION/" configure.ac > foo42 && mv foo42 configure.ac
+sed -i "s/$VERSION/$NEW_VERSION/" CMakeLists.txt
 
 # only set this if this is a final release
 if [ "$target" == "RELEASE" ]; then
-    sed "s/UNSTABLE/STABLE/" Makefile.in > foo42 && mv foo42 Makefile.in
+    sed -i "s/UNSTABLE/STABLE/" Makefile.in
 fi
 
 echo "Purging unwanted files..."

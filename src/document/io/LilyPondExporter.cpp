@@ -2193,7 +2193,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                 event->get<Int>(BEAMED_GROUP_ID, newGroupId);
 
-                // Is it really beamed? 4ths and longer notes cannot be
+                // Is it really beamed? quarter and longer notes cannot be
                 // (ex: bug #1705430, beaming groups erroneous after merging notes)
                 // HJJ: This should be fixed in notation engine,
                 //      after which the workaround below should be removed.
