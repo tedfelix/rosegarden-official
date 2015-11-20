@@ -4317,26 +4317,7 @@ void
 NotationView::slotEditLyrics()
 {
     Segment *segment = getCurrentSegment();
-    int oldVerseCount = 1;
-    
-    // The loop below is identical with the one in LyricEditDialog::countVerses() 
-    // Maybe countVerses() should be moved to a Segment manipulating class ? (hjj)
-    for (Segment::iterator i = segment->begin();
-         segment->isBeforeEndMarker(i); ++i) {
-
-        if ((*i)->isa(Text::EventType)) {
-
-            std::string textType;
-            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
-                textType == Text::Lyric) {
-
-                long verse = 0;
-                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
-
-                if (verse >= oldVerseCount) oldVerseCount = verse + 1;
-            }
-        }
-    }
+    int oldVerseCount = segment->getVerseCount();
 
     LyricEditDialog dialog(this, segment);
 
