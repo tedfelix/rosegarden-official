@@ -627,15 +627,16 @@ public:
     void setTranspose(int transpose);
 
     /**
-     * Return the number of verses in the lyrics
-     * (call countVerses() when needed)
+     * Return the number of verses in the lyrics.
      */
     int getVerseCount();
-    
+
     /**
-     * (Re)compute the internally remembered verse count
+     * Ask to recompute the number of verses the next time getVerseCount()
+     * will be running.
+     * This method must be called each time verses are added or removed.
      */
-    void countVerses();
+    void invalidateVerseCount() { m_verseCount = -1; }
 
     /**
      * Return the verse index of lyrics associated with the segment if
@@ -890,6 +891,12 @@ public:
 
 private:
     void checkInsertAsClefKey(Event *e) const;
+
+    /**
+     * (Re)compute the internally remembered verse count.
+     * Used by getVerseCount().
+     */
+    void countVerses();
     
     Composition *m_composition; // owns me, if it exists
 

@@ -146,6 +146,9 @@ SetLyricsCommand::execute()
             m_segment->insert(event);
         }
     }
+
+    // The verse count changed
+    m_segment->invalidateVerseCount();
 }
 
 void
