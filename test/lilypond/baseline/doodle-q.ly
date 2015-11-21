@@ -19,7 +19,6 @@ globalTempo = {
         \override Score.Fingering #'staff-padding = #'()
 
         \context Staff = "track 1" << 
-            \set Staff.instrumentName = \markup { \center-column { " " } }
             \set Staff.midiInstrument = "Viola"
             \set Score.skipBars = ##t
             \set Staff.printKeyCancellation = ##f
@@ -89,7 +88,6 @@ globalTempo = {
         >> % Staff ends
 
         \context Staff = "track 2" << 
-            \set Staff.instrumentName = \markup { \center-column { " " } }
             \set Staff.midiInstrument = "Viola"
             \set Score.skipBars = ##t
             \set Staff.printKeyCancellation = ##f
@@ -159,7 +157,6 @@ globalTempo = {
         >> % Staff ends
 
         \context Staff = "track 3" << 
-            \set Staff.instrumentName = \markup { \center-column { " " } }
             \set Staff.midiInstrument = "Cello"
             \set Score.skipBars = ##t
             \set Staff.printKeyCancellation = ##f
@@ -229,7 +226,6 @@ globalTempo = {
         >> % Staff ends
 
         \context Staff = "track 4" << 
-            \set Staff.instrumentName = \markup { \center-column { " " } }
             \set Staff.midiInstrument = "Cello"
             \set Score.skipBars = ##t
             \set Staff.printKeyCancellation = ##f
@@ -306,8 +302,6 @@ globalTempo = {
     >> % notes
 
     \layout {
-        indent = 3.0\cm
-        short-indent = 1.5\cm
         \context { \Staff \RemoveEmptyStaves }
         \context { \GrandStaff \accepts "Lyrics" }
     }

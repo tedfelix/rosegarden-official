@@ -1331,6 +1331,7 @@ LilyPondExporter::write()
                             << staffName << "\" ";
 
                         str << "<< " << std::endl;
+                        ++col;
 
                         if (staffName.size()) {
                             hasInstrumentNames = true;
@@ -1361,11 +1362,11 @@ LilyPondExporter::write()
                             }
                             staffNameWithTranspose << " } }";
                             if (m_languageLevel < LILYPOND_VERSION_2_10) {
-                                str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
+                                str << indent(col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
                                     << std::endl;
                             } else {
                                 // always write long staff name
-                                str << indent(++col) << "\\set Staff.instrumentName = "
+                                str << indent(col) << "\\set Staff.instrumentName = "
                                     << staffNameWithTranspose.str() << std::endl;
 
                                 // write short staff name if user desires, and if
