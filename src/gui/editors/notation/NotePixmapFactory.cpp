@@ -3482,6 +3482,12 @@ NotePixmapFactory::makeItem(QPoint hotspot)
     p->setPixmap(*m_generatedPixmap);
     p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
 
+    // The hit test QGraphicsScene::items(), called by NotationScene::setupMouseEvent,
+    // calls contains() which calls shape(), which by default generates a mask (slow!).
+    // Change the shape mode to BoundingRectShape to be able to click on text items anywhere
+    // in the bounding rect, rather than having to aim for a black pixel.
+    p->setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
+
 //    NOTATION_DEBUG << "NotePixmapFactory::makeItem: item = " << p << " (scene = " << p->scene() << ")" << endl;
 
     delete m_generatedPixmap;
