@@ -1418,9 +1418,7 @@ LilyPondExporter::write()
                 // ex. LilyPond expects signals when a decrescendo starts
                 // as well as when it ends
                 eventendlist preEventsInProgress;
-                eventstartlist preEventsToStart;
                 eventendlist postEventsInProgress;
-                eventstartlist postEventsToStart;
 
                 // If the segment doesn't start at 0, add a "skip" to the start
                 // No worries about overlapping segments, because Voices can overlap
