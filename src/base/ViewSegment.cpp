@@ -38,18 +38,11 @@ ViewSegment::~ViewSegment()
 ViewElementList *
 ViewSegment::getViewElementList()
 {
-    return getViewElementList(m_segment.begin(), m_segment.end());
-}
-
-ViewElementList *
-ViewSegment::getViewElementList(Segment::iterator from,
-				Segment::iterator to)
-{
     if (!m_viewElementList) {
 
         m_viewElementList = new ViewElementList;
 
-        for (Segment::iterator i = from; i != to; ++i) {
+        for (Segment::const_iterator i = m_segment.begin(); i != m_segment.end(); ++i) {
 
             if (!wrapEvent(*i)) continue;
 
@@ -58,7 +51,6 @@ ViewSegment::getViewElementList(Segment::iterator from,
         }
 
         m_segment.addObserver(this);
-
     }
     
     return m_viewElementList;

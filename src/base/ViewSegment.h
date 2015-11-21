@@ -49,14 +49,6 @@ public:
     ViewElementList *getViewElementList();
 
     /**
-     * Create a new ViewElementList wrapping Events in the
-     * [from, to[ interval, or return the previously created one
-     * (even if passed new arguments)
-     */
-    ViewElementList *getViewElementList(Segment::iterator from,
-					Segment::iterator to);
-
-    /**
      * Return the Segment wrapped by this object 
      */
     Segment &getSegment() { return m_segment; }
