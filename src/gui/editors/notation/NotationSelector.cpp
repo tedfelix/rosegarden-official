@@ -274,8 +274,6 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
         const QPointF p1(e->sceneX, e->sceneY);
         const QRectF r = QRectF(p0, p1).normalized();
 
-        RG_DEBUG << "SELECTION RECT:" << r;
-
         m_selectionRect->setRect(r.x() + 0.5, r.y() + 0.5, r.width(), r.height());
         m_selectionRect->show();
 
@@ -287,7 +285,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 
 void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 {
-    RG_DEBUG << "NotationSelector::handleMouseRelease.";
+    //RG_DEBUG << "NotationSelector::handleMouseRelease.";
     m_updateRect = false;
 
     // We can lose m_selectionRect since the click under some
@@ -301,18 +299,15 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     int w = int(e->sceneX - m_selectionOrigin.x());
     int h = int(e->sceneY - m_selectionOrigin.y());
 
-    RG_DEBUG << "e->sceneX =" << e->sceneX << "sceneY =" << e->sceneY
-             << "m_selectionOrigin =" << m_selectionOrigin
-             << "w =" << w << "h =" << h << "m_startedFineDrag =" << m_startedFineDrag;
+    //RG_DEBUG << "e->sceneX =" << e->sceneX << "sceneY =" << e->sceneY
+    //         << "m_selectionOrigin =" << m_selectionOrigin
+    //         << "w =" << w << "h =" << h << "m_startedFineDrag =" << m_startedFineDrag;
      
     if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
         (m_clickedShift)) {
 
-        RG_DEBUG << "click! m_clickedElement =" << m_clickedElement << "m_selectedStaff =" << m_selectedStaff;
-
         if (m_clickedElement != 0 && m_selectedStaff) {
             
-            RG_DEBUG << "clicked on element";
             // If we didn't drag out a meaningful area, but _did_
             // click on an individual event, then select just that
             // event
@@ -334,7 +329,6 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
                 m_selectionToMerge = 0;
 
             } else {
-                RG_DEBUG << "YES, SELECT" << m_clickedElement;
                 m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
             }
             /*
@@ -365,7 +359,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
         if (m_clickedElement &&
             !m_clickedShift /* &&
             !m_clickedElement->isRest() */) {
-            RG_DEBUG << "Dragging from Code Point Foxtrot: w =" << w << "h =" << h;
+            //RG_DEBUG << "Dragging from Code Point Foxtrot: w =" << w << "h =" << h;
             // drag() must be called here from Foxtrot, whether attempting to
             // click to select a note head or to click and drag a note.  It's
             // required in both cases, and neither case works without this call
@@ -554,7 +548,6 @@ void NotationSelector::drag(int x, int y, bool final)
             // can't always recreate it, so as a precaution clear it
             // here so at least it isn't set to something bogus
             m_clickedElement = 0;
-            RG_DEBUG << "CLEARED m_clickedElement!";
 
             if (mc && singleNonNotePreview) {
 
@@ -575,7 +568,6 @@ void NotationSelector::drag(int x, int y, bool final)
                         m_clickedElement = 0;
                     }
 
-                    RG_DEBUG << "setPos" << x << y;
                     m_selectionRect->setPos(x, y);
                 }
             }
