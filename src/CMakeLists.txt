@@ -716,12 +716,41 @@ qt4_wrap_ui(rg_SOURCES
   gui/studio/DeviceManagerDialogUi.ui
 )
 
+# Compile translations (.ts -> .qm)
+file(GLOB TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/*.ts)
+list(REMOVE_ITEM TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/rosegarden.ts)
+qt4_add_translation(QM_FILES ${TS_FILES})
+
+# Generate a .qrc for the .qm files
+SET(localeqrc_file locale)
+SET(localeqrc_srcfile ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale.qrc)
+SET(localeqrc_infile ${CMAKE_CURRENT_BINARY_DIR}/locale.qrc)
+SET(localeqrc_outfile ${CMAKE_CURRENT_BINARY_DIR}/qrc_locale.cpp)
+
+# Copy the QRC file to the output directory, because the files listed in the
+# qrc file are relative to that directory.
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${localeqrc_infile}
+    COMMAND ${CMAKE_COMMAND} -E copy ${localeqrc_srcfile} ${localeqrc_infile}
+    MAIN_DEPENDENCY ${localeqrc_srcfile}
+)
+
+# Run the resource compiler (rcc_options should already be set). We can't
+# use QT4_ADD_RESOURCES because the qrc file may not exist yet.
+ADD_CUSTOM_COMMAND(
+   OUTPUT ${localeqrc_outfile}
+   COMMAND ${QT_RCC_EXECUTABLE}
+   ARGS ${rcc_options} -name ${localeqrc_file} -o ${localeqrc_outfile} ${localeqrc_infile}
+   MAIN_DEPENDENCY ${localeqrc_infile}
+   DEPENDS ${QM_FILES}
+)
+
 qt4_add_resources(rg_SOURCES
    ../data/data.qrc
 )
 
 # Define a static lib with the whole code
-add_library(rosegardenprivate ${RG_LIBRARY_TYPE} ${rg_SOURCES})
+add_library(rosegardenprivate ${RG_LIBRARY_TYPE} ${rg_SOURCES} ${localeqrc_outfile})
 
 # Link to the following libraries
 target_link_libraries(rosegardenprivate

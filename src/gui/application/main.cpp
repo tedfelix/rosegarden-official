@@ -452,6 +452,7 @@ int main(int argc, char *argv[])
     std::cout << "Thorn - " << std::boolalpha << Thorn << std::endl;
 
     Q_INIT_RESOURCE(data);
+    Q_INIT_RESOURCE(locale);
 
     // In order to ensure the Thorn style comes out right, we need to set our
     // custom style, which is based on QPlastiqueStyle
