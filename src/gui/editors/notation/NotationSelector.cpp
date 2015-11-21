@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationSelector]"
+
 #include "NotationSelector.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
@@ -50,7 +52,6 @@
 #include <QRect>
 #include <QString>
 #include <QTimer>
-
 
 namespace Rosegarden
 {
@@ -175,7 +176,7 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
-    NOTATION_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
+    RG_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
 
     NotationStaff *staff = e->staff;
     if (!staff) return;
@@ -205,7 +206,7 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
 void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 {
-    NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
+    RG_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
 
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
@@ -249,7 +250,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
     int w = int(e->sceneX - m_selectionOrigin.x());
     int h = int(e->sceneY - m_selectionOrigin.y());
 
-    NOTATION_DEBUG << "NotationSelector::handleMouseMove: "
+    RG_DEBUG << "NotationSelector::handleMouseMove: "
                    << e->sceneX << "-" << m_selectionOrigin.x() << "=> w: " << w << " h: " << h << endl;
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
@@ -378,22 +379,22 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 
 void NotationSelector::drag(int x, int y, bool final)
 {
-    NOTATION_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
+    RG_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
 
     if (!m_clickedElement || !m_selectedStaff) return ;
 
     EventSelection *selection = m_scene->getSelection();
 
-    NOTATION_DEBUG << "NotationSelector::drag: scene currently has selection with " << (selection ? selection->getSegmentEvents().size() : 0) << " event(s)" << endl;
+    RG_DEBUG << "NotationSelector::drag: scene currently has selection with " << (selection ? selection->getSegmentEvents().size() : 0) << " event(s)" << endl;
 
     if (!selection || !selection->contains(m_clickedElement->event())) {
         selection = new EventSelection(m_selectedStaff->getSegment());
-        NOTATION_DEBUG << "(selection does not contain our event " << m_clickedElement->event() << " of type " << m_clickedElement->event()->getType() << ", adding it)" << endl;
+        RG_DEBUG << "(selection does not contain our event " << m_clickedElement->event() << " of type " << m_clickedElement->event()->getType() << ", adding it)" << endl;
         selection->addEvent(m_clickedElement->event(), m_ties);
     }
     m_scene->setSelection(selection, false);
 
-    NOTATION_DEBUG << "Sorted out selection" << endl;
+    RG_DEBUG << "Sorted out selection" << endl;
 
     NotationStaff *targetStaff = m_scene->getStaffForSceneCoords(x, y);
     if (!targetStaff) targetStaff = m_selectedStaff;
@@ -442,7 +443,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
                 int parts = restDuration / duration;
                 double encroachment = x - restX;
-                NOTATION_DEBUG << "encroachment is " << encroachment << ", restWidth is " << restWidth << endl;
+                RG_DEBUG << "encroachment is " << encroachment << ", restWidth is " << restWidth << endl;
                 int part = (int)((encroachment / restWidth) * parts);
                 if (part >= parts) part = parts - 1;
 
@@ -562,7 +563,6 @@ void NotationSelector::drag(int x, int y, bool final)
                         targetStaff->findEvent(lastInsertedEvent);
 
                     if (vli != targetStaff->getViewElementList()->end()) {
-                        RG_DEBUG << "SET AGAIN!";
                         m_clickedElement = dynamic_cast<NotationElement *>(*vli);
                     } else {
                         m_clickedElement = 0;
@@ -585,10 +585,10 @@ void NotationSelector::dragFine(int x, int y, bool final)
     // Nobody has complained about how broken this has been since the port, so I
     // intend to leave it broken, and try to compensate by improving the layout
     // code instead.
-    NOTATION_DEBUG << "NotationSelector::dragFine: Fine drag is broken and has been bypassed.  Seeing this message is a BUG!" << endl;
+    RG_DEBUG << "NotationSelector::dragFine: Fine drag is broken and has been bypassed.  Seeing this message is a BUG!" << endl;
     return;
 
-    NOTATION_DEBUG << "NotationSelector::dragFine (micro-position) x:" << x << " y: " << y << endl;
+    RG_DEBUG << "NotationSelector::dragFine (micro-position) x:" << x << " y: " << y << endl;
 
     if (!m_clickedElement || !m_selectedStaff)
         return ;
@@ -804,7 +804,7 @@ NotationSelector::getEventsInSelectionRect()
 
     Profiler profiler("NotationSelector::getEventsInSelectionRect");
 
-    //    NOTATION_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
+    //    RG_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
     QRectF rect = m_selectionRect->rect();
