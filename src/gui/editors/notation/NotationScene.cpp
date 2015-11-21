@@ -745,13 +745,13 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     // we've discovered what the context is -- now check whether we're
     // clicking on something specific
 
-    QList<QGraphicsItem *> collisions = items(e->scenePos());
+    const QList<QGraphicsItem *> collisions = items(e->scenePos(), Qt::ContainsItemBoundingRect, Qt::DescendingOrder);
 
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
     NotationElement *clickedNonNote = 0;
 
-    for (QList<QGraphicsItem *>::iterator i = collisions.begin();
+    for (QList<QGraphicsItem *>::const_iterator i = collisions.begin();
          i != collisions.end(); ++i) {
 
         NotationElement *element = NotationElement::getNotationElement(*i);
@@ -817,20 +817,17 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         nme.exact = true;
     }
 
-/*
-    NOTATION_DEBUG << "NotationScene::setupMouseEvent: sx = " << sx
+    /*RG_DEBUG << "NotationScene::setupMouseEvent: sx = " << sx
                    << ", sy = " << sy
                    << ", modifiers = " << nme.modifiers
                    << ", buttons = " << nme.buttons
                    << ", element = " << nme.element
                    << ", staff = " << nme.staff
-                   << " (id = " << (nme.staff ? nme.staff->getId() : -1)
+                   << " (id = " << (nme.staff ? nme.staff->getId() : -1) << ")"
                    << ", clef = " << nme.clef.getClefType()
                    << ", key = " << nme.key.getName()
                    << ", time = " << nme.time
-                   << ", height = " << nme.height
-                   << endl;
-*/
+                   << ", height = " << nme.height;*/
 }
 
 void
