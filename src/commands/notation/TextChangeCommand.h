@@ -39,7 +39,7 @@ class TextChangeCommand : public BasicCommand
 public:
     TextChangeCommand(Segment &segment,
                       Event *event,
-                      Text text);
+                      const Text &text);
     virtual ~TextChangeCommand();
 
 protected:
