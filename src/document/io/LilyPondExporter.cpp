@@ -1099,6 +1099,7 @@ LilyPondExporter::write()
     int pianoStaffCounter = 0;
     int bracket = 0;
     int prevBracket = -1;
+    bool hasInstrumentNames = false;
 
     // Write out all segments for each Track, in track order.
     // This involves a hell of a lot of loops through all tracks
@@ -1315,8 +1316,7 @@ LilyPondExporter::write()
                         // In the case of colliding note heads, user may define
                         //  - DISPLACED_X -- for a note/chord
                         //  - INVISIBLE -- for a rest
-                        std::ostringstream staffName;
-                        staffName << protectIllegalChars(m_composition->
+                        const std::string staffName = protectIllegalChars(m_composition->
                                                         getTrackById(lastTrackIndex)->getLabel());
 
                         std::string shortStaffName = protectIllegalChars(m_composition->
@@ -1327,50 +1327,53 @@ LilyPondExporter::write()
                         */
                         str << std::endl << indent(col)
                             << "\\context Staff = \"track "
-                            << (trackPos + 1) << (staffName.str() == "" ? "" : ", ")
-                            << staffName.str() << "\" ";
+                            << (trackPos + 1) << (staffName == "" ? "" : ", ")
+                            << staffName << "\" ";
 
                         str << "<< " << std::endl;
 
-                        // The octavation is omitted in the instrument name.
-                        // HJJ: Should it be automatically added to the clef: G^8 ?
-                        // What if two segments have different transpose in a track?
-                        std::ostringstream staffNameWithTranspose;
-                        staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName.str() << " \"";
-                        if ((seg->getTranspose() % 12) != 0) {
-                            staffNameWithTranspose << " \\line { ";
-                            int t = seg->getTranspose();
-                            t %= 12;
-                            if (t < 0) t+= 12;
-                            switch (t) {
-                            case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
-                            case 2 : staffNameWithTranspose << "\"in D\""; break;
-                            case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
-                            case 4 : staffNameWithTranspose << "\"in E\""; break;
-                            case 5 : staffNameWithTranspose << "\"in F\""; break;
-                            case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
-                            case 7 : staffNameWithTranspose << "\"in G\""; break;
-                            case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
-                            case 9 : staffNameWithTranspose << "\"in A\""; break;
-                            case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
-                            case 11 : staffNameWithTranspose << "\"in B\""; break;
+                        if (staffName.size()) {
+                            hasInstrumentNames = true;
+                            // The octavation is omitted in the instrument name.
+                            // HJJ: Should it be automatically added to the clef: G^8 ?
+                            // What if two segments have different transpose in a track?
+                            std::ostringstream staffNameWithTranspose;
+                            staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName << " \"";
+                            if ((seg->getTranspose() % 12) != 0) {
+                                staffNameWithTranspose << " \\line { ";
+                                int t = seg->getTranspose();
+                                t %= 12;
+                                if (t < 0) t+= 12;
+                                switch (t) {
+                                case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
+                                case 2 : staffNameWithTranspose << "\"in D\""; break;
+                                case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
+                                case 4 : staffNameWithTranspose << "\"in E\""; break;
+                                case 5 : staffNameWithTranspose << "\"in F\""; break;
+                                case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
+                                case 7 : staffNameWithTranspose << "\"in G\""; break;
+                                case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
+                                case 9 : staffNameWithTranspose << "\"in A\""; break;
+                                case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
+                                case 11 : staffNameWithTranspose << "\"in B\""; break;
+                                }
+                                staffNameWithTranspose << " }";
                             }
-                            staffNameWithTranspose << " }";
-                        }
-                        staffNameWithTranspose << " } }";
-                        if (m_languageLevel < LILYPOND_VERSION_2_10) {
-                            str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
-                                << std::endl;
-                        } else {
-                            // always write long staff name
-                            str << indent(++col) << "\\set Staff.instrumentName = "
-                                << staffNameWithTranspose.str() << std::endl;
+                            staffNameWithTranspose << " } }";
+                            if (m_languageLevel < LILYPOND_VERSION_2_10) {
+                                str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
+                                    << std::endl;
+                            } else {
+                                // always write long staff name
+                                str << indent(++col) << "\\set Staff.instrumentName = "
+                                    << staffNameWithTranspose.str() << std::endl;
 
-                            // write short staff name if user desires, and if
-                            // non-empty
-                            if (m_useShortNames && shortStaffName.size()) {
-                                str << indent(col) << "\\set Staff.shortInstrumentName = \""
-                                    << shortStaffName << "\"" << std::endl;
+                                // write short staff name if user desires, and if
+                                // non-empty
+                                if (m_useShortNames && shortStaffName.size()) {
+                                    str << indent(col) << "\\set Staff.shortInstrumentName = \""
+                                        << shortStaffName << "\"" << std::endl;
+                                }
                             }
                         }
 
@@ -1880,8 +1883,10 @@ LilyPondExporter::write()
     str << indent(col++) << "\\layout {" << std::endl;
 
     // indent instrument names
-    str << indent(col) << "indent = 3.0\\cm" << std::endl
-        << indent(col) << "short-indent = 1.5\\cm" << std::endl;
+    if (hasInstrumentNames) {
+        str << indent(col) << "indent = 3.0\\cm" << std::endl
+            << indent(col) << "short-indent = 1.5\\cm" << std::endl;
+    }
 
     if (!m_exportEmptyStaves) {
         str << indent(col) << "\\context { \\Staff \\RemoveEmptyStaves }" << std::endl;
