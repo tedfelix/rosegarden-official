@@ -71,6 +71,7 @@ if(USE_QT4)
    set(QT_QTTEST_LIBRARY Qt4::QtTest)
 
 else()
+   set(USE_QT5 TRUE)
 
    # Locate Qt5 on the system.
    find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
@@ -80,6 +81,8 @@ else()
    set(QT_QTXML_LIBRARY Qt5::Xml)
    set(QT_QTNETWORK_LIBRARY Qt5::Network)
    set(QT_QTTEST_LIBRARY Qt5::Test)
+
+   set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
 
 endif()
 

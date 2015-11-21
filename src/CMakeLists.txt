@@ -711,15 +711,26 @@ set(rg_SOURCES
   sequencer/RosegardenSequencer.cpp
 )
 
-qt4_wrap_ui(rg_SOURCES
+set(rg_UIS
   gui/dialogs/RosegardenTransportUi.ui
   gui/studio/DeviceManagerDialogUi.ui
 )
 
+if(USE_QT4)
+  qt4_wrap_ui(rg_SOURCES ${rg_UIS})
+else()
+  qt5_wrap_ui(rg_SOURCES ${rg_UIS})
+endif()
+
 # Compile translations (.ts -> .qm)
 file(GLOB TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/*.ts)
 list(REMOVE_ITEM TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/rosegarden.ts)
-qt4_add_translation(QM_FILES ${TS_FILES})
+if(USE_QT4)
+  qt4_add_translation(QM_FILES ${TS_FILES})
+else()
+  find_package(Qt5LinguistTools "5.1.0" REQUIRED)
+  qt5_add_translation(QM_FILES ${TS_FILES})
+endif()
 
 # Generate a .qrc for the .qm files
 SET(localeqrc_file locale)
@@ -745,9 +756,11 @@ ADD_CUSTOM_COMMAND(
    DEPENDS ${QM_FILES}
 )
 
-qt4_add_resources(rg_SOURCES
-   ../data/data.qrc
-)
+if(USE_QT4)
+qt4_add_resources(rg_SOURCES ../data/data.qrc)
+else()
+qt5_add_resources(rg_SOURCES ../data/data.qrc)
+endif()
 
 # Define a static lib with the whole code
 add_library(rosegardenprivate ${RG_LIBRARY_TYPE} ${rg_SOURCES} ${localeqrc_outfile})
