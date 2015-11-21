@@ -2192,8 +2192,7 @@ LilyPondExporter::writeBar(Segment *s,
 
             long newGroupId = -1;
             if (event->isa(Note::EventType)
-                    || event->isa(Note::EventRestType) // TODO don't consider first/last rests in the beam as beamed, to match the on-screen rendering
-                    ) {
+                    || event->isa(Note::EventRestType)) {
 
                 event->get<Int>(BEAMED_GROUP_ID, newGroupId);
 
@@ -2207,6 +2206,12 @@ LilyPondExporter::writeBar(Segment *s,
                     const int noteType = event->get<Int>(NOTE_TYPE);
                     if (noteType >= Note::QuarterNote)
                         newGroupId = -1;
+
+                    // A rest at the beginning of a beam group shouldn't be beamed, to match the on-screen rendering
+                    // TODO: do the same for a rest at the end of the beam group (but this requires look-ahead...)
+                    if (event->isa(Note::EventRestType) && newGroupId != groupId) {
+                        newGroupId = -1;
+                    }
                 }
             }
 

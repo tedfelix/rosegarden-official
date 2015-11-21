@@ -79,8 +79,8 @@ globalTempo = {
                         a' 4 -\tenuto a'' 2 -\tenuto g'' 4 -\tenuto  |
 %% 30
                         g'' 16 -\tenuto [ fis'' -\tenuto e'' -\tenuto d'' -\tenuto ] d'' 8 -\tenuto [ d'' -\tenuto ] d'' 4 -\tenuto r  |
-                        g'' 8 -\tenuto [ g'' -\tenuto ] r [ a'' 16 -\tenuto fis'' -\tenuto ] g'' 8 -\tenuto [ d'' -\tenuto g'' -\tenuto b'' -\tenuto ]  |
-                        g'' 8 -\tenuto [ g'' -\tenuto ] r [ a'' 16 -\tenuto fis'' -\tenuto ] g'' 8 -\tenuto [ d'' -\tenuto g'' -\tenuto b'' -\tenuto ]  |
+                        g'' 8 -\tenuto [ g'' -\tenuto ] r a'' 16 -\tenuto [ fis'' -\tenuto ] g'' 8 -\tenuto [ d'' -\tenuto g'' -\tenuto b'' -\tenuto ]  |
+                        g'' 8 -\tenuto [ g'' -\tenuto ] r a'' 16 -\tenuto [ fis'' -\tenuto ] g'' 8 -\tenuto [ d'' -\tenuto g'' -\tenuto b'' -\tenuto ]  |
                         d''' 1 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 1  |
@@ -118,8 +118,8 @@ globalTempo = {
                         e'' 8 -\tenuto [ a'' -\tenuto c'' -\tenuto c'' -\tenuto ] f'' 16 -\tenuto [ e'' -\tenuto d'' -\tenuto c'' -\tenuto ] d'' -\tenuto [ c'' -\tenuto b' -\tenuto a' -\tenuto ]  |
 %% 60
                         aes' 4 -\tenuto e'' -\tenuto e'' -\tenuto r  |
-                        a' 8 -\tenuto [ a' -\tenuto ] r [ b' 16 -\tenuto aes' -\tenuto ] a' 8 -\tenuto [ e' -\tenuto a' -\tenuto c'' -\tenuto ]  |
-                        a' 8 -\tenuto [ a' -\tenuto ] r [ b' 16 -\tenuto aes' -\tenuto ] a' 8 -\tenuto [ a' -\tenuto c'' -\tenuto e'' -\tenuto ]  |
+                        a' 8 -\tenuto [ a' -\tenuto ] r b' 16 -\tenuto [ aes' -\tenuto ] a' 8 -\tenuto [ e' -\tenuto a' -\tenuto c'' -\tenuto ]  |
+                        a' 8 -\tenuto [ a' -\tenuto ] r b' 16 -\tenuto [ aes' -\tenuto ] a' 8 -\tenuto [ a' -\tenuto c'' -\tenuto e'' -\tenuto ]  |
                         a'' 1 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 1  |
@@ -133,9 +133,9 @@ globalTempo = {
                         ees'' 2 -\tenuto d'' 4 -\tenuto c'' -\tenuto  |
 %% 70
                         b' 16 -\tenuto [ g'' -\tenuto g'' -\tenuto g'' -\tenuto ] g'' -\tenuto [ d'' -\tenuto e'' -\tenuto c'' -\tenuto ] d'' -\tenuto [ g'' -\tenuto g'' -\tenuto g'' -\tenuto ] g'' -\tenuto [ d'' -\tenuto e'' -\tenuto c'' -\tenuto ]  |
-                        b' 8 -\tenuto [ d'' -\tenuto g'' -\tenuto b'' -\tenuto ] r [ c''' -\tenuto a'' -\tenuto f'' -\tenuto ]  |
-                        r8 [ e'' -\tenuto g'' -\tenuto b'' -\tenuto ] r [ a'' -\tenuto f'' -\tenuto d'' -\tenuto ]  |
-                        r8 [ c'' -\tenuto e'' -\tenuto g'' -\tenuto ] f'' 16 -\tenuto [ g'' -\tenuto e'' -\tenuto g'' -\tenuto ] f'' -\tenuto [ g'' -\tenuto e'' -\tenuto g'' -\tenuto ]  |
+                        b' 8 -\tenuto [ d'' -\tenuto g'' -\tenuto b'' -\tenuto ] r c''' -\tenuto [ a'' -\tenuto f'' -\tenuto ]  |
+                        r8 e'' -\tenuto [ g'' -\tenuto b'' -\tenuto ] r a'' -\tenuto [ f'' -\tenuto d'' -\tenuto ]  |
+                        r8 c'' -\tenuto [ e'' -\tenuto g'' -\tenuto ] f'' 16 -\tenuto [ g'' -\tenuto e'' -\tenuto g'' -\tenuto ] f'' -\tenuto [ g'' -\tenuto e'' -\tenuto g'' -\tenuto ]  |
                         f'' 8 -\tenuto [ d'' -\tenuto b' -\tenuto g' -\tenuto ] fis' -\tenuto [ f' -\tenuto d' -\tenuto b -\tenuto ]  |
 %% 75
                         c' 4. -\tenuto d' 8 -\tenuto e' 4 -\tenuto e' -\tenuto  |
@@ -174,8 +174,8 @@ globalTempo = {
                         d' 4 -\tenuto d'' 2 -\tenuto c'' 4 -\tenuto  |
                         c'' 16 -\tenuto [ b' -\tenuto a' -\tenuto g' -\tenuto ] g' 8 -\tenuto [ g' -\tenuto ] g' 4 -\tenuto r  |
 %% 105
-                        c'' 8 -\tenuto [ c'' -\tenuto ] r [ d'' 16 -\tenuto b' -\tenuto ] c'' 8 -\tenuto [ g' -\tenuto c'' -\tenuto e'' -\tenuto ]  |
-                        c'' 8 -\tenuto [ c'' -\tenuto ] r [ d'' 16 -\tenuto b' -\tenuto ] c'' 8 -\tenuto [ g' -\tenuto c'' -\tenuto e'' -\tenuto ]  |
+                        c'' 8 -\tenuto [ c'' -\tenuto ] r d'' 16 -\tenuto [ b' -\tenuto ] c'' 8 -\tenuto [ g' -\tenuto c'' -\tenuto e'' -\tenuto ]  |
+                        c'' 8 -\tenuto [ c'' -\tenuto ] r d'' 16 -\tenuto [ b' -\tenuto ] c'' 8 -\tenuto [ g' -\tenuto c'' -\tenuto e'' -\tenuto ]  |
                         g'' 1 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 1  |
@@ -254,22 +254,22 @@ globalTempo = {
                         d'' 2 -\tenuto c'' 16 -\tenuto b' 8. -\tenuto a' 16 -\tenuto g' 8. -\tenuto  |
 %% 25
                         g' 4 -\tenuto r g 8. -\tenuto [ g' 16 -\tenuto a' 32 -\tenuto g' -\tenuto a' -\tenuto g' -\tenuto a' -\tenuto g' -\tenuto fis' -\tenuto g' -\tenuto ]  |
-                        g 2 -\tenuto r16 [ g' -\tenuto fis' -\tenuto g' -\tenuto ] a' -\tenuto [ g' -\tenuto fis' -\tenuto g' -\tenuto ]  |
+                        g 2 -\tenuto r16 g' -\tenuto [ fis' -\tenuto g' -\tenuto ] a' -\tenuto [ g' -\tenuto fis' -\tenuto g' -\tenuto ]  |
                         g' 4 -\tenuto r g 8. -\tenuto [ g' 16 -\tenuto a' 32 -\tenuto g' -\tenuto a' -\tenuto g' -\tenuto a' -\tenuto g' -\tenuto fis' -\tenuto g' -\tenuto ]  |
-                        g 2 -\tenuto r16 [ g' -\tenuto fis' -\tenuto g' -\tenuto ] a' -\tenuto [ g' -\tenuto fis' -\tenuto g' -\tenuto ]  |
+                        g 2 -\tenuto r16 g' -\tenuto [ fis' -\tenuto g' -\tenuto ] a' -\tenuto [ g' -\tenuto fis' -\tenuto g' -\tenuto ]  |
                         g' 8 -\tenuto [ g' -\tenuto g' -\tenuto g' -\tenuto ] g' -\tenuto [ g' -\tenuto e'' -\tenuto e'' -\tenuto ]  |
 %% 30
                         d'' 4 -\tenuto a' -\tenuto fis' -\tenuto r  |
                         r4 c'' -\tenuto b' -\tenuto r  |
                         r4 c'' -\tenuto b' -\tenuto r  |
-                        g' 8 -\tenuto [ g' -\tenuto ] r [ a' 16 -\tenuto fis' -\tenuto ] g' 8 -\tenuto [ d' -\tenuto g' -\tenuto a' -\tenuto ]  |
-                        b' 8 -\tenuto [ b' -\tenuto ] r [ c'' 16 -\tenuto a' -\tenuto ] b' 8 -\tenuto [ g' -\tenuto d'' -\tenuto c'' -\tenuto ]  |
+                        g' 8 -\tenuto [ g' -\tenuto ] r a' 16 -\tenuto [ fis' -\tenuto ] g' 8 -\tenuto [ d' -\tenuto g' -\tenuto a' -\tenuto ]  |
+                        b' 8 -\tenuto [ b' -\tenuto ] r c'' 16 -\tenuto [ a' -\tenuto ] b' 8 -\tenuto [ g' -\tenuto d'' -\tenuto c'' -\tenuto ]  |
 %% 35
                         b' 4 -\tenuto e'' 2 -\tenuto a' 4 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 4 d'' 2 -\tenuto g' 4 -\tenuto 
                         % warning: overlong bar truncated here |
-                        \skip 4 r8 [ e'' 16 -\tenuto c'' -\tenuto ] b' 4 -\tenuto a' -\tenuto  |
+                        \skip 4 r8 e'' 16 -\tenuto [ c'' -\tenuto ] b' 4 -\tenuto a' -\tenuto  |
                         g' 4 -\tenuto r r2  |
                         aes' 4 -\tenuto b' -\tenuto c'' 8 -\tenuto [ b' -\tenuto a' -\tenuto g' -\tenuto ]  |
 %% 40
@@ -300,10 +300,10 @@ globalTempo = {
                         e' 4 -\tenuto aes' -\tenuto aes' -\tenuto r  |
                         r4 d' -\tenuto c' -\tenuto r  |
                         r4 d' -\tenuto c' -\tenuto r  |
-                        e' 8 -\tenuto [ e' -\tenuto ] r [ g' 16 -\tenuto e' -\tenuto ] f' 8 -\tenuto [ f' -\tenuto ] r [ f'' 16 -\tenuto d'' -\tenuto ]  |
+                        e' 8 -\tenuto [ e' -\tenuto ] r g' 16 -\tenuto [ e' -\tenuto ] f' 8 -\tenuto [ f' -\tenuto ] r f'' 16 -\tenuto [ d'' -\tenuto ]  |
                         cis'' 8 -\tenuto [ e'' -\tenuto e' -\tenuto g' -\tenuto ] f' -\tenuto [ g' -\tenuto f' -\tenuto e' -\tenuto ]  |
 %% 65
-                        d' 8 -\tenuto [ d' -\tenuto ] r [ f' 16 -\tenuto d' -\tenuto ] e' 8 -\tenuto [ e' -\tenuto ] r [ e'' 16 -\tenuto c'' -\tenuto ]  |
+                        d' 8 -\tenuto [ d' -\tenuto ] r f' 16 -\tenuto [ d' -\tenuto ] e' 8 -\tenuto [ e' -\tenuto ] r e'' 16 -\tenuto [ c'' -\tenuto ]  |
                         b' 8 -\tenuto [ d'' -\tenuto d' -\tenuto f' -\tenuto ] e' -\tenuto [ g' -\tenuto c'' -\tenuto g' -\tenuto ]  |
                         e' 4 -\tenuto a' 2 -\tenuto d' 4 -\tenuto  |
                         d' 4 -\tenuto g' 2 -\tenuto c' 4 -\tenuto  |
@@ -345,7 +345,7 @@ globalTempo = {
                         g'' 2 -\tenuto f'' 16 -\tenuto e'' 8. -\tenuto d'' 16 -\tenuto c'' 8. -\tenuto  |
                         c'' 4 -\tenuto r c' 8. -\tenuto [ c'' 16 -\tenuto d'' 32 -\tenuto c'' -\tenuto d'' -\tenuto c'' -\tenuto d'' -\tenuto c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
 %% 100
-                        c' 2 -\tenuto r16 [ c'' -\tenuto b' -\tenuto c'' -\tenuto ] d'' -\tenuto [ c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
+                        c' 2 -\tenuto r16 c'' -\tenuto [ b' -\tenuto c'' -\tenuto ] d'' -\tenuto [ c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
                         c' 4 -\tenuto r c' 8. -\tenuto [ c'' 16 -\tenuto d'' 32 -\tenuto c'' -\tenuto d'' -\tenuto c'' -\tenuto d'' -\tenuto c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
                         c' 2 -\tenuto c' 16 -\tenuto [ c'' -\tenuto b' -\tenuto c'' -\tenuto ] d'' -\tenuto [ c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
                         c' 8 -\tenuto [ c' -\tenuto c' -\tenuto c' -\tenuto ] c' -\tenuto [ c' -\tenuto a' -\tenuto a' -\tenuto ]  |
@@ -353,8 +353,8 @@ globalTempo = {
 %% 105
                         r4 f' -\tenuto e' -\tenuto r  |
                         r4 f' -\tenuto e' -\tenuto r  |
-                        c' 8 -\tenuto [ c' -\tenuto ] r [ d' 16 -\tenuto b -\tenuto ] c' 8 -\tenuto [ g -\tenuto c' -\tenuto d' -\tenuto ]  |
-                        e' 8 -\tenuto [ e' -\tenuto ] r [ f' 16 -\tenuto d' -\tenuto ] e' 8 -\tenuto [ c' -\tenuto g' -\tenuto f' -\tenuto ]  |
+                        c' 8 -\tenuto [ c' -\tenuto ] r d' 16 -\tenuto [ b -\tenuto ] c' 8 -\tenuto [ g -\tenuto c' -\tenuto d' -\tenuto ]  |
+                        e' 8 -\tenuto [ e' -\tenuto ] r f' 16 -\tenuto [ d' -\tenuto ] e' 8 -\tenuto [ c' -\tenuto g' -\tenuto f' -\tenuto ]  |
                         e' 4 -\tenuto a' 2 -\tenuto d' 4 -\tenuto 
                         % warning: overlong bar truncated here |
 %% 110
@@ -403,15 +403,15 @@ globalTempo = {
                         \key c \major
                         g 1 -\tenuto 
                         % warning: overlong bar truncated here |
-                        \skip 2 r8 [ b -\tenuto d' -\tenuto b -\tenuto ]  |
+                        \skip 2 r8 b -\tenuto [ d' -\tenuto b -\tenuto ]  |
                         g 1 -\tenuto 
                         % warning: overlong bar truncated here |
-                        \skip 2 r8 [ e' -\tenuto g' -\tenuto e' -\tenuto ]  |
+                        \skip 2 r8 e' -\tenuto [ g' -\tenuto e' -\tenuto ]  |
 %% 5
                         c' 2 -\tenuto a 4 -\tenuto d' -\tenuto  |
                         g 2 -\tenuto r  |
                         g 2 -\tenuto r  |
-                        r8 [ e -\tenuto f -\tenuto g -\tenuto ] a -\tenuto [ b -\tenuto c' -\tenuto d' -\tenuto ]  |
+                        r8 e -\tenuto [ f -\tenuto g -\tenuto ] a -\tenuto [ b -\tenuto c' -\tenuto d' -\tenuto ]  |
                         e' 8 -\tenuto g' 4 -\tenuto g' -\tenuto g' -\tenuto g' 8 -\tenuto 
                         % warning: overlong bar truncated here |
 %% 10
@@ -419,12 +419,12 @@ globalTempo = {
                         g 8 -\tenuto g' 4 -\tenuto g' -\tenuto g' -\tenuto g' 8 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 8 g' 4 -\tenuto g' -\tenuto c'' 8 -\tenuto [ b' -\tenuto ] c'' -\tenuto  |
-                        c' 4 -\tenuto r r8 [ c' -\tenuto b -\tenuto c' -\tenuto ]  |
-                        c 4 -\tenuto r r8 [ c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
+                        c' 4 -\tenuto r r8 c' -\tenuto [ b -\tenuto c' -\tenuto ]  |
+                        c 4 -\tenuto r r8 c'' -\tenuto [ b' -\tenuto c'' -\tenuto ]  |
 %% 15
-                        c' 8 -\tenuto [ g' -\tenuto f' -\tenuto e' -\tenuto ] r [ f' -\tenuto e' -\tenuto d' -\tenuto ]  |
+                        c' 8 -\tenuto [ g' -\tenuto f' -\tenuto e' -\tenuto ] r f' -\tenuto [ e' -\tenuto d' -\tenuto ]  |
                         c' 4 -\tenuto r8 a -\tenuto g 2 -\tenuto  |
-                        r8 [ g -\tenuto f -\tenuto e -\tenuto ] r [ f -\tenuto e -\tenuto d -\tenuto ]  |
+                        r8 g -\tenuto [ f -\tenuto e -\tenuto ] r f -\tenuto [ e -\tenuto d -\tenuto ]  |
                         c 4 -\tenuto r8 a -\tenuto g 2 -\tenuto  |
                         g 8 -\tenuto [ g -\tenuto e -\tenuto e -\tenuto ] c' -\tenuto [ e' -\tenuto f' -\tenuto a' -\tenuto ]  |
 %% 20
@@ -443,8 +443,8 @@ globalTempo = {
                         a' 4 -\tenuto fis' -\tenuto a -\tenuto r  |
                         r4 a' -\tenuto g' -\tenuto r  |
                         r4 a' -\tenuto g' -\tenuto r  |
-                        b 8 -\tenuto [ b -\tenuto ] r [ c' 16 -\tenuto a -\tenuto ] b 8 -\tenuto [ b -\tenuto d' -\tenuto fis' -\tenuto ]  |
-                        g' 8 -\tenuto [ g' -\tenuto ] r [ a' 16 -\tenuto fis' -\tenuto ] g' 8 -\tenuto [ e' -\tenuto b' -\tenuto a' -\tenuto ]  |
+                        b 8 -\tenuto [ b -\tenuto ] r c' 16 -\tenuto [ a -\tenuto ] b 8 -\tenuto [ b -\tenuto d' -\tenuto fis' -\tenuto ]  |
+                        g' 8 -\tenuto [ g' -\tenuto ] r a' 16 -\tenuto [ fis' -\tenuto ] g' 8 -\tenuto [ e' -\tenuto b' -\tenuto a' -\tenuto ]  |
 %% 35
                         aes' 4 -\tenuto b' -\tenuto c'' 8 -\tenuto [ b' -\tenuto a' -\tenuto g' -\tenuto ]  |
                         fis' 4 -\tenuto a' -\tenuto b' 8 -\tenuto [ a' -\tenuto g' -\tenuto fis' -\tenuto ]  |
@@ -481,16 +481,16 @@ globalTempo = {
                         b 4 -\tenuto e -\tenuto e -\tenuto r  |
                         r4 b -\tenuto a -\tenuto r  |
                         r4 b -\tenuto a -\tenuto r  |
-                        cis' 8 -\tenuto [ cis' -\tenuto ] r [ e' 16 -\tenuto cis' -\tenuto ] d' 8 -\tenuto [ d' -\tenuto ] r [ a' 16 -\tenuto f' -\tenuto ]  |
+                        cis' 8 -\tenuto [ cis' -\tenuto ] r e' 16 -\tenuto [ cis' -\tenuto ] d' 8 -\tenuto [ d' -\tenuto ] r a' 16 -\tenuto [ f' -\tenuto ]  |
                         e' 8 -\tenuto [ g' -\tenuto cis' -\tenuto e' -\tenuto ] d' -\tenuto [ e' -\tenuto d' -\tenuto c' -\tenuto ]  |
 %% 65
-                        b 8 -\tenuto [ b -\tenuto ] r [ d' 16 -\tenuto b -\tenuto ] c' 8 -\tenuto [ c' -\tenuto ] r [ g' 16 -\tenuto e' -\tenuto ]  |
+                        b 8 -\tenuto [ b -\tenuto ] r d' 16 -\tenuto [ b -\tenuto ] c' 8 -\tenuto [ c' -\tenuto ] r g' 16 -\tenuto [ e' -\tenuto ]  |
                         d' 8 -\tenuto [ f' -\tenuto b -\tenuto d' -\tenuto ] c' -\tenuto [ e' -\tenuto g' -\tenuto e' -\tenuto ]  |
-                        cis' 8 -\tenuto [ cis' -\tenuto ] r [ e' 16 -\tenuto cis' -\tenuto ] f' 8 -\tenuto [ e' -\tenuto d' -\tenuto c' -\tenuto ]  |
-                        b 8 -\tenuto [ b -\tenuto ] r [ d' 16 -\tenuto b -\tenuto ] e' 8 -\tenuto [ d' -\tenuto c' -\tenuto b -\tenuto ]  |
+                        cis' 8 -\tenuto [ cis' -\tenuto ] r e' 16 -\tenuto [ cis' -\tenuto ] f' 8 -\tenuto [ e' -\tenuto d' -\tenuto c' -\tenuto ]  |
+                        b 8 -\tenuto [ b -\tenuto ] r d' 16 -\tenuto [ b -\tenuto ] e' 8 -\tenuto [ d' -\tenuto c' -\tenuto b -\tenuto ]  |
                         a 8 -\tenuto [ a -\tenuto a -\tenuto a -\tenuto ] a -\tenuto [ a -\tenuto a -\tenuto a -\tenuto ]  |
 %% 70
-                        b 4 -\tenuto r8 [ g' -\tenuto g' -\tenuto g -\tenuto ] r g -\tenuto  |
+                        b 4 -\tenuto r8 g' -\tenuto [ g' -\tenuto g -\tenuto ] r g -\tenuto  |
                         g 4 -\tenuto r8 d' -\tenuto c' 4 -\tenuto r8 a' -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 4 r8 b -\tenuto a 4 -\tenuto r8 b -\tenuto  |
@@ -499,15 +499,15 @@ globalTempo = {
 %% 75
                         g 1 -\tenuto 
                         % warning: overlong bar truncated here |
-                        \skip 2 r8 [ b -\tenuto d' -\tenuto b -\tenuto ]  |
+                        \skip 2 r8 b -\tenuto [ d' -\tenuto b -\tenuto ]  |
                         g 1 -\tenuto 
                         % warning: overlong bar truncated here |
-                        \skip 2 r8 [ e' -\tenuto g' -\tenuto e' -\tenuto ]  |
+                        \skip 2 r8 e' -\tenuto [ g' -\tenuto e' -\tenuto ]  |
                         c' 2 -\tenuto a 4 -\tenuto d' -\tenuto  |
 %% 80
                         g 2 -\tenuto r  |
                         g 2 -\tenuto r  |
-                        r8 [ e -\tenuto f -\tenuto g -\tenuto ] a -\tenuto [ b -\tenuto c' -\tenuto d' -\tenuto ]  |
+                        r8 e -\tenuto [ f -\tenuto g -\tenuto ] a -\tenuto [ b -\tenuto c' -\tenuto d' -\tenuto ]  |
                         e' 8 -\tenuto g' 4 -\tenuto g' -\tenuto g' -\tenuto g' 8 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 8 g' 4 -\tenuto g' -\tenuto g' 8 -\tenuto [ fis' -\tenuto ] g' -\tenuto  |
@@ -515,12 +515,12 @@ globalTempo = {
                         g 8 -\tenuto g' 4 -\tenuto g' -\tenuto g' -\tenuto g' 8 -\tenuto 
                         % warning: overlong bar truncated here |
                         \skip 8 g' 4 -\tenuto g' -\tenuto c'' 8 -\tenuto [ b' -\tenuto ] c'' -\tenuto  |
-                        c' 4 -\tenuto r r8 [ c' -\tenuto b -\tenuto c' -\tenuto ]  |
-                        c 4 -\tenuto r r8 [ c'' -\tenuto b' -\tenuto c'' -\tenuto ]  |
-                        c' 8 -\tenuto [ g' -\tenuto f' -\tenuto e' -\tenuto ] r [ f' -\tenuto e' -\tenuto d' -\tenuto ]  |
+                        c' 4 -\tenuto r r8 c' -\tenuto [ b -\tenuto c' -\tenuto ]  |
+                        c 4 -\tenuto r r8 c'' -\tenuto [ b' -\tenuto c'' -\tenuto ]  |
+                        c' 8 -\tenuto [ g' -\tenuto f' -\tenuto e' -\tenuto ] r f' -\tenuto [ e' -\tenuto d' -\tenuto ]  |
 %% 90
                         c' 4 -\tenuto r8 a -\tenuto g 2 -\tenuto  |
-                        r8 [ g -\tenuto f -\tenuto e -\tenuto ] r [ f -\tenuto e -\tenuto d -\tenuto ]  |
+                        r8 g -\tenuto [ f -\tenuto e -\tenuto ] r f -\tenuto [ e -\tenuto d -\tenuto ]  |
                         c 4 -\tenuto r8 a -\tenuto g 2 -\tenuto  |
                         g 8 -\tenuto [ g -\tenuto e -\tenuto e -\tenuto ] c' -\tenuto [ e' -\tenuto f' -\tenuto a' -\tenuto ]  |
                         g' 8 -\tenuto [ g' -\tenuto g' -\tenuto g' -\tenuto ] g -\tenuto [ f' -\tenuto e' -\tenuto d' -\tenuto ]  |
@@ -539,8 +539,8 @@ globalTempo = {
 %% 105
                         r4 d' -\tenuto c' -\tenuto r  |
                         r4 d' -\tenuto c' -\tenuto r  |
-                        e 8 -\tenuto [ e -\tenuto ] r [ f 16 -\tenuto d -\tenuto ] e 4 -\tenuto g 8 -\tenuto [ b -\tenuto ]  |
-                        c' 8 -\tenuto [ c' -\tenuto ] r [ d' 16 -\tenuto b -\tenuto ] c' 8 -\tenuto [ g -\tenuto e' -\tenuto d' -\tenuto ]  |
+                        e 8 -\tenuto [ e -\tenuto ] r f 16 -\tenuto [ d -\tenuto ] e 4 -\tenuto g 8 -\tenuto [ b -\tenuto ]  |
+                        c' 8 -\tenuto [ c' -\tenuto ] r d' 16 -\tenuto [ b -\tenuto ] c' 8 -\tenuto [ g -\tenuto e' -\tenuto d' -\tenuto ]  |
                         cis' 4 -\tenuto e' -\tenuto f' 8 -\tenuto [ e' -\tenuto d' -\tenuto c' -\tenuto ]  |
 %% 110
                         b 4 -\tenuto d' -\tenuto e' 8 -\tenuto [ d' -\tenuto c' -\tenuto b -\tenuto ]  |
@@ -600,8 +600,8 @@ globalTempo = {
                         g 4 -\tenuto g, -\tenuto r2  |
                         g 4 -\tenuto d -\tenuto b, -\tenuto g, -\tenuto  |
                         c 4 -\tenuto c' -\tenuto r2  |
-                        r8 [ c' -\tenuto b -\tenuto c' -\tenuto ] c 4 -\tenuto r  |
-                        r8 [ c -\tenuto b, -\tenuto c -\tenuto ] c, 4 -\tenuto r  |
+                        r8 c' -\tenuto [ b -\tenuto c' -\tenuto ] c 4 -\tenuto r  |
+                        r8 c -\tenuto [ b, -\tenuto c -\tenuto ] c, 4 -\tenuto r  |
 %% 15
                         c 4 -\tenuto r g -\tenuto r  |
                         c' 4 -\tenuto f -\tenuto g -\tenuto g, -\tenuto  |
@@ -627,13 +627,13 @@ globalTempo = {
                         g 4 -\tenuto d -\tenuto g, -\tenuto r  |
                         g 4 -\tenuto d -\tenuto g, -\tenuto r  |
 %% 35
-                        e 8 -\tenuto [ e -\tenuto ] r [ aes 16 -\tenuto e -\tenuto ] a 8 -\tenuto [ g -\tenuto fis -\tenuto e -\tenuto ]  |
-                        d 8 -\tenuto [ d -\tenuto ] r [ fis 16 -\tenuto d -\tenuto ] g 8 -\tenuto [ fis -\tenuto e -\tenuto d -\tenuto ]  |
+                        e 8 -\tenuto [ e -\tenuto ] r aes 16 -\tenuto [ e -\tenuto ] a 8 -\tenuto [ g -\tenuto fis -\tenuto e -\tenuto ]  |
+                        d 8 -\tenuto [ d -\tenuto ] r fis 16 -\tenuto [ d -\tenuto ] g 8 -\tenuto [ fis -\tenuto e -\tenuto d -\tenuto ]  |
                         c 8 -\tenuto [ c -\tenuto c -\tenuto c -\tenuto ] d -\tenuto [ d -\tenuto d -\tenuto d -\tenuto ]  |
                         g 4 -\tenuto r r2  |
-                        e 8 -\tenuto [ e -\tenuto ] r [ aes 16 -\tenuto e -\tenuto ] a 8 -\tenuto [ g -\tenuto fis -\tenuto e -\tenuto ]  |
+                        e 8 -\tenuto [ e -\tenuto ] r aes 16 -\tenuto [ e -\tenuto ] a 8 -\tenuto [ g -\tenuto fis -\tenuto e -\tenuto ]  |
 %% 40
-                        d 8 -\tenuto [ d -\tenuto ] r [ fis 16 -\tenuto d -\tenuto ] g 8 -\tenuto [ fis -\tenuto e -\tenuto d -\tenuto ]  |
+                        d 8 -\tenuto [ d -\tenuto ] r fis 16 -\tenuto [ d -\tenuto ] g 8 -\tenuto [ fis -\tenuto e -\tenuto d -\tenuto ]  |
                         c 8 -\tenuto [ c -\tenuto c -\tenuto c -\tenuto ] d -\tenuto [ d -\tenuto d -\tenuto d -\tenuto ]  |
                         g, 4 -\tenuto r fis, -\tenuto r  |
                         g, 4 -\tenuto r c -\tenuto d -\tenuto  |
@@ -666,8 +666,8 @@ globalTempo = {
 %% 65
                         g, 4 -\tenuto g -\tenuto e -\tenuto c -\tenuto  |
                         g, 4 -\tenuto g -\tenuto c -\tenuto e -\tenuto  |
-                        a 8 -\tenuto [ a -\tenuto ] r [ cis' 16 -\tenuto a -\tenuto ] d' 8 -\tenuto [ c' -\tenuto b -\tenuto a -\tenuto ]  |
-                        g 8 -\tenuto [ g -\tenuto ] r [ b 16 -\tenuto g -\tenuto ] c' 8 -\tenuto [ b -\tenuto a -\tenuto g -\tenuto ]  |
+                        a 8 -\tenuto [ a -\tenuto ] r cis' 16 -\tenuto [ a -\tenuto ] d' 8 -\tenuto [ c' -\tenuto b -\tenuto a -\tenuto ]  |
+                        g 8 -\tenuto [ g -\tenuto ] r b 16 -\tenuto [ g -\tenuto ] c' 8 -\tenuto [ b -\tenuto a -\tenuto g -\tenuto ]  |
                         fis 8 -\tenuto [ fis -\tenuto fis -\tenuto fis -\tenuto ] fis -\tenuto [ fis -\tenuto fis -\tenuto fis -\tenuto ]  |
 %% 70
                         g 8 -\tenuto [ g -\tenuto g -\tenuto g -\tenuto ] g -\tenuto [ g -\tenuto g -\tenuto g -\tenuto ]  |
@@ -690,8 +690,8 @@ globalTempo = {
 %% 85
                         g 4 -\tenuto d -\tenuto b, -\tenuto g, -\tenuto  |
                         c 4 -\tenuto c' -\tenuto r2  |
-                        r8 [ c' -\tenuto b -\tenuto c' -\tenuto ] c 4 -\tenuto r  |
-                        r8 [ c -\tenuto b, -\tenuto c -\tenuto ] c, 4 -\tenuto r  |
+                        r8 c' -\tenuto [ b -\tenuto c' -\tenuto ] c 4 -\tenuto r  |
+                        r8 c -\tenuto [ b, -\tenuto c -\tenuto ] c, 4 -\tenuto r  |
                         c 4 -\tenuto r g -\tenuto r  |
 %% 90
                         c' 4 -\tenuto f -\tenuto g -\tenuto g, -\tenuto  |

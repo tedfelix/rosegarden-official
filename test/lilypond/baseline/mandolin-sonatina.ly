@@ -157,11 +157,11 @@ globalTempo = {
                     d'' 8 [ d'' ] e'' 16 [ d'' cis'' d'' ]  |
                     b' 32 [ b' b' b' b' b' b' b' ] g' 8 r  |
 %% 35
-                    r8 [ d'' d'' d'' ]  |
+                    r8 d'' [ d'' d'' ]  |
                     d'' 8 r r4  |
-                    r8 [ e' e'' e'' ]  |
+                    r8 e' [ e'' e'' ]  |
                     e'' 8 r r4  |
-                    r8 [ fis' fis'' fis'' ]  |
+                    r8 fis' [ fis'' fis'' ]  |
 %% 40
                     b' 8 [ cis'' d'' b' ]  |
                     c'' 8 [ d'' e'' cis'' ]  |
@@ -312,10 +312,10 @@ globalTempo = {
                         < g' d' b > 8 r < g' d' b > r  |
                         < g' d' b > 8 r r4  |
 %% 15
-                        r8 [ < c'' e' > < e'' g' > < c'' g' > ]  |
+                        r8 < c'' e' > [ < e'' g' > < c'' g' > ]  |
                         r8 < c'' a' > r < c'' g' >  |
                         r8 < c'' a' d' > r < b' f' d' >  |
-                        r8 [ < e' c'' > ] c' r  |
+                        r8 < e' c'' > c' r  |
                         r8 < e'' g' > r < d'' g' >  |
 %% 20
                         r8 < c'' fis' > r < b' d' >  |
@@ -334,7 +334,7 @@ globalTempo = {
 %% 40
                         b' 8 [ cis'' d'' b' ]  |
                         c'' 8 [ d'' e'' cis'' ]  |
-                        d'' 8 r [ f' ] g'  |
+                        d'' 8 r f' g'  |
                         a' 8 [ g' f' e' ]  |
                         d' 8 [ c' b a ]  |
 %% 45
@@ -356,10 +356,10 @@ globalTempo = {
                         < g' d' b > 8 r < g' d' b > r  |
                         < g' d' b > 8 r r4  |
 %% 60
-                        r8 [ < c'' e' > < e'' g' > < c'' g' > ]  |
+                        r8 < c'' e' > [ < e'' g' > < c'' g' > ]  |
                         r8 < c'' a' > r < c'' g' >  |
                         r8 < c'' a' d' > r < b' f' d' >  |
-                        r8 [ < e' c'' > ] c' r  |
+                        r8 < e' c'' > c' r  |
                         < c'' ees' > 4 r  |
 %% 65
                         aes'' 4. g'' 16 [ d'' ]  |
@@ -379,7 +379,7 @@ globalTempo = {
                         c'' 16 [ aes' f' c' ] aes' [ f' c' aes ]  |
                         R2*2  |
 %% 80
-                        r8 [ bes' bes' bes' ]  |
+                        r8 bes' [ bes' bes' ]  |
                         cis'' 4. c'' 16 [ bes' ]  |
                         aes' 8 [ c'' c'' c'' ]  |
                         ees'' 4. d'' 16 [ c'' ]  |
@@ -387,7 +387,7 @@ globalTempo = {
 %% 85
                         ees' 8 ees' 4 d' 16 [ c' ]  |
                         R2*2  |
-                        r8 [ bes' bes' bes' ]  |
+                        r8 bes' [ bes' bes' ]  |
                         cis'' 4. c'' 16 [ bes' ]  |
 %% 90
                         aes' 8 [ c'' c'' c'' ]  |
@@ -412,7 +412,7 @@ globalTempo = {
                         < g' d' b > 8 r < g' d' b > r  |
                         < g' d' b > 8 r r4  |
 %% 110
-                        r8 [ < c'' e' > < e'' g' > < c'' g' > ]  |
+                        r8 < c'' e' > [ < e'' g' > < c'' g' > ]  |
                         r8 < c'' a' > r < c'' g' >  |
                         r8 < c'' a' d' > r < b' f' d' >  |
                         < e' c'' > 4 r8 < a' f' c' >  |
@@ -485,7 +485,7 @@ globalTempo = {
 %% 20
                         a 8 r g r  |
                         fis 8 r e r  |
-                        r8 [ d cis d ]  |
+                        r8 d [ cis d ]  |
                         < a fis c > 8 d' 4 < a fis > 8 d'  |
                         < b g b, > 8 d' 4 < b g > 8 [ < d' g, > ]  |
 %% 25

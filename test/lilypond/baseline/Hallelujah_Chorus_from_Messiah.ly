@@ -50,36 +50,36 @@ globalTempo = {
                     R1*3  |
                     d'' 4. -\f a' 8 [ b' ] a' r4  |
 %% 5
-                    d'' 4. a' 8 [ b' ] a' r [ d'' 16 d'' ]  |
-                    d'' 8 [ d'' ] r [ d'' 16 d'' ] d'' 8 [ d'' ] r d''  |
+                    d'' 4. a' 8 [ b' ] a' r d'' 16 [ d'' ]  |
+                    d'' 8 [ d'' ] r d'' 16 [ d'' ] d'' 8 [ d'' ] r d''  |
                     cis'' 8 d'' 4 cis'' 8 d'' 4 r  |
                     e'' 4. a' 8 [ fis'' ] e'' r4  |
-                    e'' 4. a' 8 [ fis'' ] e'' r [ e'' 16 e'' ]  |
+                    e'' 4. a' 8 [ fis'' ] e'' r e'' 16 [ e'' ]  |
 %% 10
-                    fis'' 8 [ e'' ] r [ e'' 16 e'' ] fis'' 8 [ e'' ] r e''  |
+                    fis'' 8 [ e'' ] r e'' 16 [ e'' ] fis'' 8 [ e'' ] r e''  |
                     fis'' 8 [ e'' ] d'' 4 cis'' r  |
                     a' 2 b' 4 cis''  |
                     d'' 8 [ d' ] d'' 4. d'' 8 cis'' 4  |
-                    b' 2 a' 4 r8 [ e'' 16 e'' ]  |
+                    b' 2 a' 4 r8 e'' 16 [ e'' ]  |
 %% 15
-                    d'' 8 [ cis'' ] r [ e'' 16 e'' ] d'' 8 [ cis'' ] r [ e'' 16 e'' ]  |
-                    fis'' 8 [ e'' ] r [ e'' 16 e'' ] fis'' 8 [ e'' ] r4  |
+                    d'' 8 [ cis'' ] r e'' 16 [ e'' ] d'' 8 [ cis'' ] r e'' 16 [ e'' ]  |
+                    fis'' 8 [ e'' ] r e'' 16 [ e'' ] fis'' 8 [ e'' ] r4  |
                     R1*2  |
-                    r2 r4 r8 [ d'' 16 d'' ]  |
+                    r2 r4 r8 d'' 16 [ d'' ]  |
 %% 20
-                    d'' 8 [ d'' ] r [ d'' 16 d'' ] d'' 8 [ d'' ] r [ d'' 16 d'' ]  |
-                    d'' 8 [ d'' ] r [ d'' 16 d'' ] d'' 8 [ d'' ] r4  |
+                    d'' 8 [ d'' ] r d'' 16 [ d'' ] d'' 8 [ d'' ] r d'' 16 [ d'' ]  |
+                    d'' 8 [ d'' ] r d'' 16 [ d'' ] d'' 8 [ d'' ] r4  |
                     d'' 2 e'' 4 fis''  |
                     g'' 8 [ g' ] g'' 4. g'' 8 fis'' 4  |
-                    e'' 2 d'' 4 r8 [ d'' 16 d'' ]  |
+                    e'' 2 d'' 4 r8 d'' 16 [ d'' ]  |
 %% 25
-                    cis'' 8 [ a' ] r [ cis'' 16 cis'' ] d'' 8 [ d'' 16 d'' ] e'' 8 [ e'' ]  |
-                    a' 4 r8 [ d'' 16 cis'' ] b' 8 [ b' ] r e''  |
+                    cis'' 8 [ a' ] r cis'' 16 [ cis'' ] d'' 8 [ d'' 16 d'' ] e'' 8 [ e'' ]  |
+                    a' 4 r8 d'' 16 [ cis'' ] b' 8 [ b' ] r e''  |
                     d'' 8 [ cis'' d'' e'' 16 d'' ] cis'' 8 [ cis'' 16 cis'' ] e'' 8 [ cis'' ]  |
-                    r8 [ a' 16 a' ] d'' 8 [ a' ] r [ cis'' 16 cis'' ] e'' 8 [ cis'' ]  |
-                    r8 [ a' 16 a' ] fis'' 8 [ d'' ] r [ cis'' 16 cis'' ] d'' 8 [ a' ]  |
+                    r8 a' 16 [ a' ] d'' 8 [ a' ] r cis'' 16 [ cis'' ] e'' 8 [ cis'' ]  |
+                    r8 a' 16 [ a' ] fis'' 8 [ d'' ] r cis'' 16 [ cis'' ] d'' 8 [ a' ]  |
 %% 30
-                    r8 [ b' 16 b' ] e'' 8 [ e'' ] r [ cis'' 16 cis'' ] d'' 8 [ d'' ]  |
+                    r8 b' 16 [ b' ] e'' 8 [ e'' ] r cis'' 16 [ cis'' ] d'' 8 [ d'' ]  |
                     d'' 4 cis'' d'' d''  |
                     d'' 4 d'' d'' 2  |
                     r2 r4 a'  |
@@ -129,8 +129,8 @@ globalTempo = {
                     \skip 1  |
                     r4 r8 fis'' g'' 4 g''  |
                     g'' 1 -\tenuto  |
-                    r4 r8 [ g'' fis'' e'' ] fis'' [ g'' ]  |
-                    e'' 2 r8 [ cis'' d'' e'' ]  |
+                    r4 r8 g'' [ fis'' e'' ] fis'' [ g'' ]  |
+                    e'' 2 r8 cis'' [ d'' e'' ]  |
 %% 70
                     a' 4 r r2  |
                     r2 r4 a'  |
@@ -138,9 +138,9 @@ globalTempo = {
                     g'' 4 fis'' 8 [ e'' ] fis'' 4 e'' 8. [ d'' 16 ]  |
                     d'' 2 r  |
 %% 75
-                    r4 r8 [ d'' g'' fis'' ] r d''  |
+                    r4 r8 d'' [ g'' fis'' ] r d''  |
                     g'' 8 [ fis'' ] r4 r2  |
-                    r4 r8 [ d'' 16 d'' ] g'' 8 [ fis'' ] r [ d'' 16 d'' ]  |
+                    r4 r8 d'' 16 [ d'' ] g'' 8 [ fis'' ] r d'' 16 [ d'' ]  |
                     g'' 8 [ fis'' ] r a' a' 4 d''  |
                     fis'' 4 d'' d'' a' 8 [ a' ]  |
 %% 80
@@ -156,8 +156,8 @@ globalTempo = {
                     d'' 4 r d'' d''  |
                     d'' 4 r8 d'' d'' 4 d''  |
 %% 90
-                    d'' 4 r8 [ d'' 16 d'' ] d'' 8 [ d'' ] r [ d'' 16 d'' ]  |
-                    d'' 8 [ d'' ] r [ d'' 16 d'' ] d'' 8 [ d'' ] r [ d'' 16 d'' ]  |
+                    d'' 4 r8 d'' 16 [ d'' ] d'' 8 [ d'' ] r d'' 16 [ d'' ]  |
+                    d'' 8 [ d'' ] r d'' 16 [ d'' ] d'' 8 [ d'' ] r d'' 16 [ d'' ]  |
                     d'' 8 [ d'' ] r4 r d''  |
                     d'' 2. d'' 4  |
                     d'' 1  |
@@ -188,37 +188,37 @@ globalTempo = {
                     e 8 [ d a a, ] d 4 r  |
                     d 8 [ d e fis ] g [ d ] r4  |
 %% 5
-                    d 8 [ d e fis ] g [ d ] r [ fis 16 fis ]  |
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r fis  |
+                    d 8 [ d e fis ] g [ d ] r fis 16 [ fis ]  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis  |
                     e 8 [ d a a, ] d [ fis e d ]  |
                     a 4. cis' 8 [ d' ] a r4  |
-                    a 4. cis' 8 [ d' ] a r [ cis' 16 cis' ]  |
+                    a 4. cis' 8 [ d' ] a r cis' 16 [ cis' ]  |
 %% 10
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r cis'  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis'  |
                     d' 8 [ cis' ] b 4 a r  |
                     a 2 b 4 cis'  |
                     d' 8 [ d ] d' 2 cis' 4  |
-                    b 2 a 4 r8 [ cis' 16 cis' ]  |
+                    b 2 a 4 r8 cis' 16 [ cis' ]  |
 %% 15
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r [ cis' 16 cis' ]  |
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r4  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis' 16 [ cis' ]  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r4  |
                     d 2 e 4 fis  |
                     g 8 [ g, ] g 2 fis 4  |
-                    e 2 d 4 r8 [ fis 16 fis ]  |
+                    e 2 d 4 r8 fis 16 [ fis ]  |
 %% 20
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
-                    g 8 [ fis ] r [ fis 16 fis ] g 8 [ d ] r4  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
+                    g 8 [ fis ] r fis 16 [ fis ] g 8 [ d ] r4  |
                     R1*2  |
-                    r4 r8 [ a 16 a ] fis 8 [ d d' d ]  |
+                    r4 r8 a 16 [ a ] fis 8 [ d d' d ]  |
 %% 25
                     a 2 b 4 cis'  |
                     d' 8 [ d ] d' 2 cis' 4  |
-                    b 2 a 4 r8 [ a 16 a ]  |
-                    fis 8 [ d ] r [ d' 16 d' ] cis' 8 [ a cis' a ]  |
-                    d' 4. d' 16 [ d' ] cis' 8 [ a ] r [ d' 16 d' ]  |
+                    b 2 a 4 r8 a 16 [ a ]  |
+                    fis 8 [ d ] r d' 16 [ d' ] cis' 8 [ a cis' a ]  |
+                    d' 4. d' 16 [ d' ] cis' 8 [ a ] r d' 16 [ d' ]  |
 %% 30
-                    b 8 [ g ] r [ e 16 e ] a 8 [ a ] r [ b 16 b ]  |
-                    g 8 [ e ] a 8. [ g 16 ] fis 4 r8 [ d' 16 d' ]  |
+                    b 8 [ g ] r e 16 [ e ] a 8 [ a ] r b 16 [ b ]  |
+                    g 8 [ e ] a 8. [ g 16 ] fis 4 r8 d' 16 [ d' ]  |
                     b 8 [ g b cis' ] d' [ d 16 d ] d 8 [ d ]  |
                     b, 8 [ b, 16 b, ] g, 8 [ g, ] d 4 d  |
                     cis 4 b, a, g  |
@@ -233,33 +233,33 @@ globalTempo = {
                     d 4. a 8 d' 4 fis  |
                     b 4 d g fis 8 [ e ]  |
                     e 2 d 4 r  |
-                    r4 r8 [ a d' d ] r fis  |
+                    r4 r8 a [ d' d ] r fis  |
 %% 45
-                    b 8 [ gis ] a 4 r8 [ e d e ]  |
+                    b 8 [ gis ] a 4 r8 e [ d e ]  |
                     cis 8 [ a g a ] fis 4 r8 fis  |
-                    g 8 [ d ] r [ b e' cis' ] d' [ g ]  |
-                    a 8 [ a, ] r [ a fis d ] r d'  |
-                    cis' 8 [ a ] r [ cis' d' d ] r fis  |
+                    g 8 [ d ] r b [ e' cis' ] d' [ g ]  |
+                    a 8 [ a, ] r a [ fis d ] r d'  |
+                    cis' 8 [ a ] r cis' [ d' d ] r fis  |
 %% 50
                     b 8 [ gis a d ] e [ e, ] r e  |
                     cis 4 a, r2  |
-                    r4 r8 [ cis' d' a ] r cis'  |
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r [ cis' 16 cis' ]  |
+                    r4 r8 cis' [ d' a ] r cis'  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis' 16 [ cis' ]  |
                     d' 8 [ a ] r4 r2  |
 %% 55
-                    r4 r8 [ cis' d' a ] r cis'  |
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r [ cis' 16 cis' ]  |
+                    r4 r8 cis' [ d' a ] r cis'  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis' 16 [ cis' ]  |
                     d' 8 [ a ] r4 r2  |
-                    r4 r8 [ fis g d ] r fis  |
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
+                    r4 r8 fis [ g d ] r fis  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
 %% 60
                     g 8 [ d ] r4 r2  |
-                    r4 r8 [ gis a e ] r gis  |
-                    a 8 [ e ] r [ gis 16 gis ] a 8 [ e ] r [ gis 16 gis ]  |
+                    r4 r8 gis [ a e ] r gis  |
+                    a 8 [ e ] r gis 16 [ gis ] a 8 [ e ] r gis 16 [ gis ]  |
                     a 8 [ e ] r4 r2  |
-                    r4 r8 [ bes b fis ] r bes  |
+                    r4 r8 bes [ b fis ] r bes  |
 %% 65
-                    b 8 [ fis ] r [ bes 16 bes ] b 8 [ fis ] r [ bes 16 bes ]  |
+                    b 8 [ fis ] r bes 16 [ bes ] b 8 [ fis ] r bes 16 [ bes ]  |
                     b 4 b, r2  |
                     r2 b 4 b  |
                     cis' 4. cis' 8 d' 4 d  |
@@ -267,13 +267,13 @@ globalTempo = {
 %% 70
                     fis 4 a, d cis  |
                     b, 2 a, 4 r  |
-                    r2 r8 [ d, g, fis, ]  |
+                    r2 r8 d, [ g, fis, ]  |
                     e, 4 fis, 8 [ g ] a 4 g 8 [ a ]  |
                     fis 4 d r2  |
 %% 75
-                    r4 r8 [ fis g d ] r fis  |
+                    r4 r8 fis [ g d ] r fis  |
                     g 8 [ d ] r4 r2  |
-                    r4 r8 [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
+                    r4 r8 fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
                     g 8 [ d ] r d d' 4 fis  |
                     b 4 d g fis 8 [ fis ]  |
 %% 80
@@ -286,11 +286,11 @@ globalTempo = {
                     d' 4 r8 d d' 4 fis  |
                     b 4 d g fis 8 [ fis ]  |
                     e 4 d 8 [ d ] a 2  |
-                    d 4 r8 [ fis g d ] r fis  |
-                    g 8 [ d ] r [ fis g d ] r fis  |
+                    d 4 r8 fis [ g d ] r fis  |
+                    g 8 [ d ] r fis [ g d ] r fis  |
 %% 90
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
                     g 8 [ d ] r4 r d  |
                     g, 2. g, 4  |
                     d, 1  |
@@ -317,29 +317,29 @@ globalTempo = {
                     \clef "treble"
                     \key e \major
                     R1*13  |
-                    r2 r4 r8 [ < b' fis'' > 16 < b' fis'' > ]  |
+                    r2 r4 r8 < b' fis'' > 16 [ < b' fis'' > ]  |
 %% 15
-                    < b' gis'' > 8 [ < b' fis'' > ] r [ < b' fis'' > 16 < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r [ < fis'' b'' > 16 < fis'' b'' > ]  |
+                    < b' gis'' > 8 [ < b' fis'' > ] r < b' fis'' > 16 [ < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r < fis'' b'' > 16 [ < fis'' b'' > ]  |
                     < gis'' b'' > 8 [ < fis'' b'' > 16 < fis'' b'' > ] < fis'' b'' > 8 [ < b' fis'' > 16 < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r4  |
                     R1*2  |
-                    r2 r4 r8 [ < e'' b'' > 16 < e'' b'' > ]  |
+                    r2 r4 r8 < e'' b'' > 16 [ < e'' b'' > ]  |
 %% 20
-                    < a'' cis''' > 8 [ < gis'' b'' > ] r [ < e'' b'' > 16 < e'' b'' > ] < a'' cis''' > 8 [ < gis'' b'' > ] r [ < gis' e'' > 16 < gis' e'' > ]  |
+                    < a'' cis''' > 8 [ < gis'' b'' > ] r < e'' b'' > 16 [ < e'' b'' > ] < a'' cis''' > 8 [ < gis'' b'' > ] r < gis' e'' > 16 [ < gis' e'' > ]  |
                     < a'' e' > 8 [ < gis'' e' > 16 < gis'' e' > ] < b' gis'' > 8 [ < gis' e'' > 16 < gis' e'' > ] < e' e'' > 8 [ < gis' b' > 16 < gis' b' > ] < gis' b' > 8 [ < gis' b' > 16 < gis' b' > ]  |
                     < e' gis' > 4 r r2  |
                     r2 r  |
                     r2 r  |
 %% 25
-                    r8 [ < b' fis'' > 16 < b' fis'' > ] < b' fis'' > 8 [ b' 16 -\tenuto ] r < gis' e'' > 8 [ < a'' e' > 16 < gis'' e' > ] < b' fis'' > 8 [ < b' b'' > 16 < b' a'' > ]  |
+                    r8 < b' fis'' > 16 [ < b' fis'' > ] < b' fis'' > 8 [ b' 16 -\tenuto ] r < gis' e'' > 8 [ < a'' e' > 16 < gis'' e' > ] < b' fis'' > 8 [ < b' b'' > 16 < b' a'' > ]  |
                     < b' gis'' > 4 r8 < e'' gis'' > fis'' 4 -\tenuto r8 fis''  |
-                    e'' 8 [ < b' b'' > e'' fis'' 16 e'' ] fis'' 4 r8 [ < fis'' b'' > 16 < fis'' b'' > ]  |
-                    < e'' b'' > 8 [ < b' gis'' > ] r [ < gis' gis'' > 16 < gis' gis'' > ] < b' fis'' > 8 [ < b' fis'' > ] r4  |
+                    e'' 8 [ < b' b'' > e'' fis'' 16 e'' ] fis'' 4 r8 < fis'' b'' > 16 [ < fis'' b'' > ]  |
+                    < e'' b'' > 8 [ < b' gis'' > ] r < gis' gis'' > 16 [ < gis' gis'' > ] < b' fis'' > 8 [ < b' fis'' > ] r4  |
                     e'' 2 fis'' 4 gis''  |
 %% 30
                     a'' 4 a'' 2 gis'' 4  |
                     fis'' 2 e'' 
                     % warning: overlong bar truncated here |
-                    \skip 2 r8 [ < b' gis'' > 16 < b' gis'' > ] < b' gis'' > 8 [ < b' gis'' > ]  |
+                    \skip 2 r8 < b' gis'' > 16 [ < b' gis'' > ] < b' gis'' > 8 [ < b' gis'' > ]  |
                     < e'' a'' > 8 [ < e' e'' > 16 < e' e'' > ] < e' e'' > 8 [ < e' e'' > ] < gis' b' > 4 r  |
                     R1*3  |
                     r2 r4 < gis'' b'' >  |
@@ -360,8 +360,8 @@ globalTempo = {
 %% 50
                     r2 r  |
                     r2 r  |
-                    r4 r8 [ < b' fis'' > < b' gis'' > < b' fis'' > ] r < b' fis'' >  |
-                    < b' gis'' > 8 [ < b' fis'' > ] r [ < b' fis'' > 16 < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r [ < b' fis'' > 16 < b' fis'' > ]  |
+                    r4 r8 < b' fis'' > [ < b' gis'' > < b' fis'' > ] r < b' fis'' >  |
+                    < b' gis'' > 8 [ < b' fis'' > ] r < b' fis'' > 16 [ < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r < b' fis'' > 16 [ < b' fis'' > ]  |
                     < b' gis'' > 8 [ < b' fis'' > ] r4 r2  |
 %% 55
                     r4 r8 fis'' gis'' [ fis'' ] r fis''  |
@@ -394,7 +394,7 @@ globalTempo = {
                     e' 1 -\tenuto  |
                     r4 r8 e' e' 4 e'  |
                     e' 1 -\tenuto  |
-                    r8 [ e' 16 e' ] < e' gis' > 8 [ < e' b' > ] < gis' e'' > 4 < e'' b'' >  |
+                    r8 e' 16 [ e' ] < e' gis' > 8 [ < e' b' > ] < gis' e'' > 4 < e'' b'' >  |
                     < gis'' e''' > 4 < e'' gis'' > < e'' cis''' > e''  |
 %% 80
                     < fis'' a'' > 4 < e'' gis'' > 8 [ fis'' fis'' -\tenuto ] r16 r r8 < b' e'' >  |
@@ -427,28 +427,28 @@ globalTempo = {
                     \clef "treble"
                     \key e \major
                     R1*13  |
-                    r2 r4 r8 [ < b' fis'' > 16 < b' fis'' > ]  |
+                    r2 r4 r8 < b' fis'' > 16 [ < b' fis'' > ]  |
 %% 15
-                    < b' gis'' > 8 [ < b' fis'' > ] r [ < b' fis'' > 16 < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r [ < fis'' b'' > 16 < fis'' b'' > ]  |
+                    < b' gis'' > 8 [ < b' fis'' > ] r < b' fis'' > 16 [ < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r < fis'' b'' > 16 [ < fis'' b'' > ]  |
                     < gis'' b'' > 8 [ < fis'' b'' > 16 < fis'' b'' > ] < fis'' b'' > 8 [ < b' fis'' > 16 < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r4  |
                     R1*2  |
-                    r2 r4 r8 [ < e'' b'' > 16 < e'' b'' > ]  |
+                    r2 r4 r8 < e'' b'' > 16 [ < e'' b'' > ]  |
 %% 20
-                    < a'' cis''' > 8 [ < gis'' b'' > ] r [ < e'' b'' > 16 < e'' b'' > ] < a'' cis''' > 8 [ < gis'' b'' > ] r [ < gis' e'' > 16 < gis' e'' > ]  |
+                    < a'' cis''' > 8 [ < gis'' b'' > ] r < e'' b'' > 16 [ < e'' b'' > ] < a'' cis''' > 8 [ < gis'' b'' > ] r < gis' e'' > 16 [ < gis' e'' > ]  |
                     < a'' e' > 8 [ < gis'' e' > 16 < gis'' e' > ] < b' gis'' > 8 [ < gis' e'' > 16 < gis' e'' > ] < e' e'' > 8 [ < gis' b' > 16 < gis' b' > ] < gis' b' > 8 [ < gis' b' > 16 < gis' b' > ]  |
                     < e' gis' > 4 r r2  |
                     r2 r  |
                     r2 r  |
 %% 25
-                    r8 [ < b' fis'' > 16 < b' fis'' > ] < b' fis'' > 8 [ gis'' 16 fis'' ] < gis' e'' > 8 [ < a'' e' > 16 < gis'' e' > ] < b' fis'' > 8 [ < b' b'' > 16 < b' a'' > ]  |
+                    r8 < b' fis'' > 16 [ < b' fis'' > ] < b' fis'' > 8 [ gis'' 16 fis'' ] < gis' e'' > 8 [ < a'' e' > 16 < gis'' e' > ] < b' fis'' > 8 [ < b' b'' > 16 < b' a'' > ]  |
                     < b' gis'' > 4 r8 < e'' gis'' > ais'' 4 b'' 8 -\tenuto r  |
-                    e'' 8 [ < b' b'' > ais'' -\tenuto ] r16 r < fis'' b'' > 4 r8 [ < fis'' b'' > 16 < fis'' b'' > ]  |
-                    < e'' b'' > 8 [ < b' gis'' > ] r [ < gis' gis'' > 16 < gis' gis'' > ] < b' fis'' > 8 [ < b' fis'' > ] r4  |
+                    e'' 8 [ < b' b'' > ais'' -\tenuto ] r16 r < fis'' b'' > 4 r8 < fis'' b'' > 16 [ < fis'' b'' > ]  |
+                    < e'' b'' > 8 [ < b' gis'' > ] r < gis' gis'' > 16 [ < gis' gis'' > ] < b' fis'' > 8 [ < b' fis'' > ] r4  |
                     e'' 2 fis'' 4 gis''  |
 %% 30
                     a'' 4 a'' 2 gis'' 4  |
                     fis'' 2 e'' _~  |
-                    e'' 2 r8 [ < b' gis'' > 16 < b' gis'' > ] < b' gis'' > 8 [ < b' gis'' > ]  |
+                    e'' 2 r8 < b' gis'' > 16 [ < b' gis'' > ] < b' gis'' > 8 [ < b' gis'' > ]  |
                     < e'' a'' > 8 [ < e' e'' > 16 < e' e'' > ] < e' e'' > 8 [ < e' e'' > ] < gis' b' > 4 r  |
                     R1*3  |
                     r2 r4 < gis'' b'' >  |
@@ -469,13 +469,13 @@ globalTempo = {
 %% 50
                     r2 r  |
                     r2 r  |
-                    r4 r8 [ < b' fis'' > < b' gis'' > < b' fis'' > ] r < b' fis'' >  |
-                    < b' gis'' > 8 [ < b' fis'' > ] r [ < b' fis'' > 16 < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r [ < b' fis'' > 16 < b' fis'' > ]  |
+                    r4 r8 < b' fis'' > [ < b' gis'' > < b' fis'' > ] r < b' fis'' >  |
+                    < b' gis'' > 8 [ < b' fis'' > ] r < b' fis'' > 16 [ < b' fis'' > ] < b' gis'' > 8 [ < b' fis'' > ] r < b' fis'' > 16 [ < b' fis'' > ]  |
                     < b' gis'' > 8 [ < b' fis'' > ] r4 r2  |
 %% 55
                     r4 b'' 8 -\tenuto r b'' 2 -\tenuto _~  |
                     b'' 1 -\tenuto _~  |
-                    b'' 4 -\tenuto r16 [ a'' gis'' fis'' ] e'' 4 e''  |
+                    b'' 4 -\tenuto r16 a'' [ gis'' fis'' ] e'' 4 e''  |
                     e'' 1 -\tenuto _~  |
                     e'' 1 -\tenuto  |
 %% 60
@@ -500,7 +500,7 @@ globalTempo = {
                     e' 1 -\tenuto  |
                     r4 r8 e' e' 4 e'  |
                     e' 1 -\tenuto  |
-                    r8 [ e' 16 e' ] < e' gis' > 8 [ < e' b' > ] < gis' e'' > 4 < e'' b'' >  |
+                    r8 e' 16 [ e' ] < e' gis' > 8 [ < e' b' > ] < gis' e'' > 4 < e'' b'' >  |
                     < gis'' e''' > 4 < e'' gis'' > < e'' cis''' > e''  |
 %% 80
                     < fis'' a'' > 4 < e'' gis'' > 8 [ < b' fis'' > < fis'' b' > -\tenuto b' 16 b' ] b' 8 [ < b' e'' > ]  |
@@ -543,25 +543,25 @@ globalTempo = {
                     \clef "bass"
                     \key d \major
                     R1*13  |
-                    r2 r4 r8 [ a, 16 a, ]  |
+                    r2 r4 r8 a, 16 [ a, ]  |
 %% 15
-                    d 8 [ a, ] r [ a, 16 a, ] d 8 [ a, ] r [ a, 16 a, ]  |
+                    d 8 [ a, ] r a, 16 [ a, ] d 8 [ a, ] r a, 16 [ a, ]  |
                     d 8 [ a, 16 a, ] a, 8 [ a, 16 a, ] d 8 [ a, ] r4  |
                     R1*2  |
-                    r2 r4 r8 [ d 16 d ]  |
+                    r2 r4 r8 d 16 [ d ]  |
 %% 20
-                    d 8 [ d ] r [ d 16 d ] d 8 [ d ] r [ d 16 d ]  |
+                    d 8 [ d ] r d 16 [ d ] d 8 [ d ] r d 16 [ d ]  |
                     d 8 [ d 16 d ] d 8 [ d 16 d ] d 8 [ d 16 d ] d 8 [ d 16 d ]  |
                     d 4 r r2  |
                     r2 r  |
                     r2 r  |
 %% 25
-                    r8 [ a, 16 a, ] a, 8 [ a, d d 16 d ] a, 8 [ a, 16 a, ]  |
+                    r8 a, 16 [ a, ] a, 8 [ a, d d 16 d ] a, 8 [ a, 16 a, ]  |
                     d 8 [ a, ] d 4. d 8 a, 4  |
-                    r8 d d 8. [ d 16 ] a, 4 r8 [ a, 16 a, ]  |
-                    d 8 [ d ] r [ d 16 d ] a, 8 [ a, ] r4  |
+                    r8 d d 8. [ d 16 ] a, 4 r8 a, 16 [ a, ]  |
+                    d 8 [ d ] r d 16 [ d ] a, 8 [ a, ] r4  |
                     R1*3  |
-                    r2 r8 [ d 16 d ] d 8 [ d ]  |
+                    r2 r8 d 16 [ d ] d 8 [ d ]  |
                     d 8 [ d 16 d ] d 8 [ d ] d 4 r  |
                     R1*3  |
                     r2 r4 d  |
@@ -582,12 +582,12 @@ globalTempo = {
 %% 50
                     r2 r  |
                     r2 r  |
-                    r4 r8 [ a, d a, ] r a,  |
-                    d 8 [ a, ] r [ a, 16 a, ] d 8 [ a, ] r [ a, 16 a, ]  |
+                    r4 r8 a, [ d a, ] r a,  |
+                    d 8 [ a, ] r a, 16 [ a, ] d 8 [ a, ] r a, 16 [ a, ]  |
                     d 8 [ a, ] r4 r2  |
 %% 55
-                    r4 r8 [ a, d a, ] r a,  |
-                    d 8 [ a, ] r [ a, 16 a, ] d 8 [ a, ] r [ a, 16 a, ]  |
+                    r4 r8 a, [ d a, ] r a,  |
+                    d 8 [ a, ] r a, 16 [ a, ] d 8 [ a, ] r a, 16 [ a, ]  |
                     d 8 [ a, ] r4 r2  |
                     r2 r  |
                     r2 r  |
@@ -610,9 +610,9 @@ globalTempo = {
                     r2 r  |
                     r2 r  |
 %% 75
-                    r4 r8 [ d d d ] r d  |
+                    r4 r8 d [ d d ] r d  |
                     d 8 [ d ] r4 r2  |
-                    r4 r8 [ d 16 d ] d 8 [ d ] r [ d 16 d ]  |
+                    r4 r8 d 16 [ d ] d 8 [ d ] r d 16 [ d ]  |
                     d 8 [ d 16 d ] d 8 [ d d d ] d [ d ]  |
                     d 4 d 8. [ d 16 ] d 8 [ d 16 d ] d 8 [ d ]  |
 %% 80
@@ -625,11 +625,11 @@ globalTempo = {
                     d 4 r r d  |
                     d 4 d d d  |
                     a, 4 d 8 [ d ] a, 4. a, 8  |
-                    d 4 r8 [ d d d ] r d  |
-                    d 4 r8 [ d d d ] r d  |
+                    d 4 r8 d [ d d ] r d  |
+                    d 4 r8 d [ d d ] r d  |
 %% 90
-                    d 8 [ d ] r [ d 16 d ] d 8 [ d ] r [ d 16 d ]  |
-                    d 4 r8 [ d 16 d ] d 8 [ d 16 d ] d 8 [ d 16 d ]  |
+                    d 8 [ d ] r d 16 [ d ] d 8 [ d ] r d 16 [ d ]  |
+                    d 4 r8 d 16 [ d ] d 8 [ d 16 d ] d 8 [ d 16 d ]  |
                     d 8 [ d ] r4 r d  |
                     d 2. d 4  |
                     d 1  |
@@ -663,38 +663,38 @@ globalTempo = {
                     d'' 4 r d'' 4. a' 8  |
 %% 5
                     fis' 8 [ d' ] r4 d''' 4. a'' 8  |
-                    d'' 8 [ fis'' 16 fis'' ] g'' 8 [ fis'' ] r [ a'' 16 a'' ] b'' 8 [ a'' ]  |
-                    r4 r8 [ cis'' fis'' a'' ] g'' [ fis'' ]  |
+                    d'' 8 [ fis'' 16 fis'' ] g'' 8 [ fis'' ] r a'' 16 [ a'' ] b'' 8 [ a'' ]  |
+                    r4 r8 cis'' [ fis'' a'' ] g'' [ fis'' ]  |
                     e'' 4 r a'' 4. e'' 8  |
-                    cis'' 4 r r8 [ e'' 16 e'' ] fis'' 8 [ e'' ]  |
+                    cis'' 4 r r8 e'' 16 [ e'' ] fis'' 8 [ e'' ]  |
 %% 10
-                    r8 [ cis''' 16 cis''' ] d''' 8 [ cis''' ] r [ cis''' 16 cis''' ] d''' 8 [ cis''' ]  |
+                    r8 cis''' 16 [ cis''' ] d''' 8 [ cis''' ] r cis''' 16 [ cis''' ] d''' 8 [ cis''' ]  |
                     fis'' 8 a'' 4 gis'' 8 [ a'' ] e'' 16 [ e'' ] fis'' 8 [ e'' ]  |
                     a' 2 b' 4 cis''  |
                     d'' 8 [ d' ] d'' 2 cis'' 4  |
-                    b' 2 a' 4 r8 [ a'' 16 a'' ]  |
+                    b' 2 a' 4 r8 a'' 16 [ a'' ]  |
 %% 15
-                    d''' 8 [ cis''' ] r [ a'' 16 a'' ] d''' 8 [ cis''' ] r [ a'' 16 a'' ]  |
+                    d''' 8 [ cis''' ] r a'' 16 [ a'' ] d''' 8 [ cis''' ] r a'' 16 [ a'' ]  |
                     d''' 8 [ cis''' 16 cis''' ] cis''' 8 [ a'' 16 a'' ] d''' 8 [ cis''' ] r4  |
                     d' 2 e' 4 fis'  |
                     g' 8 [ g ] g' 2 fis' 4  |
-                    e' 2 d' 4 r8 [ a'' 16 a'' ]  |
+                    e' 2 d' 4 r8 a'' 16 [ a'' ]  |
 %% 20
-                    b'' 8 [ a'' ] r [ d''' 16 a'' ] b'' 8 [ a'' ] r [ d''' 16 a'' ]  |
+                    b'' 8 [ a'' ] r d''' 16 [ a'' ] b'' 8 [ a'' ] r d''' 16 [ a'' ]  |
                     b'' 8 [ d''' 16 d''' ] d''' 8 [ d''' 16 a'' ] b'' 8 [ a'' ] r4  |
                     d'' 2 e'' 4 fis''  |
                     g'' 8 [ g' ] g'' 2 fis'' 4  |
-                    e'' 2 d'' 4 r8 [ d''' 16 d''' ]  |
+                    e'' 2 d'' 4 r8 d''' 16 [ d''' ]  |
 %% 25
-                    cis''' 8 [ a'' ] r [ fis'' 16 e'' ] d'' 8 [ g'' 16 fis'' ] e'' 8 [ a'' 16 g'' ]  |
-                    fis'' 4 r8 [ d''' 16 cis''' ] b'' 8 [ gis'' 16 fis'' ] e'' 8 [ fis'' 16 e'' ]  |
+                    cis''' 8 [ a'' ] r fis'' 16 [ e'' ] d'' 8 [ g'' 16 fis'' ] e'' 8 [ a'' 16 g'' ]  |
+                    fis'' 4 r8 d''' 16 [ cis''' ] b'' 8 [ gis'' 16 fis'' ] e'' 8 [ fis'' 16 e'' ]  |
                     d'' 8 [ cis'' d'' e'' 16 d'' ] cis'' 8 [ e'' 16 e'' ] a'' 8 [ cis'' ]  |
-                    r8 [ a'' 16 a'' ] d''' 8 [ a'' ] r [ a'' 16 a'' ] a'' 8 [ e'' ]  |
-                    r8 [ a' 16 a' ] fis'' 8 [ d'' ] r [ cis''' 16 cis''' ] d''' 8 [ a'' ]  |
+                    r8 a'' 16 [ a'' ] d''' 8 [ a'' ] r a'' 16 [ a'' ] a'' 8 [ e'' ]  |
+                    r8 a' 16 [ a' ] fis'' 8 [ d'' ] r cis''' 16 [ cis''' ] d''' 8 [ a'' ]  |
 %% 30
-                    d'' 8 [ b' 16 b' ] e'' 8 [ e'' ] r [ cis''' 16 cis''' ] d''' 8 [ d''' ]  |
+                    d'' 8 [ b' 16 b' ] e'' 8 [ e'' ] r cis''' 16 [ cis''' ] d''' 8 [ d''' ]  |
                     d''' 8 [ d''' ] cis''' 8. [ cis''' 16 ] d''' 8 [ a'' 16 a'' ] fis'' 8 [ d'' ]  |
-                    r8 [ b'' b'' b'' ] a'' [ a'' 16 a'' ] fis'' 8 [ d'' ]  |
+                    r8 b'' [ b'' b'' ] a'' [ a'' 16 a'' ] fis'' 8 [ d'' ]  |
                     g'' 8 [ g'' 16 g'' ] b'' 8 [ b'' ] a'' 4 a'  |
                     a' 4 g' fis' e' 8. [ d' 16 ]  |
 %% 35
@@ -711,31 +711,31 @@ globalTempo = {
                     a' 4 cis' fis' a  |
 %% 45
                     d' 4 cis' 8 [ b ] cis' 4 b 8. [ a 16 ]  |
-                    a 4 r r8 [ a d' d' ]  |
-                    d' 4 r8 [ b e' cis' ] d' 4 
+                    a 4 r r8 a [ d' d' ]  |
+                    d' 4 r8 b [ e' cis' ] d' 4 
                     % warning: overlong bar truncated here |
                     \skip 4 cis' 4 d' d''  |
                     a'' 4 cis'' fis'' a'  |
 %% 50
                     d'' 4 cis'' 8 [ b' ] cis'' 4 b' 8. [ a' 16 ]  |
                     a' 2 r  |
-                    r4 r8 [ a'' d''' cis''' ] r a''  |
-                    d''' 8 [ cis''' ] r [ a'' 16 a'' ] d''' 8 [ cis''' ] r [ a'' 16 a'' ]  |
+                    r4 r8 a'' [ d''' cis''' ] r a''  |
+                    d''' 8 [ cis''' ] r a'' 16 [ a'' ] d''' 8 [ cis''' ] r a'' 16 [ a'' ]  |
                     d''' 8 [ cis''' ] r4 r2  |
 %% 55
-                    r4 r8 [ a'' d''' cis''' ] r a''  |
-                    d''' 8 [ cis''' ] r [ a'' 16 a'' ] d''' 8 [ cis''' ] r [ a'' 16 a'' ]  |
+                    r4 r8 a'' [ d''' cis''' ] r a''  |
+                    d''' 8 [ cis''' ] r a'' 16 [ a'' ] d''' 8 [ cis''' ] r a'' 16 [ a'' ]  |
                     d''' 8 [ cis''' ] r4 r2  |
-                    r4 r8 [ a'' b'' a'' ] d''' [ a'' ]  |
-                    b'' 8 [ a'' ] r [ a'' 16 a'' ] b'' 8 [ a'' ] r [ a'' 16 a'' ]  |
+                    r4 r8 a'' [ b'' a'' ] d''' [ a'' ]  |
+                    b'' 8 [ a'' ] r a'' 16 [ a'' ] b'' 8 [ a'' ] r a'' 16 [ a'' ]  |
 %% 60
                     b'' 8 [ a'' ] r4 r2  |
-                    r4 r8 [ b'' cis''' b'' ] e'' [ b'' ]  |
-                    cis''' 8 [ b'' e'' b'' 16 b'' ] cis''' 8 [ b'' ] r [ b'' 16 b'' ]  |
+                    r4 r8 b'' [ cis''' b'' ] e'' [ b'' ]  |
+                    cis''' 8 [ b'' e'' b'' 16 b'' ] cis''' 8 [ b'' ] r b'' 16 [ b'' ]  |
                     cis''' 8 [ b'' ] r4 r2  |
-                    r4 r8 [ cis''' d''' cis''' ] fis'' [ cis''' ]  |
+                    r4 r8 cis''' [ d''' cis''' ] fis'' [ cis''' ]  |
 %% 65
-                    d''' 8 [ cis''' fis'' cis''' 16 cis''' ] d''' 8 [ cis''' ] r [ cis''' 16 cis''' ]  |
+                    d''' 8 [ cis''' fis'' cis''' 16 cis''' ] d''' 8 [ cis''' ] r cis''' 16 [ cis''' ]  |
                     d''' 4 d'' r2  |
                     r2 d''' 4 d'''  |
                     a'' 8 [ e'' e'' g'' ] fis'' [ e'' fis'' g'' ]  |
@@ -747,9 +747,9 @@ globalTempo = {
                     g'' 4 fis'' 8 [ e'' ] fis'' 4 e'' 8. [ d'' 16 ]  |
                     d'' 2 d' 4 d'  |
 %% 75
-                    d' 4 r8 [ a'' b'' a'' ] r a''  |
+                    d' 4 r8 a'' [ b'' a'' ] r a''  |
                     b'' 8 [ a'' ] r d' d' 4 d'  |
-                    d' 4 r8 [ a'' 16 a'' ] b'' 8 [ a'' ] r [ a'' 16 a'' ]  |
+                    d' 4 r8 a'' 16 [ a'' ] b'' 8 [ a'' ] r a'' 16 [ a'' ]  |
                     b'' 8 [ a'' ] r4 r a''  |
                     d''' 4 fis'' b'' d''  |
 %% 80
@@ -762,8 +762,8 @@ globalTempo = {
                     a'' 8 [ fis'' 16 g'' ] a'' 8 [ b'' 16 cis''' ] d''' 4 a''  |
                     d''' 4 fis'' b'' d''  |
                     g'' 4 fis'' 8 [ e'' ] e'' 4. d'' 8  |
-                    d'' 4 r8 [ a'' b'' a'' ] r a''  |
-                    b'' 8 [ a'' ] r [ a'' b'' a'' ] r a''  |
+                    d'' 4 r8 a'' [ b'' a'' ] r a''  |
+                    b'' 8 [ a'' ] r a'' [ b'' a'' ] r a''  |
 %% 90
                     b'' 8 [ a'' 16 a'' ] d''' 8 [ a'' 16 a'' ] b'' 8 [ a'' 16 a'' ] d''' 8 [ a'' 16 a'' ]  |
                     b'' 8 [ a'' 16 a'' ] d''' 8 [ a'' 16 a'' ] b'' 8 [ a'' 16 a'' ] d''' 8 [ a'' 16 a'' ]  |
@@ -798,35 +798,35 @@ globalTempo = {
                     fis' 4 r d' 4. fis' 8  |
 %% 5
                     d' 8 [ a ] r4 d'' 4. d'' 8  |
-                    b' 8 [ a' 16 a' ] b' 8 [ a' ] r [ fis'' 16 fis'' ] g'' 8 [ d'' ]  |
-                    r4 r8 [ cis'' d'' d'' ] cis'' [ d'' ]  |
+                    b' 8 [ a' 16 a' ] b' 8 [ a' ] r fis'' 16 [ fis'' ] g'' 8 [ d'' ]  |
+                    r4 r8 cis'' [ d'' d'' ] cis'' [ d'' ]  |
                     cis'' 4 r a' 4. cis'' 8  |
-                    a' 4 r r8 [ cis'' 16 cis'' ] d'' 8 [ cis'' ]  |
+                    a' 4 r r8 cis'' 16 [ cis'' ] d'' 8 [ cis'' ]  |
 %% 10
-                    r8 [ e'' 16 e'' ] fis'' 8 [ e'' ] r [ e'' 16 e'' ] fis'' 8 [ e'' ]  |
+                    r8 e'' 16 [ e'' ] fis'' 8 [ e'' ] r e'' 16 [ e'' ] fis'' 8 [ e'' ]  |
                     a' 8 [ e'' ] d'' 4 cis'' 8 [ cis'' 16 cis'' ] d'' 8 [ cis'' ]  |
                     a' 2 b' 4 cis''  |
                     d'' 8 [ d' ] d'' 2 cis'' 4  |
-                    b' 2 a' 4 r8 [ e'' 16 e'' ]  |
+                    b' 2 a' 4 r8 e'' 16 [ e'' ]  |
 %% 15
-                    fis'' 8 [ e'' ] r [ e'' 16 e'' ] fis'' 8 [ e'' ] r [ e'' 16 e'' ]  |
+                    fis'' 8 [ e'' ] r e'' 16 [ e'' ] fis'' 8 [ e'' ] r e'' 16 [ e'' ]  |
                     fis'' 8 [ e'' 16 e'' ] e'' 8 [ e'' 16 e'' ] fis'' 8 [ e'' ] r4  |
                     d' 2 e' 4 fis'  |
                     g' 8 [ g ] g' 2 fis' 4  |
-                    e' 2 d' 4 r8 [ d'' 16 d'' ]  |
+                    e' 2 d' 4 r8 d'' 16 [ d'' ]  |
 %% 20
-                    g'' 8 [ fis'' ] r [ a'' 16 d'' ] g'' 8 [ fis'' ] r [ a'' 16 d'' ]  |
+                    g'' 8 [ fis'' ] r a'' 16 [ d'' ] g'' 8 [ fis'' ] r a'' 16 [ d'' ]  |
                     g'' 8 [ fis'' 16 fis'' ] fis'' 8 [ a'' 16 d'' ] g'' 8 [ fis'' ] r4  |
-                    r2 r8 [ a' 16 a' ] fis' 8 [ d' ]  |
-                    r8 [ d' 16 d' ] b' 8 [ b' e' a' ] r [ a' 16 a' ]  |
+                    r2 r8 a' 16 [ a' ] fis' 8 [ d' ]  |
+                    r8 d' 16 [ d' ] b' 8 [ b' e' a' ] r a' 16 [ a' ]  |
                     g' 8 [ e' a' a' ] a' [ a'' 16 a'' ] fis'' 8 [ d'' ]  |
 %% 25
-                    r8 [ e'' 16 e'' ] cis'' 8 [ cis''' 16 cis''' ] d''' 8 [ d'' 16 d'' ] a' 8 [ e'' 16 e'' ]  |
+                    r8 e'' 16 [ e'' ] cis'' 8 [ cis''' 16 cis''' ] d''' 8 [ d'' 16 d'' ] a' 8 [ e'' 16 e'' ]  |
                     a' 8 [ a'' 16 g'' ] fis'' 8 [ b'' 16 a'' ] gis'' 8 [ e'' ] a'' 4 
                     % warning: overlong bar truncated here |
                     \skip 4 gis'' 4 a'' 8 [ cis'' 16 cis'' ] e'' 8 [ cis'' ]  |
-                    r8 [ fis'' 16 fis'' ] a'' 8 [ fis'' ] r [ cis'' 16 cis'' ] e'' 8 [ cis'' ]  |
-                    r8 [ fis' 16 fis' ] a' 8 [ fis'' 16 fis'' ] a'' 8 [ e'' 16 e'' ] a' 8 [ d'' 16 d'' ]  |
+                    r8 fis'' 16 [ fis'' ] a'' 8 [ fis'' ] r cis'' 16 [ cis'' ] e'' 8 [ cis'' ]  |
+                    r8 fis' 16 [ fis' ] a' 8 [ fis'' 16 fis'' ] a'' 8 [ e'' 16 e'' ] a' 8 [ d'' 16 d'' ]  |
 %% 30
                     g'' 8 [ d'' 16 d'' ] b' 8 [ g' 16 g' ] e' 8 [ e'' 16 e'' ] fis'' 8 [ d'' 16 d'' ]  |
                     b'' 8 [ g'' ] e'' 8. [ e'' 16 ] a'' 8 [ d'' 16 d'' ] a' 8 [ fis'' 16 fis'' ]  |
@@ -850,42 +850,42 @@ globalTempo = {
                     r4 a' d'' fis'  |
                     b' 4 d' g' fis' 8 [ e' ]  |
                     fis' 4 e' 8. [ d' 16 ] d' 8 [ a' fis' d' ]  |
-                    r8 [ e' a' e' ] r [ d' cis' a ]  |
+                    r8 e' [ a' e' ] r d' [ cis' a ]  |
 %% 50
                     d' 8 [ b' ] a' 2 gis' 4  |
                     a' 4 e' r2  |
-                    r4 r8 [ e'' fis'' e'' ] r e''  |
-                    fis'' 8 [ e'' ] r [ e'' 16 e'' ] fis'' 8 [ e'' ] r [ e'' 16 e'' ]  |
+                    r4 r8 e'' [ fis'' e'' ] r e''  |
+                    fis'' 8 [ e'' ] r e'' 16 [ e'' ] fis'' 8 [ e'' ] r e'' 16 [ e'' ]  |
                     fis'' 8 [ e'' ] r4 r2  |
 %% 55
-                    r4 r8 [ e'' fis'' e'' ] r e''  |
-                    fis'' 8 [ e'' ] r [ e'' 16 e'' ] fis'' 8 [ e'' ] r [ e'' 16 e'' ]  |
+                    r4 r8 e'' [ fis'' e'' ] r e''  |
+                    fis'' 8 [ e'' ] r e'' 16 [ e'' ] fis'' 8 [ e'' ] r e'' 16 [ e'' ]  |
                     fis'' 8 [ e'' ] r4 r2  |
-                    r4 r8 [ d'' g'' fis'' ] a'' [ fis'' ]  |
-                    d'' 8 [ fis'' ] r [ d'' 16 d'' ] g'' 8 [ fis'' ] r [ d'' 16 d'' ]  |
+                    r4 r8 d'' [ g'' fis'' ] a'' [ fis'' ]  |
+                    d'' 8 [ fis'' ] r d'' 16 [ d'' ] g'' 8 [ fis'' ] r d'' 16 [ d'' ]  |
 %% 60
                     g'' 8 [ fis'' ] r4 r2  |
-                    r4 r8 [ e'' a'' gis'' ] b' [ gis'' ]  |
-                    a'' 8 [ gis'' e'' gis'' 16 gis'' ] a'' 8 [ gis'' ] r [ gis'' 16 gis'' ]  |
+                    r4 r8 e'' [ a'' gis'' ] b' [ gis'' ]  |
+                    a'' 8 [ gis'' e'' gis'' 16 gis'' ] a'' 8 [ gis'' ] r gis'' 16 [ gis'' ]  |
                     a'' 8 [ gis'' ] r4 r2  |
-                    r4 r8 [ fis'' b'' bes'' ] cis'' [ fis'' ]  |
+                    r4 r8 fis'' [ b'' bes'' ] cis'' [ fis'' ]  |
 %% 65
-                    b'' 8 [ bes'' cis'' fis'' 16 fis'' ] b'' 8 [ bes'' ] r [ fis'' 16 fis'' ]  |
+                    b'' 8 [ bes'' cis'' fis'' 16 fis'' ] b'' 8 [ bes'' ] r fis'' 16 [ fis'' ]  |
                     b'' 4 fis'' r2  |
                     r2 d'' 4 d''  |
                     e'' 8 [ a' a' e'' ] d'' [ cis'' d'' e'' ]  |
-                    cis'' 2 r8 [ cis'' d'' e'' ]  |
+                    cis'' 2 r8 cis'' [ d'' e'' ]  |
 %% 70
-                    a' 4 r r8 [ fis'' gis'' a'' ]  |
+                    a' 4 r r8 fis'' [ gis'' a'' ]  |
                     d'' 8 [ cis'' d'' e'' 16 d'' ] cis'' 8 [ e' a' g' ]  |
                     fis' 4. e' 8 d' 4. d'' 8  |
                     d'' 8 [ cis'' d'' d'' ] d'' 4 cis''  |
                     d'' 2 d' 4 d'  |
 %% 75
-                    d' 4 r8 [ d'' g'' fis'' ] r d''  |
+                    d' 4 r8 d'' [ g'' fis'' ] r d''  |
                     g'' 8 [ fis'' ] r d' d' 4 d'  |
-                    d' 4 r8 [ d'' 16 d'' ] g'' 8 [ fis'' ] r [ d'' 16 d'' ]  |
-                    g'' 8 [ fis'' ] r [ a'' fis'' 16 e'' fis'' g'' ] a'' [ g'' fis'' e'' ]  |
+                    d' 4 r8 d'' 16 [ d'' ] g'' 8 [ fis'' ] r d'' 16 [ d'' ]  |
+                    g'' 8 [ fis'' ] r a'' [ fis'' 16 e'' fis'' g'' ] a'' [ g'' fis'' e'' ]  |
                     d'' 16 [ cis'' d'' e'' ] d'' [ cis'' b' a' ] g' [ a' b' g' ] a' 8 [ a'' ]  |
 %% 80
                     cis''' 4 d''' 8 [ d''' ] d''' 4 cis'''  |
@@ -897,8 +897,8 @@ globalTempo = {
                     fis'' 8 [ d'' 16 e'' ] fis'' 8 [ g'' 16 e'' ] fis'' 8 [ fis'' 16 g'' ] a'' [ g'' fis'' e'' ]  |
                     d'' 16 [ cis'' d'' e'' ] d'' [ cis'' b' a' ] g' [ a' b' g' ] a' 8 [ a'' ]  |
                     cis'' 4 d'' d'' cis''  |
-                    d'' 4 r8 [ d'' g'' fis'' ] r d''  |
-                    g'' 8 [ fis'' ] r [ d'' g'' fis'' ] r d''  |
+                    d'' 4 r8 d'' [ g'' fis'' ] r d''  |
+                    g'' 8 [ fis'' ] r d'' [ g'' fis'' ] r d''  |
 %% 90
                     g'' 8 [ fis'' 16 fis'' ] fis'' 8 [ d'' 16 d'' ] g'' 8 [ fis'' 16 fis'' ] fis'' 8 [ d'' 16 d'' ]  |
                     g'' 8 [ fis'' 16 fis'' ] fis'' 8 [ d'' 16 d'' ] g'' 8 [ fis'' 16 fis'' ] fis'' 8 [ d'' 16 d'' ]  |
@@ -933,35 +933,35 @@ globalTempo = {
                     r2 d' 4. d' 8  |
 %% 5
                     a 8 [ fis ] r4 d' 4. d' 8  |
-                    d' 8 [ d' 16 d' ] d' 8 [ d' ] r [ d' 16 d' ] d' 8 [ d' ]  |
-                    r4 r8 [ a' a' a' ] e' [ a' ]  |
+                    d' 8 [ d' 16 d' ] d' 8 [ d' ] r d' 16 [ d' ] d' 8 [ d' ]  |
+                    r4 r8 a' [ a' a' ] e' [ a' ]  |
                     a' 4 r a' 4. a' 8  |
-                    e' 4 r r8 [ a' 16 a' ] a' 8 [ a' ]  |
+                    e' 4 r r8 a' 16 [ a' ] a' 8 [ a' ]  |
 %% 10
-                    r8 [ a' 16 a' ] a' 8 [ a' ] r [ a' 16 a' ] a' 8 [ a' ]  |
+                    r8 a' 16 [ a' ] a' 8 [ a' ] r a' 16 [ a' ] a' 8 [ a' ]  |
                     d'' 8 [ a' ] b' 4 e' 8 [ a' 16 a' ] a' 8 [ a' ]  |
                     a' 2 b' 4 cis''  |
                     d'' 8 [ d' ] d'' 2 cis'' 4  |
-                    b' 2 a' 4 r8 [ a' 16 a' ]  |
+                    b' 2 a' 4 r8 a' 16 [ a' ]  |
 %% 15
-                    a' 8 [ a' ] r [ a' 16 a' ] a' 8 [ a' ] r [ a' 16 a' ]  |
+                    a' 8 [ a' ] r a' 16 [ a' ] a' 8 [ a' ] r a' 16 [ a' ]  |
                     a' 8 [ a' 16 a' ] a' 8 [ cis'' 16 cis'' ] a' 8 [ a' ] r4  |
                     d' 2 e' 4 fis'  |
                     g' 8 [ g ] g' 2 fis' 4  |
-                    e' 2 d' 4 r8 [ d' 16 d' ]  |
+                    e' 2 d' 4 r8 d' 16 [ d' ]  |
 %% 20
-                    d'' 8 [ d'' ] r [ d' 16 fis' ] d'' 8 [ d'' ] r [ d' 16 fis' ]  |
+                    d'' 8 [ d'' ] r d' 16 [ fis' ] d'' 8 [ d'' ] r d' 16 [ fis' ]  |
                     d'' 8 [ d'' 16 a' ] d' 8 [ d' 16 d' ] d'' 8 [ d'' ] r4  |
-                    r4 r8 [ d' 16 d' ] cis' 8 [ a ] r [ d' 16 d' ]  |
-                    b 8 [ b ] r [ e' 16 e' ] cis' 8 [ a ] d' 4 
+                    r4 r8 d' 16 [ d' ] cis' 8 [ a ] r d' 16 [ d' ]  |
+                    b 8 [ b ] r e' 16 [ e' ] cis' 8 [ a ] d' 4 
                     % warning: overlong bar truncated here |
                     \skip 4 cis' 4 d' 8 [ fis' 16 fis' ] a' 8 [ fis' ]  |
 %% 25
-                    r8 [ cis'' 16 cis'' ] a' 8 [ cis'' 16 a' ] fis' 8 [ d' 16 d' ] cis'' 8 [ cis'' 16 cis'' ]  |
+                    r8 cis'' 16 [ cis'' ] a' 8 [ cis'' 16 a' ] fis' 8 [ d' 16 d' ] cis'' 8 [ cis'' 16 cis'' ]  |
                     fis' 8 [ fis' 16 e' ] d' 8 [ fis' b' b' ] cis'' [ cis'' ]  |
                     fis' 8 [ fis' d' d' ] e' [ a' 16 a' ] cis'' 8 [ a' ]  |
-                    r8 [ a' 16 a' ] fis' 8 [ d' ] r [ e' 16 e' ] cis' 8 [ a ]  |
-                    r8 [ d' 16 d' ] d'' 8 [ a' 16 a' ] e' 8 [ a' 16 a' ] fis' 8 [ fis' 16 fis' ]  |
+                    r8 a' 16 [ a' ] fis' 8 [ d' ] r e' 16 [ e' ] cis' 8 [ a ]  |
+                    r8 d' 16 [ d' ] d'' 8 [ a' 16 a' ] e' 8 [ a' 16 a' ] fis' 8 [ fis' 16 fis' ]  |
 %% 30
                     d' 8 [ d' 16 d' ] g' 8 [ g' 16 g' ] cis' 8 [ a' 16 a' ] d'' 8 [ fis' 16 d' ]  |
                     e' 8 [ b' cis' a' ] a' [ fis' 16 fis' ] d' 8 [ a' 16 a' ]  |
@@ -985,55 +985,55 @@ globalTempo = {
                     a 4 a' d'' fis'  |
                     b' 4 d' g' fis' 8 [ e' ]  |
                     fis' 4 e' 8. [ d' 16 ] d' 4 r8 fis'  |
-                    e' 8 [ cis' ] r [ a' a' d' ] r a'  |
+                    e' 8 [ cis' ] r a' [ a' d' ] r a'  |
 %% 50
                     fis' 8 [ e' e' fis' ] e' 4 e'  |
                     e' 4 cis' r2  |
-                    r4 r8 [ a' a' a' ] r a'  |
-                    a' 8 [ a' ] r [ a' 16 a' ] a' 8 [ a' ] r [ a' 16 a' ]  |
+                    r4 r8 a' [ a' a' ] r a'  |
+                    a' 8 [ a' ] r a' 16 [ a' ] a' 8 [ a' ] r a' 16 [ a' ]  |
                     a' 8 [ a' ] r4 r2  |
 %% 55
-                    r4 r8 [ a' a' a' ] r a'  |
-                    a' 8 [ a' ] r [ a' 16 a' ] a' 8 [ a' ] r [ a' 16 a' ]  |
+                    r4 r8 a' [ a' a' ] r a'  |
+                    a' 8 [ a' ] r a' 16 [ a' ] a' 8 [ a' ] r a' 16 [ a' ]  |
                     a' 8 [ a' ] r4 r2  |
-                    r4 r8 [ d' d' d' ] fis' [ d' ]  |
-                    d' 8 [ d' ] r [ d' 16 d' ] d' 8 [ d' ] r [ d' 16 d' ]  |
+                    r4 r8 d' [ d' d' ] fis' [ d' ]  |
+                    d' 8 [ d' ] r d' 16 [ d' ] d' 8 [ d' ] r d' 16 [ d' ]  |
 %% 60
                     d' 8 [ d' ] r4 r2  |
-                    r4 r8 [ e' e' e' ] gis' [ e' ]  |
-                    e' 8 [ e' gis' e' 16 e' ] e' 8 [ e' ] r [ e' 16 e' ]  |
+                    r4 r8 e' [ e' e' ] gis' [ e' ]  |
+                    e' 8 [ e' gis' e' 16 e' ] e' 8 [ e' ] r e' 16 [ e' ]  |
                     e' 8 [ e' ] r4 r2  |
-                    r4 r8 [ fis' fis' fis' ] bes' [ fis' ]  |
+                    r4 r8 fis' [ fis' fis' ] bes' [ fis' ]  |
 %% 65
-                    fis' 8 [ fis' bes' fis' 16 fis' ] fis' 8 [ fis' ] r [ fis' 16 fis' ]  |
+                    fis' 8 [ fis' bes' fis' 16 fis' ] fis' 8 [ fis' ] r fis' 16 [ fis' ]  |
                     fis' 4 fis' r2  |
                     r2 g' 4 g'  |
                     e' 4. a' 8 [ a' a' a' ] a'  |
                     a' 2 r  |
 %% 70
-                    r8 [ a' b' cis'' ] fis' [ a' e' a' ]  |
+                    r8 a' [ b' cis'' ] fis' [ a' e' a' ]  |
                     a' 4 gis' a' r  |
-                    r8 [ a d' cis' ] b 4. a' 8  |
+                    r8 a [ d' cis' ] b 4. a' 8  |
                     g' 4 a' 8 [ b' ] a' 2  |
                     a' 2 d' 4 d'  |
 %% 75
-                    d' 4 r8 [ d' d'' d'' ] r d'  |
+                    d' 4 r8 d' [ d'' d'' ] r d'  |
                     d'' 8 [ d'' ] r d' d' 4 d'  |
-                    d' 4 r8 [ d' 16 d' ] d' 8 [ d' ] r [ d' 16 d' ]  |
+                    d' 4 r8 d' 16 [ d' ] d' 8 [ d' ] r d' 16 [ d' ]  |
                     d' 8 [ d' ] r fis' a' 4 d'  |
                     fis' 4 fis' d' d'  |
 %% 80
                     e' 4 a' a' a'  |
                     a' 4 r fis' 8 [ fis' 16 fis' ] a' 8 [ a' 16 a' ]  |
-                    a' 4 r8 [ a' a' a' 16 a' ] a' 8 [ a' 16 a' ]  |
+                    a' 4 r8 a' [ a' a' 16 a' ] a' 8 [ a' 16 a' ]  |
                     d'' 4 r a' 8 [ a' 16 a' ] a' 8 [ a' 16 a' ]  |
-                    d'' 4 r8 [ a' a' a' 16 a' ] a' 8 [ a' 16 a' ]  |
+                    d'' 4 r8 a' [ a' a' 16 a' ] a' 8 [ a' 16 a' ]  |
 %% 85
                     a' 4 r8 a' a' 4 d'  |
                     fis' 8 [ d' a' fis' ] d' 4 a'  |
                     e' 4 a' 8 [ a' ] a' 4 e'  |
-                    fis' 4 r8 [ a' d'' d' ] r d'  |
-                    d'' 8 [ d' ] r [ d' d'' d' ] r d'  |
+                    fis' 4 r8 a' [ d'' d' ] r d'  |
+                    d'' 8 [ d' ] r d' [ d'' d' ] r d'  |
 %% 90
                     d'' 8 [ d' 16 d' ] a' 8 [ fis' 16 fis' ] d' 8 [ d' 16 d' ] a' 8 [ fis' 16 fis' ]  |
                     d' 8 [ d' 16 d' ] a' 8 [ fis' 16 fis' ] d' 8 [ d' 16 d' ] a' 8 [ fis' 16 fis' ]  |
@@ -1067,39 +1067,39 @@ globalTempo = {
                     e 8 [ d a a, ] d 4 r  |
                     d 8 [ d e fis ] g [ d ] r4  |
 %% 5
-                    d 8 [ d e fis ] g [ d ] r [ fis 16 fis ]  |
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r fis  |
+                    d 8 [ d e fis ] g [ d ] r fis 16 [ fis ]  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis  |
                     e 8 [ d a a, ] d [ fis e d ]  |
                     a 4. cis' 8 [ d' ] a r4  |
-                    a 4. cis' 8 [ d' ] a r [ cis' 16 cis' ]  |
+                    a 4. cis' 8 [ d' ] a r cis' 16 [ cis' ]  |
 %% 10
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r cis'  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis'  |
                     d' 8 [ cis' ] b 4 a r  |
                     a 2 b 4 cis'  |
                     d' 8 [ d ] d' 2 cis' 4  |
-                    b 2 a 4 r8 [ cis' 16 cis' ]  |
+                    b 2 a 4 r8 cis' 16 [ cis' ]  |
 %% 15
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r [ cis' 16 cis' ]  |
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r4  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis' 16 [ cis' ]  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r4  |
                     d 2 e 4 fis  |
                     g 8 [ g, ] g 2 fis 4  |
-                    e 2 d 4 r8 [ fis 16 fis ]  |
+                    e 2 d 4 r8 fis 16 [ fis ]  |
 %% 20
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
-                    g 8 [ fis ] r [ fis 16 fis ] g 8 [ d ] r4  |
-                    r4 r8 [ d' 16 d' ] cis' 8 [ a ] r [ d' 16 d' ]  |
-                    b 8 [ b ] r [ e' 16 e' ] cis' 8 [ a ] d' 4 
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
+                    g 8 [ fis ] r fis 16 [ fis ] g 8 [ d ] r4  |
+                    r4 r8 d' 16 [ d' ] cis' 8 [ a ] r d' 16 [ d' ]  |
+                    b 8 [ b ] r e' 16 [ e' ] cis' 8 [ a ] d' 4 
                     % warning: overlong bar truncated here |
                     \skip 4 cis' 8 [ a 16 a ] fis 8 [ d d' d ]  |
 %% 25
                     a 2 b 4 cis'  |
                     d' 8 [ d ] d' 2 cis' 4  |
-                    b 2 a 4 r8 [ a 16 a ]  |
-                    fis 8 [ d ] r [ d' 16 d' ] cis' 8 [ a cis' a ]  |
-                    d' 4. d' 16 [ d' ] cis' 8 [ a ] r [ d' 16 d' ]  |
+                    b 2 a 4 r8 a 16 [ a ]  |
+                    fis 8 [ d ] r d' 16 [ d' ] cis' 8 [ a cis' a ]  |
+                    d' 4. d' 16 [ d' ] cis' 8 [ a ] r d' 16 [ d' ]  |
 %% 30
-                    b 8 [ g ] r [ e 16 e ] a 8 [ a ] r [ b 16 b ]  |
-                    g 8 [ e ] a 8. [ g 16 ] fis 4 r8 [ d' 16 d' ]  |
+                    b 8 [ g ] r e 16 [ e ] a 8 [ a ] r b 16 [ b ]  |
+                    g 8 [ e ] a 8. [ g 16 ] fis 4 r8 d' 16 [ d' ]  |
                     b 8 [ g b cis' ] d' [ d 16 d ] d 8 [ d ]  |
                     b, 8 [ b, 16 b, ] g, 8 [ g, ] d 4 d  |
                     cis 4 b, a, g  |
@@ -1114,33 +1114,33 @@ globalTempo = {
                     d 4. a 8 d' 4 fis  |
                     b 4 d g fis 8 [ e ]  |
                     e 2 d 4 r  |
-                    r4 r8 [ a d' d ] r fis  |
+                    r4 r8 a [ d' d ] r fis  |
 %% 45
-                    b 8 [ gis ] a 4 r8 [ e d e ]  |
+                    b 8 [ gis ] a 4 r8 e [ d e ]  |
                     cis 8 [ a g a ] fis 4 r8 fis  |
-                    g 8 [ d ] r [ b e' cis' ] d' [ g ]  |
-                    a 8 [ a, ] r [ a fis d ] r d'  |
-                    cis' 8 [ a ] r [ cis' d' d ] r fis  |
+                    g 8 [ d ] r b [ e' cis' ] d' [ g ]  |
+                    a 8 [ a, ] r a [ fis d ] r d'  |
+                    cis' 8 [ a ] r cis' [ d' d ] r fis  |
 %% 50
                     b 8 [ gis a d ] e [ e, ] r e  |
                     cis 4 a, r2  |
-                    r4 r8 [ cis' d' a ] r cis'  |
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r [ cis' 16 cis' ]  |
+                    r4 r8 cis' [ d' a ] r cis'  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis' 16 [ cis' ]  |
                     d' 8 [ a ] r4 r2  |
 %% 55
-                    r4 r8 [ cis' d' a ] r cis'  |
-                    d' 8 [ a ] r [ cis' 16 cis' ] d' 8 [ a ] r [ cis' 16 cis' ]  |
+                    r4 r8 cis' [ d' a ] r cis'  |
+                    d' 8 [ a ] r cis' 16 [ cis' ] d' 8 [ a ] r cis' 16 [ cis' ]  |
                     d' 8 [ a ] r4 r2  |
-                    r4 r8 [ fis g d ] r fis  |
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
+                    r4 r8 fis [ g d ] r fis  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
 %% 60
                     g 8 [ d ] r4 r2  |
-                    r4 r8 [ gis a e ] r gis  |
-                    a 8 [ e ] r [ gis 16 gis ] a 8 [ e ] r [ gis 16 gis ]  |
+                    r4 r8 gis [ a e ] r gis  |
+                    a 8 [ e ] r gis 16 [ gis ] a 8 [ e ] r gis 16 [ gis ]  |
                     a 8 [ e ] r4 r2  |
-                    r4 r8 [ bes b fis ] r bes  |
+                    r4 r8 bes [ b fis ] r bes  |
 %% 65
-                    b 8 [ fis ] r [ bes 16 bes ] b 8 [ fis ] r [ bes 16 bes ]  |
+                    b 8 [ fis ] r bes 16 [ bes ] b 8 [ fis ] r bes 16 [ bes ]  |
                     b 4 b, r2  |
                     r2 b 4 b  |
                     cis' 4. cis' 8 d' 4 d  |
@@ -1152,9 +1152,9 @@ globalTempo = {
                     e 4 fis 8 [ g ] a 4 g 8 [ a ]  |
                     fis 4 d r2  |
 %% 75
-                    r4 r8 [ fis g d ] r fis  |
+                    r4 r8 fis [ g d ] r fis  |
                     g 8 [ d ] r4 r2  |
-                    r4 r8 [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
+                    r4 r8 fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
                     g 8 [ d ] r d d' 4 fis  |
                     b 4 d g fis 8 [ fis ]  |
 %% 80
@@ -1167,11 +1167,11 @@ globalTempo = {
                     d' 4 r8 d d' 4 fis  |
                     b 4 d g fis 8 [ fis ]  |
                     e 4 d 8 [ d ] a 2  |
-                    d 4 r8 [ fis g d ] r fis  |
-                    g 8 [ d ] r [ fis g d ] r fis  |
+                    d 4 r8 fis [ g d ] r fis  |
+                    g 8 [ d ] r fis [ g d ] r fis  |
 %% 90
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
-                    g 8 [ d ] r [ fis 16 fis ] g 8 [ d ] r [ fis 16 fis ]  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
+                    g 8 [ d ] r fis 16 [ fis ] g 8 [ d ] r fis 16 [ fis ]  |
                     g 8 [ d ] r4 r d  |
                     g, 2. g, 4  |
                     d, 1  |

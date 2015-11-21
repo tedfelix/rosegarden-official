@@ -287,11 +287,11 @@ globalTempo = {
                 \skip 4.*54 
 %% 10
                 \clef "treble"
-                c'' 4 r r8 r c'' 4 g' a' c'' r8 r [ c'' ] a' _~  |
+                c'' 4 r r8 r c'' 4 g' a' c'' r8 r c'' a' _~  |
                 a' 4 r8 r4. r r8 g' 4 b' d'' f'' 8 [ e'' _~ ]  |
                 e'' 8 c'' 4 r4. r8 r g' 4 a' c'' r8 r c'' a' _~  |
                 a' 4 r8 r4. r r8 g' 4 b' d'' f'' 8 [ e'' _~ ]  |
-                e'' 8 c'' 4 r4. r4 g' a' c'' r8 r [ c'' ] a' _~  |
+                e'' 8 c'' 4 r4. r4 g' a' c'' r8 r c'' a' _~  |
 %% 15
                 a' 4 r8 r4. r r8 b' 4 b' g' g'  |
                 g' 2. _~ g' 8 [ a' _~ ] a' 2. _~ a' 2  |
@@ -307,9 +307,9 @@ globalTempo = {
                 r2 r8 c'' d'' 4 e'' g'' 8 [ e'' _~ ] e'' 4 d'' 8 d'' 4 c'' 8  |
                 d'' 4. d'' 8 _~ [ d'' ] c'' [ d'' ] c'' d'' 4 e'' e'' 8 [ d'' _~ ] d'' 2  |
 %% 20
-                r2 r8 [ a' ] b' 4 e'' 4. g'' e'' 4 d'' 8 [ c'' _~ ]  |
+                r2 r8 a' b' 4 e'' 4. g'' e'' 4 d'' 8 [ c'' _~ ]  |
                 c'' 4 d'' d'' 8 [ c'' ] d'' [ c'' ] d'' 4 e'' e'' 8 [ d'' _~ ] d'' 4 r8 r  |
-                r2 r8 [ e' ] a' [ c'' _~ ] c'' e'' 4 g'' 8 [ e'' ] e'' [ d'' _~ ] d'' 4.  |
+                r2 r8 e' a' [ c'' _~ ] c'' e'' 4 g'' 8 [ e'' ] e'' [ d'' _~ ] d'' 4.  |
                 r2 r8 a' c'' 4 e'' 8 g'' 4 e'' 8 e'' 2.  |
                 r4. r c'' 4 c'' 8 b' 4 a' 8 _~ a' 4. r  |
 %% 25
@@ -323,12 +323,12 @@ globalTempo = {
 
                 \skip 4.*150 
                 \clef "treble"
-                c'' 4 r r8 r c'' 4 g' a' c'' r8 r [ c'' ] a' _~  |
+                c'' 4 r r8 r c'' 4 g' a' c'' r8 r c'' a' _~  |
                 a' 4 r8 r4. r r8 g' 4 b' d'' f'' 8 [ e'' _~ ]  |
                 e'' 8 c'' 4 r4. r8 r g' 4 a' c'' r8 r c'' a' _~  |
                 a' 4 r8 r4. r r8 g' 4 b' d'' f'' 8 [ e'' _~ ]  |
 %% 30
-                e'' 8 c'' 4 r4. r4 g' a' c'' r8 r [ c'' ] a' _~  |
+                e'' 8 c'' 4 r4. r4 g' a' c'' r8 r c'' a' _~  |
                 a' 4 r8 r4. r r8 b' 4 b' g' g'  |
                 g' 2. _~ g' 8 [ a' _~ ] a' 2. _~ a' 2  |
                 r4. r r r r r  |
@@ -741,7 +741,7 @@ globalTempo = {
                 \time 18/8
                 
                 \clef "bass"
-                r8 [ d, ] d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 d, d, } d, 8 d, c c b, b,  |
+                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 d, d, } d, 8 d, c c b, b,  |
             } % Voice
 
             \context Voice = "voice 49" {
@@ -843,7 +843,7 @@ globalTempo = {
                 \skip 4.*102 
                 \clef "bass"
                 b,, 4 r8 c, d, 4 r8 c, b,, 4 r8 c, d, 4 r8 c, < b, e, > [ a, ]  |
-                b,, 4 r8 c, d, 4 r8 c, b,, 4 r8 c, d, 4 r8 [ c, ] < a, e, > [ g, ]  |
+                b,, 4 r8 c, d, 4 r8 c, b,, 4 r8 c, d, 4 r8 c, < a, e, > [ g, ]  |
             } % Voice
 
             \context Voice = "voice 58" {
@@ -855,7 +855,7 @@ globalTempo = {
 %% 20
                 \clef "bass"
                 b,, 8 c, r c, d, 4 r8 c, b,, c, r c, d, 4 r8 c, < b, e, > [ a, ]  |
-                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 [ c, ] < a, e, > [ g, ]  |
+                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ]  |
             } % Voice
 
             \context Voice = "voice 59" {
@@ -866,7 +866,7 @@ globalTempo = {
                 \skip 4.*126 
                 \clef "bass"
                 b,, 8 c, r c, d, 4 r8 c, b,, c, r c, d, 4 r8 c, < b, e, > [ a, ]  |
-                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 [ c, ] < a, e, > [ g, ]  |
+                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ]  |
             } % Voice
 
             \context Voice = "voice 60" {
@@ -878,7 +878,7 @@ globalTempo = {
                 \clef "bass"
                 b,, 8 c, r c, d, 4 r8 c, b,, c, r c, d, 4 r8 c, < b, e, > [ a, ]  |
 %% 25
-                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 [ c, ] < a, e, > [ g, ]  |
+                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ]  |
             } % Voice
 
             \context Voice = "voice 61" {
@@ -933,7 +933,7 @@ globalTempo = {
 
                 \skip 4.*198 
                 \clef "bass"
-                r8 [ d, ] d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 d, d, } d, 8 d, c c b, b,  |
+                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 d, d, } d, 8 d, c c b, b,  |
 %% 35
                 < a, b,, d, cis > 4 r8 r4. r r  |
                 \bar "|."
