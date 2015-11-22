@@ -35,6 +35,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 1" {
                     % Segment: violin
@@ -222,6 +223,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 2" {
                     % Segment: violin
@@ -409,6 +411,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 3" {
                     % Segment: violin
@@ -589,6 +592,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 4" {
                     % Segment: viola
@@ -775,6 +779,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 5" {
                     % Segment: viola
@@ -961,6 +966,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 6" {
                     % Segment: viola
@@ -1149,6 +1155,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 7" {
                     % Segment: cello
@@ -1336,6 +1343,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 8" {
                     % Segment: cello
@@ -1523,6 +1531,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 9" {
                     % Segment: cello
@@ -1712,6 +1721,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 10" {
                     % Segment: harpsichord

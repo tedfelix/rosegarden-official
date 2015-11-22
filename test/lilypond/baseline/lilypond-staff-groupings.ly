@@ -35,6 +35,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 1" {
                     % Segment: Flute
@@ -58,6 +59,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 2" {
                     % Segment: Oboe
@@ -81,6 +83,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 3" {
                     % Segment: A clarinet
@@ -104,6 +107,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 4" {
                     % Segment: Bassoon
@@ -128,6 +132,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 5" {
                         % Segment: French horn in E {
@@ -149,6 +154,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 6" {
                         % Segment: French horn in E }
@@ -171,6 +177,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 7" {
                     % Segment: Trumpet in C
@@ -193,6 +200,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 8" {
                         % Segment: Tenor trombone {
@@ -214,6 +222,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 9" {
                         % Segment: Bass trombone   }
@@ -238,6 +247,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 10" {
                     % Segment: Timpani
@@ -262,6 +272,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 11" {
                         % Segment: Violin {
@@ -283,6 +294,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 12" {
                         % Segment: Violin }
@@ -305,6 +317,7 @@ globalTempo = {
                 \set Staff.printKeyCancellation = ##f
                 \new Voice \global
                 \new Voice \globalTempo
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                 \context Voice = "voice 13" {
                     % Segment: Viola
@@ -327,6 +340,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 14" {
                         % Segment: Violoncello {
@@ -348,6 +362,7 @@ globalTempo = {
                     \set Staff.printKeyCancellation = ##f
                     \new Voice \global
                     \new Voice \globalTempo
+                    \set Staff.autoBeaming = ##f % turns off all autobeaming
 
                     \context Voice = "voice 15" {
                         % Segment: Contrabass }

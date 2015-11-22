@@ -1415,6 +1415,9 @@ LilyPondExporter::write()
                             str << indent(col) << "\\new Voice \\markers" << std::endl;
                         }
 
+                        if (m_exportBeams) {
+                            str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
+                        }
                     }
                 } /// if (!lsc.isVolta())
 
