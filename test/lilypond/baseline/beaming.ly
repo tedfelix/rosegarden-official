@@ -42,7 +42,7 @@ globalTempo = {
                 \clef "treble"
                 \key c \major
                 \stemUp b' 4. g' 8 b' [ d'' ] b' [ g' ] \stemNeutral  |
-                \stemUp d' 8 g 16 r r8 g r2 \stemNeutral  |
+                \stemUp d' 8 g 16 r r8 g e'' [ \grace { c'' 16 } cis'' 8 ] b' [ a' ] \stemNeutral  |
                 \stemUp g' 8 [ c'' ] r d' 4 a' 8 e' 4 \stemNeutral  |
                 \bar "|."
             } % Voice

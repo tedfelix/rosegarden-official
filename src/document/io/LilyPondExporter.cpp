@@ -2216,6 +2216,11 @@ LilyPondExporter::writeBar(Segment *s,
                         newGroupId = -1;
                     }
                 }
+
+                // Grace notes are not beamed, but shouldn't break the beaming group
+                if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
+                    newGroupId = groupId;
+                }
             }
 
             //RG_DEBUG << event->toXmlString() << "BEAMED_GROUP_ID" << newGroupId;
