@@ -745,7 +745,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     // we've discovered what the context is -- now check whether we're
     // clicking on something specific
 
-    const QList<QGraphicsItem *> collisions = items(e->scenePos(), Qt::ContainsItemBoundingRect, Qt::DescendingOrder);
+    const QList<QGraphicsItem *> collisions = items(e->scenePos());
 
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
