@@ -229,18 +229,16 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     
     for (unsigned int i = 0; i < names.size(); ++i) {
 
-        m_metadata->setRowCount(row + 1);
-
         if (shown.find(names[i]) != shown.end())
             continue;
+
+        m_metadata->setRowCount(row + 1);
 
         QString name(strtoqstr(names[i]));
 
         // property names stored in lower case
         name = name.left(1).toUpper() + name.right(name.length() - 1);
 
-//        new QListWidgetItem(m_metadata, name, strtoqstr(metadata.get<String>(names[i])));
-        // qt4: icon, text, type
         tabItem = new QTableWidgetItem(name);
         m_metadata->setItem(row, 0, tabItem);
         tabItem = new QTableWidgetItem(strtoqstr(metadata.get<String>(names[i])));
