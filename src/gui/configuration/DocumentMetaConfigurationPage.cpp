@@ -316,8 +316,6 @@ void
 DocumentMetaConfigurationPage::apply()
 {
     m_headersPage->apply();
-
-    m_doc->slotDocumentModified();
 }
 
 }

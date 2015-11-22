@@ -91,5 +91,19 @@ PropertyMap::toXmlString() const
     return xml;
 }
 
+static bool propertyPairEqual(const PropertyPair &p1, const PropertyPair &p2)
+{
+    return p1.first == p2.first &&
+            p1.second->getTypeName() == p2.second->getTypeName()
+            && p1.second->unparse() == p2.second->unparse();
+}
+
+bool PropertyMap::operator==(const PropertyMap &other) const
+{
+    // The default std::map::operator== would compare pointers, provide our own predicate
+    return size() == other.size()
+       && std::equal(begin(), end(), other.begin(), propertyPairEqual);
+}
+
 }
 

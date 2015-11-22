@@ -290,12 +290,16 @@ HeadersConfigurationPage::slotDeleteProperty()
     m_metadata->removeRow(m_metadata->currentRow());
 }
 
+static void setMetadataString(Configuration &metadata, const PropertyName &property, const QString &value)
+{
+    // Don't set empty values (this is to match the XML loading code)
+    if (!value.isEmpty()) {
+        metadata.set<String>(property, qstrtostr(value));
+    }
+}
+
 void HeadersConfigurationPage::apply()
 {
-    //@@@ Next two lines not needed in this function.  Commented out
-    //@@@ QSettings settings;
-    //@@@ settings.beginGroup(NotationViewConfigGroup);
-
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.
     m_editTitle->setFocus();
@@ -305,48 +309,39 @@ void HeadersConfigurationPage::apply()
     // Update header fields
     //
 
-    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
+    Configuration &metadata = m_doc->getComposition().getMetadata();
+    const Configuration origmetadata = metadata;
     metadata.clear();
 
-    metadata.set<String>(CompositionMetadataKeys::Dedication, qstrtostr(m_editDedication->text()));
-    metadata.set<String>(CompositionMetadataKeys::Title, qstrtostr(m_editTitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Subtitle, qstrtostr(m_editSubtitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Subsubtitle, qstrtostr(m_editSubsubtitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Poet, qstrtostr(m_editPoet->text()));
-    metadata.set<String>(CompositionMetadataKeys::Composer, qstrtostr(m_editComposer->text()));
-    metadata.set<String>(CompositionMetadataKeys::Meter, qstrtostr(m_editMeter->text()));
-    metadata.set<String>(CompositionMetadataKeys::Opus, qstrtostr(m_editOpus->text()));
-    metadata.set<String>(CompositionMetadataKeys::Arranger, qstrtostr(m_editArranger->text()));
-    metadata.set<String>(CompositionMetadataKeys::Instrument, qstrtostr(m_editInstrument->text()));
-    metadata.set<String>(CompositionMetadataKeys::Piece, qstrtostr(m_editPiece->text()));
-    metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
-    metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
+    setMetadataString(metadata, CompositionMetadataKeys::Dedication, m_editDedication->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Title, m_editTitle->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Subtitle, m_editSubtitle->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Subsubtitle, m_editSubsubtitle->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Poet, m_editPoet->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Composer, m_editComposer->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Meter, m_editMeter->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Opus, m_editOpus->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Arranger, m_editArranger->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Instrument, m_editInstrument->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Piece, m_editPiece->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Copyright, m_editCopyright->text());
+    setMetadataString(metadata, CompositionMetadataKeys::Tagline, m_editTagline->text());
 
-//    for (QTableWidgetItem *item = m_metadata->firstChild();
-//            item != 0; item = item->nextSibling()) {
-    
-    QTableWidgetItem* tabItem;
-    QTableWidgetItem* tabItem2;
-    int c = 0;
     for(int r=0; r < m_metadata->rowCount(); r++){
-        //for(int c=0; c < m_metadata->columnCount(); c++){
-            
-        tabItem = m_metadata->item(r, c);
-        tabItem2 = m_metadata->item(r, c+1);
+        QTableWidgetItem* tabItem = m_metadata->item(r, 0);
+        QTableWidgetItem* tabItem2 = m_metadata->item(r, 1);
         
         if((!tabItem) || (!tabItem2)){
             RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() " << endl;
             continue;
         }
-            
-        metadata.set<String>(qstrtostr(tabItem->text().toLower()),
-                              qstrtostr(tabItem2->text()));
-//        metadata.set<String>(qstrtostr(item->text(0).toLower()),
-//                             qstrtostr(item->text(1)));
-        //}//end for(c)
-    }//end for(r)
 
-    m_doc->slotDocumentModified();
+        setMetadataString(metadata, qstrtostr(tabItem->text().toLower()), tabItem2->text());
+    }
+
+    if (metadata != origmetadata) {
+        m_doc->slotDocumentModified();
+    }
 }
 
 }

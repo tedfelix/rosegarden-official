@@ -33,6 +33,9 @@ public:
     
     std::string toXmlString() const;
 
+    bool operator==(const PropertyMap &other) const;
+    bool operator!=(const PropertyMap &other) const { return !operator==(other); }
+
 private:
     PropertyMap &operator=(const PropertyMap &); // not provided
 };
