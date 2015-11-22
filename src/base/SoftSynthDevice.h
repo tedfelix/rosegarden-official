@@ -42,7 +42,7 @@ public:
 
     // Turn into XML string
     //
-    virtual std::string toXmlString(); 
+    virtual std::string toXmlString() const;
 
     virtual InstrumentList getAllInstruments() const { return m_instruments; }
     virtual InstrumentList getPresentationInstruments() const

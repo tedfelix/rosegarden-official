@@ -539,7 +539,7 @@ MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
     
 
 std::string
-MidiDevice::toXmlString()
+MidiDevice::toXmlString() const
 {
     std::stringstream midiDevice;
 
@@ -578,9 +578,9 @@ MidiDevice::toXmlString()
 
     // and now bank information
     //
-    BankList::iterator it;
-    InstrumentList::iterator iit;
-    ProgramList::iterator pt;
+    BankList::const_iterator it;
+    InstrumentList::const_iterator iit;
+    ProgramList::const_iterator pt;
 
     for (it = m_bankList.begin(); it != m_bankList.end(); ++it)
     {
@@ -615,7 +615,7 @@ MidiDevice::toXmlString()
     // Controller colours)
     //
     midiDevice << "        <controls>" << std::endl;
-    ControlList::iterator cIt;
+    ControlList::const_iterator cIt;
     for (cIt = m_controlList.begin(); cIt != m_controlList.end() ; ++cIt)
         midiDevice << cIt->toXmlString();
     midiDevice << "        </controls>" << std::endl << std::endl;
@@ -625,7 +625,7 @@ MidiDevice::toXmlString()
     for (iit = m_instruments.begin(); iit != m_instruments.end(); ++iit)
         midiDevice << (*iit)->toXmlString();
 
-    KeyMappingList::iterator kit;
+    KeyMappingList::const_iterator kit;
 
     for (kit = m_keyMappingList.begin(); kit != m_keyMappingList.end(); ++kit)
     {

@@ -63,7 +63,7 @@ AudioPluginInstance::AudioPluginInstance(std::string identifier,
 }
 
 std::string 
-AudioPluginInstance::toXmlString()
+AudioPluginInstance::toXmlString() const
 {
 
     std::stringstream plugin;
@@ -108,7 +108,7 @@ AudioPluginInstance::toXmlString()
                << "\"/>" << std::endl;
     }
 
-    for (ConfigMap::iterator i = m_config.begin(); i != m_config.end(); ++i) {
+    for (ConfigMap::const_iterator i = m_config.begin(); i != m_config.end(); ++i) {
 	plugin << "                <configure key=\""
 	       << encode(i->first) << "\" value=\""
 	       << encode(i->second) << "\"/>" << std::endl;

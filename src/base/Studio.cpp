@@ -365,13 +365,13 @@ Studio::clear()
 }
 
 std::string
-Studio::toXmlString()
+Studio::toXmlString() const
 {
     return toXmlString(std::vector<DeviceId>());
 }
 
 std::string
-Studio::toXmlString(const std::vector<DeviceId> &devices)
+Studio::toXmlString(const std::vector<DeviceId> &devices) const
 {
     std::stringstream studio;
 
@@ -384,33 +384,31 @@ Studio::toXmlString(const std::vector<DeviceId> &devices)
 
     studio << endl;
 
-    InstrumentList list;
-
     // Get XML version of devices
     //
     if (devices.empty()) { // export all devices and busses
 
-	for (DeviceListIterator it = m_devices.begin();
-	     it != m_devices.end(); it++) {
-	    studio << (*it)->toXmlString() << endl << endl;
-	}
+        for (DeviceListConstIterator it = m_devices.begin();
+             it != m_devices.end(); it++) {
+            studio << (*it)->toXmlString() << endl << endl;
+        }
 
-	for (BussList::iterator it = m_busses.begin();
-	     it != m_busses.end(); ++it) {
-	    studio << (*it)->toXmlString() << endl << endl;
-	}
+        for (BussList::const_iterator it = m_busses.begin();
+             it != m_busses.end(); ++it) {
+            studio << (*it)->toXmlString() << endl << endl;
+        }
 
     } else {
-	for (std::vector<DeviceId>::const_iterator di(devices.begin());
-	     di != devices.end(); ++di) {
-	    Device *d = getDevice(*di);
-	    if (!d) {
-		std::cerr << "WARNING: Unknown device id " << (*di)
-			  << " in Studio::toXmlString" << std::endl;
-	    } else {
-		studio << d->toXmlString() << endl << endl;
-	    }
-	}
+        for (std::vector<DeviceId>::const_iterator di(devices.begin());
+             di != devices.end(); ++di) {
+            Device *d = getDevice(*di);
+            if (!d) {
+                std::cerr << "WARNING: Unknown device id " << (*di)
+                          << " in Studio::toXmlString" << std::endl;
+            } else {
+                studio << d->toXmlString() << endl << endl;
+            }
+        }
     }
 
     studio << endl << endl;
@@ -650,11 +648,11 @@ Studio::clearRecordIns()
 }
 
 Device *
-Studio::getDevice(DeviceId id)
+Studio::getDevice(DeviceId id) const
 {
     //cerr << "Studio[" << this << "]::getDevice(" << id << ")... ";
     
-    std::vector<Device*>::iterator it;
+    std::vector<Device*>::const_iterator it;
     
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
         

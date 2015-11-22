@@ -260,7 +260,7 @@ public:
 
     // Implementation of virtual function
     //
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
     // Get and set the parent device
     //
@@ -410,7 +410,7 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
     virtual std::string getName() const;
     virtual std::string getPresentationName() const;
     virtual std::string getAlias() const;
@@ -434,7 +434,7 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
 private:
     int m_mappedId;

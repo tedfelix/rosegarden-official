@@ -74,7 +74,7 @@ PropertyMap::clear()
 // us anything anyway).
 
 string
-PropertyMap::toXmlString()
+PropertyMap::toXmlString() const
 {
     string xml;
 

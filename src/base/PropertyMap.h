@@ -31,7 +31,7 @@ public:
     
     void clear();
     
-    std::string toXmlString();
+    std::string toXmlString() const;
 
 private:
     PropertyMap &operator=(const PropertyMap &); // not provided

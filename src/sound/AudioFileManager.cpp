@@ -34,6 +34,7 @@
 #include <QPainter>
 #include <QDateTime>
 #include <QFile>
+#include <QDir>
 
 #include "gui/general/FileSource.h"
 #include "AudioFile.h"
@@ -189,7 +190,7 @@ AudioFileManager::addFile(const QString &filePath)
 
 // Convert long filename to shorter version
 QString
-AudioFileManager::getShortFilename(const QString &fileName)
+AudioFileManager::getShortFilename(const QString &fileName) const
 {
     QString rS = fileName;
     int pos = rS.lastIndexOf("/");
@@ -203,7 +204,7 @@ AudioFileManager::getShortFilename(const QString &fileName)
 // Turn a long path into a directory ending with a slash
 //
 QString
-AudioFileManager::getDirectory(const QString &path)
+AudioFileManager::getDirectory(const QString &path) const
 {
     QString rS = path;
     int pos = rS.lastIndexOf("/");
@@ -793,7 +794,7 @@ AudioFileManager::getLastAudioFile()
 }
 
 QString
-AudioFileManager::substituteHomeForTilde(const QString &path)
+AudioFileManager::substituteHomeForTilde(const QString &path) const
 {
     QString rS = path;
     QString homePath = getenv("HOME");
@@ -812,10 +813,10 @@ AudioFileManager::substituteHomeForTilde(const QString &path)
 }
 
 QString
-AudioFileManager::substituteTildeForHome(const QString &path)
+AudioFileManager::substituteTildeForHome(const QString &path) const
 {
     QString rS = path;
-    QString homePath = getenv("HOME");
+    const QString homePath = QDir::homePath();
 
     if (rS.mid(0, 2) == "~/") {
         rS.remove(0, 1); // erase tilde and prepend HOME env
@@ -833,10 +834,9 @@ AudioFileManager::substituteTildeForHome(const QString &path)
 // audio files) and shift them about easily.
 //
 std::string
-AudioFileManager::toXmlString()
+AudioFileManager::toXmlString() const
 {
-    MutexLock lock (&audioFileManagerLock)
-        ;
+    MutexLock lock (&audioFileManagerLock);
 
     std::stringstream audioFiles;
     QString audioPath = substituteHomeForTilde(m_audioPath);
@@ -850,7 +850,7 @@ AudioFileManager::toXmlString()
     << audioPath << "\"/>" << std::endl;
 
     QString fileName;
-    std::vector<AudioFile*>::iterator it;
+    std::vector<AudioFile*>::const_iterator it;
 
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
         fileName = (*it)->getFilename();

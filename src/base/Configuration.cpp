@@ -70,7 +70,7 @@ Configuration::has(const PropertyName &name) const
     
 
 std::string
-Configuration::toXmlString()
+Configuration::toXmlString() const
 {
     using std::endl;
     std::stringstream config;
@@ -81,7 +81,7 @@ Configuration::toXmlString()
     // already can)
 
     for (const_iterator i = begin(); i != end(); ++i) {
-	config <<  "<property name=\""
+        config <<  "<property name=\""
 	       << encode(i->first.getName()) << "\" value=\""
 	       << encode(get<String>(i->first)) << "\"/>" << endl;
     }
@@ -187,7 +187,7 @@ DocumentConfiguration::operator=(const DocumentConfiguration &conf)
 // Convert to XML string for export
 //
 std::string
-DocumentConfiguration::toXmlString()
+DocumentConfiguration::toXmlString() const
 {
     using std::endl;
 

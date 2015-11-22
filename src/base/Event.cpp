@@ -212,13 +212,13 @@ Event::getAsString(const PropertyName &name) const
 // us anything anyway).
 
 string
-Event::toXmlString()
+Event::toXmlString() const
 {
     return toXmlString(0);
 }
 
 string
-Event::toXmlString(timeT expectedTime)
+Event::toXmlString(timeT expectedTime) const
 {
     std::stringstream out;
 

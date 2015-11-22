@@ -73,15 +73,15 @@ AudioDevice::renameInstruments()
 }
 
 std::string
-AudioDevice::toXmlString()
+AudioDevice::toXmlString() const
 {
     std::stringstream audioDevice;
-    InstrumentList::iterator iit;
 
     audioDevice << "    <device id=\""  << m_id
                 << "\" name=\""         << m_name
                 << "\" type=\"audio\">" << std::endl;
 
+    InstrumentList::const_iterator iit;
     for (iit = m_instruments.begin(); iit != m_instruments.end(); ++iit)
         audioDevice << (*iit)->toXmlString();
 

@@ -162,10 +162,10 @@ SoftSynthDevice::setMetronome(const MidiMetronome &metronome)
 }
 
 std::string
-SoftSynthDevice::toXmlString()
+SoftSynthDevice::toXmlString() const
 {
     std::stringstream ssiDevice;
-    InstrumentList::iterator iit;
+    InstrumentList::const_iterator iit;
 
     ssiDevice << "    <device id=\""  << m_id
                 << "\" name=\""         << m_name

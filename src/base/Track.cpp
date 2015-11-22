@@ -138,7 +138,7 @@ void Track::setMidiInputChannel(char ic)
 // Our virtual method for exporting Xml.
 //
 //
-std::string Track::toXmlString()
+std::string Track::toXmlString() const
 {
 
     std::stringstream track;

@@ -155,7 +155,7 @@ public:
 
     // Get a device by ID
     //
-    Device *getDevice(DeviceId id);
+    Device *getDevice(DeviceId id) const;
 
     // Get device of audio type (there is only one)
     //
@@ -169,12 +169,12 @@ public:
 
     // Export as XML string
     //
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
     // Export a subset of devices as XML string.  If devices is empty,
     // exports all devices just as the above method does.
     //
-    virtual std::string toXmlString(const std::vector<DeviceId> &devices);
+    virtual std::string toXmlString(const std::vector<DeviceId> &devices) const;
 
     // Get an audio preview Instrument
     //

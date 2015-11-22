@@ -200,7 +200,7 @@ public:
 
     // Export to XML
     //
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
     // Convenience function generate all previews on the audio file.
     //
@@ -246,18 +246,18 @@ public:
 
     // Get a short file name from a long one (with '/'s)
     //
-    QString getShortFilename(const QString &fileName);
+    QString getShortFilename(const QString &fileName) const;
 
     // Get a directory from a full file path
     //
-    QString getDirectory(const QString &path);
+    QString getDirectory(const QString &path) const;
 
     // Attempt to subsititute a tilde '~' for a home directory
     // to make paths a little more generic when saving.  Also
     // provide the inverse function as convenience here.
     //
-    QString substituteHomeForTilde(const QString &path);
-    QString substituteTildeForHome(const QString &path);
+    QString substituteHomeForTilde(const QString &path) const;
+    QString substituteTildeForHome(const QString &path) const;
 
     // Show entries for debug purposes
     //

@@ -781,7 +781,7 @@ public:
 
     // XML exportable method
     //
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
     // Who's making this racket?
     //

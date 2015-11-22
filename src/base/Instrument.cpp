@@ -565,7 +565,7 @@ Instrument::getAudioInput(bool &isBuss, int &channel) const
 //
 //
 std::string
-Instrument::toXmlString()
+Instrument::toXmlString() const
 {
 
     std::stringstream instrument;
@@ -646,7 +646,7 @@ Instrument::toXmlString()
         instrument << "            <alias value=\""
                    << m_alias << "\"/>" << std::endl;
 
-        PluginInstanceIterator it = m_audioPlugins.begin();
+        std::vector<AudioPluginInstance*>::const_iterator it = m_audioPlugins.begin();
         for (; it != m_audioPlugins.end(); ++it)
         {
             instrument << (*it)->toXmlString();
@@ -833,7 +833,7 @@ Buss::~Buss()
 }
 
 std::string
-Buss::toXmlString()
+Buss::toXmlString() const
 {
     std::stringstream buss;
 
@@ -841,7 +841,7 @@ Buss::toXmlString()
     buss << "       <pan value=\"" << (int)m_pan << "\"/>" << std::endl;
     buss << "       <level value=\"" << m_level << "\"/>" << std::endl;
 
-    PluginInstanceIterator it = m_audioPlugins.begin();
+    std::vector<AudioPluginInstance*>::const_iterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); ++it) {
         buss << (*it)->toXmlString();
     }
@@ -883,7 +883,7 @@ RecordIn::~RecordIn()
 }
 
 std::string
-RecordIn::toXmlString()
+RecordIn::toXmlString() const
 {
     // We don't actually save these, as they have nothing persistent
     // in them.  The studio just remembers how many there should be.

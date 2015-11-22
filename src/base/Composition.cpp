@@ -1885,7 +1885,7 @@ Composition::isTrackRecording(TrackId track) const
 // Tracks and any further sub-objects
 //
 //
-std::string Composition::toXmlString()
+std::string Composition::toXmlString() const
 {
     std::stringstream composition;
 
@@ -1934,7 +1934,7 @@ std::string Composition::toXmlString()
 
     composition << endl;
 
-    for (trackiterator tit = getTracks().begin();
+    for (trackconstiterator tit = getTracks().begin();
          tit != getTracks().end();
          ++tit)
         {

@@ -186,7 +186,7 @@ public:
     //
     void generateDefaultControllers();
 
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
     virtual void refreshForConnection(void);
 

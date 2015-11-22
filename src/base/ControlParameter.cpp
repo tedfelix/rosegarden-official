@@ -109,7 +109,7 @@ bool operator<(const ControlParameter &a, const ControlParameter &b)
 
 
 std::string
-ControlParameter::toXmlString()
+ControlParameter::toXmlString() const
 { 
     std::stringstream control;
 

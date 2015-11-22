@@ -89,7 +89,7 @@ public:
 
     // Implementation of virtual
     //
-    virtual std::string toXmlString();
+    virtual std::string toXmlString() const;
 
     Composition* getOwningComposition() { return m_owningComposition; }
 
