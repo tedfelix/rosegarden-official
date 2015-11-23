@@ -109,24 +109,24 @@ globalTempo = {
                 \repeat volta 2 {
                     \clef "treble_8"
                     \key e \minor
-                    \times 2/3 { b' 8 b g } \times 2/3 { b' b g } \times 2/3 { b' b g }  |
-                    \times 2/3 { b' 8 b g } \times 2/3 { a' b g } \times 2/3 { g' b g }  |
-                    \times 2/3 { g' 8 b g } \times 2/3 { fis' b g } \times 2/3 { e' b g }  |
-                    \times 2/3 { e' 8 b g } \times 2/3 { g' b g } \times 2/3 { b' b g }  |
+                    \times 2/3 { b' 8 [ b g ] } \times 2/3 { b' [ b g ] } \times 2/3 { b' [ b g ] }  |
+                    \times 2/3 { b' 8 [ b g ] } \times 2/3 { a' [ b g ] } \times 2/3 { g' [ b g ] }  |
+                    \times 2/3 { g' 8 [ b g ] } \times 2/3 { fis' [ b g ] } \times 2/3 { e' [ b g ] }  |
+                    \times 2/3 { e' 8 [ b g ] } \times 2/3 { g' [ b g ] } \times 2/3 { b' [ b g ] }  |
 %% 5
-                    \times 2/3 { e'' 8 b g } \times 2/3 { e'' b g } \times 2/3 { e'' b g }  |
-                    \times 2/3 { e'' 8 b g } \times 2/3 { d'' b g } \times 2/3 { c'' b g }  |
-                    \times 2/3 { c'' 8 e' c' } \times 2/3 { b' e' c' } \times 2/3 { a' e' c' }  |
-                    \times 2/3 { a' 8 e' c' } \times 2/3 { b' e' c' } \times 2/3 { c'' e' c' }  |
-                    \times 2/3 { b' 8 fis' dis' } \times 2/3 { c'' fis' dis' } \times 2/3 { b' fis' dis' }  |
+                    \times 2/3 { e'' 8 [ b g ] } \times 2/3 { e'' [ b g ] } \times 2/3 { e'' [ b g ] }  |
+                    \times 2/3 { e'' 8 [ b g ] } \times 2/3 { d'' [ b g ] } \times 2/3 { c'' [ b g ] }  |
+                    \times 2/3 { c'' 8 [ e' c' ] } \times 2/3 { b' [ e' c' ] } \times 2/3 { a' [ e' c' ] }  |
+                    \times 2/3 { a' 8 [ e' c' ] } \times 2/3 { b' [ e' c' ] } \times 2/3 { c'' [ e' c' ] }  |
+                    \times 2/3 { b' 8 [ fis' dis' ] } \times 2/3 { c'' [ fis' dis' ] } \times 2/3 { b' [ fis' dis' ] }  |
 %% 10
-                    \times 2/3 { dis'' 8 fis' dis' } \times 2/3 { c'' fis' dis' } \times 2/3 { b' fis' dis' }  |
-                    \times 2/3 { b' 8 b g } \times 2/3 { a' b g } \times 2/3 { g' b g }  |
-                    \times 2/3 { g' 8 b g } \times 2/3 { fis' b g } \times 2/3 { e' b g }  |
-                    \times 2/3 { fis' 8 b a } \times 2/3 { fis' b a } \times 2/3 { fis' b a }  |
-                    \times 2/3 { fis' 8 b a } \times 2/3 { g' b a } \times 2/3 { fis' b a }  |
+                    \times 2/3 { dis'' 8 [ fis' dis' ] } \times 2/3 { c'' [ fis' dis' ] } \times 2/3 { b' [ fis' dis' ] }  |
+                    \times 2/3 { b' 8 [ b g ] } \times 2/3 { a' [ b g ] } \times 2/3 { g' [ b g ] }  |
+                    \times 2/3 { g' 8 [ b g ] } \times 2/3 { fis' [ b g ] } \times 2/3 { e' [ b g ] }  |
+                    \times 2/3 { fis' 8 [ b a ] } \times 2/3 { fis' [ b a ] } \times 2/3 { fis' [ b a ] }  |
+                    \times 2/3 { fis' 8 [ b a ] } \times 2/3 { g' [ b a ] } \times 2/3 { fis' [ b a ] }  |
 %% 15
-                    \times 2/3 { e' 8 b g } \times 2/3 { e' b g } \times 2/3 { e' b g }  |
+                    \times 2/3 { e' 8 [ b g ] } \times 2/3 { e' [ b g ] } \times 2/3 { e' [ b g ] }  |
                     e' 2.  |
                 } % close repeat
             } % Voice
@@ -140,24 +140,24 @@ globalTempo = {
                 \repeat volta 2 {
                     \clef "treble_8"
                     \key cis \minor
-                    \times 2/3 { \stemDown gis' 8 b gis } \times 2/3 { gis' b gis } \times 2/3 { gis' b gis } \stemNeutral  |
-                    \times 2/3 { \stemDown gis' 8 b gis } \times 2/3 { fis' b gis } \times 2/3 { e' b gis } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 [ b gis ] } \times 2/3 { gis' [ b gis ] } \times 2/3 { gis' [ b gis ] } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 [ b gis ] } \times 2/3 { fis' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
 %% 35
-                    \times 2/3 { \stemDown e' 8 a fis } \times 2/3 { dis' a fis } \times 2/3 { dis' a fis } \stemNeutral  |
-                    \times 2/3 { \stemDown dis' 8 a fis } \times 2/3 { cis' a fis } \times 2/3 { dis' a fis } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 fis' dis' } \times 2/3 { cis'' fis' dis' } \times 2/3 { cis'' fis' dis' } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 fis' dis' } \times 2/3 { dis'' fis' dis' } \times 2/3 { cis'' fis' dis' } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 gis' e' } \times 2/3 { b' gis' e' } \times 2/3 { b' gis' e' } \stemNeutral  |
+                    \times 2/3 { \stemDown e' 8 [ a fis ] } \times 2/3 { dis' [ a fis ] } \times 2/3 { dis' [ a fis ] } \stemNeutral  |
+                    \times 2/3 { \stemDown dis' 8 [ a fis ] } \times 2/3 { cis' [ a fis ] } \times 2/3 { dis' [ a fis ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ fis' dis' ] } \times 2/3 { dis'' [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ gis' e' ] } \times 2/3 { b' [ gis' e' ] } \times 2/3 { b' [ gis' e' ] } \stemNeutral  |
 %% 40
-                    \times 2/3 { \stemDown b' 8 gis' e' } \times 2/3 { cis'' gis' e' } \times 2/3 { dis'' gis' e' } \stemNeutral  |
-                    \times 2/3 { \stemDown e'' 8 gis' e' } \times 2/3 { e'' gis' e' } \times 2/3 { e'' gis' e' } \stemNeutral  |
-                    \times 2/3 { \stemDown e'' 8 gis' e' } \times 2/3 { dis'' gis' e' } \times 2/3 { d'' gis' e' } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 e' cis' } \times 2/3 { cis'' e' cis' } \times 2/3 { cis'' e' cis' } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 e' cis' } \times 2/3 { b' e' cis' } \times 2/3 { a' e' cis' } \stemNeutral  |
+                    \times 2/3 { \stemDown b' 8 [ gis' e' ] } \times 2/3 { cis'' [ gis' e' ] } \times 2/3 { dis'' [ gis' e' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown e'' 8 [ gis' e' ] } \times 2/3 { e'' [ gis' e' ] } \times 2/3 { e'' [ gis' e' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown e'' 8 [ gis' e' ] } \times 2/3 { dis'' [ gis' e' ] } \times 2/3 { d'' [ gis' e' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ e' cis' ] } \times 2/3 { cis'' [ e' cis' ] } \times 2/3 { cis'' [ e' cis' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ e' cis' ] } \times 2/3 { b' [ e' cis' ] } \times 2/3 { a' [ e' cis' ] } \stemNeutral  |
 %% 45
-                    \times 2/3 { \stemDown gis' 8 dis' a } \times 2/3 { gis' dis' a } \times 2/3 { gis' dis' a } \stemNeutral  |
-                    \times 2/3 { \stemDown gis' 8 dis' a } \times 2/3 { a' dis' a } \times 2/3 { gis' dis' a } \stemNeutral  |
-                    \times 2/3 { \stemDown e' 8 b gis } \times 2/3 { e' b gis } \times 2/3 { e' b gis } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { a' [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \stemNeutral  |
+                    \times 2/3 { \stemDown e' 8 [ b gis ] } \times 2/3 { e' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
                     \stemDown b 2. \stemNeutral  |
                 } % close repeat
             } % Voice

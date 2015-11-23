@@ -203,18 +203,18 @@ globalTempo = {
                 \skip 1*120 
                 \clef "treble_8"
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r2  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r2  |
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r8 r r b 16 [ c' ]  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r8 r r b 16 [ c' ]  |
 %% 125
-                \times 2/3 { des' 32 d' ees' _~ } ees' 16 bes g ees c 8 _~ c 8. bes, 16 b, c 8 ees 16 b,  |
+                \times 2/3 { des' 32 [ d' ees' _~ ] } ees' 16 bes g ees c 8 _~ c 8. bes, 16 b, c 8 ees 16 b,  |
                 c 8 d 4 bes, 16 [ g, ] g 4 r  |
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r8 r r e 16 [ f ]  |
-                \times 2/3 { fis 32 g a _~ } a 16 ees c a, f, 8. r8 r r d 16 [ ees ]  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r8 r r e 16 [ f ]  |
+                \times 2/3 { fis 32 [ g a _~ ] } a 16 ees c a, f, 8. r8 r r d 16 [ ees ]  |
 %% 130
-                \times 2/3 { e 32 f g _~ } g 16 des bes, g, ees, 8. r8 r r des 16 [ d ]  |
-                \times 2/3 { ees 32 e fis _~ } fis 16 c a, fis, d, 8. r4 r8 c 16 [ des ]  |
+                \times 2/3 { e 32 [ f g _~ ] } g 16 des bes, g, ees, 8. r8 r r des 16 [ d ]  |
+                \times 2/3 { ees 32 [ e fis _~ ] } fis 16 c a, fis, d, 8. r4 r8 c 16 [ des ]  |
                 d 16 [ ees fis g ] a [ bes c' des' ] des' 8 r r4  |
             } % Voice
 
@@ -255,20 +255,20 @@ globalTempo = {
                 \skip 1*144 
 %% 145
                 \clef "treble_8"
-                \times 2/3 { bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
-                \times 2/3 { bes' 16 g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { a' 8 bes' c'' }  |
-                \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { g' g bes } \times 2/3 { g d f } \times 2/3 { d' g bes } \times 2/3 { g' d' f' } \times 2/3 { g'' g' bes' } \times 2/3 { g' d' f' }  |
-                \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { g' g bes } \times 2/3 { g d f } \times 2/3 { d g, bes, } \times 2/3 { g, d, f, } \times 2/3 { g, 8 bes, b, }  |
-                \times 2/3 { c 8 d ees } f 16 fis fis bes \times 2/3 { g' ees' fis' } \times 2/3 { bes c' ees' } \times 2/3 { d' 8 c' bes }  |
+                \times 2/3 { bes 16 [ c' d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { bes 32 [ c' des' 16 d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { bes [ c' d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { e' 8 [ f' g' ] }  |
+                \times 2/3 { bes' 16 [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { bes' [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { bes' [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { a' 8 [ bes' c'' ] }  |
+                \times 2/3 { d'' 16 [ g' bes' ] } \times 2/3 { g' [ d' f' ] } \times 2/3 { g' [ g bes ] } \times 2/3 { g [ d f ] } \times 2/3 { d' [ g bes ] } \times 2/3 { g' [ d' f' ] } \times 2/3 { g'' [ g' bes' ] } \times 2/3 { g' [ d' f' ] }  |
+                \times 2/3 { d'' 16 [ g' bes' ] } \times 2/3 { g' [ d' f' ] } \times 2/3 { g' [ g bes ] } \times 2/3 { g [ d f ] } \times 2/3 { d [ g, bes, ] } \times 2/3 { g, [ d, f, ] } \times 2/3 { g, 8 [ bes, b, ] }  |
+                \times 2/3 { c 8 [ d ees ] } f 16 fis fis bes \times 2/3 { g' [ ees' fis' ] } \times 2/3 { bes [ c' ees' ] } \times 2/3 { d' 8 [ c' bes ] }  |
 %% 150
-                \times 2/3 { bes' 16 g' a' } \times 2/3 { c' ees' f' } \times 2/3 { ees' 8 f' g' } \times 2/3 { des'' 16 bes' c'' } \times 2/3 { ees' fis' aes' } \times 2/3 { fis' 8 aes' bes' }  |
-                \times 2/3 { ees'' 16 c'' d'' } \times 2/3 { f' aes' bes' } \times 2/3 { aes' 8 bes' c'' } \times 2/3 { f'' 16 d'' e'' } \times 2/3 { g' bes' c'' } \times 2/3 { bes' 8 c'' d'' }  |
-                \times 2/3 { g'' 16 f'' d'' } \times 2/3 { c'' bes' g' } \times 2/3 { f' d' c' } \times 2/3 { bes g f } \times 2/3 { d c b, } \times 2/3 { g, f, d, } r8 r  |
-                \times 2/3 { aes 16 bes c' } \times 2/3 { ees' c' c' } \times 2/3 { aes 32 bes b 16 c' } \times 2/3 { ees' c' c' } \times 2/3 { aes bes c' } \times 2/3 { ees' c' c' } \times 2/3 { d' 8 ees' f' }  |
-                \times 2/3 { fis 16 aes bes } \times 2/3 { des' bes bes } \times 2/3 { fis 32 aes a 16 bes } \times 2/3 { des' bes bes } \times 2/3 { fis aes bes } \times 2/3 { des' bes bes } \times 2/3 { c' 8 des' ees' }  |
+                \times 2/3 { bes' 16 [ g' a' ] } \times 2/3 { c' [ ees' f' ] } \times 2/3 { ees' 8 [ f' g' ] } \times 2/3 { des'' 16 [ bes' c'' ] } \times 2/3 { ees' [ fis' aes' ] } \times 2/3 { fis' 8 [ aes' bes' ] }  |
+                \times 2/3 { ees'' 16 [ c'' d'' ] } \times 2/3 { f' [ aes' bes' ] } \times 2/3 { aes' 8 [ bes' c'' ] } \times 2/3 { f'' 16 [ d'' e'' ] } \times 2/3 { g' [ bes' c'' ] } \times 2/3 { bes' 8 [ c'' d'' ] }  |
+                \times 2/3 { g'' 16 [ f'' d'' ] } \times 2/3 { c'' [ bes' g' ] } \times 2/3 { f' [ d' c' ] } \times 2/3 { bes [ g f ] } \times 2/3 { d [ c b, ] } \times 2/3 { g, [ f, d, ] } r8 r  |
+                \times 2/3 { aes 16 [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes 32 [ bes b 16 c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { d' 8 [ ees' f' ] }  |
+                \times 2/3 { fis 16 [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis 32 [ aes a 16 bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { c' 8 [ des' ees' ] }  |
 %% 155
-                \times 2/3 { f 16 g a } \times 2/3 { c' a a } \times 2/3 { f 32 g aes 16 a } \times 2/3 { c' a a } \times 2/3 { f g a } \times 2/3 { c' a a } \times 2/3 { b 8 c' d' }  |
-                \times 2/3 { fis' 16 ees' d' } \times 2/3 { c' bes a } \times 2/3 { fis ees d } \times 2/3 { c bes, a, } \times 2/3 { fis, ees, d, } \times 2/3 { c, bes,, a,, } g,, 8 r  |
+                \times 2/3 { f 16 [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f 32 [ g aes 16 a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { b 8 [ c' d' ] }  |
+                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r  |
             } % Voice
 
             \context Voice = "voice 10" {
@@ -279,7 +279,7 @@ globalTempo = {
                 \skip 1*167 
                 \clef "treble"
                 \key g \minor
-                r2 r4 r8 \times 2/3 { f' 16 ees' d' }  |
+                r2 r4 r8 \times 2/3 { f' 16 [ ees' d' ] }  |
             } % Voice
 
             \context Voice = "voice 11" {
@@ -291,19 +291,19 @@ globalTempo = {
                 \clef "treble"
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
 %% 170
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 ees'' 8 [ ees'' g'' bes'' ] a'' [ a'' bes'' g'' ]  |
-                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 a'' g'' }  |
+                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 [ a'' g'' ] }  |
 %% 175
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 a' 8 [ a' c'' ees'' ] d'' [ d'' ees'' c'' ]  |
-                g' 8 [ g' bes' des'' ] c'' 4. \times 2/3 { des'' 16 c'' bes' }  |
+                g' 8 [ g' bes' des'' ] c'' 4. \times 2/3 { des'' 16 [ c'' bes' ] }  |
                 fis' 8 [ fis' a' c'' ] e'' [ e'' d'' c'' ]  |
 %% 180
-                bes' 8 c'' a' f' fis' 4. \times 2/3 { f' 16 ees' d' }  |
+                bes' 8 c'' a' f' fis' 4. \times 2/3 { f' 16 [ ees' d' ] }  |
             } % Voice
 
             \context Voice = "voice 12" {
@@ -314,17 +314,17 @@ globalTempo = {
                 \skip 1*180 
                 \clef "treble"
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
 %% 185
                 ees'' 8 [ ees'' g'' bes'' ] a'' [ a'' bes'' g'' ]  |
-                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 a'' g'' }  |
+                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 [ a'' g'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 a' 8 [ a' c'' ees'' ] d'' [ d'' ees'' c'' ]  |
 %% 190
-                g' 8 [ g' bes' des'' ] c'' 4. \times 2/3 { des'' 16 c'' bes' }  |
+                g' 8 [ g' bes' des'' ] c'' 4. \times 2/3 { des'' 16 [ c'' bes' ] }  |
                 fis' 8 [ fis' a' c'' ] e'' [ e'' d'' c'' ]  |
                 bes' 8 [ c'' a' f' ] fis' 2  |
             } % Voice
@@ -349,18 +349,18 @@ globalTempo = {
                 \clef "treble_8"
                 \key g \minor
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r2  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r2  |
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r8 r r b 16 [ c' ]  |
-                \times 2/3 { des' 32 d' ees' _~ } ees' 16 bes g ees c 8 _~ c 8. bes, 16 b, c 8 ees 16 b,  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r8 r r b 16 [ c' ]  |
+                \times 2/3 { des' 32 [ d' ees' _~ ] } ees' 16 bes g ees c 8 _~ c 8. bes, 16 b, c 8 ees 16 b,  |
 %% 30
                 c 8 d 4 bes, 16 [ g, ] g 4 r  |
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r8 r r e 16 [ f ]  |
-                \times 2/3 { fis 32 g a _~ } a 16 ees c a, f, 8. r8 r r d 16 [ ees ]  |
-                \times 2/3 { e 32 f g _~ } g 16 des bes, g, ees, 8. r8 r r des 16 [ d ]  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r8 r r e 16 [ f ]  |
+                \times 2/3 { fis 32 [ g a _~ ] } a 16 ees c a, f, 8. r8 r r d 16 [ ees ]  |
+                \times 2/3 { e 32 [ f g _~ ] } g 16 des bes, g, ees, 8. r8 r r des 16 [ d ]  |
 %% 35
-                \times 2/3 { ees 32 e fis _~ } fis 16 c a, fis, d, 8. r4 r8 c 16 [ des ]  |
+                \times 2/3 { ees 32 [ e fis _~ ] } fis 16 c a, fis, d, 8. r4 r8 c 16 [ des ]  |
                 d 16 [ ees fis g ] a [ bes c' des' ] des' 8 r r4  |
             } % Voice
 
@@ -372,21 +372,21 @@ globalTempo = {
                 \skip 1*48 
                 \clef "treble_8"
                 \key g \minor
-                \times 2/3 { bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
+                \times 2/3 { bes 16 [ c' d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { bes 32 [ c' des' 16 d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { bes [ c' d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { e' 8 [ f' g' ] }  |
 %% 50
-                \times 2/3 { bes' 16 g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { a' 8 bes' c'' }  |
-                \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' f' ees' } \times 2/3 { d' g bes } \times 2/3 { g d' f' } \times 2/3 { g' bes d' } \times 2/3 { bes g f } \times 2/3 { f 8 a c' }  |
-                \times 2/3 { d' 16 g bes } \times 2/3 { g f d } \times 2/3 { bes, c f, } \times 2/3 { g, bes, f, } d, r r8 \times 2/3 { g, bes, b, }  |
-                \times 2/3 { c 8 d ees } f 16 fis fis bes \times 2/3 { g' ees' fis' } \times 2/3 { bes c' ees' } \times 2/3 { d' 8 c' bes }  |
-                \times 2/3 { ees 8 f g 16 _~ g } bes a ees' g' \times 2/3 { des'' bes' c'' } \times 2/3 { ees' fis' aes' } \times 2/3 { fis' 8 aes' bes' }  |
+                \times 2/3 { bes' 16 [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { bes' [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { bes' [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { a' 8 [ bes' c'' ] }  |
+                \times 2/3 { d'' 16 [ g' bes' ] } \times 2/3 { g' [ f' ees' ] } \times 2/3 { d' [ g bes ] } \times 2/3 { g [ d' f' ] } \times 2/3 { g' [ bes d' ] } \times 2/3 { bes [ g f ] } \times 2/3 { f 8 [ a c' ] }  |
+                \times 2/3 { d' 16 [ g bes ] } \times 2/3 { g [ f d ] } \times 2/3 { bes, [ c f, ] } \times 2/3 { g, [ bes, f, ] } d, r r8 \times 2/3 { g, [ bes, b, ] }  |
+                \times 2/3 { c 8 [ d ees ] } f 16 fis fis bes \times 2/3 { g' [ ees' fis' ] } \times 2/3 { bes [ c' ees' ] } \times 2/3 { d' 8 [ c' bes ] }  |
+                \times 2/3 { ees 8 [ f g 16 _~ g ] } bes a ees' g' \times 2/3 { des'' [ bes' c'' ] } \times 2/3 { ees' [ fis' aes' ] } \times 2/3 { fis' 8 [ aes' bes' ] }  |
 %% 55
-                \times 2/3 { ees'' 16 c'' d'' } \times 2/3 { f' aes' bes' } \times 2/3 { aes' 8 bes' c'' } \times 2/3 { f'' 16 d'' e'' } \times 2/3 { g' bes' c'' } \times 2/3 { bes' 8 c'' d'' }  |
-                \times 2/3 { g'' 16 f'' d'' } \times 2/3 { c'' bes' g' } \times 2/3 { f' d' c' } \times 2/3 { bes g f } \times 2/3 { d c b, } \times 2/3 { g, f, d, } r8 r  |
-                \times 2/3 { aes 16 bes c' } \times 2/3 { ees' c' c' } \times 2/3 { aes 32 bes b 16 c' } \times 2/3 { ees' c' c' } \times 2/3 { aes bes c' } \times 2/3 { ees' c' c' } \times 2/3 { d' 8 ees' f' }  |
-                \times 2/3 { fis 16 aes bes } \times 2/3 { des' bes bes } \times 2/3 { fis 32 aes a 16 bes } \times 2/3 { des' bes bes } \times 2/3 { fis aes bes } \times 2/3 { des' bes bes } \times 2/3 { c' 8 des' ees' }  |
-                \times 2/3 { f 16 g a } \times 2/3 { c' a a } \times 2/3 { f 32 g aes 16 a } \times 2/3 { c' a a } \times 2/3 { f g a } \times 2/3 { c' a a } \times 2/3 { b 8 c' d' }  |
+                \times 2/3 { ees'' 16 [ c'' d'' ] } \times 2/3 { f' [ aes' bes' ] } \times 2/3 { aes' 8 [ bes' c'' ] } \times 2/3 { f'' 16 [ d'' e'' ] } \times 2/3 { g' [ bes' c'' ] } \times 2/3 { bes' 8 [ c'' d'' ] }  |
+                \times 2/3 { g'' 16 [ f'' d'' ] } \times 2/3 { c'' [ bes' g' ] } \times 2/3 { f' [ d' c' ] } \times 2/3 { bes [ g f ] } \times 2/3 { d [ c b, ] } \times 2/3 { g, [ f, d, ] } r8 r  |
+                \times 2/3 { aes 16 [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes 32 [ bes b 16 c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { d' 8 [ ees' f' ] }  |
+                \times 2/3 { fis 16 [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis 32 [ aes a 16 bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { c' 8 [ des' ees' ] }  |
+                \times 2/3 { f 16 [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f 32 [ g aes 16 a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { b 8 [ c' d' ] }  |
 %% 60
-                \times 2/3 { fis' 16 ees' d' } \times 2/3 { c' bes a } \times 2/3 { fis ees d } \times 2/3 { c bes, a, } \times 2/3 { fis, ees, d, } \times 2/3 { c, bes,, a,, } g,, 8 r  |
+                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r  |
             } % Voice
 
             \context Voice = "voice 15" {
@@ -397,7 +397,7 @@ globalTempo = {
                 \skip 1*167 
                 \clef "treble"
                 \key g \minor
-                r2 r4 r8 \times 2/3 { f'' 16 ees'' d'' }  |
+                r2 r4 r8 \times 2/3 { f'' 16 [ ees'' d'' ] }  |
             } % Voice
 
             \context Voice = "voice 16" {
@@ -409,19 +409,19 @@ globalTempo = {
                 \clef "treble"
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
 %% 170
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 ees'' 8 [ ees'' g'' bes'' ] a'' [ a'' bes'' g'' ]  |
-                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 a'' g'' }  |
+                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 [ a'' g'' ] }  |
 %% 175
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 a'' 8 [ a'' c''' ees''' ] d''' [ d''' ees''' c''' ]  |
-                g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 c''' bes'' }  |
+                g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                 fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
 %% 180
-                bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 ees'' d'' }  |
+                bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 [ ees'' d'' ] }  |
             } % Voice
 
             \context Voice = "voice 17" {
@@ -432,17 +432,17 @@ globalTempo = {
                 \skip 1*180 
                 \clef "treble"
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
 %% 185
                 ees'' 8 [ ees'' g'' bes'' ] a'' [ a'' bes'' g'' ]  |
-                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 a'' g'' }  |
+                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 [ a'' g'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 a'' 8 [ a'' c''' ees''' ] d''' [ d''' ees''' c''' ]  |
 %% 190
-                g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 c''' bes'' }  |
+                g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                 fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
                 bes'' 8 [ c''' a'' f'' ] fis'' 2  |
             } % Voice
@@ -697,18 +697,18 @@ globalTempo = {
                 \clef "treble_8"
                 \key g \minor
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r2  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r2  |
 %% 75
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r8 r r b 16 [ c' ]  |
-                \times 2/3 { des' 32 d' ees' _~ } ees' 16 bes g ees c 8 _~ c 8. bes, 16 b, c 8 ees 16 b,  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r8 r r b 16 [ c' ]  |
+                \times 2/3 { des' 32 [ d' ees' _~ ] } ees' 16 bes g ees c 8 _~ c 8. bes, 16 b, c 8 ees 16 b,  |
                 c 8 d 4 bes, 16 [ g, ] g 4 r  |
                 f 32 [ fis ] fis 16 bes 8 [ a ] bes 16 [ a ] g 4. fis 16 [ g ]  |
 %% 80
-                \times 2/3 { aes 32 a bes _~ } bes 16 f d bes, g, 8. r8 r r e' 16 [ f' ]  |
-                \times 2/3 { fis' 32 g' a' _~ } a' 16 ees' c' a f 8. r8 r r d' 16 [ ees' ]  |
-                \times 2/3 { e' 32 f' g' _~ } g' 16 des' bes g ees 8. r8 r r des' 16 [ d' ]  |
-                \times 2/3 { ees' 32 e' fis' _~ } fis' 16 c' a fis d 8. r4 r8 c' 16 [ des' ]  |
+                \times 2/3 { aes 32 [ a bes _~ ] } bes 16 f d bes, g, 8. r8 r r e' 16 [ f' ]  |
+                \times 2/3 { fis' 32 [ g' a' _~ ] } a' 16 ees' c' a f 8. r8 r r d' 16 [ ees' ]  |
+                \times 2/3 { e' 32 [ f' g' _~ ] } g' 16 des' bes g ees 8. r8 r r des' 16 [ d' ]  |
+                \times 2/3 { ees' 32 [ e' fis' _~ ] } fis' 16 c' a fis d 8. r4 r8 c' 16 [ des' ]  |
                 d' 16 [ ees' fis' g' ] a' [ bes' c'' des'' ] des'' 8 r r4  |
             } % Voice
 
@@ -720,20 +720,20 @@ globalTempo = {
                 \skip 1*96 
                 \clef "treble_8"
                 \key g \minor
-                \times 2/3 { bes 16 c' d' } \times 2/3 { f' d' d' } \times 2/3 { bes 32 c' des' 16 d' } \times 2/3 { f' d' d' } \times 2/3 { bes c' d' } \times 2/3 { f' d' d' } \times 2/3 { e' 8 f' g' }  |
-                \times 2/3 { bes' 16 g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { bes' g' a' } \times 2/3 { d' e' g' } \times 2/3 { a' 8 bes' c'' }  |
-                \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { d' g bes } \times 2/3 { g d' f' } \times 2/3 { d'' g' bes' } \times 2/3 { g d f } \times 2/3 { d' g' bes' } \times 2/3 { g' d' f' }  |
+                \times 2/3 { bes 16 [ c' d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { bes 32 [ c' des' 16 d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { bes [ c' d' ] } \times 2/3 { f' [ d' d' ] } \times 2/3 { e' 8 [ f' g' ] }  |
+                \times 2/3 { bes' 16 [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { bes' [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { bes' [ g' a' ] } \times 2/3 { d' [ e' g' ] } \times 2/3 { a' 8 [ bes' c'' ] }  |
+                \times 2/3 { d'' 16 [ g' bes' ] } \times 2/3 { g' [ d' f' ] } \times 2/3 { d' [ g bes ] } \times 2/3 { g [ d' f' ] } \times 2/3 { d'' [ g' bes' ] } \times 2/3 { g [ d f ] } \times 2/3 { d' [ g' bes' ] } \times 2/3 { g' [ d' f' ] }  |
 %% 100
-                \times 2/3 { d'' 16 g' bes' } \times 2/3 { g' d' f' } \times 2/3 { d' g bes } \times 2/3 { g d f } \times 2/3 { d' g bes } \times 2/3 { g d f } \times 2/3 { g, 8 bes, b, }  |
-                \times 2/3 { c 8 d ees } f 16 fis fis bes \times 2/3 { g' ees' fis' } \times 2/3 { bes c' ees' } \times 2/3 { d' 8 c' bes }  |
-                \times 2/3 { bes' 16 g' a' } \times 2/3 { c' ees' f' } \times 2/3 { ees' 8 f' g' } \times 2/3 { des'' 16 bes' c'' } \times 2/3 { ees' fis' aes' } \times 2/3 { fis' 8 aes' bes' }  |
-                \times 2/3 { ees'' 16 c'' d'' } \times 2/3 { f' aes' bes' } \times 2/3 { aes' 8 bes' c'' } \times 2/3 { f'' 16 d'' e'' } \times 2/3 { g' bes' c'' } \times 2/3 { bes' 8 c'' d'' }  |
-                \times 2/3 { g'' 16 f'' d'' } \times 2/3 { c'' bes' g' } \times 2/3 { f' d' c' } \times 2/3 { bes g f } \times 2/3 { d c b, } \times 2/3 { g, f, d, } r8 r  |
+                \times 2/3 { d'' 16 [ g' bes' ] } \times 2/3 { g' [ d' f' ] } \times 2/3 { d' [ g bes ] } \times 2/3 { g [ d f ] } \times 2/3 { d' [ g bes ] } \times 2/3 { g [ d f ] } \times 2/3 { g, 8 [ bes, b, ] }  |
+                \times 2/3 { c 8 [ d ees ] } f 16 fis fis bes \times 2/3 { g' [ ees' fis' ] } \times 2/3 { bes [ c' ees' ] } \times 2/3 { d' 8 [ c' bes ] }  |
+                \times 2/3 { bes' 16 [ g' a' ] } \times 2/3 { c' [ ees' f' ] } \times 2/3 { ees' 8 [ f' g' ] } \times 2/3 { des'' 16 [ bes' c'' ] } \times 2/3 { ees' [ fis' aes' ] } \times 2/3 { fis' 8 [ aes' bes' ] }  |
+                \times 2/3 { ees'' 16 [ c'' d'' ] } \times 2/3 { f' [ aes' bes' ] } \times 2/3 { aes' 8 [ bes' c'' ] } \times 2/3 { f'' 16 [ d'' e'' ] } \times 2/3 { g' [ bes' c'' ] } \times 2/3 { bes' 8 [ c'' d'' ] }  |
+                \times 2/3 { g'' 16 [ f'' d'' ] } \times 2/3 { c'' [ bes' g' ] } \times 2/3 { f' [ d' c' ] } \times 2/3 { bes [ g f ] } \times 2/3 { d [ c b, ] } \times 2/3 { g, [ f, d, ] } r8 r  |
 %% 105
-                \times 2/3 { aes 16 bes c' } \times 2/3 { ees' c' c' } \times 2/3 { aes 32 bes b 16 c' } \times 2/3 { ees' c' c' } \times 2/3 { aes bes c' } \times 2/3 { ees' c' c' } \times 2/3 { d' 8 ees' f' }  |
-                \times 2/3 { fis 16 aes bes } \times 2/3 { des' bes bes } \times 2/3 { fis 32 aes a 16 bes } \times 2/3 { des' bes bes } \times 2/3 { fis aes bes } \times 2/3 { des' bes bes } \times 2/3 { c' 8 des' ees' }  |
-                \times 2/3 { f 16 g a } \times 2/3 { c' a a } \times 2/3 { f 32 g aes 16 a } \times 2/3 { c' a a } \times 2/3 { f g a } \times 2/3 { c' a a } \times 2/3 { b 8 c' d' }  |
-                \times 2/3 { fis' 16 ees' d' } \times 2/3 { c' bes a } \times 2/3 { fis ees d } \times 2/3 { c bes, a, } \times 2/3 { fis, ees, d, } \times 2/3 { c, bes,, a,, } g,, 8 r  |
+                \times 2/3 { aes 16 [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes 32 [ bes b 16 c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { d' 8 [ ees' f' ] }  |
+                \times 2/3 { fis 16 [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis 32 [ aes a 16 bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { c' 8 [ des' ees' ] }  |
+                \times 2/3 { f 16 [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f 32 [ g aes 16 a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { b 8 [ c' d' ] }  |
+                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r  |
             } % Voice
 
             \context Voice = "voice 28" {
@@ -809,12 +809,12 @@ globalTempo = {
                     R1*2  |
                     r2 r4 r  |
                     R1*4  |
-                    r2 r4 r8 \times 2/3 { f'' 16 e'' d'' }  |
+                    r2 r4 r8 \times 2/3 { f'' 16 [ e'' d'' ] }  |
                     a'' 8 [ a'' c''' ees''' ] d''' [ d''' ees''' c''' ]  |
-                    g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 c''' bes'' }  |
+                    g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                     fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
 %% 180
-                    bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 ees'' d'' }  |
+                    bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 [ ees'' d'' ] }  |
                 } % close repeat
             } % Voice
 
@@ -826,17 +826,17 @@ globalTempo = {
                 \skip 1*180 
                 \clef "treble"
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
 %% 185
                 ees'' 8 [ ees'' g'' bes'' ] a'' [ a'' bes'' g'' ]  |
-                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 a'' g'' }  |
+                ees'' 8 [ ees'' g'' bes'' ] a'' 4. \times 2/3 { bes'' 16 [ a'' g'' ] }  |
                 bes' 8 [ bes' d'' f'' ] e'' [ e'' f'' d'' ]  |
-                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 e'' d'' }  |
+                bes' 8 [ bes' d'' f'' ] e'' 4. \times 2/3 { f'' 16 [ e'' d'' ] }  |
                 a'' 8 [ a'' c''' ees''' ] d''' [ d''' ees''' c''' ]  |
 %% 190
-                g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 c''' bes'' }  |
+                g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                 fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
                 bes'' 8 [ c''' a'' f'' ] fis'' 2  |
             } % Voice
@@ -859,19 +859,19 @@ globalTempo = {
                 \skip 1*180 
                 \clef "treble_8"
                 \key bes \major
-                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } \times 2/3 { c' d' bes } \times 2/3 { d' c' bes }  |
-                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } c' 2  |
-                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } \times 2/3 { c' d' bes } \times 2/3 { d' c' bes }  |
-                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } c' 2  |
+                \times 2/3 { g 8 [ bes d' ] } \times 2/3 { bes [ c' d' ] } \times 2/3 { c' [ d' bes ] } \times 2/3 { d' [ c' bes ] }  |
+                \times 2/3 { g 8 [ bes d' ] } \times 2/3 { bes [ c' d' ] } c' 2  |
+                \times 2/3 { g 8 [ bes d' ] } \times 2/3 { bes [ c' d' ] } \times 2/3 { c' [ d' bes ] } \times 2/3 { d' [ c' bes ] }  |
+                \times 2/3 { g 8 [ bes d' ] } \times 2/3 { bes [ c' d' ] } c' 2  |
 %% 185
-                \times 2/3 { c' 8 ees' g' } \times 2/3 { ees' f' g' } \times 2/3 { f' g' ees' } \times 2/3 { g' f' ees' }  |
-                \times 2/3 { c' 8 ees' g' } \times 2/3 { ees' f' g' } f' 2  |
-                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } \times 2/3 { c' d' bes } \times 2/3 { d' c' bes }  |
-                \times 2/3 { g 8 bes d' } \times 2/3 { bes c' d' } c' 2  |
-                \times 2/3 { f 8 a c' } \times 2/3 { a bes c' } \times 2/3 { bes c' a } \times 2/3 { c' bes aes }  |
+                \times 2/3 { c' 8 [ ees' g' ] } \times 2/3 { ees' [ f' g' ] } \times 2/3 { f' [ g' ees' ] } \times 2/3 { g' [ f' ees' ] }  |
+                \times 2/3 { c' 8 [ ees' g' ] } \times 2/3 { ees' [ f' g' ] } f' 2  |
+                \times 2/3 { g 8 [ bes d' ] } \times 2/3 { bes [ c' d' ] } \times 2/3 { c' [ d' bes ] } \times 2/3 { d' [ c' bes ] }  |
+                \times 2/3 { g 8 [ bes d' ] } \times 2/3 { bes [ c' d' ] } c' 2  |
+                \times 2/3 { f 8 [ a c' ] } \times 2/3 { a [ bes c' ] } \times 2/3 { bes [ c' a ] } \times 2/3 { c' [ bes aes ] }  |
 %% 190
-                \times 2/3 { ees 8 g bes } \times 2/3 { g a bes } a 2  |
-                \times 2/3 { d 8 ges a } \times 2/3 { ges g a } \times 2/3 { g a ges } \times 2/3 { a g f }  |
+                \times 2/3 { ees 8 [ g bes ] } \times 2/3 { g [ a bes ] } a 2  |
+                \times 2/3 { d 8 [ ges a ] } \times 2/3 { ges [ g a ] } \times 2/3 { g [ a ges ] } \times 2/3 { a [ g f ] }  |
                 d 1  |
             } % Voice
         >> % Staff ends
@@ -895,19 +895,19 @@ globalTempo = {
                 \clef "treble"
                 \key g \minor
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
 %% 5
                 ees 8 [ ees g bes ] a [ a bes g ]  |
-                ees 8 [ ees g bes ] a 4. \times 2/3 { bes 16 a g }  |
+                ees 8 [ ees g bes ] a 4. \times 2/3 { bes 16 [ a g ] }  |
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 a 8 [ a c' ees' ] d' [ d' ees' c' ]  |
 %% 10
-                g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 c' bes }  |
+                g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 [ c' bes ] }  |
                 fis 8 [ fis a c' ] e' [ e' d' c' ]  |
-                bes 8 c' a f fis 4. \times 2/3 { f 16 ees d }  |
+                bes 8 c' a f fis 4. \times 2/3 { f 16 [ ees d ] }  |
             } % Voice
 
             \context Voice = "voice 34" {
@@ -920,19 +920,19 @@ globalTempo = {
                 \key g \minor
                 bes, 8 [ bes, d f ] e [ e f d ]  |
 %% 170
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 ees 8 [ ees g bes ] a [ a bes g ]  |
-                ees 8 [ ees g bes ] a 4. \times 2/3 { bes 16 a g }  |
+                ees 8 [ ees g bes ] a 4. \times 2/3 { bes 16 [ a g ] }  |
 %% 175
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 a 8 [ a c' ees' ] d' [ d' ees' c' ]  |
-                g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 c' bes }  |
+                g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 [ c' bes ] }  |
                 fis 8 [ fis a c' ] e' [ e' d' c' ]  |
 %% 180
-                bes 8 c' a f fis 4. \times 2/3 { f 16 ees d }  |
+                bes 8 c' a f fis 4. \times 2/3 { f 16 [ ees d ] }  |
             } % Voice
 
             \context Voice = "voice 35" {
@@ -943,17 +943,17 @@ globalTempo = {
                 \skip 1*180 
                 \clef "treble"
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
 %% 185
                 ees 8 [ ees g bes ] a [ a bes g ]  |
-                ees 8 [ ees g bes ] a 4. \times 2/3 { bes 16 a g }  |
+                ees 8 [ ees g bes ] a 4. \times 2/3 { bes 16 [ a g ] }  |
                 bes, 8 [ bes, d f ] e [ e f d ]  |
-                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 e d }  |
+                bes, 8 [ bes, d f ] e 4. \times 2/3 { f 16 [ e d ] }  |
                 a 8 [ a c' ees' ] d' [ d' ees' c' ]  |
 %% 190
-                g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 c' bes }  |
+                g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 [ c' bes ] }  |
                 fis 8 [ fis a c' ] e' [ e' d' c' ]  |
                 bes 8 [ c' a f ] fis 2  |
             } % Voice

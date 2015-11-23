@@ -124,6 +124,8 @@ private:
 
     void readConfigVariables(void);
 
+    Event *nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const;
+
     // Return true if the given segment has to be print
     // (readConfigVAriables() should have been called before)
     bool isSegmentToPrint(Segment *seg);
@@ -194,7 +196,6 @@ private:
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
     std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
     void writeSlashes(const Event *note, std::ofstream &);
-    void endBeamedGroup(std::string groupType, std::ofstream &str, bool inBeamedGroup, bool newBeamedGroup);
 
 private:
     static const int MAX_DOTS = 4;

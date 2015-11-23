@@ -134,6 +134,81 @@ LilyPondExporter::readConfigVariables(void)
     settings.endGroup();
 }
 
+// Return true if @p event is allowed to start or end a beam group.
+// Only called for GROUP_TYPE_BEAMED.
+static bool canStartOrEndBeam(Event *event)
+{
+    // Rests cannot start or end beams
+    if (!event->isa(Note::EventType))
+        return false;
+
+    // Is it really beamed? quarter and longer notes cannot be
+    // (ex: bug #1705430, beaming groups erroneous after merging notes)
+    // HJJ: This should be fixed in notation engine,
+    //      after which the workaround below should be removed.
+    const int noteType = event->get<Int>(NOTE_TYPE);
+    if (noteType >= Note::QuarterNote)
+        return false;
+
+    return true;
+}
+
+Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const
+{
+    Event *currentEvent = *it;
+    long currentGroupId = -1;
+    currentEvent->get<Int>(BEAMED_GROUP_ID, currentGroupId);
+    Q_ASSERT(currentGroupId != -1);
+    const bool tuplet = groupType == GROUP_TYPE_TUPLED;
+    timeT currentTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(currentEvent);
+
+    ++it;
+    for ( ; s->isBeforeEndMarker(it) ; ++it ) {
+        Event *event = *it;
+
+        if (event->getNotationAbsoluteTime() >= barEnd)
+            break;
+
+        // Grace notes are not beamed, but shouldn't break the beaming group
+        if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE))
+            continue;
+
+        if (event->has(SKIP_PROPERTY))
+            continue;
+
+        const bool isNote = event->isa(Note::EventType);
+
+        // Rests at the end of a beam are not included into it.
+        // Rests in the middle of a beam are included, so we keep looking.
+        // Same thing for symbols, etc.
+        if (!tuplet && !isNote)
+            continue;
+        // Tuplets don't get broken by non-notes (e.g. pitchbend)
+        if (tuplet && (!isNote && !event->isa(Note::EventRestType)))
+            continue;
+
+        // Within a chord, keep moving ahead
+        const timeT eventTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
+        if (eventTime == currentTime) {
+            continue;
+        }
+        currentTime = eventTime;
+
+        long newGroupId = -1;
+        event->get<Int>(BEAMED_GROUP_ID, newGroupId);
+
+        if (!tuplet && !canStartOrEndBeam(event)) {
+            newGroupId = -1;
+        }
+
+        if (newGroupId == -1 || newGroupId != currentGroupId) {
+            return 0;
+        }
+        return event;
+    }
+    return 0;
+}
+
 LilyPondExporter::~LilyPondExporter()
 {
     delete(m_language);
@@ -2100,18 +2175,6 @@ void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str
     }
 }
 
-void LilyPondExporter::endBeamedGroup(std::string groupType, std::ofstream &str, bool inBeamedGroup, bool newBeamedGroup)
-{
-    if (groupType == GROUP_TYPE_TUPLED) {
-        if (m_exportBeams && inBeamedGroup && !newBeamedGroup) // newBeamedGroup is false only once we generated a "["
-            str << "] ";
-        str << "} ";
-    } else if (groupType == GROUP_TYPE_BEAMED) {
-        if (m_exportBeams && inBeamedGroup && !newBeamedGroup)
-            str << "] ";
-    }
-}
-
 void
 LilyPondExporter::writeBar(Segment *s,
                            int barNo, timeT barStart, timeT barEnd, int col,
@@ -2133,6 +2196,8 @@ LilyPondExporter::writeBar(Segment *s,
         SegmentNotationHelper(*s).findNotationAbsoluteTime(barStart);
     if (!s->isBeforeEndMarker(i))
         return ;
+
+    //RG_DEBUG << "===== Writing bar" << barNo;
 
     if (MultiMeasureRestCount == 0) {
         str << std::endl;
@@ -2173,9 +2238,11 @@ LilyPondExporter::writeBar(Segment *s,
     std::pair<int, int> tupletRatio(1, 1);
 
     bool overlong = false;
-    bool newBeamedGroup = false;
+
     bool inBeamedGroup = false;
-    int notesInBeamedGroup = 0;
+    bool startingBeamedGroup = false;
+    Event *nextBeamedNoteInGroup = 0;
+    Event *nextNoteInTuplet = 0;
 
     while (s->isBeforeEndMarker(i)) {
 
@@ -2189,61 +2256,41 @@ LilyPondExporter::writeBar(Segment *s,
         // for tuplets)
         QString startTupledStr;
 
-        if (event->isa(Note::EventType) || event->isa(Note::EventRestType) ||
+        const bool isNote = event->isa(Note::EventType);
+        const bool isRest = event->isa(Note::EventRestType);
+
+        if (isNote || isRest ||
             event->isa(Clef::EventType) || event->isa(Key::EventType) ||
             event->isa(Symbol::EventType)) {
 
-            long newGroupId = -1;
-            if (event->isa(Note::EventType)
-                    || event->isa(Note::EventRestType)) {
+            // skip everything until the next beamed note in the current group
+            if (!nextBeamedNoteInGroup || event == nextBeamedNoteInGroup) {
+                nextBeamedNoteInGroup = 0;
 
-                event->get<Int>(BEAMED_GROUP_ID, newGroupId);
+                groupType = "";
+                event->get<String>(BEAMED_GROUP_TYPE, groupType); // might fail
+                const bool tuplet = groupType == GROUP_TYPE_TUPLED;
 
-                // Is it really beamed? quarter and longer notes cannot be
-                // (ex: bug #1705430, beaming groups erroneous after merging notes)
-                // HJJ: This should be fixed in notation engine,
-                //      after which the workaround below should be removed.
-                std::string groupTypeProp = "";
-                event->get<String>(BEAMED_GROUP_TYPE, groupTypeProp); // might fail
-                if (groupTypeProp == GROUP_TYPE_BEAMED) {
-                    const int noteType = event->get<Int>(NOTE_TYPE);
-                    if (noteType >= Note::QuarterNote)
-                        newGroupId = -1;
+                long newGroupId = -1;
+                if (!groupType.empty() && (isNote || isRest)) {
+                    event->get<Int>(BEAMED_GROUP_ID, newGroupId);
 
-                    // A rest at the beginning of a beam group shouldn't be beamed, to match the on-screen rendering
-                    // TODO: do the same for a rest at the end of the beam group (but this requires look-ahead...)
-                    if (event->isa(Note::EventRestType) && newGroupId != groupId) {
-                        newGroupId = -1;
+                    if (newGroupId != -1) {
+                        if (tuplet) {
+                            nextNoteInTuplet = nextNoteInGroup(s, i, groupType, barEnd);
+                        }
+                        nextBeamedNoteInGroup = nextNoteInGroup(s, i, GROUP_TYPE_BEAMED, barEnd);
                     }
                 }
 
-                // Grace notes are not beamed, but shouldn't break the beaming group
-                if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
-                    newGroupId = groupId;
-                }
-            }
-
-            //RG_DEBUG << event->toXmlString() << "BEAMED_GROUP_ID" << newGroupId;
-            if (newGroupId != groupId) {
-
-                if (groupId != -1) {
-                    //RG_DEBUG << "Leaving beamed group" << groupId << "notesInBeamedGroup=" << notesInBeamedGroup;
-                    // leaving a beamed group
-                    endBeamedGroup(groupType, str, inBeamedGroup, newBeamedGroup);
-                    tupletRatio = std::pair<int, int>(1, 1);
-                    groupId = -1;
-                    groupType = "";
-                    inBeamedGroup = false;
-                }
-
-                if (newGroupId != -1) {
+                if (newGroupId != -1 && newGroupId != groupId) {
                     // entering a new beamed group
                     groupId = newGroupId;
-                    groupType = "";
-                    event->get<String>(BEAMED_GROUP_TYPE, groupType); // might fail
+
+                    startingBeamedGroup = true;
 
                     //RG_DEBUG << "Entering group" << groupId << "type" << groupType;
-                    if (groupType == GROUP_TYPE_TUPLED) {
+                    if (tuplet) {
                         long numerator = 0;
                         long denominator = 0;
                         event->get<Int>(BEAMED_GROUP_TUPLED_COUNT, numerator);
@@ -2257,31 +2304,12 @@ LilyPondExporter::writeBar(Segment *s,
                         } else {
                             startTupledStr += QString("\\times %1/%2 { ").arg(numerator).arg(denominator);
                             tupletRatio = std::pair<int, int>(numerator, denominator);
-                            // Require explicit beamed groups,
-                            // fixes bug #1683205.
-                            // HJJ: Why line below was originally present?
-                            // newBeamedGroup = true;
                         }
                     } else if (groupType == GROUP_TYPE_BEAMED) {
-                        newBeamedGroup = true;
-                        inBeamedGroup = true;
                         // there can currently be only on group type, reset tuplet ratio
                         tupletRatio = std::pair<int, int>(1,1);
                     }
-                    notesInBeamedGroup = 0;
                 }
-            } else if (inBeamedGroup
-                       && (event->isa(Note::EventType) || event->isa(Note::EventRestType))
-                       && (!event->has(SKIP_PROPERTY))) {
-
-                // This is the second note or rest in this beamed group -> add '[' after the first one.
-                if (m_exportBeams && newBeamedGroup && notesInBeamedGroup > 0) {
-                    str << "[ ";
-                    newBeamedGroup = false;
-                    //RG_DEBUG << "BEGIN" << notesInBeamedGroup;
-                }
-
-
             }
         } else if (event->isa(Controller::EventType) &&
                    event->has(Controller::NUMBER) &&
@@ -2336,7 +2364,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\breathe ";
             }
 
-        } else if (event->isa(Note::EventType)) {
+        } else if (isNote) {
 
             Chord chord(*s, i, m_composition->getNotationQuantizer());
             Event *e = *chord.getInitialNote();
@@ -2485,10 +2513,14 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\unHideNotes ";
             }
 
-            if (inBeamedGroup) {
-                notesInBeamedGroup++;
+            if (m_exportBeams && startingBeamedGroup && nextBeamedNoteInGroup && canStartOrEndBeam(event)) {
+                // starting a beamed group
+                str << "[ ";
+                startingBeamedGroup = false;
+                inBeamedGroup = true;
+                //RG_DEBUG << "BEGIN GROUP" << groupId;
             }
-        } else if (event->isa(Note::EventRestType)) {
+        } else if (isRest) {
 
             const bool hiddenRest = event->has(INVISIBLE) && event->get<Bool>(INVISIBLE);
 
@@ -2612,11 +2644,6 @@ LilyPondExporter::writeBar(Segment *s,
     
                 handleEndingPostEvents(postEventsInProgress, i, str);
                 handleStartingPostEvents(postEventsToStart, str);
-
-                if (inBeamedGroup) {
-                    notesInBeamedGroup++;
-                    //RG_DEBUG << "inBeamedGroup -> notesInBeamedGroup++" << notesInBeamedGroup;
-                }
             } else {
                 MultiMeasureRestCount--;
             }
@@ -2704,13 +2731,32 @@ LilyPondExporter::writeBar(Segment *s,
             postEventsInProgress.insert(event);
         }
 
+        if ((isNote || isRest)) {
+            bool endGroup = false;
+            if (!nextBeamedNoteInGroup) {
+                //RG_DEBUG << "Leaving beamed group" << groupId;
+                // ending a beamed group
+                if (m_exportBeams && inBeamedGroup) {
+                    str << "] ";
+                }
+                inBeamedGroup = false;
+                if (groupType == GROUP_TYPE_BEAMED)
+                    endGroup = true;
+            }
+            if (groupType == GROUP_TYPE_TUPLED && !nextNoteInTuplet) {
+                //RG_DEBUG << "Leaving tuplet group" << groupId;
+                str << "} ";
+                tupletRatio = std::pair<int, int>(1, 1);
+                endGroup = true;
+            }
+            if (endGroup) {
+                groupId = -1;
+                groupType = "";
+            }
+        }
+
         ++i;
     } // end of the gigantic while loop, I think
-
-    if (groupId != -1) {
-        //RG_DEBUG << "End of bar, ending beaming group" << groupId << groupType;
-        endBeamedGroup(groupType, str, inBeamedGroup, newBeamedGroup);
-    }
 
     if (isGrace == 1) {
         isGrace = 0;

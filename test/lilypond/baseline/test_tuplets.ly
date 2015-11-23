@@ -28,8 +28,12 @@ global = {
                 \override MultiMeasureRest #'expand-limit = 1
                 \time 4/4
                 
-                \times 2/3 { cis' 8 b cis' } \times 2/3 { cis' b 4 } \times 2/3 { b 8 ees' r } \times 2/3 { r b 4 }  |
-                \times 2/3 { r8 r4 } \times 2/3 { cis' 8 r cis' } \times 2/3 { b 4 cis' 8 } \times 2/3 { fis'' aes'' e' }  |
+                \clef "treble"
+                \key c \major
+                \times 2/3 { cis' 8 [ b cis' ] } \times 2/3 { cis' b 4 } \times 2/3 { b 8 [ ees' ] r } \times 2/3 { r b 4 }  |
+                \times 2/3 { r8 r4 } \times 2/3 { cis' 8 [ r cis' ] } \times 2/3 { b 4 cis' 8 } \times 2/3 { fis'' [ aes'' e' ] }  |
+                \times 2/3 { \stemDown a'' 4 g'' 8 [ a'' ] a'' 4 } \stemNeutral f' 8 \times 2/3 { g' [ a' ] } r4  |
+                \bar "|."
             } % Voice
         >> % Staff ends
 
@@ -47,9 +51,11 @@ global = {
                 \override MultiMeasureRest #'expand-limit = 1
                 \time 4/4
                 
+                \clef "treble"
+                \key c \major
                 cis' 8 [ b cis' cis' ] cis' b 4 cis' 8  |
-                cis' 16 [ b cis' r ] cis' [ b 8 cis' 16 ] cis' 8 [ r16 cis' 8 ] e' 16 [ b 8 ]  |
-                a'' 16 [ g'' 32 a'' 16 g'' 32 r16 ] a'' [ g'' 8 a'' 16 ] a'' 8 [ r16 a'' 8 ] c''' 16 [ g'' 8 ]  |
+                cis' 16 [ b cis' ] r cis' [ b 8 cis' 16 ] cis' 8 [ r16 cis' 8 ] e' 16 [ b 8 ]  |
+                a'' 16 [ g'' 32 a'' 16 g'' 32 ] r16 a'' [ g'' 8 a'' 16 ] a'' 8 [ r16 a'' 8 ] c''' 16 [ g'' 8 ]  |
                 \bar "|."
             } % Voice
         >> % Staff (final) ends

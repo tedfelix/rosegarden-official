@@ -90,13 +90,13 @@ globalTempo = {
 
                 \skip 4.*102 
                 \clef "treble_8"
-                < e a, > 8 \times 2/3 { a' 64 _~ < a' e' > _~ < a' e' c' > _~ } < a' e' c' > 16. _~ < a' e' c' > 8 < e a a, > \times 2/3 { e 64 _~ < e a > _~ < e a c' > _~ } < c' a e > 16. _~ < c' a e > 8 a, a, < e a, > \times 2/3 { a' 64 _~ < a' e' > _~ < a' e' c' > _~ } < a' e' c' > 16. _~ < a' e' c' > 8 < a e a, > \times 2/3 { e 64 _~ < e a > _~ < e c' a > _~ } < a c' e > 16. _~ < c' e a > 8 a, 4 aes,  |
-                < d g, > 8 \times 2/3 { g' 64 _~ < g' d' > _~ < g' d' b > _~ } < g' d' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ < d g > _~ < d b g > _~ } < g b d > 16. _~ < b d g > 8 g, g, < d g, > \times 2/3 { g' 64 _~ < g' d' > _~ < g' d' b > _~ } < g' d' b > 16. _~ < g' d' b > 8 < d g g, > \times 2/3 { d 64 _~ < d g > _~ < d g b > _~ } < b g d > 16. _~ < b g d > 8 g, 4 aes,  |
+                < e a, > 8 \times 2/3 { a' 64 _~ [ < a' e' > _~ < a' e' c' > _~ ] } < a' e' c' > 16. _~ < a' e' c' > 8 < e a a, > \times 2/3 { e 64 _~ [ < e a > _~ < e a c' > _~ ] } < c' a e > 16. _~ < c' a e > 8 a, a, < e a, > \times 2/3 { a' 64 _~ [ < a' e' > _~ < a' e' c' > _~ ] } < a' e' c' > 16. _~ < a' e' c' > 8 < a e a, > \times 2/3 { e 64 _~ [ < e a > _~ < e c' a > _~ ] } < a c' e > 16. _~ < c' e a > 8 a, 4 aes,  |
+                < d g, > 8 \times 2/3 { g' 64 _~ [ < g' d' > _~ < g' d' b > _~ ] } < g' d' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d b g > _~ ] } < g b d > 16. _~ < b d g > 8 g, g, < d g, > \times 2/3 { g' 64 _~ [ < g' d' > _~ < g' d' b > _~ ] } < g' d' b > 16. _~ < g' d' b > 8 < d g g, > \times 2/3 { d 64 _~ [ < d g > _~ < d g b > _~ ] } < b g d > 16. _~ < b g d > 8 g, 4 aes,  |
 %% 20
-                < e a, > 8 \times 2/3 { a' 64 _~ < a' e' > _~ < a' e' c' > _~ } < a' e' c' > 16. _~ < a' e' c' > 8 < a e a, > \times 2/3 { e 64 _~ < e a > _~ < e c' a > _~ } < a c' e > 16. _~ < c' e a > 8 a, a, < e a, > \times 2/3 { a' 64 _~ < a' e' > _~ < a' e' c' > _~ } < a' e' c' > 16. _~ < a' e' c' > 8 < e a a, > \times 2/3 { e 64 _~ < e a > _~ < e a c' > _~ } < c' a e > 16. _~ < c' a e > 8 a, 4 aes,  |
-                < d g, > 8 \times 2/3 { g' 64 _~ < d' g' > _~ < d' g' b > _~ } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ < d g > _~ < d g b > _~ } < b g d > 16. _~ < b g d > 8 g, g, < d g, > \times 2/3 { g' 64 _~ < d' g' > _~ < d' g' b > _~ } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ < d g > _~ < d b g > _~ } < b g d > 16. _~ < b g d > 8 g, 4 aes,  |
-                < e a, > 8 \times 2/3 { a' 64 _~ < a' e' > _~ < a' e' c' > _~ } < a' e' c' > 16. _~ < a' e' c' > 8 < a e a, > \times 2/3 { e 64 _~ < e a > _~ < e c' a > _~ } < a c' e > 16. _~ < c' e a > 8 a, a, < e a, > \times 2/3 { a' 64 _~ < a' e' > _~ < a' e' c' > _~ } < a' e' c' > 16. _~ < a' e' c' > 8 < e a a, > \times 2/3 { e 64 _~ < e a > _~ < e a c' > _~ } < c' a e > 16. _~ < c' a e > 8 a, 4 aes,  |
-                < d g, > 8 \times 2/3 { g' 64 _~ < d' g' > _~ < d' g' b > _~ } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ < d g > _~ < d g b > _~ } < b g d > 16. _~ < b g d > 8 g, g, < d g, > \times 2/3 { g' 64 _~ < d' g' > _~ < d' g' b > _~ } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ < d g > _~ < d b g > _~ } < b g d > 16. _~ < b g d > 8 g, 4 e,  |
+                < e a, > 8 \times 2/3 { a' 64 _~ [ < a' e' > _~ < a' e' c' > _~ ] } < a' e' c' > 16. _~ < a' e' c' > 8 < a e a, > \times 2/3 { e 64 _~ [ < e a > _~ < e c' a > _~ ] } < a c' e > 16. _~ < c' e a > 8 a, a, < e a, > \times 2/3 { a' 64 _~ [ < a' e' > _~ < a' e' c' > _~ ] } < a' e' c' > 16. _~ < a' e' c' > 8 < e a a, > \times 2/3 { e 64 _~ [ < e a > _~ < e a c' > _~ ] } < c' a e > 16. _~ < c' a e > 8 a, 4 aes,  |
+                < d g, > 8 \times 2/3 { g' 64 _~ [ < d' g' > _~ < d' g' b > _~ ] } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d g b > _~ ] } < b g d > 16. _~ < b g d > 8 g, g, < d g, > \times 2/3 { g' 64 _~ [ < d' g' > _~ < d' g' b > _~ ] } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d b g > _~ ] } < b g d > 16. _~ < b g d > 8 g, 4 aes,  |
+                < e a, > 8 \times 2/3 { a' 64 _~ [ < a' e' > _~ < a' e' c' > _~ ] } < a' e' c' > 16. _~ < a' e' c' > 8 < a e a, > \times 2/3 { e 64 _~ [ < e a > _~ < e c' a > _~ ] } < a c' e > 16. _~ < c' e a > 8 a, a, < e a, > \times 2/3 { a' 64 _~ [ < a' e' > _~ < a' e' c' > _~ ] } < a' e' c' > 16. _~ < a' e' c' > 8 < e a a, > \times 2/3 { e 64 _~ [ < e a > _~ < e a c' > _~ ] } < c' a e > 16. _~ < c' a e > 8 a, 4 aes,  |
+                < d g, > 8 \times 2/3 { g' 64 _~ [ < d' g' > _~ < d' g' b > _~ ] } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d g b > _~ ] } < b g d > 16. _~ < b g d > 8 g, g, < d g, > \times 2/3 { g' 64 _~ [ < d' g' > _~ < d' g' b > _~ ] } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d b g > _~ ] } < b g d > 16. _~ < b g d > 8 g, 4 e,  |
                 f, 8 _~ [ < c f, > ] < c' a > [ f ] < c f > [ < a c' > ] f [ < f c > _~ ] < a f c > [ c _~ ] < f c > _~ [ < a f c > ] < f' c' > [ a ] f < g c' > 32 _~ < a c' > 16. f 8 [ f, 16 fis, ]  |
 %% 25
                 g, 8 _~ [ < g, d > ] < b d' > [ g ] < d g > [ < b d' > ] g [ < d g > _~ ] < d b g > [ d _~ ] < d g > _~ [ < d b g > ] < g' d' > [ b ] g < d' a > 32 _~ < d' b > 16. g 8 [ g, 16 a, ]  |
@@ -230,7 +230,7 @@ globalTempo = {
                 \override MultiMeasureRest #'expand-limit = 1
 
                 \skip 4.*198 
-                \times 2/3 { c' 64 _~ < c' g' > _~ < c' g' c'' > _~ } \times 2/3 { < c' g' c'' e'' > _~ < c' g' c'' e'' g'' > _~ < c' g' c'' e'' g'' c''' > _~ } < c''' g'' e'' c'' g' c' > 1 r16 r4. r r  |
+                \times 2/3 { c' 64 _~ [ < c' g' > _~ < c' g' c'' > _~ ] } \times 2/3 { < c' g' c'' e'' > _~ [ < c' g' c'' e'' g'' > _~ < c' g' c'' e'' g'' c''' > _~ ] } < c''' g'' e'' c'' g' c' > 1 r16 r4. r r  |
             } % Voice
         >> % Staff ends
 
@@ -749,7 +749,7 @@ globalTempo = {
                 \time 18/8
                 
                 \clef "bass"
-                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 d, d, } d, 8 d, c c b, b,  |
+                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 [ d, d, ] } d, 8 d, c c b, b,  |
             } % Voice
 
             \context Voice = "voice 49" {
@@ -941,7 +941,7 @@ globalTempo = {
 
                 \skip 4.*198 
                 \clef "bass"
-                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 d, d, } d, 8 d, c c b, b,  |
+                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 [ d, d, ] } d, 8 d, c c b, b,  |
 %% 35
                 < a, b,, d, cis > 4 r8 r4. r r  |
                 \bar "|."

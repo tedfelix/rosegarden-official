@@ -173,7 +173,7 @@ globalTempo = {
                 b 8 _( [ e' ) g' _( fis' ) ] b [ e' 16 _( fis' ) ] g' _( [ fis' ) g' _( fis' ) ]  |
                 e' 8 [ fis' 16 g' ] a' [ b' ] c'' 8 c'' 2 _\markup { \finger "0 1" } -\startTrillSpan s4*0 \stopTrillSpan _~  |
 %% 15
-                c'' 8 -\tenuto _~ \breathe b' _( [ a' g' ) ] fis' _( [ e' ) d' _( cis' ) ]  |
+                c'' 8 -\tenuto _~ [ \breathe b' _( a' g' ) ] fis' _( [ e' ) d' _( cis' ) ]  |
                 a 8 _( [ d' ) fis' _( e' ) ] a [ d' 16 _( e' ) ] fis' _( [ e' ) fis' _( e' ) ]  |
                 d' 8 [ e' 16 fis' ] g' [ a' ] b' 8 b' 2 \startTrillSpan _~ 
                 % warning: overlong bar truncated here |

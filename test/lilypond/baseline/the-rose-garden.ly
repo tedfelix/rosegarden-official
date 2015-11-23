@@ -47,7 +47,7 @@ globalTempo = {
                 a'' 4 g'' 8 ^( fis'' 2 ) 
                 % warning: overlong bar truncated here |
                 \skip 2 \skip 4 \skip 8 r8  |
-                a'' 4 g'' 8 -\tenuto fis'' 4. -\tenuto \times 2/3 { g'' 8 -\tenuto r e'' -\tenuto _~ }  |
+                a'' 4 g'' 8 -\tenuto fis'' 4. -\tenuto \times 2/3 { g'' 8 -\tenuto [ r e'' -\tenuto _~ ] }  |
                 e'' 2 _~ e'' 4 -\staccato _~ e''  |
                 d'' 2. -\tenuto d''' 4  |
 %% 10
@@ -75,7 +75,7 @@ globalTempo = {
                 d'' 4. -\tenuto c'' -\tenuto b' 4 -\tenuto  |
 %% 30
                 a' 2. -\tenuto < b' c'' > 8 -\tenuto r  |
-                < d'' c'' > 16. -\tenuto r32 r8 r g' 4. -\tenuto \times 2/3 { a' 8 -\tenuto b' -\tenuto r }  |
+                < d'' c'' > 16. -\tenuto r32 r8 r g' 4. -\tenuto \times 2/3 { a' 8 -\tenuto [ b' -\tenuto ] r }  |
                 c'' 4. -\tenuto fis' e' 4  |
                 < g' fis' > 2 -\tenuto r4 fis' 8. -\tenuto r16  |
                 fis' 4 -\tenuto _~ fis' 2 -\tenuto _~ d' 8 -\tenuto e'  |
@@ -118,7 +118,7 @@ globalTempo = {
 %% 65
                 a'' 4 g'' 8 -\tenuto fis'' 2 -\tenuto _~ fis'' 8 -\tenuto _~  |
                 fis'' 1 -\tenuto _~  |
-                a'' 4 -\tenuto g'' 8 -\tenuto fis'' 4. -\tenuto \times 2/3 { g'' 8 -\tenuto r fis'' -\tenuto _~ }  |
+                a'' 4 -\tenuto g'' 8 -\tenuto fis'' 4. -\tenuto \times 2/3 { g'' 8 -\tenuto [ r fis'' -\tenuto _~ ] }  |
                 fis'' 4 -\tenuto _~ e'' 8 -\tenuto fis'' 4 -\tenuto g'' 8 -\tenuto fis'' [ e'' ]  |
                 d'' 4 -\tenuto e'' -\tenuto fis'' -\tenuto c'' -\tenuto  |
 %% 70
@@ -154,10 +154,10 @@ globalTempo = {
 %% 95
                 d'' 1 -\tenuto  |
                 R1*5  |
-                r2 \times 2/3 { a'' 8 r g'' -\staccato } fis'' -\staccato g'' 16 r  |
+                r2 \times 2/3 { a'' 8 [ r g'' -\staccato ] } fis'' -\staccato g'' 16 r  |
                 a'' 4 -\tenuto r8 g'' 4. -\tenuto r4  |
                 R1  |
-                \times 2/3 { a'' 8 -\tenuto g'' -\staccato r } fis'' r e'' 4 -\staccato fis'' 8 r  |
+                \times 2/3 { a'' 8 -\tenuto [ g'' -\staccato ] r } fis'' r e'' 4 -\staccato fis'' 8 r  |
 %% 105
                 g'' 1  |
                 < g'' fis'' > 8 -\tenuto-\staccato r e'' -\tenuto fis'' ^( r ) g'' 4 a''  |
@@ -182,7 +182,7 @@ globalTempo = {
                 a'' 4 -\tenuto g'' 8 -\staccato fis'' 2 -\tenuto r8  |
                 R1  |
                 a'' 8. r16 g'' 8 -\tenuto-\staccato fis'' 2 fis'' 8 -\staccato  |
-                g'' 8. r16 fis'' 4 \times 2/3 { e'' 8 -\tenuto d'' -\tenuto r } e'' 16 -\tenuto \times 2/3 { fis'' 8 -\staccato r } 
+                g'' 8. r16 fis'' 4 \times 2/3 { e'' 8 -\tenuto [ d'' -\tenuto ] r } e'' 16 -\tenuto \times 2/3 { fis'' 8 -\staccato r } 
                 % warning: bar too short, padding with rests
                 % 487680 + 3760 < 491520  &&  47/48 < 4/4
                 r64  |
@@ -892,11 +892,11 @@ globalTempo = {
                 g 8 -\staccato [ g -\staccato ] \times 2/3 { r fis r } r e -\staccato r4  |
                 fis 16 r fis r \times 2/3 { r8 _( e r ) } r4 r8 d 16 r  |
                 e 8 -\staccato r fis -\staccato r g -\staccato r e 16. r32 r8  |
-                d 16 r d 8 -\staccato \times 2/3 { r a r } a r \times 2/3 { g -\staccato g _( r ) }  |
+                d 16 r d 8 -\staccato \times 2/3 { r a r } a r \times 2/3 { g -\staccato [ g _( ] r ) }  |
 %% 50
                 r4 r16 r32 d' 8 -\staccato d' -\staccato c' -\staccato b 16 \times 2/3 { r8 c' -\staccato r }  |
                 g 16 r g 8 -\staccato r d' -\staccato d' r c' 16 r b 8 -\staccato  |
-                r8 c' 16. r32 r8 d' r c' -\staccato \times 2/3 { b c' -\staccato r }  |
+                r8 c' 16. r32 r8 d' r c' -\staccato \times 2/3 { b [ c' -\staccato ] r }  |
                 d' 16. r32 r8 r c' -\staccato r2  |
                 r2 r  |
 %% 55
@@ -925,9 +925,9 @@ globalTempo = {
                 r2 r  |
 %% 75
                 e' 8 -\staccato r \times 2/3 { r fis' r } r r16 g' 16. r32 r16 r8  |
-                \times 2/3 { r8 g' -\staccato r } fis' 16 r r8 \times 2/3 { g' -\staccato fis' -\staccato r } e' 16 r fis' r  |
+                \times 2/3 { r8 g' -\staccato r } fis' 16 r r8 \times 2/3 { g' -\staccato [ fis' -\staccato ] r } e' 16 r fis' r  |
                 g' 8 -\staccato r \times 2/3 { r d' -\staccato r } d' 16. r32 r8 e' 16 r fis' r  |
-                r2 r4 \times 2/3 { d' 8 -\staccato e' -\staccato r }  |
+                r2 r4 \times 2/3 { d' 8 -\staccato [ e' -\staccato ] r }  |
                 fis' 16 r r8 \times 2/3 { r c' -\staccato r } c' 16 r r r32 d' 16 \times 2/3 { r8 e' r }  |
 %% 80
                 r8 d' -\staccato r c' 16. r32 r8 d' 16 r e' 8 -\staccato r  |
@@ -943,30 +943,30 @@ globalTempo = {
                 e 32. r64 r16 fis 32. r64 r16 g r a r b 8 -\staccato r r4  |
 %% 90
                 R1  |
-                d 16 r e r fis r g -\staccato r a 8 -\staccato r \times 2/3 { b -\staccato c' -\staccato r }  |
-                d' 16 r r8 d' -\staccato r \times 2/3 { d' c' -\staccato r } d' -\staccato r  |
+                d 16 r e r fis r g -\staccato r a 8 -\staccato r \times 2/3 { b -\staccato [ c' -\staccato ] r }  |
+                d' 16 r r8 d' -\staccato r \times 2/3 { d' [ c' -\staccato ] r } d' -\staccato r  |
                 d' 16 r d' r \times 2/3 { r8 fis' -\staccato r } fis' -\staccato r e' -\staccato r  |
                 R1  |
 %% 95
                 fis' 16 r fis' 8 -\staccato r e' -\staccato r2  |
                 r8 fis' -\staccato e' -\staccato fis' 16 r e' r fis' r e' r fis' r  |
                 g' 8 -\staccato g' 16 r fis' 32. r64 r16 r8 r2  |
-                \times 2/3 { g' 8 g' -\staccato r } fis' 16 -\staccato r r8 r2  |
+                \times 2/3 { g' 8 [ g' -\staccato ] r } fis' 16 -\staccato r r8 r2  |
                 g' 8 -\staccato g' 16 r32 fis' 16 r32 r16 g' 8 -\staccato \times 2/3 { r g' r } fis' 32. r64 r16 g' 8 -\staccato  |
 %% 100
-                r8 fis' 16 r \times 2/3 { e' 8 -\staccato fis' -\staccato r } g' 16 r fis' r e' r fis' r  |
+                r8 fis' 16 r \times 2/3 { e' 8 -\staccato [ fis' -\staccato ] r } g' 16 r fis' r e' r fis' r  |
                 e' 16 -\tenuto r r8 r4 r2  |
                 R1  |
                 g' 16 r r8 r4 r2  |
-                g' 16 r g' 8 -\staccato r g' r fis' -\staccato \times 2/3 { e' -\staccato fis' -\staccato r }  |
+                g' 16 r g' 8 -\staccato r g' r fis' -\staccato \times 2/3 { e' -\staccato [ fis' -\staccato ] r }  |
 %% 105
                 g' 8 r r4 r2  |
                 r2 r8 r16 r32 r64 g' 16 -\tenuto \times 2/3 { r8 fis' r }  |
                 g' 8 r fis' 16 r g' 8 r4 r8 fis' -\staccato  |
-                \times 2/3 { g' 8 fis' -\staccato r } e' 16 r fis' r g' 16. r32 r8 fis' -\staccato e' 16 r  |
+                \times 2/3 { g' 8 [ fis' -\staccato ] r } e' 16 r fis' r g' 16. r32 r8 fis' -\staccato e' 16 r  |
                 fis' 8 -\staccato [ e' -\staccato ] r d' -\staccato r4 r8 d' 16 r  |
 %% 110
-                e' 8 -\staccato r fis' 16 r g' 8 -\staccato r4 \times 2/3 { e' 8 -\staccato r d' -\staccato }  |
+                e' 8 -\staccato r fis' 16 r g' 8 -\staccato r4 \times 2/3 { e' 8 -\staccato [ r d' -\staccato ] }  |
                 e' 8 -\staccato r fis' 16 r g' 8 -\staccato r a' -\staccato r < b' a' > 16 -\tenuto r  |
                 r8 a' -\staccato r g' -\staccato r a' -\staccato g' 16 r a' r  |
                 g' 16 r fis' r r8 e' 16 r r2  |
@@ -982,12 +982,12 @@ globalTempo = {
                 e 16 r r8 r fis 32. r64 r16 r2  |
                 g 32. r64 r16 r8 r fis 16 r r2  |
                 fis 16 r r8 \times 2/3 { r e r } r r16 r32 d 8 -\staccato r32 r8  |
-                e 8 -\staccato r16 r32 fis 16 \times 2/3 { r8 g r } \times 2/3 { r fis -\staccato r } \times 2/3 { e fis -\staccato r }  |
+                e 8 -\staccato r16 r32 fis 16 \times 2/3 { r8 g r } \times 2/3 { r fis -\staccato r } \times 2/3 { e [ fis -\staccato ] r }  |
 %% 125
                 g 16 r r8 r4 r2  |
                 r2 r4 g 16 r r8  |
                 g 16 r r8 r fis 32. r64 r16 r2  |
-                \times 2/3 { g 8 -\staccato fis -\staccato r } \times 2/3 { e fis -\staccato r } r2  |
+                \times 2/3 { g 8 -\staccato [ fis -\staccato ] r } \times 2/3 { e [ fis -\staccato ] r } r2  |
                 r2 r  |
 %% 130
                 r2 r  |

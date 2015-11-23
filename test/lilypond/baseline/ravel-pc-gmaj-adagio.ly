@@ -391,11 +391,11 @@ globalTempo = {
                     fis' 16 _~ [ g' e' 8 \) ] d' 4 _\( b 8 [ cis' \) ]  |
                     cis' 4 -\accent _\( d' 2 \)  |
                     \key a \minor
-                    \times 4/6 { r16 aes''' f''' aes''' cis''' f''' } \times 4/6 { b'' cis''' bes'' cis''' gis'' cis''' } \times 4/6 { fis'' gis'' f'' gis'' cis'' f'' }  |
-                    \times 4/6 { b' 16 bes' gis'' fis'' f'' cis''' } \times 4/6 { bes'' gis'' f''' ees''' cis''' bes'' } \times 4/6 { gis'' fis''' f''' ees''' f''' cis''' }  |
+                    \times 4/6 { r16 aes''' [ f''' aes''' cis''' f''' ] } \times 4/6 { b'' [ cis''' bes'' cis''' gis'' cis''' ] } \times 4/6 { fis'' [ gis'' f'' gis'' cis'' f'' ] }  |
+                    \times 4/6 { b' 16 [ bes' gis'' fis'' f'' cis''' ] } \times 4/6 { bes'' [ gis'' f''' ees''' cis''' bes'' ] } \times 4/6 { gis'' [ fis''' f''' ees''' f''' cis''' ] }  |
 %% 60
-                    \times 4/6 { bes'' 16 a''' fis''' a''' d''' fis''' } \times 4/6 { c''' d''' b'' d''' a'' d''' } \times 4/6 { g'' a'' fis'' a'' d'' fis'' }  |
-                    \times 4/6 { c'' 16 b' a'' g'' fis'' d''' } \times 4/6 { b'' a'' fis''' e''' d''' b'' } \times 4/6 { a'' g''' fis''' e''' fis''' d''' }  |
+                    \times 4/6 { bes'' 16 [ a''' fis''' a''' d''' fis''' ] } \times 4/6 { c''' [ d''' b'' d''' a'' d''' ] } \times 4/6 { g'' [ a'' fis'' a'' d'' fis'' ] }  |
+                    \times 4/6 { c'' 16 [ b' a'' g'' fis'' d''' ] } \times 4/6 { b'' [ a'' fis''' e''' d''' b'' ] } \times 4/6 { a'' [ g''' fis''' e''' fis''' d''' ] }  |
                     a'' 8 [ b'' ] r4 \clef "bass"
                     < f' g > 8 [ < f' g > _~ ]  |
                     < f' g > 8 _~ [ < f' g > ] < f' a > [ < b e' > _~ ] < a e' > [ < e' g > _~ ]  |
@@ -403,16 +403,16 @@ globalTempo = {
 %% 65
                     r8 < d b > \> < b d > 4 < b d > 8 [ < b d > ]  |
                     \clef "treble"
-                    \times 4/6 { r16-\p  \! gis' g' gis' f' gis' } \times 4/6 { ees' gis' d' gis' c' gis' } \times 4/6 { b gis' a gis' g' f' }  |
-                    \times 4/6 { g' 16 c'' bes' c'' gis' c'' } \times 4/6 { g' _\markup { \bold \italic "cresc." } c'' f' c'' e' c'' } \times 4/6 { d' c'' c' c'' gis' g' }  |
-                    \times 4/6 { gis' 16 cis'' c'' cis'' bes' cis'' } \times 4/6 { gis' cis'' g' cis'' f' cis'' } \times 4/6 { ees' ees'' d'' ees'' cis'' ees'' }  |
-                    \times 4/6 { c'' 16 ees'' bes' ees'' gis' ees'' } \times 4/6 { g' e'' ees'' e'' b' e'' } \times 4/6 { g' g'' fis'' g'' e'' g'' }  |
+                    \times 4/6 { r16-\p  \! gis' [ g' gis' f' gis' ] } \times 4/6 { ees' [ gis' d' gis' c' gis' ] } \times 4/6 { b [ gis' a gis' g' f' ] }  |
+                    \times 4/6 { g' 16 [ c'' bes' c'' gis' c'' ] } \times 4/6 { g' _\markup { \bold \italic "cresc." } [ c'' f' c'' e' c'' ] } \times 4/6 { d' [ c'' c' c'' gis' g' ] }  |
+                    \times 4/6 { gis' 16 [ cis'' c'' cis'' bes' cis'' ] } \times 4/6 { gis' [ cis'' g' cis'' f' cis'' ] } \times 4/6 { ees' [ ees'' d'' ees'' cis'' ees'' ] }  |
+                    \times 4/6 { c'' 16 [ ees'' bes' ees'' gis' ees'' ] } \times 4/6 { g' [ e'' ees'' e'' b' e'' ] } \times 4/6 { g' [ g'' fis'' g'' e'' g'' ] }  |
 %% 70
-                    \times 4/6 { b' 16 b'' bes'' b'' g'' b'' } \times 4/6 { e'' e''' ees''' e''' b'' e''' } \times 4/6 { g'' g''' fis''' g''' e''' g''' }  |
-                    \times 8/12 { \ottava #1 b'' 32 -\staccato b'' -\staccato b''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato e''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato } \times 8/12 { b'' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato e''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato } \times 8/12 { b'' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato } 
+                    \times 4/6 { b' 16 [ b'' bes'' b'' g'' b'' ] } \times 4/6 { e'' [ e''' ees''' e''' b'' e''' ] } \times 4/6 { g'' [ g''' fis''' g''' e''' g''' ] }  |
+                    \times 8/12 { \ottava #1 b'' 32 -\staccato [ b'' -\staccato b''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato e''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato ] } \times 8/12 { b'' -\staccato [ b'' -\staccato b''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato e''' -\staccato b'' -\staccato g''' -\staccato b'' -\staccato ] } \times 8/12 { b'' -\staccato [ b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato ] } 
                     % warning: overlong bar truncated here |
-                    \times 8/12 { b'' 32 -\staccato \> b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato } \times 8/12 { b'' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato } \times 8/12 { b'' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato }  |
-                    \times 4/6 { b'' 16 \! \> b''' gis''' b''' ees''' gis''' } \times 4/6 { b'' b''' gis''' b''' ees''' gis''' } \times 4/6 { b'' b''' gis''' b''' ees''' gis''' }  |
+                    \times 8/12 { b'' 32 -\staccato \> [ b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato ] } \times 8/12 { b'' -\staccato [ b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato ] } \times 8/12 { b'' -\staccato [ b'' -\staccato b''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato b''' -\staccato b'' -\staccato ees''' -\staccato b'' -\staccato gis''' -\staccato b'' -\staccato ] }  |
+                    \times 4/6 { b'' 16 \! \> [ b''' gis''' b''' ees''' gis''' ] } \times 4/6 { b'' [ b''' gis''' b''' ees''' gis''' ] } \times 4/6 { b'' [ b''' gis''' b''' ees''' gis''' ] }  |
                     \key e \major
                     b'' 32 -\p \! [ b''' a''' b''' gis''' b''' fis''' b''' ] e''' [ gis''' fis''' gis''' e''' gis''' dis''' gis''' ] cis''' [ e''' dis''' e''' cis''' e''' b'' e''' ]  |
 %% 75

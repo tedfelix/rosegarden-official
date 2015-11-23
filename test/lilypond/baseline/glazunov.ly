@@ -72,9 +72,9 @@ globalTempo = {
                 fis' 8 \! [ dis' ) ] e' 4 ^( _~ e' 8 \< [ cis' ) ] d' 4  |
                 gis 4. \! _( ais 8 [ fis ) ] r b 4 -\mf  |
 %% 25
-                fis' 2 _~ fis' 8 [ e' 16 ^( d' ] \times 4/6 { cis' b cis' d' e' fis' }  |
+                fis' 2 _~ fis' 8 [ e' 16 ^( d' ] \times 4/6 { cis' [ b cis' d' e' fis' ] }  |
                 gis' 8 ) r16 a' fis' 4 _~ fis' 8 r fis' 4 -\f  |
-                b' 2 _~ b' 8 [ a' 16 ^( gis' ] \times 4/6 { fis' e' fis' gis' a' b' }  |
+                b' 2 _~ b' 8 [ a' 16 ^( gis' ] \times 4/6 { fis' [ e' fis' gis' a' b' ] }  |
                 cis'' 8 ) [ r16 d'' ] b' 2 b' 8 -\tenuto [ cis'' -\tenuto ]  |
                 b' 4 \< a' 8 -\tenuto [ b' -\tenuto ] a' 4 gis' 8 -\tenuto [ a' -\tenuto ]  |
 %% 30
@@ -176,9 +176,9 @@ globalTempo = {
                     < d'' fis'' d''' > 8 -\mf \! ^( [ < e'' fis'' e''' > ] < cis'' fis'' cis''' > 4 \> _~ < cis'' fis'' cis''' > 8 [ < d'' fis'' d''' > ] < b' b'' > 4 )  |
 %% 25
                     r4 \! < fis' b' b d' > -\mf < d'' fis'' b' fis' > 2  |
-                    r4 \times 8/9 { fis'' 32 -\p ^( e'' d'' cis'' b' cis'' d'' e'' fis'' } gis'' 8 ) [ r16 a'' ] fis'' 8 r  |
+                    r4 \times 8/9 { fis'' 32 -\p ^( [ e'' d'' cis'' b' cis'' d'' e'' fis'' ] } gis'' 8 ) [ r16 a'' ] fis'' 8 r  |
                     r4 < b' fis' fis'' d'' > -\f < b'' b' d'' fis'' > 2  |
-                    r4 \times 8/9 { b'' 32 -\mf ^( a'' gis'' fis'' e'' fis'' gis'' a'' b'' } \stemDown cis''' 8 ) [ r16 d''' ] \stemNeutral b'' 8 r  |
+                    r4 \times 8/9 { b'' 32 -\mf ^( [ a'' gis'' fis'' e'' fis'' gis'' a'' b'' ] } \stemDown cis''' 8 ) [ r16 d''' ] \stemNeutral b'' 8 r  |
                     r8 < b fis' d' > -\mf r4 \< r8 < fis d' b > r4  |
 %% 30
                     < a fis cis' > 2 -\f \! \stemDown < a' cis'' gis'' > 8 -\mf ^( [ < cis'' a' fis'' > ) < fis' a' > < fis' b' a' > ] \stemNeutral  |
