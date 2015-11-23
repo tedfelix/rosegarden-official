@@ -288,7 +288,7 @@ LilyPondSegmentsContext::precompute()
     }
 
     // Then look again for repeats from linked segments
-    // (without looking at the inconsistant ones)
+    // (without looking at the inconsistent ones)
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             lookForRepeatedLinks(vit->second);
@@ -832,17 +832,20 @@ LilyPondSegmentsContext::lookForRepeatedLinks(SegmentSet & segSet)
             if (    sitv->segment->getStartTime()
                  != mainSegIt->segment->getEndMarkerTime()) break;
 
-            // The size of the volta should not be too large 
-            // (But a coda may be an exception...)
-            ///!!! TODO Needs ameliorations
-            if (sitv->duration >= sit->duration) break;
-
             // Is a new repetition following the volta ?
             bool again = false;
             if (sitm != segSet.end()) {
                 again = true;
 
-                // A repeated segment needs to be synchronous
+                // The size of the volta should not be too large.
+                // The last volta is a possible exception which breaks the
+                // repeat sequence.
+                if (sitv->duration >= sit->duration) again = false;
+
+                // The volta have to be synchronous, except the last one
+                if (!sitv->synchronous) again = false;
+
+                // A repeated segment have to be synchronous
                 if (!sitm->synchronous) again = false;
 
                 // A repeated segment can't be marked "no repeat"
