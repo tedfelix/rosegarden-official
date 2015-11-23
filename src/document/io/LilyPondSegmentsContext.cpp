@@ -258,7 +258,7 @@ LilyPondSegmentsContext::precompute()
     }
 
     // Check linked segment repeat consistency between tracks and mark
-    // inconsistant repeats
+    // inconsistent repeats
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
@@ -304,6 +304,8 @@ LilyPondSegmentsContext::precompute()
         // int trackId = m_composition->getTrackByPosition(trackPos)->getId();
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             // int voiceIndex = vit->first;
+
+            // First pass: count the repetitions and remember the volta
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
                 if (sit->repeatId) {
                     if (sit->repeatId != currentRepeatId) {
@@ -324,6 +326,25 @@ LilyPondSegmentsContext::precompute()
                             // Count more one repeat
                             currentMainSeg->numberOfRepeatLinks++;
                         }
+                    }
+                }
+            }
+
+            // Second pass: when the repeat count is 1, the repeat sequence is
+            // a false one and have to be removed.
+            for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
+                if (sit->repeatId) {
+                    if (sit->numberOfRepeatLinks == 1) {
+                        // As numberOfRepeatLinks = 1 there is one and only
+                        // one volta
+                        Volta * volta = (*sit->rawVoltaChain)[0];
+                        volta->data->volta = false;
+                        volta->data->repeatId = 0;
+                        delete volta;
+                        delete sit->rawVoltaChain;
+                        sit->rawVoltaChain = 0;
+                        sit->repeatId = 0;
+                        sit->numberOfRepeatLinks = 0;
                     }
                 }
             }
