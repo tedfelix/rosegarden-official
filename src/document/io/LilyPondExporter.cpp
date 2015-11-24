@@ -2325,7 +2325,15 @@ LilyPondExporter::writeBar(Segment *s,
         if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
             if (isGrace == 0) { 
                 isGrace = 1;
-                str << "\\grace { ";
+
+                // LilyPond export hack:  If a grace note has one or more
+                // tremolo slashes, we export it as a slashed grace note instead
+                // of a plain one.
+                long slashes;
+                slashes = event->get<Int>(NotationProperties::SLASHES, slashes);
+                if (slashes > 0) str << "\\slashedGrace { ";
+                else str << "\\grace { ";
+
                 // str << "%{ grace starts %} "; // DEBUG
             }
         } else if (isGrace == 1) {
@@ -3159,6 +3167,10 @@ LilyPondExporter::writeDuration(timeT duration,
 void
 LilyPondExporter::writeSlashes(const Event *note, std::ofstream &str)
 {
+    // if a grace note has tremolo slashes, they have already been used to turn
+    // the note into a slashed grace note, and need not be exported here
+    if (note->has(IS_GRACE_NOTE) && note->get<Bool>(IS_GRACE_NOTE)) return;
+
     // write slashes after text
     // / = 8 // = 16 /// = 32, etc.
     long slashes = 0;
