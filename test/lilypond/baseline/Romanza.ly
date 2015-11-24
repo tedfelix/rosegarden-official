@@ -37,69 +37,6 @@ globalTempo = {
             \set Staff.autoBeaming = ##f % turns off all autobeaming
 
             \context Voice = "voice 1" {
-                % Segment: Melody A master
-                \override Voice.TextScript #'padding = #2.0
-                \override MultiMeasureRest #'expand-limit = 1
-                \once \override Staff.TimeSignature #'style = #'() 
-                \time 3/4
-                
-                \repeat volta 2 {
-                    \clef "treble_8"
-                    \key e \minor
-                    \stemUp b' 4 _4 b' b' \stemNeutral  |
-                    \stemUp b' 4 a' _2 g' _2 \stemNeutral  |
-                    \stemUp g' 4 fis' _1 e' _0 \stemNeutral  |
-                    \stemUp e' 4 g' _2 b' _2 \stemNeutral  |
-%% 5
-                    \stemUp e'' 4 _4 e'' e'' \stemNeutral  |
-                    \stemUp e'' 4 d'' _4 c'' _2 \stemNeutral  |
-                    \stemUp c'' 4 ^\markup { \bold "1/2 CV________________" } b' a' \stemNeutral  |
-                    \stemUp a' 4 b' c'' \stemNeutral  |
-                    \stemUp b' 4 ^\markup { \bold "CVII__________________" } c'' b' \stemNeutral  |
-%% 10
-                    \stemUp dis'' 4 c'' b' \stemNeutral  |
-                    \stemUp b' 4 _4 a' _2 g' _2 \stemNeutral  |
-                    \stemUp g' 4 _2 fis' _1 e' _0 \stemNeutral  |
-                    \stemUp fis' 4 _3 fis' fis' \stemNeutral  |
-                    \stemUp fis' 4 g' _4 fis' _3 \stemNeutral  |
-%% 15
-                    \stemUp e' 4 e' e' \stemNeutral  |
-                    \stemUp e' 2. ^\markup { \large "Fine" } \stemNeutral  |
-                } % close repeat
-            } % Voice
-
-            \context Voice = "voice 2" {
-                % Segment: Melody B master
-                \override Voice.TextScript #'padding = #2.0
-                \override MultiMeasureRest #'expand-limit = 1
-
-                \skip 2.*16 
-                \repeat volta 2 {
-                    \clef "treble_8"
-                    \key cis \minor
-                    \stemUp gis' 4 gis' gis' \stemNeutral  |
-                    \stemUp gis' 4 fis' e' \stemNeutral  |
-%% 35
-                    \stemUp e' 4 dis' dis' \stemNeutral  |
-                    \stemUp dis' 4 cis' dis' \stemNeutral  |
-                    \stemUp cis'' 4 cis'' cis'' \stemNeutral  |
-                    \stemUp cis'' 4 dis'' cis'' \stemNeutral  |
-                    \stemUp cis'' 4 b' b' \stemNeutral  |
-%% 40
-                    \stemUp b' 4 cis'' dis'' \stemNeutral  |
-                    \stemUp e'' 4 e'' e'' \stemNeutral  |
-                    \stemUp e'' 4 dis'' d'' \stemNeutral  |
-                    \stemUp cis'' 4 cis'' cis'' \stemNeutral  |
-                    \stemUp cis'' 4 b' a' \stemNeutral  |
-%% 45
-                    \stemUp gis' 4 gis' gis' \stemNeutral  |
-                    \stemUp gis' 4 a' gis' \stemNeutral  |
-                    \stemUp e' 4 ^\markup { \large "D.C. al Fine" } e' e' \stemNeutral  |
-                    \stemUp e' 2. \stemNeutral  |
-                } % close repeat
-            } % Voice
-
-            \context Voice = "voice 3" {
                 % Segment: Middle A master
                 \override Voice.TextScript #'padding = #2.0
                 \override MultiMeasureRest #'expand-limit = 1
@@ -131,8 +68,8 @@ globalTempo = {
                 } % close repeat
             } % Voice
 
-            \context Voice = "voice 4" {
-                % Segment: Middle B master
+            \context Voice = "voice 2" {
+                % Segment: Melody B master
                 \override Voice.TextScript #'padding = #2.0
                 \override MultiMeasureRest #'expand-limit = 1
 
@@ -140,29 +77,29 @@ globalTempo = {
                 \repeat volta 2 {
                     \clef "treble_8"
                     \key cis \minor
-                    \times 2/3 { \stemDown gis' 8 [ b gis ] } \times 2/3 { gis' [ b gis ] } \times 2/3 { gis' [ b gis ] } \stemNeutral  |
-                    \times 2/3 { \stemDown gis' 8 [ b gis ] } \times 2/3 { fis' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
+                    \stemUp gis' 4 gis' gis' \stemNeutral  |
+                    \stemUp gis' 4 fis' e' \stemNeutral  |
 %% 35
-                    \times 2/3 { \stemDown e' 8 [ a fis ] } \times 2/3 { dis' [ a fis ] } \times 2/3 { dis' [ a fis ] } \stemNeutral  |
-                    \times 2/3 { \stemDown dis' 8 [ a fis ] } \times 2/3 { cis' [ a fis ] } \times 2/3 { dis' [ a fis ] } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 [ fis' dis' ] } \times 2/3 { dis'' [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 [ gis' e' ] } \times 2/3 { b' [ gis' e' ] } \times 2/3 { b' [ gis' e' ] } \stemNeutral  |
+                    \stemUp e' 4 dis' dis' \stemNeutral  |
+                    \stemUp dis' 4 cisis' dis' \stemNeutral  |
+                    \stemUp cis'' 4 cis'' cis'' \stemNeutral  |
+                    \stemUp cis'' 4 dis'' cis'' \stemNeutral  |
+                    \stemUp cis'' 4 b' b' \stemNeutral  |
 %% 40
-                    \times 2/3 { \stemDown b' 8 [ gis' e' ] } \times 2/3 { cis'' [ gis' e' ] } \times 2/3 { dis'' [ gis' e' ] } \stemNeutral  |
-                    \times 2/3 { \stemDown e'' 8 [ gis' e' ] } \times 2/3 { e'' [ gis' e' ] } \times 2/3 { e'' [ gis' e' ] } \stemNeutral  |
-                    \times 2/3 { \stemDown e'' 8 [ gis' e' ] } \times 2/3 { dis'' [ gis' e' ] } \times 2/3 { d'' [ gis' e' ] } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 [ e' cis' ] } \times 2/3 { cis'' [ e' cis' ] } \times 2/3 { cis'' [ e' cis' ] } \stemNeutral  |
-                    \times 2/3 { \stemDown cis'' 8 [ e' cis' ] } \times 2/3 { b' [ e' cis' ] } \times 2/3 { a' [ e' cis' ] } \stemNeutral  |
+                    \stemUp b' 4 cis'' dis'' \stemNeutral  |
+                    \stemUp e'' 4 e'' e'' \stemNeutral  |
+                    \stemUp e'' 4 dis'' d'' \stemNeutral  |
+                    \stemUp cis'' 4 cis'' cis'' \stemNeutral  |
+                    \stemUp cis'' 4 b' a' \stemNeutral  |
 %% 45
-                    \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \stemNeutral  |
-                    \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { a' [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \stemNeutral  |
-                    \times 2/3 { \stemDown e' 8 [ b gis ] } \times 2/3 { e' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
-                    \stemDown b 2. \stemNeutral  |
+                    \stemUp gis' 4 gis' gis' \stemNeutral  |
+                    \stemUp gis' 4 a' fis' \stemNeutral  |
+                    \stemUp e' 4 ^\markup { \large "D.C. al Fine" } e' e' \stemNeutral  |
+                    \stemUp e' 2. \stemNeutral  |
                 } % close repeat
             } % Voice
 
-            \context Voice = "voice 5" {
+            \context Voice = "voice 3" {
                 % Segment: Bass A master
                 \override Voice.TextScript #'padding = #2.0
                 \override MultiMeasureRest #'expand-limit = 1
@@ -191,6 +128,69 @@ globalTempo = {
 %% 15
                     \stemDown e 4 ^3 b, ^2 g, ^4 \stemNeutral  |
                     \stemDown < e, b g e b, > 2. \arpeggio _~ r4 r \stemNeutral  |
+                } % close repeat
+            } % Voice
+
+            \context Voice = "voice 4" {
+                % Segment: Middle B master
+                \override Voice.TextScript #'padding = #2.0
+                \override MultiMeasureRest #'expand-limit = 1
+
+                \skip 2.*16 
+                \repeat volta 2 {
+                    \clef "treble_8"
+                    \key cis \minor
+                    \times 2/3 { \stemDown gis' 8 [ b gis ] } \times 2/3 { gis' [ b gis ] } \times 2/3 { gis' [ b gis ] } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 [ b gis ] } \times 2/3 { fis' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
+%% 35
+                    \times 2/3 { \stemDown e' 8 [ a fis ] } \times 2/3 { dis' [ a fis ] } \times 2/3 { dis' [ a fis ] } \stemNeutral  |
+                    \times 2/3 { \stemDown dis' 8 [ a fis ] } \times 2/3 { cisis' [ a fis ] } \times 2/3 { dis' [ a fis ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ fis' dis' ] } \times 2/3 { dis'' [ fis' dis' ] } \times 2/3 { cis'' [ fis' dis' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ gis' e' ] } \times 2/3 { b' [ gis' e' ] } \times 2/3 { b' [ gis' e' ] } \stemNeutral  |
+%% 40
+                    \times 2/3 { \stemDown b' 8 [ gis' e' ] } \times 2/3 { cis'' [ gis' e' ] } \times 2/3 { dis'' [ gis' e' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown e'' 8 [ gis' e' ] } \times 2/3 { e'' [ gis' e' ] } \times 2/3 { e'' [ gis' e' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown e'' 8 [ gis' e' ] } \times 2/3 { dis'' [ gis' e' ] } \times 2/3 { d'' [ gis' e' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ e' cis' ] } \times 2/3 { cis'' [ e' cis' ] } \times 2/3 { cis'' [ e' cis' ] } \stemNeutral  |
+                    \times 2/3 { \stemDown cis'' 8 [ e' cis' ] } \times 2/3 { b' [ e' cis' ] } \times 2/3 { a' [ e' cis' ] } \stemNeutral  |
+%% 45
+                    \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \stemNeutral  |
+                    \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { a' [ dis' a ] } \times 2/3 { fis' [ dis' a ] } \stemNeutral  |
+                    \times 2/3 { \stemDown e' 8 [ b gis ] } \times 2/3 { e' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
+                    \stemDown b 2. \stemNeutral  |
+                } % close repeat
+            } % Voice
+
+            \context Voice = "voice 5" {
+                % Segment: Melody A master
+                \override Voice.TextScript #'padding = #2.0
+                \override MultiMeasureRest #'expand-limit = 1
+                \once \override Staff.TimeSignature #'style = #'() 
+                \time 3/4
+                
+                \repeat volta 2 {
+                    \clef "treble_8"
+                    \key e \minor
+                    \stemUp b' 4 _4 b' b' \stemNeutral  |
+                    \stemUp b' 4 a' _2 g' _2 \stemNeutral  |
+                    \stemUp g' 4 fis' _1 e' _0 \stemNeutral  |
+                    \stemUp e' 4 g' _2 b' _2 \stemNeutral  |
+%% 5
+                    \stemUp e'' 4 _4 e'' e'' \stemNeutral  |
+                    \stemUp e'' 4 d'' _4 c'' _2 \stemNeutral  |
+                    \stemUp c'' 4 ^\markup { \bold "1/2 CV________________" } b' a' \stemNeutral  |
+                    \stemUp a' 4 b' c'' \stemNeutral  |
+                    \stemUp b' 4 ^\markup { \bold "CVII__________________" } c'' b' \stemNeutral  |
+%% 10
+                    \stemUp dis'' 4 c'' b' \stemNeutral  |
+                    \stemUp b' 4 _4 a' _2 g' _2 \stemNeutral  |
+                    \stemUp g' 4 _2 fis' _1 e' _0 \stemNeutral  |
+                    \stemUp fis' 4 _3 fis' fis' \stemNeutral  |
+                    \stemUp fis' 4 g' _4 fis' _3 \stemNeutral  |
+%% 15
+                    \stemUp e' 4 e' e' \stemNeutral  |
+                    \stemUp e' 2. ^\markup { \large "Fine" } \stemNeutral  |
                 } % close repeat
             } % Voice
 
