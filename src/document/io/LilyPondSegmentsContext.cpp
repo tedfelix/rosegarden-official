@@ -339,6 +339,7 @@ LilyPondSegmentsContext::precompute()
                         // one volta
                         Volta * volta = (*sit->rawVoltaChain)[0];
                         volta->data->volta = false;
+                        volta->data->ignored = false;
                         volta->data->repeatId = 0;
                         delete volta;
                         delete sit->rawVoltaChain;
