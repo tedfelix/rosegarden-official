@@ -1,4 +1,4 @@
-include_directories(../src)
+include_directories(../src ${CMAKE_CURRENT_BINARY_DIR}/../src)
 
 # Code factorization: this macro defines unit tests
 macro(RG_UNIT_TESTS)

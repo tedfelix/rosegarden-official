@@ -28,16 +28,14 @@ namespace Rosegarden
 {
 
 
-QDebug &
-operator<<(QDebug &dbg, const std::string &s)
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const std::string &s)
 {
     dbg << strtoqstr(s);
 
     return dbg;
 }
 
-QDebug &
-operator<<(QDebug &dbg, const Rosegarden::Event &e)
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Event &e)
 {
     dbg << "Event type : " << e.getType() << '\n';
     dbg << "\tDuration : " << e.getDuration() << '\n';
@@ -54,8 +52,7 @@ operator<<(QDebug &dbg, const Rosegarden::Event &e)
     return dbg;
 }
 
-QDebug &
-operator<<(QDebug &dbg, const Rosegarden::Segment &t)
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segment &t)
 {
 //    dbg << "Segment for instrument " << t.getTrack()
 //        << " starting at " << t.getStartTime() << '\n';
@@ -86,22 +83,19 @@ operator<<(QDebug &dbg, const Rosegarden::Segment &t)
     return dbg;
 }
 
-QDebug &
-operator<<(QDebug &dbg, const Rosegarden::RealTime &t)
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::RealTime &t)
 {
     dbg << t.toString();
     return dbg;
 }
 
-QDebug &
-operator<<(QDebug &dbg, const Rosegarden::Colour &c)
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Colour &c)
 {
     dbg << "Colour : rgb = " << c.getRed() << "," << c.getGreen() << "," << c.getBlue();
     return dbg;
 }
 
-QDebug &
-operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
 {
     dbg << "Chord root = " << c.getRoot() << ", ext = '" << c.getExt() << "'";
 
@@ -122,6 +116,5 @@ operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
     }        
     return dbg;
 }
-
 
 }

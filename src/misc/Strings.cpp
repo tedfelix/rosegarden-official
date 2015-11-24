@@ -26,27 +26,27 @@
 namespace Rosegarden
 {
 
-QString strtoqstr(const std::string &str)
+ROSEGARDENPRIVATE_EXPORT QString strtoqstr(const std::string &str)
 {
     return QString::fromUtf8(str.c_str());
 }
 
-QString strtoqstr(const Rosegarden::PropertyName &p)
+ROSEGARDENPRIVATE_EXPORT QString strtoqstr(const Rosegarden::PropertyName &p)
 {
     return QString::fromUtf8(p.c_str());
 }
 
-std::string qstrtostr(const QString &qstr)
+ROSEGARDENPRIVATE_EXPORT std::string qstrtostr(const QString &qstr)
 {
     return std::string(qstr.toUtf8().data());
 }
 
-std::string qStrToStrUtf8(const QString &qstr)
+ROSEGARDENPRIVATE_EXPORT std::string qStrToStrUtf8(const QString &qstr)
 {
     return qstrtostr(qstr);
 }
 
-std::string qStrToStrLocal8(const QString &qstr)
+ROSEGARDENPRIVATE_EXPORT std::string qStrToStrLocal8(const QString &qstr)
 {
     return std::string(qstr.toLocal8Bit().data());
 }
@@ -58,7 +58,7 @@ std::string qStrToStrLocal8(const QString &qstr)
  * things like configuration values from XML files where we want to
  * guarantee the same value is used regardless of surrounding locale.
  */
-double strtodouble(const std::string &s)
+ROSEGARDENPRIVATE_EXPORT double strtodouble(const std::string &s)
 {
     int dp = 0;
     int sign = 1;
@@ -102,13 +102,13 @@ double strtodouble(const std::string &s)
     return result * sign;
 }
 
-double qstrtodouble(const QString &s)
+ROSEGARDENPRIVATE_EXPORT double qstrtodouble(const QString &s)
 {
     return strtodouble(qstrtostr(s));
 }
 
 
-bool qStrToBool(const QString &s)
+ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QString &s)
 {
     QString tt = s.toLower();
     tt = tt.trimmed();
@@ -118,7 +118,7 @@ bool qStrToBool(const QString &s)
     return false;
 }
 
-bool qStrToBool(const QVariant &v)
+ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QVariant &v)
 {
     return qStrToBool( v.toString() );
 }
@@ -126,8 +126,7 @@ bool qStrToBool(const QVariant &v)
 
 
 
-std::string
-convertFromCodec(std::string text, QTextCodec *codec)
+ROSEGARDENPRIVATE_EXPORT std::string convertFromCodec(std::string text, QTextCodec *codec)
 {
     if (codec)
         return qstrtostr(codec->toUnicode(text.c_str(), text.length()));
@@ -135,20 +134,17 @@ convertFromCodec(std::string text, QTextCodec *codec)
         return text;
 }
 
-std::ostream &
-operator<<(std::ostream &target, const QString &str)
+ROSEGARDENPRIVATE_EXPORT std::ostream &operator<<(std::ostream &target, const QString &str)
 {
     return target << str.toLocal8Bit().data();
 }
 
-QTextStream &
-operator<<(QTextStream &target, const std::string &str)
+ROSEGARDENPRIVATE_EXPORT QTextStream &operator<<(QTextStream &target, const std::string &str)
 {
     return target << QString(str.c_str());
 }
 
-QStringList
-splitQuotedString(QString s)
+ROSEGARDENPRIVATE_EXPORT QStringList splitQuotedString(QString s)
 {
     QStringList tokens;
     QString tok;

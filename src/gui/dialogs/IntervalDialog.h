@@ -23,6 +23,7 @@
 #include <vector>
 #include "gui/widgets/DiatonicPitchChooser.h"
 
+#include <rosegardenprivate_export.h>
 
 class QWidget;
 class QComboBox;
@@ -36,7 +37,7 @@ namespace Rosegarden
 class RosegardenDocument;
 
 
-class IntervalDialog : public QDialog
+class ROSEGARDENPRIVATE_EXPORT IntervalDialog : public QDialog
 {
     Q_OBJECT
 public:

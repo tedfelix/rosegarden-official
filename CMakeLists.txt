@@ -102,6 +102,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
    if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -W -Wpointer-arith -fno-check-new -fno-common")
       add_definitions(-DQT_NO_EXCEPTIONS)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
    endif()
 endif()
 
@@ -191,6 +192,7 @@ if(BUILD_TESTING)
     message(STATUS "Building unit tests, using shared libraries")
 else()
     set(RG_LIBRARY_TYPE STATIC)
+    set(ROSEGARDENPRIVATE_STATIC_BUILD TRUE) # for generating rosegardenprivate-export.h
     message(STATUS "Not building unit tests, using a static library for rosegarden")
 endif()
 

@@ -40,7 +40,7 @@ public:
  * does not take a copy of those Events, it just remembers which ones they are.
  */
 
-class EventSelection : public SegmentObserver
+class ROSEGARDENPRIVATE_EXPORT EventSelection : public SegmentObserver
 {
 public:
     typedef EventContainer eventcontainer;

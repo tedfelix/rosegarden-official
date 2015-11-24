@@ -66,7 +66,7 @@ class BasicCommand;
  *     They provide no virtual dtor.  EventContainer should instead
  *     have a std::multiset member object.
  */
-class EventContainer : public std::multiset<Event*, Event::EventCmp>
+class ROSEGARDENPRIVATE_EXPORT EventContainer : public std::multiset<Event*, Event::EventCmp>
 {
  public:
     iterator findEventOfType(iterator i, const std::string &type);
@@ -91,7 +91,7 @@ class EventContainer : public std::multiset<Event*, Event::EventCmp>
  *
  * The Segment owns the Events its items are pointing at.
  */
-class Segment : public QObject, public EventContainer
+class ROSEGARDENPRIVATE_EXPORT Segment : public QObject, public EventContainer
 {
   Q_OBJECT
 
@@ -1013,7 +1013,7 @@ typedef Segment::SegmentMultiSet SegmentMultiSet;
 /**
  * See Segment::addObserver() and Segment::m_observers.
  */
-class SegmentObserver
+class ROSEGARDENPRIVATE_EXPORT SegmentObserver
 {
 public:
     virtual ~SegmentObserver() {}

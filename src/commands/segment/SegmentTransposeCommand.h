@@ -31,7 +31,7 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentTransposeCommand : public MacroCommand
+class ROSEGARDENPRIVATE_EXPORT SegmentTransposeCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentTransposeCommand)
 

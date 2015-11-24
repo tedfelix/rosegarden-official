@@ -48,21 +48,21 @@ namespace Accidentals
      * based on the performance pitch and current key at the
      * location of the note.
      */
-    const Accidental NoAccidental = "no-accidental";
+    ROSEGARDENPRIVATE_EXPORT const Accidental NoAccidental = "no-accidental";
 
-    const Accidental Sharp = "sharp";
-    const Accidental Flat = "flat";
-    const Accidental Natural = "natural";
-    const Accidental DoubleSharp = "double-sharp";
-    const Accidental DoubleFlat = "double-flat";
+    ROSEGARDENPRIVATE_EXPORT const Accidental Sharp = "sharp";
+    ROSEGARDENPRIVATE_EXPORT const Accidental Flat = "flat";
+    ROSEGARDENPRIVATE_EXPORT const Accidental Natural = "natural";
+    ROSEGARDENPRIVATE_EXPORT const Accidental DoubleSharp = "double-sharp";
+    ROSEGARDENPRIVATE_EXPORT const Accidental DoubleFlat = "double-flat";
 
     // Additional Accidentals for demi- and sesqui- sharps and flats
-    const Accidental QuarterFlat = "demiflat";
-    const Accidental ThreeQuarterFlat =  "sesqiflat";
-    const Accidental QuarterSharp = "demisharp";
-    const Accidental ThreeQuarterSharp = "sesquisharp";
+    ROSEGARDENPRIVATE_EXPORT const Accidental QuarterFlat = "demiflat";
+    ROSEGARDENPRIVATE_EXPORT const Accidental ThreeQuarterFlat =  "sesqiflat";
+    ROSEGARDENPRIVATE_EXPORT const Accidental QuarterSharp = "demisharp";
+    ROSEGARDENPRIVATE_EXPORT const Accidental ThreeQuarterSharp = "sesquisharp";
 
-    AccidentalList getStandardAccidentals() {
+    ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals() {
 
         static Accidental a[] = {
             NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
@@ -76,7 +76,7 @@ namespace Accidentals
         return v;
     }
 
-    int getPitchOffset(const Accidental &acc) {
+    ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &acc) {
         if (acc == DoubleSharp) return 2;
         else if (acc == Sharp) return 1;
         else if (acc == Flat) return -1;
@@ -84,7 +84,7 @@ namespace Accidentals
         else return 0;
     }
 
-    Accidental getAccidental(int pitchChange) {
+    ROSEGARDENPRIVATE_EXPORT Accidental getAccidental(int pitchChange) {
         if (pitchChange == -2) return DoubleFlat;
         if (pitchChange == -1) return Flat;
         // Yielding 'Natural' will add a natural-sign even if not needed, so for now
@@ -104,69 +104,69 @@ using namespace Accidentals;
 
 namespace Marks
 {
-    const Mark NoMark = "no-mark";
-    const Mark Accent = "accent";
-    const Mark Tenuto = "tenuto";
-    const Mark Staccato = "staccato";
-    const Mark Staccatissimo = "staccatissimo";
-    const Mark Marcato = "marcato";
-    const Mark Open = "open";
-    const Mark Stopped = "stopped";
-    const Mark Harmonic = "harmonic";
-    const Mark Sforzando = getTextMark("sf");
-    const Mark Rinforzando = getTextMark("rf");
-    const Mark Trill = "trill";
-    const Mark LongTrill = "long-trill";
-    const Mark TrillLine = "trill-line";
-    const Mark Turn = "turn";
-    const Mark Pause = "pause";
-    const Mark UpBow = "up-bow";
-    const Mark DownBow = "down-bow";
+    ROSEGARDENPRIVATE_EXPORT const Mark NoMark = "no-mark";
+    ROSEGARDENPRIVATE_EXPORT const Mark Accent = "accent";
+    ROSEGARDENPRIVATE_EXPORT const Mark Tenuto = "tenuto";
+    ROSEGARDENPRIVATE_EXPORT const Mark Staccato = "staccato";
+    ROSEGARDENPRIVATE_EXPORT const Mark Staccatissimo = "staccatissimo";
+    ROSEGARDENPRIVATE_EXPORT const Mark Marcato = "marcato";
+    ROSEGARDENPRIVATE_EXPORT const Mark Open = "open";
+    ROSEGARDENPRIVATE_EXPORT const Mark Stopped = "stopped";
+    ROSEGARDENPRIVATE_EXPORT const Mark Harmonic = "harmonic";
+    ROSEGARDENPRIVATE_EXPORT const Mark Sforzando = getTextMark("sf");
+    ROSEGARDENPRIVATE_EXPORT const Mark Rinforzando = getTextMark("rf");
+    ROSEGARDENPRIVATE_EXPORT const Mark Trill = "trill";
+    ROSEGARDENPRIVATE_EXPORT const Mark LongTrill = "long-trill";
+    ROSEGARDENPRIVATE_EXPORT const Mark TrillLine = "trill-line";
+    ROSEGARDENPRIVATE_EXPORT const Mark Turn = "turn";
+    ROSEGARDENPRIVATE_EXPORT const Mark Pause = "pause";
+    ROSEGARDENPRIVATE_EXPORT const Mark UpBow = "up-bow";
+    ROSEGARDENPRIVATE_EXPORT const Mark DownBow = "down-bow";
 
-    const Mark Mordent = "mordent";
-    const Mark MordentInverted = "mordent-inverted";
-    const Mark MordentLong = "mordent-long";
-    const Mark MordentLongInverted = "mordent-long-inverted";
+    ROSEGARDENPRIVATE_EXPORT const Mark Mordent = "mordent";
+    ROSEGARDENPRIVATE_EXPORT const Mark MordentInverted = "mordent-inverted";
+    ROSEGARDENPRIVATE_EXPORT const Mark MordentLong = "mordent-long";
+    ROSEGARDENPRIVATE_EXPORT const Mark MordentLongInverted = "mordent-long-inverted";
 
-    string getTextMark(string text) {
+    ROSEGARDENPRIVATE_EXPORT string getTextMark(string text) {
         return string("text_") + text;
     }
 
-    bool isTextMark(Mark mark) {
+    ROSEGARDENPRIVATE_EXPORT bool isTextMark(Mark mark) {
         return string(mark).substr(0, 5) == "text_";
     }
 
-    string getTextFromMark(Mark mark) {
+    ROSEGARDENPRIVATE_EXPORT string getTextFromMark(Mark mark) {
         if (!isTextMark(mark)) return string();
         else return string(mark).substr(5);
     }
 
-    string getFingeringMark(string fingering) {
+    ROSEGARDENPRIVATE_EXPORT string getFingeringMark(string fingering) {
         return string("finger_") + fingering;
     }
 
-    bool isFingeringMark(Mark mark) {
+    ROSEGARDENPRIVATE_EXPORT bool isFingeringMark(Mark mark) {
         return string(mark).substr(0, 7) == "finger_";
     }
 
-    bool isApplicableToRests(Mark mark) {
+    ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(Mark mark) {
         if (mark == Marks::Pause) return true;
         if (isTextMark(mark)) return true;
         return false;
     }
 
-    string getFingeringFromMark(Mark mark) {
+    ROSEGARDENPRIVATE_EXPORT string getFingeringFromMark(Mark mark) {
         if (!isFingeringMark(mark)) return string();
         else return string(mark).substr(7);
     }
 
-    int getMarkCount(const Event &e) {
+    ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e) {
         long markCount = 0;
         e.get<Int>(BaseProperties::MARK_COUNT, markCount);
         return markCount;
     }
 
-    std::vector<Mark> getMarks(const Event &e) {
+    ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getMarks(const Event &e) {
 
 	std::vector<Mark> marks;
 
@@ -185,7 +185,7 @@ namespace Marks
 	return marks;
     }
 
-    Mark getFingeringMark(const Event &e) {
+    ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark(const Event &e) {
 
 	long markCount = 0;
 	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
@@ -202,7 +202,7 @@ namespace Marks
 	return NoMark;
     }
 
-    void addMark(Event &e, const Mark &mark, bool unique) {
+    ROSEGARDENPRIVATE_EXPORT void addMark(Event &e, const Mark &mark, bool unique) {
 	if (unique && hasMark(e, mark)) return;
 
 	long markCount = 0;
@@ -213,7 +213,7 @@ namespace Marks
 	e.set<String>(markProperty, mark);
     }
 
-    bool removeMark(Event &e, const Mark &mark) {
+    ROSEGARDENPRIVATE_EXPORT bool removeMark(Event &e, const Mark &mark) {
 
 	long markCount = 0;
 	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
@@ -239,7 +239,7 @@ namespace Marks
 	return false;
     }
 
-    bool hasMark(const Event &e, const Mark &mark) {
+    ROSEGARDENPRIVATE_EXPORT bool hasMark(const Event &e, const Mark &mark) {
 	long markCount = 0;
 	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
 
@@ -253,7 +253,7 @@ namespace Marks
 	return false;
     }
 
-    std::vector<Mark> getStandardMarks() {
+    ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getStandardMarks() {
 
         static Mark a[] = {
             NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato, Open,

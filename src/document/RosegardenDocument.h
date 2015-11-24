@@ -76,7 +76,7 @@ static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
   * RosegardenDocument owns the Composition in the document.
   */
 
-class RosegardenDocument : public QObject
+class ROSEGARDENPRIVATE_EXPORT RosegardenDocument : public QObject
 {
     Q_OBJECT
 public:

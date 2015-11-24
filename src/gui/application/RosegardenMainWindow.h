@@ -41,6 +41,8 @@
 #include <map>
 #include <set>
 
+#include <rosegardenprivate_export.h>
+
 class QWidget;
 class QTimer;
 class QTextCodec;
@@ -113,7 +115,7 @@ class ConfigureDialog;
   *     contains the TrackEditor.
   *   * getTransport() returns the TransportDialog instance.
   */
-class RosegardenMainWindow : public QMainWindow, public ActionFileClient
+class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
     

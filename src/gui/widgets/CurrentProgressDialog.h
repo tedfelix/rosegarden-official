@@ -20,7 +20,7 @@
 
 #include <QObject>
 
-
+#include <rosegardenprivate_export.h>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 class ProgressDialog;
 
 
-class CurrentProgressDialog : public QObject
+class ROSEGARDENPRIVATE_EXPORT CurrentProgressDialog : public QObject
 {
     Q_OBJECT
 public:

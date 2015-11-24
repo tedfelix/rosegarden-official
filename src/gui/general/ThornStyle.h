@@ -20,7 +20,7 @@
 
 #include <QPlastiqueStyle>
 #include <QIcon>
-
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden
 {
@@ -29,7 +29,7 @@ namespace Rosegarden
 /** Subclass QPlastiqueStyle so we can define our own custom icons for
  * QMessageBox and so on and make them look better in the Thorn style.
  */
-class ThornStyle : public QPlastiqueStyle
+class ROSEGARDENPRIVATE_EXPORT ThornStyle : public QPlastiqueStyle
 {
     Q_OBJECT
 

@@ -28,35 +28,35 @@
 #include "base/PropertyName.h"
 #include "base/Exception.h"
 
+#include <rosegardenprivate_export.h>
+
 class QTextCodec;
 
 namespace Rosegarden
 {
 
-extern QString strtoqstr(const std::string &);
-extern QString strtoqstr(const Rosegarden::PropertyName &);
+extern ROSEGARDENPRIVATE_EXPORT QString strtoqstr(const std::string &);
+extern ROSEGARDENPRIVATE_EXPORT QString strtoqstr(const Rosegarden::PropertyName &);
 
-extern std::string qstrtostr(const QString &);
+extern ROSEGARDENPRIVATE_EXPORT std::string qstrtostr(const QString &);
 
-extern double strtodouble(const std::string &);
-extern double qstrtodouble(const QString &);
+extern ROSEGARDENPRIVATE_EXPORT double strtodouble(const std::string &);
+extern ROSEGARDENPRIVATE_EXPORT double qstrtodouble(const QString &);
 
-extern bool qStrToBool(const QString &s);
-extern bool qStrToBool(const QVariant &v);
+extern ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QString &s);
+extern ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QVariant &v);
 
-extern std::string qStrToStrLocal8(const QString &qstr);
-extern std::string qStrToStrUtf8(const QString &qstr);
+extern ROSEGARDENPRIVATE_EXPORT std::string qStrToStrLocal8(const QString &qstr);
+extern ROSEGARDENPRIVATE_EXPORT std::string qStrToStrUtf8(const QString &qstr);
 
-extern std::string convertFromCodec(std::string, QTextCodec *);
+extern ROSEGARDENPRIVATE_EXPORT std::string convertFromCodec(std::string, QTextCodec *);
 
-std::ostream &
-operator<<(std::ostream &, const QString &);
+ROSEGARDENPRIVATE_EXPORT std::ostream &operator<<(std::ostream &, const QString &);
 
-QTextStream &
-operator<<(QTextStream &, const std::string &);
+ROSEGARDENPRIVATE_EXPORT QTextStream &operator<<(QTextStream &, const std::string &);
 
 /// Split a string at whitespace, allowing for quoted substring sections
-extern QStringList splitQuotedString(QString s);
+extern ROSEGARDENPRIVATE_EXPORT QStringList splitQuotedString(QString s);
 
 }
 

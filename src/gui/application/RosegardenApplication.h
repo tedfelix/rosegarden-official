@@ -22,6 +22,7 @@
 #include <QByteArray>
 #include <QString>
 
+#include <rosegardenprivate_export.h>
 
 class QSessionManager;
 class QProcess;
@@ -38,12 +39,11 @@ namespace Rosegarden
  * Handles RosegardenMainWindow's perceived uniqueness for us.
  *
  */
-class RosegardenApplication : public QApplication
+class ROSEGARDENPRIVATE_EXPORT RosegardenApplication : public QApplication
 {
     Q_OBJECT
 public:
-    RosegardenApplication(int &argc, char **argv) :
-        QApplication(argc, argv) {}
+    RosegardenApplication(int &argc, char **argv);
 
     /**
      * Handle the attempt at creation of a new instance - 

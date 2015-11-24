@@ -23,10 +23,11 @@
 #include <QString>
 
 #include <map>
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden {
 
-class IconLoader
+class ROSEGARDENPRIVATE_EXPORT IconLoader
 {
 public:
     IconLoader() { }

@@ -5,7 +5,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Compiler definitions
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rosegarden-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegarden-version.h )
+configure_file(rosegarden-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegarden-version.h )
+
+# Export macros
+configure_file(rosegardenprivate_export.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegardenprivate_export.h)
+add_definitions(-DROSEGARDENPRIVATE_LIB_MAKEDLL)
 
 # Define the include paths (-I...)
 include_directories(

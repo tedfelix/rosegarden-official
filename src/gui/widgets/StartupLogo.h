@@ -22,10 +22,12 @@
 #include <QWidget>
 #include <QPixmap>
 
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden
 {
 
-class StartupLogo : public QWidget
+class ROSEGARDENPRIVATE_EXPORT StartupLogo : public QWidget
 {
     Q_OBJECT
 

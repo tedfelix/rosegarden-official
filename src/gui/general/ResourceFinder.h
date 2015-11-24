@@ -16,10 +16,11 @@
 #define RG_RESOURCE_FINDER_H
 
 #include <QString>
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden {
 	
-class ResourceFinder
+class ROSEGARDENPRIVATE_EXPORT ResourceFinder
 {
 public:
     ResourceFinder() { }

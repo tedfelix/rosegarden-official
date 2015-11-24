@@ -19,6 +19,8 @@
 #include <list>
 #include <map>
 
+#include <rosegardenprivate_export.h>
+
 #include "Event.h"
 
 /*
@@ -60,7 +62,7 @@
 namespace Rosegarden 
 {
 
-extern const int MIN_SUBORDERING;
+extern ROSEGARDENPRIVATE_EXPORT const int MIN_SUBORDERING;
 
 typedef std::list<int> DurationList;
 
@@ -77,16 +79,16 @@ typedef std::string Accidental;
 
 namespace Accidentals
 {
-    extern const Accidental NoAccidental;
-    extern const Accidental Sharp;
-    extern const Accidental Flat;
-    extern const Accidental Natural;
-    extern const Accidental DoubleSharp;
-    extern const Accidental DoubleFlat;
-    extern const Accidental QuarterFlat;
-    extern const Accidental ThreeQuarterFlat;
-    extern const Accidental QuarterSharp;
-    extern const Accidental ThreeQuarterSharp;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental NoAccidental;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental Sharp;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental Flat;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental Natural;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental DoubleSharp;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental DoubleFlat;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental QuarterFlat;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental ThreeQuarterFlat;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental QuarterSharp;
+    extern ROSEGARDENPRIVATE_EXPORT const Accidental ThreeQuarterSharp;
 
     typedef std::vector<Accidental> AccidentalList;
 
@@ -111,7 +113,7 @@ namespace Accidentals
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
      */
-    extern AccidentalList getStandardAccidentals();
+    extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
 
     /**
      * Get the change in pitch resulting from an accidental: -1 for
@@ -120,7 +122,7 @@ namespace Accidentals
      * effect of an accidental depends on the key as well -- see
      * the Key and Pitch classes.
      */
-    extern int getPitchOffset(const Accidental &accidental);
+    extern ROSEGARDENPRIVATE_EXPORT int getPitchOffset(const Accidental &accidental);
 
 
     /**
@@ -130,7 +132,7 @@ namespace Accidentals
      * Useful for tying to code that represents accidentals by 
      * their pitch change.
      */
-    extern Accidental getAccidental(int pitchChange);
+    extern ROSEGARDENPRIVATE_EXPORT Accidental getAccidental(int pitchChange);
 }
 
 
@@ -142,51 +144,51 @@ typedef std::string Mark;
   
 namespace Marks //!!! This would be better as a class, these days
 {
-    extern const Mark NoMark;         // " "
+    extern ROSEGARDENPRIVATE_EXPORT const Mark NoMark;         // " "
 
-    extern const Mark Accent;         // ">"
-    extern const Mark Tenuto;         // "-"  ("legato" in RG2.1)
-    extern const Mark Staccato;       // "."
-    extern const Mark Staccatissimo;  // "'"
-    extern const Mark Marcato;        // "^"
-    extern const Mark Open;           // "o"
-    extern const Mark Stopped;        // "+"
-    extern const Mark Harmonic;       // "°"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Accent;         // ">"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Tenuto;         // "-"  ("legato" in RG2.1)
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Staccato;       // "."
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Staccatissimo;  // "'"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Marcato;        // "^"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Open;           // "o"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Stopped;        // "+"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Harmonic;       // "°"
 
-    extern const Mark Sforzando;      // "sf"
-    extern const Mark Rinforzando;    // "rf"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Sforzando;      // "sf"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Rinforzando;    // "rf"
 
-    extern const Mark Trill;          // "tr"
-    extern const Mark LongTrill;      // with wiggly line
-    extern const Mark TrillLine;      // line on its own
-    extern const Mark Turn;           // "~"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Trill;          // "tr"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark LongTrill;      // with wiggly line
+    extern ROSEGARDENPRIVATE_EXPORT const Mark TrillLine;      // line on its own
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Turn;           // "~"
 
-    extern const Mark Pause;          // aka "fermata"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Pause;          // aka "fermata"
 
-    extern const Mark UpBow;          // "v"
-    extern const Mark DownBow;        // a square with the bottom side missing
+    extern ROSEGARDENPRIVATE_EXPORT const Mark UpBow;          // "v"
+    extern ROSEGARDENPRIVATE_EXPORT const Mark DownBow;        // a square with the bottom side missing
 
-    extern const Mark Mordent;
-    extern const Mark MordentInverted;
-    extern const Mark MordentLong;
-    extern const Mark MordentLongInverted;
+    extern ROSEGARDENPRIVATE_EXPORT const Mark Mordent;
+    extern ROSEGARDENPRIVATE_EXPORT const Mark MordentInverted;
+    extern ROSEGARDENPRIVATE_EXPORT const Mark MordentLong;
+    extern ROSEGARDENPRIVATE_EXPORT const Mark MordentLongInverted;
 
     /**
      * Given a string, return a mark that will be recognised as a
      * text mark containing that string.  For example, the Sforzando
      * mark is actually defined as getTextMark("sf").
      */
-    extern Mark getTextMark(std::string text);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getTextMark(std::string text);
 
     /**
      * Return true if the given mark is a text mark.
      */
-    extern bool isTextMark(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool isTextMark(Mark mark);
 
     /**
      * Extract the string from a text mark.
      */
-    extern std::string getTextFromMark(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT std::string getTextFromMark(Mark mark);
 
     /**
      * Given a string, return a mark that will be recognised as a
@@ -194,62 +196,62 @@ namespace Marks //!!! This would be better as a class, these days
      * instead of a number to permit "fingering" marks containing
      * labels like "+".)
      */
-    extern Mark getFingeringMark(std::string fingering);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark(std::string fingering);
 
     /**
      * Return true if the given mark is a fingering mark.
      */
-    extern bool isFingeringMark(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool isFingeringMark(Mark mark);
 
     /**
      * Extract the string from a fingering mark.
      */
-    extern std::string getFingeringFromMark(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT std::string getFingeringFromMark(Mark mark);
 
     /**
      * Return true if the given mark makes sense when applied to a rest.
      */
-    extern bool isApplicableToRests(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(Mark mark);
 
     /**
      * Extract the number of marks from an event.
      */
-    extern int getMarkCount(const Event &e);
+    extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
 
     /**
      * Extract the marks from an event.
      */
-    extern std::vector<Mark> getMarks(const Event &e);
+    extern ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getMarks(const Event &e);
 
     /**
      * Return the first fingering mark on an event (or NoMark, if none).
      */
-    extern Mark getFingeringMark(const Event &e);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark(const Event &e);
 
     /**
      * Add a mark to an event.  If unique is true, add the mark only
      * if the event does not already have it (otherwise permit
      * multiple identical marks).
      */
-    extern void addMark(Event &e, const Mark &mark, bool unique);
+    extern ROSEGARDENPRIVATE_EXPORT void addMark(Event &e, const Mark &mark, bool unique);
 
     /**
      * Remove a mark from an event.  Returns true if the mark was
      * there to remove.  If the mark was not unique, removes only
      * the first instance of it.
      */
-    extern bool removeMark(Event &e, const Mark &mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool removeMark(Event &e, const Mark &mark);
 
     /**
      * Returns true if the event has the given mark.
      */
-    extern bool hasMark(const Event &e, const Mark &mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool hasMark(const Event &e, const Mark &mark);
 
     /**
      * Get the predefined marks (i.e. the ones listed above) in their
      * defined order.
      */
-    extern std::vector<Mark> getStandardMarks();
+    extern ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getStandardMarks();
 }
 
 
@@ -259,7 +261,7 @@ namespace Marks //!!! This would be better as a class, these days
  * provides a few bits of information about the clefs.
  */
 
-class Clef
+class ROSEGARDENPRIVATE_EXPORT Clef
 {
 public:
     static const std::string EventType;
@@ -381,7 +383,7 @@ private:
  * transposing between keys.
  */
 
-class Key 
+class ROSEGARDENPRIVATE_EXPORT Key
 {
 public:
     static const std::string EventType;
@@ -774,7 +776,7 @@ private:
  * This completely replaces the older NotationDisplayPitch class. 
  */
 
-class Pitch
+class ROSEGARDENPRIVATE_EXPORT Pitch
 {
 public:
     /**
@@ -1031,7 +1033,7 @@ class TimeSignature;
  * note events.  You can construct one of these from either.
  */
 
-class Note
+class ROSEGARDENPRIVATE_EXPORT Note
 {
 public:
     static const std::string EventType;
@@ -1128,7 +1130,7 @@ private:
  * but only in the Composition's reference segment.
  */
 
-class TimeSignature
+class ROSEGARDENPRIVATE_EXPORT TimeSignature
 {
 public:
     static const TimeSignature DefaultTimeSignature;
@@ -1316,7 +1318,7 @@ private:
  * and call newBar() or newClef() when a new bar happens or a new
  * clef is encountered.
  */
-class AccidentalTable
+class ROSEGARDENPRIVATE_EXPORT AccidentalTable
 {
 public:
     enum OctaveType {
@@ -1377,7 +1379,7 @@ private:
  *
  * \author D. Michael McIntyre
  */
-class Symbol
+class ROSEGARDENPRIVATE_EXPORT Symbol
 {
 public:
     static const std::string EventType;

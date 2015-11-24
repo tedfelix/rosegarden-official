@@ -86,7 +86,7 @@ const std::string headerTagline = "tagline";
  * LilyPond scorefile export
  */
 
-class LilyPondExporter : public ProgressReporter
+class ROSEGARDENPRIVATE_EXPORT LilyPondExporter : public ProgressReporter
 {
     //Q_OBJECT
 public:

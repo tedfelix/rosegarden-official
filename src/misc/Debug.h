@@ -20,6 +20,7 @@
 #include <QTextStream>
 
 #include <string>
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden {
 
@@ -32,12 +33,12 @@ namespace Guitar {
     class Chord;
 }
 
-QDebug &operator<<(QDebug &, const std::string &);
-QDebug &operator<<(QDebug &, const Rosegarden::Event &);
-QDebug &operator<<(QDebug &, const Rosegarden::Segment &);
-QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
-QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
-QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const std::string &);
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Event &);
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Segment &);
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
 
 class RGNoDebug
 {

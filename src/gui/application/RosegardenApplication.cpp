@@ -36,8 +36,7 @@
 #include <QSettings>
 
 
-namespace Rosegarden
-{
+using namespace Rosegarden;
 
 static bool s_noSequencerMode = false;
 
@@ -87,10 +86,24 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
 
 }
 
+// to be outside the Rosegarden namespace
+static void initResources()
+{
+    // Initialize .qrc resources (necessary when using a static lib)
+    Q_INIT_RESOURCE(data);
+    Q_INIT_RESOURCE(locale);
+}
+
+RosegardenApplication::RosegardenApplication(int &argc, char **argv) :
+    QApplication(argc, argv) {
+
+    initResources();
+}
+
 void
 RosegardenApplication::refreshGUI(int /* maxTime */)
 {
-//    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |                 //&&& eventLoop()->processEvents()
+    //    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |                 //&&& eventLoop()->processEvents()
 //                               QEventLoop::ExcludeSocketNotifiers,
    //                            maxTime);
 }
@@ -125,6 +138,3 @@ RosegardenApplication::notify(QObject * receiver, QEvent * event)
         return false;
     }
 }
-
-}
-

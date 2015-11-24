@@ -19,12 +19,14 @@
 #include <iostream>
 #include <string>
 
+#include <rosegardenprivate_export.h>
+
 struct timeval;
 
 namespace Rosegarden 
 {
 
-struct RealTime
+struct ROSEGARDENPRIVATE_EXPORT RealTime
 {
     int sec;
     int nsec;
