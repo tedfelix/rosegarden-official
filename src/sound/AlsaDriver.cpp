@@ -13,6 +13,10 @@
   COPYING included with this distribution for more information.
 */
 
+#ifdef __GNUG__
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
+
 #define RG_MODULE_STRING "[AlsaDriver]"
 
 #include <iostream>
@@ -1783,7 +1787,7 @@ void
 AlsaDriver::initialisePlayback(const RealTime &position)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "\n\nAlsaDriver - initialisePlayback" << std::endl;
+    RG_DEBUG << "initialisePlayback() begin...";
 #endif
 
     // now that we restart the queue at each play, the origin is always zero
@@ -1805,29 +1809,23 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     // synchronise the sequencer with the clock.
     //
     if (getMIDISyncStatus() == TRANSPORT_MASTER) {
+
+        sendSystemDirect(SND_SEQ_EVENT_STOP, NULL);
+
         // Send the Song Position Pointer for MIDI CLOCK positioning
-        //
+
         // Get time from current alsa time to start of alsa timing -
         // add the initial starting point and divide by the MIDI Beat
         // length.  The SPP is is the MIDI Beat upon which to start the song.
         // Songs are always assumed to start on a MIDI Beat of 0. Each MIDI
         // Beat spans 6 MIDI Clocks. In other words, each MIDI Beat is a 16th
         // note (since there are 24 MIDI Clocks in a quarter note).
-        //
-        long spp =
+
+        int spp =
             lround(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
                   m_midiClockInterval) / 6.0 );
+        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, &spp);
 
-        // Ok now we have the new SPP - stop the transport and restart with the
-        // new value.
-        //
-        sendSystemDirect(SND_SEQ_EVENT_STOP, NULL);
-
-        signed int args = spp;
-        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, &args);
-
-        // Now send the START/CONTINUE
-        //
         if (m_playStartPosition == RealTime::zeroTime)
             sendSystemDirect(SND_SEQ_EVENT_START, NULL);
         else
@@ -1840,7 +1838,8 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         // behind by one MIDI clock.
 
         // Shift the ALSA clock to get a 2ms delay before starting playback.
-        m_alsaPlayStartTime = {0, 2000000};
+        m_alsaPlayStartTime.sec = 0;
+        m_alsaPlayStartTime.nsec = 2000000;
     }
 
     // Since the MTC message is queued, it needs to know that
