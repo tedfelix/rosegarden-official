@@ -20,6 +20,7 @@
 
 #include "gui/seqmanager/MappedEventBuffer.h"
 #include "sound/MappedEvent.h"
+#include "base/RealTime.h"
 
 #include <set>
 

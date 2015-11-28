@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MappedBufMetaIterator]"
+
 #include "MappedBufMetaIterator.h"
 
 #include "base/Profiler.h"
@@ -162,9 +164,7 @@ fetchEvents(MappedInserterBase &inserter,
 {
     Profiler profiler("MappedBufMetaIterator::fetchEvents", false);
 #ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "MBMI::fetchEvents "
-                    << startTime << " -> "
-                    << endTime << endl;
+    RG_DEBUG << "fetchEvents() " << startTime << " -> " << endTime;
 #endif
     // To keep mappers on the same channel from interfering, for
     // instance sending their initializations while another is playing
@@ -221,56 +221,67 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
                  const RealTime& endTime)
 {
 #ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting "
-                    << startTime << " -> "
-                    << endTime << endl;
+    RG_DEBUG << "fetchEventsNoncompeting() " << startTime << " -> " << endTime;
 #endif
     Profiler profiler("MappedBufMetaIterator::fetchEventsNoncompeting", false);
 
     m_currentTime = endTime;
     
-    // Activate segments that have anything playing during this
-    // slice.  We include segments that end exactly when we start, but
-    // not segments that start exactly when we end.
+    // For each segment, activate segments that have anything playing.
     for (segmentiterators::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) { 
-        RealTime start, end;
+        RealTime start;
+        RealTime end;
         (*i)->getSegment()->getStartEnd(start, end);
+
+        // Activate segments that have anything playing during this
+        // slice.  We include segments that end exactly when we start, but
+        // not segments that start exactly when we end.
         bool active = ((start < endTime) && (end >= startTime));
         (*i)->setActive(active, startTime);
     }
 
-    // State variable to allow the outer loop to run until the inner
-    // loop has nothing to do.
-    bool innerLoopHasMore = false;
-    do {
-        innerLoopHasMore = false;
+    // State variable to allow the outer (round-robin) loop to run until
+    // the inner (segment) loop has nothing to do.
+    bool segmentsHaveMore = false;
 
+    // For each pass through the segments.
+    // On each pass, we only process one event in each segment.
+    // ??? Why not process all the events in each segment?
+    //     for each segment
+    //         for each event
+    //             process the event
+    //         rof
+    //     rof
+    //     Is this round-robin approach intended to spread the locks out?
+    //     Is it really necessary?
+    //     Prior to the auto-channels feature, this routine was called
+    //     MappedSegmentsMetaIterator::fillCompositionWithEventsUntil().
+    //     It has always used this round-robin approach.
+    do {
+        segmentsHaveMore = false;
+
+        // For each segment, process only the first event.
         for (size_t i = 0; i < m_iterators.size(); ++i) {
             MappedEventBuffer::iterator *iter = m_iterators[i];
 
 #ifdef DEBUG_META_ITERATOR
-            SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : "
-                            << "checking segment #" << i << endl;
+            RG_DEBUG << "fetchEventsNoncompeting() : checking segment #" << i;
 #endif
 
+            // Skip any segments that aren't active.
             if (!iter->getActive()) {
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : "
-                                << "no more events to get for this slice"
-                                << "in segment #" << i << endl;
+                RG_DEBUG << "fetchEventsNoncompeting() : no more events to get for this slice in segment #" << i;
 #endif
 
-                continue; // skip this iterator
+                continue;
             }
 
             if (iter->atEnd()) {
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : "
-                                << endTime
-                                << " reached end of segment #"
-                                << i << endl;
+                RG_DEBUG << "fetchEventsNoncompeting() : " << endTime << " reached end of segment #" << i;
 #endif
                 // Make this iterator abort early in future
                 // iterations, since we know it's all done.
@@ -281,55 +292,56 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
             // This locks the iterator's buffer against writes, lest
             // writing cause reallocating the buffer while we are
             // holding a pointer into it.  No function we call will
-            // hold the `cur' pointer past its own scope, implying
+            // hold the `event' pointer past its own scope, implying
             // that nothing holds it past an iteration of this loop,
             // which is this lock's scope.
             QReadLocker locker(iter->getLock());
 
-            MappedEvent *cur = iter->peek();
+            MappedEvent *event = iter->peek();
 
             // We couldn't fetch an event or it failed a sanity check.
             // So proceed to the next iterator but keep looking at
             // this one - incrementing it does nothing useful, and it
-            // might get more events.  But don't set innerLoopHasMore,
+            // might get more events.  But don't set segmentsHaveMore,
             // lest we loop forever waiting for a valid event.
-            if (!cur || !cur->isValid()) { continue; }
+            if (!event || !event->isValid())
+                continue;
 
             // If we got this far, make the mapper ready.  Do this
             // even if the note won't play during this slice, because
             // sometimes/always we prepare channels slightly ahead of
             // their first notes, to fix bug #1378
-            if (!iter->isReady()) {
+            if (!iter->isReady())
                 iter->makeReady(inserter, startTime);
-            }
-            
-            if (cur->getEventTime() < endTime) {
+
+            // If this event starts prior to the end of the slice, take it.
+            if (event->getEventTime() < endTime) {
                 // Increment the iterator, since we're taking this
                 // event.  NB, in the other branch it is not yet used
                 // so we leave `iter' where it is.
                 ++(*iter);
-                
+
                 // If we got this far, we'll want to try the next
                 // iteration, so note it.
-                innerLoopHasMore = true;
+                segmentsHaveMore = true;
                 
 #ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : " << endTime
                                 << " seeing evt from segment #"
                                 << i
-                                << " : trackId: " << cur->getTrackId()
-                                << " channel: " << (unsigned int) cur->getRecordedChannel()
-                                << " - inst: " << cur->getInstrument()
-                                << " - type: " << cur->getType()
-                                << " - time: " << cur->getEventTime()
-                                << " - duration: " << cur->getDuration()
-                                << " - data1: " << (unsigned int)cur->getData1()
-                                << " - data2: " << (unsigned int)cur->getData2()
+                                << " : trackId: " << event->getTrackId()
+                                << " channel: " << (unsigned int) event->getRecordedChannel()
+                                << " - inst: " << event->getInstrument()
+                                << " - type: " << event->getType()
+                                << " - time: " << event->getEventTime()
+                                << " - duration: " << event->getDuration()
+                                << " - data1: " << (unsigned int)event->getData1()
+                                << " - data2: " << (unsigned int)event->getData2()
                                 << endl;
 #endif
 
-                if(iter->shouldPlay(cur, startTime)) {
-                    iter->doInsert(inserter, *cur);
+                if (iter->shouldPlay(event, startTime)) {
+                    iter->doInsert(inserter, *event);
 #ifdef DEBUG_META_ITERATOR
                     SEQUENCER_DEBUG << "Inserting event" << endl;
 #endif
@@ -350,7 +362,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
 #endif
             }
         }
-    } while (innerLoopHasMore);
+    } while (segmentsHaveMore);
 
     return;
 }
