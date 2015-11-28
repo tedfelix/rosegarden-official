@@ -56,29 +56,22 @@ echo "Checking out a clean copy of $URL (this will take some time)..."
 svn co $URL $outDir > /dev/null || puke "Unable to check out $URL!"
 cd $outDir || puke "Unable to change to $outDir!"
 
-echo "Rewriting version from $VERSION to $NEW_VERSION in configure.ac..."
+echo "Rewriting version from $VERSION to $NEW_VERSION in CMakeLists.txt..."
 # NOTE: . is a regex wildcard, but it does match a simple . so I've elected not
 # to bother with some hackery to escape it to \. here
 sed -i "s/$VERSION/$NEW_VERSION/" CMakeLists.txt
 
 # only set this if this is a final release
 if [ "$target" == "RELEASE" ]; then
-    sed -i "s/UNSTABLE/STABLE/" Makefile.in
+    sed -i "s/UNSTABLE/STABLE/" CMakeLists.txt
 fi
 
 echo "Purging unwanted files..."
 # templates/ and test/ are of no value to people doing an end use build
 rm -rf templates test
 
-# attic/ will be disappearing before the real release, but if it still exists,
-# remove it
-[ -d "attic" ] && rm -rf attic
-
 # remove all the .svn directories and their contents 
 find . -name \.svn|xargs rm -rf
-
-echo "Bootstrapping..."
-sh ./bootstrap.sh || "Bootstrapping failed!"
 
 cat > CONTRIBUTING << EOF
 This source tree is a release version that has been stripped of version-control
