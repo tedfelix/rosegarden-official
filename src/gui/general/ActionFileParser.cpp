@@ -395,6 +395,7 @@ ActionFileParser::findMenu(QString menuName)
             new ActionFileMenuWrapper(menu, m_actionOwner);
         }
     }
+    menu->setMouseTracking(true);
     return menu;
 }
 
@@ -424,6 +425,7 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
         }
         toolbar->setObjectName(toolbarName);
     }
+    toolbar->setMouseTracking(true);
     return toolbar;
 }
 
@@ -556,6 +558,8 @@ ActionFileParser::addMenuToMenu(QString parent, QString child)
     parentMenu->addMenu(childMenu);
     QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
     if (!mw) return false;
+    parentMenu->setMouseTracking(true);
+    childMenu->setMouseTracking(true);
     return true;
 }
 
@@ -569,6 +573,8 @@ ActionFileParser::addMenuToMenubar(QString menuName)
     QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
     if (!mw) return false;
     mw->menuBar()->addMenu(menu);
+    menu->setMouseTracking(true);
+    mw->menuBar()->setMouseTracking(true);
     return true;
 }
 
