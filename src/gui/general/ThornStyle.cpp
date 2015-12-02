@@ -24,7 +24,10 @@ namespace Rosegarden
 
 ThornStyle::ThornStyle()
 {
-    // ...
+}
+
+ThornStyle::~ThornStyle()
+{
 }
 
 QIcon
@@ -117,8 +120,8 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
     case SP_MediaVolumeMuted:
     case SP_CustomBase:
     default:
-        // let QPlastiqueStyle handle the rest
-        return QPlastiqueStyle::standardPixmap(standardIcon, option, parent);
+        // let the base class handle the rest
+        return QProxyStyle::standardPixmap(standardIcon, option, parent);
     }
 }
 

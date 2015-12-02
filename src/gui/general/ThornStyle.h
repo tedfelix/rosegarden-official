@@ -18,7 +18,7 @@
 #ifndef RG_THORN_STYLE_H
 #define RG_THORN_STYLE_H
 
-#include <QPlastiqueStyle>
+#include <QProxyStyle>
 #include <QIcon>
 #include <rosegardenprivate_export.h>
 
@@ -26,16 +26,16 @@ namespace Rosegarden
 {
 
 
-/** Subclass QPlastiqueStyle so we can define our own custom icons for
+/** Subclass a widget style so we can define our own custom icons for
  * QMessageBox and so on and make them look better in the Thorn style.
  */
-class ROSEGARDENPRIVATE_EXPORT ThornStyle : public QPlastiqueStyle
+class ROSEGARDENPRIVATE_EXPORT ThornStyle : public QProxyStyle
 {
     Q_OBJECT
 
 public:
     ThornStyle();
-    ~ThornStyle() { ; }
+    ~ThornStyle();
 
 protected slots:
     QIcon standardIconImplementation(StandardPixmap standardIcon,

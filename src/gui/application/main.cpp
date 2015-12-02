@@ -451,11 +451,11 @@ int main(int argc, char *argv[])
 
     std::cout << "Thorn - " << std::boolalpha << Thorn << std::endl;
 
-    // In order to ensure the Thorn style comes out right, we need to set our
-    // custom style, which is based on QPlastiqueStyle
-    if (Thorn) QApplication::setStyle(new ThornStyle);
+    RosegardenApplication theApp(argc, argv);
 
-    RosegardenApplication theApp(argc, argv);    
+    // In order to ensure the Thorn style comes out right, we need to set our
+    // custom style
+    if (Thorn) QApplication::setStyle(new ThornStyle);
 
     theApp.setOrganizationName("rosegardenmusic");
     theApp.setOrganizationDomain("rosegardenmusic.com");
