@@ -146,7 +146,7 @@ ControllerEventsRuler::init()
     for (Segment::iterator it = m_segment->begin();
             it != m_segment->end(); ++it) {
         if (isOnThisRuler(*it)) {
-            addControlItem(*it);
+            addControlItem2(*it);
         }
     }
     
@@ -306,7 +306,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
     //  add a ControlItem to display it
     // Note that ControlPainter will (01/08/09) add events directly
     //  these should not be replicated by this observer mechanism
-    if (isOnThisRuler(event) && !m_moddingSegment) addControlItem(event);
+    if (isOnThisRuler(event) && !m_moddingSegment) addControlItem2(event);
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
@@ -328,7 +328,7 @@ void ControllerEventsRuler::segmentDeleted(const Segment *)
     m_segment = 0;
 }
 
-ControlItem* ControllerEventsRuler::addControlItem(Event *event)
+ControlItem* ControllerEventsRuler::addControlItem2(Event *event)
 {
     EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(event), QPolygonF());
     controlItem->updateFromEvent();
@@ -337,7 +337,7 @@ ControlItem* ControllerEventsRuler::addControlItem(Event *event)
     return controlItem;
 }
 
-ControlItem* ControllerEventsRuler::addControlItem(float x, float y)
+ControlItem* ControllerEventsRuler::addControlItem2(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
     clearSelectedItems();

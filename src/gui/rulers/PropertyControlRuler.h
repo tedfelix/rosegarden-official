@@ -85,7 +85,7 @@ public slots:
     virtual void slotSetTool(const QString &);
 
 protected:
-    void addControlItem(ViewElement *);
+    void addControlItem2(ViewElement *);
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);

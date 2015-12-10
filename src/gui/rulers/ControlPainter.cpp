@@ -99,7 +99,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
                 }
             } else {
 
-                ControlItem *item = ruler->addControlItem(x,e->y);
+                ControlItem *item = ruler->addControlItem2(x,e->y);
                 ControlMouseEvent *newevent = new ControlMouseEvent(e);
                 newevent->itemList.push_back(item);
                 m_overItem = true;

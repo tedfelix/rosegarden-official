@@ -150,7 +150,7 @@ QString PropertyControlRuler::getName()
     return getPropertyName().c_str();
 }
 
-void PropertyControlRuler::addControlItem(ViewElement *el)
+void PropertyControlRuler::addControlItem2(ViewElement *el)
 {
 //    double x0 = el->getLayoutX();
 //    double x1 = el->getWidth() + x0;
@@ -207,7 +207,7 @@ void PropertyControlRuler::init()
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
 //        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
         if ((*it)->event()->isa(Note::EventType))
-            addControlItem(*it);
+            addControlItem2(*it);
 //        }
     }
     
@@ -298,7 +298,7 @@ void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 //    RG_DEBUG << "PropertyControlRuler::eventAdded()";
 //    addControlItem(el->event());
 //    if (MatrixElement *mel = dynamic_cast<MatrixElement*>(el)) {
-    addControlItem(el);
+    addControlItem2(el);
 //    }
 
     update();

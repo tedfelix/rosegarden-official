@@ -67,8 +67,8 @@ public:
     virtual void eventRemoved(const Segment *, Event *);
     virtual void segmentDeleted(const Segment *);
 
-    virtual ControlItem* addControlItem(float, float);
-    virtual ControlItem* addControlItem(Event *);
+    virtual ControlItem* addControlItem2(float, float);
+    virtual ControlItem* addControlItem2(Event *);
 
     /** Draw a line of controllers from (x1, y1) to (x2, y2).  If
      * eraseExistingControllers is true, any existing controllers falling within
