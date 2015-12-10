@@ -76,6 +76,10 @@ public:
                      const RealTime &end);
 
     /// Re-seek to current time on the iterator for this segment.
+    /**
+     * @param immediate means to reset it right away, presumably because
+     *   we are playing right now.
+     */
     void resetIteratorForSegment(MappedEventBuffer *s, bool immediate);
 
     void getAudioEvents(std::vector<MappedEvent> &);

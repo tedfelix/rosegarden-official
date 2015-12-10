@@ -26,7 +26,6 @@
 
 #include <queue>
 #include <functional>
-#include <iostream>
 
 //#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
@@ -230,12 +229,13 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
 void
 MappedBufMetaIterator::
 fetchEventsNoncompeting(MappedInserterBase &inserter,
-                 const RealTime& startTime,
-                 const RealTime& endTime)
+                 const RealTime &startTime,
+                 const RealTime &endTime)
 {
 #ifdef DEBUG_META_ITERATOR
     RG_DEBUG << "fetchEventsNoncompeting() " << startTime << " -> " << endTime;
 #endif
+
     Profiler profiler("MappedBufMetaIterator::fetchEventsNoncompeting", false);
 
     m_currentTime = endTime;
@@ -251,7 +251,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
         // Activate segments that have anything playing during this
         // slice.  We include segments that end exactly when we start, but
         // not segments that start exactly when we end.
-        bool active = ((start < endTime) && (end >= startTime));
+        bool active = (start < endTime  &&  end >= startTime);
         (*i)->setActive(active, startTime);
     }
 
@@ -317,7 +317,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
             // this one - incrementing it does nothing useful, and it
             // might get more events.  But don't set segmentsHaveMore,
             // lest we loop forever waiting for a valid event.
-            if (!event || !event->isValid())
+            if (!event  ||  !event->isValid())
                 continue;
 
             // If we got this far, make the mapper ready.  Do this
@@ -339,29 +339,27 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
                 segmentsHaveMore = true;
                 
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MBMI::fetchEventsNoncompeting : " << endTime
-                                << " seeing evt from segment #"
-                                << i
-                                << " : trackId: " << event->getTrackId()
-                                << " channel: " << (unsigned int) event->getRecordedChannel()
-                                << " - inst: " << event->getInstrument()
-                                << " - type: " << event->getType()
-                                << " - time: " << event->getEventTime()
-                                << " - duration: " << event->getDuration()
-                                << " - data1: " << (unsigned int)event->getData1()
-                                << " - data2: " << (unsigned int)event->getData2()
-                                << endl;
+                RG_DEBUG << "fetchEventsNoncompeting() : " << endTime
+                         << " seeing evt from segment #" << i
+                         << " : trackId: " << event->getTrackId()
+                         << " channel: " << (unsigned int) event->getRecordedChannel()
+                         << " - inst: " << event->getInstrument()
+                         << " - type: " << event->getType()
+                         << " - time: " << event->getEventTime()
+                         << " - duration: " << event->getDuration()
+                         << " - data1: " << (unsigned int)event->getData1()
+                         << " - data2: " << (unsigned int)event->getData2();
 #endif
 
                 if (iter->shouldPlay(event, startTime)) {
                     iter->doInsert(inserter, *event);
 #ifdef DEBUG_META_ITERATOR
-                    SEQUENCER_DEBUG << "Inserting event" << endl;
+                    RG_DEBUG << "  Inserting event";
 #endif
 
                 } else {
 #ifdef DEBUG_META_ITERATOR
-                    SEQUENCER_DEBUG << "Skipping event" << endl;
+                    RG_DEBUG << "  Skipping event";
 #endif
                 }
             } else {
@@ -370,8 +368,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
                 iter->setInactive();
 
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "fetchEventsNoncompeting : Event is past end for segment #"
-                                << i << endl;
+                RG_DEBUG << "fetchEventsNoncompeting() : Event is past end for segment #" << i;
 #endif
             }
         }
@@ -380,73 +377,77 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
     return;
 }
 
-// @param immediate means to reset it right away, presumably because
-// we are playing right now.
 void
 MappedBufMetaIterator::
-resetIteratorForSegment(MappedEventBuffer *s, bool immediate)
+resetIteratorForSegment(MappedEventBuffer *mappedEventBuffer, bool immediate)
 {
+    // For each segment
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
 
         MappedEventBuffer::iterator *iter = *i;
 
-        if (iter->getSegment() == s) {
+        // If we found it
+        if (iter->getSegment() == mappedEventBuffer) {
 
 #ifdef DEBUG_META_ITERATOR
-            SEQUENCER_DEBUG << "MBMI::resetIteratorForSegment("
-                            << s << ") : found iterator\n";
+            RG_DEBUG << "resetIteratorForSegment(" << mappedEventBuffer << ") : found iterator";
 #endif
+
             if (immediate) {
                 iter->reset();
                 moveIteratorToTime(*iter, m_currentTime);
             } else {
                 iter->setReady(false);
             }
+
             break;
         }
     }
 }
 
 void
-MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
+MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 {
-    v.clear();
+    audioEvents.clear();
 
+    // For each segment
     for (MappedSegments::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
-        MappedEventBuffer::iterator itr(*i);
+        MappedEventBuffer::iterator iter(*i);
 
-        while (!itr.atEnd()) {
+        // For each event
+        while (!iter.atEnd()) {
 
-            if ((*itr).getType() != MappedEvent::Audio) {
-                ++itr;
+            // Skip any non-Audio events.
+            if ((*iter).getType() != MappedEvent::Audio) {
+                ++iter;
                 continue;
             }
 
-            MappedEvent evt(*itr);
-            ++itr;
+            MappedEvent event(*iter);
+            ++iter;
 
-            if (ControlBlock::getInstance()->isTrackMuted(evt.getTrackId())) {
+            // If the track for this event is muted, try the next event.
+            if (ControlBlock::getInstance()->isTrackMuted(event.getTrackId())) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                std::cout << "MBMI::getAudioEvents - "
-                          << "track " << evt.getTrackId() << " is muted" << std::endl;
+                RG_DEBUG << "getAudioEvents() - " << "track " << event.getTrackId() << " is muted";
 #endif
                 continue;
             }
 
+            // If we're in solo mode and this event isn't on the solo track,
+            // try the next event.
             if (ControlBlock::getInstance()->isSolo() == true &&
-                evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
+                    event.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                std::cout << "MBMI::getAudioEvents - "
-                          << "track " << evt.getTrackId() << " is not solo track" << std::endl;
+                RG_DEBUG << "getAudioEvents() - " << "track " << event.getTrackId() << " is not solo track";
 #endif
-
                 continue;
             }
 
-            v.push_back(evt);
+            audioEvents.push_back(event);
         }
     }
 }
@@ -460,7 +461,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
     m_playingAudioSegments.clear();
 
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-    std::cout << "MBMI::getPlayingAudioFiles" << std::endl;
+    RG_DEBUG << "getPlayingAudioFiles()...";
 #endif
 
     for (MappedSegments::iterator i = m_segments.begin();
@@ -480,8 +481,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
             //
             if (ControlBlock::getInstance()->isTrackMuted(evt.getTrackId()) == true) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                std::cout << "MBMI::getPlayingAudioFiles - "
-                << "track " << evt.getTrackId() << " is muted" << std::endl;
+                RG_DEBUG << "  track " << evt.getTrackId() << " is muted";
 #endif
 
                 ++iter;
@@ -491,8 +491,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
             if (ControlBlock::getInstance()->isSolo() == true &&
                 evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                std::cout << "MBMI::getPlayingAudioFiles - "
-                << "track " << evt.getTrackId() << " is not solo track" << std::endl;
+                RG_DEBUG << "  track " << evt.getTrackId() << " is not solo track";
 #endif
 
                 ++iter;
@@ -506,18 +505,9 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
                 songPosition < evt.getEventTime() + evt.getDuration()) {
 
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                std::cout << "MBMI::getPlayingAudioFiles - "
-                          << "instrument id = " << evt.getInstrument()
-                          << std::endl;
-
-                std::cout << "MBMI::getPlayingAudioFiles - "
-                          << " id " << evt.getRuntimeSegmentId()
-                          << ", audio event time     = " << evt.getEventTime()
-                          << std::endl;
-
-                std::cout << "MBMI::getPlayingAudioFiles - "
-                          << "audio event duration = " << evt.getDuration()
-                          << std::endl;
+                RG_DEBUG << "  instrument id = " << evt.getInstrument();
+                RG_DEBUG << "  id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime();
+                RG_DEBUG << "  audio event duration = " << evt.getDuration();
 #endif // DEBUG_PLAYING_AUDIO_FILES
 
                 m_playingAudioSegments.push_back(evt);
@@ -526,7 +516,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
             ++iter;
         }
 
-        //std::cout << "END OF ITERATOR" << std::endl << std::endl;
+        //RG_DEBUG << "END OF ITERATOR\n";
     }
 
     return m_playingAudioSegments;
