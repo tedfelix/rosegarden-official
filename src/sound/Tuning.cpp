@@ -376,6 +376,10 @@ Tuning::Tuning(const std::string name,
                         if (it->second > m_size) {
                             qDebug() << "Spelling list does not match "
                                         "number of intervals!";
+                            // !!! This invalidates the iterator and will
+                            //     cause serious problems.  Recommend using
+                            //     the "increment before use" idiom.  Search
+                            //     the code for examples.
                             spellings->erase(it);
                         }
                     }
