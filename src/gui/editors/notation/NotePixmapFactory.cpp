@@ -15,6 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef __GNUG__
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
+
 #include "NotePixmapFactory.h"
 
 #include "misc/Debug.h"
@@ -2951,10 +2955,9 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
 }
 
 void
-NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
+NotePixmapFactory::drawBracket(int length, bool left, bool /*curly*/, int x, int y)
 {
     // curly mode not yet implemented
-    curly = curly;  // shut up compiler warning
 
     int thickness = getStemThickness() * 2;
 

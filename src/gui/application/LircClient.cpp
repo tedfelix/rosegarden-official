@@ -41,7 +41,8 @@ LircClient::LircClient(void)
     int socketFlags;
 
     // socket setup with nonblock
-    m_socket = lirc_init("rosegarden", 1);
+    char prog[] = "rosegarden";  // fixes compiler warning
+    m_socket = lirc_init(prog, 1);
     if (m_socket == -1) {
         throw Exception("Failed to connect to LIRC");
     }

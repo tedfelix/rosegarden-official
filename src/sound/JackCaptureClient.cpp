@@ -35,7 +35,8 @@ JackCaptureClient::JackCaptureClient( const char *captureClientName, int fs ) :
         m_frameSize(fs)
 {
     // Try to connect to Jack server
-    if ( (client = jack_client_new(captureClientName)) == 0 ) {
+    //if ( (client = jack_client_new(captureClientName)) == 0 ) {
+    if ( (client = jack_client_open(captureClientName, JackNullOption, NULL)) == 0 ) {
         return;
     }
 #if DEBUG_JACK_CAPTURE_CLIENT
