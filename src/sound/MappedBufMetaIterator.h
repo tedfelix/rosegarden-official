@@ -60,7 +60,7 @@ public:
     /// Delete all iterators and forget all segments
     void clear();
 
-    bool jumpToTime(const RealTime &);
+    void jumpToTime(const RealTime &);
 
     /// Fetch events from start to end into a mapped event list (via inserter).
     /**
@@ -110,8 +110,7 @@ private:
                                  const RealTime &start,
                                  const RealTime &end);
 
-    // ??? Move into MappedEventBuffer::iterator?
-    bool moveIteratorToTime(MappedEventBuffer::iterator &,
+    void moveIteratorToTime(MappedEventBuffer::iterator &,
                             const RealTime &);
 
     //--------------- Data members ---------------------------------

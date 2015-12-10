@@ -61,21 +61,24 @@ MappedBufMetaIterator::addSegment(MappedEventBuffer *mappedEventBuffer)
 }
 
 void
-MappedBufMetaIterator::removeSegment(MappedEventBuffer *ms)
+MappedBufMetaIterator::removeSegment(MappedEventBuffer *mappedEventBuffer)
 {
     // Remove from m_iterators
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
-        if ((*i)->getSegment() == ms) {
+        if ((*i)->getSegment() == mappedEventBuffer) {
             delete (*i);
-            // Now ms may not be a valid address.
+            // Now mappedEventBuffer may not be a valid address since the
+            // iterator we just deleted may have been the last "owner" of
+            // the MappedEventBuffer.  See MappedEventBuffer::iterator's
+            // dtor and MappedEventBuffer::removeOwner().
             m_iterators.erase(i);
             break;
         }
     }
 
     // Remove from m_segments
-    m_segments.erase(ms);
+    m_segments.erase(mappedEventBuffer);
 }
 
 void
@@ -84,95 +87,102 @@ MappedBufMetaIterator::clear()
     for (size_t i = 0; i < m_iterators.size(); ++i) {
         delete m_iterators[i];
     }
-
     m_iterators.clear();
+
     m_segments.clear();
 }
 
 void
 MappedBufMetaIterator::reset()
 {
-    m_currentTime.sec = m_currentTime.nsec = 0;
+    m_currentTime = RealTime::zeroTime;
 
+    // Reset each iterator.
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         (*i)->reset();
     }
 }
 
-bool
-MappedBufMetaIterator::jumpToTime(const RealTime &startTime)
+void
+MappedBufMetaIterator::jumpToTime(const RealTime &time)
 {
-    SEQUENCER_DEBUG << "jumpToTime(" << startTime << ")" << endl;
+    RG_DEBUG << "jumpToTime(" << time << ")";
 
     reset();
 
-    bool res = true;
-
-    m_currentTime = startTime;
+    m_currentTime = time;
 
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
-        if (!moveIteratorToTime(*(*i), startTime)) {
-            res = false;
-        }
+        moveIteratorToTime(**i, time);
     }
-
-    return res;
 }
 
-bool
+void
 MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
-                                               const RealTime &startTime)
+                                          const RealTime &time)
 {
+    // ??? Move this routine to MappedEventBuffer::iterator::moveTo(time).
+
     // Rather than briefly unlock and immediately relock each
     // iteration, we leave the lock on until we're done.
     QReadLocker locker(iter.getLock());
 
+    // For each event from the current iterator position
     while (1) {
-
-        if (iter.atEnd()) break;
+        if (iter.atEnd())
+            break;
 
         // We use peek because it's safe even if we have not fully
-        // filled the buffer yet.  That means we can get NULL e.
-        const MappedEvent *e = iter.peek();
-        
-        // If the event sounds past startTime, stop.  If e is NULL, we
-        // also stop because we know nothing about the event yet.
-        if (!e ||
-            e->getEventTime() + e->getDuration() >= startTime) {
+        // filled the buffer yet.  That means we can get NULL.
+        const MappedEvent *event = iter.peek();
+
+        // We know nothing about the event yet.  Stop here.
+        if (!event)
             break;
-        }
+
+#if 1
+        // If the event sounds past time, stop here.
+        // This will cause re-firing of events in progress.
+        if (event->getEventTime() + event->getDuration() >= time)
+            break;
+#else
+        // If the event starts on or after time, stop here.
+        // This will cause events in progress to be skipped.
+        if (event->getEventTime() >= time)
+            break;
+#endif
 
         ++iter;
     }
 
-    bool res = !iter.atEnd();
     iter.setReady(false);
-    return res;
 }
 
-
-
-
 void
-MappedBufMetaIterator::
-fetchEvents(MappedInserterBase &inserter,
-                               const RealTime& startTime,
-                               const RealTime& endTime)
+MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
+                                   const RealTime &startTime,
+                                   const RealTime &endTime)
 {
     Profiler profiler("MappedBufMetaIterator::fetchEvents", false);
+
 #ifdef DEBUG_META_ITERATOR
     RG_DEBUG << "fetchEvents() " << startTime << " -> " << endTime;
 #endif
+
     // To keep mappers on the same channel from interfering, for
     // instance sending their initializations while another is playing
-    // on the channel, we slice the timeslice into slices during which
-    // no new mappers start and pass each slice to
+    // on the channel, we divide the timeslice into sub-slices during which
+    // no new mappers start and pass each sub-slice to
     // fetchEventsNoncompeting.  We could re-slice it smarter but this
     // suffices.
 
     // Make a queue of all segment starts that occur during the slice.
+    // ??? Why not use std::set instead?  All this is doing is sorting
+    //     the start times.  std::vector and std::sort() should be another
+    //     option.  Using std::priority_queue implies there will be a
+    //     Compare predicate that is more interesting than std::greater.
     std::priority_queue<RealTime,
                         std::vector<RealTime>,
                         std::greater<RealTime> >
@@ -181,10 +191,13 @@ fetchEvents(MappedInserterBase &inserter,
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) {
-        RealTime start, end;
-        (*i)->getSegment()->getStartEnd(start, end); 
-        if ((start >= startTime) && (start < endTime))
-            { segStarts.push(start); }
+        RealTime start;
+        RealTime end;
+        (*i)->getSegment()->getStartEnd(start, end);
+        // If this segment's start is within the timeslice, add it
+        // to segStarts.
+        if (start >= startTime  &&  start < endTime)
+            segStarts.push(start);
     }
 
     // The progressive starting time, updated each iteration.
@@ -198,7 +211,8 @@ fetchEvents(MappedInserterBase &inserter,
         segStarts.pop();
         // If it starts exactly at innerStart, it doesn't need its own
         // slice.
-        if (innerEnd == innerStart) { continue; }
+        if (innerEnd == innerStart)
+            continue;
         // Get a slice from the previous end-time (or startTime) to
         // this new start-time.
         fetchEventsNoncompeting(inserter, innerStart, innerEnd);
