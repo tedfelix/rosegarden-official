@@ -498,16 +498,21 @@ protected:
     TransportSyncStatus          m_mtcStatus;
     MidiByte                     m_mmcId;      // device id
 
-    // MIDI clock interval
-    //
+    /// Whether we are sending MIDI Clocks (transport master).
+    /**
+     * ??? This is basically (m_midiSyncStatus == TRANSPORT_MASTER).  It is
+     *     likely redundant and m_midiSyncStatus can be used instead.
+     */
     bool                         m_midiClockEnabled;
+    /// 24 MIDI clocks per quarter note.  MIDI Spec section 2, page 30.
+    /**
+     * If the Composition has tempo changes, this single interval is
+     * insufficient.  We should instead compute SPP based on bar/beat/pulse
+     * from the Composition.  Since the GUI and sequencer are separated,
+     * the bar/beat/pulse values would need to be pushed in at play and
+     * record time.  See RosegardenSequencer::m_songPosition.
+     */
     RealTime                     m_midiClockInterval;
-    RealTime                     m_midiClockSendTime;
-
-    // MIDI Song Position pointer
-    //
-    long                         m_midiSongPositionPointer;
-
 };
 
 }

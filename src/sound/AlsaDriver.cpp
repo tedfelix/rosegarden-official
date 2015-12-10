@@ -1783,6 +1783,25 @@ AlsaDriver::initialiseAudio()
 #endif
 }
 
+int
+AlsaDriver::songPositionPointer(const RealTime &time)
+{
+    // The SPP is the MIDI Beat upon which to start the song.
+    // Songs are always assumed to start on a MIDI Beat of 0.  Each MIDI
+    // Beat spans 6 MIDI Clocks.  In other words, each MIDI Beat is a 16th
+    // note (since there are 24 MIDI Clocks in a quarter note).
+    // See the MIDI spec section 2, page 27.
+
+    // 24 MIDI clocks per quarter note.
+    // ??? This does not work if there are tempo changes.  See comments
+    //     on m_midiClockInterval.
+    const int midiClocks = lround(time / m_midiClockInterval);
+
+    // Convert to MIDI beats.  Round down to the previous MIDI beat to avoid
+    // skipping anything.
+    return midiClocks / 6;
+}
+
 void
 AlsaDriver::initialisePlayback(const RealTime &position)
 {
@@ -1814,17 +1833,30 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
         // Send the Song Position Pointer for MIDI CLOCK positioning
 
-        // Get time from current alsa time to start of alsa timing -
-        // add the initial starting point and divide by the MIDI Beat
-        // length.  The SPP is is the MIDI Beat upon which to start the song.
-        // Songs are always assumed to start on a MIDI Beat of 0. Each MIDI
-        // Beat spans 6 MIDI Clocks. In other words, each MIDI Beat is a 16th
-        // note (since there are 24 MIDI Clocks in a quarter note).
+        // Get time from current alsa time to start of alsa timing,
+        // add the initial starting point and convert to SPP.
+        // ??? It doesn't seem appropriate for ALSA time to figure into
+        //     the SPP computation.  SPP is relative only to Composition
+        //     time.
 
-        int spp =
-            lround(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
-                  m_midiClockInterval) / 6.0 );
+        int spp = songPositionPointer(
+                getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition);
         sendSystemDirect(SND_SEQ_EVENT_SONGPOS, &spp);
+
+        // ??? The computed SPP might be significantly different from
+        //     m_playStartPosition.  This will then knock us out of sync.
+        //     We need to adjust m_playStartPosition to match the SPP
+        //     exactly.  See Bug #1101.
+        //
+        //       m_playStartPosition = spp * 6 * m_midiClockInterval;
+        //
+        //     It's probably not safe to mess with m_playStartPosition
+        //     here.  We probably need to work our way up the call chain
+        //     to a safer place.
+        //
+        //     The workaround is to make sure you start playback on a
+        //     beat.  Hold down Ctrl while positioning the playback
+        //     position pointer.
 
         if (m_playStartPosition == RealTime::zeroTime)
             sendSystemDirect(SND_SEQ_EVENT_START, NULL);
@@ -4334,7 +4366,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
         if ((*i)->getType() == MappedEvent::SystemMIDIClock) {
             switch ((int)(*i)->getData1()) {
-            case 0:
+            case 0:  // MIDI Clock and System messages: Off
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "
@@ -4345,7 +4377,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 setMIDISyncStatus(TRANSPORT_OFF);
                 break;
 
-            case 1:
+            case 1:  // MIDI Clock and System messages: Send MIDI Clock, Start and Stop
                 m_midiClockEnabled = true;
 #ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "
@@ -4356,7 +4388,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 setMIDISyncStatus(TRANSPORT_MASTER);
                 break;
 
-            case 2:
+            case 2:  // MIDI Clock and System messages: Accept Start, Stop and Continue
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "

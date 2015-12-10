@@ -35,6 +35,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <string>
 
 namespace Rosegarden
 {
@@ -653,6 +654,9 @@ private:
      * bursts.
      */
     bool throttledDebug() const;
+
+    /// Compute SPP at or prior to time.
+    int songPositionPointer(const RealTime &time);
 };
 
 }
