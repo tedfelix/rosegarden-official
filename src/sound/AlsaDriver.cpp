@@ -1829,6 +1829,9 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     //
     if (getMIDISyncStatus() == TRANSPORT_MASTER) {
 
+        // Note: CakeWalk PA 9.03 doesn't like this.  This causes it to go out
+        //       of "Waiting for MIDI sync" mode, rendering MIDI sync
+        //       impossible.
         sendSystemDirect(SND_SEQ_EVENT_STOP, NULL);
 
         // Send the Song Position Pointer for MIDI CLOCK positioning
@@ -1838,6 +1841,10 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         // ??? It doesn't seem appropriate for ALSA time to figure into
         //     the SPP computation.  SPP is relative only to Composition
         //     time.
+
+        // Note: CakeWalk PA 9.03 does not adhere to the MIDI spec.  It treats
+        //       SPP 1 as the beginning of the song.  The spec says 0 is the
+        //       beginning.
 
         int spp = songPositionPointer(
                 getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition);
