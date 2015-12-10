@@ -386,17 +386,18 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
 
     while (k != preEventsInProgress.end()) {
 
-        eventendlist::iterator l(k);
-        ++l;
+        // Increment before use.  This avoids invalidating k if the element
+        // at l is erased.
+        eventendlist::iterator l(k++);
 
         // Handle and remove all the relevant events in value()
         // This assumes all deferred events are indications
 
         try {
-            Indication i(**k);
+            Indication i(**l);
 
             timeT indicationEnd =
-                (*k)->getNotationAbsoluteTime() + i.getIndicationDuration();
+                (*l)->getNotationAbsoluteTime() + i.getIndicationDuration();
             timeT eventEnd =
                 (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
 
@@ -415,7 +416,7 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
                     str << "\\ottava #0 ";
                 }
 
-                preEventsInProgress.erase(k);
+                preEventsInProgress.erase(l);
             }
 
         } catch (Event::BadType) {
@@ -424,8 +425,6 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
         } catch (Event::NoData e) {
             std::cerr << "Bad indication: " << e.getMessage() << std::endl;
         }
-
-        k = l;
     }
 }
 
@@ -438,17 +437,18 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
 
     while (k != postEventsInProgress.end()) {
 
-        eventendlist::iterator l(k);
-        ++l;
+        // Increment before use.  This avoids invalidating k if the element
+        // at l is erased.
+        eventendlist::iterator l(k++);
 
         // Handle and remove all the relevant events in value()
         // This assumes all deferred events are indications
 
         try {
-            Indication i(**k);
+            Indication i(**l);
 
             timeT indicationEnd =
-                (*k)->getNotationAbsoluteTime() + i.getIndicationDuration();
+                (*l)->getNotationAbsoluteTime() + i.getIndicationDuration();
             timeT eventEnd =
                 (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
 
@@ -468,7 +468,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                     str << "\\stopTrillSpan ";
                 }
 
-                postEventsInProgress.erase(k);
+                postEventsInProgress.erase(l);
             }
 
         } catch (Event::BadType) {
@@ -477,8 +477,6 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
         } catch (Event::NoData e) {
             std::cerr << "Bad indication: " << e.getMessage() << std::endl;
         }
-
-        k = l;
     }
 }
 
