@@ -21,12 +21,12 @@
 
 #include "base/Profiler.h"
 #include "misc/Debug.h"
-#include "sound/MappedEventList.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/ControlBlock.h"
 
 #include <queue>
 #include <functional>
+#include <iostream>
 
 //#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
@@ -34,9 +34,6 @@
 namespace Rosegarden
 {
 
-MappedBufMetaIterator::MappedBufMetaIterator()
-{
-}
 
 MappedBufMetaIterator::~MappedBufMetaIterator()
 {
@@ -44,19 +41,21 @@ MappedBufMetaIterator::~MappedBufMetaIterator()
 }
 
 void
-MappedBufMetaIterator::addSegment(MappedEventBuffer *ms)
+MappedBufMetaIterator::addSegment(MappedEventBuffer *mappedEventBuffer)
 {
-    // BUG #3546135
+    // BUG #1349 (was #3546135)
     // If we already have this segment, bail, or else we'll have two
     // iterators pointing to the same segment.  That will eventually
     // cause an access to freed memory and a subsequent crash.
     // This seems to happen when recording and we pass the end of the
     // composition.
-    if (m_segments.find(ms) != m_segments.end())
+    if (m_segments.find(mappedEventBuffer) != m_segments.end())
         return;
 
-    m_segments.insert(ms);
-    MappedEventBuffer::iterator *iter = new MappedEventBuffer::iterator(ms);
+    m_segments.insert(mappedEventBuffer);
+
+    MappedEventBuffer::iterator *iter =
+            new MappedEventBuffer::iterator(mappedEventBuffer);
     moveIteratorToTime(*iter, m_currentTime);
     m_iterators.push_back(iter);
 }
@@ -65,7 +64,7 @@ void
 MappedBufMetaIterator::removeSegment(MappedEventBuffer *ms)
 {
     // Remove from m_iterators
-    for (segmentiterators::iterator i = m_iterators.begin();
+    for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         if ((*i)->getSegment() == ms) {
             delete (*i);
@@ -95,7 +94,7 @@ MappedBufMetaIterator::reset()
 {
     m_currentTime.sec = m_currentTime.nsec = 0;
 
-    for (segmentiterators::iterator i = m_iterators.begin();
+    for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         (*i)->reset();
     }
@@ -112,7 +111,7 @@ MappedBufMetaIterator::jumpToTime(const RealTime &startTime)
 
     m_currentTime = startTime;
 
-    for (segmentiterators::iterator i = m_iterators.begin();
+    for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         if (!moveIteratorToTime(*(*i), startTime)) {
             res = false;
@@ -179,7 +178,7 @@ fetchEvents(MappedInserterBase &inserter,
                         std::greater<RealTime> >
         segStarts;
 
-    for (segmentiterators::iterator i = m_iterators.begin();
+    for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) {
         RealTime start, end;
@@ -228,7 +227,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
     m_currentTime = endTime;
     
     // For each segment, activate segments that have anything playing.
-    for (segmentiterators::iterator i = m_iterators.begin();
+    for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) { 
         RealTime start;
@@ -373,7 +372,7 @@ void
 MappedBufMetaIterator::
 resetIteratorForSegment(MappedEventBuffer *s, bool immediate)
 {
-    for (segmentiterators::iterator i = m_iterators.begin();
+    for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
 
         MappedEventBuffer::iterator *iter = *i;
@@ -400,7 +399,7 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
 {
     v.clear();
 
-    for (mappedsegments::iterator i = m_segments.begin();
+    for (MappedSegments::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
         MappedEventBuffer::iterator itr(*i);
@@ -438,7 +437,7 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
     }
 }
 
-
+#if 0
 std::vector<MappedEvent> &
 MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
 {
@@ -450,7 +449,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
     std::cout << "MBMI::getPlayingAudioFiles" << std::endl;
 #endif
 
-    for (mappedsegments::iterator i = m_segments.begin();
+    for (MappedSegments::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
         MappedEventBuffer::iterator iter(*i);
@@ -518,5 +517,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
 
     return m_playingAudioSegments;
 }
+#endif
+
 
 }
