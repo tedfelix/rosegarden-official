@@ -188,7 +188,7 @@ public:
 
     virtual std::string toXmlString() const;
 
-    virtual void refreshForConnection(void);
+    virtual void refreshForConnection(void)  { }
 
     // Accessors for recording property
     bool isRecording() {return m_recording; }
@@ -199,7 +199,7 @@ public:
 protected:
     void createInstruments(InstrumentId);
     void renameInstruments();
-    void conformInstrumentControllers(void);
+    //void conformInstrumentControllers(void);
 
     void generatePresentationList();
 

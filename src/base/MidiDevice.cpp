@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MidiDevice]"
+
 #include "MidiDevice.h"
 #include "sound/Midi.h"
 #include "base/AllocateChannels.h"
@@ -646,18 +648,6 @@ MidiDevice::toXmlString() const
     return midiDevice.str();
 }
 
-void
-MidiDevice::
-refreshForConnection(void)
-{
-    // !!! We cheat here: instead of checking beforehand which
-    // Instrument controllers have default values and changing them to
-    // the new defaults, we assume afterwards that zero values are
-    // probably leftover old defaults.
-    generateDefaultControllers();
-    conformInstrumentControllers();
-}
-
 // Only copy across non System instruments
 //
 InstrumentList
@@ -906,6 +896,7 @@ MidiDevice::replaceControlParameters(const ControlList &con)
     }
 }
 
+#if 0
 // Conform instrument controllers to a new setup.
 void
 MidiDevice::
@@ -944,6 +935,7 @@ conformInstrumentControllers(void)
         }
     }
 }
+#endif
 
 // Check to see if passed ControlParameter is unique.  Either the
 // type must be unique or in the case of Controller::EventType the
