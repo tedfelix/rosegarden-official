@@ -22,10 +22,10 @@
 #include "PlayListView.h"
 #include "PlayListViewItem.h"
 #include "misc/ConfigGroups.h"
+#include "gui/widgets/FileDialog.h"
 
 #include <QLayout>
 #include <QSettings>
-#include <QFileDialog>
 #include <QFrame>
 #include <QPushButton>
 #include <QString>
@@ -109,11 +109,10 @@ PlayList::~PlayList()
 
 void PlayList::slotOpenFiles()
 {
-    QStringList files = QFileDialog::getOpenFileNames( this, tr("Select one or more Rosegarden files"), QDir::currentPath(),
+    QStringList files = FileDialog::getOpenFileNames( this, tr("Select one or more Rosegarden files"), QDir::currentPath(),
                         tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                         tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
-//$$$ Typo here: Rosegaden --> Rosegarden
-                        tr("X11 Rosegaden files") + " (*.rose)" + ";;" +
+                        tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                         tr("All files") + " (*)", 0, 0 );
     
     QString fname;

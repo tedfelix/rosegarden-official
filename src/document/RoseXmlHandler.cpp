@@ -58,7 +58,6 @@
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
 
-#include <QFileDialog>
 #include <QMessageBox>
 #include <QByteArray>
 #include <QDataStream>

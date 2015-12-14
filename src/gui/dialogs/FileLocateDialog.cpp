@@ -23,7 +23,6 @@
 #include "misc/Debug.h"
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QFileDialog>
 #include <QFileInfo>
 #include <QLabel>
 #include <QString>

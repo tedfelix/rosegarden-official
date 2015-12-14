@@ -23,7 +23,6 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QCheckBox>
-#include <QFileDialog>
 #include <QSettings>
 
 #include <iterator>

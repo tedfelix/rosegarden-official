@@ -54,10 +54,10 @@
 #include "sound/WAVAudioFile.h"
 #include "UnusedAudioSelectionDialog.h"
 #include "document/Command.h"
+#include "gui/widgets/FileDialog.h"
 
 #include <QApplication>
 #include <QMainWindow>
-#include <QFileDialog>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QTreeWidgetItemIterator>
@@ -510,7 +510,7 @@ AudioManagerDialog::slotExportAudio()
     Segment *segment = item->getSegment();
 
     QString saveFile =
-            QFileDialog::getSaveFileName(this,
+            FileDialog::getSaveFileName(this,
                                          tr("Save File As"),
                                          QDir::currentPath(),
                                          tr("*.wav|WAV files (*.wav)"));
@@ -759,7 +759,7 @@ AudioManagerDialog::slotAdd()
               << qstrtostr(directory) << std::endl;
 
     QStringList urlList;
-    urlList = QFileDialog::getOpenFileNames(this, tr("Select one or more audio files"), directory, extensionList);
+    urlList = FileDialog::getOpenFileNames(this, tr("Select one or more audio files"), directory, extensionList);
 
     QDir d;
     for (int i = 0 ; i < urlList.size(); i++) {

@@ -1764,7 +1764,7 @@ BankEditorDialog::slotExport()
     QString dir = ResourceFinder().getResourceSaveDir("library");
 
     QString name =
-        QFileDialog::getSaveFileName(this,
+        FileDialog::getSaveFileName(this,
                                      tr("Export Device as..."),
                                      dir,
                                      (extension.isEmpty() ? QString("*") : ("*." + extension)));

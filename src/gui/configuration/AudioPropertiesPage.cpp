@@ -25,13 +25,12 @@
 #include "gui/general/FileSource.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
+#include "gui/widgets/FileDialog.h"
 
 #include <QSettings>
-#include <QFileDialog>
 #include <QFile>
 #include <QByteArray>
 #include <QDataStream>
-#include <QDialog>
 #include <QFrame>
 #include <QLabel>
 #include <QPushButton>
@@ -132,9 +131,9 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
 {
     m_diskSpace->setText(tr("%1 kB out of %2 kB (%3% kB used)")
                           //KIO::convertSizeFromKB
-			  .arg(kBAvail)
+              .arg(kBAvail)
                           //KIO::convertSizeFromKB
-			  .arg(kBSize)
+              .arg(kBSize)
                           .arg(100 - (int)(100.0 * kBAvail / kBSize) ));
 
 
@@ -162,26 +161,12 @@ AudioPropertiesPage::slotFileDialog()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    QFileDialog *fileDialog = new QFileDialog(this, tr("Audio Recording Path"), afm.getAudioPath());
-	fileDialog->setFileMode( QFileDialog::Directory );
+    QStringList selectedFiles = FileDialog::getOpenFileNames(this, tr("Audio Recording Path"), afm.getAudioPath());
 
-// Interestingly enough, these slots didn't exist in stable_1_7 either, and
-// nobody ever noticed the Qt runtime warnings.
-//
-//    connect(fileDialog, SIGNAL(fileSelected(const QString&)),
-//            SLOT(slotFileSelected(const QString&)));
-//
-//    connect(fileDialog, SIGNAL(destroyed()),
-//            SLOT(slotDirectoryDialogClosed()));
-
-    if (fileDialog->exec() == QDialog::Accepted) {
-        QStringList selectedFiles = fileDialog->selectedFiles();
-        if (!selectedFiles.isEmpty()) {
-            m_path->setText(selectedFiles[0]);
-        }
-        calculateStats();
+    if (!selectedFiles.isEmpty()) {
+        m_path->setText(selectedFiles[0]);
     }
-    delete fileDialog;
+    calculateStats();
 }
 
 void

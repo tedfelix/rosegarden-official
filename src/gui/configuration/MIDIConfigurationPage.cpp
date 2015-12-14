@@ -35,10 +35,10 @@
 #include "TabbedConfigurationPage.h"
 #include "misc/Debug.h"
 #include "gui/widgets/LineEdit.h"
+#include "gui/widgets/FileDialog.h"
 
 #include <QComboBox>
 #include <QSettings>
-#include <QFileDialog>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QByteArray>
@@ -318,7 +318,7 @@ MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
 void
 MIDIConfigurationPage::slotSfxLoadPathChoose()
 {
-    QString path = QFileDialog::getOpenFileName(this, tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
+    QString path = FileDialog::getOpenFileName(this, tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
 
     m_sfxLoadPath->setText(path);
 }
@@ -326,7 +326,7 @@ MIDIConfigurationPage::slotSfxLoadPathChoose()
 void
 MIDIConfigurationPage::slotSoundFontChoose()
 {
-    QString path = QFileDialog::getOpenFileName(this, tr("Soundfont path"), QDir::currentPath(),
+    QString path = FileDialog::getOpenFileName(this, tr("Soundfont path"), QDir::currentPath(),
                    tr("Sound fonts") + " (*.sb *.sf2 *.SF2 *.SB)" + ";;" +
                    tr("All files") + " (*)" ); // ":SOUNDFONTS"
 
