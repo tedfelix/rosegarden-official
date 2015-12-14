@@ -235,8 +235,8 @@ FileDialog::getExistingDirectory(QWidget *parent,
 
     // (code adapted from Qt 4 Git repository (c) 2012 Digia)
     FileDialog dialog(parent, caption, dir);
-    dialog.setOption(QFileDialog::ShowDirsOnly, true);
     dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly, true);
 
     if (dialog.exec() == QDialog::Accepted) {
         return dialog.selectedFiles().value(0);
