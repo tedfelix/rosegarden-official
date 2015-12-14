@@ -1429,7 +1429,7 @@ AudioMixerWindow::slotSetSubmasterCountFromAction()
         if (count + 1 < current) {
 
             BussList::iterator it = busses.end();
-            it--;  // Now this actually points to something
+            --it;  // Now this actually points to something
 
             while (count + 1 < current--) {
                 m_studio->removeBuss((*it--)->getId());
@@ -1438,7 +1438,7 @@ AudioMixerWindow::slotSetSubmasterCountFromAction()
         } else {
 
             BussList::iterator it = busses.end();
-            it--;
+            --it;
             unsigned int lastId = (*it)->getId();
 
             while (count + 1 > current++) {

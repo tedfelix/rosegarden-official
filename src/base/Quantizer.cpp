@@ -266,7 +266,7 @@ Quantizer::unquantize(EventSelection *selection) const
     Rosegarden::EventSelection::eventcontainer::iterator it
         = selection->getSegmentEvents().begin();
 
-    for (; it != selection->getSegmentEvents().end(); it++) {
+    for (; it != selection->getSegmentEvents().end(); ++it) {
 
 	if (m_target == RawEventData || m_target == NotationPrefix) {
 

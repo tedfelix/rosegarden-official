@@ -590,6 +590,7 @@ RIFFAudioFile::identifySubType(const QString &filename)
         type = UNKNOWN;
 
     testFile->close();
+    delete testFile;
     delete [] bytes;
 
     return type;

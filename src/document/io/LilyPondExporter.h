@@ -307,13 +307,13 @@ private:
     }
     int gcd(int a, int b) {
 	// Euclid's algorithm to find the greatest common divisor
-	while ( 1 ) {
-	    int r = a % b;
-	    if ( r == 0 )
-		return (b == 0 ? 1 : b);
-	    a = b;
-	    b = r; 
+        int t = 0;
+	while ( b != 0) {
+	    t = b;
+            b = a % b;
+            a = t;
 	}
+        return a;
     }
 };
 

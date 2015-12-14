@@ -802,7 +802,7 @@ typedef std::vector<RelativeEvent *> RelativeEventVec;
 int higherPitch(Event *a, Event* b)
 {
     if (!a->has(BaseProperties::PITCH) ||
-        !a->has(BaseProperties::PITCH)) {
+        !b->has(BaseProperties::PITCH)) {
         throw Exception("Shouldn't get a note that has no pitch.");
     }
 

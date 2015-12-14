@@ -1477,7 +1477,7 @@ MusicXmlExportHelper::retrieve(bool direction, timeT time)
         }
     }
     for (std::vector<std::vector<SimpleQueue>::iterator>::iterator i = toErase.begin();
-         i != toErase.end(); i++) {
+         i != toErase.end(); ++i) {
         tmp_queue.erase(*i);
     }
 
