@@ -730,6 +730,7 @@ QMenuBar,
 #App QMenuBar
 {
     background-color: #404040;
+    padding: 4px;
 }
 
 QMenuBar::item,
