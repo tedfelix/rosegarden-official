@@ -7350,20 +7350,23 @@ RosegardenMainWindow::slotTempoViewClosed()
 void
 RosegardenMainWindow::slotControlEditorClosed()
 {
-    const QObject *s = sender();
+    RG_DEBUG << "slotControlEditorClosed()";
 
-    RG_DEBUG << "RosegardenMainWindow::slotControlEditorClosed" << endl;
+    // Make sure changes get to the UI.
+    uiUpdateKludge();
+
+    const QObject *s = sender();
 
     for (std::set<ControlEditorDialog *>::iterator i = m_controlEditors.begin();
          i != m_controlEditors.end(); ++i) {
         if (*i == s) {
             m_controlEditors.erase(i);
-            RG_DEBUG << "removed control editor dialog, have " << m_controlEditors.size() << " left" << endl;
+            RG_DEBUG << "removed control editor dialog, have " << m_controlEditors.size() << " left";
             return ;
         }
     }
 
-    std::cerr << "WARNING: control editor " << s << " closed, but couldn't find it in our control editor list (we have " << m_controlEditors.size() << " editors)" << std::endl;
+    RG_WARNING << "WARNING: control editor " << s << " closed, but couldn't find it in our control editor list (we have " << m_controlEditors.size() << " editors)";
 }
 
 void
