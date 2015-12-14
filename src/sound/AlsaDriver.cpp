@@ -3587,6 +3587,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         SequencerDataBlock::getInstance()->setVisual(*mC.begin());
     }
 
+    // A pointer to this is extracted from it and placed in "event".
+    // We need this to stay alive so that the pointer continues to
+    // be valid until "event" is finally used.  It might be possible to
+    // move this to a smaller scope, but this loop is really big and
+    // hard to follow.
+    std::string sysExData;
+
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
     // For each incoming mapped event
@@ -3850,16 +3857,18 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             case MIDI_SYSTEM_EXCLUSIVE: {
                 char out[2];
                 sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
-                std::string data = out;
+                sysExData = out;
 
-                data += DataBlockRepository::getDataBlockForEvent((*i));
+                sysExData += DataBlockRepository::getDataBlockForEvent((*i));
 
                 sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
-                data += out;
+                sysExData += out;
 
+                // Note: sysExData needs to stay around until this event
+                //   is actually sent.  event has a pointer to its contents.
                 snd_seq_ev_set_sysex(&event,
-                                     data.length(),
-                                     (char*)(data.c_str()));
+                                     sysExData.length(),
+                                     (char*)(sysExData.c_str()));
             }
                 break;
 
