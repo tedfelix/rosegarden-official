@@ -161,10 +161,10 @@ AudioPropertiesPage::slotFileDialog()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    QStringList selectedFiles = FileDialog::getOpenFileNames(this, tr("Audio Recording Path"), afm.getAudioPath());
+    QString selectedDirectory = FileDialog::getExistingDirectory(this, tr("Audio Recording Path"), afm.getAudioPath());
 
-    if (!selectedFiles.isEmpty()) {
-        m_path->setText(selectedFiles[0]);
+    if (!selectedDirectory.isEmpty()) {
+        m_path->setText(selectedDirectory);
     }
     calculateStats();
 }

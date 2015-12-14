@@ -219,6 +219,30 @@ FileDialog::getSaveFileName(QWidget *parent,
     return QString();
 }
 
+QString
+FileDialog::getExistingDirectory(QWidget *parent,
+                                 const QString &caption,
+                                 const QString &dir)
+{
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
+    if (!Thorn) {
+        return QFileDialog::getExistingDirectory(parent, caption, dir, QFileDialog::ShowDirsOnly);
+    }
+
+    // (code adapted from Qt 4 Git repository (c) 2012 Digia)
+    FileDialog dialog(parent, caption, dir);
+    dialog.setOption(QFileDialog::ShowDirsOnly, true);
+    dialog.setFileMode(QFileDialog::Directory);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        return dialog.selectedFiles().value(0);
+    }
+    return QString();    
+}
 
 }
 

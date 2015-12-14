@@ -75,6 +75,16 @@ public:
                                    QString *selectedFilter = 0,
                                    QFileDialog::Options options = 0);
 
+    /**
+     * Subclass of QFileDialog::getExistingDirectory() specifically to get an
+     * existing directory, eg. an audio path.  This version has several details
+     * hard coded in the implementation, and is less flexible than the full
+     * QFileDialog version.
+     */
+    static QString getExistingDirectory(QWidget *parent = 0,
+                                        const QString &caption = QString(),
+                                        const QString &dir = QString());
+
 protected:
     explicit FileDialog(QWidget *parent = 0,
                         const QString &caption = QString(),
