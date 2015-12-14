@@ -127,6 +127,12 @@ ConfigureDialogBase::slotActivateApply()
 }
 
 void
+ConfigureDialogBase::deactivateApply()
+{
+    m_applyButton->setEnabled(false);
+}
+
+void
 ConfigureDialogBase::accept()
 {
     slotApply();

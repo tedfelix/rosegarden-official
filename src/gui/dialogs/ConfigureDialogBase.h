@@ -49,15 +49,18 @@ public:
     void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
 
     void setPageByIndex(int index);
-    
+
 protected slots:
-    
     virtual void accept();
     virtual void slotApply();
     virtual void slotCancelOrClose();
     virtual void slotHelpRequested();
 
+public slots:
     virtual void slotActivateApply();
+
+public:
+    void deactivateApply();
 
 protected:
 

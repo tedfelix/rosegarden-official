@@ -32,6 +32,7 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class HeadersConfigurationPage;
+class CommentsConfigurationPage;
 
 /**
  * Document Meta-information page
@@ -68,6 +69,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     HeadersConfigurationPage *m_headersPage;
+    CommentsConfigurationPage *m_commentsPage;
 };
 
 

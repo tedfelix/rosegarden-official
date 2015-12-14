@@ -56,7 +56,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
         QString windowCaption,
         QString /* heading */,
         bool createdFromNotationEditor):
-        QDialog(parent),
+    QDialog(parent),
     m_doc(doc),
     m_createdFromNotationEditor(createdFromNotationEditor)
 {

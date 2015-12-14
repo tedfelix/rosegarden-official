@@ -34,6 +34,8 @@
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
+#include "gui/configuration/CommentsConfigurationPage.h"
+#include "gui/dialogs/ConfigureDialogBase.h"
 #include "gui/general/GUIPalette.h"
 
 #include <QSettings>
@@ -60,35 +62,41 @@ public:
 
     virtual QString key() const {
 
-    // It doesn't seem to be possible to specify a comparator so
-    // as to get the right sorting for numeric items (what am I
-    // missing here?), only to override this function to return a
-    // string for comparison.  So for integer items we'll return a
-    // string that starts with a single digit corresponding to the
-    // number of digits in the integer, which should ensure that
-    // dictionary sorting works correctly.
-    // 
-    // This relies on the assumption that any item whose text
-    // starts with a digit will contain nothing other than a
-    // single non-negative integer of no more than 9 digits.  That
-    // assumption should hold for all current uses of this class,
-    // but may need checking for future uses...
+        // It doesn't seem to be possible to specify a comparator so
+        // as to get the right sorting for numeric items (what am I
+        // missing here?), only to override this function to return a
+        // string for comparison.  So for integer items we'll return a
+        // string that starts with a single digit corresponding to the
+        // number of digits in the integer, which should ensure that
+        // dictionary sorting works correctly.
+        // 
+        // This relies on the assumption that any item whose text
+        // starts with a digit will contain nothing other than a
+        // single non-negative integer of no more than 9 digits.  That
+        // assumption should hold for all current uses of this class,
+        // but may need checking for future uses...
 
-    QString s(text());
-    if (s[0].digitValue() >= 0) {
-        return QString("%1%2").arg(s.length()).arg(s);
-    } else {
-        return s;
-    }
+        QString s(text());
+        if (s[0].digitValue() >= 0) {
+            return QString("%1%2").arg(s.length()).arg(s);
+        } else {
+            return s;
+        }
     }
 };
 
-DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument *doc,
+DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
+        RosegardenDocument *doc,
         QWidget *parent) :
-        TabbedConfigurationPage(doc, parent)
+    TabbedConfigurationPage(doc, parent)
 {
-    m_headersPage = new HeadersConfigurationPage(this, doc);
+    m_headersPage = new HeadersConfigurationPage(this, doc,
+                            static_cast<ConfigureDialogBase * >(parent));
     addTab(m_headersPage, tr("Headers"));
+    
+    m_commentsPage = new CommentsConfigurationPage(this, doc,
+                            static_cast<ConfigureDialogBase * >(parent));
+    addTab(m_commentsPage, tr("Notes"));
 
     Composition &comp = doc->getComposition();
     std::set
@@ -315,7 +323,19 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument 
 void
 DocumentMetaConfigurationPage::apply()
 {
+    Configuration &metadata = m_doc->getComposition().getMetadata();
+    const Configuration origmetadata = metadata;
+
+    // Clear the metadata
+    metadata.clear();
+
+    // and recreate them from the currently edited values
     m_headersPage->apply();
+    m_commentsPage->apply();
+
+    if (metadata != origmetadata) {
+        m_doc->slotDocumentModified();
+    }
 }
 
 }

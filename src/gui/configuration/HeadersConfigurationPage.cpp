@@ -27,6 +27,8 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/widgets/LineEdit.h"
+#include "gui/configuration/CommentsConfigurationPage.h"
+#include "gui/dialogs/ConfigureDialogBase.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -48,10 +50,12 @@
 namespace Rosegarden
 {
 
-HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
-    RosegardenDocument *doc) :
+HeadersConfigurationPage::HeadersConfigurationPage(
+        QWidget *parent, RosegardenDocument *doc,
+        ConfigureDialogBase *parentDialog) :
     QWidget(parent),
-    m_doc(doc)
+    m_doc(doc),
+    m_parentDialog(parentDialog)
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -74,84 +78,123 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     std::vector<std::string> propertyNames = metadata.getPropertyNames();
     std::vector<PropertyName> fixedKeys = CompositionMetadataKeys::getFixedKeys();
 
+    // Fixed keys without value are not in propertyNames. Add them.
+    for (unsigned int i = 0; i < fixedKeys.size(); i++) {
+        std::string key = fixedKeys[i].getName();
+        bool found = false;
+        for (unsigned int j = 0; j < propertyNames.size(); ++j) {
+            if (key == propertyNames[j]) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            propertyNames.push_back(key);
+        }
+    }
+
     std::set<std::string> shown;
 
-    for (unsigned int index = 0; index < fixedKeys.size(); index++) {
-        std::string key = fixedKeys[index].getName();
-        std::string header = "";
+    for (unsigned int i = 0; i < propertyNames.size(); ++i) {
+        std::string property = propertyNames[i];
         QString headerStr("");
-        for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-            std::string property = propertyNames [i];
+        std::string key = "";
+        std::string header = "";
+        bool found = false;
+        
+        for (unsigned int index = 0; index < fixedKeys.size(); index++) {
+            key = fixedKeys[index].getName();
             if (property == key) {
-
                 // get the std::string from metadata
-                header = strtoqstr(metadata.get<String>(property)).toStdString();
-
+                std::string value = "";
+                try { value = metadata.get<String>(property);
+                } catch (Configuration::NoData) {
+                    value = "";
+                }
+                header = value;
                 //@@@ dtb: tr() only works with char* now, so I'm going to try
                 // using header directly instead of a QString version of header.
-                headerStr = QObject::tr(header.c_str());
+                headerStr = QObject::trUtf8(header.c_str());
+                found = true;
+                break;
             }
+        }
+
+        if (!found) {
+            if (strtoqstr(property).
+                    startsWith(CommentsConfigurationPage::commentsKeyBase)) {
+                // This metadata is a comment line
+                shown.insert(property); // remember it
+            }
+
+            // Don't process here properties which are not a LilyPond header
+            continue;
         }
 
         unsigned int row = 0, col = 0, width = 1;
         LineEdit *editHeader = new LineEdit(headerStr, frameHeaders);
+        if (m_parentDialog) {
+            connect(editHeader, SIGNAL(textEdited(QString)),
+                    m_parentDialog, SLOT(slotActivateApply()));
+        }
         QString trName;
-        if (key == headerDedication) {
+        if (key == headerDedication) {  
             m_editDedication = editHeader;
             row = 0; col = 2; width = 2;
             trName = tr("Dedication");
-        } else if (key == headerTitle) {
-            m_editTitle = editHeader;
+        } else if (key == headerTitle) {       
+            m_editTitle = editHeader;    
             row = 1; col = 1; width = 4;
             trName = tr("Title");
         } else if (key == headerSubtitle) {
             m_editSubtitle = editHeader;
             row = 2; col = 1; width = 4;
             trName = tr("Subtitle");
-        } else if (key == headerSubsubtitle) {
+        } else if (key == headerSubsubtitle) { 
             m_editSubsubtitle = editHeader;
             row = 3; col = 2; width = 2;
             trName = tr("Subsubtitle");
-        } else if (key == headerPoet) {
+        } else if (key == headerPoet) {        
             m_editPoet = editHeader;
             row = 4; col = 0; width = 2;
             trName = tr("Poet");
-        } else if (key == headerInstrument) {
+        } else if (key == headerInstrument) {  
             m_editInstrument = editHeader;
             row = 4; col = 2; width = 2;
             trName = tr("Instrument");
-        } else if (key == headerComposer) {
+        } else if (key == headerComposer) {    
             m_editComposer = editHeader;
-            row = 4; col = 4; width = 2;
+            row = 4; col = 4; width = 2; 
             trName = tr("Composer");
-        } else if (key == headerMeter) {
+        } else if (key == headerMeter) {       
             m_editMeter = editHeader;
-            row = 5; col = 0; width = 3;
+            row = 5; col = 0; width = 3; 
             trName = tr("Meter");
-        } else if (key == headerArranger) {
+        } else if (key == headerArranger) {    
             m_editArranger = editHeader;
-            row = 5; col = 3; width = 3;
+            row = 5; col = 3; width = 3; 
             trName = tr("Arranger");
-        } else if (key == headerPiece) {
+        } else if (key == headerPiece) {       
             m_editPiece = editHeader;
-            row = 6; col = 0; width = 3;
+            row = 6; col = 0; width = 3; 
             trName = tr("Piece");
-        } else if (key == headerOpus) {
+        } else if (key == headerOpus) {        
             m_editOpus = editHeader;
-            row = 6; col = 3; width = 3;
+            row = 6; col = 3; width = 3; 
             trName = tr("Opus");
-        } else if (key == headerCopyright) {
+        } else if (key == headerCopyright) {   
             m_editCopyright = editHeader;
-            row = 8; col = 1; width = 4;
+            row = 8; col = 1; width = 4; 
             trName = tr("Copyright");
-        } else if (key == headerTagline) {
+        } else if (key == headerTagline) {     
             m_editTagline = editHeader;
-            row = 9; col = 1; width = 4;
+            row = 9; col = 1; width = 4; 
             trName = tr("Tagline");
         }
 
         // editHeader->setReadOnly(true);
-        editHeader->setAlignment((col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter)));
+        editHeader->setAlignment((col == 0 ? Qt::AlignLeft :
+                            (col >= 3 ? Qt::AlignRight : Qt::AlignCenter)));
 
         layoutHeaders->addWidget(editHeader, row, col, 1, width);
 
@@ -162,8 +205,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         // from the external sheet and the internal hard coded stylesheet in the
         // subclass LineEdit.  I guess I should have re-implemented QLineEdit
         // instead of subclassing it.
-        QString localStyle("QToolTip {background-color: #FFFBD4; color: #000000;} QLineEdit {background-color: #FFFFFF; color: #000000;}");
-        editHeader->setStyleSheet(localStyle);
+        QString localStyle("QToolTip {background-color: #FFFBD4; color: #000000;}"
+                           " QLineEdit {background-color: #FFFFFF; color: #000000;}");
+        editHeader->setStyleSheet(localStyle); 
         editHeader->setToolTip(trName);
 
         shown.insert(key);
@@ -207,11 +251,15 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     layoutOtherHeaders->setSpacing(5);
 
     m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
+    if (m_parentDialog) {
+        connect(m_metadata, SIGNAL(cellChanged(int, int)),
+                m_parentDialog, SLOT(slotActivateApply()));
+    }
     m_metadata->setObjectName("StyledTable");
     m_metadata->setAlternatingRowColors(true);
     
-    m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name"))  ); // column, item
-    m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value"))  ); // column, item
+    m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name")) ); // column, item
+    m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value")) ); // column, item
     m_metadata->setMinimumSize(40, 40); // width, height
 
     std::vector<std::string> names(metadata.getPropertyNames());
@@ -257,6 +305,10 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     connect(deletePropButton, SIGNAL(clicked()),
             this, SLOT(slotDeleteProperty()));
+    
+    if (m_parentDialog) {
+        m_parentDialog->deactivateApply();
+    }
 }
 
 void
@@ -282,12 +334,20 @@ HeadersConfigurationPage::slotAddNewProperty()
     m_metadata->setRowCount(rc + 1);
     m_metadata->setItem(rc, 0, new QTableWidgetItem(propertyName));
     m_metadata->setItem(rc, 1, new QTableWidgetItem()); // empty value
+
+    if (m_parentDialog) {
+        m_parentDialog->slotActivateApply();
+    }
 }
 
 void
 HeadersConfigurationPage::slotDeleteProperty()
 {
     m_metadata->removeRow(m_metadata->currentRow());
+
+    if (m_parentDialog) {
+        m_parentDialog->slotActivateApply();
+    }
 }
 
 static void setMetadataString(Configuration &metadata, const PropertyName &property, const QString &value)
@@ -300,6 +360,8 @@ static void setMetadataString(Configuration &metadata, const PropertyName &prope
 
 void HeadersConfigurationPage::apply()
 {
+    // Should only be called from DocumentMetaConfigurationPage::apply()
+    
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.
     m_editTitle->setFocus();
@@ -311,8 +373,35 @@ void HeadersConfigurationPage::apply()
 
     Configuration &metadata = m_doc->getComposition().getMetadata();
     const Configuration origmetadata = metadata;
-    metadata.clear();
 
+    // If m_parentDialog is defined, HeaderConfigurationPage is owned by
+    // DocumentMetaConfigurationPage along with CommentsConfigurationPage.
+    // In this case HeaderConfigurationPage::apply() is called from
+    // DocumentMetaConfigurationPage::apply() and must not clear the meta data
+    // nor preserve the comments meta data.
+    //
+    // If m_parentDialog is null, HeaderConfigurationPage has been instantiated
+    // alone, without DocumentMetaConfigurationPage and
+    // CommentsConfigurationPage.
+    // In this case HeaderConfigurationPage::apply() must clear the meta data
+    // except the comments.
+    if (!m_parentDialog) {
+
+        // Clear the metadata
+        metadata.clear();
+
+        // Restore the comments from origmetadata
+        for (Configuration::const_iterator
+            	it = origmetadata.begin(); it != origmetadata.end(); ++it) {
+            QString key = strtoqstr(it->first);
+            if (key.startsWith(CommentsConfigurationPage::commentsKeyBase)) {
+                metadata.set<String>(it->first,
+                                     origmetadata.get<String>(it->first));
+            }
+        }
+    }
+
+    // Remember the current fixed keys metadata
     setMetadataString(metadata, CompositionMetadataKeys::Dedication, m_editDedication->text());
     setMetadataString(metadata, CompositionMetadataKeys::Title, m_editTitle->text());
     setMetadataString(metadata, CompositionMetadataKeys::Subtitle, m_editSubtitle->text());
@@ -327,11 +416,12 @@ void HeadersConfigurationPage::apply()
     setMetadataString(metadata, CompositionMetadataKeys::Copyright, m_editCopyright->text());
     setMetadataString(metadata, CompositionMetadataKeys::Tagline, m_editTagline->text());
 
-    for(int r=0; r < m_metadata->rowCount(); r++){
+    // Remember the other metadata
+    for (int r=0; r < m_metadata->rowCount(); r++) {
         QTableWidgetItem* tabItem = m_metadata->item(r, 0);
         QTableWidgetItem* tabItem2 = m_metadata->item(r, 1);
-        
-        if((!tabItem) || (!tabItem2)){
+
+        if ((!tabItem) || (!tabItem2)) {
             RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() " << endl;
             continue;
         }
@@ -339,9 +429,19 @@ void HeadersConfigurationPage::apply()
         setMetadataString(metadata, qstrtostr(tabItem->text().toLower()), tabItem2->text());
     }
 
-    if (metadata != origmetadata) {
-        m_doc->slotDocumentModified();
+    // If m_parentDialog is defined, HeaderConfigurationPage is owned by
+    // DocumentMetaConfigurationPage along with CommentsConfigurationPage.
+    // In this case HeaderConfigurationPage::apply() can't know if 
+    // m_doc->slotDocumentModified() has to be called because metadata has
+    // just been cleared.
+    // If needed DocumentMetaConfigurationPage::apply() will call
+    // m_doc->slotDocumentModified().
+    if (!m_parentDialog) {
+        if (metadata != origmetadata) {
+            m_doc->slotDocumentModified();
+        }
     }
+
 }
 
 }

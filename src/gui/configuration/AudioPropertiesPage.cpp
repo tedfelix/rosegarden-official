@@ -173,9 +173,10 @@ void
 AudioPropertiesPage::apply()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
+    QString oldDir = afm.getAudioPath();
     QString newDir = m_path->text();
 
-    if (!newDir.isNull()) {
+    if (newDir != oldDir) {
         afm.setAudioPath(newDir);
         m_doc->slotDocumentModified();
     }
