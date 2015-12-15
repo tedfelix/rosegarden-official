@@ -1518,7 +1518,7 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
 {
     unsigned int thickness;
     (void)m_font->getBeamThickness(thickness);
-    thickness = thickness * 3 / 4;
+    thickness = (slashCount == 1 && m_graceSize > 0 ? thickness / 3 : thickness * 3 / 4);
     if (thickness < 1)
         thickness = 1;
 
@@ -1538,7 +1538,8 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
     int sign = (params.m_stemGoesUp ? -1 : 1);
 
     int offset =
-        (slashCount == 1 ? m_nd.noteBodyHeight * 2 :
+        ((slashCount == 1 && m_graceSize > 0) ? m_nd.noteBodyHeight * 3 / 2 :
+         slashCount == 1 ? m_nd.noteBodyHeight * 2 :
          slashCount == 2 ? m_nd.noteBodyHeight * 3 / 2 :
          m_nd.noteBodyHeight);
     int y = m_nd.above + s0.y() + sign * (offset + thickness / 2);
