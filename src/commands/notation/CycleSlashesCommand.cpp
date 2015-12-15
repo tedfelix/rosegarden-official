@@ -19,6 +19,7 @@
 #include "CycleSlashesCommand.h"
 
 #include "base/Selection.h"
+#include "base/BaseProperties.h"
 #include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
@@ -49,7 +50,14 @@ CycleSlashesCommand::modifySegment()
         if (n) (*i)->unset(NotationProperties::SLASHES);
 
         n++;
-        if (n > 5) n = 0;
+
+        if ((*i)->has(BaseProperties::IS_GRACE_NOTE) && (*i)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
+            // if this is a grace note, limit slash count to 1
+            if (n > 1) n = 0;
+        } else {
+            // otherwise limit slash count to 5
+            if (n > 5) n = 0;
+        }
 
         // if n is still positive after rolling over, set the new slashes
         if (n) (*i)->set<Int>(NotationProperties::SLASHES, n);
