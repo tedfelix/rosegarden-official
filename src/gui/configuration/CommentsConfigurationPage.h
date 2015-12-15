@@ -53,6 +53,12 @@ protected slots:
  
 protected:
     void loadFromMetadata();
+
+    // Set the correct label and tool tip for a button according to it's use
+    void setClearButton();
+    void setReloadButton();
+    void setUndoClearButton();
+    void setUndoReloadButton();
     
     RosegardenDocument *m_doc;
     QPlainTextEdit *m_textEdit;
@@ -62,6 +68,8 @@ protected:
     QPushButton *m_reloadButton;
     QString m_saveTextClear;
     QString m_saveTextReload;
+    bool m_clearSaved;
+    bool m_reloadSaved;
 };
 
 

@@ -60,25 +60,6 @@ const QString CommentsConfigurationPage::commentsKeyBase("comments_");
 // Size of the numeric part of the line key 
 static const int keyNumSize(6);
 
-// Strings used as button labels */
-static const QString clearLabel(QObject::tr("Clear", "Button label"));
-static const QString reloadLabel(QObject::tr("Reload", "Button label"));
-static const QString undoClearLabel(QObject::tr("Undo last clear", "Button label"));
-static const QString undoReloadLabel(QObject::tr("Undo last reload", "Button label"));
-
-// Buttons tooltip texts
-static const QString clearToolTipText(QObject::tr("Clear text", "Button tool tip"));
-static const QString reloadToolTipText(
-                        QObject::tr("<qt>Reload text from the document (come"
-                                    " back to the last time apply was pressed)"
-                                    "</qt>", "Button tool tip"));
-static const QString undoClearToolTipText(QObject::tr("<qt>Restore to the last "
-                                          "text before clear<\qt>",
-                                                "Button tool tip"));
-static const QString undoReloadToolTipText(
-                        QObject::tr("<qt>Restore to the last text before "
-                                    "reload<\qt>", "Button tool tip"));
-
 
 CommentsConfigurationPage::CommentsConfigurationPage(
         QWidget *parent, RosegardenDocument *doc,
@@ -89,7 +70,9 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     m_parentDialog(parentDialog),
     m_clearButton(0),
     m_saveTextClear(""),
-    m_saveTextReload("")
+    m_saveTextReload(""),
+    m_clearSaved(false),
+    m_reloadSaved(false)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
@@ -106,13 +89,13 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     layout->addLayout(buttonsLayout);
 
-    m_clearButton = new QPushButton(clearLabel);
+    m_clearButton = new QPushButton();
     buttonsLayout->addWidget(m_clearButton);
-    m_clearButton->setToolTip(clearToolTipText);
+    setClearButton();
 
-    m_reloadButton = new QPushButton(reloadLabel);
+    m_reloadButton = new QPushButton();
     buttonsLayout->addWidget(m_reloadButton);
-    m_reloadButton->setToolTip(reloadToolTipText);
+    setReloadButton();
 
     connect(m_clearButton, SIGNAL(clicked()),
             this, SLOT(slotClear()));
@@ -132,44 +115,39 @@ CommentsConfigurationPage::CommentsConfigurationPage(
 void
 CommentsConfigurationPage::slotClear()
 {
-    if (m_saveTextClear.isEmpty()) {
+    if (!m_clearSaved) {
         m_saveTextClear = m_textEdit->toPlainText();
         m_textEdit->setPlainText("");
-        m_clearButton->setText(undoClearLabel);
-        m_clearButton->setToolTip(undoClearToolTipText);
+        setUndoClearButton();
         connect(m_textEdit, SIGNAL(textChanged()),
                 this, SLOT(slotResetUndoClearButton()));
     } else {
         m_textEdit->setPlainText(m_saveTextClear);
         m_saveTextClear = "";
-        m_clearButton->setText(clearLabel);
-        m_clearButton->setToolTip(clearToolTipText);
+        setClearButton();
     }
 }
 
 void
 CommentsConfigurationPage::slotReload()
 {
-    if (m_saveTextReload.isEmpty()) {
+    if (!m_reloadSaved) {
         m_saveTextReload = m_textEdit->toPlainText();
         loadFromMetadata();
-        m_reloadButton->setText(undoReloadLabel);
-        m_reloadButton->setToolTip(undoReloadToolTipText);
+        setUndoReloadButton();
         connect(m_textEdit, SIGNAL(textChanged()),
                 this, SLOT(slotResetUndoReloadButton()));
    } else {
         m_textEdit->setPlainText(m_saveTextReload);
         m_saveTextReload = "";
-        m_reloadButton->setText(reloadLabel);
-        m_reloadButton->setToolTip(reloadToolTipText);
+        setReloadButton();
     }
 }
 
 void
 CommentsConfigurationPage::slotResetUndoClearButton()
 {
-    m_clearButton->setText(clearLabel);
-    m_clearButton->setToolTip(clearToolTipText);
+    setClearButton();
     disconnect(m_textEdit, SIGNAL(textChanged()),
                 this, SLOT(slotResetUndoClearButton()));
     m_saveTextClear = "";
@@ -178,8 +156,7 @@ CommentsConfigurationPage::slotResetUndoClearButton()
 void
 CommentsConfigurationPage::slotResetUndoReloadButton()
 {
-    m_reloadButton->setText(reloadLabel);
-    m_reloadButton->setToolTip(reloadToolTipText);
+    setReloadButton();
     disconnect(m_textEdit, SIGNAL(textChanged()),
                 this, SLOT(slotResetUndoReloadButton()));
     m_saveTextReload = "";
@@ -266,6 +243,42 @@ CommentsConfigurationPage::loadFromMetadata()
             lastLine = currentLine;
         }
     }
+}
+
+void
+CommentsConfigurationPage::setClearButton()
+{
+    m_clearSaved = false;
+    m_clearButton->setText(tr("Clear", "Button label"));
+    m_clearButton->setToolTip(tr("Clear text", "Button tool tip"));
+}
+
+void
+CommentsConfigurationPage::setReloadButton()
+{
+    m_reloadSaved = false;
+    m_reloadButton->setText(tr("Reload", "Button label"));
+    m_reloadButton->setToolTip(tr("<qt>Reload text from the document (come"
+                                  " back to the last time apply was pressed)"
+                                  "</qt>", "Button tool tip"));
+}
+
+void
+CommentsConfigurationPage::setUndoClearButton()
+{
+    m_clearSaved = true;
+    m_clearButton->setText(tr("Undo last clear", "Button label"));
+    m_clearButton->setToolTip(tr("<qt>Restore to the last text before "
+                                 "clear</qt>", "Button tool tip"));
+}
+
+void
+CommentsConfigurationPage::setUndoReloadButton()
+{
+    m_reloadSaved = true;
+    m_reloadButton->setText(tr("Undo last reload", "Button label"));
+    m_reloadButton->setToolTip(tr("<qt>Restore to the last text before "
+                                  "reload</qt>", "Button tool tip"));
 }
 
 }
