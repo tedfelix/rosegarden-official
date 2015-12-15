@@ -60,13 +60,36 @@ const QString CommentsConfigurationPage::commentsKeyBase("comments_");
 // Size of the numeric part of the line key 
 static const int keyNumSize(6);
 
+// Strings used as button labels */
+static const QString clearLabel(QObject::tr("Clear", "Button label"));
+static const QString reloadLabel(QObject::tr("Reload", "Button label"));
+static const QString undoClearLabel(QObject::tr("Undo last clear", "Button label"));
+static const QString undoReloadLabel(QObject::tr("Undo last reload", "Button label"));
+
+// Buttons tooltip texts
+static const QString clearToolTipText(QObject::tr("Clear text", "Button tool tip"));
+static const QString reloadToolTipText(
+                        QObject::tr("<qt>Reload text from the document (come"
+                                    " back to the last time apply was pressed)"
+                                    "</qt>", "Button tool tip"));
+static const QString undoClearToolTipText(QObject::tr("<qt>Restore to the last "
+                                          "text before clear<\qt>",
+                                                "Button tool tip"));
+static const QString undoReloadToolTipText(
+                        QObject::tr("<qt>Restore to the last text before "
+                                    "reload<\qt>", "Button tool tip"));
+
+
 CommentsConfigurationPage::CommentsConfigurationPage(
         QWidget *parent, RosegardenDocument *doc,
         ConfigureDialogBase *parentDialog) :
     QWidget(parent),
     m_doc(doc),
     m_textEdit(0),
-    m_parentDialog(parentDialog)
+    m_parentDialog(parentDialog),
+    m_clearButton(0),
+    m_saveTextClear(""),
+    m_saveTextReload("")
 {
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
@@ -83,34 +106,83 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     layout->addLayout(buttonsLayout);
 
-    QPushButton* clearButton = new QPushButton(tr("Clear"));
-    buttonsLayout->addWidget(clearButton);
-    clearButton->setToolTip(tr("Clear text"));
+    m_clearButton = new QPushButton(clearLabel);
+    buttonsLayout->addWidget(m_clearButton);
+    m_clearButton->setToolTip(clearToolTipText);
 
-    QPushButton* reloadButton = new QPushButton(tr("Reload"));
-    buttonsLayout->addWidget(reloadButton);
-    reloadButton->setToolTip(tr("<qt>Reload text from the document "
-                        "(come back to the last time apply was pressed)</qt>"));
+    m_reloadButton = new QPushButton(reloadLabel);
+    buttonsLayout->addWidget(m_reloadButton);
+    m_reloadButton->setToolTip(reloadToolTipText);
 
-    connect(clearButton, SIGNAL(clicked()),
+    connect(m_clearButton, SIGNAL(clicked()),
             this, SLOT(slotClear()));
 
-    connect(reloadButton, SIGNAL(clicked()),
+    connect(m_reloadButton, SIGNAL(clicked()),
             this, SLOT(slotReload()));
+
+    // Read the comments from the document metadata
+    loadFromMetadata();
 
     if (m_parentDialog) {
         connect(m_textEdit, SIGNAL(textChanged()),
                 m_parentDialog, SLOT(slotActivateApply()));
     }
-
-    // Read the comments from the document metadata
-    slotReload();
 }
 
 void
 CommentsConfigurationPage::slotClear()
 {
-    m_textEdit->setPlainText("");
+    if (m_saveTextClear.isEmpty()) {
+        m_saveTextClear = m_textEdit->toPlainText();
+        m_textEdit->setPlainText("");
+        m_clearButton->setText(undoClearLabel);
+        m_clearButton->setToolTip(undoClearToolTipText);
+        connect(m_textEdit, SIGNAL(textChanged()),
+                this, SLOT(slotResetUndoClearButton()));
+    } else {
+        m_textEdit->setPlainText(m_saveTextClear);
+        m_saveTextClear = "";
+        m_clearButton->setText(clearLabel);
+        m_clearButton->setToolTip(clearToolTipText);
+    }
+}
+
+void
+CommentsConfigurationPage::slotReload()
+{
+    if (m_saveTextReload.isEmpty()) {
+        m_saveTextReload = m_textEdit->toPlainText();
+        loadFromMetadata();
+        m_reloadButton->setText(undoReloadLabel);
+        m_reloadButton->setToolTip(undoReloadToolTipText);
+        connect(m_textEdit, SIGNAL(textChanged()),
+                this, SLOT(slotResetUndoReloadButton()));
+   } else {
+        m_textEdit->setPlainText(m_saveTextReload);
+        m_saveTextReload = "";
+        m_reloadButton->setText(reloadLabel);
+        m_reloadButton->setToolTip(reloadToolTipText);
+    }
+}
+
+void
+CommentsConfigurationPage::slotResetUndoClearButton()
+{
+    m_clearButton->setText(clearLabel);
+    m_clearButton->setToolTip(clearToolTipText);
+    disconnect(m_textEdit, SIGNAL(textChanged()),
+                this, SLOT(slotResetUndoClearButton()));
+    m_saveTextClear = "";
+}
+
+void
+CommentsConfigurationPage::slotResetUndoReloadButton()
+{
+    m_reloadButton->setText(reloadLabel);
+    m_reloadButton->setToolTip(reloadToolTipText);
+    disconnect(m_textEdit, SIGNAL(textChanged()),
+                this, SLOT(slotResetUndoReloadButton()));
+    m_saveTextReload = "";
 }
 
 // Make the key associated to a comment line from its line number.
@@ -156,16 +228,9 @@ CommentsConfigurationPage::apply()
 }
 
 void
-CommentsConfigurationPage::slotReload()
+CommentsConfigurationPage::loadFromMetadata()
 {
-    // We don't want to activate the apply button of the parent dialog when the
-    // text editor is initialized.
-    if (m_parentDialog) {
-        disconnect(m_textEdit, SIGNAL(textChanged()),
-                   m_parentDialog, SLOT(slotActivateApply()));
-    }
-
-    slotClear();
+    m_textEdit->setPlainText("");
 
     Configuration &metadata = (&m_doc->getComposition())->getMetadata();
 
@@ -200,13 +265,6 @@ CommentsConfigurationPage::slotReload()
             m_textEdit->appendPlainText(value);
             lastLine = currentLine;
         }
-    }
-
-    // The text editor has been initialized. The connexion activating the apply
-    // button of the parent dialog may now be restored.
-    if (m_parentDialog) {
-        connect(m_textEdit, SIGNAL(textChanged()),
-                m_parentDialog, SLOT(slotActivateApply()));
     }
 }
 

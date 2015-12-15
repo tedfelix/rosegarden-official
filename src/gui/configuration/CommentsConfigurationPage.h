@@ -22,7 +22,7 @@
 #include <QWidget>
 
 class QPlainTextEdit;
-class ConfigureDialogBase;
+class QPushButton;
 
 namespace Rosegarden
 {
@@ -48,12 +48,20 @@ public:
 protected slots:
     void slotClear();
     void slotReload();
+    void slotResetUndoClearButton();
+    void slotResetUndoReloadButton();
  
 protected:
+    void loadFromMetadata();
+    
     RosegardenDocument *m_doc;
     QPlainTextEdit *m_textEdit;
     ConfigureDialogBase *m_parentDialog;
-
+    
+    QPushButton *m_clearButton;
+    QPushButton *m_reloadButton;
+    QString m_saveTextClear;
+    QString m_saveTextReload;
 };
 
 
