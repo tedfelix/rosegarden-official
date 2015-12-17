@@ -17,6 +17,7 @@
 
 #include "ThornStyle.h"
 #include "gui/general/IconLoader.h"
+#include <QStyleFactory>
 
 
 namespace Rosegarden
@@ -24,6 +25,17 @@ namespace Rosegarden
 
 ThornStyle::ThornStyle()
 {
+    // Qt 5 removes QPlastiqueStyle and defaults to a new style called "Fusion."
+    // This style forces combo boxes to do bad things.  The alternatives are:
+    //
+    // * replace data/rosegarden.qss with a fully custom QStyle
+    // * replace QComboBox with a custom version that respects style differently
+    // * replace the default style with something that causes less damage
+    //
+    // I concluded that the "windows" style causes an acceptable amount of
+    // damage while leaving things largely intact.
+    //
+    setBaseStyle(QStyleFactory::create("windows"));
 }
 
 ThornStyle::~ThornStyle()
@@ -52,7 +64,7 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
     case SP_MessageBoxQuestion:
         return IconLoader().loadPixmap("messagebox-question");
 
-        // All fall thru to default
+    // All fall thru to default
     case SP_TitleBarMenuButton:
     case SP_TitleBarMinButton:
     case SP_TitleBarMaxButton:
@@ -119,9 +131,15 @@ ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
     case SP_MediaVolume:
     case SP_MediaVolumeMuted:
     case SP_CustomBase:
+
+#if QT_VERSION >= 0x050000
+    case SP_DirLinkOpenIcon:
+    case SP_LineEditClearButton:
+#endif
+
     default:
-        // let the base class handle the rest
-        return QProxyStyle::standardPixmap(standardIcon, option, parent);
+    // let the base class handle the rest
+    return QProxyStyle::standardPixmap(standardIcon, option, parent);
     }
 }
 
