@@ -293,11 +293,18 @@ FileSource::init()
 
     if (!isRemote() && !isResource()) {
 #ifdef DEBUG_FILE_SOURCE
-        std::cerr << "FileSource::init: Not a remote URL" << std::endl;
+        std::cerr << "FileSource::init: Not a remote URL \"" << m_url.toString() << "\"" << std::endl;
 #endif
+        // If the file doesn't otherwise have a scheme set (eg. http://, ftp://), set
+        // the scheme to file://
+        if (m_url.scheme().isEmpty()) m_url.setScheme("file");
+
         bool literal = false;
         m_localFilename = m_url.toLocalFile();
 
+        // The next code block doesn't work in Qt5, but when everything works
+        // correctly, it is never entered.  I decided to leave the loose end
+        // dangling for now.
         if (m_localFilename == "") {
             // QUrl may have mishandled the scheme (e.g. in a DOS path)
             m_localFilename = m_rawFileOrUrl;

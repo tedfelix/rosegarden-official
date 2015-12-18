@@ -377,6 +377,7 @@ int main(int argc, char *argv[])
     // (this has to be outside the ifdef block below)
     QSettings preAppSettings("rosegardenmusic", "Rosegarden");
     preAppSettings.beginGroup(GeneralOptionsConfigGroup);
+#pragma GCC diagnostic ignored "-Wunused-variable"
     unsigned int graphicsSystem = preAppSettings.value("graphics_system", Native).toUInt();
     preAppSettings.endGroup();
 
