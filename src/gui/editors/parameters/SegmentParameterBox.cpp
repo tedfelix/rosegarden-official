@@ -215,7 +215,7 @@ SegmentParameterBox::initBox()
             SLOT(slotTransposeSelected(int)));
 
     // and text changes
-    connect(m_transposeValue, SIGNAL(textChanged(const QString&)),
+    connect(m_transposeValue, SIGNAL(editTextChanged(const QString&)),
             SLOT(slotTransposeTextChanged(const QString&)));
 
     // reversing motif style read-write combo
@@ -237,7 +237,7 @@ SegmentParameterBox::initBox()
             this, SLOT(slotDocColoursChanged()));
 
     // handle text changes for delay
-    connect(m_delayValue, SIGNAL(textChanged(const QString&)),
+    connect(m_delayValue, SIGNAL(editTextChanged(const QString&)),
             SLOT(slotDelayTextChanged(const QString &)));
 
     // set up combo box for colours
