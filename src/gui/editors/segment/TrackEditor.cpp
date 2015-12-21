@@ -776,26 +776,37 @@ void TrackEditor::dropEvent(QDropEvent *e)
         }
 
         if (e->mimeData()->hasUrls()) {
+            RG_DEBUG << "dropEvent() urls: " << e->mimeData()->urls();
+
+            // Note: December 2015, with Qt5, links dragged from Chromium
+            //       and dropped onto rg end up as a list containing an
+            //       empty URL and a URL that consists of the link text
+            //       (e.g. "Click Here!") rather than the link itself.
+            //       Firefox does not have this problem.  With Qt4, Chromium
+            //       works fine.  I'm assuming the issue is with either
+            //       Chromium or Qt5 and will eventually get fixed.
+
             QList<QUrl> uList = e->mimeData()->urls();
             if (!uList.isEmpty()) {
                 for (int i = 0; i < uList.size(); ++i)  {
                     uriList.append(QString::fromLocal8Bit(uList.value(i).toEncoded().data()));
-               }
+                }
             }
+
+            RG_DEBUG << "dropEvent() uri list: " << uriList;
         }
 
         if (e->mimeData()->hasText()) {
+            RG_DEBUG << "dropEvent() text: " << e->mimeData()->text();
+
             text = e->mimeData()->text();
         }
     }
 
     if (uriList.empty() && text == "") {
-        RG_DEBUG << "TrackEditor::dropEvent: Nothing dropped" << endl;
+        RG_DEBUG << "dropEvent(): Nothing dropped";
         return;
     }
-
-    RG_DEBUG << "TrackEditor::dropEvent: uri list is " << uriList
-             << ", text is " << text << endl;
 
     QPoint cpoint = m_compositionView->mapFrom(this, e->pos());
 
@@ -805,7 +816,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
     timeT time = m_compositionView->grid().snapX
         (cpoint.x() + m_compositionView->contentsX());
 
-    RG_DEBUG << "trackPos = " << trackPos << ", time = " << time << endl;
+    RG_DEBUG << "dropEvent() trackPos = " << trackPos << ", time = " << time;
 
     Track *track = m_doc->getComposition().getTrackByPosition(trackPos);
 
@@ -817,7 +828,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
         // Old behavior of stopping if .rg or .midi file encountered still works
         // We have a URI, and it didn't come from within RG
 
-        RG_DEBUG << "TrackEditor::dropEvent() : got URI :" << uriList.first() << endl;
+        RG_DEBUG << "dropEvent() first URI: " << uriList.first();
         
         QStringList::const_iterator ci;
         for (ci = uriList.constBegin(); ci != uriList.constEnd(); ++ci) {
@@ -833,22 +844,20 @@ void TrackEditor::dropEvent(QDropEvent *e)
                 emit droppedDocument(uri);
                 return;
                 //
-                // WARNING
+                // !!! WARNING
                 //
-                // DO NOT PERFORM ANY OPERATIONS AFTER THAT
-                // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
-                // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
+                // DO NOT PERFORM ANY OPERATIONS AFTER EMITTING droppedDocument().
+                // EMITTING droppedDocument() TRIGGERS THE LOADING OF A NEW DOCUMENT
+                // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT.
                 //
 
             } else {
             
                 if (!track) return;
 
-                RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
-                         << trackPos
+                RG_DEBUG << "dropEvent() : dropping at track pos = " << trackPos
                          << ", time = " << time
-                         << ", x = " << e->pos().x()
-                         << endl;
+                         << ", x = " << e->pos().x();
 
                 QString audioText;
                 QTextStream t(&audioText, QIODevice::ReadWrite);
@@ -857,7 +866,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
                 t << time << "\n";
                 t.flush();
 
-                RG_DEBUG << "TrackEditor::dropEvent() audioText = \n " << audioText << "\n";
+                RG_DEBUG << "dropEvent() audioText = " << audioText;
 
                 emit droppedNewAudio(audioText);
                 // connected to RosegardenMainViewWidget::slotDroppedNewAudio()
@@ -870,7 +879,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
         // drop, which will hopefully turn out to be from the audio
         // file manager
 
-        RG_DEBUG << "TrackEditor::dropEvent() : got text info " << endl;
+        RG_DEBUG << "dropEvent(): got text info";
         
         QString tester = text.toLower();
 
@@ -882,11 +891,11 @@ void TrackEditor::dropEvent(QDropEvent *e)
             emit droppedDocument(text);
             return;
             //
-            // WARNING
+            // !!! WARNING
             //
-            // DO NOT PERFORM ANY OPERATIONS AFTER THAT
-            // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
-            // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
+            // DO NOT PERFORM ANY OPERATIONS AFTER EMITTING droppedDocument().
+            // EMITTING droppedDocument() TRIGGERS THE LOADING OF A NEW DOCUMENT
+            // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT.
             //
 
         } else {
@@ -914,15 +923,13 @@ void TrackEditor::dropEvent(QDropEvent *e)
             QString sourceName = "NULL";
             if (e->source()) sourceName = e->source()->objectName();
             
-            RG_DEBUG << "TrackEditor::dropEvent() - event source : " << sourceName << endl;
+            RG_DEBUG << "dropEvent() event source: " << sourceName;
             
             if (sourceName == "AudioListView") { // only create something if this is data from the right client
                 
-                RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
-                         << trackPos
+                RG_DEBUG << "dropEvent() : dropping at track pos = " << trackPos
                          << ", time = " << time
-                         << ", x = " << e->pos().x()
-                         << endl;
+                         << ", x = " << e->pos().x();
 
                 QString audioText;
                 QTextStream t(&audioText);
