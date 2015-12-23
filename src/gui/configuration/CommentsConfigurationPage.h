@@ -41,10 +41,6 @@ public:
                               ConfigureDialogBase *parentDialog = 0);
     void apply();
 
-    // String used in XML to embed the comments inside the metadata
-    static const QString commentsKeyBase;
-
-
 protected slots:
     void slotClear();
     void slotReload();

@@ -323,19 +323,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
 void
 DocumentMetaConfigurationPage::apply()
 {
-    Configuration &metadata = m_doc->getComposition().getMetadata();
-    const Configuration origmetadata = metadata;
-
-    // Clear the metadata
-    metadata.clear();
-
-    // and recreate them from the currently edited values
     m_headersPage->apply();
     m_commentsPage->apply();
-
-    if (metadata != origmetadata) {
-        m_doc->slotDocumentModified();
-    }
 }
 
 }

@@ -22,6 +22,7 @@
 
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
+#include "document/MetadataHelper.h"
 #include "document/io/LilyPondExporter.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
@@ -53,13 +54,6 @@
 
 namespace Rosegarden
 {
-
-// Strings used in XML to embed the comments inside the metadata
-const QString CommentsConfigurationPage::commentsKeyBase("comments_");
-
-// Size of the numeric part of the line key 
-static const int keyNumSize(6);
-
 
 CommentsConfigurationPage::CommentsConfigurationPage(
         QWidget *parent, RosegardenDocument *doc,
@@ -137,7 +131,7 @@ CommentsConfigurationPage::slotReload()
         setUndoReloadButton();
         connect(m_textEdit, SIGNAL(textChanged()),
                 this, SLOT(slotResetUndoReloadButton()));
-   } else {
+    } else {
         m_textEdit->setPlainText(m_saveTextReload);
         m_saveTextReload = "";
         setReloadButton();
@@ -162,87 +156,20 @@ CommentsConfigurationPage::slotResetUndoReloadButton()
     m_saveTextReload = "";
 }
 
-// Make the key associated to a comment line from its line number.
-// If the line number is 123 and commentsKeyBase is "comments_" then
-// the key is "comments_000123".
-static QString lineKey(int lineNumber)
-{
-    QString number = QString("%1").arg(lineNumber);
-    while (number.size() < keyNumSize) number = "0" + number;
-    return CommentsConfigurationPage::commentsKeyBase + number;
-}
-
-// Get the number of  comment line from its key.
-// If the key is "comments_000098" then return 98.
-// Return 0 if the string is not a lineKey.
-static int lineNumber(QString lineKey)
-{
-    int baseKeyLength = CommentsConfigurationPage::commentsKeyBase.size();
-    if (lineKey.size() != (baseKeyLength + keyNumSize)) return 0;
-    if (!lineKey.startsWith(CommentsConfigurationPage::commentsKeyBase)) return 0;
-    return lineKey.right(keyNumSize).toInt();
-}
-
 void
 CommentsConfigurationPage::apply()
 {
-    // Should only be called from DocumentMetaConfigurationPage::apply()
-
-    Configuration &metadata = m_doc->getComposition().getMetadata();
-    QString value = m_textEdit->toPlainText();
-    QStringList lines = value.split("\n", QString::KeepEmptyParts);
-    
-    int n = 0;
-
-    for (QStringList::iterator i = lines.begin(); i != lines.end(); ++i) {
-        n++;
-        QString value = *i;
-        if (!value.isEmpty()) {
-            QString key = lineKey(n);
-            metadata.set<String>(qstrtostr(key), qstrtostr(value));
-        }
-    }  
+    MetadataHelper mh(m_doc);
+    QString text = m_textEdit->toPlainText();
+    mh.setComments(m_textEdit->toPlainText());
 }
 
 void
 CommentsConfigurationPage::loadFromMetadata()
 {
-    m_textEdit->setPlainText("");
-
-    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
-
-    // Get all the relevant keys from the metadata
-    std::set<QString> keys;
-    keys.clear();
-    for (Configuration::iterator
-            it = metadata.begin(); it != metadata.end(); ++it) {
-        QString key = strtoqstr(it->first);
-        if (key.startsWith(CommentsConfigurationPage::commentsKeyBase)) {
-            keys.insert(key);
-        }
-    }
-
-    // Create the text
-    if (keys.size()) {
-        int lastLine = 0;
-        for (std::set<QString>::iterator it = keys.begin(); it != keys.end(); ++it) {
-            QString key = *it;
-            int currentLine = lineNumber(key);
-            if (currentLine == 0) {
-                std::cerr << "ERROR: Bad comment key \"" << key << "\"" << std::endl; 
-                continue;
-            }
-            lastLine++;
-            for (int i = lastLine; i < currentLine; i++) {
-                // Insert blank line
-                m_textEdit->appendPlainText("");
-            }
-            // Insert currentLine
-            QString value = strtoqstr(metadata.get<String>(qstrtostr(key)));
-            m_textEdit->appendPlainText(value);
-            lastLine = currentLine;
-        }
-    }
+    MetadataHelper mh(m_doc);
+    QString text = mh.getComments();
+    m_textEdit->setPlainText(text);
 }
 
 void

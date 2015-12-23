@@ -22,6 +22,7 @@
 
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
+#include "document/MetadataHelper.h"
 #include "document/io/LilyPondExporter.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
@@ -74,62 +75,19 @@ HeadersConfigurationPage::HeadersConfigurationPage(
     headersBox->setLayout(headersBoxLayout);
 
     // grab user headers from metadata
-    Configuration metadata = m_doc->getComposition().getMetadata();
-    std::vector<std::string> propertyNames = metadata.getPropertyNames();
+    MetadataHelper mh(m_doc);
+    std::map<QString, QString> headers = mh.getHeaders();
+
     std::vector<PropertyName> fixedKeys = CompositionMetadataKeys::getFixedKeys();
 
-    // Fixed keys without value are not in propertyNames. Add them.
-    for (unsigned int i = 0; i < fixedKeys.size(); i++) {
-        std::string key = fixedKeys[i].getName();
-        bool found = false;
-        for (unsigned int j = 0; j < propertyNames.size(); ++j) {
-            if (key == propertyNames[j]) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            propertyNames.push_back(key);
-        }
-    }
-
-    std::set<std::string> shown;
-
-    for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-        std::string property = propertyNames[i];
-        QString headerStr("");
-        std::string key = "";
-        std::string header = "";
-        bool found = false;
-        
-        for (unsigned int index = 0; index < fixedKeys.size(); index++) {
-            key = fixedKeys[index].getName();
-            if (property == key) {
-                // get the std::string from metadata
-                std::string value = "";
-                try { value = metadata.get<String>(property);
-                } catch (Configuration::NoData) {
-                    value = "";
-                }
-                header = value;
-                //@@@ dtb: tr() only works with char* now, so I'm going to try
-                // using header directly instead of a QString version of header.
-                headerStr = QObject::trUtf8(header.c_str());
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            if (strtoqstr(property).
-                    startsWith(CommentsConfigurationPage::commentsKeyBase)) {
-                // This metadata is a comment line
-                shown.insert(property); // remember it
-            }
-
-            // Don't process here properties which are not a LilyPond header
-            continue;
-        }
+    std::set<QString> shown;
+    for (unsigned int index = 0; index < fixedKeys.size(); index++) {
+        std::string key = fixedKeys[index].getName();
+        QString value = headers[strtoqstr(key)];
+        std::string header = qstrtostr(value);
+        //@@@ dtb: tr() only works with char* now, so I'm going to try
+        // using header directly instead of a QString version of header.
+        QString headerStr = QObject::trUtf8(header.c_str());
 
         unsigned int row = 0, col = 0, width = 1;
         LineEdit *editHeader = new LineEdit(headerStr, frameHeaders);
@@ -210,15 +168,16 @@ HeadersConfigurationPage::HeadersConfigurationPage(
         editHeader->setStyleSheet(localStyle); 
         editHeader->setToolTip(trName);
 
-        shown.insert(key);
+        shown.insert(strtoqstr(key));
     }
     QLabel *separator = new QLabel(tr("The composition comes here."), frameHeaders);
     separator->setAlignment(Qt::AlignCenter);
     layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 1+1);
 
     frameHeaders->setLayout(layoutHeaders);
-
-
+    
+    
+    
     //
     // LilyPond export: Non-printable headers
     //
@@ -262,29 +221,27 @@ HeadersConfigurationPage::HeadersConfigurationPage(
     m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value")) ); // column, item
     m_metadata->setMinimumSize(40, 40); // width, height
 
-    std::vector<std::string> names(metadata.getPropertyNames());
-    
+
     QTableWidgetItem* tabItem;
     int row = 0;
-    
-    for (unsigned int i = 0; i < names.size(); ++i) {
 
-        if (shown.find(names[i]) != shown.end())
-            continue;
+    for (std::map<QString, QString>::iterator it = headers.begin();
+            it != headers.end(); ++it) {
+
+        if (shown.find(it->first) != shown.end()) continue;
 
         m_metadata->setRowCount(row + 1);
 
-        QString name(strtoqstr(names[i]));
+        QString name(it->first);
 
         // property names stored in lower case
         name = name.left(1).toUpper() + name.right(name.length() - 1);
 
         tabItem = new QTableWidgetItem(name);
         m_metadata->setItem(row, 0, tabItem);
-        tabItem = new QTableWidgetItem(strtoqstr(metadata.get<String>(names[i])));
+        tabItem = new QTableWidgetItem(it->second);
         m_metadata->setItem(row, 1, tabItem);
 
-        shown.insert(names[i]);
         row++;
     }
 
@@ -316,13 +273,13 @@ HeadersConfigurationPage::slotAddNewProperty()
 {
     QString propertyName;
     int i = 0;
-    
+
     while (1) {
         propertyName =
             (i > 0 ? tr("{new property %1}").arg(i) : tr("{new property}"));
         QList<QTableWidgetItem*> foundItems = m_metadata->findItems(
                     propertyName, Qt::MatchContains | Qt::MatchCaseSensitive);
-    
+
         if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
                      foundItems.isEmpty()){
             break;
@@ -350,18 +307,8 @@ HeadersConfigurationPage::slotDeleteProperty()
     }
 }
 
-static void setMetadataString(Configuration &metadata, const PropertyName &property, const QString &value)
-{
-    // Don't set empty values (this is to match the XML loading code)
-    if (!value.isEmpty()) {
-        metadata.set<String>(property, qstrtostr(value));
-    }
-}
-
 void HeadersConfigurationPage::apply()
 {
-    // Should only be called from DocumentMetaConfigurationPage::apply()
-    
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.
     m_editTitle->setFocus();
@@ -370,51 +317,23 @@ void HeadersConfigurationPage::apply()
     //
     // Update header fields
     //
-
-    Configuration &metadata = m_doc->getComposition().getMetadata();
-    const Configuration origmetadata = metadata;
-
-    // If m_parentDialog is defined, HeaderConfigurationPage is owned by
-    // DocumentMetaConfigurationPage along with CommentsConfigurationPage.
-    // In this case HeaderConfigurationPage::apply() is called from
-    // DocumentMetaConfigurationPage::apply() and must not clear the meta data
-    // nor preserve the comments meta data.
-    //
-    // If m_parentDialog is null, HeaderConfigurationPage has been instantiated
-    // alone, without DocumentMetaConfigurationPage and
-    // CommentsConfigurationPage.
-    // In this case HeaderConfigurationPage::apply() must clear the meta data
-    // except the comments.
-    if (!m_parentDialog) {
-
-        // Clear the metadata
-        metadata.clear();
-
-        // Restore the comments from origmetadata
-        for (Configuration::const_iterator
-            	it = origmetadata.begin(); it != origmetadata.end(); ++it) {
-            QString key = strtoqstr(it->first);
-            if (key.startsWith(CommentsConfigurationPage::commentsKeyBase)) {
-                metadata.set<String>(it->first,
-                                     origmetadata.get<String>(it->first));
-            }
-        }
-    }
-
+    std::map<QString, QString> headers;
+    headers.clear();
+    
     // Remember the current fixed keys metadata
-    setMetadataString(metadata, CompositionMetadataKeys::Dedication, m_editDedication->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Title, m_editTitle->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Subtitle, m_editSubtitle->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Subsubtitle, m_editSubsubtitle->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Poet, m_editPoet->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Composer, m_editComposer->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Meter, m_editMeter->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Opus, m_editOpus->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Arranger, m_editArranger->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Instrument, m_editInstrument->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Piece, m_editPiece->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Copyright, m_editCopyright->text());
-    setMetadataString(metadata, CompositionMetadataKeys::Tagline, m_editTagline->text());
+    headers[strtoqstr(CompositionMetadataKeys::Dedication)] = m_editDedication->text();
+    headers[strtoqstr(CompositionMetadataKeys::Title)] = m_editTitle->text();
+    headers[strtoqstr(CompositionMetadataKeys::Subtitle)] = m_editSubtitle->text();
+    headers[strtoqstr(CompositionMetadataKeys::Subsubtitle)] = m_editSubsubtitle->text();
+    headers[strtoqstr(CompositionMetadataKeys::Poet)] = m_editPoet->text();
+    headers[strtoqstr(CompositionMetadataKeys::Composer)] = m_editComposer->text();
+    headers[strtoqstr(CompositionMetadataKeys::Meter)] = m_editMeter->text();
+    headers[strtoqstr(CompositionMetadataKeys::Opus)] = m_editOpus->text();
+    headers[strtoqstr(CompositionMetadataKeys::Arranger)] = m_editArranger->text();
+    headers[strtoqstr(CompositionMetadataKeys::Instrument)] = m_editInstrument->text();
+    headers[strtoqstr(CompositionMetadataKeys::Piece)] = m_editPiece->text();
+    headers[strtoqstr(CompositionMetadataKeys::Copyright)] = m_editCopyright->text();
+    headers[strtoqstr(CompositionMetadataKeys::Tagline)] = m_editTagline->text();
 
     // Remember the other metadata
     for (int r=0; r < m_metadata->rowCount(); r++) {
@@ -426,22 +345,12 @@ void HeadersConfigurationPage::apply()
             continue;
         }
 
-        setMetadataString(metadata, qstrtostr(tabItem->text().toLower()), tabItem2->text());
+        headers[tabItem->text().toLower()] = tabItem2->text();
     }
 
-    // If m_parentDialog is defined, HeaderConfigurationPage is owned by
-    // DocumentMetaConfigurationPage along with CommentsConfigurationPage.
-    // In this case HeaderConfigurationPage::apply() can't know if 
-    // m_doc->slotDocumentModified() has to be called because metadata has
-    // just been cleared.
-    // If needed DocumentMetaConfigurationPage::apply() will call
-    // m_doc->slotDocumentModified().
-    if (!m_parentDialog) {
-        if (metadata != origmetadata) {
-            m_doc->slotDocumentModified();
-        }
-    }
-
+    // Export headers to metadata
+    MetadataHelper mh(m_doc);
+    mh.setHeaders(headers);
 }
 
 }
