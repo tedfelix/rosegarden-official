@@ -141,6 +141,7 @@ set(rg_SOURCES
   gui/dialogs/GeneratedRegionDialog.cpp
   gui/dialogs/AudioManagerDialog.cpp
   gui/dialogs/UseOrnamentDialog.cpp
+  gui/dialogs/CommentsPopupDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp

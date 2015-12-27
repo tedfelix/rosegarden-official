@@ -39,6 +39,9 @@ namespace Rosegarden
 // Strings used in XML to embed the comments inside the metadata
 static const QString commentsKeyBase("comments_");
 
+// Strings used in XML to ask for a note popup at startup
+static const QString commentsPopup("comments_popup");
+
 // Size of the numeric part of the line key 
 static const int keyNumSize(6);
 
@@ -81,6 +84,7 @@ MetadataHelper::getComments()
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
+        if (key == commentsPopup) continue;
         if (key.startsWith(commentsKeyBase)) {
             keys.insert(key);
         }
@@ -123,7 +127,7 @@ MetadataHelper::setComments(QString text)
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
-        if (!key.startsWith(commentsKeyBase)) {
+        if ((key == commentsPopup) || !key.startsWith(commentsKeyBase)) {
             notComments[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
         }
     }
@@ -222,12 +226,28 @@ MetadataHelper::setHeaders(std::map<QString, QString> data)
 void
 MetadataHelper::setPopupWanted(bool enabled)
 {
+    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
+    const Configuration origmetadata = metadata;
+
+    metadata.set<String>(qstrtostr(commentsPopup), enabled ? "true" : "false");
+
+    if (metadata != origmetadata) {
+        m_doc->slotDocumentModified();
+    }
 }
     
 bool
 MetadataHelper::popupWanted()
 {
-    return true;
+    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
+    for (Configuration::iterator
+            it = metadata.begin(); it != metadata.end(); ++it) {
+        QString key = strtoqstr(it->first);
+        QString value = strtoqstr(metadata.get<String>(it->first));
+
+        if ((key == commentsPopup) && (value == "true")) return true;
+    }
+    return false;
 }
 
 }

@@ -42,6 +42,7 @@ public:
     void apply();
 
 protected slots:
+    void slotShowPopupChanged(int state);
     void slotClear();
     void slotReload();
     void slotResetUndoClearButton();

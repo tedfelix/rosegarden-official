@@ -36,13 +36,10 @@
 #include <QListWidget>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QGroupBox>
-#include <QLabel>
+#include <QCheckBox>
 #include <QLayout>
 #include <QPushButton>
-#include <QPalette>
 #include <QString>
-#include <QTabWidget>
 #include <QPlainTextEdit>
 #include <QToolTip>
 #include <QWidget>
@@ -82,9 +79,16 @@ CommentsConfigurationPage::CommentsConfigurationPage(
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     layout->addLayout(buttonsLayout);
-
+    
+    QCheckBox *checkBox = new QCheckBox;
+    buttonsLayout->addWidget(checkBox);
+    checkBox->setText(tr("Show at startup"));
+    MetadataHelper mh(m_doc);
+    checkBox->setChecked(mh.popupWanted());
+    
     m_clearButton = new QPushButton();
     buttonsLayout->addWidget(m_clearButton);
+    
     setClearButton();
 
     m_reloadButton = new QPushButton();
@@ -103,7 +107,12 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     if (m_parentDialog) {
         connect(m_textEdit, SIGNAL(textChanged()),
                 m_parentDialog, SLOT(slotActivateApply()));
+        connect(checkBox, SIGNAL(stateChanged(int)),
+                m_parentDialog, SLOT(slotActivateApply()));
     }
+
+    connect (checkBox, SIGNAL(stateChanged(int)),
+             this, SLOT(slotShowPopupChanged(int)));
 }
 
 void
@@ -170,6 +179,13 @@ CommentsConfigurationPage::loadFromMetadata()
     MetadataHelper mh(m_doc);
     QString text = mh.getComments();
     m_textEdit->setPlainText(text);
+}
+
+void
+CommentsConfigurationPage::slotShowPopupChanged(int state)
+{
+    MetadataHelper mh(m_doc);
+    mh.setPopupWanted(state != Qt::Unchecked);
 }
 
 void

@@ -95,6 +95,7 @@
 #include "document/io/MupExporter.h"
 #include "document/io/MusicXmlExporter.h"
 #include "document/RosegardenDocument.h"
+#include "document/MetadataHelper.h"
 #include "misc/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AddTracksDialog.h"
@@ -104,6 +105,7 @@
 #include "gui/dialogs/AudioSplitDialog.h"
 #include "gui/dialogs/BeatsBarsDialog.h"
 #include "gui/dialogs/CompositionLengthDialog.h"
+#include "gui/dialogs/CommentsPopupDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
 #include "gui/dialogs/DialogSuppressor.h"
@@ -1452,6 +1454,9 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // Readjust canvas size
     //
     m_view->getTrackEditor()->updateCanvasSize();
+
+    // Show notes about the composition in a pop up dialog if asked for
+    new CommentsPopupDialog(m_doc, this);
 }
 
 void
