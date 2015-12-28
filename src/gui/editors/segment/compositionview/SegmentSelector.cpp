@@ -115,6 +115,23 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
     // Get the segment that was clicked.
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
+    // If middle button...
+    if (e->button() == Qt::MidButton) {
+        // If on the background, create a new segment.
+        if (!item) {
+            m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
+
+            if (m_dispatchTool) {
+                m_dispatchTool->ready(); // set mouse cursor
+                m_dispatchTool->mousePressEvent(e);
+            }
+        }
+
+        return;
+    }
+
+    // Left button.
+
     bool shift = ((e->modifiers() & Qt::ShiftModifier) != 0);
     bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
     bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
@@ -149,11 +166,19 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
         // at once, we should assume the segment-add aspect takes
         // priority
 
-        // If there will be only one segment selected, and we're near the
-        // edge of it, resize.
-        if ((!m_segmentAddMode  ||
-             !m_canvas->getModel()->haveSelection())  &&
-            isNearEdge(item->rect(), pos)) {
+        // We can only resize one segment at a time.
+        // ??? This is convoluted, and it results in a bug.  If you try to
+        //     resize with the shift key held down (to turn off snap), it
+        //     doesn't work if the segment is selected.  We need a more
+        //     direct way to determine whether exactly one segment is
+        //     or is going to be selected.
+        // ??? Would it be possible to adjust selection first, then handle
+        //     other behavior?
+        bool oneSegmentSelected =
+                (!m_segmentAddMode  ||
+                 !m_canvas->getModel()->haveSelection());
+
+        if (oneSegmentSelected  &&  isNearEdge(item->rect(), pos)) {
 
             SegmentResizer *segmentResizer = dynamic_cast<SegmentResizer *>(
                 m_canvas->getToolBox()->getTool(SegmentResizer::ToolName));
@@ -205,12 +230,8 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     } else {  // The background was clicked
 
-        // If middle button or Ctrl+left button
-        if (e->button() == Qt::MidButton ||
-            ((e->button() == Qt::LeftButton) && (e->modifiers() & Qt::ControlModifier))) {
-
-            // Create a new segment with the SegmentPencil tool.
-
+        // If Ctrl+left button, create a new segment.
+        if (ctrl) {
             m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
 
             if (m_dispatchTool) {
@@ -218,7 +239,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
                 m_dispatchTool->mousePressEvent(e);
             }
 
-            return ;
+            return;
 
         } else {
 
@@ -252,8 +273,6 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    // Hide guides and stuff
-    //
     m_canvas->hideGuides();
     m_canvas->hideTextFloat();
 
@@ -261,8 +280,13 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
         m_dispatchTool->mouseReleaseEvent(e);
         m_dispatchTool = 0;
         m_canvas->viewport()->setCursor(Qt::ArrowCursor);
-        return ;
+        return;
     }
+
+    // We only handle the left button.  The middle button is handled by
+    // the dispatch tool (segment pencil) or ignored.
+    if (e->button() != Qt::LeftButton)
+        return;
 
     int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
     int currentTrackPos = m_canvas->grid().getYBin(pos.y());
@@ -367,9 +391,13 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         return RosegardenScrollView::NoFollow;
     }
 
-    if (m_dispatchTool) {
+    if (m_dispatchTool)
         return m_dispatchTool->mouseMoveEvent(e);
-    }
+
+    // We only handle the left button.  The middle button is handled by
+    // the dispatch tool (segment pencil) or ignored.
+    if (e->buttons() != Qt::LeftButton)
+        return RosegardenScrollView::NoFollow;
 
     Composition &comp = m_doc->getComposition();
 
