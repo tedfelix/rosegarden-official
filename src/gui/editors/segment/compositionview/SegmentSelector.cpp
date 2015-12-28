@@ -50,7 +50,6 @@ const QString SegmentSelector::ToolName = "segmentselector";
 SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
     SegmentTool(c, d),
     m_clickPoint(),
-    m_buttonPressed(false),
     m_segmentAddMode(false),
     m_segmentCopyMode(false),
     m_segmentCopyingAsLink(false),
@@ -70,7 +69,7 @@ SegmentSelector::~SegmentSelector()
 void SegmentSelector::ready()
 {
     m_canvas->viewport()->setCursor(Qt::ArrowCursor);
-    setContextHelp(tr("Click and drag to select segments"));
+    setContextHelpFor(QPoint(0,0), false);
 }
 
 void
@@ -86,8 +85,6 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     // No need to propagate.
     e->accept();
-
-    m_buttonPressed = true;
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
@@ -235,8 +232,6 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    m_buttonPressed = false;
-
     // Hide guides and stuff
     //
     m_canvas->hideGuides();
@@ -344,8 +339,10 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    // ??? Does QMouseEvent offer a button state we can use instead of this?
-    if (!m_buttonPressed) {
+    // If no buttons are pressed, update the context help and bail.
+    // Note: Mouse tracking must be on for this to work.  See
+    //       QWidget::setMouseTracking().
+    if (e->buttons() == Qt::NoButton) {
         setContextHelpFor(pos, (e->modifiers() & Qt::ControlModifier));
         return RosegardenScrollView::NoFollow;
     }

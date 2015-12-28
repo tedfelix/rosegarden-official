@@ -175,6 +175,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_haloOffsets.push_back(QPoint(+1, 0));
     m_haloOffsets.push_back(QPoint(+1,+1));
 
+    // The various tools expect this.
+    setMouseTracking(true);
+
     // *** Debugging
 
     settings.beginGroup("Performance_Testing");

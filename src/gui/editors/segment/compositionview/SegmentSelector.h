@@ -64,9 +64,6 @@ private:
     /// Recorded by mousePressEvent().
     QPoint m_clickPoint;
 
-    /// Set on press, cleared on release, used by move.
-    bool m_buttonPressed;
-
     /// Shift
     bool m_segmentAddMode;
     /// Ctrl
