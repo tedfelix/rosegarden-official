@@ -54,20 +54,14 @@ public:
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
 
-    static bool cursorIsCloseEnoughToEdge(ChangingSegmentPtr, const QPoint&, int, bool &);
-
-    void setEdgeThreshold(int e) { m_edgeThreshold = e; }
-    int getEdgeThreshold() { return m_edgeThreshold; }
-
     static const QString ToolName;
 
 protected:
-    SegmentResizer(CompositionView*, RosegardenDocument*, int edgeThreshold = 10);
+    SegmentResizer(CompositionView*, RosegardenDocument*);
     void setBasicContextHelp(bool ctrlPressed = false);
 
     //--------------- Data members ---------------------------------
 
-    int m_edgeThreshold;
     bool m_resizeStart;
 };
 

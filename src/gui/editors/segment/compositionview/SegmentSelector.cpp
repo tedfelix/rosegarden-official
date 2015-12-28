@@ -41,6 +41,8 @@
 #include <QSettings>
 #include <QMouseEvent>
 
+#include <math.h>
+
 namespace Rosegarden
 {
 
@@ -72,6 +74,28 @@ void SegmentSelector::ready()
     setContextHelpFor(QPoint(0,0), false);
 }
 
+static bool isNearEdge(const QRect &segmentRect, const QPoint &cursor)
+{
+    // Fifteen percent of the width of the segment, up to 10px
+
+    int threshold = lround(segmentRect.width() * 0.15);
+
+    if (threshold == 0)
+        threshold = 1;
+    if (threshold > 10)
+        threshold = 10;
+
+    // Near right edge?
+    if (segmentRect.right() - cursor.x() < threshold)
+        return true;
+
+    // Near left edge?
+    if (cursor.x() - segmentRect.left() < threshold)
+        return true;
+
+    return false;
+}
+
 void
 SegmentSelector::mousePressEvent(QMouseEvent *e)
 {
@@ -88,40 +112,36 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
+    // Get the segment that was clicked.
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
+    bool shift = ((e->modifiers() & Qt::ShiftModifier) != 0);
+    bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+    bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+
     // Shift adds to the selection.
-    m_segmentAddMode = ((e->modifiers() & Qt::ShiftModifier) != 0);
-    // Ctrl is segment copy.
-    m_segmentCopyMode = ((e->modifiers() & Qt::ControlModifier) != 0);
+    m_segmentAddMode = shift;
+    // Ctrl and Alt+Ctrl are segment copy.
+    m_segmentCopyMode = ctrl;
     // Alt+Ctrl is copy as link.
+    // ??? Grouping Alt+Ctrl and whether the segment is linked seems
+    //     suspect.
     m_segmentCopyingAsLink = (
-        (item && item->getSegment()->isTrulyLinked()) ||
-        (((e->modifiers() & Qt::AltModifier) != 0) &&
-         ((e->modifiers() & Qt::ControlModifier) != 0)));
+        (item  &&  item->getSegment()->isTrulyLinked())  ||
+        (alt && ctrl));
 
-    // If we're in segmentAddMode or not clicking on an item then we don't
-    // clear the selection vector.  If we're clicking on an item and it's
-    // not in the selection - then also clear the selection.
-    //
-    if ((!m_segmentAddMode && !item) ||
-        (!m_segmentAddMode &&
-         !(m_canvas->getModel()->isSelected(item->getSegment())))) {
-
-        m_canvas->getModel()->clearSelected();
+    if (!m_segmentAddMode) {
+        // If the background is being clicked, or the item being clicked isn't
+        // selected, clear the selection.
+        if (!item  ||  !m_canvas->getModel()->isSelected(item->getSegment())) {
+            m_canvas->getModel()->clearSelected();
+        }
     }
 
+    // If a segment was clicked
     if (item) {
 
         // *** Resize Segment
-
-        // Fifteen percent of the width of the SegmentItem, up to 10px
-        //
-        int threshold = int(float(item->rect().width()) * 0.15);
-        if (threshold == 0) threshold = 1;
-        if (threshold > 10) threshold = 10;
-
-        bool start = false;
 
         // Resize if we're dragging from the edge, provided we aren't
         // in segment-add mode with at least one segment already
@@ -129,15 +149,14 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
         // at once, we should assume the segment-add aspect takes
         // priority
 
-        if ((!m_segmentAddMode ||
-             !m_canvas->getModel()->haveSelection()) &&
-            SegmentResizer::cursorIsCloseEnoughToEdge(
-                item, pos, threshold, start)) {
+        // If there will be only one segment selected, and we're near the
+        // edge of it, resize.
+        if ((!m_segmentAddMode  ||
+             !m_canvas->getModel()->haveSelection())  &&
+            isNearEdge(item->rect(), pos)) {
 
-            SegmentResizer* resizer = dynamic_cast<SegmentResizer*>(
+            SegmentResizer *segmentResizer = dynamic_cast<SegmentResizer *>(
                 m_canvas->getToolBox()->getTool(SegmentResizer::ToolName));
-
-            resizer->setEdgeThreshold(threshold);
 
             // For the moment we only allow resizing of a single segment
             // at a time.
@@ -145,10 +164,11 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
             m_canvas->getModel()->clearSelected();
             m_canvas->getModel()->setSelected(item->getSegment());
 
-            m_dispatchTool = resizer;
-
+            // Turn it over to SegmentResizer.
+            m_dispatchTool = segmentResizer;
             m_dispatchTool->ready(); // set mouse cursor
             m_dispatchTool->mousePressEvent(e);
+
             return;
         }
 
@@ -183,7 +203,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         setSnapTime(e, SnapGrid::SnapToBeat);
 
-    } else {
+    } else {  // The background was clicked
 
         // If middle button or Ctrl+left button
         if (e->button() == Qt::MidButton ||
@@ -538,15 +558,10 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
         // Same logic as in mousePressEvent to establish
         // whether we'd be moving or resizing
 
-        int threshold = int(float(item->rect().width()) * 0.15);
-        if (threshold == 0) threshold = 1;
-        if (threshold > 10) threshold = 10;
-        bool start = false;
-
         if ((!m_segmentAddMode ||
              !m_canvas->getModel()->haveSelection()) &&
-            SegmentResizer::cursorIsCloseEnoughToEdge(item, p,
-                                                      threshold, start)) {
+            isNearEdge(item->rect(), p)) {
+
             if (!ctrlPressed) {
                 setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
             } else {

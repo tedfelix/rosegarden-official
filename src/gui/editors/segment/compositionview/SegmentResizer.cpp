@@ -58,10 +58,9 @@ namespace Rosegarden
 
 const QString SegmentResizer::ToolName = "segmentresizer";
 
-SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d,
-                               int edgeThreshold)
-        : SegmentTool(c, d),
-        m_edgeThreshold(edgeThreshold)
+SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d) :
+    SegmentTool(c, d),
+    m_resizeStart(false)
 {
     RG_DEBUG << "SegmentResizer()\n";
 }
@@ -386,20 +385,6 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     m_canvas->slotAllNeedRefresh(getChangingSegment()->rect() | oldRect);
 
     return RosegardenScrollView::FollowHorizontal;
-}
-
-bool SegmentResizer::cursorIsCloseEnoughToEdge(ChangingSegmentPtr p, const QPoint &coord,
-        int edgeThreshold, bool &start)
-{
-    if (abs(p->rect().x() + p->rect().width() - coord.x()) < edgeThreshold) {
-        start = false;
-        return true;
-    } else if (abs(p->rect().x() - coord.x()) < edgeThreshold) {
-        start = true;
-        return true;
-    } else {
-        return false;
-    }
 }
 
 void SegmentResizer::setBasicContextHelp(bool ctrlPressed)
