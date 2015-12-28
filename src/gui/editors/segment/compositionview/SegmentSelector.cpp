@@ -42,6 +42,7 @@
 #include <QMouseEvent>
 
 #include <math.h>
+#include <stdlib.h>
 
 namespace Rosegarden
 {
@@ -396,9 +397,26 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     // Moving
 
+    // If the segment that was clicked on isn't selected, bail.
+    if (!m_canvas->getModel()->isSelected(getChangingSegment()->getSegment()))
+        return RosegardenScrollView::NoFollow;
+
+    const int dx = pos.x() - m_clickPoint.x();
+    const int dy = pos.y() - m_clickPoint.y();
+    const int inertiaDistance = 8;
+
+    // If we've not already exceeded the inertia distance, and we
+    // still haven't, bail.
+    if (!m_passedInertiaEdge  &&
+        abs(dx) < inertiaDistance  &&
+        abs(dy) < inertiaDistance) {
+        return RosegardenScrollView::NoFollow;
+    }
+
+    m_passedInertiaEdge = true;
+
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
-    // ??? Why do the quick-copy if we've not exceeded the inertia distance?
     if (m_segmentCopyMode  &&  !m_segmentQuickCopyDone) {
         MacroCommand *macroCommand = 0;
         
@@ -434,16 +452,11 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
         m_canvas->update();
 
+        // Make sure we don't do it again.
         m_segmentQuickCopyDone = true;
     }
 
     setSnapTime(e, SnapGrid::SnapToBeat);
-
-    // If the segment that was clicked on isn't selected, bail.
-    // ??? Why not bail earlier in this case?  There's no sense doing the
-    //     quick-copy above.
-    if (!m_canvas->getModel()->isSelected(getChangingSegment()->getSegment()))
-        return RosegardenScrollView::NoFollow;
 
     // If shift isn't being held down
     if ((e->modifiers() & Qt::ShiftModifier) == 0) {
@@ -454,41 +467,25 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     // start move on selected items only once
     if (!m_selectionMoveStarted) {
+        m_selectionMoveStarted = true;
+
         m_canvas->getModel()->startChangeSelection(
                 CompositionModelImpl::ChangeMove);
-        m_selectionMoveStarted = true;
+
+        // The call to startChangeSelection() generates a new changing segment.
+        // Get it.
+        ChangingSegmentPtr newChangingSegment =
+                m_canvas->getModel()->findChangingSegment(
+                          getChangingSegment()->getSegment());
+
+        if (newChangingSegment) {
+            // Toss the local "changing" segment since it isn't going to
+            // be moving at all.  Swap it for the same changing segment in
+            // CompositionModelImpl.  That one *will* be moving and can be
+            // used to drive the guides.
+            setChangingSegment(newChangingSegment);
+        }
     }
-
-    // The call to startChangeSelection() generates a new changing segment.
-    // Get it.
-    // ??? Wouldn't this make more sense inside the above "if"?  Or do we
-    //     really need to do this over and over and over?
-    ChangingSegmentPtr newChangingSegment =
-            m_canvas->getModel()->findChangingSegment(
-                      getChangingSegment()->getSegment());
-
-    if (newChangingSegment) {
-        // Toss the local "changing" segment since it isn't going to
-        // be moving at all.  Swap it for the same changing segment in
-        // CompositionModelImpl.  That one *will* be moving and can be
-        // used to drive the guides.
-        setChangingSegment(newChangingSegment);
-    }
-
-    const int dx = pos.x() - m_clickPoint.x();
-    const int dy = pos.y() - m_clickPoint.y();
-    const int inertiaDistance = 8;
-
-    // If we've not already exceeded the inertia distance, and we
-    // still haven't, bail.
-    // ??? Can we do this check earlier?
-    if (!m_passedInertiaEdge  &&
-        abs(dx) < inertiaDistance  &&
-        abs(dy) < inertiaDistance) {
-        return RosegardenScrollView::NoFollow;
-    }
-
-    m_passedInertiaEdge = true;
 
     Composition &comp = m_doc->getComposition();
 
@@ -509,8 +506,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         const timeT newStartTime = m_canvas->grid().snapX(
                 changingSegment->savedRect().x() + dx);
 
-        // ??? Why not lround()?
-        const int newX = static_cast<int>(
+        const int newX = lround(
                 m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
 
         int newTrackPos = m_canvas->grid().getYBin(
