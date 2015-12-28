@@ -117,7 +117,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     // If middle button...
     if (e->button() == Qt::MidButton) {
-        // If on the background, create a new segment.
+        // If clicked on the background, create a new segment.
         if (!item) {
             m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
 
@@ -130,64 +130,50 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    // Left button.
+    // Left button was pressed.
+    // ??? Should we split this into a midPress(e) and a leftPress(e)?
+    //     Might improve readability a little.
 
-    bool shift = ((e->modifiers() & Qt::ShiftModifier) != 0);
-    bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
-    bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
+    // *** Adjust Selection
 
-    // Shift adds to the selection.
-    m_segmentAddMode = shift;
-    // Ctrl and Alt+Ctrl are segment copy.
-    m_segmentCopyMode = ctrl;
-    // Alt+Ctrl is copy as link.
-    // ??? Grouping Alt+Ctrl and whether the segment is linked seems
-    //     suspect.
-    m_segmentCopyingAsLink = (
-        (item  &&  item->getSegment()->isTrulyLinked())  ||
-        (alt && ctrl));
+    // Shift key adds to selection.
+    m_segmentAddMode = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
-    if (!m_segmentAddMode) {
-        // If the background is being clicked, or the item being clicked isn't
-        // selected, clear the selection.
-        if (!item  ||  !m_canvas->getModel()->isSelected(item->getSegment())) {
+    // if a segment was clicked
+    if (item) {
+        bool selected = m_canvas->getModel()->isSelected(item->getSegment());
+        if (m_segmentAddMode) {
+            // toggle item selection
+            m_canvas->getModel()->setSelected(item->getSegment(), !selected);
+        } else {
+            if (!selected) {
+                // make the item the selection
+                m_canvas->getModel()->clearSelected();
+                m_canvas->getModel()->setSelected(item->getSegment());
+            }
+        }
+    } else {  // the background was clicked
+        if (!m_segmentAddMode) {
+            // clear the selection
             m_canvas->getModel()->clearSelected();
         }
     }
 
-    // If a segment was clicked
+    // *** Perform Functions
+
+    bool ctrl = ((e->modifiers() & Qt::ControlModifier) != 0);
+
+    // if a segment was clicked
     if (item) {
 
-        // *** Resize Segment
+        // * Resize
 
-        // Resize if we're dragging from the edge, provided we aren't
-        // in segment-add mode with at least one segment already
-        // selected -- as we aren't able to resize multiple segments
-        // at once, we should assume the segment-add aspect takes
-        // priority
-
-        // We can only resize one segment at a time.
-        // ??? This is convoluted, and it results in a bug.  If you try to
-        //     resize with the shift key held down (to turn off snap), it
-        //     doesn't work if the segment is selected.  We need a more
-        //     direct way to determine whether exactly one segment is
-        //     or is going to be selected.
-        // ??? Would it be possible to adjust selection first, then handle
-        //     other behavior?
-        bool oneSegmentSelected =
-                (!m_segmentAddMode  ||
-                 !m_canvas->getModel()->haveSelection());
-
-        if (oneSegmentSelected  &&  isNearEdge(item->rect(), pos)) {
+        // if only one segment is selected and clicked near the edge, resize
+        if (m_canvas->getModel()->getSelectedSegments().size() == 1  &&
+            isNearEdge(item->rect(), pos)) {
 
             SegmentResizer *segmentResizer = dynamic_cast<SegmentResizer *>(
                 m_canvas->getToolBox()->getTool(SegmentResizer::ToolName));
-
-            // For the moment we only allow resizing of a single segment
-            // at a time.
-            //
-            m_canvas->getModel()->clearSelected();
-            m_canvas->getModel()->setSelected(item->getSegment());
 
             // Turn it over to SegmentResizer.
             m_dispatchTool = segmentResizer;
@@ -197,28 +183,30 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
             return;
         }
 
-        // *** Selecting and Moving
+        // * Move
 
         // ??? Why not let SegmentMover take care of moving?  This
         //     code is awfully similar.  Not similar enough?
 
-        bool selecting = true;
-        
-        if (m_segmentAddMode  &&
-            m_canvas->getModel()->isSelected(item->getSegment())) {
+        bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
 
-            selecting = false;
-        } else {
-            // put the segment in 'move' mode only if it's being selected
-            m_canvas->getModel()->startChange(item, CompositionModelImpl::ChangeMove);
+        // Ctrl and Alt+Ctrl are segment copy.
+        m_segmentCopyMode = ctrl;
+        // Alt+Ctrl is copy as link.
+        // ??? Grouping Alt+Ctrl and whether the segment is linked seems
+        //     suspect.
+        m_segmentCopyingAsLink = (
+            (item  &&  item->getSegment()->isTrulyLinked())  ||
+            (alt && ctrl));
+
+        // If the segment is selected, put it in move mode.
+        if (m_canvas->getModel()->isSelected(item->getSegment())) {
+            m_canvas->getModel()->startChange(
+                    item, CompositionModelImpl::ChangeMove);
         }
 
-        m_canvas->getModel()->setSelected(item->getSegment(), selecting);
-
-        //RG_DEBUG << "mousePressEvent() - item = " << item;
-        // ??? This was a line that appeared to leak memory.  Was it really
-        //     leaking memory?
         setChangingSegment(item);
+
         m_clickPoint = pos;
 
         int guideX = item->rect().x();
@@ -228,11 +216,13 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         setSnapTime(e, SnapGrid::SnapToBeat);
 
-    } else {  // The background was clicked
-
-        // If Ctrl+left button, create a new segment.
+    } else {  // the background was clicked
         if (ctrl) {
-            m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
+
+            // * Create Segment
+
+            m_dispatchTool = m_canvas->getToolBox()->getTool(
+                    SegmentPencil::ToolName);
 
             if (m_dispatchTool) {
                 m_dispatchTool->ready(); // set mouse cursor
@@ -240,21 +230,18 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
             }
 
             return;
-
-        } else {
-
-            // Selection rubber band
-
-            m_canvas->drawSelectionRectPos1(pos);
-            if (!m_segmentAddMode)
-                m_canvas->getModel()->clearSelected();
-
         }
+
+        // * Rubber Band
+
+        m_canvas->drawSelectionRectPos1(pos);
+
     }
 
-    // Tell the RosegardenMainViewWidget that we've selected some new Segments -
-    // when the list is empty we're just unselecting.
-    //
+    // Tell the RosegardenMainViewWidget that we've selected some new Segments.
+    // When the list is empty we're just unselecting.
+    // ??? Calling this appears to do nothing.  Remove this and everything
+    //     still updates fine.  Why?
     m_canvas->getModel()->selectionHasChanged();
 
     m_passedInertiaEdge = false;
