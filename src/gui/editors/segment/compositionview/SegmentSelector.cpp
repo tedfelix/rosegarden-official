@@ -194,11 +194,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
         // Ctrl and Alt+Ctrl are segment copy.
         m_segmentCopyMode = ctrl;
         // Alt+Ctrl is copy as link.
-        // ??? Grouping Alt+Ctrl and whether the segment is linked seems
-        //     suspect.
-        m_segmentCopyingAsLink = (
-            (item  &&  item->getSegment()->isTrulyLinked())  ||
-            (alt && ctrl));
+        m_segmentCopyingAsLink = (alt && ctrl);
 
         // If the segment is selected, put it in move mode.
         if (m_canvas->getModel()->isSelected(item->getSegment())) {
@@ -434,16 +430,19 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         for (SegmentSelection::iterator it = selectedItems.begin();
              it != selectedItems.end();
              ++it) {
+            Segment *segment = *it;
+
             Command *command = 0;
 
-            // ??? Bug #1450.  When copying, all segments are treated either
-            //     as copies or links.  Instead, we should preserve the type
-            //     of the original segments.  Links should become new links,
-            //     non-links should become new copies.
-            if (m_segmentCopyingAsLink)
-                command = new SegmentQuickLinkCommand(*it);
-            else
-                command = new SegmentQuickCopyCommand(*it);
+            if (m_segmentCopyingAsLink) {
+                command = new SegmentQuickLinkCommand(segment);
+            } else {
+                // if it's a link, copy as link
+                if (segment->isTrulyLinked())
+                    command = new SegmentQuickLinkCommand(segment);
+                else  // copy as a non-link segment
+                    command = new SegmentQuickCopyCommand(segment);
+            }
 
             macroCommand->addCommand(command);
         }
