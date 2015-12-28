@@ -74,7 +74,7 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     layout->addWidget(m_textEdit);
     m_textEdit->setBackgroundVisible(true);
     m_textEdit->setStyleSheet(localStyle);
-    m_textEdit->setToolTip(tr("<qt>Notes inserted here will be stored in .rg "
+    m_textEdit->setToolTip(tr("<qt>Notes inserted here will be stored in the .rg "
                               "file along with the composition</qt>"));
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
