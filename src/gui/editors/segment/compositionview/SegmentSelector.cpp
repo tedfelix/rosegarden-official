@@ -238,10 +238,8 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     }
 
-    // Tell the RosegardenMainViewWidget that we've selected some new Segments.
-    // When the list is empty we're just unselecting.
-    // ??? Calling this appears to do nothing.  Remove this and everything
-    //     still updates fine.  Why?
+    // Make sure the Segment Parameters box is updated.  See
+    // RosegardenMainViewWidget::slotSelectedSegments().
     m_canvas->getModel()->selectionHasChanged();
 
     m_passedInertiaEdge = false;
@@ -378,6 +376,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         return RosegardenScrollView::NoFollow;
     }
 
+    // If another tool has taken over, delegate.
     if (m_dispatchTool)
         return m_dispatchTool->mouseMoveEvent(e);
 
@@ -386,168 +385,173 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return RosegardenScrollView::NoFollow;
 
-    Composition &comp = m_doc->getComposition();
-
+    // If we aren't moving anything, rubber band.
     if (!getChangingSegment()) {
-
-        //RG_DEBUG << "mouseMoveEvent(): no current item";
-
         m_canvas->drawSelectionRectPos2(pos);
-
         m_canvas->getModel()->selectionHasChanged();
-        return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
+
+        return RosegardenScrollView::FollowHorizontal |
+               RosegardenScrollView::FollowVertical;
     }
+
+    // Moving
 
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
-    if (m_segmentCopyMode && !m_segmentQuickCopyDone) {
-        MacroCommand *mcommand = 0;
+    // ??? Why do the quick-copy if we've not exceeded the inertia distance?
+    if (m_segmentCopyMode  &&  !m_segmentQuickCopyDone) {
+        MacroCommand *macroCommand = 0;
         
         if (m_segmentCopyingAsLink) {
-            mcommand = new MacroCommand
-                           (SegmentQuickLinkCommand::getGlobalName());
+            macroCommand = new MacroCommand(
+                    SegmentQuickLinkCommand::getGlobalName());
         } else {
-            mcommand = new MacroCommand
-                           (SegmentQuickCopyCommand::getGlobalName());
+            macroCommand = new MacroCommand(
+                    SegmentQuickCopyCommand::getGlobalName());
         }
 
         SegmentSelection selectedItems = m_canvas->getSelectedSegments();
-        SegmentSelection::iterator it;
-        for (it = selectedItems.begin();
-                it != selectedItems.end();
-                ++it) {
-            Command *command = 0;
-        
-            if (m_segmentCopyingAsLink) {
-                command = new SegmentQuickLinkCommand(*it);
-            } else {
-                command = new SegmentQuickCopyCommand(*it);
-            }
 
-            mcommand->addCommand(command);
+        // for each selected segment
+        for (SegmentSelection::iterator it = selectedItems.begin();
+             it != selectedItems.end();
+             ++it) {
+            Command *command = 0;
+
+            // ??? Bug #1450.  When copying, all segments are treated either
+            //     as copies or links.  Instead, we should preserve the type
+            //     of the original segments.  Links should become new links,
+            //     non-links should become new copies.
+            if (m_segmentCopyingAsLink)
+                command = new SegmentQuickLinkCommand(*it);
+            else
+                command = new SegmentQuickCopyCommand(*it);
+
+            macroCommand->addCommand(command);
         }
 
-        CommandHistory::getInstance()->addCommand(mcommand);
+        CommandHistory::getInstance()->addCommand(macroCommand);
 
-        // generate SegmentItem
-        //
-// 		m_canvas->updateContents();
-		m_canvas->update();
+        m_canvas->update();
 
-		m_segmentQuickCopyDone = true;
+        m_segmentQuickCopyDone = true;
     }
 
     setSnapTime(e, SnapGrid::SnapToBeat);
 
-    int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-    int currentTrackPos = m_canvas->grid().getYBin(pos.y());
-    int trackDiff = currentTrackPos - startDragTrackPos;
+    // If the segment that was clicked on isn't selected, bail.
+    // ??? Why not bail earlier in this case?  There's no sense doing the
+    //     quick-copy above.
+    if (!m_canvas->getModel()->isSelected(getChangingSegment()->getSegment()))
+        return RosegardenScrollView::NoFollow;
 
-    if (m_canvas->getModel()->isSelected(getChangingSegment()->getSegment())) {
-
-        // If shift isn't being held down
-        if ((e->modifiers() & Qt::ShiftModifier) == 0) {
-            setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
-        } else {
-            clearContextHelp();
-        }
-
-        //RG_DEBUG << "mouseMoveEvent(): current item is selected";
-
-        if (!m_selectionMoveStarted) { // start move on selected items only once
-            m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
-            m_selectionMoveStarted = true;
-        }
-
-        ChangingSegmentPtr newChangingSegment =
-                m_canvas->getModel()->findChangingSegment(
-                          getChangingSegment()->getSegment());
-
-        if (newChangingSegment) {
-            // Toss the local "changing" segment since it isn't going to
-            // be moving at all.  Swap it for the same changing segment in
-            // CompositionModelImpl.  That one *will* be moving and can be
-            // used to drive the guides.
-            setChangingSegment(newChangingSegment);
-        }
-
-        CompositionModelImpl::ChangingSegmentSet& changingItems =
-                m_canvas->getModel()->getChangingSegments();
-
-        CompositionModelImpl::ChangingSegmentSet::iterator it;
-
-        for (it = changingItems.begin();
-                it != changingItems.end();
-                ++it) {
-
-            //RG_DEBUG << "mouseMoveEvent(): movingItem at " << (*it)->rect().x() << "," << (*it)->rect().y();
-
-            int dx = pos.x() - m_clickPoint.x(),
-                dy = pos.y() - m_clickPoint.y();
-
-            const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
-            if (!m_passedInertiaEdge &&
-                    (dx < inertiaDistance && dx > -inertiaDistance) &&
-                    (dy < inertiaDistance && dy > -inertiaDistance)) {
-                return RosegardenScrollView::NoFollow;
-            } else {
-                m_passedInertiaEdge = true;
-            }
-
-            timeT newStartTime = m_canvas->grid().snapX((*it)->savedRect().x() + dx);
-
-            int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
-
-            int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
-
-            //RG_DEBUG << "mouseMoveEvent(): segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to:";
-
-            trackPos += trackDiff;
-
-            //RG_DEBUG << "  " << trackPos;
-
-            if (trackPos < 0) {
-                trackPos = 0;
-            } else if (trackPos >= (int)comp.getNbTracks()) {
-                trackPos = comp.getNbTracks() - 1;
-            }
-
-            int newY = m_canvas->grid().getYBinCoordinate(trackPos);
-
-            (*it)->moveTo(newX, newY);
-            m_changeMade = true;
-        }
-
-        if (m_changeMade) {
-            // Make sure the segments are redrawn.
-            m_canvas->slotUpdateAll();
-        }
-
-        int guideX = getChangingSegment()->rect().x();
-        int guideY = getChangingSegment()->rect().y();
-
-        m_canvas->drawGuides(guideX, guideY);
-
-        timeT currentIndexStartTime = m_canvas->grid().snapX(getChangingSegment()->rect().x());
-
-        RealTime time = comp.getElapsedRealTime(currentIndexStartTime);
-        QString ms;
-        ms.sprintf("%03d", time.msec());
-
-        int bar, beat, fraction, remainder;
-        comp.getMusicalTimeForAbsoluteTime(currentIndexStartTime, bar, beat, fraction, remainder);
-
-        QString posString = QString("%1.%2s (%3, %4, %5)")
-                            .arg(time.sec).arg(ms)
-                            .arg(bar + 1).arg(beat).arg(fraction);
-
-        m_canvas->drawTextFloat(guideX + 10, guideY - 30, posString);
-// 		m_canvas->updateContents();
-		m_canvas->update();
-
+    // If shift isn't being held down
+    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
+        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
     } else {
-        //RG_DEBUG << "mouseMoveEvent(): current item not selected";
+        clearContextHelp();
     }
+
+    // start move on selected items only once
+    if (!m_selectionMoveStarted) {
+        m_canvas->getModel()->startChangeSelection(
+                CompositionModelImpl::ChangeMove);
+        m_selectionMoveStarted = true;
+    }
+
+    // The call to startChangeSelection() generates a new changing segment.
+    // Get it.
+    // ??? Wouldn't this make more sense inside the above "if"?  Or do we
+    //     really need to do this over and over and over?
+    ChangingSegmentPtr newChangingSegment =
+            m_canvas->getModel()->findChangingSegment(
+                      getChangingSegment()->getSegment());
+
+    if (newChangingSegment) {
+        // Toss the local "changing" segment since it isn't going to
+        // be moving at all.  Swap it for the same changing segment in
+        // CompositionModelImpl.  That one *will* be moving and can be
+        // used to drive the guides.
+        setChangingSegment(newChangingSegment);
+    }
+
+    const int dx = pos.x() - m_clickPoint.x();
+    const int dy = pos.y() - m_clickPoint.y();
+    const int inertiaDistance = 8;
+
+    // If we've not already exceeded the inertia distance, and we
+    // still haven't, bail.
+    // ??? Can we do this check earlier?
+    if (!m_passedInertiaEdge  &&
+        abs(dx) < inertiaDistance  &&
+        abs(dy) < inertiaDistance) {
+        return RosegardenScrollView::NoFollow;
+    }
+
+    m_passedInertiaEdge = true;
+
+    Composition &comp = m_doc->getComposition();
+
+    const int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
+    const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
+    const int trackDiff = currentTrackPos - startDragTrackPos;
+
+    CompositionModelImpl::ChangingSegmentSet& changingSegments =
+            m_canvas->getModel()->getChangingSegments();
+
+    // For each changing segment
+    for (CompositionModelImpl::ChangingSegmentSet::iterator it =
+                 changingSegments.begin();
+         it != changingSegments.end();
+         ++it) {
+        ChangingSegmentPtr changingSegment = *it;
+
+        timeT newStartTime = m_canvas->grid().snapX(changingSegment->savedRect().x() + dx);
+
+        int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
+
+        int trackPos = m_canvas->grid().getYBin(changingSegment->savedRect().y());
+
+        trackPos += trackDiff;
+
+        if (trackPos < 0) {
+            trackPos = 0;
+        } else if (trackPos >= (int)comp.getNbTracks()) {
+            trackPos = comp.getNbTracks() - 1;
+        }
+
+        int newY = m_canvas->grid().getYBinCoordinate(trackPos);
+
+        changingSegment->moveTo(newX, newY);
+        m_changeMade = true;
+    }
+
+    if (m_changeMade) {
+        // Make sure the segments are redrawn.
+        m_canvas->slotUpdateAll();
+    }
+
+    int guideX = getChangingSegment()->rect().x();
+    int guideY = getChangingSegment()->rect().y();
+
+    m_canvas->drawGuides(guideX, guideY);
+
+    timeT currentIndexStartTime = m_canvas->grid().snapX(getChangingSegment()->rect().x());
+
+    RealTime time = comp.getElapsedRealTime(currentIndexStartTime);
+    QString ms;
+    ms.sprintf("%03d", time.msec());
+
+    int bar, beat, fraction, remainder;
+    comp.getMusicalTimeForAbsoluteTime(currentIndexStartTime, bar, beat, fraction, remainder);
+
+    QString posString = QString("%1.%2s (%3, %4, %5)")
+                        .arg(time.sec).arg(ms)
+                        .arg(bar + 1).arg(beat).arg(fraction);
+
+    m_canvas->drawTextFloat(guideX + 10, guideY - 30, posString);
+
+    m_canvas->update();
 
     return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
 }
