@@ -14,8 +14,8 @@
     <message numerus="yes">
         <location filename="../../src/document/Command.cpp" line="+102"/>
         <source>%1 (%n change(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 (%n changement(s))</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -13025,60 +13025,60 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="+77"/>
         <source>&lt;qt&gt;Notes inserted here will be stored in the .rg file along with the composition&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Les notes écrites ici seront conservées dans le fichier .rg avec la composition&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Show at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher au démarrage</translation>
     </message>
     <message>
         <location line="+110"/>
         <source>Clear</source>
         <comment>Button label</comment>
-        <translation type="unfinished">Effacer</translation>
+        <translation>Effacer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Clear text</source>
         <comment>Button tool tip</comment>
-        <translation type="unfinished"></translation>
+        <translation>Effacer la totalité du texte</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Reload</source>
         <comment>Button label</comment>
-        <translation type="unfinished"></translation>
+        <translation>Recharger</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Reload text from the document (come back to the last time apply was pressed)&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Recharge la totalité du texte depuis le document (Retour au texte présent au moment du dernier clic sur &quot;Appliquer&quot;)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Undo last clear</source>
         <comment>Button label</comment>
-        <translation type="unfinished"></translation>
+        <translation>Annuler Effacer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Restore to the last text before clear&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Restaure le texte présent avant le dernier clic sur &quot;Effacer&quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Undo last reload</source>
         <comment>Button label</comment>
-        <translation type="unfinished"></translation>
+        <translation>Annuler Recharger</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;Restore to the last text before reload&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;Restaure le texte présent avant le dernier clic sur &quot;Recharger&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -13086,22 +13086,22 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="+47"/>
         <source>Notes about %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Notes sur %1</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>&lt;qt&gt;This is a short description of the current composition&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Ce texte est une brève description de la composition contenue dans le fichier courant.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Show next time</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer la prochaine fois</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si cette case est cochée, ces notes seront affichées à la prochaine ouverture de ce document&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -13715,7 +13715,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+4"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notes</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -14858,7 +14858,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+15"/>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of two graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Qt vous donne le choix entre deux procédés d&apos;affichage graphique. Le procédé &quot;rapide&quot; (raster graphics) donne le meilleur rapport performance/stabilité mais peut poser des problèmes sur certains systèmes.  Si vous constatez des plantages fréquents ou des anomalies de l&apos;affichage, vous devriez plutôt choisir le procédé &quot;natif&quot; (native graphics).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+168"/>
@@ -16388,22 +16388,22 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+34"/>
         <source>&lt;p&gt;Ran &lt;b&gt;lilypond&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;L&apos;exécution de &lt;b&gt;lilypond&lt;/b&gt; a été effectuée mais s&apos;est terminée avec des erreurs.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Vous avez choisi d&apos;exporter les ligatures depuis Rosegarden et LilyPond ne parvient pas à traiter le fichier.  Il est vraisemblable que, pendant l&apos;édition de votre fichier, vous avez effectué certaines opérations qui se sont traduites par l&apos;affectation d&apos;une propriété&quot;ligature cachée&quot; à des événements auxquels elle n&apos;appartient pas, ce qui a provoqué l&apos;échec de LilyPond.  La solution recommandée est soit de laisser LilyPond gérer les ligatures (le traitement automatique des ligatures par LilyPond est bien meilleur que celui de Rosegarden) en décochant cette option, soit de retirer toutes les ligatures dans Rosegarden, puis de les réintroduire manuellement.  Utiliser le traitement automatique de LilyPond est probablement la meilleure solution.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;p&gt;You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you&apos;ve selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Vous avez choisi d&apos;exporter des accolades pour regrouper des portées mais LilyPond n&apos;a pas pu traiter ce fichier.  Cette fonctionnalité utile est malheureusement délicate à utiliser.  veuillez retourner en arrière et vous assurer que toutes les accolades que vous avez sélectionnées sont cohérentes, en particulier, vérifiez que leurs éventuelles imbrications sont correctes.  Si vous travaillez avec un sous-ensemble du nombre total de pistes, veillez aussi à ce que les accolades de ce sous-ensemble restent cohérentes quand elles sont retirées du contexte global de la composition.  En cas de doute, il est possible d&apos;essayer de ne pas exporter les accolades pour s&apos;assurer que LilyPond est capable de traiter le reste de la partition.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Le traitement s&apos;est achevé en raison d&apos;une erreur fatale.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+79"/>
@@ -19578,7 +19578,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1"/>
         <source>X11 Rosegarden files</source>
-        <translation type="unfinished">Fichier Rosegarden X11</translation>
+        <translation>Fichiers Rosegarden X11</translation>
     </message>
     <message>
         <source>X11 Rosegaden files</source>
@@ -21599,18 +21599,18 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+39"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished">Rosegarden - Avertissement</translation>
+        <translation>Rosegarden - Avertissement</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Le fichier courant a été modifié.&lt;/p&gt;&lt;p&gt;Souhaitez vous le sauvegarder?&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Le fichier courant a été modifié.&lt;/p&gt;&lt;p&gt;Souhaitez vous le sauvegarder ?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Could not save document at %1
 (%2)</source>
-        <translation type="unfinished">Echec sauvegarde du document en %1
+        <translation>Echec sauvegarde du document en %1
 (%2)</translation>
     </message>
 </context>
