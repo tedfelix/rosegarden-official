@@ -19,13 +19,11 @@
 
 #include "SegmentSelector.h"
 
-#include "base/Event.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/SnapGrid.h"
-#include "base/Selection.h"
 #include "base/Track.h"
 #include "commands/segment/SegmentQuickCopyCommand.h"
 #include "commands/segment/SegmentQuickLinkCommand.h"
@@ -35,22 +33,13 @@
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
-#include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
-#include "SegmentTool.h"
 #include "SegmentToolBox.h"
 
-#include <QApplication>
 #include <QSettings>
-#include <QCursor>
-#include <QEvent>
-#include <QPoint>
-#include <QRect>
-#include <QString>
 #include <QMouseEvent>
-
 
 namespace Rosegarden
 {
@@ -58,31 +47,31 @@ namespace Rosegarden
 
 const QString SegmentSelector::ToolName = "segmentselector";
 
-SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d)
-        : SegmentTool(c, d),
-        m_segmentAddMode(false),
-        m_segmentCopyMode(false),
-        m_segmentCopyingAsLink(false),
-        m_segmentQuickCopyDone(false),
-        m_buttonPressed(false),
-        m_selectionMoveStarted(false),
-        m_changeMade(false),
-        m_dispatchTool(0)
+SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
+    SegmentTool(c, d),
+    m_clickPoint(),
+    m_buttonPressed(false),
+    m_segmentAddMode(false),
+    m_segmentCopyMode(false),
+    m_segmentCopyingAsLink(false),
+    m_passedInertiaEdge(false),
+    m_segmentQuickCopyDone(false),
+    m_selectionMoveStarted(false),
+    m_changeMade(false),
+    m_dispatchTool(0)
 {
-    RG_DEBUG << "SegmentSelector()\n";
+    //RG_DEBUG << "SegmentSelector()";
 }
 
 SegmentSelector::~SegmentSelector()
-{}
+{
+}
 
 void SegmentSelector::ready()
 {
     m_canvas->viewport()->setCursor(Qt::ArrowCursor);
     setContextHelp(tr("Click and drag to select segments"));
 }
-
-void SegmentSelector::stow()
-{}
 
 void
 SegmentSelector::mousePressEvent(QMouseEvent *e)
@@ -184,7 +173,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         m_canvas->getModel()->setSelected(item->getSegment(), selecting);
 
-        //RG_DEBUG << "SegmentSelector::mousePressEvent - item = " << item << endl;
+        //RG_DEBUG << "mousePressEvent() - item = " << item;
         // ??? This was a line that appeared to leak memory.  Was it really
         //     leaking memory?
         setChangingSegment(item);
@@ -317,7 +306,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                 timeT itemEndTime = itemStartTime + segment->getEndMarkerTime(false)
                                     - segment->getStartTime();
 
-//                std::cerr << "releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId << std::endl;
+                //RG_DEBUG << "mouseReleaseEvent(): releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId;
 
                 command->addSegment(segment,
                                     itemStartTime,
@@ -369,7 +358,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     if (!getChangingSegment()) {
 
-        // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: no current item\n";
+        //RG_DEBUG << "mouseMoveEvent(): no current item";
 
         m_canvas->drawSelectionRectPos2(pos);
 
@@ -431,7 +420,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             clearContextHelp();
         }
 
-        // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: current item is selected\n";
+        //RG_DEBUG << "mouseMoveEvent(): current item is selected";
 
         if (!m_selectionMoveStarted) { // start move on selected items only once
             m_canvas->getModel()->startChangeSelection(CompositionModelImpl::ChangeMove);
@@ -459,8 +448,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
                 it != changingItems.end();
                 ++it) {
 
-            //             RG_DEBUG << "SegmentSelector::mouseMoveEvent() : movingItem at "
-            //                      << (*it)->rect().x() << "," << (*it)->rect().y() << endl;
+            //RG_DEBUG << "mouseMoveEvent(): movingItem at " << (*it)->rect().x() << "," << (*it)->rect().y();
 
             int dx = pos.x() - m_clickPoint.x(),
                 dy = pos.y() - m_clickPoint.y();
@@ -480,11 +468,11 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
             int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
 
-//            std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
+            //RG_DEBUG << "mouseMoveEvent(): segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to:";
 
             trackPos += trackDiff;
 
-//            std::cerr << trackPos << std::endl;
+            //RG_DEBUG << "  " << trackPos;
 
             if (trackPos < 0) {
                 trackPos = 0;
@@ -526,7 +514,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 		m_canvas->update();
 
     } else {
-        // 	RG_DEBUG << "SegmentSelector::mouseMoveEvent: current item not selected\n";
+        //RG_DEBUG << "mouseMoveEvent(): current item not selected";
     }
 
     return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;

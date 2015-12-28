@@ -20,63 +20,75 @@
 #define RG_SEGMENTSELECTOR_H
 
 #include "SegmentTool.h"
+
 #include <QPoint>
 #include <QString>
 
-
 class QMouseEvent;
-
 
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 class CompositionView;
 
-
+/// The Arrow Tool
 class SegmentSelector : public SegmentTool
 {
     Q_OBJECT
 
-    friend class SegmentToolBox;
-    friend class SegmentTool;
-
 public:
+    static const QString ToolName;
 
+    SegmentSelector(CompositionView *, RosegardenDocument *);
     virtual ~SegmentSelector();
 
+    /// Called when this tool becomes the active tool.
     virtual void ready();
-    virtual void stow();
+    virtual void stow()  { }
 
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
 
-    bool isSegmentAdding() const { return m_segmentAddMode; }
-    bool isSegmentCopying() const { return m_segmentCopyMode; }
+    // Unused
+    //bool isSegmentAdding() const { return m_segmentAddMode; }
+    //bool isSegmentCopying() const { return m_segmentCopyMode; }
 
-    static const QString ToolName;
-
-protected:
-    SegmentSelector(CompositionView*, RosegardenDocument*);
-
+private:
     void setContextHelpFor(QPoint p, bool ctrlPressed = false);
 
     //--------------- Data members ---------------------------------
 
-    bool m_segmentAddMode;
-    bool m_segmentCopyMode;
-    bool m_segmentCopyingAsLink;
+    /// Recorded by mousePressEvent().
     QPoint m_clickPoint;
-    bool m_segmentQuickCopyDone;
-    bool m_passedInertiaEdge;
+
+    /// Set on press, cleared on release, used by move.
     bool m_buttonPressed;
+
+    /// Shift
+    bool m_segmentAddMode;
+    /// Ctrl
+    bool m_segmentCopyMode;
+    /// Alt+Ctrl
+    bool m_segmentCopyingAsLink;
+
+    /// The mouse has moved enough that we can start moving segments.
+    bool m_passedInertiaEdge;
+
+    /// Set to true after move makes copies.
+    bool m_segmentQuickCopyDone;
+
+    /// Whether we've notified CompositionModelImpl that things are changing.
     bool m_selectionMoveStarted;
+
+    /// Set by mouse move when segments have moved.
     bool m_changeMade;
 
+    /// Secondary tool for resizing or creating new segments.
     SegmentTool *m_dispatchTool;
 };
-
 
 
 }
