@@ -176,7 +176,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_haloOffsets.push_back(QPoint(+1,+1));
 
     // The various tools expect this.
-    setMouseTracking(true);
+    // ??? Problem is that this causes crashes.  Open a file and while the
+    //     file is opening, move the mouse around the segment canvas.  CRASH.
+    //setMouseTracking(true);
 
     // *** Debugging
 
