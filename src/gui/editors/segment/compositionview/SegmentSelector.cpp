@@ -496,7 +496,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
     const int trackDiff = currentTrackPos - startDragTrackPos;
 
-    CompositionModelImpl::ChangingSegmentSet& changingSegments =
+    CompositionModelImpl::ChangingSegmentSet &changingSegments =
             m_canvas->getModel()->getChangingSegments();
 
     // For each changing segment
@@ -506,21 +506,23 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
          ++it) {
         ChangingSegmentPtr changingSegment = *it;
 
-        timeT newStartTime = m_canvas->grid().snapX(changingSegment->savedRect().x() + dx);
+        const timeT newStartTime = m_canvas->grid().snapX(
+                changingSegment->savedRect().x() + dx);
 
-        int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
+        // ??? Why not lround()?
+        const int newX = static_cast<int>(
+                m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
 
-        int trackPos = m_canvas->grid().getYBin(changingSegment->savedRect().y());
+        int newTrackPos = m_canvas->grid().getYBin(
+                changingSegment->savedRect().y()) + trackDiff;
 
-        trackPos += trackDiff;
+        // Limit to [0, comp.getNbTracks()-1].
+        if (newTrackPos < 0)
+            newTrackPos = 0;
+        if (newTrackPos > static_cast<int>(comp.getNbTracks()) - 1)
+            newTrackPos = comp.getNbTracks() - 1;
 
-        if (trackPos < 0) {
-            trackPos = 0;
-        } else if (trackPos >= (int)comp.getNbTracks()) {
-            trackPos = comp.getNbTracks() - 1;
-        }
-
-        int newY = m_canvas->grid().getYBinCoordinate(trackPos);
+        const int newY = m_canvas->grid().getYBinCoordinate(newTrackPos);
 
         changingSegment->moveTo(newX, newY);
         m_changeMade = true;
@@ -528,32 +530,41 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     if (m_changeMade) {
         // Make sure the segments are redrawn.
+        // Note: The update() call below doesn't cause the segments to be
+        //       redrawn.  It just updates from the cache.
         m_canvas->slotUpdateAll();
     }
 
-    int guideX = getChangingSegment()->rect().x();
-    int guideY = getChangingSegment()->rect().y();
+    // Guides
+
+    const int guideX = getChangingSegment()->rect().x();
+    const int guideY = getChangingSegment()->rect().y();
 
     m_canvas->drawGuides(guideX, guideY);
 
-    timeT currentIndexStartTime = m_canvas->grid().snapX(getChangingSegment()->rect().x());
+    // Text Float
 
-    RealTime time = comp.getElapsedRealTime(currentIndexStartTime);
-    QString ms;
-    ms.sprintf("%03d", time.msec());
+    const timeT guideTime = m_canvas->grid().snapX(guideX);
 
-    int bar, beat, fraction, remainder;
-    comp.getMusicalTimeForAbsoluteTime(currentIndexStartTime, bar, beat, fraction, remainder);
+    RealTime time = comp.getElapsedRealTime(guideTime);
+    QString msecs;
+    msecs.sprintf("%03d", time.msec());
 
-    QString posString = QString("%1.%2s (%3, %4, %5)")
-                        .arg(time.sec).arg(ms)
-                        .arg(bar + 1).arg(beat).arg(fraction);
+    int bar;
+    int beat;
+    int fraction;
+    int remainder;
+    comp.getMusicalTimeForAbsoluteTime(guideTime, bar, beat, fraction, remainder);
+
+    QString posString = QString("%1.%2s (%3, %4, %5)").
+            arg(time.sec).arg(msecs).arg(bar + 1).arg(beat).arg(fraction);
 
     m_canvas->drawTextFloat(guideX + 10, guideY - 30, posString);
 
     m_canvas->update();
 
-    return RosegardenScrollView::FollowHorizontal | RosegardenScrollView::FollowVertical;
+    return RosegardenScrollView::FollowHorizontal |
+           RosegardenScrollView::FollowVertical;
 }
 
 void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
