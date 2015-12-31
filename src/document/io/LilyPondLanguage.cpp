@@ -1,7 +1,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2015 the Rosegarden development team.
+    Copyright 2000-2016 the Rosegarden development team.
 
     This file is Copyright 2011 Daren Beattie <dtbeattie@gmail.com>
 

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2015 the Rosegarden development team.
+    Copyright 2000-2016 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This file is Copyright 2003
