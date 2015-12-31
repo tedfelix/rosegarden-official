@@ -68,7 +68,7 @@ fi
 
 echo "Purging unwanted files..."
 # templates/ and test/ are of no value to people doing an end use build
-rm -rf templates test
+rm -rf templates
 
 # remove all the .svn directories and their contents 
 find . -name \.svn|xargs rm -rf
