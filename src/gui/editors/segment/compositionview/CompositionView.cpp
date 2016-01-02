@@ -176,18 +176,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_haloOffsets.push_back(QPoint(+1,+1));
 
     // The various tools expect this.
-    // ??? Problem is that this causes crashes.  Open a file and while the
-    //     file is opening, move the mouse around the segment canvas.  CRASH.
-    //     It appears the issue is related to the progress dialog.  When
-    //     QProgressDialog::setValue() is called, it causes a call to
-    //     QApplication::processEvents() (to allow the progress dialog to
-    //     paint itself).  This allows mouse move events to
-    //     make it to the SegmentSelector (or pencil) tool which then tries
-    //     to update its context help.  Depending on the moment when this
-    //     happens, the Composition might not be in a consistent state.
-    //     Making the progress dialog modal appears to solve the problem.
-    //     See ProgressDialog's ctor.
-    //setMouseTracking(true);
+    setMouseTracking(true);
 
     // *** Debugging
 
