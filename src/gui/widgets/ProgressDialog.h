@@ -45,9 +45,15 @@ public:
 
 public slots:
     /// Stop and hide if we're shown
+    /**
+     * ??? This function does nothing.
+     */
     void slotFreeze();
 
     /// Restore to our normal state after freezing
+    /**
+     * ??? This function does nothing.
+     */
     void slotThaw();
 
     /// Set the value for this dialog's progress bar.
@@ -62,6 +68,7 @@ public slots:
 
 protected:
     QTimer *m_showAfterTimer;
+    // ??? Rename: m_maximum
     int m_totalSteps;
     bool m_indeterminate;
 };
