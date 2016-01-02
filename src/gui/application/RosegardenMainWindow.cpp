@@ -1075,7 +1075,7 @@ RosegardenMainWindow::initStatusBar()
 void
 RosegardenMainWindow::initView()
 {
-    RG_DEBUG << "RosegardenMainWindow::initView()" << endl;
+    RG_DEBUG << "initView()...";
 
     Composition &comp = m_doc->getComposition();
 
@@ -1087,9 +1087,9 @@ RosegardenMainWindow::initView()
         comp.setEndMarker(endMarker);
     }
 
-    // The plan is to set the new central view via setCentralWidget in
+    // The plan is to set the new central view via setCentralWidget() in
     // a moment, which schedules the old one for deletion later via
-    // deleteLater.  However, we need to make sure that the old one
+    // QObject::deleteLater().  However, we need to make sure that the old one
     // behaves as if it's already been deleted -- i.e. that it and its
     // entire tree of children send no signals between now and its
     // actual deletion.
@@ -1169,6 +1169,7 @@ RosegardenMainWindow::initView()
     //
     slotSetPointerPosition(m_doc->getComposition().getPosition());
 
+    // !!! The call to setCentralWidget() below will delete oldView.
     m_view = swapView;
 
     connect(m_view, SIGNAL(stateChange(QString, bool)),
@@ -1225,7 +1226,10 @@ RosegardenMainWindow::initView()
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = 0;
 
-    setCentralWidget(m_view); // this also deletes oldView (via deleteLater)
+    // !!! This also deletes oldView (via QObject::deleteLater()).
+    //     Since we call processEvents() below, that means this will be
+    //     deleted by the end of this routine.
+    setCentralWidget(m_view);
 
     // set the highlighted track
     comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
@@ -1282,7 +1286,13 @@ RosegardenMainWindow::initView()
 
     enterActionState("new_file"); //@@@ JAS orig. 0
     
-     qApp->processEvents(QEventLoop::AllEvents, 100);
+    // !!! It is imperative that this be called here.  If it isn't, the old
+    //     RosegardenMainViewWidget will not be deleted by the end of this
+    //     routine (the call to setCentralWidget() uses
+    //     QObject::deleteLater()), leading to crashes when it is deleted
+    //     after the old RosegardenDocument that it has a pointer to is
+    //     deleted in setDocument().  QSharedPointer anyone?
+    qApp->processEvents(QEventLoop::AllEvents, 100);
 
     if (findAction("show_chord_name_ruler")->isChecked()) {
         SetWaitCursor swc;
@@ -1344,10 +1354,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
         getView()->getTrackEditor()->getCompositionView()->endAudioPreviewGeneration();
     }
 
-    // this will delete all edit views
-    //
-    delete oldDoc;
-
     // connect needed signals
     //
     connect(m_segmentParameterBox, SIGNAL(documentModified()),
@@ -1393,9 +1399,15 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     newDocument->getStudio().resyncDeviceConnections();
 #endif
 
-    // finally recreate the main view
-    //
+    // Create a new RosegardenMainViewWidget and delete the old.
     initView();
+
+    // This will delete all edit views.
+    // This has to be done after the old RosegardenMainViewWidget is destroyed
+    // (in initView()) since RosegardenMainViewWidget depends on it.
+    // ??? QSharedPointer anyone?
+    delete oldDoc;
+    oldDoc = 0;
 
     if (getView() && getView()->getTrackEditor()) {
         connect(m_doc, SIGNAL(makeTrackVisible(int)),
