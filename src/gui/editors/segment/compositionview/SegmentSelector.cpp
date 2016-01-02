@@ -255,13 +255,20 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    m_canvas->hideGuides();
-    m_canvas->hideTextFloat();
-
+    // If another tool (SegmentPencil or SegmentResizer) has taken
+    // over, delegate.
     if (m_dispatchTool) {
         m_dispatchTool->mouseReleaseEvent(e);
+        m_dispatchTool->stow();
+
+        // Forget about the tool.
+        // Note that this is not a memory leak.  There is only one instance
+        // of each tool stored in BaseToolBox::m_tools.
         m_dispatchTool = 0;
-        m_canvas->viewport()->setCursor(Qt::ArrowCursor);
+
+        // Back to this tool.
+        ready();
+
         return;
     }
 
@@ -270,88 +277,91 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-    int currentTrackPos = m_canvas->grid().getYBin(pos.y());
-    int trackDiff = currentTrackPos - startDragTrackPos;
+    // The left button has been released.
 
+    m_canvas->hideGuides();
+    m_canvas->hideTextFloat();
+
+    // If rubber band mode
     if (!getChangingSegment()) {
         m_canvas->hideSelectionRect();
         m_canvas->getModel()->finalizeSelectionRect();
         m_canvas->getModel()->selectionHasChanged();
-        return ;
+        return;
     }
 
     m_canvas->viewport()->setCursor(Qt::ArrowCursor);
 
-    Composition &comp = m_doc->getComposition();
-
     if (m_canvas->getModel()->isSelected(getChangingSegment()->getSegment())) {
-
-        CompositionModelImpl::ChangingSegmentSet& changingItems =
-                m_canvas->getModel()->getChangingSegments();
-        CompositionModelImpl::ChangingSegmentSet::iterator it;
 
         if (m_changeMade) {
 
-            SegmentReconfigureCommand *command =
-                new SegmentReconfigureCommand
-                (tr("Move %n Segment(s)", "", changingItems.size()), &comp);
+            const int startDragTrackPos =
+                    m_canvas->grid().getYBin(m_clickPoint.y());
+            const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
+            const int trackDiff = currentTrackPos - startDragTrackPos;
 
-            for (it = changingItems.begin();
-                    it != changingItems.end();
-                    ++it) {
+            Composition &comp = m_doc->getComposition();
 
-                ChangingSegmentPtr item = *it;
+            CompositionModelImpl::ChangingSegmentSet &changingSegments =
+                    m_canvas->getModel()->getChangingSegments();
 
-                Segment* segment = item->getSegment();
+            SegmentReconfigureCommand *segmentReconfigureCommand =
+                    new SegmentReconfigureCommand(
+                            tr("Move %n Segment(s)", "", changingSegments.size()),
+                            &comp);
+
+            // For each changing segment, add the segment to the
+            // SegmentReconfigureCommand.
+            for (CompositionModelImpl::ChangingSegmentSet::iterator it =
+                         changingSegments.begin();
+                 it != changingSegments.end();
+                 ++it) {
+                ChangingSegmentPtr changingSegment = *it;
+                Segment *segment = changingSegment->getSegment();
 
                 TrackId origTrackId = segment->getTrack();
-                int trackPos = comp.getTrackPositionById(origTrackId);
-                trackPos += trackDiff;
+                int newTrackPos =
+                        comp.getTrackPositionById(origTrackId) + trackDiff;
 
-                if (trackPos < 0) {
-                    trackPos = 0;
-                } else if (trackPos >= (int)comp.getNbTracks()) {
-                    trackPos = comp.getNbTracks() - 1;
-                }
+                // Limit to [0, comp.getNbTracks()-1]
+                if (newTrackPos < 0)
+                    newTrackPos = 0;
+                if (newTrackPos > static_cast<int>(comp.getNbTracks()) - 1)
+                    newTrackPos = comp.getNbTracks() - 1;
 
-                Track *newTrack = comp.getTrackByPosition(trackPos);
+                Track *newTrack = comp.getTrackByPosition(newTrackPos);
                 int newTrackId = origTrackId;
-                if (newTrack) newTrackId = newTrack->getId();
+                if (newTrack)
+                    newTrackId = newTrack->getId();
 
-                timeT itemStartTime = item->getStartTime(m_canvas->grid());
+                timeT startTime =
+                        changingSegment->getStartTime(m_canvas->grid());
 
+                // endTime = startTime + segment duration
                 // We absolutely don't want to snap the end time to
                 // the grid.  We want it to remain exactly the same as
                 // it was, but relative to the new start time.
-                timeT itemEndTime = itemStartTime + segment->getEndMarkerTime(false)
-                                    - segment->getStartTime();
+                timeT endTime = startTime +
+                        segment->getEndMarkerTime(false) -
+                        segment->getStartTime();
 
-                //RG_DEBUG << "mouseReleaseEvent(): releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId;
-
-                command->addSegment(segment,
-                                    itemStartTime,
-                                    itemEndTime,
-                                    newTrackId);
+                segmentReconfigureCommand->addSegment(
+                        segment, startTime, endTime, newTrackId);
             }
 
-            CommandHistory::getInstance()->addCommand(command);
+            CommandHistory::getInstance()->addCommand(
+                    segmentReconfigureCommand);
         }
 
         m_canvas->getModel()->endChange();
         m_canvas->slotUpdateAll();
     }
 
-    // if we've just finished a quick copy then drop the Z level back
-    if (m_segmentQuickCopyDone) {
-        m_segmentQuickCopyDone = false;
-        //        getChangingSegment()->setZ(2); // see SegmentItem::setSelected  --??
-    }
-
+    // Get ready for the next button press.
+    m_segmentQuickCopyDone = false;
     m_changeMade = false;
-
     m_selectionMoveStarted = false;
-
     setChangingSegment(ChangingSegmentPtr());
 
     setContextHelpFor(pos);
@@ -564,6 +574,10 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
 void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
+    // ??? We should also call this if any of the modifier keys are
+    //     pressed/released.  Might be a good idea to audit all of
+    //     these while reviewing this one.
+
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
