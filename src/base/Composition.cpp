@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Composition]"
+
 #include "Composition.h"
 #include "misc/Debug.h"
 #include "base/Segment.h"

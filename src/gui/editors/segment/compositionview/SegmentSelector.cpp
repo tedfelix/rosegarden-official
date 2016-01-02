@@ -32,13 +32,11 @@
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "misc/ConfigGroups.h"
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentToolBox.h"
 
-#include <QSettings>
 #include <QMouseEvent>
 
 #include <math.h>
@@ -578,47 +576,37 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
     //     pressed/released.  Might be a good idea to audit all of
     //     these while reviewing this one.
 
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
-        settings.endGroup();
-        return;
-    }
-    settings.endGroup();
-
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(p);
 
     if (!item) {
         setContextHelp(tr("Click and drag to select segments; middle-click and drag to draw an empty segment"));
+        return;
+    }
 
+    // Same logic as in mousePressEvent to establish
+    // whether we'd be moving or resizing
+
+    if ((!m_segmentAddMode ||
+         !m_canvas->getModel()->haveSelection()) &&
+        isNearEdge(item->rect(), p)) {
+
+        if (!ctrlPressed) {
+            setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+        } else {
+            setContextHelp(tr("Click and drag to rescale segment"));
+        }
     } else {
-
-        // Same logic as in mousePressEvent to establish
-        // whether we'd be moving or resizing
-
-        if ((!m_segmentAddMode ||
-             !m_canvas->getModel()->haveSelection()) &&
-            isNearEdge(item->rect(), p)) {
-
+        if (m_canvas->getModel()->haveMultipleSelection()) {
             if (!ctrlPressed) {
-                setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+                setContextHelp(tr("Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies"));
             } else {
-                setContextHelp(tr("Click and drag to rescale segment"));
+                setContextHelp(tr("Click and drag to copy segments"));
             }
         } else {
-            if (m_canvas->getModel()->haveMultipleSelection()) {
-                if (!ctrlPressed) {
-                    setContextHelp(tr("Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies"));
-                } else {
-                    setContextHelp(tr("Click and drag to copy segments"));
-                }
+            if (!ctrlPressed) {
+                setContextHelp(tr("Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit"));
             } else {
-                if (!ctrlPressed) {
-                    setContextHelp(tr("Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit"));
-                } else {
-                    setContextHelp(tr("Click and drag to copy segment"));
-                }
+                setContextHelp(tr("Click and drag to copy segment"));
             }
         }
     }
