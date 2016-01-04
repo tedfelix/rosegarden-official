@@ -793,7 +793,7 @@ target_link_libraries(rosegardenprivate
 )
 
 #########################
-# Generate list of source files, as input for getsvn.cmake to compute BUILDKEY at compile time
+# Generate list of source files, as input for buildkey.cmake to compute BUILDKEY at compile time
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/source_files_list "")
 foreach(source_file ${rg_CPPS} ${rg_UIS})
    get_filename_component(abs_path ${source_file} ABSOLUTE)
@@ -809,7 +809,7 @@ add_custom_target(svnheader ALL DEPENDS svn_header) # svn_header never gets crea
 # creates svnheader.h using cmake script
 add_custom_command(OUTPUT svn_header ${CMAKE_CURRENT_BINARY_DIR}/svnheader.h
     COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
-                         -P ${CMAKE_CURRENT_SOURCE_DIR}/getsvn.cmake)
+                         -P ${CMAKE_CURRENT_SOURCE_DIR}/buildkey.cmake)
 
 # svnversion.h is a generated file
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
