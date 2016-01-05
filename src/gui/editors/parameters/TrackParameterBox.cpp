@@ -344,9 +344,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_defClef->addItem(tr("baritone", "Clef name"), BaritoneClef);
     m_defClef->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
     m_defClef->addItem(tr("subbass", "Clef name"), SubbassClef);
-    /*  clef types in the datbase that are not yet supported must be ignored for
-     *  now:
-        m_defClef->addItem(tr("two bar"), TwoBarClef); */
+    m_defClef->addItem(tr("twobar", "Clef name"), TwoBarClef);
     groupLayout->addWidget(m_defClef, row, 1, 1, 2);
 
     // default transpose

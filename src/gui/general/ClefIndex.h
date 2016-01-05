@@ -38,7 +38,7 @@ enum { TrebleClef = 0,                  // G clef, line 2
        BaritoneClef,                    // C clef, line 5
        VarbaritoneClef,                 // F clef, line 3
        SubbassClef,                     // F clef, line 5
-       TwoBarClef                       // percussion clef  //!!! doesn't exist yet!
+       TwoBarClef                       // percussion clef
      };
 
 namespace Rosegarden 

@@ -157,7 +157,7 @@ PresetHandlerDialog::initDialog()
         m_convertAllSegments->setChecked(qStrToBool(settings.value("convert_all_segments", "0")));
     }
     else {
-    	m_convertSegments->setChecked(qStrToBool(settings.value("convert_segments", "0")));
+        m_convertSegments->setChecked(qStrToBool(settings.value("convert_segments", "0")));
     }
     
     connect(m_categoryCombo, SIGNAL(activated(int)),

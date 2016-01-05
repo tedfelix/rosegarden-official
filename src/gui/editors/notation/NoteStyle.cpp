@@ -309,6 +309,8 @@ NoteStyle::getClefCharName(const Clef &clef)
         return NoteCharacterNames::F_CLEF;
     } else if (clefType == Clef::Treble || clefType == Clef::French) {
         return NoteCharacterNames::G_CLEF;
+    } else if (clefType == Clef::TwoBar) {
+        return NoteCharacterNames::TWO_BAR_CLEF;
     } else {
         return NoteCharacterNames::C_CLEF;
     }

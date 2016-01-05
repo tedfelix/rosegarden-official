@@ -43,6 +43,7 @@ const int MIN_SUBORDERING = SHRT_MIN;
 
 namespace Accidentals
 {
+#pragma GCC diagnostic ignored "-Wattributes"
     /**
      * NoAccidental means the accidental will be inferred
      * based on the performance pitch and current key at the
@@ -168,89 +169,89 @@ namespace Marks
 
     ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getMarks(const Event &e) {
 
-	std::vector<Mark> marks;
+        std::vector<Mark> marks;
 
-	long markCount = 0;
-	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
-	if (markCount == 0) return marks;
+        long markCount = 0;
+        e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+        if (markCount == 0) return marks;
 
-	for (long j = 0; j < markCount; ++j) {
+        for (long j = 0; j < markCount; ++j) {
 
-	    Mark mark(Marks::NoMark);
-	    (void)e.get<String>(BaseProperties::getMarkPropertyName(j), mark);
+            Mark mark(Marks::NoMark);
+            (void)e.get<String>(BaseProperties::getMarkPropertyName(j), mark);
 
-	    marks.push_back(mark);
-	}
+            marks.push_back(mark);
+        }
 
-	return marks;
+        return marks;
     }
 
     ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark(const Event &e) {
 
-	long markCount = 0;
-	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
-	if (markCount == 0) return NoMark;
+        long markCount = 0;
+        e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+        if (markCount == 0) return NoMark;
 
-	for (long j = 0; j < markCount; ++j) {
+        for (long j = 0; j < markCount; ++j) {
 
-	    Mark mark(Marks::NoMark);
-	    (void)e.get<String>(BaseProperties::getMarkPropertyName(j), mark);
+            Mark mark(Marks::NoMark);
+            (void)e.get<String>(BaseProperties::getMarkPropertyName(j), mark);
 
-	    if (isFingeringMark(mark)) return mark;
-	}
+            if (isFingeringMark(mark)) return mark;
+        }
 
-	return NoMark;
+        return NoMark;
     }
 
     ROSEGARDENPRIVATE_EXPORT void addMark(Event &e, const Mark &mark, bool unique) {
-	if (unique && hasMark(e, mark)) return;
+        if (unique && hasMark(e, mark)) return;
 
-	long markCount = 0;
-	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
-	e.set<Int>(BaseProperties::MARK_COUNT, markCount + 1);
+        long markCount = 0;
+        e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+        e.set<Int>(BaseProperties::MARK_COUNT, markCount + 1);
 
-	PropertyName markProperty = BaseProperties::getMarkPropertyName(markCount);
-	e.set<String>(markProperty, mark);
+        PropertyName markProperty = BaseProperties::getMarkPropertyName(markCount);
+        e.set<String>(markProperty, mark);
     }
 
     ROSEGARDENPRIVATE_EXPORT bool removeMark(Event &e, const Mark &mark) {
 
-	long markCount = 0;
-	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+        long markCount = 0;
+        e.get<Int>(BaseProperties::MARK_COUNT, markCount);
 
-	for (long j = 0; j < markCount; ++j) {
-	    PropertyName pn(BaseProperties::getMarkPropertyName(j));
-	    std::string m;
-	    if (e.get<String>(pn, m) && m == mark) {
-		e.unset(pn);
-		while (j < markCount - 1) {
-		    PropertyName npn(BaseProperties::getMarkPropertyName(j+1));
-		    if (e.get<String>(npn, m)) {
-			e.set<String>( pn, m);
-		    }
-		    pn = npn;
-		    ++j;
-		}
-		e.set<Int>(BaseProperties::MARK_COUNT, markCount - 1);
-		return true;
-	    }
-	}
+        for (long j = 0; j < markCount; ++j) {
+            PropertyName pn(BaseProperties::getMarkPropertyName(j));
+            std::string m;
+            if (e.get<String>(pn, m) && m == mark) {
+                e.unset(pn);
+                while (j < markCount - 1) {
+                    PropertyName npn(BaseProperties::getMarkPropertyName(j+1));
+                    if (e.get<String>(npn, m)) {
+                        e.set<String>( pn, m);
+                    }
+                    pn = npn;
+                    ++j;
+                }
+                e.set<Int>(BaseProperties::MARK_COUNT, markCount - 1);
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
     ROSEGARDENPRIVATE_EXPORT bool hasMark(const Event &e, const Mark &mark) {
-	long markCount = 0;
-	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+        long markCount = 0;
+        e.get<Int>(BaseProperties::MARK_COUNT, markCount);
 
-	for (long j = 0; j < markCount; ++j) {
-	    std::string m;
-	    if (e.get<String>(BaseProperties::getMarkPropertyName(j), m) && m == mark) {
-		return true;
-	    }
-	}
+        for (long j = 0; j < markCount; ++j) {
+            std::string m;
+            if (e.get<String>(BaseProperties::getMarkPropertyName(j), m) && m == mark) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
     ROSEGARDENPRIVATE_EXPORT std::vector<Mark> getStandardMarks() {
@@ -293,6 +294,7 @@ const string Clef::Baritone = "baritone";
 const string Clef::Varbaritone = "varbaritone";
 const string Clef::Bass = "bass";
 const string Clef::Subbass = "subbass";
+const string Clef::TwoBar = "twobar";
 
 const Clef Clef::DefaultClef = Clef("treble");
 const Clef Clef::UndefinedClef = Clef("undefined");
@@ -302,19 +304,19 @@ Clef::Clef(const Event &e) :
     m_octaveOffset(0)
 {
     if (e.getType() != EventType) {
-	std::cerr << Event::BadType
-	    ("Clef model event", EventType, e.getType()).getMessage()
-		  << std::endl;
-	return;
+        std::cerr << Event::BadType
+            ("Clef model event", EventType, e.getType()).getMessage()
+                  << std::endl;
+        return;
     }
 
     std::string s;
     e.get<String>(ClefPropertyName, s);
 
-    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass) {
-	std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
-		  << std::endl;
-	    return;
+    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass && s != TwoBar) {
+        std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
+                  << std::endl;
+            return;
     }
 
     long octaveOffset = 0;
@@ -329,7 +331,7 @@ Clef::Clef(const std::string &s, int octaveOffset)
 {
     if (s != Treble && s != Soprano && s != French && s != Mezzosoprano
         && s != Alto && s != Tenor && s != Baritone && s != Bass
-        && s != Varbaritone && s != Subbass && s != "undefined") {
+        && s != Varbaritone && s != Subbass && s != TwoBar && s != "undefined") {
 
         throw BadClefName("No such clef as \"" + s + "\"");
     }
@@ -340,8 +342,8 @@ Clef::Clef(const std::string &s, int octaveOffset)
 Clef &Clef::operator=(const Clef &c)
 {
     if (this != &c) {
-	m_clef = c.m_clef;
-	m_octaveOffset = c.m_octaveOffset;
+        m_clef = c.m_clef;
+        m_octaveOffset = c.m_octaveOffset;
     }
     return *this;
 }
@@ -352,7 +354,7 @@ bool Clef::isValid(const Event &e)
 
     std::string s;
     e.get<String>(ClefPropertyName, s);
-    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass) return false;
+    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass && s != TwoBar) return false;
 
     return true;
 }
@@ -382,6 +384,7 @@ int Clef::getPitchOffset() const
     else if (m_clef == Varbaritone) return -4;
     else if (m_clef == Bass) return -2;
     else if (m_clef == Subbass) return 0;
+    else if (m_clef == TwoBar) return 0;
     else return -2;
 }
 
@@ -397,6 +400,7 @@ int Clef::getAxisHeight() const
     else if (m_clef == Varbaritone) return 4;
     else if (m_clef == Bass) return 6;
     else if (m_clef == Subbass) return 8;
+    else if (m_clef == TwoBar) return 4;
     else return 6;
 }
 
@@ -404,6 +408,7 @@ Clef::ClefList
 Clef::getClefs()
 {
     ClefList clefs;
+    clefs.push_back(Clef(TwoBar));
     clefs.push_back(Clef(Bass));
     clefs.push_back(Clef(Varbaritone));
     clefs.push_back(Clef(Subbass));
@@ -453,15 +458,15 @@ Key::Key(const Event &e) :
     checkMap();
     if (e.getType() != EventType) {
         std::cerr << Event::BadType
-	    ("Key model event", EventType, e.getType()).getMessage()
-		  << std::endl;
-	return;
+            ("Key model event", EventType, e.getType()).getMessage()
+                  << std::endl;
+        return;
     }
     e.get<String>(KeyPropertyName, m_name);
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-	std::cerr << BadKeyName
-	    ("No such key as \"" + m_name + "\"").getMessage() << std::endl;
-	return;
+        std::cerr << BadKeyName
+            ("No such key as \"" + m_name + "\"").getMessage() << std::endl;
+        return;
     }
 }
 
@@ -484,8 +489,8 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
          i != m_keyDetailMap.end(); ++i) {
         if ((*i).second.m_sharpCount == accidentalCount &&
             (*i).second.m_minor == isMinor &&
-	    ((*i).second.m_sharps == isSharp ||
-	     (*i).second.m_sharpCount == 0)) {
+            ((*i).second.m_sharps == isSharp ||
+             (*i).second.m_sharpCount == 0)) {
             m_name = (*i).first;
             return;
         }
@@ -506,7 +511,7 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
 Key::Key(int tonicPitch, bool isMinor) :
     m_accidentalHeights(0)
 {
-	checkMap();
+        checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
          i != m_keyDetailMap.end(); ++i) {
         if ((*i).second.m_tonicPitch == tonicPitch &&
@@ -809,12 +814,12 @@ bool
 Indication::isValid(const std::string &s) const
 {
     return
-	(s == Slur || s == PhrasingSlur ||
-	 s == Crescendo || s == Decrescendo ||
-	 s == Glissando || // we have a stub for a glissando already?!
+        (s == Slur || s == PhrasingSlur ||
+         s == Crescendo || s == Decrescendo ||
+         s == Glissando || // we have a stub for a glissando already?!
          s == TrillLine ||
-	 s == QuindicesimaUp || s == OttavaUp ||
-	 s == OttavaDown || s == QuindicesimaDown ||
+         s == QuindicesimaUp || s == OttavaUp ||
+         s == OttavaDown || s == QuindicesimaDown ||
          s == FigParameterChord ||
          s == Figuration);
 }
@@ -897,9 +902,9 @@ Text &
 Text::operator=(const Text &t)
 {
     if (&t != this) {
-	m_text = t.m_text;
-	m_type = t.m_type;
-	m_verse = t.m_verse;
+        m_text = t.m_text;
+        m_type = t.m_type;
+        m_verse = t.m_verse;
     }
     return *this;
 }
@@ -1064,14 +1069,14 @@ resolveNoAccidental(int pitch,
  */
 void
 resolveSpecifiedAccidental(int pitch,
-			      const Clef &/* clef */,
-			      const Key &key,
-			      int &height,
-			      int &octave,
-			      Accidental &inputAccidental,
-			      Accidental &outputAccidental)
+                              const Clef &/* clef */,
+                              const Key &key,
+                              int &height,
+                              int &octave,
+                              Accidental &inputAccidental,
+                              Accidental &outputAccidental)
 {
-	// 4.  Get info from the Key
+        // 4.  Get info from the Key
     long accidentalCount = key.getAccidentalCount();
     bool keyIsSharp = key.isSharp(), keyIsFlat = !keyIsSharp;
 
@@ -1334,7 +1339,7 @@ resolveSpecifiedAccidental(int pitch,
     }
 
     if (outputAccidental == NoAccidental && inputAccidental == Natural) {
-	outputAccidental = Natural;
+        outputAccidental = Natural;
     }
 
 }
@@ -1342,42 +1347,42 @@ resolveSpecifiedAccidental(int pitch,
 bool
 Pitch::validAccidental() const
 {
-//	std::cout << "Checking whether accidental is valid " << std::endl;
-	if (m_accidental == NoAccidental)
-	{
-		return true;
-	}
-	int naturalPitch = (m_pitch -
-		Accidentals::getPitchOffset(m_accidental) + 12) % 12;
-	switch(naturalPitch)
-	{
-		case 0: //C
-			return true;
-		case 1:
-			return false;
-		case 2: //D
-			return true;
-		case 3:
-			return false;
-		case 4: //E
-			return true;
-		case 5: //F
-			return true;
-		case 6:
-			return false;
-		case 7: //G
-			return true;
-		case 8:
-			return false;
-		case 9: //A
-			return true;
-		case 10:
-			return false;
-		case 11: //B
-			return true;
-	};
-	std::cout << "Internal error in validAccidental" << std::endl;
-	return false;
+//      std::cout << "Checking whether accidental is valid " << std::endl;
+        if (m_accidental == NoAccidental)
+        {
+                return true;
+        }
+        int naturalPitch = (m_pitch -
+                Accidentals::getPitchOffset(m_accidental) + 12) % 12;
+        switch(naturalPitch)
+        {
+                case 0: //C
+                        return true;
+                case 1:
+                        return false;
+                case 2: //D
+                        return true;
+                case 3:
+                        return false;
+                case 4: //E
+                        return true;
+                case 5: //F
+                        return true;
+                case 6:
+                        return false;
+                case 7: //G
+                        return true;
+                case 8:
+                        return false;
+                case 9: //A
+                        return true;
+                case 10:
+                        return false;
+                case 11: //B
+                        return true;
+        };
+        std::cout << "Internal error in validAccidental" << std::endl;
+        return false;
 }
 
 Event *
@@ -1409,11 +1414,11 @@ Pitch::getAsNoteEvent(timeT absoluteTime, timeT duration) const
  */
 void
 Pitch::rawPitchToDisplayPitch(int rawpitch,
-			      const Clef &clef,
-			      const Key &key,
-			      int &height,
-			      Accidental &accidental,
-			      NoAccidentalStrategy noAccidentalStrategy)
+                              const Clef &clef,
+                              const Key &key,
+                              int &height,
+                              Accidental &accidental,
+                              NoAccidentalStrategy noAccidentalStrategy)
 {
 
     // 1. Calculate the octave (for later):
@@ -1433,13 +1438,13 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
 
     if (userAccidental == NoAccidental || !Pitch(rawpitch, userAccidental).validAccidental())
     {
-    	userAccidental = resolveNoAccidental(pitch, key, noAccidentalStrategy);
-    	//std::cout << "Chose accidental " << userAccidental << " for pitch " << pitch <<
-    	//	" in key " << key.getName() << std::endl;
+        userAccidental = resolveNoAccidental(pitch, key, noAccidentalStrategy);
+        //std::cout << "Chose accidental " << userAccidental << " for pitch " << pitch <<
+        //      " in key " << key.getName() << std::endl;
     }
     //else
     //{
-    //	std::cout << "Accidental was specified, as " << userAccidental << std::endl;
+    //  std::cout << "Accidental was specified, as " << userAccidental << std::endl;
     //}
 
     resolveSpecifiedAccidental(pitch, clef, key, height, octave, userAccidental, accidental);
@@ -1452,10 +1457,10 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     if (accidental == "") {
         std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
 #else
-	std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
+        std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
 #endif
                   << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct "
-		  << octave << ")  userAcc: " << userAccidental
+                  << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
 #ifndef DEBUG_PITCH
     }
@@ -1475,11 +1480,11 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
 
 void
 Pitch::displayPitchToRawPitch(int height,
-			      Accidental accidental,
-			      const Clef &clef,
-			      const Key &key,
-			      int &pitch,
-			      bool ignoreOffset)
+                              Accidental accidental,
+                              const Clef &clef,
+                              const Key &key,
+                              int &pitch,
+                              bool ignoreOffset)
 {
     int octave = 5;
 
@@ -1544,7 +1549,7 @@ Pitch::Pitch(int performancePitch, const Accidental &explicitAccidental) :
 }
 
 Pitch::Pitch(int pitchInOctave, int octave,
-	     const Accidental &explicitAccidental, int octaveBase) :
+             const Accidental &explicitAccidental, int octaveBase) :
     m_pitch((octave - octaveBase) * 12 + pitchInOctave),
     m_accidental(explicitAccidental)
 {
@@ -1552,7 +1557,7 @@ Pitch::Pitch(int pitchInOctave, int octave,
 }
 
 Pitch::Pitch(int noteInScale, int octave, const Key &key,
-	     const Accidental &explicitAccidental, int octaveBase) :
+             const Accidental &explicitAccidental, int octaveBase) :
     m_pitch(0),
     m_accidental(explicitAccidental)
 {
@@ -1566,7 +1571,7 @@ Pitch::Pitch(int noteInScale, int octave, const Key &key,
 }
 
 Pitch::Pitch(int noteInCMajor, int octave, int pitch,
-	     int octaveBase) :
+             int octaveBase) :
     m_pitch(pitch)
 {
     int natural = (octave - octaveBase) * 12 + scale_Cmajor[noteInCMajor];
@@ -1575,13 +1580,13 @@ Pitch::Pitch(int noteInCMajor, int octave, int pitch,
 
 
 Pitch::Pitch(char noteName, int octave, const Key &key,
-	     const Accidental &explicitAccidental, int octaveBase) :
+             const Accidental &explicitAccidental, int octaveBase) :
     m_pitch(0),
     m_accidental(explicitAccidental)
 {
     int height = getIndexForNote(noteName) - 2;
     displayPitchToRawPitch(height, explicitAccidental,
-			   Clef(), key, m_pitch);
+                           Clef(), key, m_pitch);
 
     // we now have the pitch within octave 5 (C == 60) -- though it
     // might have spilled over at either end
@@ -1591,12 +1596,12 @@ Pitch::Pitch(char noteName, int octave, const Key &key,
 }
 
 Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
-	     const Accidental &explicitAccidental) :
+             const Accidental &explicitAccidental) :
     m_pitch(0),
     m_accidental(explicitAccidental)
 {
     displayPitchToRawPitch
-	(heightOnStaff, explicitAccidental, clef, key, m_pitch);
+        (heightOnStaff, explicitAccidental, clef, key, m_pitch);
 }
 
 Pitch::Pitch(const Pitch &p) :
@@ -1610,8 +1615,8 @@ Pitch &
 Pitch::operator=(const Pitch &p)
 {
     if (&p != this) {
-	m_pitch = p.m_pitch;
-	m_accidental = p.m_accidental;
+        m_pitch = p.m_pitch;
+        m_accidental = p.m_accidental;
     }
     return *this;
 }
@@ -1626,7 +1631,7 @@ Accidental
 Pitch::getAccidental(bool useSharps) const
 {
     return getDisplayAccidental(Key("C major"),
-		useSharps ? UseSharps : UseFlats);
+                useSharps ? UseSharps : UseFlats);
 }
 
 Accidental
@@ -1768,11 +1773,11 @@ Pitch::getIndexForNote(char noteName)
 {
     if (islower(noteName)) noteName = toupper(noteName);
     if (noteName < 'C') {
-	if (noteName < 'A') return 0; // error, really
-	else return noteName - 'A' + 5;
+        if (noteName < 'A') return 0; // error, really
+        else return noteName - 'A' + 5;
     } else {
-	if (noteName > 'G') return 0; // error, really
-	else return noteName - 'C';
+        if (noteName > 'G') return 0; // error, really
+        else return noteName - 'C';
     }
 }
 
@@ -1785,9 +1790,9 @@ Pitch::getNoteForIndex(int index)
 
 int
 Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
-					const Accidental &accidental,
-					const Clef &clef,
-					const Key &)
+                                        const Accidental &accidental,
+                                        const Clef &clef,
+                                        const Key &)
 {
     // X11 Rosegarden pitches are a bit weird; see
     // docs/data_struct/units.txt
@@ -1949,11 +1954,11 @@ TimeSignature::TimeSignature(const Event &e)
     m_denominator = 4;
 
     if (e.has(NumeratorPropertyName)) {
-	m_numerator = e.get<Int>(NumeratorPropertyName);
+        m_numerator = e.get<Int>(NumeratorPropertyName);
     }
 
     if (e.has(DenominatorPropertyName)) {
-	m_denominator = e.get<Int>(DenominatorPropertyName);
+        m_denominator = e.get<Int>(DenominatorPropertyName);
     }
 
     m_common = false;
@@ -2261,7 +2266,7 @@ const timeT TimeSignature::m_dottedCrotchetTime = basePPQ + basePPQ/2;
 //////////////////////////////////////////////////////////////////////
 
 AccidentalTable::AccidentalTable(const Key &key, const Clef &clef,
-				 OctaveType octaves, BarResetType barReset) :
+                                 OctaveType octaves, BarResetType barReset) :
     m_key(key), m_clef(clef),
     m_octaves(octaves), m_barReset(barReset)
 {
@@ -2283,21 +2288,21 @@ AccidentalTable &
 AccidentalTable::operator=(const AccidentalTable &t)
 {
     if (&t != this) {
-	m_key = t.m_key;
-	m_clef = t.m_clef;
-	m_octaves = t.m_octaves;
-	m_barReset = t.m_barReset;
-	m_accidentals = t.m_accidentals;
-	m_canonicalAccidentals = t.m_canonicalAccidentals;
-	m_newAccidentals = t.m_newAccidentals;
-	m_newCanonicalAccidentals = t.m_newCanonicalAccidentals;
+        m_key = t.m_key;
+        m_clef = t.m_clef;
+        m_octaves = t.m_octaves;
+        m_barReset = t.m_barReset;
+        m_accidentals = t.m_accidentals;
+        m_canonicalAccidentals = t.m_canonicalAccidentals;
+        m_newAccidentals = t.m_newAccidentals;
+        m_newCanonicalAccidentals = t.m_newCanonicalAccidentals;
     }
     return *this;
 }
 
 Accidental
 AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
-					  bool &cautionary)
+                                          bool &cautionary)
 {
     Accidental acc = acc0;
 
@@ -2309,28 +2314,28 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
     Accidental prevBarAcc = NoAccidental;
 
     if (m_octaves == OctavesEquivalent ||
-	m_octaves == OctavesCautionary) {
+        m_octaves == OctavesCautionary) {
 
-	AccidentalMap::iterator i = m_canonicalAccidentals.find(canonicalHeight);
-	if (i != m_canonicalAccidentals.end() && !i->second.previousBar) {
-	    canonicalAcc = i->second.accidental;
-	}
+        AccidentalMap::iterator i = m_canonicalAccidentals.find(canonicalHeight);
+        if (i != m_canonicalAccidentals.end() && !i->second.previousBar) {
+            canonicalAcc = i->second.accidental;
+        }
     }
 
     if (m_octaves == OctavesEquivalent) {
-	normalAcc = canonicalAcc;
+        normalAcc = canonicalAcc;
     } else {
-	AccidentalMap::iterator i = m_accidentals.find(height);
-	if (i != m_accidentals.end() && !i->second.previousBar) {
-	    normalAcc = i->second.accidental;
-	}
+        AccidentalMap::iterator i = m_accidentals.find(height);
+        if (i != m_accidentals.end() && !i->second.previousBar) {
+            normalAcc = i->second.accidental;
+        }
     }
 
     if (m_barReset != BarResetNone) {
-	AccidentalMap::iterator i = m_accidentals.find(height);
-	if (i != m_accidentals.end() && i->second.previousBar) {
-	    prevBarAcc = i->second.accidental;
-	}
+        AccidentalMap::iterator i = m_accidentals.find(height);
+        if (i != m_accidentals.end() && i->second.previousBar) {
+            prevBarAcc = i->second.accidental;
+        }
     }
 
 //    std::cerr << "AccidentalTable::processDisplayAccidental: acc " << acc0 << ", h " << height << ", caut " << cautionary << ", ch " << canonicalHeight << ", keyacc " << keyAcc << " canacc " << canonicalAcc << " noracc " << normalAcc << " oct " << m_octaves << " barReset = " << m_barReset << " pbacc " << prevBarAcc << std::endl;
@@ -2338,76 +2343,76 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
     if (acc == NoAccidental) acc = keyAcc;
 
     if (m_octaves == OctavesIndependent ||
-	m_octaves == OctavesEquivalent) {
+        m_octaves == OctavesEquivalent) {
 
-	if (normalAcc == NoAccidental) {
-	    normalAcc = keyAcc;
-	}
+        if (normalAcc == NoAccidental) {
+            normalAcc = keyAcc;
+        }
 
-	if (acc == normalAcc) {
-	    if (!cautionary) acc = NoAccidental;
-	} else if (acc == NoAccidental) {
-	    if (normalAcc != Natural) {
-		acc = Natural;
-	    }
-	}
+        if (acc == normalAcc) {
+            if (!cautionary) acc = NoAccidental;
+        } else if (acc == NoAccidental) {
+            if (normalAcc != Natural) {
+                acc = Natural;
+            }
+        }
 
     } else {
 
-	if (normalAcc != NoAccidental) {
-	    if (acc != normalAcc) {
-		if (acc == NoAccidental) {
-		    if (normalAcc != Natural) {
-			acc = Natural;
-		    }
-		}
-	    } else { // normalAcc != NoAccidental, acc == normalAcc
-		if (canonicalAcc != NoAccidental && canonicalAcc != normalAcc) {
-		    cautionary = true;
-		} else { // canonicalAcc == NoAccidental || canonicalAcc == normalAcc
-		    if (!cautionary) {
-			acc = NoAccidental;
-		    }
-		}
-	    }
-	} else { // normalAcc == NoAccidental
-	    if (acc != keyAcc && keyAcc != Natural) {
-		if (acc == NoAccidental) {
-		    acc = Natural;
-		}
-	    } else { // normalAcc == NoAccidental, acc == keyAcc
-		if (canonicalAcc != NoAccidental && canonicalAcc != keyAcc) {
-		    cautionary = true;
-		    if (acc == NoAccidental) {
-			acc = Natural;
-		    }
-		} else { // canonicalAcc == NoAccidental || canonicalAcc == keyAcc
-		    if (!cautionary) {
-			acc = NoAccidental;
-		    }
-		}
-	    }
-	}
+        if (normalAcc != NoAccidental) {
+            if (acc != normalAcc) {
+                if (acc == NoAccidental) {
+                    if (normalAcc != Natural) {
+                        acc = Natural;
+                    }
+                }
+            } else { // normalAcc != NoAccidental, acc == normalAcc
+                if (canonicalAcc != NoAccidental && canonicalAcc != normalAcc) {
+                    cautionary = true;
+                } else { // canonicalAcc == NoAccidental || canonicalAcc == normalAcc
+                    if (!cautionary) {
+                        acc = NoAccidental;
+                    }
+                }
+            }
+        } else { // normalAcc == NoAccidental
+            if (acc != keyAcc && keyAcc != Natural) {
+                if (acc == NoAccidental) {
+                    acc = Natural;
+                }
+            } else { // normalAcc == NoAccidental, acc == keyAcc
+                if (canonicalAcc != NoAccidental && canonicalAcc != keyAcc) {
+                    cautionary = true;
+                    if (acc == NoAccidental) {
+                        acc = Natural;
+                    }
+                } else { // canonicalAcc == NoAccidental || canonicalAcc == keyAcc
+                    if (!cautionary) {
+                        acc = NoAccidental;
+                    }
+                }
+            }
+        }
     }
 
     if (m_barReset != BarResetNone) {
-	if (acc == NoAccidental) {
-	    if (prevBarAcc != NoAccidental &&
-		prevBarAcc != keyAcc &&
-		!(prevBarAcc == Natural && keyAcc == NoAccidental)) {
-		cautionary = (m_barReset == BarResetCautionary);
-		if (keyAcc == NoAccidental) {
-		    acc = Natural;
-		} else {
-		    acc = keyAcc;
-		}
-	    }
-	}
+        if (acc == NoAccidental) {
+            if (prevBarAcc != NoAccidental &&
+                prevBarAcc != keyAcc &&
+                !(prevBarAcc == Natural && keyAcc == NoAccidental)) {
+                cautionary = (m_barReset == BarResetCautionary);
+                if (keyAcc == NoAccidental) {
+                    acc = Natural;
+                } else {
+                    acc = keyAcc;
+                }
+            }
+        }
     }
 
     if (acc != NoAccidental) {
-	m_newAccidentals[height] = AccidentalRec(acc, false);
-	m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
+        m_newAccidentals[height] = AccidentalRec(acc, false);
+        m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
     }
 
     return acc;
@@ -2424,17 +2429,17 @@ void
 AccidentalTable::newBar()
 {
     for (AccidentalMap::iterator i = m_accidentals.begin();
-	 i != m_accidentals.end(); ) {
+         i != m_accidentals.end(); ) {
 
-	if (i->second.previousBar) {
-	    AccidentalMap::iterator j = i;
-	    ++j;
-	    m_accidentals.erase(i);
-	    i = j;
-	} else {
-	    i->second.previousBar = true;
-	    ++i;
-	}
+        if (i->second.previousBar) {
+            AccidentalMap::iterator j = i;
+            ++j;
+            m_accidentals.erase(i);
+            i = j;
+        } else {
+            i->second.previousBar = true;
+            ++i;
+        }
     }
 
     m_canonicalAccidentals.clear();
@@ -2492,7 +2497,7 @@ Symbol &
 Symbol::operator=(const Symbol &t)
 {
     if (&t != this) {
-	m_type = t.m_type;
+        m_type = t.m_type;
     }
     return *this;
 }

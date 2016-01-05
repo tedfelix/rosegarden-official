@@ -94,6 +94,7 @@ extern const CharName PEDAL_UP_MARK;
 extern const CharName C_CLEF;
 extern const CharName G_CLEF;
 extern const CharName F_CLEF;
+extern const CharName TWO_BAR_CLEF;
 
 extern const CharName COMMON_TIME;
 extern const CharName CUT_TIME;

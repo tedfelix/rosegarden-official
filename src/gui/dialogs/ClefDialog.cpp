@@ -334,6 +334,8 @@ ClefDialog::translatedClefName(Clef clef)
         name = name.arg(tr("Bass"));
     else if (type == Clef::Subbass)
         name = name.arg(tr("Sub-bass"));
+    else if (type == Clef::TwoBar)
+        name = name.arg(tr("Two-bar"));
 
     return name;
 }

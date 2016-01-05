@@ -114,6 +114,7 @@
         <symbol name="MUSICAL SYMBOL C CLEF" font-id="0" code="140" glyph="108"/>
         <symbol name="MUSICAL SYMBOL G CLEF" font-id="0" code="144" glyph="112"/>
         <symbol name="MUSICAL SYMBOL F CLEF" font-id="0" code="142" glyph="110"/>
+        <symbol name="MUSICAL SYMBOL DRUM CLEF-1" font-id="0" code="146" glyph="114"/>
 
 	<symbol	name="MUSICAL SYMBOL CUT TIME" font-id="0" code="151" glyph="119"/>
 	<symbol	name="MUSICAL SYMBOL COMMON TIME" font-id="0" code="150" glyph="118"/>

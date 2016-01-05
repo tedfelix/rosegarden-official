@@ -282,6 +282,7 @@ public:
     static const std::string Varbaritone;
     static const std::string Bass;
     static const std::string Subbass;
+    static const std::string TwoBar;
 
     /**
      * Construct the default clef (treble).
