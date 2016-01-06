@@ -154,11 +154,18 @@ SegmentSplitByDrumCommand::execute()
 //                    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(upper)"))));
                 s = 0;
 
-            } // end pitch loop
+            } // end segment loop
 
-        } // end 
-    } 
+        } // end pitch loop
 
+    } else {
+        // to make redo work, we have to re-insert all of these
+        for (SegmentVector::iterator i = m_newSegments.begin(); i != m_newSegments.end(); ++i) {
+            m_composition->addSegment(*i);
+        }
+    }
+
+    // whether we do or redo we want to detach the original segment
     m_composition->detachSegment(m_segment);
     m_executed = true;
 }
