@@ -19,148 +19,145 @@
 #include "SegmentSplitByDrumCommand.h"
 
 #include "base/BaseProperties.h"
-#include "base/Sets.h"
+//#include "base/Sets.h"
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "base/NotationQuantizer.h"
+//#include "base/NotationQuantizer.h"
 #include "base/Segment.h"
-#include "base/SegmentNotationHelper.h"
+//#include "base/SegmentNotationHelper.h"
+#include "base/TimeT.h"
 
-#include <QString>
+//#include <QString>
 #include <QtGlobal>
 
 #include <vector>
 #include <algorithm>
+
+
 namespace Rosegarden
 {
+
 
 SegmentSplitByDrumCommand::SegmentSplitByDrumCommand(Segment *segment) :
         NamedCommand(tr("Split by Drum")),
         m_composition(segment->getComposition()),
         m_segment(segment),
-        m_newSegment(0),
         m_executed(false)
-{}
+{
+}
 
 SegmentSplitByDrumCommand::~SegmentSplitByDrumCommand()
 {
     if (m_executed) {
         delete m_segment;
     } else {
-        delete m_newSegment; // needs to be container of pointers to segments
+        for (SegmentVector::iterator i = m_newSegments.begin(); i != m_newSegments.end(); ++i) {
+            delete (*i);
+        }
     }
 }
 
 void
 SegmentSplitByDrumCommand::execute()
 {
-    if (!m_newSegmentA) {
+    if (!m_newSegments.size()) {
 
-        m_newSegmentA = new Segment;
-        m_newSegmentB = new Segment;
+        Segment *s = 0;
 
-        m_newSegmentA->setTrack(m_segment->getTrack());
-        m_newSegmentA->setStartTime(m_segment->getStartTime());
+        // get the total number of colors in the map; only do this once
+        int maxColors = m_composition->getSegmentColourMap().size();
 
-        m_newSegmentB->setTrack(m_segment->getTrack());
-        m_newSegmentB->setStartTime(m_segment->getStartTime());
+        // get the color index for the template segment, so we can make the new
+        // segments have contrasting colors for layer indication purposes
+        int colorIndex = m_segment->getColourIndex();
 
-        // This value persists between iterations of the loop, for
-        // Ranging strategy.
-        int splitDrum(m_splitDrum);
-            
-        for (Segment::iterator i = m_segment->begin();
-                m_segment->isBeforeEndMarker(i); ++i) {
 
-            if ((*i)->isa(Note::EventRestType)) continue;
-            // just skip indications:
-            if ((*i)->isa(Indication::EventType)) continue;
+        // iterate through each pitch from 0 to 127, hunting for notes
+        for (int pitch = 0; pitch <= 127; ++pitch) {
 
-            if ((*i)->isa(Clef::EventType) &&
-                    m_clefHandling != LeaveClefs)
-                continue;
+            // iterate through our source segment pitch by pitch, creating a new
+            // destination segment to contain all notes of each pitch
+            // encountered
+            for (Segment::iterator i = m_segment->begin();
+                    m_segment->isBeforeEndMarker(i); ++i) {
 
-            if ((*i)->isa(Note::EventType)) {
-                splitDrum = getSplitDrumAt(i);
+//                if ((*i)->isa(Note::EventRestType)) continue;
+//                if ((*i)->isa(Indication::EventType)) continue;
+//                if ((*i)->isa(Clef::EventType) continue;
+//                if ((*i)->isa(Key::EventType) continue;
+
                 
-                if ((*i)->has(BaseProperties::PITCH) &&
-                        (*i)->get
-                        <Int>(BaseProperties::PITCH) <
-                        splitDrum) {
-                    if (m_newSegmentB->empty()) {
-                        m_newSegmentB->fillWithRests((*i)->getAbsoluteTime());
+                // handle Note::EventType; implicitly ignore everything else at
+                // this stage (future behavioral requirements to be determined
+                // after field testing)
+                if ((*i)->isa(Note::EventType)) {
+
+                    if ((*i)->has(BaseProperties::PITCH) && (*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+
+                        // we have an event of this pitch to put into a segment;
+                        // do we have already have a segment?
+                        if (!s) {
+
+                            // no segment, so create one, and set it up with an
+                            // initial drum clef, then increment the color index
+                            // so the layer wheel and the ruler will help
+                            // indicate which layer segment is active
+                            s = new Segment;
+                            timeT start = m_segment->getStartTime();
+                            Event *clefEvent = Clef(Clef::TwoBar).getAsEvent(start);
+
+                            s->setTrack(m_segment->getTrack());
+                            s->setStartTime(start);
+                            s->insert(clefEvent);
+
+                            // ensure segment color contrast
+                            colorIndex += 5;
+
+                            // if we went past the end of the color map, just roll back to 0
+                            if (colorIndex > maxColors) colorIndex = 0;
+                            s->setColourIndex(colorIndex);
+
+                            m_newSegments.push_back(s);
+                        }
+
+                        // insert event into new segment (we'll normalize rests
+                        // later)
+                        s->insert(new Event(**i));
                     }
-                    m_newSegmentB->insert(new Event(**i));
+
+                } else {
+
+                    //TODO what do we do with everything else?  there could be
+                    // controllers or program changes or other things, and even
+                    // internal events like text dynamics...  it seems like it
+                    // may be necessary to grab that stuff and store it in an
+                    // additional conductor segment or something...  dunno yet
+
                 }
-                else {
-                    if (m_newSegmentA->empty()) {
-                        m_newSegmentA->fillWithRests((*i)->getAbsoluteTime());
-                    }
-                    m_newSegmentA->insert(new Event(**i));
-                }
 
-            } else {
+            } // end segment iterator loop
+        
+            // end of the loop for this pitch, so if we created a segment,
+            // normalize the rests, add it to the composition, then set s
+            // back to 0 for the next pass
+            if (s) {
+                s->normalizeRests(m_segment->getStartTime(), m_segment->getEndMarkerTime());
+                m_composition->addSegment(s);
 
-                m_newSegmentA->insert(new Event(**i));
+                //TODO get label from percussion key map if one exists for
+                // this pitch, otherwise I suppose we compose something,
+                // then either way we append the original label
+//                    std::string label = m_segment->getLabel();
+//                    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(upper)"))));
+                s = 0;
 
-                if (m_dupNonNoteEvents) {
-                    m_newSegmentB->insert(new Event(**i));
-                }
-            }
-        }
+            } // end pitch loop
 
-        //!!!   m_newSegmentA->fillWithRests(m_segment->getEndMarkerTime());
-        //      m_newSegmentB->fillWithRests(m_segment->getEndMarkerTime());
-        m_newSegmentA->normalizeRests(m_segment->getStartTime(),
-                                      m_segment->getEndMarkerTime());
-        m_newSegmentB->normalizeRests(m_segment->getStartTime(),
-                                      m_segment->getEndMarkerTime());
-    }
-
-    m_composition->addSegment(m_newSegmentA);
-    m_composition->addSegment(m_newSegmentB);
-
-    SegmentNotationHelper helperA(*m_newSegmentA);
-    SegmentNotationHelper helperB(*m_newSegmentB);
-
-    if (m_clefHandling == RecalculateClefs) {
-
-        m_newSegmentA->insert
-        (helperA.guessClef(m_newSegmentA->begin(),
-                           m_newSegmentA->end()).getAsEvent
-         (m_newSegmentA->getStartTime()));
-
-        m_newSegmentB->insert
-        (helperB.guessClef(m_newSegmentB->begin(),
-                           m_newSegmentB->end()).getAsEvent
-         (m_newSegmentB->getStartTime()));
-
-    } else if (m_clefHandling == UseTrebleAndBassClefs) {
-
-        m_newSegmentA->insert
-        (Clef(Clef::Treble).getAsEvent
-         (m_newSegmentA->getStartTime()));
-
-        m_newSegmentB->insert
-        (Clef(Clef::Bass).getAsEvent
-         (m_newSegmentB->getStartTime()));
-    }
-
-    //!!!    m_composition->getNotationQuantizer()->quantize(m_newSegmentA);
-    //    m_composition->getNotationQuantizer()->quantize(m_newSegmentB);
-    helperA.autoBeam(m_newSegmentA->begin(), m_newSegmentA->end(),
-                     BaseProperties::GROUP_TYPE_BEAMED);
-    helperB.autoBeam(m_newSegmentB->begin(), m_newSegmentB->end(),
-                     BaseProperties::GROUP_TYPE_BEAMED);
-
-    std::string label = m_segment->getLabel();
-    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(upper)"))));
-    m_newSegmentB->setLabel(appendLabel(label, qstrtostr(tr("(lower)"))));
-    m_newSegmentA->setColourIndex(m_segment->getColourIndex());
-    m_newSegmentB->setColourIndex(m_segment->getColourIndex());
+        } // end 
+    } 
 
     m_composition->detachSegment(m_segment);
     m_executed = true;
@@ -170,161 +167,12 @@ void
 SegmentSplitByDrumCommand::unexecute()
 {
     m_composition->addSegment(m_segment);
-    m_composition->detachSegment(m_newSegmentA);
-    m_composition->detachSegment(m_newSegmentB);
+
+    for (SegmentVector::iterator i = m_newSegments.begin(); i != m_newSegments.end(); ++i) {
+        m_composition->detachSegment(*i);
+    }
     m_executed = false;
 }
 
-int
-SegmentSplitByDrumCommand::getNewRangingSplitDrum(Segment::iterator prevNote,
-                                                    int lastSplitDrum,
-                                                    std::vector<int>& c0p)
-{
-    typedef std::set<int> Drumes;
-    typedef std::set<int>::iterator DrumItr;
 
-    const Quantizer *quantizer(m_segment->getComposition()->getNotationQuantizer());
-
-    int myHighest, myLowest;
-    int prevHighest = 0, prevLowest = 0;
-    bool havePrev = false;
-    Drumes pitches;
-    pitches.insert(c0p.begin(), c0p.end());
-
-    myLowest = c0p[0];
-    myHighest = c0p[c0p.size() - 1];
-
-    if (prevNote != m_segment->end()) {
-
-        havePrev = true;
-
-        Chord c1(*m_segment, prevNote, quantizer);
-        std::vector<int> c1p(c1.getDrumes());
-        pitches.insert(c1p.begin(), c1p.end());
-
-        prevLowest = c1p[0];
-        prevHighest = c1p[c1p.size() - 1];
-    }
-
-    if (pitches.size() < 2)
-        return lastSplitDrum;
-
-    DrumItr pi = pitches.begin();
-    int lowest(*pi);
-
-    pi = pitches.end();
-    --pi;
-    int highest(*pi);
-
-    if ((pitches.size() == 2 || highest - lowest <= 18) &&
-        myHighest > lastSplitDrum &&
-        myLowest < lastSplitDrum &&
-        prevHighest > lastSplitDrum &&
-        prevLowest < lastSplitDrum) {
-
-        if (havePrev) {
-            if ((myLowest > prevLowest && myHighest > prevHighest) ||
-                (myLowest < prevLowest && myHighest < prevHighest)) {
-                int avgDiff = ((myLowest - prevLowest) +
-                               (myHighest - prevHighest)) / 2;
-                if (avgDiff < -5)
-                    avgDiff = -5;
-                if (avgDiff > 5)
-                    avgDiff = 5;
-                return lastSplitDrum + avgDiff;
-            }
-        }
-
-        return lastSplitDrum;
-    }
-
-    int middle = (highest - lowest) / 2 + lowest;
-
-    while (lastSplitDrum > middle && lastSplitDrum > m_splitDrum - 12) {
-        if (lastSplitDrum - lowest < 12)
-            return lastSplitDrum;
-        if (lastSplitDrum <= m_splitDrum - 12)
-            return lastSplitDrum;
-        --lastSplitDrum;
-    }
-
-    while (lastSplitDrum < middle && lastSplitDrum < m_splitDrum + 12) {
-        if (highest - lastSplitDrum < 12)
-            return lastSplitDrum;
-        if (lastSplitDrum >= m_splitDrum + 12)
-            return lastSplitDrum;
-        ++lastSplitDrum;
-    }
-
-    return lastSplitDrum;
-}
-
-int
-SegmentSplitByDrumCommand::getSplitDrumAt(Segment::iterator i)
-{
-    // Can handle ConstantDrum immediately.
-    if (m_splitStrategy == ConstantDrum) { return m_splitDrum; }
-
-    // when this algorithm appears to be working ok, we should be
-    // able to make it much quicker
-
-    const Quantizer *quantizer(m_segment->getComposition()->getNotationQuantizer());
-
-    Chord c0(*m_segment, i, quantizer);
-    // Drumes in the chord.
-    std::vector<int> c0p(c0.getDrumes());
-
-    // Can handle ChordToneOfInitialDrum early if tone index hasn't
-    // been set.
-    if ((m_splitStrategy == ChordToneOfInitialDrum) &&
-        (m_toneIndex < 0)) {
-        // Find tone index.
-        typedef std::vector<int>::iterator iterator;
-        int toneIndex = 0;
-        for (iterator i = c0p.begin(); i != c0p.end(); ++i) {
-            if ((*i) < m_splitDrum) { toneIndex++; }
-        }
-        m_toneIndex = toneIndex;
-        // This time split-pitch will just be initial split-pitch, so
-        // return that.
-        return m_splitDrum;
-    }
-    
-    // Order pitches lowest to highest
-    sort(c0p.begin(), c0p.end());
-
-    switch (m_splitStrategy) {
-    case LowestTone:
-        return c0p[0] + 1; 
-
-        /* NOTREACHED */
-    case HighestTone:
-        return c0p.back() - 1;
-
-        /* NOTREACHED */
-    case ChordToneOfInitialDrum:
-        Q_ASSERT(m_toneIndex >= 0);
-
-        // Lower than the lowest tone (a pointless command but
-        // shouldn't be an error)
-        if (m_toneIndex == 0) { return c0p[0] - 1; }
-        // Higher than the highest tone (slightly more reasonable)
-        if (m_toneIndex == (int)c0p.size()) { return c0p.back() + 1; }
-        // Use a pitch between the adjacent tones (the usual case)
-        return (c0p[m_toneIndex - 1] + c0p[m_toneIndex])/2;
-
-        /* NOTREACHED */
-    case Ranging:
-        m_splitDrum =
-            getNewRangingSplitDrum(Segment::iterator(c0.getPreviousNote()),
-                                    m_splitDrum,
-                                    c0p);
-        return m_splitDrum;
-        /* NOTREACHED */
-        // Shouldn't get here.
-    case ConstantDrum:
-    default:
-        return 0;
-    }
-}
 } // namespace Rosegarden

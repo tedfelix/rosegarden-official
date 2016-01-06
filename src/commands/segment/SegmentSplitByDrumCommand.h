@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,9 +20,9 @@
 
 #include "base/Segment.h"
 #include "document/Command.h"
-#include "gui/general/ClefIndex.h"
+//#include "gui/general/ClefIndex.h"
 
-#include <QString>
+//#include <QString>
 #include <QCoreApplication>
 
 
@@ -38,13 +37,14 @@ class SegmentSplitByDrumCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSplitByDrumCommand)
 
+
 public:
+    typedef std::vector<Segment *> SegmentVector;
     
     SegmentSplitByDrumCommand(Segment *segment);
     virtual ~SegmentSplitByDrumCommand();
 
-    static QString getGlobalName()
-        { return tr("Split by &Drum..."); }
+    static QString getGlobalName() { return tr("Split by &Drum..."); }
 
     virtual void execute();
     virtual void unexecute();
@@ -52,7 +52,7 @@ public:
 private:
     Composition *m_composition;
     Segment *m_segment;
-    Segment *m_newSegment;
+    SegmentVector m_newSegments;
     bool m_executed;
 };
 

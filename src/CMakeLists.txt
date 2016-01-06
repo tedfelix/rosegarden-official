@@ -682,6 +682,7 @@ set(rg_CPPS
   commands/segment/UpdateFigurationCommand.cpp
   commands/segment/SegmentLinkTransposeCommand.cpp
   commands/segment/SegmentSplitByPitchCommand.cpp
+  commands/segment/SegmentSplitByDrumCommand.cpp
   commands/segment/SegmentSyncClefCommand.cpp
   commands/segment/SegmentReconfigureCommand.cpp
   commands/segment/SegmentCommandRepeat.cpp

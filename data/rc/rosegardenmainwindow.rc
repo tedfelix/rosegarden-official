@@ -199,7 +199,8 @@
       <Action name="auto_split" text="&amp;Split on Silence" />
       <Action name="split_by_pitch" text="Split by &amp;Pitch..." icon="split-by-pitch" />
       <Action name="split_by_recording" text="Split by &amp;Recording Source..." />
-      <Action name="split_at_time" text=" Split &amp;at Time..." />
+      <Action name="split_at_time" text="Split &amp;at Time..." />
+      <Action name="split_by_drum" text="Split by &amp;Drum (EXPERIMENTAL!)" />
     </Menu>
     <Action name="repeats_to_real_copies" text="Turn Re&amp;peats into Copies" />
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />

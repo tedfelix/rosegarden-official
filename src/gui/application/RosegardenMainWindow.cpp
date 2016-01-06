@@ -80,6 +80,7 @@
 #include "commands/segment/SegmentRescaleCommand.h"
 #include "commands/segment/SegmentSplitByPitchCommand.h"
 #include "commands/segment/SegmentSplitByRecordingSrcCommand.h"
+#include "commands/segment/SegmentSplitByDrumCommand.h"
 #include "commands/segment/SegmentSplitCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/SegmentSyncCommand.h"
@@ -827,6 +828,7 @@ RosegardenMainWindow::setupActions()
     createAction("split_by_pitch", SLOT(slotSplitSelectionByPitch()));
     createAction("split_by_recording", SLOT(slotSplitSelectionByRecordedSrc()));
     createAction("split_at_time", SLOT(slotSplitSelectionAtTime()));
+    createAction("split_by_drum", SLOT(slotSplitSelectionByDrum()));
     createAction("jog_left", SLOT(slotJogLeft()));
     createAction("jog_right", SLOT(slotJogRight()));
     createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
@@ -3021,6 +3023,73 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
                    "No segment will be split."));
         }
     }
+}
+
+void
+RosegardenMainWindow::slotSplitSelectionByDrum()
+{
+    if (!m_view->haveSelection()) return;
+
+    SegmentSelection selection = m_view->getSelection();
+    if (selection.empty()) return;
+
+//    timeT now = m_doc->getComposition().getPosition();
+
+    QString title = tr("Split %n Segment(s) by Drum", "", selection.size());
+
+//    TimeDialog dialog(m_view, title,
+//                      &m_doc->getComposition(),
+//                      now, true);
+
+    MacroCommand *command = new MacroCommand(title);
+
+    //TODO there may be an options dialog where you set up where to write what
+    // pitches...  also considering adding a new field to the percussion key map
+    // to show indicated pitch for each trigger pitch, eg. several hi-hat
+    // variants all have G on top of staff pitch...
+    //
+    // also this magic thingie could hack the events while it's at it, to set up
+    // special percussion-related properties that do not as yet actually exist,
+    // like whether to draw with an X head, and also stuff that will be needed
+    // for LilyPond export to handle things correctly, like this is what in
+    // LilyPond and this is what else in LilyPond, built into the events as new
+    // properties or something
+    //
+    // haven't gotten that far in my planning yet...  figure it's better to get
+    // something started so I end up shamed into seeing it through, because I
+    // can chat with myself in design documents for eternity without
+    // accomplishing anything
+    //
+    //
+//    if (dialog.exec() == QDialog::Accepted) {
+        int segmentCount = 0;
+        for (SegmentSelection::iterator i = selection.begin();
+                i != selection.end(); ++i) {
+
+            if ((*i)->getType() == Segment::Audio) {
+                return;
+
+                // message box to inform user that this only works on MIDI
+                // segments?  if we do, we should only show it one time
+            } else {
+                SegmentSplitByDrumCommand *subCommand = new SegmentSplitByDrumCommand(*i);
+                command->addCommand(subCommand);
+                ++segmentCount;
+            }
+        }
+
+        if (segmentCount) {
+            // Change the command's name to indicate how many segments were
+            // actually split.
+            title = tr("Split %n Segment(s) by Drum", "", segmentCount);
+            command->setName(title);
+
+            m_view->slotAddCommandToHistory(command);
+        } else {
+            QMessageBox::information(this, tr("Rosegarden"), 
+                tr("No segment was split."));
+        }
+//    }    
 }
 
 void

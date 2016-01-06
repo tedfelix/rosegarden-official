@@ -829,6 +829,12 @@ public slots:
     void slotSplitSelectionAtTime();
 
     /**
+     * Split the selected segments by drum, ie. each discrete pitch goes into a
+     * separate segment of its own
+     */
+    void slotSplitSelectionByDrum();
+
+    /**
      * Produce a harmony segment from the selected segments
      */
     void slotHarmonizeSelection();
