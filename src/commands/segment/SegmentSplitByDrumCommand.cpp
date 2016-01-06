@@ -147,7 +147,8 @@ SegmentSplitByDrumCommand::execute()
 
                 // use label from percussion key map if available, else use
                 // "pitch n" for label
-                std::string label = (m_keyMap ? m_keyMap->getMapForKeyName(pitch) : "Pitch " + pitch) + " (" + m_segment->getLabel() + ")";
+                QString fsckIt = QString("Pitch %1").arg(pitch); // can't remember how to do this in STL
+                std::string label = (m_keyMap ? m_keyMap->getMapForKeyName(pitch) : fsckIt.toStdString()) + " (" + m_segment->getLabel() + ")";
                 s->setLabel(label);
 
                 s = 0;
