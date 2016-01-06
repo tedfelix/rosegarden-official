@@ -20,9 +20,7 @@
 
 #include "base/Segment.h"
 #include "document/Command.h"
-//#include "gui/general/ClefIndex.h"
 
-//#include <QString>
 #include <QCoreApplication>
 
 
@@ -31,6 +29,7 @@ namespace Rosegarden
 
 
 class Composition;
+class MidiKeyMapping;
 
 
 class SegmentSplitByDrumCommand : public NamedCommand
@@ -41,7 +40,7 @@ class SegmentSplitByDrumCommand : public NamedCommand
 public:
     typedef std::vector<Segment *> SegmentVector;
     
-    SegmentSplitByDrumCommand(Segment *segment);
+    SegmentSplitByDrumCommand(Segment *segment, const MidiKeyMapping *keyMap);
     virtual ~SegmentSplitByDrumCommand();
 
     static QString getGlobalName() { return tr("Split by &Drum..."); }
@@ -52,6 +51,7 @@ public:
 private:
     Composition *m_composition;
     Segment *m_segment;
+    const MidiKeyMapping *m_keyMap;
     SegmentVector m_newSegments;
     bool m_executed;
 };

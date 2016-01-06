@@ -3072,7 +3072,15 @@ RosegardenMainWindow::slotSplitSelectionByDrum()
                 // message box to inform user that this only works on MIDI
                 // segments?  if we do, we should only show it one time
             } else {
-                SegmentSplitByDrumCommand *subCommand = new SegmentSplitByDrumCommand(*i);
+
+
+                // get percussion key map, if available, or a fat 0 otherwise
+                Composition &comp = m_doc->getComposition();
+                Track *track = comp.getTrackById((*i)->getTrack());
+                Instrument *inst = m_doc->getStudio().getInstrumentById(track->getInstrument());
+                const MidiKeyMapping *keyMap = inst->getKeyMapping();
+
+                SegmentSplitByDrumCommand *subCommand = new SegmentSplitByDrumCommand(*i, keyMap);
                 command->addCommand(subCommand);
                 ++segmentCount;
             }

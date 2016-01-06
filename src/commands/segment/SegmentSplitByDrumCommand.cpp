@@ -19,7 +19,6 @@
 #include "SegmentSplitByDrumCommand.h"
 
 #include "base/BaseProperties.h"
-//#include "base/Sets.h"
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -27,10 +26,9 @@
 #include "base/NotationTypes.h"
 //#include "base/NotationQuantizer.h"
 #include "base/Segment.h"
-//#include "base/SegmentNotationHelper.h"
 #include "base/TimeT.h"
+#include "base/MidiProgram.h"
 
-//#include <QString>
 #include <QtGlobal>
 
 #include <vector>
@@ -41,10 +39,11 @@ namespace Rosegarden
 {
 
 
-SegmentSplitByDrumCommand::SegmentSplitByDrumCommand(Segment *segment) :
+SegmentSplitByDrumCommand::SegmentSplitByDrumCommand(Segment *segment, const MidiKeyMapping *keyMap) :
         NamedCommand(tr("Split by Drum")),
         m_composition(segment->getComposition()),
         m_segment(segment),
+        m_keyMap(keyMap),
         m_executed(false)
 {
 }
@@ -74,9 +73,8 @@ SegmentSplitByDrumCommand::execute()
         // segments have contrasting colors for layer indication purposes
         int colorIndex = m_segment->getColourIndex();
 
-
         // iterate through each pitch from 0 to 127, hunting for notes
-        for (int pitch = 0; pitch <= 127; ++pitch) {
+        for (MidiByte pitch = 0; pitch <= 127; ++pitch) {
 
             // iterate through our source segment pitch by pitch, creating a new
             // destination segment to contain all notes of each pitch
@@ -147,11 +145,11 @@ SegmentSplitByDrumCommand::execute()
                 s->normalizeRests(m_segment->getStartTime(), m_segment->getEndMarkerTime());
                 m_composition->addSegment(s);
 
-                //TODO get label from percussion key map if one exists for
-                // this pitch, otherwise I suppose we compose something,
-                // then either way we append the original label
-//                    std::string label = m_segment->getLabel();
-//                    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(upper)"))));
+                // use label from percussion key map if available, else use
+                // "pitch n" for label
+                std::string label = (m_keyMap ? m_keyMap->getMapForKeyName(pitch) : "Pitch " + pitch) + " (" + m_segment->getLabel() + ")";
+                s->setLabel(label);
+
                 s = 0;
 
             } // end segment loop
