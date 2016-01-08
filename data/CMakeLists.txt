@@ -13,7 +13,7 @@ foreach(_size 16;32;64)
           RENAME application-x-rosegarden-template.png)
 endforeach()
 
-foreach(_size 32;64;128)
+foreach(_size 16;32;64;128)
   set(_dir "${ICON_INSTALL_DIR}/hicolor/${_size}x${_size}/apps")
   install(FILES ${ICON_SRC_DIR}/rg-rwb-rose3-${_size}x${_size}.png DESTINATION ${_dir}
           RENAME rosegarden.png)
