@@ -28,6 +28,7 @@
 #include "base/Segment.h"
 #include "base/TimeT.h"
 #include "base/MidiProgram.h"
+#include "base/Profiler.h"
 
 #include <QtGlobal>
 
@@ -62,6 +63,7 @@ SegmentSplitByDrumCommand::~SegmentSplitByDrumCommand()
 void
 SegmentSplitByDrumCommand::execute()
 {
+    Profiler profiler("SplitByDrumCommand::execute", true);
     if (!m_newSegments.size()) {
 
         Segment *s = 0;
@@ -73,8 +75,28 @@ SegmentSplitByDrumCommand::execute()
         // segments have contrasting colors for layer indication purposes
         int colorIndex = m_segment->getColourIndex();
 
-        // iterate through each pitch from 0 to 127, hunting for notes
-        for (MidiByte pitch = 0; pitch <= 127; ++pitch) {
+        PitchList pitchesUsed;
+
+        // collect the pitches used by this segment into a vector
+        // (iterate through eg. 3,000 events 1 time)
+        for (Segment::iterator i = m_segment->begin();
+                m_segment->isBeforeEndMarker(i); ++i) {
+
+            // only interested in notes here
+            if ((*i)->isa(Note::EventType)) {
+                if ((*i)->has(BaseProperties::PITCH)) pitchesUsed.push_back((*i)->get<Int>(BaseProperties::PITCH));
+            }
+        }
+
+        // sort the vector leaving just one of each
+        std::sort(pitchesUsed.begin(), pitchesUsed.end());
+        pitchesUsed.erase(std::unique(pitchesUsed.begin(), pitchesUsed.end()), pitchesUsed.end());
+
+
+        // iterate through eg. 3,000 events n times, for a total of n + 1
+        // instead of 128.  n + 1 will always be dramatically smaller than 128;
+        // typically on the order of 20.
+        for (PitchList::const_iterator index = pitchesUsed.begin(); index != pitchesUsed.end(); ++index) {
 
             // iterate through our source segment pitch by pitch, creating a new
             // destination segment to contain all notes of each pitch
@@ -93,7 +115,7 @@ SegmentSplitByDrumCommand::execute()
                 // after field testing)
                 if ((*i)->isa(Note::EventType)) {
 
-                    if ((*i)->has(BaseProperties::PITCH) && (*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+                    if ((*i)->has(BaseProperties::PITCH) && (*i)->get<Int>(BaseProperties::PITCH) == (*index)) {
 
                         // we have an event of this pitch to put into a segment;
                         // do we have already have a segment?
@@ -147,8 +169,8 @@ SegmentSplitByDrumCommand::execute()
 
                 // use label from percussion key map if available, else use
                 // "pitch n" for label
-                QString fsckIt = QString("Pitch %1").arg(pitch); // can't remember how to do this in STL
-                std::string label = (m_keyMap ? m_keyMap->getMapForKeyName(pitch) : fsckIt.toStdString()) + " (" + m_segment->getLabel() + ")";
+                QString fsckIt = tr("Pitch %1").arg(*index);
+                std::string label = (m_keyMap ? m_keyMap->getMapForKeyName(*index) : fsckIt.toStdString()) + " (" + m_segment->getLabel() + ")";
                 s->setLabel(label);
 
                 s = 0;

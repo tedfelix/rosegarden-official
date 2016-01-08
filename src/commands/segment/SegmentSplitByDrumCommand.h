@@ -39,6 +39,7 @@ class SegmentSplitByDrumCommand : public NamedCommand
 
 public:
     typedef std::vector<Segment *> SegmentVector;
+    typedef std::vector<MidiByte> PitchList;
     
     SegmentSplitByDrumCommand(Segment *segment, const MidiKeyMapping *keyMap);
     virtual ~SegmentSplitByDrumCommand();
