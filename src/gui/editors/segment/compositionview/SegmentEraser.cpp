@@ -49,7 +49,7 @@ SegmentEraser::SegmentEraser(CompositionView *c, RosegardenDocument *d)
 void SegmentEraser::ready()
 {
     m_canvas->viewport()->setCursor(Qt::PointingHandCursor);
-    setBasicContextHelp();
+    setContextHelp2();
 }
 
 void SegmentEraser::mousePressEvent(QMouseEvent *e)
@@ -68,6 +68,8 @@ void SegmentEraser::mousePressEvent(QMouseEvent *e)
 
     // Save the Segment for the mouse release event.
     setChangingSegment(m_canvas->getModel()->getSegmentAt(pos));
+
+    setContextHelp2();
 }
 
 void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
@@ -88,6 +90,8 @@ void SegmentEraser::mouseReleaseEvent(QMouseEvent *e)
 
     // Clear the current Segment.
     setChangingSegment(ChangingSegmentPtr());
+
+    setContextHelp2();
 }
 
 int SegmentEraser::mouseMoveEvent(QMouseEvent *e)
@@ -95,12 +99,12 @@ int SegmentEraser::mouseMoveEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
-    setBasicContextHelp();
+    setContextHelp2();
 
     return RosegardenScrollView::NoFollow;
 }
 
-void SegmentEraser::setBasicContextHelp()
+void SegmentEraser::setContextHelp2()
 {
     setContextHelp(tr("Click on a segment to delete it"));
 }    
