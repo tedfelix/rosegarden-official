@@ -380,7 +380,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     // Note: Mouse tracking must be on for this to work.  See
     //       QWidget::setMouseTracking().
     if (e->buttons() == Qt::NoButton) {
-        setContextHelpFor(pos, (e->modifiers() & Qt::ControlModifier));
+        setContextHelpFor(pos, e->modifiers());
         return RosegardenScrollView::NoFollow;
     }
 
@@ -468,13 +468,6 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     setSnapTime(e, SnapGrid::SnapToBeat);
 
-    // If shift isn't being held down
-    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
-        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
-    } else {
-        clearContextHelp();
-    }
-
     // start move on selected items only once
     if (!m_selectionMoveStarted) {
         m_selectionMoveStarted = true;
@@ -496,6 +489,9 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
             setChangingSegment(newChangingSegment);
         }
     }
+
+    // Display help for the Shift key.
+    setContextHelpFor(pos, e->modifiers());
 
     Composition &comp = m_doc->getComposition();
 
@@ -575,37 +571,56 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
 void SegmentSelector::keyPressEvent(QKeyEvent *e)
 {
-    // In case ctrl was pressed, update the context help.
-    setContextHelpFor(m_lastMousePos,
-                      (e->modifiers() & Qt::ControlModifier));
+    // In case shift or ctrl were pressed, update the context help.
+    setContextHelpFor(m_lastMousePos, e->modifiers());
 }
 
 void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
 {
-    // In case ctrl was released, update the context help.
-    setContextHelpFor(m_lastMousePos,
-                      (e->modifiers() & Qt::ControlModifier));
+    // In case shift or ctrl were released, update the context help.
+    setContextHelpFor(m_lastMousePos, e->modifiers());
 }
 
-void SegmentSelector::setContextHelpFor(QPoint p, bool ctrl)
+void SegmentSelector::setContextHelpFor(QPoint pos,
+                                        Qt::KeyboardModifiers modifiers)
 {
-    ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(p);
+    // If we are moving something
+    if (m_selectionMoveStarted)
+    {
+        const bool shift = ((modifiers & Qt::ShiftModifier) != 0);
 
-    if (!item) {
+        // If shift isn't being held down
+        if (!shift) {
+            setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
+        } else {
+            clearContextHelp();
+        }
+
+        return;
+    }
+
+    ChangingSegmentPtr segment = m_canvas->getModel()->getSegmentAt(pos);
+
+    // If the mouse is hovering over the background
+    if (!segment) {
         setContextHelp(tr("Click and drag to select segments; middle-click and drag to draw an empty segment"));
         return;
     }
 
-    // If resizing
+    // The mouse is hovering over a segment.
+
+    const bool ctrl = ((modifiers & Qt::ControlModifier) != 0);
+
+    // If clicking would resize
     if (m_canvas->getModel()->getSelectedSegments().size() <= 1  &&
-        isNearEdge(item->rect(), p)) {
+        isNearEdge(segment->rect(), pos)) {
 
         if (!ctrl) {
             setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
         } else {
             setContextHelp(tr("Click and drag to rescale segment"));
         }
-    } else {  // moving
+    } else {  // clicking would move
         if (m_canvas->getModel()->haveMultipleSelection()) {
             if (!ctrl) {
                 setContextHelp(tr("Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies"));

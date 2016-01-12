@@ -60,7 +60,7 @@ public:
     //bool isSegmentCopying() const { return m_segmentCopyMode; }
 
 private:
-    void setContextHelpFor(QPoint p, bool ctrl = false);
+    void setContextHelpFor(QPoint pos, Qt::KeyboardModifiers modifiers = 0);
 
     //--------------- Data members ---------------------------------
 
