@@ -38,6 +38,7 @@ class QResizeEvent;
 class QPaintEvent;
 class QPainter;
 class QMouseEvent;
+class QKeyEvent;
 class QEvent;
 
 
@@ -373,6 +374,9 @@ private:
      * Also handles scrolling as needed.
      */
     virtual void mouseMoveEvent(QMouseEvent *);
+
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
 
     /// Delegates to drawAll().
     virtual void paintEvent(QPaintEvent *);

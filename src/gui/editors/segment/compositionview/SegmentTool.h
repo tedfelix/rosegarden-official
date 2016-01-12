@@ -28,6 +28,7 @@
 
 
 class QMouseEvent;
+class QKeyEvent;
 
 
 namespace Rosegarden
@@ -63,6 +64,8 @@ public:
     virtual int mouseMoveEvent(QMouseEvent *)
             { return RosegardenScrollView::NoFollow; }
     virtual void mouseReleaseEvent(QMouseEvent *)  { }
+    virtual void keyPressEvent(QKeyEvent *)  { }
+    virtual void keyReleaseEvent(QKeyEvent *)  { }
 
 protected:
     /// Protected since a SegmentTool isn't very useful on its own.

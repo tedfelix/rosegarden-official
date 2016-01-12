@@ -25,6 +25,7 @@
 #include <QString>
 
 class QMouseEvent;
+class QKeyEvent;
 
 namespace Rosegarden
 {
@@ -51,18 +52,22 @@ public:
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
 
     // Unused
     //bool isSegmentAdding() const { return m_segmentAddMode; }
     //bool isSegmentCopying() const { return m_segmentCopyMode; }
 
 private:
-    void setContextHelpFor(QPoint p, bool ctrlPressed = false);
+    void setContextHelpFor(QPoint p, bool ctrl = false);
 
     //--------------- Data members ---------------------------------
 
     /// Recorded by mousePressEvent().
     QPoint m_clickPoint;
+
+    QPoint m_lastMousePos;
 
     /// Shift
     bool m_segmentAddMode;

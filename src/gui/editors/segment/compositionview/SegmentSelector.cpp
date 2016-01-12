@@ -38,6 +38,7 @@
 #include "SegmentToolBox.h"
 
 #include <QMouseEvent>
+#include <QKeyEvent>
 
 #include <math.h>
 #include <stdlib.h>
@@ -51,6 +52,7 @@ const QString SegmentSelector::ToolName = "segmentselector";
 SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
     SegmentTool(c, d),
     m_clickPoint(),
+    m_lastMousePos(),
     m_segmentAddMode(false),
     m_segmentCopyMode(false),
     m_segmentCopyingAsLink(false),
@@ -70,7 +72,7 @@ SegmentSelector::~SegmentSelector()
 void SegmentSelector::ready()
 {
     m_canvas->viewport()->setCursor(Qt::ArrowCursor);
-    setContextHelpFor(QPoint(0,0), false);
+    setContextHelpFor(QPoint(0,0));
 }
 
 static bool isNearEdge(const QRect &segmentRect, const QPoint &cursor)
@@ -372,6 +374,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     e->accept();
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
+    m_lastMousePos = pos;
 
     // If no buttons are pressed, update the context help and bail.
     // Note: Mouse tracking must be on for this to work.  See
@@ -570,12 +573,22 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
            RosegardenScrollView::FollowVertical;
 }
 
-void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
+void SegmentSelector::keyPressEvent(QKeyEvent *e)
 {
-    // ??? We should also call this if any of the modifier keys are
-    //     pressed/released.  Might be a good idea to audit all of
-    //     these while reviewing this one.
+    // In case ctrl was pressed, update the context help.
+    setContextHelpFor(m_lastMousePos,
+                      (e->modifiers() & Qt::ControlModifier));
+}
 
+void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
+{
+    // In case ctrl was released, update the context help.
+    setContextHelpFor(m_lastMousePos,
+                      (e->modifiers() & Qt::ControlModifier));
+}
+
+void SegmentSelector::setContextHelpFor(QPoint p, bool ctrl)
+{
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(p);
 
     if (!item) {
@@ -583,27 +596,24 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
         return;
     }
 
-    // Same logic as in mousePressEvent to establish
-    // whether we'd be moving or resizing
-
-    if ((!m_segmentAddMode ||
-         !m_canvas->getModel()->haveSelection()) &&
+    // If resizing
+    if (m_canvas->getModel()->getSelectedSegments().size() <= 1  &&
         isNearEdge(item->rect(), p)) {
 
-        if (!ctrlPressed) {
+        if (!ctrl) {
             setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
         } else {
             setContextHelp(tr("Click and drag to rescale segment"));
         }
-    } else {
+    } else {  // moving
         if (m_canvas->getModel()->haveMultipleSelection()) {
-            if (!ctrlPressed) {
+            if (!ctrl) {
                 setContextHelp(tr("Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies"));
             } else {
                 setContextHelp(tr("Click and drag to copy segments"));
             }
         } else {
-            if (!ctrlPressed) {
+            if (!ctrl) {
                 setContextHelp(tr("Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit"));
             } else {
                 setContextHelp(tr("Click and drag to copy segment"));

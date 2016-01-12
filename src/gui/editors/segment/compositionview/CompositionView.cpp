@@ -177,6 +177,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
 
     // The various tools expect this.
     setMouseTracking(true);
+    setFocusPolicy(Qt::StrongFocus);
 
     // *** Debugging
 
@@ -1269,6 +1270,8 @@ void CompositionView::enterEvent(QEvent *)
     // Ask RosegardenMainWindow to display the context help in the status bar.
     emit showContextHelp(m_toolContextHelp);
     m_contextHelpShown = true;
+    // So we can get shift/ctrl/alt key presses.
+    setFocus();
 }
 
 void CompositionView::leaveEvent(QEvent *)
@@ -1276,6 +1279,7 @@ void CompositionView::leaveEvent(QEvent *)
     // Ask RosegardenMainWindow to clear the context help in the status bar.
     emit showContextHelp("");
     m_contextHelpShown = false;
+    clearFocus();
 }
 
 void CompositionView::slotToolHelpChanged(const QString &text)
@@ -1364,6 +1368,30 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     if (followMode != RosegardenScrollView::NoFollow) {
         doAutoScroll();
     }
+}
+
+void CompositionView::keyPressEvent(QKeyEvent *e)
+{
+    // Let the baseclass have first dibs.
+    RosegardenScrollView::keyPressEvent(e);
+
+    if (!m_currentTool)
+        return;
+
+    // Delegate to the current tool.
+    m_currentTool->keyPressEvent(e);
+}
+
+void CompositionView::keyReleaseEvent(QKeyEvent *e)
+{
+    // Let the baseclass have first dibs.
+    RosegardenScrollView::keyReleaseEvent(e);
+
+    if (!m_currentTool)
+        return;
+
+    // Delegate to the current tool.
+    m_currentTool->keyPressEvent(e);
 }
 
 void CompositionView::drawPointer(int pos)
