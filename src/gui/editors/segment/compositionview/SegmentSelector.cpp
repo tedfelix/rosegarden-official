@@ -571,12 +571,24 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
 void SegmentSelector::keyPressEvent(QKeyEvent *e)
 {
+    // If another tool has taken over, delegate.
+    if (m_dispatchTool) {
+        m_dispatchTool->keyPressEvent(e);
+        return;
+    }
+
     // In case shift or ctrl were pressed, update the context help.
     setContextHelpFor(m_lastMousePos, e->modifiers());
 }
 
 void SegmentSelector::keyReleaseEvent(QKeyEvent *e)
 {
+    // If another tool has taken over, delegate.
+    if (m_dispatchTool) {
+        m_dispatchTool->keyReleaseEvent(e);
+        return;
+    }
+
     // In case shift or ctrl were released, update the context help.
     setContextHelpFor(m_lastMousePos, e->modifiers());
 }

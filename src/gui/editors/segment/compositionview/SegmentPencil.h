@@ -26,6 +26,7 @@
 
 
 class QMouseEvent;
+class QKeyEvent;
 
 
 namespace Rosegarden
@@ -52,12 +53,14 @@ public:
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
 
     static const QString ToolName;
 
 protected:
     SegmentPencil(CompositionView*, RosegardenDocument*);
-    void setContextHelpFor(QPoint p);
+    void setContextHelpFor(QPoint pos, Qt::KeyboardModifiers modifiers = 0);
 
     //--------------- Data members ---------------------------------
 
@@ -65,6 +68,9 @@ protected:
 
     // X coord of the initial mouse button press
     int m_pressX;
+
+    QPoint m_lastMousePos;
+
     // Start time of the segment as computed by press and move.
     timeT m_startTime;
     // End time of the segment as computed by press and move.

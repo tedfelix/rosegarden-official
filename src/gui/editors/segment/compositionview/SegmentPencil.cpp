@@ -41,6 +41,7 @@
 #include <QRect>
 #include <QString>
 #include <QMouseEvent>
+#include <QKeyEvent>
 
 namespace Rosegarden
 {
@@ -51,6 +52,7 @@ SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_newRect(false),
         m_pressX(0),
+        m_lastMousePos(),
         m_startTime(0),
         m_endTime(0)
 {
@@ -155,7 +157,9 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
 
     m_newRect = true;
 
-	m_canvas->update(tmpRect);
+    setContextHelpFor(pos, e->modifiers());
+
+    m_canvas->update(tmpRect);
 }
 
 void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
@@ -170,8 +174,6 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
     e->accept();
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
-
-    setContextHelpFor(pos);
 
     if (m_newRect) {
 
@@ -223,8 +225,9 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
 
         m_canvas->hideNewSegment();
         m_canvas->slotUpdateAll();
-
     }
+
+    setContextHelpFor(pos, e->modifiers());
 }
 
 int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
@@ -233,18 +236,15 @@ int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
     e->accept();
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
+    m_lastMousePos = pos;
 
     if (!m_newRect) {
         setContextHelpFor(pos);
         return RosegardenScrollView::NoFollow;
     }
 
-    // If shift isn't being held down
-    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
-        setContextHelp(tr("Hold Shift to avoid snapping to bar lines"));
-    } else {
-        clearContextHelp();
-    }
+    // Display help for the Shift key.
+    setContextHelpFor(pos, e->modifiers());
 
     QRect tmpRect = m_canvas->getNewSegmentRect();
 
@@ -282,20 +282,54 @@ int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
     return RosegardenScrollView::FollowHorizontal;
 }
 
-void SegmentPencil::setContextHelpFor(QPoint p)
+void SegmentPencil::keyPressEvent(QKeyEvent *e)
 {
-    int trackPosition = m_canvas->grid().getYBin(p.y());
+    // In case shift was pressed, update the context help.
+    setContextHelpFor(m_lastMousePos, e->modifiers());
+}
+
+void SegmentPencil::keyReleaseEvent(QKeyEvent *e)
+{
+    // In case shift was released, update the context help.
+    setContextHelpFor(m_lastMousePos, e->modifiers());
+}
+
+void SegmentPencil::setContextHelpFor(QPoint pos,
+                                      Qt::KeyboardModifiers modifiers)
+{
+    // if we're drawing a segment...
+    if (m_newRect)
+    {
+        const bool shift = ((modifiers & Qt::ShiftModifier) != 0);
+
+        // If shift isn't being held down
+        if (!shift)
+            setContextHelp(tr("Hold Shift to avoid snapping to bar lines"));
+        else
+            clearContextHelp();
+
+        return;
+    }
+
+    // Mouse is hovering.
+
+    // Audio Track
+
+    int trackPosition = m_canvas->grid().getYBin(pos.y());
 
     if (trackPosition < (int)m_doc->getComposition().getNbTracks()) {
-        Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
-        if (t) {
-            InstrumentId id = t->getInstrument();
-            if (id >= AudioInstrumentBase && id < MidiInstrumentBase) {
+        Track *track = m_doc->getComposition().getTrackByPosition(trackPosition);
+        if (track) {
+            InstrumentId id = track->getInstrument();
+            // If this is an audio instrument
+            if (id >= AudioInstrumentBase  &&  id < MidiInstrumentBase) {
                 setContextHelp(tr("Record or drop audio here"));
                 return;
             }
         }
     }
+
+    // MIDI Track
 
     setContextHelp(tr("Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode."));
 }
