@@ -51,8 +51,6 @@ public:
 
 protected:
     SegmentEraser(CompositionView*, RosegardenDocument*);
-
-    void setContextHelp2();
 };
 
 

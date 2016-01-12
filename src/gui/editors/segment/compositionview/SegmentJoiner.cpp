@@ -40,11 +40,10 @@ const QString SegmentJoiner::ToolName = "segmentjoiner";
 SegmentJoiner::SegmentJoiner(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
-    RG_DEBUG << "SegmentJoiner() - not implemented\n";
+    RG_DEBUG << "SegmentJoiner() - not implemented";
 }
 
-SegmentJoiner::~SegmentJoiner()
-{}
+#if 0
 
 void
 SegmentJoiner::mousePressEvent(QMouseEvent *e)
@@ -94,7 +93,9 @@ SegmentJoiner::mouseMoveEvent(QMouseEvent *e)
 
 void
 SegmentJoiner::contentsMouseDoubleClickEvent(QMouseEvent*)
-{}
+{
+}
 
+#endif
 
 }

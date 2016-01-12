@@ -33,6 +33,10 @@ class RosegardenDocument;
 class CompositionView;
 
 
+/// NOT IMPLEMENTED
+/**
+ * Segment > Join does this.
+ */
 class SegmentJoiner : public SegmentTool
 {
     Q_OBJECT
@@ -41,14 +45,16 @@ class SegmentJoiner : public SegmentTool
 
 public:
 
-    virtual ~SegmentJoiner();
+    // *** NOT IMPLEMENTED ***
 
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual int mouseMoveEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
+    //virtual ~SegmentJoiner()  { }
+
+    //virtual void mousePressEvent(QMouseEvent *);
+    //virtual int mouseMoveEvent(QMouseEvent *);
+    //virtual void mouseReleaseEvent(QMouseEvent *);
  
     // don't do double clicks
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+    //virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
     static const QString ToolName;
 
