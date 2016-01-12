@@ -296,6 +296,51 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
         if (m_changeMade) {
 
+            // ??? Everything in this scope should be gathered into a single
+            //     MacroCommand to reduce this to a single undo.
+
+            if (m_segmentCopyMode) {
+                // Make copies of the original Segment(s).  These copies will
+                // take the place of the originals.
+
+                MacroCommand *macroCommand = 0;
+
+                if (m_segmentCopyingAsLink) {
+                    macroCommand = new MacroCommand(
+                            SegmentQuickLinkCommand::getGlobalName());
+                } else {
+                    macroCommand = new MacroCommand(
+                            SegmentQuickCopyCommand::getGlobalName());
+                }
+
+                SegmentSelection selectedItems = m_canvas->getSelectedSegments();
+
+                // for each selected segment
+                for (SegmentSelection::iterator it = selectedItems.begin();
+                     it != selectedItems.end();
+                     ++it) {
+                    Segment *segment = *it;
+
+                    Command *command = 0;
+
+                    if (m_segmentCopyingAsLink) {
+                        command = new SegmentQuickLinkCommand(segment);
+                    } else {
+                        // if it's a link, copy as link
+                        if (segment->isTrulyLinked())
+                            command = new SegmentQuickLinkCommand(segment);
+                        else  // copy as a non-link segment
+                            command = new SegmentQuickCopyCommand(segment);
+                    }
+
+                    macroCommand->addCommand(command);
+                }
+
+                CommandHistory::getInstance()->addCommand(macroCommand);
+
+                m_canvas->update();
+            }
+
             const int startDragTrackPos =
                     m_canvas->grid().getYBin(m_clickPoint.y());
             const int currentTrackPos = m_canvas->grid().getYBin(pos.y());
@@ -424,6 +469,8 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
+#if 0
+// ??? Moving to mouseReleaseEvent().
     if (m_segmentCopyMode  &&  !m_segmentQuickCopyDone) {
         // Make copies of the original Segment(s).  These copies will
         // take the place of the originals as the user drags the
@@ -469,6 +516,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         // Make sure we don't do it again.
         m_segmentQuickCopyDone = true;
     }
+#endif
 
     setSnapTime(e, SnapGrid::SnapToBeat);
 
@@ -477,7 +525,8 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
         m_selectionMoveStarted = true;
 
         m_canvas->getModel()->startChangeSelection(
-                CompositionModelImpl::ChangeMove);
+                m_segmentCopyMode ? CompositionModelImpl::ChangeCopy :
+                                    CompositionModelImpl::ChangeMove);
 
         // The call to startChangeSelection() generates a new changing segment.
         // Get it.
