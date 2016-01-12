@@ -53,12 +53,14 @@ public:
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
 
     static const QString ToolName;
 
 protected:
     SegmentResizer(CompositionView*, RosegardenDocument*);
-    void setBasicContextHelp(bool ctrlPressed = false);
+    void setContextHelp2(Qt::KeyboardModifiers modifiers = 0);
 
     //--------------- Data members ---------------------------------
 

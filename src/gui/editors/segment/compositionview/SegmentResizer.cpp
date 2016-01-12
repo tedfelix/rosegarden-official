@@ -68,7 +68,7 @@ SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d) :
 void SegmentResizer::ready()
 {
     m_canvas->viewport()->setCursor(Qt::SizeHorCursor);
-    setBasicContextHelp(false);
+    setContextHelp2();
 }
 
 void SegmentResizer::stow()
@@ -110,6 +110,8 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
 
         setSnapTime(e, SnapGrid::SnapToBeat);
     }
+
+    setContextHelp2(e->modifiers());
 }
 
 void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
@@ -264,7 +266,8 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
     
     //setChangeMade(false);
     setChangingSegment(ChangingSegmentPtr());
-    setBasicContextHelp();
+
+    setContextHelp2(e->modifiers());
 }
 
 int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
@@ -276,27 +279,10 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    bool rescale = (e->modifiers() & Qt::ControlModifier);
+    setContextHelp2(e->modifiers());
 
     if (!getChangingSegment()) {
-        setBasicContextHelp(rescale);
         return RosegardenScrollView::NoFollow;
-    }
-
-    if (rescale) {
-        // If shift isn't being held down
-        if ((e->modifiers() & Qt::ShiftModifier) == 0) {
-            setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
-        } else {
-            clearContextHelp();
-        }
-    } else {
-        // If shift isn't being held down
-        if ((e->modifiers() & Qt::ShiftModifier) == 0) {
-            setContextHelp(tr("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
-        } else {
-            setContextHelp(tr("Hold Ctrl to rescale contents"));
-        }
     }
 
     Segment* segment = getChangingSegment()->getSegment();
@@ -387,9 +373,46 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     return RosegardenScrollView::FollowHorizontal;
 }
 
-void SegmentResizer::setBasicContextHelp(bool ctrlPressed)
+void SegmentResizer::keyPressEvent(QKeyEvent *e)
 {
-    if (ctrlPressed) {
+    // In case shift or ctrl were pressed, update the context help.
+    setContextHelp2(e->modifiers());
+}
+
+void SegmentResizer::keyReleaseEvent(QKeyEvent *e)
+{
+    // In case shift or ctrl were released, update the context help.
+    setContextHelp2(e->modifiers());
+}
+
+void SegmentResizer::setContextHelp2(Qt::KeyboardModifiers modifiers)
+{
+    const bool ctrl = ((modifiers & Qt::ControlModifier) != 0);
+
+    // If we're resizing something
+    if (getChangingSegment()) {
+        const bool shift = ((modifiers & Qt::ShiftModifier) != 0);
+
+        if (ctrl) {
+            // If shift isn't being held down
+            if (!shift) {
+                setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
+            } else {
+                clearContextHelp();
+            }
+        } else {
+            // If shift isn't being held down
+            if (!shift) {
+                setContextHelp(tr("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
+            } else {
+                setContextHelp(tr("Hold Ctrl to rescale contents"));
+            }
+        }
+
+        return;
+    }
+
+    if (!ctrl) {
         setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
     } else {
         setContextHelp(tr("Click and drag to rescale segment"));
