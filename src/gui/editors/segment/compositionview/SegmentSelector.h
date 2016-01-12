@@ -34,7 +34,10 @@ namespace Rosegarden
 class RosegardenDocument;
 class CompositionView;
 
-/// The Arrow Tool
+/// The "Select and Edit (F2)" arrow tool
+/**
+ * ??? rename: SelectAndEditTool
+ */
 class SegmentSelector : public SegmentTool
 {
     Q_OBJECT

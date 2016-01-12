@@ -259,7 +259,9 @@ public:
 
     // ??? This category might make more sense combined with Segments.
 
-    enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
+    enum ChangeType {
+        ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd, ChangeCopy
+    };
 
     /// Begin move/resize for a single segment.
     void startChange(ChangingSegmentPtr, ChangeType change);

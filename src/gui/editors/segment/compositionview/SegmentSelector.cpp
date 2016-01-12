@@ -186,8 +186,8 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         // * Move
 
-        // ??? Why not let SegmentMover take care of moving?  This
-        //     code is awfully similar.  Not similar enough?
+        // We don't dispatch to SegmentMover because SegmentMover
+        // doesn't support copying/linking.
 
         bool alt = ((e->modifiers() & Qt::AltModifier) != 0);
 
@@ -425,6 +425,10 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
     if (m_segmentCopyMode  &&  !m_segmentQuickCopyDone) {
+        // Make copies of the original Segment(s).  These copies will
+        // take the place of the originals as the user drags the
+        // the originals to a new location.
+
         MacroCommand *macroCommand = 0;
         
         if (m_segmentCopyingAsLink) {

@@ -178,8 +178,9 @@ void CompositionModelImpl::getSegmentRects(
 
         const Segment *segment = *i;
 
-        // Changing segments are handled in the next for loop.
-        if (isChanging(segment))
+        // Changing segments are handled in the next for loop.  However,
+        // if we are copying, show both the original and the changing one.
+        if (m_changeType != ChangeCopy  &&  isChanging(segment))
             continue;
 
         SegmentRect segmentRect;
