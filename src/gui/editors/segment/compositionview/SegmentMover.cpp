@@ -62,7 +62,7 @@ SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
 void SegmentMover::ready()
 {
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
-    setBasicContextHelp();
+    setContextHelp2();
 }
 
 void SegmentMover::stow()
@@ -141,6 +141,8 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
     }
 
     m_canvas->update();
+
+    setContextHelp2(e->modifiers());
 }
 
 void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
@@ -237,7 +239,7 @@ void SegmentMover::mouseReleaseEvent(QMouseEvent *e)
 
     setChangingSegment(ChangingSegmentPtr());
 
-    setBasicContextHelp();
+    setContextHelp2();
 }
 
 int SegmentMover::mouseMoveEvent(QMouseEvent *e)
@@ -253,12 +255,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 
     setSnapTime(e, SnapGrid::SnapToBeat);
 
-    // If shift isn't being held down
-    if ((e->modifiers() & Qt::ShiftModifier) == 0) {
-        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
-    } else {
-        clearContextHelp();
-    }
+    setContextHelp2(e->modifiers());
 
     const SnapGrid &grid = m_canvas->grid();
 
@@ -329,8 +326,34 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
            RosegardenScrollView::FollowVertical;
 }
 
-void SegmentMover::setBasicContextHelp()
+void SegmentMover::keyPressEvent(QKeyEvent *e)
 {
+    // In case shift was pressed, update the context help.
+    setContextHelp2(e->modifiers());
+}
+
+void SegmentMover::keyReleaseEvent(QKeyEvent *e)
+{
+    // In case shift was released, update the context help.
+    setContextHelp2(e->modifiers());
+}
+
+void SegmentMover::setContextHelp2(Qt::KeyboardModifiers modifiers)
+{
+    // If we're moving something
+    if (getChangingSegment()) {
+        bool shift = ((modifiers & Qt::ShiftModifier) != 0);
+
+        // If shift isn't being held down
+        if (!shift) {
+            setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
+        } else {
+            clearContextHelp();
+        }
+
+        return;
+    }
+
     setContextHelp(tr("Click and drag to move a segment"));
 }
 

@@ -47,13 +47,15 @@ public:
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
 
     static const QString ToolName;
 
 protected:
     SegmentMover(CompositionView*, RosegardenDocument*);
 
-    void setBasicContextHelp();
+    void setContextHelp2(Qt::KeyboardModifiers modifiers = 0);
 
     QPoint m_clickPoint;
     bool m_changeMade;
