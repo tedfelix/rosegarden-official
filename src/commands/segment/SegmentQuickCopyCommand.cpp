@@ -48,8 +48,11 @@ SegmentQuickCopyCommand::execute()
 {
     if (!m_segment) {
         m_segment = m_segmentToCopy->clone(false);
-        std::string label = m_segment->getLabel();
-        m_segment->setLabel(appendLabel(label, qstrtostr(tr("(copied)"))));
+        std::string label = m_segmentToCopy->getLabel();
+        // We rename the original segment to end in (copied) since it is
+        // the one that is being moved by SegmentTool.  The copy is being
+        // left behind in place of the original.
+        m_segmentToCopy->setLabel(appendLabel(label, qstrtostr(tr("(copied)"))));
     }
     m_composition->addSegment(m_segment);
     m_detached = false;
