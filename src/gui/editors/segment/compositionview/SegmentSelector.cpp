@@ -296,22 +296,27 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
         if (m_changeMade) {
 
-            // ??? Everything in this scope should be gathered into a single
-            //     MacroCommand to reduce this to a single undo.
+            MacroCommand *macroCommand = 0;
+
+            CompositionModelImpl::ChangingSegmentSet &changingSegments =
+                    m_canvas->getModel()->getChangingSegments();
+
+            if (m_segmentCopyMode) {
+                if (m_segmentCopyingAsLink) {
+                    macroCommand = new MacroCommand(
+                            tr("Copy %n Segment(s) as link(s)", "", changingSegments.size()));
+                } else {
+                    macroCommand = new MacroCommand(
+                            tr("Copy %n Segment(s)", "", changingSegments.size()));
+                }
+            } else {
+                macroCommand = new MacroCommand(
+                        tr("Move %n Segment(s)", "", changingSegments.size()));
+            }
 
             if (m_segmentCopyMode) {
                 // Make copies of the original Segment(s).  These copies will
                 // take the place of the originals.
-
-                MacroCommand *macroCommand = 0;
-
-                if (m_segmentCopyingAsLink) {
-                    macroCommand = new MacroCommand(
-                            SegmentQuickLinkCommand::getGlobalName());
-                } else {
-                    macroCommand = new MacroCommand(
-                            SegmentQuickCopyCommand::getGlobalName());
-                }
 
                 SegmentSelection selectedItems = m_canvas->getSelectedSegments();
 
@@ -335,10 +340,6 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
                     macroCommand->addCommand(command);
                 }
-
-                CommandHistory::getInstance()->addCommand(macroCommand);
-
-                m_canvas->update();
             }
 
             const int startDragTrackPos =
@@ -348,13 +349,8 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
             Composition &comp = m_doc->getComposition();
 
-            CompositionModelImpl::ChangingSegmentSet &changingSegments =
-                    m_canvas->getModel()->getChangingSegments();
-
             SegmentReconfigureCommand *segmentReconfigureCommand =
-                    new SegmentReconfigureCommand(
-                            tr("Move %n Segment(s)", "", changingSegments.size()),
-                            &comp);
+                    new SegmentReconfigureCommand("", &comp);
 
             // For each changing segment, add the segment to the
             // SegmentReconfigureCommand.
@@ -395,8 +391,11 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                         segment, startTime, endTime, newTrackId);
             }
 
-            CommandHistory::getInstance()->addCommand(
-                    segmentReconfigureCommand);
+            macroCommand->addCommand(segmentReconfigureCommand);
+
+            CommandHistory::getInstance()->addCommand(macroCommand);
+
+            m_canvas->update();
         }
 
         m_canvas->getModel()->endChange();
