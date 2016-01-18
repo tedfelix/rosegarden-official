@@ -25,16 +25,16 @@
 #include "InstrumentParameterPanel.h"
 
 #include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
 #include <QString>
 #include <QSharedPointer>
 
 
 class QWidget;
 class QSignalMapper;
-class QLabel;
 class QGridLayout;
 class QFrame;
-class QComboBox;
 
 namespace Rosegarden
 {
@@ -139,18 +139,18 @@ private:
     QCheckBox m_percussionCheckBox;
 
     // Bank
-    QLabel             *m_bankLabel;
-    QCheckBox          *m_bankCheckBox;
-    QComboBox          *m_bankComboBox;
-    BankList            m_banks;
+    QLabel m_bankLabel;
+    QCheckBox m_bankCheckBox;
+    QComboBox m_bankComboBox;
+    BankList m_banks;
     void showBank(bool show);
     /// From the selected instrument.
     void updateBankComboBox();
 
     // Program
-    QLabel             *m_programLabel;
-    QCheckBox          *m_programCheckBox;
-    QComboBox          *m_programComboBox;
+    QLabel m_programLabel;
+    QCheckBox m_programCheckBox;
+    QComboBox m_programComboBox;
     ProgramList         m_programs;
     /// From the selected instrument.
     void updateProgramComboBox();
