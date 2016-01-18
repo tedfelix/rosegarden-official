@@ -151,25 +151,24 @@ private:
     QLabel m_programLabel;
     QCheckBox m_programCheckBox;
     QComboBox m_programComboBox;
-    ProgramList         m_programs;
+    ProgramList m_programs;
     /// From the selected instrument.
     void updateProgramComboBox();
     static bool hasNoName(const MidiProgram &p);
 
     // Variation
-    QLabel             *m_variationLabel;
-    QCheckBox          *m_variationCheckBox;
-    QComboBox          *m_variationComboBox;
-    ProgramList         m_variations;
+    QLabel m_variationLabel;
+    QCheckBox m_variationCheckBox;
+    QComboBox m_variationComboBox;
+    ProgramList m_variations;
     void showVariation(bool show);
     /// From the selected instrument.
     void updateVariationComboBox();
 
     // Channel: auto/fixed
-    QComboBox          *m_channelValue;
+    QComboBox m_channelValue;
 
-    QLabel             *m_receiveExternalLabel;
-    QCheckBox          *m_receiveExternalCheckBox;
+    QCheckBox m_receiveExternalCheckBox;
 
     // Rotaries
 
