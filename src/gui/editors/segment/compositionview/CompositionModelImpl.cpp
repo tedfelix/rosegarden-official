@@ -1326,8 +1326,11 @@ bool CompositionModelImpl::isTmpSelected(const Segment *s) const
 
 // --- Misc ---------------------------------------------------------
 
-int CompositionModelImpl::getCompositionHeight() const
+int CompositionModelImpl::getCompositionHeight()
 {
+    // Make sure we have the latest track heights.
+    updateAllTrackHeights();
+
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
