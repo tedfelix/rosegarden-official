@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentInsertCommand]"
 
 #include "SegmentInsertCommand.h"
 
@@ -23,6 +24,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenDocument.h"
+#include "misc/Debug.h"
 
 
 #include <QApplication>

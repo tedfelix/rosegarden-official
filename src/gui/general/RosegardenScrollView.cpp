@@ -137,8 +137,6 @@ void RosegardenScrollView::updateContents(int x, int y, int w, int h)
     if (!isVisible() || !updatesEnabled())
         return;
 
-    //RG_DEBUG << "updateContents()";
-
     // Translate contents coords to viewport coords.
     x -= contentsX();
     y -= contentsY();
@@ -388,8 +386,6 @@ void RosegardenScrollView::scrollVert(int y)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent *e)
 {
-    RG_DEBUG << "resizeEvent()";
-
     QAbstractScrollArea::resizeEvent(e);
 
     // Since the viewport size has changed, we need to update
@@ -405,8 +401,6 @@ void RosegardenScrollView::resizeEvent(QResizeEvent *e)
 
 void RosegardenScrollView::updateBottomRulerGeometry()
 {
-    RG_DEBUG << "updateBottomRulerGeometry()";
-
     if (!m_bottomRuler)
         return;
 
