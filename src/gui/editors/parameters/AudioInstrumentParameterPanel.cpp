@@ -90,12 +90,12 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument*
     // Instrument label : first row, all cols
     QFontMetrics metrics(f);
     int width25 = metrics.width("1234567890123456789012345");
-    m_instrumentLabel->setFont(f);
-    m_instrumentLabel->setFixedWidth(width25);
-    m_instrumentLabel->setAlignment(Qt::AlignCenter);
-    m_instrumentLabel->setToolTip(tr("Click the button above to rename this instrument"));
-    m_instrumentLabel->setText("REFRESH BUG!"); // no tr(); temporary internal string
-    gridLayout->addWidget(m_instrumentLabel, 0, 0, 1, 2, Qt::AlignCenter);
+    m_instrumentLabel.setFont(f);
+    m_instrumentLabel.setFixedWidth(width25);
+    m_instrumentLabel.setAlignment(Qt::AlignCenter);
+    m_instrumentLabel.setToolTip(tr("Click the button above to rename this instrument"));
+    m_instrumentLabel.setText("REFRESH BUG!"); // no tr(); temporary internal string
+    gridLayout->addWidget(&m_instrumentLabel, 0, 0, 1, 2, Qt::AlignCenter);
 
     // fader and connect it
     gridLayout->addWidget(m_audioFader, 1, 0, 1, 2);
@@ -361,7 +361,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     if (l.isEmpty()) l = instrument->getLocalizedPresentationName();
 
     setSelectedInstrument(instrument);
-    m_instrumentLabel->setText(l);
+    m_instrumentLabel.setText(l);
 
     m_aliasButton->setInstrument(instrument);
 

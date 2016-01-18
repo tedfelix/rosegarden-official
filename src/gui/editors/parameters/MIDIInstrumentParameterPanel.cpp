@@ -73,11 +73,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
 
     // Grid
     setContentsMargins(2, 2, 2, 2);
-    m_mainGrid = new QGridLayout(this);
-    m_mainGrid->setMargin(0);
-    m_mainGrid->setSpacing(3);
-    m_mainGrid->setColumnStretch(2, 1);
-    setLayout(m_mainGrid);
+    QGridLayout *mainGrid = new QGridLayout(this);
+    mainGrid->setMargin(0);
+    mainGrid->setSpacing(3);
+    mainGrid->setColumnStretch(2, 1);
+    setLayout(mainGrid);
 
     // Font
     QFont f;
@@ -89,37 +89,35 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     const int labelWidth = metrics.width("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
     // Instrument Label
-    m_instrumentLabel->setFont(f);
+    m_instrumentLabel.setFont(f);
     // Set a fixed width to prevent the label from growing too large.
-    m_instrumentLabel->setFixedWidth(labelWidth);
-    m_instrumentLabel->setAlignment(Qt::AlignCenter);
-    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
+    m_instrumentLabel.setFixedWidth(labelWidth);
+    m_instrumentLabel.setAlignment(Qt::AlignCenter);
+    mainGrid->addWidget(&m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
 
     // Connection Label
-    m_connectionLabel = new SqueezedLabel(this);
-    m_connectionLabel->setFont(f);
+    m_connectionLabel.setFont(f);
     // Set a fixed width to prevent the label from growing too large.
-    m_connectionLabel->setFixedWidth(labelWidth);
-    m_connectionLabel->setAlignment(Qt::AlignCenter);
-    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
+    m_connectionLabel.setFixedWidth(labelWidth);
+    m_connectionLabel.setAlignment(Qt::AlignCenter);
+    mainGrid->addWidget(&m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
 
     // Percussion Label
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
     percussionLabel->setFont(f);
-    m_mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
+    mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
 
     // Percussion CheckBox
-    m_percussionCheckBox = new QCheckBox(this);
-    m_percussionCheckBox->setFont(f);
-    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    connect(m_percussionCheckBox, SIGNAL(clicked(bool)),
+    m_percussionCheckBox.setFont(f);
+    m_percussionCheckBox.setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
+    connect(&m_percussionCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotPercussionClicked(bool)));
-    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
+    mainGrid->addWidget(&m_percussionCheckBox, 3, 3, Qt::AlignLeft);
 
     // Bank Label
     m_bankLabel = new QLabel(tr("Bank"), this);
     m_bankLabel->setFont(f);
-    m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
+    mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
 
     // Bank CheckBox
     m_bankCheckBox = new QCheckBox(this);
@@ -127,7 +125,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
     connect(m_bankCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotBankClicked(bool)));
-    m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
+    mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
 
     // Ensure a reasonable amount of space in the dropdowns even
     // if no instrument initially selected.
@@ -147,12 +145,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     connect(m_bankComboBox, SIGNAL(activated(int)),
             SLOT(slotSelectBank(int)));
     //m_bankComboBox->setCurrentIndex(-1);
-    m_mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
 
     // Program Label
     m_programLabel = new QLabel(tr("Program"), this);
     m_programLabel->setFont(f);
-    m_mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
+    mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
 
     // Program CheckBox
     m_programCheckBox = new QCheckBox(this);
@@ -160,7 +158,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
     connect(m_programCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotProgramClicked(bool)));
-    m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
+    mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
 
     // Program ComboBox
     m_programComboBox = new QComboBox(this);
@@ -173,12 +171,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     connect(m_programComboBox, SIGNAL(activated(int)),
             SLOT(slotSelectProgram(int)));
     //m_programComboBox->setCurrentIndex(-1);
-    m_mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
 
     // Variation Label
     m_variationLabel = new QLabel(tr("Variation"), this);
     m_variationLabel->setFont(f);
-    m_mainGrid->addWidget(m_variationLabel, 6, 0);
+    mainGrid->addWidget(m_variationLabel, 6, 0);
 
     // Variation CheckBox
     m_variationCheckBox = new QCheckBox(this);
@@ -186,7 +184,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
     connect(m_variationCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotVariationClicked(bool)));
-    m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
+    mainGrid->addWidget(m_variationCheckBox, 6, 1);
 
     // Variation ComboBox
     m_variationComboBox = new QComboBox(this);
@@ -199,14 +197,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     connect(m_variationComboBox, SIGNAL(activated(int)),
             SLOT(slotSelectVariation(int)));
     //m_variationComboBox->setCurrentIndex(-1);
-    m_mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
 
     // Channel Label
     QLabel *channelLabel = new QLabel(tr("Channel"), this);
     channelLabel->setFont(f);
     QString channelTip(tr("<qt><p><i>Auto</i>, allocate channel automatically; <i>Fixed</i>, fix channel to instrument number</p></qt>"));
     channelLabel->setToolTip(channelTip);
-    m_mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
+    mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
 
     // Channel ComboBox
     m_channelValue = new QComboBox(this);
@@ -220,14 +218,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     connect(m_channelValue, SIGNAL(activated(int)),
             SLOT(slotSelectChannel(int)));
     //m_channelValue->setCurrentIndex(-1);
-    m_mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
 
     // Receive External Label
     m_receiveExternalLabel = new QLabel(tr("Receive external"), this);
     m_receiveExternalLabel->setFont(f);
     QString receiveExternalTip = tr("<qt>Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
     m_receiveExternalLabel->setToolTip(receiveExternalTip);
-    m_mainGrid->addWidget(m_receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
+    mainGrid->addWidget(m_receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
     
     // Receive External CheckBox
     m_receiveExternalCheckBox = new QCheckBox(this);
@@ -235,7 +233,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_receiveExternalCheckBox->setToolTip(receiveExternalTip);
     m_receiveExternalCheckBox->setShortcut((QKeySequence)"Shift+P");
     m_receiveExternalCheckBox->setChecked(false);
-    m_mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
+    mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
 
     // Rotary Frame and Grid
     m_rotaryFrame = new QFrame(this);
@@ -246,11 +244,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
     m_rotaryFrame->setLayout(m_rotaryGrid);
     // Add the rotary frame to the main grid layout.
-    m_mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
+    mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
     // Add a spacer to take up the rest of the space.  This keeps
     // the widgets above compact vertically.
-    m_mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
-    m_mainGrid->setRowStretch(11, 1);
+    mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
+    mainGrid->setRowStretch(11, 1);
 
     // Rotary Mapper
     m_rotaryMapper = new QSignalMapper(this);
@@ -277,7 +275,7 @@ MIDIInstrumentParameterPanel::displayInstrument(Instrument *instrument)
         return;
 
     setSelectedInstrument(instrument);
-    m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
+    m_instrumentLabel.setText(instrument->getLocalizedPresentationName());
 
     updateWidgets();
 }
@@ -299,7 +297,7 @@ MIDIInstrumentParameterPanel::updateWidgets()
 
     // Instrument name
 
-    m_instrumentLabel->setText(
+    m_instrumentLabel.setText(
             getSelectedInstrument()->getLocalizedPresentationName());
 
     // Studio Device (connection) name
@@ -313,10 +311,10 @@ MIDIInstrumentParameterPanel::updateWidgets()
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
     }
 
-    m_connectionLabel->setText("[ " + connection + " ]");
+    m_connectionLabel.setText("[ " + connection + " ]");
 
     // Percussion
-    m_percussionCheckBox->setChecked(getSelectedInstrument()->isPercussion());
+    m_percussionCheckBox.setChecked(getSelectedInstrument()->isPercussion());
     
     // Bank
     m_bankCheckBox->setChecked(getSelectedInstrument()->sendsBankSelect());

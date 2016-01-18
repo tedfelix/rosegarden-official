@@ -20,9 +20,11 @@
 
 #include "base/MidiProgram.h"  // InstrumentId
 #include "base/MidiDevice.h"  // MidiByteList
+#include "gui/widgets/SqueezedLabel.h"
 
 #include "InstrumentParameterPanel.h"
 
+#include <QCheckBox>
 #include <QString>
 #include <QSharedPointer>
 
@@ -32,7 +34,6 @@ class QSignalMapper;
 class QLabel;
 class QGridLayout;
 class QFrame;
-class QCheckBox;
 class QComboBox;
 
 namespace Rosegarden
@@ -44,7 +45,6 @@ class MidiDevice;
 class Instrument;
 class InstrumentStaticSignals;
 class Rotary;
-class SqueezedLabel;
 
 
 /// "Instrument Parameters" box for MIDI Instrument's.  AKA "MIPP".
@@ -132,13 +132,11 @@ private slots:
 
 private:
 
-    QGridLayout        *m_mainGrid;
-
     // m_instrumentLabel is inherited from InstrumentParameterPanel.
 
-    SqueezedLabel      *m_connectionLabel;
+    SqueezedLabel m_connectionLabel;
 
-    QCheckBox          *m_percussionCheckBox;
+    QCheckBox m_percussionCheckBox;
 
     // Bank
     QLabel             *m_bankLabel;

@@ -18,6 +18,8 @@
 #ifndef RG_INSTRUMENTPARAMETERPANEL_H
 #define RG_INSTRUMENTPARAMETERPANEL_H
 
+#include "gui/widgets/SqueezedLabel.h"
+
 #include <QFrame>
 
 #include <vector>
@@ -32,7 +34,6 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class Instrument;
-class SqueezedLabel;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -53,7 +54,7 @@ protected:
     void setSelectedInstrument(Instrument *);
     Instrument *getSelectedInstrument();
 
-    SqueezedLabel *m_instrumentLabel;
+    SqueezedLabel m_instrumentLabel;
 
 private slots:
     /// m_selectedInstrument is being destroyed

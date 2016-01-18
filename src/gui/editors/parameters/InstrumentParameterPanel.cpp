@@ -66,7 +66,7 @@ InstrumentParameterPanel::
 slotInstrumentGone(void)
 {
     m_selectedInstrument = 0;
-    m_instrumentLabel->setText(tr("none"));
+    m_instrumentLabel.setText(tr("none"));
 }
 
 
