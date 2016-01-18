@@ -110,7 +110,7 @@ public:
      */
     int snapY(int y) const {
         if (m_ysnap == 0) return y;
-	return getYBinCoordinate(getYBin(y));
+        return getYBinCoordinate(getYBin(y));
     }
 
     /**
@@ -131,7 +131,7 @@ public:
      * is equivalent to specifying it in the constructor.
      */
     void setYSnap(int ysnap) {
-	m_ysnap = ysnap;
+        m_ysnap = ysnap;
     }
 
     /**
@@ -146,15 +146,15 @@ public:
      * multiple * ysnap high.  The default is 1 for all bins.
      */
     void setBinHeightMultiple(int bin, int multiple) {
-	m_ymultiple[bin] = multiple;
+        m_ymultiple[bin] = multiple;
     }
     
     /**
      * Retrieve the height multiple for a bin.
      */
     int getBinHeightMultiple(int bin) {
-	if (m_ymultiple.find(bin) == m_ymultiple.end()) return 1;
-	return m_ymultiple[bin];
+        if (m_ymultiple.find(bin) == m_ymultiple.end()) return 1;
+        return m_ymultiple[bin];
     }
 
     const RulerScale *getRulerScale() const {
@@ -165,6 +165,8 @@ protected:
     const RulerScale *m_rulerScale; // I don't own this
     timeT m_snapTime;
     int m_ysnap;
+
+    /// Number of segments high for each track.
     std::map<int, int> m_ymultiple;
 };
 
