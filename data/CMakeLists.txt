@@ -1,5 +1,5 @@
 # Install icons
-set(ICON_INSTALL_DIR "share/icons")
+set(ICON_INSTALL_DIR "${CMAKE_INSTALL_DATAROOTDIR}/icons")
 set(ICON_SRC_DIR "pixmaps/icons")
 foreach(_size 16;32;64)
   set(_dir "${ICON_INSTALL_DIR}/hicolor/${_size}x${_size}/mimetypes")
@@ -20,10 +20,10 @@ foreach(_size 16;32;64;128)
 endforeach()
 
 # Install mimetype
-install(FILES mime/rosegarden.xml DESTINATION "share/mime/packages")
+install(FILES mime/rosegarden.xml DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/mime/packages")
 
 # Install desktop file
-install(FILES desktop/rosegarden.desktop DESTINATION "share/applications")
+install(FILES desktop/rosegarden.desktop DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
 
 # Install appdata file
-install(FILES appdata/rosegarden.appdata.xml DESTINATION "share/appdata")
+install(FILES appdata/rosegarden.appdata.xml DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/appdata")
