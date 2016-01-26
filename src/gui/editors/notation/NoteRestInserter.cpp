@@ -89,8 +89,8 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
 
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
-    createAction("switch_to_notes", SLOT(slotRestsSelected()));
-    createAction("switch_to_rests", SLOT(slotNotesSelected()));
+    createAction("switch_to_notes", SLOT(slotNotesSelected()));
+    createAction("switch_to_rests", SLOT(slotRestsSelected()));
 
     //connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
     //        this, SLOT(slotSetAccidental(Accidental, bool)));

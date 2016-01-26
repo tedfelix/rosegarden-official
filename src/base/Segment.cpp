@@ -67,6 +67,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_realTimeDelay(0, 0),
     m_highestPlayable(127),
     m_lowestPlayable(0),
+    m_percussionPitch(-1),
     m_clefKeyList(0),
     m_notifyResizeLocked(false),
     m_memoStart(0),
@@ -112,6 +113,7 @@ Segment::Segment(const Segment &segment):
     m_realTimeDelay(segment.getRealTimeDelay()),
     m_highestPlayable(127),
     m_lowestPlayable(0),
+    m_percussionPitch(-1),
     m_clefKeyList(0),
     m_notifyResizeLocked(false),  // To copy a segment while notifications
     m_memoStart(0),               // are locked doesn't sound as a good
@@ -1693,6 +1695,15 @@ Segment::countVerses()
             }
         }
     }
+}
+
+// return m_percussionPitch with bounds enforcement
+void
+Segment::setPercussionPitch(int pitch)
+{
+    if (pitch < -1) pitch = -1;
+    if (pitch > 127) pitch = 127;
+    m_percussionPitch = pitch;
 }
 
 SegmentMultiSet&
