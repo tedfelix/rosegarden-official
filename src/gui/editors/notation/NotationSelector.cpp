@@ -178,6 +178,9 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
     RG_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
 
+    // Only double click on left mouse button is currently used (fix #1493)
+    if (e->buttons != Qt::LeftButton) return;
+
     NotationStaff *staff = e->staff;
     if (!staff) return;
     m_selectedStaff = staff;
