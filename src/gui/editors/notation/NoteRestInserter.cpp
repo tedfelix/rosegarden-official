@@ -680,15 +680,16 @@ void NoteRestInserter::slotRestsSelected()
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note, true));
     actionName.replace(QRegExp("-"), "_");
-	
-    QAction* action = findAction(actionName);
-	
+
+    QAction* action = findActionInParentView(actionName);
+
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
         setToRestInserter(true);
         action->setChecked(true);
         action->trigger();
+        invokeInParentView("switch_to_rests");
     }
 }
 
@@ -697,7 +698,7 @@ void NoteRestInserter::slotNotesSelected()
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp("-"), "_");
-	
+
     QAction *action = findActionInParentView(actionName);
 
     if (!action) {
@@ -706,6 +707,7 @@ void NoteRestInserter::slotNotesSelected()
         setToRestInserter(false);
         action->setChecked(true);
         action->trigger();
+        invokeInParentView("switch_to_notes");
     }
 }
 
