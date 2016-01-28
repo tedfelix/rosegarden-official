@@ -19,10 +19,16 @@
 #ifndef RG_COMMENTSCONFIGURATIONPAGE_H
 #define RG_COMMENTSCONFIGURATIONPAGE_H
 
+#include "document/MetadataHelper.h"
+
 #include <QWidget>
+
+#include <map>
 
 class QPlainTextEdit;
 class QPushButton;
+class QCheckBox;
+class QLabel;
 
 namespace Rosegarden
 {
@@ -47,19 +53,33 @@ protected slots:
     void slotReload();
     void slotResetUndoClearButton();
     void slotResetUndoReloadButton();
+    void slotShowPagesMenu();
+    
+    // Store the currently edited page in m_comments and update its time stamp 
+    void cacheEditedCommentPage();
  
 protected:
-    void loadFromMetadata();
+    MetadataHelper::CommentsMap loadFromMetadata();
+    void showPage(QString pageName);
+    void createPage();
 
     // Set the correct label and tool tip for a button according to it's use
+    // ("Clear" button may be used as "Undo Clear" button and "Reload" button
+    // may be used as "Undo Reload" button).
     void setClearButton();
     void setReloadButton();
     void setUndoClearButton();
     void setUndoReloadButton();
     
     RosegardenDocument *m_doc;
+    MetadataHelper::CommentsMap m_comments;
+    QString m_page;         // Current page
+    
+    QLabel *m_pageLabel;
+    QPushButton *m_pageButton;
     QPlainTextEdit *m_textEdit;
     ConfigureDialogBase *m_parentDialog;
+    QCheckBox *m_checkBox;
     
     QPushButton *m_clearButton;
     QPushButton *m_reloadButton;

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -45,27 +44,57 @@ static const QString commentsPopup("comments_popup");
 // Size of the numeric part of the line key 
 static const int keyNumSize(6);
 
-// Make the key associated to a comment line from its line number.
-// If the line number is 123 and commentsKeyBase is "comments_" then
-// the key is "comments_000123".
-static QString lineKey(int lineNumber)
+// Make the key associated to a comment line from its line number and page name.
+// If the line number is 123, the page name is "es" and commentsKeyBase is
+// "comments_" then the key is "comments_es_000123".
+// If there in no page name (reference page) then the key is "comments_000123".
+static QString lineKey(QString pageName, int lineNumber)
 {
     QString number = QString("%1").arg(lineNumber);
     while (number.size() < keyNumSize) number = "0" + number;
-    return commentsKeyBase + number;
+    QString sep = pageName.isEmpty() ? "" : "_";
+    return commentsKeyBase + pageName + sep + number;
 }
 
-// Get the number of  comment line from its key.
-// If the key is "comments_000098" then return 98.
-// Return 0 if the string is not a lineKey.
-static int lineNumber(QString lineKey)
+MetadataHelper::CommentsKey::CommentsKey(QString keyString) :
+    m_key(keyString),
+    m_isOK(false),
+    m_pageName("")
 {
     int baseKeyLength = commentsKeyBase.size();
-    if (lineKey.size() != (baseKeyLength + keyNumSize)) return 0;
-    if (!lineKey.startsWith(commentsKeyBase)) return 0;
-    return lineKey.right(keyNumSize).toInt();
+
+    // A valid comment key has a minimum length 
+    m_isOK = keyString.size() >= (baseKeyLength + keyNumSize);
+ 
+    // A valid comment key starts with the comment key base string
+    m_isOK = m_isOK && keyString.startsWith(commentsKeyBase);
+
+    // The character preceding the final line number must be "_"
+    m_isOK = m_isOK && (keyString.mid(commentsKeyBase.size() - 1,
+                            keyString.size() - keyNumSize -
+                            commentsKeyBase.size() + 1).right(1) == "_");
+           
+    if (!m_isOK) return;         // key is not a comments key
+
+    // Get the page of a comment line from its key.
+    // If the key is "comments_es_000098" then pageName is "es".
+    // If the key is "comments_000098" then pageName is "".
+    m_pageName = keyString.mid(baseKeyLength - 1,
+                               keyString.size() - baseKeyLength - keyNumSize);
+    if (!m_pageName.isEmpty()) m_pageName.remove(0, 1);
+
 }
 
+// Get the number of the comment line from its key.
+// If the key is "comments_es_000098" then lineNumber 98.
+// Line number 0 is used to store a time stamp.
+// Return -1 if the key is not related to a comment.
+int
+MetadataHelper::CommentsKey::lineNumber() 
+{
+    if (!m_isOK) return -1;
+    return m_key.right(keyNumSize).toInt();
+}
 
 
 MetadataHelper::MetadataHelper(RosegardenDocument *doc) :
@@ -73,56 +102,74 @@ MetadataHelper::MetadataHelper(RosegardenDocument *doc) :
 {
 }
 
-QString
+MetadataHelper::CommentsMap
 MetadataHelper::getComments()
 {
     Configuration &metadata = (&m_doc->getComposition())->getMetadata();
 
-    // Get all the relevant keys from the metadata
-    std::set<QString> keys;
+    // Get all the relevant keys and pages from the metadata
+    // (keys[page] is the ordered list of keys related to page)
+   std::map< QString, std::set<QString> > keys;
     keys.clear();
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
-        QString key = strtoqstr(it->first);
-        if (key == commentsPopup) continue;
-        if (key.startsWith(commentsKeyBase)) {
-            keys.insert(key);
-        }
+        CommentsKey ck(strtoqstr(it->first));
+        if (!ck.isOK()) continue;
+        keys[ck.pageName()].insert(ck.key());
     }
 
-    // Create the text
-    QStringList lines;
-    if (keys.size()) {
-        int lastLine = 0;
-        for (std::set<QString>::iterator it = keys.begin(); it != keys.end(); ++it) {
-            QString key = *it;
-            int currentLine = lineNumber(key);
-            if (currentLine == 0) {
-                std::cerr << "ERROR: Bad comment key \"" << key << "\"" << std::endl; 
-                continue;
+    // Create the texts
+    CommentsMap comments;
+    comments.clear();
+    
+    for (std::map< QString, std::set<QString> >::iterator it0 = keys.begin();
+             it0 != keys.end(); ++it0) {
+        
+        std::set<QString> keySet = it0->second;
+        QStringList lines;
+        if (keySet.size()) {
+            int lastLine = 0;
+            for (std::set<QString>::iterator it = keySet.begin();
+                    it != keySet.end(); ++it) {
+                QString key = *it;
+                CommentsKey ck(key);
+                int currentLine = ck.lineNumber();
+                if (currentLine == -1) {
+                    std::cerr << "ERROR: Bad comment key \"" << key << "\""
+                              << std::endl; 
+                    continue;
+                }
+                if (currentLine == 0) {
+                    // Line 0 is the time stamp
+                    comments[it0->first].timeStamp =
+                        strtoqstr(metadata.get<String>(qstrtostr(key)));
+                    continue;
+                }
+                lastLine++;
+                for (int i = lastLine; i < currentLine; i++) {
+                    // Insert blank line
+                    lines << "";
+                }
+                // Insert currentLine
+                lines << strtoqstr(metadata.get<String>(qstrtostr(key)));
+                lastLine = currentLine;
             }
-            lastLine++;
-            for (int i = lastLine; i < currentLine; i++) {
-                // Insert blank line
-                lines << "";
-            }
-            // Insert currentLine
-            lines << strtoqstr(metadata.get<String>(qstrtostr(key)));
-            lastLine = currentLine;
         }
+        
+        comments[it0->first].text = lines.join("\n");
     }
 
-    return QString(lines.join("\n"));
+    return comments;
 }
 
 void
-MetadataHelper::setComments(QString text)
+MetadataHelper::setComments(CommentsMap comments)
 {
     Configuration &metadata = m_doc->getComposition().getMetadata();
     const Configuration origmetadata = metadata;
 
     // Get from the metadata all the keys other than comments
-    std::map<QString, QString> notComments;
+    HeadersMap notComments;
     notComments.clear();
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
@@ -136,7 +183,7 @@ MetadataHelper::setComments(QString text)
     metadata.clear();
     
     // Add the strings other than comments
-    for (std::map<QString, QString>::iterator it = notComments.begin();
+    for (HeadersMap::iterator it = notComments.begin();
             it != notComments.end(); ++it) {
         QString key = it->first;;
         QString value = it->second;
@@ -144,14 +191,28 @@ MetadataHelper::setComments(QString text)
     }
 
     // Add the comments lines
-    QStringList lines = text.split("\n", QString::KeepEmptyParts);
-    int n = 0;
-    for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it) {
-        n++;
-        QString value = *it;
-        if (!value.isEmpty()) {
-            QString key = lineKey(n);
-            metadata.set<String>(qstrtostr(key), qstrtostr(value));
+    for (CommentsMap::iterator it = comments.begin();
+            it != comments.end(); ++it) {
+        QString page = it->first;
+        QString timeStamp = it->second.timeStamp;
+        QString text = it->second.text;
+        // Add the text lines
+        QStringList lines = text.split("\n", QString::KeepEmptyParts);
+        bool textExists = false;
+        int n = 0;
+        for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it) {
+            n++;
+            QString value = *it;
+            if (!value.isEmpty()) {
+                QString key = lineKey(page, n);
+                metadata.set<String>(qstrtostr(key), qstrtostr(value));
+                textExists = true;
+            }
+        }
+        // Add the time stamp if any and if there is some text
+        if (textExists && !timeStamp.isEmpty()) {
+            QString key = lineKey(page, 0);   // Time stamp is stored as line 0
+            metadata.set<String>(qstrtostr(key), qstrtostr(timeStamp));
         }
     }
 
@@ -160,11 +221,11 @@ MetadataHelper::setComments(QString text)
     }
 }
 
-std::map<QString, QString>
+MetadataHelper::HeadersMap
 MetadataHelper::getHeaders()
 {
     Configuration &metadata = (&m_doc->getComposition())->getMetadata();
-    std::map<QString, QString> data;
+    HeadersMap data;
 
     data.clear();
     for (Configuration::iterator
@@ -179,15 +240,15 @@ MetadataHelper::getHeaders()
 }
 
 void
-MetadataHelper::setHeaders(std::map<QString, QString> data)
+MetadataHelper::setHeaders(HeadersMap data)
 {
 
 
     Configuration &metadata = m_doc->getComposition().getMetadata();
     const Configuration origmetadata = metadata;
 
-    // Get all the comments from the metadata
-    std::map<QString, QString> comments;
+    // Get all the comments from the metadata (keep them in raw form)
+    HeadersMap comments;
     comments.clear();
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
@@ -200,8 +261,8 @@ MetadataHelper::setHeaders(std::map<QString, QString> data)
     // Clear the metadata
     metadata.clear();
     
-    // Add the strings other than comments
-    for (std::map<QString, QString>::iterator it = data.begin();
+    // Add the strings other than comments to the metadata
+    for (HeadersMap::iterator it = data.begin();
             it != data.end(); ++it) {
         QString key = it->first;
         QString value = it->second;
@@ -210,8 +271,8 @@ MetadataHelper::setHeaders(std::map<QString, QString> data)
         }
     }
 
-    // Add the comments lines
-    for (std::map<QString, QString>::iterator it = comments.begin();
+    // Add the comments lines to the metadata
+    for (HeadersMap::iterator it = comments.begin();
             it != comments.end(); ++it) {
         QString key = it->first;;
         QString value = it->second;

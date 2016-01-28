@@ -26,6 +26,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QPlainTextEdit>
+#include <QLocale>
 
 namespace Rosegarden
 {
@@ -51,14 +52,26 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
 
     QPlainTextEdit *textEdit = new QPlainTextEdit(this);
     mainLayout->addWidget(textEdit);
-    QString localStyle("QPlainTextEdit {background-color: #D0D0D0; color: #000000;}");
+    QString localStyle("QPlainTextEdit { background-color: #D0D0D0;"
+                       " color: #000000; }");
     textEdit->setMinimumSize(600, 500);  // About the size of the edit widget
-    textEdit->setPlainText(mh.getComments());
     textEdit->setReadOnly(true);
     textEdit->setBackgroundVisible(true);
     textEdit->setStyleSheet(localStyle);
     textEdit->setToolTip(tr("<qt>This is a short description of the current "
                             "composition</qt>"));
+
+    // Read the comments from the document metadata
+    MetadataHelper::CommentsMap comments = mh.getComments();
+
+    // Get local language
+    QLocale locale;
+    QString lang = locale.name().split('_').at(0);
+
+    // Display translated text if any
+    QString page = "";
+    if (comments.find(lang) != comments.end()) page = lang;
+    textEdit->setPlainText(comments[page].text);
 
     QWidget *hb = new QWidget;
     mainLayout->addWidget(hb);
@@ -69,7 +82,8 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     QCheckBox *checkBox = new QCheckBox;
     bottomLayout->addWidget(checkBox);
     checkBox->setText(tr("Show next time"));
-    checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next time the document is loaded</qt>"));
+    checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next"
+                            "time the document is loaded</qt>"));
     checkBox->setChecked(true);
     connect(checkBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotCheckChanged(int)));

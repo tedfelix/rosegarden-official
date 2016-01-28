@@ -20,33 +20,24 @@
 
 #include "CommentsConfigurationPage.h"
 
-#include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "document/MetadataHelper.h"
-#include "document/io/LilyPondExporter.h"
-#include "gui/widgets/CollapsingFrame.h"
-#include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "gui/widgets/LineEdit.h"
-#include "gui/configuration/DocumentMetaConfigurationPage.h"
+#include "gui/widgets/InputDialog.h"
 #include "gui/dialogs/ConfigureDialogBase.h"
 
-#include <QApplication>
-#include <QSettings>
-#include <QListWidget>
-#include <QTableWidget>
-#include <QTableWidgetItem>
+#include <QAction>
 #include <QCheckBox>
+#include <QLabel>
 #include <QLayout>
+#include <QMenu>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QString>
-#include <QPlainTextEdit>
 #include <QToolTip>
-#include <QWidget>
 #include <QVBoxLayout>
-#include <QFont>
+#include <QWidget>
 
-#include <set>
 
 
 namespace Rosegarden
@@ -57,43 +48,102 @@ CommentsConfigurationPage::CommentsConfigurationPage(
         ConfigureDialogBase *parentDialog) :
     QWidget(parent),
     m_doc(doc),
+    m_page(""),             // The reference (default) page of the comments
+    m_pageLabel(0),
+    m_pageButton(0),
     m_textEdit(0),
     m_parentDialog(parentDialog),
+    m_checkBox(0),
     m_clearButton(0),
+    m_reloadButton(0),
     m_saveTextClear(""),
     m_saveTextReload(""),
     m_clearSaved(false),
     m_reloadSaved(false)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
 
-    QString localStyle("QPlainTextEdit {background-color: #E8E8E8; color: #000000;}");
+    // Top widgets
+    m_pageLabel = new QLabel();
+    QLabel *filler = new QLabel("");
+    m_pageButton = new QPushButton();
 
+
+    // Text editor widget
+    QString localStyle("QPlainTextEdit "
+                       "{ background-color: #E8E8E8; color: #000000; }");
     m_textEdit = new QPlainTextEdit(this);
-    layout->addWidget(m_textEdit);
     m_textEdit->setBackgroundVisible(true);
     m_textEdit->setStyleSheet(localStyle);
     m_textEdit->setToolTip(tr("<qt>Notes inserted here will be stored in the .rg "
                               "file along with the composition</qt>"));
 
+
+
+    // Bottom widgets
+    m_checkBox = new QCheckBox;
+    m_checkBox->setText(tr("Show at startup"));
+    m_checkBox->setToolTip(tr("<p>If checked, these notes or their translation"
+                              " into the local language will pop up the next"
+                              " time the document is loaded</p>"));
+    MetadataHelper mh(m_doc);
+    m_checkBox->setChecked(mh.popupWanted());
+    m_clearButton = new QPushButton();
+    setClearButton();
+    m_reloadButton = new QPushButton();
+    setReloadButton();
+    
+
+
+    // Define the page layout
+    
+    // Main layout
+    // Contains top widgets, text editor and bottom widgets
+    QVBoxLayout *layout = new QVBoxLayout;
+    setLayout(layout);
+
+    // Top widgets layout
+    QHBoxLayout *pageNameLayout = new QHBoxLayout;
+    layout->addLayout(pageNameLayout);
+    pageNameLayout->addWidget(m_pageLabel);
+    pageNameLayout->addWidget(filler);
+    pageNameLayout->addWidget(m_pageButton);
+    
+    // Editor 
+    layout->addWidget(m_textEdit);
+    
+    // Bottom widgets layout
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     layout->addLayout(buttonsLayout);
-    
-    QCheckBox *checkBox = new QCheckBox;
-    buttonsLayout->addWidget(checkBox);
-    checkBox->setText(tr("Show at startup"));
-    MetadataHelper mh(m_doc);
-    checkBox->setChecked(mh.popupWanted());
-    
-    m_clearButton = new QPushButton();
+    buttonsLayout->addWidget(m_checkBox);
     buttonsLayout->addWidget(m_clearButton);
-    
-    setClearButton();
-
-    m_reloadButton = new QPushButton();
     buttonsLayout->addWidget(m_reloadButton);
-    setReloadButton();
+
+    
+
+    // Read the comments from the document metadata
+    m_comments = loadFromMetadata();
+
+    // Display the reference page
+    m_textEdit->setPlainText(m_comments[m_page].text);
+    
+    // Set the pages related labels
+    if (m_comments.size() == 1) {
+        m_pageLabel->setText(tr(""));
+        m_pageButton->setText(tr("Create another page"));
+    } else {
+        m_pageLabel->setText(tr("<h3>Main page</h3>"));
+        m_pageButton->setText(tr("Change page"));
+        m_pageButton->setToolTip(tr("<p>Display another existing page "
+                                    "or create a new one.</p>"
+                                    "<p>If the page name is a language code"
+                                    " name (as \"es\" or \"de\") the page"
+                                    " should be a translation of the main page"
+                                    " and may be displayed at startup if"
+                                    " matching the local language.</p>"));
+    }
+
+
+    // Set up the connexions
 
     connect(m_clearButton, SIGNAL(clicked()),
             this, SLOT(slotClear()));
@@ -101,18 +151,94 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     connect(m_reloadButton, SIGNAL(clicked()),
             this, SLOT(slotReload()));
 
-    // Read the comments from the document metadata
-    loadFromMetadata();
-
     if (m_parentDialog) {
         connect(m_textEdit, SIGNAL(textChanged()),
                 m_parentDialog, SLOT(slotActivateApply()));
-        connect(checkBox, SIGNAL(stateChanged(int)),
+        connect(m_checkBox, SIGNAL(stateChanged(int)),
                 m_parentDialog, SLOT(slotActivateApply()));
     }
 
-    connect (checkBox, SIGNAL(stateChanged(int)),
+    connect (m_checkBox, SIGNAL(stateChanged(int)),
              this, SLOT(slotShowPopupChanged(int)));
+
+    connect(m_pageButton, SIGNAL(clicked()), this, SLOT(slotShowPagesMenu()));
+}
+
+void
+CommentsConfigurationPage::createPage()
+{
+    bool ok;
+    QString pageName = InputDialog::getText(this,
+                    tr("Create a new page"), tr("Page name:"),
+                    LineEdit::Normal, "", &ok);
+
+    if (ok && !pageName.isEmpty()) {
+        cacheEditedCommentPage();
+        if (m_comments.find(m_page) == m_comments.end()) {
+            m_comments[pageName].text = "";
+        }
+        showPage(pageName);
+    }
+}
+
+void
+CommentsConfigurationPage::showPage(QString pageName)
+{
+    cacheEditedCommentPage();
+    m_page = pageName;
+    m_textEdit->setPlainText(m_comments[m_page].text);
+    if (m_page.isEmpty()) {
+        m_pageLabel->setText(tr("<h3>Main page</h3>"));
+    } else {
+        m_pageLabel->setText(tr("<h3>Page \"%1\"</h3>").arg(m_page));
+    }
+    m_pageButton->setText(tr("Change page"));
+}
+
+void
+CommentsConfigurationPage::slotShowPagesMenu()
+{
+    if (m_comments.size() == 1) {
+        // There is only one page which is already displayed.
+        // So we only can create a new page.
+        createPage();
+        return;
+    }
+
+    // Create a popup menu
+    QMenu menu("Page menu");  // Text never shown (?) so translation not needed
+
+    // First mandatory entry : Create a new page.
+    QAction * action = menu.addAction(tr("Create a new page"));
+    action->setData(1);
+
+    // Second (optional) entry : Go to the main page.
+    if (!m_page.isEmpty()) {
+        action = menu.addAction(tr("Go to the main page"));
+        action->setData("");
+    }
+
+    // Add to the menu one entry for each existing page.
+    for (MetadataHelper::CommentsMap::iterator it = m_comments.begin();
+         it != m_comments.end(); ++it) {
+        QString page = it->first;
+        if (!page.isEmpty() && (page != m_page)) {
+            action = menu.addAction(tr("Go to page \"%1\"").arg(page));
+            action->setData(page);
+        }
+    }
+
+    // Pop up the menu then execute the chosen action
+    action = menu.exec(QCursor::pos());
+    if (action) {
+        if (action->data().userType() == QMetaType::Int) {
+            if (action->data().toInt() == 1) {
+                createPage();
+            }
+        } else {
+            showPage(action->data().toString());
+        }
+    }
 }
 
 void
@@ -136,7 +262,9 @@ CommentsConfigurationPage::slotReload()
 {
     if (!m_reloadSaved) {
         m_saveTextReload = m_textEdit->toPlainText();
-        loadFromMetadata();
+        MetadataHelper::CommentsMap comments = loadFromMetadata();
+        m_comments[m_page] = comments[m_page];
+        m_textEdit->setPlainText(m_comments[m_page].text);
         setUndoReloadButton();
         connect(m_textEdit, SIGNAL(textChanged()),
                 this, SLOT(slotResetUndoReloadButton()));
@@ -168,17 +296,45 @@ CommentsConfigurationPage::slotResetUndoReloadButton()
 void
 CommentsConfigurationPage::apply()
 {
+    cacheEditedCommentPage();
     MetadataHelper mh(m_doc);
-    QString text = m_textEdit->toPlainText();
-    mh.setComments(m_textEdit->toPlainText());
+    mh.setComments(m_comments);
+}
+
+// Return the current UTC date and time using the format "yyyy-MM-dd hh:mm:ss"
+static QString
+currentTime()
+{
+    QDateTime t(QDateTime::currentDateTime().toUTC());
+    return t.toString("yyyy-MM-dd hh:mm:ss");
 }
 
 void
+CommentsConfigurationPage::cacheEditedCommentPage()
+{
+    if (m_textEdit->toPlainText() != m_comments[m_page].text) {
+        m_comments[m_page].text = m_textEdit->toPlainText();
+        if (m_page.isEmpty()) {
+            // The reference page has changed : get a new time stamp.
+            m_comments[m_page].timeStamp = currentTime();
+        } else {
+            // The page has changed and is not the reference one : it get
+            // the time stamp of the reference page.
+            m_comments[m_page].timeStamp = m_comments[""].timeStamp;
+        }
+    }
+}
+
+
+MetadataHelper::CommentsMap
 CommentsConfigurationPage::loadFromMetadata()
 {
     MetadataHelper mh(m_doc);
-    QString text = mh.getComments();
-    m_textEdit->setPlainText(text);
+    MetadataHelper::CommentsMap comments = mh.getComments();
+    if (comments.find("") == comments.end()) {
+        comments[""].text = "";
+    }
+    return comments;
 }
 
 void
