@@ -47,6 +47,7 @@ class QCheckBox;
 namespace Rosegarden
 {
 
+class CollapsingFrame;
 class RosegardenDocument;
 class InstrumentStaticSignals;
 
@@ -141,15 +142,14 @@ private:
     // --- Staff export options -------------------------------------
 
     // Notation size
-    QComboBox *m_staffSizeCombo;
+    QComboBox *m_notationSizeCombo;
 
     // Bracket type
-    QLabel *m_grandStaffLbl;  // "Bracket type:"
-    QComboBox *m_staffBracketCombo;
+    QComboBox *m_bracketTypeCombo;
 
     // --- Create segments with -------------------------------------
 
-    QFrame *m_defaultsGroup;
+    CollapsingFrame *m_createSegmentsWithFrame;
 
     // Preset
     QLabel *m_psetLbl;  // "Preset"
