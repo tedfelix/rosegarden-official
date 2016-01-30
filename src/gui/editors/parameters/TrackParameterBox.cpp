@@ -88,15 +88,13 @@ namespace Rosegarden
 {
 
 TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
-                                     QWidget *parent)
-        : RosegardenParameterBox(tr("Track"),
-                                 tr("Track Parameters"),
-                                 parent),
-          m_doc(doc),
-          m_selectedTrackId((int)NO_TRACK),
-          m_lastInstrumentType(-1),
-          m_lowestPlayable(0),
-          m_highestPlayable(127)
+                                     QWidget *parent) :
+    RosegardenParameterBox(tr("Track"), tr("Track Parameters"), parent),
+    m_doc(doc),
+    m_selectedTrackId((int)NO_TRACK),
+    m_lastInstrumentType(-1),
+    m_lowestPlayable(0),
+    m_highestPlayable(127)
 {
     setObjectName("Track Parameter Box");
 
@@ -157,16 +155,16 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     playbackParameters->setContentsMargins(3, 3, 3, 3);
 
     // Device
-    QLabel *deviceLabel = new QLabel(tr("Device"), playbackParameters);
-    deviceLabel->setFont(m_font);
+    QLabel *playbackDeviceLabel = new QLabel(tr("Device"), playbackParameters);
+    playbackDeviceLabel->setFont(m_font);
     m_playDevice = new QComboBox(playbackParameters);
     m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
     m_playDevice->setFont(m_font);
 
     // Instrument
-    QLabel *insLabel = new QLabel(tr("Instrument"), playbackParameters);
-    insLabel->setFont(m_font);
+    QLabel *instrumentLabel = new QLabel(tr("Instrument"), playbackParameters);
+    instrumentLabel->setFont(m_font);
     m_instrument = new QComboBox(playbackParameters);
     m_instrument->setFont(m_font);
     m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
@@ -180,10 +178,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
     // Row 0: Device
-    groupLayout->addWidget(deviceLabel, 0, 0);
+    groupLayout->addWidget(playbackDeviceLabel, 0, 0);
     groupLayout->addWidget(m_playDevice, 0, 1, 1, 2);
     // Row 1: Instrument
-    groupLayout->addWidget(insLabel, 1, 0, 1, 2);
+    groupLayout->addWidget(instrumentLabel, 1, 0, 1, 2);
     groupLayout->addWidget(m_instrument, 1, 2);
     // Let column 2 fill the rest of the space.
     groupLayout->setColumnStretch(2, 1);
@@ -192,55 +190,50 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     CollapsingFrame *recordingFiltersFrame = new CollapsingFrame(
             tr("Recording filters"), this, trackParametersRecord);
-    m_recordGroup = new QFrame(recordingFiltersFrame);
-    recordingFiltersFrame->setWidget(m_recordGroup);
-    m_recordGroup->setContentsMargins(3, 3, 3, 3);
-    groupLayout = new QGridLayout(m_recordGroup);
-    groupLayout->setContentsMargins(5,0,0,5);
-    groupLayout->setSpacing(2);
 
-    // recording group title
-    //
-    int row = 0;
+    QWidget *recordingFilters = new QWidget(recordingFiltersFrame);
+    recordingFiltersFrame->setWidget(recordingFilters);
+    recordingFilters->setContentsMargins(3, 3, 3, 3);
 
-    // recording device
-    QLabel *label = new QLabel(tr("Device"), m_recordGroup);
-    label->setFont(m_font);
-    groupLayout->addWidget(label, row, 0);
-    m_recDevice = new QComboBox(m_recordGroup);
+    // Device
+    QLabel *recordDeviceLabel = new QLabel(tr("Device"), recordingFilters);
+    recordDeviceLabel->setFont(m_font);
+    m_recDevice = new QComboBox(recordingFilters);
     m_recDevice->setFont(m_font);
     m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
-    groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
 
-    // recording channel
-    //
-    row++;
-    label = new QLabel(tr("Channel"), m_recordGroup);
-    label->setFont(m_font);
-    groupLayout->addWidget(label, row, 0, 1, 2);
-    m_recChannel = new QComboBox(m_recordGroup);
+    // Channel
+    QLabel *channelLabel = new QLabel(tr("Channel"), recordingFilters);
+    channelLabel->setFont(m_font);
+    m_recChannel = new QComboBox(recordingFilters);
     m_recChannel->setFont(m_font);
     m_recChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
     m_recChannel->setMaxVisibleItems(17);
     m_recChannel->setMinimumWidth(width11);
-    groupLayout->addWidget(m_recChannel, row, 2);
 
-    groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
+    // Recording filters layout
+
+    groupLayout = new QGridLayout(recordingFilters);
+    groupLayout->setContentsMargins(5,0,0,5);
+    groupLayout->setSpacing(2);
+    // Row 0: Device
+    groupLayout->addWidget(recordDeviceLabel, 0, 0);
+    groupLayout->addWidget(m_recDevice, 0, 1, 1, 2);
+    // Row 1: Channel
+    groupLayout->addWidget(channelLabel, 1, 0, 1, 2);
+    groupLayout->addWidget(m_recChannel, 1, 2);
+    // Let column 2 fill the rest of the space.
+    groupLayout->setColumnStretch(2, 1);
 
     // Staff export options
 
     CollapsingFrame *staffExportOptionsFrame = new CollapsingFrame(
             tr("Staff export options"), this, trackStaffGroup);
-    m_staffGroup = new QFrame(staffExportOptionsFrame);
-    staffExportOptionsFrame->setWidget(m_staffGroup);
-    m_staffGroup->setContentsMargins(2, 2, 2, 2);
-    groupLayout = new QGridLayout(m_staffGroup);
-    groupLayout->setContentsMargins(5,0,0,5);
-    groupLayout->setSpacing(2);
-    groupLayout->setColumnStretch(1, 1);
 
-    row = 0;
+    QWidget *staffExportOptions = new QWidget(staffExportOptionsFrame);
+    staffExportOptionsFrame->setWidget(staffExportOptions);
+    staffExportOptions->setContentsMargins(2, 2, 2, 2);
 
     // Notation size (export only)
     //
@@ -249,10 +242,9 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // per-staff (rather than per-score) basis is something the author of the
     // LilyPond documentation has no idea how to do, so we settle for this,
     // which is not as nice, but actually a lot easier to implement.
-    m_staffGrpLbl = new QLabel(tr("Notation size:"), m_staffGroup);
-    m_staffGrpLbl->setFont(m_font);
-    groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
-    m_staffSizeCombo = new QComboBox(m_staffGroup);
+    QLabel *notationSizeLabel = new QLabel(tr("Notation size:"), staffExportOptions);
+    notationSizeLabel->setFont(m_font);
+    m_staffSizeCombo = new QComboBox(staffExportOptions);
     m_staffSizeCombo->setFont(m_font);
     m_staffSizeCombo->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.</p><p>This is as close as we get to enabling you to print parts in cue size</p></qt>"));
     m_staffSizeCombo->setMinimumWidth(width11);
@@ -260,15 +252,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_staffSizeCombo->addItem(tr("Small"), StaffTypes::Small);
     m_staffSizeCombo->addItem(tr("Tiny"), StaffTypes::Tiny);
 
-    groupLayout->addWidget(m_staffSizeCombo, row, 1, row- row+1, 2);
-
+    // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
     // rendering would be nice in the future!) //!!! 
-    row++;
-    m_grandStaffLbl = new QLabel(tr("Bracket type:"), m_staffGroup);
+    m_grandStaffLbl = new QLabel(tr("Bracket type:"), staffExportOptions);
     m_grandStaffLbl->setFont(m_font);
-    groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
-    m_staffBracketCombo = new QComboBox(m_staffGroup);
+    m_staffBracketCombo = new QComboBox(staffExportOptions);
     m_staffBracketCombo->setFont(m_font);
     m_staffBracketCombo->setToolTip(tr("<qt><p>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
     m_staffBracketCombo->setMinimumWidth(width11);
@@ -281,7 +270,18 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_staffBracketCombo->addItem(tr("{[---"), Brackets::CurlySquareOn);
     m_staffBracketCombo->addItem(tr("---]}"), Brackets::CurlySquareOff);
 
-    groupLayout->addWidget(m_staffBracketCombo, row, 1, row- row+1, 2);
+    // Staff export options layout
+
+    groupLayout = new QGridLayout(staffExportOptions);
+    groupLayout->setContentsMargins(5,0,0,5);
+    groupLayout->setSpacing(2);
+    groupLayout->setColumnStretch(1, 1);
+    // Row 0: Notation size
+    groupLayout->addWidget(notationSizeLabel, 0, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_staffSizeCombo, 0, 1, 1, 2);
+    // Row 1: Bracket type
+    groupLayout->addWidget(m_grandStaffLbl, 1, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_staffBracketCombo, 1, 1, 1, 2);
 
     // Create segments with
 
@@ -295,7 +295,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setSpacing(2);
     groupLayout->setColumnStretch(1, 1);
 
-    row = 0;
+    int row = 0;
 
     // preset picker
     m_psetLbl = new QLabel(tr("Preset"), m_defaultsGroup);
@@ -370,7 +370,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_rangeLbl->setFont(m_font);
     groupLayout->addWidget(m_rangeLbl, row, 0, Qt::AlignLeft);
 
-    label = new QLabel(tr("Lowest"), m_defaultsGroup);
+    QLabel *label = new QLabel(tr("Lowest"), m_defaultsGroup);
     label->setFont(m_font);
     groupLayout->addWidget(label, row, 1, Qt::AlignRight);
 

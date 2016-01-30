@@ -130,8 +130,6 @@ private:
 
     // --- Record filters -------------------------------------------
 
-    QFrame *m_recordGroup;
-
     // Record Device
     QComboBox *m_recDevice;
     IdsVector m_recDeviceIds;
@@ -142,10 +140,7 @@ private:
 
     // --- Staff export options -------------------------------------
 
-    QFrame *m_staffGroup;
-
     // Notation size
-    QLabel *m_staffGrpLbl;  // "Notation size:"
     QComboBox *m_staffSizeCombo;
 
     // Bracket type
