@@ -148,37 +148,37 @@ SegmentParameterBox::initBox()
     QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
     repeatLabel->setFont(m_font);
 
-    m_repeatValue = new TristateCheckBox(this);
-    m_repeatValue->setFont(m_font);
-    m_repeatValue->setToolTip(tr("<qt><p>When checked,     any selected segments will repeat until they run into another segment,  "
+    m_repeatCheckBox = new TristateCheckBox(this);
+    m_repeatCheckBox->setFont(m_font);
+    m_repeatCheckBox->setToolTip(tr("<qt><p>When checked,     any selected segments will repeat until they run into another segment,  "
                                  "or the end of the composition.</p><p>When viewed in the notation editor or printed via LilyPond, "
                                  "the segments will be bracketed by repeat signs.</p><p><center><img src=\":pixmaps/tooltip/repeats"
                                  ".png\"></img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
                                  "orial. [Ctrl+Shift+R] </qt>"));
-    connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
+    connect(m_repeatCheckBox, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
     // Transpose
     QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
     transposeLabel->setFont(m_font);
 
-    m_transposeValue = new QComboBox(this);
-    m_transposeValue->setFont(m_font);
-    m_transposeValue->setToolTip(tr("<qt><p>Raise or lower playback of any selected segments by this number of semitones</p><p>"
+    m_transposeComboBox = new QComboBox(this);
+    m_transposeComboBox->setFont(m_font);
+    m_transposeComboBox->setToolTip(tr("<qt><p>Raise or lower playback of any selected segments by this number of semitones</p><p>"
                                     "<i>NOTE: This control changes segments that already exist.</i></p><p><i>Use the transpose "
                                     "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
                                     "setting before drawing or recording new segments.</i></p></qt>"));
-    connect(m_transposeValue, SIGNAL(activated(int)),
+    connect(m_transposeComboBox, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
-    connect(m_transposeValue, SIGNAL(editTextChanged(const QString&)),
+    connect(m_transposeComboBox, SIGNAL(editTextChanged(const QString&)),
             SLOT(slotTransposeTextChanged(const QString&)));
 
     // Quantize
     QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
     quantizeLabel->setFont(m_font);
 
-    m_quantizeValue = new QComboBox(this);
-    m_quantizeValue->setFont(m_font);
+    m_quantizeComboBox = new QComboBox(this);
+    m_quantizeComboBox->setFont(m_font);
 
     //!!!  I don't think that actually *is* what the quantize combo is for.  Is
     // it?  Isn't the SPB quantize combo different from the notation view big Q
@@ -186,38 +186,38 @@ SegmentParameterBox::initBox()
     // use it.  Anyway, it's better not to say anything than to say something
     // that might be wrong, so let's just hide this tooltip and not burden
     // translators with it until such time as it might get sorted out.
-    //m_quantizeValue->setToolTip(tr("<qt><p>This allows you to choose how you want to quantize the midi notes.This allows you to tidy up human play to make sense of the notes for notation purposes. This gives you visual quantization only, and does not affect the way the midi sounds. </p></qt>"));
+    //m_quantizeComboBox->setToolTip(tr("<qt><p>This allows you to choose how you want to quantize the midi notes.This allows you to tidy up human play to make sense of the notes for notation purposes. This gives you visual quantization only, and does not affect the way the midi sounds. </p></qt>"));
 
     // handle quantize changes from drop down
-    connect(m_quantizeValue, SIGNAL(activated(int)),
+    connect(m_quantizeComboBox, SIGNAL(activated(int)),
             SLOT(slotQuantizeSelected(int)));
 
     // Delay
     QLabel *delayLabel = new QLabel(tr("Delay"), this);
     delayLabel->setFont(m_font);
 
-    m_delayValue = new QComboBox(this);
-    m_delayValue->setFont(m_font);
-    m_delayValue->setToolTip(tr("<qt><p>Delay playback of any selected segments by this number of miliseconds</p><p><i>NOTE: "
+    m_delayComboBox = new QComboBox(this);
+    m_delayComboBox->setFont(m_font);
+    m_delayComboBox->setToolTip(tr("<qt><p>Delay playback of any selected segments by this number of miliseconds</p><p><i>NOTE: "
                                 "Rosegarden does not support negative delay.  If you need a negative delay effect, set the   "
                                 "composition to start before bar 1, and move segments to the left.  You can hold <b>shift</b>"
                                 " while doing this for fine-grained control, though doing so will have harsh effects on music"
                                 " notation rendering as viewed in the notation editor.</i></p></qt>"));
-    connect(m_delayValue, SIGNAL(activated(int)),
+    connect(m_delayComboBox, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
-    connect(m_delayValue, SIGNAL(editTextChanged(const QString&)),
+    connect(m_delayComboBox, SIGNAL(editTextChanged(const QString&)),
             SLOT(slotDelayTextChanged(const QString &)));
 
     // Color
     QLabel *colourLabel = new QLabel(tr("Color"), this);
     colourLabel->setFont(m_font);
 
-    m_colourValue = new QComboBox(this);
-    m_colourValue->setEditable(false);
-    m_colourValue->setFont(m_font);
-    m_colourValue->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
-    m_colourValue->setMaxVisibleItems(20);
-    connect(m_colourValue, SIGNAL(activated(int)),
+    m_colourComboBox = new QComboBox(this);
+    m_colourComboBox->setEditable(false);
+    m_colourComboBox->setFont(m_font);
+    m_colourComboBox->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
+    m_colourComboBox->setMaxVisibleItems(20);
+    connect(m_colourComboBox, SIGNAL(activated(int)),
             SLOT(slotColourSelected(int)));
 
     connect(m_doc, SIGNAL(docColoursChanged()),
@@ -235,36 +235,36 @@ SegmentParameterBox::initBox()
     linkedSegmentParametersFrame->hide();
 
     // Inner fixed widget
-    m_linkedSegmentGroup = new QWidget(linkedSegmentParametersFrame);
-    linkedSegmentParametersFrame->setWidget(m_linkedSegmentGroup);
-    m_linkedSegmentGroup->setContentsMargins(3, 3, 3, 3);
+    QWidget *linkedSegmentParameters = new QWidget(linkedSegmentParametersFrame);
+    linkedSegmentParametersFrame->setWidget(linkedSegmentParameters);
+    linkedSegmentParameters->setContentsMargins(3, 3, 3, 3);
 
     // Transpose
-    QLabel *linkTransposeLabel = new QLabel(tr("Transpose"), m_linkedSegmentGroup);
+    QLabel *linkTransposeLabel = new QLabel(tr("Transpose"), linkedSegmentParameters);
     linkTransposeLabel->setFont(m_font);
 
     // Change
-    m_linkTransposeButton = new QPushButton(tr("Change"), m_linkedSegmentGroup);
-    m_linkTransposeButton->setFont(m_font);
-    m_linkTransposeButton->setToolTip(tr("<qt>Edit the relative transposition on the linked segment</qt>"));
-    connect(m_linkTransposeButton, SIGNAL(released()),
+    QPushButton *changeButton = new QPushButton(tr("Change"), linkedSegmentParameters);
+    changeButton->setFont(m_font);
+    changeButton->setToolTip(tr("<qt>Edit the relative transposition on the linked segment</qt>"));
+    connect(changeButton, SIGNAL(released()),
             SLOT(slotChangeLinkTranspose()));
 
     // Reset
-    m_linkTransposeResetButton = new QPushButton(tr("Reset"), m_linkedSegmentGroup);
-    m_linkTransposeResetButton->setFont(m_font);
-    m_linkTransposeResetButton->setToolTip(tr("<qt>Reset the relative transposition on the linked segment to zero</qt>"));
-    connect(m_linkTransposeResetButton, SIGNAL(released()),
+    QPushButton *resetButton = new QPushButton(tr("Reset"), linkedSegmentParameters);
+    resetButton->setFont(m_font);
+    resetButton->setToolTip(tr("<qt>Reset the relative transposition on the linked segment to zero</qt>"));
+    connect(resetButton, SIGNAL(released()),
             SLOT(slotResetLinkTranspose()));
 
     // Linked segment parameters layout
 
-    QGridLayout *groupLayout = new QGridLayout(m_linkedSegmentGroup);
+    QGridLayout *groupLayout = new QGridLayout(linkedSegmentParameters);
     groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
     groupLayout->addWidget(linkTransposeLabel, 0, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_linkTransposeButton, 0, 1);
-    groupLayout->addWidget(m_linkTransposeResetButton, 0, 2);
+    groupLayout->addWidget(changeButton, 0, 1);
+    groupLayout->addWidget(resetButton, 0, 2);
     groupLayout->setColumnStretch(3, 1);
 
     // SegmentParameterBox Layout
@@ -278,17 +278,17 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(m_editButton, 0, 5);
     // Row 1: Repeat/Transpose
     gridLayout->addWidget(repeatLabel, 1, 0);
-    gridLayout->addWidget(m_repeatValue, 1, 1);
+    gridLayout->addWidget(m_repeatCheckBox, 1, 1);
     gridLayout->addWidget(transposeLabel, 1, 2, 1, 2, Qt::AlignRight);
-    gridLayout->addWidget(m_transposeValue, 1, 4, 1, 2);
+    gridLayout->addWidget(m_transposeComboBox, 1, 4, 1, 2);
     // Row 2: Quantize/Delay
     gridLayout->addWidget(quantizeLabel, 2, 0);
-    gridLayout->addWidget(m_quantizeValue, 2, 1, 1, 2);
+    gridLayout->addWidget(m_quantizeComboBox, 2, 1, 1, 2);
     gridLayout->addWidget(delayLabel, 2, 3, Qt::AlignRight);
-    gridLayout->addWidget(m_delayValue, 2, 4, 1, 2);
+    gridLayout->addWidget(m_delayComboBox, 2, 4, 1, 2);
     // Row 3: Color
     gridLayout->addWidget(colourLabel, 3, 0);
-    gridLayout->addWidget(m_colourValue, 3, 1, 1, 5);
+    gridLayout->addWidget(m_colourComboBox, 3, 1, 1, 5);
     // Row 4: Linked segment parameters
     gridLayout->addWidget(linkedSegmentParametersFrame, 4, 0, 1, 5);
 
@@ -308,19 +308,19 @@ SegmentParameterBox::initBox()
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-        m_quantizeValue->addItem(error ? noMap : pmap, label);
+        m_quantizeComboBox->addItem(error ? noMap : pmap, label);
     }
-    m_quantizeValue->addItem(noMap, tr("Off"));
+    m_quantizeComboBox->addItem(noMap, tr("Off"));
 
     // default to last item
-    m_quantizeValue->setCurrentIndex(m_quantizeValue->count() - 1);
+    m_quantizeComboBox->setCurrentIndex(m_quantizeComboBox->count() - 1);
 
     // populate the transpose combo
     //
     for (int i = -m_transposeRange; i < m_transposeRange + 1; i++) {
-        m_transposeValue->addItem(noMap, QString("%1").arg(i));
+        m_transposeComboBox->addItem(noMap, QString("%1").arg(i));
         if (i == 0)
-            m_transposeValue->setCurrentIndex(m_transposeValue->count() - 1);
+            m_transposeComboBox->setCurrentIndex(m_transposeComboBox->count() - 1);
     }
 
     m_delays.clear();
@@ -342,19 +342,19 @@ SegmentParameterBox::initBox()
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-        m_delayValue->addItem((error ? noMap : pmap), label);
+        m_delayComboBox->addItem((error ? noMap : pmap), label);
     }
 
     for (int i = 0; i < 10; i++) {
         int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
         m_realTimeDelays.push_back(rtd);
-        m_delayValue->addItem(tr("%1 ms").arg(rtd));
+        m_delayComboBox->addItem(tr("%1 ms").arg(rtd));
     }
 
     // set delay blank initially
-    m_delayValue->setCurrentIndex( -1);
+    m_delayComboBox->setCurrentIndex( -1);
 
-    // populate m_colourValue
+    // populate m_colourComboBox
     slotDocColoursChanged();
 
     //RG_DEBUG << "SegmentParameterBox::SegmentParameterBox: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
@@ -400,7 +400,7 @@ SegmentParameterBox::slotDocColoursChanged()
 {
     RG_DEBUG << "SegmentParameterBox::slotDocColoursChanged()" << endl;
 
-    m_colourValue->clear();
+    m_colourComboBox->clear();
     m_colourList.clear();
     // Populate it from composition.m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
@@ -414,7 +414,7 @@ SegmentParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_colourValue->addItem(colour, tr("Default"), i);
+            m_colourComboBox->addItem(colour, tr("Default"), i);
         } else {
             // truncate name to 25 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide (This expands from 15 because the
@@ -423,22 +423,22 @@ SegmentParameterBox::slotDocColoursChanged()
             // spare.)
             if (qtrunc.length() > 25)
                 qtrunc = qtrunc.left(22) + "...";
-            m_colourValue->addItem(colour, qtrunc, i);
+            m_colourComboBox->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
 
     m_addColourPos = i;
-    m_colourValue->addItem(tr("Add New Color"), m_addColourPos);
+    m_colourComboBox->addItem(tr("Add New Color"), m_addColourPos);
     
     // remove the item we just inserted; this leaves the translation alone, but
     // eliminates the useless option
     //
     //!!! fix after release
-    m_colourValue->removeItem(m_addColourPos);
+    m_colourComboBox->removeItem(m_addColourPos);
 
-    m_colourValue->setCurrentIndex(0);
+    m_colourComboBox->setCurrentIndex(0);
 }
 
 void SegmentParameterBox::update()
@@ -495,7 +495,7 @@ SegmentParameterBox::populateBoxFromSegments()
     // segment, and therefore no label to edit.  So we disable the edit button
     // and repeat checkbox first:
     m_editButton->setEnabled(false);
-    m_repeatValue->setEnabled(false);
+    m_repeatCheckBox->setEnabled(false);
 
 
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
@@ -504,7 +504,7 @@ SegmentParameterBox::populateBoxFromSegments()
         // and since there is at least one segment, we can re-enable the edit button
         // and repeat checkbox:
         m_editButton->setEnabled(true);
-        m_repeatValue->setEnabled(true);
+        m_repeatCheckBox->setEnabled(true);
 
         if (repeated == NotApplicable)
             repeated = None;
@@ -624,28 +624,28 @@ SegmentParameterBox::populateBoxFromSegments()
 
     switch (repeated) {
     case All:
-        m_repeatValue->setChecked(true);
+        m_repeatCheckBox->setChecked(true);
         break;
 
     case Some:
-        m_repeatValue->setCheckState(Qt::PartiallyChecked);
+        m_repeatCheckBox->setCheckState(Qt::PartiallyChecked);
         break;
 
     case None:
     case NotApplicable:
     default:
-        m_repeatValue->setChecked(false);
+        m_repeatCheckBox->setChecked(false);
         break;
     }
 
-    m_repeatValue->setEnabled(repeated != NotApplicable);
+    m_repeatCheckBox->setEnabled(repeated != NotApplicable);
 
     switch (quantized) {
     case All: {
             for (unsigned int i = 0;
                     i < m_standardQuantizations.size(); ++i) {
                 if (m_standardQuantizations[i] == qntzLevel) {
-                    m_quantizeValue->setCurrentIndex(i);
+                    m_quantizeComboBox->setCurrentIndex(i);
                     break;
                 }
             }
@@ -655,38 +655,38 @@ SegmentParameterBox::populateBoxFromSegments()
     case Some:
         // Set the edit text to an unfeasible blank value meaning "Some"
         //
-        m_quantizeValue->setCurrentIndex( -1);
+        m_quantizeComboBox->setCurrentIndex( -1);
         break;
 
         // Assuming "Off" is always the last field
     case None:
     case NotApplicable:
     default:
-        m_quantizeValue->setCurrentIndex(m_quantizeValue->count() - 1);
+        m_quantizeComboBox->setCurrentIndex(m_quantizeComboBox->count() - 1);
         break;
     }
 
-    m_quantizeValue->setEnabled(quantized != NotApplicable);
+    m_quantizeComboBox->setEnabled(quantized != NotApplicable);
 
     switch (transposed) {
     case All:
-          m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("%1").arg(transposeLevel)));
+          m_transposeComboBox->setCurrentIndex(m_transposeComboBox->findText(QString("%1").arg(transposeLevel)));
           break;
 
     case Some:
-          m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("")));
+          m_transposeComboBox->setCurrentIndex(m_transposeComboBox->findText(QString("")));
           break;
 
     case None:
     case NotApplicable:
     default:
-          m_transposeValue->setCurrentIndex(m_transposeValue->findText(QString("0")));
+          m_transposeComboBox->setCurrentIndex(m_transposeComboBox->findText(QString("0")));
           break;
     }
 
-    m_transposeValue->setEnabled(transposed != NotApplicable);
+    m_transposeComboBox->setEnabled(transposed != NotApplicable);
 
-    m_delayValue->blockSignals(true);
+    m_delayComboBox->blockSignals(true);
 
     switch (delayed) {
     case All:
@@ -695,36 +695,36 @@ SegmentParameterBox::populateBoxFromSegments()
             QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
                             true,
                             error);
-               m_delayValue->setCurrentIndex(m_delayValue->findText(label));
+               m_delayComboBox->setCurrentIndex(m_delayComboBox->findText(label));
 
         } else if (delayLevel < 0) {
 
-               m_delayValue->setCurrentIndex(m_delayValue->findText( tr("%1 ms").arg(-delayLevel) ));
+               m_delayComboBox->setCurrentIndex(m_delayComboBox->findText( tr("%1 ms").arg(-delayLevel) ));
           }
 
         break;
 
     case Some:
-          m_delayValue->setCurrentIndex(m_delayValue->findText(QString("")));
+          m_delayComboBox->setCurrentIndex(m_delayComboBox->findText(QString("")));
           break;
 
     case None:
     case NotApplicable:
     default:
-        m_delayValue->setCurrentIndex(m_delayValue->findText(QString("0")));
+        m_delayComboBox->setCurrentIndex(m_delayComboBox->findText(QString("0")));
         break;
     }
 
-    m_delayValue->setEnabled(delayed != NotApplicable);
+    m_delayComboBox->setEnabled(delayed != NotApplicable);
 
-    m_delayValue->blockSignals(false);
+    m_delayComboBox->blockSignals(false);
 
     switch (diffcolours) {
     case None:
         if (m_colourList.find(myCol) != m_colourList.end())
-            m_colourValue->setCurrentIndex(m_colourList[myCol]);
+            m_colourComboBox->setCurrentIndex(m_colourList[myCol]);
         else
-            m_colourValue->setCurrentIndex(0);
+            m_colourComboBox->setCurrentIndex(0);
         break;
 
 
@@ -732,12 +732,12 @@ SegmentParameterBox::populateBoxFromSegments()
     case NotApplicable:
     case Some:
     default:
-        m_colourValue->setCurrentIndex(0);
+        m_colourComboBox->setCurrentIndex(0);
         break;
 
     }
 
-    m_colourValue->setEnabled(diffcolours != NotApplicable);
+    m_colourComboBox->setEnabled(diffcolours != NotApplicable);
 
     // deleted a large amount of "fix after 1.3" cruft from this spot
 }
@@ -749,7 +749,7 @@ void SegmentParameterBox::slotRepeatPressed()
 
     bool state = false;
 
-    switch (m_repeatValue->checkState()) {
+    switch (m_repeatCheckBox->checkState()) {
     case Qt::Unchecked:
         state = true;
         break;
@@ -762,7 +762,7 @@ void SegmentParameterBox::slotRepeatPressed()
     }
 
     // update the check box and all current Segments
-    m_repeatValue->setChecked(state);
+    m_repeatCheckBox->setChecked(state);
 
     addCommandToHistory(new SegmentCommandRepeat(m_segments, state));
 
@@ -775,7 +775,7 @@ void SegmentParameterBox::slotRepeatPressed()
 void
 SegmentParameterBox::slotQuantizeSelected(int qLevel)
 {
-    bool off = (qLevel == m_quantizeValue->count() - 1);
+    bool off = (qLevel == m_quantizeComboBox->count() - 1);
 
     SegmentChangeQuantizationCommand *command =
         new SegmentChangeQuantizationCommand
@@ -811,7 +811,7 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 void
 SegmentParameterBox::slotTransposeSelected(int value)
 {
-    slotTransposeTextChanged(m_transposeValue->itemText(value));
+    slotTransposeTextChanged(m_transposeComboBox->itemText(value));
 }
 
 void

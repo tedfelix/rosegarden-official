@@ -128,16 +128,11 @@ protected:
     QPushButton                *m_editButton;
 //    QPushButton                *m_highButton;
 //    QPushButton                *m_lowButton;
-    TristateCheckBox *m_repeatValue;
-    QComboBox                  *m_quantizeValue;
-    QComboBox                  *m_transposeValue;
-    QComboBox                  *m_delayValue;
-    QComboBox                  *m_colourValue;
-    QPushButton                *m_linkTransposeButton;
-    QPushButton                *m_linkTransposeResetButton;
-
-    // Collapse frame for linked segment functions
-    QWidget                    *m_linkedSegmentGroup;
+    TristateCheckBox *m_repeatCheckBox;
+    QComboBox                  *m_quantizeComboBox;
+    QComboBox                  *m_transposeComboBox;
+    QComboBox                  *m_delayComboBox;
+    QComboBox                  *m_colourComboBox;
 
     // Audio autofade
     //
