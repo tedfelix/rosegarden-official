@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Segment]"
+
 #include "base/Segment.h"
 #include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
@@ -22,6 +24,7 @@
 #include "base/SegmentLinker.h"
 #include "document/DocumentGet.h"
 #include "gui/general/GUIPalette.h"
+//#include "misc/Debug.h"
 
 #include <QtGlobal>
 

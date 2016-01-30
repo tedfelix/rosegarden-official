@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -15,12 +14,6 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
-/// Though called PitchBendSequenceDialog for historical reasons, this
-/// dialog deals with either pitchbend events or controller events,
-/// according the "m_control" parameter.  It inserts, erases, or
-/// replaces a series of such events in the a given segment.  It now
-/// supplies the functionality for several menu items.
 
 #ifndef RG_PITCHBENDSEQUENCEDIALOG_H
 #define RG_PITCHBENDSEQUENCEDIALOG_H
@@ -41,9 +34,20 @@ class ControlParameter;
 class MacroCommand;
 class Segment;
 
-// @authors: Jani (original author?)
-// Tom Breton (Tehom)
-// Tim Munro
+/// Dialog for inserting a controller sequence.
+/**
+ * Though called PitchBendSequenceDialog for historical reasons, this
+ * dialog deals with either pitchbend events or controller events,
+ * according the "m_control" parameter.  It inserts, erases, or
+ * replaces a series of such events in a given segment.  It now
+ * supplies the functionality for several menu items.
+ *
+ * Used by both the NotationView and the MatrixView.
+ *
+ * @authors Jani (original author?),
+ *          Tom Breton (Tehom),
+ *          Tim Munro
+ */
 class PitchBendSequenceDialog : public QDialog
 {
     Q_OBJECT
@@ -70,9 +74,9 @@ class PitchBendSequenceDialog : public QDialog
       StepSizeByCount,
     };
 
- public:
+public:
     PitchBendSequenceDialog(QWidget *parent, Segment *segment,
-			    const ControlParameter &control,
+                            const ControlParameter &control,
                             timeT startTime, timeT endTime);
 
 public slots:

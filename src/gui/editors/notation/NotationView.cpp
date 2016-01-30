@@ -2577,9 +2577,11 @@ void
 NotationView::slotControllerSequence()
 {
     ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
+    // ??? We should pop up a message: No ruler is visible/selected.
     if (!cr) { return; }
     
     const ControlParameter *cp = cr->getControlParameter();
+    // ??? We should pop up a message: Selected ruler is not a controller ruler.
     if (!cp) { return; }
 
     insertControllerSequence(*cp);

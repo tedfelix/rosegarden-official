@@ -379,9 +379,9 @@ protected slots:
     virtual void slotConfigure();
 
     // Open insert pitch bends sequence dialog
-    void slotExpressionSequence();
-    void slotPitchBendSequence();
-    void slotControllerSequence();
+    void slotExpressionSequence();  // Controllers > Insert Expression Controller Sequence...
+    void slotPitchBendSequence();   // Controllers > Insert Pitch Bend Sequence...
+    void slotControllerSequence();  // Controllers > Insert Controller Sequence...
 
     // Update the "Show staff headers" check box in the menu
     void slotCheckShowHeadersMenu(bool checked);

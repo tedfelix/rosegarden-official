@@ -748,29 +748,39 @@ PitchBendSequenceDialog::accept()
     saveSettings();
 
     // TRANSLATORS: The arg value will be either a controller name or
-    // Pitchbend, so the resulting text is like "Pitchbend Sequence",
+    // PitchBend, so the resulting text is like "PitchBend Sequence",
     // "Expression Sequence", etc.
     QString controllerName(m_control.getName().data());
     QString commandName(tr("%1 Sequence").arg(controllerName));
     MacroCommand *macro = new MacroCommand(commandName);
 
+    // In Replace and OnlyErase modes, erase the events in the time range.
     if (getReplaceMode() != OnlyAdd) {
-        // Selection initially contains no event, and we add all the
-        // relevant ones.  
         EventSelection *selection = new EventSelection(*m_segment);
+        // For each event in the time range
         for (Segment::const_iterator i = m_segment->findTime(m_startTime);
              i != m_segment->findTime(m_endTime);
              ++i) {
             Event *e = *i;
+            // If this is a relevant event, add it to the selection.
             if (m_control.matches(e)) {
                 selection->addEvent(e, false);
             }
         }
 
-        // EraseCommand takes ownership of "selection".
-        macro->addCommand(new EraseCommand(*selection));
+        // Only perform the erase if there is something in the selection.
+        // For some reason, if we perform the erase with an empty selection,
+        // we end up with the segment expanded to the beginning of the
+        // composition.
+        if (selection->getAddedEvents() != 0)
+        {
+            // Erase the events.
+            // (EraseCommand takes ownership of "selection".)
+            macro->addCommand(new EraseCommand(*selection));
+        }
     }
 
+    // In Replace and OnlyAdd modes, add the requested controller events.
     if (getReplaceMode() != OnlyErase) {
         if ((getRampMode() == Linear) &&
             (getStepSizeCalculation() == StepSizeByCount)) {
@@ -779,6 +789,7 @@ PitchBendSequenceDialog::accept()
             addStepwiseEvents(macro);
         }
     }
+
     CommandHistory::getInstance()->addCommand(macro);
 
     QDialog::accept();
