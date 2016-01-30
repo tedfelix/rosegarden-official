@@ -332,51 +332,51 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_clefCombo->addItem(tr("twobar", "Clef name"), TwoBarClef);
 
     // Transpose
-    m_transpLbl = new QLabel(tr("Transpose"), createSegmentsWith);
-    m_transpLbl->setFont(m_font);
-    m_defTranspose = new QComboBox(createSegmentsWith);
-    m_defTranspose->setFont(m_font);
-    m_defTranspose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
-    connect(m_defTranspose, SIGNAL(activated(int)),
+    QLabel *transposeLabel = new QLabel(tr("Transpose"), createSegmentsWith);
+    transposeLabel->setFont(m_font);
+    m_transposeCombo = new QComboBox(createSegmentsWith);
+    m_transposeCombo->setFont(m_font);
+    m_transposeCombo->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
+    connect(m_transposeCombo, SIGNAL(activated(int)),
             SLOT(slotTransposeIndexChanged(int)));
 
     int transposeRange = 48;
     for (int i = -transposeRange; i < transposeRange + 1; i++) {
-        m_defTranspose->addItem(QString("%1").arg(i));
+        m_transposeCombo->addItem(QString("%1").arg(i));
         if (i == 0)
-            m_defTranspose->setCurrentIndex(m_defTranspose->count() - 1);
+            m_transposeCombo->setCurrentIndex(m_transposeCombo->count() - 1);
     }
 
     // Pitch
-    m_rangeLbl = new QLabel(tr("Pitch"), createSegmentsWith);
-    m_rangeLbl->setFont(m_font);
+    QLabel *pitchLabel = new QLabel(tr("Pitch"), createSegmentsWith);
+    pitchLabel->setFont(m_font);
 
     // Lowest playable note
     QLabel *lowestLabel = new QLabel(tr("Lowest"), createSegmentsWith);
     lowestLabel->setFont(m_font);
 
-    m_lowButton = new QPushButton(tr("---"), createSegmentsWith);
-    m_lowButton->setFont(m_font);
-    m_lowButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
+    m_lowestButton = new QPushButton(tr("---"), createSegmentsWith);
+    m_lowestButton->setFont(m_font);
+    m_lowestButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
 
     // Highest playable note
     QLabel *highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
     highestLabel->setFont(m_font);
 
-    m_highButton = new QPushButton(tr("---"), createSegmentsWith);
-    m_highButton->setFont(m_font);
-    m_highButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
+    m_highestButton = new QPushButton(tr("---"), createSegmentsWith);
+    m_highestButton->setFont(m_font);
+    m_highestButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
 
     updateHighLow();
 
     // Color
-    m_colorLbl = new QLabel(tr("Color"), createSegmentsWith);
-    m_colorLbl->setFont(m_font);
-    m_defColor = new QComboBox(createSegmentsWith);
-    m_defColor->setFont(m_font);
-    m_defColor->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
-    m_defColor->setEditable(false);
-    m_defColor->setMaxVisibleItems(20);
+    QLabel *colorLabel = new QLabel(tr("Color"), createSegmentsWith);
+    colorLabel->setFont(m_font);
+    m_colorCombo = new QComboBox(createSegmentsWith);
+    m_colorCombo->setFont(m_font);
+    m_colorCombo->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
+    m_colorCombo->setEditable(false);
+    m_colorCombo->setMaxVisibleItems(20);
 
     // "Create segments with" layout
 
@@ -391,18 +391,18 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     row++;
     groupLayout->addWidget(clefLabel, row, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_clefCombo, row, 1, 1, 2);
-    groupLayout->addWidget(m_transpLbl, row, 3, 1, 2, Qt::AlignRight);
-    groupLayout->addWidget(m_defTranspose, row, 5, 1, 1);
+    groupLayout->addWidget(transposeLabel, row, 3, 1, 2, Qt::AlignRight);
+    groupLayout->addWidget(m_transposeCombo, row, 5, 1, 1);
     row++;
-    groupLayout->addWidget(m_rangeLbl, row, 0, Qt::AlignLeft);
+    groupLayout->addWidget(pitchLabel, row, 0, Qt::AlignLeft);
     groupLayout->addWidget(lowestLabel, row, 1, Qt::AlignRight);
-    groupLayout->addWidget(m_lowButton, row, 2, 1, 1);
+    groupLayout->addWidget(m_lowestButton, row, 2, 1, 1);
     groupLayout->setColumnStretch(2, 2);
     groupLayout->addWidget(highestLabel, row, 3, Qt::AlignRight);
-    groupLayout->addWidget(m_highButton, row, 4, 1, 2);
+    groupLayout->addWidget(m_highestButton, row, 4, 1, 2);
     row++;
-    groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_defColor, row, 1, 1, 5);
+    groupLayout->addWidget(colorLabel, row, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_colorCombo, row, 1, 1, 5);
 
     // populate combo from doc colors
     slotDocColoursChanged();
@@ -431,13 +431,13 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
             this, SLOT(slotDocColoursChanged()));
 
     // handle colour combo changes
-    connect(m_defColor, SIGNAL(activated(int)),
+    connect(m_colorCombo, SIGNAL(activated(int)),
             SLOT(slotColorChanged(int)));
 
-    connect(m_highButton, SIGNAL(released()),
+    connect(m_highestButton, SIGNAL(released()),
             SLOT(slotHighestPressed()));
 
-    connect(m_lowButton, SIGNAL(released()),
+    connect(m_lowestButton, SIGNAL(released()),
             SLOT(slotLowestPressed()));
 
     connect(m_loadButton, SIGNAL(released()),
@@ -695,11 +695,11 @@ TrackParameterBox::updateHighLow()
     // difference
     QString tmp = QObject::tr(highest.getAsString(includeOctave, base).c_str(), "note name");
     tmp += tr(" %1").arg(highest.getOctave(base));
-    m_highButton->setText(tmp);
+    m_highestButton->setText(tmp);
 
     tmp = QObject::tr(lowest.getAsString(includeOctave, base).c_str(), "note name");
     tmp += tr(" %1").arg(lowest.getOctave(base));
-    m_lowButton->setText(tmp);
+    m_lowestButton->setText(tmp);
 
     m_preset->setEnabled(false);
 }
@@ -722,8 +722,8 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
     m_clefCombo->setCurrentIndex(trk->getClef());
-    m_defTranspose->setCurrentIndex(m_defTranspose->findText(QString("%1").arg(trk->getTranspose())));
-    m_defColor->setCurrentIndex(trk->getColor());
+    m_transposeCombo->setCurrentIndex(m_transposeCombo->findText(QString("%1").arg(trk->getTranspose())));
+    m_colorCombo->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
@@ -1024,7 +1024,7 @@ TrackParameterBox::slotTransposeChanged(int transpose)
 void
 TrackParameterBox::slotTransposeIndexChanged(int index)
 {
-    slotTransposeTextChanged(m_defTranspose->itemText(index));
+    slotTransposeTextChanged(m_transposeCombo->itemText(index));
 }
 
 void
@@ -1040,7 +1040,7 @@ TrackParameterBox::slotDocColoursChanged()
 {
     RG_DEBUG << "TrackParameterBox::slotDocColoursChanged()" << endl;
 
-    m_defColor->clear();
+    m_colorCombo->clear();
     m_colourList.clear();
     // Populate it from composition.m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
@@ -1052,7 +1052,7 @@ TrackParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_defColor->addItem(colour, tr("Default"), i);
+            m_colorCombo->addItem(colour, tr("Default"), i);
         } else {
             // truncate name to 25 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide (This expands from 15 because the
@@ -1061,22 +1061,22 @@ TrackParameterBox::slotDocColoursChanged()
             // spare.)
             if (qtrunc.length() > 25)
                 qtrunc = qtrunc.left(22) + "...";
-            m_defColor->addItem(colour, qtrunc, i);
+            m_colorCombo->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
 
     m_addColourPos = i;
-    m_defColor->addItem(tr("Add New Color"), m_addColourPos);
+    m_colorCombo->addItem(tr("Add New Color"), m_addColourPos);
 
     // remove the item we just inserted; this leaves the translation alone, but
     // eliminates the useless option
     //
     //!!! fix after release
-    m_defColor->removeItem(m_addColourPos);
+    m_colorCombo->removeItem(m_addColourPos);
 
-    m_defColor->setCurrentIndex(0);
+    m_colorCombo->setCurrentIndex(0);
 }
 
 void
@@ -1197,7 +1197,7 @@ TrackParameterBox::slotPresetPressed()
             }
             m_clefCombo->setCurrentIndex(dialog.getClef());
                      
-            m_defTranspose->setCurrentIndex(m_defTranspose->findText(QString("%1").arg(dialog.getTranspose())));
+            m_transposeCombo->setCurrentIndex(m_transposeCombo->findText(QString("%1").arg(dialog.getTranspose())));
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();

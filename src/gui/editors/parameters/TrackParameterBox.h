@@ -159,20 +159,17 @@ private:
     QComboBox *m_clefCombo;
 
     // Transpose
-    QLabel *m_transpLbl;
-    QComboBox *m_defTranspose;
+    QComboBox *m_transposeCombo;
 
     // Pitch
-    QLabel *m_rangeLbl;  // "Pitch"
-    QPushButton *m_lowButton;
-    QPushButton *m_highButton;
+    QPushButton *m_lowestButton;
+    QPushButton *m_highestButton;
     int m_lowestPlayable;
     int m_highestPlayable;
 
     // Color
-    QLabel *m_colorLbl;  // "Color"
-    QComboBox *m_defColor;
-    // Position of the Add Colour item in m_defColor.
+    QComboBox *m_colorCombo;
+    // Position of the Add Colour item in m_colorCombo.
     int m_addColourPos;
     ColourTable::ColourList m_colourList;
 
