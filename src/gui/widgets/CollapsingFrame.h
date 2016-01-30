@@ -36,7 +36,7 @@ class CollapsingFrame : public QFrame
     Q_OBJECT
 
 public:
-    CollapsingFrame(QString label, QWidget *parent = 0, const char *name = 0);
+    CollapsingFrame(QString label, QWidget *parent = 0, const QString &name = "");
     virtual ~CollapsingFrame();
 
     QFont font() const;

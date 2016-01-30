@@ -36,13 +36,13 @@
 namespace Rosegarden
 {
 
-CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) :
+CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const QString &name) :
         QFrame(parent),
         m_widget(0),
         m_fill(false),
         m_collapsed(false)
 {
-    setObjectName(n);
+    setObjectName(name);
 
     setContentsMargins(0, 0, 0, 0);
     m_layout = new QGridLayout(this);

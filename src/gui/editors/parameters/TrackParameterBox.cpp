@@ -101,35 +101,48 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     setObjectName("Track Parameter Box");
 
     QFont font(m_font);
+
     QFont title_font(m_font);
+    title_font.setBold(true);
+
     QFontMetrics metrics(font);
     int width11 = metrics.width("12345678901");
     int width20 = metrics.width("12345678901234567890");
     int width22 = metrics.width("1234567890123456789012");
     int width25 = metrics.width("1234567890123456789012345");
-    title_font.setBold(true);
 
     // Set up default expansions for the collapsing elements.  These
     // CollapsingFrame objects keep track of their own settings per object name
-    // internally.  We have this delightful bit of nonsense looking code to
-    // "initialize" all of this from the outside.  It's impressively ghastly,
-    // but having realized its purpose, I've decided to leave well enough alone.
-    //
+    // internally, however, they do not provide a way to specify an initial
+    // default setting, so we have to do that here.
+    // See the "name" parameter to CollapsingFrame's ctor.
+    // ??? CollapsingFrame should provide a way to pass a default so this
+    //     code can be moved into its ctor.
     QSettings settings;
     settings.beginGroup(CollapsingFrameConfigGroup);
 
-    bool expanded = qStrToBool(settings.value("trackparametersplayback", "true")) ;
-    settings.setValue("trackparametersplayback", expanded);
-    expanded = qStrToBool(settings.value("trackparametersrecord", "false")) ;
-    settings.setValue("trackparametersrecord", expanded);
-    expanded = qStrToBool(settings.value("trackparametersdefaults", "false")) ;
-    settings.setValue("trackparametersdefaults", expanded);
-    expanded = qStrToBool(settings.value("trackstaffgroup", "false")) ;
-    settings.setValue("trackstaffgroup", expanded);
+    // ??? Move these down with their widgets.  Then move into
+    //     CollapsingFrame's ctor.
+    const QString trackParametersPlayback = "trackparametersplayback";
+    bool expanded = qStrToBool(settings.value(trackParametersPlayback, "true")) ;
+    settings.setValue(trackParametersPlayback, expanded);
+
+    const QString trackParametersRecord = "trackparametersrecord";
+    expanded = qStrToBool(settings.value(trackParametersRecord, "false")) ;
+    settings.setValue(trackParametersRecord, expanded);
+
+    const QString trackParametersDefaults = "trackparametersdefaults";
+    expanded = qStrToBool(settings.value(trackParametersDefaults, "false")) ;
+    settings.setValue(trackParametersDefaults, expanded);
+
+    const QString trackStaffGroup = "trackstaffgroup";
+    expanded = qStrToBool(settings.value(trackStaffGroup, "false")) ;
+    settings.setValue(trackStaffGroup, expanded);
 
     settings.endGroup();
 
-    setContentsMargins(2, 2, 2, 2);
+    // Widgets
+
     QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(1);
@@ -143,12 +156,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_trackLabel->setFont(m_font);
     mainLayout->addWidget(m_trackLabel, 0, 0);
 
-    // playback group
-    //
-    CollapsingFrame *cframe = new CollapsingFrame(tr("Playback parameters"),
-                              this, "trackparametersplayback");
-    m_playbackGroup = new QFrame(cframe);
-    cframe->setWidget(m_playbackGroup);
+    // Playback parameters
+
+    CollapsingFrame *playbackParametersFrame = new CollapsingFrame(
+            tr("Playback parameters"), this, trackParametersPlayback);
+    m_playbackGroup = new QFrame(playbackParametersFrame);
+    playbackParametersFrame->setWidget(m_playbackGroup);
     m_playbackGroup->setContentsMargins(3, 3, 3, 3);
     QGridLayout *groupLayout = new QGridLayout(m_playbackGroup);
     groupLayout->setMargin(0);
@@ -185,14 +198,14 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
 
-    mainLayout->addWidget(cframe, 1, 0);
+    mainLayout->addWidget(playbackParametersFrame, 1, 0);
 
-    // record group
-    //
-    cframe = new CollapsingFrame(tr("Recording filters"), this,
-                                 "trackparametersrecord");
-    m_recordGroup = new QFrame(cframe);
-    cframe->setWidget(m_recordGroup);
+    // Recording filters
+
+    CollapsingFrame *recordingFiltersFrame = new CollapsingFrame(
+            tr("Recording filters"), this, trackParametersRecord);
+    m_recordGroup = new QFrame(recordingFiltersFrame);
+    recordingFiltersFrame->setWidget(m_recordGroup);
     m_recordGroup->setContentsMargins(3, 3, 3, 3);
     groupLayout = new QGridLayout(m_recordGroup);
     groupLayout->setMargin(0);
@@ -227,14 +240,14 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
 
-    mainLayout->addWidget(cframe, 2, 0);
+    mainLayout->addWidget(recordingFiltersFrame, 2, 0);
 
-    // staff group
-    //
-    cframe = new CollapsingFrame(tr("Staff export options"), this,
-                                 "staffoptions");
-    m_staffGroup = new QFrame(cframe);
-    cframe->setWidget(m_staffGroup);
+    // Staff export options
+
+    CollapsingFrame *staffExportOptionsFrame = new CollapsingFrame(
+            tr("Staff export options"), this, trackStaffGroup);
+    m_staffGroup = new QFrame(staffExportOptionsFrame);
+    staffExportOptionsFrame->setWidget(m_staffGroup);
     m_staffGroup->setContentsMargins(2, 2, 2, 2);
     groupLayout = new QGridLayout(m_staffGroup);
     groupLayout->setSpacing(2);
@@ -284,15 +297,14 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout->addWidget(m_staffBracketCombo, row, 1, row- row+1, 2);
 
-    mainLayout->addWidget(cframe, 3, 0);
+    mainLayout->addWidget(staffExportOptionsFrame, 3, 0);
 
+    // Create segments with
 
-    // default segment group
-    //
-    cframe = new CollapsingFrame(tr("Create segments with"), this,
-                                 "trackparametersdefaults");
-    m_defaultsGroup = new QFrame(cframe);
-    cframe->setWidget(m_defaultsGroup);
+    CollapsingFrame *createSegmentsWithFrame = new CollapsingFrame(
+            tr("Create segments with"), this, trackParametersDefaults);
+    m_defaultsGroup = new QFrame(createSegmentsWithFrame);
+    createSegmentsWithFrame->setWidget(m_defaultsGroup);
     m_defaultsGroup->setContentsMargins(3, 3, 3, 3);
     groupLayout = new QGridLayout(m_defaultsGroup);
     groupLayout->setSpacing(2);
@@ -417,10 +429,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Force a popluation of Record / Playback Devices (Playback was not populating).
     slotPopulateDeviceLists();
 
-    mainLayout->addWidget(cframe, 4, 0);
+    mainLayout->addWidget(createSegmentsWithFrame, 4, 0);
 
 
-    // Configure the empty final row to accomodate any extra vertical space.
+    // Configure the empty final row to accommodate any extra vertical space.
     //
 //    mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
 
@@ -463,12 +475,16 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     connect(m_staffBracketCombo, SIGNAL(activated(int)),
             this, SLOT(slotStaffBracketChanged(int)));
 
-    m_doc->getComposition().addObserver(this);
-
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
+
+    // Box
+
+    m_doc->getComposition().addObserver(this);
+
+    setContentsMargins(2, 7, 2, 2);
 
     slotUpdateControls(-1);
 }
