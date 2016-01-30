@@ -161,6 +161,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
     m_playDevice->setFont(m_font);
+    connect(m_playDevice, SIGNAL(activated(int)),
+            this, SLOT(slotPlaybackDeviceChanged(int)));
 
     // Instrument
     QLabel *instrumentLabel = new QLabel(tr("Instrument"), playbackParameters);
@@ -170,6 +172,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
     m_instrument->setMaxVisibleItems(16);
     m_instrument->setMinimumWidth(width22);
+    connect(m_instrument, SIGNAL(activated(int)),
+            this, SLOT(slotInstrumentChanged(int)));
 
     // Playback parameters layout
 
@@ -202,6 +206,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_recDevice->setFont(m_font);
     m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
+    connect(m_recDevice, SIGNAL(activated(int)),
+            this, SLOT(slotRecordingDeviceChanged(int)));
 
     // Channel
     QLabel *channelLabel = new QLabel(tr("Channel"), recordingFilters);
@@ -211,6 +217,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_recChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
     m_recChannel->setMaxVisibleItems(17);
     m_recChannel->setMinimumWidth(width11);
+    connect(m_recChannel, SIGNAL(activated(int)),
+            this, SLOT(slotRecordingChannelChanged(int)));
 
     // Recording filters layout
 
@@ -251,6 +259,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_notationSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
     m_notationSizeCombo->addItem(tr("Small"), StaffTypes::Small);
     m_notationSizeCombo->addItem(tr("Tiny"), StaffTypes::Tiny);
+    connect(m_notationSizeCombo, SIGNAL(activated(int)),
+            this, SLOT(slotStaffSizeChanged(int)));
 
     // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
@@ -269,6 +279,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_bracketTypeCombo->addItem(tr("----}"), Brackets::CurlyOff);
     m_bracketTypeCombo->addItem(tr("{[---"), Brackets::CurlySquareOn);
     m_bracketTypeCombo->addItem(tr("---]}"), Brackets::CurlySquareOff);
+    connect(m_bracketTypeCombo, SIGNAL(activated(int)),
+            this, SLOT(slotStaffBracketChanged(int)));
 
     // Staff export options layout
 
@@ -305,6 +317,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_loadButton = new QPushButton(tr("Load"), createSegmentsWith);
     m_loadButton->setFont(m_font);
     m_loadButton->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
+    connect(m_loadButton, SIGNAL(released()),
+            SLOT(slotPresetPressed()));
 
     // Clef
     QLabel *clefLabel = new QLabel(tr("Clef"), createSegmentsWith);
@@ -330,6 +344,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_clefCombo->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
     m_clefCombo->addItem(tr("subbass", "Clef name"), SubbassClef);
     m_clefCombo->addItem(tr("twobar", "Clef name"), TwoBarClef);
+    connect(m_clefCombo, SIGNAL(activated(int)),
+            this, SLOT(slotClefChanged(int)));
 
     // Transpose
     QLabel *transposeLabel = new QLabel(tr("Transpose"), createSegmentsWith);
@@ -358,6 +374,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_lowestButton = new QPushButton(tr("---"), createSegmentsWith);
     m_lowestButton->setFont(m_font);
     m_lowestButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
+    connect(m_lowestButton, SIGNAL(released()),
+            SLOT(slotLowestPressed()));
 
     // Highest playable note
     QLabel *highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
@@ -366,6 +384,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_highestButton = new QPushButton(tr("---"), createSegmentsWith);
     m_highestButton->setFont(m_font);
     m_highestButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
+    connect(m_highestButton, SIGNAL(released()),
+            SLOT(slotHighestPressed()));
 
     updateHighLow();
 
@@ -377,32 +397,35 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_colorCombo->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
     m_colorCombo->setEditable(false);
     m_colorCombo->setMaxVisibleItems(20);
+    connect(m_colorCombo, SIGNAL(activated(int)),
+            SLOT(slotColorChanged(int)));
 
     // "Create segments with" layout
 
     groupLayout = new QGridLayout(createSegmentsWith);
     groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
+    // Row 0: Preset/Load
+    groupLayout->addWidget(presetLabel, 0, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_preset, 0, 1, 1, 3);
+    groupLayout->addWidget(m_loadButton, 0, 4, 1, 2);
+    // Row 1: Clef/Transpose
+    groupLayout->addWidget(clefLabel, 1, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_clefCombo, 1, 1, 1, 2);
+    groupLayout->addWidget(transposeLabel, 1, 3, 1, 2, Qt::AlignRight);
+    groupLayout->addWidget(m_transposeCombo, 1, 5, 1, 1);
+    // Row 2: Pitch/Lowest/Highest
+    groupLayout->addWidget(pitchLabel, 2, 0, Qt::AlignLeft);
+    groupLayout->addWidget(lowestLabel, 2, 1, Qt::AlignRight);
+    groupLayout->addWidget(m_lowestButton, 2, 2, 1, 1);
+    groupLayout->addWidget(highestLabel, 2, 3, Qt::AlignRight);
+    groupLayout->addWidget(m_highestButton, 2, 4, 1, 2);
+    // Row 3: Color
+    groupLayout->addWidget(colorLabel, 3, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_colorCombo, 3, 1, 1, 5);
+
     groupLayout->setColumnStretch(1, 1);
-    int row = 0;
-    groupLayout->addWidget(presetLabel, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_preset, row, 1, 1, 3);
-    groupLayout->addWidget(m_loadButton, row, 4, 1, 2);
-    row++;
-    groupLayout->addWidget(clefLabel, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_clefCombo, row, 1, 1, 2);
-    groupLayout->addWidget(transposeLabel, row, 3, 1, 2, Qt::AlignRight);
-    groupLayout->addWidget(m_transposeCombo, row, 5, 1, 1);
-    row++;
-    groupLayout->addWidget(pitchLabel, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(lowestLabel, row, 1, Qt::AlignRight);
-    groupLayout->addWidget(m_lowestButton, row, 2, 1, 1);
     groupLayout->setColumnStretch(2, 2);
-    groupLayout->addWidget(highestLabel, row, 3, Qt::AlignRight);
-    groupLayout->addWidget(m_highestButton, row, 4, 1, 2);
-    row++;
-    groupLayout->addWidget(colorLabel, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_colorCombo, row, 1, 1, 5);
 
     // populate combo from doc colors
     slotDocColoursChanged();
@@ -411,48 +434,17 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     slotPopulateDeviceLists();
 
     // Connections
-    connect(m_playDevice, SIGNAL(activated(int)),
-             this, SLOT(slotPlaybackDeviceChanged(int)));
-
-    connect(m_instrument, SIGNAL(activated(int)),
-             this, SLOT(slotInstrumentChanged(int)));
-
-    connect(m_recDevice, SIGNAL(activated(int)),
-             this, SLOT(slotRecordingDeviceChanged(int)));
-
-    connect(m_recChannel, SIGNAL(activated(int)),
-             this, SLOT(slotRecordingChannelChanged(int)));
-
-    connect(m_clefCombo, SIGNAL(activated(int)),
-             this, SLOT(slotClefChanged(int)));
 
     // Detect when the document colours are updated
     connect(m_doc, SIGNAL(docColoursChanged()),
             this, SLOT(slotDocColoursChanged()));
 
-    // handle colour combo changes
-    connect(m_colorCombo, SIGNAL(activated(int)),
-            SLOT(slotColorChanged(int)));
-
-    connect(m_highestButton, SIGNAL(released()),
-            SLOT(slotHighestPressed()));
-
-    connect(m_lowestButton, SIGNAL(released()),
-            SLOT(slotLowestPressed()));
-
-    connect(m_loadButton, SIGNAL(released()),
-            SLOT(slotPresetPressed()));
-
-    connect(m_notationSizeCombo, SIGNAL(activated(int)),
-            this, SLOT(slotStaffSizeChanged(int)));
-
-    connect(m_bracketTypeCombo, SIGNAL(activated(int)),
-            this, SLOT(slotStaffBracketChanged(int)));
-
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
+
+    m_doc->getComposition().addObserver(this);
 
     // Layout
 
@@ -465,16 +457,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     mainLayout->addWidget(staffExportOptionsFrame, 3, 0);
     mainLayout->addWidget(m_createSegmentsWithFrame, 4, 0);
 
-    // Configure the empty final row to accommodate any extra vertical space.
-    //mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
-
-    // Oddly, this call is not needed.  Either QFrame or QWidget
-    // automagically uses the first child layout for the layout.
-    setLayout(mainLayout);
-
     // Box
-
-    m_doc->getComposition().addObserver(this);
 
     setContentsMargins(2, 7, 2, 2);
 
