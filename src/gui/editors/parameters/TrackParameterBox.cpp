@@ -100,16 +100,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 {
     setObjectName("Track Parameter Box");
 
-    QFont font(m_font);
-
-    QFont title_font(m_font);
-    title_font.setBold(true);
-
-    QFontMetrics metrics(font);
-    int width11 = metrics.width("12345678901");
-    int width20 = metrics.width("12345678901234567890");
-    int width22 = metrics.width("1234567890123456789012");
-    int width25 = metrics.width("1234567890123456789012345");
+    QFontMetrics metrics(m_font);
+    const int width11 = metrics.width("12345678901");
+    const int width20 = metrics.width("12345678901234567890");
+    const int width22 = metrics.width("1234567890123456789012");
+    const int width25 = metrics.width("1234567890123456789012345");
 
     // Set up default expansions for the collapsing elements.  These
     // CollapsingFrame objects keep track of their own settings per object name
@@ -143,62 +138,55 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // Widgets
 
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(1);
-
-    int row = 0;
-
-    // track label
-    //
-    m_trackLabel = new SqueezedLabel (tr("<untitled>"), this);
+    // Label
+    m_trackLabel = new SqueezedLabel(tr("<untitled>"), this);
     m_trackLabel->setAlignment(Qt::AlignCenter);
     m_trackLabel->setFont(m_font);
-    mainLayout->addWidget(m_trackLabel, 0, 0);
 
     // Playback parameters
 
+    // Outer collapsing frame
     CollapsingFrame *playbackParametersFrame = new CollapsingFrame(
             tr("Playback parameters"), this, trackParametersPlayback);
-    m_playbackGroup = new QFrame(playbackParametersFrame);
-    playbackParametersFrame->setWidget(m_playbackGroup);
-    m_playbackGroup->setContentsMargins(3, 3, 3, 3);
-    QGridLayout *groupLayout = new QGridLayout(m_playbackGroup);
-    groupLayout->setMargin(0);
-    groupLayout->setSpacing(2);
 
-    // playback group title
-    //
-    row = 0;
+    // Inner fixed widget
+    // We need an inner widget so that we can have a layout.  The outer
+    // CollapsingFrame already has its own layout.
+    QWidget *playbackParameters = new QWidget(playbackParametersFrame);
+    playbackParametersFrame->setWidget(playbackParameters);
+    playbackParameters->setContentsMargins(3, 3, 3, 3);
 
-    // playback device
-    //
-    //    row++;
-    QLabel *devLabel = new QLabel(tr("Device"), m_playbackGroup);
+    // Device
+    QLabel *devLabel = new QLabel(tr("Device"), playbackParameters);
     devLabel->setFont(m_font);
-    groupLayout->addWidget(devLabel, row, 0);
-    m_playDevice = new QComboBox(m_playbackGroup);
+    m_playDevice = new QComboBox(playbackParameters);
     m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
     m_playDevice->setFont(m_font);
-    groupLayout->addWidget(m_playDevice, row, 1, row- row+1, 2);
 
-    // playback instrument
-    //
-    row++;
-    QLabel *insLabel = new QLabel(tr("Instrument"), m_playbackGroup);
+    // Instrument
+    QLabel *insLabel = new QLabel(tr("Instrument"), playbackParameters);
     insLabel->setFont(m_font);
-    groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
-    m_instrument = new QComboBox(m_playbackGroup);
+    m_instrument = new QComboBox(playbackParameters);
     m_instrument->setFont(m_font);
     m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
     m_instrument->setMaxVisibleItems(16);
     m_instrument->setMinimumWidth(width22);
-    groupLayout->addWidget(m_instrument, row, 2);
 
-    groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
+    // Playback parameters layout
 
-    mainLayout->addWidget(playbackParametersFrame, 1, 0);
+    // This automagically becomes playbackParameters's layout.
+    QGridLayout *groupLayout = new QGridLayout(playbackParameters);
+    groupLayout->setContentsMargins(5,0,0,5);
+    groupLayout->setSpacing(2);
+    // Row 0: Device
+    groupLayout->addWidget(devLabel, 0, 0);
+    groupLayout->addWidget(m_playDevice, 0, 1, 1, 2);
+    // Row 1: Instrument
+    groupLayout->addWidget(insLabel, 1, 0, 1, 2);
+    groupLayout->addWidget(m_instrument, 1, 2);
+    // Let column 2 fill the rest of the space.
+    groupLayout->setColumnStretch(2, 1);
 
     // Recording filters
 
@@ -208,12 +196,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     recordingFiltersFrame->setWidget(m_recordGroup);
     m_recordGroup->setContentsMargins(3, 3, 3, 3);
     groupLayout = new QGridLayout(m_recordGroup);
-    groupLayout->setMargin(0);
+    groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
 
     // recording group title
     //
-    row = 0;
+    int row = 0;
 
     // recording device
     QLabel *label = new QLabel(tr("Device"), m_recordGroup);
@@ -229,7 +217,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     //
     row++;
     label = new QLabel(tr("Channel"), m_recordGroup);
-    label->setFont(font);
+    label->setFont(m_font);
     groupLayout->addWidget(label, row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
     m_recChannel->setFont(m_font);
@@ -240,8 +228,6 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
 
-    mainLayout->addWidget(recordingFiltersFrame, 2, 0);
-
     // Staff export options
 
     CollapsingFrame *staffExportOptionsFrame = new CollapsingFrame(
@@ -250,8 +236,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     staffExportOptionsFrame->setWidget(m_staffGroup);
     m_staffGroup->setContentsMargins(2, 2, 2, 2);
     groupLayout = new QGridLayout(m_staffGroup);
+    groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
-    groupLayout->setMargin(0);
     groupLayout->setColumnStretch(1, 1);
 
     row = 0;
@@ -297,8 +283,6 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout->addWidget(m_staffBracketCombo, row, 1, row- row+1, 2);
 
-    mainLayout->addWidget(staffExportOptionsFrame, 3, 0);
-
     // Create segments with
 
     CollapsingFrame *createSegmentsWithFrame = new CollapsingFrame(
@@ -307,8 +291,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     createSegmentsWithFrame->setWidget(m_defaultsGroup);
     m_defaultsGroup->setContentsMargins(3, 3, 3, 3);
     groupLayout = new QGridLayout(m_defaultsGroup);
+    groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
-    groupLayout->setMargin(0);
     groupLayout->setColumnStretch(1, 1);
 
     row = 0;
@@ -429,13 +413,6 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Force a popluation of Record / Playback Devices (Playback was not populating).
     slotPopulateDeviceLists();
 
-    mainLayout->addWidget(createSegmentsWithFrame, 4, 0);
-
-
-    // Configure the empty final row to accommodate any extra vertical space.
-    //
-//    mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
-
     // Connections
     connect(m_playDevice, SIGNAL(activated(int)),
              this, SLOT(slotPlaybackDeviceChanged(int)));
@@ -479,6 +456,24 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
+
+    // Layout
+
+    QGridLayout *mainLayout = new QGridLayout(this);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(1);
+    mainLayout->addWidget(m_trackLabel, 0, 0);
+    mainLayout->addWidget(playbackParametersFrame, 1, 0);
+    mainLayout->addWidget(recordingFiltersFrame, 2, 0);
+    mainLayout->addWidget(staffExportOptionsFrame, 3, 0);
+    mainLayout->addWidget(createSegmentsWithFrame, 4, 0);
+
+    // Configure the empty final row to accommodate any extra vertical space.
+    //mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
+
+    // Oddly, this call is not needed.  Either QFrame or QWidget
+    // automagically uses the first child layout for the layout.
+    setLayout(mainLayout);
 
     // Box
 

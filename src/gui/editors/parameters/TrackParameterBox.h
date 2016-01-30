@@ -146,7 +146,6 @@ private:
     char                m_lastInstrumentType;
 
     // Additional elements that may be hidden in vertical stacked mode
-    QFrame              *m_playbackGroup;
     QFrame              *m_recordGroup;
     QFrame              *m_defaultsGroup;
     QFrame              *m_staffGroup;
