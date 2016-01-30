@@ -45,14 +45,15 @@ public:
     virtual void unexecute();
 
     // return pointer to new copy
-    Segment* getCopy() { return m_segment; }
+    Segment* getCopy() { return m_newSegment; }
 
     static QString getGlobalName() { return tr("Quick-Copy Segment"); }
 
 private:
     Composition *m_composition;
-    Segment     *m_segmentToCopy;
-    Segment     *m_segment;
+    Segment     *m_originalSegment;
+    std::string  m_originalLabel;
+    Segment     *m_newSegment;
     bool m_detached;
 };
 

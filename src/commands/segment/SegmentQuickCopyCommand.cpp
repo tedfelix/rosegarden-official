@@ -31,38 +31,43 @@ namespace Rosegarden
 SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
         NamedCommand(getGlobalName()),
         m_composition(segment->getComposition()),
-        m_segmentToCopy(segment),
-        m_segment(0),
+        m_originalSegment(segment),
+        m_newSegment(0),
         m_detached(false)
 {}
 
 SegmentQuickCopyCommand::~SegmentQuickCopyCommand()
 {
     if (m_detached) {
-        delete m_segment;
+        delete m_newSegment;
     }
 }
 
 void
 SegmentQuickCopyCommand::execute()
 {
-    if (!m_segment) {
-        m_segment = m_segmentToCopy->clone(false);
-        std::string label = m_segmentToCopy->getLabel();
+    if (!m_newSegment) {
+        m_newSegment = m_originalSegment->clone(false);
+        m_originalLabel = m_originalSegment->getLabel();
         // We rename the original segment to end in (copied) since it is
         // the one that is being moved by SegmentTool.  The copy is being
         // left behind in place of the original.
-        m_segmentToCopy->setLabel(appendLabel(label, qstrtostr(tr("(copied)"))));
+        m_originalSegment->setLabel(
+                appendLabel(m_originalLabel, qstrtostr(tr("(copied)"))));
     }
-    m_composition->addSegment(m_segment);
+    m_composition->addSegment(m_newSegment);
     m_detached = false;
 }
 
 void
 SegmentQuickCopyCommand::unexecute()
 {
-    m_composition->detachSegment(m_segment);
+    // Delete the copy
+    m_composition->detachSegment(m_newSegment);
     m_detached = true;
+
+    // Put back the original label.
+    m_originalSegment->setLabel(m_originalLabel);
 }
 
 }
