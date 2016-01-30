@@ -86,15 +86,13 @@ namespace Rosegarden
 {
 
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
-        QWidget *parent)
-        : RosegardenParameterBox(tr("Segment"),
-                                 tr("Segment Parameters"),
-                                 parent),
-        m_highestPlayable(127),
-        m_lowestPlayable(0),
-        m_standardQuantizations(BasicQuantizer::getStandardQuantizations()),
-        m_doc(doc),
-        m_transposeRange(48)
+                                         QWidget *parent) :
+    RosegardenParameterBox(tr("Segment"), tr("Segment Parameters"), parent),
+    m_highestPlayable(127),
+    m_lowestPlayable(0),
+    m_standardQuantizations(BasicQuantizer::getStandardQuantizations()),
+    m_doc(doc),
+    m_transposeRange(48)
 {
     setObjectName("Segment Parameter Box");
 
@@ -116,30 +114,17 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
-    QFont font(m_font);
-
-    QFontMetrics fontMetrics(font);
-    // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
-    //int comboHeight = std::max(fontMetrics.height(), 13) + 10;
+    QFontMetrics fontMetrics(m_font);
 
     QSettings settings;
     settings.beginGroup(CollapsingFrameConfigGroup);
-    {
-        bool expanded = qStrToBool(settings.value("segmentparameterslinked", "false")) ;
-        settings.setValue("segmentparameterslinked", expanded);
-    }
+    const QString segmentParametersLinked = "segmentparameterslinked";
+    // ??? CollapsingFrame should take a default so we don't have to
+    //     do this.  See the comments in TrackParameterBox's ctor.
+    bool expanded = qStrToBool(settings.value(segmentParametersLinked, "false")) ;
+    settings.setValue(segmentParametersLinked, expanded);
     settings.endGroup();
 
-    //    QFrame *frame = new QFrame(this);
-    setContentsMargins(4, 4, 4, 4);
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setMargin(0);
-    gridLayout->setSpacing(2);
-
-    QLabel *label     = new QLabel(tr("Label"), this);
-    QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
-    QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
-    QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
     QLabel *delayLabel = new QLabel(tr("Delay"), this);
     QLabel *colourLabel = new QLabel(tr("Color"), this);
 //    m_autoFadeLabel = new QLabel(tr("Audio auto-fade"), this);
@@ -147,46 +132,60 @@ SegmentParameterBox::initBox()
 //    m_fadeOutLabel = new QLabel(tr("Fade out"), this);
 //    m_rangeLabel = new QLabel(tr("Range"), this);
 
-    // Label ..
+    // Label
+    QLabel *label = new QLabel(tr("Label"), this);
+
     m_label = new Label(this);
     m_label->setObjectName("SPECIAL_LABEL");
-    m_label->setFont(font);
+    m_label->setFont(m_font);
     int width = fontMetrics.width("12345678901234567890");
     m_label->setFixedWidth(width);
-    //m_label->setFixedHeight(comboHeight);
-//    m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_label->setToolTip(tr("<qt>Click to edit the segment label for any selected segments</qt>"));
-
     connect(m_label, SIGNAL(clicked()),
             SLOT(slotEditSegmentLabel()));
 
-    // .. and edit button
+    // Edit button
     // ??? This Edit button is now no longer needed.  The user can just
     //     click on the label to edit it.
     m_labelButton = new QPushButton(tr("Edit"), this);
-    m_labelButton->setFont(font);
+    m_labelButton->setFont(m_font);
     m_labelButton->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
-    //    m_labelButton->setFixedWidth(50);
-
     connect(m_labelButton, SIGNAL(released()),
             SLOT(slotEditSegmentLabel()));
 
+    // Repeat
+    QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
+
     m_repeatValue = new TristateCheckBox(this);
-    m_repeatValue->setFont(font);
+    m_repeatValue->setFont(m_font);
     m_repeatValue->setToolTip(tr("<qt><p>When checked,     any selected segments will repeat until they run into another segment,  "
                                  "or the end of the composition.</p><p>When viewed in the notation editor or printed via LilyPond, "
                                  "the segments will be bracketed by repeat signs.</p><p><center><img src=\":pixmaps/tooltip/repeats"
                                  ".png\"></img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
                                  "orial. [Ctrl+Shift+R] </qt>"));
-    //m_repeatValue->setFixedHeight(comboHeight);
-    
-    // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
+
+    // Transpose
+    QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
+
+    m_transposeValue = new QComboBox(this);
+    m_transposeValue->setFont(m_font);
+    m_transposeValue->setToolTip(tr("<qt><p>Raise or lower playback of any selected segments by this number of semitones</p><p>"
+                                    "<i>NOTE: This control changes segments that already exist.</i></p><p><i>Use the transpose "
+                                    "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
+                                    "setting before drawing or recording new segments.</i></p></qt>"));
+    connect(m_transposeValue, SIGNAL(activated(int)),
+            SLOT(slotTransposeSelected(int)));
+    connect(m_transposeValue, SIGNAL(editTextChanged(const QString&)),
+            SLOT(slotTransposeTextChanged(const QString&)));
+
+    // Quantize
+    QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
 
     // non-reversing motif style read-only combo
     m_quantizeValue = new QComboBox(this);
-    m_quantizeValue->setFont(font);
+    m_quantizeValue->setFont(m_font);
 
     //!!!  I don't think that actually *is* what the quantize combo is for.  Is
     // it?  Isn't the SPB quantize combo different from the notation view big Q
@@ -195,38 +194,19 @@ SegmentParameterBox::initBox()
     // that might be wrong, so let's just hide this tooltip and not burden
     // translators with it until such time as it might get sorted out.
 //    m_quantizeValue->setToolTip(tr("<qt><p>This allows you to choose how you want to quantize the midi notes.This allows you to tidy up human play to make sense of the notes for notation purposes. This gives you visual quantization only, and does not affect the way the midi sounds. </p></qt>"));
-    //m_quantizeValue->setFixedHeight(comboHeight);
 
     // handle quantize changes from drop down
     connect(m_quantizeValue, SIGNAL(activated(int)),
             SLOT(slotQuantizeSelected(int)));
 
     // reversing motif style read-write combo
-    m_transposeValue = new QComboBox(this);
-    m_transposeValue->setFont(font);
-    m_transposeValue->setToolTip(tr("<qt><p>Raise or lower playback of any selected segments by this number of semitones</p><p>"
-                                    "<i>NOTE: This control changes segments that already exist.</i></p><p><i>Use the transpose "
-                                    "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
-                                    "setting before drawing or recording new segments.</i></p></qt>"));
-    //m_transposeValue->setFixedHeight(comboHeight);
-
-    // handle transpose combo changes
-    connect(m_transposeValue, SIGNAL(activated(int)),
-            SLOT(slotTransposeSelected(int)));
-
-    // and text changes
-    connect(m_transposeValue, SIGNAL(editTextChanged(const QString&)),
-            SLOT(slotTransposeTextChanged(const QString&)));
-
-    // reversing motif style read-write combo
     m_delayValue = new QComboBox(this);
-    m_delayValue->setFont(font);
+    m_delayValue->setFont(m_font);
     m_delayValue->setToolTip(tr("<qt><p>Delay playback of any selected segments by this number of miliseconds</p><p><i>NOTE: "
                                 "Rosegarden does not support negative delay.  If you need a negative delay effect, set the   "
                                 "composition to start before bar 1, and move segments to the left.  You can hold <b>shift</b>"
                                 " while doing this for fine-grained control, though doing so will have harsh effects on music"
                                 " notation rendering as viewed in the notation editor.</i></p></qt>"));
-    //m_delayValue->setFixedHeight(comboHeight);
 
     // handle delay combo changes
     connect(m_delayValue, SIGNAL(activated(int)),
@@ -243,9 +223,8 @@ SegmentParameterBox::initBox()
     // set up combo box for colours
     m_colourValue = new QComboBox(this);
     m_colourValue->setEditable(false);
-    m_colourValue->setFont(font);
+    m_colourValue->setFont(m_font);
     m_colourValue->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
-    //m_colourValue->setFixedHeight(comboHeight);
     //    m_colourValue->setMaximumWidth(width);
     m_colourValue->setMaxVisibleItems(20);
 
@@ -257,16 +236,16 @@ SegmentParameterBox::initBox()
     // crossfaders Rich never finished, and from the segment-level controls to
     // change highest/lowest playable that I decided not to add after all.
 
-    label->setFont(font);
-    repeatLabel->setFont(font);
-    quantizeLabel->setFont(font);
-    transposeLabel->setFont(font);
-    delayLabel->setFont(font);
-    colourLabel->setFont(font);
+    label->setFont(m_font);
+    repeatLabel->setFont(m_font);
+    quantizeLabel->setFont(m_font);
+    transposeLabel->setFont(m_font);
+    delayLabel->setFont(m_font);
+    colourLabel->setFont(m_font);
 
     //linked segment collapse frame
     CollapsingFrame *cframe = new CollapsingFrame(tr("Linked segment parameters"),
-            this, "segmentparameterslinked");
+            this, segmentParametersLinked);
 
     //unhide this cframe if you want to play with the linked segment transpose
     //parameters
@@ -286,12 +265,12 @@ SegmentParameterBox::initBox()
 
     //linked segment transpose label
     QLabel *linkTransposeLabel = new QLabel(tr("Transpose"), m_linkedSegmentGroup);
-    linkTransposeLabel->setFont(font);
+    linkTransposeLabel->setFont(m_font);
     groupLayout->addWidget(linkTransposeLabel, 0, 0, Qt::AlignLeft);
 
     //transpose change button
     m_linkTransposeButton = new QPushButton(tr("Change"), m_linkedSegmentGroup);
-    m_linkTransposeButton->setFont(font);
+    m_linkTransposeButton->setFont(m_font);
     m_linkTransposeButton->setToolTip(tr("<qt>Edit the relative transposition on the linked segment</qt>"));
     //    m_labelButton->setFixedWidth(50);
     groupLayout->addWidget(m_linkTransposeButton, 0, 1);
@@ -301,12 +280,18 @@ SegmentParameterBox::initBox()
 
     //transpose reset button
     m_linkTransposeResetButton = new QPushButton(tr("Reset"), m_linkedSegmentGroup);
-    m_linkTransposeResetButton->setFont(font);
+    m_linkTransposeResetButton->setFont(m_font);
     m_linkTransposeResetButton->setToolTip(tr("<qt>Reset the relative transposition on the linked segment to zero</qt>"));
     groupLayout->addWidget(m_linkTransposeResetButton, 0, 2);
 
     connect(m_linkTransposeResetButton, SIGNAL(released()),
             SLOT(slotResetLinkTranspose()));
+
+    // Box Layout
+
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setMargin(0);
+    gridLayout->setSpacing(2);
 
     int row = 0;
 
@@ -405,8 +390,9 @@ SegmentParameterBox::initBox()
     // populate m_colourValue
     slotDocColoursChanged();
 
-    RG_DEBUG << "SegmentParameterBox::SegmentParameterBox: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)" << endl;
+    setContentsMargins(4, 7, 4, 4);
 
+    //RG_DEBUG << "SegmentParameterBox::SegmentParameterBox: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 }
 
 void
