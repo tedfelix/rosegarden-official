@@ -108,63 +108,86 @@ protected:
     void updateHighLow();
 
 private:
-    RosegardenDocument    *m_doc;
+    RosegardenDocument *m_doc;
 
-    QComboBox           *m_playDevice;
-    QComboBox           *m_instrument;
-    QComboBox           *m_recDevice;
-    QComboBox           *m_recChannel;
+    int m_selectedTrackId;
 
-    QPushButton         *m_presetButton;
-    QPushButton         *m_highButton;
-    QPushButton         *m_lowButton;
+    // Track number and name
+    QLabel *m_trackLabel;
+    void selectedTrackNameChanged();
 
-    QComboBox           *m_defClef;
-    QComboBox           *m_defColor;
-    QComboBox           *m_defTranspose;
-    QComboBox           *m_staffSizeCombo;
-    QComboBox           *m_staffBracketCombo;
+    // --- Playback parameters --------------------------------------
 
-
-    int                 m_addColourPos;
-    int                 m_highestPlayable;
-    int                 m_lowestPlayable;
-    ColourTable::ColourList  m_colourList;
-    
-    QLabel              *m_trackLabel;
-    
+    // Playback Device
+    QComboBox *m_playDevice;
     typedef std::vector<DeviceId> IdsVector;
-    
-    IdsVector           m_playDeviceIds;    
-    IdsVector           m_recDeviceIds;
+    IdsVector m_playDeviceIds;
 
-    std::map<DeviceId, IdsVector>   m_instrumentIds;
+    // Playback Instrument
+    QComboBox *m_instrument;
+    std::map<DeviceId, IdsVector> m_instrumentIds;
     std::map<DeviceId, QStringList> m_instrumentNames;
-    
-    int                 m_selectedTrackId;
-    
-    char                m_lastInstrumentType;
 
-    // Additional elements that may be hidden in vertical stacked mode
-    QFrame              *m_recordGroup;
-    QFrame              *m_defaultsGroup;
-    QFrame              *m_staffGroup;
-    QLabel              *m_segHeader;
-    QLabel              *m_presetLbl;
-    QLabel              *m_staffGrpLbl;
-    QLabel              *m_grandStaffLbl;
-    QLabel              *m_clefLbl;
-    QLabel              *m_transpLbl;
-    QLabel              *m_colorLbl;
-    QLabel              *m_rangeLbl;
-    QLabel              *m_psetLbl;
+    // --- Record filters -------------------------------------------
+
+    QFrame *m_recordGroup;
+
+    // Record Device
+    QComboBox *m_recDevice;
+    IdsVector m_recDeviceIds;
+    char m_lastInstrumentType;
+
+    // Record Channel
+    QComboBox *m_recChannel;
+
+    // --- Staff export options -------------------------------------
+
+    QFrame *m_staffGroup;
+
+    // Notation size
+    QLabel *m_staffGrpLbl;  // "Notation size:"
+    QComboBox *m_staffSizeCombo;
+
+    // Bracket type
+    QLabel *m_grandStaffLbl;  // "Bracket type:"
+    QComboBox *m_staffBracketCombo;
+
+    // --- Create segments with -------------------------------------
+
+    QFrame *m_defaultsGroup;
+
+    // Preset
+    QLabel *m_psetLbl;  // "Preset"
+    QLabel *m_presetLbl;
+    QPushButton *m_presetButton;  // "Load"
+
+    // Clef
+    QLabel *m_clefLbl;
+    QComboBox *m_defClef;
+
+    // Transpose
+    QLabel *m_transpLbl;
+    QComboBox *m_defTranspose;
+
+    // Pitch
+    QLabel *m_rangeLbl;  // "Pitch"
+    QPushButton *m_lowButton;
+    QPushButton *m_highButton;
+    int m_lowestPlayable;
+    int m_highestPlayable;
+
+    // Color
+    QLabel *m_colorLbl;  // "Color"
+    QComboBox *m_defColor;
+    // Position of the Add Colour item in m_defColor.
+    int m_addColourPos;
+    ColourTable::ColourList m_colourList;
+
 
     // CompositionObserver interface
     virtual void trackChanged(const Composition *comp, Track *track);
     virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
     virtual void trackSelectionChanged(const Composition *, TrackId);
-
-    void selectedTrackNameChanged();
 };
 
 

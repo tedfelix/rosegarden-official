@@ -93,10 +93,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
                                  tr("Track Parameters"),
                                  parent),
           m_doc(doc),
-          m_highestPlayable(127),
-          m_lowestPlayable(0),
           m_selectedTrackId((int)NO_TRACK),
-          m_lastInstrumentType(-1)
+          m_lastInstrumentType(-1),
+          m_lowestPlayable(0),
+          m_highestPlayable(127)
 {
     setObjectName("Track Parameter Box");
 
@@ -157,8 +157,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     playbackParameters->setContentsMargins(3, 3, 3, 3);
 
     // Device
-    QLabel *devLabel = new QLabel(tr("Device"), playbackParameters);
-    devLabel->setFont(m_font);
+    QLabel *deviceLabel = new QLabel(tr("Device"), playbackParameters);
+    deviceLabel->setFont(m_font);
     m_playDevice = new QComboBox(playbackParameters);
     m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
@@ -180,7 +180,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
     // Row 0: Device
-    groupLayout->addWidget(devLabel, 0, 0);
+    groupLayout->addWidget(deviceLabel, 0, 0);
     groupLayout->addWidget(m_playDevice, 0, 1, 1, 2);
     // Row 1: Instrument
     groupLayout->addWidget(insLabel, 1, 0, 1, 2);
