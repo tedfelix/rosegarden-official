@@ -292,48 +292,46 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_createSegmentsWithFrame->setWidget(createSegmentsWith);
     createSegmentsWith->setContentsMargins(3, 3, 3, 3);
 
-    // preset picker
-    m_psetLbl = new QLabel(tr("Preset"), createSegmentsWith);
-    m_psetLbl->setFont(m_font);
+    // Preset
+    QLabel *presetLabel = new QLabel(tr("Preset"), createSegmentsWith);
+    presetLabel->setFont(m_font);
 
-    m_presetLbl = new QLabel(tr("<none>"), createSegmentsWith);
-    m_presetLbl->setFont(m_font);
-    m_presetLbl->setObjectName("SPECIAL_LABEL");
-    m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_presetLbl->setMinimumWidth(width20);
+    m_preset = new QLabel(tr("<none>"), createSegmentsWith);
+    m_preset->setFont(m_font);
+    m_preset->setObjectName("SPECIAL_LABEL");
+    m_preset->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_preset->setMinimumWidth(width20);
 
-    m_presetButton = new QPushButton(tr("Load"), createSegmentsWith);
-    m_presetButton->setFont(m_font);
-    m_presetButton->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
+    m_loadButton = new QPushButton(tr("Load"), createSegmentsWith);
+    m_loadButton->setFont(m_font);
+    m_loadButton->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
 
-    // default clef
-    //
-    m_clefLbl = new QLabel(tr("Clef"), createSegmentsWith);
-    m_clefLbl->setFont(m_font);
-    m_defClef = new QComboBox(createSegmentsWith);
-    m_defClef->setFont(m_font);
-    m_defClef->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
-    m_defClef->setMinimumWidth(width11);
-    m_defClef->addItem(tr("treble", "Clef name"), TrebleClef);
-    m_defClef->addItem(tr("bass", "Clef name"), BassClef);
-    m_defClef->addItem(tr("crotales", "Clef name"), CrotalesClef);
-    m_defClef->addItem(tr("xylophone", "Clef name"), XylophoneClef);
-    m_defClef->addItem(tr("guitar", "Clef name"), GuitarClef);
-    m_defClef->addItem(tr("contrabass", "Clef name"), ContrabassClef);
-    m_defClef->addItem(tr("celesta", "Clef name"), CelestaClef);
-    m_defClef->addItem(tr("old celesta", "Clef name"), OldCelestaClef);
-    m_defClef->addItem(tr("french", "Clef name"), FrenchClef);
-    m_defClef->addItem(tr("soprano", "Clef name"), SopranoClef);
-    m_defClef->addItem(tr("mezzosoprano", "Clef name"), MezzosopranoClef);
-    m_defClef->addItem(tr("alto", "Clef name"), AltoClef);
-    m_defClef->addItem(tr("tenor", "Clef name"), TenorClef);
-    m_defClef->addItem(tr("baritone", "Clef name"), BaritoneClef);
-    m_defClef->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
-    m_defClef->addItem(tr("subbass", "Clef name"), SubbassClef);
-    m_defClef->addItem(tr("twobar", "Clef name"), TwoBarClef);
+    // Clef
+    QLabel *clefLabel = new QLabel(tr("Clef"), createSegmentsWith);
+    clefLabel->setFont(m_font);
+    m_clefCombo = new QComboBox(createSegmentsWith);
+    m_clefCombo->setFont(m_font);
+    m_clefCombo->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
+    m_clefCombo->setMinimumWidth(width11);
+    m_clefCombo->addItem(tr("treble", "Clef name"), TrebleClef);
+    m_clefCombo->addItem(tr("bass", "Clef name"), BassClef);
+    m_clefCombo->addItem(tr("crotales", "Clef name"), CrotalesClef);
+    m_clefCombo->addItem(tr("xylophone", "Clef name"), XylophoneClef);
+    m_clefCombo->addItem(tr("guitar", "Clef name"), GuitarClef);
+    m_clefCombo->addItem(tr("contrabass", "Clef name"), ContrabassClef);
+    m_clefCombo->addItem(tr("celesta", "Clef name"), CelestaClef);
+    m_clefCombo->addItem(tr("old celesta", "Clef name"), OldCelestaClef);
+    m_clefCombo->addItem(tr("french", "Clef name"), FrenchClef);
+    m_clefCombo->addItem(tr("soprano", "Clef name"), SopranoClef);
+    m_clefCombo->addItem(tr("mezzosoprano", "Clef name"), MezzosopranoClef);
+    m_clefCombo->addItem(tr("alto", "Clef name"), AltoClef);
+    m_clefCombo->addItem(tr("tenor", "Clef name"), TenorClef);
+    m_clefCombo->addItem(tr("baritone", "Clef name"), BaritoneClef);
+    m_clefCombo->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
+    m_clefCombo->addItem(tr("subbass", "Clef name"), SubbassClef);
+    m_clefCombo->addItem(tr("twobar", "Clef name"), TwoBarClef);
 
-    // default transpose
-    //
+    // Transpose
     m_transpLbl = new QLabel(tr("Transpose"), createSegmentsWith);
     m_transpLbl->setFont(m_font);
     m_defTranspose = new QComboBox(createSegmentsWith);
@@ -349,11 +347,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
             m_defTranspose->setCurrentIndex(m_defTranspose->count() - 1);
     }
 
-    // highest/lowest playable note
-    //
+    // Pitch
     m_rangeLbl = new QLabel(tr("Pitch"), createSegmentsWith);
     m_rangeLbl->setFont(m_font);
 
+    // Lowest playable note
     QLabel *lowestLabel = new QLabel(tr("Lowest"), createSegmentsWith);
     lowestLabel->setFont(m_font);
 
@@ -361,6 +359,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_lowButton->setFont(m_font);
     m_lowButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
 
+    // Highest playable note
     QLabel *highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
     highestLabel->setFont(m_font);
 
@@ -368,13 +367,9 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_highButton->setFont(m_font);
     m_highButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
 
-//    m_lowButton->setMaximumWidth(width11);
-//    m_highButton->setMaximumWidth(width11);
-
     updateHighLow();
 
-    // default color
-    //
+    // Color
     m_colorLbl = new QLabel(tr("Color"), createSegmentsWith);
     m_colorLbl->setFont(m_font);
     m_defColor = new QComboBox(createSegmentsWith);
@@ -390,12 +385,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setSpacing(2);
     groupLayout->setColumnStretch(1, 1);
     int row = 0;
-    groupLayout->addWidget(m_psetLbl, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_presetLbl, row, 1, 1, 3);
-    groupLayout->addWidget(m_presetButton, row, 4, 1, 2);
+    groupLayout->addWidget(presetLabel, row, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_preset, row, 1, 1, 3);
+    groupLayout->addWidget(m_loadButton, row, 4, 1, 2);
     row++;
-    groupLayout->addWidget(m_clefLbl, row, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_defClef, row, 1, 1, 2);
+    groupLayout->addWidget(clefLabel, row, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_clefCombo, row, 1, 1, 2);
     groupLayout->addWidget(m_transpLbl, row, 3, 1, 2, Qt::AlignRight);
     groupLayout->addWidget(m_defTranspose, row, 5, 1, 1);
     row++;
@@ -428,7 +423,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     connect(m_recChannel, SIGNAL(activated(int)),
              this, SLOT(slotRecordingChannelChanged(int)));
 
-    connect(m_defClef, SIGNAL(activated(int)),
+    connect(m_clefCombo, SIGNAL(activated(int)),
              this, SLOT(slotClefChanged(int)));
 
     // Detect when the document colours are updated
@@ -445,7 +440,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     connect(m_lowButton, SIGNAL(released()),
             SLOT(slotLowestPressed()));
 
-    connect(m_presetButton, SIGNAL(released()),
+    connect(m_loadButton, SIGNAL(released()),
             SLOT(slotPresetPressed()));
 
     connect(m_notationSizeCombo, SIGNAL(activated(int)),
@@ -706,7 +701,7 @@ TrackParameterBox::updateHighLow()
     tmp += tr(" %1").arg(lowest.getOctave(base));
     m_lowButton->setText(tmp);
 
-    m_presetLbl->setEnabled(false);
+    m_preset->setEnabled(false);
 }
 
 void
@@ -726,15 +721,15 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
 
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
-    m_defClef->setCurrentIndex(trk->getClef());
+    m_clefCombo->setCurrentIndex(trk->getClef());
     m_defTranspose->setCurrentIndex(m_defTranspose->findText(QString("%1").arg(trk->getTranspose())));
     m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
     // set this down here because updateHighLow just disabled the label
-    m_presetLbl->setText(strtoqstr(trk->getPresetLabel()));
-    m_presetLbl->setEnabled(true);
+    m_preset->setText(strtoqstr(trk->getPresetLabel()));
+    m_preset->setEnabled(true);
 
     m_notationSizeCombo->setCurrentIndex(trk->getStaffSize());
     m_bracketTypeCombo->setCurrentIndex(trk->getStaffBracket());
@@ -782,7 +777,7 @@ TrackParameterBox::slotSelectedTrackChanged()
     Composition &comp = m_doc->getComposition();
     TrackId newTrack = comp.getSelectedTrack();
     if ((int)newTrack != m_selectedTrackId) {
-        m_presetLbl->setEnabled(true);
+        m_preset->setEnabled(true);
         m_selectedTrackId = newTrack;
         selectedTrackNameChanged();
         slotUpdateControls(-1);
@@ -1008,7 +1003,7 @@ TrackParameterBox::slotClefChanged(int clef)
     }
     Track *trk = comp.getTrackById(m_selectedTrackId);
     trk->setClef(clef);
-    m_presetLbl->setEnabled(false);
+    m_preset->setEnabled(false);
 }
 
 void
@@ -1023,7 +1018,7 @@ TrackParameterBox::slotTransposeChanged(int transpose)
     }
     Track *trk = comp.getTrackById(m_selectedTrackId);
     trk->setTranspose(transpose);
-    m_presetLbl->setEnabled(false);
+    m_preset->setEnabled(false);
 }
 
 void
@@ -1147,7 +1142,7 @@ TrackParameterBox::slotHighestPressed()
         updateHighLow();
     }
 
-    m_presetLbl->setEnabled(false);
+    m_preset->setEnabled(false);
 }
 
 void
@@ -1169,7 +1164,7 @@ TrackParameterBox::slotLowestPressed()
         updateHighLow();
     }
 
-    m_presetLbl->setEnabled(false);
+    m_preset->setEnabled(false);
 }
 
 void
@@ -1190,7 +1185,7 @@ TrackParameterBox::slotPresetPressed()
     Track *trk = comp.getTrackById(m_selectedTrackId);
     try {
         if (dialog.exec() == QDialog::Accepted) {
-            m_presetLbl->setText(dialog.getName());
+            m_preset->setText(dialog.getName());
             trk->setPresetLabel(qstrtostr(dialog.getName()));
             if (dialog.getConvertAllSegments()) {
                 SegmentSyncCommand* command = new SegmentSyncCommand(
@@ -1200,7 +1195,7 @@ TrackParameterBox::slotPresetPressed()
                         clefIndexToClef(dialog.getClef()));
                 CommandHistory::getInstance()->addCommand(command);
             }
-            m_defClef->setCurrentIndex(dialog.getClef());
+            m_clefCombo->setCurrentIndex(dialog.getClef());
                      
             m_defTranspose->setCurrentIndex(m_defTranspose->findText(QString("%1").arg(dialog.getTranspose())));
 
@@ -1214,7 +1209,7 @@ TrackParameterBox::slotPresetPressed()
             // re-enable it until it is subsequently re-disabled by the
             // user overriding the preset, calling one of the above slots
             // in the normal course
-            m_presetLbl->setEnabled(true);
+            m_preset->setEnabled(true);
         }
     } catch (Exception e) {
         //!!! This should be a more verbose error to pass along the

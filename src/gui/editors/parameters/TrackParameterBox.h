@@ -152,13 +152,11 @@ private:
     CollapsingFrame *m_createSegmentsWithFrame;
 
     // Preset
-    QLabel *m_psetLbl;  // "Preset"
-    QLabel *m_presetLbl;
-    QPushButton *m_presetButton;  // "Load"
+    QLabel *m_preset;
+    QPushButton *m_loadButton;
 
     // Clef
-    QLabel *m_clefLbl;
-    QComboBox *m_defClef;
+    QComboBox *m_clefCombo;
 
     // Transpose
     QLabel *m_transpLbl;
