@@ -83,35 +83,39 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     // Widgets
 
     // Instrument Label
-    m_instrumentLabel.setFont(f);
+    m_instrumentLabel->setFont(f);
     // Set a fixed width to prevent the label from growing too large.
-    m_instrumentLabel.setFixedWidth(labelWidth);
-    m_instrumentLabel.setAlignment(Qt::AlignCenter);
+    m_instrumentLabel->setFixedWidth(labelWidth);
+    m_instrumentLabel->setAlignment(Qt::AlignCenter);
 
     // Connection Label
-    m_connectionLabel.setFont(f);
+    m_connectionLabel = new SqueezedLabel;
+    m_connectionLabel->setFont(f);
     // Set a fixed width to prevent the label from growing too large.
-    m_connectionLabel.setFixedWidth(labelWidth);
-    m_connectionLabel.setAlignment(Qt::AlignCenter);
+    m_connectionLabel->setFixedWidth(labelWidth);
+    m_connectionLabel->setAlignment(Qt::AlignCenter);
 
     // Percussion Label
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
     percussionLabel->setFont(f);
 
     // Percussion CheckBox
-    m_percussionCheckBox.setFont(f);
-    m_percussionCheckBox.setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    connect(&m_percussionCheckBox, SIGNAL(clicked(bool)),
+    m_percussionCheckBox = new QCheckBox;
+    m_percussionCheckBox->setFont(f);
+    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
+    connect(m_percussionCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotPercussionClicked(bool)));
 
     // Bank Label
-    m_bankLabel.setText(tr("Bank"));
-    m_bankLabel.setFont(f);
+    m_bankLabel = new QLabel;
+    m_bankLabel->setText(tr("Bank"));
+    m_bankLabel->setFont(f);
 
     // Bank CheckBox
-    m_bankCheckBox.setFont(f);
-    m_bankCheckBox.setToolTip(tr("<qt>Send bank select</qt>"));
-    connect(&m_bankCheckBox, SIGNAL(clicked(bool)),
+    m_bankCheckBox = new QCheckBox;
+    m_bankCheckBox->setFont(f);
+    m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
+    connect(m_bankCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotBankClicked(bool)));
 
     // Since these ComboBoxes may have a very large number of items,
@@ -122,47 +126,54 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     const int minimumContentsLength = 25;
 
     // Bank ComboBox
-    m_bankComboBox.setFont(f);
-    m_bankComboBox.setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
-    m_bankComboBox.setMaxVisibleItems(maxVisibleItems);
-    m_bankComboBox.setMinimumContentsLength(minimumContentsLength);
-    connect(&m_bankComboBox, SIGNAL(activated(int)),
+    m_bankComboBox = new QComboBox;
+    m_bankComboBox->setFont(f);
+    m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
+    m_bankComboBox->setMaxVisibleItems(maxVisibleItems);
+    m_bankComboBox->setMinimumContentsLength(minimumContentsLength);
+    connect(m_bankComboBox, SIGNAL(activated(int)),
             SLOT(slotSelectBank(int)));
 
     // Program Label
-    m_programLabel.setText(tr("Program"));
-    m_programLabel.setFont(f);
+    m_programLabel = new QLabel;
+    m_programLabel->setText(tr("Program"));
+    m_programLabel->setFont(f);
 
     // Program CheckBox
-    m_programCheckBox.setFont(f);
-    m_programCheckBox.setToolTip(tr("<qt>Send program change</qt>"));
-    connect(&m_programCheckBox, SIGNAL(clicked(bool)),
+    m_programCheckBox = new QCheckBox;
+    m_programCheckBox->setFont(f);
+    m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
+    connect(m_programCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotProgramClicked(bool)));
 
     // Program ComboBox
-    m_programComboBox.setFont(f);
-    m_programComboBox.setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
-    m_programComboBox.setMaxVisibleItems(maxVisibleItems);
-    m_programComboBox.setMinimumContentsLength(minimumContentsLength);
-    connect(&m_programComboBox, SIGNAL(activated(int)),
+    m_programComboBox = new QComboBox;
+    m_programComboBox->setFont(f);
+    m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
+    m_programComboBox->setMaxVisibleItems(maxVisibleItems);
+    m_programComboBox->setMinimumContentsLength(minimumContentsLength);
+    connect(m_programComboBox, SIGNAL(activated(int)),
             SLOT(slotSelectProgram(int)));
 
     // Variation Label
-    m_variationLabel.setText(tr("Variation"));
-    m_variationLabel.setFont(f);
+    m_variationLabel = new QLabel;
+    m_variationLabel->setText(tr("Variation"));
+    m_variationLabel->setFont(f);
 
     // Variation CheckBox
-    m_variationCheckBox.setFont(f);
-    m_variationCheckBox.setToolTip(tr("<qt>Send bank select for variation</qt>"));
-    connect(&m_variationCheckBox, SIGNAL(clicked(bool)),
+    m_variationCheckBox = new QCheckBox;
+    m_variationCheckBox->setFont(f);
+    m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
+    connect(m_variationCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotVariationClicked(bool)));
 
     // Variation ComboBox
-    m_variationComboBox.setFont(f);
-    m_variationComboBox.setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
-    m_variationComboBox.setMaxVisibleItems(maxVisibleItems);
-    m_variationComboBox.setMinimumContentsLength(minimumContentsLength);
-    connect(&m_variationComboBox, SIGNAL(activated(int)),
+    m_variationComboBox = new QComboBox;
+    m_variationComboBox->setFont(f);
+    m_variationComboBox->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
+    m_variationComboBox->setMaxVisibleItems(maxVisibleItems);
+    m_variationComboBox->setMinimumContentsLength(minimumContentsLength);
+    connect(m_variationComboBox, SIGNAL(activated(int)),
             SLOT(slotSelectVariation(int)));
 
     // Channel Label
@@ -172,14 +183,15 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     channelLabel->setToolTip(channelTip);
 
     // Channel ComboBox
-    m_channelValue.setFont(f);
-    m_channelValue.setToolTip(channelTip);
-    m_channelValue.setMaxVisibleItems(2);
+    m_channelValue = new QComboBox;
+    m_channelValue->setFont(f);
+    m_channelValue->setToolTip(channelTip);
+    m_channelValue->setMaxVisibleItems(2);
     // Everything else sets up elsewhere, but these don't vary per instrument:
-    m_channelValue.addItem(tr("Auto"));
-    m_channelValue.addItem(tr("Fixed"));
-    m_channelValue.setMinimumContentsLength(minimumContentsLength);
-    connect(&m_channelValue, SIGNAL(activated(int)),
+    m_channelValue->addItem(tr("Auto"));
+    m_channelValue->addItem(tr("Fixed"));
+    m_channelValue->setMinimumContentsLength(minimumContentsLength);
+    connect(m_channelValue, SIGNAL(activated(int)),
             SLOT(slotSelectChannel(int)));
 
     // Receive External Label
@@ -189,10 +201,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     receiveExternalLabel->setToolTip(receiveExternalTip);
     
     // Receive External CheckBox
-    m_receiveExternalCheckBox.setFont(f);
-    m_receiveExternalCheckBox.setToolTip(receiveExternalTip);
-    m_receiveExternalCheckBox.setShortcut((QKeySequence)"Shift+P");
-    m_receiveExternalCheckBox.setChecked(false);
+    m_receiveExternalCheckBox = new QCheckBox;
+    m_receiveExternalCheckBox->setFont(f);
+    m_receiveExternalCheckBox->setToolTip(receiveExternalTip);
+    m_receiveExternalCheckBox->setShortcut((QKeySequence)"Shift+P");
+    m_receiveExternalCheckBox->setChecked(false);
 
     // Rotary Frame and Grid
     m_rotaryFrame = new QFrame(this);
@@ -219,31 +232,31 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     mainGrid->setSpacing(3);
     mainGrid->setColumnStretch(2, 1);
 
-    mainGrid->addWidget(&m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
+    mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
 
-    mainGrid->addWidget(&m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
+    mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
 
     mainGrid->addItem(new QSpacerItem(1, 5), 2, 0, 1, 4);
 
     mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
-    mainGrid->addWidget(&m_percussionCheckBox, 3, 3, Qt::AlignLeft);
+    mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
 
-    mainGrid->addWidget(&m_bankLabel, 4, 0, Qt::AlignLeft);
-    mainGrid->addWidget(&m_bankCheckBox, 4, 1, Qt::AlignRight);
-    mainGrid->addWidget(&m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
+    mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
+    mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
 
-    mainGrid->addWidget(&m_programLabel, 5, 0, Qt::AlignLeft);
-    mainGrid->addWidget(&m_programCheckBox, 5, 1, Qt::AlignRight);
-    mainGrid->addWidget(&m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
+    mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
+    mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
 
-    mainGrid->addWidget(&m_variationLabel, 6, 0);
-    mainGrid->addWidget(&m_variationCheckBox, 6, 1);
-    mainGrid->addWidget(&m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_variationLabel, 6, 0);
+    mainGrid->addWidget(m_variationCheckBox, 6, 1);
+    mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
 
     mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
-    mainGrid->addWidget(&m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
 
-    mainGrid->addWidget(&m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
+    mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
     mainGrid->addWidget(receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
 
     mainGrid->addItem(new QSpacerItem(1, 5), 9, 0, 1, 4);
@@ -266,7 +279,7 @@ MIDIInstrumentParameterPanel::clearReceiveExternal()
 {
     RG_DEBUG << "clearReceiveExternal()";
 
-    m_receiveExternalCheckBox.setChecked(false);
+    m_receiveExternalCheckBox->setChecked(false);
 }
 
 void
@@ -276,7 +289,7 @@ MIDIInstrumentParameterPanel::displayInstrument(Instrument *instrument)
         return;
 
     setSelectedInstrument(instrument);
-    m_instrumentLabel.setText(instrument->getLocalizedPresentationName());
+    m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
 
     updateWidgets();
 }
@@ -298,7 +311,7 @@ MIDIInstrumentParameterPanel::updateWidgets()
 
     // Instrument name
 
-    m_instrumentLabel.setText(
+    m_instrumentLabel->setText(
             getSelectedInstrument()->getLocalizedPresentationName());
 
     // Studio Device (connection) name
@@ -312,25 +325,25 @@ MIDIInstrumentParameterPanel::updateWidgets()
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
     }
 
-    m_connectionLabel.setText("[ " + connection + " ]");
+    m_connectionLabel->setText("[ " + connection + " ]");
 
     // Percussion
-    m_percussionCheckBox.setChecked(getSelectedInstrument()->isPercussion());
+    m_percussionCheckBox->setChecked(getSelectedInstrument()->isPercussion());
     
     // Bank
-    m_bankCheckBox.setChecked(getSelectedInstrument()->sendsBankSelect());
+    m_bankCheckBox->setChecked(getSelectedInstrument()->sendsBankSelect());
     updateBankComboBox();
 
     // Program
-    m_programCheckBox.setChecked(getSelectedInstrument()->sendsProgramChange());
+    m_programCheckBox->setChecked(getSelectedInstrument()->sendsProgramChange());
     updateProgramComboBox();
 
     // Variation
-    m_variationCheckBox.setChecked(getSelectedInstrument()->sendsBankSelect());
+    m_variationCheckBox->setChecked(getSelectedInstrument()->sendsBankSelect());
     updateVariationComboBox();
 
     // Channel
-    m_channelValue.setCurrentIndex(
+    m_channelValue->setCurrentIndex(
             getSelectedInstrument()->hasFixedChannel() ? 1 : 0);
 
     // Controller Rotaries
@@ -504,9 +517,9 @@ void
 MIDIInstrumentParameterPanel::showBank(bool show)
 {
     // Show/hide all bank-related widgets.
-    m_bankLabel.setVisible(show);
-    m_bankCheckBox.setVisible(show);
-    m_bankComboBox.setVisible(show);
+    m_bankLabel->setVisible(show);
+    m_bankCheckBox->setVisible(show);
+    m_bankComboBox->setVisible(show);
 }
 
 void
@@ -612,14 +625,14 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         m_banks = banks;
 
         // Copy from m_banks to m_bankComboBox.
-        m_bankComboBox.clear();
+        m_bankComboBox->clear();
         for (BankList::const_iterator i = m_banks.begin();
                 i != m_banks.end(); ++i) {
-            m_bankComboBox.addItem(QObject::tr(i->getName().c_str()));
+            m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
         }
     }
 
-    m_bankComboBox.setEnabled(getSelectedInstrument()->sendsBankSelect());
+    m_bankComboBox->setEnabled(getSelectedInstrument()->sendsBankSelect());
 
 #if 0
 // ??? This is a pretty nifty idea, but unfortunately, it requires
@@ -642,7 +655,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         showBank(true);
 
     // Display the current bank.
-    m_bankComboBox.setCurrentIndex(currentBank);
+    m_bankComboBox->setCurrentIndex(currentBank);
 }
 
 bool
@@ -684,9 +697,9 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     // enable/disable program changes.  If we do away with the checkbox
     // in the future, we should re-evaluate this decision.
     bool show = !programs.empty();
-    m_programLabel.setVisible(show);
-    m_programCheckBox.setVisible(show);
-    m_programComboBox.setVisible(show);
+    m_programLabel->setVisible(show);
+    m_programCheckBox->setVisible(show);
+    m_programComboBox->setVisible(show);
 
     int currentProgram = -1;
 
@@ -706,15 +719,15 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         m_programs = programs;
 
         // Copy from m_programs to m_programComboBox.
-        m_programComboBox.clear();
+        m_programComboBox->clear();
         for (unsigned i = 0; i < m_programs.size(); ++i) {
-            m_programComboBox.addItem(QObject::tr("%1. %2")
+            m_programComboBox->addItem(QObject::tr("%1. %2")
                                        .arg(m_programs[i].getProgram() + 1)
                                        .arg(QObject::tr(m_programs[i].getName().c_str())));
         }
     }
 
-    m_programComboBox.setEnabled(getSelectedInstrument()->sendsProgramChange());
+    m_programComboBox->setEnabled(getSelectedInstrument()->sendsProgramChange());
 
 #if 0
 // ??? This is a pretty nifty idea, but unfortunately, it requires
@@ -731,16 +744,16 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
 #endif
 
     // Display the current program.
-    m_programComboBox.setCurrentIndex(currentProgram);
+    m_programComboBox->setCurrentIndex(currentProgram);
 }
 
 void
 MIDIInstrumentParameterPanel::showVariation(bool show)
 {
     // Show/hide all variation-related widgets.
-    m_variationLabel.setVisible(show);
-    m_variationCheckBox.setVisible(show);
-    m_variationComboBox.setVisible(show);
+    m_variationLabel->setVisible(show);
+    m_variationCheckBox->setVisible(show);
+    m_variationComboBox->setVisible(show);
 }
 
 void
@@ -831,7 +844,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         m_variations = variations;
 
         // Copy from m_variations to m_variationComboBox.
-        m_variationComboBox.clear();
+        m_variationComboBox->clear();
         for (size_t i = 0; i < m_variations.size(); ++i) {
             std::string programName = md->getProgramName(m_variations[i]);
 
@@ -839,14 +852,14 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
             MidiBank bank = m_variations[i].getBank();
             MidiByte variationBank = useMSB ? bank.getMSB() : bank.getLSB();
 
-            m_variationComboBox.addItem(QObject::tr("%1. %2")
+            m_variationComboBox->addItem(QObject::tr("%1. %2")
                                          .arg(variationBank)
                                          .arg(QObject::tr(programName.c_str())));
         }
     }
 
     // Display the current variation.
-    m_variationComboBox.setCurrentIndex(currentVariation);
+    m_variationComboBox->setCurrentIndex(currentVariation);
 
     // Show the variation widgets in either of two cases:
     //   1. More than one variation is available for this program.
@@ -855,7 +868,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     showVariation(m_variations.size() > 1  ||
                   (currentVariation == -1  &&  !m_variations.empty()));
 
-    m_variationComboBox.setEnabled(getSelectedInstrument()->sendsBankSelect());
+    m_variationComboBox->setEnabled(getSelectedInstrument()->sendsBankSelect());
 }
 
 void
@@ -1061,7 +1074,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
     RG_DEBUG << "slotExternalProgramChange()";
 
     // If we aren't set to "Receive External", bail.
-    if (!m_receiveExternalCheckBox.isChecked())
+    if (!m_receiveExternalCheckBox->isChecked())
         return;
 
     if (!getSelectedInstrument())

@@ -20,13 +20,9 @@
 
 #include "base/MidiProgram.h"  // InstrumentId
 #include "base/MidiDevice.h"  // MidiByteList
-#include "gui/widgets/SqueezedLabel.h"
 
 #include "InstrumentParameterPanel.h"
 
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
 #include <QString>
 #include <QSharedPointer>
 
@@ -35,6 +31,9 @@ class QWidget;
 class QSignalMapper;
 class QGridLayout;
 class QFrame;
+class QCheckBox;
+class QComboBox;
+class QLabel;
 
 namespace Rosegarden
 {
@@ -45,6 +44,7 @@ class MidiDevice;
 class Instrument;
 class InstrumentStaticSignals;
 class Rotary;
+class SqueezedLabel;
 
 
 /// "Instrument Parameters" box for MIDI Instrument's.  AKA "MIPP".
@@ -134,41 +134,41 @@ private:
 
     // m_instrumentLabel is inherited from InstrumentParameterPanel.
 
-    SqueezedLabel m_connectionLabel;
+    SqueezedLabel *m_connectionLabel;
 
-    QCheckBox m_percussionCheckBox;
+    QCheckBox *m_percussionCheckBox;
 
     // Bank
-    QLabel m_bankLabel;
-    QCheckBox m_bankCheckBox;
-    QComboBox m_bankComboBox;
+    QLabel *m_bankLabel;
+    QCheckBox *m_bankCheckBox;
+    QComboBox *m_bankComboBox;
     BankList m_banks;
     void showBank(bool show);
     /// From the selected instrument.
     void updateBankComboBox();
 
     // Program
-    QLabel m_programLabel;
-    QCheckBox m_programCheckBox;
-    QComboBox m_programComboBox;
+    QLabel *m_programLabel;
+    QCheckBox *m_programCheckBox;
+    QComboBox *m_programComboBox;
     ProgramList m_programs;
     /// From the selected instrument.
     void updateProgramComboBox();
     static bool hasNoName(const MidiProgram &p);
 
     // Variation
-    QLabel m_variationLabel;
-    QCheckBox m_variationCheckBox;
-    QComboBox m_variationComboBox;
+    QLabel *m_variationLabel;
+    QCheckBox *m_variationCheckBox;
+    QComboBox *m_variationComboBox;
     ProgramList m_variations;
     void showVariation(bool show);
     /// From the selected instrument.
     void updateVariationComboBox();
 
     // Channel: auto/fixed
-    QComboBox m_channelValue;
+    QComboBox *m_channelValue;
 
-    QCheckBox m_receiveExternalCheckBox;
+    QCheckBox *m_receiveExternalCheckBox;
 
     // Rotaries
 
