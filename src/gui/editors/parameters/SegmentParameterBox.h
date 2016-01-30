@@ -125,7 +125,7 @@ protected:
 
     Label                      *m_label;
 //    QLabel                     *m_rangeLabel;
-    QPushButton                *m_labelButton;
+    QPushButton                *m_editButton;
 //    QPushButton                *m_highButton;
 //    QPushButton                *m_lowButton;
     TristateCheckBox *m_repeatValue;
@@ -137,7 +137,7 @@ protected:
     QPushButton                *m_linkTransposeResetButton;
 
     // Collapse frame for linked segment functions
-    QFrame                     *m_linkedSegmentGroup;
+    QWidget                    *m_linkedSegmentGroup;
 
     // Audio autofade
     //

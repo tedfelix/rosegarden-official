@@ -134,17 +134,15 @@ SegmentParameterBox::initBox()
     const int width20 = fontMetrics.width("12345678901234567890");
     m_label->setFixedWidth(width20);
     m_label->setToolTip(tr("<qt>Click to edit the segment label for any selected segments</qt>"));
-    connect(m_label, SIGNAL(clicked()),
-            SLOT(slotEditSegmentLabel()));
+    connect(m_label, SIGNAL(clicked()), SLOT(slotEditSegmentLabel()));
 
     // Edit button
     // ??? This Edit button is now no longer needed.  The user can just
     //     click on the label to edit it.
-    m_labelButton = new QPushButton(tr("Edit"), this);
-    m_labelButton->setFont(m_font);
-    m_labelButton->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
-    connect(m_labelButton, SIGNAL(released()),
-            SLOT(slotEditSegmentLabel()));
+    m_editButton = new QPushButton(tr("Edit"), this);
+    m_editButton->setFont(m_font);
+    m_editButton->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
+    connect(m_editButton, SIGNAL(released()), SLOT(slotEditSegmentLabel()));
 
     // Repeat
     QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
@@ -227,18 +225,18 @@ SegmentParameterBox::initBox()
 
     // Linked segment parameters (hidden)
 
-    // linked segment collapse frame
-    CollapsingFrame *cframe = new CollapsingFrame(tr("Linked segment parameters"),
-            this, segmentParametersLinked);
+    // Outer collapsing frame
+    CollapsingFrame *linkedSegmentParametersFrame = new CollapsingFrame(
+            tr("Linked segment parameters"), this, segmentParametersLinked);
 
-    // Unhide this cframe if you want to play with the linked segment
+    // Unhide this if you want to play with the linked segment
     // transpose parameters.  I've hidden it for the time being until
     // we've decided how we're going to interact with these transpose params.
-    cframe->hide();
+    linkedSegmentParametersFrame->hide();
 
-    // ??? QWidget should be enough.
-    m_linkedSegmentGroup = new QFrame(cframe);
-    cframe->setWidget(m_linkedSegmentGroup);
+    // Inner fixed widget
+    m_linkedSegmentGroup = new QWidget(linkedSegmentParametersFrame);
+    linkedSegmentParametersFrame->setWidget(m_linkedSegmentGroup);
     m_linkedSegmentGroup->setContentsMargins(3, 3, 3, 3);
 
     // Transpose
@@ -262,55 +260,43 @@ SegmentParameterBox::initBox()
     // Linked segment parameters layout
 
     QGridLayout *groupLayout = new QGridLayout(m_linkedSegmentGroup);
-    groupLayout->setMargin(0);
+    groupLayout->setContentsMargins(5,0,0,5);
     groupLayout->setSpacing(2);
-    groupLayout->setColumnMinimumWidth(3, 80);
     groupLayout->addWidget(linkTransposeLabel, 0, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_linkTransposeButton, 0, 1);
     groupLayout->addWidget(m_linkTransposeResetButton, 0, 2);
+    groupLayout->setColumnStretch(3, 1);
 
     // SegmentParameterBox Layout
 
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setMargin(0);
     gridLayout->setSpacing(2);
+    // Row 0: Label
+    gridLayout->addWidget(label, 0, 0);
+    gridLayout->addWidget(m_label, 0, 1, 1, 4);
+    gridLayout->addWidget(m_editButton, 0, 5);
+    // Row 1: Repeat/Transpose
+    gridLayout->addWidget(repeatLabel, 1, 0);
+    gridLayout->addWidget(m_repeatValue, 1, 1);
+    gridLayout->addWidget(transposeLabel, 1, 2, 1, 2, Qt::AlignRight);
+    gridLayout->addWidget(m_transposeValue, 1, 4, 1, 2);
+    // Row 2: Quantize/Delay
+    gridLayout->addWidget(quantizeLabel, 2, 0);
+    gridLayout->addWidget(m_quantizeValue, 2, 1, 1, 2);
+    gridLayout->addWidget(delayLabel, 2, 3, Qt::AlignRight);
+    gridLayout->addWidget(m_delayValue, 2, 4, 1, 2);
+    // Row 3: Color
+    gridLayout->addWidget(colourLabel, 3, 0);
+    gridLayout->addWidget(m_colourValue, 3, 1, 1, 5);
+    // Row 4: Linked segment parameters
+    gridLayout->addWidget(linkedSegmentParametersFrame, 4, 0, 1, 5);
 
-    int row = 0;
+    // SegmentParameterBox
 
-    //gridLayout->addRowSpacing(0, 12); // why??
+    setContentsMargins(4, 7, 4, 4);
 
-    gridLayout->addWidget(label, row, 0); //, AlignRight);
-    gridLayout->addWidget(m_label, row, 1, row- row+1, 4); //, AlignLeft);
-    gridLayout->addWidget(m_labelButton, row, 5); //, AlignLeft);
-    ++row;
-
-    gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
-    gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
-
-    gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 2+1, Qt::AlignRight);
-    gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 4+1);
-    ++row;
-
-    gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
-    gridLayout->addWidget(m_quantizeValue, row, 1, row- row+1, 2); //, AlignLeft);
-
-    gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
-    gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 4+1);
-    ++row;
-
-    gridLayout->addWidget(colourLabel, row, 0); //, AlignRight);
-    gridLayout->addWidget(m_colourValue, row, 1, row- row+1, 5);
-    ++row;
-
-    gridLayout->addWidget(cframe, row, 0, 1, 5);
-    ++row;
-
-    // Configure the empty final row to accommodate any extra vertical space.
-    gridLayout->setRowStretch(gridLayout->rowCount() - 1, 1);
-
-    // Configure the empty final column to accommodate any extra horizontal
-    // space.
-    //gridLayout->setColStretch(gridLayout->numCols() - 1, 1);
+    // Populate the widgets
 
     // populate the quantize combo
     //
@@ -370,8 +356,6 @@ SegmentParameterBox::initBox()
 
     // populate m_colourValue
     slotDocColoursChanged();
-
-    setContentsMargins(4, 7, 4, 4);
 
     //RG_DEBUG << "SegmentParameterBox::SegmentParameterBox: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 }
@@ -510,7 +494,7 @@ SegmentParameterBox::populateBoxFromSegments()
     // back to the "..." button that this was never disabled if there was no
     // segment, and therefore no label to edit.  So we disable the edit button
     // and repeat checkbox first:
-    m_labelButton->setEnabled(false);
+    m_editButton->setEnabled(false);
     m_repeatValue->setEnabled(false);
 
 
@@ -519,7 +503,7 @@ SegmentParameterBox::populateBoxFromSegments()
         //
         // and since there is at least one segment, we can re-enable the edit button
         // and repeat checkbox:
-        m_labelButton->setEnabled(true);
+        m_editButton->setEnabled(true);
         m_repeatValue->setEnabled(true);
 
         if (repeated == NotApplicable)
