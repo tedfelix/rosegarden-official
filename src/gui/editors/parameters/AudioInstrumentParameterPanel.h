@@ -21,6 +21,9 @@
 
 #include "base/MidiProgram.h"
 #include "InstrumentParameterPanel.h"
+#include "gui/widgets/InstrumentAliasButton.h"
+#include "gui/widgets/AudioFaderBox.h"
+
 
 #include <QPixmap>
 #include <QString>
@@ -37,8 +40,6 @@ namespace Rosegarden
 class RosegardenDocument;
 class Instrument;
 class InstrumentStaticSignals;
-class InstrumentAliasButton;
-class AudioFaderBox;
 
 
 class AudioInstrumentParameterPanel : public InstrumentParameterPanel
@@ -86,7 +87,7 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
 
-    AudioFaderBox   *m_audioFader;
+    AudioFaderBox m_audioFader;
 
 private slots:
 
@@ -97,7 +98,7 @@ private:
 
     // This is the tiny button in the upper left that allows the user
     // to change the name of the audio instrument.
-    InstrumentAliasButton *m_aliasButton;
+    InstrumentAliasButton m_aliasButton;
 
     QPixmap                                      m_monoPixmap;
     QPixmap                                      m_stereoPixmap;

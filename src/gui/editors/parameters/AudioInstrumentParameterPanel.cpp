@@ -29,7 +29,6 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/widgets/AudioFaderBox.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
@@ -39,7 +38,6 @@
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
 #include "gui/widgets/PluginPushButton.h"
-#include "gui/widgets/InstrumentAliasButton.h"
 
 #include <QColor>
 #include <QFrame>
@@ -59,69 +57,71 @@
 namespace Rosegarden
 {
 
-AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument* doc, QWidget* parent)
-        : InstrumentParameterPanel(doc, parent),
-        m_audioFader(new AudioFaderBox(this)),
-        m_aliasButton(NULL)
+AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(
+        RosegardenDocument *doc, QWidget *parent) :
+    InstrumentParameterPanel(doc, parent),
+    m_audioFader(this),
+    m_aliasButton(this)
 {
     setObjectName("Audio Instrument Parameter Panel");
 
-    QFont f;
-    f.setPointSize(f.pointSize() * 90 / 100);
-    f.setBold(false);
+    QFont font;
+    font.setPointSize(font.pointSize() * 90 / 100);
+    font.setBold(false);
 
-    m_audioFader->setFont(f);
+    // Widgets
 
-    setContentsMargins(5, 5, 5, 5);
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setSpacing(5);
-    gridLayout->setMargin(0);
-    setLayout(gridLayout);
-
+    // Alias button
     // we should have a change alias button here too (remember, it changes the
     // alias by itself, so we just have to update to reflect the change)
-    m_aliasButton = new InstrumentAliasButton(this, 0);
-    m_aliasButton->setFixedSize(10, 6); // golden rectangle
-    m_aliasButton->setToolTip(tr("Click to rename this instrument"));
-    // cheat on the layout, both this and the label at 0, 0; this all the way
-    // left, the label centered.
-    gridLayout->addWidget(m_aliasButton, 0, 0, 1, 2, Qt::AlignLeft);
+    m_aliasButton.setFixedSize(10, 6); // golden rectangle
+    m_aliasButton.setToolTip(tr("Click to rename this instrument"));
 
-    // Instrument label : first row, all cols
-    QFontMetrics metrics(f);
+    // Instrument label
+    QFontMetrics metrics(font);
     int width25 = metrics.width("1234567890123456789012345");
-    m_instrumentLabel.setFont(f);
+    m_instrumentLabel.setFont(font);
     m_instrumentLabel.setFixedWidth(width25);
     m_instrumentLabel.setAlignment(Qt::AlignCenter);
     m_instrumentLabel.setToolTip(tr("Click the button above to rename this instrument"));
     m_instrumentLabel.setText("REFRESH BUG!"); // no tr(); temporary internal string
+
+    // Audio Fader Box
+    m_audioFader.setFont(font);
+    connect(&m_audioFader, SIGNAL(audioChannelsChanged(int)),
+            this, SLOT(slotAudioChannels(int)));
+    connect(m_audioFader.m_signalMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotSelectPlugin(int)));
+    connect(m_audioFader.m_fader, SIGNAL(faderChanged(float)),
+            this, SLOT(slotSelectAudioLevel(float)));
+    connect(m_audioFader.m_recordFader, SIGNAL(faderChanged(float)),
+            this, SLOT(slotSelectAudioRecordLevel(float)));
+    connect(m_audioFader.m_pan, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSetPan(float)));
+    connect(m_audioFader.m_synthButton, SIGNAL(clicked()),
+            this, SLOT(slotSynthButtonClicked()));
+    connect(m_audioFader.m_synthGUIButton, SIGNAL(clicked()),
+            this, SLOT(slotSynthGUIButtonClicked()));
+
+    // Layout
+
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(5);
+    gridLayout->setMargin(0);
+    // The alias button and the label are in 0,0.  The only difference is the
+    // alignment.
+    gridLayout->addWidget(&m_aliasButton, 0, 0, 1, 2, Qt::AlignLeft);
     gridLayout->addWidget(&m_instrumentLabel, 0, 0, 1, 2, Qt::AlignCenter);
 
-    // fader and connect it
-    gridLayout->addWidget(m_audioFader, 1, 0, 1, 2);
+    gridLayout->addWidget(&m_audioFader, 1, 0, 1, 2);
 
+    // Make row 2 fill up the rest of the space.
     gridLayout->setRowStretch(2, 1);
 
-    connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
-            this, SLOT(slotAudioChannels(int)));
+    // Panel
 
-    connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotSelectPlugin(int)));
-
-    connect(m_audioFader->m_fader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotSelectAudioLevel(float)));
-
-    connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotSelectAudioRecordLevel(float)));
-
-    connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSetPan(float)));
-
-    connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
-            this, SLOT(slotSynthButtonClicked()));
-
-    connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
-            this, SLOT(slotSynthGUIButtonClicked()));
+    setLayout(gridLayout);
+    setContentsMargins(5, 7, 5, 2);
 
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
@@ -193,13 +193,13 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     QString noneText;
 
     // updates synth gui button &c:
-    m_audioFader->slotSetInstrument(&m_doc->getStudio(), getSelectedInstrument());
+    m_audioFader.slotSetInstrument(&m_doc->getStudio(), getSelectedInstrument());
 
     if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
-        button = m_audioFader->m_synthButton;
+        button = m_audioFader.m_synthButton;
         noneText = tr("<no synth>");
     } else {
-        button = m_audioFader->m_plugins[index];
+        button = m_audioFader.m_plugins[index];
         noneText = tr("<no plugin>");
     }
 
@@ -284,9 +284,9 @@ AudioInstrumentParameterPanel::setButtonColour(
     PluginPushButton *button = 0;
 
     if (pluginIndex == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-        button = m_audioFader->m_synthButton;
+        button = m_audioFader.m_synthButton;
     } else {
-        button = m_audioFader->m_plugins[pluginIndex];
+        button = m_audioFader.m_plugins[pluginIndex];
     }
 
     if (!button)
@@ -345,8 +345,8 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright,
     if (getSelectedInstrument()) {
         // Always set stereo, because we have to reflect what's happening
         // with the pan setting even on mono tracks
-        m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
-        m_audioFader->m_vuMeter->setRecordLevel(recDBleft, recDBright);
+        m_audioFader.m_vuMeter->setLevel(dBleft, dBright);
+        m_audioFader.m_vuMeter->setRecordLevel(recDBleft, recDBright);
     }
 }
 
@@ -363,30 +363,30 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     setSelectedInstrument(instrument);
     m_instrumentLabel.setText(l);
 
-    m_aliasButton->setInstrument(instrument);
+    m_aliasButton.setInstrument(instrument);
 
-    m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());
-    m_audioFader->m_fader->setFader(instrument->getLevel());
+    m_audioFader.m_recordFader->setFader(instrument->getRecordLevel());
+    m_audioFader.m_fader->setFader(instrument->getLevel());
 
-    m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
+    m_audioFader.slotSetInstrument(&m_doc->getStudio(), instrument);
 
     int start = 0;
 
     if (instrument->getType() == Instrument::SoftSynth)
         start = -1;
 
-    for (int i = start; i < int(m_audioFader->m_plugins.size()); i++) {
+    for (int i = start; i < int(m_audioFader.m_plugins.size()); i++) {
         int index;
         PluginPushButton *button;
         QString noneText;
 
         if (i == -1) {
             index = Instrument::SYNTH_PLUGIN_POSITION;
-            button = m_audioFader->m_synthButton;
+            button = m_audioFader.m_synthButton;
             noneText = tr("<no synth>");
         } else {
             index = i;
-            button = m_audioFader->m_plugins[i];
+            button = m_audioFader.m_plugins[i];
             noneText = tr("<no plugin>");
         }
 
@@ -415,15 +415,15 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     // Set the number of channels on the fader widget
     //
-    m_audioFader->setAudioChannels(instrument->getAudioChannels());
+    m_audioFader.setAudioChannels(instrument->getAudioChannels());
 
     // Pan - adjusted backwards
     //
-    m_audioFader->m_pan->setPosition(instrument->getPan() - 100);
+    m_audioFader.m_pan->setPosition(instrument->getPan() - 100);
 
     // Tell fader box whether to include e.g. audio input selection
     //
-    m_audioFader->setIsSynth(instrument->getType() == Instrument::SoftSynth);
+    m_audioFader.setIsSynth(instrument->getType() == Instrument::SoftSynth);
 
     blockSignals(false);
 }
