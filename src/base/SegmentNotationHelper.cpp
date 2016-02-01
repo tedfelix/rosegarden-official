@@ -2012,7 +2012,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
 
     iterator j = getNextAdjacentNote(i, true, true);
 
-    if (j == end() || (*j)->getAbsoluteTime() >= rangeEnd) return end();
+    if (j == end() || (*j)->getNotationAbsoluteTime() >= rangeEnd) return end();
     if ((*i)->maskedInTrigger() != (*j)->maskedInTrigger()) {
         // They should be just tied, just not merged.
         (*i)->set<Bool>(TIED_FORWARD, true);
@@ -2020,12 +2020,12 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
         return end();
     }
     
-    timeT iEnd = (*i)->getAbsoluteTime() + (*i)->getDuration();
-    timeT jEnd = (*j)->getAbsoluteTime() + (*j)->getDuration();
+    timeT iEnd = (*i)->getNotationAbsoluteTime() + (*i)->getNotationDuration();
+    timeT jEnd = (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
 
     Event *newEvent = new Event
-	(**i, (*i)->getAbsoluteTime(),
-	 (std::max(iEnd, jEnd) - (*i)->getAbsoluteTime()));
+	(**i, (*i)->getNotationAbsoluteTime(),
+	 (std::max(iEnd, jEnd) - (*i)->getNotationAbsoluteTime()));
 
     newEvent->unset(TIED_BACKWARD);
     newEvent->unset(TIED_FORWARD);
