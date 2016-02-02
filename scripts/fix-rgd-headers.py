@@ -16,7 +16,7 @@ inf.close()
                                                                           
 outf = open(sys.argv[1], 'w')                                             
 zipf = gzip.GzipFile(mode='w', filename='audio/x-rosegarden-device', fileobj=outf)                                                             
-zipf.filename = "audio/x-rosegarden-device"                               
+#zipf.filename = 'audio/x-rosegarden-device'                               
 zipf.write(content)                                                       
 zipf.close()                                                              
 outf.close()
